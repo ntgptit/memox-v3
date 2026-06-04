@@ -1,0 +1,1673 @@
+{
+  "@@locale": "en",
+  "appName": "MemoX",
+  "commonBack": "Back",
+  "commonOk": "OK",
+  "commonCancel": "Cancel",
+  "commonClose": "Close",
+  "bottomSheetDragHandleLabel": "Dismiss bottom sheet",
+  "@bottomSheetDragHandleLabel": {
+    "description": "Accessibility label for the drag handle at the top of a modal bottom sheet."
+  },
+  "commonCreate": "Create",
+  "commonEdit": "Edit",
+  "commonDelete": "Delete",
+  "commonSort": "Sort",
+  "commonSave": "Save",
+  "commonImport": "Import",
+  "commonExport": "Export",
+  "commonMove": "Move",
+  "commonClear": "Clear",
+  "commonSelect": "Select",
+  "commonSelectAll": "Select all",
+  "commonSaveOrder": "Save order",
+  "commonOverview": "Overview",
+  "commonNever": "Never",
+  "commonReorder": "Reorder",
+  "commonNoValidDestinationFound": "No valid destination found.",
+  "commonDefaultOrderUpdated": "Default order updated.",
+  "commonPercentValue": "{value}%",
+  "@commonPercentValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSearch": "Search",
+  "sortManual": "Manual",
+  "sortName": "Name",
+  "sortNewest": "Newest",
+  "sortLastStudied": "Last studied",
+  "homeTitle": "Home",
+  "libraryTitle": "Library",
+  "progressTitle": "Progress",
+  "settingsTitle": "Settings",
+  "appShellHomePlaceholderDescription": "Home dashboard foundation is not wired yet.",
+  "appShellProgressPlaceholderDescription": "Progress foundation is not wired yet.",
+  "appShellSettingsPlaceholderDescription": "Settings foundation is not wired yet.",
+  "dashboardTodayLabel": "Today",
+  "dashboardGreetingTitle": "Good evening, learner",
+  "dashboardGreetingSubtitle": "Ready to study today?",
+  "dashboardHeading": "Today's study focus",
+  "dashboardSubtitle": "Review, study new cards, or continue a session.",
+  "dashboardTodayReviewTitle": "Today Review",
+  "dashboardOverdueLabel": "Overdue",
+  "dashboardReviewReadyMessage": "{count} cards are ready for SRS review.",
+  "@dashboardReviewReadyMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardReviewEmptyMessage": "No review cards are due. Open your library to add cards.",
+  "dashboardReviewCompactStatus": "{count, plural, =0{0 due} =1{1 due} other{{count} due}}",
+  "@dashboardReviewCompactStatus": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardReviewNowAction": "Review",
+  "dashboardDueNowLabel": "Due now",
+  "dashboardDueNowSummary": "{cardCount, plural, =1{1 card} other{{cardCount} cards}} across {deckCount, plural, =1{1 deck} other{{deckCount} decks}}",
+  "@dashboardDueNowSummary": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      },
+      "deckCount": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardReviewTimeEstimate": "About {minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "@dashboardReviewTimeEstimate": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardStartReviewAction": "Start review",
+  "dashboardAllCaughtUpTitle": "All caught up",
+  "dashboardNewStudyTitle": "New Study",
+  "dashboardNewCardsLabel": "New cards available",
+  "dashboardNewStudyMessage": "{count} new cards are ready.",
+  "@dashboardNewStudyMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardNewStudyEmptyMessage": "Add or import cards before starting a new study session.",
+  "dashboardNewStudyCompactStatus": "{count, plural, =0{0 new} =1{1 new} other{{count} new}}",
+  "@dashboardNewStudyCompactStatus": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardStartNewStudyAction": "Start",
+  "dashboardResumeTitle": "Resume",
+  "dashboardActiveSessionsLabel": "Active sessions",
+  "dashboardResumeMessage": "{count} sessions can be continued or finalized.",
+  "@dashboardResumeMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardResumeEmptyMessage": "No active session. Start studying to resume later.",
+  "dashboardResumeCompactStatus": "{count, plural, =0{0 active} =1{1 active} other{{count} active}}",
+  "@dashboardResumeCompactStatus": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardContinueSessionAction": "Resume",
+  "dashboardResumeSectionTitle": "Continue studying",
+  "dashboardDiscardAction": "Discard",
+  "dashboardMorePausedSessions": "{count, plural, =1{+ 1 more paused session} other{+ {count} more paused sessions}}",
+  "@dashboardMorePausedSessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardPausedSessionsSheetTitle": "{count, plural, =1{1 paused session} other{{count} paused sessions}}",
+  "@dashboardPausedSessionsSheetTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardDiscardSessionTitle": "Discard this session?",
+  "dashboardDiscardSessionMessage": "Your progress on answered cards is kept, but the remaining cards in this session will be abandoned.",
+  "dashboardSessionDiscardedMessage": "Session discarded.",
+  "dashboardSessionDiscardFailedMessage": "Couldn't discard the session. Try again.",
+  "dashboardStartNewLearningAction": "Start new learning",
+  "dashboardScopePickerTitle": "What do you want to study?",
+  "dashboardScopeToday": "Today",
+  "dashboardScopeTodaySubtitle": "{count, plural, =0{No cards due now} =1{1 card due now} other{{count} cards due now}}",
+  "@dashboardScopeTodaySubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardScopeDeck": "Deck",
+  "dashboardScopeDeckSubtitle": "Pick a deck to study",
+  "dashboardScopeFolder": "Folder",
+  "dashboardScopeFolderSubtitle": "Pick a folder to study",
+  "dashboardScopeDeckPickerTitle": "Pick a deck",
+  "dashboardScopeFolderPickerTitle": "Pick a folder",
+  "dashboardScopeDeckSearchHint": "Search decks",
+  "dashboardScopeFolderSearchHint": "Search folders",
+  "dashboardScopeDeckEmpty": "No decks yet. Create a deck first.",
+  "dashboardScopeFolderEmpty": "No folders yet.",
+  "dashboardLibraryHealthTitle": "Library health",
+  "dashboardLibraryHealthSummary": "{folderCount, plural, =0{0 folders} =1{1 folder} other{{folderCount} folders}} · {deckCount, plural, =0{0 decks} =1{1 deck} other{{deckCount} decks}} · {cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}",
+  "@dashboardLibraryHealthSummary": {
+    "placeholders": {
+      "folderCount": {
+        "type": "int"
+      },
+      "deckCount": {
+        "type": "int"
+      },
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardMasteryLabel": "Mastery",
+  "dashboardStreakDays": "{count, plural, =1{1 day} other{{count} days}}",
+  "@dashboardStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardMasteredCards": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@dashboardMasteredCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardDueTodayTitle": "Due today",
+  "dashboardDueTodayMessage": "{count} cards ready to review",
+  "@dashboardDueTodayMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardLibrarySummary": "{folderCount} folders · {cardCount} cards",
+  "@dashboardLibrarySummary": {
+    "placeholders": {
+      "folderCount": {
+        "type": "int"
+      },
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardNoDueTitle": "No cards due now",
+  "dashboardNoDueMessage": "Open your library to add cards or start a focused deck session.",
+  "dashboardStudyTodayAction": "Study",
+  "dashboardOpenLibraryAction": "View library",
+  "dashboardLibraryProgressTitle": "Library progress",
+  "dashboardLibraryProgressMessage": "{percent}% mastery",
+  "@dashboardLibraryProgressMessage": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRecentDecksTitle": "Recent decks",
+  "dashboardPickUpTitle": "Pick up where you left off",
+  "dashboardStartDeckTitle": "Start a deck",
+  "dashboardDeckStats": "{cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}",
+  "@dashboardDeckStats": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardDeckDueSummary": "{dueCount, plural, =1{1 due} other{{dueCount} due}} · {cardCount, plural, =1{1 card} other{{cardCount} cards}}",
+  "@dashboardDeckDueSummary": {
+    "placeholders": {
+      "dueCount": {
+        "type": "int"
+      },
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardDeckCaughtUpSummary": "All caught up · {cardCount, plural, =1{1 card} other{{cardCount} cards}}",
+  "@dashboardDeckCaughtUpSummary": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "progressOverviewHeading": "Learning overview",
+  "progressOverviewSubtitle": "Track review pressure, library mastery, and open session recovery.",
+  "progressReviewDueCount": "Due now",
+  "progressActiveSessionsHeading": "Active sessions",
+  "progressActiveSessionsSubtitle": "Resume, finalize, retry, or cancel the study sessions that are still open.",
+  "progressActiveSessionsCount": "Active",
+  "progressReadySessionsCount": "Ready",
+  "progressFailedSessionsCount": "Needs retry",
+  "progressEmptyTitle": "No active study sessions",
+  "progressEmptyMessage": "Start studying from Library. Sessions that are in progress or waiting to finalize will appear here.",
+  "progressSessionTitle": "{studyType} · {entryType}",
+  "@progressSessionTitle": {
+    "placeholders": {
+      "studyType": {},
+      "entryType": {}
+    }
+  },
+  "progressSessionCardProgress": "{completed} of {total} study steps · {remaining} remaining",
+  "@progressSessionCardProgress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "progressSessionCurrentCard": "Current card: {card}",
+  "@progressSessionCurrentCard": {
+    "placeholders": {
+      "card": {}
+    }
+  },
+  "progressSessionStartedAt": "Started {date} at {time}",
+  "@progressSessionStartedAt": {
+    "placeholders": {
+      "date": {},
+      "time": {}
+    }
+  },
+  "progressEntryDeck": "Deck",
+  "progressEntryFolder": "Folder",
+  "progressEntryToday": "Today",
+  "progressSessionStatusInProgress": "In progress",
+  "progressSessionStatusReady": "Ready to finalize",
+  "progressSessionStatusFailed": "Finalize failed",
+  "progressCancelConfirmTitle": "Cancel this study session?",
+  "progressCancelConfirmMessage": "The current session will stop. Completed attempts remain in its history, but pending cards are abandoned.",
+  "progressSessionCancelledMessage": "Session cancelled.",
+  "progressSessionFinalizedMessage": "Session finalized.",
+  "progressSessionRetryFinalizeMessage": "Finalize retried.",
+  "progressSessionActionFailed": "Session action failed.",
+  "settingsAppearanceTitle": "Appearance",
+  "settingsPersonalizationTitle": "Personalization",
+  "settingsStudySectionTitle": "Study",
+  "settingsAppSectionTitle": "App",
+  "settingsAboutSectionTitle": "About",
+  "settingsOverviewFooter": "Made for calm learning · MemoX",
+  "settingsAccountTitle": "Account",
+  "settingsAccountLoading": "Loading account",
+  "settingsAccountLinkedOverviewTitle": "Account & sync",
+  "settingsAccountSignInSyncTitle": "Sign in & sync",
+  "settingsAccountSignInSyncSubtitle": "Save your progress across devices",
+  "settingsAccountSigningIn": "Signing in...",
+  "settingsAccountSubtitleSignedOut": "Link Google now so Drive sync can be enabled later.",
+  "settingsAccountSubtitleReady": "Google Drive app data access is ready for future sync.",
+  "settingsAccountSubtitleReconnect": "Reconnect Drive access before sync can run.",
+  "settingsAccountSubtitleConfig": "Google sign-in is not configured for this build.",
+  "settingsAccountSubtitleUnsupported": "Google sign-in is not available on this platform.",
+  "settingsAccountSubtitleError": "Google account could not be updated.",
+  "settingsAccountSignedOut": "No Google account is linked.",
+  "settingsAccountMissingConfig": "Add Google OAuth client IDs to enable account linking.",
+  "settingsAccountUnsupported": "Use Android, iOS, or web to link Google account.",
+  "settingsAccountDriveReady": "Google Drive ready",
+  "settingsAccountDriveReconnectRequired": "Google Drive reconnect required",
+  "settingsAccountOverviewSubtitle": "{status}\n{email}",
+  "@settingsAccountOverviewSubtitle": {
+    "placeholders": {
+      "status": {},
+      "email": {}
+    }
+  },
+  "settingsAccountOverviewSyncedSubtitle": "{email} · synced {time}",
+  "@settingsAccountOverviewSyncedSubtitle": {
+    "placeholders": {
+      "email": {},
+      "time": {}
+    }
+  },
+  "settingsAccountOverviewSyncedMockSubtitle": "{email} · synced 2 min ago",
+  "@settingsAccountOverviewSyncedMockSubtitle": {
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "settingsAccountOverviewSyncErrorSubtitle": "{email} · last synced 2 days ago",
+  "@settingsAccountOverviewSyncErrorSubtitle": {
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "settingsOverviewSyncRetry": "Retry",
+  "settingsAccountDriveAuthorizationRequired": "Grant Google Drive app data access to prepare sync.",
+  "settingsAccountSignIn": "Sign in with Google",
+  "settingsAccountReconnectDrive": "Reconnect Google Drive",
+  "settingsAccountSkipDrive": "Use without cloud backup",
+  "settingsAccountSignOut": "Sign out",
+  "settingsAccountSignOutConfirmTitle": "Sign out of Google?",
+  "settingsAccountSignOutConfirmMessage": "Your Drive backup is kept. Sign in again later to restore it.",
+  "settingsAccountDisconnect": "Disconnect Google",
+  "settingsAccountDisconnectConfirmTitle": "Disconnect Google account?",
+  "settingsAccountDisconnectConfirmMessage": "This revokes Drive access tokens for this app. The Drive backup itself is kept. Use this on shared or lost devices.",
+  "settingsAccountDisconnectedMessage": "Google account disconnected. Drive access tokens revoked.",
+  "settingsAccountSignInCanceled": "Google sign-in was canceled.",
+  "settingsAccountSignInFailed": "Google sign-in failed. Try again.",
+  "settingsAccountLastSignedIn": "Last signed in {at}",
+  "@settingsAccountLastSignedIn": {
+    "placeholders": {
+      "at": {}
+    }
+  },
+  "settingsAccountSignedOutMessage": "Signed out. Local flashcards stay on this device.",
+  "settingsDriveSyncTitle": "Drive sync",
+  "settingsDriveSyncLoading": "Loading sync state",
+  "settingsDriveSyncSubtitleSignedOut": "Link Google account before syncing.",
+  "settingsDriveSyncSubtitleUnconfigured": "Google sign-in is not configured for this build.",
+  "settingsDriveSyncSubtitleReconnect": "Reconnect Drive access before sync can run.",
+  "settingsDriveSyncSubtitleNoRemote": "Create the first Drive backup from this device.",
+  "settingsDriveSyncSubtitleSynced": "Local data matches the latest Drive snapshot.",
+  "settingsDriveSyncSubtitleReady": "Manual sync is ready.",
+  "settingsDriveSyncSubtitleConflict": "Choose which copy should win.",
+  "settingsDriveSyncSubtitleUnsupportedSchema": "Update the app before restoring this Drive copy.",
+  "settingsDriveSyncSubtitleError": "Drive sync could not complete.",
+  "settingsDriveSyncSignedOut": "Sign in with Google to sync the local database with Drive.",
+  "settingsDriveSyncUnconfigured": "Add Google OAuth client IDs to enable Drive sync.",
+  "settingsDriveSyncReconnectRequired": "Reconnect Google Drive in Account first.",
+  "settingsDriveSyncNoRemote": "No Drive snapshot exists yet.",
+  "settingsDriveSyncSynced": "Google Drive is up to date.",
+  "settingsDriveSyncReady": "A Drive snapshot is available.",
+  "settingsDriveSyncConflictStatus": "Local and Drive data both changed.",
+  "settingsDriveSyncUnsupportedSchema": "The Drive copy was created by a newer database schema.",
+  "settingsDriveSyncLastSynced": "Last synced: {value}",
+  "@settingsDriveSyncLastSynced": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "settingsDriveSyncRemoteDevice": "Drive copy from: {device}",
+  "@settingsDriveSyncRemoteDevice": {
+    "placeholders": {
+      "device": {}
+    }
+  },
+  "settingsDriveSyncAction": "Sync now",
+  "settingsDriveSyncDirectionTitle": "Choose sync direction",
+  "settingsDriveSyncDirectionMessage": "Choose which copy is the source of truth for this sync.",
+  "settingsDriveSyncUploadLocalAction": "Upload local data to Drive",
+  "settingsDriveSyncUploadLocalSubtitle": "Use this device as latest and replace the Drive snapshot.",
+  "settingsDriveSyncRestoreDriveAction": "Download Drive data to this device",
+  "settingsDriveSyncRestoreDriveSubtitle": "Use the Drive snapshot as latest and replace local data.",
+  "settingsDriveSyncRestoreUnavailable": "No Drive snapshot is available to download.",
+  "settingsDriveSyncUploadConfirmTitle": "Upload local data?",
+  "settingsDriveSyncUploadConfirmMessage": "This will replace the Google Drive snapshot with this device's current database and settings.",
+  "settingsDriveSyncUploadConfirmAction": "Upload to Drive",
+  "settingsDriveSyncRestoreConfirmTitle": "Restore Drive copy?",
+  "settingsDriveSyncRestoreConfirmMessage": "Restoring from Drive will replace this device's local database and settings with backup data. Recent local changes that were not uploaded may be lost. Upload local data first if you are unsure, and continue only if you trust this Drive backup.",
+  "settingsDriveSyncRestoreConfirmAction": "Restore from Drive",
+  "settingsDriveSyncBackupSource": "Backup from {device} • {when}",
+  "@settingsDriveSyncBackupSource": {
+    "placeholders": {
+      "device": {},
+      "when": {}
+    }
+  },
+  "settingsDriveSyncBackupAppVersion": "App version: {version}",
+  "@settingsDriveSyncBackupAppVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "settingsDriveSyncCrossDeviceTitle": "Overwrite backup from another device?",
+  "settingsDriveSyncCrossDeviceMessage": "The current Google Drive backup was created by a DIFFERENT device. Uploading from this device will replace it. Make sure that other device does not still hold data you want to keep.",
+  "settingsDriveSyncCrossDeviceContinue": "Overwrite anyway",
+  "settingsDriveSyncRestoreCrossDeviceWarning": "Warning: this backup was created on a different device. Restoring replaces this device's local data with that device's data.",
+  "settingsDriveSyncUploadInProgressTitle": "Backing up to Google Drive",
+  "settingsDriveSyncUploadInProgressMessage": "Please keep the app open. Do not close or switch accounts.",
+  "settingsDriveSyncRestoreInProgressTitle": "Restoring from Google Drive",
+  "settingsDriveSyncRestoreInProgressMessage": "Please keep the app open. The app will refresh when restore completes.",
+  "settingsDriveSyncUploaded": "Local data backed up to Google Drive.",
+  "settingsDriveSyncRestored": "Drive copy restored.",
+  "settingsDriveSyncNoChanges": "Already up to date.",
+  "settingsDriveSyncCanceled": "Sync canceled.",
+  "settingsDriveSyncFailed": "Drive sync failed. Try again.",
+  "settingsDriveSyncConflictTitle": "Resolve sync conflict",
+  "settingsDriveSyncConflictMessage": "Local data and the Drive copy both changed since the last sync.",
+  "settingsDriveSyncKeepLocal": "Keep local data",
+  "settingsDriveSyncKeepLocalSubtitle": "Upload this device's database and replace the Drive snapshot.",
+  "settingsDriveSyncUseDrive": "Use Drive copy",
+  "settingsDriveSyncUseDriveSubtitle": "Restore the Drive snapshot over this device's local database.",
+  "settingsThemeModeLabel": "Theme mode",
+  "settingsThemeSystem": "System",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsAppearanceOverviewSubtitle": "Light, dark, system",
+  "settingsSoonChip": "SOON",
+  "settingsLanguageTitle": "Language",
+  "settingsLanguageOverviewSubtitle": "English",
+  "settingsLocaleLabel": "App language",
+  "settingsLocaleSystem": "System",
+  "settingsLocaleEnglish": "English",
+  "settingsLocaleVietnamese": "Vietnamese",
+  "settingsStudyDefaultsTitle": "Study defaults",
+  "settingsLearningExperienceTitle": "Learning experience",
+  "settingsLearningOverviewTitle": "Learning",
+  "settingsStudyDefaultsSubtitle": "Defaults used when a new study session is created.",
+  "settingsStudyDefaultsLoading": "Loading study defaults",
+  "settingsNewStudyBatchSizeLabel": "New Study batch size",
+  "settingsReviewBatchSizeLabel": "Review batch size",
+  "settingsLearningOverviewSummary": "20 cards / day · 5 study modes",
+  "settingsCardsCountValue": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@settingsCardsCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsSrsIntervalsTitle": "SRS intervals",
+  "settingsSrsIntervalsSubtitle": "Current runtime schedule",
+  "settingsSrsIntervalBoxLabel": "Box {box}",
+  "@settingsSrsIntervalBoxLabel": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsSrsIntervalToday": "Today",
+  "settingsSrsIntervalDays": "{count, plural, =1{1 day} other{{count} days}}",
+  "@settingsSrsIntervalDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTagsSectionTitle": "Tags",
+  "settingsManageTagsLearningSubtitle": "Open tag management",
+  "settingsManageTagsTitle": "Manage tags",
+  "settingsManageTagsOverviewSubtitle": "14 tags",
+  "tagHashLabel": "#{tag}",
+  "@tagHashLabel": {
+    "placeholders": {
+      "tag": { "type": "String" }
+    }
+  },
+  "settingsTagsSearchHint": "Search tags",
+  "settingsTagsCount": "{count, plural, =1{1 tag} other{{count} tags}}",
+  "@settingsTagsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "settingsTagsCardCount": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@settingsTagsCardCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "settingsTagsSortMostCards": "Most cards",
+  "settingsTagsSortNameAsc": "A → Z",
+  "settingsTagsSortNameDesc": "Z → A",
+  "settingsTagsEmptyTitle": "No tags yet",
+  "settingsTagsEmptyMessage": "Tags are added when you create or edit flashcards. Open a card to add your first tag.",
+  "settingsTagsEmptyAction": "Go to library",
+  "settingsTagsSearchEmptyTitle": "No matching tags",
+  "settingsTagsSearchEmptyMessage": "No tags match your search.",
+  "settingsTagsActionRename": "Rename",
+  "settingsTagsActionMerge": "Merge into another tag",
+  "settingsTagsActionDelete": "Delete tag (keeps cards)",
+  "settingsTagsRenameTitle": "Rename tag",
+  "settingsTagsRenameLabel": "Tag name",
+  "settingsTagsRenameHint": "Enter a new name",
+  "settingsTagsRenameConfirm": "Rename",
+  "settingsTagsRenamedMessage": "Tag renamed.",
+  "settingsTagsMergeSheetTitle": "Merge \"{source}\" into…",
+  "@settingsTagsMergeSheetTitle": {
+    "placeholders": {
+      "source": { "type": "String" }
+    }
+  },
+  "settingsTagsMergeSheetEmpty": "No other tags to merge into.",
+  "settingsTagsMergeConfirmTitle": "Merge tags?",
+  "settingsTagsMergeConfirmMessage": "All cards tagged \"{source}\" will be re-tagged with \"{destination}\". The tag \"{source}\" will be deleted.",
+  "@settingsTagsMergeConfirmMessage": {
+    "placeholders": {
+      "source": { "type": "String" },
+      "destination": { "type": "String" }
+    }
+  },
+  "settingsTagsMergeConfirmAction": "Merge",
+  "settingsTagsMergedMessage": "Tags merged.",
+  "settingsTagsDeleteTitle": "Delete tag?",
+  "settingsTagsDeleteMessage": "Delete \"{tag}\"? This removes the tag from {count, plural, =1{1 card} other{{count} cards}}. Cards are not deleted.",
+  "@settingsTagsDeleteMessage": {
+    "placeholders": {
+      "tag": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "settingsTagsDeleteConfirm": "Delete",
+  "settingsTagsDeletedMessage": "Tag deleted.",
+  "flashcardsTagErrorEmpty": "Tag name is required.",
+  "flashcardsTagErrorComma": "Tags cannot contain commas.",
+  "flashcardsTagErrorTooLong": "Tag too long (max 50 chars).",
+  "settingsSpeechTitle": "Speech",
+  "settingsAudioSpeechTitle": "Audio & speech",
+  "settingsAudioSpeechEnabled": "On",
+  "settingsAudioSpeechDisabled": "Off",
+  "settingsAudioSpeechOverviewSummary": "Korean voice · 0.9× speed",
+  "settingsSpeechLabel": "Korean and English pronunciation support",
+  "settingsSpeechLoading": "Loading speech settings",
+  "settingsSpeechAutoPlayLabel": "Auto-play in study",
+  "settingsSpeechTextToSpeechLabel": "Text-to-Speech",
+  "settingsSpeechAutoPlaySubtitle": "Automatically pronounce cards after study transitions.",
+  "settingsSpeechVoiceSelectionLabel": "Voice selection",
+  "settingsSpeechFrontLanguageLabel": "Front language",
+  "settingsSpeechKorean": "Korean",
+  "settingsSpeechEnglish": "English",
+  "settingsSpeechRateLabel": "Speech rate",
+  "settingsSpeechRateValue": "{value}x",
+  "@settingsSpeechRateValue": {
+    "placeholders": {
+      "value": {
+        "type": "double"
+      }
+    }
+  },
+  "settingsSpeechPitchLabel": "Voice pitch",
+  "settingsSpeechPitchValue": "{value}x",
+  "@settingsSpeechPitchValue": {
+    "placeholders": {
+      "value": {
+        "type": "double"
+      }
+    }
+  },
+  "settingsSpeechVolumeLabel": "Volume",
+  "settingsSpeechVolumeValue": "{value}%",
+  "@settingsSpeechVolumeValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsSpeechFrontVoiceLabel": "Front voice",
+  "settingsSpeechSystemVoice": "System voice",
+  "settingsSpeechStoredVoice": "Device voice",
+  "settingsSpeechKoreanVoiceLabel": "Korean voice {index}",
+  "@settingsSpeechKoreanVoiceLabel": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "settingsSpeechEnglishVoiceLabel": "English voice {index}",
+  "@settingsSpeechEnglishVoiceLabel": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "settingsSpeechVoiceDeviceSource": "Device",
+  "settingsSpeechVoiceOnlineSource": "Online",
+  "settingsSpeechVoiceMale": "Male",
+  "settingsSpeechVoiceFemale": "Female",
+  "settingsSpeechLoadingVoices": "Loading voices...",
+  "settingsSpeechNoVoices": "No {language} voice was reported by this device.",
+  "@settingsSpeechNoVoices": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsSpeechPreviewKorean": "Preview Korean",
+  "settingsSpeechPreviewEnglish": "Preview English",
+  "settingsSpeechPreviewSelected": "Preview audio",
+  "settingsSpeechVoiceOptions": "Voice options",
+  "settingsSpeechHideVoiceOptions": "Hide voice options",
+  "settingsSpeechKoreanPreviewText": "안녕하세요",
+  "settingsSpeechEnglishPreviewText": "Hello",
+  "settingsSpeechPreviewTextLabel": "Test text",
+  "settingsSpeechPreviewTextHelper": "Leave empty to use the default sample.",
+  "settingsSpeechPreviewTextHint": "Type or paste any text to test...",
+  "settingsSpeechPreviewClearTooltip": "Clear test text",
+  "settingsAboutMemoXTitle": "About MemoX",
+  "settingsAboutVersion": "Version {version}",
+  "@settingsAboutVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "settingsAboutVersionUnknown": "Version unavailable",
+  "settingsAboutMessage": "MemoX keeps flashcard learning local-first, calm, and ready to back up when you choose.",
+  "settingsAboutLegalese": "MemoX",
+  "settingsUpdatedMessage": "Settings updated.",
+  "appRouterErrorTitle": "Navigation error",
+  "errorConfiguration": "The app configuration is invalid.",
+  "errorRequestTimedOut": "The request timed out.",
+  "errorInvalidData": "The received data is invalid.",
+  "errorUnsupportedAction": "This action is not supported right now.",
+  "errorNetwork": "A network problem occurred.",
+  "errorStorage": "A local storage problem occurred.",
+  "errorNotFound": "The requested resource could not be found.",
+  "errorUnexpected": "Something went wrong.",
+  "errorFolderContainsDecks": "This folder already contains decks. Create a deck here or choose another folder for subfolders.",
+  "errorFolderContainsSubfolders": "This folder already contains subfolders. Create a subfolder here or choose another folder for decks.",
+  "foldersNewSubfolderTooltip": "New subfolder",
+  "foldersNewDeckTooltip": "New deck",
+  "foldersCreateChoiceTitle": "What do you want to create?",
+  "foldersNewSubfolderTitle": "New subfolder",
+  "foldersFolderNameLabel": "Folder name",
+  "foldersFolderNameHint": "e.g. Listening practice",
+  "foldersMoreActionsTooltip": "More actions",
+  "foldersActionsTitle": "Folder actions",
+  "foldersReorder": "Reorder",
+  "foldersReorderManualOnlyHint": "Switch sort back to manual to reorder.",
+  "foldersImportChoiceTitle": "Import flashcards",
+  "foldersImportCreateDeckAction": "Create new deck",
+  "foldersImportExistingDeckAction": "Add to existing deck",
+  "foldersImportChooseDeckTitle": "Choose deck",
+  "foldersImportNoDecksHint": "No decks in this folder yet.",
+  "foldersStatusSubfolders": "Contains {subfolderCount} subfolders",
+  "@foldersStatusSubfolders": {
+    "placeholders": {
+      "subfolderCount": {
+        "type": "int"
+      }
+    }
+  },
+  "foldersStatusDecks": "Contains {deckCount} decks · {totalCardCount} cards",
+  "@foldersStatusDecks": {
+    "placeholders": {
+      "deckCount": {
+        "type": "int"
+      },
+      "totalCardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "foldersSegmentSubfolders": "Subfolders",
+  "foldersSegmentDecks": "Decks",
+  "foldersSubfolderDeckHint": "To add decks here, organize them in a subfolder.",
+  "foldersDeckStats": "{cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}",
+  "@foldersDeckStats": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "foldersSubfolderCreatedMessage": "Subfolder created.",
+  "foldersRenameTitle": "Rename folder",
+  "foldersUpdatedMessage": "Folder updated.",
+  "foldersMoveTitle": "Move folder",
+  "foldersMoveRootTitle": "Library root",
+  "foldersMoveRootSubtitle": "Move this folder to root",
+  "foldersMovedMessage": "Folder moved.",
+  "foldersDeleteTitle": "Delete folder",
+  "foldersDeleteMessage": "This will delete the full subtree, including decks and flashcards.",
+  "foldersDeletedMessage": "Folder deleted.",
+  "foldersManualReorderWarning": "Manual reorder is only available in manual sort.",
+  "foldersSummaryUnlocked": "This folder is empty and can hold subfolders or decks.",
+  "foldersEmptyTitle": "This folder is empty",
+  "foldersEmptyMessage": "Choose a direction first. A folder can contain subfolders or decks, not both.",
+  "foldersEmptySubfoldersTitle": "No subfolders yet",
+  "foldersEmptySubfoldersMessage": "Create a subfolder to keep this branch organized.",
+  "foldersEmptyDecksTitle": "No decks yet",
+  "foldersEmptyDecksMessage": "Create a deck to start adding flashcards here.",
+  "foldersNoResultsTitle": "No matching items",
+  "foldersNoResultsMessage": "Clear search or try a different term.",
+  "foldersClearSearchAction": "Clear",
+  "libraryCreateFolderTooltip": "Create folder",
+  "libraryCreateFolderDialogTitle": "Create folder",
+  "libraryFolderCreatedMessage": "Folder created.",
+  "libraryDueTodayPrefix": "You have ",
+  "libraryDueTodaySuffix": " items due today",
+  "libraryStudyNow": "Study now  →",
+  "libraryFoldersSectionTitle": "Folders",
+  "libraryManageFoldersSubtitle": "Manage your folder tree",
+  "librarySearchResultsSubtitle": "Search results",
+  "libraryHeroDueToday": "Due today: {count}",
+  "@libraryHeroDueToday": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryFolderStats": "{subfolderCount, plural, =0{0 subfolders} =1{1 subfolder} other{{subfolderCount} subfolders}} · {deckCount, plural, =0{0 decks} =1{1 deck} other{{deckCount} decks}} · {cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}",
+  "@libraryFolderStats": {
+    "placeholders": {
+      "subfolderCount": {
+        "type": "int"
+      },
+      "deckCount": {
+        "type": "int"
+      },
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryFolderMastery": "Mastery {percent}%",
+  "@libraryFolderMastery": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryEmptyTitle": "No folders yet",
+  "libraryEmptyMessage": "Create your first folder to start building your library.",
+  "libraryLoadFailedTitle": "Couldn't load your library",
+  "libraryLoadFailedMessage": "Your data is safe on this device. Try again in a moment.",
+  "libraryOverflowTooltip": "Folder options",
+  "libraryFiltersTooltip": "Filters",
+  "librarySearchHint": "Search decks, cards, tags",
+  "libraryNewFolderLabel": "New folder",
+  "libraryFolderCountLabel": "{count, plural, =1{1 folder} other{{count} folders}}",
+  "@libraryFolderCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryDueSummaryTitle": "{count, plural, =1{1 card due today} other{{count} cards due today}}",
+  "@libraryDueSummaryTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "decksCreateTitle": "Create deck",
+  "decksNameLabel": "Deck name",
+  "decksNameHint": "e.g. Core vocabulary",
+  "decksCreatedMessage": "Deck created.",
+  "decksMoreActionsTooltip": "More actions",
+  "decksActionsTitle": "Deck actions",
+  "decksDuplicateAction": "Duplicate",
+  "decksExportAction": "Export deck",
+  "decksOverviewSubtitle": "{cardCount} cards · {dueToday} due today · {masteryPercent}% mastery",
+  "@decksOverviewSubtitle": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      },
+      "dueToday": {
+        "type": "int"
+      },
+      "masteryPercent": {
+        "type": "int"
+      }
+    }
+  },
+  "decksLastStudiedLabel": "Last studied: {date}",
+  "@decksLastStudiedLabel": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "decksManageContentTitle": "Manage content",
+  "decksManageContentSubtitle": "Open flashcards, import into this deck, or continue editing content.",
+  "decksEmptyStudyTitle": "Add cards before studying",
+  "decksEmptyStudyMessage": "This deck has no flashcards yet. Add or import cards first.",
+  "decksStudyUnavailableNoCards": "Study is available after this deck has at least one flashcard.",
+  "decksRenameTitle": "Rename deck",
+  "decksUpdatedMessage": "Deck updated.",
+  "decksMoveTitle": "Move deck",
+  "decksMovedMessage": "Deck moved.",
+  "decksDuplicateTitle": "Duplicate deck",
+  "decksCurrentFolderTitle": "Current folder",
+  "decksDuplicatedMessage": "Deck duplicated.",
+  "decksDeleteTitle": "Delete deck",
+  "decksDeleteMessage": "This will delete the entire deck and all flashcards inside it.",
+  "decksDeletedMessage": "Deck deleted.",
+  "flashcardsOpenListAction": "Open",
+  "flashcardsAddAction": "Add",
+  "flashcardsAddTooltip": "Add flashcard",
+  "flashcardsActionsTitle": "Flashcard actions",
+  "flashcardsSearchHint": "Search flashcards",
+  "flashcardsPreviewDialogTitle": "Preview card",
+  "flashcardsDeckSummary": "{cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}} · {masteryPercent}% mastery",
+  "@flashcardsDeckSummary": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      },
+      "masteryPercent": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsStudyModesTitle": "Study modes",
+  "flashcardsProgressTitle": "Your progress",
+  "flashcardsProgressSubtitle": "Progress is derived from this deck's SRS state.",
+  "flashcardsProgressNew": "New",
+  "flashcardsProgressLearning": "Learning",
+  "flashcardsProgressMastered": "Mastered",
+  "flashcardsProgressCountValue": "{count}",
+  "@flashcardsProgressCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsCardsSectionTitle": "Cards",
+  "flashcardsLearnDeckAction": "Study this deck",
+  "flashcardsBulkSelected": "{count} selected",
+  "@flashcardsBulkSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsBulkSubtitle": "Move, export, or delete the selected flashcards.",
+  "flashcardsEmptyTitle": "No flashcards yet",
+  "flashcardsEmptyMessage": "Add cards manually or import them into this deck.",
+  "flashcardsNoResultsTitle": "No matching flashcards",
+  "flashcardsNoResultsMessage": "No flashcards in this deck match your search.",
+  "flashcardsClearSearchAction": "Clear",
+  "flashcardsMoveTitle": "Move flashcards",
+  "flashcardsMoveProgressKeptNote": "Learning progress will be kept after moving.",
+  "flashcardsMovedMessage": "Flashcards moved.",
+  "flashcardsDeleteTitle": "Delete flashcards",
+  "flashcardsDeleteMessage": "This will permanently delete the selected flashcards.",
+  "flashcardsDeletedMessage": "Flashcards deleted.",
+  "flashcardsEditTitle": "Edit card",
+  "flashcardsNewTitle": "New card",
+  "flashcardsFieldFrontLabel": "Front",
+  "flashcardsFieldFrontHint": "Type the term",
+  "flashcardsFieldBackLabel": "Back",
+  "flashcardsFieldBackHint": "English, Vietnamese, or both — comma-separated reads cleanest.",
+  "flashcardsFieldNoteLabel": "Note",
+  "flashcardsFieldNoteHint": "Optional extra note",
+  "flashcardsFieldExampleLabel": "Example sentence",
+  "flashcardsFieldExampleHint": "Add a sentence using this term…",
+  "flashcardsFieldTagsLabel": "Tags",
+  "flashcardsFieldTagsHint": "Add tag",
+  "flashcardsFieldPronunciationLabel": "Pronunciation",
+  "flashcardsFieldPronunciationHint": "Romanization or phonetic spelling",
+  "flashcardsFieldHintLabel": "Hint",
+  "flashcardsFieldHintHint": "A clue that jogs memory without giving the answer.",
+  "flashcardsFieldStartingStatusLabel": "Starting status",
+  "flashcardsStatusNew": "New",
+  "flashcardsStatusLearning": "Learning",
+  "flashcardsStatusReviewing": "Reviewing",
+  "flashcardsRecordPronunciationTooltip": "Record pronunciation",
+  "flashcardsListenPronunciationTooltip": "Listen to pronunciation",
+  "flashcardsTagsAddAction": "Add tag",
+  "flashcardsTagsSheetTitle": "Add tag",
+  "flashcardsTagsConfirmAction": "Add",
+  "flashcardsOptionalSuffix": "optional",
+  "flashcardsFieldLabelOptional": "{label} · optional",
+  "@flashcardsFieldLabelOptional": {
+    "placeholders": {
+      "label": { "type": "String" }
+    }
+  },
+  "flashcardsShowAdvanced": "Show advanced fields",
+  "flashcardsHideAdvanced": "Hide advanced",
+  "flashcardsDeckPickerLabel": "Saving to",
+  "flashcardsDeckPickerSheetTitle": "Save card to",
+  "flashcardsSaveAndAddNextTooltip": "Save and add another",
+  "flashcardsLongContentHelper": "Supports multiple lines. Keep the full answer readable during study.",
+  "flashcardsNoteHelper": "Optional context, examples, or memory hints.",
+  "flashcardsSaveAndAddNext": "Save & add another",
+  "flashcardsSavedMessage": "Flashcard saved.",
+  "flashcardsSaveChanges": "Save changes",
+  "flashcardsSaveAction": "Save card",
+  "flashcardsLearningContentChangedTitle": "You changed the learning content.",
+  "flashcardsLearningContentChangedMessage": "Keep existing progress or reset this card?",
+  "flashcardsKeepProgressAction": "Keep",
+  "flashcardsResetProgressAction": "Reset",
+  "flashcardsUpdatedMessage": "Flashcard updated.",
+  "flashcardsCreatedMessage": "Flashcard created.",
+  "flashcardsDiscardChangesTitle": "Discard changes?",
+  "flashcardsDiscardChangesMessage": "Your unsaved flashcard changes will be lost.",
+  "flashcardsDiscardChangesAction": "Discard",
+  "flashcardsKeepEditingAction": "Keep editing",
+  "studyEntryTitle": "Study",
+  "studyEntryHeading": "Start a study session",
+  "studyEntrySubtitle": "Choose a flow and snapshot settings for this session.",
+  "studyStartAction": "Study",
+  "studyStartNewSessionAction": "Start",
+  "studyStartNewSessionConfirmTitle": "Start a new session?",
+  "studyStartNewSessionConfirmMessage": "Starting a new session will cancel the current unfinished session.",
+  "studyRestartAction": "Restart",
+  "studyResumeTitle": "Session in progress",
+  "studyResumeAction": "Continue",
+  "studyContinueSessionAction": "Continue",
+  "studyResumeChoiceTitle": "Resume previous session?",
+  "studyResumeChoiceMessage": "You have a paused study session for this scope. Resume where you left off, or start over?",
+  "studyResumeChoiceResumeAction": "Resume",
+  "folderResumeMessage": "You have a paused study session for this folder.",
+  "folderStudyEntryTitle": "Study this folder",
+  "folderStudyTodayAction": "Study due cards",
+  "folderStudyFolderAction": "Study folder",
+  "folderStudyDueCount": "{count, plural, =1{1 card due today} other{{count} cards due today}}",
+  "@folderStudyDueCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderStudyCardCount": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@folderStudyCardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailMasteryOverline": "Folder mastery",
+  "folderDetailDeckCountAndCards": "{deckCount, plural, =1{1 deck} other{{deckCount} decks}} · {cardCount, plural, =1{1 card} other{{cardCount} cards}}",
+  "@folderDetailDeckCountAndCards": {
+    "placeholders": {
+      "deckCount": {
+        "type": "int"
+      },
+      "cardCount": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailDueCount": "{count, plural, =1{1 due} other{{count} due}}",
+  "@folderDetailDueCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailStartStudyDueAction": "Start study · {count, plural, =1{1 due} other{{count} due}}",
+  "@folderDetailStartStudyDueAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailStartStudyAction": "Start study",
+  "folderDetailDecksSectionTitle": "{count, plural, =1{1 deck} other{{count} decks}}",
+  "@folderDetailDecksSectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailSubfoldersSectionTitle": "{count, plural, =1{1 subfolder} other{{count} subfolders}}",
+  "@folderDetailSubfoldersSectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckResumeMessage": "You have a paused study session for this deck.",
+  "deckStudyEntryTitle": "Study this deck",
+  "deckStudyTodayAction": "Study due cards",
+  "deckStudyDeckAction": "Study deck",
+  "deckStudyDueCount": "{count, plural, =1{1 card due today} other{{count} cards due today}}",
+  "@deckStudyDueCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckStudyCardCount": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@deckStudyCardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyStartOverAction": "Start over",
+  "studyFlowTitle": "Study flow",
+  "studyTypeNew": "New Study",
+  "studyTypeReview": "SRS Review",
+  "studyTodayReviewOnly": "Today supports SRS Review due and overdue cards in v1.",
+  "studySettingsTitle": "Session settings",
+  "studyBatchSizeLabel": "Batch size: {count}",
+  "@studyBatchSizeLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyBatchSizeRangeLabel": "{min}-{max} cards",
+  "@studyBatchSizeRangeLabel": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "studyDecreaseBatch": "Decrease batch size",
+  "studyIncreaseBatch": "Increase batch size",
+  "studyShuffleCards": "Shuffle flashcards",
+  "studyShuffleAnswers": "Shuffle answers",
+  "studyPrioritizeOverdue": "Prioritize overdue cards",
+  "studyBatchSizeShortLabel": "Batch size",
+  "studyStartWithCountAction": "Start · {count} cards",
+  "@studyStartWithCountAction": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "studyStartNewWithCountAction": "Start new · {count} cards",
+  "@studyStartNewWithCountAction": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "studySessionTitle": "Study session",
+  "studyCancelAction": "Cancel",
+  "studyActionFailed": "Study action failed.",
+  "studyFinalizeAction": "Finalize",
+  "studySkipAction": "Skip",
+  "studyTextSettingsTooltip": "Text settings",
+  "studyAudioTooltip": "Audio",
+  "studyMoreActionsTooltip": "More actions",
+  "studyEditCardTooltip": "Edit card",
+  "studyCardAudioTooltip": "Play card audio",
+  "studyStopAudioTooltip": "Stop audio",
+  "studyReviewTextSettingsTooltip": "Text settings",
+  "studyReviewAudioTooltip": "Audio",
+  "studyReviewMoreActionsTooltip": "More actions",
+  "studyReviewEditCardTooltip": "Edit card",
+  "studyReviewCardAudioTooltip": "Play card audio",
+  "studyReviewProgressPercent": "{percent}%",
+  "@studyReviewProgressPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionEnded": "This session has ended.",
+  "studyViewResultAction": "View",
+  "studyProgressModeRound": "{mode} · round {round}",
+  "@studyProgressModeRound": {
+    "placeholders": {
+      "mode": {},
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "studyResultTitle": "Study result",
+  "studyResultHeading": "Session summary",
+  "studyResultCards": "Cards",
+  "studyResultAttempts": "Attempts",
+  "studyResultCorrect": "Correct",
+  "studyResultIncorrect": "Incorrect",
+  "studyResultBoxUp": "Box increased",
+  "studyResultBoxDown": "Box decreased",
+  "studyResultRemaining": "Remaining",
+  "studyResultAccuracyLabel": "Accuracy",
+  "studyResultAttemptAccuracyLabel": "Attempt accuracy",
+  "studyResultRetryCardsLabel": "Retry cards",
+  "studyResultCardsMastered": "Cards mastered: {mastered}/{total}",
+  "@studyResultCardsMastered": {
+    "placeholders": {
+      "mastered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyResultCardsCompleted": "{completed} of {total} cards completed",
+  "@studyResultCardsCompleted": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyResultReviewMoreAction": "Review",
+  "studyResultStudyAgainAction": "Study",
+  "studyRetryFinalizeAction": "Retry",
+  "studyResultCompleted": "Completed",
+  "studyResultCancelled": "Cancelled",
+  "studyResultFailedFinalize": "Finalize failed. Retry when ready.",
+  "studyResultReadyFinalize": "Ready to finalize",
+  "studyResultInProgress": "In progress",
+  "studyResultDraft": "Draft",
+  "studyResultDoneAction": "Done",
+  "studyResultStudyMoreAction": "Study more",
+  "studyResultBreakdownTitle": "Results",
+  "studyResultPerfect": "Perfect",
+  "studyResultPassed": "Passed",
+  "studyResultRecovered": "Recovered",
+  "studyResultForgot": "Forgot",
+  "studyResultBoxChangesTitle": "Box changes",
+  "studyResultBoxAdvanced": "Advanced",
+  "studyResultBoxStayed": "Stayed",
+  "studyResultBoxReset": "Reset to box 1",
+  "studyResultBoxReachedMax": "Reached box 8",
+  "studyResultFailedFinalizeBanner": "Some data couldn't be saved. Please retry.",
+  "studyResultEmpty": "No cards answered",
+  "studyResultCardsToReviewTitle": "Cards to review",
+  "studyResultCardsToReviewEmpty": "No cards need extra review.",
+  "studyResultRecoveredLabel": "Recovered",
+  "studyResultForgotLabel": "Forgot",
+  "studyResultBoxChangedLabel": "Box {oldBox} → {newBox}",
+  "@studyResultBoxChangedLabel": {
+    "placeholders": {
+      "oldBox": { "type": "int" },
+      "newBox": { "type": "int" }
+    }
+  },
+  "studyModeReview": "Review",
+  "studyModeMatch": "Match",
+  "studyModeGuess": "Guess",
+  "studyModeRecall": "Recall",
+  "studyModeFill": "Fill",
+  "studyModeReviewSubtitle": "Flip cards on SRS schedule",
+  "studyModeMatchSubtitle": "Pair fronts & backs",
+  "studyModeGuessSubtitle": "Multiple choice A / B / C / D",
+  "studyModeRecallSubtitle": "Write from memory",
+  "studyModeFillSubtitle": "Complete the blank",
+  "studyModeMixTitle": "Mix",
+  "studyModeMixSubtitle": "All 5 modes, one session",
+  "studyModeMixBadge": "Adaptive",
+  "studyModeMixSummary": "Review · Match · Guess · Recall · Fill",
+  "deckBreakdownTitle": "Card breakdown",
+  "deckBreakdownNew": "New",
+  "deckBreakdownLearning": "Learning",
+  "deckBreakdownReviewing": "Reviewing",
+  "deckBreakdownMastered": "Mastered",
+  "libraryDeckDueSuffix": "· {dueCount} due",
+  "@libraryDeckDueSuffix": {
+    "placeholders": {
+      "dueCount": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryDeckAllCaughtUp": "All caught up",
+  "libraryFilterAll": "All",
+  "deckMasteryLabel": "Mastery",
+  "deckMasteryProgress": "{mastered} of {total} cards mastered",
+  "@deckMasteryProgress": {
+    "placeholders": {
+      "mastered": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "studyReadyToFinalizeTitle": "Ready to finalize",
+  "studyReadyToFinalizeMessage": "All required items are passed. Finalize to commit SRS progress.",
+  "studyChooseMatchingAnswer": "Choose the matching answer.",
+  "studyTypeMatchingAnswer": "Type the matching answer.",
+  "studyAnswerLabel": "Answer",
+  "studySubmitAnswer": "Submit",
+  "studyHelpAction": "Help",
+  "studyCheckAnswerAction": "Check",
+  "studyFillNoAnswerLabel": "No answer entered",
+  "studyCorrectAction": "Correct",
+  "studyIncorrectAction": "Incorrect",
+  "studyRememberedAction": "Remembered",
+  "studyForgotAction": "Forgot",
+  "studyShowAnswerAction": "Show",
+  "studyShowAnswerCountdownAction": "Show ({seconds}s)",
+  "@studyShowAnswerCountdownAction": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "studyNextAction": "Next",
+  "studyAnswerCorrectTitle": "Correct",
+  "studyAnswerIncorrectTitle": "Not quite",
+  "studyCorrectAnswerLabel": "Correct answer: {answer}",
+  "@studyCorrectAnswerLabel": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyYourAnswerLabel": "Your answer: {answer}",
+  "@studyYourAnswerLabel": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyMarkCorrectAction": "Mark correct",
+  "studyTryAgainAction": "Try again",
+  "studyHintAction": "Hint",
+  "studyGotItAction": "Got it",
+  "studyReviewSwipeHint": "Swipe or tap Next",
+  "studyReviewMeaningLabel": "Meaning",
+  "studyGuessPromptLabel": "What is this?",
+  "studyGuessAutoAdvanceLabel": "Next card in {seconds}s",
+  "@studyGuessAutoAdvanceLabel": {
+    "placeholders": {
+      "seconds": {"type": "String"}
+    }
+  },
+  "studyMatchBoardStatus": "Board {board} of {totalBoards} · {pairsLeft, plural, =1{1 pair left} other{{pairsLeft} pairs left}}",
+  "@studyMatchBoardStatus": {
+    "placeholders": {
+      "board": {"type": "int"},
+      "totalBoards": {"type": "int"},
+      "pairsLeft": {"type": "num"}
+    }
+  },
+  "studyMatchMistakesLabel": "{mistakes, plural, =0{No mistakes} =1{1 mistake} other{{mistakes} mistakes}}",
+  "@studyMatchMistakesLabel": {
+    "placeholders": {
+      "mistakes": {"type": "num"}
+    }
+  },
+  "studyCounterFormat": "{current} / {total}",
+  "@studyCounterFormat": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "studyContinueAction": "Continue",
+  "studyEmptyAnswerMessage": "Enter an answer before submitting.",
+  "studyEmpty_deck_noCards_title": "No flashcards in this deck",
+  "@studyEmpty_deck_noCards_title": {
+    "description": "Empty-scope title shown when a user opens Study on a deck with zero flashcards. P0-1 Tier 1; copy pending product review."
+  },
+  "studyEmpty_deck_noCards_cta": "Add flashcards",
+  "@studyEmpty_deck_noCards_cta": {
+    "description": "Empty-scope CTA that pushes the flashcard-create screen for the current deck."
+  },
+  "studyEmpty_deck_noDueCards_title": "All caught up",
+  "@studyEmpty_deck_noDueCards_title": {
+    "description": "Empty-scope title when a deck has cards but none are due for SRS review. P0-1 Tier 1."
+  },
+  "studyEmpty_deck_noDueCards_subtitle": "Next due {relativeTime}.",
+  "@studyEmpty_deck_noDueCards_subtitle": {
+    "description": "Empty-scope subtitle showing when the next deck card becomes due. Omitted when no future due date exists.",
+    "placeholders": {
+      "relativeTime": {
+        "type": "String"
+      }
+    }
+  },
+  "studyEmpty_deck_noDueCards_cta": "Study new instead",
+  "@studyEmpty_deck_noDueCards_cta": {
+    "description": "Empty-scope CTA that restarts study on the deck as a New Study session."
+  },
+  "studyEmpty_folder_noCards_title": "No cards in this folder",
+  "@studyEmpty_folder_noCards_title": {
+    "description": "Empty-scope title when a folder subtree has zero flashcards. P0-1 Tier 1."
+  },
+  "studyEmpty_folder_noCards_cta": "Add a deck",
+  "@studyEmpty_folder_noCards_cta": {
+    "description": "Empty-scope CTA that returns to the folder so the user can add a deck."
+  },
+  "studyEmpty_folder_noDueCards_title": "All caught up for this folder",
+  "@studyEmpty_folder_noDueCards_title": {
+    "description": "Empty-scope title when a folder subtree has cards but none are due for SRS review. P0-1 Tier 1."
+  },
+  "studyEmpty_folder_noDueCards_subtitle": "Next due {relativeTime}.",
+  "@studyEmpty_folder_noDueCards_subtitle": {
+    "description": "Empty-scope subtitle showing when the next folder card becomes due. Omitted when no future due date exists.",
+    "placeholders": {
+      "relativeTime": {
+        "type": "String"
+      }
+    }
+  },
+  "studyEmpty_folder_noDueCards_cta": "Study new instead",
+  "@studyEmpty_folder_noDueCards_cta": {
+    "description": "Empty-scope CTA that restarts study on the folder as a New Study session."
+  },
+  "studyEmpty_today_allDone_title": "All done for today!",
+  "@studyEmpty_today_allDone_title": {
+    "description": "Empty-scope title when today's SRS review queue is empty but the user has cards. P0-1 Tier 1."
+  },
+  "studyEmpty_today_allDone_message": "Great work. Check back tomorrow for your next review.",
+  "@studyEmpty_today_allDone_message": {
+    "description": "Empty-scope motivational message shown when today's review queue is clear."
+  },
+  "studyEmpty_today_allDone_cta": "Back to dashboard",
+  "@studyEmpty_today_allDone_cta": {
+    "description": "Empty-scope CTA that returns to the dashboard when today's review queue is clear."
+  },
+  "studyEmpty_today_noContent_title": "You haven't created any flashcards yet",
+  "@studyEmpty_today_noContent_title": {
+    "description": "Empty-scope title when the user has zero flashcards anywhere. P0-1 Tier 1."
+  },
+  "studyEmpty_today_noContent_cta": "Create your first deck",
+  "@studyEmpty_today_noContent_cta": {
+    "description": "Empty-scope CTA that opens the library so the user can create their first deck."
+  },
+  "studyEmptyNextDueInDays": "in {count, plural, =1{1 day} other{{count} days}}",
+  "@studyEmptyNextDueInDays": {
+    "description": "Relative time fragment for the next-due hint, in days.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyEmptyNextDueInHours": "in {count, plural, =1{1 hour} other{{count} hours}}",
+  "@studyEmptyNextDueInHours": {
+    "description": "Relative time fragment for the next-due hint, in hours.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyEmptyNextDueSoon": "soon",
+  "@studyEmptyNextDueSoon": {
+    "description": "Relative time fragment for the next-due hint when the next card is due in under an hour."
+  },
+  "studyEmpty_allBuried_title": "All cards buried",
+  "@studyEmpty_allBuried_title": {
+    "description": "Empty-scope title when every card in scope is buried for today. P0-2 Tier 3."
+  },
+  "studyEmpty_allBuried_message": "You buried every card for now. They'll return tomorrow.",
+  "@studyEmpty_allBuried_message": {
+    "description": "Empty-scope message for the all-buried state."
+  },
+  "studyEmpty_allBuried_cta": "Study new instead",
+  "@studyEmpty_allBuried_cta": {
+    "description": "Empty-scope CTA that restarts study as a New Study session when all cards are buried."
+  },
+  "studyEmpty_allSuspended_title": "All cards suspended",
+  "@studyEmpty_allSuspended_title": {
+    "description": "Empty-scope title when every card in scope is suspended. P0-2 Tier 3."
+  },
+  "studyEmpty_allSuspended_message": "Resume some cards to study them again.",
+  "@studyEmpty_allSuspended_message": {
+    "description": "Empty-scope message for the all-suspended state."
+  },
+  "studyEmpty_allSuspended_cta": "View flashcards",
+  "@studyEmpty_allSuspended_cta": {
+    "description": "Empty-scope CTA that opens the flashcard list so the user can unsuspend cards."
+  },
+  "cardActionsTitle": "Card actions",
+  "@cardActionsTitle": {
+    "description": "Title of the card-actions bottom sheet shown during a study session."
+  },
+  "cardActionBury": "Bury until tomorrow",
+  "@cardActionBury": {
+    "description": "Card-actions sheet entry that buries the current card until tomorrow."
+  },
+  "cardActionSuspend": "Suspend card",
+  "@cardActionSuspend": {
+    "description": "Card-actions sheet entry that suspends the current card indefinitely."
+  },
+  "studyCardBuriedMessage": "Card buried until tomorrow.",
+  "@studyCardBuriedMessage": {
+    "description": "Snackbar shown after burying a card."
+  },
+  "studyCardSuspendedMessage": "Card suspended.",
+  "@studyCardSuspendedMessage": {
+    "description": "Snackbar shown after suspending a card."
+  },
+  "commonUndo": "Undo",
+  "@commonUndo": {
+    "description": "Generic undo action label used by bury/suspend toasts."
+  },
+  "studyCancelConfirmTitle": "Cancel this session?",
+  "studyCancelConfirmMessage": "Your current study session will stop and you will be taken to the result screen.",
+  "studyCancelConfirmAction": "Cancel",
+  "flashcardsImportTitle": "Import flashcards",
+  "bulkAddTitle": "Bulk add",
+  "bulkAddBreadcrumbLeaf": "Bulk add",
+  "bulkAddTabPaste": "Paste",
+  "bulkAddTabPreview": "Preview",
+  "bulkAddTabPreviewWithCount": "Preview ({count})",
+  "@bulkAddTabPreviewWithCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "bulkAddPasteHint": "연구자\tresearcher\n공부하다\tto study\n도서관\tlibrary",
+  "bulkAddHelper": "One card per line. Separate the term and meaning with a tab or two spaces. Paste straight from a spreadsheet — it just works.",
+  "bulkAddCardsReady": "{count, plural, =1{1 card ready} other{{count} cards ready}}",
+  "@bulkAddCardsReady": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "bulkAddNoDuplicates": "No duplicates",
+  "bulkAddDuplicatesSkipped": "{count, plural, =1{1 duplicate skipped} other{{count} duplicates skipped}}",
+  "@bulkAddDuplicatesSkipped": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "bulkAddIssuesCount": "{count, plural, =1{1 issue} other{{count} issues}}",
+  "@bulkAddIssuesCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "bulkAddCommit": "{count, plural, =1{Add 1 card} other{Add {count} cards}}",
+  "@bulkAddCommit": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "bulkAddFooterSummary": "{count, plural, =1{1 card · {deckName}} other{{count} cards · {deckName}}}",
+  "@bulkAddFooterSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "deckName": { "type": "String" }
+    }
+  },
+  "bulkAddEmptyPaste": "Paste your list to see a preview.",
+  "bulkAddHelpTooltip": "Format help",
+  "bulkAddSeparatorLabel": "SEPARATOR",
+  "bulkAddSourceTabText": "Text",
+  "bulkAddSourceTabFile": "File",
+  "bulkAddFileEmptyTitle": "No file loaded",
+  "bulkAddFileEmptyDescription": "Choose a CSV (.csv) or Excel (.xlsx) file up to 10 MB. Only the first sheet is read for Excel.",
+  "bulkAddFileChooseAction": "Choose file",
+  "bulkAddFileSizeError": "File exceeds 10 MB. Please choose a smaller file.",
+  "bulkAddFileFormatHint": "CSV · XLSX · 10 MB max",
+  "exportFormatChoiceTitle": "Export as",
+  "exportFormatCsvLabel": "CSV",
+  "exportFormatCsvDescription": "Plain text · opens in any spreadsheet",
+  "exportFormatExcelLabel": "Excel (.xlsx)",
+  "exportFormatExcelDescription": "Native Excel workbook · single sheet",
+  "bulkAddFileLoadedTitle": "{name}",
+  "@bulkAddFileLoadedTitle": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "bulkAddFileSizeLabel": "{size} KB",
+  "@bulkAddFileSizeLabel": {
+    "placeholders": { "size": { "type": "String" } }
+  },
+  "bulkAddFooterTrailing": "cards · {deckName}",
+  "@bulkAddFooterTrailing": {
+    "placeholders": { "deckName": { "type": "String" } }
+  },
+  "importSourceTitle": "Import from",
+  "importSourceSubtitle": "Import is preview-first and atomic. Any invalid line blocks the entire write.",
+  "importCsvLabel": "CSV",
+  "importExcelLabel": "Excel",
+  "importTextFormatLabel": "Text",
+  "importLoadFile": "Load file",
+  "importSelectExcelFile": "Select Excel file",
+  "importChangeFile": "Change",
+  "importRemoveFile": "Remove",
+  "importFileReadyToPreview": "Ready to preview",
+  "importDetectedRowsLabel": "{count, plural, =1{1 row detected} other{{count} rows detected}}",
+  "@importDetectedRowsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importCsvContentLabel": "CSV content",
+  "importExcelFileLabel": "Excel file",
+  "importExcelNoFileTitle": "No Excel file loaded",
+  "importExcelNoFileDescription": "Load a .xlsx file. Column A is front, column B is back, and column C is optional note.",
+  "importExcelLoadedFileDescription": "Preview reads the first sheet from A1. Use the header option if row 1 contains labels.",
+  "importExcelHasHeaderLabel": "First row is header",
+  "importExcelHasHeaderDescription": "Data starts at row 2.",
+  "importTextContentLabel": "Structured text",
+  "importCsvHint": "front,back,note",
+  "importTextHint": "Front: ...\nBack: ...\nNote: ...\nOr one card per line: term / definition",
+  "importCsvRulesText": "Use front, back, and optional note columns.",
+  "importExcelRulesText": "Column A = front, Column B = back, Column C = note.",
+  "importTextRulesText": "Use Front:, Back:, and optional Note: lines.",
+  "importSeparatorLabel": "Separator",
+  "importSeparatorAuto": "Auto",
+  "importSeparatorTab": "Tab",
+  "importSeparatorComma": "Comma",
+  "importSeparatorColon": "Colon",
+  "importSeparatorSlash": "Slash",
+  "importSeparatorSemicolon": "Semicolon",
+  "importSeparatorPipe": "Pipe",
+  "importSeparatorAutoDescription": "Detects clear line separators before preview.",
+  "importSeparatorTabDescription": "term<Tab>definition",
+  "importSeparatorCommaDescription": "term, definition",
+  "importSeparatorColonDescription": "term: definition",
+  "importSeparatorSlashDescription": "term / definition",
+  "importSeparatorSemicolonDescription": "term; definition",
+  "importSeparatorPipeDescription": "term | definition",
+  "importDuplicateHandlingTitle": "Duplicate handling",
+  "importDuplicatePolicySkipExact": "Skip exact duplicates",
+  "importDuplicatePolicySkipExactDescription": "Same front with a different back will still be imported.",
+  "importDuplicatePolicyImportAnyway": "Import anyway",
+  "importDuplicatePolicyImportAnywayDescription": "Future option: create every valid row, even when front and back match an existing card.",
+  "importDuplicatePolicyUpdateExisting": "Update existing cards",
+  "importDuplicatePolicyUpdateExistingDescription": "Future option: update matched cards instead of creating new duplicates.",
+  "importPreviewAction": "Preview import",
+  "importCommitCardsAction": "{count, plural, =1{Import 1 card} other{Import {count} cards}}",
+  "@importCommitCardsAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importSuccessMessage": "Imported {count} flashcards.",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importLoadedFileMessage": "Loaded {fileName}.",
+  "@importLoadedFileMessage": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "importFileUnavailableMessage": "This file cannot be read. Choose another CSV, text, or .xlsx file.",
+  "importValidationIssuesTitle": "Validation issues",
+  "importValidationIssuesSubtitle": "Fix every issue before importing.",
+  "importValidationIssueLine": "Line {line}",
+  "@importValidationIssueLine": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
+  "importPreviewTitle": "Preview",
+  "importPreviewSubtitle": "{count} flashcards ready to create",
+  "@importPreviewSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importPreviewSummary": "{valid} valid · {invalid} issues",
+  "@importPreviewSummary": {
+    "placeholders": {
+      "valid": {
+        "type": "int"
+      },
+      "invalid": {
+        "type": "int"
+      }
+    }
+  },
+  "importPreviewSummaryWithSkipped": "{valid} valid · {invalid} issues · {skipped} skipped",
+  "@importPreviewSummaryWithSkipped": {
+    "placeholders": {
+      "valid": {
+        "type": "int"
+      },
+      "invalid": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "importSkippedDuplicatesTitle": "Skipped duplicates",
+  "importSkippedDuplicatesSubtitle": "{count} exact duplicates will be skipped.",
+  "@importSkippedDuplicatesSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importSkippedDuplicateInFile": "Exact duplicate in this file",
+  "importSkippedDuplicateInDeck": "Exact duplicate in this deck",
+  "importNothingTitle": "Nothing to import",
+  "importNothingMessage": "No valid rows or blocks were produced from the source.",
+  "sharedErrorTitle": "Something went wrong",
+  "sharedTryAgain": "Try again",
+  "sharedShowDetails": "Show details",
+  "sharedHideDetails": "Hide details",
+  "sharedFullscreenTooltip": "Fullscreen",
+  "sharedStreakLabel": "Streak",
+  "sharedOfflineTitle": "You're offline",
+  "sharedOfflineMessage": "Check your internet connection and try again. Your local flashcards still work."
+}
