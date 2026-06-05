@@ -1697,5 +1697,22 @@
   "@libraryFolderCardsCount": { "placeholders": { "count": { "type": "int" } } },
   "libraryFolderDueCount": "{count} cần ôn",
   "@libraryFolderDueCount": { "placeholders": { "count": { "type": "int" } } },
-  "libraryOverflowTooltip": "Tùy chọn thư mục"
+  "libraryOverflowTooltip": "Tùy chọn thư mục",
+  "folderDetailSearchHint": "Tìm trong thư mục này",
+  "folderNotFoundTitle": "Không tìm thấy thư mục",
+  "folderNotFoundMessage": "Thư mục này có thể đã bị di chuyển hoặc xóa.",
+  "folderEmptyLockedTitle": "Thư mục này đang trống",
+  "folderEmptyLockedMessage": "Dùng nút bên dưới để thêm nội dung.",
+  "folderUnlockedTitle": "Thư mục này đang trống",
+  "folderUnlockedMessage": "Chọn cách lấp đầy thư mục:",
+  "folderModeLockHint": "Một thư mục chỉ chứa thư mục con hoặc bộ thẻ — không cả hai.",
+  "folderNewSubfolderLabel": "Thư mục con mới",
+  "folderNewDeckLabel": "Bộ thẻ mới",
+  "subfolderCreateDialogTitle": "Thư mục con mới",
+  "subfolderCreateFieldLabel": "Tên thư mục con",
+  "deckCreateDialogTitle": "Bộ thẻ mới",
+  "deckCreateFieldLabel": "Tên bộ thẻ",
+  "folderDeckDuplicateError": "Đã có một bộ thẻ trùng tên này.",
+  "folderChildCreateError": "Không thể tạo. Vui lòng thử lại.",
+  "folderModeLockedError": "Thư mục này không thể chứa loại mục đó."
 }

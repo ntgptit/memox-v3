@@ -1697,5 +1697,22 @@
   "@libraryFolderCardsCount": { "placeholders": { "count": { "type": "int" } } },
   "libraryFolderDueCount": "{count} due",
   "@libraryFolderDueCount": { "placeholders": { "count": { "type": "int" } } },
-  "libraryOverflowTooltip": "Folder actions"
+  "libraryOverflowTooltip": "Folder actions",
+  "folderDetailSearchHint": "Search this folder",
+  "folderNotFoundTitle": "Folder not found",
+  "folderNotFoundMessage": "This folder may have been moved or deleted.",
+  "folderEmptyLockedTitle": "This folder is empty",
+  "folderEmptyLockedMessage": "Use the button below to add to it.",
+  "folderUnlockedTitle": "This folder is empty",
+  "folderUnlockedMessage": "Choose how to fill it:",
+  "folderModeLockHint": "A folder can hold subfolders or decks — not both.",
+  "folderNewSubfolderLabel": "New subfolder",
+  "folderNewDeckLabel": "New deck",
+  "subfolderCreateDialogTitle": "New subfolder",
+  "subfolderCreateFieldLabel": "Subfolder name",
+  "deckCreateDialogTitle": "New deck",
+  "deckCreateFieldLabel": "Deck name",
+  "folderDeckDuplicateError": "A deck with this name already exists.",
+  "folderChildCreateError": "Couldn't create that. Please try again.",
+  "folderModeLockedError": "This folder can't hold that item type."
 }

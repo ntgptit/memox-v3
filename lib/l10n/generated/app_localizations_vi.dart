@@ -3105,4 +3105,57 @@ class AppLocalizationsVi extends AppLocalizations {
   String libraryFolderDueCount(int count) {
     return '$count cần ôn';
   }
+
+  @override
+  String get folderDetailSearchHint => 'Tìm trong thư mục này';
+
+  @override
+  String get folderNotFoundTitle => 'Không tìm thấy thư mục';
+
+  @override
+  String get folderNotFoundMessage =>
+      'Thư mục này có thể đã bị di chuyển hoặc xóa.';
+
+  @override
+  String get folderEmptyLockedTitle => 'Thư mục này đang trống';
+
+  @override
+  String get folderEmptyLockedMessage => 'Dùng nút bên dưới để thêm nội dung.';
+
+  @override
+  String get folderUnlockedTitle => 'Thư mục này đang trống';
+
+  @override
+  String get folderUnlockedMessage => 'Chọn cách lấp đầy thư mục:';
+
+  @override
+  String get folderModeLockHint =>
+      'Một thư mục chỉ chứa thư mục con hoặc bộ thẻ — không cả hai.';
+
+  @override
+  String get folderNewSubfolderLabel => 'Thư mục con mới';
+
+  @override
+  String get folderNewDeckLabel => 'Bộ thẻ mới';
+
+  @override
+  String get subfolderCreateDialogTitle => 'Thư mục con mới';
+
+  @override
+  String get subfolderCreateFieldLabel => 'Tên thư mục con';
+
+  @override
+  String get deckCreateDialogTitle => 'Bộ thẻ mới';
+
+  @override
+  String get deckCreateFieldLabel => 'Tên bộ thẻ';
+
+  @override
+  String get folderDeckDuplicateError => 'Đã có một bộ thẻ trùng tên này.';
+
+  @override
+  String get folderChildCreateError => 'Không thể tạo. Vui lòng thử lại.';
+
+  @override
+  String get folderModeLockedError => 'Thư mục này không thể chứa loại mục đó.';
 }

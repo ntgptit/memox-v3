@@ -3229,4 +3229,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String libraryFolderDueCount(int count) {
     return '$count due';
   }
+
+  @override
+  String get folderDetailSearchHint => 'Search this folder';
+
+  @override
+  String get folderNotFoundTitle => 'Folder not found';
+
+  @override
+  String get folderNotFoundMessage =>
+      'This folder may have been moved or deleted.';
+
+  @override
+  String get folderEmptyLockedTitle => 'This folder is empty';
+
+  @override
+  String get folderEmptyLockedMessage => 'Use the button below to add to it.';
+
+  @override
+  String get folderUnlockedTitle => 'This folder is empty';
+
+  @override
+  String get folderUnlockedMessage => 'Choose how to fill it:';
+
+  @override
+  String get folderModeLockHint =>
+      'A folder can hold subfolders or decks — not both.';
+
+  @override
+  String get folderNewSubfolderLabel => 'New subfolder';
+
+  @override
+  String get folderNewDeckLabel => 'New deck';
+
+  @override
+  String get subfolderCreateDialogTitle => 'New subfolder';
+
+  @override
+  String get subfolderCreateFieldLabel => 'Subfolder name';
+
+  @override
+  String get deckCreateDialogTitle => 'New deck';
+
+  @override
+  String get deckCreateFieldLabel => 'Deck name';
+
+  @override
+  String get folderDeckDuplicateError =>
+      'A deck with this name already exists.';
+
+  @override
+  String get folderChildCreateError =>
+      'Couldn\'t create that. Please try again.';
+
+  @override
+  String get folderModeLockedError => 'This folder can\'t hold that item type.';
 }

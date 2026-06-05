@@ -5123,6 +5123,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} due'**
   String libraryFolderDueCount(int count);
+
+  /// No description provided for @folderDetailSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search this folder'**
+  String get folderDetailSearchHint;
+
+  /// No description provided for @folderNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder not found'**
+  String get folderNotFoundTitle;
+
+  /// No description provided for @folderNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder may have been moved or deleted.'**
+  String get folderNotFoundMessage;
+
+  /// No description provided for @folderEmptyLockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder is empty'**
+  String get folderEmptyLockedTitle;
+
+  /// No description provided for @folderEmptyLockedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the button below to add to it.'**
+  String get folderEmptyLockedMessage;
+
+  /// No description provided for @folderUnlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder is empty'**
+  String get folderUnlockedTitle;
+
+  /// No description provided for @folderUnlockedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how to fill it:'**
+  String get folderUnlockedMessage;
+
+  /// No description provided for @folderModeLockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A folder can hold subfolders or decks — not both.'**
+  String get folderModeLockHint;
+
+  /// No description provided for @folderNewSubfolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New subfolder'**
+  String get folderNewSubfolderLabel;
+
+  /// No description provided for @folderNewDeckLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New deck'**
+  String get folderNewDeckLabel;
+
+  /// No description provided for @subfolderCreateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New subfolder'**
+  String get subfolderCreateDialogTitle;
+
+  /// No description provided for @subfolderCreateFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Subfolder name'**
+  String get subfolderCreateFieldLabel;
+
+  /// No description provided for @deckCreateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New deck'**
+  String get deckCreateDialogTitle;
+
+  /// No description provided for @deckCreateFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck name'**
+  String get deckCreateFieldLabel;
+
+  /// No description provided for @folderDeckDuplicateError.
+  ///
+  /// In en, this message translates to:
+  /// **'A deck with this name already exists.'**
+  String get folderDeckDuplicateError;
+
+  /// No description provided for @folderChildCreateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create that. Please try again.'**
+  String get folderChildCreateError;
+
+  /// No description provided for @folderModeLockedError.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder can\'t hold that item type.'**
+  String get folderModeLockedError;
 }
 
 class _AppLocalizationsDelegate
