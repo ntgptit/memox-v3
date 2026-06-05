@@ -77,14 +77,22 @@ class LibraryActionController extends _$LibraryActionController {
   @override
   FutureOr<void> build() {}
 
+  void _setSettledState<T>(Result<T> result) {
+    if (!ref.mounted) {
+      return;
+    }
+
+    state = result.fold(
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
+      (T _) => const AsyncValue<void>.data(null),
+    );
+  }
+
   Future<Result<Folder>> createFolder(String name) async {
     state = const AsyncValue<void>.loading();
     final useCase = ref.read(createRootFolderUseCaseProvider);
     final Result<Folder> result = await useCase.call(name: name);
-    state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
-      (Folder _) => const AsyncValue<void>.data(null),
-    );
+    _setSettledState(result);
     return result;
   }
 
@@ -92,10 +100,7 @@ class LibraryActionController extends _$LibraryActionController {
     state = const AsyncValue<void>.loading();
     final useCase = ref.read(renameFolderUseCaseProvider);
     final Result<Folder> result = await useCase.call(id: id, name: name);
-    state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
-      (Folder _) => const AsyncValue<void>.data(null),
-    );
+    _setSettledState(result);
     return result;
   }
 
@@ -106,10 +111,7 @@ class LibraryActionController extends _$LibraryActionController {
       id: id,
       newParentId: newParentId,
     );
-    state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
-      (Folder _) => const AsyncValue<void>.data(null),
-    );
+    _setSettledState(result);
     return result;
   }
 
@@ -117,10 +119,7 @@ class LibraryActionController extends _$LibraryActionController {
     state = const AsyncValue<void>.loading();
     final useCase = ref.read(deleteFolderUseCaseProvider);
     final Result<void> result = await useCase.call(id: id);
-    state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
-      (void _) => const AsyncValue<void>.data(null),
-    );
+    _setSettledState(result);
     return result;
   }
 

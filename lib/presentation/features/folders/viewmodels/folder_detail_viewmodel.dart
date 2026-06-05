@@ -76,6 +76,17 @@ class FolderActionController extends _$FolderActionController {
   @override
   FutureOr<void> build() {}
 
+  void _setSettledState<T>(Result<T> result) {
+    if (!ref.mounted) {
+      return;
+    }
+
+    state = result.fold(
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
+      (T _) => const AsyncValue<void>.data(null),
+    );
+  }
+
   Future<Result<Folder>> createSubfolder(String parentId, String name) async {
     state = const AsyncValue<void>.loading();
     final useCase = ref.read(createSubfolderUseCaseProvider);
@@ -83,10 +94,7 @@ class FolderActionController extends _$FolderActionController {
       parentId: parentId,
       name: name,
     );
-    state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
-      (Folder _) => const AsyncValue<void>.data(null),
-    );
+    _setSettledState(result);
     return result;
   }
 
@@ -97,10 +105,7 @@ class FolderActionController extends _$FolderActionController {
       parentFolderId: parentFolderId,
       name: name,
     );
-    state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
-      (Deck _) => const AsyncValue<void>.data(null),
-    );
+    _setSettledState(result);
     return result;
   }
 }

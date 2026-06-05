@@ -6,11 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/app/app.dart';
 import 'package:memox/app/config/app_config.dart';
 import 'package:memox/app/di/app_providers.dart';
+import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/app/logging/app_talker.dart';
+import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
@@ -53,6 +57,20 @@ LibraryOverviewReadModel _model({
   dueToday: dueToday,
   totalFolderCount: totalFolderCount,
 );
+
+final class _UnusedFolderRepository implements FolderRepository {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+final class _PendingCreateRootFolderUseCase extends CreateRootFolderUseCase {
+  _PendingCreateRootFolderUseCase() : super(_UnusedFolderRepository());
+
+  final Completer<Result<Folder>> completer = Completer<Result<Folder>>();
+
+  @override
+  Future<Result<Folder>> call({required String name}) => completer.future;
+}
 
 Widget _wrapBody(
   LibraryOverviewReadModel model, {
@@ -397,6 +415,30 @@ void main() {
     );
   });
 
+  group('LibraryActionController — Lifecycle', () {
+    test(
+      'createFolder returns after auto-dispose without writing disposed state',
+      () async {
+        final useCase = _PendingCreateRootFolderUseCase();
+        final ProviderContainer container = ProviderContainer(
+          overrides: [
+            createRootFolderUseCaseProvider.overrideWithValue(useCase),
+          ],
+        );
+
+        final Future<Result<Folder>> pending = container
+            .read(libraryActionControllerProvider.notifier)
+            .createFolder('Korean');
+        container.dispose();
+
+        final Result<Folder> expected = Result<Folder>.ok(_folder('Korean'));
+        useCase.completer.complete(expected);
+
+        await expectLater(pending, completion(expected));
+      },
+    );
+  });
+
   group('LibraryOverviewScreen — Overflow sheet', () {
     Future<void> pumpLoaded(
       WidgetTester tester, {
@@ -481,7 +523,10 @@ void main() {
     ) async {
       await pumpLoaded(tester);
 
-      expect(find.widgetWithText(FloatingActionButton, 'New folder'), findsOneWidget);
+      expect(
+        find.widgetWithText(FloatingActionButton, 'New folder'),
+        findsOneWidget,
+      );
     });
   });
 
