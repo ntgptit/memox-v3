@@ -211,6 +211,27 @@ enum ContentMode {
 
 Source: `docs/business/folder/folder-management.md`.
 
+### ContentSortMode
+
+**Status:** Current (read/use-case layer; no V1 sort UI control).
+
+How Library / Folder-detail content rows are ordered.
+
+```dart
+enum ContentSortMode {
+  manual,       // User-controlled order via sort_order (default)
+  name,         // Name A→Z
+  newest,       // Most recently created first
+  lastStudied,  // Most recently studied subtree first
+}
+```
+
+**Storage:** sort preference persists per user in SharedPreferences (key
+`library.sort`); the enum itself is not stored on a row.
+
+Source: `docs/wireframes/02-library.md` §Sort options. Used by
+`FolderRepository.watchLibraryOverview` + `WatchLibraryOverviewUseCase`.
+
 ### TargetLanguage
 
 The language of a deck's front field. Drives TTS gating.
@@ -421,6 +442,7 @@ lib/domain/types/
 ├── study_type.dart
 ├── session_status.dart
 ├── content_mode.dart
+├── content_sort_mode.dart
 ├── target_language.dart
 ├── tts_language_code.dart
 ├── box_number.dart           (typedef + assertion helpers)

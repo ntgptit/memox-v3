@@ -2547,13 +2547,13 @@ abstract class AppLocalizations {
   /// No description provided for @libraryEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'No folders yet'**
+  /// **'Nothing here yet'**
   String get libraryEmptyTitle;
 
   /// No description provided for @libraryEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Create your first folder to start building your library.'**
+  /// **'Create a folder to organize your decks.'**
   String get libraryEmptyMessage;
 
   /// No description provided for @libraryLoadFailedTitle.
@@ -2565,7 +2565,7 @@ abstract class AppLocalizations {
   /// No description provided for @libraryLoadFailedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your data is safe on this device. Try again in a moment.'**
+  /// **'Something went wrong while loading your folders.'**
   String get libraryLoadFailedMessage;
 
   /// No description provided for @libraryOverflowTooltip.
@@ -2583,7 +2583,7 @@ abstract class AppLocalizations {
   /// No description provided for @librarySearchHint.
   ///
   /// In en, this message translates to:
-  /// **'Search decks, cards, tags'**
+  /// **'Search folders'**
   String get librarySearchHint;
 
   /// No description provided for @libraryNewFolderLabel.
@@ -2595,7 +2595,7 @@ abstract class AppLocalizations {
   /// No description provided for @libraryFolderCountLabel.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 folder} other{{count} folders}}'**
+  /// **'{count} folders'**
   String libraryFolderCountLabel(int count);
 
   /// No description provided for @libraryDueSummaryTitle.
@@ -5045,6 +5045,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check your internet connection and try again. Your local flashcards still work.'**
   String get sharedOfflineMessage;
+
+  /// No description provided for @commonRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
+
+  /// No description provided for @libraryFilterTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get libraryFilterTooltip;
+
+  /// No description provided for @librarySearchClearTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get librarySearchClearTooltip;
+
+  /// No description provided for @librarySearchNoResultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No folders found'**
+  String get librarySearchNoResultsTitle;
+
+  /// No description provided for @librarySearchNoResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No folder matches your search.'**
+  String get librarySearchNoResultsMessage;
+
+  /// No description provided for @folderCreateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New folder'**
+  String get folderCreateDialogTitle;
+
+  /// No description provided for @folderCreateFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder name'**
+  String get folderCreateFieldLabel;
+
+  /// No description provided for @libraryFolderDuplicateError.
+  ///
+  /// In en, this message translates to:
+  /// **'A folder with this name already exists.'**
+  String get libraryFolderDuplicateError;
+
+  /// No description provided for @libraryCreateFolderError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the folder. Please try again.'**
+  String get libraryCreateFolderError;
+
+  /// No description provided for @libraryFolderDecksCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No decks} =1{1 deck} other{{count} decks}}'**
+  String libraryFolderDecksCount(int count);
+
+  /// No description provided for @libraryFolderSubfoldersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No subfolders} =1{1 subfolder} other{{count} subfolders}}'**
+  String libraryFolderSubfoldersCount(int count);
+
+  /// No description provided for @libraryFolderCardsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No cards} =1{1 card} other{{count} cards}}'**
+  String libraryFolderCardsCount(int count);
+
+  /// No description provided for @libraryFolderDueCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} due'**
+  String libraryFolderDueCount(int count);
 }
 
 class _AppLocalizationsDelegate

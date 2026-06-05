@@ -5,6 +5,9 @@
 /// this single file from feature code instead of reaching into the tree.
 library;
 
+// Async-state adapters (app-wiring-adjacent).
+export 'async/app_async_builder.dart';
+export 'async/mx_retained_async_state.dart';
 // Feedback & overlays.
 export 'feedback/mx_callout.dart';
 export 'feedback/mx_offline_banner.dart';
@@ -20,12 +23,16 @@ export 'widgets/buttons/mx_action_button.dart';
 export 'widgets/buttons/mx_action_intent.dart';
 export 'widgets/buttons/mx_button_size.dart';
 export 'widgets/buttons/mx_card_actions.dart';
+export 'widgets/buttons/mx_fab.dart';
 export 'widgets/buttons/mx_icon_button.dart';
 export 'widgets/buttons/mx_primary_button.dart';
 export 'widgets/buttons/mx_secondary_button.dart';
+// Inputs.
+export 'widgets/inputs/mx_search_field.dart';
 // Interaction primitive.
 export 'widgets/mx_tappable.dart';
 // Navigation chrome.
+export 'widgets/navigation/mx_app_bar.dart';
 export 'widgets/navigation/mx_breadcrumb.dart';
 export 'widgets/navigation/mx_study_top_bar.dart';
 // State placeholders.

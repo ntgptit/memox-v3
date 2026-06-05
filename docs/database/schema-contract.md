@@ -6,6 +6,29 @@ schema_version: 13 (see lib/data/datasources/local/app_database.dart `currentSch
 
 # Database Schema Contract
 
+## Current implementation status (incremental rebuild)
+
+The Drift data layer is being **rebuilt incrementally, per feature slice**. The
+table-area and migration sections below describe the **target** schema (the
+mature shape to migrate toward); they are intentionally ahead of the current
+code per the "do not downgrade target concepts" rule.
+
+**Current schema** (`AppDatabase.currentSchemaVersion`): **1**. Tables shipped
+so far (added for the Library feature):
+
+| Table | Columns (current) |
+| --- | --- |
+| `folders` | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at` |
+| `decks` | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language`, `sort_order`, `created_at`, `updated_at` |
+| `flashcards` | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `sort_order`, `created_at`, `updated_at` |
+| `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number`, `due_at?`, `buried_until?`, `is_suspended`, `review_count`, `lapse_count`, `last_studied_at?` + index `idx_flashcard_progress_eligibility` |
+
+Remaining target tables (`flashcard_tags`, `study_sessions`,
+`study_session_items`, `study_attempts`, `tts_settings`) land with their
+feature slices. When a new table/column ships, bump
+`AppDatabase.currentSchemaVersion`, add an `onUpgrade` step
+(`docs/database/migration-contract.md`), and update this section.
+
 ## Source files to inspect
 
 - `lib/data/datasources/local/app_database.dart`

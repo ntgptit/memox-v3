@@ -1598,18 +1598,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get libraryEmptyTitle => 'No folders yet';
+  String get libraryEmptyTitle => 'Nothing here yet';
 
   @override
-  String get libraryEmptyMessage =>
-      'Create your first folder to start building your library.';
+  String get libraryEmptyMessage => 'Create a folder to organize your decks.';
 
   @override
   String get libraryLoadFailedTitle => 'Couldn\'t load your library';
 
   @override
   String get libraryLoadFailedMessage =>
-      'Your data is safe on this device. Try again in a moment.';
+      'Something went wrong while loading your folders.';
 
   @override
   String get libraryOverflowTooltip => 'Folder options';
@@ -1618,20 +1617,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get libraryFiltersTooltip => 'Filters';
 
   @override
-  String get librarySearchHint => 'Search decks, cards, tags';
+  String get librarySearchHint => 'Search folders';
 
   @override
   String get libraryNewFolderLabel => 'New folder';
 
   @override
   String libraryFolderCountLabel(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count folders',
-      one: '1 folder',
-    );
-    return '$_temp0';
+    return '$count folders';
   }
 
   @override
@@ -3166,4 +3159,74 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sharedOfflineMessage =>
       'Check your internet connection and try again. Your local flashcards still work.';
+
+  @override
+  String get commonRetry => 'Retry';
+
+  @override
+  String get libraryFilterTooltip => 'Filters';
+
+  @override
+  String get librarySearchClearTooltip => 'Clear search';
+
+  @override
+  String get librarySearchNoResultsTitle => 'No folders found';
+
+  @override
+  String get librarySearchNoResultsMessage => 'No folder matches your search.';
+
+  @override
+  String get folderCreateDialogTitle => 'New folder';
+
+  @override
+  String get folderCreateFieldLabel => 'Folder name';
+
+  @override
+  String get libraryFolderDuplicateError =>
+      'A folder with this name already exists.';
+
+  @override
+  String get libraryCreateFolderError =>
+      'Couldn\'t create the folder. Please try again.';
+
+  @override
+  String libraryFolderDecksCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count decks',
+      one: '1 deck',
+      zero: 'No decks',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String libraryFolderSubfoldersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count subfolders',
+      one: '1 subfolder',
+      zero: 'No subfolders',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String libraryFolderCardsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+      zero: 'No cards',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String libraryFolderDueCount(int count) {
+    return '$count due';
+  }
 }

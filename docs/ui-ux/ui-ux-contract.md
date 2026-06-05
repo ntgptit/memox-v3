@@ -73,13 +73,28 @@ provides, by handoff section:
   `MxBarChart`.
 - Study modes: `MxFlashcard`, `MxRatingBar`, `MxSelfAssessment`,
   `MxChoiceOption`, `MxMatchTile`.
-- Feedback/overlays: `MxOfflineBanner`, `MxCallout`, `MxSkeleton`.
+- Feedback/overlays: `MxOfflineBanner`, `MxCallout`, `MxSkeleton`,
+  `showMxSnackbar` (the sanctioned snackbar helper — feature code must not use
+  raw `SnackBar`/`ScaffoldMessenger`).
+- Chrome/nav (feature-safe wrappers): `MxAppBar`, `MxFab`.
+- Inputs: `MxSearchField`, and `MxText` (the only shared widget with a public
+  `MxTextRole` API — feature code must not read `context.textTheme` directly).
+- Dialogs: `showMxNameDialog` (single-field create/rename).
+- Interaction: `MxTappable` (the single shaped tap primitive — feature/shared
+  code must not hand-roll `InkWell`/`GestureDetector`).
+- Async rendering: `AppAsyncBuilder` and `MxRetainedAsyncState` (in
+  `shared/async`) — the sanctioned alternatives to `AsyncValue.when`, retaining
+  data on refetch with a skeleton-first first load.
+
+Navigation uses the `AppNavigation` `BuildContext` extension
+(`lib/app/router/app_navigation.dart`) — UI code must not call raw `GoRouter`
+APIs.
 
 Material widgets already styled by `MxComponentThemes` (FilledButton, Card,
-Chip, TextField, SearchBar, Switch, Slider, SegmentedButton, Dialog,
-BottomSheet, SnackBar, NavigationBar, AppBar, Divider, LinearProgressIndicator)
-are used directly — they are intentionally not re-wrapped. `MxRetainedAsyncState`
-is still pending (state layer not yet built).
+Chip, Switch, Slider, SegmentedButton, BottomSheet, NavigationBar, Divider,
+LinearProgressIndicator) are used directly inside shared widgets — they are
+intentionally not re-wrapped. Feature code, however, must use the `Mx*`
+wrappers above (the guard bans raw Material in `features/**`).
 
 ## Button and action density rule
 

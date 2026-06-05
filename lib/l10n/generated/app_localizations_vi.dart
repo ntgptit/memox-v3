@@ -1493,18 +1493,18 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get libraryEmptyTitle => 'Chưa có thư mục nào';
+  String get libraryEmptyTitle => 'Chưa có gì ở đây';
 
   @override
   String get libraryEmptyMessage =>
-      'Tạo thư mục đầu tiên để bắt đầu xây dựng thư viện của bạn.';
+      'Tạo một thư mục để sắp xếp các bộ thẻ của bạn.';
 
   @override
-  String get libraryLoadFailedTitle => 'Không thể tải thư viện của bạn';
+  String get libraryLoadFailedTitle => 'Không tải được thư viện';
 
   @override
   String get libraryLoadFailedMessage =>
-      'Dữ liệu của bạn vẫn an toàn trên thiết bị này. Hãy thử lại sau giây lát.';
+      'Đã xảy ra lỗi khi tải các thư mục của bạn.';
 
   @override
   String get libraryOverflowTooltip => 'Tùy chọn thư mục';
@@ -1513,20 +1513,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get libraryFiltersTooltip => 'Bộ lọc';
 
   @override
-  String get librarySearchHint => 'Tìm bộ thẻ, thẻ, nhãn';
+  String get librarySearchHint => 'Tìm thư mục';
 
   @override
   String get libraryNewFolderLabel => 'Thư mục mới';
 
   @override
   String libraryFolderCountLabel(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count thư mục',
-      one: '1 thư mục',
-    );
-    return '$_temp0';
+    return '$count thư mục';
   }
 
   @override
@@ -1534,8 +1528,7 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count thẻ đến hạn hôm nay',
-      one: '1 thẻ đến hạn hôm nay',
+      other: '$count thẻ cần ôn hôm nay',
     );
     return '$_temp0';
   }
@@ -3045,4 +3038,71 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get sharedOfflineMessage =>
       'Hãy kiểm tra kết nối internet và thử lại. Bộ flashcard cục bộ của bạn vẫn hoạt động.';
+
+  @override
+  String get commonRetry => 'Thử lại';
+
+  @override
+  String get libraryFilterTooltip => 'Bộ lọc';
+
+  @override
+  String get librarySearchClearTooltip => 'Xóa tìm kiếm';
+
+  @override
+  String get librarySearchNoResultsTitle => 'Không tìm thấy thư mục';
+
+  @override
+  String get librarySearchNoResultsMessage =>
+      'Không có thư mục nào khớp với tìm kiếm của bạn.';
+
+  @override
+  String get folderCreateDialogTitle => 'Thư mục mới';
+
+  @override
+  String get folderCreateFieldLabel => 'Tên thư mục';
+
+  @override
+  String get libraryFolderDuplicateError => 'Đã có một thư mục trùng tên này.';
+
+  @override
+  String get libraryCreateFolderError =>
+      'Không thể tạo thư mục. Vui lòng thử lại.';
+
+  @override
+  String libraryFolderDecksCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bộ thẻ',
+      zero: 'Chưa có bộ thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String libraryFolderSubfoldersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thư mục con',
+      zero: 'Chưa có thư mục con',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String libraryFolderCardsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ',
+      zero: 'Chưa có thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String libraryFolderDueCount(int count) {
+    return '$count cần ôn';
+  }
 }

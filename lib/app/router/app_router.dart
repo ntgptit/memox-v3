@@ -5,6 +5,7 @@ import 'package:memox/app/router/redirect.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
@@ -58,40 +59,8 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
       ),
       StatefulShellBranch(
         navigatorKey: _libraryNavigatorKey,
-        routes: <RouteBase>[
-          GoRoute(
-            path: RoutePaths.library,
-            name: RouteNames.library,
-            builder: (context, state) =>
-                const RoutePlaceholder(routeName: RouteNames.library),
-            routes: <RouteBase>[
-              // Shell-visible library tree (folder drill-down, flashcard list).
-              GoRoute(
-                path: '${RoutePaths.folderSegment}/:${RoutePaths.idParam}',
-                name: RouteNames.folderDetail,
-                builder: (context, state) => RoutePlaceholder(
-                  routeName: RouteNames.folderDetail,
-                  params: <String, String>{
-                    RoutePaths.idParam:
-                        state.pathParameters[RoutePaths.idParam] ?? '',
-                  },
-                ),
-              ),
-              GoRoute(
-                path:
-                    '${RoutePaths.deckSegment}/:${RoutePaths.deckIdParam}/${RoutePaths.flashcardsSegment}',
-                name: RouteNames.flashcardList,
-                builder: (context, state) => RoutePlaceholder(
-                  routeName: RouteNames.flashcardList,
-                  params: <String, String>{
-                    RoutePaths.deckIdParam:
-                        state.pathParameters[RoutePaths.deckIdParam] ?? '',
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
+        // Library Overview + folder tree, composed from the feature registry.
+        routes: libraryBranchRoutes(),
       ),
       StatefulShellBranch(
         navigatorKey: _progressNavigatorKey,
