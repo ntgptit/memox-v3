@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 
 /// App bar wrapper — feature code must not use raw `AppBar`
@@ -25,15 +24,14 @@ class MxAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
 
   @override
-  Size get preferredSize => Size.fromHeight(
-    SizeTokens.appbar + (bottom?.preferredSize.height ?? 0),
-  );
+  Size get preferredSize =>
+      Size.fromHeight(SizeTokens.appbar + (bottom?.preferredSize.height ?? 0));
 
   @override
   Widget build(BuildContext context) => AppBar(
-      title: title ?? (titleText == null ? null : Text(titleText!)),
-      actions: actions,
-      leading: leading,
-      bottom: bottom,
-    );
+    title: title ?? (titleText == null ? null : Text(titleText!)),
+    actions: actions,
+    leading: leading,
+    bottom: bottom,
+  );
 }

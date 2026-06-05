@@ -43,5 +43,6 @@ final class AppConfig {
   final bool enableRiverpodDiagnostics;
 
   bool get isProduction => flavor == AppFlavor.production;
+
   bool get isDevelopment => flavor == AppFlavor.development;
 }

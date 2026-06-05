@@ -49,30 +49,31 @@ Cross-cutting contracts (in `docs/` siblings):
 
 When product behavior changes, update the related business doc before or in the same change.
 
-When docs and code disagree, do not silently choose one. Report the mismatch or update both in the same change.
+When docs and code disagree, do not silently choose one. Report the mismatch or update both in the
+same change.
 
 ## Main business areas
 
-| Area | Source of truth |
-| --- | --- |
-| Vocabulary | `docs/business/glossary.md` |
-| App scope | `docs/business/system/overview.md` |
-| Route relationship | `docs/business/navigation/navigation-flow.md` |
-| Folder rules | `docs/business/folder/folder-management.md` |
-| Deck rules | `docs/business/deck/deck-management.md` |
-| Flashcard rules + import | `docs/business/flashcard/flashcard-management.md` |
-| Study session + empty scope | `docs/business/study/study-flow.md` |
-| SRS review | `docs/business/srs/srs-review.md` |
-| Bury / suspend | `docs/business/study-actions/bury-suspend.md` |
-| Resume session | `docs/business/resume/resume-session.md` |
-| Tag system | `docs/business/tags/tag-system.md` |
-| Bulk operations | `docs/business/bulk/bulk-operations.md` |
-| Global search | `docs/business/search/global-search.md` |
-| Card history | `docs/business/history/card-history.md` |
+| Area                            | Source of truth                                    |
+|---------------------------------|----------------------------------------------------|
+| Vocabulary                      | `docs/business/glossary.md`                        |
+| App scope                       | `docs/business/system/overview.md`                 |
+| Route relationship              | `docs/business/navigation/navigation-flow.md`      |
+| Folder rules                    | `docs/business/folder/folder-management.md`        |
+| Deck rules                      | `docs/business/deck/deck-management.md`            |
+| Flashcard rules + import        | `docs/business/flashcard/flashcard-management.md`  |
+| Study session + empty scope     | `docs/business/study/study-flow.md`                |
+| SRS review                      | `docs/business/srs/srs-review.md`                  |
+| Bury / suspend                  | `docs/business/study-actions/bury-suspend.md`      |
+| Resume session                  | `docs/business/resume/resume-session.md`           |
+| Tag system                      | `docs/business/tags/tag-system.md`                 |
+| Bulk operations                 | `docs/business/bulk/bulk-operations.md`            |
+| Global search                   | `docs/business/search/global-search.md`            |
+| Card history                    | `docs/business/history/card-history.md`            |
 | Daily goal + streak + reminders | `docs/business/engagement/dashboard-engagement.md` |
-| Export (CSV/Excel) | `docs/business/export/export.md` |
-| TTS / audio | `docs/business/tts/tts-settings.md` |
-| Account + Drive sync | `docs/business/account-sync/account-sync.md` |
+| Export (CSV/Excel)              | `docs/business/export/export.md`                   |
+| TTS / audio                     | `docs/business/tts/tts-settings.md`                |
+| Account + Drive sync            | `docs/business/account-sync/account-sync.md`       |
 
 ## Related
 

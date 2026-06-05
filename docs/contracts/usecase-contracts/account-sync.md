@@ -5,9 +5,13 @@ status: contract
 
 # Account & Sync Use Cases Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-Google sign-in, account-scoped DB, Drive App Folder backup/restore with mandatory pre-restore snapshot.
+Google sign-in, account-scoped DB, Drive App Folder backup/restore with mandatory pre-restore
+snapshot.
 
 ## SignInWithGoogleUseCase
 
@@ -117,9 +121,11 @@ Future<Either<Failure, RestoreResult>> call({
 
 **Rules:**
 
-- `skipSnapshot` is not exposed by current V1 Account Settings restore. It is reserved for a future full onboarding / empty-DB restore prompt and is valid only when the local DB is verifiably empty.
+- `skipSnapshot` is not exposed by current V1 Account Settings restore. It is reserved for a future
+  full onboarding / empty-DB restore prompt and is valid only when the local DB is verifiably empty.
 - If `!skipSnapshot`:
-  - Call `CreatePreRestoreSnapshotUseCase`. If fails → return `StorageFailure`, abort, original DB UNCHANGED.
+    - Call `CreatePreRestoreSnapshotUseCase`. If fails → return `StorageFailure`, abort, original DB
+      UNCHANGED.
 - Download DB from Drive.
 - Validate downloaded manifest matches schema version.
 - Replace local DB atomically (write to temp file, then rename).
@@ -152,10 +158,12 @@ Future<Either<Failure, Unit>> call({required String label});
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md` (Failure types), `docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
+**Base contracts:** `docs/contracts/error-contract.md` (Failure types),
+`docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
 
 **Business spec:** `docs/business/account-sync/account-sync.md`
 **Repository:** `docs/contracts/repository-contracts/sync-repository.md`
-**Wireframes:** `docs/wireframes/19-settings-account.md`, `docs/wireframes/24-shared-dialogs.md` §restore-warning
+**Wireframes:** `docs/wireframes/19-settings-account.md`, `docs/wireframes/24-shared-dialogs.md`
+§restore-warning
 **Decision table:** rows under "Account / Sync"
 **Code paths:** `lib/domain/usecases/account_sync/**`, `lib/data/sync/**`, `lib/core/auth/**`

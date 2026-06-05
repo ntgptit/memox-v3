@@ -5,9 +5,14 @@ status: contract
 
 # Code Style Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-Naming, file organization, import order, and forbidden patterns for MemoX Flutter code. This contract supplements (does NOT replace) `analysis_options.yaml`. When linter and this doc disagree, fix the linter rule, not the convention.
+Naming, file organization, import order, and forbidden patterns for MemoX Flutter code. This
+contract supplements (does NOT replace) `analysis_options.yaml`. When linter and this doc disagree,
+fix the linter rule, not the convention.
 
 ## File and folder layout
 
@@ -105,39 +110,40 @@ lib/l10n/
 
 ### Classes
 
-| Kind | Suffix | Example |
-| --- | --- | --- |
-| Screen widget | `Screen` | `DashboardScreen` |
-| Bottom-sheet widget | `Sheet` (with `Mx` prefix if shared) | `MxSheetTagPicker` |
-| Dialog widget | `Dialog` (with `Mx` prefix if shared) | `MxDialogDeleteConfirm` |
-| Use case | `UseCase` | `GradeAttemptUseCase` |
-| Repository interface | `Repository` | `FlashcardRepository` |
-| Repository implementation | `RepositoryImpl` | `FlashcardRepositoryImpl` |
-| DAO | `Dao` | `FlashcardDao` |
-| Notifier (Riverpod) | `Notifier` | `DashboardNotifier` |
-| Service (cross-cutting) | `Service` | `TtsService`, `DriveSyncService` |
-| Mapper | `Mapper` | `FlashcardMapper` |
-| Entity / model | no suffix | `Flashcard`, `Folder`, `Deck` |
-| Failure | `Failure` | `StorageFailure`, `NotFoundFailure` |
-| Enum | no suffix | `AttemptResult`, `StudyMode` |
-| Shared widget | `Mx` prefix | `MxPrimaryButton`, `MxScaffold` |
-| Feature-private widget | no `Mx` prefix | `ResumeCard`, `GoalRing` |
+| Kind                      | Suffix                                | Example                             |
+|---------------------------|---------------------------------------|-------------------------------------|
+| Screen widget             | `Screen`                              | `DashboardScreen`                   |
+| Bottom-sheet widget       | `Sheet` (with `Mx` prefix if shared)  | `MxSheetTagPicker`                  |
+| Dialog widget             | `Dialog` (with `Mx` prefix if shared) | `MxDialogDeleteConfirm`             |
+| Use case                  | `UseCase`                             | `GradeAttemptUseCase`               |
+| Repository interface      | `Repository`                          | `FlashcardRepository`               |
+| Repository implementation | `RepositoryImpl`                      | `FlashcardRepositoryImpl`           |
+| DAO                       | `Dao`                                 | `FlashcardDao`                      |
+| Notifier (Riverpod)       | `Notifier`                            | `DashboardNotifier`                 |
+| Service (cross-cutting)   | `Service`                             | `TtsService`, `DriveSyncService`    |
+| Mapper                    | `Mapper`                              | `FlashcardMapper`                   |
+| Entity / model            | no suffix                             | `Flashcard`, `Folder`, `Deck`       |
+| Failure                   | `Failure`                             | `StorageFailure`, `NotFoundFailure` |
+| Enum                      | no suffix                             | `AttemptResult`, `StudyMode`        |
+| Shared widget             | `Mx` prefix                           | `MxPrimaryButton`, `MxScaffold`     |
+| Feature-private widget    | no `Mx` prefix                        | `ResumeCard`, `GoalRing`            |
 
 ### Functions and variables
 
 - lowerCamelCase always.
-- Boolean: prefix with `is`, `has`, `can`, `should` (`isSuspended`, `hasUnsavedChanges`, `canCommit`).
+- Boolean: prefix with `is`, `has`, `can`, `should` (`isSuspended`, `hasUnsavedChanges`,
+  `canCommit`).
 - Private: leading underscore (`_buildHeader`, `_currentDeckProvider`).
 - Stream getter: `watchXxx()` (matches Drift convention).
 - Future single: `getXxx()`, `findXxx()`, `loadXxx()`.
 
 ### Providers (Riverpod v3 annotation codegen)
 
-| Need | Pattern |
-| --- | --- |
-| Query provider | `@riverpod {ReturnType} {entity}({Ref} ref, ...)` → `{entity}Provider` |
-| Notifier | `@riverpod class {Feature}Notifier extends _$ {Feature}Notifier { ... }` → `{feature}NotifierProvider` |
-| Scoped/family | use `family` parameter; never manual key construction |
+| Need           | Pattern                                                                                                |
+|----------------|--------------------------------------------------------------------------------------------------------|
+| Query provider | `@riverpod {ReturnType} {entity}({Ref} ref, ...)` → `{entity}Provider`                                 |
+| Notifier       | `@riverpod class {Feature}Notifier extends _$ {Feature}Notifier { ... }` → `{feature}NotifierProvider` |
+| Scoped/family  | use `family` parameter; never manual key construction                                                  |
 
 Examples:
 
@@ -156,12 +162,14 @@ class DashboardNotifier extends _$DashboardNotifier {
 Forbidden:
 
 - Manual `Provider`/`StateProvider`/`StateNotifierProvider` (use annotation codegen).
-- Two providers with same logical purpose but different names (e.g., `flashcardListProvider` AND `currentDeckFlashcardsProvider`).
+- Two providers with same logical purpose but different names (e.g., `flashcardListProvider` AND
+  `currentDeckFlashcardsProvider`).
 - Provider for `BuildContext` or other transient.
 
 ## Imports order
 
-The import example below includes `fpdart` as target architecture. Omit `package:fpdart/fpdart.dart` until the dependency/API migration is approved and applied.
+The import example below includes `fpdart` as target architecture. Omit `package:fpdart/fpdart.dart`
+until the dependency/API migration is approved and applied.
 
 ```dart
 // 1. dart: imports
@@ -187,7 +195,8 @@ part 'dashboard_notifier.g.dart';
 part 'dashboard_state.freezed.dart';
 ```
 
-Use absolute `package:memox/...` imports for local code, NOT relative `../../`. Easier to grep and move.
+Use absolute `package:memox/...` imports for local code, NOT relative `../../`. Easier to grep and
+move.
 
 ## Const, final, var
 
@@ -227,25 +236,26 @@ Forbidden:
 
 - One widget per file when widget is non-trivial (>~30 lines or used outside).
 - Build method: short. Extract `_buildXxx()` methods OR sub-widgets.
-- No business logic in build (no DB call, no validation, no transformation that should be in notifier/use case).
+- No business logic in build (no DB call, no validation, no transformation that should be in
+  notifier/use case).
 - `BuildContext` only inside build / callbacks; never store.
 - `MediaQuery.of(context)` once at top of build; reuse the result.
 
 ## Forbidden in production code
 
-| Forbidden | Why | Replacement |
-| --- | --- | --- |
-| `print()` | Goes to stdout, not log levels | `Logger('feature').info(...)` |
-| `debugPrint()` | Same problem | `Logger(...)` |
-| Hardcoded route string | Breaks rename | `RouteNames.xxx`, `RoutePaths.xxx` |
-| Hardcoded color hex | Breaks theme | `Theme.of(context).colorScheme.xxx` |
-| Hardcoded TextStyle | Breaks theme | `Theme.of(context).textTheme.xxx` |
-| Hardcoded duration | Breaks settings consistency | `MxDurations.fast/medium/slow` |
-| Hardcoded user-facing string | Breaks l10n | `AppLocalizations.of(context).xxx` |
-| `DateTime.now()` | Untestable | `clock.now()` (package:clock) |
-| `Random()` | Untestable | injected `Random` |
-| `Container(decoration: BoxDecoration(...))` for known patterns | Duplicates design system | Use `Mx*` widget |
-| `// TODO` without ticket | Drift accumulates | `// TODO(#123): ...` with issue link |
+| Forbidden                                                      | Why                            | Replacement                          |
+|----------------------------------------------------------------|--------------------------------|--------------------------------------|
+| `print()`                                                      | Goes to stdout, not log levels | `Logger('feature').info(...)`        |
+| `debugPrint()`                                                 | Same problem                   | `Logger(...)`                        |
+| Hardcoded route string                                         | Breaks rename                  | `RouteNames.xxx`, `RoutePaths.xxx`   |
+| Hardcoded color hex                                            | Breaks theme                   | `Theme.of(context).colorScheme.xxx`  |
+| Hardcoded TextStyle                                            | Breaks theme                   | `Theme.of(context).textTheme.xxx`    |
+| Hardcoded duration                                             | Breaks settings consistency    | `MxDurations.fast/medium/slow`       |
+| Hardcoded user-facing string                                   | Breaks l10n                    | `AppLocalizations.of(context).xxx`   |
+| `DateTime.now()`                                               | Untestable                     | `clock.now()` (package:clock)        |
+| `Random()`                                                     | Untestable                     | injected `Random`                    |
+| `Container(decoration: BoxDecoration(...))` for known patterns | Duplicates design system       | Use `Mx*` widget                     |
+| `// TODO` without ticket                                       | Drift accumulates              | `// TODO(#123): ...` with issue link |
 
 ## Required patterns
 
@@ -298,7 +308,8 @@ BREAKING CHANGE: AttemptResult enum case renamed (hypothetical example). Update 
 
 - Branch: `feat/{feature-slug}`, `fix/{bug-slug}`, `refactor/{slug}`.
 - One PR = one logical change. Avoid mega-PRs.
-- PR description must reference: business spec, decision row IDs, related wireframe, related docs that changed.
+- PR description must reference: business spec, decision row IDs, related wireframe, related docs
+  that changed.
 
 ## Forbidden in tests
 
@@ -307,8 +318,10 @@ See `docs/testing/test-strategy.md`.
 ## Agent rule
 
 - Follow this contract strictly. Lint failures = task failure.
-- When a new pattern is needed (e.g., new widget category, new naming case), update this contract FIRST, then implement.
-- When you encounter legacy code violating this contract, fix it in the same PR if scoped, else file a TODO with ticket.
+- When a new pattern is needed (e.g., new widget category, new naming case), update this contract
+  FIRST, then implement.
+- When you encounter legacy code violating this contract, fix it in the same PR if scoped, else file
+  a TODO with ticket.
 
 ## Related
 

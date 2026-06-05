@@ -18,9 +18,8 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 ///
 /// Leading icon-tile, name + an icon metadata row (subfolders/decks · cards),
 /// an optional due badge, and a trailing kebab. Tapping the row opens the
-/// folder; the kebab and a long-press are wired to [onShowActions] (the folder
-/// action sheet) — when that is null the affordance renders disabled (see the
-/// deferred-actions note in the caller) so no unsupported action is exposed.
+/// folder; the kebab and a long-press are both wired to [onShowActions], which
+/// opens the folder action sheet (Rename / Move / Import flashcards / Delete).
 class LibraryFolderTile extends StatelessWidget {
   const LibraryFolderTile({
     required this.item,

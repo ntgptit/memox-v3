@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 
 /// Text styles with no Material `TextTheme` slot.

@@ -81,21 +81,29 @@ If any step is skipped, report it explicitly.
 ## Related
 
 **Schema:**
+
 - `docs/database/schema-contract.md` — full schema with 6 pending migrations enumerated
 
 **Related contracts:**
+
 - `docs/database/storage-boundaries.md` — non-Drift storage that does NOT migrate via Drift
 - `docs/architecture/clean-architecture-contract.md`
 
 **Business specs introducing migrations:**
+
 - `docs/business/deck/deck-management.md` → `decks.target_language`
 - `docs/business/study-actions/bury-suspend.md` → `flashcard_progress.buried_until`, `is_suspended`
-- `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at`, `study_attempts.box_before`, `box_after`
-- `docs/wireframes/17-study-session-fill.md` + `docs/business/srs/srs-review.md` → enum/constraint changes for Fill attempt grading channels such as `study_attempts.result = 'recovered'`
+- `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at`,
+  `study_attempts.box_before`, `box_after`
+- `docs/wireframes/17-study-session-fill.md` + `docs/business/srs/srs-review.md` → enum/constraint
+  changes for Fill attempt grading channels such as `study_attempts.result = 'recovered'`
 
 **Decision table:**
-- `docs/decision-tables/memox-core-decision-table.md` rows under "Migration" (ordering, idempotency, schemaVersion bump)
+
+- `docs/decision-tables/memox-core-decision-table.md` rows under "Migration" (ordering, idempotency,
+  schemaVersion bump)
 
 **Source files to inspect:**
+
 - `lib/data/datasources/local/migrations/**`
 - `lib/data/datasources/local/app_database.dart` (schemaVersion)

@@ -11,29 +11,66 @@ source_specs:
 
 # 25 — Shared Bottom-Sheets Catalog
 
-## V1 implementation status (Prompt 28, 2026-06-01)
+## Drift correction (2026-06-06, Prompt 49D)
+
+The "Current primitives" / "Current composed usages" lists below **drifted** from code: as of this
+update the files `mx_bottom_sheet.dart`, `mx_action_sheet_list.dart`,
+`mx_destination_picker_sheet.dart`, `mx_card_actions_sheet.dart`,
+`study_scope_picker_sheet.dart`, and `dashboard_paused_sessions_sheet.dart` did **not** exist in
+`lib/`. Treat the unqualified claims below as **Target**, not Current. Actually-Current sheet code:
+
+- `lib/presentation/shared/dialogs/mx_bottom_sheet.dart` — **Current.** The `showMxBottomSheet`
+  modal host: themed `BottomSheetThemeData` (rounded top, `surfaceContainerLowest`, visible tappable
+  drag handle), safe-area insets, 90%-height cap. Receives prepared child content.
+- `lib/presentation/shared/dialogs/mx_confirm_dialog.dart` — **Current.** `showMxConfirmDialog`,
+  the binary/destructive confirm used by §delete-confirm callers.
+- §item-context and §folder-picker are realized for Library folder rows as feature-local sheets
+  (`lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart`,
+  `folder_move_picker_sheet.dart`) composed over `showMxBottomSheet`. A shared `MxActionSheetList` /
+  `MxDestinationPickerSheet` extraction remains **Target** (promote when a second caller needs it).
+
+## V1 implementation status (Prompt 28, 2026-06-01) — superseded by the drift correction above
 
 **Current primitives:**
 
-- `MxBottomSheet` (`lib/presentation/shared/dialogs/mx_bottom_sheet.dart`) is the shared modal host. It is tokenized, uses generated localization for the drag-handle accessibility label, shows a visible tappable drag handle, handles keyboard insets, and receives prepared child content.
-- `MxActionSheetList` (`lib/presentation/shared/dialogs/mx_action_sheet_list.dart`) is the shared action-row/list primitive. It renders neutral/destructive/disabled rows and returns typed values to the caller.
-- `MxDestinationPickerSheet` (`lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`) is the shared searchable destination picker. It receives immutable destination view data and callbacks from the owner; disabled destinations stay visible and non-selectable.
-- `MxCardActionsSheet` (`lib/presentation/shared/dialogs/mx_card_actions_sheet.dart`) is Current for study-session card actions: Edit / Bury until tomorrow / Suspend card. Flashcard History is intentionally absent.
+- `MxBottomSheet` (`lib/presentation/shared/dialogs/mx_bottom_sheet.dart`) is the shared modal host.
+  It is tokenized, uses generated localization for the drag-handle accessibility label, shows a
+  visible tappable drag handle, handles keyboard insets, and receives prepared child content.
+- `MxActionSheetList` (`lib/presentation/shared/dialogs/mx_action_sheet_list.dart`) is the shared
+  action-row/list primitive. It renders neutral/destructive/disabled rows and returns typed values
+  to the caller.
+- `MxDestinationPickerSheet` (`lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`) is
+  the shared searchable destination picker. It receives immutable destination view data and
+  callbacks from the owner; disabled destinations stay visible and non-selectable.
+- `MxCardActionsSheet` (`lib/presentation/shared/dialogs/mx_card_actions_sheet.dart`) is Current for
+  study-session card actions: Edit / Bury until tomorrow / Suspend card. Flashcard History is
+  intentionally absent.
 
 **Current composed usages:**
 
-- Dashboard paused sessions use a feature-local sheet (`lib/presentation/features/dashboard/widgets/dashboard_paused_sessions_sheet.dart`) consumed only by Dashboard in V1. It lists live resumable sessions, resumes via the caller callback, and delegates discard to the shared confirmation dialog/use-case path.
-- Dashboard "Start new learning" and Study Result "Study more" use the shared two-step scope picker (`lib/presentation/shared/bottom_sheets/study_scope_picker_sheet.dart`): Today / Deck / Folder only. Deck and Folder options are loaded by the caller and passed to the shared sheet as callbacks; Tag scope remains Blocked/Future.
-- Folder/deck/card move flows reuse `MxDestinationPickerSheet`; owner screens perform mutations after selection.
+- Dashboard paused sessions use a feature-local sheet (
+  `lib/presentation/features/dashboard/widgets/dashboard_paused_sessions_sheet.dart`) consumed only
+  by Dashboard in V1. It lists live resumable sessions, resumes via the caller callback, and
+  delegates discard to the shared confirmation dialog/use-case path.
+- Dashboard "Start new learning" and Study Result "Study more" use the shared two-step scope
+  picker (`lib/presentation/shared/bottom_sheets/study_scope_picker_sheet.dart`): Today / Deck /
+  Folder only. Deck and Folder options are loaded by the caller and passed to the shared sheet as
+  callbacks; Tag scope remains Blocked/Future.
+- Folder/deck/card move flows reuse `MxDestinationPickerSheet`; owner screens perform mutations
+  after selection.
 
 **Still Partial / Target / Future:**
 
-- Dedicated `SortOptionsSheet` is NotStarted/Target. Current sort UI is chip/menu based (`MxSortMenuChip` / `MxSearchSortToolbar`) rather than a bottom sheet.
-- `DailyGoalSheet`, `StreakHistorySheet`, reminder/notification sheets, engagement dashboard sheets, tag-scoped study, Global Search, and Flashcard History remain Target/Future/Blocked. Do not mark them Current without code + tests + docs.
+- Dedicated `SortOptionsSheet` is NotStarted/Target. Current sort UI is chip/menu based (
+  `MxSortMenuChip` / `MxSearchSortToolbar`) rather than a bottom sheet.
+- `DailyGoalSheet`, `StreakHistorySheet`, reminder/notification sheets, engagement dashboard sheets,
+  tag-scoped study, Global Search, and Flashcard History remain Target/Future/Blocked. Do not mark
+  them Current without code + tests + docs.
 
 ## Purpose
 
-Reusable bottom-sheet patterns. Identified by anchor (`§name`). Bottom-sheets are preferred over dialogs when:
+Reusable bottom-sheet patterns. Identified by anchor (`§name`). Bottom-sheets are preferred over
+dialogs when:
 
 - Multiple choice (radio / multi-select / list picker).
 - Action menu with > 3 items.
@@ -43,7 +80,8 @@ Dialogs (24) are for binary confirmations or short forms.
 
 ## Invocation inputs
 
-Shared dialogs and bottom-sheets receive only prepared view data and callbacks from the caller screen/notifier.
+Shared dialogs and bottom-sheets receive only prepared view data and callbacks from the caller
+screen/notifier.
 
 They must not load persistent data by themselves.
 
@@ -52,6 +90,7 @@ They must not load persistent data by themselves.
 The caller owns data loading and mutation orchestration.
 
 Shared dialogs and bottom-sheets may receive:
+
 - immutable display data
 - selected ids or labels
 - validation state prepared by the caller
@@ -61,27 +100,28 @@ They must not call DAO, repository, or use case directly.
 
 ## Catalog index
 
-| Anchor | Use case |
-| --- | --- |
-| §paused-sessions | List all resumable sessions |
-| §streak-history | Streak calendar / history view |
-| §daily-goal | Adjust daily goal slider |
-| §reminder-time | Pick reminder time |
-| §scope-picker | Pick what to study (deck / folder / tag / today) |
-| §library-fab | Library FAB action menu |
-| §deck-create | Create a new deck (with target_language) |
-| §item-context | Context actions for a folder or deck row |
-| §card-context | Context actions for a flashcard row (single, not bulk) |
-| §folder-picker | Pick a folder destination |
-| §deck-picker | Pick a deck destination |
-| §filter-status | Status filter picker for flashcard list |
-| §tag-picker | Multi-select tag picker |
-| §undo-toast | Undoable action toast (snackbar variant) |
-| §about | App info, version, licenses |
+| Anchor           | Use case                                               |
+|------------------|--------------------------------------------------------|
+| §paused-sessions | List all resumable sessions                            |
+| §streak-history  | Streak calendar / history view                         |
+| §daily-goal      | Adjust daily goal slider                               |
+| §reminder-time   | Pick reminder time                                     |
+| §scope-picker    | Pick what to study (deck / folder / tag / today)       |
+| §library-fab     | Library FAB action menu                                |
+| §deck-create     | Create a new deck (with target_language)               |
+| §item-context    | Context actions for a folder or deck row               |
+| §card-context    | Context actions for a flashcard row (single, not bulk) |
+| §folder-picker   | Pick a folder destination                              |
+| §deck-picker     | Pick a deck destination                                |
+| §filter-status   | Status filter picker for flashcard list                |
+| §tag-picker      | Multi-select tag picker                                |
+| §undo-toast      | Undoable action toast (snackbar variant)               |
+| §about           | App info, version, licenses                            |
 
 ## Common structure
 
-Material 3 modal bottom-sheet. Drag handle on top. Title row (optional). Body. Action row at bottom for confirm flows. Tap outside or drag down to dismiss (when non-confirmation).
+Material 3 modal bottom-sheet. Drag handle on top. Title row (optional). Body. Action row at bottom
+for confirm flows. Tap outside or drag down to dismiss (when non-confirmation).
 
 ```
 ┌───────────────────────────────────────┐
@@ -327,12 +367,12 @@ Used by: Library FAB, folder detail FAB (when in decks/unlocked mode), onboardin
 
 ### Validation
 
-| Rule | Message |
-| --- | --- |
-| Name empty | "Deck name is required." |
-| Name > 100 chars | "Deck name too long (max 100)." |
-| Duplicate name in same parent | "A deck with this name already exists in this folder." |
-| Parent mode = subfolders (locked) | Parent picker filters this out; can't reach. |
+| Rule                              | Message                                                |
+|-----------------------------------|--------------------------------------------------------|
+| Name empty                        | "Deck name is required."                               |
+| Name > 100 chars                  | "Deck name too long (max 100)."                        |
+| Duplicate name in same parent     | "A deck with this name already exists in this folder." |
+| Parent mode = subfolders (locked) | Parent picker filters this out; can't reach.           |
 
 ---
 
@@ -356,6 +396,7 @@ Used by: Library row long-press, folder detail row long-press.
 ```
 
 For decks, add:
+
 ```
 │ ⬇ Export                              │
 │ ⬇ Import                              │
@@ -365,7 +406,8 @@ For decks, add:
 
 ## §card-context
 
-Used by: flashcard row long-press alternative (when not in selection mode), card menu in study session.
+Used by: flashcard row long-press alternative (when not in selection mode), card menu in study
+session.
 
 > **V1 scope note.** Card History and standalone Reset Progress are Future
 > Proposal / migration-required items. Do not expose `View history` or a
@@ -396,7 +438,8 @@ own Move, Export, Select, and Delete.
 
 ## §folder-picker
 
-Used by: move folder, move deck, move card (target folder of new deck location), deck create parent picker.
+Used by: move folder, move deck, move card (target folder of new deck location), deck create parent
+picker.
 
 ```
 ┌───────────────────────────────────────┐
@@ -481,7 +524,8 @@ Used by: flashcard list (06) filter dropdown.
 
 ## §tag-picker
 
-Used by: flashcard list (06) tag filter chip, scope picker tag tab, bulk add/remove tag, tag input on create/edit.
+Used by: flashcard list (06) tag filter chip, scope picker tag tab, bulk add/remove tag, tag input
+on create/edit.
 
 ```
 ┌───────────────────────────────────────┐
@@ -516,13 +560,13 @@ Used by: flashcard list (06) tag filter chip, scope picker tag tab, bulk add/rem
 
 ### Mode variants
 
-| Caller | Behavior difference |
-| --- | --- |
-| Filter | Apply sets filter for current list. |
-| Scope picker tag tab | Apply uses lowercased comma-joined sorted as `entry_ref_id`. |
-| Bulk add tag | Apply adds selected tags to all selected cards (transaction). |
-| Bulk remove tag | List filtered to tags present on selection only. Apply removes. |
-| Card tag input | Apply replaces card's tag list with selected set. |
+| Caller               | Behavior difference                                             |
+|----------------------|-----------------------------------------------------------------|
+| Filter               | Apply sets filter for current list.                             |
+| Scope picker tag tab | Apply uses lowercased comma-joined sorted as `entry_ref_id`.    |
+| Bulk add tag         | Apply adds selected tags to all selected cards (transaction).   |
+| Bulk remove tag      | List filtered to tags present on selection only. Apply removes. |
+| Card tag input       | Apply replaces card's tag list with selected set.               |
 
 ---
 
@@ -544,18 +588,19 @@ Material 3 snackbar variant. Bottom-aligned, above bottom nav if visible.
 
 ### Actions covered
 
-| Action | Toast copy | Undo behavior |
-| --- | --- | --- |
-| Bury single | "Card buried until tomorrow." | Restore `buried_until = NULL`. |
-| Bury bulk | "{n} cards buried until tomorrow." | Restore for all. |
-| Suspend single | "Card suspended." | Restore `is_suspended = false`. |
-| Suspend bulk | "{n} cards suspended." | Restore for all. |
-| Unsuspend single | "Card resumed." | Re-suspend. |
-| Bulk add tag | "{n} cards tagged #{tag}." | Remove tag from all. |
-| Bulk remove tag | "{n} cards untagged #{tag}." | Re-add tag. |
-| Bulk move | "{n} cards moved to {deck}." | Move back. |
+| Action           | Toast copy                         | Undo behavior                   |
+|------------------|------------------------------------|---------------------------------|
+| Bury single      | "Card buried until tomorrow."      | Restore `buried_until = NULL`.  |
+| Bury bulk        | "{n} cards buried until tomorrow." | Restore for all.                |
+| Suspend single   | "Card suspended."                  | Restore `is_suspended = false`. |
+| Suspend bulk     | "{n} cards suspended."             | Restore for all.                |
+| Unsuspend single | "Card resumed."                    | Re-suspend.                     |
+| Bulk add tag     | "{n} cards tagged #{tag}."         | Remove tag from all.            |
+| Bulk remove tag  | "{n} cards untagged #{tag}."       | Re-add tag.                     |
+| Bulk move        | "{n} cards moved to {deck}."       | Move back.                      |
 
-Destructive ops (bulk delete, single delete, reset progress) do NOT get undo toasts — they use confirm dialogs instead.
+Destructive ops (bulk delete, single delete, reset progress) do NOT get undo toasts — they use
+confirm dialogs instead.
 
 ---
 
@@ -590,15 +635,23 @@ Each link opens browser or in-app web view.
 ## Accessibility (cross-cutting)
 
 - Each bottom-sheet MUST announce its title when opened.
-- Drag handle MUST have accessible label "Drag to dismiss" or equivalent, and a tap on it MUST also dismiss for users who can't drag.
+- Drag handle MUST have accessible label "Drag to dismiss" or equivalent, and a tap on it MUST also
+  dismiss for users who can't drag.
 - Close button (✕) MUST be focusable and labeled "Close".
 - Focus order: title → primary content (list/form) → action row at bottom.
-- For multi-select sheets (e.g., §tag-picker): each checkbox MUST announce its label and state ("Checked, #verb, 80 cards" / "Not checked, #greet, 42 cards").
-- For radio pickers (e.g., §folder-picker, §deck-picker, §filter-status): selection MUST announce on change ("Selected: Library / Korean").
-- For action menus (e.g., §library-fab, §item-context, §card-context): each row is a button with clear action verb in its label.
-- For toast variants (§undo-toast): the toast MUST be announced via live region (assertive politeness) so screen-reader users hear it before it dismisses. Undo button MUST remain focusable for the full 5s.
-- For confirmation flows inside sheets (e.g., §deck-create with Create button): Save/Create button enabled/disabled state MUST be announced when state changes.
-- Disabled rows (e.g., locked folders in §folder-picker) MUST announce reason: "Disabled, this folder is locked to decks mode".
+- For multi-select sheets (e.g., §tag-picker): each checkbox MUST announce its label and state ("
+  Checked, #verb, 80 cards" / "Not checked, #greet, 42 cards").
+- For radio pickers (e.g., §folder-picker, §deck-picker, §filter-status): selection MUST announce on
+  change ("Selected: Library / Korean").
+- For action menus (e.g., §library-fab, §item-context, §card-context): each row is a button with
+  clear action verb in its label.
+- For toast variants (§undo-toast): the toast MUST be announced via live region (assertive
+  politeness) so screen-reader users hear it before it dismisses. Undo button MUST remain focusable
+  for the full 5s.
+- For confirmation flows inside sheets (e.g., §deck-create with Create button): Save/Create button
+  enabled/disabled state MUST be announced when state changes.
+- Disabled rows (e.g., locked folders in §folder-picker) MUST announce reason: "Disabled, this
+  folder is locked to decks mode".
 - System back gesture MUST dismiss the sheet, equivalent to tap-outside or Cancel.
 
 ## Forbidden (catalog-level)
@@ -614,7 +667,8 @@ Each link opens browser or in-app web view.
 
 ## Cross-cutting rules
 
-- Bottom-sheets MUST be dismissible by drag-down OR tap outside, unless they're in a destructive confirm sub-flow.
+- Bottom-sheets MUST be dismissible by drag-down OR tap outside, unless they're in a destructive
+  confirm sub-flow.
 - All bottom-sheets MUST have a drag handle visible.
 - Maximum height = 90% of screen; longer content scrolls inside the sheet.
 - Confirmation flows in bottom-sheets show actions sticky at bottom.
@@ -625,34 +679,61 @@ Each link opens browser or in-app web view.
 - Do NOT introduce new bottom-sheets without adding them here first.
 - Undo toast duration is exactly 5s. Do not tweak per action.
 - Tag picker MUST validate inline (no commas, max length); rejection visible before Apply.
-- Folder/deck pickers MUST disable invalid destinations (mode rules), not hide them — disabling teaches the rule.
+- Folder/deck pickers MUST disable invalid destinations (mode rules), not hide them — disabling
+  teaches the rule.
 
 ## Implementation refs
 
 **Business specs (per sheet):**
-- §paused-sessions, §scope-picker → `docs/business/study/study-flow.md`, `docs/business/resume/resume-session.md`
+
+- §paused-sessions, §scope-picker → `docs/business/study/study-flow.md`,
+  `docs/business/resume/resume-session.md`
 - §streak-history, §daily-goal, §reminder-time → `docs/business/engagement/dashboard-engagement.md`
-- §library-fab → `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md`
+- §library-fab → `docs/business/folder/folder-management.md`,
+  `docs/business/deck/deck-management.md`
 - §deck-create → `docs/business/deck/deck-management.md`
 - §item-context, §card-context → respective business specs
-- §folder-picker, §deck-picker → `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md`
-- §filter-status → `docs/business/flashcard/flashcard-management.md`, `docs/business/study-actions/bury-suspend.md`
+- §folder-picker, §deck-picker → `docs/business/folder/folder-management.md`,
+  `docs/business/deck/deck-management.md`
+- §filter-status → `docs/business/flashcard/flashcard-management.md`,
+  `docs/business/study-actions/bury-suspend.md`
 - §tag-picker → `docs/business/tags/tag-system.md`
-- §undo-toast → `docs/business/bulk/bulk-operations.md`, `docs/business/study-actions/bury-suspend.md`
+- §undo-toast → `docs/business/bulk/bulk-operations.md`,
+  `docs/business/study-actions/bury-suspend.md`
 - §about → app metadata
 
 **Decision rows:**
-- Sheet interaction rules (drag handle, dismiss semantics, undo toast 5s timeout, locked-row disabling)
 
-**Contracts:** Sheets are dispatched from screens to invoke use cases per anchor. Primary refs across the catalog: `docs/contracts/usecase-contracts/study.md` (paused-sessions, scope-picker), `docs/contracts/usecase-contracts/engagement.md` (streak-history, daily-goal, reminder-time), `docs/contracts/usecase-contracts/folder.md`/`docs/contracts/usecase-contracts/deck.md` (library-fab, deck-create, item-context, folder-picker, deck-picker), `docs/contracts/usecase-contracts/tag.md` (tag-picker), `docs/contracts/usecase-contracts/bulk.md` + `docs/contracts/usecase-contracts/study.md` §bury/suspend (undo-toast).
+- Sheet interaction rules (drag handle, dismiss semantics, undo toast 5s timeout, locked-row
+  disabling)
+
+**Contracts:** Sheets are dispatched from screens to invoke use cases per anchor. Primary refs
+across the catalog: `docs/contracts/usecase-contracts/study.md` (paused-sessions, scope-picker),
+`docs/contracts/usecase-contracts/engagement.md` (streak-history, daily-goal, reminder-time),
+`docs/contracts/usecase-contracts/folder.md`/`docs/contracts/usecase-contracts/deck.md` (
+library-fab, deck-create, item-context, folder-picker, deck-picker),
+`docs/contracts/usecase-contracts/tag.md` (tag-picker), `docs/contracts/usecase-contracts/bulk.md` +
+`docs/contracts/usecase-contracts/study.md` §bury/suspend (undo-toast).
 
 **Code paths:**
-- Current host/list/picker primitives: `lib/presentation/shared/dialogs/mx_bottom_sheet.dart`, `lib/presentation/shared/dialogs/mx_action_sheet_list.dart`, `lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`, `lib/presentation/shared/dialogs/mx_card_actions_sheet.dart`
+
+- Current host/list/picker primitives: `lib/presentation/shared/dialogs/mx_bottom_sheet.dart`,
+  `lib/presentation/shared/dialogs/mx_action_sheet_list.dart`,
+  `lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`,
+  `lib/presentation/shared/dialogs/mx_card_actions_sheet.dart`
 - Current shared scope picker: `lib/presentation/shared/bottom_sheets/study_scope_picker_sheet.dart`
-- Current Dashboard paused sessions feature sheet: `lib/presentation/features/dashboard/widgets/dashboard_paused_sessions_sheet.dart`
-- Current sort control is not a sheet: `lib/presentation/shared/widgets/mx_sort_menu_chip.dart`, `lib/presentation/shared/widgets/mx_search_sort_toolbar.dart`
-- Target naming for future dedicated sheets: `MxSheetPausedSessions`, `MxSheetStreakHistory`, `MxSheetDailyGoal`, `MxSheetReminderTime`, `MxSheetScopePicker`, `MxSheetLibraryFab`, `MxSheetDeckCreate`, `MxSheetItemContext`, `MxSheetCardContext`, `MxSheetFolderPicker`, `MxSheetDeckPicker`, `MxSheetFilterStatus`, `MxSheetTagPicker`, `MxSheetAbout`
-- Undo toast target: `MxUndoToast` widget + `UndoToastController` provider with 5s timer. Current study-session bury/suspend undo reverts progress state only; active-session reinsert remains follow-up.
+- Current Dashboard paused sessions feature sheet:
+  `lib/presentation/features/dashboard/widgets/dashboard_paused_sessions_sheet.dart`
+- Current sort control is not a sheet: `lib/presentation/shared/widgets/mx_sort_menu_chip.dart`,
+  `lib/presentation/shared/widgets/mx_search_sort_toolbar.dart`
+- Target naming for future dedicated sheets: `MxSheetPausedSessions`, `MxSheetStreakHistory`,
+  `MxSheetDailyGoal`, `MxSheetReminderTime`, `MxSheetScopePicker`, `MxSheetLibraryFab`,
+  `MxSheetDeckCreate`, `MxSheetItemContext`, `MxSheetCardContext`, `MxSheetFolderPicker`,
+  `MxSheetDeckPicker`, `MxSheetFilterStatus`, `MxSheetTagPicker`, `MxSheetAbout`
+- Undo toast target: `MxUndoToast` widget + `UndoToastController` provider with 5s timer. Current
+  study-session bury/suspend undo reverts progress state only; active-session reinsert remains
+  follow-up.
 
 **Related wireframes:**
+
 - Used by virtually every screen; see "Used by:" list in each sheet section

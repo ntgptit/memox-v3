@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 
@@ -16,11 +15,11 @@ class MxLoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView.separated(
-      padding: const EdgeInsets.all(SpacingTokens.lg),
-      itemCount: rows,
-      separatorBuilder: (_, _) => const SizedBox(height: SpacingTokens.md),
-      itemBuilder: (BuildContext context, _) => const _SkeletonRow(),
-    );
+    padding: const EdgeInsets.all(SpacingTokens.lg),
+    itemCount: rows,
+    separatorBuilder: (_, _) => const SizedBox(height: SpacingTokens.md),
+    itemBuilder: (BuildContext context, _) => const _SkeletonRow(),
+  );
 }
 
 class _SkeletonRow extends StatelessWidget {
@@ -28,28 +27,28 @@ class _SkeletonRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        MxSkeleton.circle(size: 44),
-        SizedBox(width: SpacingTokens.md),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              FractionallySizedBox(
-                widthFactor: 0.7,
-                alignment: Alignment.centerLeft,
-                child: MxSkeleton(height: 12),
-              ),
-              SizedBox(height: SpacingTokens.sm),
-              FractionallySizedBox(
-                widthFactor: 0.4,
-                alignment: Alignment.centerLeft,
-                child: MxSkeleton(height: 12),
-              ),
-            ],
-          ),
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      MxSkeleton.circle(size: 44),
+      SizedBox(width: SpacingTokens.md),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            FractionallySizedBox(
+              widthFactor: 0.7,
+              alignment: Alignment.centerLeft,
+              child: MxSkeleton(height: 12),
+            ),
+            SizedBox(height: SpacingTokens.sm),
+            FractionallySizedBox(
+              widthFactor: 0.4,
+              alignment: Alignment.centerLeft,
+              child: MxSkeleton(height: 12),
+            ),
+          ],
         ),
-      ],
-    );
+      ),
+    ],
+  );
 }

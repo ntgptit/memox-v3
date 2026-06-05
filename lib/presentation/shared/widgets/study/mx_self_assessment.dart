@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/custom_colors.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
@@ -57,7 +56,11 @@ class MxSelfAssessment extends StatelessWidget {
 }
 
 class _ScoreChip extends StatelessWidget {
-  const _ScoreChip({required this.label, required this.color, required this.onTap});
+  const _ScoreChip({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
 
   final String label;
   final Color color;
@@ -65,22 +68,22 @@ class _ScoreChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MxTappable(
-      onTap: onTap,
-      borderRadius: RadiusTokens.brMd,
-      child: Container(
-        height: SizeTokens.button - 4,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: RadiusTokens.brMd,
-          border: Border.all(color: color, width: BorderTokens.width),
-        ),
-        child: Text(
-          label,
-          style: context.textTheme.labelLarge?.copyWith(
-            color: color,
-            fontWeight: TypographyTokens.bold,
-          ),
+    onTap: onTap,
+    borderRadius: RadiusTokens.brMd,
+    child: Container(
+      height: SizeTokens.button - 4,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: RadiusTokens.brMd,
+        border: Border.all(color: color, width: BorderTokens.width),
+      ),
+      child: Text(
+        label,
+        style: context.textTheme.labelLarge?.copyWith(
+          color: color,
+          fontWeight: TypographyTokens.bold,
         ),
       ),
-    );
+    ),
+  );
 }

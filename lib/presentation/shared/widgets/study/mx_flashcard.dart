@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
@@ -33,38 +32,42 @@ class MxFlashcard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MxTappable(
-      onTap: onTap,
-      borderRadius: RadiusTokens.brLg,
-      child: TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: 0, end: showBack ? 1 : 0),
-        duration: DurationTokens.cardFlip,
-        curve: EasingTokens.standard,
-        builder: (BuildContext context, double t, _) {
-          final bool showingBack = t >= 0.5;
-          final double angle = t * math.pi;
-          final Widget face = showingBack
-              ? _Face(isBack: true, minHeight: minHeight, child: back)
-              : _Face(isBack: false, minHeight: minHeight, child: front);
-          return Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)
-              ..rotateY(angle),
-            child: showingBack
-                ? Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.identity()..rotateY(math.pi),
-                    child: face,
-                  )
-                : face,
-          );
-        },
-      ),
-    );
+    onTap: onTap,
+    borderRadius: RadiusTokens.brLg,
+    child: TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: showBack ? 1 : 0),
+      duration: DurationTokens.cardFlip,
+      curve: EasingTokens.standard,
+      builder: (BuildContext context, double t, _) {
+        final bool showingBack = t >= 0.5;
+        final double angle = t * math.pi;
+        final Widget face = showingBack
+            ? _Face(isBack: true, minHeight: minHeight, child: back)
+            : _Face(isBack: false, minHeight: minHeight, child: front);
+        return Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateY(angle),
+          child: showingBack
+              ? Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.identity()..rotateY(math.pi),
+                  child: face,
+                )
+              : face,
+        );
+      },
+    ),
+  );
 }
 
 class _Face extends StatelessWidget {
-  const _Face({required this.isBack, required this.minHeight, required this.child});
+  const _Face({
+    required this.isBack,
+    required this.minHeight,
+    required this.child,
+  });
 
   final bool isBack;
   final double minHeight;

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/id_generator.dart';
@@ -10,9 +9,11 @@ import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
+import 'package:memox/data/repositories/folder_repo_impl_mutation_helpers.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/types/content_mode.dart';
@@ -38,18 +39,31 @@ class FolderRepositoryImpl implements FolderRepository {
         ? null
         : StringUtils.normalize(searchTerm);
 
-    final Stream<List<QueryRow>> source = _dao.watchLibraryOverview(
-      nowMs: _endOfTodayMs(),
-      orderClause: _orderClause(sort),
-      normalizedSearch: normalized,
-    );
+    final Stream<List<LibraryOverviewResult>> source = _dao
+        .watchLibraryOverview(
+          nowMs: _endOfTodayMs(),
+          sort: sort,
+          normalizedSearch: normalized,
+        );
 
     return source.transform(
-      StreamTransformer<List<QueryRow>, Result<LibraryOverviewReadModel>>.fromHandlers(
-        handleData: (List<QueryRow> rows, EventSink<Result<LibraryOverviewReadModel>> sink) =>
-            sink.add(Result<LibraryOverviewReadModel>.ok(_toReadModel(rows))),
-        handleError: (Object error, StackTrace stack, EventSink<Result<LibraryOverviewReadModel>> sink) =>
-            sink.add(
+      StreamTransformer<
+        List<LibraryOverviewResult>,
+        Result<LibraryOverviewReadModel>
+      >.fromHandlers(
+        handleData:
+            (
+              List<LibraryOverviewResult> rows,
+              EventSink<Result<LibraryOverviewReadModel>> sink,
+            ) => sink.add(
+              Result<LibraryOverviewReadModel>.ok(_toReadModel(rows)),
+            ),
+        handleError:
+            (
+              Object error,
+              StackTrace stack,
+              EventSink<Result<LibraryOverviewReadModel>> sink,
+            ) => sink.add(
               Result<LibraryOverviewReadModel>.err(
                 Failure.storage(
                   operation: StorageOp.read,
@@ -91,10 +105,7 @@ class FolderRepositoryImpl implements FolderRepository {
 
       if (created == null) {
         return const Result<Folder>.err(
-          Failure.validation(
-            field: 'name',
-            code: ValidationCode.duplicate,
-          ),
+          Failure.validation(field: 'name', code: ValidationCode.duplicate),
         );
       }
       return Result<Folder>.ok(FolderMapper.fromRow(created));
@@ -118,18 +129,25 @@ class FolderRepositoryImpl implements FolderRepository {
       final FolderRow created = await _dao.transaction(() async {
         final FolderRow? parent = await _dao.findFolder(parentId);
         if (parent == null) {
-          throw _RuleViolation(Failure.notFound(entity: 'folder', id: parentId));
+          throw _RuleViolation(
+            Failure.notFound(entity: 'folder', id: parentId),
+          );
         }
-        final ContentMode parentMode =
-            FolderMapper.contentModeFromStorage(parent.contentMode);
+        final ContentMode parentMode = FolderMapper.contentModeFromStorage(
+          parent.contentMode,
+        );
         if (parentMode == ContentMode.decks) {
           throw const _RuleViolation(
-            Failure.unsupportedAction(action: 'create_subfolder_in_decks_folder'),
+            Failure.unsupportedAction(
+              action: 'create_subfolder_in_decks_folder',
+            ),
           );
         }
         final String normalized = StringUtils.normalize(name);
         final List<String> siblings = await _dao.childFolderNames(parentId);
-        if (siblings.any((String n) => StringUtils.normalize(n) == normalized)) {
+        if (siblings.any(
+          (String n) => StringUtils.normalize(n) == normalized,
+        )) {
           throw const _RuleViolation(
             Failure.validation(field: 'name', code: ValidationCode.duplicate),
           );
@@ -141,7 +159,9 @@ class FolderRepositoryImpl implements FolderRepository {
             id: id,
             name: name,
             parentId: Value<String?>(parentId),
-            sortOrder: Value<int>((await _dao.maxChildFolderSortOrder(parentId)) + 1),
+            sortOrder: Value<int>(
+              (await _dao.maxChildFolderSortOrder(parentId)) + 1,
+            ),
             createdAt: nowMs,
             updatedAt: nowMs,
           ),
@@ -182,16 +202,21 @@ class FolderRepositoryImpl implements FolderRepository {
             Failure.notFound(entity: 'folder', id: parentFolderId),
           );
         }
-        final ContentMode parentMode =
-            FolderMapper.contentModeFromStorage(parent.contentMode);
+        final ContentMode parentMode = FolderMapper.contentModeFromStorage(
+          parent.contentMode,
+        );
         if (parentMode == ContentMode.subfolders) {
           throw const _RuleViolation(
-            Failure.unsupportedAction(action: 'create_deck_in_subfolders_folder'),
+            Failure.unsupportedAction(
+              action: 'create_deck_in_subfolders_folder',
+            ),
           );
         }
         final String normalized = StringUtils.normalize(name);
         final List<String> siblings = await _dao.deckNames(parentFolderId);
-        if (siblings.any((String n) => StringUtils.normalize(n) == normalized)) {
+        if (siblings.any(
+          (String n) => StringUtils.normalize(n) == normalized,
+        )) {
           throw const _RuleViolation(
             Failure.validation(field: 'name', code: ValidationCode.duplicate),
           );
@@ -206,7 +231,9 @@ class FolderRepositoryImpl implements FolderRepository {
             targetLanguage: Value<String>(
               DeckMapper.targetLanguageToStorage(targetLanguage),
             ),
-            sortOrder: Value<int>((await _dao.maxDeckSortOrder(parentFolderId)) + 1),
+            sortOrder: Value<int>(
+              (await _dao.maxDeckSortOrder(parentFolderId)) + 1,
+            ),
             createdAt: nowMs,
             updatedAt: nowMs,
           ),
@@ -232,6 +259,27 @@ class FolderRepositoryImpl implements FolderRepository {
       );
     }
   }
+
+  @override
+  Future<Result<Folder>> renameFolder({
+    required String folderId,
+    required String name,
+  }) => renameFolderTxn(_dao, folderId, name);
+
+  @override
+  Future<Result<Folder>> moveFolder({
+    required String folderId,
+    required String? newParentId,
+  }) => moveFolderTxn(_dao, folderId, newParentId);
+
+  @override
+  Future<Result<void>> deleteFolder({required String folderId}) =>
+      deleteFolderTxn(_dao, folderId);
+
+  @override
+  Future<Result<List<FolderMoveTarget>>> getFolderMoveTargets({
+    required String folderId,
+  }) => folderMoveTargets(_dao, folderId);
 
   @override
   Stream<Result<FolderDetail>> watchFolderDetail(
@@ -264,14 +312,13 @@ class FolderRepositoryImpl implements FolderRepository {
       final Folder folder = FolderMapper.fromRow(folderRow);
       final int nowMs = _endOfTodayMs();
 
-      final List<FolderBreadcrumbSegment> breadcrumb = (await _dao.breadcrumb(folderId))
-          .map(
-            (QueryRow row) => FolderBreadcrumbSegment(
-              id: row.read<String>('id'),
-              name: row.read<String>('name'),
-            ),
-          )
-          .toList(growable: false);
+      final List<FolderBreadcrumbSegment> breadcrumb =
+          (await _dao.breadcrumb(folderId))
+              .map(
+                (FolderBreadcrumbResult row) =>
+                    FolderBreadcrumbSegment(id: row.id, name: row.name),
+              )
+              .toList(growable: false);
 
       // A folder holds either subfolders or decks (never both); the unused list
       // stays empty.
@@ -280,18 +327,18 @@ class FolderRepositoryImpl implements FolderRepository {
           ? (await _dao.getSubfolderItems(
               parentId: folderId,
               nowMs: nowMs,
-              orderClause: _orderClause(sort),
+              sort: sort,
               normalizedSearch: normalizedSearch,
-            )).map(FolderMapper.overviewItemFromQueryRow).toList(growable: false)
+            )).map(_folderWithCountFromSubfolderItem).toList(growable: false)
           : const <FolderWithCount>[];
 
       final List<DeckWithCount> decks = folder.contentMode == ContentMode.decks
           ? (await _dao.getDeckItems(
               folderId: folderId,
               nowMs: nowMs,
-              orderClause: _deckOrderClause(sort),
+              sort: sort,
               normalizedSearch: normalizedSearch,
-            )).map(DeckMapper.deckWithCountFromQueryRow).toList(growable: false)
+            )).map(_deckWithCountFromDeckItem).toList(growable: false)
           : const <DeckWithCount>[];
 
       return Result<FolderDetail>.ok(
@@ -313,43 +360,84 @@ class FolderRepositoryImpl implements FolderRepository {
     }
   }
 
-  LibraryOverviewReadModel _toReadModel(List<QueryRow> rows) {
+  LibraryOverviewReadModel _toReadModel(List<LibraryOverviewResult> rows) {
     final List<FolderWithCount> folders = rows
-        .map(FolderMapper.overviewItemFromQueryRow)
+        .map(_folderWithCountFromLibraryOverview)
         .toList(growable: false);
     // Global totals are repeated on every row; read from the first, else 0
     // (no rows ⇒ no folders at all ⇒ totals are 0).
-    final QueryRow? first = rows.isEmpty ? null : rows.first;
+    final LibraryOverviewResult? first = rows.isEmpty ? null : rows.first;
     return LibraryOverviewReadModel(
       folders: folders,
-      dueToday: first?.read<int>('due_today_total') ?? 0,
-      totalFolderCount: first?.read<int>('total_folder_count') ?? 0,
+      dueToday: first?.dueTodayTotal ?? 0,
+      totalFolderCount: first?.totalFolderCount ?? 0,
     );
   }
 
-  /// Trusted, controlled `ORDER BY` fragment. Folders are kept stable by
-  /// `sort_order` then creation time as a tiebreaker.
-  static String _orderClause(ContentSortMode sort) => switch (sort) {
-    ContentSortMode.name => 'LOWER(f.name) ASC, f.sort_order ASC',
-    ContentSortMode.newest => 'f.created_at DESC, f.sort_order ASC',
-    // lastStudied has no dedicated column yet; fall back to manual order.
-    ContentSortMode.lastStudied ||
-    ContentSortMode.manual => 'f.sort_order ASC, f.created_at ASC',
-  };
+  static FolderWithCount _folderWithCountFromLibraryOverview(
+    LibraryOverviewResult row,
+  ) => FolderWithCount(
+    folder: FolderMapper.fromStorageFields(
+      id: row.id,
+      parentId: row.parentId,
+      name: row.name,
+      contentMode: row.contentMode,
+      sortOrder: row.sortOrder,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    ),
+    subfolderCount: row.subfolderCount,
+    deckCount: row.deckCount,
+    cardCount: row.cardCount,
+    dueCount: row.dueCount,
+  );
 
-  /// `ORDER BY` fragment for deck child rows (alias `d`).
-  static String _deckOrderClause(ContentSortMode sort) => switch (sort) {
-    ContentSortMode.name => 'LOWER(d.name) ASC, d.sort_order ASC',
-    ContentSortMode.newest => 'd.created_at DESC, d.sort_order ASC',
-    ContentSortMode.lastStudied ||
-    ContentSortMode.manual => 'd.sort_order ASC, d.created_at ASC',
-  };
+  static FolderWithCount _folderWithCountFromSubfolderItem(
+    SubfolderItemsResult row,
+  ) => FolderWithCount(
+    folder: FolderMapper.fromStorageFields(
+      id: row.id,
+      parentId: row.parentId,
+      name: row.name,
+      contentMode: row.contentMode,
+      sortOrder: row.sortOrder,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    ),
+    subfolderCount: row.subfolderCount,
+    deckCount: row.deckCount,
+    cardCount: row.cardCount,
+    dueCount: row.dueCount,
+  );
+
+  static DeckWithCount _deckWithCountFromDeckItem(DeckItemsResult row) =>
+      DeckWithCount(
+        deck: DeckMapper.fromStorageFields(
+          id: row.id,
+          folderId: row.folderId,
+          name: row.name,
+          targetLanguage: row.targetLanguage,
+          sortOrder: row.sortOrder,
+          createdAt: row.createdAt,
+          updatedAt: row.updatedAt,
+        ),
+        cardCount: row.cardCount,
+        dueCount: row.dueCount,
+      );
 
   /// End of the current local day in UTC epoch ms — cards due any time today
   /// count toward "due today".
   static int _endOfTodayMs() {
     final DateTime now = DateTime.now();
-    final DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
+    final DateTime endOfDay = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      23,
+      59,
+      59,
+      999,
+    );
     return endOfDay.millisecondsSinceEpoch;
   }
 }

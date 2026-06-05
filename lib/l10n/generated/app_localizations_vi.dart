@@ -3158,4 +3158,31 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get folderModeLockedError => 'Thư mục này không thể chứa loại mục đó.';
+
+  @override
+  String get libraryFolderActionsRename => 'Đổi tên';
+
+  @override
+  String get libraryFolderActionsMove => 'Di chuyển đến thư mục';
+
+  @override
+  String get libraryFolderActionsImport => 'Nhập thẻ';
+
+  @override
+  String get libraryFolderActionsDelete => 'Xóa thư mục';
+
+  @override
+  String get libraryFolderActionError =>
+      'Không thể hoàn tất thao tác. Vui lòng thử lại.';
+
+  @override
+  String get folderMovePickerSearchHint => 'Tìm thư mục';
+
+  @override
+  String get folderMovePickerCycleReason =>
+      'Không thể di chuyển thư mục vào chính nó hoặc thư mục con của nó.';
+
+  @override
+  String get folderMovePickerLockedReason =>
+      'Đã khóa ở chế độ bộ thẻ — không thể chứa thư mục.';
 }

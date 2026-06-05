@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
@@ -35,7 +34,11 @@ class MxOfflineBanner extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            Icon(Icons.cloud_off_outlined, size: SizeTokens.iconSm, color: tone),
+            Icon(
+              Icons.cloud_off_outlined,
+              size: SizeTokens.iconSm,
+              color: tone,
+            ),
             const SizedBox(width: SpacingTokens.sm),
             Expanded(
               child: Text(

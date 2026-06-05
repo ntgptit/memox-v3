@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
@@ -47,7 +46,11 @@ class MxErrorState extends StatelessWidget {
                 borderRadius: RadiusTokens.brLg,
               ),
               alignment: Alignment.center,
-              child: Icon(icon, size: SizeTokens.iconMd + 2, color: scheme.error),
+              child: Icon(
+                icon,
+                size: SizeTokens.iconMd + 2,
+                color: scheme.error,
+              ),
             ),
             const SizedBox(height: SpacingTokens.md),
             Text(title, style: text.titleMedium),
@@ -56,7 +59,9 @@ class MxErrorState extends StatelessWidget {
               Text(
                 message!,
                 textAlign: TextAlign.center,
-                style: text.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+                style: text.bodyMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
             ],
             if (retryLabel != null && onRetry != null) ...<Widget>[

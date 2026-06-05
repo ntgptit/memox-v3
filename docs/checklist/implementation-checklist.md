@@ -40,12 +40,17 @@ Run before declaring task done. Tick each:
 
 - [ ] **(1) User-visible behavior change?** If yes → business/wireframe doc updated.
 - [ ] **(2) Schema/persistence change?** If yes → `docs/database/**` updated.
-- [ ] **(3) Route/navigation change?** If yes → `docs/business/navigation/navigation-flow.md` + route constants updated.
-- [ ] **(4) SRS/study mode/flow change?** If yes → `docs/business/srs/srs-review.md` + `docs/business/study/study-flow.md` + decision table updated.
-- [ ] **(5) Rule/edge case/validation change?** If yes → relevant doc updated. No silent rule changes.
+- [ ] **(3) Route/navigation change?** If yes → `docs/business/navigation/navigation-flow.md` +
+  route constants updated.
+- [ ] **(4) SRS/study mode/flow change?** If yes → `docs/business/srs/srs-review.md` +
+  `docs/business/study/study-flow.md` + decision table updated.
+- [ ] **(5) Rule/edge case/validation change?** If yes → relevant doc updated. No silent rule
+  changes.
 - [ ] **(6) New testable branch?** If yes → decision table row added + test written.
-- [ ] **(7) Status transition?** (Specified ↔ implemented ↔ not specified) → `docs/business/system/overview.md` updated.
-- [ ] **(8) Refs to old term/route/field after rename?** Run `grep -rn "{old}" docs/` and confirm zero results.
+- [ ] **(7) Status transition?** (Specified ↔ implemented ↔ not specified) →
+  `docs/business/system/overview.md` updated.
+- [ ] **(8) Refs to old term/route/field after rename?** Run `grep -rn "{old}" docs/` and confirm
+  zero results.
 
 ## Business
 
@@ -123,9 +128,11 @@ flutter test <targeted tests>
 
 Analyze / dart-fix pairing:
 
-- If `flutter analyze` reports diagnostics that are safely fixable, run `dart fix --apply`, inspect the diff, then rerun `flutter analyze`.
+- If `flutter analyze` reports diagnostics that are safely fixable, run `dart fix --apply`, inspect
+  the diff, then rerun `flutter analyze`.
 - Do not run `dart fix --apply` as a standalone cleanup step without the follow-up analyzer pass.
-- If a fixable analyzer diagnostic is not applied, report the reason under "Skipped checks or risks".
+- If a fixable analyzer diagnostic is not applied, report the reason under "Skipped checks or
+  risks".
 
 All must pass. If any is skipped, justify in final report.
 
@@ -183,7 +190,8 @@ NEVER leave this section silently empty.
 <anything not done, with reason>
 ```
 
-A report missing "Changed doc files" section or its explicit-empty justification is incomplete and will be rejected.
+A report missing "Changed doc files" section or its explicit-empty justification is incomplete and
+will be rejected.
 
 ## Related
 
@@ -199,7 +207,8 @@ A report missing "Changed doc files" section or its explicit-empty justification
 **Contracts referenced by this checklist:**
 
 - `docs/business/index.md`, `docs/business/glossary.md`, `docs/business/system/overview.md`
-- `docs/database/schema-contract.md`, `docs/database/migration-contract.md`, `docs/database/storage-boundaries.md`
+- `docs/database/schema-contract.md`, `docs/database/migration-contract.md`,
+  `docs/database/storage-boundaries.md`
 - `docs/architecture/clean-architecture-contract.md`
 - `docs/state/state-management-contract.md`
 - `docs/ui-ux/ui-ux-contract.md`

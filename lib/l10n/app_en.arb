@@ -1714,5 +1714,13 @@
   "deckCreateFieldLabel": "Deck name",
   "folderDeckDuplicateError": "A deck with this name already exists.",
   "folderChildCreateError": "Couldn't create that. Please try again.",
-  "folderModeLockedError": "This folder can't hold that item type."
+  "folderModeLockedError": "This folder can't hold that item type.",
+  "libraryFolderActionsRename": "Rename",
+  "libraryFolderActionsMove": "Move to folder",
+  "libraryFolderActionsImport": "Import flashcards",
+  "libraryFolderActionsDelete": "Delete folder",
+  "libraryFolderActionError": "Couldn't complete that action. Please try again.",
+  "folderMovePickerSearchHint": "Search folders",
+  "folderMovePickerCycleReason": "Can't move a folder into itself or its subfolders.",
+  "folderMovePickerLockedReason": "Locked to decks — can't hold folders."
 }

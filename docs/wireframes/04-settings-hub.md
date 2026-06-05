@@ -10,21 +10,22 @@ source_specs:
 
 ## Purpose
 
-Entry point to all settings sub-screens. Plain list, no settings live here directly except a few status indicators.
+Entry point to all settings sub-screens. Plain list, no settings live here directly except a few
+status indicators.
 
 ## V1 verification status
 
 Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settings mutation owner.
 
-| Aspect | V1 status | Notes |
-| --- | --- | --- |
-| `/settings` route + shell navigation | Current | `/settings` renders `SettingsScreen` inside the app shell. |
-| Account, Learning, Audio/Speech, Tags navigation | Current | Rows push named settings sub-routes; sub-screens hide shell navigation; back returns to the hub when entered from the hub. |
-| Appearance / Language rows | Current (disabled Future rows) | Render as disabled rows with a Soon badge; no route is exposed. |
-| About row | Current (dialog) / Target (bottom-sheet) | Current code opens Flutter's `AboutDialog`. The About bottom-sheet remains release-polish target behavior. |
-| Hub-owned mutation | Current absent | Hub rows navigate only. Account/Drive, study defaults, TTS, and tag mutation live in their sub-screens/viewmodels. |
-| Subtitle source | Partial | Account status uses account/sync state. Learning, Audio/Speech, and Tags overview subtitles are V1 summaries, not full live aggregates. |
-| Async state | Current | Provider-backed rows keep rows visible and use row-level skeleton/error states; the hub has no full-screen empty state. |
+| Aspect                                           | V1 status                                | Notes                                                                                                                                   |
+|--------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `/settings` route + shell navigation             | Current                                  | `/settings` renders `SettingsScreen` inside the app shell.                                                                              |
+| Account, Learning, Audio/Speech, Tags navigation | Current                                  | Rows push named settings sub-routes; sub-screens hide shell navigation; back returns to the hub when entered from the hub.              |
+| Appearance / Language rows                       | Current (disabled Future rows)           | Render as disabled rows with a Soon badge; no route is exposed.                                                                         |
+| About row                                        | Current (dialog) / Target (bottom-sheet) | Current code opens Flutter's `AboutDialog`. The About bottom-sheet remains release-polish target behavior.                              |
+| Hub-owned mutation                               | Current absent                           | Hub rows navigate only. Account/Drive, study defaults, TTS, and tag mutation live in their sub-screens/viewmodels.                      |
+| Subtitle source                                  | Partial                                  | Account status uses account/sync state. Learning, Audio/Speech, and Tags overview subtitles are V1 summaries, not full live aggregates. |
+| Async state                                      | Current                                  | Provider-backed rows keep rows visible and use row-level skeleton/error states; the hub has no full-screen empty state.                 |
 
 ## Layout
 
@@ -74,20 +75,20 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 
 ## Inputs
 
-| Param | Source | Notes |
-| --- | --- | --- |
-| (none) | route | hub does not accept params |
+| Param  | Source | Notes                      |
+|--------|--------|----------------------------|
+| (none) | route  | hub does not accept params |
 
 ## Data to load
 
-| Data | Source | Refresh trigger |
-| --- | --- | --- |
-| Account sign-in state (email, signed-in/out) | `AuthService` + SharedPreferences | watch |
-| Last sync result (success/failed/never) | SharedPreferences | watch |
-| Daily goal (for subtitle) | SharedPreferences | watch |
-| TTS default voice label | SharedPreferences | watch |
-| Total tag count | `flashcard_tags` aggregate `COUNT(DISTINCT tag)` | watch |
-| App version | `package_info_plus` | once at boot |
+| Data                                         | Source                                           | Refresh trigger |
+|----------------------------------------------|--------------------------------------------------|-----------------|
+| Account sign-in state (email, signed-in/out) | `AuthService` + SharedPreferences                | watch           |
+| Last sync result (success/failed/never)      | SharedPreferences                                | watch           |
+| Daily goal (for subtitle)                    | SharedPreferences                                | watch           |
+| TTS default voice label                      | SharedPreferences                                | watch           |
+| Total tag count                              | `flashcard_tags` aggregate `COUNT(DISTINCT tag)` | watch           |
+| App version                                  | `package_info_plus`                              | once at boot    |
 
 Subtitles populate independently; rows render immediately, subtitles fill in.
 
@@ -100,30 +101,30 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 
 ## Components
 
-| Component | Spec |
-| --- | --- |
-| Section header | All caps, small font, theme-secondary color. |
-| Row | Icon + title + dynamic subtitle + chevron. Whole row tappable. |
-| Account row subtitle | Reflects sign-in + sync state: "Not signed in" / "Signed in as {email}" + sync status. |
-| Learning row subtitle | Target: "Daily goal: {n} cards" if goal enabled; "Goal off" if disabled. Current V1: study-defaults summary. |
-| Audio row subtitle | Target: "{Korean|English} voice (default)". Current V1: global front-language / speech summary. |
-| Tags row subtitle | Target: "{n} tags" total across user data. Current V1: static management summary; live count belongs to the Tags sub-screen. |
+| Component             | Spec                                                                                                                         |
+|-----------------------|------------------------------------------------------------------------------------------------------------------------------|
+| Section header        | All caps, small font, theme-secondary color.                                                                                 |
+| Row                   | Icon + title + dynamic subtitle + chevron. Whole row tappable.                                                               |
+| Account row subtitle  | Reflects sign-in + sync state: "Not signed in" / "Signed in as {email}" + sync status.                                       |
+| Learning row subtitle | Target: "Daily goal: {n} cards" if goal enabled; "Goal off" if disabled. Current V1: study-defaults summary.                 |
+| Audio row subtitle    | Target: "{Korean                                                                                                             |English} voice (default)". Current V1: global front-language / speech summary. |
+| Tags row subtitle     | Target: "{n} tags" total across user data. Current V1: static management summary; live count belongs to the Tags sub-screen. |
 
 ## States
 
-| State | Trigger | Behavior |
-| --- | --- | --- |
-| Loading | Initial open | Skeletons for subtitles only; rows visible immediately. |
-| Signed out | No cloud account | Account subtitle: "Not signed in — Tap to set up backup." |
-| Sign-in in progress | Token refresh / OAuth flow | Account subtitle: "Signing in..." with spinner. |
-| Sync error | Last sync failed | Account row shows error indicator + subtitle "Sync failed — Tap to review." |
+| State               | Trigger                    | Behavior                                                                    |
+|---------------------|----------------------------|-----------------------------------------------------------------------------|
+| Loading             | Initial open               | Skeletons for subtitles only; rows visible immediately.                     |
+| Signed out          | No cloud account           | Account subtitle: "Not signed in — Tap to set up backup."                   |
+| Sign-in in progress | Token refresh / OAuth flow | Account subtitle: "Signing in..." with spinner.                             |
+| Sync error          | Last sync failed           | Account row shows error indicator + subtitle "Sync failed — Tap to review." |
 
 ## Actions
 
-| Action | Trigger | Result |
-| --- | --- | --- |
-| Tap any row | Tap | `push` to corresponding sub-screen. |
-| Tap About | Tap | Current V1: open app About dialog with version/legal copy. Target: About bottom-sheet (`docs/wireframes/25-shared-bottom-sheets.md` §about) showing version, licenses, links. |
+| Action      | Trigger | Result                                                                                                                                                                        |
+|-------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Tap any row | Tap     | `push` to corresponding sub-screen.                                                                                                                                           |
+| Tap About   | Tap     | Current V1: open app About dialog with version/legal copy. Target: About bottom-sheet (`docs/wireframes/25-shared-bottom-sheets.md` §about) showing version, licenses, links. |
 
 ## Dialogs and bottom-sheets used
 
@@ -162,7 +163,8 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 
 - Do NOT inline settings UI here. Each setting category gets its own screen.
 - Do NOT hide the Account row when signed out; show "Not signed in" prompt instead.
-- About bottom-sheet content (licenses, attributions) is required at release; can be a stub during development.
+- About bottom-sheet content (licenses, attributions) is required at release; can be a stub during
+  development.
 
 ## Implementation refs
 
@@ -179,7 +181,9 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 
 - Live aggregates: deck count, tag count, sync manifest fetch
 
-**Contracts:** `docs/contracts/usecase-contracts/account-sync.md`, `docs/contracts/usecase-contracts/engagement.md`, `docs/contracts/usecase-contracts/tts.md`, `docs/contracts/usecase-contracts/tag.md`
+**Contracts:** `docs/contracts/usecase-contracts/account-sync.md`,
+`docs/contracts/usecase-contracts/engagement.md`, `docs/contracts/usecase-contracts/tts.md`,
+`docs/contracts/usecase-contracts/tag.md`
 
 **Code paths:**
 
@@ -190,5 +194,6 @@ Subtitles populate independently; rows render immediately, subtitles fill in.
 
 **Related wireframes:**
 
-- `docs/wireframes/19-settings-account.md`, `docs/wireframes/20-settings-learning.md`, `docs/wireframes/21-settings-audio-speech.md`, `docs/wireframes/22-settings-tag-management.md`
+- `docs/wireframes/19-settings-account.md`, `docs/wireframes/20-settings-learning.md`,
+  `docs/wireframes/21-settings-audio-speech.md`, `docs/wireframes/22-settings-tag-management.md`
 - `docs/wireframes/25-shared-bottom-sheets.md` §about

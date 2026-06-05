@@ -1,5 +1,4 @@
 import 'package:flutter/animation.dart';
-
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
 import 'package:memox/core/theme/tokens/easing_tokens.dart';
 

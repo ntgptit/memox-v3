@@ -2,6 +2,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -62,5 +63,44 @@ abstract interface class FolderRepository {
     required FolderId parentFolderId,
     required String name,
     required TargetLanguage targetLanguage,
+  });
+
+  /// Renames [folderId] to [name] (assumed trimmed). Enforces case-insensitive
+  /// sibling-name uniqueness; an unchanged name is a no-op that returns the
+  /// folder unchanged.
+  ///
+  /// Errors: `NotFoundFailure`, `ValidationFailure(duplicate)`, `StorageFailure`.
+  Future<Result<Folder>> renameFolder({
+    required FolderId folderId,
+    required String name,
+  });
+
+  /// Moves [folderId] under [newParentId] (`null` = Library root) in one
+  /// transaction: recomputes `sort_order`, locks the destination to
+  /// `subfolders` if it was `unlocked`, and reverts an emptied old parent to
+  /// `unlocked`. An unchanged parent is a no-op.
+  ///
+  /// Errors: `NotFoundFailure`, `ValidationFailure(cycleDetected)`,
+  /// `ValidationFailure(duplicate)`, `UnsupportedActionFailure` (destination
+  /// locked to decks), `StorageFailure`.
+  Future<Result<Folder>> moveFolder({
+    required FolderId folderId,
+    required FolderId? newParentId,
+  });
+
+  /// Deletes [folderId] and its whole subtree (descendant folders, their decks,
+  /// flashcards, and progress cascade via FKs) in one transaction, reverting an
+  /// emptied parent to `unlocked`.
+  ///
+  /// Errors: `NotFoundFailure`, `StorageFailure`.
+  Future<Result<void>> deleteFolder({required FolderId folderId});
+
+  /// Lists every candidate destination for moving [folderId]: the Library root
+  /// plus all folders, each annotated as current-parent / blocked. Blocked rows
+  /// (the folder itself, its descendants, or `decks`-locked folders) are
+  /// returned with a reason, never omitted (`docs/wireframes/25-shared-bottom-sheets.md`
+  /// §folder-picker).
+  Future<Result<List<FolderMoveTarget>>> getFolderMoveTargets({
+    required FolderId folderId,
   });
 }

@@ -5,13 +5,19 @@ status: Future Proposal — Migration Required
 
 # History Use Cases Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-Read-only timeline of per-card attempts + lifetime stats. This contract is **Future Proposal** for V1 and also requires schema migration before implementation.
+Read-only timeline of per-card attempts + lifetime stats. This contract is **Future Proposal** for
+V1 and also requires schema migration before implementation.
 
 ## V1 rule
 
-Do not implement these use cases in V1 unless Card History is promoted in `docs/checklist/v1-implementation-scope-2026-05-29.md` and the migration for `last_reset_at`, `box_before`, and `box_after` is included.
+Do not implement these use cases in V1 unless Card History is promoted in
+`docs/checklist/v1-implementation-scope-2026-05-29.md` and the migration for `last_reset_at`,
+`box_before`, and `box_after` is included.
 
 ## Future Proposal: GetCardHistoryUseCase
 
@@ -25,7 +31,8 @@ Future<Either<Failure, CardHistoryPage>> call({
 
 **Rules:**
 
-- READ `study_attempts WHERE flashcard_id = :id` ORDER BY `attempted_at DESC` LIMIT :limit (with cursor on `attempted_at < :before` if provided).
+- READ `study_attempts WHERE flashcard_id = :id` ORDER BY `attempted_at DESC` LIMIT :limit (with
+  cursor on `attempted_at < :before` if provided).
 - Cursor pagination (NOT offset).
 
 **Returns:** `CardHistoryPage { attempts: List<StudyAttempt>, nextCursor: DateTime? }`.
@@ -68,7 +75,8 @@ Returns `flashcard_progress.last_reset_at`. Used by timeline to position the res
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`,
+`docs/contracts/code-style.md`
 
 **Business spec:** `docs/business/history/card-history.md`
 **Repository:** `docs/contracts/repository-contracts/progress-repository.md` (attempts methods)

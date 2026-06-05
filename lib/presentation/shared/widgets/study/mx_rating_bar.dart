@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/custom_colors.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
@@ -32,11 +31,8 @@ enum MxRating {
 /// [labels] supplies the localized text per rating (defaults to enum order at
 /// the call site). Calls [onRate] with the chosen [MxRating].
 class MxRatingBar extends StatelessWidget {
-  const MxRatingBar({
-    required this.labels,
-    required this.onRate,
-    super.key,
-  }) : assert(labels.length == 4, 'Provide a label for each of the 4 ratings.');
+  const MxRatingBar({required this.labels, required this.onRate, super.key})
+    : assert(labels.length == 4, 'Provide a label for each of the 4 ratings.');
 
   /// Localized labels in [MxRating] order: again, hard, good, easy.
   final List<String> labels;
@@ -63,7 +59,11 @@ class MxRatingBar extends StatelessWidget {
 }
 
 class _RatingButton extends StatelessWidget {
-  const _RatingButton({required this.label, required this.color, required this.onTap});
+  const _RatingButton({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
 
   final String label;
   final Color color;
@@ -71,23 +71,23 @@ class _RatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-      color: color,
+    color: color,
+    borderRadius: RadiusTokens.brMd,
+    child: MxTappable(
+      onTap: onTap,
       borderRadius: RadiusTokens.brMd,
-      child: MxTappable(
-        onTap: onTap,
-        borderRadius: RadiusTokens.brMd,
-        child: SizedBox(
-          height: SizeTokens.button,
-          child: Center(
-            child: Text(
-              label,
-              style: context.textTheme.labelLarge?.copyWith(
-                color: context.colorScheme.onPrimary,
-                fontWeight: TypographyTokens.bold,
-              ),
+      child: SizedBox(
+        height: SizeTokens.button,
+        child: Center(
+          child: Text(
+            label,
+            style: context.textTheme.labelLarge?.copyWith(
+              color: context.colorScheme.onPrimary,
+              fontWeight: TypographyTokens.bold,
             ),
           ),
         ),
       ),
-    );
+    ),
+  );
 }

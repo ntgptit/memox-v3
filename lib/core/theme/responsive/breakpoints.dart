@@ -28,15 +28,21 @@ abstract final class Breakpoints {
   }
 
   static bool isMobile(double width) => width < mobile;
+
   static bool isTablet(double width) => width >= mobile && width < desktop;
+
   static bool isDesktop(double width) => width >= desktop;
 }
 
 /// `context.formFactor` / width helpers for widgets.
 extension ResponsiveContext on BuildContext {
   double get screenWidth => MediaQuery.sizeOf(this).width;
+
   FormFactor get formFactor => Breakpoints.of(screenWidth);
+
   bool get isMobile => Breakpoints.isMobile(screenWidth);
+
   bool get isTablet => Breakpoints.isTablet(screenWidth);
+
   bool get isDesktop => Breakpoints.isDesktop(screenWidth);
 }

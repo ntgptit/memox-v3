@@ -3284,4 +3284,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get folderModeLockedError => 'This folder can\'t hold that item type.';
+
+  @override
+  String get libraryFolderActionsRename => 'Rename';
+
+  @override
+  String get libraryFolderActionsMove => 'Move to folder';
+
+  @override
+  String get libraryFolderActionsImport => 'Import flashcards';
+
+  @override
+  String get libraryFolderActionsDelete => 'Delete folder';
+
+  @override
+  String get libraryFolderActionError =>
+      'Couldn\'t complete that action. Please try again.';
+
+  @override
+  String get folderMovePickerSearchHint => 'Search folders';
+
+  @override
+  String get folderMovePickerCycleReason =>
+      'Can\'t move a folder into itself or its subfolders.';
+
+  @override
+  String get folderMovePickerLockedReason =>
+      'Locked to decks — can\'t hold folders.';
 }

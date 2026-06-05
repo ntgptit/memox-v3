@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
@@ -36,7 +35,12 @@ class MxChoiceOption extends StatelessWidget {
     final Color mastery = context.customColors.mastery;
     final Color error = scheme.error;
 
-    final (Color border, Color fill, Color fg, IconData? glyph) = switch (state) {
+    final (
+      Color border,
+      Color fill,
+      Color fg,
+      IconData? glyph,
+    ) = switch (state) {
       MxChoiceState.idle => (
         scheme.outlineVariant,
         scheme.surfaceContainerLowest,
@@ -83,7 +87,8 @@ class MxChoiceOption extends StatelessWidget {
                   ),
                 ),
               ),
-              if (glyph != null) Icon(glyph, size: SizeTokens.iconSm, color: fg),
+              if (glyph != null)
+                Icon(glyph, size: SizeTokens.iconSm, color: fg),
             ],
           ),
         ),

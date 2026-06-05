@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
@@ -59,7 +58,11 @@ class FolderDeckTile extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Icon(Icons.style_outlined, size: SizeTokens.iconXs, color: tone),
+                    Icon(
+                      Icons.style_outlined,
+                      size: SizeTokens.iconXs,
+                      color: tone,
+                    ),
                     const SizedBox(width: SpacingTokens.xxs),
                     MxText(
                       l10n.libraryFolderCardsCount(item.cardCount),

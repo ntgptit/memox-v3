@@ -5,9 +5,13 @@ status: contract
 
 # Study Repository Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-Sessions + session items. Attempts and progress live in `docs/contracts/repository-contracts/progress-repository.md`.
+Sessions + session items. Attempts and progress live in
+`docs/contracts/repository-contracts/progress-repository.md`.
 
 ## Methods
 
@@ -35,11 +39,11 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 
 ## Transaction requirements
 
-| Operation | Tables touched |
-| --- | --- |
-| `createSession` | `study_sessions` INSERT + `study_session_items` INSERTs |
-| `markCompleted` | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
-| `expireOldSessions` | `study_sessions` UPDATE batch |
+| Operation           | Tables touched                                                                    |
+|---------------------|-----------------------------------------------------------------------------------|
+| `createSession`     | `study_sessions` INSERT + `study_session_items` INSERTs                           |
+| `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
+| `expireOldSessions` | `study_sessions` UPDATE batch                                                     |
 
 ## Resumable matching rules
 
@@ -64,11 +68,11 @@ strict and must surface the corruption instead of hiding it.
 ## Constraints
 
 - Session `status` transitions allowed:
-  - `draft` → `in_progress` (on first attempt)
-  - `draft` / `in_progress` → `completed` (on finalize)
-  - `draft` / `in_progress` → `cancelled` (on user action OR auto-expire)
-  - `in_progress` → `failed_to_finalize` (partial finalize)
-  - `failed_to_finalize` → `completed` (on retry)
+    - `draft` → `in_progress` (on first attempt)
+    - `draft` / `in_progress` → `completed` (on finalize)
+    - `draft` / `in_progress` → `cancelled` (on user action OR auto-expire)
+    - `in_progress` → `failed_to_finalize` (partial finalize)
+    - `failed_to_finalize` → `completed` (on retry)
 - Any other transition is `UnsupportedActionFailure` at use case layer.
 - New Study batch loading treats flashcards with missing `flashcard_progress`
   rows as new active cards. This keeps repaired or legacy local databases from
@@ -78,7 +82,8 @@ strict and must surface the corruption instead of hiding it.
 ## Forbidden
 
 - ❌ DELETE a session row. Use status=cancelled.
-- ❌ Allow concurrent in_progress sessions for same scope (enforced via resume-or-start-over flow at use case).
+- ❌ Allow concurrent in_progress sessions for same scope (enforced via resume-or-start-over flow at
+  use case).
 - ❌ Compute aggregate by re-scanning every time. Cache result for `completed` sessions.
 
 ## Test contract
@@ -91,7 +96,8 @@ strict and must surface the corruption instead of hiding it.
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`,
+`docs/contracts/code-style.md`
 
 **Business spec:** `docs/business/study/study-flow.md`, `docs/business/resume/resume-session.md`
 **Use cases:** `docs/contracts/usecase-contracts/study.md`

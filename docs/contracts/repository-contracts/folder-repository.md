@@ -1,9 +1,20 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-06
 status: contract
 ---
 
 # Folder Repository Contract
+
+> **Implemented surface (2026-06-06, Prompt 49D):** the live `FolderRepository` uses the existing
+> `Result<T>` contract (not yet `Either`) and these method names:
+> `renameFolder({folderId, name})`, `moveFolder({folderId, newParentId})`,
+> `deleteFolder({folderId})` → `Result<void>`, and `getFolderMoveTargets({folderId})` →
+> `Result<List<FolderMoveTarget>>` (root + all folders, blocked rows annotated, never hidden). The
+> `Either`/`Unit` signatures below are the target style. Move locks the destination to `subfolders`
+> when unlocked and reverts an emptied old parent to `unlocked`; cycle and decks-lock rejections are
+> enforced before the update. Backed by `FolderDao.{updateFolderName,updateFolderParent,
+> deleteFolderById,descendantFolderIdsDepthFirst,siblingFolderNames,childFolderCount,allFolders}`.
+> Tests: `test/data/repositories/folder_repository_impl_test.dart`.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 

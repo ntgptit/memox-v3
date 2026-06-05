@@ -10,28 +10,39 @@ source_specs:
 
 ## Purpose
 
-Current V1 configures study defaults and provides the Manage tags route. Daily goal, streak, reminder, and other engagement controls are target settings only; they are not implemented in the current V1 Learning settings screen.
+Current V1 configures study defaults and provides the Manage tags route. Daily goal, streak,
+reminder, and other engagement controls are target settings only; they are not implemented in the
+current V1 Learning settings screen.
 
 ## V1 verification status
 
-Prompt 23 (2026-05-31) verifies this screen as Current for study defaults, the read-only runtime interval table, and the Manage tags route entry. Current code does not implement the full engagement settings target shown in the original layout.
+Prompt 23 (2026-05-31) verifies this screen as Current for study defaults, the read-only runtime
+interval table, and the Manage tags route entry. Current code does not implement the full engagement
+settings target shown in the original layout.
 
-| Aspect | V1 status | Notes |
-| --- | --- | --- |
-| Route `/settings/learning` | Current | Reachable from Settings Hub; hides shell navigation; back returns to hub when pushed from the hub. |
-| New-study defaults | Current | Edits new-study batch size and shared study defaults through `StudyDefaultsSettings`. |
-| SRS-review defaults | Current | Edits review batch size and shared study defaults through `StudyDefaultsSettings`. |
-| Interval table | Current | Read-only display based on `SrsIntervalPolicy`, the current runtime interval source also used by SRS finalization through `_intervalForBox`. |
-| Manage tags entry | Current | Pushes `/settings/learning/tags`. |
-| Daily goal / streak / reminder controls | Future/Target | Not implemented in this screen's current V1 code. Do not add in a Settings Hub parity task. |
+| Aspect                                  | V1 status     | Notes                                                                                                                                        |
+|-----------------------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| Route `/settings/learning`              | Current       | Reachable from Settings Hub; hides shell navigation; back returns to hub when pushed from the hub.                                           |
+| New-study defaults                      | Current       | Edits new-study batch size and shared study defaults through `StudyDefaultsSettings`.                                                        |
+| SRS-review defaults                     | Current       | Edits review batch size and shared study defaults through `StudyDefaultsSettings`.                                                           |
+| Interval table                          | Current       | Read-only display based on `SrsIntervalPolicy`, the current runtime interval source also used by SRS finalization through `_intervalForBox`. |
+| Manage tags entry                       | Current       | Pushes `/settings/learning/tags`.                                                                                                            |
+| Daily goal / streak / reminder controls | Future/Target | Not implemented in this screen's current V1 code. Do not add in a Settings Hub parity task.                                                  |
 
-The layout/data/components/states sections below describe the target engagement settings design unless a row is explicitly marked Current in the V1 verification table.
+The layout/data/components/states sections below describe the target engagement settings design
+unless a row is explicitly marked Current in the V1 verification table.
 
 ## Layout
 
-Target/reference layout. Current V1 renders study defaults (batch-size rows with `MxBottomSheet` editor, shared study toggles), the interval table, and Manage tags; the daily-goal/reminder blocks and the advanced study-defaults block below are not shipped Current controls.
+Target/reference layout. Current V1 renders study defaults (batch-size rows with `MxBottomSheet`
+editor, shared study toggles), the interval table, and Manage tags; the daily-goal/reminder blocks
+and the advanced study-defaults block below are not shipped Current controls.
 
-> **Current V1 study defaults are NOT shown in this target layout diagram.** The implemented V1 controls are: new-study batch-size row (opens `MxBottomSheet` stepper on tap), review batch-size row (opens `MxBottomSheet` stepper on tap), and three inline shared-study toggles (shuffle flashcards, shuffle answers, prioritise overdue). These live above the DAILY GOAL block at runtime. The layout below is the target engagement design for reference only.
+> **Current V1 study defaults are NOT shown in this target layout diagram.** The implemented V1
+> controls are: new-study batch-size row (opens `MxBottomSheet` stepper on tap), review batch-size
+> row (opens `MxBottomSheet` stepper on tap), and three inline shared-study toggles (shuffle
+> flashcards, shuffle answers, prioritise overdue). These live above the DAILY GOAL block at runtime.
+> The layout below is the target engagement design for reference only.
 
 ```
 ┌───────────────────────────────────────┐
@@ -83,87 +94,91 @@ Target/reference layout. Current V1 renders study defaults (batch-size rows with
 
 ## Inputs
 
-| Param | Source | Notes |
-| --- | --- | --- |
-| (none) | route | |
+| Param  | Source | Notes |
+|--------|--------|-------|
+| (none) | route  |       |
 
 ## Data to load
 
-| Data | Source | Refresh trigger |
-| --- | --- | --- |
-| Current study defaults | `StudySettingsStore` via study settings providers | watch |
-| SRS interval table | Runtime interval source | on screen open |
-| Tag count / tags entry data | Tag providers / `flashcard_tags` aggregate | watch when rendered |
-| Target/Future: `goalEnabled`, `dailyGoal` | SharedPreferences | watch when engagement settings are implemented |
-| Target/Future: `streakEnabled` | SharedPreferences | watch when engagement settings are implemented |
-| Target/Future: `reminderEnabled`, `reminderTime` | SharedPreferences | watch when engagement settings are implemented |
-| Target/Future: OS notification permission state | platform channel | on focus + after toggle when reminders are implemented |
-| Target/Future: show swipe hint / auto-advance delays | SharedPreferences | watch when implemented |
+| Data                                                 | Source                                            | Refresh trigger                                        |
+|------------------------------------------------------|---------------------------------------------------|--------------------------------------------------------|
+| Current study defaults                               | `StudySettingsStore` via study settings providers | watch                                                  |
+| SRS interval table                                   | Runtime interval source                           | on screen open                                         |
+| Tag count / tags entry data                          | Tag providers / `flashcard_tags` aggregate        | watch when rendered                                    |
+| Target/Future: `goalEnabled`, `dailyGoal`            | SharedPreferences                                 | watch when engagement settings are implemented         |
+| Target/Future: `streakEnabled`                       | SharedPreferences                                 | watch when engagement settings are implemented         |
+| Target/Future: `reminderEnabled`, `reminderTime`     | SharedPreferences                                 | watch when engagement settings are implemented         |
+| Target/Future: OS notification permission state      | platform channel                                  | on focus + after toggle when reminders are implemented |
+| Target/Future: show swipe hint / auto-advance delays | SharedPreferences                                 | watch when implemented                                 |
 
 ## Forbidden
 
 - ❌ Target/Future engagement controls: add a Save button. Auto-save with 500ms debounce.
 - ❌ Target/Future engagement controls: allow `dailyGoal` value outside 5-200 via any code path.
 - ❌ Target/Future reminder controls: schedule reminder before OS permission granted.
-- ❌ Target/Future streak controls: reset streak when user toggles goal off. Freeze (do not advance), keep value.
+- ❌ Target/Future streak controls: reset streak when user toggles goal off. Freeze (do not advance),
+  keep value.
 - ❌ Show unimplemented toggles as enabled.
-- ❌ Target/Future reminder controls: reschedule notification on every slider tick. Reschedule on commit only.
+- ❌ Target/Future reminder controls: reschedule notification on every slider tick. Reschedule on
+  commit only.
 
 ## Components
 
-| Component | Spec |
-| --- | --- |
-| Current: New-study defaults | Current V1 section for new-study batch size and shared study defaults. |
-| Current: SRS-review defaults | Current V1 section for review batch size and shared study defaults. |
-| Current: Interval table | Current V1 read-only SRS interval display. |
-| Current: Manage tags link | Quick access to tag management screen. |
-| Target/Future: Goal enabled toggle | Master switch. When off: streak frozen, goal ring hidden on Dashboard. |
-| Target/Future: Cards per day slider | Range 5-200, step 5. Default 20. Live preview number below. |
-| Target/Future: Streak counter toggle | Show/hide streak chip on Dashboard. Independent of goal. |
-| Target/Future: Daily reminder toggle | Opt-in. Triggers OS notification permission request on first enable. |
-| Target/Future: Reminder time | Time picker. Disabled when reminder off. Default 8:00 PM. |
+| Component                                | Spec                                                                         |
+|------------------------------------------|------------------------------------------------------------------------------|
+| Current: New-study defaults              | Current V1 section for new-study batch size and shared study defaults.       |
+| Current: SRS-review defaults             | Current V1 section for review batch size and shared study defaults.          |
+| Current: Interval table                  | Current V1 read-only SRS interval display.                                   |
+| Current: Manage tags link                | Quick access to tag management screen.                                       |
+| Target/Future: Goal enabled toggle       | Master switch. When off: streak frozen, goal ring hidden on Dashboard.       |
+| Target/Future: Cards per day slider      | Range 5-200, step 5. Default 20. Live preview number below.                  |
+| Target/Future: Streak counter toggle     | Show/hide streak chip on Dashboard. Independent of goal.                     |
+| Target/Future: Daily reminder toggle     | Opt-in. Triggers OS notification permission request on first enable.         |
+| Target/Future: Reminder time             | Time picker. Disabled when reminder off. Default 8:00 PM.                    |
 | Target/Future: Additional study defaults | Show swipe hint / auto-advance controls may remain hidden until implemented. |
 
 ## States
 
-| State | Trigger | Behavior |
-| --- | --- | --- |
-| Current: Study defaults loaded | Screen opens | Render current study default controls, interval table, and Manage tags entry. |
-| Current: Saving study defaults | Current V1 setting change | Persist through study settings store; no explicit Save button. |
-| Target/Future: Goal off | Toggle off | Slider disabled. Streak counter row still shown but greyed. Hint copy visible. |
-| Target/Future: Goal on | Toggle on | Slider editable. |
-| Target/Future: Reminder permission denied | OS denies notification permission | Show inline error: "Notifications are blocked. Open device settings." with deep-link. |
-| Target/Future: Reminder enabled, permission granted | Normal | Time picker enabled. |
-| Target/Future: Saving engagement settings | Engagement setting change | Auto-save with debounced 500ms write. No explicit Save button. |
+| State                                               | Trigger                           | Behavior                                                                              |
+|-----------------------------------------------------|-----------------------------------|---------------------------------------------------------------------------------------|
+| Current: Study defaults loaded                      | Screen opens                      | Render current study default controls, interval table, and Manage tags entry.         |
+| Current: Saving study defaults                      | Current V1 setting change         | Persist through study settings store; no explicit Save button.                        |
+| Target/Future: Goal off                             | Toggle off                        | Slider disabled. Streak counter row still shown but greyed. Hint copy visible.        |
+| Target/Future: Goal on                              | Toggle on                         | Slider editable.                                                                      |
+| Target/Future: Reminder permission denied           | OS denies notification permission | Show inline error: "Notifications are blocked. Open device settings." with deep-link. |
+| Target/Future: Reminder enabled, permission granted | Normal                            | Time picker enabled.                                                                  |
+| Target/Future: Saving engagement settings           | Engagement setting change         | Auto-save with debounced 500ms write. No explicit Save button.                        |
 
 ## Actions
 
-| Action | Trigger | Result |
-| --- | --- | --- |
-| Change current study defaults | Tap / input | Persist current V1 study default settings. |
-| Tap Manage tags | Tap | Navigate to `/settings/learning/tags`. |
-| Target/Future: Toggle Goal enabled | Tap | Update preference. If turning off, show hint copy and let user manage streak separately. |
-| Target/Future: Drag goal slider | Drag | Live value update. Persist on release. |
-| Target/Future: Toggle streak counter | Tap | Update preference. |
-| Target/Future: Toggle reminder | Tap | If turning on, request OS permission. On grant: schedule reminder. On deny: revert toggle + show inline error. |
-| Target/Future: Tap time picker | Tap | Open time picker dialog/sheet. On confirm: reschedule reminder. |
-| Target/Future: Toggle show swipe hint | Tap | Update preference when implemented. |
-| Target/Future: Drag delay sliders | Drag | Live value; persist on release when implemented. |
+| Action                                | Trigger     | Result                                                                                                         |
+|---------------------------------------|-------------|----------------------------------------------------------------------------------------------------------------|
+| Change current study defaults         | Tap / input | Persist current V1 study default settings.                                                                     |
+| Tap Manage tags                       | Tap         | Navigate to `/settings/learning/tags`.                                                                         |
+| Target/Future: Toggle Goal enabled    | Tap         | Update preference. If turning off, show hint copy and let user manage streak separately.                       |
+| Target/Future: Drag goal slider       | Drag        | Live value update. Persist on release.                                                                         |
+| Target/Future: Toggle streak counter  | Tap         | Update preference.                                                                                             |
+| Target/Future: Toggle reminder        | Tap         | If turning on, request OS permission. On grant: schedule reminder. On deny: revert toggle + show inline error. |
+| Target/Future: Tap time picker        | Tap         | Open time picker dialog/sheet. On confirm: reschedule reminder.                                                |
+| Target/Future: Toggle show swipe hint | Tap         | Update preference when implemented.                                                                            |
+| Target/Future: Drag delay sliders     | Drag        | Live value; persist on release when implemented.                                                               |
 
 ## Dialogs and bottom-sheets used
 
-- Current V1: batch-size editing uses `MxBottomSheet` (see `_showBatchSizeSheet` in `study_settings_group.dart`); shared study toggles are inline and do not need a dialog or sheet.
-- Target/Future: Time picker (platform-native or `docs/wireframes/25-shared-bottom-sheets.md` §reminder-time).
+- Current V1: batch-size editing uses `MxBottomSheet` (see `_showBatchSizeSheet` in
+  `study_settings_group.dart`); shared study toggles are inline and do not need a dialog or sheet.
+- Target/Future: Time picker (platform-native or `docs/wireframes/25-shared-bottom-sheets.md`
+  §reminder-time).
 
 ## Validation
 
-| Rule | Behavior |
-| --- | --- |
-| Current study defaults | Validated by current study settings controls/store. |
-| Target/Future: Cards per day range | Slider hardware-clamped to 5-200. Out-of-range impossible via UI. |
-| Target/Future: Reminder time | Any valid local time. |
-| Target/Future: Auto-advance delay (correct) range | 0.5-3.0s, step 0.1s. |
-| Target/Future: Auto-advance delay (wrong) range | 0.5-5.0s, step 0.5s. |
+| Rule                                              | Behavior                                                          |
+|---------------------------------------------------|-------------------------------------------------------------------|
+| Current study defaults                            | Validated by current study settings controls/store.               |
+| Target/Future: Cards per day range                | Slider hardware-clamped to 5-200. Out-of-range impossible via UI. |
+| Target/Future: Reminder time                      | Any valid local time.                                             |
+| Target/Future: Auto-advance delay (correct) range | 0.5-3.0s, step 0.1s.                                              |
+| Target/Future: Auto-advance delay (wrong) range   | 0.5-5.0s, step 0.5s.                                              |
 
 ## Navigation in
 
@@ -180,8 +195,10 @@ Target/reference layout. Current V1 renders study defaults (batch-size rows with
 
 ## Performance
 
-- Current V1 study default writes must avoid unnecessary rebuilds and persist through the current study settings store.
-- Target/Future engagement auto-save is debounced 500ms with a single SharedPreferences write per change.
+- Current V1 study default writes must avoid unnecessary rebuilds and persist through the current
+  study settings store.
+- Target/Future engagement auto-save is debounced 500ms with a single SharedPreferences write per
+  change.
 - Target/Future reminder rescheduling happens on commit; not on every drag tick.
 
 ## Accessibility
@@ -202,12 +219,15 @@ Target/reference layout. Current V1 renders study defaults (batch-size rows with
 
 ## Agent rule
 
-- Do NOT promote daily goal, streak, reminder, or notification permission controls to Current in a Settings route/parity task.
+- Do NOT promote daily goal, streak, reminder, or notification permission controls to Current in a
+  Settings route/parity task.
 - Current V1 study defaults must not add a Save button unless the implementation already uses one.
 - Target/Future: Do NOT add a Save button. Auto-save with debounce.
 - Target/Future: Do NOT allow goal value outside 5-200 via deep-link or backdoor.
-- Target/Future: Reminder permission flow MUST handle "permanently denied" state with deep-link to device settings.
-- Target/Future study-default controls may remain hidden until implemented; do not show unimplemented toggles.
+- Target/Future: Reminder permission flow MUST handle "permanently denied" state with deep-link to
+  device settings.
+- Target/Future study-default controls may remain hidden until implemented; do not show
+  unimplemented toggles.
 
 ## Implementation refs
 
@@ -217,13 +237,16 @@ Target/reference layout. Current V1 renders study defaults (batch-size rows with
 
 **Decision rows:**
 
-- Current V1: settings route/action coverage, study defaults tests, runtime interval-table render tests, and Manage tags route-entry tests.
+- Current V1: settings route/action coverage, study defaults tests, runtime interval-table render
+  tests, and Manage tags route-entry tests.
 - Target/Future engagement: goal range 5-200 step 5, single reminder, goal-off freezes streak.
 
 **Schema / storage:**
 
-- Current V1: study defaults store and providers listed in Code paths; interval values from `lib/domain/study/srs_interval_policy.dart`.
-- Target/Future SharedPreferences keys: `goalEnabled`, `dailyGoal`, `streakEnabled`, `reminderEnabled`, `reminderTime`
+- Current V1: study defaults store and providers listed in Code paths; interval values from
+  `lib/domain/study/srs_interval_policy.dart`.
+- Target/Future SharedPreferences keys: `goalEnabled`, `dailyGoal`, `streakEnabled`,
+  `reminderEnabled`, `reminderTime`
 - Target/Future: `study.showSwipeHint`, `study.autoAdvanceCorrect`, `study.autoAdvanceWrong`
 
 **Contracts:** `docs/contracts/usecase-contracts/engagement.md`
@@ -239,5 +262,6 @@ Target/reference layout. Current V1 renders study defaults (batch-size rows with
 
 **Related wireframes:**
 
-- `docs/wireframes/04-settings-hub.md` (entry), `docs/wireframes/22-settings-tag-management.md` (Manage tags row)
+- `docs/wireframes/04-settings-hub.md` (entry), `docs/wireframes/22-settings-tag-management.md` (
+  Manage tags row)
 - `docs/wireframes/25-shared-bottom-sheets.md` §reminder-time

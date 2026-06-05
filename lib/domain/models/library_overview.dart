@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:memox/domain/entities/folder.dart';
 
 part 'library_overview.freezed.dart';

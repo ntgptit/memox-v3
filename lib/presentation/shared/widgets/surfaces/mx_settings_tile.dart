@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -74,7 +73,11 @@ class MxSettingsTile extends StatelessWidget {
         child: Row(
           children: <Widget>[
             if (leadingIcon != null) ...<Widget>[
-              Icon(leadingIcon, size: SizeTokens.iconSm, color: scheme.onSurfaceVariant),
+              Icon(
+                leadingIcon,
+                size: SizeTokens.iconSm,
+                color: scheme.onSurfaceVariant,
+              ),
               const SizedBox(width: SpacingTokens.md),
             ],
             Expanded(
@@ -123,7 +126,11 @@ class _ValueChevron extends StatelessWidget {
             ),
           ),
         const SizedBox(width: SpacingTokens.xs),
-        Icon(Icons.chevron_right, size: SizeTokens.iconSm, color: scheme.onSurfaceVariant),
+        Icon(
+          Icons.chevron_right,
+          size: SizeTokens.iconSm,
+          color: scheme.onSurfaceVariant,
+        ),
       ],
     );
   }

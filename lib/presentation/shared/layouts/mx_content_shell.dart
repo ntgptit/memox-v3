@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/responsive/breakpoints.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
@@ -22,10 +21,10 @@ class MxContentShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Align(
-      alignment: Alignment.topCenter,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth),
-        child: Padding(padding: padding, child: child),
-      ),
-    );
+    alignment: Alignment.topCenter,
+    child: ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: Padding(padding: padding, child: child),
+    ),
+  );
 }

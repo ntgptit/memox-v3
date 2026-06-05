@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
@@ -12,11 +11,7 @@ import 'package:memox/presentation/shared/widgets/status/mx_card_status.dart';
 /// Section E of the handoff. The [label] is caller-supplied (localized); the
 /// color comes from [status].
 class MxStatusBadge extends StatelessWidget {
-  const MxStatusBadge({
-    required this.status,
-    required this.label,
-    super.key,
-  });
+  const MxStatusBadge({required this.status, required this.label, super.key});
 
   final MxCardStatus status;
   final String label;

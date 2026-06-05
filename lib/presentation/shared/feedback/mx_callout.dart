@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
@@ -42,7 +41,9 @@ class MxCallout extends StatelessWidget {
       decoration: BoxDecoration(
         color: tint.withValues(alpha: OpacityTokens.hover),
         borderRadius: RadiusTokens.brMd,
-        border: Border.all(color: tint.withValues(alpha: OpacityTokens.selected)),
+        border: Border.all(
+          color: tint.withValues(alpha: OpacityTokens.selected),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

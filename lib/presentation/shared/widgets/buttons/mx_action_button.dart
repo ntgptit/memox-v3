@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
@@ -38,8 +37,9 @@ class MxActionButton extends StatelessWidget {
       'Intent $intent forbids full-width actions '
       '(docs/ui-ux/action-hierarchy-contract.md).',
     );
-    final bool expand =
-        spec.allowFullWidthOverride ? (fullWidth ?? spec.fullWidthDefault) : false;
+    final bool expand = spec.allowFullWidthOverride
+        ? (fullWidth ?? spec.fullWidthDefault)
+        : false;
 
     if (MxActionSpec.isSecondary(intent)) {
       final MxSecondaryVariant variant = intent == MxActionIntent.cardSecondary

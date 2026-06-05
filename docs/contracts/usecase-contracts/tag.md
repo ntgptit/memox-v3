@@ -5,9 +5,13 @@ status: contract
 
 # Tag Use Cases Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-Tags are global (cross-deck), case-insensitive by name, with strict input validation (no comma, max 50 chars).
+Tags are global (cross-deck), case-insensitive by name, with strict input validation (no comma, max
+50 chars).
 
 ## TagValidator (pure)
 
@@ -64,8 +68,10 @@ Future<Either<Failure, Unit>> call({required String oldName, required String new
 
 - Validate `newName` via `TagValidator`.
 - If `LOWER(newName) == LOWER(oldName)` → no-op.
-- If new name exists as another tag → return `ConflictFailure` so UI shows merge confirmation. Do NOT auto-merge.
-- Atomic UPDATE: `UPDATE flashcard_tags SET tag = newName WHERE LOWER(tag) = LOWER(oldName)`. See `docs/contracts/repository-contracts/tag-repository.md`.
+- If new name exists as another tag → return `ConflictFailure` so UI shows merge confirmation. Do
+  NOT auto-merge.
+- Atomic UPDATE: `UPDATE flashcard_tags SET tag = newName WHERE LOWER(tag) = LOWER(oldName)`. See
+  `docs/contracts/repository-contracts/tag-repository.md`.
 
 **Errors:** `ValidationFailure`, `ConflictFailure`, `StorageFailure`.
 
@@ -78,7 +84,8 @@ Future<Either<Failure, MergeResult>> call({required String sourceName, required 
 **Rules:**
 
 - Validate destinationName.
-- Atomic: for each card tagged with source, ensure destination exists (insert if missing); DELETE source rows. Per-card dedup. See `docs/contracts/repository-contracts/tag-repository.md`.
+- Atomic: for each card tagged with source, ensure destination exists (insert if missing); DELETE
+  source rows. Per-card dedup. See `docs/contracts/repository-contracts/tag-repository.md`.
 
 **Errors:** `ValidationFailure`, `StorageFailure`.
 
@@ -103,7 +110,8 @@ Future<Either<Failure, int>> call({required String tag});  // returns affected c
 
 ## BuildStudyByTagRefIdUseCase
 
-**Status:** Target / Blocked for Current V1. Do not expose tag-scoped study until `StudyEntryType.tag`, tag-scope resolution, and executable tests are implemented.
+**Status:** Target / Blocked for Current V1. Do not expose tag-scoped study until
+`StudyEntryType.tag`, tag-scope resolution, and executable tests are implemented.
 
 ```dart
 String call(List<String> selectedTags);
@@ -118,7 +126,8 @@ Pure function. Returns canonical `entry_ref_id` for `entry_type=tag`:
 
 Example: `["Weak", "grammar"]` → `"grammar,weak"`.
 
-**Errors:** throws `AssertionError` if any tag invalid (programmer error — caller should validate first).
+**Errors:** throws `AssertionError` if any tag invalid (programmer error — caller should validate
+first).
 
 **Test refs:** TG11.
 
@@ -150,10 +159,12 @@ Returns distinct tags within a deck, used by flashcard list tag filter.
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md` (Failure types), `docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
+**Base contracts:** `docs/contracts/error-contract.md` (Failure types),
+`docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
 
 **Business spec:** `docs/business/tags/tag-system.md`
 **Repository:** `docs/contracts/repository-contracts/tag-repository.md`
-**Wireframes:** `docs/wireframes/22-settings-tag-management.md`, `docs/wireframes/07-flashcard-create.md`, `docs/wireframes/25-shared-bottom-sheets.md` §tag-picker
+**Wireframes:** `docs/wireframes/22-settings-tag-management.md`,
+`docs/wireframes/07-flashcard-create.md`, `docs/wireframes/25-shared-bottom-sheets.md` §tag-picker
 **Decision table:** rows TG1-TG11
 **Code paths:** `lib/domain/usecases/tag/**`, `lib/domain/tag/**`

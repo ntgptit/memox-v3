@@ -14,7 +14,10 @@ status: contract
 > `docs/database/migrations/nullable-deck-parent-migration.md` is retained only
 > as a rejected historical design note. Do not implement it.
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
 ## CreateDeckUseCase
 
@@ -37,7 +40,8 @@ Future<Either<Failure, Deck>> call({
 - Reject duplicate within same parent (case-insensitive).
 - Atomic insert + parent mode update. See `docs/contracts/repository-contracts/deck-repository.md`.
 
-**Errors:** `NotFoundFailure`, `UnsupportedActionFailure` (parent locked to subfolders), `ValidationFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `UnsupportedActionFailure` (parent locked to subfolders),
+`ValidationFailure`, `StorageFailure`.
 
 **Test refs:** D1-D3.
 
@@ -76,7 +80,8 @@ Future<Either<Failure, Deck>> call({
 
 **Rules:**
 
-- Atomic deck-parent + both folder modes; recompute `sort_order`. See `docs/contracts/repository-contracts/deck-repository.md`.
+- Atomic deck-parent + both folder modes; recompute `sort_order`. See
+  `docs/contracts/repository-contracts/deck-repository.md`.
 
 **Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
 
@@ -90,7 +95,8 @@ Future<Either<Failure, Unit>> call({required DeckId id});
 
 **Rules:**
 
-- Atomic cascade across progress, tags, attempts, flashcards, sessions, deck row + old parent mode update. Full cascade list in `docs/contracts/repository-contracts/deck-repository.md`.
+- Atomic cascade across progress, tags, attempts, flashcards, sessions, deck row + old parent mode
+  update. Full cascade list in `docs/contracts/repository-contracts/deck-repository.md`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.
 
@@ -128,18 +134,21 @@ Used by deck-level study CTA enable/disable and Today CTA subtitle.
 
 ## Forbidden patterns
 
-- ❌ Change `target_language` without consideration of TTS impact (UI must reflect on next study session).
+- ❌ Change `target_language` without consideration of TTS impact (UI must reflect on next study
+  session).
 - ❌ Delete deck without cascading session deletion.
 - ❌ Allow create in `subfolders`-mode parent.
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md` (Failure types), `docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
+**Base contracts:** `docs/contracts/error-contract.md` (Failure types),
+`docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
 
 **Business spec:** `docs/business/deck/deck-management.md`
 **Repository:** `docs/contracts/repository-contracts/deck-repository.md`
 **Rejected migration design:** `docs/database/migrations/nullable-deck-parent-migration.md`
-**Wireframes:** `docs/wireframes/02-library.md`, `docs/wireframes/05-folder-detail.md`, `docs/wireframes/06-flashcard-list.md`
+**Wireframes:** `docs/wireframes/02-library.md`, `docs/wireframes/05-folder-detail.md`,
+`docs/wireframes/06-flashcard-list.md`
 **TTS gate:** `docs/business/tts/tts-settings.md`
 **Decision table:** rows D1-D8
 **Code paths:** `lib/domain/usecases/deck/**`

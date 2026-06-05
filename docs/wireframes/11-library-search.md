@@ -14,31 +14,35 @@ related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
 
 V1 does **not** implement a dedicated global search screen.
 
-V1 uses this document as the canonical UX guideline for **inline/scope-local search** in existing screens:
+V1 uses this document as the canonical UX guideline for **inline/scope-local search** in existing
+screens:
 
 - Library overview search/filter.
 - Folder detail search/filter.
 - Flashcard list search inside one deck.
 - Tag management search/filter.
 
-The full `/library/search` experience with recent searches, popular tags, grouped cross-scope results and deep links is a **Future Proposal**.
+The full `/library/search` experience with recent searches, popular tags, grouped cross-scope
+results and deep links is a **Future Proposal**.
 
 ## V1 purpose
 
-Help users find content inside the screen/scope they are already using, without introducing a new global route or persistence model.
+Help users find content inside the screen/scope they are already using, without introducing a new
+global route or persistence model.
 
 ## V1 supported scopes
 
-| Surface | Scope | V1 behavior |
-| --- | --- | --- |
-| Library overview | Root folders + root decks shown on Library | Filter visible rows. No cross-deck flashcard search. |
-| Folder detail | Direct/recursive content under current folder, depending on existing folder screen behavior | Filter visible folders/decks; keep breadcrumb context. |
-| Flashcard list | Flashcards in current deck only | Filter by front/back/note/pronunciation/example/hint where available. |
-| Tag management | Tags only | Filter tags by tag name. |
+| Surface          | Scope                                                                                       | V1 behavior                                                           |
+|------------------|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| Library overview | Root folders + root decks shown on Library                                                  | Filter visible rows. No cross-deck flashcard search.                  |
+| Folder detail    | Direct/recursive content under current folder, depending on existing folder screen behavior | Filter visible folders/decks; keep breadcrumb context.                |
+| Flashcard list   | Flashcards in current deck only                                                             | Filter by front/back/note/pronunciation/example/hint where available. |
+| Tag management   | Tags only                                                                                   | Filter tags by tag name.                                              |
 
 ## V1 rules
 
-- Minimum 2 characters before filtering, unless the existing screen already supports empty-query reset.
+- Minimum 2 characters before filtering, unless the existing screen already supports empty-query
+  reset.
 - Debounce text input by 300ms when the query hits repository/database work.
 - Case-insensitive match.
 - Trim surrounding whitespace and collapse repeated whitespace.
@@ -49,23 +53,23 @@ Help users find content inside the screen/scope they are already using, without 
 
 ## V1 states
 
-| State | Trigger | Behavior |
-| --- | --- | --- |
-| Empty query | Field cleared | Show normal screen content. |
-| Too short | Query length = 1 | Show existing content or a small hint: `Type at least 2 characters.` |
-| Loading | Query triggers async work | Show the screen's normal loading style or lightweight inline progress. |
-| Results | Matches found | Show filtered list in the current screen only. |
-| No results | No match in current scope | Show local empty state: `No results in this {scope}.` |
-| Error | Search/filter failure | Keep the user on the current screen and show inline error/toast. |
+| State       | Trigger                   | Behavior                                                               |
+|-------------|---------------------------|------------------------------------------------------------------------|
+| Empty query | Field cleared             | Show normal screen content.                                            |
+| Too short   | Query length = 1          | Show existing content or a small hint: `Type at least 2 characters.`   |
+| Loading     | Query triggers async work | Show the screen's normal loading style or lightweight inline progress. |
+| Results     | Matches found             | Show filtered list in the current screen only.                         |
+| No results  | No match in current scope | Show local empty state: `No results in this {scope}.`                  |
+| Error       | Search/filter failure     | Keep the user on the current screen and show inline error/toast.       |
 
 ## V1 result behavior
 
-| Surface | Tap result |
-| --- | --- |
-| Library overview | Open folder or deck. |
-| Folder detail | Open folder or deck. |
-| Flashcard list | Open flashcard detail/editor or keep row selected, depending on existing screen behavior. |
-| Tag management | Select/open tag action menu, depending on existing screen behavior. |
+| Surface          | Tap result                                                                                |
+|------------------|-------------------------------------------------------------------------------------------|
+| Library overview | Open folder or deck.                                                                      |
+| Folder detail    | Open folder or deck.                                                                      |
+| Flashcard list   | Open flashcard detail/editor or keep row selected, depending on existing screen behavior. |
+| Tag management   | Select/open tag action menu, depending on existing screen behavior.                       |
 
 ## V1 forbidden behavior
 
@@ -95,12 +99,12 @@ Future layout states may include:
 
 Future global result actions:
 
-| Result type | Future behavior |
-| --- | --- |
-| Folder | Navigate to `/library/folder/:id`. |
-| Deck | Navigate to `/library/deck/:deckId/flashcards`. |
-| Flashcard | Navigate to the card's deck and scroll/select the card. |
-| Tag | Open a global tag-filtered flashcard list. |
+| Result type | Future behavior                                         |
+|-------------|---------------------------------------------------------|
+| Folder      | Navigate to `/library/folder/:id`.                      |
+| Deck        | Navigate to `/library/deck/:deckId/flashcards`.         |
+| Flashcard   | Navigate to the card's deck and scroll/select the card. |
+| Tag         | Open a global tag-filtered flashcard list.              |
 
 Future implementation requires product promotion in:
 
@@ -111,4 +115,5 @@ Future implementation requires product promotion in:
 
 ## Agent rule
 
-Implement only inline/scope-local search improvements in V1. Treat every full global search screen detail as Future Proposal until promoted.
+Implement only inline/scope-local search improvements in V1. Treat every full global search screen
+detail as Future Proposal until promoted.

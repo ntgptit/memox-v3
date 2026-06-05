@@ -5,11 +5,16 @@ applies_to: deck entity and deck management feature
 
 # Deck Management
 
-> **Status: Partial Target — Migration Required for `target_language`; root-level decks Rejected / Out of Scope.** Folder-owned deck CRUD itself is implementable today. However, the `target_language` field (referenced throughout this spec) is a pending column from `docs/database/schema-contract.md` §Pending schema changes:
+> **Status: Partial Target — Migration Required for `target_language`; root-level decks Rejected /
+Out of Scope.** Folder-owned deck CRUD itself is implementable today. However, the `target_language`
+> field (referenced throughout this spec) is a pending column from `docs/database/schema-contract.md`
+> §Pending schema changes:
 >
 > - `decks.target_language TEXT NOT NULL DEFAULT 'korean'`
 >
-> Migration backfills existing decks to `'korean'`; user adjusts per-deck after. Blocks (until migration): TTS gating in study modes 13-17, settings audio-speech screen, target-language picker in deck create/edit flows.
+> Migration backfills existing decks to `'korean'`; user adjusts per-deck after. Blocks (until
+> migration): TTS gating in study modes 13-17, settings audio-speech screen, target-language picker in
+> deck create/edit flows.
 >
 > Prompt 43A supersedes the Prompt 42/42B root-level deck direction. Product
 > ownership rejected root-level decks: every deck must belong to exactly one
@@ -45,30 +50,33 @@ Important fields:
 
 ## Target language
 
-Every deck has a target language indicating what language the FRONT side of its cards is in. This drives TTS behavior and sets explicit expectations about content type.
+Every deck has a target language indicating what language the FRONT side of its cards is in. This
+drives TTS behavior and sets explicit expectations about content type.
 
-| Value | Meaning | TTS supported now? |
-| --- | --- | --- |
-| `korean` | Korean (ko-KR) front content | Yes |
-| `english` | English (en-US) front content | Yes |
-| `unsupported` | Any other language; TTS disabled for this deck | No |
+| Value         | Meaning                                        | TTS supported now? |
+|---------------|------------------------------------------------|--------------------|
+| `korean`      | Korean (ko-KR) front content                   | Yes                |
+| `english`     | English (en-US) front content                  | Yes                |
+| `unsupported` | Any other language; TTS disabled for this deck | No                 |
 
 When user creates or edits a deck, they MUST pick a target language. Default: `korean`.
 
-Rationale: Without explicit language tagging, TTS would attempt to speak Vietnamese/Japanese/etc. with an English voice → wrong pronunciation. Forcing a per-deck declaration prevents silent failure.
+Rationale: Without explicit language tagging, TTS would attempt to speak Vietnamese/Japanese/etc.
+with an English voice → wrong pronunciation. Forcing a per-deck declaration prevents silent failure.
 
 ### Effects of target language
 
-| Surface | Behavior |
-| --- | --- |
+| Surface                           | Behavior                                                                                              |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------|
 | TTS speak action on study session | Enabled only when `targetLanguage` is `korean` or `english`. Disabled (greyed out) for `unsupported`. |
-| TTS auto-play | Skipped silently when deck's `targetLanguage = unsupported`. |
-| Deck create/edit form | Required field (defaults to `korean`). |
-| TTS settings screen | Voice/language picker remains global; future per-deck override planned. |
+| TTS auto-play                     | Skipped silently when deck's `targetLanguage = unsupported`.                                          |
+| Deck create/edit form             | Required field (defaults to `korean`).                                                                |
+| TTS settings screen               | Voice/language picker remains global; future per-deck override planned.                               |
 
 ### Migration
 
-Existing decks (pre-feature) get `target_language = korean` as default during migration. Users can edit each deck to set the correct value.
+Existing decks (pre-feature) get `target_language = korean` as default during migration. Users can
+edit each deck to set the correct value.
 
 ## Rules
 
@@ -114,7 +122,8 @@ Do not add a separate deck detail route unless route contract and navigation doc
 
 **Wireframes:**
 
-- `docs/wireframes/02-library.md` — Current V1 Library does not render root-level decks; top-level deck rows are Rejected / Out of Scope
+- `docs/wireframes/02-library.md` — Current V1 Library does not render root-level decks; top-level
+  deck rows are Rejected / Out of Scope
 - `docs/wireframes/05-folder-detail.md` — decks listed inside a folder (decks mode)
 - `docs/wireframes/06-flashcard-list.md` — deck content view + deck-level CTAs
 - `docs/wireframes/10-deck-import.md` — import flow into a deck
@@ -122,14 +131,16 @@ Do not add a separate deck detail route unless route contract and navigation doc
 
 **Schema:**
 
-- `docs/database/schema-contract.md` → `decks` table (`id`, `folder_id`, `name`, `target_language`, `sort_order`, timestamps). `target_language` is one of the 6 pending migrations.
+- `docs/database/schema-contract.md` → `decks` table (`id`, `folder_id`, `name`, `target_language`,
+  `sort_order`, timestamps). `target_language` is one of the 6 pending migrations.
 - `docs/database/migrations/nullable-deck-parent-migration.md` → rejected Prompt
   42B design; nullable `decks.folder_id` is Not Applicable while the folder-owned
   deck invariant holds.
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows under "Deck management" and "TTS gating" (target_language influences TTS UI in study modes)
+- `docs/decision-tables/memox-core-decision-table.md` rows under "Deck management" and "TTS
+  gating" (target_language influences TTS UI in study modes)
 
 **Glossary terms:**
 
@@ -137,7 +148,8 @@ Do not add a separate deck detail route unless route contract and navigation doc
 
 **Related business specs:**
 
-- `docs/business/folder/folder-management.md` — folder mode lock affects whether deck can be created here
+- `docs/business/folder/folder-management.md` — folder mode lock affects whether deck can be created
+  here
 - `docs/business/flashcard/flashcard-management.md` — deck owns flashcards
 - `docs/business/tts/tts-settings.md` — `target_language` gates TTS at deck level
 - `docs/business/export/export.md` — deck is the export unit

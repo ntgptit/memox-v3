@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:memox/domain/types/ids.dart';
 
 part 'folder_move_target.freezed.dart';

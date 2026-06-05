@@ -24,11 +24,13 @@ class FolderDetailToolbarState {
 
   bool get isSearching => StringUtils.trimmed(searchTerm).isNotEmpty;
 
-  FolderDetailToolbarState copyWith({String? searchTerm, ContentSortMode? sort}) =>
-      FolderDetailToolbarState(
-        searchTerm: searchTerm ?? this.searchTerm,
-        sort: sort ?? this.sort,
-      );
+  FolderDetailToolbarState copyWith({
+    String? searchTerm,
+    ContentSortMode? sort,
+  }) => FolderDetailToolbarState(
+    searchTerm: searchTerm ?? this.searchTerm,
+    sort: sort ?? this.sort,
+  );
 }
 
 /// Ephemeral search/sort selections, scoped per folder so stacked folder-detail
@@ -52,8 +54,9 @@ class FolderDetailToolbar extends _$FolderDetailToolbar {
 /// (e.g. NotFound) surfaces as `AsyncError` for the screen's error state.
 @Riverpod(keepAlive: true)
 Stream<FolderDetail> folderDetailQuery(Ref ref, String folderId) {
-  final FolderDetailToolbarState toolbar =
-      ref.watch(folderDetailToolbarProvider(folderId));
+  final FolderDetailToolbarState toolbar = ref.watch(
+    folderDetailToolbarProvider(folderId),
+  );
   final useCase = ref.watch(watchFolderDetailUseCaseProvider);
   return useCase
       .call(folderId, searchTerm: toolbar.searchTerm, sort: toolbar.sort)
@@ -76,8 +79,10 @@ class FolderActionController extends _$FolderActionController {
   Future<Result<Folder>> createSubfolder(String parentId, String name) async {
     state = const AsyncValue<void>.loading();
     final useCase = ref.read(createSubfolderUseCaseProvider);
-    final Result<Folder> result =
-        await useCase.call(parentId: parentId, name: name);
+    final Result<Folder> result = await useCase.call(
+      parentId: parentId,
+      name: name,
+    );
     state = result.fold(
       (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
       (Folder _) => const AsyncValue<void>.data(null),
@@ -88,8 +93,10 @@ class FolderActionController extends _$FolderActionController {
   Future<Result<Deck>> createDeck(String parentFolderId, String name) async {
     state = const AsyncValue<void>.loading();
     final useCase = ref.read(createDeckUseCaseProvider);
-    final Result<Deck> result =
-        await useCase.call(parentFolderId: parentFolderId, name: name);
+    final Result<Deck> result = await useCase.call(
+      parentFolderId: parentFolderId,
+      name: name,
+    );
     state = result.fold(
       (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
       (Deck _) => const AsyncValue<void>.data(null),

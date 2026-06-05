@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
 
 /// Base screen scaffold — themed `AppBar`, width-capped body, optional FAB and
@@ -30,13 +29,11 @@ class MxScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: appBar,
-      floatingActionButton: floatingActionButton,
-      bottomNavigationBar: bottomNavigationBar,
-      bottomSheet: bottomSheet,
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      body: SafeArea(
-        child: useShell ? MxContentShell(child: body) : body,
-      ),
-    );
+    appBar: appBar,
+    floatingActionButton: floatingActionButton,
+    bottomNavigationBar: bottomNavigationBar,
+    bottomSheet: bottomSheet,
+    resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+    body: SafeArea(child: useShell ? MxContentShell(child: body) : body),
+  );
 }

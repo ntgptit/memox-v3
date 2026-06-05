@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/color_tokens.dart';
 
 /// Builds the app `ColorScheme` from a seed.

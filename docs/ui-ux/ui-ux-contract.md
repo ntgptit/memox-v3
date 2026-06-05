@@ -152,16 +152,16 @@ Avoid:
 
 ## Performance rule
 
-| Scenario | Rule |
-| --- | --- |
-| List > 50 items | `ListView.builder`, never `Column` + `map` |
-| List > 200 items | Consider pagination or sliver virtualization |
-| Search input | Debounce 300ms |
-| Tag/autocomplete input | Debounce 200ms |
-| Image (network/asset cache) | Use cached image widget; do not rebuild every frame |
-| Heavy compute | `compute()` or isolate; never on UI thread |
-| Animation | Use AnimatedX widgets; avoid manual setState in tickers |
-| Stream listeners | Always cancel in dispose; prefer Riverpod auto-dispose |
+| Scenario                    | Rule                                                    |
+|-----------------------------|---------------------------------------------------------|
+| List > 50 items             | `ListView.builder`, never `Column` + `map`              |
+| List > 200 items            | Consider pagination or sliver virtualization            |
+| Search input                | Debounce 300ms                                          |
+| Tag/autocomplete input      | Debounce 200ms                                          |
+| Image (network/asset cache) | Use cached image widget; do not rebuild every frame     |
+| Heavy compute               | `compute()` or isolate; never on UI thread              |
+| Animation                   | Use AnimatedX widgets; avoid manual setState in tickers |
+| Stream listeners            | Always cancel in dispose; prefer Riverpod auto-dispose  |
 
 ## Accessibility rule
 
@@ -182,7 +182,8 @@ Destructive actions require confirmation dialog:
 - Discard unsaved form changes.
 
 Confirmation dialog must use `MxConfirmDialog` or equivalent shared widget.
-Current V1 implementation uses `MxConfirmationDialog`; destructive confirmations are not barrier-dismissible and must provide an explicit Cancel path.
+Current V1 implementation uses `MxConfirmationDialog`; destructive confirmations are not
+barrier-dismissible and must provide an explicit Cancel path.
 
 ## Loading state rule
 
@@ -206,15 +207,18 @@ Current V1 implementation uses `MxConfirmationDialog`; destructive confirmations
 
 ## Agent rule
 
-Do not build anonymous `Container + Row + hardcoded style` UI when a shared component exists or should be promoted.
+Do not build anonymous `Container + Row + hardcoded style` UI when a shared component exists or
+should be promoted.
 
-When introducing a new shared widget, name it `Mx<Name>` and place in `lib/presentation/shared/widgets/**`.
+When introducing a new shared widget, name it `Mx<Name>` and place in
+`lib/presentation/shared/widgets/**`.
 
 ## Related
 
 **Wireframes:**
 
-- `docs/wireframes/index.md` — all 25 wireframes follow the tokens defined here (Slate Meridian theme, Plus Jakarta Sans, breakpoints 600dp / 1024dp)
+- `docs/wireframes/index.md` — all 25 wireframes follow the tokens defined here (Slate Meridian
+  theme, Plus Jakarta Sans, breakpoints 600dp / 1024dp)
 - `docs/wireframes/24-shared-dialogs.md` — reusable dialogs
 - `docs/wireframes/25-shared-bottom-sheets.md` — reusable bottom-sheets
 
@@ -228,7 +232,8 @@ When introducing a new shared widget, name it `Mx<Name>` and place in `lib/prese
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows under "UI/UX" (touch target, accessibility, l10n)
+- `docs/decision-tables/memox-core-decision-table.md` rows under "UI/UX" (touch target,
+  accessibility, l10n)
 
 **Source files to inspect:**
 

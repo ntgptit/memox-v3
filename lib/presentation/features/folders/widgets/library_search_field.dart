@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';

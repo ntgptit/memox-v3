@@ -1,8 +1,5 @@
-import 'package:drift/drift.dart' show QueryRow;
-
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/entities/folder.dart';
-import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
 
 /// Maps Drift rows to folder domain types
@@ -25,30 +22,36 @@ abstract final class FolderMapper {
   static DateTime _dateFromMs(int ms) =>
       DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
 
-  static Folder fromRow(FolderRow row) => Folder(
+  static Folder fromRow(FolderRow row) => fromStorageFields(
     id: row.id,
     parentId: row.parentId,
     name: row.name,
-    contentMode: contentModeFromStorage(row.contentMode),
+    contentMode: row.contentMode,
     sortOrder: row.sortOrder,
-    createdAt: _dateFromMs(row.createdAt),
-    updatedAt: _dateFromMs(row.updatedAt),
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
   );
 
-  /// Builds a [FolderWithCount] from a Library Overview query row.
-  static FolderWithCount overviewItemFromQueryRow(QueryRow row) => FolderWithCount(
-    folder: Folder(
-      id: row.read<String>('id'),
-      parentId: row.read<String?>('parent_id'),
-      name: row.read<String>('name'),
-      contentMode: contentModeFromStorage(row.read<String>('content_mode')),
-      sortOrder: row.read<int>('sort_order'),
-      createdAt: _dateFromMs(row.read<int>('created_at')),
-      updatedAt: _dateFromMs(row.read<int>('updated_at')),
-    ),
-    subfolderCount: row.read<int>('subfolder_count'),
-    deckCount: row.read<int>('deck_count'),
-    cardCount: row.read<int>('card_count'),
-    dueCount: row.read<int>('due_count'),
+  /// Converts database storage fields to the domain entity.
+  ///
+  /// This intentionally does not accept generated query-result classes. Drift
+  /// owns exact query result shapes; repositories pass the generated fields
+  /// here only when they need the storage-to-domain transformation.
+  static Folder fromStorageFields({
+    required String id,
+    required String? parentId,
+    required String name,
+    required String contentMode,
+    required int sortOrder,
+    required int createdAt,
+    required int updatedAt,
+  }) => Folder(
+    id: id,
+    parentId: parentId,
+    name: name,
+    contentMode: contentModeFromStorage(contentMode),
+    sortOrder: sortOrder,
+    createdAt: _dateFromMs(createdAt),
+    updatedAt: _dateFromMs(updatedAt),
   );
 }

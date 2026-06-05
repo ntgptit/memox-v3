@@ -18,7 +18,8 @@ applies_to: flashcard entity and flashcard management feature
 
 Flashcards are stored in `flashcards`.
 
-Supported fields are defined by current Drift schema. Agents must inspect schema before changing forms or import logic.
+Supported fields are defined by current Drift schema. Agents must inspect schema before changing
+forms or import logic.
 
 Core fields:
 
@@ -53,15 +54,16 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 - Imported rows must pass same validation as manual creation.
 - Invalid rows must be reported clearly via the preview screen (see "Import preview flow" below).
 - Do not silently create garbage rows.
-- Import result distinguishes success (committed previewItems), skipped duplicates, and validation issues.
+- Import result distinguishes success (committed previewItems), skipped duplicates, and validation
+  issues.
 - Import must use a transaction (see `docs/database/storage-boundaries.md`).
 
 ## Import sources
 
-| Source | When | Notes |
-| --- | --- | --- |
-| `ImportSourceFormat.csv` | Pasted text or loaded `.csv` file | Standard CSV (UTF-8). |
-| `ImportSourceFormat.excel` | Loaded `.xlsx` file | First sheet read. `excelHasHeader` toggle decides if row 1 is skipped. |
+| Source                              | When                              | Notes                                                                                     |
+|-------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------|
+| `ImportSourceFormat.csv`            | Pasted text or loaded `.csv` file | Standard CSV (UTF-8).                                                                     |
+| `ImportSourceFormat.excel`          | Loaded `.xlsx` file               | First sheet read. `excelHasHeader` toggle decides if row 1 is skipped.                    |
 | `ImportSourceFormat.structuredText` | Pasted text with custom separator | Separator chosen by user (`auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`). |
 
 `structuredText` with `auto` infers separator by frequency analysis of the first non-empty line.
@@ -72,15 +74,17 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 
 Duplicate detection:
 
-- An imported row is a duplicate of another imported row if `front` and `back` match after trim and case-insensitive comparison.
-- An imported row is a duplicate of an existing card if `front` and `back` match the same way against any card in the target deck.
+- An imported row is a duplicate of another imported row if `front` and `back` match after trim and
+  case-insensitive comparison.
+- An imported row is a duplicate of an existing card if `front` and `back` match the same way
+  against any card in the target deck.
 
 Skipped duplicates appear in `FlashcardImportPreparation.skippedDuplicates` with their source:
 
-| `FlashcardImportDuplicateSource` | Meaning |
-| --- | --- |
-| `importFile` | Duplicate WITHIN the imported file (only the first occurrence is kept). |
-| `deck` | Duplicate against an EXISTING card in the target deck. |
+| `FlashcardImportDuplicateSource` | Meaning                                                                 |
+|----------------------------------|-------------------------------------------------------------------------|
+| `importFile`                     | Duplicate WITHIN the imported file (only the first occurrence is kept). |
+| `deck`                           | Duplicate against an EXISTING card in the target deck.                  |
 
 ## Import preview flow
 
@@ -101,14 +105,14 @@ flowchart TD
 
 ### Preview screen content
 
-| Section | Content | Visibility |
-| --- | --- | --- |
-| Summary | "Will import: N cards. Skipped: M duplicates. Issues: K." | Always |
-| Valid rows list | First 50 rows of `previewItems` with `front` / `back` / `note` columns. "Show all" if more. | Always |
-| Skipped duplicates | Each `FlashcardImportSkippedDuplicate` with badge ("In file" / "In deck") | When `skippedDuplicates.isNotEmpty` — **Future**: V1 surfaces an aggregate "N duplicates skipped" count badge only, not a per-row list (see `docs/wireframes/10-deck-import.md` §V1 verification status). |
-| Validation issues | Each `ImportValidationIssue` with `lineNumber` + `message` | When `issues.isNotEmpty` |
-| Commit CTA | Primary button "Import N cards" | Enabled only when `canCommit == true` |
-| Cancel CTA | Secondary button | Always |
+| Section            | Content                                                                                     | Visibility                                                                                                                                                                                                |
+|--------------------|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Summary            | "Will import: N cards. Skipped: M duplicates. Issues: K."                                   | Always                                                                                                                                                                                                    |
+| Valid rows list    | First 50 rows of `previewItems` with `front` / `back` / `note` columns. "Show all" if more. | Always                                                                                                                                                                                                    |
+| Skipped duplicates | Each `FlashcardImportSkippedDuplicate` with badge ("In file" / "In deck")                   | When `skippedDuplicates.isNotEmpty` — **Future**: V1 surfaces an aggregate "N duplicates skipped" count badge only, not a per-row list (see `docs/wireframes/10-deck-import.md` §V1 verification status). |
+| Validation issues  | Each `ImportValidationIssue` with `lineNumber` + `message`                                  | When `issues.isNotEmpty`                                                                                                                                                                                  |
+| Commit CTA         | Primary button "Import N cards"                                                             | Enabled only when `canCommit == true`                                                                                                                                                                     |
+| Cancel CTA         | Secondary button                                                                            | Always                                                                                                                                                                                                    |
 
 ### Validation issues
 
@@ -119,7 +123,8 @@ Triggered by:
 - Front length exceeds field max → "Line {n}: front exceeds {N} chars."
 - Back length exceeds field max → "Line {n}: back exceeds {N} chars."
 - Tag invalid (empty after trim, or exceeds max length) → "Line {n}: invalid tag '{tag}'."
-- Excel/CSV format error (e.g., unparseable column count) → "Line {n}: row has {x} columns, expected {y}."
+- Excel/CSV format error (e.g., unparseable column count) → "Line {n}: row has {x} columns, expected
+  {y}."
 
 A preparation with any issue cannot be committed (`canCommit = false`). User MUST either:
 
@@ -134,7 +139,8 @@ NOT supported. Rationale:
 - Users editing a single row would need to re-parse the whole file anyway.
 - Force users back to source keeps the model simple.
 
-If the user finds a wrong row, they must fix the source (paste box content or file content) and re-import. Document this clearly in UI ("Edit your file and re-paste / re-load to fix issues").
+If the user finds a wrong row, they must fix the source (paste box content or file content) and
+re-import. Document this clearly in UI ("Edit your file and re-paste / re-load to fix issues").
 
 ### Commit behavior
 
@@ -142,7 +148,8 @@ On commit:
 
 1. Open transaction.
 2. Compute next `sort_order` (current max + 1).
-3. Insert each `FlashcardImportPreviewItem.draft` as a new flashcard in target deck, with default SRS progress (box=1, due=now).
+3. Insert each `FlashcardImportPreviewItem.draft` as a new flashcard in target deck, with default
+   SRS progress (box=1, due=now).
 4. Apply tags from each draft.
 5. Set `created_at`, `updated_at` to now.
 6. Commit transaction.
@@ -151,24 +158,30 @@ If transaction fails: surface failure feedback, retain preview state so user can
 
 ### Result screen
 
-> **Future (not in V1).** The standalone result screen below is the target. V1 does not render a separate result step: on a successful commit the screen shows a deferred success snackbar (`importSuccessMessage(count)`) and pops back to the Flashcard List. The committed/skipped counts are computed in `FlashcardImportPreparation` but only the imported count is surfaced (via the snackbar). See `docs/wireframes/10-deck-import.md` §V1 verification status.
+> **Future (not in V1).** The standalone result screen below is the target. V1 does not render a
+> separate result step: on a successful commit the screen shows a deferred success snackbar (
+`importSuccessMessage(count)`) and pops back to the Flashcard List. The committed/skipped counts are
+> computed in `FlashcardImportPreparation` but only the imported count is surfaced (via the snackbar).
+> See `docs/wireframes/10-deck-import.md` §V1 verification status.
 
 After commit:
 
-| Field | Value |
-| --- | --- |
-| Imported | `previewItems.length` (number actually committed) |
+| Field              | Value                                               |
+|--------------------|-----------------------------------------------------|
+| Imported           | `previewItems.length` (number actually committed)   |
 | Skipped duplicates | `skippedDuplicates.length` with breakdown by source |
-| Issues | (should be 0 since canCommit required this) |
-| CTA | "Done" → back to flashcard list |
+| Issues             | (should be 0 since canCommit required this)         |
+| CTA                | "Done" → back to flashcard list                     |
 
 Optional secondary CTA: "Import more" → reset import flow.
 
 ## Cross-account import
 
-- Import operates on the active account's database (see `docs/business/account-sync/account-sync.md`).
+- Import operates on the active account's database (see
+  `docs/business/account-sync/account-sync.md`).
 - File source is platform-neutral (the file picker reads any file the user has access to).
-- The file does NOT carry account identity. A CSV/Excel exported from account A imports cleanly into account B.
+- The file does NOT carry account identity. A CSV/Excel exported from account A imports cleanly into
+  account B.
 - The user is responsible for content separation. App makes no provider-bound restriction.
 - Drive sync metadata is not part of import scope; only flashcard content is imported.
 
@@ -187,21 +200,27 @@ Flashcard list/editor/import should support:
 V1 create/edit note:
 
 - Flashcard create and edit routes share `FlashcardEditorScreen`.
-- Create mode is selected by `deckId` with no `flashcardId`; edit mode is selected by `deckId` + `flashcardId`.
+- Create mode is selected by `deckId` with no `flashcardId`; edit mode is selected by `deckId` +
+  `flashcardId`.
 - The editor owns content/tag create and update only.
-- Create mode may retarget the destination deck before first save; normal Save returns to the selected destination deck's flashcard list, while "Save and add another" keeps the selected destination and stays in the editor with a clean blank draft.
-- Create/edit dirty close and browser/system back require a discard confirmation when unsaved content, optional fields, tags, starting status, or create destination changes exist. Preloaded edit optional fields/tags are not dirty until changed.
+- Create mode may retarget the destination deck before first save; normal Save returns to the
+  selected destination deck's flashcard list, while "Save and add another" keeps the selected
+  destination and stays in the editor with a clean blank draft.
+- Create/edit dirty close and browser/system back require a discard confirmation when unsaved
+  content, optional fields, tags, starting status, or create destination changes exist. Preloaded
+  edit optional fields/tags are not dirty until changed.
 - Single-card move/delete/export actions live on the flashcard list row/bulk action surfaces.
 - Bury/Suspend live on the study-session card-actions sheet.
 - Flashcard History is Future Proposal and must not be exposed as a live editor/list action in V1.
-- Learned front/back edits keep SRS progress unless the explicit progress-policy dialog chooses Reset.
+- Learned front/back edits keep SRS progress unless the explicit progress-policy dialog chooses
+  Reset.
 
 Deck import screen (`/library/deck/:deckId/import`):
 
 - Format picker (CSV / Excel / Structured text).
 - Format-specific options:
-  - Excel: `excelHasHeader` toggle.
-  - Structured text: separator picker.
+    - Excel: `excelHasHeader` toggle.
+    - Structured text: separator picker.
 - Source area: paste box (for csv/text) OR "Load file" button (for excel/file).
 - "Preview" action runs parse + validation.
 - Below: preview screen content (see above).
@@ -211,7 +230,8 @@ Deck import screen (`/library/deck/:deckId/import`):
 - Save button disabled until required fields valid.
 - Save action shows saving state, disables form.
 - Save success returns to list with refreshed data.
-- Dirty form requires confirm on close/back, including browser/system back when supported by Flutter.
+- Dirty form requires confirm on close/back, including browser/system back when supported by
+  Flutter.
 
 ## Performance
 
@@ -222,7 +242,8 @@ Deck import screen (`/library/deck/:deckId/import`):
 
 ## Agent rule
 
-Do not add new flashcard fields without updating schema, mapper, docs, l10n, tests, and generated files.
+Do not add new flashcard fields without updating schema, mapper, docs, l10n, tests, and generated
+files.
 
 ## Related
 
@@ -238,11 +259,14 @@ Do not add new flashcard fields without updating schema, mapper, docs, l10n, tes
 
 **Schema:**
 
-- `docs/database/schema-contract.md` → `flashcards` (front/back/note/example/pronunciation/hint/deck_id), `flashcard_progress` (current_box, due_at, buried_until, is_suspended, last_reset_at), `flashcard_tags`
+- `docs/database/schema-contract.md` → `flashcards` (
+  front/back/note/example/pronunciation/hint/deck_id), `flashcard_progress` (current_box, due_at,
+  buried_until, is_suspended, last_reset_at), `flashcard_tags`
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows under "Flashcard management", "Import", "Validation"
+- `docs/decision-tables/memox-core-decision-table.md` rows under "Flashcard management", "Import", "
+  Validation"
 
 **Glossary terms:**
 

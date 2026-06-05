@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -75,8 +74,9 @@ class LibraryFolderCountHeader extends StatelessWidget {
   final int count;
 
   @override
-  Widget build(BuildContext context) =>
-      MxSectionHeader(label: AppLocalizations.of(context).libraryFolderCountLabel(count));
+  Widget build(BuildContext context) => MxSectionHeader(
+    label: AppLocalizations.of(context).libraryFolderCountLabel(count),
+  );
 }
 
 /// Non-interactive due-summary card, shown only when `dueToday > 0`.
@@ -87,18 +87,18 @@ class LibraryDueSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MxCard(
-      child: Row(
-        children: <Widget>[
-          const MxIconTile(icon: Icons.bolt_rounded),
-          const SizedBox(width: SpacingTokens.md),
-          Expanded(
-            child: MxText(
-              AppLocalizations.of(context).libraryDueSummaryTitle(dueToday),
-              role: MxTextRole.titleMedium,
-              fontWeight: TypographyTokens.bold,
-            ),
+    child: Row(
+      children: <Widget>[
+        const MxIconTile(icon: Icons.bolt_rounded),
+        const SizedBox(width: SpacingTokens.md),
+        Expanded(
+          child: MxText(
+            AppLocalizations.of(context).libraryDueSummaryTitle(dueToday),
+            role: MxTextRole.titleMedium,
+            fontWeight: TypographyTokens.bold,
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 }

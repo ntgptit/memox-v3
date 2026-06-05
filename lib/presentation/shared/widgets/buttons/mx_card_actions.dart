@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 
@@ -22,13 +21,13 @@ class MxCardActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-      mainAxisAlignment: alignment,
-      children: <Widget>[
-        if (secondary != null) ...<Widget>[
-          secondary!,
-          const SizedBox(width: SpacingTokens.sm),
-        ],
-        primary,
+    mainAxisAlignment: alignment,
+    children: <Widget>[
+      if (secondary != null) ...<Widget>[
+        secondary!,
+        const SizedBox(width: SpacingTokens.sm),
       ],
-    );
+      primary,
+    ],
+  );
 }

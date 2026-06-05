@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/theme_provider.dart';
 import 'package:memox/core/theme/app_theme.dart';

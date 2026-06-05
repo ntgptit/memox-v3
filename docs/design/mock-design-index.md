@@ -15,19 +15,22 @@ agents to the exact per-screen visual contract when one exists.
 
 - Do not implement a screen from an unapproved mock.
 - Do not use an old mock when this index points to a newer approved source.
-- Do not start UI code from `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` alone.
+- Do not start UI code from `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
+  alone.
 - Read the matching wireframe and visual contract before changing a screen.
-- If a screen has no approved mock source or visual contract, map visible mock elements before coding and ask if scope is unclear.
-- If a mock conflicts with business, route, schema, state, or wireframe docs, stop and resolve the conflict before coding.
+- If a screen has no approved mock source or visual contract, map visible mock elements before
+  coding and ask if scope is unclear.
+- If a mock conflicts with business, route, schema, state, or wireframe docs, stop and resolve the
+  conflict before coding.
 
 ## Screen Index
 
-| Screen | Route | Mock source | Wireframe | Visual contract | Current status | Main implementation files |
-| --- | --- | --- | --- | --- | --- | --- |
-| Library Overview | `/library` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `03 · Library overview` (`03a`-`03f`) | `docs/wireframes/02-library.md` | `docs/design/screens/library-overview.visual-contract.md` | Current V1 partial | `lib/presentation/features/folders/screens/library_overview_screen.dart`, `lib/presentation/features/folders/widgets/library_overview_body.dart`, `lib/presentation/features/folders/widgets/library_folder_tile.dart` |
-| Dashboard | `/home` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `02 · Dashboard` | `docs/wireframes/01-dashboard.md` | TBD | Partial / mixed Current and Future | TBD |
-| Progress | `/progress` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `19 · Progress`; `18 · Stats` is legacy reference only | `docs/wireframes/03-progress.md` | TBD | Partial / mixed Current and Future | TBD |
-| Settings | `/settings` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `20 · Settings` | `docs/wireframes/04-settings-hub.md` | TBD | Partial / mixed Current and Future | TBD |
+| Screen           | Route       | Mock source                                                                                                                 | Wireframe                            | Visual contract                                           | Current status                     | Main implementation files                                                                                                                                                                                              |
+|------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------|--------------------------------------|-----------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Library Overview | `/library`  | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `03 · Library overview` (`03a`-`03f`)                  | `docs/wireframes/02-library.md`      | `docs/design/screens/library-overview.visual-contract.md` | Current V1 partial                 | `lib/presentation/features/folders/screens/library_overview_screen.dart`, `lib/presentation/features/folders/widgets/library_overview_body.dart`, `lib/presentation/features/folders/widgets/library_folder_tile.dart` |
+| Dashboard        | `/home`     | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `02 · Dashboard`                                       | `docs/wireframes/01-dashboard.md`    | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
+| Progress         | `/progress` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `19 · Progress`; `18 · Stats` is legacy reference only | `docs/wireframes/03-progress.md`     | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
+| Settings         | `/settings` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `20 · Settings`                                        | `docs/wireframes/04-settings-hub.md` | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
 
 ## Agent Workflow
 

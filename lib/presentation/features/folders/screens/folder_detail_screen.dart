@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -35,8 +34,9 @@ class FolderDetailScreen extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     // guard:allow-screen-watch -- reason: the app bar title and the
     // mode-constrained FAB both need the loaded folder (name + content_mode).
-    final AsyncValue<FolderDetail> query =
-        ref.watch(folderDetailQueryProvider(folderId));
+    final AsyncValue<FolderDetail> query = ref.watch(
+      folderDetailQueryProvider(folderId),
+    );
     final FolderDetail? detail = query.asData?.value;
 
     return MxScaffold(
@@ -84,10 +84,12 @@ class _FolderDetailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<FolderDetail> query =
-        ref.watch(folderDetailQueryProvider(folderId));
-    final bool isSearching =
-        ref.watch(folderDetailToolbarProvider(folderId)).isSearching;
+    final AsyncValue<FolderDetail> query = ref.watch(
+      folderDetailQueryProvider(folderId),
+    );
+    final bool isSearching = ref
+        .watch(folderDetailToolbarProvider(folderId))
+        .isSearching;
 
     return Column(
       children: <Widget>[
@@ -132,14 +134,19 @@ class _FolderBreadcrumb extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final FolderDetail? detail =
-        ref.watch(folderDetailQueryProvider(folderId)).asData?.value;
+    final FolderDetail? detail = ref
+        .watch(folderDetailQueryProvider(folderId))
+        .asData
+        ?.value;
     if (detail == null) {
       return const SizedBox.shrink();
     }
     final AppLocalizations l10n = AppLocalizations.of(context);
     final List<MxBreadcrumbSegment> segments = <MxBreadcrumbSegment>[
-      MxBreadcrumbSegment(label: l10n.libraryTitle, onTap: () => context.goLibrary()),
+      MxBreadcrumbSegment(
+        label: l10n.libraryTitle,
+        onTap: () => context.goLibrary(),
+      ),
       for (final FolderBreadcrumbSegment seg in detail.breadcrumb)
         MxBreadcrumbSegment(
           label: seg.name,

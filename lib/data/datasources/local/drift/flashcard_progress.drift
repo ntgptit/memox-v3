@@ -1,0 +1,26 @@
+import 'flashcards.drift';
+
+-- `flashcard_progress` table — one-to-one SRS scheduling per flashcard.
+-- A card is **due** when it is not suspended, not currently buried, and its
+-- `due_at` has passed. Generated row class: `FlashcardProgressRow`.
+CREATE TABLE flashcard_progress (
+  flashcard_id TEXT NOT NULL PRIMARY KEY
+    REFERENCES flashcards (id) ON DELETE CASCADE,
+  -- Leitner box 1..8.
+  box_number INTEGER NOT NULL DEFAULT 1,
+  -- Next review time, UTC epoch ms. NULL = brand-new, never scheduled.
+  due_at INTEGER,
+  -- Buried until this UTC epoch ms (NULL = not buried).
+  buried_until INTEGER,
+  is_suspended BOOLEAN NOT NULL DEFAULT FALSE,
+  review_count INTEGER NOT NULL DEFAULT 0,
+  lapse_count INTEGER NOT NULL DEFAULT 0,
+  -- Last study time, UTC epoch ms.
+  last_studied_at INTEGER
+) AS FlashcardProgressRow;
+
+-- Eligibility index for the "due" predicate (matches the schema contract's
+-- `idx_flashcard_progress_eligibility`). Previously created via a migration
+-- `customStatement`; it now lives in the schema definition.
+CREATE INDEX idx_flashcard_progress_eligibility
+  ON flashcard_progress (is_suspended, buried_until, due_at);

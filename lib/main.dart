@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:memox/app/app.dart';
 import 'package:memox/app/bootstrap/app_bootstrap.dart';
 import 'package:memox/app/config/app_config.dart';

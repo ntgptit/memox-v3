@@ -13,16 +13,26 @@ related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
 
 ## V1 decision
 
-V1 does **not** implement a dedicated onboarding feature folder, first-launch welcome screen, or onboarding route.
+V1 does **not** implement a dedicated onboarding feature folder, first-launch welcome screen, or
+onboarding route.
 
-V1 onboarding means: **strong empty states when the app has zero content**, with clear CTAs to create, import, or restore data.
+V1 onboarding means: **strong empty states when the app has zero content**, with clear CTAs to
+create, import, or restore data.
 
 ## Prompt 26 V1 honesty sweep — 2026-06-01
 
-- Full onboarding is still **Future Proposal**: no `/onboarding` route, no `lib/presentation/features/onboarding/**`, no first-launch preference gate, and no multi-step wizard.
-- Current V1 uses existing owner surfaces only. Library true-empty owns its local Create folder CTA; Folder Detail owns mode-appropriate New subfolder / New deck CTAs; Flashcard List owns Add flashcard and deck Import entry points; Account Settings owns sign-in, manual Drive upload, and manual Drive restore.
-- Restore guidance must navigate or point to Account Settings. It must not imply a standalone onboarding restore wizard, auto-restore after sign-in, or the full restore-protection target as Current.
-- Dashboard zero-content onboarding remains Target/Future unless a dedicated Dashboard task implements code, tests, and docs.
+- Full onboarding is still **Future Proposal**: no `/onboarding` route, no
+  `lib/presentation/features/onboarding/**`, no first-launch preference gate, and no multi-step
+  wizard.
+- Current V1 uses existing owner surfaces only. Library true-empty owns its local Create folder CTA;
+  Folder Detail owns mode-appropriate New subfolder / New deck CTAs; Flashcard List owns Add
+  flashcard and deck Import entry points; Account Settings owns sign-in, manual Drive upload, and
+  manual Drive restore.
+- Restore guidance must navigate or point to Account Settings. It must not imply a standalone
+  onboarding restore wizard, auto-restore after sign-in, or the full restore-protection target as
+  Current.
+- Dashboard zero-content onboarding remains Target/Future unless a dedicated Dashboard task
+  implements code, tests, and docs.
 
 ## V1 purpose
 
@@ -34,12 +44,12 @@ A new or freshly restored user should immediately understand the next useful act
 
 ## V1 entry conditions
 
-| Condition | Surface | Behavior |
-| --- | --- | --- |
-| `decks.count == 0 AND flashcards.count == 0` | Library empty state | Show zero-content guidance and CTAs. |
-| `decks.count == 0 AND flashcards.count == 0` | Dashboard empty state, if Dashboard is visible | Show zero-content guidance and CTAs. |
-| User is signed out | Empty state | Restore CTA first leads to sign-in, then user can restore manually/through account flow. |
-| User is signed in | Empty state | Restore CTA opens restore flow or Settings/Account restore entry. |
+| Condition                                    | Surface                                        | Behavior                                                                                 |
+|----------------------------------------------|------------------------------------------------|------------------------------------------------------------------------------------------|
+| `decks.count == 0 AND flashcards.count == 0` | Library empty state                            | Show zero-content guidance and CTAs.                                                     |
+| `decks.count == 0 AND flashcards.count == 0` | Dashboard empty state, if Dashboard is visible | Show zero-content guidance and CTAs.                                                     |
+| User is signed out                           | Empty state                                    | Restore CTA first leads to sign-in, then user can restore manually/through account flow. |
+| User is signed in                            | Empty state                                    | Restore CTA opens restore flow or Settings/Account restore entry.                        |
 
 V1 should preserve current route behavior unless a separate navigation task changes it.
 
@@ -68,21 +78,21 @@ V1 should preserve current route behavior unless a separate navigation task chan
 
 ## V1 CTA behavior
 
-| CTA | Behavior |
-| --- | --- |
-| Create first deck | Opens existing deck-create dialog/bottom sheet. |
-| Import CSV / Excel | If no deck exists, first create/select destination deck using existing deck creation flow, then open import. |
+| CTA                       | Behavior                                                                                                                          |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Create first deck         | Opens existing deck-create dialog/bottom sheet.                                                                                   |
+| Import CSV / Excel        | If no deck exists, first create/select destination deck using existing deck creation flow, then open import.                      |
 | Restore from Google Drive | If signed out, start Google sign-in or navigate to Settings/Account. If signed in, open restore entry point. Do not auto-restore. |
 
 ## V1 states
 
-| State | Trigger | Behavior |
-| --- | --- | --- |
-| Zero content | No deck and no flashcard | Show create/import/restore CTAs. |
-| Create in progress | Create deck action active | Use existing dialog state/loading/error behavior. |
-| Import handoff | Import selected with no deck | Require destination deck before import. |
-| Restore handoff | Restore selected | Go through account/restore flow; no automatic overwrite. |
-| Non-empty content | At least one deck or flashcard exists | Hide zero-content onboarding copy. |
+| State              | Trigger                               | Behavior                                                 |
+|--------------------|---------------------------------------|----------------------------------------------------------|
+| Zero content       | No deck and no flashcard              | Show create/import/restore CTAs.                         |
+| Create in progress | Create deck action active             | Use existing dialog state/loading/error behavior.        |
+| Import handoff     | Import selected with no deck          | Require destination deck before import.                  |
+| Restore handoff    | Restore selected                      | Go through account/restore flow; no automatic overwrite. |
+| Non-empty content  | At least one deck or flashcard exists | Hide zero-content onboarding copy.                       |
 
 ## V1 forbidden behavior
 
@@ -115,4 +125,5 @@ Future promotion requires updating:
 
 ## Agent rule
 
-During V1, implement only zero-content empty-state improvements and restore CTA routing. Do not create a standalone onboarding feature or route.
+During V1, implement only zero-content empty-state improvements and restore CTA routing. Do not
+create a standalone onboarding feature or route.

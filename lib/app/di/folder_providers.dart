@@ -5,6 +5,10 @@ import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/usecases/deck/create_deck_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_subfolder_usecase.dart';
+import 'package:memox/domain/usecases/folder/delete_folder_usecase.dart';
+import 'package:memox/domain/usecases/folder/get_folder_move_targets_usecase.dart';
+import 'package:memox/domain/usecases/folder/move_folder_usecase.dart';
+import 'package:memox/domain/usecases/folder/rename_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/watch_folder_detail_usecase.dart';
 import 'package:memox/domain/usecases/folder/watch_library_overview_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -42,3 +46,19 @@ CreateSubfolderUseCase createSubfolderUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 CreateDeckUseCase createDeckUseCase(Ref ref) =>
     CreateDeckUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+RenameFolderUseCase renameFolderUseCase(Ref ref) =>
+    RenameFolderUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+MoveFolderUseCase moveFolderUseCase(Ref ref) =>
+    MoveFolderUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+DeleteFolderUseCase deleteFolderUseCase(Ref ref) =>
+    DeleteFolderUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+GetFolderMoveTargetsUseCase getFolderMoveTargetsUseCase(Ref ref) =>
+    GetFolderMoveTargetsUseCase(ref.watch(folderRepositoryProvider));

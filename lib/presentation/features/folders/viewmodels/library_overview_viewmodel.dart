@@ -5,8 +5,10 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'library_overview_viewmodel.g.dart';
@@ -80,10 +82,50 @@ class LibraryActionController extends _$LibraryActionController {
     final useCase = ref.read(createRootFolderUseCaseProvider);
     final Result<Folder> result = await useCase.call(name: name);
     state = result.fold(
-      (Failure failure) =>
-          AsyncValue<void>.error(failure, StackTrace.current),
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
       (Folder _) => const AsyncValue<void>.data(null),
     );
     return result;
   }
+
+  Future<Result<Folder>> renameFolder(FolderId id, String name) async {
+    state = const AsyncValue<void>.loading();
+    final useCase = ref.read(renameFolderUseCaseProvider);
+    final Result<Folder> result = await useCase.call(id: id, name: name);
+    state = result.fold(
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
+      (Folder _) => const AsyncValue<void>.data(null),
+    );
+    return result;
+  }
+
+  Future<Result<Folder>> moveFolder(FolderId id, FolderId? newParentId) async {
+    state = const AsyncValue<void>.loading();
+    final useCase = ref.read(moveFolderUseCaseProvider);
+    final Result<Folder> result = await useCase.call(
+      id: id,
+      newParentId: newParentId,
+    );
+    state = result.fold(
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
+      (Folder _) => const AsyncValue<void>.data(null),
+    );
+    return result;
+  }
+
+  Future<Result<void>> deleteFolder(FolderId id) async {
+    state = const AsyncValue<void>.loading();
+    final useCase = ref.read(deleteFolderUseCaseProvider);
+    final Result<void> result = await useCase.call(id: id);
+    state = result.fold(
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
+      (void _) => const AsyncValue<void>.data(null),
+    );
+    return result;
+  }
+
+  /// Loads the move-destination candidates for [id] (read-only; does not change
+  /// the controller's mutation state).
+  Future<Result<List<FolderMoveTarget>>> loadMoveTargets(FolderId id) =>
+      ref.read(getFolderMoveTargetsUseCaseProvider).call(folderId: id);
 }

@@ -16,9 +16,13 @@ status: contract
 > as a rejected historical design note. Do not use it as implementation
 > guidance.
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-`abstract class DeckRepository`. Implementation in `lib/data/repositories/deck_repository_impl.dart`.
+`abstract class DeckRepository`. Implementation in
+`lib/data/repositories/deck_repository_impl.dart`.
 
 ## Methods
 
@@ -43,11 +47,11 @@ Future<Either<Failure, Unit>> reorder(FolderId parentId, List<DeckId> orderedIds
 
 ## Transaction requirements
 
-| Operation | Tables touched |
-| --- | --- |
-| `create` | `decks` INSERT + parent folder `content_mode` UPDATE if unlocked |
-| `move` | `decks` UPDATE + both old/new parent folder mode |
-| `delete` | cascade: `flashcard_progress`, `flashcard_tags`, `study_attempts`, `flashcards`, `study_session_items` for sessions targeting this deck, `study_sessions` with entry_type=deck and entry_ref_id=id, `decks` |
+| Operation | Tables touched                                                                                                                                                                                              |
+|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `create`  | `decks` INSERT + parent folder `content_mode` UPDATE if unlocked                                                                                                                                            |
+| `move`    | `decks` UPDATE + both old/new parent folder mode                                                                                                                                                            |
+| `delete`  | cascade: `flashcard_progress`, `flashcard_tags`, `study_attempts`, `flashcards`, `study_session_items` for sessions targeting this deck, `study_sessions` with entry_type=deck and entry_ref_id=id, `decks` |
 
 ## Constraints
 
@@ -74,10 +78,12 @@ Future<Either<Failure, Unit>> reorder(FolderId parentId, List<DeckId> orderedIds
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`,
+`docs/contracts/code-style.md`
 
 **Business spec:** `docs/business/deck/deck-management.md`
 **Use cases:** `docs/contracts/usecase-contracts/deck.md`
 **Schema:** `docs/database/schema-contract.md` `decks` table
 **Rejected migration design:** `docs/database/migrations/nullable-deck-parent-migration.md`
-**Code paths:** `lib/domain/repositories/deck_repository.dart`, `lib/data/repositories/deck_repository_impl.dart`, `lib/data/datasources/local/daos/deck_dao.dart`
+**Code paths:** `lib/domain/repositories/deck_repository.dart`,
+`lib/data/repositories/deck_repository_impl.dart`, `lib/data/datasources/local/daos/deck_dao.dart`

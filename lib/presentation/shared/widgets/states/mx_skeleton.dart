@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
@@ -64,16 +63,19 @@ class _MxSkeletonState extends State<MxSkeleton>
   Widget build(BuildContext context) {
     final Color base = context.colorScheme.surfaceContainerHighest;
     return FadeTransition(
-      opacity: Tween<double>(begin: 1, end: OpacityTokens.disabled + 0.2)
-          .animate(_controller),
+      opacity: Tween<double>(
+        begin: 1,
+        end: OpacityTokens.disabled + 0.2,
+      ).animate(_controller),
       child: Container(
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
           color: base,
           shape: widget.shape,
-          borderRadius:
-              widget.shape == BoxShape.circle ? null : widget.borderRadius,
+          borderRadius: widget.shape == BoxShape.circle
+              ? null
+              : widget.borderRadius,
         ),
       ),
     );

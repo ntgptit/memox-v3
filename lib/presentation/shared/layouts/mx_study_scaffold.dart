@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_study_top_bar.dart';
@@ -23,29 +22,29 @@ class MxStudyScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: topBar,
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: SpacingTokens.lg),
-                child: MxContentShell(child: body),
-              ),
+    appBar: topBar,
+    body: SafeArea(
+      top: false,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: SpacingTokens.lg),
+              child: MxContentShell(child: body),
             ),
-            if (bottomAction != null)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  SpacingTokens.lg,
-                  0,
-                  SpacingTokens.lg,
-                  SpacingTokens.md,
-                ),
-                child: MxContentShell(child: bottomAction!),
+          ),
+          if (bottomAction != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                SpacingTokens.lg,
+                0,
+                SpacingTokens.lg,
+                SpacingTokens.md,
               ),
-          ],
-        ),
+              child: MxContentShell(child: bottomAction!),
+            ),
+        ],
       ),
-    );
+    ),
+  );
 }

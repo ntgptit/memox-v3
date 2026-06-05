@@ -22,65 +22,83 @@ applies_to: routing, navigation, deep links
 
 ## Top-level destinations
 
-| Path | Responsibility | Shell visible |
-| --- | --- | --- |
-| `/home` | Dashboard | Yes |
-| `/library` | Library | Yes |
-| `/progress` | Progress | Yes |
-| `/settings` | Settings hub | Yes |
+| Path        | Responsibility | Shell visible |
+|-------------|----------------|---------------|
+| `/home`     | Dashboard      | Yes           |
+| `/library`  | Library        | Yes           |
+| `/progress` | Progress       | Yes           |
+| `/settings` | Settings hub   | Yes           |
 
-Current V1 app boot redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`. This is the existing app entry and must not be replaced by an onboarding wizard in V1. Dashboard remains a top-level destination, but changing the default entry to `/home` requires a dedicated navigation task with route tests and doc updates.
+Current V1 app boot redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`. This is
+the existing app entry and must not be replaced by an onboarding wizard in V1. Dashboard remains a
+top-level destination, but changing the default entry to `/home` requires a dedicated navigation
+task with route tests and doc updates.
 
 ## Settings routes
 
-| Path | Responsibility | Shell visible |
-| --- | --- | --- |
-| `/settings/account` | Account linking + Drive sync | No |
-| `/settings/learning` | Study defaults | No |
-| `/settings/learning/tags` | Tag management (new; see `docs/business/tags/tag-system.md` and wireframe `docs/wireframes/22-settings-tag-management.md`) | No |
-| `/settings/audio-speech` | TTS settings | No |
+| Path                      | Responsibility                                                                                                             | Shell visible |
+|---------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------|
+| `/settings/account`       | Account linking + Drive sync                                                                                               | No            |
+| `/settings/learning`      | Study defaults                                                                                                             | No            |
+| `/settings/learning/tags` | Tag management (new; see `docs/business/tags/tag-system.md` and wireframe `docs/wireframes/22-settings-tag-management.md`) | No            |
+| `/settings/audio-speech`  | TTS settings                                                                                                               | No            |
 
-Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.settings`, `RouteNames.settingsAccount`, `RouteNames.settingsLearning`, `RouteNames.settingsLearningTags`, `RouteNames.settingsAudioSpeech`. Path segment constants: `RoutePaths.settingsAccountSegment`, `RoutePaths.settingsLearningSegment`, `RoutePaths.settingsLearningTagsSegment`, `RoutePaths.settingsAudioSpeechSegment`.
+Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.settings`,
+`RouteNames.settingsAccount`, `RouteNames.settingsLearning`, `RouteNames.settingsLearningTags`,
+`RouteNames.settingsAudioSpeech`. Path segment constants: `RoutePaths.settingsAccountSegment`,
+`RoutePaths.settingsLearningSegment`, `RoutePaths.settingsLearningTagsSegment`,
+`RoutePaths.settingsAudioSpeechSegment`.
 
 ## Library routes
 
-| Route responsibility | Route pattern | Shell visible |
-| --- | --- | --- |
-| Folder detail | `/library/folder/:id` | Yes |
-| Flashcard list | `/library/deck/:deckId/flashcards` | Yes |
-| Flashcard list (filtered) | `/library/deck/:deckId/flashcards?filter={active\|suspended\|buried\|due}&tag={t1,t2}` | Yes |
-| Flashcard create | `/library/deck/:deckId/flashcards/new` | No |
-| Flashcard edit | `/library/deck/:deckId/flashcards/:flashcardId/edit` | No |
-| Flashcard history | Future Proposal; no live V1 route | No |
-| Deck import | `/library/deck/:deckId/import` | No |
-| Library search | Future Proposal; no live V1 route | Yes |
-| Study entry | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No |
-| Today study | `/library/study/today` | No |
-| Study session | `/library/study/session/:sessionId` | No |
-| Study result | `/library/study/session/:sessionId/result` | No |
+| Route responsibility      | Route pattern                                                                                                                                                                                                                                                                           | Shell visible |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| Folder detail             | `/library/folder/:id`                                                                                                                                                                                                                                                                   | Yes           |
+| Flashcard list            | `/library/deck/:deckId/flashcards`                                                                                                                                                                                                                                                      | Yes           |
+| Flashcard list (filtered) | `/library/deck/:deckId/flashcards?filter={active\|suspended\|buried\|due}&tag={t1,t2}`                                                                                                                                                                                                  | Yes           |
+| Flashcard create          | `/library/deck/:deckId/flashcards/new`                                                                                                                                                                                                                                                  | No            |
+| Flashcard edit            | `/library/deck/:deckId/flashcards/:flashcardId/edit`                                                                                                                                                                                                                                    | No            |
+| Flashcard history         | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | No            |
+| Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
+| Library search            | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | Yes           |
+| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
+| Today study               | `/library/study/today`                                                                                                                                                                                                                                                                  | No            |
+| Study session             | `/library/study/session/:sessionId`                                                                                                                                                                                                                                                     | No            |
+| Study result              | `/library/study/session/:sessionId/result`                                                                                                                                                                                                                                              | No            |
 
 Notes:
 
-- Query-string filters on the flashcard list are application conventions; verify GoRouter declarations in `lib/presentation/features/**/routes/*.dart`.
-- The `tag` entry type is Blocked/Future until `StudyEntryType.tag` and tag-scope queries are promoted. Flashcard history and library search routes are Future Proposal. Add route constants in `RouteNames` / `RoutePaths` and wire any of these only when the related scope guard promotes them.
-- Folder Detail surfaces Study folder / Today / Resume entry points (Current, Prompt 45). Study folder and Today route through the Study Entry gate (`entry_type=folder`, with `study_type=srs_review` for Today); the Resume banner opens the existing `study/session/:id` directly without re-entering the gate or creating a session. Folder Detail never creates a session itself.
-- Flashcard List surfaces Study deck / Today / Resume entry points (Current, Prompt 46). Study deck and Today route through the Study Entry gate (`entry_type=deck`, with `study_type=srs_review` for Today — never global `entry_type=today`); the Resume banner opens the existing `study/session/:id` directly without re-entering the gate or creating a session. Flashcard List never creates a session itself.
+- Query-string filters on the flashcard list are application conventions; verify GoRouter
+  declarations in `lib/presentation/features/**/routes/*.dart`.
+- The `tag` entry type is Blocked/Future until `StudyEntryType.tag` and tag-scope queries are
+  promoted. Flashcard history and library search routes are Future Proposal. Add route constants in
+  `RouteNames` / `RoutePaths` and wire any of these only when the related scope guard promotes them.
+- Folder Detail surfaces Study folder / Today / Resume entry points (Current, Prompt 45). Study
+  folder and Today route through the Study Entry gate (`entry_type=folder`, with
+  `study_type=srs_review` for Today); the Resume banner opens the existing `study/session/:id`
+  directly without re-entering the gate or creating a session. Folder Detail never creates a session
+  itself.
+- Flashcard List surfaces Study deck / Today / Resume entry points (Current, Prompt 46). Study deck
+  and Today route through the Study Entry gate (`entry_type=deck`, with `study_type=srs_review` for
+  Today — never global `entry_type=today`); the Resume banner opens the existing `study/session/:id`
+  directly without re-entering the gate or creating a session. Flashcard List never creates a
+  session itself.
 
 ## Push vs Go rules
 
-| Scenario | Method | Reason |
-| --- | --- | --- |
-| Folder → subfolder | `push` | Need back stack |
-| Folder → deck flashcards | `push` | Need back |
-| Flashcard list → create | `push` | Return result |
-| Flashcard list → edit | `push` | Return result |
-| Deck → import | `push` | Return result |
-| Settings hub → sub-screen (account/learning/audio-speech) | `push` | Need back to hub |
-| Bottom nav switch | `go` | Reset tab stack |
-| Study entry → session | `pushReplacement` | No back into entry screen |
-| Session → result | `pushReplacement` | Session is done, do not stack |
-| Result → origin | `go` | Reset, do not stack result |
-| Invalid route | `go` to safe route | Recover, do not stack error |
+| Scenario                                                  | Method             | Reason                        |
+|-----------------------------------------------------------|--------------------|-------------------------------|
+| Folder → subfolder                                        | `push`             | Need back stack               |
+| Folder → deck flashcards                                  | `push`             | Need back                     |
+| Flashcard list → create                                   | `push`             | Return result                 |
+| Flashcard list → edit                                     | `push`             | Return result                 |
+| Deck → import                                             | `push`             | Return result                 |
+| Settings hub → sub-screen (account/learning/audio-speech) | `push`             | Need back to hub              |
+| Bottom nav switch                                         | `go`               | Reset tab stack               |
+| Study entry → session                                     | `pushReplacement`  | No back into entry screen     |
+| Session → result                                          | `pushReplacement`  | Session is done, do not stack |
+| Result → origin                                           | `go`               | Reset, do not stack result    |
+| Invalid route                                             | `go` to safe route | Recover, do not stack error   |
 
 ## Navigation flow diagram
 
@@ -133,20 +151,21 @@ When params are invalid or entity is deleted:
 
 ## Deep link rules
 
-- Public routes (deep linkable): `/home`, `/library`, `/library/folder/:id`, `/library/deck/:deckId/flashcards`, `/progress`, `/settings`.
+- Public routes (deep linkable): `/home`, `/library`, `/library/folder/:id`,
+  `/library/deck/:deckId/flashcards`, `/progress`, `/settings`.
 - Private routes (not deep linkable): study session routes, create/edit forms, import.
 - Private routes accessed via deep link must redirect to safe public ancestor.
 
 ## Back behavior
 
-| Screen | Back behavior |
-| --- | --- |
-| Top-level | System exit (or to Dashboard) |
-| Folder detail | Pop to parent folder or library root |
-| Flashcard list | Pop to deck's folder |
-| Create/edit form | Pop with confirm if dirty |
-| Study session | Confirm dialog, then pop with `cancelled` status |
-| Study result | Go to origin, do not allow back into session |
+| Screen           | Back behavior                                    |
+|------------------|--------------------------------------------------|
+| Top-level        | System exit (or to Dashboard)                    |
+| Folder detail    | Pop to parent folder or library root             |
+| Flashcard list   | Pop to deck's folder                             |
+| Create/edit form | Pop with confirm if dirty                        |
+| Study session    | Confirm dialog, then pop with `cancelled` status |
+| Study result     | Go to origin, do not allow back into session     |
 
 ## Agent checklist
 
@@ -171,7 +190,8 @@ When params are invalid or entity is deleted:
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows under "Navigation" (push vs go, invalid route recovery, deep link rules)
+- `docs/decision-tables/memox-core-decision-table.md` rows under "Navigation" (push vs go, invalid
+  route recovery, deep link rules)
 
 **Glossary terms:**
 
@@ -180,7 +200,8 @@ When params are invalid or entity is deleted:
 **Related business specs:**
 
 - Every business spec that introduces a route (most of `docs/business/**`)
-- `docs/business/resume/resume-session.md` — entry gate uses `pushReplacement` so back returns to caller
+- `docs/business/resume/resume-session.md` — entry gate uses `pushReplacement` so back returns to
+  caller
 - `docs/business/study/study-flow.md` — `/library/study/...` family
 
 **Source files to inspect:**

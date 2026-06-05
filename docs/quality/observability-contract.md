@@ -5,7 +5,8 @@ status: contract
 
 # Observability Contract
 
-Logging and error reporting policy. MemoX is local-first with no remote telemetry. All logs are local, used for debugging only.
+Logging and error reporting policy. MemoX is local-first with no remote telemetry. All logs are
+local, used for debugging only.
 
 ## Logging library
 
@@ -15,39 +16,41 @@ Logging and error reporting policy. MemoX is local-first with no remote telemetr
 final _log = Logger('study.session');
 ```
 
-Logger naming follows feature folder path with dots: `dashboard`, `library`, `library.search`, `study.session`, `study.srs`, `data.sync`, `core.tts`, `core.auth`.
+Logger naming follows feature folder path with dots: `dashboard`, `library`, `library.search`,
+`study.session`, `study.srs`, `data.sync`, `core.tts`, `core.auth`.
 
 ## Levels
 
-| Level | When |
-| --- | --- |
-| `Level.SEVERE` | `IntegrityFailure`, unrecoverable storage error, programmer error caught at boundary, uncaught exception in app shell |
-| `Level.WARNING` | Unexpected `StorageFailure`, retry exhausted on network, token refresh failed, migration rollback |
-| `Level.INFO` | Use case entry/exit for significant ops (session create, finalize, import commit, sync upload/restore), migration steps, app boot |
-| `Level.FINE` | Use case entry/exit for routine ops (read flashcard list), provider invalidation |
-| `Level.FINER` | Per-card grade attempt (in dev mode only) |
-| `Level.FINEST` | Detailed loop trace (off by default) |
+| Level           | When                                                                                                                              |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `Level.SEVERE`  | `IntegrityFailure`, unrecoverable storage error, programmer error caught at boundary, uncaught exception in app shell             |
+| `Level.WARNING` | Unexpected `StorageFailure`, retry exhausted on network, token refresh failed, migration rollback                                 |
+| `Level.INFO`    | Use case entry/exit for significant ops (session create, finalize, import commit, sync upload/restore), migration steps, app boot |
+| `Level.FINE`    | Use case entry/exit for routine ops (read flashcard list), provider invalidation                                                  |
+| `Level.FINER`   | Per-card grade attempt (in dev mode only)                                                                                         |
+| `Level.FINEST`  | Detailed loop trace (off by default)                                                                                              |
 
-In production builds, level threshold is `Level.INFO`. In debug builds, `Level.FINE`. Configurable via `kReleaseMode` flag.
+In production builds, level threshold is `Level.INFO`. In debug builds, `Level.FINE`. Configurable
+via `kReleaseMode` flag.
 
 ## What to log
 
-| Event | Level | Content |
-| --- | --- | --- |
-| Use case entry | INFO/FINE | Use case name + non-PII params |
-| Use case exit success | INFO/FINE | Use case name + result type |
-| Use case exit failure | WARNING | Use case name + failure type (not user data) |
-| Migration applied | INFO | From version → to version |
-| App boot | INFO | Build flavor + app version |
-| Provider invalidation | FINE | Provider name + reason |
-| Drift transaction commit | FINE | Transaction tag |
-| Sync upload start/end | INFO | Manifest size, duration |
-| Sync restore start/end | INFO | Manifest device label + uploaded_at, duration |
-| Snapshot creation | INFO | Path, size |
-| Token refresh | INFO | Success/fail (no token value) |
-| TTS engine init | INFO | Engine name, language |
-| TTS playback start | FINE | Language, char count (NOT text content) |
-| Uncaught exception (Zone) | SEVERE | Type, message, stack |
+| Event                     | Level     | Content                                       |
+|---------------------------|-----------|-----------------------------------------------|
+| Use case entry            | INFO/FINE | Use case name + non-PII params                |
+| Use case exit success     | INFO/FINE | Use case name + result type                   |
+| Use case exit failure     | WARNING   | Use case name + failure type (not user data)  |
+| Migration applied         | INFO      | From version → to version                     |
+| App boot                  | INFO      | Build flavor + app version                    |
+| Provider invalidation     | FINE      | Provider name + reason                        |
+| Drift transaction commit  | FINE      | Transaction tag                               |
+| Sync upload start/end     | INFO      | Manifest size, duration                       |
+| Sync restore start/end    | INFO      | Manifest device label + uploaded_at, duration |
+| Snapshot creation         | INFO      | Path, size                                    |
+| Token refresh             | INFO      | Success/fail (no token value)                 |
+| TTS engine init           | INFO      | Engine name, language                         |
+| TTS playback start        | FINE      | Language, char count (NOT text content)       |
+| Uncaught exception (Zone) | SEVERE    | Type, message, stack                          |
 
 ## PII rule (strict)
 
@@ -86,17 +89,18 @@ Example:
 
 ## Error handling and logging interplay
 
-| Situation | What to do |
-| --- | --- |
-| Catching expected `Failure` at notifier | Log WARNING with failure type, update state |
+| Situation                                   | What to do                                                           |
+|---------------------------------------------|----------------------------------------------------------------------|
+| Catching expected `Failure` at notifier     | Log WARNING with failure type, update state                          |
 | Catching unexpected `Exception` at boundary | Log SEVERE with stack, map to `IntegrityFailure` or `StorageFailure` |
-| Empty catch block | FORBIDDEN. Either log or rethrow. |
-| Catch + ignore (intentional) | Log FINE with explicit comment explaining why |
-| Catch + rethrow | Log FINE before rethrow if useful context, else just rethrow |
+| Empty catch block                           | FORBIDDEN. Either log or rethrow.                                    |
+| Catch + ignore (intentional)                | Log FINE with explicit comment explaining why                        |
+| Catch + rethrow                             | Log FINE before rethrow if useful context, else just rethrow         |
 
 ## Error reporting (no remote)
 
-MemoX v1 does NOT send crash reports. Optional future: opt-in local dump exported when user taps "Report a bug" in About.
+MemoX v1 does NOT send crash reports. Optional future: opt-in local dump exported when user taps "
+Report a bug" in About.
 
 For now:
 
@@ -136,10 +140,12 @@ If/when integrating Talker:
 
 ## Agent rule
 
-- When implementing a use case: add `_log.info('use_case_name entry params=...')` at start and one of:
-  - `_log.fine('use_case_name success result=...')` on success
-  - `_log.warning('use_case_name failure type=...')` on failure
-- When catching exception in data layer: WARNING with failure type, never SEVERE unless `IntegrityFailure`.
+- When implementing a use case: add `_log.info('use_case_name entry params=...')` at start and one
+  of:
+    - `_log.fine('use_case_name success result=...')` on success
+    - `_log.warning('use_case_name failure type=...')` on failure
+- When catching exception in data layer: WARNING with failure type, never SEVERE unless
+  `IntegrityFailure`.
 - When adding a new log site: verify no PII in content.
 
 ## Related

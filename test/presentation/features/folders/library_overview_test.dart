@@ -54,28 +54,30 @@ LibraryOverviewReadModel _model({
   totalFolderCount: totalFolderCount,
 );
 
-Widget _wrapBody(LibraryOverviewReadModel model, {bool isSearching = false}) =>
-    MaterialApp(
-      theme: AppTheme.light(),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: LibraryOverviewBody(
-          model: model,
-          isSearching: isSearching,
-          onCreateFolder: () {},
-          onClearSearch: () {},
-        ),
-      ),
-    );
+Widget _wrapBody(
+  LibraryOverviewReadModel model, {
+  bool isSearching = false,
+  void Function(FolderWithCount item)? onShowFolderActions,
+}) => MaterialApp(
+  theme: AppTheme.light(),
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Scaffold(
+    body: LibraryOverviewBody(
+      model: model,
+      isSearching: isSearching,
+      onCreateFolder: () {},
+      onClearSearch: () {},
+      onShowFolderActions: onShowFolderActions ?? (FolderWithCount _) {},
+    ),
+  ),
+);
 
 /// Wraps the full screen so the inline search field, body, and the
 /// `MxRetainedAsyncState` (loading / error) wiring are exercised end-to-end.
 /// The library-overview query stream is supplied per test via [stream].
 Widget _wrapScreen(Stream<LibraryOverviewReadModel> stream) => ProviderScope(
-  overrides: [
-    libraryOverviewQueryProvider.overrideWith((Ref ref) => stream),
-  ],
+  overrides: [libraryOverviewQueryProvider.overrideWith((Ref ref) => stream)],
   child: MaterialApp(
     theme: AppTheme.light(),
     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -115,7 +117,11 @@ void main() {
         _wrapBody(
           _model(
             folders: <FolderWithCount>[
-              _item('Languages', mode: ContentMode.subfolders, subfolderCount: 4),
+              _item(
+                'Languages',
+                mode: ContentMode.subfolders,
+                subfolderCount: 4,
+              ),
             ],
             totalFolderCount: 1,
           ),
@@ -125,15 +131,17 @@ void main() {
       expect(find.text('4 subfolders'), findsOneWidget);
     });
 
-    testWidgets('overflow kebab is disabled (folder action sheet is Future)', (
+    testWidgets('overflow kebab is enabled and invokes the action callback', (
       WidgetTester tester,
     ) async {
+      FolderWithCount? tapped;
       await tester.pumpWidget(
         _wrapBody(
           _model(
             folders: <FolderWithCount>[_item('Korean')],
             totalFolderCount: 1,
           ),
+          onShowFolderActions: (FolderWithCount item) => tapped = item,
         ),
       );
 
@@ -143,26 +151,35 @@ void main() {
           matching: find.byType(IconButton),
         ),
       );
-      // No folder action use cases exist yet, so the affordance is inert.
-      expect(kebab.onPressed, isNull);
+      expect(kebab.onPressed, isNotNull);
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pump();
+      expect(tapped?.folder.name, 'Korean');
     });
 
-    testWidgets('folder row long-press is disabled (no action sheet wired)', (
+    testWidgets('folder row long-press invokes the action callback', (
       WidgetTester tester,
     ) async {
+      FolderWithCount? tapped;
       await tester.pumpWidget(
         _wrapBody(
           _model(
             folders: <FolderWithCount>[_item('Korean')],
             totalFolderCount: 1,
           ),
+          onShowFolderActions: (FolderWithCount item) => tapped = item,
         ),
       );
 
-      // The long-press affordance routes to `onShowActions`, which is null
-      // until the folder action sheet (and its use cases) exist.
+      // The long-press affordance routes to `onShowActions`, now wired to the
+      // folder action sheet.
       final MxCard card = tester.widget<MxCard>(find.byType(MxCard));
-      expect(card.onLongPress, isNull);
+      expect(card.onLongPress, isNotNull);
+
+      await tester.longPress(find.byType(MxCard));
+      await tester.pump();
+      expect(tapped?.folder.name, 'Korean');
     });
   });
 
@@ -219,17 +236,18 @@ void main() {
   });
 
   group('LibraryOverviewBody — Empty vs search no-results', () {
-    testWidgets('true-empty library shows the create-folder CTA, not no-results', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(_wrapBody(_model()));
+    testWidgets(
+      'true-empty library shows the create-folder CTA, not no-results',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(_wrapBody(_model()));
 
-      expect(
-        find.byKey(const ValueKey<String>('library_search_no_results')),
-        findsNothing,
-      );
-      expect(find.text('New folder'), findsOneWidget);
-    });
+        expect(
+          find.byKey(const ValueKey<String>('library_search_no_results')),
+          findsNothing,
+        );
+        expect(find.text('New folder'), findsOneWidget);
+      },
+    );
 
     testWidgets('active search with no matches shows the no-results section', (
       WidgetTester tester,
@@ -328,9 +346,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        _wrapScreen(
-          Stream<LibraryOverviewReadModel>.error(Exception('boom')),
-        ),
+        _wrapScreen(Stream<LibraryOverviewReadModel>.error(Exception('boom'))),
       );
       await tester.pump();
 
@@ -379,6 +395,94 @@ void main() {
         expect(field.controller?.text, '');
       },
     );
+  });
+
+  group('LibraryOverviewScreen — Overflow sheet', () {
+    Future<void> pumpLoaded(
+      WidgetTester tester, {
+      ContentMode mode = ContentMode.decks,
+    }) async {
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<LibraryOverviewReadModel>.value(
+            _model(
+              folders: <FolderWithCount>[_item('Korean', mode: mode)],
+              totalFolderCount: 1,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('tapping the kebab opens the folder action sheet', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      // Mock-approved actions only.
+      expect(find.text('Rename'), findsOneWidget);
+      expect(find.text('Move to folder'), findsOneWidget);
+      expect(find.text('Import flashcards'), findsOneWidget);
+      expect(find.text('Delete folder'), findsOneWidget);
+      // Unsupported mock actions are not exposed.
+      expect(find.text('Study due cards'), findsNothing);
+      expect(find.text('Archive folder'), findsNothing);
+    });
+
+    testWidgets('long-pressing the folder row opens the same sheet', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      await tester.longPress(find.byType(LibraryFolderTile));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Rename'), findsOneWidget);
+      expect(find.text('Delete folder'), findsOneWidget);
+    });
+
+    testWidgets('subfolder-mode folder hides Import flashcards', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester, mode: ContentMode.subfolders);
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Move to folder'), findsOneWidget);
+      expect(find.text('Import flashcards'), findsNothing);
+    });
+
+    testWidgets('Delete opens the destructive confirm dialog', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete folder'));
+      await tester.pumpAndSettle();
+
+      // The confirm dialog's unique subtree-warning copy is shown.
+      expect(
+        find.text(
+          'This will delete the full subtree, including decks and flashcards.',
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('New folder FAB is visible in the loaded state', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      expect(find.widgetWithText(FloatingActionButton, 'New folder'), findsOneWidget);
+    });
   });
 
   testWidgets('bottom navigation switches tabs', (WidgetTester tester) async {

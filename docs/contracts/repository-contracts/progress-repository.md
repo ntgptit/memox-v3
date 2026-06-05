@@ -5,7 +5,10 @@ status: contract
 
 # Progress Repository Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
 `flashcard_progress` + `study_attempts`. The SRS heart of the data layer.
 
@@ -46,11 +49,11 @@ Future<Either<Failure, int>> bulkResetProgress(List<FlashcardId> ids);
 
 ## Transaction requirements
 
-| Operation | Tables touched |
-| --- | --- |
+| Operation                        | Tables touched                                                                                                                                     |
+|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `recordAttemptAndUpdateProgress` | `study_attempts` INSERT + `flashcard_progress` UPDATE (current_box, due_at, review_count++, lapse_count++ if forgot, last_studied_at, last_result) |
-| `resetProgress` | `flashcard_progress` UPDATE: current_box=1, due_at=now, last_reset_at=now (counters UNCHANGED, attempts UNCHANGED) |
-| `bulkResetProgress` | Single transaction across N rows |
+| `resetProgress`                  | `flashcard_progress` UPDATE: current_box=1, due_at=now, last_reset_at=now (counters UNCHANGED, attempts UNCHANGED)                                 |
+| `bulkResetProgress`              | Single transaction across N rows                                                                                                                   |
 
 ## Index dependencies
 
@@ -64,7 +67,8 @@ These methods rely on indexes (recommend in `docs/database/schema-contract.md`):
 ## Constraints
 
 - `current_box` ∈ 1..8.
-- `box_before` and `box_after` in `study_attempts` MUST be populated (pending migration default 0; mapper handles pre-migration rows).
+- `box_before` and `box_after` in `study_attempts` MUST be populated (pending migration default 0;
+  mapper handles pre-migration rows).
 - `due_at` always reflects `current_box`.
 
 ## Forbidden
@@ -89,10 +93,13 @@ These methods rely on indexes (recommend in `docs/database/schema-contract.md`):
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`,
+`docs/contracts/code-style.md`
 
-**Business specs:** `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`, `docs/business/study-actions/bury-suspend.md`
-**Use cases:** `docs/contracts/usecase-contracts/study.md`, `docs/contracts/usecase-contracts/history.md`, `docs/contracts/usecase-contracts/srs.md`
+**Business specs:** `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`,
+`docs/business/study-actions/bury-suspend.md`
+**Use cases:** `docs/contracts/usecase-contracts/study.md`,
+`docs/contracts/usecase-contracts/history.md`, `docs/contracts/usecase-contracts/srs.md`
 **Schema:** `docs/database/schema-contract.md` `flashcard_progress`, `study_attempts`
 **Code paths:**
 

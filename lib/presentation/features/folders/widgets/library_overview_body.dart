@@ -15,6 +15,7 @@ class LibraryOverviewBody extends StatelessWidget {
     required this.isSearching,
     required this.onCreateFolder,
     required this.onClearSearch,
+    required this.onShowFolderActions,
     super.key,
   });
 
@@ -22,6 +23,9 @@ class LibraryOverviewBody extends StatelessWidget {
   final bool isSearching;
   final VoidCallback onCreateFolder;
   final VoidCallback onClearSearch;
+
+  /// Opens the folder action sheet for one row (kebab tap / long-press).
+  final void Function(FolderWithCount item) onShowFolderActions;
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +50,10 @@ class LibraryOverviewBody extends StatelessWidget {
           LibraryFolderTile(
             item: item,
             onTap: () => context.pushFolderDetail(item.folder.id),
-            // Deferred (Future): the folder action sheet
-            // (Edit / Move / Import flashcards / Delete) per
-            // `docs/wireframes/02-library.md` §overflow sheet needs the folder
-            // mutation use cases, which do not exist yet. Until then the kebab
-            // renders disabled — no unsupported action is exposed and no
-            // behavior is faked.
-            onShowActions: null,
+            // Kebab tap and row long-press both open the folder action sheet
+            // (Rename / Move / Import flashcards / Delete) per
+            // `docs/wireframes/02-library.md` §Overflow sheet.
+            onShowActions: () => onShowFolderActions(item),
           ),
           const SizedBox(height: SpacingTokens.sm),
         ],

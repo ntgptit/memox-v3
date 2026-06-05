@@ -13,7 +13,8 @@ checks for mock-driven screen work.
 ## Structure
 
 - Every visible mock element is mapped in the screen visual contract or task notes.
-- Every unmapped element has a reason: Future, Rejected, Missing data, Visual-only, Unknown, or Conflict.
+- Every unmapped element has a reason: Future, Rejected, Missing data, Visual-only, Unknown, or
+  Conflict.
 - Current, Future, Rejected, and Unknown elements are not mixed in production UI.
 - No unsupported behavior was added to make a mock look active.
 - No mock-only route, schema field, provider state, or action was invented.
@@ -59,9 +60,11 @@ checks for mock-driven screen work.
 
 ## Validation
 
-- Run the related widget tests for loaded, loading, empty, error, search/no-results, and key actions.
+- Run the related widget tests for loaded, loading, empty, error, search/no-results, and key
+  actions.
 - Run `flutter analyze` and targeted tests for UI code changes.
-- Run `python code-verification-guard/guard/run.py check --project . --ruleset memox` when the guard is present.
+- Run `python code-verification-guard/guard/run.py check --project . --ruleset memox` when the guard
+  is present.
 - For docs-only visual-contract changes, run markdown path/reference checks and `git diff --check`.
 
 ## Reporting

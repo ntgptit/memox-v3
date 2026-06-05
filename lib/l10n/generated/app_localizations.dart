@@ -5225,6 +5225,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This folder can\'t hold that item type.'**
   String get folderModeLockedError;
+
+  /// No description provided for @libraryFolderActionsRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get libraryFolderActionsRename;
+
+  /// No description provided for @libraryFolderActionsMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to folder'**
+  String get libraryFolderActionsMove;
+
+  /// No description provided for @libraryFolderActionsImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import flashcards'**
+  String get libraryFolderActionsImport;
+
+  /// No description provided for @libraryFolderActionsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete folder'**
+  String get libraryFolderActionsDelete;
+
+  /// No description provided for @libraryFolderActionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t complete that action. Please try again.'**
+  String get libraryFolderActionError;
+
+  /// No description provided for @folderMovePickerSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search folders'**
+  String get folderMovePickerSearchHint;
+
+  /// No description provided for @folderMovePickerCycleReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t move a folder into itself or its subfolders.'**
+  String get folderMovePickerCycleReason;
+
+  /// No description provided for @folderMovePickerLockedReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked to decks — can\'t hold folders.'**
+  String get folderMovePickerLockedReason;
 }
 
 class _AppLocalizationsDelegate

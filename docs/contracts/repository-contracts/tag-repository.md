@@ -5,9 +5,13 @@ status: contract
 
 # Tag Repository Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
-`flashcard_tags` operations. Tag storage = lowercased trimmed string keyed by `(flashcard_id, LOWER(tag))`.
+`flashcard_tags` operations. Tag storage = lowercased trimmed string keyed by
+`(flashcard_id, LOWER(tag))`.
 
 ## Methods
 
@@ -27,18 +31,19 @@ Future<Either<Failure, int>> delete(String name);  // returns affected card coun
 
 ## Transaction requirements
 
-| Operation | Tables touched |
-| --- | --- |
-| `addToCard` | `flashcard_tags` INSERT (idempotent dedupe by LOWER) |
-| `removeFromCard` | `flashcard_tags` DELETE |
-| `rename` | `flashcard_tags` UPDATE batch |
-| `merge` | `flashcard_tags`: INSERT dest if missing per card + DELETE source rows. Atomic. |
-| `delete` | `flashcard_tags` DELETE WHERE LOWER(tag) = LOWER(:tag) |
+| Operation        | Tables touched                                                                  |
+|------------------|---------------------------------------------------------------------------------|
+| `addToCard`      | `flashcard_tags` INSERT (idempotent dedupe by LOWER)                            |
+| `removeFromCard` | `flashcard_tags` DELETE                                                         |
+| `rename`         | `flashcard_tags` UPDATE batch                                                   |
+| `merge`          | `flashcard_tags`: INSERT dest if missing per card + DELETE source rows. Atomic. |
+| `delete`         | `flashcard_tags` DELETE WHERE LOWER(tag) = LOWER(:tag)                          |
 
 ## Constraints
 
 - Tag stored lowercased.
-- Validation (no comma, max 50) MUST happen in domain layer (TagValidator). Repo assumes pre-validated input.
+- Validation (no comma, max 50) MUST happen in domain layer (TagValidator). Repo assumes
+  pre-validated input.
 - `(flashcard_id, LOWER(tag))` pair uniqueness via DB index.
 
 ## Forbidden
@@ -59,7 +64,8 @@ Future<Either<Failure, int>> delete(String name);  // returns affected card coun
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`, `docs/contracts/code-style.md`
+**Base contracts:** `docs/contracts/error-contract.md`, `docs/contracts/types-catalog.md`,
+`docs/contracts/code-style.md`
 
 **Business spec:** `docs/business/tags/tag-system.md`
 **Use cases:** `docs/contracts/usecase-contracts/tag.md`

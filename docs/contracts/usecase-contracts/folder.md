@@ -1,9 +1,19 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-06
 status: contract
 ---
 
 # Folder Use Cases Contract
+
+> **Implementation status (2026-06-06, Prompt 49D):** `RenameFolderUseCase`, `MoveFolderUseCase`,
+> `DeleteFolderUseCase`, and `GetFolderMoveTargetsUseCase` are **implemented** over the existing
+> `Result<Failure, T>` contract (not yet `Either`) and wired in `lib/app/di/folder_providers.dart`.
+> Code: `lib/domain/usecases/folder/{rename_folder,move_folder,delete_folder,get_folder_move_targets}_usecase.dart`,
+> backed by `FolderRepository.{renameFolder,moveFolder,deleteFolder,getFolderMoveTargets}`. They power
+> the Library Overview folder action sheet (`docs/wireframes/02-library.md` §Overflow sheet). Tests:
+> `test/data/repositories/folder_repository_impl_test.dart` (F8-F12) +
+> `test/presentation/features/folders/library_overview_test.dart`. `ReorderFoldersUseCase` remains
+> Future.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
@@ -114,6 +124,27 @@ Future<Either<Failure, Unit>> call({required FolderId id});
 **Test refs:** F12.
 
 **Caution:** Destructive. Caller MUST confirm via §delete-confirm dialog before invoking.
+
+## GetFolderMoveTargetsUseCase
+
+```dart
+Future<Result<List<FolderMoveTarget>>> call({required FolderId folderId});
+```
+
+**Rules:**
+
+- Returns the Library root (`id == null`) plus **every** folder as a candidate destination, each
+  annotated with `isCurrentParent` and a non-null `block` reason when it cannot accept the move.
+- Blocked, never hidden (`docs/wireframes/25-shared-bottom-sheets.md` §folder-picker): the folder
+  itself and its descendants are `FolderMoveBlock.cycle`; folders locked to `decks` mode are
+  `FolderMoveBlock.lockedToDecks`.
+- Pure read; performs the same descendant + mode checks that `MoveFolderUseCase` enforces, so the
+  picker can disable invalid rows up front.
+
+**Errors:** `StorageFailure`.
+
+**Code:** `lib/domain/usecases/folder/get_folder_move_targets_usecase.dart`;
+`FolderRepositoryImpl.getFolderMoveTargets`; model `lib/domain/models/folder_move_target.dart`.
 
 ## ReorderFoldersUseCase
 

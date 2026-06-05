@@ -12,15 +12,20 @@ related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
 
 ## V1 decision
 
-This screen is a **Future Proposal** for V1. Do not implement the route, screen, use cases, repository queries, or entry links during V1.
+This screen is a **Future Proposal** for V1. Do not implement the route, screen, use cases,
+repository queries, or entry links during V1.
 
-If a UI surface still contains `View history`, hide it or keep it disabled until this feature is promoted.
+If a UI surface still contains `View history`, hide it or keep it disabled until this feature is
+promoted.
 
-Promotion requires schema migration for `flashcard_progress.last_reset_at`, `study_attempts.box_before`, and `study_attempts.box_after`, plus route/use case/repository/test work.
+Promotion requires schema migration for `flashcard_progress.last_reset_at`,
+`study_attempts.box_before`, and `study_attempts.box_after`, plus route/use case/repository/test
+work.
 
 ## Purpose
 
-Per-card timeline showing every study attempt. Helps user spot patterns ("always struggling with this card") and decide on actions (suspend, reset).
+Per-card timeline showing every study attempt. Helps user spot patterns ("always struggling with
+this card") and decide on actions (suspend, reset).
 
 ## Layout
 
@@ -100,20 +105,20 @@ Per-card timeline showing every study attempt. Helps user spot patterns ("always
 
 ## Inputs
 
-| Param | Source | Notes |
-| --- | --- | --- |
-| `deckId` (required path param) | URL | parent deck |
-| `flashcardId` (required path param) | URL | card whose history to show |
+| Param                               | Source | Notes                      |
+|-------------------------------------|--------|----------------------------|
+| `deckId` (required path param)      | URL    | parent deck                |
+| `flashcardId` (required path param) | URL    | card whose history to show |
 
 ## Data to load
 
-| Data | Source | Refresh trigger |
-| --- | --- | --- |
-| Card preview (front, back truncated) | `flashcards` lookup | once |
-| Current SRS state (current_box, due_at, is_suspended) | `flashcard_progress` lookup | once |
-| Lifetime stats (review_count, lapse_count, accuracy, last_reset_at) | `flashcard_progress` counters | once |
-| First page of attempts (LIMIT 50 ORDER BY attempted_at DESC) | `study_attempts WHERE flashcard_id = :id` | cursor pagination |
-| Divider position | computed from `last_reset_at` vs row timestamps | derived from above |
+| Data                                                                | Source                                          | Refresh trigger    |
+|---------------------------------------------------------------------|-------------------------------------------------|--------------------|
+| Card preview (front, back truncated)                                | `flashcards` lookup                             | once               |
+| Current SRS state (current_box, due_at, is_suspended)               | `flashcard_progress` lookup                     | once               |
+| Lifetime stats (review_count, lapse_count, accuracy, last_reset_at) | `flashcard_progress` counters                   | once               |
+| First page of attempts (LIMIT 50 ORDER BY attempted_at DESC)        | `study_attempts WHERE flashcard_id = :id`       | cursor pagination  |
+| Divider position                                                    | computed from `last_reset_at` vs row timestamps | derived from above |
 
 ## Forbidden
 
@@ -123,18 +128,19 @@ Per-card timeline showing every study attempt. Helps user spot patterns ("always
 - ❌ Show "Box 0" — render `—` for box_before=0 or box_after=0 (pre-migration rows).
 - ❌ Show divider when `last_reset_at` is null OR there are no attempts.
 - ❌ Reset progress without updating `last_reset_at = now`.
-- ❌ Auto-refresh timeline on every attempt insert; refresh only on screen visibility change OR explicit pull-to-refresh.
+- ❌ Auto-refresh timeline on every attempt insert; refresh only on screen visibility change OR
+  explicit pull-to-refresh.
 
 ## Components
 
-| Component | Spec |
-| --- | --- |
-| App bar | Back, title "Card history", overflow ⋮ (Edit card / Suspend / Reset progress / Delete). |
+| Component   | Spec                                                                                                                   |
+|-------------|------------------------------------------------------------------------------------------------------------------------|
+| App bar     | Back, title "Card history", overflow ⋮ (Edit card / Suspend / Reset progress / Delete).                                |
 | Header card | Front preview, back subtitle, current state line, lifetime stats. Sub-label visible only when `last_reset_at != null`. |
-| Timeline | Vertical list, newest first. 50 per page. Tap → opens session result (if completed). |
-| Divider row | Visual separator inserted at `last_reset_at` position. Non-tappable. Wider stroke. |
-| Load more | Button at bottom when more pages available. |
-| Empty state | When zero attempts, replaces timeline section. CTA opens deck study. |
+| Timeline    | Vertical list, newest first. 50 per page. Tap → opens session result (if completed).                                   |
+| Divider row | Visual separator inserted at `last_reset_at` position. Non-tappable. Wider stroke.                                     |
+| Load more   | Button at bottom when more pages available.                                                                            |
+| Empty state | When zero attempts, replaces timeline section. CTA opens deck study.                                                   |
 
 ## Timeline row shape
 
@@ -146,36 +152,36 @@ Per-card timeline showing every study attempt. Helps user spot patterns ("always
 
 Result label mapping:
 
-| `result` | Icon | Label |
-| --- | --- | --- |
-| `perfect` | ✓ green | Perfect |
-| `initial_passed` | ✓ green | Passed |
-| `recovered` | ⚠ yellow | Recovered |
-| `forgot` | ✗ red | Forgot |
+| `result`         | Icon     | Label     |
+|------------------|----------|-----------|
+| `perfect`        | ✓ green  | Perfect   |
+| `initial_passed` | ✓ green  | Passed    |
+| `recovered`      | ⚠ yellow | Recovered |
+| `forgot`         | ✗ red    | Forgot    |
 
 When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` instead of `Box 0`.
 
 ## States
 
-| State | Trigger | Behavior |
-| --- | --- | --- |
-| Loading | Initial fetch | Skeleton header + timeline rows. |
-| Populated | Has attempts | Header + timeline visible. |
-| Empty | Zero attempts | Empty layout. |
-| Loading more | Tap Load more | Inline spinner; append on success. |
-| Card not found | Card deleted | "Card no longer exists" error + back. |
-| Reset done | After reset progress | Header updates; divider appears at top of timeline. |
-| Error | Query failure | Inline error card with retry. |
+| State          | Trigger              | Behavior                                            |
+|----------------|----------------------|-----------------------------------------------------|
+| Loading        | Initial fetch        | Skeleton header + timeline rows.                    |
+| Populated      | Has attempts         | Header + timeline visible.                          |
+| Empty          | Zero attempts        | Empty layout.                                       |
+| Loading more   | Tap Load more        | Inline spinner; append on success.                  |
+| Card not found | Card deleted         | "Card no longer exists" error + back.               |
+| Reset done     | After reset progress | Header updates; divider appears at top of timeline. |
+| Error          | Query failure        | Inline error card with retry.                       |
 
 ## Actions
 
-| Action | Trigger | Result |
-| --- | --- | --- |
-| Tap back | Back | Pop. |
-| Tap overflow ⋮ | Tap | Menu: Edit card / Suspend (or Unsuspend) / Reset progress / Delete. |
-| Tap "Start study" (empty) | Tap | Navigate to deck study entry gate. |
-| Tap timeline row | Tap | Open session result screen if session is `completed`. No-op otherwise. |
-| Tap Load more | Tap | Fetch next page. |
+| Action                    | Trigger | Result                                                                 |
+|---------------------------|---------|------------------------------------------------------------------------|
+| Tap back                  | Back    | Pop.                                                                   |
+| Tap overflow ⋮            | Tap     | Menu: Edit card / Suspend (or Unsuspend) / Reset progress / Delete.    |
+| Tap "Start study" (empty) | Tap     | Navigate to deck study entry gate.                                     |
+| Tap timeline row          | Tap     | Open session result screen if session is `completed`. No-op otherwise. |
+| Tap Load more             | Tap     | Fetch next page.                                                       |
 
 ## Dialogs and bottom-sheets used
 
@@ -214,8 +220,10 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 ## Rules
 
 - Timeline is read-only.
-- Divider only renders when `last_reset_at` is non-null AND there are attempts both above (newer) and below (older) the reset point.
-- If reset happened but no attempts existed before reset, no divider needed (timeline starts post-reset).
+- Divider only renders when `last_reset_at` is non-null AND there are attempts both above (newer)
+  and below (older) the reset point.
+- If reset happened but no attempts existed before reset, no divider needed (timeline starts
+  post-reset).
 - `box_before` / `box_after` from `study_attempts`. If 0, render `—`.
 
 ## Agent rule
@@ -226,7 +234,8 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 
 - Do NOT recalculate accuracy on every render; use stored counters.
 - Do NOT add inline edit of attempts. Read-only.
-- Reset progress from this screen MUST update `last_reset_at = now` AND refresh the timeline so divider appears.
+- Reset progress from this screen MUST update `last_reset_at = now` AND refresh the timeline so
+  divider appears.
 - "Load more" pagination uses cursor based on `attempted_at DESC`; do NOT use offset (perf reason).
 
 ## Implementation refs
@@ -246,7 +255,8 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 - READ `flashcard_progress.last_reset_at`, lifetime counters
 - Cursor-based pagination on `attempted_at DESC`
 
-**Contracts:** `docs/contracts/usecase-contracts/history.md`, `docs/contracts/repository-contracts/progress-repository.md`
+**Contracts:** `docs/contracts/usecase-contracts/history.md`,
+`docs/contracts/repository-contracts/progress-repository.md`
 
 **Code paths:**
 
@@ -260,4 +270,5 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 
 **Related wireframes:**
 
-- `docs/wireframes/08-flashcard-edit.md` (entry point), `docs/wireframes/18-study-result.md` (timeline row tap target if completed)
+- `docs/wireframes/08-flashcard-edit.md` (entry point), `docs/wireframes/18-study-result.md` (
+  timeline row tap target if completed)

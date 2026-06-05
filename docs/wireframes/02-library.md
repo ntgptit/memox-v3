@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-05
+last_updated: 2026-06-06
 route: /library
 source_specs:
   - docs/business/folder/folder-management.md
@@ -9,56 +9,136 @@ source_specs:
 
 # 02 — Library
 
-## V1 verification status (2026-05-31, Prompt 18/18B; root-deck decision updated 2026-06-03, Prompt 43A; 6-state visual parity 2026-06-04, Prompt 49; loaded-state visual fix 2026-06-04, Prompt 49B; mock mapping docs 2026-06-05)
+## V1 verification status (2026-05-31, Prompt 18/18B; root-deck decision updated 2026-06-03, Prompt 43A; 6-state visual parity 2026-06-04, Prompt 49; loaded-state visual fix 2026-06-04, Prompt 49B; mock mapping docs 2026-06-05; overflow sheet implemented + 6 states Current 2026-06-06, Prompt 49D)
 
-This screen is **partially Current**. The recursive folder counts (verified Prompt 14) plus the aspects below are verified by code and tests; the remainder is **Future** and intentionally not exposed in V1. Do NOT mark the whole screen Current. The §Layout / §Components / §Actions / §Sort options blocks below describe the **target** design; where they conflict with this section, this section is the current truth.
+This screen is **partially Current**. The recursive folder counts (verified Prompt 14) plus the
+aspects below are verified by code and tests; the remainder is **Future** and intentionally not
+exposed in V1. Do NOT mark the whole screen Current. The §Layout / §Components / §Actions / §Sort
+options blocks below describe the **target** design; where they conflict with this section, this
+section is the current truth.
 
 Screen-level visual contract: `docs/design/screens/library-overview.visual-contract.md`.
 
-**Prompt 49 scope (2026-06-04):** visual/layout parity for the Library Overview mock states (loaded · loading · empty · error · search · overflow reference) against `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` §"03 · Library overview". No schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local; Global Search and a `/library/search` screen remain **Future**; root-level decks remain **Rejected / Out of Scope**. The mock's overflow sheet remains a visual reference until the folder action sheet is implemented; current V1 keeps only the visible row kebab affordance and does not expose unsupported actions. Card padding/radius and bottom-nav density remained a separate Design Token / Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026-06-05):** card surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`), applied in `MxCard`. Bottom-nav density is still open.
+**Prompt 49 scope (2026-06-04):** visual/layout parity for the Library Overview mock states (
+loaded · loading · empty · error · search · overflow reference) against
+`docs/system-design/MemoX Design System/ui_kits/mobile/index.html` §"03 · Library overview". No
+schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local;
+Global Search and a `/library/search` screen remain **Future**; root-level decks remain **Rejected /
+Out of Scope**. The mock's overflow sheet is now **implemented and Current** (see "Overflow sheet —
+now Current" below, Prompt 49D); the row kebab and long-press open the folder action sheet. Card
+padding/radius and bottom-nav density remained a separate Design Token /
+Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026-06-05):** card
+surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`),
+applied in `MxCard`. Bottom-nav density is still open.
 
-**Prompt 49B scope (2026-06-04):** fixes the **loaded-state visual drift** left by Prompt 49 against the same mock §"03 · Library overview". No schema/SRS/repository/use-case change. Changes are presentation-only:
+**Prompt 49B scope (2026-06-04):** fixes the **loaded-state visual drift** left by Prompt 49 against
+the same mock §"03 · Library overview". No schema/SRS/repository/use-case change. Changes are
+presentation-only:
 
-- Header right control is now a sliders/filter affordance (`Icons.tune_rounded`), **not** a search-icon toggle. It is a **visual-only target** — rendered disabled because Library has no approved filter/sort sheet yet (no unsupported action is exposed).
-- Search is **always-visible inline** scope-local search directly below the title (no toggle). It never navigates; Global Search and `/library/search` remain **Future**.
+- Header right control is now a sliders/filter affordance (`Icons.tune_rounded`), **not** a
+  search-icon toggle. It is a **visual-only target** — rendered disabled because Library has no
+  approved filter/sort sheet yet (no unsupported action is exposed).
+- Search is **always-visible inline** scope-local search directly below the title (no toggle). It
+  never navigates; Global Search and `/library/search` remain **Future**.
 - The static `All` filter chip is **removed** from the loaded header.
-- Loaded state renders a `{n} FOLDERS` overline section header (count only; **no sort control** — the mock sort pill remains Future).
-- A **due summary card** (`{n} cards due today`) is rendered when `dueToday > 0` and hidden otherwise. It is **non-interactive**: Library state only knows the aggregate `dueToday`, so there is no subtitle (folder span / estimated minutes) and no study-launch navigation.
-- The FAB is now a labelled **`New folder` pill** wired to the existing create-folder flow. **New deck / Import are not exposed** from Library root.
+- Loaded state renders a `{n} FOLDERS` overline section header (count only; **no sort control** —
+  the mock sort pill remains Future).
+- A **due summary card** (`{n} cards due today`) is rendered when `dueToday > 0` and hidden
+  otherwise. It is **non-interactive**: Library state only knows the aggregate `dueToday`, so there
+  is no subtitle (folder span / estimated minutes) and no study-launch navigation.
+- The FAB is now a labelled **`New folder` pill** wired to the existing create-folder flow. **New
+  deck / Import are not exposed** from Library root.
 
-**Doc drift correction (2026-06-05):** current code passes `onShowActions: null` from `LibraryOverviewBody` to `LibraryFolderTile`, so the visible kebab is Current but the folder action sheet is **Future / deferred**. Do not report the overflow sheet as Current until it is implemented and tested.
+**Overflow sheet — now Current (2026-06-06, Prompt 49D — 6-state parity completion):** the folder
+action sheet is **implemented and Current**. The earlier "Future / deferred" decision is
+**superseded**. All six mock states (loaded · loading · empty · error · search · overflow sheet) are
+**Current target scope**.
 
-**Overflow sheet decision (2026-06-05, Prompt 49C — 6-state parity review):** the approved folder action sheet (Edit / Move / Import flashcards / Delete) stays **Future / deferred** because the required folder mutation use cases do **not** exist yet — `lib/app/di/folder_providers.dart` wires only `WatchLibraryOverview`, `CreateRootFolder`, `WatchFolderDetail`, `CreateSubfolder`, and `CreateDeck`. There is no rename/edit, move, delete, or import-flashcards folder use case, and adding domain/data APIs was out of scope for this presentation-only parity task. Therefore:
-
-- Both the kebab (`onPressed`) and the row long-press (`onLongPress`) are wired to `onShowActions`, which is intentionally `null` → the affordance renders **disabled**. No unsupported/fake action is exposed.
-- This disabled behavior is now asserted by widget tests (`test/presentation/features/folders/library_overview_test.dart`): the kebab `IconButton.onPressed` is `null` and a long-press opens no bottom sheet.
-- Promote to Current only together with the folder action sheet implementation, its use cases, l10n, docs, and tests. The mock's "Study due cards" / "Archive folder" / root "New deck" / root "Import" remain out of scope.
+- Both the kebab (`onPressed`) and the row long-press (`onLongPress`) open the folder action sheet
+  via `onShowActions` (no longer `null`, never disabled).
+- Sheet actions (mock-approved set): **Rename**, **Move to folder**, **Import flashcards**
+  (decks/unlocked folders only — hidden for subfolder-mode), and **Delete folder** (destructive).
+  The mock's "Open folder" is the row tap itself; "Study due cards" and "Archive folder" remain
+  **out of scope** (not exposed).
+- Backing use cases now exist and are wired in `lib/app/di/folder_providers.dart`:
+  `RenameFolderUseCase`, `MoveFolderUseCase`, `DeleteFolderUseCase`, `GetFolderMoveTargetsUseCase`
+  (over new `FolderRepository.renameFolder/moveFolder/deleteFolder/getFolderMoveTargets`). The DAO
+  mutation methods (`updateFolderName`, `updateFolderParent`, `deleteFolderById`,
+  `descendantFolderIdsDepthFirst`, `siblingFolderNames`) back them.
+- **Rename** opens `MxNameDialog` pre-filled with the current name → `renameFolder` (sibling-name
+  uniqueness, no-op on unchanged name). **Move** loads candidates via `getFolderMoveTargets` and
+  opens the move picker (`docs/wireframes/25-shared-bottom-sheets.md` §folder-picker): blocked
+  destinations (self/descendants = cycle, decks-locked folders) are shown disabled with a reason,
+  never hidden; the destination locks to `subfolders` and an emptied old parent reverts to
+  `unlocked`. **Import flashcards** navigates into the folder (`pushFolderDetail`) where the existing
+  per-deck import flow lives — there is no folder-level import target, so this opens the folder to
+  pick/create a deck. **Delete** confirms via the destructive `MxConfirmDialog`
+  (`docs/wireframes/24-shared-dialogs.md` §delete-confirm) then cascades the subtree.
+- Asserted by widget tests (`test/presentation/features/folders/library_overview_test.dart`: kebab
+  enabled, kebab/long-press both open the sheet, action set, subfolder-mode hides Import, Delete
+  opens the confirm dialog) and repository tests
+  (`test/data/repositories/folder_repository_impl_test.dart`: rename/move/delete/move-targets,
+  cycle + decks-lock rejection, cascade).
 
 **Verified Current (behaviour + tests):**
 
-- Route `/library` opens `LibraryOverviewView` (also `initialLocation`). Folder row → `pushFolderDetail` → `/library/folder/:id`. No `/library/search` route exists; the always-visible inline search field filters scope-locally, it does not navigate.
-- Renders **top-level folders only**. Recursive subtree counts per folder (subfolders · decks · cards · due) are Current from Prompt 14 and isolated between sibling roots.
+- Route `/library` opens `LibraryOverviewView` (also `initialLocation`). Folder row →
+  `pushFolderDetail` → `/library/folder/:id`. No `/library/search` route exists; the always-visible
+  inline search field filters scope-locally, it does not navigate.
+- Renders **top-level folders only**. Recursive subtree counts per folder (subfolders · decks ·
+  cards · due) are Current from Prompt 14 and isolated between sibling roots.
 - States:
-  - **Loaded** — `LibraryOverviewBody` list of `LibraryFolderTile` rows; no root-level deck card.
-  - **Loading** — `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` (skeleton folder rows, `ValueKey('library_skeleton')`), not a full-screen spinner; no folder row is tappable while data is absent.
-  - **Error** — `MxRetainedAsyncState.errorBuilder` → `MxErrorState` with localized `libraryLoadFailedTitle` / `libraryLoadFailedMessage`, `Icons.cloud_off_outlined`, Retry → `ref.invalidate(libraryOverviewQueryProvider)`; no raw exception text surfaced.
-  - **True empty library** — `totalFolderCount == 0`, regardless of search term → `LibraryEmptyStateSection` "Create folder" CTA.
-  - **Search no-results** — `folders.isEmpty && searchTerm` active **&& `totalFolderCount > 0`** → `LibrarySearchNoResultsSection`, `ValueKey('library_search_no_results')`, "Clear" CTA. Distinct from true empty (Prompt 18; classification corrected Prompt 18B — counts driven by `LibraryOverviewState.totalFolderCount` from `LibraryOverviewReadModel.totalFolderCount`).
-  - **Overflow affordance** — each folder row carries a visible kebab (`Icons.more_vert`, tooltip `libraryOverflowTooltip`); the action sheet itself is Future / deferred because no action handler is wired in current code.
-- Inline search (Prompt 49B: always visible below the title, no toggle): scope-local within Library. When a term is active the query broadens to match **any folder by name across the tree** (`listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to Global Search; does not mutate persisted `sort_order`.
-- Loaded section header: `{n} FOLDERS` overline (`libraryFolderCountLabel`, count only — no sort UI control).
-- Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle`), hidden otherwise. Non-interactive — no subtitle and no study-launch (state only carries the aggregate `dueToday`).
-- Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended, `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill both open `MxNameDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog; failures map to a localized error snackbar; success refreshes via `contentDataRevision`. No New deck / Import entry on Library root.
-- Folder row overflow action sheet is **Future / deferred**. Current rows keep the kebab visual affordance, but no action sheet is exposed until folder action behavior is implemented. The mock's "Study due cards" / "Archive folder" actions remain **not exposed** (out of current scope).
-- Sort (`ContentSortMode`: manual/name/newest/lastStudied) is implemented and tested at the **repository + use-case** layer (`folder_repository_impl`, `content_repository_test`). The viewmodel exposes `setSortMode`. No sort **UI control** is rendered (the mock's sort pill remains Future).
+    - **Loaded** — `LibraryOverviewBody` list of `LibraryFolderTile` rows; no root-level deck card.
+    - **Loading** — `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` (skeleton folder
+      rows, `ValueKey('library_skeleton')`), not a full-screen spinner; no folder row is tappable
+      while data is absent.
+    - **Error** — `MxRetainedAsyncState.errorBuilder` → `MxErrorState` with localized
+      `libraryLoadFailedTitle` / `libraryLoadFailedMessage`, `Icons.cloud_off_outlined`, Retry →
+      `ref.invalidate(libraryOverviewQueryProvider)`; no raw exception text surfaced.
+    - **True empty library** — `totalFolderCount == 0`, regardless of search term →
+      `LibraryEmptyStateSection` "Create folder" CTA.
+    - **Search no-results** — `folders.isEmpty && searchTerm` active **&& `totalFolderCount > 0`** →
+      `LibrarySearchNoResultsSection`, `ValueKey('library_search_no_results')`, "Clear" CTA.
+      Distinct from true empty (Prompt 18; classification corrected Prompt 18B — counts driven by
+      `LibraryOverviewState.totalFolderCount` from `LibraryOverviewReadModel.totalFolderCount`).
+    - **Overflow sheet** — each folder row carries a visible kebab (`Icons.more_vert`, tooltip
+      `libraryOverflowTooltip`); the kebab **and** a row long-press open the folder action sheet
+      (Rename / Move / Import flashcards / Delete). **Current** — see "Overflow sheet — now Current".
+- Inline search (Prompt 49B: always visible below the title, no toggle): scope-local within Library.
+  When a term is active the query broadens to match **any folder by name across the tree** (
+  `listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to
+  Global Search; does not mutate persisted `sort_order`.
+- Loaded section header: `{n} FOLDERS` overline (`libraryFolderCountLabel`, count only — no sort UI
+  control).
+- Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle`), hidden
+  otherwise. Non-interactive — no subtitle and no study-launch (state only carries the aggregate
+  `dueToday`).
+- Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended,
+  `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill
+  both open `MxNameDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
+  failures map to a localized error snackbar; success refreshes via `contentDataRevision`. No New
+  deck / Import entry on Library root.
+- Folder row overflow action sheet is **Current** (Rename / Move / Import flashcards / Delete) — see
+  "Overflow sheet — now Current". The mock's "Study due cards" / "Archive folder" actions remain
+  **not exposed** (out of current scope).
+- Sort (`ContentSortMode`: manual/name/newest/lastStudied) is implemented and tested at the *
+  *repository + use-case** layer (`folder_repository_impl`, `content_repository_test`). The
+  viewmodel exposes `setSortMode`. No sort **UI control** is rendered (the mock's sort pill remains
+  Future).
 
 **Future / not exposed in V1:**
 
-- **Root-level decks are Rejected / Out of Scope.** `LibraryOverviewReadModel` carries `folders` only. The §Layout "Top-level deck" rows and the "Tap deck row → /library/deck/:deckId/flashcards" action are visual history only, not target scope.
-- FAB action sheet (New folder / New deck / Import) — V1 FAB is a `New folder` pill that creates a folder directly; there is no New deck or Import entry on Library Overview. Deck creation/import remain owned by Folder Detail / Flashcard List / Deck Import.
-- Filter chips (All / Folders / Decks) — removed in Prompt 49B (the previous static, non-functional "All" chip is gone). A real filter/sort control behind the header sliders icon remains Future.
-- No sort **UI control** on Library Overview (no overflow sort menu / sort chip). Sort exists only in the data/use-case layer.
-- Folder action sheet from the `03f` mock overflow variant. Current code renders the kebab disabled when no action handler exists; promote this only with folder action sheet implementation, l10n, docs, and tests.
+- **Root-level decks are Rejected / Out of Scope.** `LibraryOverviewReadModel` carries `folders`
+  only. The §Layout "Top-level deck" rows and the "Tap deck row → /library/deck/:deckId/flashcards"
+  action are visual history only, not target scope.
+- FAB action sheet (New folder / New deck / Import) — V1 FAB is a `New folder` pill that creates a
+  folder directly; there is no New deck or Import entry on Library Overview. Deck creation/import
+  remain owned by Folder Detail / Flashcard List / Deck Import.
+- Filter chips (All / Folders / Decks) — removed in Prompt 49B (the previous static,
+  non-functional "All" chip is gone). A real filter/sort control behind the header sliders icon
+  remains Future.
+- No sort **UI control** on Library Overview (no overflow sort menu / sort chip). Sort exists only
+  in the data/use-case layer.
 - Drag-to-reorder of root items, pull-to-refresh, and grid/multi-column responsive layout.
 - Global Search screen / `/library/search` route (Global Search remains Future).
 
@@ -70,7 +150,9 @@ rejected nullable-parent direction is recorded in
 
 ## Purpose
 
-Root content browser. Current V1 shows top-level folders only. Root-level decks are Rejected / Out of Scope and are not rendered in the current app. Entry point for content management and a launch point for study.
+Root content browser. Current V1 shows top-level folders only. Root-level decks are Rejected / Out
+of Scope and are not rendered in the current app. Entry point for content management and a launch
+point for study.
 
 ## Layout
 
@@ -129,88 +211,95 @@ Root content browser. Current V1 shows top-level folders only. Root-level decks 
 
 ## Inputs
 
-| Param | Source | Notes |
-| --- | --- | --- |
-| `filter` (optional query param) | URL | `all` / `folders` / `decks`; default `all` |
-| `sort` (optional query param) | URL or SharedPreferences | persisted |
+| Param                           | Source                   | Notes                                      |
+|---------------------------------|--------------------------|--------------------------------------------|
+| `filter` (optional query param) | URL                      | `all` / `folders` / `decks`; default `all` |
+| `sort` (optional query param)   | URL or SharedPreferences | persisted                                  |
 
 ## Data to load
 
-| Data | Source | Refresh trigger |
-| --- | --- | --- |
-| Top-level folders (`parent_id IS NULL`) | `folders` table | stream from DB |
-| Top-level decks (`folder_id IS NULL`) | Rejected / Out of Scope | do not query; decks must belong to exactly one folder |
-| Per-row card count (decks) | `flashcards` aggregate cached | invalidated on flashcard change |
-| Per-row subfolder/deck count (folders) | aggregates cached | invalidated on folder/deck change |
-| Sort preference | SharedPreferences key `library.sort` | watch |
+| Data                                    | Source                               | Refresh trigger                                       |
+|-----------------------------------------|--------------------------------------|-------------------------------------------------------|
+| Top-level folders (`parent_id IS NULL`) | `folders` table                      | stream from DB                                        |
+| Top-level decks (`folder_id IS NULL`)   | Rejected / Out of Scope              | do not query; decks must belong to exactly one folder |
+| Per-row card count (decks)              | `flashcards` aggregate cached        | invalidated on flashcard change                       |
+| Per-row subfolder/deck count (folders)  | aggregates cached                    | invalidated on folder/deck change                     |
+| Sort preference                         | SharedPreferences key `library.sort` | watch                                                 |
 
 ## Forbidden
 
 - ❌ Query DAO from widget. Use `LibraryNotifier`.
-- ❌ Mix folder and deck rows alphabetically when sort is manual. Folders MUST appear above decks in manual sort.
+- ❌ Mix folder and deck rows alphabetically when sort is manual. Folders MUST appear above decks in
+  manual sort.
 - ❌ Recompute aggregate counts on every render. Cache 60s.
 - ❌ Lose drag-reorder on app restart. Persist to `sort_order` column.
-- ❌ Show FAB action sheet's "New deck" when current root would require choosing a folder first — not applicable at root (root acts as unlocked), but if extended, follow folder-detail rules.
+- ❌ Show FAB action sheet's "New deck" when current root would require choosing a folder first — not
+  applicable at root (root acts as unlocked), but if extended, follow folder-detail rules.
 
 ## Components
 
-| Component | Spec |
-| --- | --- |
-| App bar | Title "Library". Right side: search icon, overflow menu (⋮). |
-| Filter chips | Optional. Three chips: All / Folders / Decks. Default: All. |
-| Item row | Icon (folder 📁 or deck 📚) + name + subtitle (count) + chevron. |
-| Folder subtitle | "{n} decks" or "{n} subfolders" depending on `content_mode`. |
-| Deck subtitle | "{n} cards" (total) and optional "{m} due" badge in theme color. |
-| FAB | Plus button (bottom-right). Tap → action sheet: New folder / New deck / Import. |
+| Component       | Spec                                                                            |
+|-----------------|---------------------------------------------------------------------------------|
+| App bar         | Title "Library". Right side: search icon, overflow menu (⋮).                    |
+| Filter chips    | Optional. Three chips: All / Folders / Decks. Default: All.                     |
+| Item row        | Icon (folder 📁 or deck 📚) + name + subtitle (count) + chevron.                |
+| Folder subtitle | "{n} decks" or "{n} subfolders" depending on `content_mode`.                    |
+| Deck subtitle   | "{n} cards" (total) and optional "{m} due" badge in theme color.                |
+| FAB             | Plus button (bottom-right). Tap → action sheet: New folder / New deck / Import. |
 
 ### Count semantics
 
-- Folder-row counts are recursive over the folder subtree: descendant subfolders, decks in any descendant folder, and flashcards inside those decks are included.
-- Root-level sibling folder trees are isolated; counts from one root folder do not leak into another.
+- Folder-row counts are recursive over the folder subtree: descendant subfolders, decks in any
+  descendant folder, and flashcards inside those decks are included.
+- Root-level sibling folder trees are isolated; counts from one root folder do not leak into
+  another.
 - Empty nested folders contribute `0` deck/card/due/new-card counts.
-- Deck/card counts are derived from deck and flashcard rows in the subtree and are not recomputed in presentation.
+- Deck/card counts are derived from deck and flashcard rows in the subtree and are not recomputed in
+  presentation.
 
 ## States
 
-| State | Trigger | Behavior |
-| --- | --- | --- |
-| Loading | Initial query | Shimmer rows. |
-| Populated | Normal | List shown. |
-| Empty | No folders AND no top-level decks | Empty state layout. |
-| Error | Query failure | Inline error card with retry. |
-| Sort active | User picked a sort | Items reordered; chip in app bar showing current sort. |
+| State       | Trigger                           | Behavior                                               |
+|-------------|-----------------------------------|--------------------------------------------------------|
+| Loading     | Initial query                     | Shimmer rows.                                          |
+| Populated   | Normal                            | List shown.                                            |
+| Empty       | No folders AND no top-level decks | Empty state layout.                                    |
+| Error       | Query failure                     | Inline error card with retry.                          |
+| Sort active | User picked a sort                | Items reordered; chip in app bar showing current sort. |
 
 ## Sort options (from overflow)
 
-| Sort | Stored as |
-| --- | --- |
-| Manual (default) | `sort_order` |
-| Name A→Z | `name` ascending |
-| Name Z→A | `name` descending |
+| Sort             | Stored as               |
+|------------------|-------------------------|
+| Manual (default) | `sort_order`            |
+| Name A→Z         | `name` ascending        |
+| Name Z→A         | `name` descending       |
 | Recently updated | `updated_at` descending |
-| Most cards | computed |
+| Most cards       | computed                |
 
 Sort preference persists per user via SharedPreferences (key `library.sort`).
 
 ## Actions
 
-| Action | Trigger | Result |
-| --- | --- | --- |
-| Tap folder row | Tap | Navigate to `/library/folder/:id`. |
-| Tap deck row | Tap | Navigate to `/library/deck/:deckId/flashcards`. |
-| Long-press folder/deck | Long-press | Enter selection mode (multi-select) OR open context bottom-sheet (Rename / Move / Delete). Decide via UI/UX contract; recommend context sheet here since multi-select on folders is rare. |
-| Tap search icon | Tap | Navigate to `/library/search`. |
-| Tap overflow ⋮ | Tap | Menu: Sort by ▸ / New folder / New deck / Import. |
-| Tap FAB | Tap | Action sheet (`docs/wireframes/25-shared-bottom-sheets.md` §library-fab). |
-| Pull to refresh | Pull | Re-run queries. |
-| Reorder (drag) in Manual sort | Long-press handle + drag | Update `sort_order` of dragged item; persist on drop. |
+| Action                        | Trigger                  | Result                                                                                                                                                                                    |
+|-------------------------------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Tap folder row                | Tap                      | Navigate to `/library/folder/:id`.                                                                                                                                                        |
+| Tap deck row                  | Tap                      | Navigate to `/library/deck/:deckId/flashcards`.                                                                                                                                           |
+| Long-press folder/deck        | Long-press               | Enter selection mode (multi-select) OR open context bottom-sheet (Rename / Move / Delete). Decide via UI/UX contract; recommend context sheet here since multi-select on folders is rare. |
+| Tap search icon               | Tap                      | Navigate to `/library/search`.                                                                                                                                                            |
+| Tap overflow ⋮                | Tap                      | Menu: Sort by ▸ / New folder / New deck / Import.                                                                                                                                         |
+| Tap FAB                       | Tap                      | Action sheet (`docs/wireframes/25-shared-bottom-sheets.md` §library-fab).                                                                                                                 |
+| Pull to refresh               | Pull                     | Re-run queries.                                                                                                                                                                           |
+| Reorder (drag) in Manual sort | Long-press handle + drag | Update `sort_order` of dragged item; persist on drop.                                                                                                                                     |
 
 ## Dialogs and bottom-sheets used
 
 - Library FAB action sheet — see `docs/wireframes/25-shared-bottom-sheets.md` §library-fab.
 - New folder dialog — see `docs/wireframes/24-shared-dialogs.md` §folder-create.
-- New deck bottom-sheet (with target_language field) — see `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
-- Item context sheet (Rename / Move / Delete) — see `docs/wireframes/25-shared-bottom-sheets.md` §item-context.
+- New deck bottom-sheet (with target_language field) — see
+  `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
+- Item context sheet (Rename / Move / Delete) — see `docs/wireframes/25-shared-bottom-sheets.md`
+  §item-context.
 - Delete confirm dialog — see `docs/wireframes/24-shared-dialogs.md` §delete-confirm.
 - Move-to-folder picker — see `docs/wireframes/25-shared-bottom-sheets.md` §folder-picker.
 
@@ -247,14 +336,17 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 ## Rules
 
 - Top-level items are folders + decks whose `folder_id` is null.
-- Decks at root are allowed (Library is treated as an implicit unlocked root container; "decks can be in folders that are unlocked or `decks` mode" — root is conceptually unlocked).
-- FAB action sheet MUST include Import even though Import is technically per-deck (it routes via "pick a deck" flow when invoked from Library FAB).
+- Decks at root are allowed (Library is treated as an implicit unlocked root container; "decks can
+  be in folders that are unlocked or `decks` mode" — root is conceptually unlocked).
+- FAB action sheet MUST include Import even though Import is technically per-deck (it routes via "
+  pick a deck" flow when invoked from Library FAB).
 - Sort default is Manual (user-controlled order via `sort_order`).
 
 ## Agent rule
 
 - Do NOT create a separate route for "folder/0" or root folder. Library IS the root.
-- Do NOT mix folder and deck rows visually in confusing ways; keep folders above decks when sorting by manual order.
+- Do NOT mix folder and deck rows visually in confusing ways; keep folders above decks when sorting
+  by manual order.
 - Reorder MUST persist; do not lose order on app restart.
 - Empty state CTAs MUST be clearly distinct visually from FAB to avoid duplicate paths confusion.
 
@@ -275,15 +367,29 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 - `folders` (parent_id = null = root), `decks` (folder_id = null = root)
 - SharedPreferences: `library.sort`
 
-**Contracts:** `docs/contracts/usecase-contracts/folder.md`, `docs/contracts/usecase-contracts/deck.md`, `docs/contracts/repository-contracts/folder-repository.md`, `docs/contracts/repository-contracts/deck-repository.md`
+**Contracts:** `docs/contracts/usecase-contracts/folder.md`,
+`docs/contracts/usecase-contracts/deck.md`,
+`docs/contracts/repository-contracts/folder-repository.md`,
+`docs/contracts/repository-contracts/deck-repository.md`
 
 **Code paths (verified Prompt 18):**
 
 - `lib/presentation/features/folders/screens/library_overview_screen.dart`
-- `lib/presentation/features/folders/viewmodels/library_overview_viewmodel.dart` (`libraryOverviewQuery`, `LibraryToolbarState`, `LibraryOverviewActionController`)
-- `lib/presentation/features/folders/widgets/library_overview_body.dart` (loaded/empty/search-no-results switch)
-- `lib/presentation/features/folders/widgets/library_folder_tile.dart` (folder card row + visible kebab affordance)
-- `lib/presentation/features/folders/widgets/library_sections.dart` (`LibraryDueSummaryCard`, `LibraryFolderCountHeader`, `LibraryEmptyStateSection`, `LibrarySearchNoResultsSection`, `LibraryErrorSection`)
+- `lib/presentation/features/folders/viewmodels/library_overview_viewmodel.dart` (
+  `libraryOverviewQuery`, `LibraryToolbarState`, `LibraryOverviewActionController`)
+- `lib/presentation/features/folders/widgets/library_overview_body.dart` (
+  loaded/empty/search-no-results switch)
+- `lib/presentation/features/folders/widgets/library_folder_tile.dart` (folder card row + kebab /
+  long-press → folder action sheet)
+- `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart` (Rename / Move /
+  Import flashcards / Delete action sheet)
+- `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart` (move destination picker)
+- `lib/presentation/shared/dialogs/mx_bottom_sheet.dart` (modal sheet host),
+  `lib/presentation/shared/dialogs/mx_confirm_dialog.dart` (delete confirm)
+- `lib/domain/usecases/folder/{rename_folder,move_folder,delete_folder,get_folder_move_targets}_usecase.dart`
+- `lib/presentation/features/folders/widgets/library_sections.dart` (`LibraryDueSummaryCard`,
+  `LibraryFolderCountHeader`, `LibraryEmptyStateSection`, `LibrarySearchNoResultsSection`,
+  `LibraryErrorSection`)
 - `lib/presentation/features/folders/widgets/library_search_field.dart` (inline scope-local search)
 - `lib/presentation/features/folders/widgets/library_skeleton.dart` (`LibrarySkeleton`, Prompt 49)
 - `lib/presentation/features/folders/routes/folder_routes.dart` (`libraryBranchRoutes`)
@@ -298,4 +404,5 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 - `docs/wireframes/06-flashcard-list.md` — deck content
 - `docs/wireframes/11-library-search.md` — search target
 - `docs/wireframes/24-shared-dialogs.md` §folder-create, §delete-confirm
-- `docs/wireframes/25-shared-bottom-sheets.md` §library-fab, §deck-create, §item-context, §folder-picker
+- `docs/wireframes/25-shared-bottom-sheets.md` §library-fab, §deck-create, §item-context,
+  §folder-picker

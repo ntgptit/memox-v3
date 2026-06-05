@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-
 import 'package:memox/app/router/route_paths.dart';
 
 /// Top-level GoRouter redirect rules.

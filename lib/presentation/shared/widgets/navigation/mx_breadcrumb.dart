@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
@@ -33,14 +32,16 @@ class MxBreadcrumb extends StatelessWidget {
       final bool isLast = i == segments.length - 1;
       final MxBreadcrumbSegment segment = segments[i];
       if (i > 0) {
-        children.add(Padding(
-          padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
-          child: Icon(
-            Icons.chevron_right,
-            size: SizeTokens.iconXs,
-            color: scheme.onSurfaceVariant,
+        children.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
+            child: Icon(
+              Icons.chevron_right,
+              size: SizeTokens.iconXs,
+              color: scheme.onSurfaceVariant,
+            ),
           ),
-        ));
+        );
       }
       final TextStyle style = (text.labelLarge ?? const TextStyle()).copyWith(
         color: isLast ? scheme.onSurface : scheme.onSurfaceVariant,

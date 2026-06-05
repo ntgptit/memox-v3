@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
@@ -28,12 +27,12 @@ class MxCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      clipBehavior: clip,
-      child: MxTappable(
-        onTap: onTap,
-        onLongPress: onLongPress,
-        borderRadius: RadiusTokens.brLg,
-        child: Padding(padding: padding, child: child),
-      ),
-    );
+    clipBehavior: clip,
+    child: MxTappable(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      borderRadius: RadiusTokens.brLg,
+      child: Padding(padding: padding, child: child),
+    ),
+  );
 }

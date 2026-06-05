@@ -5,7 +5,10 @@ status: contract
 
 # Engagement Use Cases Contract
 
-> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
+> Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
+> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
+> ordinary feature implementation. First run an approved dependency/API migration task, or use the
+> existing repository error/result pattern until that migration is approved.
 
 Daily goal, streak, reminder, recent decks, dashboard aggregate.
 
@@ -15,9 +18,11 @@ Daily goal, streak, reminder, recent decks, dashboard aggregate.
 Future<Either<Failure, DashboardState>> call();
 ```
 
-Aggregates: resumable session, streak, daily goal progress, today's due, recent decks (top 3), onboarding flag.
+Aggregates: resumable session, streak, daily goal progress, today's due, recent decks (top 3),
+onboarding flag.
 
-In practice, this is a coordinator that fires sub-use-cases in parallel via Riverpod providers. Use case form documented here as the conceptual unit.
+In practice, this is a coordinator that fires sub-use-cases in parallel via Riverpod providers. Use
+case form documented here as the conceptual unit.
 
 ## GetDailyGoalUseCase
 
@@ -35,7 +40,8 @@ Future<Either<Failure, Unit>> call({bool? enabled, int? target, bool? streakEnab
 
 **Rules:**
 
-- If `target` provided: assert 5 ≤ target ≤ 200 AND target % 5 == 0. Else `ValidationFailure(code: outOfRange)`.
+- If `target` provided: assert 5 ≤ target ≤ 200 AND target % 5 == 0. Else
+  `ValidationFailure(code: outOfRange)`.
 - Persist to SharedPreferences.
 - Side effect: if `enabled` toggled off → freeze streak (do NOT reset).
 
@@ -51,8 +57,9 @@ Future<StreakInfo> call();
 
 - READ `lastGoalMetDate`, `currentStreak`, `longestStreak` from SharedPreferences.
 - If `lastGoalMetDate < today - 1 day` AND `goalEnabled` AND `currentStreak > 0`:
-  - Detect broken streak. Return `StreakInfo { currentStreak: 0, brokenStreakInfo: { previousStreak: N, brokenDate } }`.
-  - Side effect: update SharedPreferences (reset currentStreak to 0). One-time banner shown by UI.
+    - Detect broken streak. Return
+      `StreakInfo { currentStreak: 0, brokenStreakInfo: { previousStreak: N, brokenDate } }`.
+    - Side effect: update SharedPreferences (reset currentStreak to 0). One-time banner shown by UI.
 - Else return current streak as-is.
 
 ## RecordGoalProgressUseCase
@@ -66,7 +73,8 @@ Called by `FinalizeSessionUseCase` and any other point where attempts complete.
 **Rules:**
 
 - If `cardsAnsweredToday >= dailyGoal` AND today != `lastGoalMetDate`:
-  - Increment `currentStreak`. Update `lastGoalMetDate = today`. Update `longestStreak = max(longest, current)`.
+    - Increment `currentStreak`. Update `lastGoalMetDate = today`. Update
+      `longestStreak = max(longest, current)`.
 
 **Errors:** `StorageFailure`.
 
@@ -118,11 +126,18 @@ Set SharedPreferences `firstLaunchCompletedAt = now`.
 
 ## Related
 
-**Base contracts:** `docs/contracts/error-contract.md` (Failure types), `docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
+**Base contracts:** `docs/contracts/error-contract.md` (Failure types),
+`docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
 
-**Repositories used:** `docs/contracts/repository-contracts/study-repository.md` (read attempts for goal progress), `docs/contracts/repository-contracts/deck-repository.md` (recent decks). Engagement preferences live in SharedPreferences (not a Drift repository); see `docs/database/storage-boundaries.md`.
+**Repositories used:** `docs/contracts/repository-contracts/study-repository.md` (read attempts for
+goal progress), `docs/contracts/repository-contracts/deck-repository.md` (recent decks). Engagement
+preferences live in SharedPreferences (not a Drift repository); see
+`docs/database/storage-boundaries.md`.
 
 **Business spec:** `docs/business/engagement/dashboard-engagement.md`
-**Wireframes:** `docs/wireframes/01-dashboard.md`, `docs/wireframes/20-settings-learning.md`, `docs/wireframes/18-study-result.md`
+**Wireframes:** `docs/wireframes/01-dashboard.md`, `docs/wireframes/20-settings-learning.md`,
+`docs/wireframes/18-study-result.md`
 **Decision table:** rows under "Dashboard engagement"
-**Code paths:** `lib/domain/usecases/engagement/**`, `lib/data/datasources/local/preferences/engagement_preferences.dart`, `lib/core/notifications/reminder_scheduler.dart`
+**Code paths:** `lib/domain/usecases/engagement/**`,
+`lib/data/datasources/local/preferences/engagement_preferences.dart`,
+`lib/core/notifications/reminder_scheduler.dart`

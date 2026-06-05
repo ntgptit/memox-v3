@@ -30,11 +30,11 @@ Important fields:
 
 See `docs/business/glossary.md` for definitions.
 
-| Mode | Meaning | Allowed children |
-| --- | --- | --- |
-| `unlocked` | Empty or not locked | Subfolder or deck |
-| `subfolders` | Locked to subfolders | Only subfolders |
-| `decks` | Locked to decks | Only decks |
+| Mode         | Meaning              | Allowed children  |
+|--------------|----------------------|-------------------|
+| `unlocked`   | Empty or not locked  | Subfolder or deck |
+| `subfolders` | Locked to subfolders | Only subfolders   |
+| `decks`      | Locked to decks      | Only decks        |
 
 ## Content mode transitions
 
@@ -60,7 +60,9 @@ stateDiagram-v2
 - Creating deck locks parent to `decks`.
 - Folder with `subfolders` cannot create deck.
 - Folder with `decks` cannot create subfolder.
-- Lock-mode rejection is typed: deck-locked parents use `folder_contains_decks`, subfolder-locked parents use `folder_contains_subfolders`. Folder Detail maps these to localized snackbar copy and must not show the generic unexpected-error message for this case.
+- Lock-mode rejection is typed: deck-locked parents use `folder_contains_decks`, subfolder-locked
+  parents use `folder_contains_subfolders`. Folder Detail maps these to localized snackbar copy and
+  must not show the generic unexpected-error message for this case.
 - Moving folder must not create cycle.
 - Deleting last child returns folder to `unlocked`.
 - Deleting folder deletes nested content according to persistence rules.
@@ -85,7 +87,8 @@ Folder list/detail should support:
 
 ## Agent rule
 
-Do not enforce folder content mode only in UI. The rule must be protected by use case/domain/data flow.
+Do not enforce folder content mode only in UI. The rule must be protected by use case/domain/data
+flow.
 
 ## Related
 
@@ -98,15 +101,18 @@ Do not enforce folder content mode only in UI. The rule must be protected by use
 
 **Schema:**
 
-- `docs/database/schema-contract.md` → `folders` table (`id`, `parent_id`, `name`, `content_mode`, `sort_order`, timestamps)
+- `docs/database/schema-contract.md` → `folders` table (`id`, `parent_id`, `name`, `content_mode`,
+  `sort_order`, timestamps)
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows under "Folder management" (folder mode lock, move cycle prevention, delete cascade)
+- `docs/decision-tables/memox-core-decision-table.md` rows under "Folder management" (folder mode
+  lock, move cycle prevention, delete cascade)
 
 **Glossary terms:**
 
-- `docs/business/glossary.md` → `content_mode`, `unlocked`, `subfolders`, `decks` modes; folder hierarchy
+- `docs/business/glossary.md` → `content_mode`, `unlocked`, `subfolders`, `decks` modes; folder
+  hierarchy
 
 **Related business specs:**
 

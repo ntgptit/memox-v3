@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/component_themes/component_themes.dart';
 import 'package:memox/core/theme/extensions/custom_colors.dart';
 import 'package:memox/core/theme/extensions/custom_text_styles.dart';

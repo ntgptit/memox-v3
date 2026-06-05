@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/utils/string_utils.dart';
 
 /// Single-field name dialog (create folder / rename), returning the trimmed
@@ -16,15 +15,15 @@ Future<String?> showMxNameDialog(
   required String cancelLabel,
   String initialValue = '',
 }) => showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => _MxNameDialog(
-      title: title,
-      fieldLabel: fieldLabel,
-      confirmLabel: confirmLabel,
-      cancelLabel: cancelLabel,
-      initialValue: initialValue,
-    ),
-  );
+  context: context,
+  builder: (BuildContext context) => _MxNameDialog(
+    title: title,
+    fieldLabel: fieldLabel,
+    confirmLabel: confirmLabel,
+    cancelLabel: cancelLabel,
+    initialValue: initialValue,
+  ),
+);
 
 class _MxNameDialog extends StatefulWidget {
   const _MxNameDialog({
@@ -46,8 +45,9 @@ class _MxNameDialog extends StatefulWidget {
 }
 
 class _MxNameDialogState extends State<_MxNameDialog> {
-  late final TextEditingController _controller =
-      TextEditingController(text: widget.initialValue);
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.initialValue,
+  );
 
   @override
   void dispose() {
@@ -65,30 +65,29 @@ class _MxNameDialogState extends State<_MxNameDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-      title: Text(widget.title),
-      content: TextField(
-        controller: _controller,
-        autofocus: true,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(labelText: widget.fieldLabel),
-        onSubmitted: (_) => _submit(),
+    title: Text(widget.title),
+    content: TextField(
+      controller: _controller,
+      autofocus: true,
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(labelText: widget.fieldLabel),
+      onSubmitted: (_) => _submit(),
+    ),
+    actions: <Widget>[
+      TextButton(
+        onPressed: () => Navigator.of(context).pop(),
+        child: Text(widget.cancelLabel),
       ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(widget.cancelLabel),
-        ),
-        ValueListenableBuilder<TextEditingValue>(
-          valueListenable: _controller,
-          builder: (BuildContext context, TextEditingValue value, _) {
-            final bool canSubmit =
-                StringUtils.trimmed(value.text).isNotEmpty;
-            return FilledButton(
-              onPressed: canSubmit ? _submit : null,
-              child: Text(widget.confirmLabel),
-            );
-          },
-        ),
-      ],
-    );
+      ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _controller,
+        builder: (BuildContext context, TextEditingValue value, _) {
+          final bool canSubmit = StringUtils.trimmed(value.text).isNotEmpty;
+          return FilledButton(
+            onPressed: canSubmit ? _submit : null,
+            child: Text(widget.confirmLabel),
+          );
+        },
+      ),
+    ],
+  );
 }

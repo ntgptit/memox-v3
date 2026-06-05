@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 
 /// Round icon button with two densities.
@@ -35,13 +34,13 @@ class MxIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => IconButton(
-      onPressed: onPressed,
-      tooltip: tooltip,
-      icon: Icon(icon),
-      iconSize: size.glyph,
-      color: color,
-      visualDensity: VisualDensity.compact,
-      constraints: BoxConstraints.tightFor(width: size.box, height: size.box),
-      padding: EdgeInsets.zero,
-    );
+    onPressed: onPressed,
+    tooltip: tooltip,
+    icon: Icon(icon),
+    iconSize: size.glyph,
+    color: color,
+    visualDensity: VisualDensity.compact,
+    constraints: BoxConstraints.tightFor(width: size.box, height: size.box),
+    padding: EdgeInsets.zero,
+  );
 }

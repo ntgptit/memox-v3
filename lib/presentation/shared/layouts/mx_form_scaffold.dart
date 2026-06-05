@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -23,21 +22,21 @@ class MxFormScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: appBar,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
-                child: MxContentShell(child: body),
-              ),
+    appBar: appBar,
+    body: SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
+              child: MxContentShell(child: body),
             ),
-            _BottomBar(child: bottomAction),
-          ],
-        ),
+          ),
+          _BottomBar(child: bottomAction),
+        ],
       ),
-    );
+    ),
+  );
 }
 
 class _BottomBar extends StatelessWidget {
