@@ -47,6 +47,7 @@ class LibraryFolderTile extends StatelessWidget {
                 MxText(
                   item.folder.name,
                   role: MxTextRole.titleSmall,
+                  fontWeight: TypographyTokens.bold,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
