@@ -124,10 +124,12 @@ abstract final class MxComponentThemes {
         ),
       );
 
+  // Primary-filled per the mock (`New folder` pill) — a single prominent CTA
+  // that stands out on both light and dark surfaces.
   static FloatingActionButtonThemeData fab(ColorScheme scheme) =>
       FloatingActionButtonThemeData(
-        backgroundColor: scheme.primaryContainer,
-        foregroundColor: scheme.onPrimaryContainer,
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
         elevation: ElevationTokens.level2,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(RadiusTokens.xxl)),

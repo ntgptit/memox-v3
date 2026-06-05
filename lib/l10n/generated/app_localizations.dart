@@ -2571,7 +2571,7 @@ abstract class AppLocalizations {
   /// No description provided for @libraryOverflowTooltip.
   ///
   /// In en, this message translates to:
-  /// **'Folder options'**
+  /// **'Folder actions'**
   String get libraryOverflowTooltip;
 
   /// No description provided for @libraryFiltersTooltip.

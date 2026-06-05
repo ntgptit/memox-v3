@@ -46,6 +46,13 @@ class LibraryOverviewBody extends StatelessWidget {
           LibraryFolderTile(
             item: item,
             onTap: () => context.pushFolderDetail(item.folder.id),
+            // Deferred (Future): the folder action sheet
+            // (Edit / Move / Import flashcards / Delete) per
+            // `docs/wireframes/02-library.md` §overflow sheet needs the folder
+            // mutation use cases, which do not exist yet. Until then the kebab
+            // renders disabled — no unsupported action is exposed and no
+            // behavior is faked.
+            onShowActions: null,
           ),
           const SizedBox(height: SpacingTokens.sm),
         ],

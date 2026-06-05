@@ -1696,5 +1696,6 @@
   "libraryFolderCardsCount": "{count, plural, =0{Chưa có thẻ} other{{count} thẻ}}",
   "@libraryFolderCardsCount": { "placeholders": { "count": { "type": "int" } } },
   "libraryFolderDueCount": "{count} cần ôn",
-  "@libraryFolderDueCount": { "placeholders": { "count": { "type": "int" } } }
+  "@libraryFolderDueCount": { "placeholders": { "count": { "type": "int" } } },
+  "libraryOverflowTooltip": "Tùy chọn thư mục"
 }

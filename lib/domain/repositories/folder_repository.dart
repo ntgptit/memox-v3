@@ -1,7 +1,11 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/target_language.dart';
 
 /// Folder data access contract (`docs/contracts/repository-contracts/folder-repository.md`).
 ///
@@ -26,4 +30,37 @@ abstract interface class FolderRepository {
   /// a clash returns `ValidationFailure(code: duplicate)`. [name] is assumed
   /// already trimmed by the use case.
   Future<Result<Folder>> createRootFolder({required String name});
+
+  /// Streams a folder's detail: the folder, its breadcrumb path, and its direct
+  /// children (subfolders **or** decks per `content_mode`), each with counts.
+  /// A missing/deleted folder yields `NotFoundFailure`. [searchTerm] filters
+  /// the direct children by name (`docs/wireframes/05-folder-detail.md`).
+  Stream<Result<FolderDetail>> watchFolderDetail(
+    String folderId, {
+    String? searchTerm,
+    ContentSortMode sort,
+  });
+
+  /// Creates a subfolder under [parentId] in one transaction: inserts the child
+  /// (`content_mode = unlocked`, next `sort_order`) and locks the parent to
+  /// `subfolders` if it was `unlocked`. [name] is assumed trimmed.
+  ///
+  /// Errors: `NotFoundFailure` (parent missing), `UnsupportedActionFailure`
+  /// (parent locked to decks), `ValidationFailure(duplicate)`, `StorageFailure`.
+  Future<Result<Folder>> createSubfolder({
+    required FolderId parentId,
+    required String name,
+  });
+
+  /// Creates a deck under [parentFolderId] in one transaction: inserts the deck
+  /// and locks the parent to `decks` if it was `unlocked`. [name] is assumed
+  /// trimmed.
+  ///
+  /// Errors: `NotFoundFailure`, `UnsupportedActionFailure` (parent locked to
+  /// subfolders), `ValidationFailure(duplicate)`, `StorageFailure`.
+  Future<Result<Deck>> createDeck({
+    required FolderId parentFolderId,
+    required String name,
+    required TargetLanguage targetLanguage,
+  });
 }

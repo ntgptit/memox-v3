@@ -117,8 +117,8 @@ Mandatory minimums:
   dashboard/library/settings cards use dense card actions.
 - Frozen mobile density: card/study actions use `40dp` compact visual height;
   medium `48dp` stays for form/dialog/bottom action contexts; regular cards use
-  `12dp` radius and `12dp` padding; compact icon buttons are `36dp` with a
-  `20dp` icon.
+  the design-system card surface — `16dp` radius (`lg`) and `16dp` padding
+  (`--memox-space-card`); compact icon buttons are `36dp` with a `20dp` icon.
 - This density freeze does not alter business scope: Library root contains
   folders only, root-level decks remain Rejected / Out of Scope, and nullable
   deck parent migration remains Rejected / Not Applicable.

@@ -1611,7 +1611,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong while loading your folders.';
 
   @override
-  String get libraryOverflowTooltip => 'Folder options';
+  String get libraryOverflowTooltip => 'Folder actions';
 
   @override
   String get libraryFiltersTooltip => 'Filters';

@@ -2,7 +2,10 @@ import 'package:memox/app/di/database_providers.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
+import 'package:memox/domain/usecases/deck/create_deck_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
+import 'package:memox/domain/usecases/folder/create_subfolder_usecase.dart';
+import 'package:memox/domain/usecases/folder/watch_folder_detail_usecase.dart';
 import 'package:memox/domain/usecases/folder/watch_library_overview_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -27,3 +30,15 @@ WatchLibraryOverviewUseCase watchLibraryOverviewUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 CreateRootFolderUseCase createRootFolderUseCase(Ref ref) =>
     CreateRootFolderUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+WatchFolderDetailUseCase watchFolderDetailUseCase(Ref ref) =>
+    WatchFolderDetailUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+CreateSubfolderUseCase createSubfolderUseCase(Ref ref) =>
+    CreateSubfolderUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+CreateDeckUseCase createDeckUseCase(Ref ref) =>
+    CreateDeckUseCase(ref.watch(folderRepositoryProvider));

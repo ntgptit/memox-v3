@@ -1696,5 +1696,6 @@
   "libraryFolderCardsCount": "{count, plural, =0{No cards} =1{1 card} other{{count} cards}}",
   "@libraryFolderCardsCount": { "placeholders": { "count": { "type": "int" } } },
   "libraryFolderDueCount": "{count} due",
-  "@libraryFolderDueCount": { "placeholders": { "count": { "type": "int" } } }
+  "@libraryFolderDueCount": { "placeholders": { "count": { "type": "int" } } },
+  "libraryOverflowTooltip": "Folder actions"
 }

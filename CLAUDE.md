@@ -181,6 +181,79 @@ This convention applies to **backtick references** in markdown body text and tab
 10. Chạy verification theo `docs/checklist/implementation-checklist.md`.
 11. Báo cáo theo format trong checklist, **bao gồm section "Docs updated"** liệt kê file docs đã sửa và lý do, section `Guard status`, và lý do nếu bỏ qua command nào.
 
+## UI Mock Design Parity
+
+When implementing or modifying UI screens, the mock design is a contract, not a loose inspiration.
+
+Before coding any UI screen:
+
+1. Identify the exact target mock/design reference.
+2. Identify the exact target screen/route/component.
+3. Create a short mapping table before implementation:
+
+   * Mock element
+   * Existing code/component
+   * Implementation plan
+   * Scope status: Current / Future / Rejected / Unknown
+4. Do not start coding until every visible mock element is mapped or explicitly marked out of scope.
+
+Implementation rules:
+
+* Match layout, spacing, hierarchy, density, typography, colors, icons, states, and component behavior as closely as the current design system allows.
+* Use existing design tokens and shared components first.
+* Do not hardcode raw colors, spacing, radius, or typography inside feature widgets unless the design system explicitly allows it.
+* Do not invent unsupported behavior just to visually match the mock.
+* Do not silently skip visible mock elements.
+* Do not replace a visible mock element with a different UI pattern unless there is a documented reason.
+* Do not expose Future/Rejected features from docs just because they appear in an old mock.
+* If the mock and documentation conflict, stop and document the conflict instead of guessing.
+
+Required UI parity checklist:
+Before finishing a UI task, verify:
+
+* Header/app bar matches the mock.
+* Search/filter/sort controls match approved scope.
+* Cards/rows match mock structure, spacing, icon placement, badges, and trailing actions.
+* Empty/loading/error/search-no-results states remain valid.
+* Bottom navigation matches mock density and selected state.
+* FAB/button style, position, label, and prominence match the mock.
+* Light and dark mode remain readable and visually consistent.
+* No unsupported actions were introduced.
+* No existing behavior/regression was broken.
+
+Visual drift policy:
+
+* A screen is not complete when it only "works".
+* A screen is complete only when it passes both behavior and visual parity checks.
+* Any remaining visual gap must be listed explicitly with one of these reasons:
+
+  * Missing data in current read model
+  * Feature marked Future
+  * Feature marked Rejected
+  * Design token/component not available yet
+  * Mock/documentation conflict
+
+Testing requirements:
+For UI changes, add or update widget tests for:
+
+* Main loaded state
+* Important row/card actions
+* Empty state
+* Loading state
+* Error state
+* Search/no-results state when applicable
+* Navigation behavior when applicable
+
+Expected final response after implementing a UI task:
+
+* Files changed
+* Mock elements mapped
+* Visual gaps fixed
+* Remaining visual gaps and reasons
+* Behavior intentionally unchanged
+* `flutter analyze` result
+* `flutter test` result
+
 ## Stack reference
 
 - Flutter, Dart 3

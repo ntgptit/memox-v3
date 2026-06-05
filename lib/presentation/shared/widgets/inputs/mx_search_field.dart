@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -39,15 +40,26 @@ class MxSearchField extends StatelessWidget {
           controller: controller,
           onChanged: onChanged,
           textInputAction: TextInputAction.search,
+          style: context.textTheme.bodyMedium,
           decoration: InputDecoration(
             isDense: true,
             filled: true,
             fillColor: scheme.surfaceContainer,
             hintText: hintText,
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: SpacingTokens.sm,
+            hintStyle: context.textTheme.bodyMedium?.copyWith(
+              color: scheme.onSurfaceVariant.withValues(
+                alpha: OpacityTokens.hint,
+              ),
             ),
-            prefixIcon: const Icon(Icons.search, size: SizeTokens.iconSm),
+            constraints: const BoxConstraints(minHeight: SizeTokens.button),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: SpacingTokens.md,
+            ),
+            prefixIcon: Icon(
+              Icons.search,
+              size: SizeTokens.iconSm,
+              color: scheme.onSurfaceVariant,
+            ),
             suffixIcon: hasText
                 ? IconButton(
                     icon: const Icon(Icons.close),

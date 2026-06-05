@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:memox/core/theme/extensions/theme_context.dart';
-import 'package:memox/core/theme/tokens/opacity_tokens.dart';
-import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
 /// True-empty library (no folders at all): create-folder CTA.
@@ -87,34 +86,19 @@ class LibraryDueSummaryCard extends StatelessWidget {
   final int dueToday;
 
   @override
-  Widget build(BuildContext context) {
-    final ColorScheme scheme = context.colorScheme;
-    return MxCard(
+  Widget build(BuildContext context) => MxCard(
       child: Row(
         children: <Widget>[
-          Container(
-            width: SizeTokens.button,
-            height: SizeTokens.button,
-            decoration: BoxDecoration(
-              color: scheme.primary.withValues(alpha: OpacityTokens.hover),
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.bolt_outlined,
-              color: scheme.primary,
-              size: SizeTokens.iconSm,
-            ),
-          ),
+          const MxIconTile(icon: Icons.bolt_rounded),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
             child: MxText(
               AppLocalizations.of(context).libraryDueSummaryTitle(dueToday),
-              role: MxTextRole.titleSmall,
+              role: MxTextRole.titleMedium,
+              fontWeight: TypographyTokens.bold,
             ),
           ),
         ],
       ),
     );
-  }
 }
