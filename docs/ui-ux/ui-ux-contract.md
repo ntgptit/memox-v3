@@ -59,6 +59,28 @@ Preferred primitives:
 - `MxPrimaryButton` (low-level primitive)
 - `MxSecondaryButton` (low-level primitive)
 
+The full kit (built from the "0 · Foundations · Shared widgets" handoff in
+`docs/system-design/MemoX Design System/ui_kits/mobile/index.html`) lives under
+`lib/presentation/shared/**` and is re-exported from the barrel
+`lib/presentation/shared/mx_widgets.dart`. Beyond the primitives above it also
+provides, by handoff section:
+
+- Chrome/nav: `MxIconButton`, `MxBreadcrumb`, `MxStudyTopBar`.
+- Surfaces: `MxIconTile`, `MxSectionHeader`, `MxSettingsTile`, `MxAvatar`,
+  `MxListTile`.
+- Status & data viz: `MxStatusBadge` (+ `MxCardStatus`, `masteryColor`),
+  `MxMasteryRing`, `MxLinearProgress`, `MxStatDisplay`, `MxStreakChip`,
+  `MxBarChart`.
+- Study modes: `MxFlashcard`, `MxRatingBar`, `MxSelfAssessment`,
+  `MxChoiceOption`, `MxMatchTile`.
+- Feedback/overlays: `MxOfflineBanner`, `MxCallout`, `MxSkeleton`.
+
+Material widgets already styled by `MxComponentThemes` (FilledButton, Card,
+Chip, TextField, SearchBar, Switch, Slider, SegmentedButton, Dialog,
+BottomSheet, SnackBar, NavigationBar, AppBar, Divider, LinearProgressIndicator)
+are used directly — they are intentionally not re-wrapped. `MxRetainedAsyncState`
+is still pending (state layer not yet built).
+
 ## Button and action density rule
 
 Action density is governed by `docs/ui-ux/action-hierarchy-contract.md`. Read it
@@ -196,5 +218,5 @@ When introducing a new shared widget, name it `Mx<Name>` and place in `lib/prese
 **Source files to inspect:**
 
 - `lib/core/theme/**`
-- `lib/core/widgets/**` (Mx* shared widgets)
+- `lib/presentation/shared/**` (Mx* shared widgets)
 - `lib/l10n/**` (ARB sources)

@@ -226,6 +226,6 @@ See `docs/testing/test-strategy.md`.
 
 - `lib/core/error/failure.dart` (sealed Failure base)
 - `lib/core/error/validation_messages.dart` (mapping)
-- `lib/core/widgets/error/mx_error_state.dart`
-- `lib/core/widgets/error/mx_validation_field.dart`
+- `lib/presentation/shared/feedback/mx_error_state.dart`
+- `lib/presentation/shared/widgets/mx_validation_field.dart`
 - `lib/l10n/app_en.arb` (error_* keys)
