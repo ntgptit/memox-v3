@@ -28,6 +28,12 @@ Screen-level visual contract: `docs/design/screens/library-overview.visual-contr
 
 **Doc drift correction (2026-06-05):** current code passes `onShowActions: null` from `LibraryOverviewBody` to `LibraryFolderTile`, so the visible kebab is Current but the folder action sheet is **Future / deferred**. Do not report the overflow sheet as Current until it is implemented and tested.
 
+**Overflow sheet decision (2026-06-05, Prompt 49C — 6-state parity review):** the approved folder action sheet (Edit / Move / Import flashcards / Delete) stays **Future / deferred** because the required folder mutation use cases do **not** exist yet — `lib/app/di/folder_providers.dart` wires only `WatchLibraryOverview`, `CreateRootFolder`, `WatchFolderDetail`, `CreateSubfolder`, and `CreateDeck`. There is no rename/edit, move, delete, or import-flashcards folder use case, and adding domain/data APIs was out of scope for this presentation-only parity task. Therefore:
+
+- Both the kebab (`onPressed`) and the row long-press (`onLongPress`) are wired to `onShowActions`, which is intentionally `null` → the affordance renders **disabled**. No unsupported/fake action is exposed.
+- This disabled behavior is now asserted by widget tests (`test/presentation/features/folders/library_overview_test.dart`): the kebab `IconButton.onPressed` is `null` and a long-press opens no bottom sheet.
+- Promote to Current only together with the folder action sheet implementation, its use cases, l10n, docs, and tests. The mock's "Study due cards" / "Archive folder" / root "New deck" / root "Import" remain out of scope.
+
 **Verified Current (behaviour + tests):**
 
 - Route `/library` opens `LibraryOverviewView` (also `initialLocation`). Folder row → `pushFolderDetail` → `/library/folder/:id`. No `/library/search` route exists; the always-visible inline search field filters scope-locally, it does not navigate.

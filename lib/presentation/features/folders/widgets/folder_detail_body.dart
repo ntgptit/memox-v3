@@ -84,8 +84,8 @@ class FolderDetailBody extends StatelessWidget {
               onTap: () => context.pushFolderDetail(item.folder.id),
             ),
             const SizedBox(height: SpacingTokens.sm),
-          ]
-        else
+          ],
+        if (!isSubfolderMode)
           for (final DeckWithCount item in detail.decks) ...<Widget>[
             FolderDeckTile(
               item: item,
