@@ -93,7 +93,13 @@ default and whether an explicit `fullWidth:` override is honored.
 - `docs/ui-ux/ui-ux-contract.md` §Button and action density rule
 - `docs/system-design/MemoX Design System/README.md` §Components
 - `docs/agent/agent-task-template.md` §UI Density Gate
-- Source: `lib/presentation/shared/widgets/mx_action_button.dart`,
-  `lib/presentation/shared/widgets/mx_card_actions.dart`,
-  `lib/presentation/shared/widgets/mx_primary_button.dart`,
-  `lib/core/theme/responsive/app_layout.dart`
+- Source: `lib/presentation/shared/widgets/buttons/mx_action_button.dart`,
+  `lib/presentation/shared/widgets/buttons/mx_action_intent.dart` (the
+  intent → size + full-width resolution table),
+  `lib/presentation/shared/widgets/buttons/mx_card_actions.dart`,
+  `lib/presentation/shared/widgets/buttons/mx_primary_button.dart`,
+  `lib/presentation/shared/widgets/buttons/mx_secondary_button.dart`,
+  `lib/presentation/shared/widgets/buttons/mx_button_size.dart`. (Density is
+  carried by `MxButtonSize` heights + `MaterialTapTargetSize.padded`; the
+  planned `lib/core/theme/responsive/app_layout.dart` helper is not yet
+  present.)
