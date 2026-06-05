@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-05
 applies_to: Drift schema, all tables, migrations
 schema_version: 13 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
@@ -32,10 +32,7 @@ feature slices. When a new table/column ships, bump
 ## Source files to inspect
 
 - `lib/data/datasources/local/app_database.dart`
-- `lib/data/datasources/local/database_schema_support.dart`
 - `lib/data/datasources/local/tables/**`
-- `lib/data/datasources/local/migrations/**`
-- `lib/domain/entities/account_database_context.dart` (per-account DB file naming)
 
 ## Rules
 
@@ -72,7 +69,7 @@ This table describes the target persistence contract. Some entries are ahead of 
 | Area | Table |
 | --- | --- |
 | Folders | `folders` |
-| Decks | `decks`; `target_language` and nullable `folder_id` for root decks are Target / Migration Required per `docs/business/deck/deck-management.md` and `docs/database/migrations/nullable-deck-parent-migration.md` |
+| Decks | `decks`; `target_language` is Target / Migration Required per `docs/business/deck/deck-management.md`; nullable `folder_id` for root decks is Rejected / Not Applicable |
 | Flashcards | `flashcards` |
 | SRS progress | `flashcard_progress`; `buried_until` and `is_suspended` implemented in schema v10 (P0-2). `last_reset_at` remains Target / Migration Required per `docs/business/history/card-history.md` |
 | Tags | `flashcard_tags` |
@@ -106,7 +103,7 @@ The following schema changes are required to implement new specs. Each requires 
 
 ### V1 migration gate
 
-A pending column listed here does not automatically approve every dependent feature. Before coding, check `docs/checklist/v1-implementation-scope-2026-05-29.md` and `docs/checklist/screen-function-task-matrix.md`.
+A pending column listed here does not automatically approve every dependent feature. Before coding, check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and `docs/checklist/implementation-checklist.md`.
 
 - `flashcard_progress.buried_until` and `flashcard_progress.is_suspended` — ✅ implemented in schema v10 (P0-2 bury/suspend foundation), with index `idx_flashcard_progress_eligibility (is_suspended, buried_until, due_at)`.
 - `study_attempts.result = 'recovered'` — ✅ implemented in schema v13 for Fill hint-taint / Mark-correct grading. Schema v13 intentionally also repairs schema-12 databases that were created before the recovered CHECK migration was version-safe.
@@ -118,7 +115,7 @@ A pending column listed here does not automatically approve every dependent feat
 | Change | Source spec | Notes |
 | --- | --- | --- |
 | Add `decks.target_language TEXT NOT NULL DEFAULT 'korean'` | `docs/business/deck/deck-management.md` | Migration backfills existing rows to `'korean'`. |
-| Rejected / Not Applicable: change `decks.folder_id` from `TEXT NOT NULL` to `TEXT NULL` | `docs/database/migrations/nullable-deck-parent-migration.md`, `docs/business/deck/deck-management.md`, `docs/wireframes/02-library.md` | Superseded by product-owner decision. Do not make deck parent nullable; folder-owned deck invariant remains locked. |
+| Rejected / Not Applicable: change `decks.folder_id` from `TEXT NOT NULL` to `TEXT NULL` | `docs/business/deck/deck-management.md`, `docs/wireframes/02-library.md` | Superseded by product-owner decision. Do not make deck parent nullable; folder-owned deck invariant remains locked. |
 | ✅ DONE (v10) `flashcard_progress.buried_until INTEGER NULL` | `docs/business/study-actions/bury-suspend.md` | Default null. Shipped in schema v10. |
 | ✅ DONE (v10) `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0` | `docs/business/study-actions/bury-suspend.md` | Default false. Shipped in schema v10. |
 | Add `flashcard_progress.last_reset_at INTEGER NULL` | `docs/business/history/card-history.md` | Default null. Updated when user resets a card's progress. |

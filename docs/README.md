@@ -12,7 +12,7 @@ Read these in order:
 
 1. `CLAUDE.md` at project root.
 2. `AGENTS.md` at project root.
-3. Related business, wireframe, database, architecture, state, UI/UX and contract docs.
+3. Related business, wireframe, design, database, architecture, state, UI/UX and contract docs.
 4. Related source files.
 
 Do not implement from assumption when repo contracts already exist.
@@ -81,6 +81,7 @@ Important V1 decisions:
 | Migration | `docs/database/migration-contract.md` |
 | Architecture | `docs/architecture/clean-architecture-contract.md` |
 | UI/UX | `docs/ui-ux/ui-ux-contract.md` |
+| Mock design visual contracts | `docs/design/mock-design-index.md` |
 | System design / mock design | `docs/system-design/MemoX Design System/README.md` |
 | State management | `docs/state/state-management-contract.md` |
 | Decision table | `docs/decision-tables/memox-core-decision-table.md` |

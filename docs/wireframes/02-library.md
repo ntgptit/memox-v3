@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-05
 route: /library
 source_specs:
   - docs/business/folder/folder-management.md
@@ -9,11 +9,13 @@ source_specs:
 
 # 02 — Library
 
-## V1 verification status (2026-05-31, Prompt 18/18B; root-deck decision updated 2026-06-03, Prompt 43A; 6-state visual parity 2026-06-04, Prompt 49; loaded-state visual fix 2026-06-04, Prompt 49B)
+## V1 verification status (2026-05-31, Prompt 18/18B; root-deck decision updated 2026-06-03, Prompt 43A; 6-state visual parity 2026-06-04, Prompt 49; loaded-state visual fix 2026-06-04, Prompt 49B; mock mapping docs 2026-06-05)
 
 This screen is **partially Current**. The recursive folder counts (verified Prompt 14) plus the aspects below are verified by code and tests; the remainder is **Future** and intentionally not exposed in V1. Do NOT mark the whole screen Current. The §Layout / §Components / §Actions / §Sort options blocks below describe the **target** design; where they conflict with this section, this section is the current truth.
 
-**Prompt 49 scope (2026-06-04):** visual/layout parity for the **6 Library Overview states only** (loaded · loading · empty · error · search · overflow sheet) against `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` §"03 · Library overview". No schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local; Global Search and a `/library/search` screen remain **Future**; root-level decks remain **Rejected / Out of Scope**; the overflow sheet exposes only current approved folder actions (Edit / Move / Import flashcards / Delete). Card padding/radius and bottom-nav density remained a separate Design Token / Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026-06-05):** card surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`), applied in `MxCard`. Bottom-nav density is still open.
+Screen-level visual contract: `docs/design/screens/library-overview.visual-contract.md`.
+
+**Prompt 49 scope (2026-06-04):** visual/layout parity for the Library Overview mock states (loaded · loading · empty · error · search · overflow reference) against `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` §"03 · Library overview". No schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local; Global Search and a `/library/search` screen remain **Future**; root-level decks remain **Rejected / Out of Scope**. The mock's overflow sheet remains a visual reference until the folder action sheet is implemented; current V1 keeps only the visible row kebab affordance and does not expose unsupported actions. Card padding/radius and bottom-nav density remained a separate Design Token / Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026-06-05):** card surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`), applied in `MxCard`. Bottom-nav density is still open.
 
 **Prompt 49B scope (2026-06-04):** fixes the **loaded-state visual drift** left by Prompt 49 against the same mock §"03 · Library overview". No schema/SRS/repository/use-case change. Changes are presentation-only:
 
@@ -24,22 +26,24 @@ This screen is **partially Current**. The recursive folder counts (verified Prom
 - A **due summary card** (`{n} cards due today`) is rendered when `dueToday > 0` and hidden otherwise. It is **non-interactive**: Library state only knows the aggregate `dueToday`, so there is no subtitle (folder span / estimated minutes) and no study-launch navigation.
 - The FAB is now a labelled **`New folder` pill** wired to the existing create-folder flow. **New deck / Import are not exposed** from Library root.
 
+**Doc drift correction (2026-06-05):** current code passes `onShowActions: null` from `LibraryOverviewBody` to `LibraryFolderTile`, so the visible kebab is Current but the folder action sheet is **Future / deferred**. Do not report the overflow sheet as Current until it is implemented and tested.
+
 **Verified Current (behaviour + tests):**
 
 - Route `/library` opens `LibraryOverviewView` (also `initialLocation`). Folder row → `pushFolderDetail` → `/library/folder/:id`. No `/library/search` route exists; the always-visible inline search field filters scope-locally, it does not navigate.
 - Renders **top-level folders only**. Recursive subtree counts per folder (subfolders · decks · cards · due) are Current from Prompt 14 and isolated between sibling roots.
-- States (all 6 verified by widget tests, Prompt 49):
-  - **Loaded** — `LibraryFolderSliver` of `MxFolderTile` rows; no root-level deck card (`MxDeckCard` absent).
+- States:
+  - **Loaded** — `LibraryOverviewBody` list of `LibraryFolderTile` rows; no root-level deck card.
   - **Loading** — `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` (skeleton folder rows, `ValueKey('library_skeleton')`), not a full-screen spinner; no folder row is tappable while data is absent.
   - **Error** — `MxRetainedAsyncState.errorBuilder` → `MxErrorState` with localized `libraryLoadFailedTitle` / `libraryLoadFailedMessage`, `Icons.cloud_off_outlined`, Retry → `ref.invalidate(libraryOverviewQueryProvider)`; no raw exception text surfaced.
   - **True empty library** — `totalFolderCount == 0`, regardless of search term → `LibraryEmptyStateSection` "Create folder" CTA.
   - **Search no-results** — `folders.isEmpty && searchTerm` active **&& `totalFolderCount > 0`** → `LibrarySearchNoResultsSection`, `ValueKey('library_search_no_results')`, "Clear" CTA. Distinct from true empty (Prompt 18; classification corrected Prompt 18B — counts driven by `LibraryOverviewState.totalFolderCount` from `LibraryOverviewReadModel.totalFolderCount`).
-  - **Overflow sheet** — each folder row carries a visible kebab (`Icons.more_vert`, tooltip `libraryOverflowTooltip`) **and** long-press, both opening the folder action sheet.
+  - **Overflow affordance** — each folder row carries a visible kebab (`Icons.more_vert`, tooltip `libraryOverflowTooltip`); the action sheet itself is Future / deferred because no action handler is wired in current code.
 - Inline search (Prompt 49B: always visible below the title, no toggle): scope-local within Library. When a term is active the query broadens to match **any folder by name across the tree** (`listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to Global Search; does not mutate persisted `sort_order`.
 - Loaded section header: `{n} FOLDERS` overline (`libraryFolderCountLabel`, count only — no sort UI control).
 - Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle`), hidden otherwise. Non-interactive — no subtitle and no study-launch (state only carries the aggregate `dueToday`).
 - Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended, `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill both open `MxNameDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog; failures map to a localized error snackbar; success refreshes via `contentDataRevision`. No New deck / Import entry on Library root.
-- Folder row overflow (kebab tap or long-press) → folder actions sheet (Edit / Move / Import flashcards / Delete); Import hidden for subfolder-mode folders. The mock's "Study due cards" / "Archive folder" actions are **not** exposed (out of current scope).
+- Folder row overflow action sheet is **Future / deferred**. Current rows keep the kebab visual affordance, but no action sheet is exposed until folder action behavior is implemented. The mock's "Study due cards" / "Archive folder" actions remain **not exposed** (out of current scope).
 - Sort (`ContentSortMode`: manual/name/newest/lastStudied) is implemented and tested at the **repository + use-case** layer (`folder_repository_impl`, `content_repository_test`). The viewmodel exposes `setSortMode`. No sort **UI control** is rendered (the mock's sort pill remains Future).
 
 **Future / not exposed in V1:**
@@ -48,14 +52,15 @@ This screen is **partially Current**. The recursive folder counts (verified Prom
 - FAB action sheet (New folder / New deck / Import) — V1 FAB is a `New folder` pill that creates a folder directly; there is no New deck or Import entry on Library Overview. Deck creation/import remain owned by Folder Detail / Flashcard List / Deck Import.
 - Filter chips (All / Folders / Decks) — removed in Prompt 49B (the previous static, non-functional "All" chip is gone). A real filter/sort control behind the header sliders icon remains Future.
 - No sort **UI control** on Library Overview (no overflow sort menu / sort chip). Sort exists only in the data/use-case layer.
+- Folder action sheet from the `03f` mock overflow variant. Current code renders the kebab disabled when no action handler exists; promote this only with folder action sheet implementation, l10n, docs, and tests.
 - Drag-to-reorder of root items, pull-to-refresh, and grid/multi-column responsive layout.
 - Global Search screen / `/library/search` route (Global Search remains Future).
 
 **Prompt 42/42B superseded (2026-06-03, Prompt 43A):** Product ownership rejected
 root-level decks and nullable deck parent migration. Keep `decks.folder_id`
-non-null, keep deck APIs folder-bound, and keep Library root folders-only.
-`docs/database/migrations/nullable-deck-parent-migration.md` is retained as a
-rejected historical design note only.
+non-null, keep deck APIs folder-bound, and keep Library root folders-only. The
+rejected nullable-parent direction is recorded in
+`docs/database/schema-contract.md`.
 
 ## Purpose
 
@@ -270,11 +275,16 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 
 - `lib/presentation/features/folders/screens/library_overview_screen.dart`
 - `lib/presentation/features/folders/viewmodels/library_overview_viewmodel.dart` (`libraryOverviewQuery`, `LibraryToolbarState`, `LibraryOverviewActionController`)
-- `lib/presentation/features/folders/widgets/library_folder_list.dart` (folder rows + kebab overflow trigger), `library_app_bar.dart`, `library_empty_state_section.dart` (`LibraryEmptyStateSection`, `LibrarySearchNoResultsSection`), `library_skeleton.dart` (`LibrarySkeleton`, Prompt 49)
+- `lib/presentation/features/folders/widgets/library_overview_body.dart` (loaded/empty/search-no-results switch)
+- `lib/presentation/features/folders/widgets/library_folder_tile.dart` (folder card row + visible kebab affordance)
+- `lib/presentation/features/folders/widgets/library_sections.dart` (`LibraryDueSummaryCard`, `LibraryFolderCountHeader`, `LibraryEmptyStateSection`, `LibrarySearchNoResultsSection`, `LibraryErrorSection`)
+- `lib/presentation/features/folders/widgets/library_search_field.dart` (inline scope-local search)
+- `lib/presentation/features/folders/widgets/library_skeleton.dart` (`LibrarySkeleton`, Prompt 49)
 - `lib/presentation/features/folders/routes/folder_routes.dart` (`libraryBranchRoutes`)
 - `lib/domain/usecases/content_query_usecases.dart` → `WatchLibraryOverviewUseCase`
 - `lib/data/repositories/folder_repository_impl.dart` → `getLibraryOverview`
 - `lib/app/router/route_names.dart` → `RouteNames.library`
+- `docs/design/screens/library-overview.visual-contract.md` — mock-to-code visual mapping
 
 **Related wireframes:**
 

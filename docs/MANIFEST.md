@@ -38,7 +38,7 @@ project-root/
 8. `docs/contracts/error-contract.md` — Failure taxonomy target.
 9. `docs/contracts/types-catalog.md` — enums and value objects.
 10. `docs/contracts/code-style.md` — naming and structure.
-11. For any task: the matching row in `docs/checklist/screen-function-task-matrix.md` and the matching wireframe `docs/wireframes/NN-{screen}.md`.
+11. For any UI mock task: `docs/design/mock-design-index.md`, the matching visual contract under `docs/design/screens/`, and the matching wireframe `docs/wireframes/NN-{screen}.md`.
 
 ## Current vs Target documentation rule
 
@@ -105,6 +105,7 @@ Incorrect:
 | V1 scope gate | `docs/checklist/v1-implementation-scope-2026-05-29.md` |
 | Business behavior, edge cases | `docs/business/**` |
 | UI states, copy, layout | `docs/wireframes/**` |
+| Per-screen mock-to-code visual mapping | `docs/design/**` |
 | Use case signatures, preconditions, rules, errors | `docs/contracts/usecase-contracts/**` |
 | Tables touched per mutation, transaction span, index dependencies | `docs/contracts/repository-contracts/**` |
 | Failure type definitions | `docs/contracts/error-contract.md` |
@@ -127,6 +128,7 @@ docs/
 ├── README.md
 ├── business/            # business specs + index + glossary + overview
 ├── wireframes/          # 25 wireframes + index
+├── design/              # mock-to-code visual contracts and parity checklists
 ├── database/            # schema, migration, storage boundaries
 ├── architecture/        # Clean Architecture contract
 ├── state/               # state management contract

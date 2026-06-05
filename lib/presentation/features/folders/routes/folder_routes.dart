@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 
 /// Library-branch route registry, composed by `app_router.dart`
@@ -17,11 +18,8 @@ List<RouteBase> libraryBranchRoutes() => <RouteBase>[
       GoRoute(
         path: '${RoutePaths.folderSegment}/:${RoutePaths.idParam}',
         name: RouteNames.folderDetail,
-        builder: (_, GoRouterState state) => RoutePlaceholder(
-          routeName: RouteNames.folderDetail,
-          params: <String, String>{
-            RoutePaths.idParam: state.pathParameters[RoutePaths.idParam] ?? '',
-          },
+        builder: (_, GoRouterState state) => FolderDetailScreen(
+          folderId: state.pathParameters[RoutePaths.idParam] ?? '',
         ),
       ),
       GoRoute(

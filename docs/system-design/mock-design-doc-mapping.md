@@ -5,6 +5,7 @@ status: reference
 applies_to:
   - docs/system-design/MemoX Design System/ui_kits/mobile/index.html
   - docs/system-design/MemoX Design System/preview/*.html
+  - docs/design/**/*.md
   - docs/wireframes/*.md
   - docs/business/**/*.md
   - docs/contracts/**/*.md
@@ -27,11 +28,12 @@ The correct priority is:
 
 1. Business behavior source of truth: `docs/business/**`
 2. Flow, route, and visual-structure source of truth: `docs/wireframes/**`
-3. Architecture, state, use case, repository, and database contracts: `docs/architecture/**`, `docs/state/**`, `docs/contracts/**`, `docs/database/**`
-4. Visual design source of truth: `docs/system-design/MemoX Design System/README.md` and `docs/system-design/MemoX Design System/colors_and_type.css`
-5. Mock implementation reference: `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
-6. Component preview reference: `docs/system-design/MemoX Design System/preview/*.html`
-7. Uploaded screenshots: `docs/system-design/MemoX Design System/uploads/*`
+3. Per-screen mock-to-code visual contracts: `docs/design/**`
+4. Architecture, state, use case, repository, and database contracts: `docs/architecture/**`, `docs/state/**`, `docs/contracts/**`, `docs/database/**`
+5. Visual design source of truth: `docs/system-design/MemoX Design System/README.md` and `docs/system-design/MemoX Design System/colors_and_type.css`
+6. Mock implementation reference: `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
+7. Component preview reference: `docs/system-design/MemoX Design System/preview/*.html`
+8. Uploaded screenshots: `docs/system-design/MemoX Design System/uploads/*`
 
 The mock HTML must be used as a visual reference only. Do not copy inline styles, raw colors, hardcoded spacing, JSX structure, or temporary demo data into Flutter production code.
 
@@ -43,6 +45,7 @@ The mock HTML must be used as a visual reference only. Do not copy inline styles
 | Mobile mock notes | `docs/system-design/MemoX Design System/ui_kits/mobile/README.md` | Current README for the mobile kit. It defines screen order, visual-only scope, and Current / Partial / Future / Rejected / Visual-only target labels. |
 | Design foundation | `docs/system-design/MemoX Design System/README.md` | Brand, theme, component, and implementation guidance. |
 | Token CSS | `docs/system-design/MemoX Design System/colors_and_type.css` | Color, typography, spacing, radius, elevation, opacity, and motion tokens used by the HTML mock. |
+| Per-screen visual contracts | `docs/design/**` | Screen-level mock-element mapping, token/component rules, and visual parity checklist. |
 | Component previews | `docs/system-design/MemoX Design System/preview/*.html` | Visual references for reusable components and token groups. |
 | Uploaded references | `docs/system-design/MemoX Design System/uploads/*` | Raw screenshots/images used as source visual references. |
 | Wireframes | `docs/wireframes/*.md` | Main screen-level behavior and layout contracts. |
@@ -62,6 +65,7 @@ When implementation agents find a conflict, resolve it in this order:
 | DB/schema conflict | `docs/database/**` | Schema and migration contracts control what can be persisted. |
 | Use case/repository conflict | `docs/contracts/**` | Domain and data boundaries must not be bypassed. |
 | Visual token conflict | `docs/system-design/MemoX Design System/colors_and_type.css` and Flutter theme tokens | Production UI must use tokens, not raw mock values. |
+| Screen-level mock-element mapping conflict | `docs/design/screens/*.visual-contract.md` plus the matching wireframe | Visual contracts refine mock elements without overriding product scope. |
 | Layout shape conflict | Matching wireframe first, mock HTML second | Wireframe is the structural contract; mock refines visual feel. |
 | Copy/text conflict | `docs/ui-ux/l10n-copy-contract.md` | UI text must be localizable and not copied blindly from mock. |
 
@@ -70,15 +74,16 @@ When implementation agents find a conflict, resolve it in this order:
 For any screen implementation task, the agent must read these in order:
 
 1. This mapping document.
-2. The matching wireframe from `docs/wireframes/**`.
-3. The wireframe's `Implementation refs` section.
-4. The linked business specs.
-5. The linked use case and repository contracts.
-6. `docs/state/state-management-contract.md`.
-7. `docs/ui-ux/ui-ux-contract.md` and `docs/ui-ux/l10n-copy-contract.md`.
-8. `docs/system-design/MemoX Design System/README.md`.
-9. `docs/system-design/MemoX Design System/colors_and_type.css`.
-10. The matching screen variant in `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`.
+2. `docs/design/mock-design-index.md` and the matching `docs/design/screens/*.visual-contract.md` when present.
+3. The matching wireframe from `docs/wireframes/**`.
+4. The wireframe's `Implementation refs` section.
+5. The linked business specs.
+6. The linked use case and repository contracts.
+7. `docs/state/state-management-contract.md`.
+8. `docs/ui-ux/ui-ux-contract.md` and `docs/ui-ux/l10n-copy-contract.md`.
+9. `docs/system-design/MemoX Design System/README.md`.
+10. `docs/system-design/MemoX Design System/colors_and_type.css`.
+11. The matching screen variant in `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`.
 
 The agent must not start from the HTML mock alone.
 
@@ -88,7 +93,7 @@ The agent must not start from the HTML mock alone.
 | --- | --- | --- | --- | --- | --- |
 | Onboarding | `01a`-`01i` in `ui_kits/mobile/index.html` | `docs/wireframes/23-onboarding.md` | `docs/business/system/overview.md`, `docs/business/account-sync/account-sync.md`, `docs/business/deck/deck-management.md`, `docs/business/flashcard/flashcard-management.md` | `docs/contracts/usecase-contracts/account-sync.md`, `docs/state/state-management-contract.md` | Future / Visual-only target. V1 implements only owner-split zero-content guidance; do not add a route or feature folder from this mock. |
 | Dashboard | `02a`-`02h` | `docs/wireframes/01-dashboard.md` | `docs/business/engagement/dashboard-engagement.md`, `docs/business/resume/resume-session.md`, `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md` | `docs/contracts/usecase-contracts/engagement.md`, `docs/state/state-management-contract.md` | Partial. Current resume/scope/recent-deck pieces exist; streak/goal/engagement/onboarding states are Future / Visual-only target except the documented static placeholder. Prefer Dashboard naming over legacy `HomeScreen`. |
-| Library overview | `03a`-`03f` | `docs/wireframes/02-library.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md`, `docs/business/flashcard/flashcard-management.md` | `docs/contracts/usecase-contracts/folder.md`, `docs/contracts/repository-contracts/folder-repository.md` | Current for folders-only Library root. Root-level decks are Rejected / Out of Scope and must not be promoted from mock rows. |
+| Library overview | `03a`-`03f` | `docs/wireframes/02-library.md`, `docs/design/screens/library-overview.visual-contract.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md`, `docs/business/flashcard/flashcard-management.md` | `docs/contracts/usecase-contracts/folder.md`, `docs/contracts/repository-contracts/folder-repository.md` | Current for folders-only Library root. Root-level decks are Rejected / Out of Scope and must not be promoted from mock rows. The `03f` overflow sheet is Future/deferred until implemented; current code only keeps the visible kebab affordance. |
 | Folder detail | `04a`-`04h` | `docs/wireframes/05-folder-detail.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md` | `docs/contracts/usecase-contracts/folder.md`, `docs/contracts/repository-contracts/folder-repository.md` | Current for folder-owned decks. |
 | Library search | `05a`-`05e` | `docs/wireframes/11-library-search.md` | `docs/business/search/global-search.md` | `docs/contracts/usecase-contracts/search.md`, `docs/contracts/repository-contracts/*` | Full global/root search screen is Future Proposal; V1 uses inline/scope-local search in the owner screen. |
 | Flashcard list | `06a`-`06h` | `docs/wireframes/06-flashcard-list.md` | `docs/business/flashcard/flashcard-management.md`, `docs/business/deck/deck-management.md`, `docs/business/study-actions/bury-suspend.md` | `docs/contracts/usecase-contracts/flashcard.md`, `docs/contracts/repository-contracts/flashcard-repository.md` | Current for verified V1 deck-owned list scope. |
@@ -199,12 +204,12 @@ The agent must not start from the HTML mock alone.
 
 | Mock variant | Visual state | Wireframe | Required docs |
 | --- | --- | --- | --- |
-| `03a · Library overview (loaded)` | Loaded root/library overview | `docs/wireframes/02-library.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md` |
+| `03a · Library overview (loaded)` | Loaded root/library overview | `docs/wireframes/02-library.md`, `docs/design/screens/library-overview.visual-contract.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md` |
 | `03b · Library overview (loading)` | Loading library | `docs/wireframes/02-library.md` | `docs/state/state-management-contract.md` |
 | `03c · Library overview (empty)` | Empty library | `docs/wireframes/02-library.md`, `docs/wireframes/23-onboarding.md` | `docs/business/system/overview.md`, `docs/business/folder/folder-management.md` |
 | `03d · Library overview (error)` | Library load error | `docs/wireframes/02-library.md` | `docs/contracts/error-contract.md` |
 | `03e · Library overview (search)` | Inline library search state | `docs/wireframes/02-library.md`, `docs/wireframes/11-library-search.md` | `docs/business/search/global-search.md` |
-| `03f · Library overview (overflow)` | Overflow menu/action state | `docs/wireframes/02-library.md`, `docs/wireframes/25-shared-bottom-sheets.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md` |
+| `03f · Library overview (overflow)` | Visual overflow reference; action sheet is Future/deferred until implemented | `docs/wireframes/02-library.md`, `docs/design/screens/library-overview.visual-contract.md`, `docs/wireframes/25-shared-bottom-sheets.md` | `docs/business/folder/folder-management.md`, `docs/business/deck/deck-management.md` |
 
 ### 6.9 Folder detail variants
 
@@ -423,17 +428,19 @@ Rules:
 For each screen or screen group:
 
 1. Identify the mock variant IDs from this mapping.
-2. Open the matching wireframe.
-3. Read the wireframe `Implementation refs` section.
-4. Read the linked business docs.
-5. Read the linked contracts.
-6. Inspect `colors_and_type.css` only to understand visual token intent.
-7. Map mock visuals to existing Flutter theme/shared widgets.
-8. Implement states in the notifier/view model, not with local mock flags.
-9. Add or update tests using the decision table IDs where available.
-10. Run recursive review against:
+2. Open `docs/design/mock-design-index.md` and the matching visual contract under `docs/design/screens/` when present.
+3. Open the matching wireframe.
+4. Read the wireframe `Implementation refs` section.
+5. Read the linked business docs.
+6. Read the linked contracts.
+7. Inspect `colors_and_type.css` only to understand visual token intent.
+8. Map mock visuals to existing Flutter theme/shared widgets.
+9. Implement states in the notifier/view model, not with local mock flags.
+10. Add or update tests using the decision table IDs where available.
+11. Run recursive review against:
     - business docs,
     - wireframe,
+    - visual contract,
     - mock visual state,
     - design system token rules,
     - architecture contracts.
