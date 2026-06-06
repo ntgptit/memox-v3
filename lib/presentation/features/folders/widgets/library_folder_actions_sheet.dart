@@ -29,15 +29,15 @@ Future<LibraryFolderAction?> showLibraryFolderActions(
   required bool showImport,
 }) => showMxBottomSheet<LibraryFolderAction>(
   context,
-  builder: (BuildContext context) => _LibraryFolderActionsSheet(
+  builder: (BuildContext context) => _LibraryFolderActions(
     name: name,
     subtitle: subtitle,
     showImport: showImport,
   ),
 );
 
-class _LibraryFolderActionsSheet extends StatelessWidget {
-  const _LibraryFolderActionsSheet({
+class _LibraryFolderActions extends StatelessWidget {
+  const _LibraryFolderActions({
     required this.name,
     required this.subtitle,
     required this.showImport,

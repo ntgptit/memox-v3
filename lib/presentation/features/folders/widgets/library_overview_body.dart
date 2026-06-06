@@ -32,7 +32,7 @@ class LibraryOverviewBody extends StatelessWidget {
     if (model.folders.isEmpty) {
       // Distinguish a genuinely empty library from a search that matched none.
       if (isSearching && model.totalFolderCount > 0) {
-        return LibrarySearchNoResultsSection(onClear: onClearSearch);
+        return LibrarySearchNoResults(onClear: onClearSearch);
       }
       return LibraryEmptyStateSection(onCreateFolder: onCreateFolder);
     }
@@ -41,10 +41,10 @@ class LibraryOverviewBody extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
       children: <Widget>[
         if (model.dueToday > 0) ...<Widget>[
-          LibraryDueSummaryCard(dueToday: model.dueToday),
+          LibraryDueSummary(dueToday: model.dueToday),
           const SizedBox(height: SpacingTokens.lg),
         ],
-        LibraryFolderCountHeader(count: model.folders.length),
+        LibraryFolderCount(count: model.folders.length),
         const SizedBox(height: SpacingTokens.sm),
         for (final FolderWithCount item in model.folders) ...<Widget>[
           LibraryFolderTile(

@@ -11,8 +11,8 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart'
 /// Empty-deck state (`docs/wireframes/06-flashcard-list.md` §empty state): glyph,
 /// headline, hint, and the dual Add / Import CTAs. Shown when the deck holds no
 /// cards (`totalCount == 0`), regardless of any active search term.
-class FlashcardEmptyStateSection extends StatelessWidget {
-  const FlashcardEmptyStateSection({
+class FlashcardEmptyState extends StatelessWidget {
+  const FlashcardEmptyState({
     required this.onAddCard,
     required this.onImport,
     super.key,

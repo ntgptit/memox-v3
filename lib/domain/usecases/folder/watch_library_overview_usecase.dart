@@ -8,8 +8,8 @@ import 'package:memox/domain/types/content_sort_mode.dart';
 ///
 /// Thin orchestration over [FolderRepository]; notifiers depend on this, never
 /// on the repository directly.
-class WatchLibraryOverviewUseCase {
-  const WatchLibraryOverviewUseCase(this._repository);
+class LibraryOverviewUseCase {
+  const LibraryOverviewUseCase(this._repository);
 
   final FolderRepository _repository;
 

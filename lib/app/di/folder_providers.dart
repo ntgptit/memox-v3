@@ -29,8 +29,8 @@ FolderRepository folderRepository(Ref ref) =>
     FolderRepositoryImpl(ref.watch(folderDaoProvider));
 
 @Riverpod(keepAlive: true)
-WatchLibraryOverviewUseCase watchLibraryOverviewUseCase(Ref ref) =>
-    WatchLibraryOverviewUseCase(ref.watch(folderRepositoryProvider));
+LibraryOverviewUseCase watchLibraryOverviewUseCase(Ref ref) =>
+    LibraryOverviewUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 CreateRootFolderUseCase createRootFolderUseCase(Ref ref) =>
@@ -65,5 +65,5 @@ DeleteFolderUseCase deleteFolderUseCase(Ref ref) =>
     DeleteFolderUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
-GetFolderMoveTargetsUseCase getFolderMoveTargetsUseCase(Ref ref) =>
-    GetFolderMoveTargetsUseCase(ref.watch(folderRepositoryProvider));
+FolderMoveTargetsUseCase getFolderMoveTargetsUseCase(Ref ref) =>
+    FolderMoveTargetsUseCase(ref.watch(folderRepositoryProvider));

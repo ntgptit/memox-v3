@@ -11,8 +11,8 @@ import 'package:memox/domain/types/ids.dart';
 /// the current parent and why it is blocked (cycle / locked-to-decks). Invalid
 /// destinations are returned **disabled with a reason**, never omitted — the
 /// picker renders them greyed so the rule is visible.
-class GetFolderMoveTargetsUseCase {
-  const GetFolderMoveTargetsUseCase(this._repository);
+class FolderMoveTargetsUseCase {
+  const FolderMoveTargetsUseCase(this._repository);
 
   final FolderRepository _repository;
 

@@ -198,7 +198,7 @@ class _FlashcardListView extends ConsumerWidget {
         if (!toolbar.isReordering)
           Padding(
             padding: const EdgeInsets.only(bottom: SpacingTokens.sm),
-            child: _FlashcardSearchField(deckId: deckId),
+          child: _FlashcardSearch(deckId: deckId),
           ),
         Expanded(
           child: MxRetainedAsyncState<FlashcardListDetail>(
@@ -360,17 +360,17 @@ class _FlashcardBreadcrumb extends ConsumerWidget {
   }
 }
 
-class _FlashcardSearchField extends ConsumerStatefulWidget {
-  const _FlashcardSearchField({required this.deckId});
+class _FlashcardSearch extends ConsumerStatefulWidget {
+  const _FlashcardSearch({required this.deckId});
 
   final String deckId;
 
   @override
-  ConsumerState<_FlashcardSearchField> createState() =>
-      _FlashcardSearchFieldState();
+  ConsumerState<_FlashcardSearch> createState() =>
+      _FlashcardSearchState();
 }
 
-class _FlashcardSearchFieldState extends ConsumerState<_FlashcardSearchField> {
+class _FlashcardSearchState extends ConsumerState<_FlashcardSearch> {
   final TextEditingController _controller = TextEditingController();
 
   @override

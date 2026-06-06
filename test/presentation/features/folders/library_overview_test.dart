@@ -327,7 +327,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
-            body: LibrarySearchNoResultsSection(onClear: () => clears++),
+            body: LibrarySearchNoResults(onClear: () => clears++),
           ),
         ),
       );

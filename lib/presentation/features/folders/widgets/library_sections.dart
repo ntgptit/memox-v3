@@ -29,8 +29,8 @@ class LibraryEmptyStateSection extends StatelessWidget {
 }
 
 /// Active search matched no folders (but the library is non-empty): clear CTA.
-class LibrarySearchNoResultsSection extends StatelessWidget {
-  const LibrarySearchNoResultsSection({required this.onClear, super.key});
+class LibrarySearchNoResults extends StatelessWidget {
+  const LibrarySearchNoResults({required this.onClear, super.key});
 
   final VoidCallback onClear;
 
@@ -68,8 +68,8 @@ class LibraryErrorSection extends StatelessWidget {
 }
 
 /// `{n} FOLDERS` overline above the list (count only — no sort UI in V1).
-class LibraryFolderCountHeader extends StatelessWidget {
-  const LibraryFolderCountHeader({required this.count, super.key});
+class LibraryFolderCount extends StatelessWidget {
+  const LibraryFolderCount({required this.count, super.key});
 
   final int count;
 
@@ -80,8 +80,8 @@ class LibraryFolderCountHeader extends StatelessWidget {
 }
 
 /// Non-interactive due-summary card, shown only when `dueToday > 0`.
-class LibraryDueSummaryCard extends StatelessWidget {
-  const LibraryDueSummaryCard({required this.dueToday, super.key});
+class LibraryDueSummary extends StatelessWidget {
+  const LibraryDueSummary({required this.dueToday, super.key});
 
   final int dueToday;
 

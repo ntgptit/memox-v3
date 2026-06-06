@@ -27,19 +27,19 @@ Future<FolderMoveTarget?> showFolderMovePicker(
   required List<FolderMoveTarget> targets,
 }) => showMxBottomSheet<FolderMoveTarget>(
   context,
-  builder: (BuildContext context) => _FolderMovePickerSheet(targets: targets),
+  builder: (BuildContext context) => _FolderMovePicker(targets: targets),
 );
 
-class _FolderMovePickerSheet extends StatefulWidget {
-  const _FolderMovePickerSheet({required this.targets});
+class _FolderMovePicker extends StatefulWidget {
+  const _FolderMovePicker({required this.targets});
 
   final List<FolderMoveTarget> targets;
 
   @override
-  State<_FolderMovePickerSheet> createState() => _FolderMovePickerSheetState();
+  State<_FolderMovePicker> createState() => _FolderMovePickerState();
 }
 
-class _FolderMovePickerSheetState extends State<_FolderMovePickerSheet> {
+class _FolderMovePickerState extends State<_FolderMovePicker> {
   final TextEditingController _controller = TextEditingController();
   String _search = '';
   late FolderMoveTarget? _selected = widget.targets

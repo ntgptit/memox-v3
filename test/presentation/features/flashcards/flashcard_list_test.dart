@@ -107,7 +107,7 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapBody(_detail()));
 
-      expect(find.byType(FlashcardEmptyStateSection), findsOneWidget);
+      expect(find.byType(FlashcardEmptyState), findsOneWidget);
       expect(find.text('Add flashcard'), findsOneWidget);
       expect(find.text('Import from CSV / Excel'), findsOneWidget);
     });
@@ -117,7 +117,7 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapBody(_detail(), isSearching: true));
 
-      expect(find.byType(FlashcardEmptyStateSection), findsOneWidget);
+      expect(find.byType(FlashcardEmptyState), findsOneWidget);
       expect(
         find.byKey(const ValueKey<String>('flashcard_no_results')),
         findsNothing,
@@ -140,7 +140,7 @@ void main() {
         find.byKey(const ValueKey<String>('flashcard_no_results')),
         findsOneWidget,
       );
-      expect(find.byType(FlashcardEmptyStateSection), findsNothing);
+      expect(find.byType(FlashcardEmptyState), findsNothing);
     });
   });
 
