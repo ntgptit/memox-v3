@@ -5136,6 +5136,18 @@ abstract class AppLocalizations {
   /// **'Couldn\'t create the folder. Please try again.'**
   String get libraryCreateFolderError;
 
+  /// No description provided for @libraryDueSummarySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Across {folderCount, plural, =1{1 folder} other{{folderCount} folders}} · ~{minutes} min'**
+  String libraryDueSummarySubtitle(int folderCount, int minutes);
+
+  /// No description provided for @librarySortRecentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get librarySortRecentLabel;
+
   /// No description provided for @libraryFolderDecksCount.
   ///
   /// In en, this message translates to:
@@ -5153,6 +5165,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No cards} =1{1 card} other{{count} cards}}'**
   String libraryFolderCardsCount(int count);
+
+  /// No description provided for @libraryFolderNewCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new'**
+  String libraryFolderNewCount(int count);
 
   /// No description provided for @libraryFolderDueCount.
   ///

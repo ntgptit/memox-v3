@@ -394,6 +394,9 @@ class FolderRepositoryImpl implements FolderRepository {
     deckCount: row.deckCount,
     cardCount: row.cardCount,
     dueCount: row.dueCount,
+    subtitle: row.subtitle,
+    newCount: row.newCount,
+    mastery: row.mastery,
   );
 
   static FolderWithCount _folderWithCountFromSubfolderItem(

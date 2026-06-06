@@ -41,11 +41,12 @@ presentation-only:
 - Search below the title is **always-visible inline** scope-local search (no toggle). The inline
   field itself never navigates. It is the only visible search entry on Library Overview.
 - The static `All` filter chip is **removed** from the loaded header.
-- Loaded state renders a `{n} FOLDERS` overline section header (count only; **no sort control** —
-  the mock sort pill remains Future).
+- Loaded state renders a `{n} FOLDERS` section header with the mock sort pill on the right
+  (`librarySortRecentLabel` / "Recent"). The pill is visual parity for the mock; the sort sheet
+  remains Future.
 - A **due summary card** (`{n} cards due today`) is rendered when `dueToday > 0` and hidden
-  otherwise. It is **non-interactive**: Library state only knows the aggregate `dueToday`, so there
-  is no subtitle (folder span / estimated minutes) and no study-launch navigation.
+  otherwise. It includes a subtitle derived from the aggregate model (`Across {n} folders · ~{m}
+  min`) and remains non-interactive; there is no study-launch navigation.
 - The FAB is now a labelled **`New folder` pill** wired to the existing create-folder flow. **New
   deck / Import are not exposed** from Library root.
 
@@ -109,11 +110,11 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   When a term is active the query broadens to match **any folder by name across the tree** (
   `listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to
   Global Search; does not mutate persisted `sort_order`.
-- Loaded section header: `{n} FOLDERS` overline (`libraryFolderCountLabel`, count only — no sort UI
-  control).
-- Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle`), hidden
-  otherwise. Non-interactive — no subtitle and no study-launch (state only carries the aggregate
-  `dueToday`).
+- Loaded section header: `{n} FOLDERS` overline with the mock sort pill (`librarySortRecentLabel`)
+  on the right.
+- Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle` plus
+  `libraryDueSummarySubtitle`), hidden otherwise. Non-interactive — the subtitle is derived from
+  the aggregate model and there is no study-launch.
 - Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended,
   `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill
   both open `MxNameDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
@@ -124,8 +125,8 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   **not exposed** (out of current scope).
 - Sort (`ContentSortMode`: manual/name/newest/lastStudied) is implemented and tested at the *
   *repository + use-case** layer (`folder_repository_impl`, `content_repository_test`). The
-  viewmodel exposes `setSortMode`. No sort **UI control** is rendered (the mock's sort pill remains
-  Future).
+  viewmodel exposes `setSortMode`. The mock-style sort pill is now rendered in the header; a
+  dedicated sort sheet remains Future.
 
 **Future / not exposed in V1:**
 
@@ -136,10 +137,8 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   folder directly; there is no New deck or Import entry on Library Overview. Deck creation/import
   remain owned by Folder Detail / Flashcard List / Deck Import.
 - Filter chips (All / Folders / Decks) — removed in Prompt 49B (the previous static,
-  non-functional "All" chip is gone). A real filter/sort control behind the header sliders icon
+  non-functional "All" chip is gone). A dedicated filter sheet behind the header sliders icon
   remains Future.
-- No sort **UI control** on Library Overview (no overflow sort menu / sort chip). Sort exists only
-  in the data/use-case layer.
 - Drag-to-reorder of root items, pull-to-refresh, and grid/multi-column responsive layout.
 - Global Search screen / `/library/search` route is a separate search surface for
   folders/decks/flashcards. Only the in-search **Tags** section, recent searches, and popular tags
@@ -245,8 +244,9 @@ point for study.
 |-----------------|---------------------------------------------------------------------------------|
 | App bar         | Title "Library". Right side: sliders/filter icon (disabled).                    |
 | Filter chips    | Optional. Three chips: All / Folders / Decks. Default: All.                     |
-| Item row        | Icon (folder 📁 or deck 📚) + name + subtitle (count) + chevron.                |
-| Folder subtitle | "{n} decks" or "{n} subfolders" depending on `content_mode`.                    |
+| Item row        | Accent tile + name + optional subtitle + counts row + due badge + progress bar + kebab. |
+| Folder subtitle | Direct child names joined with ` · ` when available; fallback is the count row. |
+| Folder new      | `{n} new` from `flashcard_progress` rows where `due_at IS NULL`.                |
 | Deck subtitle   | "{n} cards" (total) and optional "{m} due" badge in theme color.                |
 | FAB             | Plus button (bottom-right). Tap → action sheet: New folder / New deck / Import. |
 

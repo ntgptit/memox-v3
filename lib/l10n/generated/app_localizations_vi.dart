@@ -3138,6 +3138,14 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không thể tạo thư mục. Vui lòng thử lại.';
 
   @override
+  String libraryDueSummarySubtitle(int folderCount, int minutes) {
+    return 'Trong $folderCount thư mục · ~$minutes phút';
+  }
+
+  @override
+  String get librarySortRecentLabel => 'Gần đây';
+
+  @override
   String libraryFolderDecksCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3168,6 +3176,11 @@ class AppLocalizationsVi extends AppLocalizations {
       zero: 'Chưa có thẻ',
     );
     return '$_temp0';
+  }
+
+  @override
+  String libraryFolderNewCount(int count) {
+    return '$count mới';
   }
 
   @override

@@ -4,7 +4,8 @@ import 'flashcards.drift';
 import 'flashcard_progress.drift';
 
 -- Library Overview: one row per anchor folder (top-level when :search is empty,
--- else any folder whose name matches) with its recursive subtree aggregates and
+-- else any folder whose name matches) with its recursive subtree aggregates,
+-- summary hints for the mock-aligned row (subtitle / new count / mastery), and
 -- the global folder/due totals. `:now` is the "due today" cutoff (UTC epoch ms);
 -- `:search` is a pre-normalised LIKE pattern (e.g. '%korean%') or '' for no
 -- search; `$order` is the caller-built sort. Explicit columns (no SELECT *) so
@@ -45,6 +46,41 @@ SELECT
        AND p.is_suspended = FALSE
        AND (p.buried_until IS NULL OR p.buried_until <= :now)
        AND p.due_at IS NOT NULL AND p.due_at <= :now) AS due_count,
+  CASE folders.content_mode
+    WHEN 'subfolders' THEN (
+      SELECT GROUP_CONCAT(name, ' · ') FROM (
+        SELECT c.name AS name
+        FROM folders AS c
+        WHERE c.parent_id = folders.id
+        ORDER BY c.sort_order
+        LIMIT 3
+      )
+    )
+    WHEN 'decks' THEN (
+      SELECT GROUP_CONCAT(name, ' · ') FROM (
+        SELECT d.name AS name
+        FROM decks AS d
+        WHERE d.folder_id = folders.id
+        ORDER BY d.sort_order
+        LIMIT 3
+      )
+    )
+    ELSE NULL
+  END AS subtitle,
+  (SELECT COUNT(*) FROM flashcards fc
+     INNER JOIN decks d ON fc.deck_id = d.id
+     INNER JOIN subtree s ON d.folder_id = s.folder_id
+     LEFT JOIN flashcard_progress p ON p.flashcard_id = fc.id
+     WHERE s.anchor_id = folders.id
+       AND COALESCE(p.is_suspended, FALSE) = FALSE
+       AND (p.buried_until IS NULL OR p.buried_until <= :now)
+       AND (p.flashcard_id IS NULL OR p.due_at IS NULL)) AS new_count,
+  (SELECT COALESCE(AVG(COALESCE(p.box_number, 1)), 0.0) / 8.0
+     FROM flashcards fc
+     INNER JOIN decks d ON fc.deck_id = d.id
+     INNER JOIN subtree s ON d.folder_id = s.folder_id
+     LEFT JOIN flashcard_progress p ON p.flashcard_id = fc.id
+     WHERE s.anchor_id = folders.id) AS mastery,
   (SELECT COUNT(*) FROM folders) AS total_folder_count,
   (SELECT COUNT(*) FROM flashcards fc
      INNER JOIN flashcard_progress p ON p.flashcard_id = fc.id

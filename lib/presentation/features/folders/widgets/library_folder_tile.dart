@@ -9,17 +9,19 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_accent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
+import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
 /// A Library Overview folder row (`docs/wireframes/02-library.md`).
 ///
-/// Leading icon-tile, name + an icon metadata row (subfolders/decks · cards),
-/// an optional due badge, and a trailing kebab. Tapping the row opens the
-/// folder; the kebab and a long-press are both wired to [onShowActions], which
-/// opens the folder action sheet (Rename / Move / Import flashcards / Delete).
+/// Leading accent tile, name + optional topic subtitle, a counts row
+/// (decks/subfolders · cards · new), a mastery bar, an optional due badge, and
+/// a trailing kebab. Tapping the row opens the folder; the kebab and a
+/// long-press are both wired to [onShowActions], which opens the folder action
+/// sheet (Rename / Move / Import flashcards / Delete).
 class LibraryFolderTile extends StatelessWidget {
   const LibraryFolderTile({
     required this.item,
@@ -37,60 +39,158 @@ class LibraryFolderTile extends StatelessWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool isSubfolderMode =
         item.folder.contentMode == ContentMode.subfolders;
+    final Color tone = folderAccentFor(item.folder.id);
+    return _LibraryFolderTileCard(
+      item: item,
+      tone: tone,
+      isSubfolderMode: isSubfolderMode,
+      onTap: onTap,
+      onShowActions: onShowActions,
+      tooltip: l10n.libraryOverflowTooltip,
+      subtitle: item.subtitle,
+      newCount: item.newCount,
+      mastery: (item.mastery ?? _fallbackMastery(item)).clamp(0, 1).toDouble(),
+    );
+  }
+}
 
-    return MxCard(
+class _LibraryFolderTileCard extends StatelessWidget {
+  const _LibraryFolderTileCard({
+    required this.item,
+    required this.tone,
+    required this.isSubfolderMode,
+    required this.onTap,
+    required this.onShowActions,
+    required this.tooltip,
+    required this.subtitle,
+    required this.newCount,
+    required this.mastery,
+  });
+
+  final FolderWithCount item;
+  final Color tone;
+  final bool isSubfolderMode;
+  final VoidCallback onTap;
+  final VoidCallback? onShowActions;
+  final String tooltip;
+  final String? subtitle;
+  final int? newCount;
+  final double mastery;
+
+  @override
+  Widget build(BuildContext context) => MxCard(
       onTap: onTap,
       onLongPress: onShowActions,
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.md + SpacingTokens.xxs,
+        vertical: SpacingTokens.md,
+      ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const MxIconTile(icon: Icons.folder_rounded),
+          _LeadingTile(color: tone),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                MxText(
-                  item.folder.name,
-                  role: MxTextRole.titleSmall,
-                  fontWeight: TypographyTokens.bold,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: SpacingTokens.xs),
-                Row(
-                  children: <Widget>[
-                    _FolderMetaItem(
-                      icon: isSubfolderMode
-                          ? Icons.folder_copy_outlined
-                          : Icons.layers_outlined,
-                      label: isSubfolderMode
-                          ? l10n.libraryFolderSubfoldersCount(item.subfolderCount)
-                          : l10n.libraryFolderDecksCount(item.deckCount),
-                    ),
-                    const SizedBox(width: SpacingTokens.md),
-                    _FolderMetaItem(
-                      icon: Icons.style_outlined,
-                      label: l10n.libraryFolderCardsCount(item.cardCount),
-                    ),
-                  ],
-                ),
-              ],
+            child: _FolderTileBody(
+              item: item,
+              tone: tone,
+              subtitle: subtitle,
+              newCount: newCount,
+              mastery: mastery,
+              isSubfolderMode: isSubfolderMode,
             ),
           ),
-          if (item.dueCount > 0) ...<Widget>[
-            const SizedBox(width: SpacingTokens.sm),
-            _DueCountBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
-          ],
-          const SizedBox(width: SpacingTokens.xxs),
+          const SizedBox(width: SpacingTokens.md),
           MxIconButton(
             icon: Icons.more_vert,
-            tooltip: l10n.libraryOverflowTooltip,
+            tooltip: tooltip,
             size: MxIconButtonSize.compact,
             onPressed: onShowActions,
           ),
         ],
       ),
+    );
+}
+
+class _FolderTileBody extends StatelessWidget {
+  const _FolderTileBody({
+    required this.item,
+    required this.tone,
+    required this.subtitle,
+    required this.newCount,
+    required this.mastery,
+    required this.isSubfolderMode,
+  });
+
+  final FolderWithCount item;
+  final Color tone;
+  final String? subtitle;
+  final int? newCount;
+  final double mastery;
+  final bool isSubfolderMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    final String? effectiveSubtitle = subtitle;
+    final int? effectiveNewCount = newCount;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: MxText(
+                item.folder.name,
+                role: MxTextRole.titleSmall,
+                fontWeight: TypographyTokens.bold,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (item.dueCount > 0) ...<Widget>[
+              const SizedBox(width: SpacingTokens.sm),
+              _DueCountBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
+            ],
+          ],
+        ),
+        if (effectiveSubtitle?.isNotEmpty ?? false) ...<Widget>[
+          const SizedBox(height: SpacingTokens.xxs),
+          MxText(
+            effectiveSubtitle!,
+            role: MxTextRole.labelMedium,
+            color: context.colorScheme.onSurfaceVariant,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+        const SizedBox(height: SpacingTokens.xs),
+        Row(
+          children: <Widget>[
+            _FolderMetaItem(
+              icon: isSubfolderMode
+                  ? Icons.folder_copy_outlined
+                  : Icons.layers_outlined,
+              label: isSubfolderMode
+                  ? l10n.libraryFolderSubfoldersCount(item.subfolderCount)
+                  : l10n.libraryFolderDecksCount(item.deckCount),
+            ),
+            const SizedBox(width: SpacingTokens.md),
+            _FolderMetaItem(
+              icon: Icons.copy_outlined,
+              label: l10n.libraryFolderCardsCount(item.cardCount),
+            ),
+            if ((effectiveNewCount ?? 0) > 0) ...<Widget>[
+              const SizedBox(width: SpacingTokens.md),
+              _NewMetaItem(label: l10n.libraryFolderNewCount(effectiveNewCount!)),
+            ],
+          ],
+        ),
+        const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
+        MxLinearProgress(value: mastery, color: tone, height: 4),
+      ],
     );
   }
 }
@@ -114,6 +214,25 @@ class _FolderMetaItem extends StatelessWidget {
       ],
     );
   }
+}
+
+class _LeadingTile extends StatelessWidget {
+  const _LeadingTile({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    key: const ValueKey<String>('library_folder_leading_tile'),
+    width: 44,
+    height: 44,
+    decoration: BoxDecoration(
+      color: color.withValues(alpha: OpacityTokens.hover),
+      borderRadius: RadiusTokens.brMd,
+    ),
+    alignment: Alignment.center,
+    child: Icon(Icons.folder_rounded, size: 20, color: color),
+  );
 }
 
 /// Right-aligned due badge, shown only when a folder subtree has due cards.
@@ -142,4 +261,35 @@ class _DueCountBadge extends StatelessWidget {
       ),
     );
   }
+}
+
+class _NewMetaItem extends StatelessWidget {
+  const _NewMetaItem({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color tone = context.customColors.masteryHigh;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(color: tone, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: SpacingTokens.xxs),
+        MxText(label, role: MxTextRole.labelMedium, color: tone),
+      ],
+    );
+  }
+}
+
+double _fallbackMastery(FolderWithCount item) {
+  final int total = item.cardCount;
+  if (total <= 0) {
+    return 0;
+  }
+  return ((total - item.dueCount) / total).clamp(0, 1).toDouble();
 }

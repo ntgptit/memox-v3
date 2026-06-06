@@ -8,8 +8,10 @@ part 'library_overview.freezed.dart';
 ///
 /// Counts include descendants: [subfolderCount] descendant folders,
 /// [deckCount] decks anywhere in the subtree, [cardCount] flashcards in those
-/// decks, and [dueCount] of those cards due now. Sibling root trees are
-/// isolated — counts never leak across roots.
+/// decks, and [dueCount] of those cards due now. Optional presentation hints
+/// ([subtitle], [newCount], [mastery]) let Library Overview mirror the mock
+/// without inventing extra tables. Sibling root trees are isolated — counts
+/// never leak across roots.
 @freezed
 abstract class FolderWithCount with _$FolderWithCount {
   const factory FolderWithCount({
@@ -18,6 +20,9 @@ abstract class FolderWithCount with _$FolderWithCount {
     required int deckCount,
     required int cardCount,
     required int dueCount,
+    String? subtitle,
+    int? newCount,
+    double? mastery,
   }) = _FolderWithCount;
 }
 

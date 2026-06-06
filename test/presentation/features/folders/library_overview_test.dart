@@ -21,6 +21,7 @@ import 'package:memox/presentation/features/folders/viewmodels/library_overview_
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/library_overview_body.dart';
 import 'package:memox/presentation/features/folders/widgets/library_sections.dart';
+import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 Folder _folder(String name, {ContentMode mode = ContentMode.decks}) => Folder(
@@ -40,12 +41,18 @@ FolderWithCount _item(
   int deckCount = 3,
   int cardCount = 40,
   int dueCount = 0,
+  String? subtitle,
+  int? newCount,
+  double? mastery,
 }) => FolderWithCount(
   folder: _folder(name, mode: mode),
   subfolderCount: subfolderCount,
   deckCount: deckCount,
   cardCount: cardCount,
   dueCount: dueCount,
+  subtitle: subtitle,
+  newCount: newCount,
+  mastery: mastery,
 );
 
 LibraryOverviewReadModel _model({
@@ -123,9 +130,37 @@ void main() {
       // Metadata row: "{n} decks" + "{n} cards".
       expect(find.text('3 decks'), findsOneWidget);
       expect(find.text('40 cards'), findsOneWidget);
+      expect(find.text('Recent'), findsOneWidget);
+      expect(find.byIcon(Icons.swap_vert_rounded), findsOneWidget);
+      // Progress bar is present on the mock-aligned root row.
+      expect(find.byType(MxLinearProgress), findsOneWidget);
       // Kebab present; chevron absent (rows open via tap, not a chevron).
       expect(find.byIcon(Icons.more_vert), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsNothing);
+    });
+
+    testWidgets('folder row renders subtitle and new count when available', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(
+          _model(
+            folders: <FolderWithCount>[
+              _item(
+                'Korean',
+                subtitle: 'TOPIK · Hangul · grammar',
+                newCount: 6,
+                mastery: 0.62,
+              ),
+            ],
+            totalFolderCount: 1,
+          ),
+        ),
+      );
+
+      expect(find.text('TOPIK · Hangul · grammar'), findsOneWidget);
+      expect(find.text('6 new'), findsOneWidget);
+      expect(find.byType(MxLinearProgress), findsOneWidget);
     });
 
     testWidgets('subfolder-mode folder shows the subfolders metadata', (
@@ -232,7 +267,7 @@ void main() {
       await tester.pumpWidget(
         _wrapBody(
           _model(
-            folders: <FolderWithCount>[_item('Korean')],
+            folders: <FolderWithCount>[_item('Korean', dueCount: 12)],
             dueToday: 18,
             totalFolderCount: 1,
           ),
@@ -240,6 +275,7 @@ void main() {
       );
       expect(find.byIcon(Icons.bolt_rounded), findsOneWidget);
       expect(find.textContaining('due today'), findsOneWidget);
+      expect(find.textContaining('Across 1 folder'), findsOneWidget);
 
       await tester.pumpWidget(
         _wrapBody(
@@ -326,9 +362,7 @@ void main() {
           theme: AppTheme.light(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: LibrarySearchNoResults(onClear: () => clears++),
-          ),
+          home: Scaffold(body: LibrarySearchNoResults(onClear: () => clears++)),
         ),
       );
 

@@ -3259,6 +3259,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t create the folder. Please try again.';
 
   @override
+  String libraryDueSummarySubtitle(int folderCount, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      folderCount,
+      locale: localeName,
+      other: '$folderCount folders',
+      one: '1 folder',
+    );
+    return 'Across $_temp0 · ~$minutes min';
+  }
+
+  @override
+  String get librarySortRecentLabel => 'Recent';
+
+  @override
   String libraryFolderDecksCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3292,6 +3306,11 @@ class AppLocalizationsEn extends AppLocalizations {
       zero: 'No cards',
     );
     return '$_temp0';
+  }
+
+  @override
+  String libraryFolderNewCount(int count) {
+    return '$count new';
   }
 
   @override

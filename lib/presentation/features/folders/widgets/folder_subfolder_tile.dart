@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
-import 'package:memox/core/theme/tokens/color_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_accent.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
@@ -31,7 +31,7 @@ class FolderSubfolderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final Color tone = _accentForFolder(item.folder.id);
+    final Color tone = folderAccentFor(item.folder.id);
     final double progress = item.cardCount == 0
         ? 0
         : ((item.cardCount - item.dueCount) / item.cardCount)
@@ -99,18 +99,6 @@ class FolderSubfolderTile extends StatelessWidget {
       ),
     );
   }
-}
-
-Color _accentForFolder(Object folderId) {
-  final List<Color> accents = <Color>[
-    ColorTokens.seedIndigo,
-    ColorTokens.seedTeal,
-    ColorTokens.seedAmber,
-    ColorTokens.seedViolet,
-    ColorTokens.seedRose,
-    ColorTokens.seedSage,
-  ];
-  return accents[folderId.hashCode.abs() % accents.length];
 }
 
 class _LeadingTile extends StatelessWidget {
