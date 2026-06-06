@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -21,6 +22,19 @@ abstract interface class FlashcardRepository {
     DeckId deckId, {
     String? searchTerm,
     ContentSortMode sort,
+  });
+
+  /// Creates one flashcard in [deckId] plus its initial progress row.
+  ///
+  /// Errors: `NotFoundFailure` (deck missing), `ValidationFailure` (front or
+  /// back blank after trim), `StorageFailure`.
+  Future<Result<Flashcard>> createFlashcard({
+    required DeckId deckId,
+    required String front,
+    required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
   });
 
   /// Deletes a single flashcard (its `flashcard_progress` row cascades via FK).

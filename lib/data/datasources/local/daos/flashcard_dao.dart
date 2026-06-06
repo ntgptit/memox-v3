@@ -34,6 +34,10 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
   Future<int> countFlashcards(String deckId) =>
       flashcardCountInDeck(deckId).getSingle();
 
+  /// Highest `sort_order` in [deckId], or -1 when the deck has no cards yet.
+  Future<int> maxFlashcardSortOrder(String deckId) =>
+      flashcardMaxSortOrderInDeck(deckId).getSingle();
+
   // ── Single-row mutations (Drift query builder) ────────────────────
 
   Future<void> deleteFlashcardById(String id) =>

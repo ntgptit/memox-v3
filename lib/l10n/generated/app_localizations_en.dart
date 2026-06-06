@@ -1833,6 +1833,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flashcardsClearSearchAction => 'Clear';
 
   @override
+  String get flashcardEditorTitle => 'New flashcard';
+
+  @override
+  String get flashcardEditorBreadcrumbFolder => 'Folder';
+
+  @override
+  String get flashcardEditorBreadcrumbDeck => 'Deck';
+
+  @override
+  String get flashcardEditorBreadcrumbCurrent => 'New card';
+
+  @override
+  String get flashcardEditorDestinationDeckLabel => 'Selected deck';
+
+  @override
+  String get flashcardEditorRequiredWord => 'Required';
+
+  @override
+  String get flashcardEditorFrontHeading => 'Front';
+
+  @override
+  String get flashcardEditorBackHeading => 'Back';
+
+  @override
+  String get flashcardEditorFrontPlaceholder => 'The term you want to remember';
+
+  @override
+  String get flashcardEditorBackPlaceholder =>
+      'Add the meaning or translation.';
+
+  @override
+  String get flashcardEditorMoreFieldsLabel => 'Add details';
+
+  @override
+  String get flashcardEditorMoreFieldsSummary =>
+      'example · hint · pronunciation';
+
+  @override
+  String get flashcardEditorNoteLabel => 'Note';
+
+  @override
+  String get flashcardEditorExampleLabel => 'Example';
+
+  @override
+  String get flashcardEditorPronunciationLabel => 'Pronunciation';
+
+  @override
+  String get flashcardEditorHintLabel => 'Hint';
+
+  @override
+  String get flashcardEditorTagsLabel => 'TAGS';
+
+  @override
+  String get flashcardEditorTagsOptionalLabel => 'optional';
+
+  @override
+  String get flashcardEditorAddTagLabel => '+ Add tag';
+
+  @override
+  String get flashcardEditorSaveCardLabel => 'Save card';
+
+  @override
+  String get flashcardEditorSaveHelperText =>
+      'Front and back are required to save.';
+
+  @override
+  String get flashcardEditorSampleFront => '안녕하세요';
+
+  @override
+  String get flashcardEditorSampleBack => 'Hello';
+
+  @override
+  String get flashcardEditorSampleNote => 'Greeting used on first contact.';
+
+  @override
+  String get flashcardEditorSampleExample => '안녕하세요, 저는 민수입니다.';
+
+  @override
+  String get flashcardEditorSamplePronunciation => 'annyeonghaseyo';
+
+  @override
+  String get flashcardEditorSampleHint => 'Start with a casual greeting.';
+
+  @override
+  String get flashcardEditorSampleTagGreet => 'greet';
+
+  @override
+  String get flashcardEditorSampleTagN5 => 'N5';
+
+  @override
+  String get flashcardEditorFrontError => 'Front is required.';
+
+  @override
+  String get flashcardEditorBackError => 'Back is required.';
+
+  @override
+  String get flashcardEditorSaveFailedMessage =>
+      'Couldn\'t save this flashcard. Try again.';
+
+  @override
   String get flashcardsMoveTitle => 'Move flashcards';
 
   @override

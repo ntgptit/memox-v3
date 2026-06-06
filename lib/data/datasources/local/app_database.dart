@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import 'package:memox/data/datasources/local/connection/database_connection.dart';
+import 'package:memox/data/datasources/local/migrations/v2_add_flashcard_optional_fields.dart';
 
 part 'app_database.g.dart';
 
@@ -27,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Bump and add an `onUpgrade` step for every schema change
   /// (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 1;
+  static const int currentSchemaVersion = 2;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -37,6 +38,11 @@ class AppDatabase extends _$AppDatabase {
     // Tables + the eligibility index are created from the `.drift` schema.
     onCreate: (Migrator m) async {
       await m.createAll();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      if (from < 2) {
+        await addFlashcardOptionalFields(m, this);
+      }
     },
     beforeOpen: (OpeningDetails details) async {
       await customStatement('PRAGMA foreign_keys = ON');

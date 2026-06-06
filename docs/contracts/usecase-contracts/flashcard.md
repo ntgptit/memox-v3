@@ -17,22 +17,21 @@ Future<Either<Failure, Flashcard>> call({
   required DeckId deckId,
   required String front,
   required String back,
-  String? note,
-  String? example,
+  String? exampleSentence,
   String? pronunciation,
   String? hint,
-  List<String> tags = const [],
 });
 ```
 
 **Rules:**
 
 - Trim front and back. Reject empty for either → `ValidationFailure(field, code: empty)`.
-- Validate each tag via `TagValidator` (no comma, max 50 chars, not empty after trim). Dedupe
-  case-insensitively.
+- Trim `exampleSentence`, `pronunciation`, and `hint`; store `null` when any value is blank after
+  trim.
 - Atomic insert flashcard + initial `flashcard_progress` row (current_box=1, due_at=now,
-  review_count=0, lapse_count=0) + each unique tag in `flashcard_tags`. See
-  `docs/contracts/repository-contracts/flashcard-repository.md`.
+  review_count=0, lapse_count=0). See `docs/contracts/repository-contracts/flashcard-repository.md`.
+- Current shipped create flow supports front, back, example sentence, pronunciation, and hint.
+  Tags remain future editor work until the schema and screen expand together.
 
 **Errors:** `NotFoundFailure` (deck), `ValidationFailure`, `StorageFailure`.
 

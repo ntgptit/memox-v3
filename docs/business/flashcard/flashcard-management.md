@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-06
 applies_to: flashcard entity and flashcard management feature
 ---
 
@@ -21,18 +21,22 @@ Flashcards are stored in `flashcards`.
 Supported fields are defined by current Drift schema. Agents must inspect schema before changing
 forms or import logic.
 
-Core fields:
+Current V1 manual create/edit writes only the schema-backed content fields that the editor
+surface exposes today:
 
 - `deck_id`
 - `front`
 - `back`
-- `note`
-- `example`
+- `example_sentence`
 - `pronunciation`
 - `hint`
 - `sort_order`
 
-Tags are stored separately in `flashcard_tags`.
+Optional tags content remains a future extension until the schema and editor surface are expanded
+together.
+
+Tags are stored separately in `flashcard_tags` and are not part of the current flashcard create
+screen.
 
 SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.md`.
 
@@ -41,8 +45,8 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 - Flashcard belongs to exactly one deck.
 - Front is required after trim.
 - Back is required after trim.
-- Optional text fields (`note`, `example`, `pronunciation`, `hint`) should be trimmed.
-- Empty optional fields stored as null, not empty string.
+- Optional example / pronunciation / hint text should be trimmed.
+- Empty optional example / pronunciation / hint text is stored as `null`, not an empty string.
 - Tags must be non-empty after trim.
 - Tags are deduplicated case-insensitively per flashcard.
 - Flashcard must not be edited under wrong deck.
@@ -202,13 +206,11 @@ V1 create/edit note:
 - Flashcard create and edit routes share `FlashcardEditorScreen`.
 - Create mode is selected by `deckId` with no `flashcardId`; edit mode is selected by `deckId` +
   `flashcardId`.
-- The editor owns content/tag create and update only.
-- Create mode may retarget the destination deck before first save; normal Save returns to the
-  selected destination deck's flashcard list, while "Save and add another" keeps the selected
-  destination and stays in the editor with a clean blank draft.
+- The editor owns content create and update only.
+- Current create mode saves front, back, and optional example / pronunciation / hint text.
+  Destination-deck retargeting, save-and-add-another, and tag editing remain future work.
 - Create/edit dirty close and browser/system back require a discard confirmation when unsaved
-  content, optional fields, tags, starting status, or create destination changes exist. Preloaded
-  edit optional fields/tags are not dirty until changed.
+  content exists.
 - Single-card move/delete/export actions live on the flashcard list row/bulk action surfaces.
 - Bury/Suspend live on the study-session card-actions sheet.
 - Flashcard History is Future Proposal and must not be exposed as a live editor/list action in V1.
@@ -270,7 +272,7 @@ files.
 
 **Glossary terms:**
 
-- `docs/business/glossary.md` → flashcard, front, back, note, example, pronunciation, hint
+- `docs/business/glossary.md` → flashcard, front, back, example
 
 **Related business specs:**
 

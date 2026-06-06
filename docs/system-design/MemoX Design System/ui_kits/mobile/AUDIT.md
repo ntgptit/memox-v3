@@ -33,8 +33,8 @@ Nebula, focusing on theme correctness and UX friendliness. Findings:
   in-app these are real state transitions, not prop-seeded mounts.
 
 **Reviewed and confirmed correct (no change needed)**
-- **Toast / snackbar** (Tag op-error) uses a fixed dark slate (`rgb(52,57,93)`) with light
-  text in *both* themes — the M3 inverse-surface pattern. Legible in light and dark. Good.
+- **Toast / snackbar** now uses the shared surface-container-highest tone with an error-accent
+  icon, keeping the failure state lighter and closer to the gallery snackbar mock. Good.
 - **Primary buttons** keep brand indigo `#5265F5` + white label in dark (the scoped
   `.memox-dark` deliberately overrides primary back to indigo rather than the lifted
   `#8B9AFF`), so `#fff`-on-primary contrast holds in both themes.

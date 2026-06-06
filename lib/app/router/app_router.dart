@@ -5,6 +5,7 @@ import 'package:memox/app/router/redirect.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/flashcards/routes/flashcard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -91,44 +92,7 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
 
 /// Flashcard create/edit + import — pushed over the shell (shell hidden).
 List<RouteBase> _libraryHiddenRoutes() => <RouteBase>[
-  GoRoute(
-    parentNavigatorKey: _rootNavigatorKey,
-    path: RoutePaths.flashcardCreateTemplate,
-    name: RouteNames.flashcardCreate,
-    builder: (context, state) => RoutePlaceholder(
-      routeName: RouteNames.flashcardCreate,
-      params: <String, String>{
-        RoutePaths.deckIdParam:
-            state.pathParameters[RoutePaths.deckIdParam] ?? '',
-      },
-    ),
-  ),
-  GoRoute(
-    parentNavigatorKey: _rootNavigatorKey,
-    path: RoutePaths.flashcardEditTemplate,
-    name: RouteNames.flashcardEdit,
-    builder: (context, state) => RoutePlaceholder(
-      routeName: RouteNames.flashcardEdit,
-      params: <String, String>{
-        RoutePaths.deckIdParam:
-            state.pathParameters[RoutePaths.deckIdParam] ?? '',
-        RoutePaths.flashcardIdParam:
-            state.pathParameters[RoutePaths.flashcardIdParam] ?? '',
-      },
-    ),
-  ),
-  GoRoute(
-    parentNavigatorKey: _rootNavigatorKey,
-    path: RoutePaths.deckImportTemplate,
-    name: RouteNames.deckImport,
-    builder: (context, state) => RoutePlaceholder(
-      routeName: RouteNames.deckImport,
-      params: <String, String>{
-        RoutePaths.deckIdParam:
-            state.pathParameters[RoutePaths.deckIdParam] ?? '',
-      },
-    ),
-  ),
+  ...flashcardRoutes(_rootNavigatorKey),
 ];
 
 /// Study entry/today/session/result — full-screen, shell hidden.

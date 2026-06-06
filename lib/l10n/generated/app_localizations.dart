@@ -2928,6 +2928,198 @@ abstract class AppLocalizations {
   /// **'Clear'**
   String get flashcardsClearSearchAction;
 
+  /// No description provided for @flashcardEditorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New flashcard'**
+  String get flashcardEditorTitle;
+
+  /// No description provided for @flashcardEditorBreadcrumbFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get flashcardEditorBreadcrumbFolder;
+
+  /// No description provided for @flashcardEditorBreadcrumbDeck.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck'**
+  String get flashcardEditorBreadcrumbDeck;
+
+  /// No description provided for @flashcardEditorBreadcrumbCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'New card'**
+  String get flashcardEditorBreadcrumbCurrent;
+
+  /// No description provided for @flashcardEditorDestinationDeckLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected deck'**
+  String get flashcardEditorDestinationDeckLabel;
+
+  /// No description provided for @flashcardEditorRequiredWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get flashcardEditorRequiredWord;
+
+  /// No description provided for @flashcardEditorFrontHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get flashcardEditorFrontHeading;
+
+  /// No description provided for @flashcardEditorBackHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get flashcardEditorBackHeading;
+
+  /// No description provided for @flashcardEditorFrontPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'The term you want to remember'**
+  String get flashcardEditorFrontPlaceholder;
+
+  /// No description provided for @flashcardEditorBackPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the meaning or translation.'**
+  String get flashcardEditorBackPlaceholder;
+
+  /// No description provided for @flashcardEditorMoreFieldsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add details'**
+  String get flashcardEditorMoreFieldsLabel;
+
+  /// No description provided for @flashcardEditorMoreFieldsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'example · hint · pronunciation'**
+  String get flashcardEditorMoreFieldsSummary;
+
+  /// No description provided for @flashcardEditorNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get flashcardEditorNoteLabel;
+
+  /// No description provided for @flashcardEditorExampleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get flashcardEditorExampleLabel;
+
+  /// No description provided for @flashcardEditorPronunciationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronunciation'**
+  String get flashcardEditorPronunciationLabel;
+
+  /// No description provided for @flashcardEditorHintLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get flashcardEditorHintLabel;
+
+  /// No description provided for @flashcardEditorTagsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TAGS'**
+  String get flashcardEditorTagsLabel;
+
+  /// No description provided for @flashcardEditorTagsOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'optional'**
+  String get flashcardEditorTagsOptionalLabel;
+
+  /// No description provided for @flashcardEditorAddTagLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add tag'**
+  String get flashcardEditorAddTagLabel;
+
+  /// No description provided for @flashcardEditorSaveCardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Save card'**
+  String get flashcardEditorSaveCardLabel;
+
+  /// No description provided for @flashcardEditorSaveHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Front and back are required to save.'**
+  String get flashcardEditorSaveHelperText;
+
+  /// No description provided for @flashcardEditorSampleFront.
+  ///
+  /// In en, this message translates to:
+  /// **'안녕하세요'**
+  String get flashcardEditorSampleFront;
+
+  /// No description provided for @flashcardEditorSampleBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get flashcardEditorSampleBack;
+
+  /// No description provided for @flashcardEditorSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Greeting used on first contact.'**
+  String get flashcardEditorSampleNote;
+
+  /// No description provided for @flashcardEditorSampleExample.
+  ///
+  /// In en, this message translates to:
+  /// **'안녕하세요, 저는 민수입니다.'**
+  String get flashcardEditorSampleExample;
+
+  /// No description provided for @flashcardEditorSamplePronunciation.
+  ///
+  /// In en, this message translates to:
+  /// **'annyeonghaseyo'**
+  String get flashcardEditorSamplePronunciation;
+
+  /// No description provided for @flashcardEditorSampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with a casual greeting.'**
+  String get flashcardEditorSampleHint;
+
+  /// No description provided for @flashcardEditorSampleTagGreet.
+  ///
+  /// In en, this message translates to:
+  /// **'greet'**
+  String get flashcardEditorSampleTagGreet;
+
+  /// No description provided for @flashcardEditorSampleTagN5.
+  ///
+  /// In en, this message translates to:
+  /// **'N5'**
+  String get flashcardEditorSampleTagN5;
+
+  /// No description provided for @flashcardEditorFrontError.
+  ///
+  /// In en, this message translates to:
+  /// **'Front is required.'**
+  String get flashcardEditorFrontError;
+
+  /// No description provided for @flashcardEditorBackError.
+  ///
+  /// In en, this message translates to:
+  /// **'Back is required.'**
+  String get flashcardEditorBackError;
+
+  /// No description provided for @flashcardEditorSaveFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save this flashcard. Try again.'**
+  String get flashcardEditorSaveFailedMessage;
+
   /// No description provided for @flashcardsMoveTitle.
   ///
   /// In en, this message translates to:

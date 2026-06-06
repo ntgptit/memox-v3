@@ -1,5 +1,7 @@
+import 'package:drift/drift.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/core/utils/id_generator.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
@@ -92,6 +94,85 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   }
 
   @override
+  Future<Result<Flashcard>> createFlashcard({
+    required String deckId,
+    required String front,
+    required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+  }) async {
+    final String trimmedFront = StringUtils.trimmed(front);
+    if (trimmedFront.isEmpty) {
+      return Future<Result<Flashcard>>.value(
+        const Result<Flashcard>.err(
+          Failure.validation(field: 'front', code: ValidationCode.empty),
+        ),
+      );
+    }
+
+    final String trimmedBack = StringUtils.trimmed(back);
+    if (trimmedBack.isEmpty) {
+      return Future<Result<Flashcard>>.value(
+        const Result<Flashcard>.err(
+          Failure.validation(field: 'back', code: ValidationCode.empty),
+        ),
+      );
+    }
+
+    final String? trimmedExample = _optionalText(exampleSentence);
+    final String? trimmedPronunciation = _optionalText(pronunciation);
+    final String? trimmedHint = _optionalText(hint);
+
+    try {
+      final FlashcardRow created = await _dao.transaction(() async {
+        final DeckRow? deckRow = await _folderDao.findDeck(deckId);
+        if (deckRow == null) {
+          throw _RuleViolation(Failure.notFound(entity: 'deck', id: deckId));
+        }
+
+        final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
+        final String id = IdGenerator.newId();
+        final int nextSortOrder = (await _dao.maxFlashcardSortOrder(deckId)) + 1;
+
+        await _dao.into(_dao.flashcards).insert(
+          FlashcardsCompanion.insert(
+            id: id,
+            deckId: deckId,
+            front: trimmedFront,
+            back: trimmedBack,
+            exampleSentence: Value<String?>(trimmedExample),
+            pronunciation: Value<String?>(trimmedPronunciation),
+            hint: Value<String?>(trimmedHint),
+            sortOrder: Value<int>(nextSortOrder),
+            createdAt: nowMs,
+            updatedAt: nowMs,
+          ),
+        );
+        await _dao.into(_dao.attachedDatabase.flashcardProgress).insert(
+          FlashcardProgressCompanion.insert(
+            flashcardId: id,
+            dueAt: Value<int?>(nowMs),
+          ),
+        );
+        return (await _dao.findFlashcard(id))!;
+      });
+
+      return Result<Flashcard>.ok(FlashcardMapper.fromRow(created));
+    } on _RuleViolation catch (violation) {
+      return Result<Flashcard>.err(violation.failure);
+    } catch (error) {
+      return Result<Flashcard>.err(
+        Failure.storage(
+          operation: StorageOp.write,
+          cause: error.toString(),
+          table: 'flashcards',
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Result<void>> deleteFlashcard({required String flashcardId}) async {
     try {
       final FlashcardRow? row = await _dao.findFlashcard(flashcardId);
@@ -137,4 +218,17 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     }
   }
 
+  static String? _optionalText(String? value) {
+    if (value == null) {
+      return null;
+    }
+    final String trimmed = StringUtils.trimmed(value);
+    return trimmed.isEmpty ? null : trimmed;
+  }
+}
+
+class _RuleViolation implements Exception {
+  const _RuleViolation(this.failure);
+
+  final Failure failure;
 }

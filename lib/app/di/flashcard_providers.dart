@@ -3,6 +3,7 @@ import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
+import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/reorder_flashcards_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/watch_flashcard_list_usecase.dart';
@@ -26,6 +27,10 @@ FlashcardRepository flashcardRepository(Ref ref) => FlashcardRepositoryImpl(
   ref.watch(flashcardDaoProvider),
   ref.watch(folderDaoProvider),
 );
+
+@Riverpod(keepAlive: true)
+CreateFlashcardUseCase createFlashcardUseCase(Ref ref) =>
+    CreateFlashcardUseCase(ref.watch(flashcardRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 WatchFlashcardListUseCase watchFlashcardListUseCase(Ref ref) =>

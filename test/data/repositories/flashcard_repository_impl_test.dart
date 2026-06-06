@@ -9,6 +9,7 @@ import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/entities/deck.dart';
+import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -51,6 +52,11 @@ void main() {
     String front,
     String back,
     int order,
+    {
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+  }
   ) async {
     final int now = DateTime.now().toUtc().millisecondsSinceEpoch;
     await db
@@ -61,6 +67,9 @@ void main() {
             deckId: deckId,
             front: front,
             back: back,
+            exampleSentence: Value<String?>(exampleSentence),
+            pronunciation: Value<String?>(pronunciation),
+            hint: Value<String?>(hint),
             sortOrder: Value<int>(order),
             createdAt: now,
             updatedAt: now,
@@ -120,6 +129,38 @@ void main() {
       expect(detail.totalCount, 2);
     });
 
+    test('search matches pronunciation and hint content', () async {
+      final Deck deck = await seedDeck();
+      await addCard(
+        deck.id,
+        'c1',
+        '안녕하세요',
+        'Hello',
+        0,
+        pronunciation: 'annyeonghaseyo',
+      );
+      await addCard(
+        deck.id,
+        'c2',
+        '연구자',
+        'Researcher',
+        1,
+        hint: 'research + person',
+      );
+
+      final FlashcardListDetail pronunciationDetail = await load(
+        deck.id,
+        search: 'annyeong',
+      );
+      final FlashcardListDetail hintDetail = await load(
+        deck.id,
+        search: 'person',
+      );
+
+      expect(pronunciationDetail.cards.single.front, '안녕하세요');
+      expect(hintDetail.cards.single.front, '연구자');
+    });
+
     test('unknown deck id surfaces a NotFoundFailure', () async {
       final Result<FlashcardListDetail> result = await repo
           .watchFlashcardList('missing')
@@ -127,6 +168,49 @@ void main() {
 
       expect(result, isA<Err<FlashcardListDetail>>());
       expect((result as Err<FlashcardListDetail>).failure, isA<NotFoundFailure>());
+    });
+  });
+
+  group('createFlashcard', () {
+    test('creates a card with trimmed text and seeds progress', () async {
+      final Deck deck = await seedDeck();
+
+      final Result<Flashcard> result = await repo.createFlashcard(
+        deckId: deck.id,
+        front: '  안녕하세요  ',
+        back: '  Hello  ',
+        exampleSentence: '  Example sentence  ',
+        pronunciation: '  annyeonghaseyo  ',
+        hint: '  Greeting root  ',
+      );
+
+      expect(result, isA<Ok<Flashcard>>());
+      final Flashcard created = (result as Ok<Flashcard>).value;
+      expect(created.front, '안녕하세요');
+      expect(created.back, 'Hello');
+      expect(created.exampleSentence, 'Example sentence');
+      expect(created.pronunciation, 'annyeonghaseyo');
+      expect(created.hint, 'Greeting root');
+      expect(created.sortOrder, 0);
+
+      final List<FlashcardProgressRow> progressRows =
+          await db.select(db.flashcardProgress).get();
+      expect(progressRows, hasLength(1));
+      expect(progressRows.single.flashcardId, created.id);
+      expect(progressRows.single.dueAt, isA<int>());
+    });
+
+    test('unknown deck returns NotFoundFailure and inserts nothing', () async {
+      final Result<Flashcard> result = await repo.createFlashcard(
+        deckId: 'missing',
+        front: 'Hello',
+        back: 'World',
+      );
+
+      expect(result, isA<Err<Flashcard>>());
+      expect((result as Err<Flashcard>).failure, isA<NotFoundFailure>());
+      expect(await db.select(db.flashcards).get(), isEmpty);
+      expect(await db.select(db.flashcardProgress).get(), isEmpty);
     });
   });
 

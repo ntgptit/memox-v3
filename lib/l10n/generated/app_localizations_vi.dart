@@ -1721,6 +1721,105 @@ class AppLocalizationsVi extends AppLocalizations {
   String get flashcardsClearSearchAction => 'Xóa';
 
   @override
+  String get flashcardEditorTitle => 'Thẻ mới';
+
+  @override
+  String get flashcardEditorBreadcrumbFolder => 'Thư mục';
+
+  @override
+  String get flashcardEditorBreadcrumbDeck => 'Bộ thẻ';
+
+  @override
+  String get flashcardEditorBreadcrumbCurrent => 'Thẻ mới';
+
+  @override
+  String get flashcardEditorDestinationDeckLabel => 'Bộ thẻ đã chọn';
+
+  @override
+  String get flashcardEditorRequiredWord => 'Bắt buộc';
+
+  @override
+  String get flashcardEditorFrontHeading => 'Mặt trước';
+
+  @override
+  String get flashcardEditorBackHeading => 'Mặt sau';
+
+  @override
+  String get flashcardEditorFrontPlaceholder => 'Thuật ngữ bạn muốn ghi nhớ';
+
+  @override
+  String get flashcardEditorBackPlaceholder => 'Thêm nghĩa hoặc bản dịch.';
+
+  @override
+  String get flashcardEditorMoreFieldsLabel => 'Thêm chi tiết';
+
+  @override
+  String get flashcardEditorMoreFieldsSummary => 'ví dụ · gợi ý · phát âm';
+
+  @override
+  String get flashcardEditorNoteLabel => 'Ghi chú';
+
+  @override
+  String get flashcardEditorExampleLabel => 'Ví dụ';
+
+  @override
+  String get flashcardEditorPronunciationLabel => 'Phát âm';
+
+  @override
+  String get flashcardEditorHintLabel => 'Gợi ý';
+
+  @override
+  String get flashcardEditorTagsLabel => 'THẺ';
+
+  @override
+  String get flashcardEditorTagsOptionalLabel => 'không bắt buộc';
+
+  @override
+  String get flashcardEditorAddTagLabel => '+ Thêm thẻ';
+
+  @override
+  String get flashcardEditorSaveCardLabel => 'Lưu thẻ';
+
+  @override
+  String get flashcardEditorSaveHelperText =>
+      'Mặt trước và mặt sau là bắt buộc để lưu.';
+
+  @override
+  String get flashcardEditorSampleFront => '안녕하세요';
+
+  @override
+  String get flashcardEditorSampleBack => 'Hello';
+
+  @override
+  String get flashcardEditorSampleNote => 'Lời chào dùng khi gặp lần đầu.';
+
+  @override
+  String get flashcardEditorSampleExample => '안녕하세요, 저는 민수입니다.';
+
+  @override
+  String get flashcardEditorSamplePronunciation => 'annyeonghaseyo';
+
+  @override
+  String get flashcardEditorSampleHint =>
+      'Bắt đầu bằng một lời chào thân thiện.';
+
+  @override
+  String get flashcardEditorSampleTagGreet => 'greet';
+
+  @override
+  String get flashcardEditorSampleTagN5 => 'N5';
+
+  @override
+  String get flashcardEditorFrontError => 'Mặt trước là bắt buộc.';
+
+  @override
+  String get flashcardEditorBackError => 'Mặt sau là bắt buộc.';
+
+  @override
+  String get flashcardEditorSaveFailedMessage =>
+      'Không thể lưu thẻ này. Thử lại.';
+
+  @override
   String get flashcardsMoveTitle => 'Di chuyển flashcard';
 
   @override

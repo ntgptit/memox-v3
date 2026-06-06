@@ -51,9 +51,13 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 > **Target** (`Either`-based, full surface). The shipped V1
 > `FlashcardRepository` (`lib/domain/repositories/flashcard_repository.dart`,
 > impl `lib/data/repositories/flashcard_repository_impl.dart`) is a `Result`-based
-> subset for the Flashcard List slice:
+> subset for the Flashcard List/editor slice:
+> - `Future<Result<Flashcard>> createFlashcard({deckId, front, back, exampleSentence, pronunciation, hint})`
+>   — trims required fields, stores the optional example sentence / pronunciation / hint when
+>   provided, and inserts the initial `flashcard_progress` row in the same transaction.
 > - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort})`
->   — deck + folder breadcrumb + search-filtered cards + search-independent `totalCount`
+>   — deck + folder breadcrumb + search-filtered cards (front/back/example/pronunciation/hint) +
+>   search-independent `totalCount`
 >   (composes `FlashcardDao` with `FolderDao` for the breadcrumb + content-revision stream).
 > - `Future<Result<void>> deleteFlashcard({flashcardId})` — single-card delete (progress
 >   cascades via FK).
@@ -69,7 +73,7 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 
 | Operation | Single transaction across |
 | --- | --- |
-| `create` | `flashcards` INSERT + `flashcard_progress` initial row + `flashcard_tags` INSERTs |
+| `create` | `flashcards` INSERT + `flashcard_progress` initial row |
 | `update` (with tags) | `flashcards` UPDATE + replace `flashcard_tags` rows |
 | `move` | `flashcards.deck_id` UPDATE + `sort_order` recompute |
 | `delete` | `study_attempts`, `flashcard_tags`, `flashcard_progress`, `flashcards` |
@@ -83,6 +87,7 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 ## Constraints
 
 - `front` and `back` non-empty after trim.
+- Optional example sentence / pronunciation / hint text is trimmed and stored as `null` when blank.
 - Tags via `flashcard_tags` rows, lowercased, max 50 chars.
 - Initial progress row MUST be created with `current_box=1`, `due_at=now`.
 
