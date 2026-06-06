@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import 'package:memox/data/datasources/local/connection/database_connection.dart';
 import 'package:memox/data/datasources/local/migrations/v2_add_flashcard_optional_fields.dart';
+import 'package:memox/data/datasources/local/migrations/v3_add_flashcard_tags.dart';
 
 part 'app_database.g.dart';
 
@@ -17,6 +18,7 @@ part 'app_database.g.dart';
     'drift/folders.drift',
     'drift/decks.drift',
     'drift/flashcards.drift',
+    'drift/flashcard_tags.drift',
     'drift/flashcard_progress.drift',
   },
 )
@@ -28,7 +30,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Bump and add an `onUpgrade` step for every schema change
   /// (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 2;
+  static const int currentSchemaVersion = 3;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -42,6 +44,9 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (Migrator m, int from, int to) async {
       if (from < 2) {
         await addFlashcardOptionalFields(m, this);
+      }
+      if (from < 3) {
+        await addFlashcardTags(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

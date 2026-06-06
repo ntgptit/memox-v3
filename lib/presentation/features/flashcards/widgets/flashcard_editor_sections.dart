@@ -59,7 +59,11 @@ class FlashcardEditorDeckChip extends StatelessWidget {
     );
     return onTap == null
         ? child
-        : MxTappable(onTap: onTap, borderRadius: RadiusTokens.brFull, child: child);
+        : MxTappable(
+            onTap: onTap,
+            borderRadius: RadiusTokens.brFull,
+            child: child,
+          );
   }
 }
 
@@ -200,6 +204,7 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
     required this.hintFocusNode,
     required this.onToggle,
     required this.onChanged,
+    this.pronunciationTrailingIcon,
     super.key,
   });
 
@@ -220,6 +225,7 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
   final FocusNode hintFocusNode;
   final VoidCallback onToggle;
   final ValueChanged<String>? onChanged;
+  final IconData? pronunciationTrailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -230,84 +236,117 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
         borderRadius: RadiusTokens.brLg,
         border: Border.all(color: scheme.outlineVariant),
       ),
-      child: expanded
-          ? Padding(
-              padding: const EdgeInsets.all(SpacingTokens.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _OptionalField(
-                    label: exampleLabel,
-                    placeholder: examplePlaceholder,
-                    controller: exampleController,
-                    focusNode: exampleFocusNode,
-                    onChanged: onChanged,
-                    minLines: 2,
-                    maxLines: 4,
-                  ),
-                  const SizedBox(height: SpacingTokens.md),
-                  _OptionalField(
-                    label: hintLabel,
-                    placeholder: hintPlaceholder,
-                    controller: hintController,
-                    focusNode: hintFocusNode,
-                    onChanged: onChanged,
-                    minLines: 2,
-                    maxLines: 3,
-                  ),
-                  const SizedBox(height: SpacingTokens.md),
-                  _OptionalField(
-                    label: pronunciationLabel,
-                    placeholder: pronunciationPlaceholder,
-                    controller: pronunciationController,
-                    focusNode: pronunciationFocusNode,
-                    onChanged: onChanged,
-                    minLines: 1,
-                    maxLines: 2,
-                  ),
-                ],
-              ),
-            )
-          : MxTappable(
+      child: Padding(
+        padding: const EdgeInsets.all(SpacingTokens.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _DetailsToggleRow(
+              title: title,
+              subtitle: subtitle,
+              expanded: expanded,
               onTap: onToggle,
-              borderRadius: RadiusTokens.brLg,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SpacingTokens.md,
-                  vertical: SpacingTokens.md,
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.auto_awesome_outlined,
-                      size: SizeTokens.iconSm,
-                      color: scheme.primary,
-                    ),
-                    const SizedBox(width: SpacingTokens.sm),
-                    MxText(
-                      title,
-                      role: MxTextRole.labelLarge,
-                      color: scheme.primary,
-                      fontWeight: TypographyTokens.semiBold,
-                    ),
-                    const SizedBox(width: SpacingTokens.sm),
-                    Expanded(
-                      child: MxText(
-                        subtitle,
-                        role: MxTextRole.labelMedium,
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(width: SpacingTokens.sm),
-                    Icon(
-                      Icons.expand_more,
-                      size: SizeTokens.iconSm,
-                      color: scheme.primary,
-                    ),
-                  ],
-                ),
+            ),
+            if (expanded) ...<Widget>[
+              const SizedBox(height: SpacingTokens.md),
+              _OptionalField(
+                label: exampleLabel,
+                placeholder: examplePlaceholder,
+                controller: exampleController,
+                focusNode: exampleFocusNode,
+                onChanged: onChanged,
+                minLines: 2,
+                maxLines: 4,
+              ),
+              const SizedBox(height: SpacingTokens.md),
+              _OptionalField(
+                label: hintLabel,
+                placeholder: hintPlaceholder,
+                controller: hintController,
+                focusNode: hintFocusNode,
+                onChanged: onChanged,
+                minLines: 2,
+                maxLines: 3,
+              ),
+              const SizedBox(height: SpacingTokens.md),
+              _OptionalField(
+                label: pronunciationLabel,
+                placeholder: pronunciationPlaceholder,
+                controller: pronunciationController,
+                focusNode: pronunciationFocusNode,
+                onChanged: onChanged,
+                minLines: 1,
+                maxLines: 2,
+                trailingIcon: pronunciationTrailingIcon,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailsToggleRow extends StatelessWidget {
+  const _DetailsToggleRow({
+    required this.title,
+    required this.subtitle,
+    required this.expanded,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final bool expanded;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = context.colorScheme;
+    return MxTappable(
+      onTap: onTap,
+      borderRadius: RadiusTokens.brLg,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.md,
+          vertical: SpacingTokens.md,
+        ),
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          borderRadius: RadiusTokens.brLg,
+          border: Border.all(color: scheme.outlineVariant),
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.auto_awesome_outlined,
+              size: SizeTokens.iconSm,
+              color: scheme.primary,
+            ),
+            const SizedBox(width: SpacingTokens.sm),
+            MxText(
+              title,
+              role: MxTextRole.labelLarge,
+              color: scheme.primary,
+              fontWeight: TypographyTokens.semiBold,
+            ),
+            const SizedBox(width: SpacingTokens.sm),
+            Expanded(
+              child: MxText(
+                subtitle,
+                role: MxTextRole.labelMedium,
+                color: scheme.onSurfaceVariant,
               ),
             ),
+            const SizedBox(width: SpacingTokens.sm),
+            Icon(
+              expanded ? Icons.expand_less : Icons.expand_more,
+              size: SizeTokens.iconSm,
+              color: scheme.primary,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -321,6 +360,7 @@ class _OptionalField extends StatelessWidget {
     required this.onChanged,
     required this.minLines,
     required this.maxLines,
+    this.trailingIcon,
   });
 
   final String label;
@@ -330,6 +370,7 @@ class _OptionalField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int minLines;
   final int maxLines;
+  final IconData? trailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -352,6 +393,7 @@ class _OptionalField extends StatelessWidget {
           textInputAction: TextInputAction.newline,
           onChanged: onChanged,
           hintText: placeholder,
+          trailingIcon: trailingIcon,
           prominent: false,
         ),
       ],

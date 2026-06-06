@@ -1,0 +1,11 @@
+import 'flashcards.drift';
+
+-- `flashcard_tags` table - free-form lowercased tags attached to a flashcard.
+-- Tags are global by name; the table uses one row per flashcard/tag pair.
+CREATE TABLE flashcard_tags (
+  flashcard_id TEXT NOT NULL REFERENCES flashcards (id) ON DELETE CASCADE,
+  tag TEXT NOT NULL,
+  PRIMARY KEY (flashcard_id, tag)
+) AS FlashcardTagRow;
+
+CREATE INDEX idx_flashcard_tags_tag ON flashcard_tags (tag, flashcard_id);

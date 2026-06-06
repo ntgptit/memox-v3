@@ -66,7 +66,7 @@ They must not call DAO, repository, or use case directly.
 
 ## Dialog patterns
 
-All dialogs share the same Material 3 structure: title, body, optional inline warning region, action row right-aligned. Most destructive actions use theme `error` color; the documented folder-delete strong variant uses the dedicated destructive fill token from the mock (`error-fill`) for its solid button. Primary safe action is on the right; cancel on the left.
+All dialogs share the same Material 3 structure: title, body, optional inline warning region, and a right-aligned action row. Name/confirm dialogs use a single horizontal action row with equal-width buttons. All shared dialogs are modal-locked; tapping outside or pressing back does not dismiss them. Most destructive actions use theme `error` color; the documented folder-delete strong variant uses the dedicated destructive fill token from the mock (`error-fill`) for its solid button. Primary safe action is on the right; cancel on the left.
 
 ---
 

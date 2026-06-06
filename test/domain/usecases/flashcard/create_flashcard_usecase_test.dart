@@ -16,6 +16,7 @@ class _CreateCall {
     required this.exampleSentence,
     required this.pronunciation,
     required this.hint,
+    required this.tags,
   });
 
   final DeckId deckId;
@@ -24,12 +25,12 @@ class _CreateCall {
   final String? exampleSentence;
   final String? pronunciation;
   final String? hint;
+  final List<String> tags;
 }
 
 class _RecordingFlashcardRepository implements FlashcardRepository {
-  _RecordingFlashcardRepository({
-    Result<Flashcard>? createResult,
-  }) : createResult = createResult ?? Result<Flashcard>.ok(_flashcard());
+  _RecordingFlashcardRepository({Result<Flashcard>? createResult})
+    : createResult = createResult ?? Result<Flashcard>.ok(_flashcard());
 
   final Result<Flashcard> createResult;
 
@@ -43,6 +44,7 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    List<String> tags = const <String>[],
   }) async {
     lastCreateCall = _CreateCall(
       deckId: deckId,
@@ -51,6 +53,7 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
       exampleSentence: exampleSentence,
       pronunciation: pronunciation,
       hint: hint,
+      tags: tags,
     );
     return createResult;
   }
@@ -164,6 +167,39 @@ void main() {
       expect(repo.lastCreateCall!.exampleSentence, isNull);
       expect(repo.lastCreateCall!.pronunciation, isNull);
       expect(repo.lastCreateCall!.hint, isNull);
+    });
+
+    test('normalizes and deduplicates tags before delegating', () async {
+      final _RecordingFlashcardRepository repo =
+          _RecordingFlashcardRepository();
+      final CreateFlashcardUseCase useCase = CreateFlashcardUseCase(repo);
+
+      await useCase.call(
+        deckId: 'd1',
+        front: 'Hello',
+        back: 'World',
+        tags: <String>['  TOPIK II  ', '#topik ii', 'noun'],
+      );
+
+      expect(repo.lastCreateCall, isNotNull);
+      expect(repo.lastCreateCall!.tags, <String>['topik ii', 'noun']);
+    });
+
+    test('rejects a comma in tags before calling the repository', () async {
+      final _RecordingFlashcardRepository repo =
+          _RecordingFlashcardRepository();
+      final CreateFlashcardUseCase useCase = CreateFlashcardUseCase(repo);
+
+      final Result<Flashcard> result = await useCase.call(
+        deckId: 'd1',
+        front: 'Hello',
+        back: 'World',
+        tags: <String>['bad,tag'],
+      );
+
+      expect(result, isA<Err<Flashcard>>());
+      expect((result as Err<Flashcard>).failure, isA<ValidationFailure>());
+      expect(repo.lastCreateCall, isNull);
     });
   });
 }

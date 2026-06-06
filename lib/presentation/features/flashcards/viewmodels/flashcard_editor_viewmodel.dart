@@ -20,13 +20,15 @@ Stream<FlashcardListDetail> flashcardEditorContextQuery(
   DeckId deckId,
 ) {
   final useCase = ref.watch(watchFlashcardListUseCaseProvider);
-  return useCase.call(deckId).map(
-    (Result<FlashcardListDetail> result) => result.fold(
-      // ignore: only_throw_errors
-      (Failure failure) => throw failure,
-      (FlashcardListDetail detail) => detail,
-    ),
-  );
+  return useCase
+      .call(deckId)
+      .map(
+        (Result<FlashcardListDetail> result) => result.fold(
+          // ignore: only_throw_errors
+          (Failure failure) => throw failure,
+          (FlashcardListDetail detail) => detail,
+        ),
+      );
 }
 
 /// Executes the create mutation for the flashcard editor screen.
@@ -42,6 +44,7 @@ class FlashcardEditorController extends _$FlashcardEditorController {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    List<String> tags = const <String>[],
   }) async {
     state = const AsyncValue<void>.loading();
     final Result<Flashcard> result = await ref
@@ -53,12 +56,10 @@ class FlashcardEditorController extends _$FlashcardEditorController {
           exampleSentence: exampleSentence,
           pronunciation: pronunciation,
           hint: hint,
+          tags: tags,
         );
     state = result.fold(
-      (Failure failure) => AsyncValue<void>.error(
-        failure,
-        StackTrace.current,
-      ),
+      (Failure failure) => AsyncValue<void>.error(failure, StackTrace.current),
       (Flashcard _) => const AsyncValue<void>.data(null),
     );
     return result;

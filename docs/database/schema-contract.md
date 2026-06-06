@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-06
 applies_to: Drift schema, all tables, migrations
-schema_version: 2 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 3 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract
@@ -13,7 +13,7 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **2**. Tables shipped
+**Current schema** (`AppDatabase.currentSchemaVersion`): **3**. Tables shipped
 so far (added for the Library feature):
 
 | Table                | Columns (current)                                                                                                                                                                                     |
@@ -21,9 +21,10 @@ so far (added for the Library feature):
 | `folders`            | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`                                                                                               |
 | `decks`              | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language`, `sort_order`, `created_at`, `updated_at`                                                                                          |
 | `flashcards`         | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, `created_at`, `updated_at`                                                    |
+| `flashcard_tags`     | `flashcard_id` (FK→flashcards, cascade), `tag` + index `idx_flashcard_tags_tag`                                                                                                                     |
 | `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number`, `due_at?`, `buried_until?`, `is_suspended`, `review_count`, `lapse_count`, `last_studied_at?` + index `idx_flashcard_progress_eligibility` |
 
-Remaining target tables (`flashcard_tags`, `study_sessions`,
+Remaining target tables (`study_sessions`,
 `study_session_items`, `study_attempts`, `tts_settings`) land with their
 feature slices. When a new table/column ships, bump
 `AppDatabase.currentSchemaVersion`, add an `onUpgrade` step
@@ -122,6 +123,7 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 
 - `flashcards.pronunciation` and `flashcards.hint` — ✅ implemented in schema v2 (flashcard create
   optional detail fields).
+- `flashcard_tags.tag` — ✅ implemented in schema v3 (create-time tags on flashcards).
 - `study_attempts.result = 'recovered'` — ✅ implemented in schema v13 for Fill hint-taint /
   Mark-correct grading. Schema v13 intentionally also repairs schema-12 databases that were created
   before the recovered CHECK migration was version-safe.
@@ -222,7 +224,7 @@ This schema is referenced by every business spec that touches persistent state.
 | `decks` (incl. `target_language` pending migration)                                             | `docs/business/deck/deck-management.md`, `docs/business/tts/tts-settings.md`                                              |
 | `flashcards`                                                                                    | `docs/business/flashcard/flashcard-management.md`                                                                         |
 | `flashcard_progress` (incl. `buried_until`, `is_suspended`, `last_reset_at` pending migrations) | `docs/business/srs/srs-review.md`, `docs/business/study-actions/bury-suspend.md`, `docs/business/history/card-history.md` |
-| `flashcard_tags`                                                                                | `docs/business/tags/tag-system.md`                                                                                        |
+| `flashcard_tags`                                                                                | `docs/business/tags/tag-system.md`, `docs/business/flashcard/flashcard-management.md`                                     |
 | `study_sessions`                                                                                | `docs/business/study/study-flow.md`, `docs/business/resume/resume-session.md`                                             |
 | `study_session_items`                                                                           | `docs/business/study/study-flow.md`                                                                                       |
 | `study_attempts` (incl. `box_before`, `box_after` pending migrations)                           | `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`                                                |

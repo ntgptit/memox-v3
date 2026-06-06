@@ -11,7 +11,7 @@ applies_to: flashcard entity and flashcard management feature
 - `lib/domain/**flashcard**`
 - `lib/data/**flashcard**`
 - `lib/data/datasources/local/tables/flashcards_table.dart`
-- `lib/data/datasources/local/tables/flashcard_tags_table.dart`
+- `lib/data/datasources/local/drift/flashcard_tags.drift`
 - `lib/data/datasources/local/tables/flashcard_progress_table.dart`
 
 ## Data
@@ -21,8 +21,8 @@ Flashcards are stored in `flashcards`.
 Supported fields are defined by current Drift schema. Agents must inspect schema before changing
 forms or import logic.
 
-Current V1 manual create/edit writes only the schema-backed content fields that the editor
-surface exposes today:
+Current V1 manual create/edit writes the schema-backed content fields that the editor surface
+exposes today:
 
 - `deck_id`
 - `front`
@@ -30,13 +30,11 @@ surface exposes today:
 - `example_sentence`
 - `pronunciation`
 - `hint`
+- `tags` (stored separately via `flashcard_tags`)
 - `sort_order`
 
-Optional tags content remains a future extension until the schema and editor surface are expanded
-together.
-
-Tags are stored separately in `flashcard_tags` and are not part of the current flashcard create
-screen.
+Tags are stored separately in `flashcard_tags` and are part of the current flashcard create screen.
+Edit surface tag editing remains future work until the edit route is promoted.
 
 SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.md`.
 
@@ -47,6 +45,7 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 - Back is required after trim.
 - Optional example / pronunciation / hint text should be trimmed.
 - Empty optional example / pronunciation / hint text is stored as `null`, not an empty string.
+- Tags are trimmed, lowercased on save, and deduplicated case-insensitively per flashcard.
 - Tags must be non-empty after trim.
 - Tags are deduplicated case-insensitively per flashcard.
 - Flashcard must not be edited under wrong deck.
@@ -207,8 +206,8 @@ V1 create/edit note:
 - Create mode is selected by `deckId` with no `flashcardId`; edit mode is selected by `deckId` +
   `flashcardId`.
 - The editor owns content create and update only.
-- Current create mode saves front, back, and optional example / pronunciation / hint text.
-  Destination-deck retargeting, save-and-add-another, and tag editing remain future work.
+- Current create mode saves front, back, optional example / pronunciation / hint text, and tags.
+  Destination-deck retargeting and save-and-add-another remain future work.
 - Create/edit dirty close and browser/system back require a discard confirmation when unsaved
   content exists.
 - Single-card move/delete/export actions live on the flashcard list row/bulk action surfaces.
@@ -238,7 +237,7 @@ Deck import screen (`/library/deck/:deckId/import`):
 ## Performance
 
 - Flashcard list >100 items: pagination or sliver-based virtualization.
-- Tag input: debounce 200ms.
+- Tag input in the editor: debounce 200ms.
 - Search: debounce 300ms.
 - Large deck flashcard list initial load: stream first 50, lazy load rest.
 
@@ -288,7 +287,7 @@ files.
 
 - `lib/data/datasources/local/tables/flashcards_table.dart`
 - `lib/data/datasources/local/tables/flashcard_progress_table.dart`
-- `lib/data/datasources/local/tables/flashcard_tags_table.dart`
+- `lib/data/datasources/local/drift/flashcard_tags.drift`
 - `lib/data/repositories/flashcard_import_*.dart`
 - `lib/domain/entities/flashcard.dart`
 - `lib/domain/usecases/flashcard/**`

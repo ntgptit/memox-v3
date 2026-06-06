@@ -39,11 +39,12 @@ void main() {
     final Folder folder =
         (await folderRepo.createRootFolder(name: 'Korean') as Ok<Folder>).value;
     return (await folderRepo.createDeck(
-          parentFolderId: folder.id,
-          name: 'N5',
-          targetLanguage: TargetLanguage.korean,
-        )
-        as Ok<Deck>).value;
+              parentFolderId: folder.id,
+              name: 'N5',
+              targetLanguage: TargetLanguage.korean,
+            )
+            as Ok<Deck>)
+        .value;
   }
 
   Future<void> addCard(
@@ -51,13 +52,12 @@ void main() {
     String id,
     String front,
     String back,
-    int order,
-    {
+    int order, {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
-  }
-  ) async {
+    List<String> tags = const <String>[],
+  }) async {
     final int now = DateTime.now().toUtc().millisecondsSinceEpoch;
     await db
         .into(db.flashcards)
@@ -75,6 +75,11 @@ void main() {
             updatedAt: now,
           ),
         );
+    for (final String tag in tags) {
+      await db
+          .into(db.flashcardTags)
+          .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
+    }
   }
 
   Future<FlashcardListDetail> load(DeckId deckId, {String? search}) async {
@@ -108,15 +113,18 @@ void main() {
       expect(detail.totalCount, 0);
     });
 
-    test('search no-results keeps totalCount > 0 (distinct from empty deck)', () async {
-      final Deck deck = await seedDeck();
-      await addCard(deck.id, 'c1', '안녕하세요', 'Hello', 0);
+    test(
+      'search no-results keeps totalCount > 0 (distinct from empty deck)',
+      () async {
+        final Deck deck = await seedDeck();
+        await addCard(deck.id, 'c1', '안녕하세요', 'Hello', 0);
 
-      final FlashcardListDetail detail = await load(deck.id, search: 'zzz');
+        final FlashcardListDetail detail = await load(deck.id, search: 'zzz');
 
-      expect(detail.cards, isEmpty);
-      expect(detail.totalCount, 1);
-    });
+        expect(detail.cards, isEmpty);
+        expect(detail.totalCount, 1);
+      },
+    );
 
     test('search matches front/back substring', () async {
       final Deck deck = await seedDeck();
@@ -167,7 +175,10 @@ void main() {
           .first;
 
       expect(result, isA<Err<FlashcardListDetail>>());
-      expect((result as Err<FlashcardListDetail>).failure, isA<NotFoundFailure>());
+      expect(
+        (result as Err<FlashcardListDetail>).failure,
+        isA<NotFoundFailure>(),
+      );
     });
   });
 
@@ -182,6 +193,7 @@ void main() {
         exampleSentence: '  Example sentence  ',
         pronunciation: '  annyeonghaseyo  ',
         hint: '  Greeting root  ',
+        tags: <String>['topik ii', 'noun', 'noun'],
       );
 
       expect(result, isA<Ok<Flashcard>>());
@@ -193,8 +205,14 @@ void main() {
       expect(created.hint, 'Greeting root');
       expect(created.sortOrder, 0);
 
-      final List<FlashcardProgressRow> progressRows =
-          await db.select(db.flashcardProgress).get();
+      final List<FlashcardTagRow> tagRows = await db
+          .select(db.flashcardTags)
+          .get();
+      expect(tagRows.map((row) => row.tag), <String>['topik ii', 'noun']);
+
+      final List<FlashcardProgressRow> progressRows = await db
+          .select(db.flashcardProgress)
+          .get();
       expect(progressRows, hasLength(1));
       expect(progressRows.single.flashcardId, created.id);
       expect(progressRows.single.dueAt, isA<int>());
@@ -205,6 +223,7 @@ void main() {
         deckId: 'missing',
         front: 'Hello',
         back: 'World',
+        tags: <String>['tag'],
       );
 
       expect(result, isA<Err<Flashcard>>());
@@ -266,7 +285,10 @@ void main() {
       final Result<FlashcardListDetail> after = await repo
           .watchFlashcardList(deck.id)
           .first;
-      expect((after as Err<FlashcardListDetail>).failure, isA<NotFoundFailure>());
+      expect(
+        (after as Err<FlashcardListDetail>).failure,
+        isA<NotFoundFailure>(),
+      );
     });
   });
 }

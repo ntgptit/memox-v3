@@ -13,6 +13,7 @@ import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
+import 'package:memox/domain/tag/tag_validator.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 
 /// Drift-backed [FlashcardRepository].
@@ -65,12 +66,11 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
               )
               .toList(growable: false);
 
-      final List<Flashcard> cards =
-          (await _dao.getFlashcards(
-            deckId: deckId,
-            sort: sort,
-            normalizedSearch: normalizedSearch,
-          )).map(FlashcardMapper.fromRow).toList(growable: false);
+      final List<Flashcard> cards = (await _dao.getFlashcards(
+        deckId: deckId,
+        sort: sort,
+        normalizedSearch: normalizedSearch,
+      )).map(FlashcardMapper.fromRow).toList(growable: false);
 
       final int totalCount = await _dao.countFlashcards(deckId);
 
@@ -101,6 +101,7 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    List<String> tags = const <String>[],
   }) async {
     final String trimmedFront = StringUtils.trimmed(front);
     if (trimmedFront.isEmpty) {
@@ -123,6 +124,15 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     final String? trimmedExample = _optionalText(exampleSentence);
     final String? trimmedPronunciation = _optionalText(pronunciation);
     final String? trimmedHint = _optionalText(hint);
+    final Set<String> seenTags = <String>{};
+    final List<String> normalizedTags = <String>[];
+    for (final String tag in tags) {
+      final String normalizedTag = TagValidator.storageValue(tag);
+      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
+        continue;
+      }
+      normalizedTags.add(normalizedTag);
+    }
 
     try {
       final FlashcardRow created = await _dao.transaction(() async {
@@ -133,28 +143,38 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
 
         final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
         final String id = IdGenerator.newId();
-        final int nextSortOrder = (await _dao.maxFlashcardSortOrder(deckId)) + 1;
+        final int nextSortOrder =
+            (await _dao.maxFlashcardSortOrder(deckId)) + 1;
 
-        await _dao.into(_dao.flashcards).insert(
-          FlashcardsCompanion.insert(
-            id: id,
-            deckId: deckId,
-            front: trimmedFront,
-            back: trimmedBack,
-            exampleSentence: Value<String?>(trimmedExample),
-            pronunciation: Value<String?>(trimmedPronunciation),
-            hint: Value<String?>(trimmedHint),
-            sortOrder: Value<int>(nextSortOrder),
-            createdAt: nowMs,
-            updatedAt: nowMs,
-          ),
-        );
-        await _dao.into(_dao.attachedDatabase.flashcardProgress).insert(
-          FlashcardProgressCompanion.insert(
-            flashcardId: id,
-            dueAt: Value<int?>(nowMs),
-          ),
-        );
+        await _dao
+            .into(_dao.flashcards)
+            .insert(
+              FlashcardsCompanion.insert(
+                id: id,
+                deckId: deckId,
+                front: trimmedFront,
+                back: trimmedBack,
+                exampleSentence: Value<String?>(trimmedExample),
+                pronunciation: Value<String?>(trimmedPronunciation),
+                hint: Value<String?>(trimmedHint),
+                sortOrder: Value<int>(nextSortOrder),
+                createdAt: nowMs,
+                updatedAt: nowMs,
+              ),
+            );
+        await _dao
+            .into(_dao.attachedDatabase.flashcardProgress)
+            .insert(
+              FlashcardProgressCompanion.insert(
+                flashcardId: id,
+                dueAt: Value<int?>(nowMs),
+              ),
+            );
+        for (final String tag in normalizedTags) {
+          await _dao
+              .into(_dao.attachedDatabase.flashcardTags)
+              .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
+        }
         return (await _dao.findFlashcard(id))!;
       });
 

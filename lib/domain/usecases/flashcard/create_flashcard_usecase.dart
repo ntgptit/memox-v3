@@ -3,14 +3,15 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
+import 'package:memox/domain/tag/tag_validator.dart';
 import 'package:memox/domain/types/ids.dart';
 
 /// Creates a single flashcard
 /// (`docs/contracts/usecase-contracts/flashcard.md` §CreateFlashcardUseCase).
 ///
 /// Front/back are validated here so the repository only sees save-ready input.
-/// Optional example text is trimmed and collapsed to `null` when empty; the
-/// repository stores the raw front/back strings as typed.
+/// Optional example text is trimmed and collapsed to `null` when empty. Tags
+/// are normalized to lowercased storage values after validation.
 class CreateFlashcardUseCase {
   const CreateFlashcardUseCase(this._repository);
 
@@ -23,6 +24,7 @@ class CreateFlashcardUseCase {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    List<String> tags = const <String>[],
   }) {
     final String trimmedFront = StringUtils.trimmed(front);
     if (trimmedFront.isEmpty) {
@@ -45,6 +47,20 @@ class CreateFlashcardUseCase {
     final String? normalizedExample = _optionalText(exampleSentence);
     final String? normalizedPronunciation = _optionalText(pronunciation);
     final String? normalizedHint = _optionalText(hint);
+    final List<String> normalizedTags = <String>[];
+    final Set<String> seenTags = <String>{};
+    for (final String tag in tags) {
+      final Failure? validationFailure = TagValidator.validate(tag);
+      if (validationFailure != null) {
+        return Future<Result<Flashcard>>.value(
+          Result<Flashcard>.err(validationFailure),
+        );
+      }
+      final String normalizedTag = TagValidator.storageValue(tag);
+      if (seenTags.add(normalizedTag)) {
+        normalizedTags.add(normalizedTag);
+      }
+    }
     return _repository.createFlashcard(
       deckId: deckId,
       front: trimmedFront,
@@ -52,6 +68,7 @@ class CreateFlashcardUseCase {
       exampleSentence: normalizedExample,
       pronunciation: normalizedPronunciation,
       hint: normalizedHint,
+      tags: normalizedTags,
     );
   }
 

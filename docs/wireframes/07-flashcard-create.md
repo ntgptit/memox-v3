@@ -12,7 +12,7 @@ source_specs:
 > Flashcard Editor surface at
 > `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`.
 > Create mode is selected by `deckId` and currently supports front, back, plus
-> optional example, pronunciation, and hint fields. Edit mode is documented
+> optional example, pronunciation, hint, and tags fields. Edit mode is documented
 > separately in `docs/wireframes/08-flashcard-edit.md`.
 
 ## Purpose
@@ -55,6 +55,9 @@ fast manual entry and keeps the surface intentionally small.
 │ │ Add a mnemonic or reminder.               │   │
 │ └────────────────────────────────────────────┘   │
 │                                                │
+│ TAGS · optional                                 │
+│ [TOPIK II ×] [noun ×] [people ×] [+ Add tag]    │
+│                                                │
 └────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────┐
 │ Cancel                              Save card  │
@@ -82,7 +85,7 @@ fast manual entry and keeps the surface intentionally small.
 | --- | --- | --- |
 | Runtime widget | `FlashcardEditorScreen(deckId: ...)` | `FlashcardEditorScreen(deckId: ..., flashcardId: ...)` |
 | Route input | `deckId` required | `deckId` + `flashcardId` required |
-| Initial content | Blank front/back/example/pronunciation/hint | Loaded from the existing card |
+| Initial content | Blank front/back/example/pronunciation/hint/tags | Loaded from the existing card |
 | Destination deck | Fixed to the selected deck for the create flow | Read-only; moving a saved card belongs to flashcard list row/bulk actions |
 | Save action | Creates one card in the selected deck | Updates the same card |
 | Save and add another | Future Proposal | Hidden |
@@ -94,7 +97,7 @@ fast manual entry and keeps the surface intentionally small.
 - Auto-correct or normalize user typing in front/back.
 - Submit form when Save button is disabled.
 - Reset form on save failure. Keep dirty state visible.
-- Expose tags in the current create flow.
+- Expose tag management or study-by-tag actions from this route.
 
 ## Components
 
@@ -104,7 +107,8 @@ fast manual entry and keeps the surface intentionally small.
 | Breadcrumb | Library root → folder chain → deck → New card. |
 | Deck context chip | Shows the selected destination deck. |
 | Front / Back fields | Multi-line; required validation on save. |
-| More details expander | Collapsed by default. Expands inline example, pronunciation, and hint inputs. |
+| More details expander | Collapsed by default. Keeps the summary row visible and expands inline example, pronunciation, and hint inputs. |
+| Tags row | Shows current chips plus the "+ Add tag" chip. |
 | Save failure banner | Shows localized error feedback with retry affordance. |
 | Bottom helper copy | Explains save requirements under the action bar. |
 
@@ -115,7 +119,9 @@ fast manual entry and keeps the surface intentionally small.
 | Empty | Just opened | Front/back blank. Save disabled until both required fields are filled after trim. |
 | Editing | User typing | Save becomes enabled when front and back are non-empty after trim. |
 | Details collapsed | Default | More details row shows the example / hint / pronunciation summary. |
-| Details expanded | Tap More details | Example, pronunciation, and hint inputs are shown inline. |
+| Details expanded | Tap More details | Summary row stays visible with an expanded chevron and the example, pronunciation, and hint inputs are shown inline. |
+| Tags idle | Default | Tag chips row shows any current chips plus the Add tag chip. |
+| Tags add | Tap Add tag | The tag input dialog accepts one tag and appends it if valid. |
 | Saving | Save tapped | Save button shows spinner; form stays visible and the buttons disable. |
 | Saved | Success | Return to the deck's flashcard list with a success snackbar. |
 | Save error | Repository failure | Error banner appears; form contents remain. |
@@ -128,7 +134,9 @@ fast manual entry and keeps the surface intentionally small.
 | Tap close | Tap | If the draft is dirty, show the discard dialog; otherwise pop immediately. |
 | Browser/system back | Back gesture / browser back | Same discard-confirm behavior as close when the draft is dirty. |
 | Tap Save | Tap | Validate required fields, save, then pop back to the deck list. |
-| Tap More details | Tap | Toggle the inline optional detail inputs. |
+| Tap More details | Tap | Toggle the inline optional detail inputs while keeping the summary row visible. |
+| Tap Add tag | Tap | Open the tag input dialog and append a valid tag chip. |
+| Tap tag chip | Tap chip | Remove the tag chip from the draft. |
 | Retry after save error | Tap retry | Re-run the save using the current draft. |
 
 ## Dialogs used
@@ -157,7 +165,7 @@ fast manual entry and keeps the surface intentionally small.
 ## Responsive
 
 - Body scrolls on small screens.
-- Front/back/optional details stack vertically on every breakpoint in V1.
+- Front/back/optional details/tags stack vertically on every breakpoint in V1.
 
 ## Accessibility
 

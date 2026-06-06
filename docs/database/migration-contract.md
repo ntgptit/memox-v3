@@ -91,6 +91,7 @@ If any step is skipped, report it explicitly.
 
 **Business specs introducing migrations:**
 
+- `docs/business/flashcard/flashcard-management.md` → `flashcard_tags`
 - `docs/business/flashcard/flashcard-management.md` → `flashcards.pronunciation`, `flashcards.hint`
 - `docs/business/deck/deck-management.md` → `decks.target_language`
 - `docs/business/study-actions/bury-suspend.md` → `flashcard_progress.buried_until`, `is_suspended`

@@ -58,6 +58,7 @@ class _CreateCall {
     required this.exampleSentence,
     required this.pronunciation,
     required this.hint,
+    required this.tags,
   });
 
   final DeckId deckId;
@@ -66,12 +67,12 @@ class _CreateCall {
   final String? exampleSentence;
   final String? pronunciation;
   final String? hint;
+  final List<String> tags;
 }
 
 class _RecordingFlashcardRepository implements FlashcardRepository {
-  _RecordingFlashcardRepository({
-    Result<Flashcard>? createResult,
-  }) : createResult = createResult ?? Result<Flashcard>.ok(_createdFlashcard());
+  _RecordingFlashcardRepository({Result<Flashcard>? createResult})
+    : createResult = createResult ?? Result<Flashcard>.ok(_createdFlashcard());
 
   final Result<Flashcard> createResult;
 
@@ -85,6 +86,7 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    List<String> tags = const <String>[],
   }) async {
     lastCreateCall = _CreateCall(
       deckId: deckId,
@@ -93,6 +95,7 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
       exampleSentence: exampleSentence,
       pronunciation: pronunciation,
       hint: hint,
+      tags: tags,
     );
     return createResult;
   }
@@ -135,9 +138,9 @@ class _EditorHost extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               unawaited(
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute<void>(builder: (_) => child),
-                ),
+                Navigator.of(
+                  context,
+                ).push<void>(MaterialPageRoute<void>(builder: (_) => child)),
               );
             },
             child: const Text('Open editor'),
@@ -152,27 +155,35 @@ Widget _wrapApp({
   required _RecordingFlashcardRepository repository,
   ThemeData? theme,
 }) => ProviderScope(
-    overrides: [
-      flashcardEditorContextQueryProvider('d1').overrideWith(
-        (Ref ref) => Stream<FlashcardListDetail>.value(_detail()),
-      ),
-      createFlashcardUseCaseProvider.overrideWithValue(
-        CreateFlashcardUseCase(repository),
-      ),
-    ],
-    child: MaterialApp(
-      locale: const Locale('en'),
-      theme: theme ?? AppTheme.light(),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const _EditorHost(
-        child: FlashcardEditorScreen(deckId: 'd1'),
-      ),
+  overrides: [
+    flashcardEditorContextQueryProvider(
+      'd1',
+    ).overrideWith((Ref ref) => Stream<FlashcardListDetail>.value(_detail())),
+    createFlashcardUseCaseProvider.overrideWithValue(
+      CreateFlashcardUseCase(repository),
     ),
-  );
+  ],
+  child: MaterialApp(
+    locale: const Locale('en'),
+    theme: theme ?? AppTheme.light(),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: const _EditorHost(child: FlashcardEditorScreen(deckId: 'd1')),
+  ),
+);
 
 Future<void> _openEditor(WidgetTester tester) async {
   await tester.tap(find.text('Open editor'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _addTag(WidgetTester tester, String tag) async {
+  await tester.ensureVisible(find.text('+ Add tag').first);
+  await tester.tap(find.text('+ Add tag').first);
+  await tester.pumpAndSettle();
+  await tester.enterText(find.byType(TextField).last, tag);
+  await tester.pump();
+  await tester.tap(find.text('Add'));
   await tester.pumpAndSettle();
 }
 
@@ -187,20 +198,21 @@ void main() {
   group('FlashcardEditorScreen', () {
     testWidgets(
       'DT1 onDisplay: renders the interactive form and keeps save disabled at first',
-      (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _wrapApp(repository: _RecordingFlashcardRepository()),
-      );
-      await _openEditor(tester);
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapApp(repository: _RecordingFlashcardRepository()),
+        );
+        await _openEditor(tester);
 
-      expect(find.text('New flashcard'), findsOneWidget);
-      expect(find.byType(TextFormField), findsNWidgets(2));
-      expect(find.text('Add details'), findsOneWidget);
-      expect(_primaryButton(tester, 'Save').onPressed, isNull);
-      expect(_primaryButton(tester, 'Save card').onPressed, isNull);
-    });
+        expect(find.text('New flashcard'), findsOneWidget);
+        expect(find.byType(TextFormField), findsNWidgets(2));
+        expect(find.text('Add details'), findsOneWidget);
+        expect(find.text('TAGS'), findsOneWidget);
+        expect(find.text('+ Add tag'), findsOneWidget);
+        expect(_primaryButton(tester, 'Save').onPressed, isNull);
+        expect(_primaryButton(tester, 'Save card').onPressed, isNull);
+      },
+    );
 
     testWidgets('DT2 onDisplay: expands the optional fields section', (
       WidgetTester tester,
@@ -214,28 +226,121 @@ void main() {
       await tester.tap(find.text('Add details'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Add details'), findsNothing);
+      expect(find.text('Add details'), findsOneWidget);
       expect(find.byType(TextFormField), findsNWidgets(5));
+      expect(find.text('TAGS'), findsOneWidget);
+      expect(find.text('+ Add tag'), findsOneWidget);
     });
 
-    testWidgets('DT3 onNavigate: close button pops immediately on a clean draft', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _wrapApp(repository: _RecordingFlashcardRepository()),
-      );
-      await _openEditor(tester);
+    testWidgets(
+      'DT3 onNavigate: close button pops immediately on a clean draft',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapApp(repository: _RecordingFlashcardRepository()),
+        );
+        await _openEditor(tester);
 
-      await tester.tap(find.byIcon(Icons.close));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.close));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Library home'), findsOneWidget);
-      expect(find.text('New flashcard'), findsNothing);
-    });
+        expect(find.text('Library home'), findsOneWidget);
+        expect(find.text('New flashcard'), findsNothing);
+      },
+    );
 
     testWidgets(
       'DT4 onNavigate: dirty close asks for discard and cancel keeps editing',
-      (
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapApp(repository: _RecordingFlashcardRepository()),
+        );
+        await _openEditor(tester);
+
+        await tester.enterText(find.byType(TextFormField).at(0), '안녕하세요');
+        await tester.pump();
+
+        await tester.tap(find.byIcon(Icons.close));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Discard changes?'), findsOneWidget);
+        expect(find.text('Discard'), findsOneWidget);
+        expect(find.text('Keep editing'), findsOneWidget);
+
+        await tester.tap(find.text('Keep editing'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('New flashcard'), findsOneWidget);
+
+        await tester.tap(find.byIcon(Icons.close));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Discard'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Library home'), findsOneWidget);
+        expect(find.text('New flashcard'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'DT5 onInsert: save trims inputs, shows success feedback, and pops',
+      (WidgetTester tester) async {
+        final _RecordingFlashcardRepository repository =
+            _RecordingFlashcardRepository();
+
+        await tester.pumpWidget(_wrapApp(repository: repository));
+        await _openEditor(tester);
+
+        await tester.enterText(find.byType(TextFormField).at(0), '  안녕하세요  ');
+        await tester.pump();
+        await tester.enterText(find.byType(TextFormField).at(1), '  Hello  ');
+        await tester.pump();
+
+        await tester.ensureVisible(find.text('Add details'));
+        await tester.tap(find.text('Add details'));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+          find.byType(TextFormField).at(2),
+          '  Example sentence  ',
+        );
+        await tester.pump();
+        await tester.enterText(
+          find.byType(TextFormField).at(3),
+          '  Greeting root  ',
+        );
+        await tester.pump();
+        await tester.enterText(
+          find.byType(TextFormField).at(4),
+          '  annyeonghaseyo  ',
+        );
+        await tester.pump();
+
+        await _addTag(tester, '  TOPIK II  ');
+        await _addTag(tester, '#noun');
+
+        expect(find.text('TOPIK II'), findsOneWidget);
+        expect(find.text('noun'), findsOneWidget);
+
+        expect(_primaryButton(tester, 'Save').onPressed, isNotNull);
+        expect(_primaryButton(tester, 'Save card').onPressed, isNotNull);
+
+        await tester.tap(find.text('Save'));
+        await tester.pumpAndSettle();
+
+        expect(repository.lastCreateCall, isNotNull);
+        expect(repository.lastCreateCall!.deckId, 'd1');
+        expect(repository.lastCreateCall!.front, '안녕하세요');
+        expect(repository.lastCreateCall!.back, 'Hello');
+        expect(repository.lastCreateCall!.exampleSentence, 'Example sentence');
+        expect(repository.lastCreateCall!.pronunciation, 'annyeonghaseyo');
+        expect(repository.lastCreateCall!.hint, 'Greeting root');
+        expect(repository.lastCreateCall!.tags, <String>['topik ii', 'noun']);
+        expect(find.text('Flashcard created.'), findsOneWidget);
+        expect(find.text('Library home'), findsOneWidget);
+        expect(find.text('New flashcard'), findsNothing);
+      },
+    );
+
+    testWidgets('DT6 onEdit: tapping a tag chip removes it from the draft', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
@@ -243,84 +348,13 @@ void main() {
       );
       await _openEditor(tester);
 
-      await tester.enterText(find.byType(TextFormField).at(0), '안녕하세요');
-      await tester.pump();
+      await _addTag(tester, 'TOPIK II');
+      expect(find.text('TOPIK II'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.close));
+      await tester.tap(find.text('TOPIK II'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Discard changes?'), findsOneWidget);
-      expect(find.text('Discard'), findsOneWidget);
-      expect(find.text('Keep editing'), findsOneWidget);
-
-      await tester.tap(find.text('Keep editing'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('New flashcard'), findsOneWidget);
-
-      await tester.tap(find.byIcon(Icons.close));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Discard'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Library home'), findsOneWidget);
-      expect(find.text('New flashcard'), findsNothing);
-    });
-
-    testWidgets(
-      'DT5 onInsert: save trims inputs, shows success feedback, and pops',
-      (
-      WidgetTester tester,
-    ) async {
-      final _RecordingFlashcardRepository repository =
-          _RecordingFlashcardRepository();
-
-      await tester.pumpWidget(_wrapApp(repository: repository));
-      await _openEditor(tester);
-
-      await tester.enterText(
-        find.byType(TextFormField).at(0),
-        '  안녕하세요  ',
-      );
-      await tester.pump();
-      await tester.enterText(find.byType(TextFormField).at(1), '  Hello  ');
-      await tester.pump();
-
-      await tester.ensureVisible(find.text('Add details'));
-      await tester.tap(find.text('Add details'));
-      await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byType(TextFormField).at(2),
-        '  Example sentence  ',
-      );
-      await tester.pump();
-      await tester.enterText(
-        find.byType(TextFormField).at(3),
-        '  Greeting root  ',
-      );
-      await tester.pump();
-      await tester.enterText(
-        find.byType(TextFormField).at(4),
-        '  annyeonghaseyo  ',
-      );
-      await tester.pump();
-
-      expect(_primaryButton(tester, 'Save').onPressed, isNotNull);
-      expect(_primaryButton(tester, 'Save card').onPressed, isNotNull);
-
-      await tester.tap(find.text('Save'));
-      await tester.pumpAndSettle();
-
-      expect(repository.lastCreateCall, isNotNull);
-      expect(repository.lastCreateCall!.deckId, 'd1');
-      expect(repository.lastCreateCall!.front, '안녕하세요');
-      expect(repository.lastCreateCall!.back, 'Hello');
-      expect(repository.lastCreateCall!.exampleSentence, 'Example sentence');
-      expect(repository.lastCreateCall!.pronunciation, 'annyeonghaseyo');
-      expect(repository.lastCreateCall!.hint, 'Greeting root');
-      expect(find.text('Flashcard created.'), findsOneWidget);
-      expect(find.text('Library home'), findsOneWidget);
-      expect(find.text('New flashcard'), findsNothing);
+      expect(find.text('TOPIK II'), findsNothing);
     });
   });
 }

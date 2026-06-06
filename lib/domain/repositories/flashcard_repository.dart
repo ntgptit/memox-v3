@@ -35,6 +35,7 @@ abstract interface class FlashcardRepository {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    List<String> tags = const <String>[],
   });
 
   /// Deletes a single flashcard (its `flashcard_progress` row cascades via FK).

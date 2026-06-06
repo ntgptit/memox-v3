@@ -7,7 +7,9 @@ applies_to: flashcard tags — creation, filtering, study-by-tag, management
 
 ## Purpose
 
-Today tags exist on `flashcard_tags` table but only serve as visual labels. This doc upgrades tags to first-class organizational primitives that complement folders/decks without replacing them.
+Today tags exist on `flashcard_tags` table and are used on flashcard create/edit surfaces as
+first-class per-card labels. This doc upgrades tags to first-class organizational primitives that
+complement folders/decks without replacing them.
 
 Use cases:
 
@@ -236,7 +238,7 @@ All bulk operations are transactional.
 
 **Source files to inspect:**
 
-- `lib/data/datasources/local/tables/flashcard_tags_table.dart`
+- `lib/data/datasources/local/drift/flashcard_tags.drift`
 - `lib/domain/usecases/tag_usecases.dart` (watch/add/remove/rename/merge/delete)
 - `lib/presentation/features/settings/screens/tag_management_screen.dart`
 - `lib/presentation/features/settings/providers/tag_management_notifier.dart`

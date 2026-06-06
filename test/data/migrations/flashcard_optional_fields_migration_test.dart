@@ -69,72 +69,91 @@ class _LegacyAppDatabase extends AppDatabase {
 }
 
 void main() {
-  test('migrates flashcard optional detail columns without losing data', () async {
-    final Directory tempDir = await Directory.systemTemp.createTemp(
-      'memox_flashcard_optional_fields_',
-    );
-    final File dbFile = File('${tempDir.path}${Platform.pathSeparator}memox.sqlite');
+  test(
+    'migrates flashcard optional detail columns without losing data',
+    () async {
+      final Directory tempDir = await Directory.systemTemp.createTemp(
+        'memox_flashcard_optional_fields_',
+      );
+      final File dbFile = File(
+        '${tempDir.path}${Platform.pathSeparator}memox.sqlite',
+      );
 
-    final _LegacyAppDatabase legacyDb = _LegacyAppDatabase(
-      NativeDatabase(dbFile),
-    );
-    await legacyDb.customStatement('PRAGMA foreign_keys = ON');
-    await legacyDb.into(legacyDb.folders).insert(
-      FoldersCompanion.insert(
-        id: 'f1',
-        name: 'Korean',
-        contentMode: const Value<String>('unlocked'),
-        sortOrder: const Value<int>(0),
-        createdAt: 1,
-        updatedAt: 1,
-      ),
-    );
-    await legacyDb.into(legacyDb.decks).insert(
-      DecksCompanion.insert(
-        id: 'd1',
-        folderId: 'f1',
-        name: 'N5',
-        targetLanguage: const Value<String>('korean'),
-        sortOrder: const Value<int>(0),
-        createdAt: 1,
-        updatedAt: 1,
-      ),
-    );
-    await legacyDb.into(legacyDb.flashcards).insert(
-      FlashcardsCompanion.insert(
-        id: 'c1',
-        deckId: 'd1',
-        front: '안녕하세요',
-        back: 'Hello',
-        exampleSentence: const Value<String?>('안녕하세요, 저는 민수입니다.'),
-        sortOrder: const Value<int>(0),
-        createdAt: 1,
-        updatedAt: 1,
-      ),
-    );
-    await legacyDb.into(legacyDb.flashcardProgress).insert(
-      FlashcardProgressCompanion.insert(
-        flashcardId: 'c1',
-        dueAt: const Value<int?>(1),
-      ),
-    );
-    await legacyDb.close();
+      final _LegacyAppDatabase legacyDb = _LegacyAppDatabase(
+        NativeDatabase(dbFile),
+      );
+      await legacyDb.customStatement('PRAGMA foreign_keys = ON');
+      await legacyDb
+          .into(legacyDb.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'f1',
+              name: 'Korean',
+              contentMode: const Value<String>('unlocked'),
+              sortOrder: const Value<int>(0),
+              createdAt: 1,
+              updatedAt: 1,
+            ),
+          );
+      await legacyDb
+          .into(legacyDb.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'f1',
+              name: 'N5',
+              targetLanguage: const Value<String>('korean'),
+              sortOrder: const Value<int>(0),
+              createdAt: 1,
+              updatedAt: 1,
+            ),
+          );
+      await legacyDb
+          .into(legacyDb.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'd1',
+              front: '안녕하세요',
+              back: 'Hello',
+              exampleSentence: const Value<String?>('안녕하세요, 저는 민수입니다.'),
+              sortOrder: const Value<int>(0),
+              createdAt: 1,
+              updatedAt: 1,
+            ),
+          );
+      await legacyDb
+          .into(legacyDb.flashcardProgress)
+          .insert(
+            FlashcardProgressCompanion.insert(
+              flashcardId: 'c1',
+              dueAt: const Value<int?>(1),
+            ),
+          );
+      await legacyDb.close();
 
-    final AppDatabase migratedDb = AppDatabase(NativeDatabase(dbFile));
-    final FlashcardRow migratedRow = await migratedDb.select(
-      migratedDb.flashcards,
-    ).getSingle();
+      final AppDatabase migratedDb = AppDatabase(NativeDatabase(dbFile));
+      final FlashcardRow migratedRow = await migratedDb
+          .select(migratedDb.flashcards)
+          .getSingle();
 
-    expect(migratedRow.exampleSentence, '안녕하세요, 저는 민수입니다.');
-    expect(migratedRow.pronunciation, same(null));
-    expect(migratedRow.hint, same(null));
+      expect(migratedRow.exampleSentence, '안녕하세요, 저는 민수입니다.');
+      expect(migratedRow.pronunciation, same(null));
+      expect(migratedRow.hint, same(null));
 
-    final List<FlashcardProgressRow> progressRows =
-        await migratedDb.select(migratedDb.flashcardProgress).get();
-    expect(progressRows, hasLength(1));
-    expect(progressRows.single.flashcardId, 'c1');
+      final List<FlashcardProgressRow> progressRows = await migratedDb
+          .select(migratedDb.flashcardProgress)
+          .get();
+      expect(progressRows, hasLength(1));
+      expect(progressRows.single.flashcardId, 'c1');
 
-    await migratedDb.close();
-    await tempDir.delete(recursive: true);
-  });
+      final List<FlashcardTagRow> tagRows = await migratedDb
+          .select(migratedDb.flashcardTags)
+          .get();
+      expect(tagRows, isEmpty);
+
+      await migratedDb.close();
+      await tempDir.delete(recursive: true);
+    },
+  );
 }
