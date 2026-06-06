@@ -37,8 +37,9 @@ class LibraryOverviewBody extends StatelessWidget {
       return LibraryEmptyStateSection(onCreateFolder: onCreateFolder);
     }
 
-    final int dueFolderCount =
-        model.folders.where((FolderWithCount item) => item.dueCount > 0).length;
+    final int dueFolderCount = model.folders
+        .where((FolderWithCount item) => item.dueCount > 0)
+        .length;
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
       children: <Widget>[
@@ -47,10 +48,10 @@ class LibraryOverviewBody extends StatelessWidget {
             dueToday: model.dueToday,
             dueFolderCount: dueFolderCount,
           ),
-          const SizedBox(height: SpacingTokens.lg),
+          const SizedBox(height: SpacingTokens.md),
         ],
         LibraryFolderHeader(count: model.folders.length),
-        const SizedBox(height: SpacingTokens.sm),
+        const SizedBox(height: SpacingTokens.sm + SpacingTokens.xxs),
         for (final FolderWithCount item in model.folders) ...<Widget>[
           LibraryFolderTile(
             item: item,
@@ -60,7 +61,7 @@ class LibraryOverviewBody extends StatelessWidget {
             // `docs/wireframes/02-library.md` §Overflow sheet.
             onShowActions: () => onShowFolderActions(item),
           ),
-          const SizedBox(height: SpacingTokens.sm),
+          const SizedBox(height: SpacingTokens.sm + SpacingTokens.xxs),
         ],
       ],
     );

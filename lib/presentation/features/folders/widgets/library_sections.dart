@@ -91,10 +91,7 @@ class LibraryFolderHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     return Padding(
-      padding: const EdgeInsets.only(
-        left: SpacingTokens.lg + SpacingTokens.xxs,
-        right: SpacingTokens.lg + SpacingTokens.xxs,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

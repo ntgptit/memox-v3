@@ -10,6 +10,7 @@ import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/app/logging/app_talker.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
+import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
@@ -113,6 +114,44 @@ Widget _wrapScreen(Stream<LibraryOverviewReadModel> stream) => ProviderScope(
 
 void main() {
   group('LibraryOverviewBody — Loaded', () {
+    testWidgets('header and folder card use the mock paddings', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(
+          _model(
+            folders: <FolderWithCount>[_item('Korean')],
+            totalFolderCount: 1,
+          ),
+        ),
+      );
+
+      final Finder headerPaddingFinder = find.descendant(
+        of: find.byType(LibraryFolderHeader),
+        matching: find.byType(Padding),
+      );
+      final Padding headerPadding = tester
+          .widgetList<Padding>(headerPaddingFinder)
+          .firstWhere(
+            (Padding widget) =>
+                widget.padding ==
+                const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
+          );
+      expect(
+        headerPadding.padding,
+        const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
+      );
+
+      final MxCard card = tester.widget<MxCard>(find.byType(MxCard));
+      expect(
+        card.padding,
+        const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.md + SpacingTokens.xxs,
+          vertical: SpacingTokens.md + SpacingTokens.xxs,
+        ),
+      );
+    });
+
     testWidgets('folder row renders title, metadata, kebab, and no chevron', (
       WidgetTester tester,
     ) async {

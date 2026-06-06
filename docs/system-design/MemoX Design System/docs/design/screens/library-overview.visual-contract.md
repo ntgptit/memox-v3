@@ -27,6 +27,17 @@ This screen is the root Library browser for top-level folders only.
 - Extended `New folder` FAB in the lower-right.
 - Bottom navigation stays fixed.
 
+## Spacing notes
+
+- The section header sits on a very tight local inset inside the shared screen
+  shell so it reads as `18dp` from the mock edge, not a doubled outer padding.
+- Folder cards use `14dp` internal padding on all sides and `14dp` between the
+  leading tile, the text block, and the trailing action button.
+- Inside the text block, the subtitle → counts row and counts row → progress bar
+  rhythm is `8dp`.
+- The folder list uses a `10dp` vertical rhythm between rows and a `12dp`
+  gap between the due summary strip and the section header.
+
 ## Data mapping
 
 | Mock block | Implementation source |

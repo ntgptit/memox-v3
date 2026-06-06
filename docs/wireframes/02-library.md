@@ -111,7 +111,8 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   `listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to
   Global Search; does not mutate persisted `sort_order`.
 - Loaded section header: `{n} FOLDERS` overline with the mock sort pill (`librarySortRecentLabel`)
-  on the right.
+  on the right. Its horizontal inset is intentionally tight so it does not feel double-padded
+  inside the shared screen shell.
 - Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle` plus
   `libraryDueSummarySubtitle`), hidden otherwise. Non-interactive — the subtitle is derived from
   the aggregate model and there is no study-launch.
@@ -244,7 +245,7 @@ point for study.
 |-----------------|---------------------------------------------------------------------------------|
 | App bar         | Title "Library". Right side: sliders/filter icon (disabled).                    |
 | Filter chips    | Optional. Three chips: All / Folders / Decks. Default: All.                     |
-| Item row        | Accent tile + name + optional subtitle + counts row + due badge + progress bar + kebab. |
+| Item row        | Accent tile + name + optional subtitle + counts row + due badge + progress bar + kebab. Card padding is `14dp` on all sides, with `14dp` gaps between the leading tile, body, and trailing action, and `8dp` internal rhythm between subtitle/counts/progress. |
 | Folder subtitle | Direct child names joined with ` · ` when available; fallback is the count row. |
 | Folder new      | `{n} new` from `flashcard_progress` rows where `due_at IS NULL`.                |
 | Deck subtitle   | "{n} cards" (total) and optional "{m} due" badge in theme color.                |

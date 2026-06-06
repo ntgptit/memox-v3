@@ -79,37 +79,37 @@ class _LibraryFolderTileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MxCard(
-      onTap: onTap,
-      onLongPress: onShowActions,
-      padding: const EdgeInsets.symmetric(
-        horizontal: SpacingTokens.md + SpacingTokens.xxs,
-        vertical: SpacingTokens.md,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _LeadingTile(color: tone),
-          const SizedBox(width: SpacingTokens.md),
-          Expanded(
-            child: _FolderTileBody(
-              item: item,
-              tone: tone,
-              subtitle: subtitle,
-              newCount: newCount,
-              mastery: mastery,
-              isSubfolderMode: isSubfolderMode,
-            ),
+    onTap: onTap,
+    onLongPress: onShowActions,
+    padding: const EdgeInsets.symmetric(
+      horizontal: SpacingTokens.md + SpacingTokens.xxs,
+      vertical: SpacingTokens.md + SpacingTokens.xxs,
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        _LeadingTile(color: tone),
+        const SizedBox(width: SpacingTokens.md + SpacingTokens.xxs),
+        Expanded(
+          child: _FolderTileBody(
+            item: item,
+            tone: tone,
+            subtitle: subtitle,
+            newCount: newCount,
+            mastery: mastery,
+            isSubfolderMode: isSubfolderMode,
           ),
-          const SizedBox(width: SpacingTokens.md),
-          MxIconButton(
-            icon: Icons.more_vert,
-            tooltip: tooltip,
-            size: MxIconButtonSize.compact,
-            onPressed: onShowActions,
-          ),
-        ],
-      ),
-    );
+        ),
+        const SizedBox(width: SpacingTokens.md),
+        MxIconButton(
+          icon: Icons.more_vert,
+          tooltip: tooltip,
+          size: MxIconButtonSize.compact,
+          onPressed: onShowActions,
+        ),
+      ],
+    ),
+  );
 }
 
 class _FolderTileBody extends StatelessWidget {
@@ -166,7 +166,7 @@ class _FolderTileBody extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ],
-        const SizedBox(height: SpacingTokens.xs),
+        const SizedBox(height: SpacingTokens.sm),
         Row(
           children: <Widget>[
             _FolderMetaItem(
@@ -184,11 +184,13 @@ class _FolderTileBody extends StatelessWidget {
             ),
             if ((effectiveNewCount ?? 0) > 0) ...<Widget>[
               const SizedBox(width: SpacingTokens.md),
-              _NewMetaItem(label: l10n.libraryFolderNewCount(effectiveNewCount!)),
+              _NewMetaItem(
+                label: l10n.libraryFolderNewCount(effectiveNewCount!),
+              ),
             ],
           ],
         ),
-        const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
+        const SizedBox(height: SpacingTokens.sm),
         MxLinearProgress(value: mastery, color: tone, height: 4),
       ],
     );
