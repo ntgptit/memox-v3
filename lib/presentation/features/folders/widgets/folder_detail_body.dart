@@ -23,6 +23,8 @@ class FolderDetailBody extends StatelessWidget {
     required this.onNewSubfolder,
     required this.onNewDeck,
     required this.onClearSearch,
+    required this.onShowSubfolderActions,
+    required this.onShowDeckActions,
     super.key,
   });
 
@@ -31,6 +33,8 @@ class FolderDetailBody extends StatelessWidget {
   final VoidCallback onNewSubfolder;
   final VoidCallback onNewDeck;
   final VoidCallback onClearSearch;
+  final void Function(FolderWithCount item) onShowSubfolderActions;
+  final void Function(DeckWithCount item) onShowDeckActions;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +90,7 @@ class FolderDetailBody extends StatelessWidget {
             FolderSubfolderTile(
               item: item,
               onTap: () => context.pushFolderDetail(item.folder.id),
+              onShowActions: () => onShowSubfolderActions(item),
             ),
             const SizedBox(height: SpacingTokens.sm),
           ],
@@ -94,6 +99,7 @@ class FolderDetailBody extends StatelessWidget {
             FolderDeckTile(
               item: item,
               onTap: () => context.pushFlashcardList(item.deck.id),
+              onShowActions: () => onShowDeckActions(item),
             ),
             const SizedBox(height: SpacingTokens.sm),
           ],

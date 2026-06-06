@@ -4,21 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
-import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
-import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
-import 'package:memox/domain/models/folder_move_target.dart';
+import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
-import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_detail_actions.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
-import 'package:memox/presentation/features/folders/widgets/folder_move_picker_sheet.dart';
-import 'package:memox/presentation/features/folders/widgets/library_folder_actions_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
-import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -130,6 +125,10 @@ class _FolderDetailView extends ConsumerWidget {
               onClearSearch: () => ref
                   .read(folderDetailToolbarProvider(folderId).notifier)
                   .clearSearch(),
+              onShowSubfolderActions: (FolderWithCount item) =>
+                  showFolderDetailSubfolderActions(context, ref, item),
+              onShowDeckActions: (DeckWithCount item) =>
+                  showFolderDetailDeckActions(context, ref, item),
             ),
           ),
         ),
@@ -283,186 +282,3 @@ String _childCreateError(
   UnsupportedActionFailure() => l10n.folderModeLockedError,
   _ => l10n.folderChildCreateError,
 };
-
-/// Opens the current folder's overflow action sheet (Rename / Move / Delete) and
-/// dispatches the chosen action (`docs/wireframes/05-folder-detail.md` §overflow,
-/// states `delConfirm` + `moveSheet`). Reuses the Library folder action flow so
-/// the detail screen and the Library row share one set of use cases. Import is
-/// hidden — it targets a specific deck inside the folder, not the folder itself.
-Future<void> showFolderDetailActions(
-  BuildContext context,
-  WidgetRef ref,
-  FolderDetail detail,
-) async {
-  final AppLocalizations l10n = AppLocalizations.of(context);
-  final LibraryFolderAction? action = await showLibraryFolderActions(
-    context,
-    name: detail.folder.name,
-    subtitle: _folderDetailSubtitle(l10n, detail),
-    showImport: false,
-  );
-  if (action == null) {
-    return;
-  }
-  if (!context.mounted) {
-    return;
-  }
-  switch (action) {
-    case LibraryFolderAction.rename:
-      await _renameFolder(context, ref, detail.folder);
-    case LibraryFolderAction.move:
-      await _moveFolder(context, ref, detail.folder);
-    case LibraryFolderAction.delete:
-      await _deleteFolder(context, ref, detail);
-    case LibraryFolderAction.importFlashcards:
-      // Not offered for the current-folder overflow (showImport: false).
-      break;
-  }
-}
-
-String _folderDetailSubtitle(AppLocalizations l10n, FolderDetail detail) {
-  final bool isSubfolderMode =
-      detail.folder.contentMode == ContentMode.subfolders;
-  final String primary = isSubfolderMode
-      ? l10n.libraryFolderSubfoldersCount(detail.subfolders.length)
-      : l10n.libraryFolderDecksCount(detail.decks.length);
-  final int cardTotal = isSubfolderMode
-      ? detail.subfolders.fold<int>(0, (int s, item) => s + item.cardCount)
-      : detail.decks.fold<int>(0, (int s, item) => s + item.cardCount);
-  return '$primary · ${l10n.libraryFolderCardsCount(cardTotal)}';
-}
-
-Future<void> _renameFolder(
-  BuildContext context,
-  WidgetRef ref,
-  Folder folder,
-) async {
-  final AppLocalizations l10n = AppLocalizations.of(context);
-  final String? name = await showMxNameDialog(
-    context,
-    title: l10n.foldersRenameTitle,
-    fieldLabel: l10n.folderCreateFieldLabel,
-    confirmLabel: l10n.commonSave,
-    cancelLabel: l10n.commonCancel,
-    initialValue: folder.name,
-  );
-  if (name == null) {
-    return;
-  }
-  if (!context.mounted) {
-    return;
-  }
-  final Result<Folder> result = await ref
-      .read(libraryActionControllerProvider.notifier)
-      .renameFolder(folder.id, name);
-  if (!context.mounted) {
-    return;
-  }
-  result.fold(
-    (Failure failure) => showMxSnackbar(
-      context,
-      message: _folderActionError(l10n, failure),
-      isError: true,
-    ),
-    (Folder _) => showMxSnackbar(context, message: l10n.foldersUpdatedMessage),
-  );
-}
-
-Future<void> _moveFolder(
-  BuildContext context,
-  WidgetRef ref,
-  Folder folder,
-) async {
-  final AppLocalizations l10n = AppLocalizations.of(context);
-  final Result<List<FolderMoveTarget>> targets = await ref
-      .read(libraryActionControllerProvider.notifier)
-      .loadMoveTargets(folder.id);
-  if (!context.mounted) {
-    return;
-  }
-  final List<FolderMoveTarget>? list = targets.fold(
-    (Failure _) => null,
-    (List<FolderMoveTarget> value) => value,
-  );
-  if (list == null) {
-    showMxSnackbar(context, message: l10n.libraryFolderActionError, isError: true);
-    return;
-  }
-  final FolderMoveTarget? destination = await showFolderMovePicker(
-    context,
-    targets: list,
-  );
-  if (destination == null) {
-    return;
-  }
-  if (!context.mounted) {
-    return;
-  }
-  final Result<Folder> result = await ref
-      .read(libraryActionControllerProvider.notifier)
-      .moveFolder(folder.id, destination.id);
-  if (!context.mounted) {
-    return;
-  }
-  result.fold(
-    (Failure failure) => showMxSnackbar(
-      context,
-      message: _folderActionError(l10n, failure),
-      isError: true,
-    ),
-    (Folder _) => showMxSnackbar(context, message: l10n.foldersMovedMessage),
-  );
-}
-
-Future<void> _deleteFolder(
-  BuildContext context,
-  WidgetRef ref,
-  FolderDetail detail,
-) async {
-  final AppLocalizations l10n = AppLocalizations.of(context);
-  final String summaryText = detail.folder.contentMode == ContentMode.subfolders
-      ? l10n.libraryFolderSubfoldersCount(detail.subfolders.length)
-      : l10n.libraryFolderDecksCount(detail.decks.length);
-  final bool confirmed = await showMxFolderDeleteDialog(
-    context,
-    folderName: detail.folder.name,
-    summaryText: summaryText,
-    title: l10n.folderDeleteDialogTitle,
-    reassuranceText: l10n.folderDeleteDialogReassurance,
-    confirmLabel: l10n.folderDeleteDialogConfirmLabel,
-    deleteButtonLabel: l10n.folderDeleteDialogDeleteButton,
-    cancelLabel: l10n.commonCancel,
-    confirmHint: l10n.folderDeleteDialogConfirmLabel,
-  );
-  if (!confirmed) {
-    return;
-  }
-  if (!context.mounted) {
-    return;
-  }
-  final Result<void> result = await ref
-      .read(libraryActionControllerProvider.notifier)
-      .deleteFolder(detail.folder.id);
-  if (!context.mounted) {
-    return;
-  }
-  result.fold(
-    (Failure failure) => showMxSnackbar(
-      context,
-      message: _folderActionError(l10n, failure),
-      isError: true,
-    ),
-    // The folder is gone — leave the now-stale detail screen for its parent.
-    (void _) {
-      showMxSnackbar(context, message: l10n.foldersDeletedMessage);
-      unawaited(Navigator.of(context).maybePop());
-    },
-  );
-}
-
-String _folderActionError(AppLocalizations l10n, Failure failure) =>
-    switch (failure) {
-      ValidationFailure(code: ValidationCode.duplicate) =>
-        l10n.libraryFolderDuplicateError,
-      _ => l10n.libraryFolderActionError,
-    };

@@ -60,6 +60,11 @@ because they are derived from the existing deck read model, not the study UI.
   Move opens `showFolderMovePicker` (mock state `moveSheet`); Delete opens the
   shared destructive confirm dialog (`showMxConfirmDialog`, mock state
   `delConfirm`) and, on success, leaves the now-stale detail screen for its parent.
+- **Long-press child row is Current**: subfolder rows open the shared folder
+  action sheet (`showLibraryFolderActions`) and deck rows open the shared deck
+  action sheet (`showDeckActions`). Child-folder actions reuse the existing
+  folder use cases; child-deck actions reuse the existing deck delete/reorder
+  flow plus deck import.
 
 ### Future / not built (MUST NOT be rendered with placeholder values)
 
@@ -231,7 +236,7 @@ banner are **Future** (the study layer is not built).
 | Tap breadcrumb segment    | Tap        | Go to that segment's folder; deep stack if needed.                                                                                                                                                                                          |
 | Tap subfolder row         | Tap        | **Current.** `push` to `/library/folder/:childId`.                                                                                                                                                                                          |
 | Tap deck row              | Tap        | **Current.** `push` to `/library/deck/:deckId/flashcards`.                                                                                                                                                                                  |
-| Long-press child row      | Long-press | **Future.** Child folder/deck row actions are not yet wired here (`onShowActions` is null).                                                                                                                                                  |
+| Long-press child row      | Long-press | **Current.** Subfolder rows open the shared folder action sheet; deck rows open the shared deck action sheet.                                                                                                                              |
 | Tap "Study folder"        | Tap        | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                       |
 | Tap "Today (n)"           | Tap        | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                       |
 | Tap resume banner         | Tap        | **Future.** Study layer not built.                                                                                                                                                                                                          |

@@ -76,6 +76,7 @@ FolderDetail _detail({
 
 Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
     MaterialApp(
+      locale: const Locale('en'),
       theme: AppTheme.light(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -86,6 +87,8 @@ Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
           onNewSubfolder: () {},
           onNewDeck: () {},
           onClearSearch: () {},
+          onShowSubfolderActions: (FolderWithCount _) {},
+          onShowDeckActions: (DeckWithCount _) {},
         ),
       ),
     );
@@ -95,6 +98,7 @@ Widget _wrapScreen(Stream<FolderDetail> stream) => ProviderScope(
     folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
   ],
   child: MaterialApp(
+    locale: const Locale('en'),
     theme: AppTheme.light(),
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
@@ -218,7 +222,65 @@ void main() {
     });
   });
 
-  group('FolderDetailScreen — Loading (5/8) & Error (6/8)', () {
+  group('FolderDetailScreen — Row actions (5/8)', () {
+    Future<void> pumpLoaded(
+      WidgetTester tester, {
+      ContentMode mode = ContentMode.decks,
+      List<DeckWithCount> decks = const <DeckWithCount>[],
+      List<FolderWithCount> subfolders = const <FolderWithCount>[],
+    }) async {
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<FolderDetail>.value(
+            _detail(mode: mode, decks: decks, subfolders: subfolders),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('subfolder long-press opens the shared folder action sheet', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(
+        tester,
+        mode: ContentMode.subfolders,
+        subfolders: <FolderWithCount>[_subfolder('TOPIK I', dueCount: 8)],
+      );
+
+      await tester.longPress(find.byType(FolderSubfolderTile));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Rename'), findsOneWidget);
+      expect(find.text('Move to folder'), findsOneWidget);
+      expect(find.text('Delete folder'), findsOneWidget);
+    });
+
+    testWidgets('deck long-press opens the shared deck action sheet', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(
+        tester,
+        decks: <DeckWithCount>[
+          _deck(
+            'Vocab — chapter 1',
+            cardCount: 62,
+            dueCount: 8,
+            lastStudiedAt: DateTime.utc(2026, 6, 6, 10),
+          ),
+        ],
+      );
+
+      await tester.longPress(find.byType(FolderDeckTile));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Import flashcards'), findsOneWidget);
+      expect(find.text('Reorder cards'), findsOneWidget);
+      expect(find.text('Delete deck'), findsOneWidget);
+    });
+  });
+
+  group('FolderDetailScreen — Loading (6/8) & Error (7/8)', () {
     testWidgets('loading renders the skeleton and no content rows', (
       WidgetTester tester,
     ) async {
@@ -245,7 +307,7 @@ void main() {
     });
   });
 
-  group('FolderDetailScreen — Overflow (Delete 7/8 · Move 8/8)', () {
+  group('FolderDetailScreen — Overflow (Delete 8/8 · Move 9/8)', () {
     Future<void> pumpLoaded(
       WidgetTester tester, {
       ContentMode mode = ContentMode.decks,
