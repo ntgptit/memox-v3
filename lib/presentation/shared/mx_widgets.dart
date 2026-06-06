@@ -28,6 +28,7 @@ export 'widgets/buttons/mx_icon_button.dart';
 export 'widgets/buttons/mx_primary_button.dart';
 export 'widgets/buttons/mx_secondary_button.dart';
 // Inputs.
+export 'widgets/inputs/mx_checkbox_row.dart';
 export 'widgets/inputs/mx_search_field.dart';
 export 'widgets/inputs/mx_text_field.dart';
 // Interaction primitive.

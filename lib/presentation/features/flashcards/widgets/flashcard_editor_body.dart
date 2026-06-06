@@ -36,6 +36,8 @@ class FlashcardEditorBody extends StatelessWidget {
     required this.saveFailure,
     required this.onRetrySave,
     required this.isSaving,
+    required this.saveAndAddAnother,
+    required this.onSaveAndAddAnotherChanged,
     required this.tagsLabel,
     required this.tagsOptionalLabel,
     required this.addTagLabel,
@@ -64,6 +66,8 @@ class FlashcardEditorBody extends StatelessWidget {
   final Failure? saveFailure;
   final VoidCallback onRetrySave;
   final bool isSaving;
+  final bool saveAndAddAnother;
+  final ValueChanged<bool> onSaveAndAddAnotherChanged;
   final String tagsLabel;
   final String tagsOptionalLabel;
   final String addTagLabel;
@@ -161,6 +165,12 @@ class FlashcardEditorBody extends StatelessWidget {
             tags: tags,
             onAddTag: onAddTag,
             onRemoveTag: onRemoveTag,
+          ),
+          const SizedBox(height: SpacingTokens.sm),
+          MxCheckboxRow(
+            label: l10n.flashcardsSaveAndAddNextTooltip,
+            value: saveAndAddAnother,
+            onChanged: onSaveAndAddAnotherChanged,
           ),
           ..._buildSaveFailureWidgets(context),
         ],

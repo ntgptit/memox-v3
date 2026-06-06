@@ -46,6 +46,7 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
   final FocusNode _hintFocusNode = FocusNode();
 
   bool _detailsOpen = false;
+  bool _saveAndAddAnother = false;
   Failure? _saveFailure;
 
   @override
@@ -212,6 +213,8 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
           saveFailure: _saveFailure,
           onRetrySave: _save,
           isSaving: isSaving,
+          saveAndAddAnother: _saveAndAddAnother,
+          onSaveAndAddAnotherChanged: _toggleSaveAndAddAnother,
           tagsLabel: l10n.flashcardEditorTagsLabel,
           tagsOptionalLabel: l10n.flashcardEditorTagsOptionalLabel,
           addTagLabel: l10n.flashcardEditorAddTagLabel,
@@ -308,6 +311,10 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
   }
 
   Future<void> _save() async {
+    await _saveDraft(addAnother: _saveAndAddAnother);
+  }
+
+  Future<void> _saveDraft({required bool addAnother}) async {
     if (_isSaving) {
       return;
     }
@@ -336,9 +343,40 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
     result.fold((Failure failure) => setState(() => _saveFailure = failure), (
       Flashcard _,
     ) {
+      if (addAnother) {
+        _resetDraftForAnotherCard();
+        showMxSnackbar(context, message: l10n.flashcardsSavedMessage);
+        return;
+      }
       showMxSnackbar(context, message: l10n.flashcardsCreatedMessage);
       _dismissEditor();
     });
+  }
+
+  void _resetDraftForAnotherCard() {
+    setState(() {
+      _frontController.clear();
+      _backController.clear();
+      _exampleController.clear();
+      _pronController.clear();
+      _hintController.clear();
+      _tags.clear();
+      _detailsOpen = false;
+      _saveFailure = null;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      FocusScope.of(context).requestFocus(_frontFocusNode);
+    });
+  }
+
+  void _toggleSaveAndAddAnother(bool value) {
+    if (!mounted) {
+      return;
+    }
+    setState(() => _saveAndAddAnother = value);
   }
 
   void _dismissEditor() {

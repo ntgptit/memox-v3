@@ -64,7 +64,7 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | C16 | Edit editor close        | Tag list changed                                     | Future Proposal                                                  | —        | Future |
 | C17 | Edit editor close        | Existing optional note/tags loaded but unchanged     | Future Proposal                                                  | —        | Future |
 | C18 | Create card save         | Destination deck changed before normal Save          | Future Proposal                                                  | —        | Future |
-| C19 | Create card save-and-add | Destination deck changed before Save and add another | Future Proposal                                                  | —        | Future |
+| C19 | Create card save-and-add | Checkbox under tags checked + valid front/back + optional example/hint/pronunciation/tags | Persist card, clear the draft, keep the same deck, and focus the Front field for another entry | C0+C1    | `test/presentation/features/flashcards/flashcard_editor_screen_test.dart::DT7 onInsert` |
 
 ## Study/SRS
 

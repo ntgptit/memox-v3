@@ -207,7 +207,9 @@ V1 create/edit note:
   `flashcardId`.
 - The editor owns content create and update only.
 - Current create mode saves front, back, optional example / pronunciation / hint text, and tags.
-  Destination-deck retargeting and save-and-add-another remain future work.
+  It also supports a local "save and add another" checkbox under Tags that saves the current
+  card, clears the draft, and keeps the user in the same deck for batch entry. Destination-deck
+  retargeting remains future work.
 - Create/edit dirty close and browser/system back require a discard confirmation when unsaved
   content exists.
 - Single-card move/delete/export actions live on the flashcard list row/bulk action surfaces.

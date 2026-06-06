@@ -209,6 +209,8 @@ void main() {
         expect(find.text('Add details'), findsOneWidget);
         expect(find.text('TAGS'), findsOneWidget);
         expect(find.text('+ Add tag'), findsOneWidget);
+        expect(find.text('Save and add another'), findsOneWidget);
+        expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isFalse);
         expect(_primaryButton(tester, 'Save').onPressed, isNull);
         expect(_primaryButton(tester, 'Save card').onPressed, isNull);
       },
@@ -340,6 +342,88 @@ void main() {
       },
     );
 
+    testWidgets(
+      'DT7 onInsert: save and add another resets the draft and keeps editing',
+      (WidgetTester tester) async {
+        final _RecordingFlashcardRepository repository =
+            _RecordingFlashcardRepository();
+
+        await tester.pumpWidget(_wrapApp(repository: repository));
+        await _openEditor(tester);
+
+        await tester.enterText(find.byType(TextFormField).at(0), '  안녕하세요  ');
+        await tester.pump();
+        await tester.enterText(find.byType(TextFormField).at(1), '  Hello  ');
+        await tester.pump();
+
+        await tester.ensureVisible(find.text('Add details'));
+        await tester.tap(find.text('Add details'));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+          find.byType(TextFormField).at(2),
+          '  Example sentence  ',
+        );
+        await tester.pump();
+        await tester.enterText(
+          find.byType(TextFormField).at(3),
+          '  Greeting root  ',
+        );
+        await tester.pump();
+        await tester.enterText(
+          find.byType(TextFormField).at(4),
+          '  annyeonghaseyo  ',
+        );
+        await tester.pump();
+
+        await _addTag(tester, '  TOPIK II  ');
+
+        await tester.ensureVisible(find.byType(Checkbox));
+        await tester.tap(find.byType(Checkbox));
+        await tester.pumpAndSettle();
+
+        expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
+
+        await tester.tap(find.text('Save card'));
+        await tester.pumpAndSettle();
+
+        expect(repository.lastCreateCall, isNotNull);
+        expect(repository.lastCreateCall!.front, '안녕하세요');
+        expect(repository.lastCreateCall!.back, 'Hello');
+        expect(repository.lastCreateCall!.exampleSentence, 'Example sentence');
+        expect(repository.lastCreateCall!.pronunciation, 'annyeonghaseyo');
+        expect(repository.lastCreateCall!.hint, 'Greeting root');
+        expect(repository.lastCreateCall!.tags, <String>['topik ii']);
+        expect(find.text('Flashcard saved.'), findsOneWidget);
+        expect(find.text('New flashcard'), findsOneWidget);
+        expect(find.byType(TextFormField), findsNWidgets(2));
+        expect(find.text('TOPIK II'), findsNothing);
+        expect(
+          tester
+              .widget<TextFormField>(find.byType(TextFormField).at(0))
+              .controller!
+              .text,
+          isEmpty,
+        );
+        expect(
+          tester
+              .widget<TextFormField>(find.byType(TextFormField).at(1))
+              .controller!
+              .text,
+          isEmpty,
+        );
+        expect(
+          tester
+              .widget<EditableText>(find.byType(EditableText).first)
+              .focusNode
+              .hasFocus,
+          isTrue,
+        );
+        expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
+        expect(_primaryButton(tester, 'Save').onPressed, isNull);
+        expect(_primaryButton(tester, 'Save card').onPressed, isNull);
+      },
+    );
+
     testWidgets('DT6 onEdit: tapping a tag chip removes it from the draft', (
       WidgetTester tester,
     ) async {
@@ -351,6 +435,7 @@ void main() {
       await _addTag(tester, 'TOPIK II');
       expect(find.text('TOPIK II'), findsOneWidget);
 
+      await tester.ensureVisible(find.text('TOPIK II'));
       await tester.tap(find.text('TOPIK II'));
       await tester.pumpAndSettle();
 

@@ -57,6 +57,7 @@ fast manual entry and keeps the surface intentionally small.
 │                                                │
 │ TAGS · optional                                 │
 │ [TOPIK II ×] [noun ×] [people ×] [+ Add tag]    │
+│ ☐ Save and add another                          │
 │                                                │
 └────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────┐
@@ -88,7 +89,7 @@ fast manual entry and keeps the surface intentionally small.
 | Initial content | Blank front/back/example/pronunciation/hint/tags | Loaded from the existing card |
 | Destination deck | Fixed to the selected deck for the create flow | Read-only; moving a saved card belongs to flashcard list row/bulk actions |
 | Save action | Creates one card in the selected deck | Updates the same card |
-| Save and add another | Future Proposal | Hidden |
+| Save and add another | Checkbox under Tags; when checked, saving clears the draft and keeps the editor open on the same deck | Hidden |
 | Starting status | Hidden | Hidden |
 | Delete/history/suspend/bury actions | Not shown | Not shown in the editor in V1 |
 
@@ -122,6 +123,8 @@ fast manual entry and keeps the surface intentionally small.
 | Details expanded | Tap More details | Summary row stays visible with an expanded chevron and the example, pronunciation, and hint inputs are shown inline. |
 | Tags idle | Default | Tag chips row shows any current chips plus the Add tag chip. |
 | Tags add | Tap Add tag | The tag input dialog accepts one tag and appends it if valid. |
+| Save and add another off | Default | Checkbox under Tags is unchecked; Save behaves normally. |
+| Save and add another on | Checkbox checked | Save clears the draft and keeps the editor open for batch entry. |
 | Saving | Save tapped | Save button shows spinner; form stays visible and the buttons disable. |
 | Saved | Success | Return to the deck's flashcard list with a success snackbar. |
 | Save error | Repository failure | Error banner appears; form contents remain. |
@@ -134,6 +137,7 @@ fast manual entry and keeps the surface intentionally small.
 | Tap close | Tap | If the draft is dirty, show the discard dialog; otherwise pop immediately. |
 | Browser/system back | Back gesture / browser back | Same discard-confirm behavior as close when the draft is dirty. |
 | Tap Save | Tap | Validate required fields, save, then pop back to the deck list. |
+| Toggle save and add another | Tap checkbox | Turn batch-entry mode on or off for the current create session. |
 | Tap More details | Tap | Toggle the inline optional detail inputs while keeping the summary row visible. |
 | Tap Add tag | Tap | Open the tag input dialog and append a valid tag chip. |
 | Tap tag chip | Tap chip | Remove the tag chip from the draft. |
