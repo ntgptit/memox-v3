@@ -42,6 +42,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSave => 'Save';
 
   @override
+  String get commonRename => 'Rename';
+
+  @override
   String get commonImport => 'Import';
 
   @override
@@ -3248,7 +3251,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get folderCreateDialogTitle => 'New folder';
 
   @override
+  String get folderCreateDialogDescription => 'Group related decks together.';
+
+  @override
   String get folderCreateFieldLabel => 'Folder name';
+
+  @override
+  String get folderCreateColorLabel => 'Color';
+
+  @override
+  String get folderCreateIconLabel => 'Icon';
 
   @override
   String get libraryFolderDuplicateError =>
@@ -3361,6 +3373,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deckCreateFieldLabel => 'Deck name';
+
+  @override
+  String get folderRenameDialogDescription =>
+      'Only the folder name changes — every deck and card inside stays put.';
+
+  @override
+  String get folderRenameDialogFieldLabel => 'New name';
+
+  @override
+  String folderRenameDialogHelper(String summary) {
+    return '$summary will keep this folder as their home.';
+  }
 
   @override
   String get folderDeckDuplicateError =>

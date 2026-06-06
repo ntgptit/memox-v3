@@ -66,7 +66,7 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   (over new `FolderRepository.renameFolder/moveFolder/deleteFolder/getFolderMoveTargets`). The DAO
   mutation methods (`updateFolderName`, `updateFolderParent`, `deleteFolderById`,
   `descendantFolderIdsDepthFirst`, `siblingFolderNames`) back them.
-- **Rename** opens `MxNameDialog` pre-filled with the current name → `renameFolder` (sibling-name
+- **Rename** opens `showMxFolderRenameDialog` pre-filled with the current name → `renameFolder` (sibling-name
   uniqueness, no-op on unchanged name). **Move** loads candidates via `getFolderMoveTargets` and
   opens the move picker (`docs/wireframes/25-shared-bottom-sheets.md` §folder-picker): blocked
   destinations (self/descendants = cycle, decks-locked folders) are shown disabled with a reason,
@@ -118,7 +118,7 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   the aggregate model and there is no study-launch.
 - Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended,
   `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill
-  both open `MxNameDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
+  both open `showMxFolderCreateDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
   failures map to a localized error snackbar; success refreshes via `contentDataRevision`. No New
   deck / Import entry on Library root.
 - Folder row overflow action sheet is **Current** (Rename / Move / Import flashcards / Delete) — see
@@ -298,7 +298,7 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 ## Dialogs and bottom-sheets used
 
 - Library FAB action sheet — see `docs/wireframes/25-shared-bottom-sheets.md` §library-fab.
-- New folder dialog — see `docs/wireframes/24-shared-dialogs.md` §folder-create.
+- New folder dialog — see `docs/wireframes/24-shared-dialogs.md` §folder-form.
 - New deck bottom-sheet (with target_language field) — see
   `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
 - Item context sheet (Rename / Move / Delete) — see `docs/wireframes/25-shared-bottom-sheets.md`
@@ -406,6 +406,6 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 - `docs/wireframes/05-folder-detail.md` — child folder detail
 - `docs/wireframes/06-flashcard-list.md` — deck content
 - `docs/wireframes/11-library-search.md` — search target
-- `docs/wireframes/24-shared-dialogs.md` §folder-create, §delete-confirm
+- `docs/wireframes/24-shared-dialogs.md` §folder-form, §delete-confirm
 - `docs/wireframes/25-shared-bottom-sheets.md` §library-fab, §deck-create, §item-context,
   §folder-picker

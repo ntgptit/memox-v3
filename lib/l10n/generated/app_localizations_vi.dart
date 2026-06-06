@@ -42,6 +42,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonSave => 'Lưu';
 
   @override
+  String get commonRename => 'Đổi tên';
+
+  @override
   String get commonImport => 'Nhập';
 
   @override
@@ -3128,7 +3131,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get folderCreateDialogTitle => 'Thư mục mới';
 
   @override
+  String get folderCreateDialogDescription =>
+      'Nhóm các bộ thẻ liên quan vào cùng một nơi.';
+
+  @override
   String get folderCreateFieldLabel => 'Tên thư mục';
+
+  @override
+  String get folderCreateColorLabel => 'Màu';
+
+  @override
+  String get folderCreateIconLabel => 'Biểu tượng';
 
   @override
   String get libraryFolderDuplicateError => 'Đã có một thư mục trùng tên này.';
@@ -3231,6 +3244,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get deckCreateFieldLabel => 'Tên bộ thẻ';
+
+  @override
+  String get folderRenameDialogDescription =>
+      'Chỉ tên thư mục thay đổi — mọi bộ thẻ và thẻ bên trong vẫn giữ nguyên.';
+
+  @override
+  String get folderRenameDialogFieldLabel => 'Tên mới';
+
+  @override
+  String folderRenameDialogHelper(String summary) {
+    return '$summary sẽ tiếp tục xem thư mục này là nhà của chúng.';
+  }
 
   @override
   String get folderDeckDuplicateError => 'Đã có một bộ thẻ trùng tên này.';

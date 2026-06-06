@@ -14,6 +14,7 @@ import 'package:memox/presentation/features/folders/widgets/folder_detail_action
 import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
 import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
+import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -208,10 +209,13 @@ Future<void> createSubfolderDialog(
   String folderId,
 ) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final String? name = await showMxNameDialog(
+  final String? name = await showMxFolderCreateDialog(
     context,
     title: l10n.subfolderCreateDialogTitle,
+    description: l10n.folderCreateDialogDescription,
     fieldLabel: l10n.subfolderCreateFieldLabel,
+    colorLabel: l10n.folderCreateColorLabel,
+    iconLabel: l10n.folderCreateIconLabel,
     confirmLabel: l10n.commonCreate,
     cancelLabel: l10n.commonCancel,
   );

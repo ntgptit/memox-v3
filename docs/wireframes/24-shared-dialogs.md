@@ -18,7 +18,7 @@ Reusable dialog patterns referenced across screens. Each dialog is identified by
 
 ## V1 implementation status — Prompt 27, 2026-06-01
 
-Current V1 shared primitives are `MxDialog`, `MxConfirmationDialog`, `MxNameDialog`, and `MxDialogResumeOrStartOver`.
+Current V1 shared primitives are `MxDialog`, `MxConfirmationDialog`, `MxNameDialog`, `MxDialogResumeOrStartOver`, and the folder-specific `showMxFolderCreateDialog` / `showMxFolderRenameDialog` pair.
 
 Current V1 return contracts are intentionally mixed:
 - `MxConfirmationDialog.show(...)` returns `Future<bool>` where `true` means confirmed and `false` means Cancel/system dismissal.
@@ -61,7 +61,7 @@ They must not call DAO, repository, or use case directly.
 | §bulk-delete | Multi-card delete |
 | §reset-progress | Reset SRS for one card or in bulk |
 | §rename | Rename an entity (folder, deck, device label) |
-| §folder-create | Create a new folder |
+| §folder-form | Create or rename a folder |
 | §restore-warning | Drive restore with fingerprint mismatch |
 
 ## Dialog patterns
@@ -319,32 +319,83 @@ Rename button disabled until name is valid AND different from current.
 
 ---
 
-## §folder-create
+## §folder-form
 
-Used by: Library FAB and folder detail FAB. Future full onboarding or zero-content guidance may reuse this flow, but V1 has no standalone onboarding dialog or wizard.
+Used by: Library FAB, folder-detail FAB, Library rename action, folder-detail rename action.
+
+`showMxFolderCreateDialog(...)` returns `Future<String?>` where the trimmed name means confirm and
+`null` means cancel/dismiss. `showMxFolderRenameDialog(...)` uses the same return contract.
+Unlike the generic `MxNameDialog`, this folder-specific dialog is mock-aligned and includes the
+preview/choice affordances from the design kit.
+
+### Create variant
 
 ```
 ┌───────────────────────────────────────┐
-│  New folder                           │
+│  [icon] New folder                    │
+│          Group related decks together.│
 ├───────────────────────────────────────┤
-│                                       │
-│  Name *                               │
+│  FOLDER NAME                          │
 │  ┌─────────────────────────────────┐  │
-│  │                                 │  │
+│  │ Vietnamese                        │  │
 │  └─────────────────────────────────┘  │
 │                                       │
-│  Parent                               │
-│  Library / Korean ▾                  │  ← Tap to change parent
+│  COLOR                                │
+│  ○ ○ ○ ○ ○ ○                         │
 │                                       │
+│  ICON                                 │
+│  [ ] [ ] [ ] [ ] [ ]                 │
 ├───────────────────────────────────────┤
-│        [ Cancel ]  [ Create ]         │
+│ [Cancel]              [Create folder] │
 └───────────────────────────────────────┘
 ```
 
-- Default parent = current screen's folder (or root).
-- Tap parent → folder picker bottom-sheet to change.
-- Parent picker filters to folders that allow subfolders (mode = subfolders or unlocked).
-- Validation same as §rename.
+- Top preview tile reflects the selected color/icon and is visual preview only until the folder
+  model stores those attributes.
+- The name field is 44dp tall and uses the primary border treatment from the mock.
+- The dialog shell uses the same outer inset / width treatment as the shared delete dialog so the
+  form does not feel cramped on mobile.
+- Footer buttons are 40dp high, keep the dialog-side 18dp inset, and use an equal-width pair
+  grouped toward the trailing side; `Create folder` uses a leading folder-plus icon.
+- The create and rename variants are modal-locked: tapping outside or pressing back does not
+  dismiss them; only the `Cancel` action closes the dialog.
+
+### Rename variant
+
+```
+┌───────────────────────────────────────┐
+│  Rename folder                        │
+│  Only the folder name changes — ...   │
+├───────────────────────────────────────┤
+│  NEW NAME                             │
+│  ┌─────────────────────────────────┐  │
+│  │ Korean                           │  │
+│  └─────────────────────────────────┘  │
+│  8 decks · 412 cards will keep ...    │
+├───────────────────────────────────────┤
+│ [Cancel]                     [Rename] │
+└───────────────────────────────────────┘
+```
+
+- The initial name is pre-filled and fully selected so the user can overwrite it immediately.
+- The helper line below the field is derived by the caller from the current folder summary.
+- The dialog shell uses the same outer inset / width treatment as the shared delete dialog so the
+  rename body stays comfortably wide.
+- Footer buttons reuse the same 40dp/rounded shape treatment as create, with a visible
+  `Cancel` action on the left and `Rename` on the right in an equal-width pair.
+- The create and rename variants are modal-locked: tapping outside or pressing back does not
+  dismiss them; only the `Cancel` action closes the dialog.
+
+---
+
+## §folder-create
+
+Legacy label retained for older references only. The Current folder create
+experience is documented in `§folder-form`, which includes the mock-aligned
+name + color/icon picker dialog.
+
+If you are updating code or docs for the current product surface, prefer
+`§folder-form` and keep this section as a compatibility note only.
 
 ---
 
@@ -460,7 +511,7 @@ When fingerprints match, this dialog still appears but the warning is softer and
 - §bulk-delete → `docs/business/bulk/bulk-operations.md`
 - §reset-progress → `docs/business/history/card-history.md`
 - §rename → folder/deck/`docs/business/account-sync/account-sync.md` (device label)
-- §folder-create → `docs/business/folder/folder-management.md`
+- §folder-form → `docs/business/folder/folder-management.md`
 - §restore-warning → `docs/business/account-sync/account-sync.md`
 
 **Decision rows:**
@@ -470,7 +521,7 @@ When fingerprints match, this dialog still appears but the warning is softer and
 
 **Code paths:**
 - Shared dialogs live under `lib/presentation/shared/dialogs/**` (each as its own widget file), built on `MxDialog` / `MxConfirmationDialog`.
-- Naming: `MxDialogResumeOrStartOver`, `MxDialogDiscardSession`, `MxDialogDiscardChanges`, `MxDialogExitSession`, `MxDialogDeleteConfirm`, `MxDialogBulkDelete`, `MxDialogResetProgress`, `MxDialogRename`, `MxDialogFolderCreate`, `MxDialogRestoreWarning`
+- Naming: `MxDialogResumeOrStartOver`, `MxDialogDiscardSession`, `MxDialogDiscardChanges`, `MxDialogExitSession`, `MxDialogDeleteConfirm`, `MxDialogBulkDelete`, `MxDialogResetProgress`, `MxDialogRename`, `MxFolderFormDialog`, `MxDialogRestoreWarning`
 - Implemented so far: `MxDialogResumeOrStartOver` (`mx_dialog_resume_or_start_over.dart`, Prompt 05) returns typed `MxResumeChoice?`; §discard-session is composed from `MxConfirmationDialog` (danger tone) by the entry gate, Dashboard/Progress resume surfaces, and (Prompt 47) the deck/folder resume banners via the shared `confirmAndDiscardResumeSession` flow (`lib/presentation/shared/study/discard_resume_session.dart`).
 - Return contracts follow the Current V1 list above: confirmation dialogs use `bool`, name dialogs use `String?`, and resume/start-over uses typed `MxResumeChoice?`.
 

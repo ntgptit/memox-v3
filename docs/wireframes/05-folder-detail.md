@@ -56,7 +56,9 @@ because they are derived from the existing deck read model, not the study UI.
   (`showLibraryFolderActions`) for the **current** folder with Rename / Move /
   Delete, reusing the Library folder action flow
   (`libraryActionControllerProvider` → `{rename,move,delete,getFolderMoveTargets}`
-  use cases). Import is hidden here (it targets a specific deck, not the folder).
+  use cases). Rename now uses `showMxFolderRenameDialog` from
+  `docs/wireframes/24-shared-dialogs.md` §folder-form. Import is hidden here
+  (it targets a specific deck, not the folder).
   Move opens `showFolderMovePicker` (mock state `moveSheet`); Delete opens the
   shared destructive confirm dialog (`showMxConfirmDialog`, mock state
   `delConfirm`) and, on success, leaves the now-stale detail screen for its parent.
@@ -246,9 +248,9 @@ banner are **Future** (the study layer is not built).
 ## Dialogs and bottom-sheets used
 
 - Resume banner discard dialog — **Future.** Study layer not built.
-- New folder dialog — `docs/wireframes/24-shared-dialogs.md` §folder-create.
+- New folder dialog — `docs/wireframes/24-shared-dialogs.md` §folder-form.
 - New deck bottom-sheet — `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
-- Folder rename dialog — `docs/wireframes/24-shared-dialogs.md` §rename.
+- Folder rename dialog — `docs/wireframes/24-shared-dialogs.md` §folder-form.
 - Move-to-folder picker — `docs/wireframes/25-shared-bottom-sheets.md` §folder-picker.
 - Delete folder dialog — `docs/wireframes/24-shared-dialogs.md` §delete-confirm (strong folder-delete variant with typed confirmation and reassurance copy).
 - Item context sheet — `docs/wireframes/25-shared-bottom-sheets.md` §item-context.
@@ -346,5 +348,5 @@ banner are **Future** (the study layer is not built).
 - `docs/wireframes/02-library.md` (parent)
 - `docs/wireframes/06-flashcard-list.md` (deck child)
 - `docs/wireframes/12-study-entry-gate.md` (folder-scoped study)
-- `docs/wireframes/24-shared-dialogs.md` §folder-create, §rename, §delete-confirm, §discard-session
+- `docs/wireframes/24-shared-dialogs.md` §folder-form, §rename, §delete-confirm, §discard-session
 - `docs/wireframes/25-shared-bottom-sheets.md` §deck-create, §folder-picker, §item-context

@@ -164,6 +164,12 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get commonSave;
 
+  /// No description provided for @commonRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get commonRename;
+
   /// No description provided for @commonImport.
   ///
   /// In en, this message translates to:
@@ -5118,11 +5124,29 @@ abstract class AppLocalizations {
   /// **'New folder'**
   String get folderCreateDialogTitle;
 
+  /// No description provided for @folderCreateDialogDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Group related decks together.'**
+  String get folderCreateDialogDescription;
+
   /// No description provided for @folderCreateFieldLabel.
   ///
   /// In en, this message translates to:
   /// **'Folder name'**
   String get folderCreateFieldLabel;
+
+  /// No description provided for @folderCreateColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get folderCreateColorLabel;
+
+  /// No description provided for @folderCreateIconLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get folderCreateIconLabel;
 
   /// No description provided for @libraryFolderDuplicateError.
   ///
@@ -5261,6 +5285,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deck name'**
   String get deckCreateFieldLabel;
+
+  /// No description provided for @folderRenameDialogDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the folder name changes — every deck and card inside stays put.'**
+  String get folderRenameDialogDescription;
+
+  /// No description provided for @folderRenameDialogFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New name'**
+  String get folderRenameDialogFieldLabel;
+
+  /// No description provided for @folderRenameDialogHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'{summary} will keep this folder as their home.'**
+  String folderRenameDialogHelper(String summary);
 
   /// No description provided for @folderDeckDuplicateError.
   ///

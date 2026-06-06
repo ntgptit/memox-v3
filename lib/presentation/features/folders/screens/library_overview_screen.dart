@@ -18,7 +18,7 @@ import 'package:memox/presentation/features/folders/widgets/library_sections.dar
 import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
-import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
+import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
@@ -109,10 +109,13 @@ Future<void> _showCreateFolderDialog(
   WidgetRef ref,
 ) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final String? name = await showMxNameDialog(
+  final String? name = await showMxFolderCreateDialog(
     context,
     title: l10n.folderCreateDialogTitle,
+    description: l10n.folderCreateDialogDescription,
     fieldLabel: l10n.folderCreateFieldLabel,
+    colorLabel: l10n.folderCreateColorLabel,
+    iconLabel: l10n.folderCreateIconLabel,
     confirmLabel: l10n.commonCreate,
     cancelLabel: l10n.commonCancel,
   );
@@ -156,8 +159,7 @@ Future<void> _showFolderActions(
   final AppLocalizations l10n = AppLocalizations.of(context);
   // Import targets a deck; subfolder-mode folders hold no decks, so it is
   // hidden for them (`docs/wireframes/02-library.md`).
-  final bool showImport =
-      item.folder.contentMode != ContentMode.subfolders;
+  final bool showImport = item.folder.contentMode != ContentMode.subfolders;
   final LibraryFolderAction? action = await showLibraryFolderActions(
     context,
     name: item.folder.name,
@@ -185,8 +187,7 @@ Future<void> _showFolderActions(
 }
 
 String _folderActionSubtitle(AppLocalizations l10n, FolderWithCount item) {
-  final String primary =
-      item.folder.contentMode == ContentMode.subfolders
+  final String primary = item.folder.contentMode == ContentMode.subfolders
       ? l10n.libraryFolderSubfoldersCount(item.subfolderCount)
       : l10n.libraryFolderDecksCount(item.deckCount);
   return '$primary · ${l10n.libraryFolderCardsCount(item.cardCount)}';
@@ -198,11 +199,15 @@ Future<void> _renameFolder(
   FolderWithCount item,
 ) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final String? name = await showMxNameDialog(
+  final String? name = await showMxFolderRenameDialog(
     context,
     title: l10n.foldersRenameTitle,
-    fieldLabel: l10n.folderCreateFieldLabel,
-    confirmLabel: l10n.commonSave,
+    description: l10n.folderRenameDialogDescription,
+    fieldLabel: l10n.folderRenameDialogFieldLabel,
+    helperText: l10n.folderRenameDialogHelper(
+      _folderActionSubtitle(l10n, item),
+    ),
+    confirmLabel: l10n.commonRename,
     cancelLabel: l10n.commonCancel,
     initialValue: item.folder.name,
   );
@@ -224,8 +229,7 @@ Future<void> _renameFolder(
       message: _folderActionErrorMessage(l10n, failure),
       isError: true,
     ),
-    (Folder _) =>
-        showMxSnackbar(context, message: l10n.foldersUpdatedMessage),
+    (Folder _) => showMxSnackbar(context, message: l10n.foldersUpdatedMessage),
   );
 }
 
@@ -317,8 +321,7 @@ Future<void> _deleteFolder(
       message: _folderActionErrorMessage(l10n, failure),
       isError: true,
     ),
-    (void _) =>
-        showMxSnackbar(context, message: l10n.foldersDeletedMessage),
+    (void _) => showMxSnackbar(context, message: l10n.foldersDeletedMessage),
   );
 }
 

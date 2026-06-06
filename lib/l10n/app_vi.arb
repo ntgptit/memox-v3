@@ -14,6 +14,7 @@
   "commonDelete": "Xóa",
   "commonSort": "Sắp xếp",
   "commonSave": "Lưu",
+  "commonRename": "Đổi tên",
   "commonImport": "Nhập",
   "commonExport": "Xuất",
   "commonMove": "Di chuyển",
@@ -1708,7 +1709,10 @@
   "librarySearchNoResultsTitle": "Không tìm thấy thư mục",
   "librarySearchNoResultsMessage": "Không có thư mục nào khớp với tìm kiếm của bạn.",
   "folderCreateDialogTitle": "Thư mục mới",
+  "folderCreateDialogDescription": "Nhóm các bộ thẻ liên quan vào cùng một nơi.",
   "folderCreateFieldLabel": "Tên thư mục",
+  "folderCreateColorLabel": "Màu",
+  "folderCreateIconLabel": "Biểu tượng",
   "libraryFolderDuplicateError": "Đã có một thư mục trùng tên này.",
   "libraryCreateFolderError": "Không thể tạo thư mục. Vui lòng thử lại.",
   "libraryFolderCountLabel": "{count} thư mục",
@@ -1743,6 +1747,16 @@
   "subfolderCreateFieldLabel": "Tên thư mục con",
   "deckCreateDialogTitle": "Bộ thẻ mới",
   "deckCreateFieldLabel": "Tên bộ thẻ",
+  "folderRenameDialogDescription": "Chỉ tên thư mục thay đổi — mọi bộ thẻ và thẻ bên trong vẫn giữ nguyên.",
+  "folderRenameDialogFieldLabel": "Tên mới",
+  "folderRenameDialogHelper": "{summary} sẽ tiếp tục xem thư mục này là nhà của chúng.",
+  "@folderRenameDialogHelper": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
   "folderDeckDuplicateError": "Đã có một bộ thẻ trùng tên này.",
   "folderChildCreateError": "Không thể tạo. Vui lòng thử lại.",
   "folderModeLockedError": "Thư mục này không thể chứa loại mục đó.",

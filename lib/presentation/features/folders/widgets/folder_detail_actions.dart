@@ -19,7 +19,7 @@ import 'package:memox/presentation/features/folders/widgets/folder_move_picker_s
 import 'package:memox/presentation/features/folders/widgets/library_folder_actions_sheet.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
-import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
+import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 
 /// Opens the current folder's overflow action sheet (Rename / Move / Delete) and
@@ -45,7 +45,12 @@ Future<void> showFolderDetailActions(
   }
   switch (action) {
     case LibraryFolderAction.rename:
-      await _renameFolder(context, ref, detail.folder);
+      await _renameFolder(
+        context,
+        ref,
+        detail.folder,
+        helperText: _folderDetailSubtitle(l10n, detail),
+      );
     case LibraryFolderAction.move:
       await _moveFolder(context, ref, detail.folder);
     case LibraryFolderAction.delete:
@@ -78,7 +83,12 @@ Future<void> showFolderDetailSubfolderActions(
   }
   switch (action) {
     case LibraryFolderAction.rename:
-      await _renameFolder(context, ref, item.folder);
+      await _renameFolder(
+        context,
+        ref,
+        item.folder,
+        helperText: _folderActionSubtitle(l10n, item),
+      );
     case LibraryFolderAction.move:
       await _moveFolder(context, ref, item.folder);
     case LibraryFolderAction.importFlashcards:
@@ -125,14 +135,17 @@ Future<void> showFolderDetailDeckActions(
 Future<void> _renameFolder(
   BuildContext context,
   WidgetRef ref,
-  Folder folder,
-) async {
+  Folder folder, {
+  required String helperText,
+}) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final String? name = await showMxNameDialog(
+  final String? name = await showMxFolderRenameDialog(
     context,
     title: l10n.foldersRenameTitle,
-    fieldLabel: l10n.folderCreateFieldLabel,
-    confirmLabel: l10n.commonSave,
+    description: l10n.folderRenameDialogDescription,
+    fieldLabel: l10n.folderRenameDialogFieldLabel,
+    helperText: helperText,
+    confirmLabel: l10n.commonRename,
     cancelLabel: l10n.commonCancel,
     initialValue: folder.name,
   );

@@ -114,7 +114,7 @@ Driven by `folderDetailQueryProvider(folderId)` (`AsyncValue<FolderDetail>`) +
 | Search active | `isSearching == true`, matches exist | App bar, breadcrumb, search (with clear), filtered rows | Unlocked choice | mode FAB | — | — | Filtering is folder-scope-local. |
 | Search — no results | `isSearching == true`, no matches but children exist | App bar, breadcrumb, search, **search-empty** w/ Clear | Rows | "Clear search" (`onClearSearch`) | — | `MxEmptyState` (via `FolderDetailBody`) | Do not route to Global Search. |
 | Error / not found | Query error (invalid/deleted `:id`) | App bar, breadcrumb*, search shell, **error state** | Rows, FAB | "Retry" (`commonRetry`) | back | `MxErrorState` (`Icons.folder_off_outlined`, `folderNotFoundTitle/Message`) | Retry = `ref.invalidate(folderDetailQueryProvider)`. No raw exception text. |
-| Submitting (create) | `folderActionController` loading | unchanged list + dialog busy | — | dialog confirm (busy) | dialog cancel | `showMxNameDialog` busy + `showMxSnackbar` on failure | Drift stream refreshes list on success; failure → localized snackbar. |
+| Submitting (create) | `folderActionController` loading | unchanged list + dialog busy | — | dialog confirm (busy) | dialog cancel | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` busy + `showMxSnackbar` on failure | Drift stream refreshes list on success; failure → localized snackbar. |
 | Resume present / Study CTAs | (mock) folder has session/due | — | — | — | — | — | **Future** — not rendered in code. Do not implement from the mock. |
 
 ## 5. Element mapping
@@ -141,7 +141,7 @@ existing widget/token covers an element.
 | Loading skeleton | First-load placeholder | `LibrarySkeleton` (`MxSkeleton` in `MxCard`) | `MxSkeleton`; `brLg` | loading | **Current** | Per-row skeleton, not a full-screen spinner. |
 | Error / not-found | Safe failure surface | `MxErrorState` | error-state theme; `iconXl` `folder_off_outlined` | error | **Current** | Localized title/message + Retry. |
 | Create FAB | Add child by mode | `MxFab.extended` | `SizeTokens.fab`; `RadiusTokens.brXl`; primary/onPrimary | decks/subfolders loaded | **Current** | Mode-locked label & icon. Unlocked → no FAB. |
-| New folder / deck dialog | Name the new child | `showMxNameDialog` | dialog theme `brLg`; level2–3; scrim 32% | on FAB / choice tap | **Current** | Confirm/cancel via l10n; duplicate/mode-lock errors → `showMxSnackbar`. |
+| New folder / deck dialog | Name the new child | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` for folder cases; `showMxNameDialog` remains for deck naming | dialog theme `brLg`; level2–3; scrim 32% | on FAB / choice tap | **Current** | Folder dialog is mock-aligned with preview tile + color/icon pickers on create and helper text on rename; duplicate/mode-lock errors → `showMxSnackbar`. |
 | Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | would be `MxCard` + `MxMasteryRing` | (mock) | **Future** | Not rendered. No folder mastery read model; never fake a percent. |
 | Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | (mock) | **Future** | Study layer not built; must route through Study Entry Gate when promoted. |
 | Resume banner (+ Discard) | Continue/cancel paused session | `MxCallout` + `MxConfirmationDialog` | callout/dialog themes | (mock) | **Future** | No session layer on this ref. |
@@ -308,7 +308,7 @@ levels keeping first + last.
 **Reuse these shared widgets** (do not hand-roll): `MxScaffold`, `MxAppBar`,
 `MxBreadcrumb`, `MxSearchField`, `MxRetainedAsyncState`, `MxErrorState`,
 `MxEmptyState`, `MxSkeleton`, `MxCard`, `MxIconTile`, `MxIconButton`,
-`MxFab.extended`, `showMxNameDialog`, `showMxSnackbar`, `MxConfirmationDialog`.
+`MxFab.extended`, `showMxFolderCreateDialog`, `showMxFolderRenameDialog`, `showMxNameDialog`, `showMxSnackbar`, `MxConfirmationDialog`.
 
 **Theme/token files:** `lib/core/theme/tokens/**`,
 `lib/core/theme/extensions/theme_context.dart`,

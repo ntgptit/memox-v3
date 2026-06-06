@@ -14,6 +14,7 @@
   "commonDelete": "Delete",
   "commonSort": "Sort",
   "commonSave": "Save",
+  "commonRename": "Rename",
   "commonImport": "Import",
   "commonExport": "Export",
   "commonMove": "Move",
@@ -1708,7 +1709,10 @@
   "librarySearchNoResultsTitle": "No folders found",
   "librarySearchNoResultsMessage": "No folder matches your search.",
   "folderCreateDialogTitle": "New folder",
+  "folderCreateDialogDescription": "Group related decks together.",
   "folderCreateFieldLabel": "Folder name",
+  "folderCreateColorLabel": "Color",
+  "folderCreateIconLabel": "Icon",
   "libraryFolderDuplicateError": "A folder with this name already exists.",
   "libraryCreateFolderError": "Couldn't create the folder. Please try again.",
   "libraryFolderCountLabel": "{count} folders",
@@ -1743,6 +1747,16 @@
   "subfolderCreateFieldLabel": "Subfolder name",
   "deckCreateDialogTitle": "New deck",
   "deckCreateFieldLabel": "Deck name",
+  "folderRenameDialogDescription": "Only the folder name changes — every deck and card inside stays put.",
+  "folderRenameDialogFieldLabel": "New name",
+  "folderRenameDialogHelper": "{summary} will keep this folder as their home.",
+  "@folderRenameDialogHelper": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
   "folderDeckDuplicateError": "A deck with this name already exists.",
   "folderChildCreateError": "Couldn't create that. Please try again.",
   "folderModeLockedError": "This folder can't hold that item type.",
