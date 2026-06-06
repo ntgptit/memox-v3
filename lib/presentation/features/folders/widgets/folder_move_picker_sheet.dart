@@ -64,9 +64,9 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
         .where(
           (FolderMoveTarget t) =>
               t.id == null ||
-              StringUtils.normalize(t.breadcrumb.join(' / ')).contains(
-                normalized,
-              ),
+              StringUtils.normalize(
+                t.breadcrumb.join(' / '),
+              ).contains(normalized),
         )
         .toList(growable: false);
   }
@@ -112,9 +112,7 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
           const SizedBox(height: SpacingTokens.sm),
           Flexible(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                vertical: SpacingTokens.xs,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xs),
               itemCount: visible.length,
               itemBuilder: (BuildContext context, int index) {
                 final FolderMoveTarget target = visible[index];
@@ -191,50 +189,56 @@ class _TargetRow extends StatelessWidget {
     final Color titleColor = enabled
         ? scheme.onSurface
         : scheme.onSurfaceVariant;
-    return MxTappable(
-      onTap: enabled ? onTap : null,
-      borderRadius: RadiusTokens.brSm,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.lg,
-          vertical: SpacingTokens.sm + 2,
-        ),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              selected
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
-              size: SpacingTokens.xl,
-              color: selected ? scheme.primary : scheme.onSurfaceVariant,
-            ),
-            const SizedBox(width: SpacingTokens.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  MxText(
-                    title,
-                    role: MxTextRole.bodyLarge,
-                    color: titleColor,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (subtitle != null) ...<Widget>[
-                    const SizedBox(height: SpacingTokens.xxs),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.sm,
+        vertical: SpacingTokens.xs,
+      ),
+      child: MxTappable(
+        onTap: enabled ? onTap : null,
+        borderRadius: RadiusTokens.brSm,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpacingTokens.lg,
+            vertical: SpacingTokens.sm + 2,
+          ),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                selected
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                size: SpacingTokens.xl,
+                color: selected ? scheme.primary : scheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: SpacingTokens.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
                     MxText(
-                      subtitle!,
-                      role: MxTextRole.labelMedium,
-                      color: scheme.onSurfaceVariant,
-                      maxLines: 2,
+                      title,
+                      role: MxTextRole.bodyLarge,
+                      color: titleColor,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    if (subtitle != null) ...<Widget>[
+                      const SizedBox(height: SpacingTokens.xxs),
+                      MxText(
+                        subtitle!,
+                        role: MxTextRole.labelMedium,
+                        color: scheme.onSurfaceVariant,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

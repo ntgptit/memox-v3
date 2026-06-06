@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/folder_detail.dart';
@@ -8,8 +7,8 @@ import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_deck_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_summary.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_subfolder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
-import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
@@ -84,7 +83,7 @@ class FolderDetailBody extends StatelessWidget {
         const SizedBox(height: SpacingTokens.sm),
         if (isSubfolderMode)
           for (final FolderWithCount item in detail.subfolders) ...<Widget>[
-            LibraryFolderTile(
+            FolderSubfolderTile(
               item: item,
               onTap: () => context.pushFolderDetail(item.folder.id),
             ),

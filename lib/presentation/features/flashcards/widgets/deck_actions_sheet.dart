@@ -135,42 +135,48 @@ class _ActionRow extends StatelessWidget {
     final ColorScheme scheme = context.colorScheme;
     final Color tint = destructive ? scheme.error : scheme.primary;
     final Color labelColor = destructive ? scheme.error : scheme.onSurface;
-    return MxTappable(
-      onTap: onTap,
-      borderRadius: RadiusTokens.brSm,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.lg,
-          vertical: SpacingTokens.md,
-        ),
-        child: Row(
-          children: <Widget>[
-            Container(
-              width: SizeTokens.iconLg,
-              height: SizeTokens.iconLg,
-              decoration: BoxDecoration(
-                color: tint.withValues(alpha: OpacityTokens.hover),
-                borderRadius: RadiusTokens.brSm,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.sm,
+        vertical: SpacingTokens.xs,
+      ),
+      child: MxTappable(
+        onTap: onTap,
+        borderRadius: RadiusTokens.brSm,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpacingTokens.lg,
+            vertical: SpacingTokens.md,
+          ),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: SizeTokens.iconLg,
+                height: SizeTokens.iconLg,
+                decoration: BoxDecoration(
+                  color: tint.withValues(alpha: OpacityTokens.hover),
+                  borderRadius: RadiusTokens.brSm,
+                ),
+                alignment: Alignment.center,
+                child: Icon(icon, size: SizeTokens.iconXs, color: tint),
               ),
-              alignment: Alignment.center,
-              child: Icon(icon, size: SizeTokens.iconXs, color: tint),
-            ),
-            const SizedBox(width: SpacingTokens.md),
-            Expanded(
-              child: MxText(
-                label,
-                role: MxTextRole.bodyLarge,
-                color: labelColor,
-                fontWeight: TypographyTokens.medium,
+              const SizedBox(width: SpacingTokens.md),
+              Expanded(
+                child: MxText(
+                  label,
+                  role: MxTextRole.bodyLarge,
+                  color: labelColor,
+                  fontWeight: TypographyTokens.medium,
+                ),
               ),
-            ),
-            if (!destructive)
-              Icon(
-                Icons.chevron_right,
-                size: SizeTokens.iconSm,
-                color: scheme.onSurfaceVariant,
-              ),
-          ],
+              if (!destructive)
+                Icon(
+                  Icons.chevron_right,
+                  size: SizeTokens.iconSm,
+                  color: scheme.onSurfaceVariant,
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -21,7 +21,8 @@ update the files `mx_bottom_sheet.dart`, `mx_action_sheet_list.dart`,
 
 - `lib/presentation/shared/dialogs/mx_bottom_sheet.dart` — **Current.** The `showMxBottomSheet`
   modal host: themed `BottomSheetThemeData` (rounded top, `surfaceContainerLowest`, visible tappable
-  drag handle), safe-area insets, 90%-height cap. Receives prepared child content.
+  drag handle), safe-area insets, root-navigator overlay so sheets can cover the app shell/bottom
+  nav, and a 90%-height cap. Receives prepared child content.
 - `lib/presentation/shared/dialogs/mx_confirm_dialog.dart` — **Current.** `showMxConfirmDialog`,
   the binary/destructive confirm used by §delete-confirm callers.
 - §item-context and §folder-picker are realized for Library folder rows as feature-local sheets
@@ -120,8 +121,12 @@ They must not call DAO, repository, or use case directly.
 
 ## Common structure
 
-Material 3 modal bottom-sheet. Drag handle on top. Title row (optional). Body. Action row at bottom
+Material 3 modal bottom-sheet. The shared host opens on the root navigator so the sheet can extend
+over the app shell bottom nav. Drag handle on top. Title row (optional). Body. Action row at bottom
 for confirm flows. Tap outside or drag down to dismiss (when non-confirmation).
+
+Action rows are inset from the sheet edge so the hover/focus surface reads as a floating block
+rather than touching the sheet border.
 
 ```
 ┌───────────────────────────────────────┐

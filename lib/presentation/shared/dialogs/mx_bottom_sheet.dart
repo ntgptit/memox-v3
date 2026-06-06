@@ -14,6 +14,7 @@ Future<T?> showMxBottomSheet<T>(
   required WidgetBuilder builder,
 }) => showModalBottomSheet<T>(
   context: context,
+  useRootNavigator: true,
   isScrollControlled: true,
   useSafeArea: true,
   constraints: BoxConstraints(

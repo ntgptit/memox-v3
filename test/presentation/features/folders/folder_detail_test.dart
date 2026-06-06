@@ -14,13 +14,11 @@ import 'package:memox/presentation/features/folders/viewmodels/folder_detail_vie
 import 'package:memox/presentation/features/folders/widgets/folder_deck_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_summary.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_subfolder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 
-Folder _folder(
-  String name, {
-  ContentMode mode = ContentMode.decks,
-}) => Folder(
+Folder _folder(String name, {ContentMode mode = ContentMode.decks}) => Folder(
   id: name,
   parentId: null,
   name: name,
@@ -76,23 +74,21 @@ FolderDetail _detail({
   decks: decks,
 );
 
-Widget _wrapBody(
-  FolderDetail detail, {
-  bool isSearching = false,
-}) => MaterialApp(
-  theme: AppTheme.light(),
-  localizationsDelegates: AppLocalizations.localizationsDelegates,
-  supportedLocales: AppLocalizations.supportedLocales,
-  home: Scaffold(
-    body: FolderDetailBody(
-      detail: detail,
-      isSearching: isSearching,
-      onNewSubfolder: () {},
-      onNewDeck: () {},
-      onClearSearch: () {},
-    ),
-  ),
-);
+Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
+    MaterialApp(
+      theme: AppTheme.light(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: FolderDetailBody(
+          detail: detail,
+          isSearching: isSearching,
+          onNewSubfolder: () {},
+          onNewDeck: () {},
+          onClearSearch: () {},
+        ),
+      ),
+    );
 
 Widget _wrapScreen(Stream<FolderDetail> stream) => ProviderScope(
   overrides: [
@@ -111,9 +107,7 @@ Widget _wrapDeckTile(FolderDeckTile tile) => MaterialApp(
   theme: AppTheme.light(),
   localizationsDelegates: AppLocalizations.localizationsDelegates,
   supportedLocales: AppLocalizations.supportedLocales,
-  home: Scaffold(
-    body: Center(child: tile),
-  ),
+  home: Scaffold(body: Center(child: tile)),
 );
 
 void main() {
@@ -177,7 +171,8 @@ void main() {
       // 2 subfolders, 198 cards, 12 due.
       expect(find.text('198'), findsOneWidget);
       expect(find.text('12'), findsOneWidget);
-      expect(find.byType(LibraryFolderTile), findsNWidgets(2));
+      expect(find.byType(FolderSubfolderTile), findsNWidgets(2));
+      expect(find.byType(LibraryFolderTile), findsNothing);
     });
   });
 
@@ -227,9 +222,7 @@ void main() {
     testWidgets('loading renders the skeleton and no content rows', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _wrapScreen(const Stream<FolderDetail>.empty()),
-      );
+      await tester.pumpWidget(_wrapScreen(const Stream<FolderDetail>.empty()));
       await tester.pump();
 
       expect(
@@ -302,9 +295,7 @@ void main() {
 
       expect(find.text(l10n.folderDeleteDialogTitle), findsOneWidget);
       expect(
-        find.text(
-          'TOPIK II and its 1 deck will be removed from your library.',
-        ),
+        find.text('TOPIK II and its 1 deck will be removed from your library.'),
         findsOneWidget,
       );
       expect(find.text(l10n.folderDeleteDialogReassurance), findsOneWidget);
@@ -334,6 +325,21 @@ void main() {
         expect(find.text('Vocab — chapter 1'), findsOneWidget);
         expect(find.text('62 cards · last 2 hours ago'), findsOneWidget);
         expect(find.text('8 due'), findsOneWidget);
+        expect(
+          tester.getSize(
+            find.byKey(const ValueKey<String>('folder_deck_leading_tile')),
+          ),
+          const Size(36, 36),
+        );
+        expect(
+          tester
+              .getSize(
+                find.byKey(const ValueKey<String>('folder_deck_due_badge')),
+              )
+              .height,
+          18,
+        );
+        expect(find.byIcon(Icons.style_outlined), findsNothing);
         expect(find.byIcon(Icons.chevron_right), findsOneWidget);
         expect(find.byType(LinearProgressIndicator), findsOneWidget);
       },
@@ -358,6 +364,91 @@ void main() {
         expect(find.byIcon(Icons.chevron_right), findsOneWidget);
         expect(find.byType(LinearProgressIndicator), findsOneWidget);
         expect(find.textContaining('due'), findsNothing);
+      },
+    );
+  });
+
+  group('FolderSubfolderTile — loaded display (10/10)', () {
+    Widget wrapFolderTile(FolderSubfolderTile tile) => MaterialApp(
+      locale: const Locale('en'),
+      theme: AppTheme.light(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(body: Center(child: tile)),
+    );
+
+    testWidgets(
+      'DT3 onDisplay: renders the due badge, decks + cards metadata, progress '
+      'bar, and chevron when subtree due exists',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          wrapFolderTile(
+            FolderSubfolderTile(
+              item: _subfolder(
+                'TOPIK I',
+                deckCount: 3,
+                cardCount: 124,
+                dueCount: 8,
+              ),
+              onTap: () {},
+            ),
+          ),
+        );
+
+        expect(find.text('TOPIK I'), findsOneWidget);
+        expect(find.text('3 decks · 124 cards'), findsOneWidget);
+        expect(find.text('8 due'), findsOneWidget);
+        expect(
+          tester.getSize(
+            find.byKey(const ValueKey<String>('folder_subfolder_leading_tile')),
+          ),
+          const Size(36, 36),
+        );
+        expect(
+          tester
+              .getSize(
+                find.byKey(
+                  const ValueKey<String>('folder_subfolder_due_badge'),
+                ),
+              )
+              .height,
+          18,
+        );
+        expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+        expect(find.byType(LinearProgressIndicator), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(FolderSubfolderTile),
+            matching: find.byIcon(Icons.more_vert),
+          ),
+          findsNothing,
+        );
+      },
+    );
+
+    testWidgets(
+      'DT4 onDisplay: collapses to decks + cards metadata when subtree due '
+      'is missing',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          wrapFolderTile(
+            FolderSubfolderTile(
+              item: _subfolder(
+                'Grammar',
+                deckCount: 4,
+                cardCount: 138,
+                dueCount: 0,
+              ),
+              onTap: () {},
+            ),
+          ),
+        );
+
+        expect(find.text('Grammar'), findsOneWidget);
+        expect(find.text('4 decks · 138 cards'), findsOneWidget);
+        expect(find.textContaining('due'), findsNothing);
+        expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+        expect(find.byType(LinearProgressIndicator), findsOneWidget);
       },
     );
   });

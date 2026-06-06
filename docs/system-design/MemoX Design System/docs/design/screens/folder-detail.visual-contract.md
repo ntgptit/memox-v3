@@ -44,8 +44,9 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
   - `lib/presentation/features/folders/screens/folder_detail_screen.dart`
   - `lib/presentation/features/folders/widgets/folder_detail_body.dart`
   - `lib/presentation/features/folders/widgets/folder_deck_tile.dart`
+  - `lib/presentation/features/folders/widgets/folder_subfolder_tile.dart`
   - `lib/presentation/features/folders/widgets/folder_unlocked_empty.dart`
-  - `lib/presentation/features/folders/widgets/library_folder_tile.dart` (reused for subfolder rows)
+  - `lib/presentation/features/folders/widgets/library_folder_tile.dart` (Library Overview rows)
   - `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart`
   - `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart`
   - `lib/presentation/features/folders/widgets/library_skeleton.dart`
@@ -90,7 +91,7 @@ Top → bottom. Root is `MxScaffold` with an `MxAppBar` and a mode-dependent
 | Breadcrumb | Below app bar | Fixed | Low | bottom gap `SpacingTokens.sm`; `onSurfaceVariant` text | `MxBreadcrumb` (`MxBreadcrumbSegment[]`) | First segment = `Library` → `context.goLibrary()`; then each ancestor → `context.pushFolderDetail(id)`. Hidden until folder loads. |
 | Search field | Below breadcrumb | Fixed | Low | bottom gap `SpacingTokens.sm`; input via `SizeTokens.input` | `MxSearchField` | Hint `l10n.folderDetailSearchHint` (folder-scoped). Drives `folderDetailToolbar.setSearch`. |
 | Content (async) | Fills remainder | Scrollable | High | screen horizontal padding via owning shell; row gap `SpacingTokens.sm` | `MxRetainedAsyncState<FolderDetail>` → `FolderDetailBody` | Switches loading (skeleton) / error / data. Data branch renders rows or empty/search-empty per `FolderDetailBody`. |
-| Children list | Inside content | Scrollable | High | card padding `cardPadding`/`lg`; row gap `sm`; radius `RadiusTokens.brLg` | `LibraryFolderTile` (subfolders), `FolderDeckTile` (decks) | One mode only, from `folder.contentMode`. |
+| Children list | Inside content | Scrollable | High | child-row padding `12px 14px`; row gap `sm`; radius `RadiusTokens.brLg` | `FolderSubfolderTile` (subfolders), `FolderDeckTile` (decks) | One mode only, from `folder.contentMode`. |
 | Unlocked empty | Inside content (unlocked) | Fixed/centered | Medium | section gap `xl`/`sectionGap`; icon `SizeTokens.iconXl` | `FolderUnlockedEmpty` | Mode-choice: "New subfolder" / "New deck" + mode-lock explanation. |
 | FAB | Bottom-right, over content | Fixed | Medium (accent) | `SizeTokens.fab`; radius `RadiusTokens.brXl` (xxl 28) | `MxFab.extended` | subfolders → `create_new_folder_outlined` + `folderNewSubfolderLabel`; decks → `add` + `folderNewDeckLabel`; unlocked → **no FAB** (choice lives in body). |
 
@@ -107,7 +108,7 @@ Driven by `folderDetailQueryProvider(folderId)` (`AsyncValue<FolderDetail>`) +
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Initial / Loading | Query pending | App bar, breadcrumb*, search shell, **skeleton rows** | Real rows, FAB (FAB null until `detail` loads) | — | — | `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` | *Breadcrumb renders only once `detail` is available. No tappable rows while loading. |
 | Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, search, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | — | — | Deck rows = `FolderDeckTile`. Tap → flashcard list (Future target). |
-| Loaded — subfolders | `contentMode == subfolders` | App bar, breadcrumb, search, subfolder rows, New-subfolder FAB | Deck rows, unlocked choice | `MxFab.extended` New subfolder | — | — | Subfolder rows = `LibraryFolderTile`. Tap → child `pushFolderDetail`. |
+| Loaded — subfolders | `contentMode == subfolders` | App bar, breadcrumb, search, subfolder rows, New-subfolder FAB | Deck rows, unlocked choice | `MxFab.extended` New subfolder | — | — | Subfolder rows = `FolderSubfolderTile`. Tap → child `pushFolderDetail`. |
 | Empty — unlocked | `contentMode == unlocked` (no children) | App bar, breadcrumb, search, **mode-choice empty** | Rows, FAB | "New subfolder" | "New deck" | `FolderUnlockedEmpty` | Choice locks mode on first create. Must NOT auto-unlock or show both in a FAB. |
 | Empty — locked | Locked but zero children (all deleted) | App bar, breadcrumb, search, "empty" message + FAB | Rows | mode FAB | — | (empty surface) | Do not auto-unlock; keep mode FAB only. |
 | Search active | `isSearching == true`, matches exist | App bar, breadcrumb, search (with clear), filtered rows | Unlocked choice | mode FAB | — | — | Filtering is folder-scope-local. |
@@ -128,11 +129,11 @@ existing widget/token covers an element.
 | Overflow ⋮ (app bar) | Folder actions (rename/move/delete/sort) | `MxIconButton(Icons.more_vert)` | `SizeTokens.iconMd`/`touch`; `onSurfaceVariant` | All loaded | **Visual-only** | Rendered with `onPressed: null` (disabled). Folder-level action sheet not wired on this screen yet. |
 | Breadcrumb | Show + jump ancestor path | `MxBreadcrumb` / `MxBreadcrumbSegment` | `SpacingTokens.sm` gap; `onSurfaceVariant`; `labelMedium` | Loaded (hidden until data) | **Current** | `Library` + ancestors; middle-ellipsis past ~3 levels (do not lose first/last). |
 | Inline search field | Folder-scope-local search | `MxSearchField` | `SizeTokens.input`; `RadiusTokens.brMd`; focus = 1px `primary` | All | **Current** | Hint `folderDetailSearchHint`; clear tooltip `librarySearchClearTooltip`. |
-| Subfolder row | Open child folder | `LibraryFolderTile` | `MxCard` (ghost border, `brLg`, `cardPadding`); `MxIconTile`; text roles | subfolders mode | **Current** | Icon + name + "{n} subfolders/decks" subtitle + chevron. |
-| Deck row | Open deck's flashcards | `FolderDeckTile` | `MxCard`; `MxIconTile`; text/icon roles | decks mode | **Current** | Icon + name + optional `{m} due` badge on the top row, `{n} cards · last {relative time}` meta when `lastStudiedAt` is present, compact progress bar, and chevron. Tap → flashcard list (Future target screen). |
-| Deck due badge | Show due count | within `FolderDeckTile` | tokenized opacity/`brFull`/text | decks mode, when `due > 0` | **Current** | Show only when due > 0; never "0 due". Uses the deck aggregate `dueCount`. |
+| Subfolder row | Open child folder | `FolderSubfolderTile` | custom 36×36 leading tile with `RadiusTokens.brSm`; `MxCard` padding `12px 14px`; text roles | subfolders mode | **Current** | Folder icon + name + optional `{m} due` badge on the top row, `{n} decks · {c} cards` metadata, compact progress bar, and chevron. Tap → child folder detail. |
+| Deck row | Open deck's flashcards | `FolderDeckTile` | custom 36×36 leading tile with `RadiusTokens.brSm`; `MxCard` padding `12px 14px`; text/icon roles | decks mode | **Current** | Icon tile + name + optional `{m} due` badge on the top row, `{n} cards · last {relative time}` meta when `lastStudiedAt` is present, compact progress bar, and chevron. Tap → flashcard list (Future target screen). |
+| Deck due badge | Show due count | within `FolderDeckTile` | 18px chip height; `0 7px` inset; `brFull`/text | decks mode, when `due > 0` | **Current** | Show only when due > 0; never "0 due". Uses the deck aggregate `dueCount`. |
 | Deck last studied | Show recency metadata | within `FolderDeckTile` | `RelativeTime` formatter + l10n suffix | decks mode, when `lastStudiedAt` is present | **Current** | Rendered as `last {relative time}` in English and localized equivalent in Vietnamese; null collapses to cards-only meta. |
-| Deck compact progress bar | Show deck progress hint | within `FolderDeckTile` | `MxLinearProgress` | decks mode | **Current** | Derived from loaded deck aggregates; visual-only summary bar, not the folder mastery ring. |
+| Deck compact progress bar | Show deck progress hint | within `FolderDeckTile` | `MxLinearProgress` height `4px`; meta→bar gap `6px` | decks mode | **Current** | Derived from loaded deck aggregates; visual-only summary bar, not the folder mastery ring. |
 | Row chevron | Affordance into child | row trailing | `iconSm`/`iconMd`; `onSurfaceVariant` | rows present | **Current** | Folder Detail rows DO use a chevron (unlike Library Overview cards, which use a kebab). |
 | Long-press row → item context sheet | Rename/Move/Delete child | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `MxConfirmationDialog` | shared sheet/dialog themes; scrim 32% | rows present | **Current** (verify wiring on Folder Detail) | Item-context sheet (`wireframes/25 §item-context`). Confirm long-press is wired here as it is on Library rows. |
 | Mode-choice empty | Pick subfolders or decks | `FolderUnlockedEmpty` | `iconXl`; `sectionGap`; secondary buttons | unlocked empty | **Current** | "New subfolder" / "New deck" + lock explanation copy (l10n). |
@@ -158,7 +159,7 @@ Use `MxText` roles / `TextTheme` (collapsed scale 48/32/24/20/16/14/12). No raw
 | Breadcrumb segments | Navigational labels | `MxTextRole.labelMedium` | `onSurfaceVariant` (current segment emphasized) | 1 each | middle-ellipsis past ~3 | `Library` from `l10n.libraryTitle`; names are data | Segments are buttons. |
 | Search hint | Input placeholder | input hint role | `onSurfaceVariant` | 1 | ellipsis | `l10n.folderDetailSearchHint` | Folder scope wording. |
 | Row title (folder/deck) | List item title | `MxTextRole.titleSmall`/`titleMedium` | `onSurface` | 1 | ellipsis | data | Density per row. |
-| Row subtitle (counts + recency) | Metadata | `MxTextRole.bodyMedium`/`labelMedium` | `onSurfaceVariant` | 1 | ellipsis | ICU plural ("{n} cards", "{n} decks") + relative time label | Tabular figures for counts; deck rows collapse to cards-only when `lastStudiedAt` is null. |
+| Row subtitle (counts + recency) | Metadata | `MxTextRole.bodyMedium`/`labelMedium` | `onSurfaceVariant` | 1 | ellipsis | ICU plural ("{n} cards", "{n} decks") | Tabular figures for counts; deck rows collapse to cards-only when `lastStudiedAt` is null. |
 | Due badge | Count chip | label role | primary tint content | 1 | clip | ICU plural ("{n} due") | Only when due > 0. |
 | Empty/search-empty title + body | Guidance | empty-state roles | `onSurface` / `onSurfaceVariant` | 2–3 | wrap | yes | Calm, action-led copy. |
 | Error title + message | Failure | error-state roles | `onSurface` / `onSurfaceVariant` | 2–3 | wrap | `folderNotFoundTitle`/`folderNotFoundMessage` | No raw failure text. |
@@ -193,9 +194,9 @@ Theme roles only (Material 3 seeded scheme; Tokyo Pure Light / Tokyo Nebula).
 | Screen horizontal | `SpacingTokens.screenPadding` (or owning shell) | — | — | — | wider gutters ≥600dp | Don't hardcode 24. |
 | Breadcrumb block | — | bottom `SpacingTokens.sm` | — | — | wraps/ellipsis | Matches code (`EdgeInsets.only(bottom: sm)`). |
 | Search field block | — | bottom `SpacingTokens.sm` | `RadiusTokens.brMd` | `SizeTokens.input` | full width | Matches code. |
-| Row card | `SpacingTokens.cardPadding`/`lg` | between rows `SpacingTokens.sm` (`listItemGap`) | `RadiusTokens.brLg` | — | 2-col grid ≥600dp | Ghost border. |
-| Leading icon tile | — | tile→text `SpacingTokens.md` | `RadiusTokens.brMd` | `MxIconTile` (`iconMd`) | fixed | Don't resize per row. |
-| Due badge | xs/sm inset | — | `RadiusTokens.brFull` | `iconXs`/`iconSm` if iconized | — | Pill. |
+| Row card | `12px 14px` | between rows `SpacingTokens.sm` (`listItemGap`) | `RadiusTokens.brLg` | — | 2-col grid ≥600dp | Ghost border. |
+| Leading icon tile | — | tile→text `SpacingTokens.md`; tile `36px`, icon `17px` | `RadiusTokens.brSm` | custom local tile | fixed | Folder-detail rows use a compact custom tile, not the shared 44dp `MxIconTile`. |
+| Due badge | `0 7px` inset | — | `RadiusTokens.brFull` | 18px height | — | Pill. |
 | Empty-state icon | — | `SpacingTokens.lg`/`xl` | — | `SizeTokens.iconXl` | center | — |
 | FAB | — | — | `RadiusTokens.brXl` (xxl 28) | `SizeTokens.fab` | bottom-right | `MxFab.extended`. |
 | Touch targets | — | — | — | min `SizeTokens.touch` (48) | — | Icon buttons keep 48dp tap target. |

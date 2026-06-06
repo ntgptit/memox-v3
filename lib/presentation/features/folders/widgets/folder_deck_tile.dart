@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
-import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/relative_time.dart';
@@ -11,7 +10,6 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
 /// A deck row inside a `decks`-mode folder (`docs/wireframes/05-folder-detail.md`
 /// §Deck row): leading icon-tile, name + due badge, card count + last studied,
@@ -54,11 +52,14 @@ class FolderDeckTile extends StatelessWidget {
     return MxCard(
       onTap: onTap,
       onLongPress: onShowActions,
-      padding: const EdgeInsets.all(SpacingTokens.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.md + SpacingTokens.xxs,
+        vertical: SpacingTokens.md,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const MxIconTile(icon: Icons.layers_rounded, size: 36),
+          const _DeckIconTile(),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
             child: Column(
@@ -86,32 +87,19 @@ class FolderDeckTile extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: SpacingTokens.xs),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.style_outlined,
-                      size: SizeTokens.iconXs,
-                      color: tone,
-                    ),
-                    const SizedBox(width: SpacingTokens.xxs),
-                    Flexible(
-                      child: MxText(
-                        lastStudiedLabel == null
-                            ? l10n.libraryFolderCardsCount(item.cardCount)
-                            : l10n.folderDetailDeckMeta(
-                                item.cardCount,
-                                lastStudiedLabel,
-                              ),
-                        role: MxTextRole.labelMedium,
-                        color: tone,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                MxText(
+                  lastStudiedLabel == null
+                      ? l10n.libraryFolderCardsCount(item.cardCount)
+                      : l10n.folderDetailDeckMeta(
+                          item.cardCount,
+                          lastStudiedLabel,
+                        ),
+                  role: MxTextRole.labelMedium,
+                  color: tone,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: SpacingTokens.xs),
+                const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
                 MxLinearProgress(
                   value: progress,
                   color: context.customColors.masteryHigh,
@@ -120,7 +108,7 @@ class FolderDeckTile extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: SpacingTokens.sm),
+          const SizedBox(width: SpacingTokens.md),
           Icon(Icons.chevron_right, size: 18, color: tone),
         ],
       ),
@@ -133,6 +121,26 @@ String _formatRelativeTimeAgo({
   required RelativeTime relativeTime,
 }) => l10n.relativeTimeAgo(relativeTime.unit.name, relativeTime.count);
 
+class _DeckIconTile extends StatelessWidget {
+  const _DeckIconTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final Color tint = context.colorScheme.primary;
+    return Container(
+      key: const ValueKey<String>('folder_deck_leading_tile'),
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        color: tint.withValues(alpha: OpacityTokens.hover),
+        borderRadius: RadiusTokens.brSm,
+      ),
+      alignment: Alignment.center,
+      child: Icon(Icons.layers_rounded, size: 17, color: tint),
+    );
+  }
+}
+
 class _DueCountBadge extends StatelessWidget {
   const _DueCountBadge({required this.label});
 
@@ -141,20 +149,23 @@ class _DueCountBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: SpacingTokens.sm,
-        vertical: SpacingTokens.xxs,
-      ),
-      decoration: BoxDecoration(
-        color: scheme.primary.withValues(alpha: OpacityTokens.focus),
-        borderRadius: RadiusTokens.brFull,
-      ),
-      child: MxText(
-        label,
-        role: MxTextRole.labelMedium,
-        color: scheme.primary,
-        fontWeight: TypographyTokens.bold,
+    return SizedBox(
+      height: 18,
+      child: Container(
+        key: const ValueKey<String>('folder_deck_due_badge'),
+        padding: const EdgeInsets.symmetric(horizontal: 7),
+        decoration: BoxDecoration(
+          color: scheme.primary.withValues(alpha: OpacityTokens.focus),
+          borderRadius: RadiusTokens.brFull,
+        ),
+        child: Center(
+          child: MxText(
+            label,
+            role: MxTextRole.labelMedium,
+            color: scheme.primary,
+            fontWeight: TypographyTokens.bold,
+          ),
+        ),
       ),
     );
   }
