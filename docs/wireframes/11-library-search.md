@@ -102,6 +102,10 @@ Overview app-bar search action.
 | No results  | Query ran, matched nothing in any section| `MxEmptyState` (search-off glyph) — "No results".                 |
 | Error       | Repository `StorageFailure`              | `MxErrorState` — localized title/message + retry (re-runs query). |
 
+The app-bar search field itself uses a trailing `K` shortcut keycap in the empty state and swaps to
+the clear icon once text is present. That keycap is visual only; it does not change search
+behavior.
+
 ### Query rules (implemented)
 
 - Minimum 2 characters (normalized) before the query fires; otherwise the empty/hint state shows.
