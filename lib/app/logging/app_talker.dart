@@ -4,6 +4,8 @@ import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 
 import '../../core/logging/app_logger.dart';
 import '../config/app_config.dart';
+import '../feedback/app_messenger.dart';
+import '../feedback/mx_app_feedback_observer.dart';
 
 const int _maxTalkerHistoryItems = 500;
 const String _unhandledErrorMessage = 'Unhandled MemoX app error';
@@ -19,27 +21,36 @@ List<ProviderObserver> createAppProviderObservers({
   required Talker talker,
   required MxAppConfig config,
 }) {
-  if (!config.enableRiverpodDiagnostics) {
-    return const <ProviderObserver>[];
-  }
-
-  return <ProviderObserver>[
-    TalkerRiverpodObserver(
-      talker: talker,
-      settings: const TalkerRiverpodLoggerSettings(
-        printProviderAdded: true,
-        printProviderUpdated: true,
-        printProviderDisposed: false,
-        printProviderFailed: true,
-        printStateFullData: false,
-        printFailFullData: true,
-        printMutationStart: true,
-        printMutationSuccess: true,
-        printMutationFailed: true,
-        printMutationReset: false,
-      ),
+  // Always-on: logs every provider failure (even with diagnostics off) and
+  // surfaces retained-data refetch failures as a snackbar app-wide.
+  final List<ProviderObserver> observers = <ProviderObserver>[
+    MxAppFeedbackObserver(
+      logger: TalkerAppLogger(talker),
+      messengerKey: appMessengerKey,
     ),
   ];
+
+  if (config.enableRiverpodDiagnostics) {
+    observers.add(
+      TalkerRiverpodObserver(
+        talker: talker,
+        settings: const TalkerRiverpodLoggerSettings(
+          printProviderAdded: true,
+          printProviderUpdated: true,
+          printProviderDisposed: false,
+          printProviderFailed: true,
+          printStateFullData: false,
+          printFailFullData: true,
+          printMutationStart: true,
+          printMutationSuccess: true,
+          printMutationFailed: true,
+          printMutationReset: false,
+        ),
+      ),
+    );
+  }
+
+  return observers;
 }
 
 void reportAppErrorToTalker(

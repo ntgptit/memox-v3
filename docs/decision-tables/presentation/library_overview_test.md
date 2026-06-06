@@ -14,6 +14,7 @@ widget tests after the mock-parity refresh.
 | DT2 | Loaded root row with subtitle + new count + mastery score | Subtitle line, `n new` token, tinted progress bar | `folder row renders subtitle and new count when available` |
 | DT3 | Due summary with `dueToday > 0` | Gradient summary card with title, derived subtitle, and chevron | `due summary card renders only when dueToday > 0` |
 | DT4 | Due summary with `dueToday == 0` | Summary card hidden | `due summary card renders only when dueToday > 0` |
+| DT5 | Retained data query refresh fails after data was visible | Previous folder list remains visible and a localized error snackbar appears | `retained data query error shows a localized snackbar` |
 
 ## Notes
 

@@ -19,6 +19,7 @@ import 'package:memox/presentation/features/flashcards/widgets/flashcard_list_sk
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_row_actions_sheet.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
@@ -151,9 +152,12 @@ class FlashcardListScreen extends ConsumerWidget {
       return;
     }
     result.fold(
-      (Failure _) => showMxSnackbar(
+      (Failure failure) => showMxSnackbar(
         context,
-        message: l10n.flashcardListActionError,
+        message: l10n.failureMessage(
+          failure,
+          fallback: l10n.flashcardListActionError,
+        ),
         isError: true,
       ),
       // The deck is gone — leave the now-stale list for its parent folder.
@@ -283,9 +287,12 @@ class _FlashcardListView extends ConsumerWidget {
       return;
     }
     result.fold(
-      (Failure _) => showMxSnackbar(
+      (Failure failure) => showMxSnackbar(
         context,
-        message: l10n.flashcardListActionError,
+        message: l10n.failureMessage(
+          failure,
+          fallback: l10n.flashcardListActionError,
+        ),
         isError: true,
       ),
       (void _) =>
@@ -306,9 +313,12 @@ class _FlashcardListView extends ConsumerWidget {
       return;
     }
     result.fold(
-      (Failure _) => showMxSnackbar(
+      (Failure failure) => showMxSnackbar(
         context,
-        message: l10n.flashcardReorderError,
+        message: l10n.failureMessage(
+          failure,
+          fallback: l10n.flashcardReorderError,
+        ),
         isError: true,
       ),
       (_) {},

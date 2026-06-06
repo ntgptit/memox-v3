@@ -16,6 +16,7 @@ import 'package:memox/presentation/features/folders/widgets/library_skeleton.dar
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
@@ -234,7 +235,11 @@ Future<void> createSubfolderDialog(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _childCreateError(l10n, failure, isDeck: false),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.folderChildCreateError,
+      ),
       isError: true,
     ),
     (_) {},
@@ -269,20 +274,13 @@ Future<void> createDeckDialog(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _childCreateError(l10n, failure, isDeck: true),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.folderDeckDuplicateError,
+        fallback: l10n.folderChildCreateError,
+      ),
       isError: true,
     ),
     (_) {},
   );
 }
-
-String _childCreateError(
-  AppLocalizations l10n,
-  Failure failure, {
-  required bool isDeck,
-}) => switch (failure) {
-  ValidationFailure(code: ValidationCode.duplicate) =>
-    isDeck ? l10n.folderDeckDuplicateError : l10n.libraryFolderDuplicateError,
-  UnsupportedActionFailure() => l10n.folderModeLockedError,
-  _ => l10n.folderChildCreateError,
-};

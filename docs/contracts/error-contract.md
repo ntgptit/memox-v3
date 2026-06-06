@@ -75,9 +75,14 @@ enum ValidationCode {
 }
 ```
 
-UI maps `(field, code)` to localized message. Mapping table lives in
-`lib/core/error/validation_messages.dart` and l10n ARB keys follow pattern
-`error_validation_{field}_{code}`.
+UI maps `(field, code)` to localized message. The presentation layer maps a
+`Failure` (validation and every other subtype) to user-safe localized copy in
+one place: the `MxFailureMessage` extension in
+`lib/presentation/shared/feedback/mx_failure_message.dart`. Because generated
+`AppLocalizations` getters cannot be looked up by string key, the mapper resolves
+getters directly rather than returning ARB key names. Call sites pass optional
+`duplicate` (entity-specific copy) and `fallback` (action-specific generic line)
+overrides; they never re-implement the `switch (failure)`.
 
 ### StorageFailure subtypes
 
@@ -141,6 +146,24 @@ Reserved for **data corruption** — should never happen in normal operation. Wh
 - Renders shared error widget (`MxErrorState`, `MxEmptyState`, `MxValidationField`, etc.) based on
   failure subtype.
 - Never displays raw `Failure.toString()` or technical detail.
+
+### App-wide (composition root)
+
+- `AppBootstrap` (`lib/app/bootstrap/app_bootstrap.dart`) installs `runZonedGuarded`,
+  `FlutterError.onError`, and `PlatformDispatcher.instance.onError` so uncaught Dart/Flutter errors
+  are reported (to Talker) — the last-resort crash net.
+- `MxAppFeedbackObserver` (`lib/app/feedback/mx_app_feedback_observer.dart`) is an always-on
+  `ProviderObserver` (registered even when Riverpod diagnostics are off). It has two jobs:
+  1. **Logging** — `providerDidFail` (which also fires for `Future`/`Stream` errors) routes every
+     provider failure to `AppLogger`, so production failures are never silently dropped.
+  2. **Retained-data refetch feedback** — on a `previous is AsyncData → new is AsyncError`
+     transition (a background refetch failed while data was on screen), it shows a snackbar app-wide
+     via `appMessengerKey` (`lib/app/feedback/app_messenger.dart`, wired to
+     `MaterialApp.scaffoldMessengerKey`), mapping the `Failure` through `MxFailureMessage`.
+     First-load errors (`previous` = loading) are skipped — they render full-screen via
+     `MxRetainedAsyncState`. Mutation controllers set loading before failing, so they are skipped
+     too and stay handled inline at the call site. Screens therefore do **not** add their own
+     retained-refetch listeners.
 
 ## User-facing message convention
 
@@ -254,7 +277,11 @@ See `docs/testing/test-strategy.md`.
 **Code paths:**
 
 - `lib/core/error/failure.dart` (sealed Failure base)
-- `lib/core/error/validation_messages.dart` (mapping)
-- `lib/presentation/shared/feedback/mx_error_state.dart`
+- `lib/presentation/shared/feedback/mx_failure_message.dart` (`Failure` → localized copy mapper)
+- `lib/presentation/shared/feedback/mx_snackbar.dart` (`showMxSnackbar` / `showMxSnackbarOn`)
+- `lib/app/feedback/mx_app_feedback_observer.dart` (always-on logging + retained-refetch snackbar)
+- `lib/app/feedback/app_messenger.dart` (`appMessengerKey` for context-free feedback)
+- `lib/app/bootstrap/app_bootstrap.dart` (uncaught-error crash net)
+- `lib/presentation/shared/widgets/states/mx_error_state.dart`
 - `lib/presentation/shared/widgets/mx_validation_field.dart`
 - `lib/l10n/app_en.arb` (error_* keys)

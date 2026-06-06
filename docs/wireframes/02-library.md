@@ -119,8 +119,9 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 - Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended,
   `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill
   both open `showMxFolderCreateDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
-  failures map to a localized error snackbar; success refreshes via `contentDataRevision`. No New
-  deck / Import entry on Library root.
+  direct mutation failures map to a localized error snackbar. If the create mutation commits but the
+  retained library query refresh fails, the previous list remains visible and a localized error
+  snackbar is shown instead of relying on logs only. No New deck / Import entry on Library root.
 - Folder row overflow action sheet is **Current** (Rename / Move / Import flashcards / Delete) — see
   "Overflow sheet — now Current". The mock's "Study due cards" / "Archive folder" actions remain
   **not exposed** (out of current scope).

@@ -19,6 +19,7 @@ import 'package:memox/presentation/features/folders/widgets/library_skeleton.dar
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
@@ -70,6 +71,8 @@ class _LibraryOverviewView extends ConsumerWidget {
       libraryOverviewQueryProvider,
     );
     final LibraryToolbarState toolbar = ref.watch(libraryToolbarProvider);
+    // Retained-data refetch failures are surfaced app-wide by
+    // `MxAppFeedbackObserver`; no screen-local listener needed.
 
     return Column(
       children: <Widget>[
@@ -135,19 +138,16 @@ Future<void> _showCreateFolderDialog(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _createFolderErrorMessage(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryCreateFolderError,
+      ),
       isError: true,
     ),
     (Folder _) {},
   );
 }
-
-String _createFolderErrorMessage(AppLocalizations l10n, Failure failure) =>
-    switch (failure) {
-      ValidationFailure(code: ValidationCode.duplicate) =>
-        l10n.libraryFolderDuplicateError,
-      _ => l10n.libraryCreateFolderError,
-    };
 
 /// Opens the folder action sheet and dispatches the chosen action
 /// (`docs/wireframes/02-library.md` §Overflow sheet).
@@ -226,7 +226,11 @@ Future<void> _renameFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionErrorMessage(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     (Folder _) => showMxSnackbar(context, message: l10n.foldersUpdatedMessage),
@@ -245,18 +249,18 @@ Future<void> _moveFolder(
   if (!context.mounted) {
     return;
   }
-  final List<FolderMoveTarget>? list = targets.fold(
-    (Failure _) => null,
-    (List<FolderMoveTarget> value) => value,
-  );
-  if (list == null) {
+  if (targets case Err<List<FolderMoveTarget>>(:final Failure failure)) {
     showMxSnackbar(
       context,
-      message: l10n.libraryFolderActionError,
+      message: l10n.failureMessage(
+        failure,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     );
     return;
   }
+  final List<FolderMoveTarget> list = targets.valueOrNull!;
   final FolderMoveTarget? destination = await showFolderMovePicker(
     context,
     targets: list,
@@ -276,7 +280,11 @@ Future<void> _moveFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionErrorMessage(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     (Folder _) => showMxSnackbar(context, message: l10n.foldersMovedMessage),
@@ -318,16 +326,13 @@ Future<void> _deleteFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionErrorMessage(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     (void _) => showMxSnackbar(context, message: l10n.foldersDeletedMessage),
   );
 }
-
-String _folderActionErrorMessage(AppLocalizations l10n, Failure failure) =>
-    switch (failure) {
-      ValidationFailure(code: ValidationCode.duplicate) =>
-        l10n.libraryFolderDuplicateError,
-      _ => l10n.libraryFolderActionError,
-    };

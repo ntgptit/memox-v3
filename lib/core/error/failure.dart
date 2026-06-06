@@ -3,8 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'failure.freezed.dart';
 
 /// Validation failure codes (`docs/contracts/error-contract.md`
-/// §ValidationFailure subtypes). Maps to localized copy via
-/// `ValidationMessages`.
+/// §ValidationFailure subtypes). Mapped to localized copy by the presentation
+/// helper `MxFailureMessage`
+/// (`lib/presentation/shared/feedback/mx_failure_message.dart`).
 enum ValidationCode {
   empty,
   tooLong,

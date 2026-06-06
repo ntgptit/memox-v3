@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:memox/app/feedback/app_messenger.dart';
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/theme_provider.dart';
 import 'package:memox/core/theme/app_theme.dart';
@@ -18,6 +19,7 @@ class MxApplication extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
+      scaffoldMessengerKey: appMessengerKey,
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),

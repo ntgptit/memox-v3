@@ -13,8 +13,35 @@ void showMxSnackbar(
   required String message,
   bool isError = false,
 }) {
+  _present(
+    ScaffoldMessenger.of(context),
+    context,
+    message: message,
+    isError: isError,
+  );
+}
+
+/// Variant for app-wide callers that already hold the [ScaffoldMessengerState]
+/// (e.g. the global provider observer via `appMessengerKey`). Avoids the
+/// ancestor lookup `ScaffoldMessenger.of` does, which fails when invoked from
+/// the messenger's own context. [context] supplies theme colors only.
+void showMxSnackbarOn(
+  ScaffoldMessengerState messenger,
+  BuildContext context, {
+  required String message,
+  bool isError = false,
+}) {
+  _present(messenger, context, message: message, isError: isError);
+}
+
+void _present(
+  ScaffoldMessengerState messenger,
+  BuildContext context, {
+  required String message,
+  required bool isError,
+}) {
   final ColorScheme scheme = context.colorScheme;
-  ScaffoldMessenger.of(context)
+  messenger
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
@@ -24,8 +51,9 @@ void showMxSnackbar(
             color: isError ? scheme.onErrorContainer : scheme.onInverseSurface,
           ),
         ),
-        backgroundColor:
-            isError ? scheme.errorContainer : scheme.inverseSurface,
+        backgroundColor: isError
+            ? scheme.errorContainer
+            : scheme.inverseSurface,
         behavior: SnackBarBehavior.floating,
       ),
     );

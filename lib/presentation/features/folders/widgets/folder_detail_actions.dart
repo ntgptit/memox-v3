@@ -20,6 +20,7 @@ import 'package:memox/presentation/features/folders/widgets/library_folder_actio
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 
 /// Opens the current folder's overflow action sheet (Rename / Move / Delete) and
@@ -164,7 +165,11 @@ Future<void> _renameFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionError(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     (Folder _) => showMxSnackbar(context, message: l10n.foldersUpdatedMessage),
@@ -183,18 +188,18 @@ Future<void> _moveFolder(
   if (!context.mounted) {
     return;
   }
-  final List<FolderMoveTarget>? list = targets.fold(
-    (Failure _) => null,
-    (List<FolderMoveTarget> value) => value,
-  );
-  if (list == null) {
+  if (targets case Err<List<FolderMoveTarget>>(:final Failure failure)) {
     showMxSnackbar(
       context,
-      message: l10n.libraryFolderActionError,
+      message: l10n.failureMessage(
+        failure,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     );
     return;
   }
+  final List<FolderMoveTarget> list = targets.valueOrNull!;
   final FolderMoveTarget? destination = await showFolderMovePicker(
     context,
     targets: list,
@@ -214,7 +219,11 @@ Future<void> _moveFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionError(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     (Folder _) => showMxSnackbar(context, message: l10n.foldersMovedMessage),
@@ -256,7 +265,11 @@ Future<void> _deleteFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionError(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     // The folder is gone — leave the now-stale detail screen for its parent.
@@ -302,7 +315,11 @@ Future<void> _deleteChildFolder(
   result.fold(
     (Failure failure) => showMxSnackbar(
       context,
-      message: _folderActionError(l10n, failure),
+      message: l10n.failureMessage(
+        failure,
+        duplicate: l10n.libraryFolderDuplicateError,
+        fallback: l10n.libraryFolderActionError,
+      ),
       isError: true,
     ),
     (void _) => showMxSnackbar(context, message: l10n.foldersDeletedMessage),
@@ -336,9 +353,12 @@ Future<void> _deleteChildDeck(
     return;
   }
   result.fold(
-    (Failure _) => showMxSnackbar(
+    (Failure failure) => showMxSnackbar(
       context,
-      message: l10n.flashcardListActionError,
+      message: l10n.failureMessage(
+        failure,
+        fallback: l10n.flashcardListActionError,
+      ),
       isError: true,
     ),
     (void _) => showMxSnackbar(context, message: l10n.decksDeletedMessage),
@@ -369,11 +389,4 @@ String _languageLabel(AppLocalizations l10n, TargetLanguage lang) =>
       TargetLanguage.korean => l10n.flashcardListLanguageKorean,
       TargetLanguage.english => l10n.flashcardListLanguageEnglish,
       TargetLanguage.unsupported => l10n.flashcardListLanguageOther,
-    };
-
-String _folderActionError(AppLocalizations l10n, Failure failure) =>
-    switch (failure) {
-      ValidationFailure(code: ValidationCode.duplicate) =>
-        l10n.libraryFolderDuplicateError,
-      _ => l10n.libraryFolderActionError,
     };

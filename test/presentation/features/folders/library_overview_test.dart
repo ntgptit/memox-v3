@@ -460,6 +460,10 @@ void main() {
       // No raw exception text leaks into the UI.
       expect(find.textContaining('boom'), findsNothing);
     });
+
+    // Retained-data refetch failures are now surfaced app-wide by
+    // `MxAppFeedbackObserver` (no screen-local listener). That behavior is
+    // covered in test/app/feedback/mx_app_feedback_observer_test.dart.
   });
 
   group('LibraryOverviewScreen — Search clear sync', () {
