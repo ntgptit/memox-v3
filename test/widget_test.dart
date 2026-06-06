@@ -9,8 +9,10 @@ import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 
 void main() {
-  testWidgets('MemoxApp boots into the library destination', (tester) async {
-    const config = AppConfig.development();
+  testWidgets('MxApplication boots into the library destination', (
+    tester,
+  ) async {
+    const config = MxAppConfig.development();
     final talker = createAppTalker(config);
 
     await tester.pumpWidget(
@@ -29,7 +31,7 @@ void main() {
             ),
           ),
         ],
-        child: const MemoxApp(),
+        child: const MxApplication(),
       ),
     );
     await tester.pumpAndSettle();

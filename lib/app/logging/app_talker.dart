@@ -8,16 +8,16 @@ import '../config/app_config.dart';
 const int _maxTalkerHistoryItems = 500;
 const String _unhandledErrorMessage = 'Unhandled MemoX app error';
 
-Talker createAppTalker([AppConfig? config]) =>
+Talker createAppTalker([MxAppConfig? config]) =>
     TalkerFlutter.init(settings: _talkerSettings(config));
 
-void configureAppTalker(Talker talker, AppConfig config) {
+void configureAppTalker(Talker talker, MxAppConfig config) {
   talker.configure(settings: _talkerSettings(config));
 }
 
 List<ProviderObserver> createAppProviderObservers({
   required Talker talker,
-  required AppConfig config,
+  required MxAppConfig config,
 }) {
   if (!config.enableRiverpodDiagnostics) {
     return const <ProviderObserver>[];
@@ -61,7 +61,7 @@ final class TalkerAppLogger implements AppLogger {
   }
 }
 
-TalkerSettings _talkerSettings(AppConfig? config) => TalkerSettings(
+TalkerSettings _talkerSettings(MxAppConfig? config) => TalkerSettings(
   useHistory: true,
   useConsoleLogs: config?.enableTalkerConsoleLogs ?? true,
   maxHistoryItems: _maxTalkerHistoryItems,

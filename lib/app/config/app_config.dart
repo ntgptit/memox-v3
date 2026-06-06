@@ -7,15 +7,15 @@ enum AppFlavor { development, staging, production }
 /// Immutable application configuration resolved once at bootstrap.
 ///
 /// Wiring layer only: feature code reads this via DI, never constructs it.
-final class AppConfig {
-  const AppConfig({
+final class MxAppConfig {
+  const MxAppConfig({
     required this.flavor,
     required this.enableTalkerConsoleLogs,
     required this.enableRiverpodDiagnostics,
   });
 
   /// Local development: verbose logging + Riverpod observer on.
-  const AppConfig.development()
+  const MxAppConfig.development()
     : this(
         flavor: AppFlavor.development,
         enableTalkerConsoleLogs: true,
@@ -23,7 +23,7 @@ final class AppConfig {
       );
 
   /// Pre-release: console logs on, provider diagnostics off (less noise).
-  const AppConfig.staging()
+  const MxAppConfig.staging()
     : this(
         flavor: AppFlavor.staging,
         enableTalkerConsoleLogs: true,
@@ -31,7 +31,7 @@ final class AppConfig {
       );
 
   /// Release: diagnostics off; errors still routed to the crash reporter.
-  const AppConfig.production()
+  const MxAppConfig.production()
     : this(
         flavor: AppFlavor.production,
         enableTalkerConsoleLogs: false,

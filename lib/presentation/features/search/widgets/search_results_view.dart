@@ -26,7 +26,7 @@ class SearchResultsView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
       children: <Widget>[
         if (results.folders.isNotEmpty)
-          _Section(
+          _SearchResultSection(
             label: l10n.searchSectionFolders,
             total: results.folderTotal,
             shown: results.folders.length,
@@ -45,7 +45,7 @@ class SearchResultsView extends StatelessWidget {
             ],
           ),
         if (results.decks.isNotEmpty)
-          _Section(
+          _SearchResultSection(
             label: l10n.searchSectionDecks,
             total: results.deckTotal,
             shown: results.decks.length,
@@ -61,7 +61,7 @@ class SearchResultsView extends StatelessWidget {
             ],
           ),
         if (results.flashcards.isNotEmpty)
-          _Section(
+          _SearchResultSection(
             label: l10n.searchSectionFlashcards,
             total: results.flashcardTotal,
             shown: results.flashcards.length,
@@ -81,8 +81,8 @@ class SearchResultsView extends StatelessWidget {
   }
 }
 
-class _Section extends StatelessWidget {
-  const _Section({
+class _SearchResultSection extends StatelessWidget {
+  const _SearchResultSection({
     required this.label,
     required this.total,
     required this.shown,

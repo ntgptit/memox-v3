@@ -76,7 +76,7 @@ class FolderDeckTile extends StatelessWidget {
           ),
           if (item.dueCount > 0) ...<Widget>[
             const SizedBox(width: SpacingTokens.sm),
-            _DueBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
+            _DueCountBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
           ],
           const SizedBox(width: SpacingTokens.xxs),
           MxIconButton(
@@ -91,8 +91,8 @@ class FolderDeckTile extends StatelessWidget {
   }
 }
 
-class _DueBadge extends StatelessWidget {
-  const _DueBadge({required this.label});
+class _DueCountBadge extends StatelessWidget {
+  const _DueCountBadge({required this.label});
 
   final String label;
 

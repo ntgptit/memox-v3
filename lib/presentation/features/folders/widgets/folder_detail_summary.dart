@@ -93,11 +93,14 @@ class FolderSubfoldersSummary extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _Stat(value: subfolders.length, label: l10n.folderSummarySubfoldersStat),
-          const _StatDivider(),
-          _Stat(value: _cardTotal, label: l10n.folderSummaryCardsStat),
-          const _StatDivider(),
-          _Stat(
+          _FolderStatItem(
+            value: subfolders.length,
+            label: l10n.folderSummarySubfoldersStat,
+          ),
+          const _FolderStatDivider(),
+          _FolderStatItem(value: _cardTotal, label: l10n.folderSummaryCardsStat),
+          const _FolderStatDivider(),
+          _FolderStatItem(
             value: dueTotal,
             label: l10n.folderSummaryDueStat,
             highlight: dueTotal > 0,
@@ -108,8 +111,8 @@ class FolderSubfoldersSummary extends StatelessWidget {
   }
 }
 
-class _Stat extends StatelessWidget {
-  const _Stat({
+class _FolderStatItem extends StatelessWidget {
+  const _FolderStatItem({
     required this.value,
     required this.label,
     this.highlight = false,
@@ -147,8 +150,8 @@ class _Stat extends StatelessWidget {
 
 /// Hairline separator between stats — a tokenized 1px [ColoredBox] (no raw
 /// `VerticalDivider`).
-class _StatDivider extends StatelessWidget {
-  const _StatDivider();
+class _FolderStatDivider extends StatelessWidget {
+  const _FolderStatDivider();
 
   @override
   Widget build(BuildContext context) => Padding(

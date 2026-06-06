@@ -46,7 +46,7 @@ GoRouter goRouter(Ref ref) => GoRouter(
 /// Bottom-nav shell with one branch per top-level destination.
 StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
   builder: (context, state, navigationShell) =>
-      AppShell(navigationShell: navigationShell),
+      MxAppShell(navigationShell: navigationShell),
   branches: <StatefulShellBranch>[
     StatefulShellBranch(
       navigatorKey: _homeNavigatorKey,

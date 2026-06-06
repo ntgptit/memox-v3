@@ -10,7 +10,7 @@ part 'app_providers.g.dart';
 /// Defaults to the development flavor; `main.dart` overrides this with the
 /// flavor chosen at boot so the rest of the graph reads a single source.
 @Riverpod(keepAlive: true)
-AppConfig appConfig(Ref ref) => const AppConfig.development();
+MxAppConfig appConfig(Ref ref) => const MxAppConfig.development();
 
 /// Shared Talker instance for logging/diagnostics.
 ///

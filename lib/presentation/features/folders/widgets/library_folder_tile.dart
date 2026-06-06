@@ -60,7 +60,7 @@ class LibraryFolderTile extends StatelessWidget {
                 const SizedBox(height: SpacingTokens.xs),
                 Row(
                   children: <Widget>[
-                    _MetaItem(
+                    _FolderMetaItem(
                       icon: isSubfolderMode
                           ? Icons.folder_copy_outlined
                           : Icons.layers_outlined,
@@ -69,7 +69,7 @@ class LibraryFolderTile extends StatelessWidget {
                           : l10n.libraryFolderDecksCount(item.deckCount),
                     ),
                     const SizedBox(width: SpacingTokens.md),
-                    _MetaItem(
+                    _FolderMetaItem(
                       icon: Icons.style_outlined,
                       label: l10n.libraryFolderCardsCount(item.cardCount),
                     ),
@@ -80,7 +80,7 @@ class LibraryFolderTile extends StatelessWidget {
           ),
           if (item.dueCount > 0) ...<Widget>[
             const SizedBox(width: SpacingTokens.sm),
-            _DueBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
+            _DueCountBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
           ],
           const SizedBox(width: SpacingTokens.xxs),
           MxIconButton(
@@ -96,8 +96,8 @@ class LibraryFolderTile extends StatelessWidget {
 }
 
 /// A small icon + count pair in the folder metadata row.
-class _MetaItem extends StatelessWidget {
-  const _MetaItem({required this.icon, required this.label});
+class _FolderMetaItem extends StatelessWidget {
+  const _FolderMetaItem({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
@@ -117,8 +117,8 @@ class _MetaItem extends StatelessWidget {
 }
 
 /// Right-aligned due badge, shown only when a folder subtree has due cards.
-class _DueBadge extends StatelessWidget {
-  const _DueBadge({required this.label});
+class _DueCountBadge extends StatelessWidget {
+  const _DueCountBadge({required this.label});
 
   final String label;
 

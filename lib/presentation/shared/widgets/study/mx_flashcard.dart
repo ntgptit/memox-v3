@@ -42,8 +42,8 @@ class MxFlashcard extends StatelessWidget {
         final bool showingBack = t >= 0.5;
         final double angle = t * math.pi;
         final Widget face = showingBack
-            ? _Face(isBack: true, minHeight: minHeight, child: back)
-            : _Face(isBack: false, minHeight: minHeight, child: front);
+            ? _FlashcardFace(isBack: true, minHeight: minHeight, child: back)
+            : _FlashcardFace(isBack: false, minHeight: minHeight, child: front);
         return Transform(
           alignment: Alignment.center,
           transform: Matrix4.identity()
@@ -62,8 +62,8 @@ class MxFlashcard extends StatelessWidget {
   );
 }
 
-class _Face extends StatelessWidget {
-  const _Face({
+class _FlashcardFace extends StatelessWidget {
+  const _FlashcardFace({
     required this.isBack,
     required this.minHeight,
     required this.child,

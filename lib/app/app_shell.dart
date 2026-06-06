@@ -11,8 +11,8 @@ import 'package:memox/presentation/shared/widgets/navigation/mx_bottom_navigatio
 /// Backed by `StatefulShellRoute.indexedStack`, so each tab keeps its own
 /// navigation stack. Tab switches use `goBranch` (reset semantics), matching
 /// `docs/business/navigation/navigation-flow.md` §Push vs Go.
-class AppShell extends StatelessWidget {
-  const AppShell({required this.navigationShell, super.key});
+class MxAppShell extends StatelessWidget {
+  const MxAppShell({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
@@ -26,7 +26,7 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       body: navigationShell,
@@ -37,22 +37,22 @@ class AppShell extends StatelessWidget {
           MxNavDestination(
             icon: Icons.home_outlined,
             selectedIcon: Icons.home,
-            label: l10n.homeTitle,
+            label: localizations.homeTitle,
           ),
           MxNavDestination(
             icon: Icons.folder_outlined,
             selectedIcon: Icons.folder,
-            label: l10n.libraryTitle,
+            label: localizations.libraryTitle,
           ),
           MxNavDestination(
             icon: Icons.insights_outlined,
             selectedIcon: Icons.insights,
-            label: l10n.progressTitle,
+            label: localizations.progressTitle,
           ),
           MxNavDestination(
             icon: Icons.settings_outlined,
             selectedIcon: Icons.settings,
-            label: l10n.settingsTitle,
+            label: localizations.settingsTitle,
           ),
         ],
       ),

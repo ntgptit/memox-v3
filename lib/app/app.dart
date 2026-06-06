@@ -9,8 +9,8 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 ///
 /// Wires the router, theme, and localization. State and routing come from
 /// Riverpod providers — this widget stays declarative.
-class MemoxApp extends ConsumerWidget {
-  const MemoxApp({super.key});
+class MxApplication extends ConsumerWidget {
+  const MxApplication({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

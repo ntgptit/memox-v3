@@ -8,7 +8,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 /// Root logging setup.
 ///
 /// `package:logging` is the emit API (`Logger('study.session')`); this wires
-/// `Logger.root` once with a level threshold from [AppConfig] and fans each
+/// `Logger.root` once with a level threshold from [MxAppConfig] and fans each
 /// record out to Talker (the in-app viewer) and an optional
 /// [PersistentLogWriter] (rotated file). Format and PII rules follow
 /// `docs/quality/observability-contract.md`. Call once from `main.dart`.
@@ -16,7 +16,7 @@ abstract final class LogConfig {
   LogConfig._();
 
   static void configure({
-    required AppConfig config,
+    required MxAppConfig config,
     required Talker talker,
     PersistentLogWriter? fileWriter,
   }) {

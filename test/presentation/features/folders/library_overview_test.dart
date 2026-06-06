@@ -531,7 +531,7 @@ void main() {
   });
 
   testWidgets('bottom navigation switches tabs', (WidgetTester tester) async {
-    const AppConfig config = AppConfig.development();
+    const MxAppConfig config = MxAppConfig.development();
     final talker = createAppTalker(config);
 
     await tester.pumpWidget(
@@ -543,7 +543,7 @@ void main() {
             (ref) => Stream<LibraryOverviewReadModel>.value(_model()),
           ),
         ],
-        child: const MemoxApp(),
+        child: const MxApplication(),
       ),
     );
     await tester.pumpAndSettle();

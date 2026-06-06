@@ -6,7 +6,7 @@ import 'package:memox/app/di/app_providers.dart';
 import 'package:memox/app/logging/app_talker.dart';
 
 Future<void> main() async {
-  const config = AppConfig.development();
+  const config = MxAppConfig.development();
   final talker = createAppTalker(config);
 
   await AppBootstrap.bootstrap(
@@ -18,7 +18,7 @@ Future<void> main() async {
         appConfigProvider.overrideWithValue(config),
         talkerProvider.overrideWithValue(talker),
       ],
-      child: const MemoxApp(),
+      child: const MxApplication(),
     ),
   );
 }

@@ -25,13 +25,13 @@ final class AppBootstrap {
     _configureStackTraceDemangler();
 
     final errorReporter = reportError ?? _reportUnhandledError;
-    final originalFlutterOnError = FlutterError.onError;
+    final previousOnError = FlutterError.onError;
 
     await runZonedGuarded(() async {
       WidgetsFlutterBinding.ensureInitialized();
 
       FlutterError.onError = (details) {
-        originalFlutterOnError?.call(details);
+        previousOnError?.call(details);
         final stackTrace = details.stack ?? StackTrace.current;
         errorReporter(details.exception, stackTrace);
       };
@@ -45,8 +45,8 @@ final class AppBootstrap {
         await beforeRun();
       }
 
-      final app = await builder();
-      runApp(app);
+      final applicationWidget = await builder();
+      runApp(applicationWidget);
     }, errorReporter);
   }
 
@@ -57,20 +57,20 @@ final class AppBootstrap {
   }
 
   static void _configureStackTraceDemangler() {
-    final originalDemangler = FlutterError.demangleStackTrace;
+    final previousDemangler = FlutterError.demangleStackTrace;
 
     FlutterError.demangleStackTrace = (stackTrace) {
-      final demangledStackTrace = originalDemangler(stackTrace);
+      final demangledTrace = previousDemangler(stackTrace);
 
-      if (demangledStackTrace is stack_trace.Trace) {
-        return demangledStackTrace.vmTrace;
+      if (demangledTrace is stack_trace.Trace) {
+        return demangledTrace.vmTrace;
       }
 
-      if (demangledStackTrace is stack_trace.Chain) {
-        return demangledStackTrace.toTrace().vmTrace;
+      if (demangledTrace is stack_trace.Chain) {
+        return demangledTrace.toTrace().vmTrace;
       }
 
-      return demangledStackTrace;
+      return demangledTrace;
     };
   }
 }

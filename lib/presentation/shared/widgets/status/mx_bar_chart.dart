@@ -83,7 +83,7 @@ class _MxBarChartState extends State<MxBarChart> with SingleTickerProviderStateM
             children: <Widget>[
               for (final MxBarDatum datum in widget.data)
                 Expanded(
-                  child: _Bar(
+                  child: _ChartBarItem(
                     datum: datum,
                     maxValue: maxValue,
                     progress: _grow.value,
@@ -100,8 +100,8 @@ class _MxBarChartState extends State<MxBarChart> with SingleTickerProviderStateM
   }
 }
 
-class _Bar extends StatelessWidget {
-  const _Bar({
+class _ChartBarItem extends StatelessWidget {
+  const _ChartBarItem({
     required this.datum,
     required this.maxValue,
     required this.progress,

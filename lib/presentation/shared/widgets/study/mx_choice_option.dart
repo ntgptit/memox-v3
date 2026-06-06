@@ -38,7 +38,7 @@ class MxChoiceOption extends StatelessWidget {
     final (
       Color border,
       Color fill,
-      Color fg,
+      Color foreground,
       IconData? glyph,
     ) = switch (state) {
       MxChoiceState.idle => (
@@ -82,13 +82,13 @@ class MxChoiceOption extends StatelessWidget {
                 child: Text(
                   label,
                   style: context.textTheme.titleSmall?.copyWith(
-                    color: fg,
+                    color: foreground,
                     fontWeight: TypographyTokens.semiBold,
                   ),
                 ),
               ),
               if (glyph != null)
-                Icon(glyph, size: SizeTokens.iconSm, color: fg),
+                Icon(glyph, size: SizeTokens.iconSm, color: foreground),
             ],
           ),
         ),
