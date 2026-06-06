@@ -24,7 +24,7 @@ class MxCheckboxRow extends StatelessWidget {
       onTap: () => onChanged(!value),
       borderRadius: RadiusTokens.brMd,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xs),
+        padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xxs),
         child: Row(
           children: <Widget>[
             Checkbox(
@@ -36,7 +36,7 @@ class MxCheckboxRow extends StatelessWidget {
             Expanded(
               child: MxText(
                 label,
-                role: MxTextRole.bodyMedium,
+                role: MxTextRole.labelMedium,
                 color: scheme.onSurfaceVariant,
               ),
             ),

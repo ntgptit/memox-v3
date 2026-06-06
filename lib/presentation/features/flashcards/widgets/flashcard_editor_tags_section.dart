@@ -52,7 +52,7 @@ class FlashcardEditorTagsSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: SpacingTokens.xs),
+        const SizedBox(height: SpacingTokens.sm),
         Wrap(
           spacing: SpacingTokens.sm,
           runSpacing: SpacingTokens.sm,

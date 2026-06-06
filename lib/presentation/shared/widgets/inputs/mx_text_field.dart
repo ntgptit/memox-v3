@@ -41,8 +41,9 @@ class MxTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
-    final TextStyle? textStyle =
-        prominent ? context.textTheme.bodyLarge : context.textTheme.bodyMedium;
+    final TextStyle? textStyle = prominent
+        ? context.textTheme.bodyLarge
+        : context.textTheme.bodyMedium;
     final Color fill = prominent
         ? scheme.surfaceContainerLowest
         : scheme.surfaceContainerLowest;
@@ -80,10 +81,7 @@ class MxTextField extends StatelessWidget {
               ),
         suffixIconConstraints: trailingIcon == null
             ? null
-            : const BoxConstraints(
-                minWidth: 0,
-                minHeight: 0,
-              ),
+            : const BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: const EdgeInsets.all(SpacingTokens.md),
         border: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
@@ -95,10 +93,7 @@ class MxTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
-          borderSide: BorderSide(
-            color: scheme.primary,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: scheme.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,

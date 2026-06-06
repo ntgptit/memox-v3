@@ -166,7 +166,7 @@ class FlashcardEditorFieldSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: SpacingTokens.xs),
+        const SizedBox(height: SpacingTokens.sm),
         MxTextField(
           controller: controller,
           focusNode: focusNode,
@@ -384,7 +384,7 @@ class _OptionalField extends StatelessWidget {
           color: scheme.onSurfaceVariant,
           fontWeight: TypographyTokens.semiBold,
         ),
-        const SizedBox(height: SpacingTokens.xs),
+        const SizedBox(height: SpacingTokens.sm),
         MxTextField(
           controller: controller,
           focusNode: focusNode,

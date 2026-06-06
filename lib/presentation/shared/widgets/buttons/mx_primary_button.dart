@@ -30,7 +30,8 @@ class MxPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool expand = fullWidth || (stretchOnCompact && size == MxButtonSize.compact);
+    final bool expand =
+        fullWidth || (stretchOnCompact && size == MxButtonSize.compact);
     final ButtonStyle style = FilledButton.styleFrom(
       minimumSize: Size(0, size.height),
       tapTargetSize: MaterialTapTargetSize.padded,
