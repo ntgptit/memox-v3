@@ -5,58 +5,89 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
+import 'package:memox/core/utils/relative_time.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
+import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
 /// A deck row inside a `decks`-mode folder (`docs/wireframes/05-folder-detail.md`
-/// §Deck row): leading icon-tile, name + card count, optional due badge, kebab.
+/// §Deck row): leading icon-tile, name + due badge, card count + last studied,
+/// progress bar, and a chevron.
 ///
-/// The kebab + long-press use [onShowActions] (the deck action sheet); when
-/// null the affordance is disabled — no unsupported action is exposed (the
+/// The long-press use [onShowActions] (the deck action sheet); when null the
+/// affordance is disabled — no unsupported action is exposed (the
 /// deck/flashcard mutations are not built yet).
 class FolderDeckTile extends StatelessWidget {
   const FolderDeckTile({
     required this.item,
     required this.onTap,
     this.onShowActions,
+    this.referenceNow,
     super.key,
   });
 
   final DeckWithCount item;
   final VoidCallback onTap;
   final VoidCallback? onShowActions;
+  final DateTime? referenceNow;
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final Color tone = context.colorScheme.onSurfaceVariant;
+    final DateTime now = referenceNow ?? DateTime.now();
+    final double progress = item.cardCount == 0
+        ? 0
+        : ((item.cardCount - item.dueCount) / item.cardCount)
+              .clamp(0, 1)
+              .toDouble();
+    final String? lastStudiedLabel = item.lastStudiedAt == null
+        ? null
+        : _formatRelativeTimeAgo(
+            l10n: l10n,
+            relativeTime: RelativeTime.between(item.lastStudiedAt!, now),
+          );
 
     return MxCard(
       onTap: onTap,
       onLongPress: onShowActions,
+      padding: const EdgeInsets.all(SpacingTokens.md),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const MxIconTile(icon: Icons.layers_rounded),
+          const MxIconTile(icon: Icons.layers_rounded, size: 36),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                MxText(
-                  item.deck.name,
-                  role: MxTextRole.titleSmall,
-                  fontWeight: TypographyTokens.bold,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: MxText(
+                        item.deck.name,
+                        role: MxTextRole.titleSmall,
+                        fontWeight: TypographyTokens.bold,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (item.dueCount > 0) ...<Widget>[
+                      const SizedBox(width: SpacingTokens.sm),
+                      _DueCountBadge(
+                        label: l10n.libraryFolderDueCount(item.dueCount),
+                      ),
+                    ],
+                  ],
                 ),
                 const SizedBox(height: SpacingTokens.xs),
                 Row(
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Icon(
                       Icons.style_outlined,
@@ -64,32 +95,43 @@ class FolderDeckTile extends StatelessWidget {
                       color: tone,
                     ),
                     const SizedBox(width: SpacingTokens.xxs),
-                    MxText(
-                      l10n.libraryFolderCardsCount(item.cardCount),
-                      role: MxTextRole.labelMedium,
-                      color: tone,
+                    Flexible(
+                      child: MxText(
+                        lastStudiedLabel == null
+                            ? l10n.libraryFolderCardsCount(item.cardCount)
+                            : l10n.folderDetailDeckMeta(
+                                item.cardCount,
+                                lastStudiedLabel,
+                              ),
+                        role: MxTextRole.labelMedium,
+                        color: tone,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
+                ),
+                const SizedBox(height: SpacingTokens.xs),
+                MxLinearProgress(
+                  value: progress,
+                  color: context.customColors.masteryHigh,
+                  height: 4,
                 ),
               ],
             ),
           ),
-          if (item.dueCount > 0) ...<Widget>[
-            const SizedBox(width: SpacingTokens.sm),
-            _DueCountBadge(label: l10n.libraryFolderDueCount(item.dueCount)),
-          ],
-          const SizedBox(width: SpacingTokens.xxs),
-          MxIconButton(
-            icon: Icons.more_vert,
-            tooltip: l10n.libraryOverflowTooltip,
-            size: MxIconButtonSize.compact,
-            onPressed: onShowActions,
-          ),
+          const SizedBox(width: SpacingTokens.sm),
+          Icon(Icons.chevron_right, size: 18, color: tone),
         ],
       ),
     );
   }
 }
+
+String _formatRelativeTimeAgo({
+  required AppLocalizations l10n,
+  required RelativeTime relativeTime,
+}) => l10n.relativeTimeAgo(relativeTime.unit.name, relativeTime.count);
 
 class _DueCountBadge extends StatelessWidget {
   const _DueCountBadge({required this.label});

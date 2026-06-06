@@ -55,7 +55,7 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
 - **Out-of-scope items (Future / Visual-only):** hero mastery card, folder-span
   subtitle, "{n} new" counts, Study folder / Today CTAs, Resume banner +
   discard, the overflow ⋮ action menu (rendered disabled), sort UI control,
-  per-deck due badges sourced from a study read model, Global Search.
+  Global Search. Per-folder / per-deck mastery ring remains Future.
 
 ## 2. Source priority
 
@@ -129,8 +129,10 @@ existing widget/token covers an element.
 | Breadcrumb | Show + jump ancestor path | `MxBreadcrumb` / `MxBreadcrumbSegment` | `SpacingTokens.sm` gap; `onSurfaceVariant`; `labelMedium` | Loaded (hidden until data) | **Current** | `Library` + ancestors; middle-ellipsis past ~3 levels (do not lose first/last). |
 | Inline search field | Folder-scope-local search | `MxSearchField` | `SizeTokens.input`; `RadiusTokens.brMd`; focus = 1px `primary` | All | **Current** | Hint `folderDetailSearchHint`; clear tooltip `librarySearchClearTooltip`. |
 | Subfolder row | Open child folder | `LibraryFolderTile` | `MxCard` (ghost border, `brLg`, `cardPadding`); `MxIconTile`; text roles | subfolders mode | **Current** | Icon + name + "{n} subfolders/decks" subtitle + chevron. |
-| Deck row | Open deck's flashcards | `FolderDeckTile` | `MxCard`; `MxIconTile`; text/icon roles | decks mode | **Current** | Icon + name + "{n} cards" (+ "{m} due" badge — see note). Tap → flashcard list (Future target screen). |
-| Deck due badge | Show due count | within `FolderDeckTile` | tokenized opacity/`brFull`/text | decks mode, when `due > 0` | **Current** if `FolderDeckItem` exposes a due count; else **Future** | Show only when due > 0; never "0 due". Confirm field in `folder_detail.dart` model. |
+| Deck row | Open deck's flashcards | `FolderDeckTile` | `MxCard`; `MxIconTile`; text/icon roles | decks mode | **Current** | Icon + name + optional `{m} due` badge on the top row, `{n} cards · last {relative time}` meta when `lastStudiedAt` is present, compact progress bar, and chevron. Tap → flashcard list (Future target screen). |
+| Deck due badge | Show due count | within `FolderDeckTile` | tokenized opacity/`brFull`/text | decks mode, when `due > 0` | **Current** | Show only when due > 0; never "0 due". Uses the deck aggregate `dueCount`. |
+| Deck last studied | Show recency metadata | within `FolderDeckTile` | `RelativeTime` formatter + l10n suffix | decks mode, when `lastStudiedAt` is present | **Current** | Rendered as `last {relative time}` in English and localized equivalent in Vietnamese; null collapses to cards-only meta. |
+| Deck compact progress bar | Show deck progress hint | within `FolderDeckTile` | `MxLinearProgress` | decks mode | **Current** | Derived from loaded deck aggregates; visual-only summary bar, not the folder mastery ring. |
 | Row chevron | Affordance into child | row trailing | `iconSm`/`iconMd`; `onSurfaceVariant` | rows present | **Current** | Folder Detail rows DO use a chevron (unlike Library Overview cards, which use a kebab). |
 | Long-press row → item context sheet | Rename/Move/Delete child | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `MxConfirmationDialog` | shared sheet/dialog themes; scrim 32% | rows present | **Current** (verify wiring on Folder Detail) | Item-context sheet (`wireframes/25 §item-context`). Confirm long-press is wired here as it is on Library rows. |
 | Mode-choice empty | Pick subfolders or decks | `FolderUnlockedEmpty` | `iconXl`; `sectionGap`; secondary buttons | unlocked empty | **Current** | "New subfolder" / "New deck" + lock explanation copy (l10n). |
@@ -156,7 +158,7 @@ Use `MxText` roles / `TextTheme` (collapsed scale 48/32/24/20/16/14/12). No raw
 | Breadcrumb segments | Navigational labels | `MxTextRole.labelMedium` | `onSurfaceVariant` (current segment emphasized) | 1 each | middle-ellipsis past ~3 | `Library` from `l10n.libraryTitle`; names are data | Segments are buttons. |
 | Search hint | Input placeholder | input hint role | `onSurfaceVariant` | 1 | ellipsis | `l10n.folderDetailSearchHint` | Folder scope wording. |
 | Row title (folder/deck) | List item title | `MxTextRole.titleSmall`/`titleMedium` | `onSurface` | 1 | ellipsis | data | Density per row. |
-| Row subtitle (counts) | Metadata | `MxTextRole.bodyMedium`/`labelMedium` | `onSurfaceVariant` | 1 | ellipsis | ICU plural ("{n} cards", "{n} decks") | Tabular figures for counts. |
+| Row subtitle (counts + recency) | Metadata | `MxTextRole.bodyMedium`/`labelMedium` | `onSurfaceVariant` | 1 | ellipsis | ICU plural ("{n} cards", "{n} decks") + relative time label | Tabular figures for counts; deck rows collapse to cards-only when `lastStudiedAt` is null. |
 | Due badge | Count chip | label role | primary tint content | 1 | clip | ICU plural ("{n} due") | Only when due > 0. |
 | Empty/search-empty title + body | Guidance | empty-state roles | `onSurface` / `onSurfaceVariant` | 2–3 | wrap | yes | Calm, action-led copy. |
 | Error title + message | Failure | error-state roles | `onSurface` / `onSurfaceVariant` | 2–3 | wrap | `folderNotFoundTitle`/`folderNotFoundMessage` | No raw failure text. |
@@ -271,15 +273,18 @@ levels keeping first + last.
 ## 13. Data/content contract
 
 - **Real data:** `FolderDetail` (folder name, `content_mode`, parent chain /
-  breadcrumb, child folders OR child decks, recursive counts) via
-  `WatchFolderDetailUseCase`; reacts to `folderDetailToolbar` (search/sort).
+  breadcrumb, child folders OR child decks, recursive counts, deck
+  `lastStudiedAt` aggregate) via `WatchFolderDetailUseCase`; reacts to
+  `folderDetailToolbar` (search/sort).
 - **Mock/demo data (do NOT copy):** sample names ("Korean", "Grammar", "Korean
   N5"), fixed counts, "Today (12)", "{n} new" — all illustrative.
 - **Empty value display:** unlocked → mode-choice; locked-empty → empty message
   + FAB; search-empty → Clear CTA. Never blank.
 - **Count formatting:** ICU plurals ("{n} decks", "{n} cards", "{m} due");
   tabular figures; hide due badge at 0.
-- **Date/time:** none on this screen.
+- **Date/time:** deck rows display relative last-studied metadata when the
+  read model exposes `lastStudiedAt`; the current implementation formats it as
+  a localized relative time string.
 - **Sorting/grouping:** `ContentSortMode` exists in toolbar state; **no sort UI
   rendered** (Future). Default order = `sort_order` (manual).
 - **Localization:** Korean + Vietnamese must fit; titles ellipsize, copy wraps.
@@ -358,7 +363,6 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 | Overflow ⋮ rendered disabled (`onPressed: null`) | Mock-only element | App-bar overflow | No folder-level action sheet wired on Folder Detail | Keep disabled until a folder action sheet (Rename/Move/Delete/Sort) is promoted |
 | `ContentSortMode` exists in toolbar state but no sort UI is rendered; wireframe says `MxSearchSortToolbar` is Current | State conflict | Sort control | Code uses plain `MxSearchField`, not the sort toolbar | Treat sort UI as Future; if promoted, use the shared `MxSearchSortToolbar`, do not fork |
 | Deck row tap targets `/library/deck/:deckId/flashcards`, but Flashcard list is not implemented | Future scope | Deck row navigation | Flashcard feature absent on this ref | Acceptable as nav intent; flashcard list must land (P2) for the tap to resolve |
-| Per-deck due badge depends on whether `FolderDeckItem` exposes a due count | Missing source | Deck due badge | Model field unconfirmed in this read | Verify `domain/models/folder_detail.dart`; if absent, mark badge Future |
 | Long-press item-context sheet wiring on Folder Detail (vs Library Overview) unconfirmed | Unknown source | Row long-press | Not visible in `folder_detail_screen.dart` (handled in body/tiles) | Verify in `folder_deck_tile.dart` / `library_folder_tile.dart`; document actual behavior |
 
 ## Related

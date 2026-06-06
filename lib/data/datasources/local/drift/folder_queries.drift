@@ -114,6 +114,11 @@ SELECT
        AND p.is_suspended = FALSE
        AND (p.buried_until IS NULL OR p.buried_until <= :now)
        AND p.due_at IS NOT NULL AND p.due_at <= :now) AS due_count
+  ,
+  (SELECT MAX(p.last_studied_at)
+     FROM flashcards fc
+     LEFT JOIN flashcard_progress p ON p.flashcard_id = fc.id
+     WHERE fc.deck_id = decks.id) AS last_studied_at
 FROM decks
 WHERE decks.folder_id = :folderId
   AND (:search = '' OR LOWER(decks.name) LIKE :search ESCAPE '\')

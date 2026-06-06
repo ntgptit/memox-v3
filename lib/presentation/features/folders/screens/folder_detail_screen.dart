@@ -18,7 +18,7 @@ import 'package:memox/presentation/features/folders/widgets/folder_move_picker_s
 import 'package:memox/presentation/features/folders/widgets/library_folder_actions_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
-import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
+import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -313,7 +313,7 @@ Future<void> showFolderDetailActions(
     case LibraryFolderAction.move:
       await _moveFolder(context, ref, detail.folder);
     case LibraryFolderAction.delete:
-      await _deleteFolder(context, ref, detail.folder);
+      await _deleteFolder(context, ref, detail);
     case LibraryFolderAction.importFlashcards:
       // Not offered for the current-folder overflow (showImport: false).
       break;
@@ -417,16 +417,22 @@ Future<void> _moveFolder(
 Future<void> _deleteFolder(
   BuildContext context,
   WidgetRef ref,
-  Folder folder,
+  FolderDetail detail,
 ) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final bool confirmed = await showMxConfirmDialog(
+  final String summaryText = detail.folder.contentMode == ContentMode.subfolders
+      ? l10n.libraryFolderSubfoldersCount(detail.subfolders.length)
+      : l10n.libraryFolderDecksCount(detail.decks.length);
+  final bool confirmed = await showMxFolderDeleteDialog(
     context,
-    title: l10n.foldersDeleteTitle,
-    message: l10n.foldersDeleteMessage,
-    confirmLabel: l10n.commonDelete,
+    folderName: detail.folder.name,
+    summaryText: summaryText,
+    title: l10n.folderDeleteDialogTitle,
+    reassuranceText: l10n.folderDeleteDialogReassurance,
+    confirmLabel: l10n.folderDeleteDialogConfirmLabel,
+    deleteButtonLabel: l10n.folderDeleteDialogDeleteButton,
     cancelLabel: l10n.commonCancel,
-    destructive: true,
+    confirmHint: l10n.folderDeleteDialogConfirmLabel,
   );
   if (!confirmed) {
     return;
@@ -436,7 +442,7 @@ Future<void> _deleteFolder(
   }
   final Result<void> result = await ref
       .read(libraryActionControllerProvider.notifier)
-      .deleteFolder(folder.id);
+      .deleteFolder(detail.folder.id);
   if (!context.mounted) {
     return;
   }

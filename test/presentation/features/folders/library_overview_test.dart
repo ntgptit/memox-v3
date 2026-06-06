@@ -339,6 +339,20 @@ void main() {
   });
 
   group('LibraryOverviewScreen — Loading & Error states', () {
+    testWidgets('app bar keeps only the filter affordance', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<LibraryOverviewReadModel>.value(_model(totalFolderCount: 1)),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.search_rounded), findsNothing);
+    });
+
     testWidgets('loading renders the skeleton and no tappable folder rows', (
       WidgetTester tester,
     ) async {
@@ -509,13 +523,17 @@ void main() {
       await tester.tap(find.text('Delete folder'));
       await tester.pumpAndSettle();
 
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(Scaffold)),
+      );
+
       // The confirm dialog's unique subtree-warning copy is shown.
       expect(
-        find.text(
-          'This will delete the full subtree, including decks and flashcards.',
-        ),
+        find.text('Korean and its 3 decks will be removed from your library.'),
         findsOneWidget,
       );
+      expect(find.text(l10n.folderDeleteDialogTitle), findsOneWidget);
+      expect(find.text(l10n.folderDeleteDialogReassurance), findsOneWidget);
     });
 
     testWidgets('New folder FAB is visible in the loaded state', (

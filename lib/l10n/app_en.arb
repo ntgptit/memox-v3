@@ -745,6 +745,10 @@
   "foldersDeleteTitle": "Delete folder",
   "foldersDeleteMessage": "This will delete the full subtree, including decks and flashcards.",
   "foldersDeletedMessage": "Folder deleted.",
+  "folderDeleteDialogTitle": "Delete this folder?",
+  "folderDeleteDialogReassurance": "Cards in those decks move to \"Unsorted\" - nothing is permanently lost.",
+  "folderDeleteDialogConfirmLabel": "Type to confirm",
+  "folderDeleteDialogDeleteButton": "Delete folder",
   "foldersManualReorderWarning": "Manual reorder is only available in manual sort.",
   "foldersSummaryUnlocked": "This folder is empty and can hold subfolders or decks.",
   "foldersEmptyTitle": "This folder is empty",
@@ -845,6 +849,17 @@
   "@decksLastStudiedLabel": {
     "placeholders": {
       "date": {}
+    }
+  },
+  "folderDetailDeckMeta": "{cardCount} cards · last {relativeTime}",
+  "@folderDetailDeckMeta": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      },
+      "relativeTime": {
+        "type": "String"
+      }
     }
   },
   "decksManageContentTitle": "Manage content",
@@ -1236,6 +1251,17 @@
   "@libraryDeckDueSuffix": {
     "placeholders": {
       "dueCount": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeTimeAgo": "{unit, select, justNow{just now} minutes{{count, plural, =1{1 minute ago} other{{count} minutes ago}}} hours{{count, plural, =1{1 hour ago} other{{count} hours ago}}} days{{count, plural, =1{1 day ago} other{{count} days ago}}} weeks{{count, plural, =1{1 week ago} other{{count} weeks ago}}} months{{count, plural, =1{1 month ago} other{{count} months ago}}} years{{count, plural, =1{1 year ago} other{{count} years ago}}} other{just now}}",
+  "@relativeTimeAgo": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

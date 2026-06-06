@@ -745,6 +745,10 @@
   "foldersDeleteTitle": "Xóa thư mục",
   "foldersDeleteMessage": "Thao tác này sẽ xóa toàn bộ cây con, bao gồm cả bộ thẻ và flashcard.",
   "foldersDeletedMessage": "Đã xóa thư mục.",
+  "folderDeleteDialogTitle": "Xóa thư mục này?",
+  "folderDeleteDialogReassurance": "Thẻ trong các bộ đó sẽ chuyển sang \"Unsorted\" - không có gì bị mất vĩnh viễn.",
+  "folderDeleteDialogConfirmLabel": "Nhập để xác nhận",
+  "folderDeleteDialogDeleteButton": "Xóa thư mục",
   "foldersManualReorderWarning": "Chỉ có thể sắp xếp thủ công khi đang ở chế độ sắp xếp thủ công.",
   "foldersSummaryUnlocked": "Thư mục này đang trống và có thể chứa thư mục con hoặc bộ thẻ.",
   "foldersEmptyTitle": "Thư mục này đang trống",
@@ -845,6 +849,17 @@
   "@decksLastStudiedLabel": {
     "placeholders": {
       "date": {}
+    }
+  },
+  "folderDetailDeckMeta": "{cardCount} thẻ · {relativeTime}",
+  "@folderDetailDeckMeta": {
+    "placeholders": {
+      "cardCount": {
+        "type": "int"
+      },
+      "relativeTime": {
+        "type": "String"
+      }
     }
   },
   "decksManageContentTitle": "Quản lý nội dung",
@@ -1236,6 +1251,17 @@
   "@libraryDeckDueSuffix": {
     "placeholders": {
       "dueCount": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeTimeAgo": "{unit, select, justNow{vừa xong} minutes{{count, plural, =1{1 phút trước} other{{count} phút trước}}} hours{{count, plural, =1{1 giờ trước} other{{count} giờ trước}}} days{{count, plural, =1{1 ngày trước} other{{count} ngày trước}}} weeks{{count, plural, =1{1 tuần trước} other{{count} tuần trước}}} months{{count, plural, =1{1 tháng trước} other{{count} tháng trước}}} years{{count, plural, =1{1 năm trước} other{{count} năm trước}}} other{vừa xong}}",
+  "@relativeTimeAgo": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

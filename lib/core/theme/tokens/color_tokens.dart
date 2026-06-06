@@ -31,6 +31,8 @@ abstract final class ColorTokens {
   static const Color onTertiary = Color(0xFFFFFFFF);
   static const Color error = Color(0xFFDC2D4E);
   static const Color errorDark = Color(0xFFFF8FA3);
+  static const Color errorFill = Color(0xFFDC2D4E);
+  static const Color errorFillDark = Color(0xFFB0485C);
   static const Color onError = Color(0xFFFFFFFF);
 
   // ── B · Surface ladder ───────────────────────────────────────

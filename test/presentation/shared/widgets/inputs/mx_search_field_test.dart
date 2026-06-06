@@ -29,7 +29,7 @@ void main() {
     );
 
     final Finder textField = find.byType(TextField);
-    expect(tester.getSize(textField).height, 48);
+    expect(tester.getSize(textField).height, 52);
     expect(
       tester.widget<TextField>(textField).decoration!.border,
       isA<OutlineInputBorder>().having(

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-04
+last_updated: 2026-06-06
 route: /library/folder/:id
 source_specs:
   - docs/business/folder/folder-management.md
@@ -15,9 +15,10 @@ source_specs:
 This screen is partially Current. The folder **browser** (subfolders / decks /
 unlocked modes, breadcrumb, inline search, true-empty vs search-no-results,
 mode-constrained create FAB, folder-scope summary, and the overflow
-rename/move/delete actions) is Current. The **study layer** (mastery, due-based
-study CTAs, resume banner, "{n} new", deck "last studied") is **not built** and
-is Future here.
+rename/move/delete actions) is Current. The **study layer** (mastery,
+due-based study CTAs, resume banner, "{n} new") is **not built** and is Future
+here. Per-deck last-studied metadata and compact progress bars are Current
+because they are derived from the existing deck read model, not the study UI.
 
 > Drift correction (2026-06-06): earlier revisions of this file described a
 > `FolderHeroCard` (`folder_hero_card.dart`), `FolderSectionTitle`
@@ -62,9 +63,7 @@ is Future here.
 
 ### Future / not built (MUST NOT be rendered with placeholder values)
 
-- Per-folder / per-deck mastery ring & progress bars (no mastery in the read model).
-- "{n} new" / fresh counts (no read model).
-- Deck "last studied" subtext (no read model).
+- Per-folder / per-deck mastery ring & "{n} new" / fresh counts (no mastery read model).
 - Folder-level Start study / Today CTAs and the Resume banner (study layer not built).
 - Global Search route, Flashcard History, tag-scoped study, root-level decks.
 - The decks-mode FAB stays `New deck` (not the mock's `New card`): creating a
@@ -181,6 +180,7 @@ banner are **Future** (the study layer is not built).
 | Breadcrumb path                                                 | derived from parent chain                                                                                            | follows folder detail                                     |
 | Child folders (when mode=subfolders)                            | `folders WHERE parent_id = :folderId ORDER BY sort_order`                                                            | stream                                                    |
 | Child decks (when mode=decks)                                   | `decks WHERE folder_id = :folderId ORDER BY sort_order`                                                              | stream                                                    |
+| Deck last-studied aggregate                                     | `MAX(flashcard_progress.last_studied_at)` per deck                                                                    | follows the children stream                               |
 | Folder-scope card total (summary line)                          | **Current.** Summed from the loaded `decks[]` / `subfolders[]` (`cardCount`)                                         | follows the children stream                               |
 | Folder-scope due total (summary line)                           | **Current.** Summed from the loaded `decks[]` / `subfolders[]` (`dueCount`)                                          | follows the children stream                               |
 | Recursive count / resumable session for folder-level study CTAs | **Future.** Study layer not built; no `GetFolderStudyEntryUseCase` exists                                            | n/a                                                       |
@@ -202,12 +202,12 @@ banner are **Future** (the study layer is not built).
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | App bar back                    | Returns to parent folder or Library.                                                                                                                                                                                                                                                                                                                                                                             |
 | Breadcrumb                      | Full path from Library to current. Tap any segment to jump.                                                                                                                                                                                                                                                                                                                                                      |
-| Folder-scope summary            | **Current.** `FolderDecksSummary` (decks · cards line + due/`All caught up`) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; no mastery ring / "{n} new" (Future, no read model).                                                                                                                                                                         |
+| Folder-scope summary            | **Current.** `FolderDecksSummary` (decks · cards line + due/`All caught up`) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; no mastery ring / "{n} new" (Future, no mastery read model).                                                                                                                                                       |
 | Resume banner                   | **Future.** Study layer not built. No resumable-session read for this scope.                                                                                                                                                                                                                                                                                                                                    |
 | Study folder CTA                | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Today CTA                       | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Subfolder row (subfolders mode) | Icon + name + "{n} subfolders" or "{n} decks" subtitle + chevron.                                                                                                                                                                                                                                                                                                                                                |
-| Deck row (decks mode)           | Icon + name + "{n} cards" + optional "{m} due" badge + chevron.                                                                                                                                                                                                                                                                                                                                                  |
+| Deck row (decks mode)           | Icon + name + optional "{m} due" badge + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
 | FAB                             | **Current.** Plus button. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                                                           |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
 | Search + section header         | **Current.** Inline `MxSearchField` above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`); a visible **sort menu chip is Future** (state exists, no UI control wired). There is no `MxSearchSortToolbar` widget. |
@@ -245,7 +245,7 @@ banner are **Future** (the study layer is not built).
 - New deck bottom-sheet — `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
 - Folder rename dialog — `docs/wireframes/24-shared-dialogs.md` §rename.
 - Move-to-folder picker — `docs/wireframes/25-shared-bottom-sheets.md` §folder-picker.
-- Delete folder dialog — `docs/wireframes/24-shared-dialogs.md` §delete-confirm.
+- Delete folder dialog — `docs/wireframes/24-shared-dialogs.md` §delete-confirm (strong folder-delete variant with typed confirmation and reassurance copy).
 - Item context sheet — `docs/wireframes/25-shared-bottom-sheets.md` §item-context.
 
 ## Navigation in

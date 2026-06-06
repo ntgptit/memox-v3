@@ -427,6 +427,9 @@ class FolderRepositoryImpl implements FolderRepository {
         ),
         cardCount: row.cardCount,
         dueCount: row.dueCount,
+        lastStudiedAt: row.lastStudiedAt == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(row.lastStudiedAt!),
       );
 
   /// End of the current local day in UTC epoch ms — cards due any time today

@@ -23,6 +23,10 @@ abstract final class MxComponentThemes {
     elevation: ElevationTokens.level0,
     scrolledUnderElevation: ElevationTokens.level0,
     centerTitle: false,
+    titleSpacing: SpacingTokens.lg,
+    actionsPadding: const EdgeInsetsDirectional.only(
+      end: SpacingTokens.lg,
+    ),
     toolbarHeight: SizeTokens.appbar,
     titleTextStyle: text.titleLarge,
   );

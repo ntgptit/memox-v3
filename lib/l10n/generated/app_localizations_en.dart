@@ -1497,6 +1497,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get foldersDeletedMessage => 'Folder deleted.';
 
   @override
+  String get folderDeleteDialogTitle => 'Delete this folder?';
+
+  @override
+  String get folderDeleteDialogReassurance =>
+      'Cards in those decks move to \"Unsorted\" - nothing is permanently lost.';
+
+  @override
+  String get folderDeleteDialogConfirmLabel => 'Type to confirm';
+
+  @override
+  String get folderDeleteDialogDeleteButton => 'Delete folder';
+
+  @override
   String get foldersManualReorderWarning =>
       'Manual reorder is only available in manual sort.';
 
@@ -1674,6 +1687,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String decksLastStudiedLabel(Object date) {
     return 'Last studied: $date';
+  }
+
+  @override
+  String folderDetailDeckMeta(int cardCount, String relativeTime) {
+    return '$cardCount cards · last $relativeTime';
   }
 
   @override
@@ -2481,6 +2499,57 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String libraryDeckDueSuffix(int dueCount) {
     return '· $dueCount due';
+  }
+
+  @override
+  String relativeTimeAgo(String unit, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes ago',
+      one: '1 minute ago',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours ago',
+      one: '1 hour ago',
+    );
+    String _temp2 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    String _temp3 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks ago',
+      one: '1 week ago',
+    );
+    String _temp4 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count months ago',
+      one: '1 month ago',
+    );
+    String _temp5 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years ago',
+      one: '1 year ago',
+    );
+    String _temp6 = intl.Intl.selectLogic(unit, {
+      'justNow': 'just now',
+      'minutes': '$_temp0',
+      'hours': '$_temp1',
+      'days': '$_temp2',
+      'weeks': '$_temp3',
+      'months': '$_temp4',
+      'years': '$_temp5',
+      'other': 'just now',
+    });
+    return '$_temp6';
   }
 
   @override

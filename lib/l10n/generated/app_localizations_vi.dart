@@ -1413,6 +1413,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get foldersDeletedMessage => 'Đã xóa thư mục.';
 
   @override
+  String get folderDeleteDialogTitle => 'Xóa thư mục này?';
+
+  @override
+  String get folderDeleteDialogReassurance =>
+      'Thẻ trong các bộ đó sẽ chuyển sang \"Unsorted\" - không có gì bị mất vĩnh viễn.';
+
+  @override
+  String get folderDeleteDialogConfirmLabel => 'Nhập để xác nhận';
+
+  @override
+  String get folderDeleteDialogDeleteButton => 'Xóa thư mục';
+
+  @override
   String get foldersManualReorderWarning =>
       'Chỉ có thể sắp xếp thủ công khi đang ở chế độ sắp xếp thủ công.';
 
@@ -1569,6 +1582,11 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String decksLastStudiedLabel(Object date) {
     return 'Học gần nhất: $date';
+  }
+
+  @override
+  String folderDetailDeckMeta(int cardCount, String relativeTime) {
+    return '$cardCount thẻ · $relativeTime';
   }
 
   @override
@@ -2369,6 +2387,57 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String libraryDeckDueSuffix(int dueCount) {
     return '· $dueCount đến hạn';
+  }
+
+  @override
+  String relativeTimeAgo(String unit, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count phút trước',
+      one: '1 phút trước',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giờ trước',
+      one: '1 giờ trước',
+    );
+    String _temp2 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ngày trước',
+      one: '1 ngày trước',
+    );
+    String _temp3 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tuần trước',
+      one: '1 tuần trước',
+    );
+    String _temp4 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tháng trước',
+      one: '1 tháng trước',
+    );
+    String _temp5 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count năm trước',
+      one: '1 năm trước',
+    );
+    String _temp6 = intl.Intl.selectLogic(unit, {
+      'justNow': 'vừa xong',
+      'minutes': '$_temp0',
+      'hours': '$_temp1',
+      'days': '$_temp2',
+      'weeks': '$_temp3',
+      'months': '$_temp4',
+      'years': '$_temp5',
+      'other': 'vừa xong',
+    });
+    return '$_temp6';
   }
 
   @override

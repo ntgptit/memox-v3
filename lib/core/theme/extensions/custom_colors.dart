@@ -13,6 +13,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.accent,
     required this.onAccent,
     required this.success,
+    required this.destructiveFill,
+    required this.onDestructiveFill,
     required this.warning,
     required this.mastery,
     required this.masteryFixed,
@@ -38,6 +40,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     accent: ColorTokens.accent,
     onAccent: ColorTokens.onAccent,
     success: ColorTokens.success,
+    destructiveFill: ColorTokens.errorFill,
+    onDestructiveFill: ColorTokens.onError,
     warning: ColorTokens.warning,
     mastery: ColorTokens.mastery,
     masteryFixed: ColorTokens.masteryFixed,
@@ -63,6 +67,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     accent: ColorTokens.accentDark,
     onAccent: ColorTokens.onAccentDark,
     success: ColorTokens.successDark,
+    destructiveFill: ColorTokens.errorFillDark,
+    onDestructiveFill: ColorTokens.onError,
     warning: ColorTokens.warningDark,
     mastery: ColorTokens.masteryDark,
     masteryFixed: ColorTokens.masteryFixedDark,
@@ -88,6 +94,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color accent;
   final Color onAccent;
   final Color success;
+  final Color destructiveFill;
+  final Color onDestructiveFill;
   final Color warning;
   final Color mastery;
   final Color masteryFixed;
@@ -113,6 +121,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? accent,
     Color? onAccent,
     Color? success,
+    Color? destructiveFill,
+    Color? onDestructiveFill,
     Color? warning,
     Color? mastery,
     Color? masteryFixed,
@@ -136,6 +146,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     accent: accent ?? this.accent,
     onAccent: onAccent ?? this.onAccent,
     success: success ?? this.success,
+    destructiveFill: destructiveFill ?? this.destructiveFill,
+    onDestructiveFill: onDestructiveFill ?? this.onDestructiveFill,
     warning: warning ?? this.warning,
     mastery: mastery ?? this.mastery,
     masteryFixed: masteryFixed ?? this.masteryFixed,
@@ -166,6 +178,12 @@ class CustomColors extends ThemeExtension<CustomColors> {
       accent: Color.lerp(accent, other.accent, t)!,
       onAccent: Color.lerp(onAccent, other.onAccent, t)!,
       success: Color.lerp(success, other.success, t)!,
+      destructiveFill: Color.lerp(destructiveFill, other.destructiveFill, t)!,
+      onDestructiveFill: Color.lerp(
+        onDestructiveFill,
+        other.onDestructiveFill,
+        t,
+      )!,
       warning: Color.lerp(warning, other.warning, t)!,
       mastery: Color.lerp(mastery, other.mastery, t)!,
       masteryFixed: Color.lerp(masteryFixed, other.masteryFixed, t)!,

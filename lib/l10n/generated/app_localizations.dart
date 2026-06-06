@@ -2406,6 +2406,30 @@ abstract class AppLocalizations {
   /// **'Folder deleted.'**
   String get foldersDeletedMessage;
 
+  /// No description provided for @folderDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this folder?'**
+  String get folderDeleteDialogTitle;
+
+  /// No description provided for @folderDeleteDialogReassurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards in those decks move to \"Unsorted\" - nothing is permanently lost.'**
+  String get folderDeleteDialogReassurance;
+
+  /// No description provided for @folderDeleteDialogConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type to confirm'**
+  String get folderDeleteDialogConfirmLabel;
+
+  /// No description provided for @folderDeleteDialogDeleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete folder'**
+  String get folderDeleteDialogDeleteButton;
+
   /// No description provided for @foldersManualReorderWarning.
   ///
   /// In en, this message translates to:
@@ -2663,6 +2687,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last studied: {date}'**
   String decksLastStudiedLabel(Object date);
+
+  /// No description provided for @folderDetailDeckMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{cardCount} cards · last {relativeTime}'**
+  String folderDetailDeckMeta(int cardCount, String relativeTime);
 
   /// No description provided for @decksManageContentTitle.
   ///
@@ -4001,6 +4031,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'· {dueCount} due'**
   String libraryDeckDueSuffix(int dueCount);
+
+  /// No description provided for @relativeTimeAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{unit, select, justNow{just now} minutes{{count, plural, =1{1 minute ago} other{{count} minutes ago}}} hours{{count, plural, =1{1 hour ago} other{{count} hours ago}}} days{{count, plural, =1{1 day ago} other{{count} days ago}}} weeks{{count, plural, =1{1 week ago} other{{count} weeks ago}}} months{{count, plural, =1{1 month ago} other{{count} months ago}}} years{{count, plural, =1{1 year ago} other{{count} years ago}}} other{just now}}'**
+  String relativeTimeAgo(String unit, int count);
 
   /// No description provided for @libraryDeckAllCaughtUp.
   ///

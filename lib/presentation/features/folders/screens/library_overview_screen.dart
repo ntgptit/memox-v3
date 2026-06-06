@@ -17,7 +17,7 @@ import 'package:memox/presentation/features/folders/widgets/library_search_field
 import 'package:memox/presentation/features/folders/widgets/library_sections.dart';
 import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
-import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
+import 'package:memox/presentation/shared/dialogs/mx_folder_delete_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -42,11 +42,6 @@ class LibraryOverviewScreen extends ConsumerWidget {
       appBar: MxAppBar(
         titleText: l10n.libraryTitle,
         actions: <Widget>[
-          MxIconButton(
-            icon: Icons.search_rounded,
-            tooltip: l10n.librarySearchOpenTooltip,
-            onPressed: () => context.pushLibrarySearch(),
-          ),
           MxIconButton(
             icon: Icons.tune_rounded,
             tooltip: l10n.libraryFilterTooltip,
@@ -290,13 +285,19 @@ Future<void> _deleteFolder(
   FolderWithCount item,
 ) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final bool confirmed = await showMxConfirmDialog(
+  final String summaryText = item.folder.contentMode == ContentMode.subfolders
+      ? l10n.libraryFolderSubfoldersCount(item.subfolderCount)
+      : l10n.libraryFolderDecksCount(item.deckCount);
+  final bool confirmed = await showMxFolderDeleteDialog(
     context,
-    title: l10n.foldersDeleteTitle,
-    message: l10n.foldersDeleteMessage,
-    confirmLabel: l10n.commonDelete,
+    folderName: item.folder.name,
+    summaryText: summaryText,
+    title: l10n.folderDeleteDialogTitle,
+    reassuranceText: l10n.folderDeleteDialogReassurance,
+    confirmLabel: l10n.folderDeleteDialogConfirmLabel,
+    deleteButtonLabel: l10n.folderDeleteDialogDeleteButton,
     cancelLabel: l10n.commonCancel,
-    destructive: true,
+    confirmHint: l10n.folderDeleteDialogConfirmLabel,
   );
   if (!confirmed) {
     return;

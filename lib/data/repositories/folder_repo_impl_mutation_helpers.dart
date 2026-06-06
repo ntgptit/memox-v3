@@ -144,6 +144,10 @@ Future<Result<Folder>> moveFolderTxn(
 
 /// Deletes [folderId] and its subtree deepest-first (decks → flashcards →
 /// progress cascade via FKs), reverting an emptied parent to `unlocked`.
+///
+/// TODO(MEMOX-UNSORTED-001): once the domain has an Unsorted destination for
+/// deck cards, move the affected cards there before folder deletion instead of
+/// dropping the subtree.
 Future<Result<void>> deleteFolderTxn(FolderDao dao, String folderId) async {
   try {
     await dao.transaction(() async {

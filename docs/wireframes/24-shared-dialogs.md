@@ -66,7 +66,7 @@ They must not call DAO, repository, or use case directly.
 
 ## Dialog patterns
 
-All dialogs share the same Material 3 structure: title, body, optional inline warning region, action row right-aligned. Destructive actions use theme `error` color. Primary safe action is on the right; cancel on the left.
+All dialogs share the same Material 3 structure: title, body, optional inline warning region, action row right-aligned. Most destructive actions use theme `error` color; the documented folder-delete strong variant uses the dedicated destructive fill token from the mock (`error-fill`) for its solid button. Primary safe action is on the right; cancel on the left.
 
 ---
 
@@ -189,7 +189,7 @@ Generic shape:
 
 | Entity | Body copy |
 | --- | --- |
-| Folder | "Folder {name} and its {n} subfolders / {m} decks will be deleted. All flashcards inside will be deleted too." |
+| Folder | Strong folder-delete variant — "Delete this folder?" + "{name} and its {n} subfolders / {m} decks will be removed from your library." + reassurance note + typed confirmation input + solid destructive-fill confirm button. |
 | Deck | "Deck {name} ({n} cards) will be deleted. All cards and their history will be deleted." |
 | Flashcard | "This flashcard and its study history will be deleted." |
 | Tag | "Tag #{name} will be removed from {n} cards. The cards themselves will be kept." |
@@ -428,7 +428,7 @@ When fingerprints match, this dialog still appears but the warning is softer and
 - ❌ Introduce a new dialog pattern without adding it to this catalog first.
 - ❌ Promote §restore-warning to Current without the two-tier confirmation and 5s timeout.
 - ❌ Use generic "Are you sure?" copy. Each dialog states the specific consequence.
-- ❌ Apply strong-variant destructive (typed confirmation) outside account removal without a spec update.
+- ❌ Apply strong-variant destructive (typed confirmation) outside account removal or the documented folder-delete exception without a spec update.
 - ❌ Hardcode dialog copy in widget. All strings from ARB (`error_*`, `dialog_*`).
 - ❌ Show dialog from build method. Always from callback.
 - ❌ Change Current V1 return contracts for catalog purity: `MxConfirmationDialog` returns `bool`, `MxNameDialog` returns `String?`, and `MxDialogResumeOrStartOver` returns typed `MxResumeChoice?`. For new complex dialogs, avoid ambiguous raw primitives when a typed result class or sealed variant is needed.
@@ -436,7 +436,7 @@ When fingerprints match, this dialog still appears but the warning is softer and
 ## Cross-cutting rules
 
 - Default focus: safe action (Cancel or primary safe).
-- Destructive actions: theme error color, right-aligned, secondary visual weight unless the dialog is explicitly destructive-first (e.g., §bulk-delete).
+- Destructive actions: theme error color, right-aligned, secondary visual weight unless the dialog is explicitly destructive-first (e.g., §bulk-delete). The documented folder-delete strong variant uses the dedicated destructive fill token from the mock for its filled CTA.
 - All dialogs respect system back button (= Cancel).
 - All dialogs are dismissible by tapping outside ONLY for non-destructive ones; destructive dialogs require explicit Cancel.
 - Counts in titles MUST be live (recomputed on open) not stale.
@@ -446,7 +446,7 @@ When fingerprints match, this dialog still appears but the warning is softer and
 - Do NOT introduce new dialog patterns without adding them to this catalog first.
 - Do NOT promote §restore-warning to Current without the two-tier confirmation and 5s timeout.
 - Do NOT use generic "Are you sure?" copy. Each dialog states the specific consequence.
-- Strong-variant destructive (typed confirmation) is reserved for account removal. Don't apply it elsewhere without spec update.
+- Strong-variant destructive (typed confirmation) is reserved for account removal, except for the documented folder-delete mock variant. Don't apply it elsewhere without spec update.
 - Keep Current V1 shared dialog return contracts as documented above. For new complex multi-branch dialogs, prefer typed result classes or sealed variants when a primitive would be ambiguous.
 
 ## Implementation refs

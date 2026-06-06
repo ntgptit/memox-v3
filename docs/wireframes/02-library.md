@@ -23,23 +23,13 @@ Screen-level visual contract: `docs/design/screens/library-overview.visual-contr
 loaded · loading · empty · error · search · overflow reference) against
 `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` §"03 · Library overview". No
 schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local;
-Global Search and a `/library/search` screen remain **Future**; root-level decks remain **Rejected /
-Out of Scope**. The mock's overflow sheet is now **implemented and Current** (see "Overflow sheet —
+the `/library/search` global-search route is separate from Library Overview and is not exposed
+from this app bar. Root-level decks remain **Rejected / Out of Scope**. The mock's overflow sheet is now **implemented and Current** (see "Overflow sheet —
 now Current" below, Prompt 49D); the row kebab and long-press open the folder action sheet. Card
 padding/radius and bottom-nav density remained a separate Design Token /
 Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026-06-05):** card
 surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`),
 applied in `MxCard`. Bottom-nav density is still open.
-
-**Prompt 50 scope (2026-06-06) — global search promotion:** the Library Overview app bar now exposes
-a leading `search` action (`Icons.search_rounded`, `librarySearchOpenTooltip`) that pushes the new
-global search screen at `/library/search` (`RouteNames.librarySearch`, `context.pushLibrarySearch()`).
-This is **Current** and covers folders/decks/flashcards; the Tags result section, recent searches,
-and popular tags remain **Future** (`docs/wireframes/11-library-search.md`,
-`docs/business/search/global-search.md`). The always-visible inline scope-local search field below
-the title is unchanged and still does not navigate. The `tune` filter affordance stays a disabled
-visual-only target. Earlier notes that "Global Search and `/library/search` remain Future" and "no
-`/library/search` route exists" are **superseded by this note**.
 
 **Prompt 49B scope (2026-06-04):** fixes the **loaded-state visual drift** left by Prompt 49 against
 the same mock §"03 · Library overview". No schema/SRS/repository/use-case change. Changes are
@@ -47,11 +37,9 @@ presentation-only:
 
 - Header right control is a sliders/filter affordance (`Icons.tune_rounded`). It is a **visual-only
   target** — rendered disabled because Library has no approved filter/sort sheet yet (no unsupported
-  action is exposed). **Updated 2026-06-06 (search promotion):** a `search` icon
-  (`Icons.search_rounded`) now sits to its left and opens the global search screen — see the
-  Prompt-50 note below.
+  action is exposed).
 - Search below the title is **always-visible inline** scope-local search (no toggle). The inline
-  field itself never navigates; global cross-scope search is reached via the new app-bar search icon.
+  field itself never navigates. It is the only visible search entry on Library Overview.
 - The static `All` filter chip is **removed** from the loaded header.
 - Loaded state renders a `{n} FOLDERS` overline section header (count only; **no sort control** —
   the mock sort pill remains Future).
@@ -96,8 +84,8 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 
 - Route `/library` opens `LibraryOverviewView` (also `initialLocation`). Folder row →
   `pushFolderDetail` → `/library/folder/:id`. The always-visible inline search field filters
-  scope-locally and does not navigate; the app-bar `search` icon pushes the global search screen at
-  `/library/search` (Current — `docs/wireframes/11-library-search.md`).
+  scope-locally and does not navigate; Library Overview no longer exposes a search affordance in the
+  app bar.
 - Renders **top-level folders only**. Recursive subtree counts per folder (subfolders · decks ·
   cards · due) are Current from Prompt 14 and isolated between sibling roots.
 - States:
@@ -153,9 +141,9 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 - No sort **UI control** on Library Overview (no overflow sort menu / sort chip). Sort exists only
   in the data/use-case layer.
 - Drag-to-reorder of root items, pull-to-refresh, and grid/multi-column responsive layout.
-- Global Search screen / `/library/search` route is now **Current** (promoted 2026-06-06) for
-  folders/decks/flashcards, opened from the app-bar search icon. Only the in-search **Tags** section,
-  recent searches, and popular tags remain Future.
+- Global Search screen / `/library/search` route is a separate search surface for
+  folders/decks/flashcards. Only the in-search **Tags** section, recent searches, and popular tags
+  remain Future.
 
 **Prompt 42/42B superseded (2026-06-03, Prompt 43A):** Product ownership rejected
 root-level decks and nullable deck parent migration. Keep `decks.folder_id`
@@ -173,9 +161,9 @@ point for study.
 
 ```
 ┌───────────────────────────────────────┐
-│ Library                  🔍   ⋮       │  ← App bar; search → /library/search
+│ Library                     ⋮         │  ← App bar; sliders/filter only
 ├───────────────────────────────────────┤
-│                                       │     ⋮ overflow → menu (sort, new)
+│                                       │     sliders/filter target (disabled)
 │ ┌─[ All ]─[ Folders ]─[ Decks ]─────┐ │  ← Optional filter chips (top-level)
 │ └───────────────────────────────────┘ │
 │                                       │
@@ -255,7 +243,7 @@ point for study.
 
 | Component       | Spec                                                                            |
 |-----------------|---------------------------------------------------------------------------------|
-| App bar         | Title "Library". Right side: search icon, overflow menu (⋮).                    |
+| App bar         | Title "Library". Right side: sliders/filter icon (disabled).                    |
 | Filter chips    | Optional. Three chips: All / Folders / Decks. Default: All.                     |
 | Item row        | Icon (folder 📁 or deck 📚) + name + subtitle (count) + chevron.                |
 | Folder subtitle | "{n} decks" or "{n} subfolders" depending on `content_mode`.                    |
@@ -301,7 +289,6 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 | Tap folder row                | Tap                      | Navigate to `/library/folder/:id`.                                                                                                                                                        |
 | Tap deck row                  | Tap                      | Navigate to `/library/deck/:deckId/flashcards`.                                                                                                                                           |
 | Long-press folder/deck        | Long-press               | Enter selection mode (multi-select) OR open context bottom-sheet (Rename / Move / Delete). Decide via UI/UX contract; recommend context sheet here since multi-select on folders is rare. |
-| Tap search icon               | Tap                      | Navigate to `/library/search`.                                                                                                                                                            |
 | Tap overflow ⋮                | Tap                      | Menu: Sort by ▸ / New folder / New deck / Import.                                                                                                                                         |
 | Tap FAB                       | Tap                      | Action sheet (`docs/wireframes/25-shared-bottom-sheets.md` §library-fab).                                                                                                                 |
 | Pull to refresh               | Pull                     | Re-run queries.                                                                                                                                                                           |
@@ -328,7 +315,7 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 
 - Folder row → `/library/folder/:id`.
 - Deck row → `/library/deck/:deckId/flashcards`.
-- Search icon → `/library/search`.
+- No Library Overview app-bar search entry; use the inline field below the title.
 - Tabs → other top-level destinations.
 
 ## Responsive
@@ -371,7 +358,7 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 
 - `docs/business/folder/folder-management.md`
 - `docs/business/deck/deck-management.md`
-- `docs/business/search/global-search.md` (search icon entry)
+- `docs/business/search/global-search.md` (global search route contract)
 
 **Decision rows:**
 

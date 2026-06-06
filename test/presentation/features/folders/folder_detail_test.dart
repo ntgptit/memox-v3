@@ -34,6 +34,7 @@ DeckWithCount _deck(
   String name, {
   int cardCount = 40,
   int dueCount = 0,
+  DateTime? lastStudiedAt,
 }) => DeckWithCount(
   deck: Deck(
     id: name,
@@ -46,6 +47,7 @@ DeckWithCount _deck(
   ),
   cardCount: cardCount,
   dueCount: dueCount,
+  lastStudiedAt: lastStudiedAt,
 );
 
 FolderWithCount _subfolder(
@@ -101,6 +103,16 @@ Widget _wrapScreen(Stream<FolderDetail> stream) => ProviderScope(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: const FolderDetailScreen(folderId: 'f1'),
+  ),
+);
+
+Widget _wrapDeckTile(FolderDeckTile tile) => MaterialApp(
+  locale: const Locale('en'),
+  theme: AppTheme.light(),
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Scaffold(
+    body: Center(child: tile),
   ),
 );
 
@@ -284,12 +296,69 @@ void main() {
       await tester.tap(find.text('Delete folder'));
       await tester.pumpAndSettle();
 
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(Scaffold)),
+      );
+
+      expect(find.text(l10n.folderDeleteDialogTitle), findsOneWidget);
       expect(
         find.text(
-          'This will delete the full subtree, including decks and flashcards.',
+          'TOPIK II and its 1 deck will be removed from your library.',
         ),
         findsOneWidget,
       );
+      expect(find.text(l10n.folderDeleteDialogReassurance), findsOneWidget);
     });
+  });
+
+  group('FolderDeckTile — loaded display (9/10)', () {
+    testWidgets(
+      'DT1 onDisplay: renders the due badge, last studied metadata, progress '
+      'bar, and chevron when study metadata exists',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapDeckTile(
+            FolderDeckTile(
+              item: _deck(
+                'Vocab — chapter 1',
+                cardCount: 62,
+                dueCount: 8,
+                lastStudiedAt: DateTime.utc(2026, 6, 6, 10),
+              ),
+              onTap: () {},
+              referenceNow: DateTime.utc(2026, 6, 6, 12),
+            ),
+          ),
+        );
+
+        expect(find.text('Vocab — chapter 1'), findsOneWidget);
+        expect(find.text('62 cards · last 2 hours ago'), findsOneWidget);
+        expect(find.text('8 due'), findsOneWidget);
+        expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+        expect(find.byType(LinearProgressIndicator), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'DT2 onDisplay: collapses to cards-only metadata when last studied '
+      'metadata is missing',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapDeckTile(
+            FolderDeckTile(
+              item: _deck('Verb conjugation', cardCount: 40, dueCount: 0),
+              onTap: () {},
+              referenceNow: DateTime.utc(2026, 6, 6, 12),
+            ),
+          ),
+        );
+
+        expect(find.text('40 cards'), findsOneWidget);
+        expect(find.textContaining('ago'), findsNothing);
+        expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+        expect(find.byType(LinearProgressIndicator), findsOneWidget);
+        expect(find.textContaining('due'), findsNothing);
+      },
+    );
   });
 }
