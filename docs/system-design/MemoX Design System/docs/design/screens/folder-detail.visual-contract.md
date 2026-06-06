@@ -91,7 +91,7 @@ Top → bottom. Root is `MxScaffold` with an `MxAppBar` and a mode-dependent
 | Breadcrumb | Below app bar | Fixed | Low | bottom gap `SpacingTokens.sm`; `onSurfaceVariant` text | `MxBreadcrumb` (`MxBreadcrumbSegment[]`) | First segment = `Library` → `context.goLibrary()`; then each ancestor → `context.pushFolderDetail(id)`. Hidden until folder loads. |
 | Search field | Below breadcrumb | Fixed | Low | bottom gap `SpacingTokens.sm`; input via `SizeTokens.input` | `MxSearchField` | Hint `l10n.folderDetailSearchHint` (folder-scoped). Drives `folderDetailToolbar.setSearch`. |
 | Content (async) | Fills remainder | Scrollable | High | screen horizontal padding via owning shell; row gap `SpacingTokens.sm` | `MxRetainedAsyncState<FolderDetail>` → `FolderDetailBody` | Switches loading (skeleton) / error / data. Data branch renders rows or empty/search-empty per `FolderDetailBody`. |
-| Children list | Inside content | Scrollable | High | child-row padding `12px 14px`; row gap `sm`; radius `RadiusTokens.brLg` | `FolderSubfolderTile` (subfolders), `FolderDeckTile` (decks) | One mode only, from `folder.contentMode`. |
+| Children list | Inside content | Scrollable | High | card padding `cardPadding`/`lg`; row gap `sm`; radius `RadiusTokens.brLg` | `LibraryFolderTile` (subfolders), `FolderDeckTile` (decks) | One mode only, from `folder.contentMode`. |
 | Unlocked empty | Inside content (unlocked) | Fixed/centered | Medium | section gap `xl`/`sectionGap`; icon `SizeTokens.iconXl` | `FolderUnlockedEmpty` | Mode-choice: "New subfolder" / "New deck" + mode-lock explanation. |
 | FAB | Bottom-right, over content | Fixed | Medium (accent) | `SizeTokens.fab`; radius `RadiusTokens.brXl` (xxl 28) | `MxFab.extended` | subfolders → `create_new_folder_outlined` + `folderNewSubfolderLabel`; decks → `add` + `folderNewDeckLabel`; unlocked → **no FAB** (choice lives in body). |
 
@@ -364,6 +364,7 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 | Overflow ⋮ rendered disabled (`onPressed: null`) | Mock-only element | App-bar overflow | No folder-level action sheet wired on Folder Detail | Keep disabled until a folder action sheet (Rename/Move/Delete/Sort) is promoted |
 | `ContentSortMode` exists in toolbar state but no sort UI is rendered; wireframe says `MxSearchSortToolbar` is Current | State conflict | Sort control | Code uses plain `MxSearchField`, not the sort toolbar | Treat sort UI as Future; if promoted, use the shared `MxSearchSortToolbar`, do not fork |
 | Deck row tap targets `/library/deck/:deckId/flashcards`, but Flashcard list is not implemented | Future scope | Deck row navigation | Flashcard feature absent on this ref | Acceptable as nav intent; flashcard list must land (P2) for the tap to resolve |
+| Per-deck due badge depends on whether `FolderDeckItem` exposes a due count | Missing source | Deck due badge | Model field unconfirmed in this read | Verify `domain/models/folder_detail.dart`; if absent, mark badge Future |
 | Long-press item-context sheet wiring on Folder Detail (vs Library Overview) unconfirmed | Unknown source | Row long-press | Not visible in `folder_detail_screen.dart` (handled in body/tiles) | Verify in `folder_deck_tile.dart` / `library_folder_tile.dart`; document actual behavior |
 
 ## Related

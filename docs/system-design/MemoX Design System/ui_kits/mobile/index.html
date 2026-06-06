@@ -3256,13 +3256,30 @@ function TagManagementScreen({ go, state = 'loaded' }) {
      loading  - skeleton folder rows
      empty    - first-time user, no folders yet
      error    - load failed, retry CTA
-     search   - search bar focused, empty query
-     overflow - folder long-press / kebab opens action sheet
+     search       - search bar focused, empty query
+     overflow     - folder long-press / kebab opens action sheet
+     createFolder - "New folder" FAB → name + color + icon dialog
+     renameFolder - sheet "Rename folder" → rename dialog
+     moveFolder   - sheet "Move folder" → destination picker sheet
+     archiveFolder- sheet "Archive folder" → archive confirm dialog
+     deleteFolder - sheet "Delete folder" → destructive confirm dialog
 */
 function LibraryOverviewScreen({ go, state = 'loaded' }) {
 
   const showSheet = state === 'overflow';
   const searchActive = state === 'search';
+
+  // Follow-up overlays reached from the overflow sheet / FAB. They all keep
+  // the populated folder list rendered behind a scrim.
+  const overlay = ['createFolder', 'renameFolder', 'moveFolder', 'archiveFolder', 'deleteFolder'].includes(state);
+  const bgLoaded = state === 'loaded' || overlay; // background chrome matches 'loaded'
+
+  // The folder these follow-up actions operate on (matches the overflow sheet).
+  const target = { name: 'Korean', decks: 8, cards: 412, due: 23, seed: '#5265F5', ic: 'flag' };
+
+  // Brand seed palette offered in the create / rename color picker.
+  const seedSwatches = ['#5265F5', '#A78BFA', '#4DB6AC', '#E57373', '#FFB74D', '#81C784'];
+  const iconChoices = ['flag', 'book-open', 'sparkles', 'layers', 'copy'];
 
   // Root folders — each has its own seed color so the eye can find them.
   // Mastery + due/new counts are summaries, not per-deck data.
@@ -3445,7 +3462,7 @@ function LibraryOverviewScreen({ go, state = 'loaded' }) {
       </div>
 
       {/* Today summary strip — only if there's anything due across all folders */}
-      {state === 'loaded' &&
+      {bgLoaded &&
       <div style={{ padding: '0 14px 12px' }}>
           <div style={{
           display: 'flex', alignItems: 'center', gap: 12,
@@ -3478,7 +3495,7 @@ function LibraryOverviewScreen({ go, state = 'loaded' }) {
       }
 
       {/* Folders header — count + sort */}
-      {(state === 'loaded' || state === 'loading' || state === 'overflow') &&
+      {(bgLoaded || state === 'loading' || state === 'overflow') &&
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 18px 8px'
@@ -3599,7 +3616,7 @@ function LibraryOverviewScreen({ go, state = 'loaded' }) {
       </div>
 
       {/* FAB — Create folder. Hidden in empty state because the empty card has its own CTA. */}
-      {state !== 'empty' && state !== 'error' && !showSheet &&
+      {state !== 'empty' && state !== 'error' && !showSheet && !overlay &&
       <button style={{
         position: 'absolute', bottom: 84, right: 16,
         height: 52, padding: '0 18px 0 16px',
@@ -3711,11 +3728,419 @@ function LibraryOverviewScreen({ go, state = 'loaded' }) {
         </>
       }
 
+      {/* ───── Create folder dialog ─────────────────────────────────
+          Reached from the "New folder" FAB. Name field + brand color +
+          icon, so a folder is identifiable the moment it's made. */}
+      {state === 'createFolder' &&
+      <>
+          <Scrim />
+          <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '24px 18px', zIndex: 51, pointerEvents: 'none'
+        }}>
+            <div style={{
+            width: '100%', maxWidth: 340,
+            background: 'var(--memox-surface-container-high)',
+            color: 'var(--memox-on-surface)',
+            borderRadius: 18,
+            boxShadow: '0 16px 40px rgba(0,0,0,0.32)',
+            pointerEvents: 'auto', overflow: 'hidden',
+            animation: 'memoxDialogIn 200ms cubic-bezier(0.2,0,0,1)'
+          }}>
+              {/* Live preview tile reflects the chosen color + icon */}
+              <div style={{ padding: '18px 18px 6px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                width: 44, height: 44, borderRadius: 12,
+                background: 'rgba(82,101,245,0.12)',
+                color: 'var(--memox-primary)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+              }}>
+                  <Ic name="flag" size={20} color="var(--memox-primary)" />
+                </div>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.2px' }}>New folder</div>
+                  <div style={{ fontSize: 12, color: 'var(--memox-on-surface-variant)', marginTop: 1 }}>
+                    Group related decks together.
+                  </div>
+                </div>
+              </div>
+
+              {/* Name input */}
+              <div style={{ padding: '12px 18px 4px' }}>
+                <div className="ov" style={{ marginBottom: 6 }}>Folder name</div>
+                <div style={{
+                height: 44, padding: '0 12px',
+                background: 'var(--memox-surface-container-lowest)',
+                border: '1px solid var(--memox-primary)',
+                borderRadius: 11,
+                display: 'flex', alignItems: 'center', gap: 8,
+                fontSize: 14, fontWeight: 600, color: 'var(--memox-on-surface)'
+              }}>
+                  <span>Vietnamese</span>
+                  <span style={{
+                  display: 'inline-block', width: 2, height: 18,
+                  background: 'var(--memox-primary)', animation: 'memoxBlink 1s infinite'
+                }} />
+                </div>
+              </div>
+
+              {/* Color picker */}
+              <div style={{ padding: '12px 18px 4px' }}>
+                <div className="ov" style={{ marginBottom: 8 }}>Color</div>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  {seedSwatches.map((c, i) =>
+                <span key={c} style={{
+                  width: 28, height: 28, borderRadius: 999, background: c,
+                  cursor: 'pointer', flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: i === 0 ? `0 0 0 2px var(--memox-surface-container-high), 0 0 0 4px ${c}` : 'none'
+                }}>
+                      {i === 0 && <Ic name="check" size={14} color="#fff" />}
+                    </span>
+                )}
+                </div>
+              </div>
+
+              {/* Icon picker */}
+              <div style={{ padding: '12px 18px 6px' }}>
+                <div className="ov" style={{ marginBottom: 8 }}>Icon</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {iconChoices.map((ic, i) =>
+                <span key={ic} style={{
+                  width: 38, height: 38, borderRadius: 11, flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer',
+                  background: i === 0 ? 'rgba(82,101,245,0.12)' : 'var(--memox-surface-container-lowest)',
+                  border: i === 0 ? '1px solid var(--memox-primary)' : 'var(--memox-border-ghost)'
+                }}>
+                      <Ic name={ic} size={17} color={i === 0 ? 'var(--memox-primary)' : 'var(--memox-on-surface-variant)'} />
+                    </span>
+                )}
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 14px 14px', display: 'flex', gap: 8 }}>
+                <button className="pill-btn outline" style={{ flex: 1, height: 40, borderRadius: 11, fontSize: 13 }}>
+                  Cancel
+                </button>
+                <button className="pill-btn primary" style={{ flex: 1.3, height: 40, borderRadius: 11, fontSize: 13 }}>
+                  <Ic name="folder-plus" size={14} color="#fff" />
+                  Create folder
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      }
+
+      {/* ───── Rename folder dialog ──────────────────────────────────
+          Reached from the sheet's "Rename folder" row. Pre-filled with the
+          current name; the field shows it selected, ready to overwrite. */}
+      {state === 'renameFolder' &&
+      <>
+          <Scrim />
+          <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '24px 18px', zIndex: 51, pointerEvents: 'none'
+        }}>
+            <div style={{
+            width: '100%', maxWidth: 340,
+            background: 'var(--memox-surface-container-high)',
+            color: 'var(--memox-on-surface)',
+            borderRadius: 18,
+            boxShadow: '0 16px 40px rgba(0,0,0,0.32)',
+            pointerEvents: 'auto', overflow: 'hidden',
+            animation: 'memoxDialogIn 200ms cubic-bezier(0.2,0,0,1)'
+          }}>
+              <div style={{ padding: '18px 18px 6px' }}>
+                <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.2px', marginBottom: 4 }}>
+                  Rename folder
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--memox-on-surface-variant)', lineHeight: 1.5 }}>
+                  Only the folder name changes \u2014 every deck and card inside stays put.
+                </div>
+              </div>
+
+              <div style={{ padding: '12px 18px 4px' }}>
+                <div className="ov" style={{ marginBottom: 6 }}>New name</div>
+                <div style={{
+                height: 44, padding: '0 12px',
+                background: 'var(--memox-surface-container-lowest)',
+                border: '1px solid var(--memox-primary)',
+                borderRadius: 11,
+                display: 'flex', alignItems: 'center', gap: 0,
+                fontSize: 14, fontWeight: 600, color: 'var(--memox-on-surface)'
+              }}>
+                  {/* selected text highlight */}
+                  <span style={{
+                  background: 'rgba(82,101,245,0.22)', borderRadius: 3, padding: '1px 1px'
+                }}>Korean</span>
+                  <span style={{
+                  display: 'inline-block', width: 2, height: 18, marginLeft: 1,
+                  background: 'var(--memox-primary)', animation: 'memoxBlink 1s infinite'
+                }} />
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--memox-on-surface-variant)', marginTop: 6, padding: '0 2px' }}>
+                  8 decks \u00b7 412 cards will keep this folder as their home.
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 14px 14px', display: 'flex', gap: 8 }}>
+                <button className="pill-btn outline" style={{ flex: 1, height: 40, borderRadius: 11, fontSize: 13 }}>
+                  Cancel
+                </button>
+                <button className="pill-btn primary" style={{ flex: 1.3, height: 40, borderRadius: 11, fontSize: 13 }}>
+                  Rename
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      }
+
+      {/* ───── Move folder sheet \u2014 destination picker ─────────────── */}
+      {state === 'moveFolder' &&
+      <>
+          <Scrim />
+          <div style={{
+          position: 'absolute', left: 0, right: 0, bottom: 0,
+          background: 'var(--memox-surface-container-high)',
+          color: 'var(--memox-on-surface)',
+          borderTopLeftRadius: 20, borderTopRightRadius: 20,
+          zIndex: 51,
+          animation: 'memoxSheetIn 260ms cubic-bezier(0.2,0,0,1)',
+          boxShadow: '0 -10px 30px rgba(0,0,0,0.32)',
+          maxHeight: '85%', overflow: 'hidden',
+          display: 'flex', flexDirection: 'column'
+        }}>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 4px' }}>
+              <span style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--memox-outline-variant)' }} />
+            </div>
+            <div style={{ padding: '4px 18px 12px' }}>
+              <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.2px', marginBottom: 4 }}>
+                Move "Korean" to…
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--memox-on-surface-variant)', lineHeight: 1.5 }}>
+                Nest it under another folder, or keep it at the top of your library.
+              </div>
+            </div>
+
+            <div className="hide-scroll" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '0 8px 10px' }}>
+              {[
+            { name: 'Library (root)', ic: 'home', count: '4 folders', current: true },
+            { name: 'Japanese', ic: 'flag', count: '5 decks \u00b7 248 cards' },
+            { name: 'Mandarin', ic: 'flag', count: '3 decks \u00b7 180 cards' },
+            { name: 'Hanja & roots', ic: 'book-open', count: '2 decks \u00b7 64 cards' },
+            { name: 'Archive', ic: 'archive', count: 'Hidden from Library' }].
+            map((t) =>
+            <button key={t.name} disabled={t.current} style={{
+              width: '100%', display: 'grid',
+              gridTemplateColumns: '30px 1fr auto', gap: 12,
+              alignItems: 'center', padding: '12px 10px',
+              background: 'transparent', border: 'none',
+              color: 'var(--memox-on-surface)',
+              borderRadius: 10, fontFamily: 'inherit', cursor: t.current ? 'default' : 'pointer',
+              textAlign: 'left', opacity: t.current ? 0.45 : 1
+            }}>
+                  <div style={{
+                width: 28, height: 28, borderRadius: 8,
+                background: 'rgba(82,101,245,0.08)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                    <Ic name={t.ic} size={13} color="var(--memox-primary)" />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600, letterSpacing: '-0.1px' }}>{t.name}</div>
+                    <div style={{ fontSize: 11, color: 'var(--memox-on-surface-variant)', marginTop: 1 }}>{t.count}</div>
+                  </div>
+                  {t.current ?
+              <span style={{
+                fontSize: 10, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
+                color: 'var(--memox-on-surface-variant)'
+              }}>Current</span> :
+              <Ic name="chevron-right" size={14} color="var(--memox-on-surface-variant)" />
+              }
+                </button>
+            )}
+            </div>
+
+            <div style={{ padding: '10px 14px 16px', display: 'flex', gap: 8, borderTop: 'var(--memox-border-ghost)' }}>
+              <button className="pill-btn outline" style={{ flex: 1, height: 40, borderRadius: 11, fontSize: 13 }}>
+                Cancel
+              </button>
+              <button className="pill-btn primary" style={{ flex: 1.3, height: 40, borderRadius: 11, fontSize: 13 }}>
+                <Ic name="folder-tree" size={14} color="#fff" />
+                Move here
+              </button>
+            </div>
+          </div>
+        </>
+      }
+
+      {/* ───── Archive folder confirm ────────────────────────────────
+          Non-destructive: hides from Library but keeps everything. */}
+      {state === 'archiveFolder' &&
+      <>
+          <Scrim />
+          <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '24px 18px', zIndex: 51, pointerEvents: 'none'
+        }}>
+            <div style={{
+            width: '100%', maxWidth: 340,
+            background: 'var(--memox-surface-container-high)',
+            color: 'var(--memox-on-surface)',
+            borderRadius: 18,
+            boxShadow: '0 16px 40px rgba(0,0,0,0.32)',
+            pointerEvents: 'auto', overflow: 'hidden',
+            animation: 'memoxDialogIn 200ms cubic-bezier(0.2,0,0,1)'
+          }}>
+              <div style={{ padding: '18px 18px 4px', textAlign: 'center' }}>
+                <div style={{
+                width: 48, height: 48, borderRadius: 14,
+                background: 'rgba(217,137,30,0.12)',
+                color: 'var(--memox-streak)',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 12
+              }}>
+                  <Ic name="archive" size={22} color="var(--memox-streak)" />
+                </div>
+                <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-0.2px', marginBottom: 6 }}>
+                  Archive this folder?
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--memox-on-surface-variant)', lineHeight: 1.55, padding: '0 6px' }}>
+                  <strong style={{ color: 'var(--memox-on-surface)', fontWeight: 700 }}>Korean</strong> leaves your Library list but keeps all 8 decks and 412 cards.
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 18px 4px' }}>
+                <div style={{
+                padding: '10px 12px',
+                background: 'var(--memox-surface-container-lowest)',
+                borderRadius: 11,
+                display: 'flex', gap: 8, alignItems: 'center'
+              }}>
+                  <Ic name="rotate-ccw" size={15} color="var(--memox-on-surface-variant)" />
+                  <div style={{ flex: 1, fontSize: 12, color: 'var(--memox-on-surface)', lineHeight: 1.5 }}>
+                    Find it any time under <strong style={{ fontWeight: 700 }}>Archive</strong> and restore in one tap.
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 14px 14px', display: 'flex', gap: 8 }}>
+                <button className="pill-btn outline" style={{ flex: 1, height: 40, borderRadius: 11, fontSize: 13 }}>
+                  Cancel
+                </button>
+                <button className="pill-btn" style={{
+                flex: 1.3, height: 40, borderRadius: 11, fontSize: 13,
+                background: 'var(--memox-streak)', color: '#fff', border: 'none', fontWeight: 600,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6
+              }}>
+                  <Ic name="archive" size={14} color="#fff" />
+                  Archive
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      }
+
+      {/* ───── Delete folder confirm \u2014 destructive ──────────────── */}
+      {state === 'deleteFolder' &&
+      <>
+          <Scrim />
+          <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '24px 18px', zIndex: 51, pointerEvents: 'none'
+        }}>
+            <div style={{
+            width: '100%', maxWidth: 340,
+            background: 'var(--memox-surface-container-high)',
+            color: 'var(--memox-on-surface)',
+            borderRadius: 18,
+            boxShadow: '0 16px 40px rgba(0,0,0,0.32)',
+            pointerEvents: 'auto', overflow: 'hidden',
+            animation: 'memoxDialogIn 200ms cubic-bezier(0.2,0,0,1)'
+          }}>
+              <div style={{ padding: '18px 18px 4px', textAlign: 'center' }}>
+                <div style={{
+                width: 48, height: 48, borderRadius: 14,
+                background: 'rgba(220,72,72,0.12)',
+                color: 'var(--memox-error)',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 12
+              }}>
+                  <Ic name="folder-x" size={22} color="var(--memox-error)" />
+                </div>
+                <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-0.2px', marginBottom: 6 }}>
+                  Delete this folder?
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--memox-on-surface-variant)', lineHeight: 1.55, padding: '0 6px' }}>
+                  <strong style={{ color: 'var(--memox-on-surface)', fontWeight: 700 }}>Korean</strong> and its 8 decks will be removed from your library.
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 18px 4px' }}>
+                <div style={{
+                padding: '10px 12px',
+                background: 'rgba(31,138,91,0.08)',
+                border: '1px solid rgba(31,138,91,0.20)',
+                borderRadius: 11,
+                display: 'flex', gap: 8, alignItems: 'center'
+              }}>
+                  <Ic name="shield-check" size={15} color="var(--memox-mastery)" />
+                  <div style={{ flex: 1, fontSize: 12, color: 'var(--memox-on-surface)', lineHeight: 1.5 }}>
+                    Cards in those decks <strong style={{ fontWeight: 700 }}>move to "Unsorted"</strong> \u2014 nothing is permanently lost.
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 18px 4px' }}>
+                <div className="ov" style={{ marginBottom: 6 }}>Type to confirm</div>
+                <div style={{
+                height: 42, padding: '0 12px',
+                background: 'var(--memox-surface-container-lowest)',
+                border: '1px solid var(--memox-error)',
+                borderRadius: 11,
+                display: 'flex', alignItems: 'center', gap: 8,
+                fontSize: 14, fontWeight: 600, color: 'var(--memox-on-surface)'
+              }}>
+                  <span>Korean</span>
+                  <span style={{
+                  display: 'inline-block', width: 2, height: 18,
+                  background: 'var(--memox-error)', animation: 'memoxBlink 1s infinite'
+                }} />
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 14px 14px', display: 'flex', gap: 8 }}>
+                <button className="pill-btn outline" style={{ flex: 1, height: 40, borderRadius: 11, fontSize: 13 }}>
+                  Cancel
+                </button>
+                <button className="pill-btn" style={{
+                flex: 1.2, height: 40, borderRadius: 11, fontSize: 13,
+                background: 'var(--memox-error-fill)', color: '#fff', border: 'none', fontWeight: 600,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6
+              }}>
+                  <Ic name="trash-2" size={14} color="#fff" />
+                  Delete folder
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      }
+
       <BottomNav active="library" onChange={go} />
 
       <style>{`
         @keyframes memoxScrimIn  { from { opacity: 0; } to { opacity: 1; } }
         @keyframes memoxSheetIn  { from { transform: translateY(20%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes memoxDialogIn { from { transform: scale(0.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes memoxBlink    { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
       `}</style>
     </div>);
@@ -9984,7 +10409,7 @@ const S = (v, l) => [v, l];
 const GROUPS = [
   { section: '1 · First run', num: '01', title: 'Onboarding', Comp: OnboardingScreen, prop: 'state', states: [S('welcome','Welcome'),S('zero','Zero state'),S('createDeck','Create deck'),S('createForImp','Deck for import'),S('signingIn','Signing in'),S('restorePrompt','Restore prompt'),S('restoring','Restoring'),S('restoreFailed','Restore failed'),S('importHandoff','Import handoff')] },
   { section: '2 · Home', num: '02', title: 'Dashboard', Comp: DashboardScreen, prop: 'state', states: [S('loaded','Loaded'),S('loading','Loading'),S('onboarding','Onboarding'),S('goalOff','Goal off'),S('resumeOnly','Resume only'),S('streakBroken','Streak broken'),S('error','Error'),S('offline','Offline'),S('multiResume','Multi resume')] },
-  { section: '3 · Library', num: '03', title: 'Library overview', Comp: LibraryOverviewScreen, prop: 'state', states: [S('loaded','Loaded'),S('loading','Loading'),S('empty','Empty'),S('error','Error'),S('search','Search'),S('overflow','Overflow sheet')] },
+  { section: '3 · Library', num: '03', title: 'Library overview', Comp: LibraryOverviewScreen, prop: 'state', states: [S('loaded','Loaded'),S('loading','Loading'),S('empty','Empty'),S('error','Error'),S('search','Search'),S('overflow','Overflow sheet'),S('createFolder','Create folder'),S('renameFolder','Rename folder'),S('moveFolder','Move folder'),S('archiveFolder','Archive folder'),S('deleteFolder','Delete folder')] },
   { num: '04', title: 'Folder detail', Comp: FolderDetailScreen, prop: 'state', states: [S('decks','Decks'),S('subfolders','Subfolders'),S('unlocked','Unlocked'),S('searchEmpty','Search empty'),S('loading','Loading'),S('error','Error'),S('delConfirm','Delete'),S('moveSheet','Move sheet')] },
   { num: '05', title: 'Library search', Comp: LibrarySearchScreen, prop: 'state', states: [S('emptyQuery','Empty'),S('loading','Loading'),S('results','Results'),S('noResults','No results'),S('error','Error')] },
   { section: '4 · Deck & cards', num: '06', title: 'Flashcard list', Comp: FlashcardListScreen, prop: 'state', states: [S('loaded','Loaded'),S('empty','Empty'),S('searchEmpty','Search empty'),S('loading','Loading'),S('error','Error'),S('delCard','Delete card'),S('delDeck','Delete deck'),S('reorder','Reorder')] },
