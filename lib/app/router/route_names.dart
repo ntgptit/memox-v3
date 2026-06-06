@@ -18,6 +18,7 @@ abstract final class RouteNames {
   static const String settingsAudioSpeech = 'settings-audio-speech';
 
   // ── Library tree ─────────────────────────────────────────────
+  static const String librarySearch = 'library-search';
   static const String folderDetail = 'folder-detail';
   static const String flashcardList = 'flashcard-list';
   static const String flashcardCreate = 'flashcard-create';

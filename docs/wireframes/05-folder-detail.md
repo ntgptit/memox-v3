@@ -10,107 +10,73 @@ source_specs:
 
 # 05 — Folder Detail
 
-## V1 verification status (2026-06-04, Prompts 45, 47, 47B, 50)
+## V1 verification status (2026-06-06)
 
-This screen is partially Current.
+This screen is partially Current. The folder **browser** (subfolders / decks /
+unlocked modes, breadcrumb, inline search, true-empty vs search-no-results,
+mode-constrained create FAB, folder-scope summary, and the overflow
+rename/move/delete actions) is Current. The **study layer** (mastery, due-based
+study CTAs, resume banner, "{n} new", deck "last studied") is **not built** and
+is Future here.
 
-### Prompt 50 — decks-state visual/layout parity
+> Drift correction (2026-06-06): earlier revisions of this file described a
+> `FolderHeroCard` (`folder_hero_card.dart`), `FolderSectionTitle`
+> (`folder_section_title.dart`), `FolderStudyEntrySection`
+> (`folder_study_entry_section.dart`), a Resume banner, a data-backed mastery
+> ring, and Study/Today CTAs as Current ("Prompts 45/47/50"). **None of those
+> widget files exist in this codebase** and the study layer is not built. Those
+> claims were doc drift and are corrected here to match the actual code.
 
-- **Decks-mode hero card is Current** (`FolderHeroCard`,
-  `lib/presentation/features/folders/widgets/folder_hero_card.dart`). It folds
-  the previous deck-mode stat strip and the Study/Today card into one soft
-  gradient hero card (`MxCard.heroGradient`: a subtle primary→secondary wash,
-  quiet primary-tinted border, light shadow — not a saturated accent fill)
-  matching the mock decks state: a hero mastery ring
-  (`MxProgressRing(size: hero)`), a `Folder mastery` overline, a
-  `{deckCount} decks · {cardCount} cards` line, a `{dueCount} due` /
-  `All caught up` sub-line, and the folder-scoped Start study CTA.
-    - **Mastery ring is Current**: it is data-backed — the percent is the average
-      of the folder's deck mastery (`FolderDeckItem.masteryPercent`); no
-      placeholder value.
-    - **`{n} new` stays Future**: there is no read model for a folder "new" count,
-      so it is never rendered (no hardcoded value).
-    - **Start study CTA preserves the Study Entry Gate contract**: with due > 0 it
-      routes `entry_type=folder` + `study_type=srs_review` (key
-      `folder_study_today_action`) and offers a secondary `Study folder`
-      (`folder_study_folder_action`, no `study_type`); with due == 0 and cards > 0
-      it routes `entry_type=folder` with no `study_type`. The card never starts a
-      session directly.
-    - **Resume banner is unchanged** and still rides above the hero when a paused
-      folder session exists (Resume opens it; Discard cancels via the shared
-      confirmation flow).
-- **Section-header overline is Current** (`FolderSectionTitle`): a compact
-  `{n} DECKS` / `{n} SUBFOLDERS` overline above the search/sort toolbar for a
-  locked folder with children. Search/sort still use the shared
-  `MxSearchSortToolbar<ContentSortMode>` (scope-local, no behavior change).
-- Subfolders / unlocked / search-empty / loading / error / delete / move-sheet
-  states keep their existing Current behavior and shared components; this prompt
-  was visual/layout parity only (no schema, SRS, repository, or use-case change).
-- Still Future/out of scope (unchanged): Global Search, `/library/search`,
-  Flashcard History, tag-scoped study, root-level decks, Onboarding,
-  engagement/streak/daily-goal/reminders, bulk suspend/reset/tag. The decks-mode
-  FAB stays `New deck` (not the mock's `New card`): creating a card needs a
-  specific `deckId` and decks mode has many decks, so auto-picking is unsafe and
-  not an approved flow.
+### Current
 
-Current V1:
-
-- `/library/folder/:id` opens Folder Detail.
-- Invalid/missing `folderId` shows a safe error surface with Retry.
+- `/library/folder/:id` opens Folder Detail. Invalid/missing `folderId` shows a
+  safe error surface (`MxErrorState`) with Retry.
 - Breadcrumb/back navigation is Current.
-- Subfolder-mode renders subfolders only.
-- Deck-mode renders decks only.
-- Unlocked mode renders true empty choice flow.
-- Inline scope-local search is Current.
-- True-empty vs search no-results is Current:
-    - true empty = no unfiltered direct children
-    - no-results = active search hides existing children
-- Sort UI via `MxSearchSortToolbar<ContentSortMode>` is Current.
-- Create subfolder/deck by content mode is Current.
-- Typed lock-mode snackbar is Current from Prompt 14.
-- Row actions currently exposed: folder/deck actions sheet, move/delete/import/duplicate/export
-  according to owner.
-- **Study-entry banners are Current from Prompt 45** (`FolderStudyEntrySection`,
-  `lib/presentation/features/folders/widgets/folder_study_entry_section.dart`),
-  shown above the children list when the recursive folder scope has cards or a
-  resumable session:
-    - **Resume banner** — visible iff a resumable session with `entry_type=folder,
-    entry_ref_id=this.id` exists; Resume opens that session directly
-      (`context.goStudySession`), never creating a new one. Discard is Current
-      from Prompt 47: it shows a danger confirmation (`MxConfirmationDialog`);
-      confirm cancels the existing paused session via the shared Resume-Discard
-      flow (`confirmAndDiscardResumeSession` → `CancelStudySessionUseCase`
-      through `progressSessionActionControllerProvider`, which bumps the
-      study-session revision so the banner refreshes away); Cancel/barrier
-      dismissal does nothing. Discard never creates a session.
-    - **Today CTA** — visible iff recursive `dueCount > 0`; routes to the Study
-      Entry Gate with `entry_type=folder` + `study_type=srs_review` (folder-scoped due
-      review). Hidden at zero.
-    - **Study folder CTA** — visible iff recursive `totalCardCount > 0`; routes to
-      the Study Entry Gate with `entry_type=folder` (new study).
-    - The section never starts a session itself; the Study Entry Gate owns
-      empty-scope validation, resume conflict, and session creation.
-    - Recursive counts + resumable session come from
-      `GetFolderStudyEntryUseCase` (reuses `StudyRepo.countFlashcardsInScope` /
-      `countDueCardsInScope` / `findResumeCandidate`); no schema added.
+- Subfolder-mode renders subfolders only; deck-mode renders decks only; unlocked
+  mode renders the dual-CTA mode-choice empty state (`FolderUnlockedEmpty`).
+- **Folder-scope summary is Current** (`folder_detail_summary.dart`), shown only
+  when the folder has children (hidden for the empty-locked and unlocked states):
+    - decks mode → `FolderDecksSummary`: a card with the
+      `{deckCount} decks · {cardCount} cards` line plus a folder-scope due line
+      (`{n} due` when due > 0, else `All caught up`). Totals are summed from the
+      loaded decks (`DeckWithCount.cardCount` / `dueCount`) — no placeholder.
+    - subfolders mode → `FolderSubfoldersSummary`: a three-stat strip
+      (subfolders · cards · due total) summed from the direct children
+      (`FolderWithCount.cardCount` / `dueCount`).
+- Section-header overline (`{n} subfolders` / `{n} decks`) via `MxSectionHeader`
+  above the children list.
+- Inline scope-local search is Current. True-empty vs search no-results is
+  Current (true empty = no unfiltered direct children; no-results = active search
+  hides existing children).
+- Per-folder sort state exists on the toolbar (`ContentSortMode`).
+- Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
+  Current.
+- **App-bar overflow ⋮ is Current**: opens the folder action sheet
+  (`showLibraryFolderActions`) for the **current** folder with Rename / Move /
+  Delete, reusing the Library folder action flow
+  (`libraryActionControllerProvider` → `{rename,move,delete,getFolderMoveTargets}`
+  use cases). Import is hidden here (it targets a specific deck, not the folder).
+  Move opens `showFolderMovePicker` (mock state `moveSheet`); Delete opens the
+  shared destructive confirm dialog (`showMxConfirmDialog`, mock state
+  `delConfirm`) and, on success, leaves the now-stale detail screen for its parent.
 
-Future / not exposed in V1:
+### Future / not built (MUST NOT be rendered with placeholder values)
 
-- "{n} new" subtitle from the mock decks-mode hero card (no read model).
-- Global Search route.
-- Flashcard History.
-- tag-scoped study.
-
-The mastery ring + decks-mode hero card and the Study/Today CTAs are now Current
-(see "Prompt 50" above). The remaining mock detail ("{n} new") stays Future and
-must not be rendered with a placeholder value by ordinary parity work.
+- Per-folder / per-deck mastery ring & progress bars (no mastery in the read model).
+- "{n} new" / fresh counts (no read model).
+- Deck "last studied" subtext (no read model).
+- Folder-level Start study / Today CTAs and the Resume banner (study layer not built).
+- Global Search route, Flashcard History, tag-scoped study, root-level decks.
+- The decks-mode FAB stays `New deck` (not the mock's `New card`): creating a
+  card needs a specific `deckId` and decks mode has many decks, so auto-picking
+  is unsafe and not an approved flow.
 
 ## Purpose
 
 Browse a folder's children: either subfolders or decks, never both. V1 focuses on folder/deck
-browsing, inline search/sort, create actions, and row actions. Folder-level study CTAs (Study
-folder / Today) and the Resume banner are Current from Prompt 45 and route through the Study Entry
-Gate.
+browsing, a folder-scope summary, inline search, create actions, and current-folder overflow
+actions (rename / move / delete). Folder-level study CTAs (Study folder / Today) and the Resume
+banner are **Future** (the study layer is not built).
 
 ## Layout — folder in `subfolders` mode
 
@@ -215,15 +181,15 @@ Gate.
 | Breadcrumb path                                                 | derived from parent chain                                                                                            | follows folder detail                                     |
 | Child folders (when mode=subfolders)                            | `folders WHERE parent_id = :folderId ORDER BY sort_order`                                                            | stream                                                    |
 | Child decks (when mode=decks)                                   | `decks WHERE folder_id = :folderId ORDER BY sort_order`                                                              | stream                                                    |
-| Recursive card count (for Study folder CTA)                     | **Current (Prompt 45).** `GetFolderStudyEntryUseCase` → `StudyRepo.countFlashcardsInScope` over the folder subtree   | re-resolves on content/session revision + folder re-entry |
-| Recursive due count (for Today CTA)                             | **Current (Prompt 45).** `StudyRepo.countDueCardsInScope` over the folder subtree                                    | re-resolves on content/session revision + folder re-entry |
-| Resumable session for this scope                                | **Current (Prompt 45).** `StudyRepo.findResumeCandidate` matched on `entry_type=folder` and `entry_ref_id=:folderId` | re-resolves on session revision + folder re-entry         |
+| Folder-scope card total (summary line)                          | **Current.** Summed from the loaded `decks[]` / `subfolders[]` (`cardCount`)                                         | follows the children stream                               |
+| Folder-scope due total (summary line)                           | **Current.** Summed from the loaded `decks[]` / `subfolders[]` (`dueCount`)                                          | follows the children stream                               |
+| Recursive count / resumable session for folder-level study CTAs | **Future.** Study layer not built; no `GetFolderStudyEntryUseCase` exists                                            | n/a                                                       |
 
 ## Forbidden
 
 - ❌ Show both "New subfolder" and "New deck" in FAB for a locked folder.
 - ❌ Allow tapping past mode-lock without explicit user choice in unlocked mode.
-- ❌ Display "Today (0)" — hide the Today CTA when 0 due (Current rule, Prompt 45).
+- ❌ Display "Today (0)" — hide the Today CTA when 0 due (Future rule; CTA not built).
 - ❌ Truncate breadcrumb so user loses location. Past 3 levels, use middle ellipsis but keep first
   and last.
 - ❌ Auto-unlock a locked-but-empty folder. Wait for explicit user action.
@@ -236,14 +202,15 @@ Gate.
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | App bar back                    | Returns to parent folder or Library.                                                                                                                                                                                                                                                                                                                                                                             |
 | Breadcrumb                      | Full path from Library to current. Tap any segment to jump.                                                                                                                                                                                                                                                                                                                                                      |
-| Resume banner                   | **Current (Prompt 45; Discard added Prompt 47).** Visible iff resumable session with `entry_type=folder, entry_ref_id=this.id`. Resume (primary) opens that session (`context.goStudySession`); no new session created. Discard (secondary, destructive) cancels the paused session after confirmation (shared `confirmAndDiscardResumeSession`); never creates a session.                                       |
-| Study folder CTA                | **Current (Prompt 45).** Tap → study entry gate `study/folder/:folderId` (new study). Shown iff recursive `totalCardCount > 0`.                                                                                                                                                                                                                                                                                  |
-| Today CTA                       | **Current (Prompt 45).** Tap → study entry gate `study/folder/:folderId?study_type=srs_review` (folder-scoped review of due cards). Shown iff recursive `dueCount > 0` (hidden at zero). Note: this is `entry_type=folder` filtered to due via `study_type=srs_review`, NOT `entry_type=today` (which is global).                                                                                                |
+| Folder-scope summary            | **Current.** `FolderDecksSummary` (decks · cards line + due/`All caught up`) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; no mastery ring / "{n} new" (Future, no read model).                                                                                                                                                                         |
+| Resume banner                   | **Future.** Study layer not built. No resumable-session read for this scope.                                                                                                                                                                                                                                                                                                                                    |
+| Study folder CTA                | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
+| Today CTA                       | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Subfolder row (subfolders mode) | Icon + name + "{n} subfolders" or "{n} decks" subtitle + chevron.                                                                                                                                                                                                                                                                                                                                                |
 | Deck row (decks mode)           | Icon + name + "{n} cards" + optional "{m} due" badge + chevron.                                                                                                                                                                                                                                                                                                                                                  |
 | FAB                             | **Current.** Plus button. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                                                           |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
-| Search + sort toolbar           | **Current.** Renders via shared `MxSearchSortToolbar<ContentSortMode>` (`lib/presentation/shared/widgets/mx_search_sort_toolbar.dart`). Combines inline search field + sort menu chip into a single sticky row above the children list. Same widget instance is also used by other browsing surfaces; do NOT fork it. Sort options come from `ContentSortMode` enum (`lib/domain/enums/content_sort_mode.dart`). |
+| Search + section header         | **Current.** Inline `MxSearchField` above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`); a visible **sort menu chip is Future** (state exists, no UI control wired). There is no `MxSearchSortToolbar` widget. |
 
 ## States
 
@@ -253,7 +220,7 @@ Gate.
 | Populated        | Has children                                                                    | List shown.                                                          |
 | Empty (unlocked) | Zero children                                                                   | Empty state with mode-choice buttons.                                |
 | Empty (locked)   | Locked but empty (shouldn't happen normally; can occur if all children deleted) | Show "This folder is empty" with FAB action only. Don't auto-unlock. |
-| Resume present   | **Current (Prompt 45).** Folder has resumable session                           | Show Resume banner above CTAs.                                       |
+| Resume present   | **Future.** Study layer not built                                               | (Future) show Resume banner above CTAs.                             |
 | Folder not found | `:id` invalid or deleted                                                        | Show error "Folder not found" with back button.                      |
 
 ## Actions
@@ -264,18 +231,16 @@ Gate.
 | Tap breadcrumb segment    | Tap        | Go to that segment's folder; deep stack if needed.                                                                                                                                                                                          |
 | Tap subfolder row         | Tap        | **Current.** `push` to `/library/folder/:childId`.                                                                                                                                                                                          |
 | Tap deck row              | Tap        | **Current.** `push` to `/library/deck/:deckId/flashcards`.                                                                                                                                                                                  |
-| Long-press row            | Long-press | Open item context sheet (Rename / Move / Delete).                                                                                                                                                                                           |
-| Tap "Study folder"        | Tap        | **Current (Prompt 45).** Navigate to `study/folder/:folderId` → study entry gate (new study).                                                                                                                                               |
-| Tap "Today (n)"           | Tap        | **Current (Prompt 45).** Navigate to `study/folder/:folderId?study_type=srs_review` → study entry gate (folder-scoped review).                                                                                                              |
-| Tap resume banner Resume  | Tap        | **Current (Prompt 45).** Navigate to the existing `study/session/{sessionId}`. No new session created.                                                                                                                                      |
-| Tap resume banner Discard | Tap        | **Current (Prompt 47).** Show danger discard confirmation; on confirm cancel the paused session (shared `confirmAndDiscardResumeSession` → `CancelStudySessionUseCase`), refresh banner away. Cancel does nothing. Never creates a session. |
-| Tap FAB                   | Tap        | **Current.** Action depends on `content_mode`: open New folder dialog OR New deck sheet OR a 2-button picker (unlocked).                                                                                                                    |
-| Tap overflow ⋮            | Tap        | Menu: Rename folder / Move folder / Delete folder / Sort by.                                                                                                                                                                                |
+| Long-press child row      | Long-press | **Future.** Child folder/deck row actions are not yet wired here (`onShowActions` is null).                                                                                                                                                  |
+| Tap "Study folder"        | Tap        | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                       |
+| Tap "Today (n)"           | Tap        | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                       |
+| Tap resume banner         | Tap        | **Future.** Study layer not built.                                                                                                                                                                                                          |
+| Tap FAB                   | Tap        | **Current.** Action depends on `content_mode`: New subfolder dialog (subfolders) OR New deck dialog (decks) OR the dual-CTA picker in the unlocked body.                                                                                      |
+| Tap overflow ⋮            | Tap        | **Current.** Opens the folder action sheet for the current folder: Rename / Move / Delete (reuses the Library folder action flow). Import hidden; Sort by is Future.                                                                          |
 
 ## Dialogs and bottom-sheets used
 
-- Resume banner discard dialog — **Current (Prompt 47).** `MxConfirmationDialog` (danger) composed
-  via the shared discard flow: `docs/wireframes/24-shared-dialogs.md` §discard-session.
+- Resume banner discard dialog — **Future.** Study layer not built.
 - New folder dialog — `docs/wireframes/24-shared-dialogs.md` §folder-create.
 - New deck bottom-sheet — `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
 - Folder rename dialog — `docs/wireframes/24-shared-dialogs.md` §rename.
@@ -325,7 +290,7 @@ Gate.
 - Deleting the last child can unlock back to `unlocked` (per
   `docs/business/folder/folder-management.md` state diagram).
 - Empty folder in `unlocked` mode MUST show mode-choice empty state (not generic empty).
-- Resume banner MUST appear above all other CTAs when present (Current, Prompt 45).
+- Resume banner MUST appear above all other CTAs when present (Future; banner not built).
 
 ## Agent rule
 
@@ -333,7 +298,7 @@ Gate.
 - Do NOT navigate user past mode-lock without explicit choice in unlocked mode.
 - Breadcrumb MUST not become so long it overlaps title; truncate middle segments with ellipsis
   past ~3 levels.
-- "Today (n)" CTA hidden when n = 0 (don't show "Today (0)") (Current, Prompt 45).
+- "Today (n)" CTA hidden when n = 0 (don't show "Today (0)") (Future; CTA not built).
 - Folder Detail MUST NOT bypass the Study Entry Gate; Today/Study folder route to the gate and
   Resume opens the existing session.
 
@@ -362,13 +327,13 @@ Gate.
 
 **Code paths:**
 
-- `lib/presentation/features/folders/screens/folder_detail_screen.dart`
-- `lib/presentation/features/folders/widgets/folder_hero_card.dart` (Prompt 50, decks-mode hero)
-- `lib/presentation/features/folders/widgets/folder_section_title.dart` (Prompt 50, section
-  overline)
-- `lib/presentation/features/folders/widgets/folder_study_entry_section.dart`
+- `lib/presentation/features/folders/screens/folder_detail_screen.dart` (overflow ⋮ → rename/move/delete)
+- `lib/presentation/features/folders/widgets/folder_detail_body.dart`
+- `lib/presentation/features/folders/widgets/folder_detail_summary.dart` (decks/subfolders summary)
+- `lib/presentation/features/folders/widgets/folder_unlocked_empty.dart`
+- `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart`,
+  `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart` (reused for overflow)
 - `lib/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart`
-- `lib/presentation/features/folders/routes/folder_routes.dart`
 - `lib/app/router/route_names.dart` → `RouteNames.folderDetail`
 
 **Related wireframes:**

@@ -3,6 +3,7 @@ import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/usecases/deck/create_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/delete_deck_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_subfolder_usecase.dart';
 import 'package:memox/domain/usecases/folder/delete_folder_usecase.dart';
@@ -46,6 +47,10 @@ CreateSubfolderUseCase createSubfolderUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 CreateDeckUseCase createDeckUseCase(Ref ref) =>
     CreateDeckUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+DeleteDeckUseCase deleteDeckUseCase(Ref ref) =>
+    DeleteDeckUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 RenameFolderUseCase renameFolderUseCase(Ref ref) =>

@@ -7,6 +7,7 @@ import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_deck_tile.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_detail_summary.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
@@ -71,6 +72,10 @@ class FolderDetailBody extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
       children: <Widget>[
+        isSubfolderMode
+            ? FolderSubfoldersSummary(subfolders: detail.subfolders)
+            : FolderDecksSummary(decks: detail.decks),
+        const SizedBox(height: SpacingTokens.md),
         MxSectionHeader(
           label: isSubfolderMode
               ? l10n.libraryFolderSubfoldersCount(detail.subfolders.length)

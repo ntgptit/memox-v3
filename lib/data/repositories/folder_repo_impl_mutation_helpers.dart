@@ -166,6 +166,31 @@ Future<Result<void>> deleteFolderTxn(FolderDao dao, String folderId) async {
   }
 }
 
+/// Deletes [deckId] and its flashcards (→ progress cascade via FKs), reverting
+/// the parent folder to `unlocked` once it holds no more decks.
+Future<Result<void>> deleteDeckTxn(FolderDao dao, String deckId) async {
+  try {
+    await dao.transaction(() async {
+      final DeckRow? row = await dao.findDeck(deckId);
+      if (row == null) {
+        throw _RuleViolation(Failure.notFound(entity: 'deck', id: deckId));
+      }
+      await dao.deleteDeckById(deckId);
+      if ((await dao.childDeckCount(row.folderId)) == 0) {
+        await dao.setFolderContentMode(
+          row.folderId,
+          FolderMapper.contentModeToStorage(ContentMode.unlocked),
+        );
+      }
+    });
+    return const Result<void>.ok(null);
+  } on _RuleViolation catch (violation) {
+    return Result<void>.err(violation.failure);
+  } catch (error) {
+    return _writeStorageErr<void>(error);
+  }
+}
+
 /// Builds the move-destination list for [folderId]: root + all folders, each
 /// annotated current-parent / blocked (cycle / decks-locked). Blocked rows are
 /// kept (disabled in the picker), never omitted.

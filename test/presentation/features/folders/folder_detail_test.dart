@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/core/theme/app_theme.dart';
+import 'package:memox/domain/entities/deck.dart';
+import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/folder_detail.dart';
+import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/target_language.dart';
+import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
+import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_deck_tile.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_detail_summary.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
+import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
+
+Folder _folder(
+  String name, {
+  ContentMode mode = ContentMode.decks,
+}) => Folder(
+  id: name,
+  parentId: null,
+  name: name,
+  contentMode: mode,
+  sortOrder: 0,
+  createdAt: DateTime.utc(2026),
+  updatedAt: DateTime.utc(2026),
+);
+
+DeckWithCount _deck(
+  String name, {
+  int cardCount = 40,
+  int dueCount = 0,
+}) => DeckWithCount(
+  deck: Deck(
+    id: name,
+    folderId: 'parent',
+    name: name,
+    targetLanguage: TargetLanguage.korean,
+    sortOrder: 0,
+    createdAt: DateTime.utc(2026),
+    updatedAt: DateTime.utc(2026),
+  ),
+  cardCount: cardCount,
+  dueCount: dueCount,
+);
+
+FolderWithCount _subfolder(
+  String name, {
+  int deckCount = 3,
+  int cardCount = 40,
+  int dueCount = 0,
+}) => FolderWithCount(
+  folder: _folder(name, mode: ContentMode.decks),
+  subfolderCount: 0,
+  deckCount: deckCount,
+  cardCount: cardCount,
+  dueCount: dueCount,
+);
+
+FolderDetail _detail({
+  ContentMode mode = ContentMode.decks,
+  List<DeckWithCount> decks = const <DeckWithCount>[],
+  List<FolderWithCount> subfolders = const <FolderWithCount>[],
+}) => FolderDetail(
+  folder: _folder('TOPIK II', mode: mode),
+  breadcrumb: const <FolderBreadcrumbSegment>[
+    FolderBreadcrumbSegment(id: 'k', name: 'Korean'),
+  ],
+  subfolders: subfolders,
+  decks: decks,
+);
+
+Widget _wrapBody(
+  FolderDetail detail, {
+  bool isSearching = false,
+}) => MaterialApp(
+  theme: AppTheme.light(),
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Scaffold(
+    body: FolderDetailBody(
+      detail: detail,
+      isSearching: isSearching,
+      onNewSubfolder: () {},
+      onNewDeck: () {},
+      onClearSearch: () {},
+    ),
+  ),
+);
+
+Widget _wrapScreen(Stream<FolderDetail> stream) => ProviderScope(
+  overrides: [
+    folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
+  ],
+  child: MaterialApp(
+    theme: AppTheme.light(),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: const FolderDetailScreen(folderId: 'f1'),
+  ),
+);
+
+void main() {
+  group('FolderDetailBody — Decks state (1/8)', () {
+    testWidgets('summary card shows decks · cards line and the due total', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(
+          _detail(
+            decks: <DeckWithCount>[
+              _deck('Vocab 1', cardCount: 62, dueCount: 4),
+              _deck('Vocab 2', cardCount: 58, dueCount: 4),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.byType(FolderDecksSummary), findsOneWidget);
+      expect(find.text('2 decks · 120 cards'), findsOneWidget);
+      // Folder-scope total (4 + 4) is distinct from each deck's "4 due" badge.
+      expect(find.text('8 due'), findsOneWidget);
+      expect(find.text('4 due'), findsNWidgets(2));
+      expect(find.byType(FolderDeckTile), findsNWidgets(2));
+    });
+
+    testWidgets('zero folder-scope due shows the all-caught-up line', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(
+          _detail(decks: <DeckWithCount>[_deck('Verb conj', cardCount: 148)]),
+        ),
+      );
+
+      expect(find.text('All caught up'), findsOneWidget);
+      expect(find.textContaining('due'), findsNothing);
+    });
+  });
+
+  group('FolderDetailBody — Subfolders state (2/8)', () {
+    testWidgets('summary strip shows subfolders, cards, and due totals', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(
+          _detail(
+            mode: ContentMode.subfolders,
+            subfolders: <FolderWithCount>[
+              _subfolder('TOPIK I', cardCount: 124, dueCount: 8),
+              _subfolder('Hangul', cardCount: 74, dueCount: 4),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.byType(FolderSubfoldersSummary), findsOneWidget);
+      expect(find.text('subfolders'), findsOneWidget);
+      expect(find.text('cards'), findsOneWidget);
+      expect(find.text('due total'), findsOneWidget);
+      // 2 subfolders, 198 cards, 12 due.
+      expect(find.text('198'), findsOneWidget);
+      expect(find.text('12'), findsOneWidget);
+      expect(find.byType(LibraryFolderTile), findsNWidgets(2));
+    });
+  });
+
+  group('FolderDetailBody — Unlocked state (3/8)', () {
+    testWidgets('renders the dual-CTA mode-choice, no summary', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(_wrapBody(_detail(mode: ContentMode.unlocked)));
+
+      expect(find.byType(FolderUnlockedEmpty), findsOneWidget);
+      expect(find.byType(FolderDecksSummary), findsNothing);
+      expect(find.byType(FolderSubfoldersSummary), findsNothing);
+    });
+  });
+
+  group('FolderDetailBody — Search empty (4/8)', () {
+    testWidgets('active search with no matches shows the no-results state', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(_detail(decks: const <DeckWithCount>[]), isSearching: true),
+      );
+
+      expect(
+        find.byKey(const ValueKey<String>('folder_search_no_results')),
+        findsOneWidget,
+      );
+      // No summary card while there is nothing to summarise.
+      expect(find.byType(FolderDecksSummary), findsNothing);
+    });
+
+    testWidgets('empty-but-locked (not searching) shows locked empty, not '
+        'no-results', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _wrapBody(_detail(decks: const <DeckWithCount>[])),
+      );
+
+      expect(
+        find.byKey(const ValueKey<String>('folder_search_no_results')),
+        findsNothing,
+      );
+      expect(find.byType(FolderDecksSummary), findsNothing);
+    });
+  });
+
+  group('FolderDetailScreen — Loading (5/8) & Error (6/8)', () {
+    testWidgets('loading renders the skeleton and no content rows', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapScreen(const Stream<FolderDetail>.empty()),
+      );
+      await tester.pump();
+
+      expect(
+        find.byKey(const ValueKey<String>('library_skeleton')),
+        findsOneWidget,
+      );
+      expect(find.byType(FolderDeckTile), findsNothing);
+    });
+
+    testWidgets('error state renders the localized failure UI with retry', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapScreen(Stream<FolderDetail>.error(Exception('boom'))),
+      );
+      await tester.pump();
+
+      expect(find.text('Retry'), findsOneWidget);
+      expect(find.textContaining('boom'), findsNothing);
+    });
+  });
+
+  group('FolderDetailScreen — Overflow (Delete 7/8 · Move 8/8)', () {
+    Future<void> pumpLoaded(
+      WidgetTester tester, {
+      ContentMode mode = ContentMode.decks,
+    }) async {
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<FolderDetail>.value(
+            _detail(mode: mode, decks: <DeckWithCount>[_deck('Vocab 1')]),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    Finder appBarKebab() => find.descendant(
+      of: find.byType(AppBar),
+      matching: find.byIcon(Icons.more_vert),
+    );
+
+    testWidgets('app-bar kebab opens the action sheet with mock-approved '
+        'actions only', (WidgetTester tester) async {
+      await pumpLoaded(tester);
+
+      await tester.tap(appBarKebab());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Rename'), findsOneWidget);
+      expect(find.text('Move to folder'), findsOneWidget);
+      expect(find.text('Delete folder'), findsOneWidget);
+      // Import targets a specific deck, not the folder — hidden here.
+      expect(find.text('Import flashcards'), findsNothing);
+    });
+
+    testWidgets('Delete opens the destructive subtree-warning confirm dialog', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      await tester.tap(appBarKebab());
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete folder'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'This will delete the full subtree, including decks and flashcards.',
+        ),
+        findsOneWidget,
+      );
+    });
+  });
+}

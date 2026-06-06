@@ -295,8 +295,9 @@ and its migration is approved.
 
 ### 6.15 Library search variants
 
-V1 status: full global search is Future Proposal. V1 may reuse visual patterns for
-inline/scope-local search only.
+V1 status: the global search screen (`/library/search`) is Current for folders/decks/flashcards
+(promoted 2026-06-06); the Tags result section, recent searches, and popular-tags landing remain
+Future Proposal. Inline/scope-local search also remains on existing screens.
 
 | Mock variant                        | Visual state       | Wireframe                              | Required docs                                                               |
 |-------------------------------------|--------------------|----------------------------------------|-----------------------------------------------------------------------------|

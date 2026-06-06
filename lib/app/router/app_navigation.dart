@@ -11,6 +11,9 @@ extension AppNavigation on BuildContext {
   /// Switch to the Library tab root.
   void goLibrary() => goNamed(RouteNames.library);
 
+  /// Open global Library search: `/library/search`.
+  void pushLibrarySearch() => pushNamed(RouteNames.librarySearch);
+
   /// Drill into a folder: `/library/folder/:id`.
   void pushFolderDetail(String folderId) => pushNamed(
     RouteNames.folderDetail,
@@ -20,6 +23,28 @@ extension AppNavigation on BuildContext {
   /// Open a deck's flashcard list: `/library/deck/:deckId/flashcards`.
   void pushFlashcardList(String deckId) => pushNamed(
     RouteNames.flashcardList,
+    pathParameters: <String, String>{RoutePaths.deckIdParam: deckId},
+  );
+
+  /// Open the new-flashcard editor: `/library/deck/:deckId/flashcards/new`.
+  void pushFlashcardCreate(String deckId) => pushNamed(
+    RouteNames.flashcardCreate,
+    pathParameters: <String, String>{RoutePaths.deckIdParam: deckId},
+  );
+
+  /// Open the flashcard editor:
+  /// `/library/deck/:deckId/flashcards/:flashcardId/edit`.
+  void pushFlashcardEdit(String deckId, String flashcardId) => pushNamed(
+    RouteNames.flashcardEdit,
+    pathParameters: <String, String>{
+      RoutePaths.deckIdParam: deckId,
+      RoutePaths.flashcardIdParam: flashcardId,
+    },
+  );
+
+  /// Open the deck import flow: `/library/deck/:deckId/import`.
+  void pushDeckImport(String deckId) => pushNamed(
+    RouteNames.deckImport,
     pathParameters: <String, String>{RoutePaths.deckIdParam: deckId},
   );
 }

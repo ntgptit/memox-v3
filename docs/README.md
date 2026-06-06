@@ -33,7 +33,8 @@ Important V1 decisions:
 | Feature                                        | V1 status          |
 |------------------------------------------------|--------------------|
 | Flashcard history screen                       | Future Proposal    |
-| Global search screen                           | Future Proposal    |
+| Global search screen (folders/decks/flashcards) | Implemented        |
+| Global search: tags + recent + popular         | Future Proposal    |
 | Full onboarding flow                           | Future Proposal    |
 | Inline/scope-local search patterns             | V1 guideline       |
 | Strong zero-content empty states + restore CTA | V1 scope           |

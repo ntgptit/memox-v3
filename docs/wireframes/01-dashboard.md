@@ -183,7 +183,7 @@ All queries fire in parallel via separate providers; UI shows skeletons per card
 | Tap "Start today's review" | Tap | Navigate to `/library/study/today` → routes through study entry gate. |
 | Tap "Start new learning" | Tap | Open scope picker bottom-sheet. |
 | Tap recent deck row | Tap | Navigate to `/library/deck/:deckId/flashcards`. |
-| Tap search icon | Target/Future | Navigate to Global Search only after that route is promoted. Current V1 exposes no Dashboard Global Search action. |
+| Tap search icon | Target/Future | The global search route (`/library/search`) now exists, but Dashboard still exposes **no** search action in V1 — global search is reached from the Library app bar only. A Dashboard search entry remains Future. |
 | Tap settings icon | Tap | Navigate to `/settings`. |
 | Pull to refresh | Pull down | Re-run all queries; replace skeletons in place. |
 

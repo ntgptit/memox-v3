@@ -21,7 +21,7 @@ It helps users:
 - Bury cards until tomorrow or suspend them indefinitely.
 - Resume paused sessions from Dashboard.
 - See a simple Dashboard streak stat placeholder in V1; full daily goal/streak/reminder engagement remains Future/Target.
-- Search/filter inside the current screen scope in V1; full global search is Future Proposal.
+- Search the whole Library (folders, decks, flashcards) from a dedicated `/library/search` screen, plus filter inside the current screen scope. Tags-in-search, recent searches, and popular tags remain Future Proposal.
 - View per-card history is Future Proposal, not V1 scope.
 - Configure audio/speech (TTS) preferences for Korean and English.
 - Optionally link a Google account for Drive AppData backup and restore with conflict protection.
@@ -48,7 +48,8 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Bulk operations on flashcards | Specified | `docs/business/bulk/bulk-operations.md` |
 | Card history view | Future Proposal — Migration Required | `docs/business/history/card-history.md` |
 | Inline/scope-local search | V1 guideline | `docs/business/search/global-search.md` |
-| Global search screen | Future Proposal | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |
+| Global search screen (folders/decks/flashcards) | Implemented | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |
+| Global search: tags section + recent + popular | Future Proposal — needs tag subsystem + `shared_preferences` | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |
 | Zero-content guidance / thin onboarding | V1 guideline — owner-split across current empty states and Account Settings restore | `docs/wireframes/23-onboarding.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/02-library.md`, `docs/wireframes/19-settings-account.md` |
 | Full onboarding flow | Future Proposal — no standalone route/feature/first-launch wizard in V1 | `docs/wireframes/23-onboarding.md` |
 | Daily goal + streak + reminders | Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets. | `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md` |

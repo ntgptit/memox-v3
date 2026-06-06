@@ -3311,4 +3311,131 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get folderMovePickerLockedReason =>
       'Locked to decks — can\'t hold folders.';
+
+  @override
+  String get folderSummaryAllCaughtUp => 'All caught up';
+
+  @override
+  String get folderSummarySubfoldersStat => 'subfolders';
+
+  @override
+  String get folderSummaryCardsStat => 'cards';
+
+  @override
+  String get folderSummaryDueStat => 'due total';
+
+  @override
+  String get librarySearchOpenTooltip => 'Search library';
+
+  @override
+  String get searchFieldHint => 'Search folders, decks, cards';
+
+  @override
+  String get searchClearTooltip => 'Clear search';
+
+  @override
+  String get searchEmptyTitle => 'Search your library';
+
+  @override
+  String get searchEmptyMessage =>
+      'Type at least 2 characters to find folders, decks, and cards.';
+
+  @override
+  String get searchNoResultsTitle => 'No results';
+
+  @override
+  String get searchNoResultsMessage =>
+      'Nothing in your library matches that search.';
+
+  @override
+  String get searchErrorTitle => 'Search failed';
+
+  @override
+  String get searchErrorMessage =>
+      'Something went wrong while searching. Please try again.';
+
+  @override
+  String get searchRetryLabel => 'Try again';
+
+  @override
+  String get searchSectionFolders => 'Folders';
+
+  @override
+  String get searchSectionDecks => 'Decks';
+
+  @override
+  String get searchSectionFlashcards => 'Flashcards';
+
+  @override
+  String get searchResultFolderSubtitle => 'Folder';
+
+  @override
+  String get searchResultDeckSubtitle => 'Deck';
+
+  @override
+  String searchMoreCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count more',
+      one: '+1 more',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get commonDone => 'Done';
+
+  @override
+  String get flashcardListAddCardAction => 'Add flashcard';
+
+  @override
+  String get flashcardListImportAction => 'Import from CSV / Excel';
+
+  @override
+  String get flashcardListErrorTitle => 'Deck unavailable';
+
+  @override
+  String get flashcardListErrorMessage =>
+      'We couldn\'t open this deck. Please try again.';
+
+  @override
+  String get flashcardListActionError =>
+      'Something went wrong. Please try again.';
+
+  @override
+  String flashcardListSubtitle(int count, String language) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards · $language',
+      one: '1 card · $language',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get flashcardListLanguageKorean => 'Korean';
+
+  @override
+  String get flashcardListLanguageEnglish => 'English';
+
+  @override
+  String get flashcardListLanguageOther => 'Other language';
+
+  @override
+  String get flashcardDeckReorderAction => 'Reorder cards';
+
+  @override
+  String get flashcardDeleteOneTitle => 'Delete flashcard';
+
+  @override
+  String get flashcardDeleteOneMessage =>
+      'This will permanently delete this flashcard.';
+
+  @override
+  String get flashcardDeletedOneMessage => 'Flashcard deleted.';
+
+  @override
+  String get flashcardReorderError => 'Couldn\'t save the new order.';
 }

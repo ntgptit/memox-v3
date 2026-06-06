@@ -95,6 +95,13 @@ abstract interface class FolderRepository {
   /// Errors: `NotFoundFailure`, `StorageFailure`.
   Future<Result<void>> deleteFolder({required FolderId folderId});
 
+  /// Deletes [deckId] and all flashcards inside it (flashcards → progress
+  /// cascade via FKs) in one transaction, reverting the now-empty parent folder
+  /// to `unlocked` when it holds no more decks.
+  ///
+  /// Errors: `NotFoundFailure`, `StorageFailure`.
+  Future<Result<void>> deleteDeck({required DeckId deckId});
+
   /// Lists every candidate destination for moving [folderId]: the Library root
   /// plus all folders, each annotated as current-parent / blocked. Blocked rows
   /// (the folder itself, its descendants, or `decks`-locked folders) are

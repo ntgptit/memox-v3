@@ -33,6 +33,7 @@ abstract final class RoutePaths {
   static const String settingsLearningTagsSegment = 'tags';
   static const String settingsAudioSpeechSegment = 'audio-speech';
 
+  static const String searchSegment = 'search';
   static const String folderSegment = 'folder';
   static const String deckSegment = 'deck';
   static const String flashcardsSegment = 'flashcards';
@@ -54,6 +55,7 @@ abstract final class RoutePaths {
       '$settings/$settingsAudioSpeechSegment';
 
   // ── Library route templates (with :params for GoRoute.path) ──
+  static const String librarySearchTemplate = '$library/$searchSegment';
   static const String folderDetailTemplate =
       '$library/$folderSegment/:$idParam';
   static const String flashcardListTemplate =
@@ -76,6 +78,8 @@ abstract final class RoutePaths {
       '$library/$studySegment/:$entryTypeParam/:$entryRefIdParam';
 
   // ── Concrete path builders ───────────────────────────────────
+  static const String librarySearch = librarySearchTemplate;
+
   static String folderDetail(String folderId) =>
       '$library/$folderSegment/$folderId';
 

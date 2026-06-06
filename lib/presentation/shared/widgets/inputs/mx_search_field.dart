@@ -19,6 +19,7 @@ class MxSearchField extends StatelessWidget {
     this.onChanged,
     this.onClear,
     this.clearTooltip,
+    this.autofocus = false,
     super.key,
   });
 
@@ -27,6 +28,10 @@ class MxSearchField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final VoidCallback? onClear;
   final String? clearTooltip;
+
+  /// Requests focus on first build (e.g. a dedicated search screen the user
+  /// opened specifically to type). Defaults to `false` for inline fields.
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,7 @@ class MxSearchField extends StatelessWidget {
         final bool hasText = value.text.isNotEmpty;
         return TextField(
           controller: controller,
+          autofocus: autofocus,
           onChanged: onChanged,
           textInputAction: TextInputAction.search,
           style: context.textTheme.bodyMedium,

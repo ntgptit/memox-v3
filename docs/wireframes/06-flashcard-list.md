@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-03
+last_updated: 2026-06-06
 route: /library/deck/:deckId/flashcards
 source_specs:
   - docs/business/flashcard/flashcard-management.md
@@ -12,37 +12,64 @@ source_specs:
 
 # 06 — Flashcard List
 
-## V1 verification status (2026-05-31, Prompt 16)
+## V1 verification status (2026-06-06)
 
-This screen is **partially Current**. The §Components 1-1 mapping (verified 2026-05-28) plus the aspects below are verified by code and tests; the remainder is **Future** and intentionally not exposed in V1. Do NOT mark the whole screen Current.
+This screen is **partially Current**. The aspects below are implemented in code and
+verified by tests (`test/presentation/features/flashcards/flashcard_list_test.dart`,
+`test/data/repositories/flashcard_repository_impl_test.dart`); everything else is
+**Future** and intentionally not exposed in V1. Do NOT mark the whole screen Current.
+
+> **Drift correction (2026-06-06):** prior versions of this section described the
+> deck-level study-entry section (Prompt 46), the Resume-Discard flow (Prompt 47),
+> bulk/selection, state badges, and a §Components 1-1 widget mapping as Current. **None
+> of that existed in code** — the entire `lib/presentation/features/flashcards/**`,
+> `FlashcardRepository`, `FlashcardDao`, and the flashcard use cases were unbuilt; the
+> route was a `RoutePlaceholder`. The list below replaces those over-claims with the
+> behaviour actually shipped.
 
 **Verified Current (behaviour + tests):**
 
-- Route `/library/deck/:deckId/flashcards` opens the list. Invalid/missing `deckId` → `NotFoundException` surfaced through `MxRetainedAsyncState` (error + Retry), no crash, no raw exception text.
-- States: Loading skeleton, error+retry, **empty deck** (`totalCount == 0`, regardless of search term), and **no-results-on-search** (`items.isEmpty && searchTerm.isNotEmpty && totalCount > 0`) — distinct (Prompt 16, classification corrected Prompt 16B).
-- Search: scope-local within the deck (toolbar search term → `ContentQuery`), never routes to global search. Clearing restores cards.
-- Sort: `ContentSortMode` via toolbar; manual sort enables reorder; reorder persists `sort_order`.
-- Row actions (long-press / overflow sheet): Edit → `flashcardEdit`, Move (destination picker, progress kept), Export, Select, Delete (confirm). **No History. No Bury/Suspend.**
-- Bulk actions (selection mode): Delete (confirm), Move, Export only.
-- Study modes route through the Study Entry gate; disabled on empty deck.
-- **Deck-level study-entry section (Prompt 46):** Resume banner, Today CTA, and Study-deck CTA, mirroring the Folder Detail ownership pattern. Backed by `GetDeckStudyEntryUseCase` (`entry_type=deck`, `entry_ref_id=deckId`; composes `countFlashcardsInScope` + `countDueCardsInScope` + `findResumeCandidate`). Resume opens the existing session (`context.goStudySession`, never a new session); Today routes to the gate with `study_type=srs_review`; Study deck routes to the gate with no explicit `study_type` (default new study). Today hidden at 0 due; whole section hidden when the deck has no cards and no resumable session. Flashcard List never starts a session directly.
-- Import CTA → `deckImport` route (route ownership only; parser/preview verified in Prompt 17).
+- Route `/library/deck/:deckId/flashcards` opens `FlashcardListScreen`. Invalid/missing
+  `deckId` → `NotFoundFailure` surfaced through `MxRetainedAsyncState` (error + Retry),
+  no crash, no raw exception text.
+- States: Loading skeleton (`flashcard_list_skeleton`), error+retry, **empty deck**
+  (`totalCount == 0`, regardless of any active search term →
+  `FlashcardEmptyStateSection`), and **no-results-on-search** (`cards.isEmpty &&
+  searchTerm.isNotEmpty && totalCount > 0` → `ValueKey('flashcard_no_results')` with a
+  Clear CTA) — distinct.
+- In-deck search: scope-local toolbar term filtering front / back / example_sentence;
+  never routes to global search; clearing restores cards. `totalCount` is search-independent.
+- Manual reorder: deck overflow → **Reorder cards** enters reorder mode
+  (`ReorderableListView`, `ValueKey('flashcard_reorder_list')`, drag handles); drop
+  persists `sort_order` via `ReorderFlashcardsUseCase`; X / Done exits.
+- Single-card row actions (long-press / kebab → `flashcard_row_actions_sheet`): **Edit**
+  → `flashcardEdit` route, **Delete** → single-card confirm dialog → `DeleteFlashcardUseCase`.
+  No Move / Export / Select / History / Bury / Suspend.
+- Deck overflow (app-bar kebab → `deck_actions_sheet`): **Import flashcards** →
+  `deckImport` route, **Reorder cards**, **Delete deck** → confirm dialog →
+  `DeleteDeckUseCase` (via `FolderRepository.deleteDeck`; cascades cards, reverts an
+  emptied parent folder to `unlocked`, then pops back).
+- FAB + empty-state CTAs: **Add flashcard** → `flashcardCreate` route; **Import** →
+  `deckImport` route.
+- Breadcrumb: `Library / {folder chain}` + subtitle `{n} cards · {target language}`.
 
-**Current (Prompt 47):**
-
-- Resume banner **Discard** secondary action. Tap → danger confirmation
-  (`MxConfirmationDialog`) → on confirm cancels the existing paused session via
-  the shared Resume-Discard flow (`confirmAndDiscardResumeSession` →
-  `CancelStudySessionUseCase`); banner refreshes away. Cancel does nothing.
-  Never creates a new session; no schema/SRS change.
+> `flashcardCreate`, `flashcardEdit`, and `deckImport` resolve to `RoutePlaceholder`
+> (screens 07 / 08 / 10 not built). The Flashcard List owns the navigation only.
 
 **Future (not exposed in V1):**
 
-- Status filter dropdown + multi-tag chip filter (`?filter=`/`?tag=` round-trip).
+- Deck-level study-entry section (resume banner, Today CTA, Study-deck CTA) — the study
+  layer is not built. The §Components order 4-7 (study-entry / deck summary / study modes
+  / progress) describe the target, not current behaviour.
+- Status filter dropdown + multi-tag chip filter (`?filter=`/`?tag=` round-trip) and the
+  toolbar sort UI.
 - State badges (Suspended / Buried / Due) per row, and the shared `CardStateComputer`.
-- Bulk suspend / unsuspend / reset / tag± (block on bury/suspend epic).
-- Long-press → enter selection mode. **V1 selection is triggered by the row "Select" action and the per-row star toggle, not by long-press** (long-press opens the row action sheet). The §Forbidden / §Agent-rule item requiring long-press-to-select describes the Future target, not current behaviour.
-- Flashcard History context action (Future Proposal, screen 09 — no live V1 route).
+- Selection mode + bulk action bar (delete / move / tag± / suspend / unsuspend / reset).
+- Move card (destination picker), Export, Flashcard History (screen 09, Future Proposal).
+- Long-press → enter selection mode (V1 long-press opens the row action sheet). The
+  §Forbidden / §Agent-rule items requiring long-press-to-select describe the Future target.
+- Flashcard create / edit / import screens (07 / 08 / 10) — routes are placeholders.
+- ≥600dp 2-col / ≥1024dp 3-col responsive grid (V1 is a single-column list).
 
 ## Purpose
 
@@ -367,14 +394,16 @@ Render order is enforced by reviewer checklist — see "Pre-commit parity check"
 
 **Contracts:** `docs/contracts/usecase-contracts/flashcard.md`, `docs/contracts/usecase-contracts/bulk.md`, `docs/contracts/usecase-contracts/study.md` (bury/suspend), `docs/contracts/repository-contracts/flashcard-repository.md`
 
-**Code paths (verified 2026-05-28):**
+**Code paths (verified 2026-06-06):**
 
 - Screen: `lib/presentation/features/flashcards/screens/flashcard_list_screen.dart`.
-- Viewmodel: `lib/presentation/features/flashcards/viewmodels/flashcard_list_viewmodel.dart` (Riverpod annotation).
-- Deck study-entry (Prompt 46): use case `lib/domain/study/usecases/deck_study_entry_usecase.dart` (`DeckStudyEntry` / `GetDeckStudyEntryUseCase`); provider `lib/presentation/features/flashcards/viewmodels/deck_study_entry_provider.dart`; section widget `lib/presentation/features/flashcards/widgets/flashcard_study_entry_section.dart`; DI `getDeckStudyEntryUseCaseProvider` in `lib/app/di/study/study_usecase_providers.dart`. Mirrors the Folder Detail study-entry pattern (Prompt 45).
-- Section widgets (1-1 with §Components order above): see `lib/presentation/features/flashcards/widgets/flashcard_*_section.dart`. There is NO standalone `flashcard_list_notifier.dart` / `selection_controller.dart` file — selection state lives in the viewmodel.
-- Bulk operations: domain layer is **not yet implemented** as a dedicated `lib/domain/usecases/bulk/**` module — current actions go through `flashcard_usecases.dart` (`DeleteFlashcardsUseCase`, `MoveFlashcardsUseCase`, `ReorderFlashcardsUseCase`). Suspend / unsuspend / reset still missing (block on bury/suspend epic — see audit `docs/checklist/wireframe-code-parity-assessment.md` §3.1).
-- Route constant: `lib/app/router/route_names.dart` → `RouteNames.flashcardList`.
+- Viewmodel: `lib/presentation/features/flashcards/viewmodels/flashcard_list_viewmodel.dart` (Riverpod annotation) — `FlashcardListToolbar` (search / sort / reorder state), `flashcardListQuery`, `FlashcardListController` (delete card, reorder, delete deck).
+- Widgets actually built (V1 reduced set; the §Components 1-1 table describes the full Future target): `flashcard_list_body.dart`, `flashcard_detail_card_row.dart`, `flashcard_empty_state_section.dart`, `flashcard_list_skeleton.dart`, `deck_actions_sheet.dart`, `flashcard_row_actions_sheet.dart`. The study-entry / deck-summary / study-modes / progress / bulk / toolbar-filter / preview section widgets are **not built** (Future).
+- Domain: entity `lib/domain/entities/flashcard.dart`; read model `lib/domain/models/flashcard_list_detail.dart`; contract `lib/domain/repositories/flashcard_repository.dart`; use cases `lib/domain/usecases/flashcard/{watch_flashcard_list,delete_flashcard,reorder_flashcards}_usecase.dart` and `lib/domain/usecases/deck/delete_deck_usecase.dart`.
+- Data: `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/datasources/local/daos/flashcard_dao.dart`, `lib/data/mappers/flashcard_mapper.dart`, `lib/data/repositories/flashcard_repository_impl.dart`. Deck delete lives on `FolderRepository.deleteDeck` (`folder_repo_impl_mutation_helpers.dart::deleteDeckTxn`, reverts an emptied parent folder to `unlocked`).
+- DI: `lib/app/di/flashcard_providers.dart` (+ `deleteDeckUseCaseProvider` in `folder_providers.dart`).
+- Routes: `RouteNames.flashcardList` → real screen in `folder_routes.dart`; `flashcardCreate` / `flashcardEdit` / `deckImport` remain `RoutePlaceholder` in `app_router.dart`.
+- Bulk / suspend / unsuspend / reset / move / tag operations: **not implemented** (block on the bury/suspend + bulk epics).
 
 **Related wireframes:**
 

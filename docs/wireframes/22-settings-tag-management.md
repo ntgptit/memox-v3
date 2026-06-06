@@ -21,7 +21,7 @@ remain Future / Global Search ownership.
 | Learning Settings entry   | Current: Learning Settings only routes to this screen; it does not own tag CRUD.                                                                                         |
 | List / count              | Current: all distinct lowercased tags with card usage counts.                                                                                                            |
 | Empty / loading / error   | Current: loading surface, true-empty state with Library CTA, and safe generic load error surface.                                                                        |
-| Search                    | Current: local in-memory substring filter only; no global search route/use case.                                                                                         |
+| Search                    | Current: local in-memory substring filter only. The global `/library/search` screen exists but does **not** search tags yet (no Tags section until the tag subsystem ships), so it does not cover this screen. |
 | Sort                      | Current: in-memory `Most cards`, `A→Z`, `Z→A`; `Recently used` is Future because `flashcard_tags` has no last-used signal. Sort is screen-local UI state, not persisted. |
 | Rename                    | Current: shared name dialog; validation and normalization happen in `RenameTagUseCase`; collision prompts merge confirmation.                                            |
 | Merge                     | Current: destination picker + confirmation; repository transaction dedupes per-card rows and removes source tag.                                                         |

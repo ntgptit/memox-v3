@@ -3185,4 +3185,129 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get folderMovePickerLockedReason =>
       'Đã khóa ở chế độ bộ thẻ — không thể chứa thư mục.';
+
+  @override
+  String get folderSummaryAllCaughtUp => 'Đã ôn hết';
+
+  @override
+  String get folderSummarySubfoldersStat => 'thư mục con';
+
+  @override
+  String get folderSummaryCardsStat => 'thẻ';
+
+  @override
+  String get folderSummaryDueStat => 'đến hạn';
+
+  @override
+  String get librarySearchOpenTooltip => 'Tìm trong thư viện';
+
+  @override
+  String get searchFieldHint => 'Tìm thư mục, bộ thẻ, thẻ';
+
+  @override
+  String get searchClearTooltip => 'Xóa tìm kiếm';
+
+  @override
+  String get searchEmptyTitle => 'Tìm trong thư viện';
+
+  @override
+  String get searchEmptyMessage =>
+      'Nhập ít nhất 2 ký tự để tìm thư mục, bộ thẻ và thẻ.';
+
+  @override
+  String get searchNoResultsTitle => 'Không có kết quả';
+
+  @override
+  String get searchNoResultsMessage =>
+      'Không có mục nào trong thư viện khớp với tìm kiếm đó.';
+
+  @override
+  String get searchErrorTitle => 'Tìm kiếm thất bại';
+
+  @override
+  String get searchErrorMessage =>
+      'Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.';
+
+  @override
+  String get searchRetryLabel => 'Thử lại';
+
+  @override
+  String get searchSectionFolders => 'Thư mục';
+
+  @override
+  String get searchSectionDecks => 'Bộ thẻ';
+
+  @override
+  String get searchSectionFlashcards => 'Thẻ';
+
+  @override
+  String get searchResultFolderSubtitle => 'Thư mục';
+
+  @override
+  String get searchResultDeckSubtitle => 'Bộ thẻ';
+
+  @override
+  String searchMoreCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count mục nữa',
+      one: '+1 mục nữa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get commonDone => 'Xong';
+
+  @override
+  String get flashcardListAddCardAction => 'Thêm thẻ';
+
+  @override
+  String get flashcardListImportAction => 'Nhập từ CSV / Excel';
+
+  @override
+  String get flashcardListErrorTitle => 'Không mở được bộ thẻ';
+
+  @override
+  String get flashcardListErrorMessage =>
+      'Không thể mở bộ thẻ này. Vui lòng thử lại.';
+
+  @override
+  String get flashcardListActionError => 'Đã xảy ra lỗi. Vui lòng thử lại.';
+
+  @override
+  String flashcardListSubtitle(int count, String language) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ · $language',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get flashcardListLanguageKorean => 'Tiếng Hàn';
+
+  @override
+  String get flashcardListLanguageEnglish => 'Tiếng Anh';
+
+  @override
+  String get flashcardListLanguageOther => 'Ngôn ngữ khác';
+
+  @override
+  String get flashcardDeckReorderAction => 'Sắp xếp lại thẻ';
+
+  @override
+  String get flashcardDeleteOneTitle => 'Xóa thẻ';
+
+  @override
+  String get flashcardDeleteOneMessage =>
+      'Thao tác này sẽ xóa vĩnh viễn thẻ này.';
+
+  @override
+  String get flashcardDeletedOneMessage => 'Đã xóa thẻ.';
+
+  @override
+  String get flashcardReorderError => 'Không thể lưu thứ tự mới.';
 }

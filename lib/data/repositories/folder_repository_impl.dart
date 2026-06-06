@@ -277,6 +277,10 @@ class FolderRepositoryImpl implements FolderRepository {
       deleteFolderTxn(_dao, folderId);
 
   @override
+  Future<Result<void>> deleteDeck({required String deckId}) =>
+      deleteDeckTxn(_dao, deckId);
+
+  @override
   Future<Result<List<FolderMoveTarget>>> getFolderMoveTargets({
     required String folderId,
   }) => folderMoveTargets(_dao, folderId);

@@ -1,29 +1,33 @@
 ---
-last_updated: 2026-05-29
-status: V1 inline/scope-local search guidelines; full global screen is Future Proposal
-route: none in V1
-future_route: /library/search
+last_updated: 2026-06-06
+status: Current — global search screen (folders/decks/flashcards); tags section + recent/popular are Future Proposal. Inline/scope-local search guidelines also retained.
+route: /library/search
 source_specs:
   - docs/business/search/global-search.md
 related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
 ---
 
-# 11 — Library Search / Inline Search Guidelines
+# 11 — Library Search
 
-## V1 decision
+## V1 decision (promoted 2026-06-06)
 
-V1 does **not** implement a dedicated global search screen.
+V1 **implements** a dedicated global search screen at `/library/search`, opened from the Library
+Overview app-bar search action. The promoted scope covers three sections — **folders, decks, and
+flashcards** — and renders all five states (empty/hint, loading, results, no-results, error).
 
-V1 uses this document as the canonical UX guideline for **inline/scope-local search** in existing
-screens:
+Still **Future Proposal** (not yet built, pending the tag subsystem and a `shared_preferences`
+dependency — both require their own approval):
 
-- Library overview search/filter.
-- Folder detail search/filter.
-- Flashcard list search inside one deck.
-- Tag management search/filter.
+- The **Tags** result section.
+- **Recent searches** (SharedPreferences, capped 5).
+- The **popular-tags** landing section in the empty state.
 
-The full `/library/search` experience with recent searches, popular tags, grouped cross-scope
-results and deep links is a **Future Proposal**.
+While that scope is pending, the empty state shows a neutral "Search your library" prompt plus the
+2-character hint rather than recent/popular shortcuts.
+
+This document also remains the canonical UX guideline for **inline/scope-local search** still used
+inside existing screens (Library overview, Folder detail, Flashcard list, Tag management) — those are
+independent of the global screen and unchanged.
 
 ## V1 purpose
 
@@ -71,49 +75,61 @@ global route or persistence model.
 | Flashcard list   | Open flashcard detail/editor or keep row selected, depending on existing screen behavior. |
 | Tag management   | Select/open tag action menu, depending on existing screen behavior.                       |
 
-## V1 forbidden behavior
+## Still-forbidden behavior (post-promotion)
 
-- Do not add `GlobalSearchUseCase`.
-- Do not add `SearchScreen`.
-- Do not add `/library/search` route.
-- Do not add `SharedPreferences search.recent`.
-- Do not add a popular-tags search landing section.
-- Do not add cross-scope grouped results.
-- Do not use FTS5 without a separate ADR and performance task.
+The global screen now exists, so `GlobalSearchUseCase`, the `GlobalSearchScreen`, the
+`/library/search` route, and cross-scope grouped results (folders/decks/flashcards) are **Current**.
+The following remain forbidden until separately approved:
 
-## Future Proposal — full global search screen
+- Do not add a **Tags** result section (no tag subsystem yet — `docs/business/tags/tag-system.md`).
+- Do not persist `SharedPreferences search.recent` (no `shared_preferences` dependency approved).
+- Do not add a popular-tags search landing section (depends on the tag subsystem).
+- Do not use FTS5 without a separate ADR and performance task — the implementation uses escaped
+  `LIKE` queries.
 
-The future global screen may use this route:
+## Global search screen — Current
 
-```text
-/library/search
-```
+Route: `/library/search` (`RouteNames.librarySearch`), shell visible, pushed from the Library
+Overview app-bar search action.
 
-Future layout states may include:
+### States (all implemented)
 
-- Empty query: recent searches + popular tags.
-- Typing: 2-character minimum hint.
-- Results: grouped Folders / Decks / Flashcards / Tags.
-- No results.
-- Section-level errors.
+| State       | Trigger                                  | UI                                                                |
+|-------------|------------------------------------------|-------------------------------------------------------------------|
+| Empty/hint  | Normalized query `< 2` chars             | `MxEmptyState` — "Search your library" + 2-character hint.        |
+| Loading     | Debounced (300ms) query in flight        | `MxLoadingState` skeleton (first load only; previous data retained otherwise). |
+| Results     | One or more matches                      | Grouped sections Folders → Decks → Flashcards, each capped at 5 with a "+N more" trailing count. |
+| No results  | Query ran, matched nothing in any section| `MxEmptyState` (search-off glyph) — "No results".                 |
+| Error       | Repository `StorageFailure`              | `MxErrorState` — localized title/message + retry (re-runs query). |
 
-Future global result actions:
+### Query rules (implemented)
 
-| Result type | Future behavior                                         |
-|-------------|---------------------------------------------------------|
-| Folder      | Navigate to `/library/folder/:id`.                      |
-| Deck        | Navigate to `/library/deck/:deckId/flashcards`.         |
-| Flashcard   | Navigate to the card's deck and scroll/select the card. |
-| Tag         | Open a global tag-filtered flashcard list.              |
+- Minimum 2 characters (normalized) before the query fires; otherwise the empty/hint state shows.
+- 300ms debounce on the in-flight query.
+- Case-insensitive, trimmed, internal whitespace collapsed (`StringUtils.normalizeQuery`).
+- User-typed `%` / `_` / `\` are escaped before the `LIKE` query (matched literally).
+- Per-section cap of 5; totals beyond the cap drive the "+N more" affordance.
 
-Future implementation requires product promotion in:
+### Result actions (implemented)
 
-- `docs/checklist/v1-implementation-scope-2026-05-29.md`
-- `docs/checklist/screen-function-task-matrix.md`
-- `docs/checklist/wireframe-code-parity-assessment.md`
-- `docs/contracts/usecase-contracts/search.md`
+| Result type | Behavior                                                        |
+|-------------|-----------------------------------------------------------------|
+| Folder      | Navigate to `/library/folder/:id`.                              |
+| Deck        | Navigate to `/library/deck/:deckId/flashcards`.                 |
+| Flashcard   | Navigate to the card's owning deck (`/library/deck/:deckId/flashcards`). Per-card scroll/select is a Future refinement. |
+
+## Future Proposal — remaining global-search scope
+
+Not yet built; each needs its own approval:
+
+- **Empty query**: recent searches + popular tags (needs `shared_preferences` + the tag subsystem).
+- **Tags** result section + tag action (`Open a global tag-filtered flashcard list`) — needs the tag
+  subsystem (`docs/business/tags/tag-system.md`).
+- Per-card scroll/select on flashcard results.
 
 ## Agent rule
 
-Implement only inline/scope-local search improvements in V1. Treat every full global search screen
-detail as Future Proposal until promoted.
+The global search screen is Current for folders/decks/flashcards. Treat the Tags section, recent
+searches, and popular-tags landing as Future Proposal until the tag subsystem and a
+`shared_preferences` dependency are approved. Inline/scope-local search guidance above still applies
+to in-screen filters.

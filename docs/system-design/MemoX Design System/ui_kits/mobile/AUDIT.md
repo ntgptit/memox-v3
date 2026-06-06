@@ -17,7 +17,6 @@ A second recursive pass reviewed every section in **both** Tokyo Pure Light and 
 Nebula, focusing on theme correctness and UX friendliness. Findings:
 
 **Fixed**
-
 - **Stray scrollbars / horizontal overflow (MAJOR, dark + light).** The Guess screen and
   two bottom-sheet lists (tag picker, move-folder) used raw `overflow: auto` /
   `overflow-y: auto`. Because setting only the Y axis makes the X axis compute to `auto`
@@ -34,7 +33,6 @@ Nebula, focusing on theme correctness and UX friendliness. Findings:
   in-app these are real state transitions, not prop-seeded mounts.
 
 **Reviewed and confirmed correct (no change needed)**
-
 - **Toast / snackbar** (Tag op-error) uses a fixed dark slate (`rgb(52,57,93)`) with light
   text in *both* themes — the M3 inverse-surface pattern. Legible in light and dark. Good.
 - **Primary buttons** keep brand indigo `#5265F5` + white label in dark (the scoped
@@ -60,8 +58,7 @@ The kit was reviewed against this checklist (per the brief):
 - Mobile UI consistency (spacing, radii, type scale, surface ladder)
 - Mobile UX friendliness (hierarchy, clear primary action, calm copy)
 - Accessibility (semantics, focus, hit targets, contrast, motion)
-- State coverage (loading / empty / error / offline / disabled / success / validation / signed-out /
-  permission-denied)
+- State coverage (loading / empty / error / offline / disabled / success / validation / signed-out / permission-denied)
 - SafeArea, scrolling, keyboard behavior
 - Common mobile widths (360 / 375 / 390 / 412 — already in the kit's Width selector)
 - Flutter engineering handoff readiness
@@ -76,7 +73,6 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
 ## 2. Fixed in this pass
 
 ### CRITICAL — apostrophes rendered as raw escapes (content defect)
-
 - **Found:** 23 occurrences of the `\u2019` escape sat in **JSX text nodes**
   (e.g. `Today\u2019s review`, `Let\u2019s start`, `phone\u2019s settings`). JSX text
   does not interpret `\uXXXX` escapes — only JS string literals do — so users saw the
@@ -87,16 +83,13 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
   the kit's copy strings should be lifted verbatim from `l10n/app_en.arb`, not retyped.
 
 ### MAJOR — accessibility: decorative icons announced to screen readers
-
 - **Found:** the shared `Ic` (Lucide) wrapper had no ARIA, so every decorative glyph was
   exposed to assistive tech.
 - **Fix:** `Ic` now renders `aria-hidden="true"` by default, with an opt-in `label` prop
   (`role="img"` + `aria-label`) for the rare icon that is the sole carrier of meaning.
-- **Flutter map:** decorative `Icon` → wrap in `ExcludeSemantics`; meaningful →
-  `Icon(..., semanticLabel: …)`.
+- **Flutter map:** decorative `Icon` → wrap in `ExcludeSemantics`; meaningful → `Icon(..., semanticLabel: …)`.
 
 ### MAJOR — accessibility: primary navigation was not a control
-
 - **Found:** `BottomNav` items were clickable `<div>`s — not keyboard-focusable, no role,
   no current-page indication.
 - **Fix:** items are now `<button type="button">` with `aria-current="page"` on the active
@@ -105,7 +98,6 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
   now matches that semantic contract.
 
 ### MAJOR — accessibility: no visible keyboard focus anywhere
-
 - **Found:** no `:focus-visible` styling on any interactive element.
 - **Fix:** a global focus ring (`2px solid var(--memox-primary)`, `offset 2px`) now applies
   to `button`, `.icon-btn`, `.pill-btn`, `.bn-item`, and `[role="switch"]`. Both `Toggle`
@@ -113,16 +105,13 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
 - **Flutter map:** Material's built-in focus highlight; keep `primary` as the focus color.
 
 ### MAJOR — touch targets below the 44px floor
-
 - **Found:** `.icon-btn` is a 36px visual circle (some inline-shrunk to 24px, e.g. dismiss
   buttons) — under the README's own "never less than 44px" rule and `SizeTokens.touch = 48`.
 - **Fix:** an invisible `::after` expands every `.icon-btn` hit area to **44×44** without
   changing the visual size, including the shrunken dismiss buttons.
-- **Flutter map:** `IconButton` already enforces a 48dp tap target via
-  `MaterialTapTargetSize.padded` — keep that default; do not shrink `constraints`.
+- **Flutter map:** `IconButton` already enforces a 48dp tap target via `MaterialTapTargetSize.padded` — keep that default; do not shrink `constraints`.
 
 ### MAJOR — missing **offline** state (requested gap)
-
 - **Found:** MemoX is local-first, but there was no reusable connectivity-lost pattern.
 - **Fix:** added a shared **`OfflineBanner`** primitive (alongside `StatusBar` / `BottomNav`)
   with `role="status"` and brand-voice copy ("You're offline. Your cards are saved on this
@@ -134,7 +123,6 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
   or an inline `Container`; copy via an l10n key.
 
 ### MINOR — reduced-motion not respected
-
 - **Found:** skeleton-pulse and the "continue studying" dot looped infinitely with no guard.
 - **Fix:** global `@media (prefers-reduced-motion: reduce)` neutralizes animations/transitions.
 - **Flutter map:** gate non-essential animation on `MediaQuery.of(context).disableAnimations`.
@@ -143,13 +131,13 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
 
 ## 3. Recommendations (not changed — need a product decision)
 
-| Sev      | Finding                                                                                                                                                                                                                                             | Why not auto-fixed                                                                                               | Suggested action                                                                                                                                                                                                                                     |
-|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| MAJOR    | **List rows / cards use clickable `<div>`s** across most screens (deck rows, folder rows, settings rows, tag rows). They are not keyboard-focusable and expose no role.                                                                             | Converting ~dozens of inline rows risks layout regressions and is screen-by-screen work.                         | In Flutter these are already `InkWell`/`ListTile` (focusable + semantic) — no app change needed. For the kit, wrap row roots in `role="button" tabIndex={0}` if AT fidelity in the mock matters.                                                     |
-| MAJOR    | **Icon-only buttons inside screens** still rely on `title` rather than `aria-label` in several places (Dashboard's search/settings are now labeled; others remain).                                                                                 | Many are inline and one-off.                                                                                     | Add `aria-label` to each; in Flutter pass `tooltip:` / `semanticLabel:` on every `IconButton`.                                                                                                                                                       |
-| DECISION | **Gradients in chrome.** The Dashboard's "Continue studying" and "Today's review" cards use subtle `linear-gradient` fills, but the design rules state *"No gradients in UI chrome — the only gradient anywhere is the mastery tri-stop gradient."* | The gradients are deliberate and attractive; removing them is a visual redesign, which is out of scope.          | Confirm intent. If keeping, update the README rule to allow a "hero-CTA tint gradient." If not, flatten to `primary-container` / `surface-container` tints — which is also the cleaner Flutter token mapping (`Theme.colorScheme.primaryContainer`). |
-| MINOR    | **SafeArea is mocked, not parameterized** — `env(safe-area-inset-*)` appears once.                                                                                                                                                                  | The phone frame is a fixed 390×780 mock; insets are simulated by the 44px status bar and the bottom-nav padding. | Acceptable for a static kit. In Flutter, wrap every screen body in `SafeArea`; the bottom nav already reserves a home-indicator gap (maps to `SafeArea(bottom:true)` / `viewPadding.bottom`).                                                        |
-| MINOR    | **Self-hosted fonts / icon font** — Plus Jakarta Sans via Google Fonts CDN; Lucide stands in for Material Symbols.                                                                                                                                  | Pre-existing, documented in the root README.                                                                     | Confirm before production: ship `google_fonts` (or bundle TTFs) and `Icons.*` (Material Symbols) in the app.                                                                                                                                         |
+| Sev | Finding | Why not auto-fixed | Suggested action |
+|---|---|---|---|
+| MAJOR | **List rows / cards use clickable `<div>`s** across most screens (deck rows, folder rows, settings rows, tag rows). They are not keyboard-focusable and expose no role. | Converting ~dozens of inline rows risks layout regressions and is screen-by-screen work. | In Flutter these are already `InkWell`/`ListTile` (focusable + semantic) — no app change needed. For the kit, wrap row roots in `role="button" tabIndex={0}` if AT fidelity in the mock matters. |
+| MAJOR | **Icon-only buttons inside screens** still rely on `title` rather than `aria-label` in several places (Dashboard's search/settings are now labeled; others remain). | Many are inline and one-off. | Add `aria-label` to each; in Flutter pass `tooltip:` / `semanticLabel:` on every `IconButton`. |
+| DECISION | **Gradients in chrome.** The Dashboard's "Continue studying" and "Today's review" cards use subtle `linear-gradient` fills, but the design rules state *"No gradients in UI chrome — the only gradient anywhere is the mastery tri-stop gradient."* | The gradients are deliberate and attractive; removing them is a visual redesign, which is out of scope. | Confirm intent. If keeping, update the README rule to allow a "hero-CTA tint gradient." If not, flatten to `primary-container` / `surface-container` tints — which is also the cleaner Flutter token mapping (`Theme.colorScheme.primaryContainer`). |
+| MINOR | **SafeArea is mocked, not parameterized** — `env(safe-area-inset-*)` appears once. | The phone frame is a fixed 390×780 mock; insets are simulated by the 44px status bar and the bottom-nav padding. | Acceptable for a static kit. In Flutter, wrap every screen body in `SafeArea`; the bottom nav already reserves a home-indicator gap (maps to `SafeArea(bottom:true)` / `viewPadding.bottom`). |
+| MINOR | **Self-hosted fonts / icon font** — Plus Jakarta Sans via Google Fonts CDN; Lucide stands in for Material Symbols. | Pre-existing, documented in the root README. | Confirm before production: ship `google_fonts` (or bundle TTFs) and `Icons.*` (Material Symbols) in the app. |
 
 ---
 
@@ -158,17 +146,17 @@ at the primitive level to benefit all 23 screens at once rather than redesigning
 All values in the kit come from `colors_and_type.css`, which mirrors `lib/core/theme/tokens/**`.
 **Tokens are law — no raw hex / sizes in the app.** Quick map:
 
-| Kit (CSS var)                                                          | Flutter token / role                                                                                   |
-|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `--memox-primary`, `--memox-on-primary`, `--memox-surface-container-*` | `ColorScheme` roles (seeded from `#5265F5`)                                                            |
-| `--memox-error-fill` (dark `#B0485C`)                                  | solid danger-button fill in dark — distinct from the light-pink `error` content color; keep this split |
-| `--memox-status-*`, `--memox-rating-*`, `--memox-mastery*`             | `CustomColors` extension on `ThemeData`                                                                |
-| `--memox-fs-*` (48/32/24/20/16/14/12)                                  | `TextTheme` sizes — the collapsed scale; never interpolate                                             |
-| `--memox-space-*` (4dp grid)                                           | `SpacingTokens`                                                                                        |
-| `--memox-radius-*`                                                     | `RadiusTokens` (card/dialog/sheet = `lg 16`; button/input = `md 12`; chip/FAB = pill/`xxl 28`)         |
-| `--memox-dur-*`, `--memox-ease-*`                                      | `DurationTokens` / `EasingTokens` (no `elasticOut` — flagged anti-pattern)                             |
-| `--memox-border-ghost`                                                 | the 15%-outlineVariant 1px "ghost border" on every card                                                |
-| glass chrome (84% + blur)                                              | app bar / bottom nav / sticky sheets only                                                              |
+| Kit (CSS var) | Flutter token / role |
+|---|---|
+| `--memox-primary`, `--memox-on-primary`, `--memox-surface-container-*` | `ColorScheme` roles (seeded from `#5265F5`) |
+| `--memox-error-fill` (dark `#B0485C`) | solid danger-button fill in dark — distinct from the light-pink `error` content color; keep this split |
+| `--memox-status-*`, `--memox-rating-*`, `--memox-mastery*` | `CustomColors` extension on `ThemeData` |
+| `--memox-fs-*` (48/32/24/20/16/14/12) | `TextTheme` sizes — the collapsed scale; never interpolate |
+| `--memox-space-*` (4dp grid) | `SpacingTokens` |
+| `--memox-radius-*` | `RadiusTokens` (card/dialog/sheet = `lg 16`; button/input = `md 12`; chip/FAB = pill/`xxl 28`) |
+| `--memox-dur-*`, `--memox-ease-*` | `DurationTokens` / `EasingTokens` (no `elasticOut` — flagged anti-pattern) |
+| `--memox-border-ghost` | the 15%-outlineVariant 1px "ghost border" on every card |
+| glass chrome (84% + blur) | app bar / bottom nav / sticky sheets only |
 
 Widget mapping: app bar → `AppBar` (56/64dp); bottom nav → `NavigationBar` (80dp);
 cards → `Card`/`Container` with ghost border, tonal elevation (no shadow > 6%); inputs →
@@ -183,19 +171,14 @@ tokenized `TextField` (focus = 1px solid `primary`); chips → pill; FAB → `le
 Every screen ships its applicable states side-by-side; the gallery stepper cycles them in
 both themes. Coverage by category:
 
-- **Loading** — per-section skeletons (not full-screen spinners): Dashboard, Library, Folder,
-  Search, Flashcard list/edit/history, Import, Tags, Progress, Settings, Sync, Audio, Study result.
-- **Empty** — action-led empty states ("Add cards to start reviewing"): Library, Folder, Search,
-  Flashcard list/history, Tags, Progress, Onboarding zero, Audio (no voices).
-- **Error** — local-safe messaging + Retry: Dashboard, Library, Folder, Search, Flashcard
-  list/edit/history, Import (failed/partial), Progress, Settings (sync error), Sync, Audio (engine
-  error).
+- **Loading** — per-section skeletons (not full-screen spinners): Dashboard, Library, Folder, Search, Flashcard list/edit/history, Import, Tags, Progress, Settings, Sync, Audio, Study result.
+- **Empty** — action-led empty states ("Add cards to start reviewing"): Library, Folder, Search, Flashcard list/history, Tags, Progress, Onboarding zero, Audio (no voices).
+- **Error** — local-safe messaging + Retry: Dashboard, Library, Folder, Search, Flashcard list/edit/history, Import (failed/partial), Progress, Settings (sync error), Sync, Audio (engine error).
 - **Offline** — **new** reusable banner; shown on Dashboard, ready for reuse.
 - **Disabled** — "Soon" chips on disabled settings rows; disabled toggles; faded options.
 - **Success** — Import success, Study result, sync ready/uploaded.
 - **Validation** — Flashcard create/edit inline validation; Tag rename → merge conflict.
-- **Signed-out / permission-denied** — Settings, Account sync (signed-out chain), Learning
-  settings (notification perm denied), Audio (TTS engine missing).
+- **Signed-out / permission-denied** — Settings, Account sync (signed-out chain), Learning settings (notification perm denied), Audio (TTS engine missing).
 
 ---
 
@@ -207,8 +190,7 @@ Re-reviewed against the checklist after fixes:
   tokens and verified in both Tokyo Pure Light and Tokyo Nebula.
 - **Consistency** — ✅ no new colors/radii/spacing introduced; primitives only.
 - **Accessibility** — ✅ icons hidden, nav is a control, focus visible, 44px targets, toggles
-  focusable, reduced-motion honored. ⚠️ inline clickable rows remain (Flutter-native already;
-  documented).
+  focusable, reduced-motion honored. ⚠️ inline clickable rows remain (Flutter-native already; documented).
 - **State coverage** — ✅ offline gap closed; rest already complete.
 - **SafeArea / scrolling / keyboard** — ✅ documented for Flutter; mock behavior unchanged.
 - **Handoff readiness** — ✅ token/widget map above; copy sourced from l10n.

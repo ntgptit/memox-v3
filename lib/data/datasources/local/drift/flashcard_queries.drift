@@ -1,0 +1,32 @@
+import 'flashcards.drift';
+import 'decks.drift';
+
+-- Flashcard List read queries (`docs/wireframes/06-flashcard-list.md`). All SQL
+-- lives here; `FlashcardDao` binds params and builds the runtime `$order`.
+
+-- Cards in :deckId, optionally filtered by a pre-normalised LIKE pattern over
+-- front / back / example_sentence. `:search` is '' for the unfiltered list or
+-- '%term%' for an active search; `\` is the LIKE escape char so user-typed
+-- `%`/`_` match literally. `$order` is the caller-built sort.
+flashcardListItems(:deckId AS TEXT, :search AS TEXT):
+SELECT
+  flashcards.id,
+  flashcards.deck_id,
+  flashcards.front,
+  flashcards.back,
+  flashcards.example_sentence,
+  flashcards.sort_order,
+  flashcards.created_at,
+  flashcards.updated_at
+FROM flashcards
+WHERE flashcards.deck_id = :deckId
+  AND (:search = ''
+    OR LOWER(flashcards.front) LIKE :search ESCAPE '\'
+    OR LOWER(flashcards.back) LIKE :search ESCAPE '\'
+    OR LOWER(COALESCE(flashcards.example_sentence, '')) LIKE :search ESCAPE '\')
+ORDER BY $order;
+
+-- Total cards in :deckId regardless of search — drives the empty-deck vs
+-- no-results-on-search distinction in the Flashcard List.
+flashcardCountInDeck(:deckId AS TEXT):
+SELECT COUNT(*) AS total FROM flashcards WHERE flashcards.deck_id = :deckId;

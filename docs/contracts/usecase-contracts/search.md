@@ -1,41 +1,55 @@
 ---
-last_updated: 2026-05-29
-status: V1 inline search guidance; GlobalSearchUseCase is Future Proposal
+last_updated: 2026-06-06
+status: Current — GlobalSearchUseCase (folders/decks/flashcards); tags + recent + popular are Future Proposal
 ---
 
 # Search Use Cases Contract
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
-V1 uses inline/scope-local search. The dedicated recursive global search use cases below are **Future Proposal** and must not be implemented in V1 unless promoted by `docs/checklist/v1-implementation-scope-2026-05-29.md`.
+The global search use case below is **Current** for three sections (folders/decks/flashcards). The
+recent-search and popular-tags use cases, and the Tags result section, remain **Future Proposal**
+pending a `shared_preferences` dependency and the tag subsystem.
 
 ## V1 inline search
 
-V1 search improvements should reuse existing screen-level providers/widgets and keep search inside the current screen scope. Do not add recent-search persistence or a dedicated global route.
+V1 also keeps inline/scope-local search on existing screens — reuse screen-level providers/widgets
+and keep that filtering inside the current screen scope. This is independent of the global screen.
 
-## Future Proposal: GlobalSearchUseCase
+## Current: GlobalSearchUseCase
+
+Implemented in `lib/domain/usecases/search/global_search_usecase.dart` over
+`lib/domain/repositories/search_repository.dart` (Drift-backed `SearchRepositoryImpl`). Uses the
+existing `Result<T>` pattern (not `Either`, per the architecture note).
 
 ```dart
-Future<Either<Failure, SearchResults>> call({
-  required String query,
-  DeckId? deckScope,  // optional pre-filter for in-deck search
-});
+Future<Result<SearchResults>> call({required String query});
 ```
 
-**Rules:**
+**Rules (implemented):**
 
-- Trim query. Reject if length < 2 → `ValidationFailure(code: tooShort)`.
-- Escape special LIKE chars (`%`, `_`) before passing to DB.
-- Run 4 parallel queries (folders, decks, flashcards, tags), each section LIKE-based.
-- Apply `deckScope` filter to flashcards section when provided.
+- Normalize query via `StringUtils.normalizeQuery` (trim, lowercase, collapse internal whitespace).
+- Reject if normalized length `< 2` → `ValidationFailure(field: 'query', code: tooShort)` — the repo
+  is never called.
+- The repository escapes special LIKE chars (`%`, `_`, `\`) before binding.
+- Runs 3 parallel section queries (folders, decks, flashcards) via record `.wait`; each section is
+  LIKE-based. The **Tags** section is deferred until the tag subsystem ships.
 - Sort within each section: exact match → starts-with → substring → recency tiebreak.
-- Cap each section at 5 visible (`SearchResults` includes total counts for "Show all" link).
+- Cap each section at `GlobalSearchUseCase.sectionCap` (5); `SearchResults` carries per-section
+  totals (`folderTotal` / `deckTotal` / `flashcardTotal`) for the "+N more" affordance.
 
-**Returns:** `SearchResults { folders, decks, flashcards, tags, queryDuration }`.
+**Returns:** `SearchResults { folders, decks, flashcards, folderTotal, deckTotal, flashcardTotal }`
+with `isEmpty` / `totalCount` getters. (The Future `tags` section and `queryDuration` are not yet
+included.)
 
-**Errors:** `ValidationFailure`, `StorageFailure`.
+**Errors:** `ValidationFailure(tooShort)`, `StorageFailure(read)`.
 
-**Test refs:** SR1-SR10.
+**Test refs:** `test/domain/usecases/global_search_usecase_test.dart`,
+`test/data/repositories/search_repository_impl_test.dart`,
+`test/presentation/features/search/global_search_test.dart`.
+
+> The `deckScope` pre-filter and a `tags` section are Future refinements — not part of the promoted
+> scope.
 
 ## Future Proposal: GetRecentSearchesUseCase
 
@@ -71,21 +85,20 @@ Future<Either<Failure, List<TagWithCount>>> call({int limit = 5});
 
 Top tags by usage. Cached in screen state.
 
-## V1 forbidden patterns
+## Still-forbidden patterns (post-promotion)
 
-- ❌ Do not implement `GlobalSearchUseCase` in V1.
-- ❌ Do not add `/library/search` in V1.
-- ❌ Do not persist `search.recent` in V1.
-- ❌ Do not add grouped cross-scope result UI in V1.
+- ❌ Do not add a Tags result section until the tag subsystem ships.
+- ❌ Do not persist `search.recent` until a `shared_preferences` dependency is approved.
+- ❌ Do not add a popular-tags landing section until the tag subsystem ships.
 
 ## Forbidden patterns
 
 - ❌ Add flat/recursive toggle. Search is always recursive.
-- ❌ Pass raw user query to LIKE without escaping.
+- ❌ Pass raw user query to LIKE without escaping (`SearchRepositoryImpl` escapes `%` / `_` / `\`).
 - ❌ Cache search results across queries.
 - ❌ Implement FTS (full-text search) without explicit ADR — keep LIKE for Phase 1.
 - ❌ Fire query at < 2 chars.
-- ❌ Store > 5 recent searches.
+- ❌ Store > 5 recent searches (when recent searches are eventually promoted).
 
 ## Related
 

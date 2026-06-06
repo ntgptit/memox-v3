@@ -60,7 +60,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard edit            | `/library/deck/:deckId/flashcards/:flashcardId/edit`                                                                                                                                                                                                                                    | No            |
 | Flashcard history         | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
-| Library search            | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | Yes           |
+| Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Opened from the Library Overview app-bar search action                                                                                                              | Yes           |
 | Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
 | Today study               | `/library/study/today`                                                                                                                                                                                                                                                                  | No            |
 | Study session             | `/library/study/session/:sessionId`                                                                                                                                                                                                                                                     | No            |
@@ -71,8 +71,13 @@ Notes:
 - Query-string filters on the flashcard list are application conventions; verify GoRouter
   declarations in `lib/presentation/features/**/routes/*.dart`.
 - The `tag` entry type is Blocked/Future until `StudyEntryType.tag` and tag-scope queries are
-  promoted. Flashcard history and library search routes are Future Proposal. Add route constants in
-  `RouteNames` / `RoutePaths` and wire any of these only when the related scope guard promotes them.
+  promoted. Flashcard history route is Future Proposal — add its route constants in `RouteNames` /
+  `RoutePaths` and wire it only when its scope guard promotes it.
+- Library search is Current: `RouteNames.librarySearch` / `RoutePaths.librarySearchTemplate`
+  (`/library/search`), registered as a child of the Library branch (shell visible) and pushed via
+  `context.pushLibrarySearch()`. The promoted V1 scope covers folders/decks/flashcards only; the
+  tags result section, recent searches, and popular-tags landing remain Future Proposal pending the
+  tag subsystem + a `shared_preferences` dependency (`docs/business/search/global-search.md`).
 - Folder Detail surfaces Study folder / Today / Resume entry points (Current, Prompt 45). Study
   folder and Today route through the Study Entry gate (`entry_type=folder`, with
   `study_type=srs_review` for Today); the Resume banner opens the existing `study/session/:id`
@@ -151,7 +156,7 @@ When params are invalid or entity is deleted:
 
 ## Deep link rules
 
-- Public routes (deep linkable): `/home`, `/library`, `/library/folder/:id`,
+- Public routes (deep linkable): `/home`, `/library`, `/library/search`, `/library/folder/:id`,
   `/library/deck/:deckId/flashcards`, `/progress`, `/settings`.
 - Private routes (not deep linkable): study session routes, create/edit forms, import.
 - Private routes accessed via deep link must redirect to safe public ancestor.

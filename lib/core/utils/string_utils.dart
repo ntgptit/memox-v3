@@ -20,6 +20,12 @@ abstract final class StringUtils {
   /// Canonical form for comparison/search/tags: trimmed then lowercased.
   static String normalize(String value) => value.trim().toLowerCase();
 
+  /// Canonical form for free-text search queries: trimmed, lowercased, and with
+  /// internal whitespace runs collapsed to a single space
+  /// (`docs/business/search/global-search.md` §V1 query input).
+  static String normalizeQuery(String value) =>
+      value.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
+
   /// First character upper-cased; remainder unchanged.
   static String capitalize(String value) =>
       value.isEmpty ? value : value[0].toUpperCase() + value.substring(1);

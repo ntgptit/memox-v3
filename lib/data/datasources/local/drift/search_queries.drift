@@ -1,0 +1,69 @@
+import 'folders.drift';
+import 'decks.drift';
+import 'flashcards.drift';
+
+-- Global Library search (`docs/wireframes/11-library-search.md`). One named
+-- query per section. The caller passes pre-normalised, LIKE-escaped patterns:
+-- `:exact` is the bare normalised term (for the `=` exact-rank test), `:prefix`
+-- is `term%`, `:contains` is `%term%`. `\` is the escape char so user-typed
+-- `%`/`_` are matched literally. `COUNT(*) OVER ()` carries the full match total
+-- on every row (window runs before LIMIT), so the row cap and the "+N more"
+-- total come from a single pass. Ranking: exact -> starts-with -> substring,
+-- then most-recent first.
+
+searchFolders(:exact AS TEXT, :prefix AS TEXT, :contains AS TEXT, :cap AS INT):
+SELECT
+  folders.id,
+  folders.name,
+  COUNT(*) OVER () AS total_count
+FROM folders
+WHERE LOWER(folders.name) LIKE :contains ESCAPE '\'
+ORDER BY
+  CASE
+    WHEN LOWER(folders.name) = :exact THEN 0
+    WHEN LOWER(folders.name) LIKE :prefix ESCAPE '\' THEN 1
+    ELSE 2
+  END,
+  folders.created_at DESC,
+  folders.name
+LIMIT :cap;
+
+searchDecks(:exact AS TEXT, :prefix AS TEXT, :contains AS TEXT, :cap AS INT):
+SELECT
+  decks.id,
+  decks.name,
+  COUNT(*) OVER () AS total_count
+FROM decks
+WHERE LOWER(decks.name) LIKE :contains ESCAPE '\'
+ORDER BY
+  CASE
+    WHEN LOWER(decks.name) = :exact THEN 0
+    WHEN LOWER(decks.name) LIKE :prefix ESCAPE '\' THEN 1
+    ELSE 2
+  END,
+  decks.created_at DESC,
+  decks.name
+LIMIT :cap;
+
+searchFlashcards(:exact AS TEXT, :prefix AS TEXT, :contains AS TEXT, :cap AS INT):
+SELECT
+  flashcards.id,
+  flashcards.deck_id,
+  flashcards.front,
+  flashcards.back,
+  COUNT(*) OVER () AS total_count
+FROM flashcards
+WHERE LOWER(flashcards.front) LIKE :contains ESCAPE '\'
+   OR LOWER(flashcards.back) LIKE :contains ESCAPE '\'
+   OR LOWER(COALESCE(flashcards.example_sentence, '')) LIKE :contains ESCAPE '\'
+ORDER BY
+  CASE
+    WHEN LOWER(flashcards.front) = :exact OR LOWER(flashcards.back) = :exact
+      THEN 0
+    WHEN LOWER(flashcards.front) LIKE :prefix ESCAPE '\'
+      OR LOWER(flashcards.back) LIKE :prefix ESCAPE '\'
+      THEN 1
+    ELSE 2
+  END,
+  flashcards.created_at DESC
+LIMIT :cap;

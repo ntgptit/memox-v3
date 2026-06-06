@@ -31,15 +31,27 @@ Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026
 surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`),
 applied in `MxCard`. Bottom-nav density is still open.
 
+**Prompt 50 scope (2026-06-06) — global search promotion:** the Library Overview app bar now exposes
+a leading `search` action (`Icons.search_rounded`, `librarySearchOpenTooltip`) that pushes the new
+global search screen at `/library/search` (`RouteNames.librarySearch`, `context.pushLibrarySearch()`).
+This is **Current** and covers folders/decks/flashcards; the Tags result section, recent searches,
+and popular tags remain **Future** (`docs/wireframes/11-library-search.md`,
+`docs/business/search/global-search.md`). The always-visible inline scope-local search field below
+the title is unchanged and still does not navigate. The `tune` filter affordance stays a disabled
+visual-only target. Earlier notes that "Global Search and `/library/search` remain Future" and "no
+`/library/search` route exists" are **superseded by this note**.
+
 **Prompt 49B scope (2026-06-04):** fixes the **loaded-state visual drift** left by Prompt 49 against
 the same mock §"03 · Library overview". No schema/SRS/repository/use-case change. Changes are
 presentation-only:
 
-- Header right control is now a sliders/filter affordance (`Icons.tune_rounded`), **not** a
-  search-icon toggle. It is a **visual-only target** — rendered disabled because Library has no
-  approved filter/sort sheet yet (no unsupported action is exposed).
-- Search is **always-visible inline** scope-local search directly below the title (no toggle). It
-  never navigates; Global Search and `/library/search` remain **Future**.
+- Header right control is a sliders/filter affordance (`Icons.tune_rounded`). It is a **visual-only
+  target** — rendered disabled because Library has no approved filter/sort sheet yet (no unsupported
+  action is exposed). **Updated 2026-06-06 (search promotion):** a `search` icon
+  (`Icons.search_rounded`) now sits to its left and opens the global search screen — see the
+  Prompt-50 note below.
+- Search below the title is **always-visible inline** scope-local search (no toggle). The inline
+  field itself never navigates; global cross-scope search is reached via the new app-bar search icon.
 - The static `All` filter chip is **removed** from the loaded header.
 - Loaded state renders a `{n} FOLDERS` overline section header (count only; **no sort control** —
   the mock sort pill remains Future).
@@ -83,8 +95,9 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 **Verified Current (behaviour + tests):**
 
 - Route `/library` opens `LibraryOverviewView` (also `initialLocation`). Folder row →
-  `pushFolderDetail` → `/library/folder/:id`. No `/library/search` route exists; the always-visible
-  inline search field filters scope-locally, it does not navigate.
+  `pushFolderDetail` → `/library/folder/:id`. The always-visible inline search field filters
+  scope-locally and does not navigate; the app-bar `search` icon pushes the global search screen at
+  `/library/search` (Current — `docs/wireframes/11-library-search.md`).
 - Renders **top-level folders only**. Recursive subtree counts per folder (subfolders · decks ·
   cards · due) are Current from Prompt 14 and isolated between sibling roots.
 - States:
@@ -140,7 +153,9 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 - No sort **UI control** on Library Overview (no overflow sort menu / sort chip). Sort exists only
   in the data/use-case layer.
 - Drag-to-reorder of root items, pull-to-refresh, and grid/multi-column responsive layout.
-- Global Search screen / `/library/search` route (Global Search remains Future).
+- Global Search screen / `/library/search` route is now **Current** (promoted 2026-06-06) for
+  folders/decks/flashcards, opened from the app-bar search icon. Only the in-search **Tags** section,
+  recent searches, and popular tags remain Future.
 
 **Prompt 42/42B superseded (2026-06-03, Prompt 43A):** Product ownership rejected
 root-level decks and nullable deck parent migration. Keep `decks.folder_id`

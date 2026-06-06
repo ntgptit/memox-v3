@@ -5273,6 +5273,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Locked to decks — can\'t hold folders.'**
   String get folderMovePickerLockedReason;
+
+  /// No description provided for @folderSummaryAllCaughtUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up'**
+  String get folderSummaryAllCaughtUp;
+
+  /// No description provided for @folderSummarySubfoldersStat.
+  ///
+  /// In en, this message translates to:
+  /// **'subfolders'**
+  String get folderSummarySubfoldersStat;
+
+  /// No description provided for @folderSummaryCardsStat.
+  ///
+  /// In en, this message translates to:
+  /// **'cards'**
+  String get folderSummaryCardsStat;
+
+  /// No description provided for @folderSummaryDueStat.
+  ///
+  /// In en, this message translates to:
+  /// **'due total'**
+  String get folderSummaryDueStat;
+
+  /// No description provided for @librarySearchOpenTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Search library'**
+  String get librarySearchOpenTooltip;
+
+  /// No description provided for @searchFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search folders, decks, cards'**
+  String get searchFieldHint;
+
+  /// No description provided for @searchClearTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get searchClearTooltip;
+
+  /// No description provided for @searchEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search your library'**
+  String get searchEmptyTitle;
+
+  /// No description provided for @searchEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least 2 characters to find folders, decks, and cards.'**
+  String get searchEmptyMessage;
+
+  /// No description provided for @searchNoResultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get searchNoResultsTitle;
+
+  /// No description provided for @searchNoResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in your library matches that search.'**
+  String get searchNoResultsMessage;
+
+  /// No description provided for @searchErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed'**
+  String get searchErrorTitle;
+
+  /// No description provided for @searchErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong while searching. Please try again.'**
+  String get searchErrorMessage;
+
+  /// No description provided for @searchRetryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get searchRetryLabel;
+
+  /// No description provided for @searchSectionFolders.
+  ///
+  /// In en, this message translates to:
+  /// **'Folders'**
+  String get searchSectionFolders;
+
+  /// No description provided for @searchSectionDecks.
+  ///
+  /// In en, this message translates to:
+  /// **'Decks'**
+  String get searchSectionDecks;
+
+  /// No description provided for @searchSectionFlashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Flashcards'**
+  String get searchSectionFlashcards;
+
+  /// No description provided for @searchResultFolderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get searchResultFolderSubtitle;
+
+  /// No description provided for @searchResultDeckSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck'**
+  String get searchResultDeckSubtitle;
+
+  /// No description provided for @searchMoreCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{+1 more} other{+{count} more}}'**
+  String searchMoreCount(int count);
+
+  /// No description provided for @commonDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get commonDone;
+
+  /// No description provided for @flashcardListAddCardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add flashcard'**
+  String get flashcardListAddCardAction;
+
+  /// No description provided for @flashcardListImportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from CSV / Excel'**
+  String get flashcardListImportAction;
+
+  /// No description provided for @flashcardListErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck unavailable'**
+  String get flashcardListErrorTitle;
+
+  /// No description provided for @flashcardListErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t open this deck. Please try again.'**
+  String get flashcardListErrorMessage;
+
+  /// No description provided for @flashcardListActionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get flashcardListActionError;
+
+  /// No description provided for @flashcardListSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card · {language}} other{{count} cards · {language}}}'**
+  String flashcardListSubtitle(int count, String language);
+
+  /// No description provided for @flashcardListLanguageKorean.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get flashcardListLanguageKorean;
+
+  /// No description provided for @flashcardListLanguageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get flashcardListLanguageEnglish;
+
+  /// No description provided for @flashcardListLanguageOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other language'**
+  String get flashcardListLanguageOther;
+
+  /// No description provided for @flashcardDeckReorderAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder cards'**
+  String get flashcardDeckReorderAction;
+
+  /// No description provided for @flashcardDeleteOneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete flashcard'**
+  String get flashcardDeleteOneTitle;
+
+  /// No description provided for @flashcardDeleteOneMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete this flashcard.'**
+  String get flashcardDeleteOneMessage;
+
+  /// No description provided for @flashcardDeletedOneMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Flashcard deleted.'**
+  String get flashcardDeletedOneMessage;
+
+  /// No description provided for @flashcardReorderError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the new order.'**
+  String get flashcardReorderError;
 }
 
 class _AppLocalizationsDelegate

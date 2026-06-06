@@ -67,7 +67,7 @@ The V1 scope guard is `docs/checklist/v1-implementation-scope-2026-05-29.md`.
 | Feature                   | V1 status                | Notes                                                     |
 |---------------------------|--------------------------|-----------------------------------------------------------|
 | Flashcard history screen  | Future Proposal          | Keep docs; hide/disable entry links in V1.                |
-| Global search screen      | Future Proposal          | V1 uses inline/scope-local search guidelines only.        |
+| Global search screen      | Implemented (folders/decks/flashcards) | `/library/search`; tags section + recent + popular remain Future. |
 | Full onboarding flow      | Future Proposal          | V1 uses stronger zero-content empty states + restore CTA. |
 | Empty-scope matrix Tier 1 | Approved V1              | Safe to implement from the P0 plan.                       |
 | Bury / suspend            | Approved after migration | Must include schema migration.                            |

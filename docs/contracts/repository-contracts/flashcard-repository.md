@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-06
 status: contract
 ---
 
@@ -46,6 +46,24 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
   List<FlashcardCreationData> items,
 );
 ```
+
+> **Current implementation (verified 2026-06-06).** The interface above is the
+> **Target** (`Either`-based, full surface). The shipped V1
+> `FlashcardRepository` (`lib/domain/repositories/flashcard_repository.dart`,
+> impl `lib/data/repositories/flashcard_repository_impl.dart`) is a `Result`-based
+> subset for the Flashcard List slice:
+> - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort})`
+>   — deck + folder breadcrumb + search-filtered cards + search-independent `totalCount`
+>   (composes `FlashcardDao` with `FolderDao` for the breadcrumb + content-revision stream).
+> - `Future<Result<void>> deleteFlashcard({flashcardId})` — single-card delete (progress
+>   cascades via FK).
+> - `Future<Result<void>> reorderFlashcards({deckId, orderedIds})` — writes `sort_order` by
+>   list position in one transaction.
+>
+> Deck deletion lives on `FolderRepository.deleteDeck` (cascades cards, reverts an emptied
+> parent folder to `unlocked`). `watchByDeck` (filtered + `CardState`), `move`, all `bulk*`,
+> `findInScope`, and tag operations are **Future** (block on the bury/suspend + bulk epics).
+> Migration to the `Either`/full surface is deferred to the approved `fpdart` migration.
 
 ## Transaction requirements
 

@@ -254,6 +254,23 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
     decks,
   )..where((Decks t) => t.id.equals(id))).getSingleOrNull();
 
+  /// Number of decks directly under [folderId]. Used to decide whether an
+  /// emptied `decks`-mode folder reverts to `unlocked`.
+  Future<int> childDeckCount(String folderId) async {
+    final Expression<int> total = decks.id.count();
+    final JoinedSelectStatement<Decks, DeckRow> query = selectOnly(decks)
+      ..addColumns(<Expression<Object>>[total])
+      ..where(decks.folderId.equals(folderId));
+    final int? value = await query
+        .map((TypedResult row) => row.read(total))
+        .getSingleOrNull();
+    return value ?? 0;
+  }
+
+  /// Deletes a single deck row. Its flashcards → progress cascade via FKs.
+  Future<void> deleteDeckById(String id) =>
+      (delete(decks)..where((Decks t) => t.id.equals(id))).go();
+
   // ── ORDER BY builders for the `$order` query placeholder ──────────
   //
   // Mirror the previous trusted SQL fragments. `name` ordering is binary

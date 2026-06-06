@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-06
 status: contract
 ---
 
@@ -160,6 +160,54 @@ Future<Either<Failure, ImportResult>> call({
 
 **Test refs:** IM1-IM6.
 
+## WatchFlashcardListUseCase
+
+```dart
+Stream<Either<Failure, FlashcardListDetail>> call(
+  DeckId deckId, {
+  String? searchTerm,
+  ContentSortMode sort = ContentSortMode.manual,
+});
+```
+
+> **Current implementation (verified 2026-06-06).** Shipped as the `Result`-based
+> `WatchFlashcardListUseCase` (`lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`)
+> over `FlashcardRepository.watchFlashcardList`. This is the V1 list-watch — the
+> unfiltered (search-only) precursor to `WatchFlashcardsByFilterUseCase`; status/tag
+> filters and computed `CardState` are Future.
+
+**Rules:**
+
+- `FlashcardListDetail` = deck + folder breadcrumb + (search-filtered) cards + `totalCount`.
+- `totalCount` is the deck's full card count, independent of `searchTerm` — it lets the UI
+  tell empty-deck (`totalCount == 0`) apart from no-results-on-search (`cards.isEmpty &&
+  totalCount > 0`).
+- A missing/deleted deck yields `NotFoundFailure`.
+
+**Errors:** `NotFoundFailure`, `StorageFailure`.
+
+## ReorderFlashcardsUseCase
+
+```dart
+Future<Either<Failure, Unit>> call({
+  required DeckId deckId,
+  required List<FlashcardId> orderedIds,
+});
+```
+
+> **Current implementation (verified 2026-06-06).** Shipped as the `Result`-based
+> `ReorderFlashcardsUseCase` (`lib/domain/usecases/flashcard/reorder_flashcards_usecase.dart`).
+
+**Rules:**
+
+- `orderedIds` is the full post-drag order of the deck's cards; the repository writes
+  `sort_order` by list position in one transaction (`docs/decision-tables/memox-core-decision-table.md`
+  §D4).
+
+**Errors:** `StorageFailure`.
+
+**Test refs:** D4.
+
 ## WatchFlashcardsByFilterUseCase
 
 ```dart
@@ -171,6 +219,8 @@ Stream<Either<Failure, List<FlashcardWithState>>> call({
 ```
 
 Returns flashcards with computed `CardState` (priority: Suspended > Buried > Due > Active).
+**Future** — status/tag filtering and `CardState` are not yet implemented; V1 uses
+`WatchFlashcardListUseCase` above.
 
 ## GetFlashcardDetailUseCase
 

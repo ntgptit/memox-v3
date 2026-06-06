@@ -43,6 +43,11 @@ class LibraryOverviewScreen extends ConsumerWidget {
         titleText: l10n.libraryTitle,
         actions: <Widget>[
           MxIconButton(
+            icon: Icons.search_rounded,
+            tooltip: l10n.librarySearchOpenTooltip,
+            onPressed: () => context.pushLibrarySearch(),
+          ),
+          MxIconButton(
             icon: Icons.tune_rounded,
             tooltip: l10n.libraryFilterTooltip,
             onPressed: null,
