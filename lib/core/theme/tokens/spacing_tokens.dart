@@ -15,6 +15,13 @@ abstract final class SpacingTokens {
   static const double xxl = 32;
   static const double xxxl = 48;
 
+  // Semantic aliases used by compact UI surfaces.
+  static const double micro = 5;
+  static const double tight = 6;
+  static const double compact = 7;
+  static const double inline = 10;
+  static const double form = 14;
+
   /// Semantic aliases.
   static const double cardPadding = 16;
   static const double screenPadding = 24;

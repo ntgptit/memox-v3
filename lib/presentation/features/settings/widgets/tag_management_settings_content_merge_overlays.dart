@@ -88,7 +88,7 @@ Widget _buildRenameDialogCard({
       boxShadow: <BoxShadow>[
         BoxShadow(
           color: scheme.shadow.withValues(alpha: 0.24),
-          blurRadius: 36,
+          blurRadius: ShadowTokens.blurDialog,
           offset: const Offset(0, 16),
         ),
       ],
@@ -215,8 +215,8 @@ class _MergeTagSheetOverlay extends StatelessWidget {
               children: <Widget>[
                 const SizedBox(height: SpacingTokens.xs),
                 Container(
-                  width: 36,
-                  height: 4,
+                  width: SizeTokens.buttonSm,
+                  height: SpacingTokens.xs,
                   margin: const EdgeInsets.only(bottom: SpacingTokens.md),
                   decoration: BoxDecoration(
                     color: scheme.outlineVariant,
@@ -252,7 +252,7 @@ class _MergeTagSheetOverlay extends StatelessWidget {
                     horizontal: SpacingTokens.lg,
                   ),
                   child: Container(
-                    height: 44,
+                    height: SizeTokens.avatar,
                     padding: const EdgeInsets.symmetric(
                       horizontal: SpacingTokens.md,
                     ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -113,13 +114,13 @@ class _LibrarySortPill extends StatelessWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final Color tone = context.colorScheme.onSurfaceVariant;
     return Container(
-      height: 28,
+      height: SizeTokens.surfaceBadgeSm,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
       decoration: const BoxDecoration(borderRadius: RadiusTokens.brFull),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.swap_vert_rounded, size: 11, color: tone),
+          Icon(Icons.swap_vert_rounded, size: SizeTokens.iconTiny, color: tone),
           const SizedBox(width: SpacingTokens.xs),
           MxText(
             l10n.librarySortRecentLabel,
@@ -127,7 +128,7 @@ class _LibrarySortPill extends StatelessWidget {
             color: tone,
           ),
           const SizedBox(width: SpacingTokens.xs),
-          Icon(Icons.keyboard_arrow_down_rounded, size: 11, color: tone),
+          Icon(Icons.keyboard_arrow_down_rounded, size: SizeTokens.iconTiny, color: tone),
         ],
       ),
     );
@@ -166,11 +167,11 @@ class LibraryDueSummary extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: SpacingTokens.md,
-        vertical: SpacingTokens.sm + SpacingTokens.xxs,
+        vertical: SpacingTokens.inline,
       ),
       child: Row(
         children: <Widget>[
-          const MxIconTile(icon: Icons.bolt_rounded, size: 36),
+          const MxIconTile(icon: Icons.bolt_rounded, size: SizeTokens.buttonSm),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
             child: Column(
@@ -183,7 +184,7 @@ class LibraryDueSummary extends StatelessWidget {
                   fontWeight: TypographyTokens.bold,
                 ),
                 SizedBox(
-                  height: SpacingTokens.xxs / 2,
+                  height: SpacingTokens.xxs,
                   child: ColoredBox(
                     color: context.colorScheme.outlineVariant.withValues(
                       alpha: OpacityTokens.divider,
@@ -203,7 +204,7 @@ class LibraryDueSummary extends StatelessWidget {
           ),
           Icon(
             Icons.chevron_right,
-            size: 18,
+            size: SizeTokens.iconMinor,
             color: context.colorScheme.primary,
           ),
         ],

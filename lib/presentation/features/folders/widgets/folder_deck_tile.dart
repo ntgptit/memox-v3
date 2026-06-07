@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/relative_time.dart';
@@ -52,10 +53,10 @@ class FolderDeckTile extends StatelessWidget {
     return MxCard(
       onTap: onTap,
       onLongPress: onShowActions,
-      padding: const EdgeInsets.symmetric(
-        horizontal: SpacingTokens.md + SpacingTokens.xxs,
-        vertical: SpacingTokens.md,
-      ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.lg,
+          vertical: SpacingTokens.md,
+        ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -99,17 +100,17 @@ class FolderDeckTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
+            const SizedBox(height: SpacingTokens.sm),
                 MxLinearProgress(
                   value: progress,
                   color: context.customColors.masteryHigh,
-                  height: 4,
+                  height: SpacingTokens.xs,
                 ),
               ],
             ),
           ),
           const SizedBox(width: SpacingTokens.md),
-          Icon(Icons.chevron_right, size: 18, color: tone),
+            Icon(Icons.chevron_right, size: SizeTokens.iconMinor, color: tone),
         ],
       ),
     );
@@ -129,14 +130,14 @@ class _DeckIconTile extends StatelessWidget {
     final Color tint = context.colorScheme.primary;
     return Container(
       key: const ValueKey<String>('folder_deck_leading_tile'),
-      width: 36,
-      height: 36,
+              width: SizeTokens.buttonSm,
+              height: SizeTokens.buttonSm,
       decoration: BoxDecoration(
         color: tint.withValues(alpha: OpacityTokens.hover),
         borderRadius: RadiusTokens.brSm,
       ),
       alignment: Alignment.center,
-      child: Icon(Icons.layers_rounded, size: 17, color: tint),
+              child: Icon(Icons.layers_rounded, size: SizeTokens.iconXs, color: tint),
     );
   }
 }
@@ -150,10 +151,10 @@ class _DueCountBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return SizedBox(
-      height: 18,
+          height: SizeTokens.iconMinor,
       child: Container(
         key: const ValueKey<String>('folder_deck_due_badge'),
-        padding: const EdgeInsets.symmetric(horizontal: 7),
+        padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.compact),
         decoration: BoxDecoration(
           color: scheme.primary.withValues(alpha: OpacityTokens.focus),
           borderRadius: RadiusTokens.brFull,

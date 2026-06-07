@@ -82,14 +82,14 @@ class _LibraryFolderTileCard extends StatelessWidget {
     onTap: onTap,
     onLongPress: onShowActions,
     padding: const EdgeInsets.symmetric(
-      horizontal: SpacingTokens.md + SpacingTokens.xxs,
-      vertical: SpacingTokens.md + SpacingTokens.xxs,
+      horizontal: SpacingTokens.lg,
+      vertical: SpacingTokens.lg,
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         _LeadingTile(color: tone),
-        const SizedBox(width: SpacingTokens.md + SpacingTokens.xxs),
+        const SizedBox(width: SpacingTokens.lg),
         Expanded(
           child: _FolderTileBody(
             item: item,
@@ -191,7 +191,7 @@ class _FolderTileBody extends StatelessWidget {
           ],
         ),
         const SizedBox(height: SpacingTokens.sm),
-        MxLinearProgress(value: mastery, color: tone, height: 4),
+        MxLinearProgress(value: mastery, color: tone, height: SpacingTokens.xs),
       ],
     );
   }
@@ -226,14 +226,14 @@ class _LeadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     key: const ValueKey<String>('library_folder_leading_tile'),
-    width: 44,
-    height: 44,
+    width: SizeTokens.avatar,
+    height: SizeTokens.avatar,
     decoration: BoxDecoration(
       color: color.withValues(alpha: OpacityTokens.hover),
       borderRadius: RadiusTokens.brMd,
     ),
     alignment: Alignment.center,
-    child: Icon(Icons.folder_rounded, size: 20, color: color),
+    child: Icon(Icons.folder_rounded, size: SizeTokens.iconSm, color: color),
   );
 }
 
@@ -277,8 +277,8 @@ class _NewMetaItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          width: 6,
-          height: 6,
+          width: SpacingTokens.tight,
+          height: SpacingTokens.tight,
           decoration: BoxDecoration(color: tone, shape: BoxShape.circle),
         ),
         const SizedBox(width: SpacingTokens.xxs),

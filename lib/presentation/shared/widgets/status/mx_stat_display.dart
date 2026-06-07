@@ -37,7 +37,7 @@ class MxStatDisplay extends StatelessWidget {
             fontFeatures: const <FontFeature>[FontFeature.tabularFigures()],
           ),
         ),
-        const SizedBox(height: SpacingTokens.xs + 2),
+        const SizedBox(height: SpacingTokens.tight),
         Text(
           StringUtils.uppercased(caption),
           style: context.customTextStyles.overline.copyWith(

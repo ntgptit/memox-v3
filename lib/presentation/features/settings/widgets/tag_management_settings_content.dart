@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
@@ -159,7 +160,7 @@ class _TagSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return Container(
-      height: 44,
+      height: SizeTokens.avatar,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerLowest,
@@ -214,7 +215,7 @@ class _TagCountSortRow extends StatelessWidget {
           color: scheme.onSurfaceVariant,
         ),
         Container(
-          height: 30,
+          height: SizeTokens.iconTile,
           padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
           decoration: BoxDecoration(
             color: scheme.surfaceContainerLowest,
@@ -369,8 +370,8 @@ class _TagManagementRow extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Container(
-                width: 28,
-                height: 28,
+                width: SizeTokens.surfaceBadgeSm,
+                height: SizeTokens.surfaceBadgeSm,
                 decoration: BoxDecoration(
                   color: scheme.primary.withValues(alpha: 0.08),
                   borderRadius: RadiusTokens.brMd,
@@ -414,7 +415,7 @@ class _TagManagementRow extends StatelessWidget {
               const SizedBox(width: SpacingTokens.sm),
               if (tag.busy)
                 const SizedBox(
-                  width: 18,
+                  width: SizeTokens.iconMinor,
                   child: MxLinearProgress(value: 0.6, height: 3),
                 ),
               if (!tag.busy)
@@ -441,7 +442,7 @@ class _TagHotBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return Container(
-      height: 20,
+      height: SizeTokens.iconSm,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xs),
       decoration: BoxDecoration(
         color: scheme.tertiaryContainer.withValues(alpha: 0.18),

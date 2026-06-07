@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/color_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
@@ -104,7 +107,6 @@ class _MxFolderFormDialog extends StatefulWidget {
 
 class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
   static const double _dialogMaxWidth = 432;
-  static const double _dialogHorizontalInset = SpacingTokens.lg;
   static const double _buttonHeight = 40;
   static const double _actionButtonWidth = 140;
   static const List<Color> _swatches = <Color>[
@@ -160,7 +162,7 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     return PopScope(
       canPop: false,
       child: Dialog(
-        insetPadding: const EdgeInsets.all(_dialogHorizontalInset),
+        insetPadding: const EdgeInsets.all(SpacingTokens.lg),
         backgroundColor: ColorTokens.transparent,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: _dialogMaxWidth),
@@ -171,7 +173,7 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: scheme.shadow.withValues(alpha: 0.32),
-                  blurRadius: 40,
+                  blurRadius: ShadowTokens.blurModal,
                   offset: const Offset(0, 16),
                 ),
               ],
@@ -211,19 +213,19 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     required TextTheme text,
   }) => Padding(
     padding: const EdgeInsets.fromLTRB(
-      _dialogHorizontalInset,
+      SpacingTokens.lg,
       SpacingTokens.md,
-      _dialogHorizontalInset,
-      SpacingTokens.xxs * 2,
+      SpacingTokens.lg,
+      SpacingTokens.xs,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         MxFolderFormSectionLabel(widget.fieldLabel),
-        const SizedBox(height: SpacingTokens.xs + SpacingTokens.xxs),
+        const SizedBox(height: SpacingTokens.tight),
         _buildTextField(scheme: scheme, text: text),
         if (widget.helperText != null) ...<Widget>[
-          const SizedBox(height: SpacingTokens.xs + SpacingTokens.xxs),
+          const SizedBox(height: SpacingTokens.tight),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
             child: Text(
@@ -241,10 +243,10 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
 
   Widget _buildColorSection({required ColorScheme scheme}) => Padding(
     padding: const EdgeInsets.fromLTRB(
-      _dialogHorizontalInset,
+      SpacingTokens.lg,
       SpacingTokens.md,
-      _dialogHorizontalInset,
-      SpacingTokens.xxs * 2,
+      SpacingTokens.lg,
+      SpacingTokens.xs,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,10 +260,10 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
 
   Widget _buildIconSection({required ColorScheme scheme}) => Padding(
     padding: const EdgeInsets.fromLTRB(
-      _dialogHorizontalInset,
+      SpacingTokens.lg,
       SpacingTokens.md,
-      _dialogHorizontalInset,
-      SpacingTokens.xxs * 3,
+      SpacingTokens.lg,
+      SpacingTokens.sm,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +279,7 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     required ColorScheme scheme,
     required TextTheme text,
   }) => SizedBox(
-    height: 44,
+    height: SizeTokens.avatar,
     width: double.infinity,
     child: TextField(
       controller: _controller,
@@ -298,11 +300,11 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brMd,
-          borderSide: BorderSide(color: scheme.primary, width: 1),
+          borderSide: BorderSide(color: scheme.primary, width: BorderTokens.width),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brMd,
-          borderSide: BorderSide(color: scheme.primary, width: 1.5),
+          borderSide: BorderSide(color: scheme.primary, width: BorderTokens.focusWidth),
         ),
       ),
     ),
@@ -342,10 +344,10 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
 
   Widget _buildActions({required ColorScheme scheme}) => Padding(
     padding: const EdgeInsets.fromLTRB(
-      _dialogHorizontalInset,
+      SpacingTokens.lg,
       SpacingTokens.md,
-      _dialogHorizontalInset,
-      _dialogHorizontalInset,
+      SpacingTokens.lg,
+      SpacingTokens.lg,
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -357,7 +359,7 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
             onPressed: () => Navigator.of(context).pop(),
             style: OutlinedButton.styleFrom(
               minimumSize: Size.zero,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.form),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               shape: const RoundedRectangleBorder(
                 borderRadius: RadiusTokens.brMd,
@@ -377,13 +379,13 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
                     backgroundColor: scheme.primary,
                     foregroundColor: scheme.onPrimary,
                     minimumSize: Size.zero,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.form),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     shape: const RoundedRectangleBorder(
                       borderRadius: RadiusTokens.brMd,
                     ),
                   ),
-                  icon: const Icon(Icons.create_new_folder_outlined, size: 14),
+                  icon: const Icon(Icons.create_new_folder_outlined, size: SizeTokens.iconXs),
                   label: Text(widget.confirmLabel),
                 )
               : FilledButton(
@@ -392,7 +394,7 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
                     backgroundColor: scheme.primary,
                     foregroundColor: scheme.onPrimary,
                     minimumSize: Size.zero,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.form),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     shape: const RoundedRectangleBorder(
                       borderRadius: RadiusTokens.brMd,

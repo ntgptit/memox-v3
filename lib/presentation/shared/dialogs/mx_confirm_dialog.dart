@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 
@@ -38,7 +40,7 @@ Future<bool> showMxConfirmDialog(
                 boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: scheme.shadow.withValues(alpha: 0.24),
-                    blurRadius: 36,
+                    blurRadius: ShadowTokens.blurDialog,
                     offset: const Offset(0, 16),
                   ),
                 ],
@@ -73,8 +75,8 @@ Future<bool> showMxConfirmDialog(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           SizedBox(
-                            width: 128,
-                            height: 40,
+                            width: SizeTokens.dialogActionWidth,
+                            height: SizeTokens.controlMd,
                             child: OutlinedButton(
                               onPressed: () => Navigator.of(context).pop(false),
                               style: OutlinedButton.styleFrom(
@@ -92,8 +94,8 @@ Future<bool> showMxConfirmDialog(
                           ),
                           const SizedBox(width: SpacingTokens.sm),
                           SizedBox(
-                            width: 128,
-                            height: 40,
+                            width: SizeTokens.dialogActionWidth,
+                            height: SizeTokens.controlMd,
                             child: FilledButton(
                               style: destructive
                                   ? FilledButton.styleFrom(

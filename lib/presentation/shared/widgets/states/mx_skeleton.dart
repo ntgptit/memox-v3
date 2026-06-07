@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
-import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 
 /// Loading placeholder block with a subtle pulse.
@@ -65,7 +64,7 @@ class _MxSkeletonState extends State<MxSkeleton>
     return FadeTransition(
       opacity: Tween<double>(
         begin: 1,
-        end: OpacityTokens.disabled + 0.2,
+        end: 0.58,
       ).animate(_controller),
       child: Container(
         width: widget.width,

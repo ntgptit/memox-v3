@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
@@ -54,8 +56,6 @@ class _MxNameDialog extends StatefulWidget {
 
 class _MxNameDialogState extends State<_MxNameDialog> {
   static const double _dialogMaxWidth = 432;
-  static const double _actionButtonWidth = 128;
-  static const double _actionButtonHeight = 40;
 
   late final TextEditingController _controller;
 
@@ -109,7 +109,7 @@ class _MxNameDialogState extends State<_MxNameDialog> {
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: scheme.shadow.withValues(alpha: 0.24),
-                  blurRadius: 36,
+                  blurRadius: ShadowTokens.blurDialog,
                   offset: const Offset(0, 16),
                 ),
               ],
@@ -142,8 +142,8 @@ class _MxNameDialogState extends State<_MxNameDialog> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         SizedBox(
-                          width: _actionButtonWidth,
-                          height: _actionButtonHeight,
+                          width: SizeTokens.dialogActionWidth,
+                          height: SizeTokens.controlMd,
                           child: OutlinedButton(
                             onPressed: () => Navigator.of(context).pop(),
                             style: OutlinedButton.styleFrom(
@@ -161,8 +161,8 @@ class _MxNameDialogState extends State<_MxNameDialog> {
                         ),
                         const SizedBox(width: SpacingTokens.sm),
                         SizedBox(
-                          width: _actionButtonWidth,
-                          height: _actionButtonHeight,
+                          width: SizeTokens.dialogActionWidth,
+                          height: SizeTokens.controlMd,
                           child: FilledButton(
                             onPressed: _canSubmit ? _submit : null,
                             style: FilledButton.styleFrom(

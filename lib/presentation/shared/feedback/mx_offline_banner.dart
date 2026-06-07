@@ -30,7 +30,7 @@ class MxOfflineBanner extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: SpacingTokens.lg,
-          vertical: SpacingTokens.sm + 2,
+          vertical: SpacingTokens.inline,
         ),
         child: Row(
           children: <Widget>[

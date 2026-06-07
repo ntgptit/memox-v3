@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/search/viewmodels/search_viewmodel.dart';
@@ -53,8 +54,8 @@ class _SearchShortcutKeycap extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
-        width: 28,
-        height: 28,
+        width: SizeTokens.surfaceBadgeSm,
+        height: SizeTokens.surfaceBadgeSm,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: scheme.surfaceContainerHighest.withValues(alpha: 0.16),

@@ -4,6 +4,7 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
@@ -72,7 +73,7 @@ class MxMatchTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 if (checked) ...<Widget>[
-                  Icon(Icons.check, size: SpacingTokens.md, color: fg),
+                  Icon(Icons.check, size: SizeTokens.iconSm, color: fg),
                   const SizedBox(width: SpacingTokens.xs),
                 ],
                 Flexible(

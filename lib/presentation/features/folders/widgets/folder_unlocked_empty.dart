@@ -35,8 +35,8 @@ class FolderUnlockedEmpty extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              width: SizeTokens.iconXl - 12,
-              height: SizeTokens.iconXl - 12,
+              width: SizeTokens.buttonLg,
+              height: SizeTokens.buttonLg,
               decoration: BoxDecoration(
                 color: scheme.primary.withValues(alpha: OpacityTokens.hover),
                 borderRadius: RadiusTokens.brLg,
@@ -44,7 +44,7 @@ class FolderUnlockedEmpty extends StatelessWidget {
               alignment: Alignment.center,
               child: Icon(
                 Icons.folder_open_outlined,
-                size: SizeTokens.iconMd + 2,
+                size: SizeTokens.surfaceBadge,
                 color: scheme.primary,
               ),
             ),

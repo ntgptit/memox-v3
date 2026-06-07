@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
 /// Temporary stand-in for a not-yet-implemented screen.
@@ -32,7 +33,7 @@ class RoutePlaceholder extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.construction_outlined,
-              size: 48,
+              size: SizeTokens.button,
               color: theme.colorScheme.primary,
             ),
             const SizedBox(height: SpacingTokens.lg),

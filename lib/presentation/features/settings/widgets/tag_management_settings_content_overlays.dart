@@ -26,8 +26,8 @@ class _TagContextSheetOverlay extends StatelessWidget {
               children: <Widget>[
                 const SizedBox(height: SpacingTokens.xs),
                 Container(
-                  width: 36,
-                  height: 4,
+                  width: SizeTokens.buttonSm,
+                  height: SpacingTokens.xs,
                   decoration: BoxDecoration(
                     color: scheme.outlineVariant,
                     borderRadius: RadiusTokens.brFull,
@@ -127,8 +127,8 @@ class _SheetActionRow extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              width: 30,
-              height: 30,
+              width: SizeTokens.iconTile,
+              height: SizeTokens.iconTile,
               decoration: BoxDecoration(
                 color: destructive
                     ? scheme.error.withValues(alpha: 0.1)
@@ -169,7 +169,7 @@ class _TagManagementPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return Container(
-      height: 26,
+      height: SizeTokens.surfaceBadge,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
       decoration: BoxDecoration(
         color: scheme.primary.withValues(alpha: 0.1),
@@ -178,7 +178,7 @@ class _TagManagementPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.sell_outlined, size: 11, color: scheme.primary),
+          Icon(Icons.sell_outlined, size: SizeTokens.iconTiny, color: scheme.primary),
           const SizedBox(width: SpacingTokens.xs),
           MxText(
             label,
@@ -223,7 +223,7 @@ class _DeleteTagDialogOverlay extends StatelessWidget {
                 boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: scheme.shadow.withValues(alpha: 0.24),
-                    blurRadius: 36,
+                    blurRadius: ShadowTokens.blurDialog,
                     offset: const Offset(0, 16),
                   ),
                 ],
@@ -298,7 +298,7 @@ class TagErrorToast extends StatelessWidget {
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: scheme.shadow.withValues(alpha: 0.28),
-              blurRadius: 24,
+              blurRadius: ShadowTokens.blurPopover,
               offset: const Offset(0, 8),
             ),
           ],

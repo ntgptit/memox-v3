@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
@@ -26,25 +28,30 @@ class MxFolderFormCreateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(18, 18, 18, 6),
+    padding: const EdgeInsets.fromLTRB(
+      SpacingTokens.lg,
+      SpacingTokens.lg,
+      SpacingTokens.lg,
+      SpacingTokens.tight,
+    ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        MxIconTile(icon: icon, color: color, size: 44),
+        MxIconTile(icon: icon, color: color, size: SizeTokens.avatar),
         const SizedBox(width: SpacingTokens.md),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              MxText(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            MxText(
               title,
               role: MxTextRole.titleMedium,
                 fontWeight: TypographyTokens.bold,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: SpacingTokens.xs),
+            const SizedBox(height: SpacingTokens.xs),
               MxText(
                 description,
                 role: MxTextRole.labelSmall,
@@ -71,7 +78,12 @@ class MxFolderFormRenameHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(18, 18, 18, 6),
+    padding: const EdgeInsets.fromLTRB(
+      SpacingTokens.lg,
+      SpacingTokens.lg,
+      SpacingTokens.lg,
+      SpacingTokens.tight,
+    ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -130,8 +142,8 @@ class MxFolderFormColorSwatch extends StatelessWidget {
       onTap: onTap,
       borderRadius: RadiusTokens.brFull,
       child: Container(
-        width: 28,
-        height: 28,
+        width: SizeTokens.surfaceBadgeSm,
+        height: SizeTokens.surfaceBadgeSm,
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,
@@ -140,17 +152,23 @@ class MxFolderFormColorSwatch extends StatelessWidget {
                   BoxShadow(
                     color: surfaceColor,
                     blurRadius: 0,
-                    spreadRadius: 2,
+                    spreadRadius: ShadowTokens.spreadHalo,
                   ),
-                  BoxShadow(color: color, blurRadius: 0, spreadRadius: 4),
+                  BoxShadow(
+                    color: color,
+                    blurRadius: 0,
+                    spreadRadius: ShadowTokens.spreadOutline,
+                  ),
                 ]
               : null,
-          border: selected ? Border.all(color: surfaceColor, width: 2) : null,
+          border: selected
+              ? Border.all(color: surfaceColor, width: BorderTokens.focusWidth)
+              : null,
         ),
         child: selected
             ? Icon(
                 Icons.check,
-                size: 14,
+                size: SizeTokens.iconXs,
                 color: Theme.of(context).colorScheme.onPrimary,
               )
             : null,
@@ -183,8 +201,8 @@ class MxFolderFormIconChoiceTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: RadiusTokens.brMd,
       child: Container(
-        width: 38,
-        height: 38,
+        width: SizeTokens.surfaceTileSm,
+        height: SizeTokens.surfaceTileSm,
         decoration: BoxDecoration(
           color: selected
               ? color.withValues(alpha: OpacityTokens.focus)
@@ -197,7 +215,7 @@ class MxFolderFormIconChoiceTile extends StatelessWidget {
         alignment: Alignment.center,
         child: Icon(
           icon,
-          size: SizeTokens.iconSm - 3,
+          size: SizeTokens.iconXs,
           color: selected ? scheme.primary : scheme.onSurfaceVariant,
         ),
       ),

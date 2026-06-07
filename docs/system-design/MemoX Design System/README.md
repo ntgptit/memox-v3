@@ -147,7 +147,7 @@ No Figma was attached for this system.
 
 ## Iconography
 
-MemoX uses **Material Symbols** via the Flutter built-in `Icons.*` set, at two sizes: `iconSm = 20` (inline/chip) and `iconMd = 24` (standard). Large empty-state glyphs hit `iconXl = 64`.
+MemoX uses **Material Symbols** via the Flutter built-in `Icons.*` set, at two sizes: `iconSm = 20` (inline/chip) and `iconMd = 24` (standard). Large empty-state glyphs hit `iconXl = 64`, and tiny status dots use `SizeTokens.dot = 2`.
 
 For this web design system we substitute **Lucide** (loaded via CDN `lucide@latest`) because it is the closest open-source match to Material Symbols in stroke weight (`2px`) and geometry, and it is what the original `docs/memox-design-system` preview used. Documented CDN: `https://unpkg.com/lucide@latest`.
 

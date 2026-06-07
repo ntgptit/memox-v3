@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -34,12 +35,12 @@ class FlashcardEditorDeckChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: scheme.primary.withValues(alpha: 0.08),
-              borderRadius: RadiusTokens.brFull,
+        Container(
+          width: SizeTokens.iconMd,
+          height: SizeTokens.iconMd,
+          decoration: BoxDecoration(
+            color: scheme.primary.withValues(alpha: 0.08),
+            borderRadius: RadiusTokens.brFull,
             ),
             child: Icon(
               Icons.layers_outlined,
@@ -87,8 +88,8 @@ class FlashcardEditorRequiredMarker extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          width: 8,
-          height: 8,
+          width: SizeTokens.dot,
+          height: SizeTokens.dot,
           decoration: BoxDecoration(
             color: scheme.primary,
             borderRadius: RadiusTokens.brFull,
@@ -479,7 +480,7 @@ class FlashcardEditorDangerZoneSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         const SizedBox(height: SpacingTokens.xs),
-        Container(height: 1, color: scheme.outlineVariant),
+        Container(height: BorderTokens.width, color: scheme.outlineVariant),
         const SizedBox(height: SpacingTokens.lg),
         Row(
           children: <Widget>[

@@ -36,7 +36,7 @@ class MxCallout extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: SpacingTokens.md,
-        vertical: SpacingTokens.sm + 2,
+        vertical: SpacingTokens.inline,
       ),
       decoration: BoxDecoration(
         color: tint.withValues(alpha: OpacityTokens.hover),

@@ -39,8 +39,8 @@ class MxErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              width: SizeTokens.iconXl - 12,
-              height: SizeTokens.iconXl - 12,
+              width: SizeTokens.buttonLg,
+              height: SizeTokens.buttonLg,
               decoration: BoxDecoration(
                 color: scheme.error.withValues(alpha: OpacityTokens.hover),
                 borderRadius: RadiusTokens.brLg,
@@ -48,7 +48,7 @@ class MxErrorState extends StatelessWidget {
               alignment: Alignment.center,
               child: Icon(
                 icon,
-                size: SizeTokens.iconMd + 2,
+                size: SizeTokens.surfaceBadge,
                 color: scheme.error,
               ),
             ),

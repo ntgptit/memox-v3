@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
@@ -159,7 +160,7 @@ class _FolderStatDivider extends StatelessWidget {
     child: ColoredBox(
       color: context.colorScheme.outlineVariant,
       child: const SizedBox(
-        width: SpacingTokens.xxs / 2,
+        width: BorderTokens.width,
         height: SizeTokens.iconLg,
       ),
     ),

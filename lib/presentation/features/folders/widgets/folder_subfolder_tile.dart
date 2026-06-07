@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/domain/models/library_overview.dart';
@@ -42,7 +43,7 @@ class FolderSubfolderTile extends StatelessWidget {
       onTap: onTap,
       onLongPress: onShowActions,
       padding: const EdgeInsets.symmetric(
-        horizontal: SpacingTokens.md + SpacingTokens.xxs,
+        horizontal: SpacingTokens.lg,
         vertical: SpacingTokens.md,
       ),
       child: Row(
@@ -84,7 +85,7 @@ class FolderSubfolderTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
+                const SizedBox(height: SpacingTokens.sm),
                 MxLinearProgress(value: progress, color: tone, height: 4),
               ],
             ),
@@ -92,7 +93,7 @@ class FolderSubfolderTile extends StatelessWidget {
           const SizedBox(width: SpacingTokens.md),
           Icon(
             Icons.chevron_right,
-            size: 18,
+            size: SizeTokens.iconMinor,
             color: context.colorScheme.onSurfaceVariant,
           ),
         ],
@@ -109,14 +110,14 @@ class _LeadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     key: const ValueKey<String>('folder_subfolder_leading_tile'),
-    width: 36,
-    height: 36,
+    width: SizeTokens.buttonSm,
+    height: SizeTokens.buttonSm,
     decoration: BoxDecoration(
       color: color.withValues(alpha: OpacityTokens.hover),
       borderRadius: RadiusTokens.brSm,
     ),
     alignment: Alignment.center,
-    child: Icon(Icons.folder_outlined, size: 17, color: color),
+    child: Icon(Icons.folder_outlined, size: SizeTokens.iconXs, color: color),
   );
 }
 
@@ -129,10 +130,10 @@ class _DueCountBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return SizedBox(
-      height: 18,
+      height: SizeTokens.iconMinor,
       child: Container(
         key: const ValueKey<String>('folder_subfolder_due_badge'),
-        padding: const EdgeInsets.symmetric(horizontal: 7),
+        padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.compact),
         decoration: BoxDecoration(
           color: scheme.primary.withValues(alpha: OpacityTokens.focus),
           borderRadius: RadiusTokens.brFull,

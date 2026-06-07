@@ -13,7 +13,7 @@ class MxIconTile extends StatelessWidget {
   const MxIconTile({
     required this.icon,
     this.color,
-    this.size = 44,
+    this.size = SizeTokens.avatar,
     super.key,
   });
 
@@ -32,7 +32,7 @@ class MxIconTile extends StatelessWidget {
         borderRadius: RadiusTokens.brMd,
       ),
       alignment: Alignment.center,
-      child: Icon(icon, size: SizeTokens.iconSm + 2, color: tint),
+      child: Icon(icon, size: SizeTokens.iconBadge, color: tint),
     );
   }
 }

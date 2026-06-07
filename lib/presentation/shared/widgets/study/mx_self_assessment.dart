@@ -71,7 +71,7 @@ class _ScoreChip extends StatelessWidget {
     onTap: onTap,
     borderRadius: RadiusTokens.brMd,
     child: Container(
-      height: SizeTokens.button - 4,
+      height: SizeTokens.avatar,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: RadiusTokens.brMd,

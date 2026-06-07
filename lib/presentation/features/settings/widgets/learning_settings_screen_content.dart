@@ -5,6 +5,8 @@ import 'package:memox/core/theme/tokens/duration_tokens.dart';
 import 'package:memox/core/theme/tokens/easing_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -94,14 +96,14 @@ class LearningNavigationRow extends StatelessWidget {
             children: <Widget>[
               if (leadingIcon != null) ...<Widget>[
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: SizeTokens.iconTile,
+                  height: SizeTokens.iconTile,
                   decoration: BoxDecoration(
                     color: scheme.primary.withValues(alpha: 0.08),
                     borderRadius: RadiusTokens.brMd,
                   ),
                   alignment: Alignment.center,
-                  child: Icon(leadingIcon, size: 15, color: scheme.primary),
+                  child: Icon(leadingIcon, size: SizeTokens.iconXs, color: scheme.primary),
                 ),
                 const SizedBox(width: SpacingTokens.md),
               ],
@@ -139,7 +141,7 @@ class LearningNavigationRow extends StatelessWidget {
               ],
               Icon(
                 Icons.chevron_right,
-                size: 18,
+                size: SizeTokens.iconMinor,
                 color: scheme.onSurfaceVariant,
               ),
             ],
@@ -207,14 +209,14 @@ class LearningToggleRow extends StatelessWidget {
             children: <Widget>[
               if (leadingIcon != null) ...<Widget>[
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: SizeTokens.iconTile,
+                  height: SizeTokens.iconTile,
                   decoration: BoxDecoration(
                     color: scheme.primary.withValues(alpha: 0.08),
                     borderRadius: RadiusTokens.brMd,
                   ),
                   alignment: Alignment.center,
-                  child: Icon(leadingIcon, size: 15, color: scheme.primary),
+                  child: Icon(leadingIcon, size: SizeTokens.iconXs, color: scheme.primary),
                 ),
                 const SizedBox(width: SpacingTokens.md),
               ],
@@ -277,14 +279,14 @@ class LearningSettingsRow extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              width: 30,
-              height: 30,
+              width: SizeTokens.iconTile,
+              height: SizeTokens.iconTile,
               decoration: BoxDecoration(
                 color: scheme.primary.withValues(alpha: 0.08),
                 borderRadius: RadiusTokens.brMd,
               ),
               alignment: Alignment.center,
-              child: Icon(leadingIcon, size: 15, color: scheme.primary),
+              child: Icon(leadingIcon, size: SizeTokens.iconXs, color: scheme.primary),
             ),
             const SizedBox(width: SpacingTokens.md),
             Expanded(
@@ -327,8 +329,8 @@ class LearningSwitch extends StatelessWidget {
     return Semantics(
       toggled: value,
       child: Container(
-        width: 44,
-        height: 26,
+      width: SizeTokens.avatar,
+      height: SizeTokens.surfaceBadge,
         decoration: BoxDecoration(
           color: value ? scheme.primary : scheme.surfaceContainerHigh,
           borderRadius: RadiusTokens.brFull,
@@ -341,15 +343,15 @@ class LearningSwitch extends StatelessWidget {
               left: value ? 21 : 3,
               top: 3,
               child: Container(
-                width: 20,
-                height: 20,
+                width: SizeTokens.iconSm,
+                height: SizeTokens.iconSm,
                 decoration: BoxDecoration(
                   color: scheme.surfaceContainerLowest,
                   borderRadius: RadiusTokens.brFull,
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: scheme.shadow.withValues(alpha: 0.18),
-                      blurRadius: 3,
+                      blurRadius: ShadowTokens.blurTiny,
                       offset: const Offset(0, 1),
                     ),
                   ],
@@ -370,7 +372,7 @@ class LearningSoonChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return Container(
-      height: 22,
+      height: SizeTokens.iconBadge,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
       decoration: BoxDecoration(
         color: scheme.surfaceContainer,
@@ -404,7 +406,7 @@ class LearningSavedChip extends StatelessWidget {
     child: IgnorePointer(
       ignoring: !visible,
       child: Container(
-        height: 22,
+        height: SizeTokens.iconBadge,
         margin: const EdgeInsets.only(right: SpacingTokens.xs),
         padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
         decoration: BoxDecoration(
@@ -414,7 +416,7 @@ class LearningSavedChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(Icons.check, size: 11, color: context.customColors.mastery),
+            Icon(Icons.check, size: SizeTokens.iconTiny, color: context.customColors.mastery),
             const SizedBox(width: SpacingTokens.xxs),
             MxText(
               label,

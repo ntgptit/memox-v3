@@ -40,14 +40,14 @@ class MxEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              width: SizeTokens.iconXl - 12,
-              height: SizeTokens.iconXl - 12,
+              width: SizeTokens.buttonLg,
+              height: SizeTokens.buttonLg,
               decoration: BoxDecoration(
                 color: scheme.primary.withValues(alpha: OpacityTokens.hover),
                 borderRadius: RadiusTokens.brLg,
               ),
               alignment: Alignment.center,
-              child: Icon(icon, size: SizeTokens.iconMd + 2, color: scheme.primary),
+              child: Icon(icon, size: SizeTokens.surfaceBadge, color: scheme.primary),
             ),
             const SizedBox(height: SpacingTokens.md),
             Text(title, style: text.titleMedium),

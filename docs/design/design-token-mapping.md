@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-05
+last_updated: 2026-06-07
 status: contract
 applies_to: UI mock-to-code implementation
 ---
@@ -48,6 +48,7 @@ Do not copy raw CSS values from the mock HTML into feature widgets.
 | Small inline icon | `SizeTokens.iconXs` or `SizeTokens.iconSm` |
 | Regular icon | `SizeTokens.iconMd` |
 | Large empty-state icon | `SizeTokens.iconXl` |
+| Micro status dot | `SizeTokens.dot` |
 | Minimum touch target | `SizeTokens.touch` |
 | Search field | `SizeTokens.input` via `MxSearchField` |
 | Bottom navigation | `SizeTokens.bottomNav` via `MxBottomNavigationBar` |

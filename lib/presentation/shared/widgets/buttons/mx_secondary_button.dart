@@ -84,16 +84,16 @@ class MxSecondaryButton extends StatelessWidget {
     return fullWidth ? SizedBox(width: double.infinity, child: child) : child;
   }
 
-  ButtonStyle _styleFor(MxSecondaryVariant variant) {
-    final double horizontal = variant == MxSecondaryVariant.text
-        ? SpacingTokens.md
-        : SpacingTokens.xl;
-    return ButtonStyle(
+  ButtonStyle _styleFor(MxSecondaryVariant variant) => ButtonStyle(
       minimumSize: WidgetStatePropertyAll<Size>(Size(0, size.height)),
       tapTargetSize: MaterialTapTargetSize.padded,
       padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
-        EdgeInsets.symmetric(horizontal: horizontal),
+        switch (variant) {
+          MxSecondaryVariant.text => const EdgeInsets.symmetric(
+            horizontal: SpacingTokens.md,
+          ),
+          _ => const EdgeInsets.symmetric(horizontal: SpacingTokens.xl),
+        },
       ),
     );
-  }
 }

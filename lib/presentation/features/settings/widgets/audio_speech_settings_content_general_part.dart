@@ -100,7 +100,7 @@ class _AudioSpeechLanguageTab extends StatelessWidget {
       child: AnimatedContainer(
         duration: Durations.short2,
         curve: Curves.easeOut,
-        height: 40,
+        height: SizeTokens.controlMd,
         decoration: BoxDecoration(
           color: active ? scheme.primary : scheme.surfaceContainerLowest,
           borderRadius: RadiusTokens.brMd,
@@ -111,8 +111,8 @@ class _AudioSpeechLanguageTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 24,
-              height: 24,
+              width: SizeTokens.iconMd,
+              height: SizeTokens.iconMd,
               decoration: BoxDecoration(
                 color: active
                     ? scheme.onPrimary.withValues(alpha: 0.18)

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 
 /// Rounded search field — leading search glyph + trailing clear
 /// (`docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
@@ -68,7 +69,7 @@ class MxSearchField extends StatelessWidget {
                 end: _fieldHorizontalPadding,
               ),
               prefixIconConstraints: const BoxConstraints.tightFor(
-                width: 36,
+                width: SizeTokens.buttonSm,
                 height: _fieldHeight,
               ),
               prefixIcon: Padding(
@@ -78,7 +79,7 @@ class MxSearchField extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.search,
-                  size: 18,
+                  size: SizeTokens.iconMinor,
                   color: scheme.onSurfaceVariant,
                 ),
               ),
@@ -88,8 +89,8 @@ class MxSearchField extends StatelessWidget {
               ),
               suffixIcon: hasText
                   ? IconButton(
-                      icon: const Icon(Icons.close),
-                      iconSize: 16,
+                    icon: const Icon(Icons.close),
+                      iconSize: SizeTokens.iconXs,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints.tightFor(
                         width: _fieldHeight,

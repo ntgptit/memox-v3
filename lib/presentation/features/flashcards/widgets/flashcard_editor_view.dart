@@ -4,6 +4,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
@@ -655,16 +656,16 @@ class _FlashcardEditorLoadingState extends StatelessWidget {
         const SizedBox(height: SpacingTokens.lg),
         _skeletonField(lines: 2),
         const SizedBox(height: SpacingTokens.lg),
-        Row(
-          children: <Widget>[
-              Container(
-                width: 18,
-                height: 18,
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHigh,
-                  borderRadius: RadiusTokens.brFull,
+            Row(
+              children: <Widget>[
+                Container(
+                  width: SizeTokens.iconMinor,
+                  height: SizeTokens.iconMinor,
+                  decoration: BoxDecoration(
+                    color: scheme.surfaceContainerHigh,
+                    borderRadius: RadiusTokens.brFull,
+                  ),
                 ),
-              ),
             const SizedBox(width: SpacingTokens.sm),
             const Expanded(child: MxSkeleton(height: 12)),
           ],
@@ -720,8 +721,8 @@ class _FlashcardEditorLoadErrorState extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                width: 52,
-                height: 52,
+                width: SizeTokens.buttonLg,
+                height: SizeTokens.buttonLg,
                 decoration: BoxDecoration(
                   color: scheme.errorContainer.withValues(alpha: 0.40),
                   borderRadius: RadiusTokens.brMd,

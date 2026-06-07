@@ -50,8 +50,8 @@ class _AudioSpeechVoiceEmptyState extends StatelessWidget {
     child: Column(
       children: <Widget>[
         Container(
-          width: 44,
-          height: 44,
+          width: SizeTokens.avatar,
+          height: SizeTokens.avatar,
           decoration: BoxDecoration(
             color: context.colorScheme.surfaceContainer,
             borderRadius: RadiusTokens.brMd,
@@ -232,8 +232,8 @@ class _AudioSpeechVoiceRow extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  width: 18,
-                  height: 18,
+                  width: SizeTokens.iconMinor,
+                  height: SizeTokens.iconMinor,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
@@ -261,7 +261,7 @@ class _AudioSpeechVoiceRow extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: SpacingTokens.xs,
-                                vertical: 4,
+                                vertical: SpacingTokens.xs,
                               ),
                               decoration: BoxDecoration(
                                 color: scheme.primary.withValues(alpha: 0.10),
@@ -320,20 +320,20 @@ class _AudioSpeechVoiceSkeletonRow extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              const MxSkeleton.circle(size: 18),
+              const MxSkeleton.circle(size: SizeTokens.iconMinor),
               const SizedBox(width: SpacingTokens.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     MxSkeleton(width: wideTop ? 116 : 92, height: 11),
-                    const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
+                    const SizedBox(height: SpacingTokens.tight),
                     MxSkeleton(width: wideTop ? 68 : 84, height: 9),
                   ],
                 ),
               ),
               const SizedBox(width: SpacingTokens.sm),
-              const MxSkeleton.circle(size: 30),
+              const MxSkeleton.circle(size: SizeTokens.iconTile),
             ],
           ),
         ),

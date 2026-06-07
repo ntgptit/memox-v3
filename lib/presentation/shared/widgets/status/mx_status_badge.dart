@@ -30,11 +30,11 @@ class MxStatusBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            width: SpacingTokens.sm - 1,
-            height: SpacingTokens.sm - 1,
+            width: SpacingTokens.compact,
+            height: SpacingTokens.compact,
             decoration: BoxDecoration(color: tone, shape: BoxShape.circle),
           ),
-          const SizedBox(width: SpacingTokens.xs + 2),
+          const SizedBox(width: SpacingTokens.tight),
           Text(
             label,
             style: context.textTheme.labelMedium?.copyWith(

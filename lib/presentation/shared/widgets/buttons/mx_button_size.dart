@@ -10,13 +10,13 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 /// [large].
 enum MxButtonSize {
   /// Toolbar text actions.
-  xsmall(SizeTokens.buttonSm - 4),
+  xsmall(SizeTokens.chip),
 
   /// Inline link-style actions.
   small(SizeTokens.buttonSm),
 
   /// Card / study actions — the everyday density.
-  compact(40),
+  compact(SizeTokens.controlMd),
 
   /// Form, dialog, and bottom-bar actions.
   medium(SizeTokens.button),

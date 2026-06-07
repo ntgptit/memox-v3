@@ -45,13 +45,13 @@ class _AudioSpeechSlider extends StatelessWidget {
               ),
               const SizedBox(height: SpacingTokens.sm),
               SizedBox(
-                height: 22,
+                height: SizeTokens.iconBadge,
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: <Widget>[
                     Positioned.fill(
                       child: Container(
-                        height: 5,
+                        height: SpacingTokens.micro,
                         decoration: BoxDecoration(
                           color: scheme.surfaceContainerHigh,
                           borderRadius: RadiusTokens.brFull,
@@ -61,7 +61,7 @@ class _AudioSpeechSlider extends StatelessWidget {
                     FractionallySizedBox(
                       widthFactor: progress,
                       child: Container(
-                        height: 5,
+                        height: SpacingTokens.micro,
                         decoration: BoxDecoration(
                           color: scheme.primary,
                           borderRadius: RadiusTokens.brFull,
@@ -69,18 +69,21 @@ class _AudioSpeechSlider extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      left: (constraints.maxWidth - 20) * progress,
+                      left: (constraints.maxWidth - SizeTokens.iconSm) * progress,
                       child: Container(
-                        width: 20,
-                        height: 20,
+                        width: SizeTokens.iconSm,
+                        height: SizeTokens.iconSm,
                         decoration: BoxDecoration(
                           color: scheme.surface,
                           borderRadius: RadiusTokens.brFull,
-                          border: Border.all(color: scheme.primary, width: 2),
+                          border: Border.all(
+                            color: scheme.primary,
+                            width: BorderTokens.focusWidth,
+                          ),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
                               color: scheme.primary.withValues(alpha: 0.22),
-                              blurRadius: 6,
+                              blurRadius: ShadowTokens.blurSm,
                               offset: const Offset(0, 2),
                             ),
                           ],
@@ -152,7 +155,7 @@ class _AudioSpeechPreviewCard extends StatelessWidget {
               borderRadius: RadiusTokens.brLg,
               child: Container(
                 width: double.infinity,
-                constraints: const BoxConstraints(minHeight: 40),
+                constraints: const BoxConstraints(minHeight: SizeTokens.controlMd),
                 decoration: BoxDecoration(
                   color: playing ? context.customColors.mastery : scheme.primary,
                   borderRadius: RadiusTokens.brLg,
@@ -167,7 +170,7 @@ class _AudioSpeechPreviewCard extends StatelessWidget {
                     if (playing) ...<Widget>[
                       const _AudioSpeechVoiceBars(),
                     ] else ...<Widget>[
-                      Icon(Icons.play_arrow, color: scheme.onPrimary, size: 16),
+                      Icon(Icons.play_arrow, color: scheme.onPrimary, size: SizeTokens.iconXs),
                     ],
                     const SizedBox(width: SpacingTokens.sm),
                     Flexible(
@@ -217,7 +220,7 @@ class _AudioSpeechBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 3,
+    width: SpacingTokens.xxs,
     height: height,
     decoration: BoxDecoration(
       color: context.colorScheme.onPrimary,

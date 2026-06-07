@@ -114,7 +114,7 @@ class _AudioSpeechSoonChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 22,
+    height: SizeTokens.iconBadge,
     padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xs),
     decoration: BoxDecoration(
       color: context.colorScheme.surfaceContainer,
@@ -147,7 +147,7 @@ class _AudioSpeechSavedChip extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(
       horizontal: SpacingTokens.sm,
-      vertical: 4,
+      vertical: SpacingTokens.xs,
     ),
     decoration: BoxDecoration(
       color: context.customColors.mastery.withValues(alpha: 0.10),
@@ -158,10 +158,10 @@ class _AudioSpeechSavedChip extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.check,
-          size: 11,
+          size: SizeTokens.iconTiny,
           color: context.customColors.mastery,
         ),
-        const SizedBox(width: SpacingTokens.xxs * 2),
+        const SizedBox(width: SpacingTokens.xs),
         MxText(
           label,
           role: MxTextRole.labelSmall,
@@ -178,11 +178,11 @@ class _AudioSpeechRowDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsetsDirectional.only(
-      start: 44,
+      start: SizeTokens.avatar,
       end: SpacingTokens.md,
     ),
     child: Container(
-      height: 1,
+      height: BorderTokens.width,
       color: context.colorScheme.outlineVariant.withValues(
         alpha: OpacityTokens.divider,
       ),

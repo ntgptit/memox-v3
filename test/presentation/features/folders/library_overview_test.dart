@@ -145,10 +145,7 @@ void main() {
       final MxCard card = tester.widget<MxCard>(find.byType(MxCard));
       expect(
         card.padding,
-        const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.md + SpacingTokens.xxs,
-          vertical: SpacingTokens.md + SpacingTokens.xxs,
-        ),
+        const EdgeInsets.all(SpacingTokens.lg),
       );
     });
 

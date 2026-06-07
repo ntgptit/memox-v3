@@ -3,6 +3,7 @@ import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -319,7 +320,7 @@ class _ChevronTrailing extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Icon(
     Icons.chevron_right,
-    size: 18,
+    size: SizeTokens.iconMinor,
     color: color ?? context.colorScheme.onSurfaceVariant,
   );
 }
@@ -334,7 +335,7 @@ class _DisabledSoonChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return Container(
-      height: 22,
+      height: SizeTokens.iconBadge,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
       decoration: BoxDecoration(
         color: scheme.surfaceContainer,
@@ -344,8 +345,8 @@ class _DisabledSoonChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (icon != null) ...<Widget>[
-            Icon(icon, size: 12, color: scheme.onSurfaceVariant),
-            const SizedBox(width: SpacingTokens.xxs),
+            Icon(icon, size: SizeTokens.iconMini, color: scheme.onSurfaceVariant),
+            const SizedBox(width: SpacingTokens.tight),
           ],
           MxText(
             label,
@@ -372,14 +373,14 @@ class _LeadingIconTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      width: 40,
-      height: 40,
+      width: SizeTokens.controlMd,
+      height: SizeTokens.controlMd,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: RadiusTokens.brMd,
       ),
       alignment: Alignment.center,
-      child: Icon(icon, size: 20, color: foregroundColor),
+      child: Icon(icon, size: SizeTokens.iconSm, color: foregroundColor),
     );
 }
 
@@ -418,7 +419,7 @@ class _SigningInSubtitle extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
       const MxSkeleton.circle(size: 10),
-      const SizedBox(width: SpacingTokens.xs + 2),
+      const SizedBox(width: SpacingTokens.tight),
       MxText(
         text,
         role: MxTextRole.labelMedium,

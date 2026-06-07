@@ -63,7 +63,7 @@ class MxChoiceOption extends StatelessWidget {
 
     return AnimatedOpacity(
       duration: DurationTokens.stateChange,
-      opacity: state == MxChoiceState.wrong ? OpacityTokens.fadeOut + 0.4 : 1,
+      opacity: state == MxChoiceState.wrong ? 0.8 : 1,
       child: MxTappable(
         onTap: onTap,
         borderRadius: RadiusTokens.brMd,

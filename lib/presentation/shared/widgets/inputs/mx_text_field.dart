@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
@@ -93,7 +94,7 @@ class MxTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
-          borderSide: BorderSide(color: scheme.primary, width: 1.5),
+          borderSide: BorderSide(color: scheme.primary, width: BorderTokens.focusWidth),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
@@ -101,7 +102,7 @@ class MxTextField extends StatelessWidget {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
-          borderSide: BorderSide(color: scheme.error, width: 1.5),
+          borderSide: BorderSide(color: scheme.error, width: BorderTokens.focusWidth),
         ),
       ),
     );

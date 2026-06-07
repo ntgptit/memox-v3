@@ -20,7 +20,7 @@ class MxStreakChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color streak = context.customColors.streak;
     return Container(
-      height: SizeTokens.chip - 4,
+      height: SizeTokens.surfaceBadgeSm,
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
       decoration: BoxDecoration(
         color: streak.withValues(alpha: OpacityTokens.focus),
@@ -30,7 +30,7 @@ class MxStreakChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(Icons.local_fire_department, size: SizeTokens.iconXs, color: streak),
-          const SizedBox(width: SpacingTokens.xs + 2),
+          const SizedBox(width: SpacingTokens.tight),
           Text(
             label,
             style: context.textTheme.labelLarge?.copyWith(

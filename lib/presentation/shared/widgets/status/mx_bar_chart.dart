@@ -135,7 +135,7 @@ class _ChartBarItem extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: SpacingTokens.xs + 1),
+          const SizedBox(height: SpacingTokens.micro),
           Text(
             datum.label,
             style: context.textTheme.labelSmall?.copyWith(color: labelColor),

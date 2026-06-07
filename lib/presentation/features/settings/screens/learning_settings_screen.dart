@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -226,14 +229,14 @@ class _LearningGoalSliderBlock extends StatelessWidget {
               ),
               const SizedBox(height: SpacingTokens.lg),
               SizedBox(
-                height: 22,
+                height: SizeTokens.iconBadge,
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: <Widget>[
                     Positioned.fill(
                       child: Center(
-                        child: Container(
-                          height: 5,
+                      child: Container(
+                          height: SpacingTokens.micro,
                           decoration: BoxDecoration(
                             color: scheme.surfaceContainerHigh,
                             borderRadius: RadiusTokens.brFull,
@@ -247,7 +250,7 @@ class _LearningGoalSliderBlock extends StatelessWidget {
                         child: FractionallySizedBox(
                           widthFactor: progress,
                           child: Container(
-                            height: 5,
+                            height: SpacingTokens.micro,
                             decoration: BoxDecoration(
                               color: scheme.primary,
                               borderRadius: RadiusTokens.brFull,
@@ -259,16 +262,19 @@ class _LearningGoalSliderBlock extends StatelessWidget {
                     Align(
                       alignment: Alignment(progress * 2 - 1, 0),
                       child: Container(
-                        width: 20,
-                        height: 20,
+                        width: SizeTokens.iconSm,
+                        height: SizeTokens.iconSm,
                         decoration: BoxDecoration(
                           color: scheme.surface,
-                          border: Border.all(color: scheme.primary, width: 2),
+                          border: Border.all(
+                            color: scheme.primary,
+                            width: BorderTokens.focusWidth,
+                          ),
                           borderRadius: RadiusTokens.brFull,
                           boxShadow: <BoxShadow>[
                             BoxShadow(
                               color: scheme.primary.withValues(alpha: 0.22),
-                              blurRadius: 6,
+                              blurRadius: ShadowTokens.blurSm,
                               offset: const Offset(0, 2),
                             ),
                           ],
@@ -299,7 +305,7 @@ class _LearningGoalSliderBlock extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.info_outline,
-                    size: 11,
+                    size: SizeTokens.iconTiny,
                     color: scheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: SpacingTokens.xs),
@@ -328,8 +334,8 @@ class _GoalTrackTick extends StatelessWidget {
   Widget build(BuildContext context) => Align(
     alignment: Alignment(position * 2 - 1, 0),
     child: Container(
-      width: 2,
-      height: 2,
+      width: SizeTokens.dot,
+      height: SizeTokens.dot,
       decoration: BoxDecoration(
         color: active
             ? context.colorScheme.surfaceContainerLowest.withValues(alpha: 0.85)
@@ -413,7 +419,7 @@ class _PermissionBanner extends StatelessWidget {
       ),
       padding: const EdgeInsets.fromLTRB(
         SpacingTokens.md,
-        12,
+        SpacingTokens.md,
         SpacingTokens.md,
         SpacingTokens.md,
       ),
@@ -422,7 +428,7 @@ class _PermissionBanner extends StatelessWidget {
         children: <Widget>[
           Icon(
             Icons.notifications_off_outlined,
-            size: 16,
+            size: SizeTokens.iconXs,
             color: context.customColors.warning,
           ),
           const SizedBox(width: SpacingTokens.sm),

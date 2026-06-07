@@ -14,11 +14,23 @@ abstract final class SizeTokens {
   static const double iconMd = 24;
   static const double iconLg = 32;
   static const double iconXl = 64;
+  static const double iconTiny = 11;
+  static const double iconMini = 12;
+  static const double iconMinor = 18;
+  static const double iconBadge = 22;
+  static const double iconTile = 30;
+  static const double dot = 2;
+  static const double surfaceBadge = 26;
+  static const double surfaceBadgeSm = 28;
+  static const double surfaceTileSm = 38;
 
   // Button heights.
   static const double buttonSm = 36;
   static const double button = 48;
   static const double buttonLg = 52;
+  static const double controlMd = 40;
+  static const double avatar = 44;
+  static const double dialogActionWidth = 128;
 
   /// Text-field height.
   static const double input = 52;

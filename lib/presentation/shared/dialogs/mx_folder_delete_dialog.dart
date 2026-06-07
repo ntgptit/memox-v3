@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/custom_colors.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/color_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
@@ -142,7 +143,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
   Widget _buildHeader(ColorScheme scheme) => MxIconTile(
     icon: Icons.folder_delete_outlined,
     color: scheme.error,
-    size: 48,
+    size: SizeTokens.button,
   );
 
   Widget _buildDescription(ColorScheme scheme, TextTheme text) => Text.rich(
@@ -188,7 +189,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
       children: <Widget>[
         Icon(
           Icons.shield_outlined,
-          size: SizeTokens.iconSm + 1,
+          size: SizeTokens.iconSm,
           color: colors.success,
         ),
         const SizedBox(width: SpacingTokens.sm),
@@ -238,7 +239,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: RadiusTokens.brMd,
-            borderSide: BorderSide(color: scheme.error, width: 1.5),
+            borderSide: BorderSide(color: scheme.error, width: BorderTokens.focusWidth),
           ),
           hintStyle: text.titleMedium?.copyWith(
             color: scheme.onSurfaceVariant.withValues(

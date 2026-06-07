@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
@@ -129,7 +130,7 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
           ColoredBox(
             color: scheme.outlineVariant,
             child: const SizedBox(
-              height: SpacingTokens.xxs / 2,
+              height: SpacingTokens.xxs,
               width: double.infinity,
             ),
           ),
@@ -200,18 +201,18 @@ class _TargetRow extends StatelessWidget {
       child: MxTappable(
         onTap: enabled ? onTap : null,
         borderRadius: RadiusTokens.brSm,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: SpacingTokens.lg,
-            vertical: SpacingTokens.sm + 2,
-          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SpacingTokens.lg,
+              vertical: SpacingTokens.inline,
+            ),
           child: Row(
             children: <Widget>[
               Icon(
                 selected
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
-                size: SpacingTokens.xl,
+                size: SizeTokens.iconMd,
                 color: selected ? scheme.primary : scheme.onSurfaceVariant,
               ),
               const SizedBox(width: SpacingTokens.md),

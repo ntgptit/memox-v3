@@ -51,7 +51,7 @@ class LibraryOverviewBody extends StatelessWidget {
           const SizedBox(height: SpacingTokens.md),
         ],
         LibraryFolderHeader(count: model.folders.length),
-        const SizedBox(height: SpacingTokens.sm + SpacingTokens.xxs),
+        const SizedBox(height: SpacingTokens.inline),
         for (final FolderWithCount item in model.folders) ...<Widget>[
           LibraryFolderTile(
             item: item,
@@ -61,7 +61,7 @@ class LibraryOverviewBody extends StatelessWidget {
             // `docs/wireframes/02-library.md` §Overflow sheet.
             onShowActions: () => onShowFolderActions(item),
           ),
-          const SizedBox(height: SpacingTokens.sm + SpacingTokens.xxs),
+          const SizedBox(height: SpacingTokens.inline),
         ],
       ],
     );
