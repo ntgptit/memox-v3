@@ -20,6 +20,28 @@ enum MxSecondaryVariant {
 /// Low-level: prefer the semantic `MxActionButton` in feature code. Always
 /// visually lighter than the primary per
 /// `docs/ui-ux/action-hierarchy-contract.md`.
+///
+/// Purpose:
+/// Provides a reusable MemoX button widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared button surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - label: public content.
+/// - onPressed: callback.
+/// - icon: public content.
+/// - variant: public configuration.
+/// - size: public configuration.
+/// - fullWidth: public property.
+///
+/// Variants:
+/// tonal, outlined, text
+/// Category:
+/// button
 class MxSecondaryButton extends StatelessWidget {
   const MxSecondaryButton({
     required this.label,
@@ -85,15 +107,13 @@ class MxSecondaryButton extends StatelessWidget {
   }
 
   ButtonStyle _styleFor(MxSecondaryVariant variant) => ButtonStyle(
-      minimumSize: WidgetStatePropertyAll<Size>(Size(0, size.height)),
-      tapTargetSize: MaterialTapTargetSize.padded,
-      padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
-        switch (variant) {
-          MxSecondaryVariant.text => const EdgeInsets.symmetric(
-            horizontal: SpacingTokens.md,
-          ),
-          _ => const EdgeInsets.symmetric(horizontal: SpacingTokens.xl),
-        },
+    minimumSize: WidgetStatePropertyAll<Size>(Size(0, size.height)),
+    tapTargetSize: MaterialTapTargetSize.padded,
+    padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(switch (variant) {
+      MxSecondaryVariant.text => const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.md,
       ),
-    );
+      _ => const EdgeInsets.symmetric(horizontal: SpacingTokens.xl),
+    }),
+  );
 }

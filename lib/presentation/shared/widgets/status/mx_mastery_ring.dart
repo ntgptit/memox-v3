@@ -10,6 +10,23 @@ import 'package:memox/presentation/shared/widgets/status/mx_card_status.dart';
 ///
 /// Section E of the handoff. The arc color steps with the percentage via
 /// [masteryColor] (`< 34 / < 67 / ≥ 67`).
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - pct: public property.
+/// - size: public configuration.
+/// - strokeWidth: public property.
+/// - showLabel: public property.
+/// Category:
+/// display
 class MxMasteryRing extends StatelessWidget {
   const MxMasteryRing({
     required this.pct,
@@ -82,7 +99,13 @@ class _MasteryRingPainter extends CustomPainter {
 
     canvas.drawCircle(center, radius, base..color = track);
     if (value > 0) {
-      canvas.drawArc(rect, _start, 2 * math.pi * value, false, base..color = color);
+      canvas.drawArc(
+        rect,
+        _start,
+        2 * math.pi * value,
+        false,
+        base..color = color,
+      );
     }
   }
 

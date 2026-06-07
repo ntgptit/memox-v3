@@ -15,6 +15,26 @@ enum MxMatchState { idle, selected, matched }
 /// Match-pairs grid tile — idle / selected (filled primary) / matched (green).
 ///
 /// Section F of the handoff. Matched tiles are non-interactive.
+///
+/// Purpose:
+/// Provides a reusable MemoX button widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared button surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - label: public content.
+/// - state: public configuration.
+/// - onTap: callback.
+/// - height: public configuration.
+///
+/// States:
+/// default, selected, disabled
+/// Category:
+/// button
 class MxMatchTile extends StatelessWidget {
   const MxMatchTile({
     required this.label,
@@ -34,19 +54,19 @@ class MxMatchTile extends StatelessWidget {
     final ColorScheme scheme = context.colorScheme;
     final Color mastery = context.customColors.mastery;
 
-    final (Color fill, Color fg, Border? border, bool checked) = switch (state) {
+    final (
+      Color fill,
+      Color fg,
+      Border? border,
+      bool checked,
+    ) = switch (state) {
       MxMatchState.idle => (
         scheme.surfaceContainerLowest,
         scheme.onSurface,
         Border.fromBorderSide(BorderTokens.ghostSide(scheme.primary)),
         false,
       ),
-      MxMatchState.selected => (
-        scheme.primary,
-        scheme.onPrimary,
-        null,
-        false,
-      ),
+      MxMatchState.selected => (scheme.primary, scheme.onPrimary, null, false),
       MxMatchState.matched => (
         scheme.surfaceContainerLowest,
         mastery,

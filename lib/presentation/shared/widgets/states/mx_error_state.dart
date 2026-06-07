@@ -12,6 +12,24 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart'
 /// Section G of the handoff (Banner/Callout danger tone, full-screen form).
 /// Pass localized [title]/[message]/[retryLabel]; failure → copy mapping is the
 /// caller's job (`docs/contracts/error-contract.md`).
+///
+/// Purpose:
+/// Provides a reusable MemoX feedback widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared feedback surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - title: public content.
+/// - message: public content.
+/// - retryLabel: public property.
+/// - onRetry: callback.
+/// - icon: public content.
+/// Category:
+/// feedback
 class MxErrorState extends StatelessWidget {
   const MxErrorState({
     required this.title,

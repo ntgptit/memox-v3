@@ -9,6 +9,27 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 /// `MxTappable` instead of hand-rolling `InkWell` / `InkResponse` / tap-only
 /// `GestureDetector`. It guarantees hover/focus/pressed overlays clipped to the
 /// widget's visual shape ([borderRadius] or [customBorder]).
+///
+/// Purpose:
+/// Provides a reusable MemoX utility widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared utility surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - child: public content.
+/// - onTap: callback.
+/// - onLongPress: callback.
+/// - borderRadius: public property.
+/// - customBorder: public property.
+/// - focusNode: public property.
+/// - autofocus: public property.
+/// - excludeFromSemantics: public property.
+/// Category:
+/// utility
 class MxTappable extends StatelessWidget {
   const MxTappable({
     required this.child,

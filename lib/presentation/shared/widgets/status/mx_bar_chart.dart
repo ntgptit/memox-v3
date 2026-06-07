@@ -9,8 +9,14 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
 /// One column of an [MxBarChart].
+/// Category:
+/// display
 class MxBarDatum {
-  const MxBarDatum({required this.value, required this.label, this.highlight = false});
+  const MxBarDatum({
+    required this.value,
+    required this.label,
+    this.highlight = false,
+  });
 
   /// Raw magnitude; bars are normalized against the max in the set.
   final double value;
@@ -25,6 +31,22 @@ class MxBarDatum {
 /// Section E of the handoff. Lightweight `CustomPaint` — no charting
 /// dependency. Highlighted bars use `primary`; the rest use
 /// `surfaceContainerHighest`. Honors reduced-motion (skips the entrance).
+///
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - data: public content.
+/// - height: public configuration.
+/// Category:
+/// display
 class MxBarChart extends StatefulWidget {
   const MxBarChart({required this.data, this.height = 80, super.key});
 
@@ -35,7 +57,8 @@ class MxBarChart extends StatefulWidget {
   State<MxBarChart> createState() => _MxBarChartState();
 }
 
-class _MxBarChartState extends State<MxBarChart> with SingleTickerProviderStateMixin {
+class _MxBarChartState extends State<MxBarChart>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: DurationTokens.chartDraw,
@@ -48,7 +71,8 @@ class _MxBarChartState extends State<MxBarChart> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _controller.value = 1; // safe default until first frame resolves motion pref
+    _controller.value =
+        1; // safe default until first frame resolves motion pref
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -79,22 +103,22 @@ class _MxBarChartState extends State<MxBarChart> with SingleTickerProviderStateM
       child: AnimatedBuilder(
         animation: _grow,
         builder: (BuildContext context, _) => Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              for (final MxBarDatum datum in widget.data)
-                Expanded(
-                  child: _ChartBarItem(
-                    datum: datum,
-                    maxValue: maxValue,
-                    progress: _grow.value,
-                    barColor: datum.highlight
-                        ? scheme.primary
-                        : scheme.surfaceContainerHighest,
-                    labelColor: scheme.onSurfaceVariant,
-                  ),
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            for (final MxBarDatum datum in widget.data)
+              Expanded(
+                child: _ChartBarItem(
+                  datum: datum,
+                  maxValue: maxValue,
+                  progress: _grow.value,
+                  barColor: datum.highlight
+                      ? scheme.primary
+                      : scheme.surfaceContainerHighest,
+                  labelColor: scheme.onSurfaceVariant,
                 ),
-            ],
-          ),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -9,6 +9,22 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 /// Section G of the handoff. Driven by a connectivity stream at the call site;
 /// the [message] (and optional [action] copy) are localized by the caller.
 /// Render it at the top of a screen body, collapsed when online.
+///
+/// Purpose:
+/// Provides a reusable MemoX feedback widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared feedback surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - message: public content.
+/// - actionLabel: public property.
+/// - onAction: callback.
+/// Category:
+/// feedback
 class MxOfflineBanner extends StatelessWidget {
   const MxOfflineBanner({
     required this.message,

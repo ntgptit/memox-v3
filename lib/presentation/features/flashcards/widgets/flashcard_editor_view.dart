@@ -2,25 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
-import 'package:memox/core/theme/extensions/theme_context.dart';
-import 'package:memox/core/theme/tokens/radius_tokens.dart';
-import 'package:memox/core/theme/tokens/size_tokens.dart';
-import 'package:memox/core/theme/tokens/spacing_tokens.dart';
-import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
-import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/tag/tag_validator.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart';
-import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_body.dart';
+import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_view_parts.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
-import 'package:memox/presentation/shared/mx_widgets.dart';
 
 class FlashcardEditorView extends ConsumerStatefulWidget {
   const FlashcardEditorView({
@@ -146,181 +139,53 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final AsyncValue<FlashcardListDetail> deckContextQuery = ref.watch(
-      flashcardEditorContextQueryProvider(widget.deckId),
-    );
-    final AsyncValue<FlashcardDetail>? flashcardQuery = _isEditMode
-        ? ref.watch(flashcardEditorDetailQueryProvider(widget.flashcardId!))
-        : null;
-
-    final FlashcardListDetail? deckDetail = deckContextQuery.asData?.value;
-    final FlashcardDetail? flashcardDetail = flashcardQuery?.asData?.value;
-
-    if (deckContextQuery.hasError || flashcardQuery?.hasError == true) {
-      return _buildLoadErrorScaffold(context, l10n);
-    }
-
-    if (deckContextQuery.isLoading ||
-        (flashcardQuery?.isLoading == true && _isEditMode)) {
-      return _buildLoadingScaffold(context, l10n);
-    }
-
-    if (_isEditMode && flashcardDetail != null && !_didPrefillCard) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) {
-          return;
-        }
-        if (_didPrefillCard) {
-          return;
-        }
-        _hydrateFromDetail(flashcardDetail);
-      });
-      return _buildLoadingScaffold(context, l10n);
-    }
-
-    if (deckDetail == null) {
-      return _buildLoadingScaffold(context, l10n);
-    }
-
-    return _buildEditorScaffold(
-      context,
-      l10n,
-      deckDetail: deckDetail,
-      flashcardDetail: flashcardDetail,
+    return FlashcardEditorViewContent(
+      deckId: widget.deckId,
+      flashcardId: widget.flashcardId,
+      isEditMode: _isEditMode,
+      didPrefillCard: _didPrefillCard,
+      onHydrateFromDetail: _hydrateFromDetail,
+      isSaving: isSaving,
+      canSave: _canSave,
+      hasUnsavedChanges: _hasUnsavedChanges,
+      detailsOpen: _detailsOpen,
+      saveAndAddAnother: _saveAndAddAnother,
+      formKey: _formKey,
+      frontController: _frontController,
+      backController: _backController,
+      exampleController: _exampleController,
+      pronunciationController: _pronController,
+      hintController: _hintController,
+      tags: _tags,
+      frontFocusNode: _frontFocusNode,
+      backFocusNode: _backFocusNode,
+      exampleFocusNode: _exampleFocusNode,
+      pronunciationFocusNode: _pronFocusNode,
+      hintFocusNode: _hintFocusNode,
+      frontMaxChars: _frontMaxChars,
+      backMaxChars: _backMaxChars,
+      onToggleSaveAndAddAnother: _toggleSaveAndAddAnother,
+      onToggleDetails: _toggleDetails,
+      onAddTag: _addTag,
+      onRemoveTag: _removeTag,
+      onDraftChanged: _handleDraftChanged,
+      saveFailure: _saveFailure,
+      onRetrySave: _retryLoad,
+      onClose: _close,
+      onSave: _save,
+      onDelete: _confirmDelete,
+      onConfirmDiscard: _confirmDiscard,
+      saveFailureFallbackMessage: _isEditMode
+          ? l10n.flashcardsEditSaveFailedMessage
+          : l10n.flashcardEditorSaveFailedMessage,
+      tagsLabel: l10n.flashcardEditorTagsLabel,
+      tagsOptionalLabel: l10n.flashcardEditorTagsOptionalLabel,
+      addTagLabel: l10n.flashcardEditorAddTagLabel,
+      currentBreadcrumbLabel: _isEditMode
+          ? l10n.flashcardsEditTitle
+          : l10n.flashcardEditorBreadcrumbCurrent,
     );
   }
-
-  Widget _buildLoadingScaffold(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) => MxScaffold(
-    appBar: MxAppBar(
-      leading: MxIconButton(
-        icon: Icons.close,
-        tooltip: l10n.commonClose,
-        onPressed: () async {
-          await Navigator.of(context).maybePop();
-        },
-      ),
-      titleText: _isEditMode ? l10n.flashcardsEditTitle : l10n.flashcardEditorTitle,
-    ),
-    body: const _FlashcardEditorLoadingState(),
-  );
-
-  Widget _buildLoadErrorScaffold(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) => MxScaffold(
-    appBar: MxAppBar(
-      leading: MxIconButton(
-        icon: Icons.close,
-        tooltip: l10n.commonClose,
-        onPressed: () async {
-          await Navigator.of(context).maybePop();
-        },
-      ),
-      titleText: _isEditMode ? l10n.flashcardsEditTitle : l10n.flashcardEditorTitle,
-    ),
-    body: _FlashcardEditorLoadErrorState(
-      title: l10n.flashcardsLoadErrorTitle,
-      message: l10n.flashcardsLoadErrorMessage,
-      backLabel: l10n.flashcardsLoadErrorBackAction,
-      retryLabel: l10n.commonRetry,
-      onBack: () async {
-        await Navigator.of(context).maybePop();
-      },
-      onRetry: _retryLoad,
-    ),
-  );
-
-  Widget _buildEditorScaffold(
-    BuildContext context,
-    AppLocalizations l10n, {
-    required FlashcardListDetail deckDetail,
-    required FlashcardDetail? flashcardDetail,
-  }) => PopScope(
-    canPop: !isSaving && !_hasUnsavedChanges,
-    onPopInvokedWithResult: (bool didPop, Object? _) async {
-      if (didPop || isSaving || !_hasUnsavedChanges) {
-        return;
-      }
-      await _confirmDiscard();
-    },
-    child: MxFormScaffold(
-      appBar: MxAppBar(
-        leading: MxIconButton(
-          icon: Icons.close,
-          tooltip: l10n.commonClose,
-          onPressed: isSaving ? null : _close,
-        ),
-        titleText: _isEditMode ? l10n.flashcardsEditTitle : l10n.flashcardEditorTitle,
-        actions: <Widget>[
-          FlashcardEditorSaveButton(
-            label: l10n.commonSave,
-            busy: isSaving,
-            enabled: _canSave,
-            showIcon: false,
-            size: MxButtonSize.xsmall,
-            onPressed: isSaving ? null : _save,
-          ),
-        ],
-      ),
-      bottomAction: FlashcardEditorBottomBar(
-        cancelLabel: l10n.commonCancel,
-        saveLabel: _isEditMode ? l10n.flashcardsSaveChanges : l10n.flashcardEditorSaveCardLabel,
-        helperLabel: _isEditMode
-            ? l10n.flashcardsEditSaveHelperText
-            : l10n.flashcardEditorSaveHelperText,
-        isSaving: isSaving,
-        saveEnabled: _canSave,
-        onCancel: isSaving ? null : _close,
-        onSave: isSaving ? null : _save,
-      ),
-      body: Form(
-        key: _formKey,
-        child: FlashcardEditorBody(
-          detail: deckDetail,
-          isEditMode: _isEditMode,
-          detailsOpen: _detailsOpen,
-          frontController: _frontController,
-          backController: _backController,
-          exampleController: _exampleController,
-          pronunciationController: _pronController,
-          hintController: _hintController,
-          tags: _tags,
-          frontFocusNode: _frontFocusNode,
-          backFocusNode: _backFocusNode,
-          exampleFocusNode: _exampleFocusNode,
-          pronunciationFocusNode: _pronFocusNode,
-          hintFocusNode: _hintFocusNode,
-          frontMaxChars: _frontMaxChars,
-          backMaxChars: _backMaxChars,
-          onToggleDetails: _toggleDetails,
-          onAddTag: _addTag,
-          onRemoveTag: _removeTag,
-          onDraftChanged: _handleDraftChanged,
-          saveFailure: _saveFailure,
-          onRetrySave: _save,
-          isSaving: isSaving,
-          showSaveAndAddAnother: !_isEditMode,
-          saveAndAddAnother: _saveAndAddAnother,
-          onSaveAndAddAnotherChanged: _toggleSaveAndAddAnother,
-          showDangerZone: _isEditMode,
-          onDelete: _confirmDelete,
-          deleteReviewCount: flashcardDetail?.progress?.reviewCount ?? 0,
-          saveFailureFallbackMessage: _isEditMode
-              ? l10n.flashcardsEditSaveFailedMessage
-              : l10n.flashcardEditorSaveFailedMessage,
-          tagsLabel: l10n.flashcardEditorTagsLabel,
-          tagsOptionalLabel: l10n.flashcardEditorTagsOptionalLabel,
-          addTagLabel: l10n.flashcardEditorAddTagLabel,
-          currentBreadcrumbLabel: _isEditMode
-              ? l10n.flashcardsEditTitle
-              : l10n.flashcardEditorBreadcrumbCurrent,
-        ),
-      ),
-    ),
-  );
 
   void _hydrateFromDetail(FlashcardDetail detail) {
     setState(() {
@@ -333,14 +198,19 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
       _tags
         ..clear()
         ..addAll(detail.tags);
-      _detailsOpen = detail.flashcard.exampleSentence != null ||
+      _detailsOpen =
+          detail.flashcard.exampleSentence != null ||
           detail.flashcard.pronunciation != null ||
           detail.flashcard.hint != null ||
           detail.tags.isNotEmpty;
       _initialFront = StringUtils.trimmed(detail.flashcard.front);
       _initialBack = StringUtils.trimmed(detail.flashcard.back);
-      _initialExample = StringUtils.trimmed(detail.flashcard.exampleSentence ?? '');
-      _initialPronunciation = StringUtils.trimmed(detail.flashcard.pronunciation ?? '');
+      _initialExample = StringUtils.trimmed(
+        detail.flashcard.exampleSentence ?? '',
+      );
+      _initialPronunciation = StringUtils.trimmed(
+        detail.flashcard.pronunciation ?? '',
+      );
       _initialHint = StringUtils.trimmed(detail.flashcard.hint ?? '');
       _initialTags = List<String>.from(detail.tags);
       _saveFailure = null;
@@ -438,10 +308,8 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
   Future<void> _save() async {
     final AppLocalizations l10n = AppLocalizations.of(context);
     if (_isEditMode && _shouldPromptProgressPolicy) {
-      final FlashcardProgressEditPolicy? policy = await _showProgressPolicyDialog(
-        context,
-        l10n,
-      );
+      final FlashcardProgressEditPolicy? policy =
+          await _showProgressPolicyDialog(l10n);
       if (policy == null) {
         return;
       }
@@ -540,9 +408,6 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
   }
 
   void _toggleSaveAndAddAnother(bool value) {
-    if (!mounted) {
-      return;
-    }
     setState(() => _saveAndAddAnother = value);
   }
 
@@ -589,7 +454,7 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
 
   Future<void> _retryLoad() async {
     ref.invalidate(flashcardEditorContextQueryProvider(widget.deckId));
-    if (_isEditMode) {
+    if (_isEditMode && widget.flashcardId != null) {
       ref.invalidate(flashcardEditorDetailQueryProvider(widget.flashcardId!));
       _didPrefillCard = false;
       _loadedDetail = null;
@@ -608,20 +473,7 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
         _ => l10n.flashcardsTagErrorEmpty,
       };
 
-  bool _sameTags(List<String> current, List<String> original) {
-    if (current.length != original.length) {
-      return false;
-    }
-    for (int index = 0; index < current.length; index++) {
-      if (!StringUtils.equalsIgnoreCase(current[index], original[index])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   Future<FlashcardProgressEditPolicy?> _showProgressPolicyDialog(
-    BuildContext context,
     AppLocalizations l10n,
   ) async {
     final bool resetProgress = await showMxConfirmDialog(
@@ -635,140 +487,16 @@ class _FlashcardEditorShell extends ConsumerState<FlashcardEditorView> {
         ? FlashcardProgressEditPolicy.resetProgress
         : FlashcardProgressEditPolicy.keepProgress;
   }
-}
 
-class _FlashcardEditorLoadingState extends StatelessWidget {
-  const _FlashcardEditorLoadingState();
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme scheme = context.colorScheme;
-    return ListView(
-      padding: const EdgeInsets.all(SpacingTokens.lg),
-      children: <Widget>[
-        const MxSkeleton(height: 14, width: 180),
-        const SizedBox(height: SpacingTokens.sm),
-        const MxSkeleton(height: 10, width: 120),
-        const SizedBox(height: SpacingTokens.lg),
-        _skeletonField(),
-        const SizedBox(height: SpacingTokens.md),
-        _skeletonField(),
-        const SizedBox(height: SpacingTokens.lg),
-        _skeletonField(lines: 2),
-        const SizedBox(height: SpacingTokens.lg),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: SizeTokens.iconMinor,
-                  height: SizeTokens.iconMinor,
-                  decoration: BoxDecoration(
-                    color: scheme.surfaceContainerHigh,
-                    borderRadius: RadiusTokens.brFull,
-                  ),
-                ),
-            const SizedBox(width: SpacingTokens.sm),
-            const Expanded(child: MxSkeleton(height: 12)),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _skeletonField({int lines = 1}) {
-    final List<Widget> children = <Widget>[
-      const MxSkeleton(height: 12, width: 100),
-      const SizedBox(height: SpacingTokens.sm),
-    ];
-    for (int index = 0; index < lines; index++) {
-      children.add(const MxSkeleton(height: 56));
-      if (index != lines - 1) {
-        children.add(const SizedBox(height: SpacingTokens.sm));
+  bool _sameTags(List<String> current, List<String> original) {
+    if (current.length != original.length) {
+      return false;
+    }
+    for (int index = 0; index < current.length; index++) {
+      if (!StringUtils.equalsIgnoreCase(current[index], original[index])) {
+        return false;
       }
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
-    );
-  }
-}
-
-class _FlashcardEditorLoadErrorState extends StatelessWidget {
-  const _FlashcardEditorLoadErrorState({
-    required this.title,
-    required this.message,
-    required this.backLabel,
-    required this.retryLabel,
-    required this.onBack,
-    required this.onRetry,
-  });
-
-  final String title;
-  final String message;
-  final String backLabel;
-  final String retryLabel;
-  final VoidCallback onBack;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme scheme = context.colorScheme;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(SpacingTokens.lg),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 360),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: SizeTokens.buttonLg,
-                height: SizeTokens.buttonLg,
-                decoration: BoxDecoration(
-                  color: scheme.errorContainer.withValues(alpha: 0.40),
-                  borderRadius: RadiusTokens.brMd,
-                ),
-                alignment: Alignment.center,
-                child: Icon(Icons.cloud_off_outlined, color: scheme.error),
-              ),
-              const SizedBox(height: SpacingTokens.md),
-              MxText(
-                title,
-                role: MxTextRole.titleMedium,
-                fontWeight: TypographyTokens.bold,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: SpacingTokens.xs),
-              MxText(
-                message,
-                role: MxTextRole.bodyMedium,
-                color: scheme.onSurfaceVariant,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: SpacingTokens.lg),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: MxSecondaryButton(
-                      label: backLabel,
-                      onPressed: onBack,
-                      variant: MxSecondaryVariant.outlined,
-                      size: MxButtonSize.medium,
-                    ),
-                  ),
-                  const SizedBox(width: SpacingTokens.sm),
-                  Expanded(
-                    child: MxPrimaryButton(
-                      label: retryLabel,
-                      onPressed: onRetry,
-                      size: MxButtonSize.medium,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return true;
   }
 }

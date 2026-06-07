@@ -15,6 +15,22 @@ import 'package:memox/presentation/shared/layouts/mx_adaptive_scaffold.dart'
 /// Pure presentation: it only forwards [selectedIndex] /
 /// [onDestinationSelected], so it drops into `StatefulShellRoute` without
 /// changing tab/route behavior.
+///
+/// Purpose:
+/// Provides a reusable MemoX navigation widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared navigation surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - destinations: public content.
+/// - selectedIndex: public property.
+/// - onDestinationSelected: callback.
+/// Category:
+/// navigation
 class MxBottomNavigationBar extends StatelessWidget {
   const MxBottomNavigationBar({
     required this.destinations,

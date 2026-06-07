@@ -13,6 +13,24 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart'
 /// Section G of the handoff. The CTA renders as an `emptyState`-intent
 /// [MxActionButton] (host-sized) per
 /// `docs/ui-ux/action-hierarchy-contract.md`.
+///
+/// Purpose:
+/// Provides a reusable MemoX feedback widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared feedback surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - icon: public content.
+/// - title: public content.
+/// - message: public content.
+/// - actionLabel: public property.
+/// - onAction: callback.
+/// Category:
+/// feedback
 class MxEmptyState extends StatelessWidget {
   const MxEmptyState({
     required this.icon,
@@ -47,7 +65,11 @@ class MxEmptyState extends StatelessWidget {
                 borderRadius: RadiusTokens.brLg,
               ),
               alignment: Alignment.center,
-              child: Icon(icon, size: SizeTokens.surfaceBadge, color: scheme.primary),
+              child: Icon(
+                icon,
+                size: SizeTokens.surfaceBadge,
+                color: scheme.primary,
+              ),
             ),
             const SizedBox(height: SpacingTokens.md),
             Text(title, style: text.titleMedium),
@@ -56,7 +78,9 @@ class MxEmptyState extends StatelessWidget {
               Text(
                 message!,
                 textAlign: TextAlign.center,
-                style: text.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+                style: text.bodyMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
             ],
             if (actionLabel != null && onAction != null) ...<Widget>[

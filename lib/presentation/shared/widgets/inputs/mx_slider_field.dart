@@ -8,6 +8,26 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 ///
 /// The component mirrors the MemoX settings slider mock: a title/value row,
 /// a themed Material slider track, and three aligned sublabels underneath.
+///
+/// Purpose:
+/// Provides a reusable MemoX input widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared input surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - label: public content.
+/// - valueLabel: public property.
+/// - value: public configuration.
+/// - min: public property.
+/// - max: public property.
+/// - sublabels: public property.
+/// - onChanged: callback.
+/// Category:
+/// input
 class MxSliderField extends StatelessWidget {
   const MxSliderField({
     required this.label,

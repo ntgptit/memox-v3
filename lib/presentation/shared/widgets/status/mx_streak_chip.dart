@@ -11,6 +11,20 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 ///
 /// Section E of the handoff. The [label] is caller-supplied (localized, e.g.
 /// "14-day streak").
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - label: public content.
+/// Category:
+/// display
 class MxStreakChip extends StatelessWidget {
   const MxStreakChip({required this.label, super.key});
 
@@ -29,7 +43,11 @@ class MxStreakChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.local_fire_department, size: SizeTokens.iconXs, color: streak),
+          Icon(
+            Icons.local_fire_department,
+            size: SizeTokens.iconXs,
+            color: streak,
+          ),
           const SizedBox(width: SpacingTokens.tight),
           Text(
             label,

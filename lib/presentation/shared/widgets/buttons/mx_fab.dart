@@ -6,6 +6,24 @@ import 'package:flutter/material.dart';
 /// (`memox.feature_raw_flutter_widget_usage`); compose this instead. Styling
 /// (container color, level-2 elevation, radius) comes from the themed
 /// `FloatingActionButtonThemeData`.
+///
+/// Purpose:
+/// Provides a reusable MemoX button widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared button surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - icon: public content.
+/// - label: public content.
+/// - onPressed: callback.
+/// - tooltip: public property.
+/// - heroTag: public property.
+/// Category:
+/// button
 class MxFab extends StatelessWidget {
   const MxFab({
     required this.icon,

@@ -5,6 +5,22 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
 
 /// Shared checkbox row primitive for local session toggles.
+///
+/// Purpose:
+/// Provides a reusable MemoX input widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared input surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - label: public content.
+/// - value: public configuration.
+/// - onChanged: callback.
+/// Category:
+/// input
 class MxCheckboxRow extends StatelessWidget {
   const MxCheckboxRow({
     required this.label,

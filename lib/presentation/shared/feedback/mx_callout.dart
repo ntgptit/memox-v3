@@ -15,6 +15,23 @@ enum MxCalloutTone { info, warning, danger, ok }
 ///
 /// Section G of the handoff. The [message] is caller-supplied (localized);
 /// optional trailing [action] (e.g. a text button).
+///
+/// Purpose:
+/// Provides a reusable MemoX feedback widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared feedback surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - message: public content.
+/// - tone: public property.
+/// - icon: public content.
+/// - action: public property.
+/// Category:
+/// feedback
 class MxCallout extends StatelessWidget {
   const MxCallout({
     required this.message,

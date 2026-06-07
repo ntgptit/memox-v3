@@ -1,24 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:memox/core/theme/extensions/theme_context.dart';
-import 'package:memox/core/theme/tokens/border_tokens.dart';
-import 'package:memox/core/theme/tokens/opacity_tokens.dart';
-import 'package:memox/core/theme/tokens/radius_tokens.dart';
-import 'package:memox/core/theme/tokens/shadow_tokens.dart';
-import 'package:memox/core/theme/tokens/size_tokens.dart';
-import 'package:memox/core/theme/tokens/spacing_tokens.dart';
-import 'package:memox/core/theme/tokens/typography_tokens.dart';
-import 'package:memox/core/utils/string_utils.dart';
-import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
-import 'package:memox/presentation/shared/widgets/mx_text.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
+part of 'mx_folder_form_dialog.dart';
 
-class MxFolderFormCreateHeader extends StatelessWidget {
-  const MxFolderFormCreateHeader({
+class _MxFolderFormCreateHeader extends StatelessWidget {
+  const _MxFolderFormCreateHeader({
     required this.icon,
     required this.color,
     required this.title,
     required this.description,
-    super.key,
   });
 
   final IconData icon;
@@ -41,17 +28,17 @@ class MxFolderFormCreateHeader extends StatelessWidget {
         const SizedBox(width: SpacingTokens.md),
         Expanded(
           child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            MxText(
-              title,
-              role: MxTextRole.titleMedium,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              MxText(
+                title,
+                role: MxTextRole.titleMedium,
                 fontWeight: TypographyTokens.bold,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-            const SizedBox(height: SpacingTokens.xs),
+              const SizedBox(height: SpacingTokens.xs),
               MxText(
                 description,
                 role: MxTextRole.labelSmall,
@@ -66,11 +53,10 @@ class MxFolderFormCreateHeader extends StatelessWidget {
   );
 }
 
-class MxFolderFormRenameHeader extends StatelessWidget {
-  const MxFolderFormRenameHeader({
+class _MxFolderFormRenameHeader extends StatelessWidget {
+  const _MxFolderFormRenameHeader({
     required this.title,
     required this.description,
-    super.key,
   });
 
   final String title;
@@ -106,8 +92,8 @@ class MxFolderFormRenameHeader extends StatelessWidget {
   );
 }
 
-class MxFolderFormSectionLabel extends StatelessWidget {
-  const MxFolderFormSectionLabel(this.label, {super.key});
+class _MxFolderFormSectionLabel extends StatelessWidget {
+  const _MxFolderFormSectionLabel(this.label);
 
   final String label;
 
@@ -120,13 +106,12 @@ class MxFolderFormSectionLabel extends StatelessWidget {
   );
 }
 
-class MxFolderFormColorSwatch extends StatelessWidget {
-  const MxFolderFormColorSwatch({
+class _MxFolderFormColorSwatch extends StatelessWidget {
+  const _MxFolderFormColorSwatch({
     required this.color,
     required this.selected,
     required this.onTap,
     required this.surfaceColor,
-    super.key,
   });
 
   final Color color;
@@ -177,14 +162,13 @@ class MxFolderFormColorSwatch extends StatelessWidget {
   );
 }
 
-class MxFolderFormIconChoiceTile extends StatelessWidget {
-  const MxFolderFormIconChoiceTile({
+class _MxFolderFormIconChoiceTile extends StatelessWidget {
+  const _MxFolderFormIconChoiceTile({
     required this.icon,
     required this.selected,
     required this.color,
     required this.onTap,
     required this.scheme,
-    super.key,
   });
 
   final IconData icon;

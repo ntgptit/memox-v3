@@ -8,6 +8,20 @@ import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 ///
 /// Renders a small column of list-row skeletons that approximates the screen
 /// being loaded.
+///
+/// Purpose:
+/// Provides a reusable MemoX feedback widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared feedback surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - rows: public property.
+/// Category:
+/// feedback
 class MxLoadingState extends StatelessWidget {
   const MxLoadingState({this.rows = 5, super.key});
 

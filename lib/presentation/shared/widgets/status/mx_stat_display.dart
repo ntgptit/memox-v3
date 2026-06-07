@@ -9,6 +9,23 @@ import 'package:memox/core/utils/string_utils.dart';
 /// Section E of the handoff. Renders the 48px `statDisplay` style with
 /// tabular figures (so digits don't jitter as the value counts up) over an
 /// ALL-CAPS caption.
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - value: public configuration.
+/// - caption: public property.
+/// - alignment: public property.
+/// - color: public content.
+/// Category:
+/// display
 class MxStatDisplay extends StatelessWidget {
   const MxStatDisplay({
     required this.value,

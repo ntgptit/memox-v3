@@ -14,6 +14,24 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 ///
 /// Section F of the handoff. Controlled by [showBack]; tapping toggles the face
 /// (or call [onTap] yourself). The back face uses the primary outline + tint.
+///
+/// Purpose:
+/// Provides a reusable MemoX card widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared card surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - front: public property.
+/// - back: public property.
+/// - showBack: public property.
+/// - onTap: callback.
+/// - minHeight: public property.
+/// Category:
+/// card
 class MxFlashcard extends StatelessWidget {
   const MxFlashcard({
     required this.front,

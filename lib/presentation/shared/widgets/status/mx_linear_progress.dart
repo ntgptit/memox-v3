@@ -8,6 +8,22 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 ///
 /// Section E of the handoff. Tone is `primary` by default; pass [color] (e.g.
 /// the mastery green) to recolor. Heights 4 / 8.
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - value: public configuration.
+/// - color: public content.
+/// - height: public configuration.
+/// Category:
+/// display
 class MxLinearProgress extends StatelessWidget {
   const MxLinearProgress({
     required this.value,

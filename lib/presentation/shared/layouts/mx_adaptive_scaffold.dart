@@ -4,6 +4,8 @@ import 'package:memox/core/theme/responsive/breakpoints.dart';
 import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
 
 /// A top-level navigation destination for [MxAdaptiveScaffold].
+/// Category:
+/// layout
 class MxNavDestination {
   const MxNavDestination({
     required this.icon,
@@ -22,6 +24,26 @@ class MxNavDestination {
 /// mobile, a `NavigationRail` on tablet/desktop (≥ 600dp). The four MemoX
 /// destinations (Home / Library / Progress / Settings) are caller-supplied so
 /// the labels stay localized.
+///
+///
+/// Purpose:
+/// Provides a reusable MemoX layout widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared layout surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - destinations: public content.
+/// - selectedIndex: public property.
+/// - onDestinationSelected: callback.
+/// - body: public content.
+/// - appBar: public property.
+/// - floatingActionButton: public property.
+/// Category:
+/// layout
 class MxAdaptiveScaffold extends StatelessWidget {
   const MxAdaptiveScaffold({
     required this.destinations,

@@ -10,6 +10,25 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 /// code. `stretchOnCompact` defaults to `false` per
 /// `docs/ui-ux/action-hierarchy-contract.md` — a button is full-width only when
 /// [fullWidth] is set explicitly.
+///
+/// Purpose:
+/// Provides a reusable MemoX button widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared button surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - label: public content.
+/// - onPressed: callback.
+/// - icon: public content.
+/// - size: public configuration.
+/// - fullWidth: public property.
+/// - stretchOnCompact: public property.
+/// Category:
+/// button
 class MxPrimaryButton extends StatelessWidget {
   const MxPrimaryButton({
     required this.label,

@@ -7,6 +7,8 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 
 /// A tappable segment of an [MxBreadcrumb] path.
+/// Category:
+/// navigation
 class MxBreadcrumbSegment {
   const MxBreadcrumbSegment({required this.label, this.onTap});
 
@@ -18,6 +20,21 @@ class MxBreadcrumbSegment {
 ///
 /// Section A of the handoff. The last segment is the current location: bold and
 /// non-tappable regardless of its `onTap`.
+///
+///
+/// Purpose:
+/// Provides a reusable MemoX navigation widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared navigation surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - segments: public content.
+/// Category:
+/// navigation
 class MxBreadcrumb extends StatelessWidget {
   const MxBreadcrumb({required this.segments, super.key});
 

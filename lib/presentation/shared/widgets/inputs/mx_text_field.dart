@@ -11,6 +11,30 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 /// The feature layer must not use raw `TextField` / `TextFormField` directly.
 /// This wrapper centralizes the MemoX field chrome while keeping the input
 /// semantics flexible enough for form screens.
+///
+/// Purpose:
+/// Provides a reusable MemoX input widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared input surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - controller: public property.
+/// - focusNode: public property.
+/// - validator: public property.
+/// - onChanged: callback.
+/// - hintText: public content.
+/// - trailingIcon: public property.
+/// - autofocus: public property.
+/// - prominent: public property.
+/// - minLines: public property.
+/// - maxLines: public property.
+/// - textInputAction: public property.
+/// Category:
+/// input
 class MxTextField extends StatelessWidget {
   const MxTextField({
     required this.controller,
@@ -94,7 +118,10 @@ class MxTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
-          borderSide: BorderSide(color: scheme.primary, width: BorderTokens.focusWidth),
+          borderSide: BorderSide(
+            color: scheme.primary,
+            width: BorderTokens.focusWidth,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
@@ -102,7 +129,10 @@ class MxTextField extends StatelessWidget {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: RadiusTokens.brLg,
-          borderSide: BorderSide(color: scheme.error, width: BorderTokens.focusWidth),
+          borderSide: BorderSide(
+            color: scheme.error,
+            width: BorderTokens.focusWidth,
+          ),
         ),
       ),
     );

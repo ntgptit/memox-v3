@@ -9,6 +9,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// required by `memox.retained_async_state_requires_skeleton` — and previous
 /// [data] is retained while a watched provider refetches
 /// (`memox.async_refetch_blanks_screen`).
+///
+/// Purpose:
+/// Provides a reusable MemoX async widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared async surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - value: public configuration.
+/// - skeletonBuilder: public property.
+/// Category:
+/// async
 class MxRetainedAsyncState<T> extends StatelessWidget {
   const MxRetainedAsyncState({
     required this.value,

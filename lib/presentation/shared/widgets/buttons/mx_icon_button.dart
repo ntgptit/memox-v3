@@ -16,6 +16,29 @@ enum MxIconButtonSize {
   final double glyph;
 }
 
+/// Compact icon-only action button with MemoX shared sizing.
+///
+/// Purpose:
+/// Provides a reusable icon button that keeps the MemoX touch-target and
+/// density rules consistent across screens.
+///
+/// Use when:
+/// A surface needs a small icon-only action, either in toolbar density or as
+/// a compact standalone control.
+///
+/// Do not use when:
+/// The action needs a text label, a full-width primary action, or more than
+/// one control in the same surface.
+///
+/// Category:
+/// button
+///
+/// Public API:
+/// - icon: icon glyph shown inside the button
+/// - onPressed: tap callback; `null` disables the button
+/// - tooltip: optional accessibility tooltip
+/// - color: optional icon color override
+/// - size: density preset that controls the visual box and glyph size
 class MxIconButton extends StatelessWidget {
   const MxIconButton({
     required this.icon,

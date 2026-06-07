@@ -22,6 +22,26 @@ enum MxTextRole {
 /// the same UI intent resolves to the same scale everywhere. This is the one
 /// shared widget allowed to expose a public role API
 /// (`memox.shared_widget_no_public_mx_text_role_api` excludes this file).
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - data: public content.
+/// - role: public property.
+/// - color: public content.
+/// - fontWeight: public property.
+/// - maxLines: public property.
+/// - overflow: public property.
+/// - textAlign: public property.
+/// Category:
+/// display
 class MxText extends StatelessWidget {
   const MxText(
     this.data, {

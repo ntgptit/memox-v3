@@ -11,6 +11,26 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 /// Feature code must not use raw `TextField` / `SearchBar`
 /// (`memox.feature_raw_flutter_widget_usage`); compose this. The clear button
 /// appears only when [controller] has text.
+///
+/// Purpose:
+/// Provides a reusable MemoX input widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared input surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - controller: public property.
+/// - hintText: public content.
+/// - emptyTrailing: public property.
+/// - onChanged: callback.
+/// - onClear: callback.
+/// - clearTooltip: public property.
+/// - autofocus: public property.
+/// Category:
+/// input
 class MxSearchField extends StatelessWidget {
   const MxSearchField({
     required this.controller,
@@ -89,7 +109,7 @@ class MxSearchField extends StatelessWidget {
               ),
               suffixIcon: hasText
                   ? IconButton(
-                    icon: const Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                       iconSize: SizeTokens.iconXs,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints.tightFor(

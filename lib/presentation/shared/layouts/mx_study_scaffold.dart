@@ -8,6 +8,22 @@ import 'package:memox/presentation/shared/widgets/navigation/mx_study_top_bar.da
 ///
 /// `docs/business/study/study-flow.md`: study chrome is the close + mode badge
 /// + progress bar; the [topBar.accent] recolors per mode.
+///
+/// Purpose:
+/// Provides a reusable MemoX layout widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared layout surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - topBar: public property.
+/// - body: public content.
+/// - bottomAction: public property.
+/// Category:
+/// layout
 class MxStudyScaffold extends StatelessWidget {
   const MxStudyScaffold({
     required this.topBar,

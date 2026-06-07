@@ -30,6 +30,21 @@ enum MxRating {
 ///
 /// [labels] supplies the localized text per rating (defaults to enum order at
 /// the call site). Calls [onRate] with the chosen [MxRating].
+///
+/// Purpose:
+/// Provides a reusable MemoX input widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared input surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - labels: public content.
+/// - onRate: callback.
+/// Category:
+/// input
 class MxRatingBar extends StatelessWidget {
   const MxRatingBar({required this.labels, required this.onRate, super.key})
     : assert(labels.length == 4, 'Provide a label for each of the 4 ratings.');

@@ -9,6 +9,23 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 ///
 /// Section G of the handoff. Neutral `surfaceContainerHighest` block; the pulse
 /// is disabled under reduced-motion. Compose these into row/list skeletons.
+///
+/// Purpose:
+/// Provides a reusable MemoX utility widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared utility surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - width: public configuration.
+/// - height: public configuration.
+/// - borderRadius: public property.
+/// - shape: public property.
+/// Category:
+/// utility
 class MxSkeleton extends StatefulWidget {
   const MxSkeleton({
     this.width,
@@ -62,10 +79,7 @@ class _MxSkeletonState extends State<MxSkeleton>
   Widget build(BuildContext context) {
     final Color base = context.colorScheme.surfaceContainerHighest;
     return FadeTransition(
-      opacity: Tween<double>(
-        begin: 1,
-        end: 0.58,
-      ).animate(_controller),
+      opacity: Tween<double>(begin: 1, end: 0.58).animate(_controller),
       child: Container(
         width: widget.width,
         height: widget.height,

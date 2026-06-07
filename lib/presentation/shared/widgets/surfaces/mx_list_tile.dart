@@ -9,6 +9,25 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 /// Section C of the handoff (the "deck row"). Leading is typically an
 /// `MxIconTile`; trailing is an `MxMasteryRing`, a chevron, or a kebab
 /// `MxIconButton`. Tappable when [onTap] is set.
+///
+/// Purpose:
+/// Provides a reusable MemoX card widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared card surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - title: public content.
+/// - subtitle: public content.
+/// - leading: public property.
+/// - trailing: public property.
+/// - onTap: callback.
+/// - padding: public property.
+/// Category:
+/// card
 class MxListTile extends StatelessWidget {
   const MxListTile({
     required this.title,

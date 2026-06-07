@@ -9,6 +9,24 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 /// `CardThemeData` (`surfaceContainerLowest` + 1px ghost border, radius lg).
 /// Adds the design-system 16dp card padding (`--memox-space-card`) and optional
 /// tap behavior so features stop hand-rolling `Container(decoration: ...)`.
+///
+/// Purpose:
+/// Provides a reusable MemoX card widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared card surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - child: public content.
+/// - padding: public property.
+/// - onTap: callback.
+/// - onLongPress: callback.
+/// - clip: public property.
+/// Category:
+/// card
 class MxCard extends StatelessWidget {
   const MxCard({
     required this.child,

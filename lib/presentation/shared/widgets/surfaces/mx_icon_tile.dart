@@ -9,6 +9,22 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 ///
 /// Section C of the handoff. Default tint is `primary @10%`; pass [color] to
 /// recolor (e.g. accent for folders). Sizes 40 / 44.
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - icon: public content.
+/// - color: public content.
+/// - size: public configuration.
+/// Category:
+/// display
 class MxIconTile extends StatelessWidget {
   const MxIconTile({
     required this.icon,

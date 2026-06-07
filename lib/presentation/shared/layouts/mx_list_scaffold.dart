@@ -7,6 +7,27 @@ import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 /// Builds a width-capped, padded `ListView.separated` from [itemCount] /
 /// [itemBuilder]. An optional [header] (e.g. search field, segmented control)
 /// pins above the list.
+///
+/// Purpose:
+/// Provides a reusable MemoX layout widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared layout surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - itemCount: public property.
+/// - itemBuilder: public property.
+/// - appBar: public property.
+/// - header: public property.
+/// - floatingActionButton: public property.
+/// - bottomNavigationBar: public property.
+/// - separator: public property.
+/// - padding: public property.
+/// Category:
+/// layout
 class MxListScaffold extends StatelessWidget {
   const MxListScaffold({
     required this.itemCount,

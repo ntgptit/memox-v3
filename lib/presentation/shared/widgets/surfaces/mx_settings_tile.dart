@@ -9,6 +9,24 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 ///
 /// Section C of the handoff. Use a `Column` of these inside an `MxCard` and a
 /// themed `Divider` between rows.
+///
+/// Purpose:
+/// Provides a reusable MemoX card widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared card surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - title: public content.
+/// - subtitle: public content.
+/// - leadingIcon: public property.
+/// - trailing: public property.
+/// - onTap: callback.
+/// Category:
+/// card
 class MxSettingsTile extends StatelessWidget {
   const MxSettingsTile({
     required this.title,

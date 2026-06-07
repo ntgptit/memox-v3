@@ -11,6 +11,24 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 /// Section A of the handoff. The [accent] recolors per study mode (defaults to
 /// `primary`). Implements `PreferredSizeWidget` so it can be an `AppBar`
 /// replacement in `MxStudyScaffold`.
+///
+/// Purpose:
+/// Provides a reusable MemoX navigation widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared navigation surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - modeLabel: public property.
+/// - current: public property.
+/// - total: public property.
+/// - onClose: callback.
+/// - accent: public property.
+/// Category:
+/// navigation
 class MxStudyTopBar extends StatelessWidget implements PreferredSizeWidget {
   const MxStudyTopBar({
     required this.modeLabel,

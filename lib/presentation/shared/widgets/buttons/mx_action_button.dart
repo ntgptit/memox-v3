@@ -10,6 +10,24 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.da
 /// intent that forbids it trips a debug assert. Secondary intents
 /// (cardSecondary / inline / toolbar) render as the lighter
 /// `MxSecondaryButton`.
+///
+/// Purpose:
+/// Provides a reusable MemoX button widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared button surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - intent: public property.
+/// - label: public content.
+/// - onPressed: callback.
+/// - icon: public content.
+/// - fullWidth: public property.
+/// Category:
+/// button
 class MxActionButton extends StatelessWidget {
   const MxActionButton({
     required this.intent,

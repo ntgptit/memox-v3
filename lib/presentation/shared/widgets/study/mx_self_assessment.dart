@@ -24,6 +24,24 @@ enum MxSelfScore {
   };
 }
 
+/// Three-choice self-assessment row for study flows.
+///
+/// Purpose:
+/// Provides a reusable missed/partial/got-it response row that keeps study
+/// feedback styling consistent with MemoX tokens.
+///
+/// Use when:
+/// A study screen needs a compact three-state confidence or recall check.
+///
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+/// Category:
+/// feedback
+///
+/// Public API:
+/// - labels: localized labels in [MxSelfScore] order
+/// - onSelect: callback fired with the chosen score
 class MxSelfAssessment extends StatelessWidget {
   const MxSelfAssessment({
     required this.labels,

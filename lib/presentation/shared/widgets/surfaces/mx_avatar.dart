@@ -8,6 +8,24 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 /// Section C of the handoff. Provide [imageProvider] for a photo, [initials]
 /// for an initials fallback, or neither for the placeholder icon. Sizes
 /// 32 / 40 / 48.
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - imageProvider: public property.
+/// - initials: public property.
+/// - size: public configuration.
+/// - backgroundColor: public property.
+/// - foregroundColor: public property.
+/// Category:
+/// display
 class MxAvatar extends StatelessWidget {
   const MxAvatar({
     this.imageProvider,

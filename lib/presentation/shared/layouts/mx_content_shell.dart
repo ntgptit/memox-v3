@@ -7,6 +7,22 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 /// `docs/ui-ux/ui-ux-contract.md` §Responsive: content must not stretch too
 /// wide. Caps at [Breakpoints.maxBodyWidth] (720) and applies horizontal
 /// [padding]. Use inside every screen body.
+///
+/// Purpose:
+/// Provides a reusable MemoX layout widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared layout surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - child: public content.
+/// - maxWidth: public property.
+/// - padding: public property.
+/// Category:
+/// layout
 class MxContentShell extends StatelessWidget {
   const MxContentShell({
     required this.child,

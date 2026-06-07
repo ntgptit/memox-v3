@@ -10,6 +10,24 @@ import 'package:memox/presentation/shared/widgets/status/mx_card_status.dart';
 ///
 /// Section E of the handoff. The [label] is caller-supplied (localized); the
 /// color comes from [status].
+///
+/// Purpose:
+/// Provides a reusable MemoX display widget that stays aligned with the design system.
+///
+/// Use when:
+/// A screen needs the shared display surface instead of a one-off custom widget.
+///
+/// Do not use when:
+/// A different interaction pattern or a one-off layout is a better fit.
+///
+/// Public API:
+/// - status: public configuration.
+/// - label: public content.
+///
+/// States:
+/// default, selected, disabled
+/// Category:
+/// display
 class MxStatusBadge extends StatelessWidget {
   const MxStatusBadge({required this.status, required this.label, super.key});
 
