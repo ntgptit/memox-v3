@@ -177,7 +177,7 @@ class _AudioSpeechRowDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: EdgeInsetsDirectional.only(
+    padding: const EdgeInsetsDirectional.only(
       start: 44,
       end: SpacingTokens.md,
     ),

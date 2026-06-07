@@ -18,15 +18,7 @@ import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
-import 'package:memox/presentation/shared/layouts/mx_form_scaffold.dart';
-import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
-import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 
 class FlashcardEditorView extends ConsumerStatefulWidget {
   const FlashcardEditorView({

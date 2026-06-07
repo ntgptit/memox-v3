@@ -10,8 +10,7 @@ class _AudioSpeechGeneralCard extends StatelessWidget {
   final bool disabled;
 
   @override
-  Widget build(BuildContext context) {
-    return Opacity(
+  Widget build(BuildContext context) => Opacity(
       opacity: disabled ? OpacityTokens.hint : 1,
       child: IgnorePointer(
         ignoring: disabled,
@@ -46,7 +45,6 @@ class _AudioSpeechGeneralCard extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _AudioSpeechLanguageTabs extends StatelessWidget {

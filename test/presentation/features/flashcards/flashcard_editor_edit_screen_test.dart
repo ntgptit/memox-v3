@@ -13,8 +13,8 @@ import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
-import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
@@ -347,7 +347,7 @@ void main() {
         await tester.pumpWidget(
           _wrapApp(
             repository: _RecordingFlashcardRepository(
-              detailResult: Result<FlashcardDetail>.err(
+              detailResult: const Result<FlashcardDetail>.err(
                 Failure.notFound(entity: 'flashcard', id: 'c1'),
               ),
             ),
@@ -446,7 +446,7 @@ void main() {
         _wrapApp(
           repository: _RecordingFlashcardRepository(
             detailResult: Result<FlashcardDetail>.ok(_freshProgressDetail()),
-            updateResult: Result<Flashcard>.err(
+            updateResult: const Result<Flashcard>.err(
               Failure.storage(
                 operation: StorageOp.write,
                 cause: 'offline',

@@ -15,8 +15,8 @@ import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/tag/tag_validator.dart';
-import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 
 /// Drift-backed [FlashcardRepository].
 ///

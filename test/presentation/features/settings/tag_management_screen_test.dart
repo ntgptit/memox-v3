@@ -5,8 +5,8 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/settings/screens/tag_management_screen.dart';
-import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
+import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 
 Widget _appShell(Widget child) => MaterialApp(
   theme: AppTheme.light(),

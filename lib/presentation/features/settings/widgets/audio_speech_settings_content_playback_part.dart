@@ -29,8 +29,7 @@ class _AudioSpeechSlider extends StatelessWidget {
         0,
       ),
       child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Column(
+        builder: (BuildContext context, BoxConstraints constraints) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
@@ -105,8 +104,7 @@ class _AudioSpeechSlider extends StatelessWidget {
               ),
               const SizedBox(height: SpacingTokens.md),
             ],
-          );
-        },
+          ),
       ),
     );
   }
@@ -197,16 +195,16 @@ class _AudioSpeechVoiceBars extends StatelessWidget {
   const _AudioSpeechVoiceBars();
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) => const Row(
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.end,
     children: <Widget>[
       _AudioSpeechBar(height: 6),
-      const SizedBox(width: 3),
+      SizedBox(width: 3),
       _AudioSpeechBar(height: 12),
-      const SizedBox(width: 3),
+      SizedBox(width: 3),
       _AudioSpeechBar(height: 8),
-      const SizedBox(width: 3),
+      SizedBox(width: 3),
       _AudioSpeechBar(height: 14),
     ],
   );

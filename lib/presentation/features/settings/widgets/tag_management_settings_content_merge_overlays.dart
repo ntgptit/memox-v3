@@ -80,8 +80,7 @@ Widget _buildRenameDialogCard({
   required TextEditingController controller,
   required _TagManagementEntry tag,
   required bool conflict,
-}) {
-  return Container(
+}) => Container(
     constraints: const BoxConstraints(maxWidth: 340),
     decoration: BoxDecoration(
       color: scheme.surface,
@@ -181,7 +180,6 @@ Widget _buildRenameDialogCard({
       ),
     ),
   );
-}
 
 class _MergeTagSheetOverlay extends StatelessWidget {
   const _MergeTagSheetOverlay({

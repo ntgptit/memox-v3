@@ -44,10 +44,13 @@ void main() {
       ),
       findsOneWidget,
     );
+    expect(find.text(l10n.settingsLearningReminderTimeLabel), findsOneWidget);
     expect(
       find.text(StringUtils.uppercased(l10n.settingsLearningTagsSectionTitle)),
       findsOneWidget,
     );
+    expect(find.text(l10n.settingsLearningStreakToggleTitle), findsOneWidget);
+    expect(find.text(l10n.settingsLearningTagsSubtitle(14)), findsOneWidget);
     await tester.scrollUntilVisible(
       find.text(
         StringUtils.uppercased(l10n.settingsLearningFutureStudyDefaultsTitle),
@@ -59,6 +62,10 @@ void main() {
       find.text(
         StringUtils.uppercased(l10n.settingsLearningFutureStudyDefaultsTitle),
       ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(l10n.settingsLearningFutureDefaultShuffleTitle),
       findsOneWidget,
     );
   });
@@ -140,7 +147,18 @@ void main() {
       tester.element(find.byType(LearningSettingsScreen)),
     );
 
-    await tester.tap(find.text(l10n.settingsManageTagsTitle));
+    final Finder scrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text(l10n.settingsManageTagsTitle),
+      200,
+      scrollable: scrollable,
+    );
+    final Finder tagRow = find.byKey(
+      const ValueKey<String>('learning-tags-row'),
+    );
+    await tester.ensureVisible(tagRow);
+    final Rect tagsBounds = tester.getRect(tagRow);
+    await tester.tapAt(tagsBounds.centerLeft + const Offset(24, 0));
     await tester.pumpAndSettle();
 
     expect(find.byType(SettingsTagManagementScreen), findsOneWidget);

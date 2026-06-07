@@ -92,12 +92,10 @@ class _AudioSpeechVoiceLoadingState extends StatelessWidget {
   Widget build(BuildContext context) => MxCard(
     padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xs),
     child: Column(
-      children: List<Widget>.generate(4, (int index) {
-        return _AudioSpeechVoiceSkeletonRow(
+      children: List<Widget>.generate(4, (int index) => _AudioSpeechVoiceSkeletonRow(
           showDivider: index < 3,
           wideTop: index == 0,
-        );
-      }),
+        )),
     ),
   );
 }
@@ -114,8 +112,7 @@ class _AudioSpeechVoiceLoadedState extends StatelessWidget {
   final bool engineDisabled;
 
   @override
-  Widget build(BuildContext context) {
-    return Opacity(
+  Widget build(BuildContext context) => Opacity(
       opacity: engineDisabled ? OpacityTokens.fadeOut : 1,
       child: IgnorePointer(
         ignoring: engineDisabled,
@@ -204,7 +201,6 @@ class _AudioSpeechVoiceLoadedState extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _AudioSpeechVoiceRow extends StatelessWidget {
@@ -315,8 +311,7 @@ class _AudioSpeechVoiceSkeletonRow extends StatelessWidget {
   final bool wideTop;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(
@@ -345,5 +340,4 @@ class _AudioSpeechVoiceSkeletonRow extends StatelessWidget {
         if (showDivider) const _AudioSpeechRowDivider(),
       ],
     );
-  }
 }
