@@ -143,22 +143,13 @@ void main() {
     );
     await tester.pump();
 
-    final AppLocalizations l10n = AppLocalizations.of(
-      tester.element(find.byType(LearningSettingsScreen)),
-    );
-
     final Finder scrollable = find.byType(Scrollable).first;
-    await tester.scrollUntilVisible(
-      find.text(l10n.settingsManageTagsTitle),
-      200,
-      scrollable: scrollable,
-    );
     final Finder tagRow = find.byKey(
       const ValueKey<String>('learning-tags-row'),
     );
-    await tester.ensureVisible(tagRow);
-    final Rect tagsBounds = tester.getRect(tagRow);
-    await tester.tapAt(tagsBounds.centerLeft + const Offset(24, 0));
+    await tester.drag(scrollable, const Offset(0, -500));
+    await tester.pumpAndSettle();
+    await tester.tap(tagRow);
     await tester.pumpAndSettle();
 
     expect(find.byType(SettingsTagManagementScreen), findsOneWidget);

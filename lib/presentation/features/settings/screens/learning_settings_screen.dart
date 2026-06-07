@@ -139,29 +139,29 @@ class _DailyGoalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-      children: <Widget>[
-        _LearningToggleRow(
-          leadingIcon: null,
-          title: l10n.settingsLearningGoalToggleTitle,
-          subtitle: goalEnabled
-              ? l10n.settingsLearningGoalToggleSubtitleOn
-              : l10n.settingsLearningGoalToggleSubtitleOff,
-          value: goalEnabled,
-          onChanged: (_) {},
-        ),
-        const _LearningRowDivider(),
-        _LearningGoalSliderBlock(goalEnabled: goalEnabled, l10n: l10n),
-        const _LearningRowDivider(),
-        _LearningToggleRow(
-          leadingIcon: Icons.local_fire_department_outlined,
-          title: l10n.settingsLearningStreakToggleTitle,
-          subtitle: l10n.settingsLearningStreakToggleSubtitle,
-          value: true,
-          onChanged: (_) {},
-          enabled: goalEnabled,
-        ),
-      ],
-    );
+    children: <Widget>[
+      _LearningToggleRow(
+        leadingIcon: null,
+        title: l10n.settingsLearningGoalToggleTitle,
+        subtitle: goalEnabled
+            ? l10n.settingsLearningGoalToggleSubtitleOn
+            : l10n.settingsLearningGoalToggleSubtitleOff,
+        value: goalEnabled,
+        onChanged: (_) {},
+      ),
+      const _LearningRowDivider(),
+      _LearningGoalSliderBlock(goalEnabled: goalEnabled, l10n: l10n),
+      const _LearningRowDivider(),
+      _LearningToggleRow(
+        leadingIcon: Icons.local_fire_department_outlined,
+        title: l10n.settingsLearningStreakToggleTitle,
+        subtitle: l10n.settingsLearningStreakToggleSubtitle,
+        value: true,
+        onChanged: (_) {},
+        enabled: goalEnabled,
+      ),
+    ],
+  );
 }
 
 class _LearningGoalSliderBlock extends StatelessWidget {
@@ -538,14 +538,13 @@ class _LearningNavigationRow extends StatelessWidget {
     required this.title,
     required this.enabled,
     required this.onTap,
-    this.key,
+    this.rowKey,
     this.subtitle,
     this.value,
     this.leadingIcon,
   });
 
-  @override
-  final Key? key;
+  final Key? rowKey;
   final IconData? leadingIcon;
   final String title;
   final String? subtitle;
@@ -556,72 +555,70 @@ class _LearningNavigationRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
-    return KeyedSubtree(
-      key: key,
-      child: Opacity(
-        opacity: enabled ? 1 : 0.45,
-        child: MxTappable(
-          onTap: enabled ? onTap : null,
-          borderRadius: RadiusTokens.brLg,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SpacingTokens.md,
-              vertical: 13,
-            ),
-            child: Row(
-              children: <Widget>[
-                if (leadingIcon != null) ...<Widget>[
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: scheme.primary.withValues(alpha: 0.08),
-                      borderRadius: RadiusTokens.brMd,
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(leadingIcon, size: 15, color: scheme.primary),
+    return Opacity(
+      opacity: enabled ? 1 : 0.45,
+      child: MxTappable(
+        key: rowKey,
+        onTap: enabled ? onTap : null,
+        borderRadius: RadiusTokens.brLg,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpacingTokens.md,
+            vertical: 13,
+          ),
+          child: Row(
+            children: <Widget>[
+              if (leadingIcon != null) ...<Widget>[
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: scheme.primary.withValues(alpha: 0.08),
+                    borderRadius: RadiusTokens.brMd,
                   ),
-                  const SizedBox(width: SpacingTokens.md),
-                ],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      MxText(
-                        title,
-                        role: MxTextRole.titleSmall,
-                        color: scheme.onSurface,
-                        fontWeight: TypographyTokens.semiBold,
-                      ),
-                      if (subtitle != null) ...<Widget>[
-                        const SizedBox(height: 2),
-                        MxText(
-                          subtitle!,
-                          role: MxTextRole.labelMedium,
-                          color: scheme.onSurfaceVariant,
-                        ),
-                      ],
-                    ],
-                  ),
+                  alignment: Alignment.center,
+                  child: Icon(leadingIcon, size: 15, color: scheme.primary),
                 ),
-                const SizedBox(width: SpacingTokens.sm),
-                if (value != null) ...<Widget>[
-                  MxText(
-                    value!,
-                    role: MxTextRole.labelLarge,
-                    color: scheme.onSurfaceVariant,
-                    fontWeight: TypographyTokens.semiBold,
-                  ),
-                  const SizedBox(width: 6),
-                ],
-                Icon(
-                  Icons.chevron_right,
-                  size: 18,
-                  color: scheme.onSurfaceVariant,
-                ),
+                const SizedBox(width: SpacingTokens.md),
               ],
-            ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    MxText(
+                      title,
+                      role: MxTextRole.titleSmall,
+                      color: scheme.onSurface,
+                      fontWeight: TypographyTokens.semiBold,
+                    ),
+                    if (subtitle != null) ...<Widget>[
+                      const SizedBox(height: 2),
+                      MxText(
+                        subtitle!,
+                        role: MxTextRole.labelMedium,
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: SpacingTokens.sm),
+              if (value != null) ...<Widget>[
+                MxText(
+                  value!,
+                  role: MxTextRole.labelLarge,
+                  color: scheme.onSurfaceVariant,
+                  fontWeight: TypographyTokens.semiBold,
+                ),
+                const SizedBox(width: 6),
+              ],
+              Icon(
+                Icons.chevron_right,
+                size: 18,
+                color: scheme.onSurfaceVariant,
+              ),
+            ],
           ),
         ),
       ),

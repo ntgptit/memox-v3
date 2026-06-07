@@ -7,7 +7,7 @@ class _LearningTagsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => _LearningNavigationRow(
-    key: const ValueKey<String>('learning-tags-row'),
+    rowKey: const ValueKey<String>('learning-tags-row'),
     leadingIcon: Icons.sell_outlined,
     title: l10n.settingsManageTagsTitle,
     subtitle: l10n.settingsLearningTagsSubtitle(14),
@@ -162,39 +162,37 @@ class _LearningSavedChip extends StatelessWidget {
   const _LearningSavedChip({required this.label, required this.visible});
 
   final String label;
-  bool visib=> Opacity(
-      opacity: visible ? 1 : 0,
-      child: IgnorePointer(
-        ignoring: !visible,
-        child: Container(
-          height: 22,
-          margin: const EdgeInsets.only(right: SpacingTokens.xs),
-          padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
-          decoration: BoxDecoration(
-            color: context.customColors.mastery.withValues(alpha: 0.10),
-            borderRadius: RadiusTokens.brFull,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(Icons.check, size: 11, color: context.customColors.mastery),
-              const SizedBox(width: SpacingTokens.xxs),
-              MxText(
-                label,
-                role: MxTextRole.labelSmall,
-                color: context.customColors.mastery,
-                fontWeight: TypographyTokens.semiBold,
-              ),
-            ],
-          ),
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) => Opacity(
+    opacity: visible ? 1 : 0,
+    child: IgnorePointer(
+      ignoring: !visible,
+      child: Container(
+        height: 22,
+        margin: const EdgeInsets.only(right: SpacingTokens.xs),
+        padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
+        decoration: BoxDecoration(
+          color: context.customColors.mastery.withValues(alpha: 0.10),
+          borderRadius: RadiusTokens.brFull,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.check, size: 11, color: context.customColors.mastery),
+            const SizedBox(width: SpacingTokens.xxs),
+            MxText(
+              label,
+              role: MxTextRole.labelSmall,
+              color: context.customColors.mastery,
+              fontWeight: TypographyTokens.semiBold,
+            ),
+          ],
         ),
       ),
-    );        ],
-          ),
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
 
 class _LearningRowDivider extends StatelessWidget {
