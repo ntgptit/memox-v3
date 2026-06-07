@@ -30,6 +30,7 @@ export 'widgets/buttons/mx_secondary_button.dart';
 // Inputs.
 export 'widgets/inputs/mx_checkbox_row.dart';
 export 'widgets/inputs/mx_search_field.dart';
+export 'widgets/inputs/mx_slider_field.dart';
 export 'widgets/inputs/mx_text_field.dart';
 // Interaction primitive.
 export 'widgets/mx_tappable.dart';

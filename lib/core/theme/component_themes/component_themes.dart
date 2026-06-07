@@ -5,6 +5,7 @@ import 'package:memox/core/theme/tokens/color_tokens.dart';
 import 'package:memox/core/theme/tokens/elevation_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/shadow_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
@@ -24,9 +25,7 @@ abstract final class MxComponentThemes {
     scrolledUnderElevation: ElevationTokens.level0,
     centerTitle: false,
     titleSpacing: SpacingTokens.lg,
-    actionsPadding: const EdgeInsetsDirectional.only(
-      end: SpacingTokens.lg,
-    ),
+    actionsPadding: const EdgeInsetsDirectional.only(end: SpacingTokens.lg),
     toolbarHeight: SizeTokens.appbar,
     titleTextStyle: text.titleLarge,
   );
@@ -92,7 +91,10 @@ abstract final class MxComponentThemes {
         ),
         border: _inputBorder(scheme.outlineVariant),
         enabledBorder: _inputBorder(scheme.outlineVariant),
-        focusedBorder: _inputBorder(scheme.primary, width: BorderTokens.focusWidth),
+        focusedBorder: _inputBorder(
+          scheme.primary,
+          width: BorderTokens.focusWidth,
+        ),
         errorBorder: _inputBorder(scheme.error),
         focusedErrorBorder: _inputBorder(
           scheme.error,
@@ -100,13 +102,14 @@ abstract final class MxComponentThemes {
         ),
       );
 
-  static ChipThemeData chip(ColorScheme scheme, TextTheme text) => ChipThemeData(
-    backgroundColor: scheme.surfaceContainer,
-    labelStyle: text.labelMedium,
-    side: BorderSide.none,
-    shape: const StadiumBorder(),
-    padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
-  );
+  static ChipThemeData chip(ColorScheme scheme, TextTheme text) =>
+      ChipThemeData(
+        backgroundColor: scheme.surfaceContainer,
+        labelStyle: text.labelMedium,
+        side: BorderSide.none,
+        shape: const StadiumBorder(),
+        padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
+      );
 
   static DialogThemeData dialog(ColorScheme scheme) => DialogThemeData(
     backgroundColor: scheme.surfaceContainerLowest,
@@ -146,6 +149,32 @@ abstract final class MxComponentThemes {
     space: SpacingTokens.lg,
   );
 
+  static SliderThemeData slider(ColorScheme scheme) => SliderThemeData(
+    trackHeight: SpacingTokens.sm,
+    activeTrackColor: scheme.primary,
+    inactiveTrackColor: scheme.surfaceContainerHigh,
+    thumbColor: scheme.surface,
+    disabledActiveTrackColor: scheme.primary.withValues(
+      alpha: OpacityTokens.disabled,
+    ),
+    disabledInactiveTrackColor: scheme.onSurface.withValues(
+      alpha: OpacityTokens.disabled,
+    ),
+    disabledThumbColor: scheme.surfaceContainerHighest,
+    overlayColor: scheme.primary.withValues(alpha: OpacityTokens.focus),
+    trackShape: const RoundedRectSliderTrackShape(),
+    thumbShape: _MxSliderThumbShape(
+      radius: SizeTokens.iconSm / 2,
+      borderColor: scheme.primary,
+      fillColor: scheme.surface,
+      shadowColor: scheme.primary.withValues(alpha: 0.22),
+    ),
+    overlayShape: SliderComponentShape.noOverlay,
+    tickMarkShape: SliderTickMarkShape.noTickMark,
+    valueIndicatorShape: SliderComponentShape.noOverlay,
+    showValueIndicator: ShowValueIndicator.never,
+  );
+
   static ButtonStyle _buttonStyle(TextTheme text) => ButtonStyle(
     minimumSize: const WidgetStatePropertyAll<Size>(
       Size.fromHeight(SizeTokens.button),
@@ -159,9 +188,69 @@ abstract final class MxComponentThemes {
     ),
   );
 
-  static OutlineInputBorder _inputBorder(Color color, {double width = BorderTokens.width}) =>
-      OutlineInputBorder(
-        borderRadius: RadiusTokens.brMd,
-        borderSide: BorderSide(color: color, width: width),
+  static OutlineInputBorder _inputBorder(
+    Color color, {
+    double width = BorderTokens.width,
+  }) => OutlineInputBorder(
+    borderRadius: RadiusTokens.brMd,
+    borderSide: BorderSide(color: color, width: width),
+  );
+}
+
+class _MxSliderThumbShape extends SliderComponentShape {
+  const _MxSliderThumbShape({
+    required this.radius,
+    required this.borderColor,
+    required this.fillColor,
+    required this.shadowColor,
+  });
+
+  final double radius;
+  final Color borderColor;
+  final Color fillColor;
+  final Color shadowColor;
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      Size.square(radius * 2);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    final Canvas canvas = context.canvas;
+    final Offset center = offset + const Offset(0, 2);
+    final double fillRadius = radius - (BorderTokens.focusWidth / 2);
+
+    final Paint shadowPaint = Paint()
+      ..color = shadowColor
+      ..maskFilter = const MaskFilter.blur(
+        BlurStyle.normal,
+        ShadowTokens.blurSm,
       );
+    final Paint fillPaint = Paint()
+      ..color = fillColor
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+    final Paint borderPaint = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = BorderTokens.focusWidth
+      ..isAntiAlias = true;
+
+    canvas.drawCircle(center, radius, shadowPaint);
+    canvas.drawCircle(center, fillRadius, fillPaint);
+    canvas.drawCircle(center, radius, borderPaint);
+  }
 }

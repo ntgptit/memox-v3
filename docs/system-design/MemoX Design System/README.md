@@ -33,7 +33,7 @@ Everything in this system was pulled from the MemoX monorepo:
 - **Design tokens:** `lib/core/theme/tokens/` — `color_tokens.dart`, `typography_tokens.dart`, `spacing_tokens.dart`, `radius_tokens.dart`, `elevation_tokens.dart`, `duration_tokens.dart`, `easing_tokens.dart`, `opacity_tokens.dart`, `size_tokens.dart`
 - **Color schemes:** `lib/core/theme/color_schemes/{app_color_scheme,custom_colors}.dart`
 - **Text themes:** `lib/core/theme/text_themes/{app_text_theme,custom_text_styles}.dart`
-- **Shared widgets:** `lib/shared/widgets/**` (~80 files — buttons, cards, chips, inputs, dialogs, navigation, feedback, progress)
+- **Shared widgets:** `lib/shared/widgets/**` (~80 files — buttons, cards, chips, inputs, sliders, dialogs, navigation, feedback, progress)
 - **Copy (l10n):** `l10n/app_en.arb` (and `app_ko.arb`, `app_vi.arb` for Korean + Vietnamese)
 - **Design rules:** `docs/memox-ui-design-rules.md`, `docs/memox-typography-usage-rules.md`, `docs/memox-guard-rules-quickref.md`, `docs/memox-reference.md`
 - **Prior web preview:** `docs/memox-design-system/src/App.tsx` + `index.css` — a Tailwind "Theme Foundation Board" that the original authors built to communicate the system. We borrowed the structure but rebuilt the card set from source tokens.
@@ -176,7 +176,7 @@ Preview cards:
 - Type: display, headings, body, labels, stat-display, type-in-use.
 - Colors: seed + alternates, surface ladder, on-surface, outline, semantic (success/warning/error), mastery gradient, status palette, rating palette, self-assessment palette, streak, dark-surface.
 - Spacing: 4dp grid, semantic spacing, radius scale, elevation/shadow opacity, opacity tokens, duration tokens, easing reference.
-- Components: primary/secondary/tertiary/text buttons, app card, deck card, status chip / mode chip / tag chip, mastery ring + bar, text field + search, bottom nav, FAB, rating row, toast, segmented control.
+- Components: primary/secondary/tertiary/text buttons, app card, deck card, status chip / mode chip / tag chip, mastery ring + bar, text field + search, slider field, bottom nav, FAB, rating row, toast, segmented control.
 - Brand: MemoX logomark + wordmark, iconography sampler, content voice example, motion reference.
 
 🚩 **Caveats for review**

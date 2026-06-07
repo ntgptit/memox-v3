@@ -42,6 +42,7 @@ abstract final class AppTheme {
       bottomSheetTheme: MxComponentThemes.bottomSheet(scheme),
       floatingActionButtonTheme: MxComponentThemes.fab(scheme),
       dividerTheme: MxComponentThemes.divider(scheme),
+      sliderTheme: MxComponentThemes.slider(scheme),
       extensions: [
         customColors,
         CustomTextStyles.fromOnSurface(scheme.onSurface),

@@ -4,6 +4,7 @@ import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/settings/screens/audio_speech_settings_screen.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_slider_field.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 
 Widget _appShell(Widget child) => MaterialApp(
@@ -52,7 +53,11 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(find.text(l10n.settingsAudioSpeechDefaultVoiceBadge), findsNWidgets(2));
+    expect(find.byType(MxSliderField), findsNWidgets(3));
+    expect(
+      find.text(l10n.settingsAudioSpeechDefaultVoiceBadge),
+      findsNWidgets(2),
+    );
 
     await tester.scrollUntilVisible(
       find.text(l10n.settingsAudioSpeechChangesSavedText),
@@ -60,11 +65,11 @@ void main() {
       scrollable: find.byType(Scrollable),
     );
     expect(find.text(l10n.settingsAudioSpeechKoreanSampleText), findsOneWidget);
+    expect(find.text(l10n.settingsAudioSpeechKoreanSampleHint), findsOneWidget);
     expect(
-      find.text(l10n.settingsAudioSpeechKoreanSampleHint),
+      find.text(l10n.settingsAudioSpeechPreviewVoiceLabel),
       findsOneWidget,
     );
-    expect(find.text(l10n.settingsAudioSpeechPreviewVoiceLabel), findsOneWidget);
     expect(
       find.text(l10n.settingsAudioSpeechSupportedLanguagesBody),
       findsOneWidget,
@@ -97,7 +102,10 @@ void main() {
       200,
       scrollable: find.byType(Scrollable),
     );
-    expect(find.text(l10n.settingsAudioSpeechEnglishSampleText), findsOneWidget);
+    expect(
+      find.text(l10n.settingsAudioSpeechEnglishSampleText),
+      findsOneWidget,
+    );
     expect(find.text(l10n.settingsAudioSpeechChangesSavedText), findsOneWidget);
   });
 
@@ -109,7 +117,10 @@ void main() {
     );
 
     expect(find.byType(MxSkeleton), findsWidgets);
-    expect(find.text(l10n.settingsAudioSpeechPreviewSectionTitle), findsNothing);
+    expect(
+      find.text(l10n.settingsAudioSpeechPreviewSectionTitle),
+      findsNothing,
+    );
   });
 
   testWidgets('renders the empty voices card', (tester) async {
@@ -120,15 +131,19 @@ void main() {
     );
 
     expect(
-      find.text(l10n.settingsAudioSpeechNoVoicesTitle(
-        l10n.settingsAudioSpeechKoreanLanguageLabel,
-      )),
+      find.text(
+        l10n.settingsAudioSpeechNoVoicesTitle(
+          l10n.settingsAudioSpeechKoreanLanguageLabel,
+        ),
+      ),
       findsOneWidget,
     );
     expect(
-      find.text(l10n.settingsAudioSpeechNoVoicesBody(
-        l10n.settingsAudioSpeechKoreanLanguageLabel,
-      )),
+      find.text(
+        l10n.settingsAudioSpeechNoVoicesBody(
+          l10n.settingsAudioSpeechKoreanLanguageLabel,
+        ),
+      ),
       findsOneWidget,
     );
     expect(find.text(l10n.settingsAudioSpeechOpenSystemSpeech), findsOneWidget);
@@ -149,7 +164,10 @@ void main() {
       find.text(l10n.settingsAudioSpeechEngineUnavailableBody),
       findsOneWidget,
     );
-    expect(find.text(l10n.settingsAudioSpeechOpenSystemSettings), findsOneWidget);
+    expect(
+      find.text(l10n.settingsAudioSpeechOpenSystemSettings),
+      findsOneWidget,
+    );
   });
 
   testWidgets('renders the playing preview state', (tester) async {

@@ -54,6 +54,7 @@ Preferred primitives:
 - `MxErrorState`
 - `MxLoadingState`
 - `MxCard`
+- `MxSliderField`
 - `MxActionButton` (semantic, intent-driven — prefer over raw buttons)
 - `MxCardActions` (card-level action layout)
 - `MxPrimaryButton` (low-level primitive)
@@ -85,6 +86,10 @@ provides, by handoff section:
 - Async rendering: `AppAsyncBuilder` and `MxRetainedAsyncState` (in
   `shared/async`) — the sanctioned alternatives to `AsyncValue.when`, retaining
   data on refetch with a skeleton-first first load.
+
+Shared-widget architecture checks may use the lightweight capability contracts
+in `lib/presentation/shared/contracts/mx_component_contracts.dart` to verify shared
+component intent without depending on widget build methods.
 
 Navigation uses the `AppNavigation` `BuildContext` extension
 (`lib/app/router/app_navigation.dart`) — UI code must not call raw `GoRouter`

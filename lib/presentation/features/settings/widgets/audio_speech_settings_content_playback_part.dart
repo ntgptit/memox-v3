@@ -18,99 +18,15 @@ class _AudioSpeechSlider extends StatelessWidget {
   final List<String> sublabels;
 
   @override
-  Widget build(BuildContext context) {
-    final ColorScheme scheme = context.colorScheme;
-    final double progress = ((value - min) / (max - min)).clamp(0, 1);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        SpacingTokens.md,
-        SpacingTokens.md,
-        SpacingTokens.md,
-        0,
-      ),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  MxText(label, role: MxTextRole.titleSmall),
-                  MxText(
-                    valueLabel,
-                    role: MxTextRole.titleSmall,
-                    color: scheme.primary,
-                  ),
-                ],
-              ),
-              const SizedBox(height: SpacingTokens.sm),
-              SizedBox(
-                height: SizeTokens.iconBadge,
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: <Widget>[
-                    Positioned.fill(
-                      child: Container(
-                        height: SpacingTokens.micro,
-                        decoration: BoxDecoration(
-                          color: scheme.surfaceContainerHigh,
-                          borderRadius: RadiusTokens.brFull,
-                        ),
-                      ),
-                    ),
-                    FractionallySizedBox(
-                      widthFactor: progress,
-                      child: Container(
-                        height: SpacingTokens.micro,
-                        decoration: BoxDecoration(
-                          color: scheme.primary,
-                          borderRadius: RadiusTokens.brFull,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: (constraints.maxWidth - SizeTokens.iconSm) * progress,
-                      child: Container(
-                        width: SizeTokens.iconSm,
-                        height: SizeTokens.iconSm,
-                        decoration: BoxDecoration(
-                          color: scheme.surface,
-                          borderRadius: RadiusTokens.brFull,
-                          border: Border.all(
-                            color: scheme.primary,
-                            width: BorderTokens.focusWidth,
-                          ),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: scheme.primary.withValues(alpha: 0.22),
-                              blurRadius: ShadowTokens.blurSm,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: SpacingTokens.xxs),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  for (final String sublabel in sublabels)
-                    MxText(
-                      sublabel,
-                      role: MxTextRole.labelSmall,
-                      color: scheme.onSurfaceVariant,
-                    ),
-                ],
-              ),
-              const SizedBox(height: SpacingTokens.md),
-            ],
-          ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => MxSliderField(
+    label: label,
+    valueLabel: valueLabel,
+    value: value,
+    min: min,
+    max: max,
+    sublabels: sublabels,
+    onChanged: (_) {},
+  );
 }
 
 class _AudioSpeechPreviewCard extends StatelessWidget {
@@ -155,9 +71,13 @@ class _AudioSpeechPreviewCard extends StatelessWidget {
               borderRadius: RadiusTokens.brLg,
               child: Container(
                 width: double.infinity,
-                constraints: const BoxConstraints(minHeight: SizeTokens.controlMd),
+                constraints: const BoxConstraints(
+                  minHeight: SizeTokens.controlMd,
+                ),
                 decoration: BoxDecoration(
-                  color: playing ? context.customColors.mastery : scheme.primary,
+                  color: playing
+                      ? context.customColors.mastery
+                      : scheme.primary,
                   borderRadius: RadiusTokens.brLg,
                 ),
                 padding: const EdgeInsets.symmetric(
@@ -170,7 +90,11 @@ class _AudioSpeechPreviewCard extends StatelessWidget {
                     if (playing) ...<Widget>[
                       const _AudioSpeechVoiceBars(),
                     ] else ...<Widget>[
-                      Icon(Icons.play_arrow, color: scheme.onPrimary, size: SizeTokens.iconXs),
+                      Icon(
+                        Icons.play_arrow,
+                        color: scheme.onPrimary,
+                        size: SizeTokens.iconXs,
+                      ),
                     ],
                     const SizedBox(width: SpacingTokens.sm),
                     Flexible(

@@ -17,6 +17,7 @@ theme tokens, l10n, and route contracts.
 | Screen scaffold | `MxScaffold`, `MxAdaptiveScaffold`, `MxListScaffold`, or another approved layout shell | Raw `Scaffold` for feature screens when an `Mx*` shell fits |
 | App bar | `MxAppBar` | Raw `AppBar` |
 | Search input | `MxSearchField` | Raw `TextField`, raw `SearchBar` |
+| Slider field | `MxSliderField` | Raw `Slider` or hand-rolled slider track/labels in feature widgets |
 | Card surface | `MxCard` | Raw `Container(decoration: ...)`, raw `Card` in feature widgets |
 | Row/card tap target | `MxTappable` through shared surfaces | Raw `InkWell` / `GestureDetector` |
 | Icon tile | `MxIconTile` | Custom repeated icon box |

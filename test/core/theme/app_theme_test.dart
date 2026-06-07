@@ -13,4 +13,17 @@ void main() {
       const EdgeInsetsDirectional.only(end: SpacingTokens.lg),
     );
   });
+
+  test('slider theme matches the MemoX settings slider contract', () {
+    final ThemeData theme = AppTheme.light();
+
+    expect(theme.sliderTheme.trackHeight, SpacingTokens.sm);
+    expect(theme.sliderTheme.activeTrackColor, theme.colorScheme.primary);
+    expect(
+      theme.sliderTheme.inactiveTrackColor,
+      theme.colorScheme.surfaceContainerHigh,
+    );
+    expect(theme.sliderTheme.thumbColor, theme.colorScheme.surface);
+    expect(theme.sliderTheme.showValueIndicator, ShowValueIndicator.never);
+  });
 }

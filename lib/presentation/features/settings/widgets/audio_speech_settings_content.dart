@@ -3,7 +3,6 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
-import 'package:memox/core/theme/tokens/shadow_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -12,6 +11,7 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart'
 import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_slider_field.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';

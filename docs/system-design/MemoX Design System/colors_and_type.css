@@ -163,6 +163,8 @@
   --memox-size-appbar-lg: 64px;
   --memox-size-bottom-nav: 80px;
   --memox-size-fab: 56px;
+  /* Slider controls reuse the same 20dp thumb + 8dp track density as the
+   * shared Flutter slider field. */
 
   /* ── Borders ───────────────────────────────────────────────── */
   --memox-border-width: 1px;
