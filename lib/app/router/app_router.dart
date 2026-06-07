@@ -79,7 +79,9 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
     ),
     StatefulShellBranch(
       navigatorKey: _settingsNavigatorKey,
-      routes: settingsRoutes(_rootNavigatorKey),
+      routes: <RouteBase>[
+        settingsHubRoute(),
+      ],
     ),
   ],
 );

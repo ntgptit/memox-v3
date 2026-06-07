@@ -12,11 +12,6 @@ import 'package:memox/presentation/features/settings/screens/tag_management_scre
 List<RouteBase> settingsRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
     <RouteBase>[
       GoRoute(
-        path: RoutePaths.settings,
-        name: RouteNames.settings,
-        builder: (_, _) => const SettingsScreen(),
-      ),
-      GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: RoutePaths.settingsAccount,
         name: RouteNames.settingsAccount,
@@ -43,3 +38,9 @@ List<RouteBase> settingsRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
         builder: (_, _) => const AudioSpeechSettingsScreen(),
       ),
     ];
+
+GoRoute settingsHubRoute() => GoRoute(
+  path: RoutePaths.settings,
+  name: RouteNames.settings,
+  builder: (_, _) => const SettingsScreen(),
+);

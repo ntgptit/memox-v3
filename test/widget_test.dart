@@ -40,4 +40,41 @@ void main() {
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.text('Library'), findsWidgets);
   });
+
+  testWidgets('MxApplication can navigate to Settings without router errors', (
+    tester,
+  ) async {
+    const config = MxAppConfig.development();
+    final talker = createAppTalker(config);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appConfigProvider.overrideWithValue(config),
+          talkerProvider.overrideWithValue(talker),
+          // Stub the Library query so boot needs no native Drift database.
+          libraryOverviewQueryProvider.overrideWith(
+            (ref) => Stream<LibraryOverviewReadModel>.value(
+              const LibraryOverviewReadModel(
+                folders: <FolderWithCount>[],
+                dueToday: 0,
+                totalFolderCount: 0,
+              ),
+            ),
+          ),
+        ],
+        child: const MxApplication(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(NavigationBar), findsOneWidget);
+
+    await tester.tap(find.text('Settings').last);
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Settings'), findsWidgets);
+  });
 }
