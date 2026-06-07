@@ -161,7 +161,7 @@ class _AudioSpeechSavedChip extends StatelessWidget {
           size: 11,
           color: context.customColors.mastery,
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: SpacingTokens.xxs * 2),
         MxText(
           label,
           role: MxTextRole.labelSmall,

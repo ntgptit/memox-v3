@@ -5,6 +5,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
@@ -732,7 +733,7 @@ class _FlashcardEditorLoadErrorState extends StatelessWidget {
               MxText(
                 title,
                 role: MxTextRole.titleMedium,
-                fontWeight: FontWeight.w700,
+                fontWeight: TypographyTokens.bold,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: SpacingTokens.xs),

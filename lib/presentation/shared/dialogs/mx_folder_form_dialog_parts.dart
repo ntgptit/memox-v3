@@ -4,6 +4,7 @@ import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
@@ -37,9 +38,9 @@ class MxFolderFormCreateHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               MxText(
-                title,
-                role: MxTextRole.titleMedium,
-                fontWeight: FontWeight.w700,
+              title,
+              role: MxTextRole.titleMedium,
+                fontWeight: TypographyTokens.bold,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -77,7 +78,7 @@ class MxFolderFormRenameHeader extends StatelessWidget {
         MxText(
           title,
           role: MxTextRole.titleMedium,
-          fontWeight: FontWeight.w700,
+          fontWeight: TypographyTokens.bold,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -103,7 +104,7 @@ class MxFolderFormSectionLabel extends StatelessWidget {
     StringUtils.uppercased(label),
     role: MxTextRole.labelMedium,
     color: context.colorScheme.onSurfaceVariant,
-    fontWeight: FontWeight.w700,
+    fontWeight: TypographyTokens.bold,
   );
 }
 

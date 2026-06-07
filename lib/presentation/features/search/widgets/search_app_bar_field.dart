@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/search/viewmodels/search_viewmodel.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
@@ -66,7 +67,7 @@ class _SearchShortcutKeycap extends StatelessWidget {
           String.fromCharCode(0x4B),
           role: MxTextRole.labelSmall,
           color: scheme.onSurfaceVariant,
-          fontWeight: FontWeight.w700,
+          fontWeight: TypographyTokens.bold,
         ),
       ),
     );

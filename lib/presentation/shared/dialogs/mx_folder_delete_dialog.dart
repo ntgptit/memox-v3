@@ -6,6 +6,7 @@ import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
@@ -123,7 +124,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
             role: MxTextRole.titleLarge,
             textAlign: TextAlign.center,
             color: scheme.onSurface,
-            fontWeight: FontWeight.w700,
+            fontWeight: TypographyTokens.bold,
           ),
           const SizedBox(height: SpacingTokens.md),
           _buildDescription(scheme, text),
@@ -155,7 +156,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
           text: widget.folderName,
           style: TextStyle(
             color: scheme.onSurface,
-            fontWeight: FontWeight.w700,
+            fontWeight: TypographyTokens.bold,
           ),
         ),
         TextSpan(
@@ -213,7 +214,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
           StringUtils.uppercased(widget.confirmLabel),
           role: MxTextRole.labelMedium,
           color: scheme.onSurfaceVariant,
-          fontWeight: FontWeight.w700,
+          fontWeight: TypographyTokens.bold,
         ),
       ),
       const SizedBox(height: SpacingTokens.xs),

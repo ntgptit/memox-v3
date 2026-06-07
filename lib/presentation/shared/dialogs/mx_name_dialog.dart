@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 
 /// Single-field name dialog (create folder / rename / tag input), returning the
@@ -123,7 +124,7 @@ class _MxNameDialogState extends State<_MxNameDialog> {
                     widget.title,
                     style: text.titleLarge?.copyWith(
                       color: scheme.onSurface,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: TypographyTokens.bold,
                     ),
                   ),
                   const SizedBox(height: SpacingTokens.lg),

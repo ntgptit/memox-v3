@@ -117,9 +117,10 @@ class _LibraryFolderActions extends StatelessWidget {
               horizontal: SpacingTokens.lg,
               vertical: SpacingTokens.sm,
             ),
-            child: ColoredBox(
-              color: scheme.outlineVariant,
-              child: const SizedBox(height: 1, width: double.infinity),
+            child: SizedBox(
+              height: SpacingTokens.xxs / 2,
+              width: double.infinity,
+              child: ColoredBox(color: scheme.outlineVariant),
             ),
           ),
           _ActionRow(

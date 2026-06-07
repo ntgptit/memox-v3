@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 
 /// Binary confirmation dialog (`docs/wireframes/24-shared-dialogs.md`
 /// §delete-confirm and other confirm flows).
@@ -52,7 +53,7 @@ Future<bool> showMxConfirmDialog(
                       title,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: scheme.onSurface,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: TypographyTokens.bold,
                       ),
                     ),
                     if (message != null) ...<Widget>[

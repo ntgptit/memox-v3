@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
+import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
@@ -119,13 +120,13 @@ class _LibrarySortPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(Icons.swap_vert_rounded, size: 11, color: tone),
-          const SizedBox(width: 5),
+          const SizedBox(width: SpacingTokens.xs),
           MxText(
             l10n.librarySortRecentLabel,
             role: MxTextRole.labelMedium,
             color: tone,
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: SpacingTokens.xs),
           Icon(Icons.keyboard_arrow_down_rounded, size: 11, color: tone),
         ],
       ),
@@ -181,7 +182,14 @@ class LibraryDueSummary extends StatelessWidget {
                   role: MxTextRole.titleSmall,
                   fontWeight: TypographyTokens.bold,
                 ),
-                const SizedBox(height: 1),
+                SizedBox(
+                  height: SpacingTokens.xxs / 2,
+                  child: ColoredBox(
+                    color: context.colorScheme.outlineVariant.withValues(
+                      alpha: OpacityTokens.divider,
+                    ),
+                  ),
+                ),
                 MxText(
                   l10n.libraryDueSummarySubtitle(
                     dueFolderCount,

@@ -327,7 +327,7 @@ class _AudioSpeechVoiceSkeletonRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     MxSkeleton(width: wideTop ? 116 : 92, height: 11),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: SpacingTokens.sm - SpacingTokens.xxs),
                     MxSkeleton(width: wideTop ? 68 : 84, height: 9),
                   ],
                 ),

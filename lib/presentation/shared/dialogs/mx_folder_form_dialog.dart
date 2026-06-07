@@ -3,6 +3,7 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/color_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog_parts.dart';
 
@@ -286,7 +287,7 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
       onSubmitted: (_) => _submit(),
       style: text.titleSmall?.copyWith(
         color: scheme.onSurface,
-        fontWeight: FontWeight.w600,
+        fontWeight: TypographyTokens.semiBold,
       ),
       decoration: InputDecoration(
         filled: true,

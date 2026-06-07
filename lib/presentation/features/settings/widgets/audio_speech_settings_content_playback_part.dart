@@ -200,11 +200,11 @@ class _AudioSpeechVoiceBars extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.end,
     children: <Widget>[
       _AudioSpeechBar(height: 6),
-      SizedBox(width: 3),
+      SizedBox(width: SpacingTokens.xxs),
       _AudioSpeechBar(height: 12),
-      SizedBox(width: 3),
+      SizedBox(width: SpacingTokens.xxs),
       _AudioSpeechBar(height: 8),
-      SizedBox(width: 3),
+      SizedBox(width: SpacingTokens.xxs),
       _AudioSpeechBar(height: 14),
     ],
   );

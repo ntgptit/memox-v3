@@ -158,7 +158,10 @@ class _FolderStatDivider extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
     child: ColoredBox(
       color: context.colorScheme.outlineVariant,
-      child: const SizedBox(width: 1, height: SizeTokens.iconLg),
+      child: const SizedBox(
+        width: SpacingTokens.xxs / 2,
+        height: SizeTokens.iconLg,
+      ),
     ),
   );
 }

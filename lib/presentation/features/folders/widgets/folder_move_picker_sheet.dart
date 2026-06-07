@@ -128,7 +128,10 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
           ),
           ColoredBox(
             color: scheme.outlineVariant,
-            child: const SizedBox(height: 1, width: double.infinity),
+            child: const SizedBox(
+              height: SpacingTokens.xxs / 2,
+              width: double.infinity,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(SpacingTokens.lg),
