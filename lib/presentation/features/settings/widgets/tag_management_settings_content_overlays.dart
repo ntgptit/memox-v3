@@ -179,14 +179,14 @@ class _TagManagementPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(Icons.sell_outlined, size: 11, color: scheme.primary),
-          const SizedBox(width: 6),
+          const SizedBox(width: SpacingTokens.xs),
           MxText(
             label,
             role: MxTextRole.labelMedium,
             color: scheme.primary,
             fontWeight: TypographyTokens.semiBold,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: SpacingTokens.xs),
           MxText(
             '· $count',
             role: MxTextRole.labelSmall,
@@ -322,7 +322,7 @@ class TagErrorToast extends StatelessWidget {
                     color: scheme.onErrorContainer,
                     fontWeight: TypographyTokens.bold,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: SpacingTokens.xxs),
                   MxText(
                     l10n.settingsTagsOpErrorBody,
                     role: MxTextRole.labelMedium,

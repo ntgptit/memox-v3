@@ -393,7 +393,7 @@ class _RowDivider extends StatelessWidget {
       color: context.colorScheme.outlineVariant.withValues(
         alpha: OpacityTokens.divider,
       ),
-      child: const SizedBox(height: 1),
+      child: const SizedBox(height: SpacingTokens.xxs),
     ),
   );
 }

@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:memox/core/logging/app_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
-
-import '../../core/logging/app_logger.dart';
 import '../config/app_config.dart';
 import '../feedback/app_messenger.dart';
 import '../feedback/mx_app_feedback_observer.dart';

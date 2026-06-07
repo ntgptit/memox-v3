@@ -265,7 +265,16 @@ class _TagManagementBody extends StatelessWidget {
     if (state == TagManagementState.loading) {
       return const KeyedSubtree(
         key: ValueKey<String>('tag-management-loading'),
-        child: SizedBox(height: 320, child: MxLoadingState(rows: 5)),
+        child: SizedBox(
+          height:
+              SpacingTokens.xxxl +
+              SpacingTokens.xxxl +
+              SpacingTokens.xxxl +
+              SpacingTokens.xxxl +
+              SpacingTokens.xxxl +
+              SpacingTokens.xxl,
+          child: MxLoadingState(rows: 5),
+        ),
       );
     }
     if (state == TagManagementState.empty) {
