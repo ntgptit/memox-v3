@@ -15,6 +15,7 @@ import 'package:memox/presentation/shared/mx_widgets.dart';
 class FlashcardEditorBody extends StatelessWidget {
   const FlashcardEditorBody({
     required this.detail,
+    required this.isEditMode,
     required this.detailsOpen,
     required this.frontController,
     required this.backController,
@@ -36,15 +37,22 @@ class FlashcardEditorBody extends StatelessWidget {
     required this.saveFailure,
     required this.onRetrySave,
     required this.isSaving,
+    required this.showSaveAndAddAnother,
     required this.saveAndAddAnother,
     required this.onSaveAndAddAnotherChanged,
+    required this.showDangerZone,
+    required this.onDelete,
+    required this.deleteReviewCount,
+    required this.saveFailureFallbackMessage,
     required this.tagsLabel,
     required this.tagsOptionalLabel,
     required this.addTagLabel,
+    required this.currentBreadcrumbLabel,
     super.key,
   });
 
   final FlashcardListDetail? detail;
+  final bool isEditMode;
   final bool detailsOpen;
   final TextEditingController frontController;
   final TextEditingController backController;
@@ -66,11 +74,17 @@ class FlashcardEditorBody extends StatelessWidget {
   final Failure? saveFailure;
   final VoidCallback onRetrySave;
   final bool isSaving;
+  final bool showSaveAndAddAnother;
   final bool saveAndAddAnother;
   final ValueChanged<bool> onSaveAndAddAnotherChanged;
+  final bool showDangerZone;
+  final VoidCallback onDelete;
+  final int deleteReviewCount;
+  final String saveFailureFallbackMessage;
   final String tagsLabel;
   final String tagsOptionalLabel;
   final String addTagLabel;
+  final String currentBreadcrumbLabel;
 
   List<MxBreadcrumbSegment> _buildBreadcrumbSegments(
     BuildContext context,
@@ -166,12 +180,24 @@ class FlashcardEditorBody extends StatelessWidget {
             onAddTag: onAddTag,
             onRemoveTag: onRemoveTag,
           ),
-          const SizedBox(height: SpacingTokens.sm),
-          MxCheckboxRow(
-            label: l10n.flashcardsSaveAndAddNextTooltip,
-            value: saveAndAddAnother,
-            onChanged: onSaveAndAddAnotherChanged,
-          ),
+          if (showSaveAndAddAnother) ...<Widget>[
+            const SizedBox(height: SpacingTokens.sm),
+            MxCheckboxRow(
+              label: l10n.flashcardsSaveAndAddNextTooltip,
+              value: saveAndAddAnother,
+              onChanged: onSaveAndAddAnotherChanged,
+            ),
+          ],
+          if (showDangerZone) ...<Widget>[
+            const SizedBox(height: SpacingTokens.lg),
+            FlashcardEditorDangerZoneSection(
+              zoneLabel: l10n.flashcardsEditDangerZoneLabel,
+              title: l10n.flashcardsDeleteCardTitle,
+              message: l10n.flashcardsDeleteCardMessage(deleteReviewCount),
+              actionLabel: l10n.flashcardsDeleteCardAction,
+              onAction: onDelete,
+            ),
+          ],
           ..._buildSaveFailureWidgets(context),
         ],
       ),
@@ -191,7 +217,7 @@ class FlashcardEditorBody extends StatelessWidget {
           MxBreadcrumbSegment(
             label: detail?.deck.name ?? l10n.flashcardEditorBreadcrumbDeck,
           ),
-          MxBreadcrumbSegment(label: l10n.flashcardEditorBreadcrumbCurrent),
+          MxBreadcrumbSegment(label: currentBreadcrumbLabel),
         ],
       ),
       const SizedBox(height: SpacingTokens.sm),
@@ -201,6 +227,7 @@ class FlashcardEditorBody extends StatelessWidget {
           FlashcardEditorDeckChip(
             label:
                 detail?.deck.name ?? l10n.flashcardEditorDestinationDeckLabel,
+            showChevron: !isEditMode,
           ),
           const SizedBox(width: SpacingTokens.sm),
           FlashcardEditorRequiredMarker(
@@ -222,7 +249,7 @@ class FlashcardEditorBody extends StatelessWidget {
       FlashcardEditorSaveFailedBanner(
         message: l10n.failureMessage(
           failure,
-          fallback: l10n.flashcardEditorSaveFailedMessage,
+          fallback: saveFailureFallbackMessage,
         ),
         retryLabel: l10n.commonRetry,
         onRetry: onRetrySave,

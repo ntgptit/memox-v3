@@ -10,17 +10,19 @@ import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/tag/tag_validator.dart';
+import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 
 /// Drift-backed [FlashcardRepository].
 ///
-/// Reads compose the [FlashcardDao] (cards + count) with the [FolderDao] (deck
-/// row + folder breadcrumb + the content-revision change stream). Errors are
-/// surfaced as [Failure] values, never raw exceptions
+/// Reads compose the [FlashcardDao] (cards + detail + count) with the
+/// [FolderDao] (deck row + folder breadcrumb + the content-revision change
+/// stream). Errors are surfaced as [Failure] values, never raw exceptions
 /// (`docs/contracts/error-contract.md`).
 class FlashcardRepositoryImpl implements FlashcardRepository {
   FlashcardRepositoryImpl(this._dao, this._folderDao);
@@ -42,6 +44,67 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     return _folderDao.watchContentChanges().asyncMap(
       (_) => _load(deckId, normalized, sort),
     );
+  }
+
+  @override
+  Future<Result<FlashcardDetail>> getFlashcardDetail({
+    required String flashcardId,
+  }) async {
+    try {
+      final FlashcardRow? flashcardRow = await _dao.findFlashcard(flashcardId);
+      if (flashcardRow == null) {
+        return Result<FlashcardDetail>.err(
+          Failure.notFound(entity: 'flashcard', id: flashcardId),
+        );
+      }
+      final DeckRow? deckRow = await _folderDao.findDeck(flashcardRow.deckId);
+      if (deckRow == null) {
+        return Result<FlashcardDetail>.err(
+          Failure.notFound(entity: 'deck', id: flashcardRow.deckId),
+        );
+      }
+      final Deck deck = DeckMapper.fromRow(deckRow);
+      final List<FolderBreadcrumbSegment> breadcrumb =
+          (await _folderDao.breadcrumb(deck.folderId))
+              .map(
+                (FolderBreadcrumbResult row) =>
+                    FolderBreadcrumbSegment(id: row.id, name: row.name),
+              )
+              .toList(growable: false);
+      final List<String> tags = (await _dao.findFlashcardTags(flashcardId))
+          .map((FlashcardTagRow row) => row.tag)
+          .toList(growable: false);
+      final FlashcardProgressRow? progressRow = await _dao.findFlashcardProgress(
+        flashcardId,
+      );
+      return Result<FlashcardDetail>.ok(
+        FlashcardDetail(
+          deck: deck,
+          breadcrumb: breadcrumb,
+          flashcard: FlashcardMapper.fromRow(flashcardRow),
+          tags: tags,
+          progress: progressRow == null
+              ? null
+              : FlashcardProgressSnapshot(
+                  boxNumber: progressRow.boxNumber,
+                  dueAt: _dateFromMs(progressRow.dueAt),
+                  buriedUntil: _dateFromMs(progressRow.buriedUntil),
+                  isSuspended: progressRow.isSuspended,
+                  reviewCount: progressRow.reviewCount,
+                  lapseCount: progressRow.lapseCount,
+                  lastStudiedAt: _dateFromMs(progressRow.lastStudiedAt),
+                ),
+        ),
+      );
+    } catch (error) {
+      return Result<FlashcardDetail>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'flashcards',
+        ),
+      );
+    }
   }
 
   Future<Result<FlashcardListDetail>> _load(
@@ -193,6 +256,91 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   }
 
   @override
+  Future<Result<Flashcard>> updateFlashcard({
+    required String flashcardId,
+    required String front,
+    required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+    List<String> tags = const <String>[],
+    FlashcardProgressEditPolicy progressPolicy =
+        FlashcardProgressEditPolicy.keepProgress,
+  }) async {
+    final String trimmedFront = StringUtils.trimmed(front);
+    if (trimmedFront.isEmpty) {
+      return Future<Result<Flashcard>>.value(
+        const Result<Flashcard>.err(
+          Failure.validation(field: 'front', code: ValidationCode.empty),
+        ),
+      );
+    }
+
+    final String trimmedBack = StringUtils.trimmed(back);
+    if (trimmedBack.isEmpty) {
+      return Future<Result<Flashcard>>.value(
+        const Result<Flashcard>.err(
+          Failure.validation(field: 'back', code: ValidationCode.empty),
+        ),
+      );
+    }
+
+    final String? trimmedExample = _optionalText(exampleSentence);
+    final String? trimmedPronunciation = _optionalText(pronunciation);
+    final String? trimmedHint = _optionalText(hint);
+    final Set<String> seenTags = <String>{};
+    final List<String> normalizedTags = <String>[];
+    for (final String tag in tags) {
+      final String normalizedTag = TagValidator.storageValue(tag);
+      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
+        continue;
+      }
+      normalizedTags.add(normalizedTag);
+    }
+
+    try {
+      final FlashcardRow updated = await _dao.transaction(() async {
+        final FlashcardRow? existing = await _dao.findFlashcard(flashcardId);
+        if (existing == null) {
+          throw _RuleViolation(
+            Failure.notFound(entity: 'flashcard', id: flashcardId),
+          );
+        }
+        final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
+        await _dao.updateFlashcardContent(
+          id: flashcardId,
+          front: trimmedFront,
+          back: trimmedBack,
+          exampleSentence: trimmedExample,
+          pronunciation: trimmedPronunciation,
+          hint: trimmedHint,
+          updatedAt: nowMs,
+        );
+        if (progressPolicy == FlashcardProgressEditPolicy.resetProgress) {
+          await _dao.resetFlashcardProgress(flashcardId: flashcardId, nowMs: nowMs);
+        }
+        await _dao.replaceFlashcardTags(
+          flashcardId: flashcardId,
+          tags: normalizedTags,
+        );
+        return (await _dao.findFlashcard(flashcardId))!;
+      });
+
+      return Result<Flashcard>.ok(FlashcardMapper.fromRow(updated));
+    } on _RuleViolation catch (violation) {
+      return Result<Flashcard>.err(violation.failure);
+    } catch (error) {
+      return Result<Flashcard>.err(
+        Failure.storage(
+          operation: StorageOp.write,
+          cause: error.toString(),
+          table: 'flashcards',
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Result<void>> deleteFlashcard({required String flashcardId}) async {
     try {
       final FlashcardRow? row = await _dao.findFlashcard(flashcardId);
@@ -245,6 +393,9 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     final String trimmed = StringUtils.trimmed(value);
     return trimmed.isEmpty ? null : trimmed;
   }
+
+  static DateTime? _dateFromMs(int? ms) =>
+      ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
 }
 
 class _RuleViolation implements Exception {

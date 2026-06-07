@@ -7,6 +7,7 @@ import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/flashcards/routes/flashcard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
+import 'package:memox/presentation/features/settings/routes/settings_routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
@@ -78,14 +79,7 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
     ),
     StatefulShellBranch(
       navigatorKey: _settingsNavigatorKey,
-      routes: <RouteBase>[
-        GoRoute(
-          path: RoutePaths.settings,
-          name: RouteNames.settings,
-          builder: (context, state) =>
-              const RoutePlaceholder(routeName: RouteNames.settings),
-        ),
-      ],
+      routes: settingsRoutes(_rootNavigatorKey),
     ),
   ],
 );
@@ -150,33 +144,5 @@ List<RouteBase> _studyRoutes() => <RouteBase>[
 
 /// Settings sub-screens — pushed over the shell to keep the hub on the stack.
 List<RouteBase> _settingsRoutes() => <RouteBase>[
-  GoRoute(
-    parentNavigatorKey: _rootNavigatorKey,
-    path: RoutePaths.settingsAccount,
-    name: RouteNames.settingsAccount,
-    builder: (context, state) =>
-        const RoutePlaceholder(routeName: RouteNames.settingsAccount),
-  ),
-  GoRoute(
-    parentNavigatorKey: _rootNavigatorKey,
-    path: RoutePaths.settingsLearning,
-    name: RouteNames.settingsLearning,
-    builder: (context, state) =>
-        const RoutePlaceholder(routeName: RouteNames.settingsLearning),
-    routes: <RouteBase>[
-      GoRoute(
-        path: RoutePaths.settingsLearningTagsSegment,
-        name: RouteNames.settingsLearningTags,
-        builder: (context, state) =>
-            const RoutePlaceholder(routeName: RouteNames.settingsLearningTags),
-      ),
-    ],
-  ),
-  GoRoute(
-    parentNavigatorKey: _rootNavigatorKey,
-    path: RoutePaths.settingsAudioSpeech,
-    name: RouteNames.settingsAudioSpeech,
-    builder: (context, state) =>
-        const RoutePlaceholder(routeName: RouteNames.settingsAudioSpeech),
-  ),
+  ...settingsRoutes(_rootNavigatorKey),
 ];

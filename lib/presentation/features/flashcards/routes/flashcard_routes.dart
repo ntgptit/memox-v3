@@ -20,14 +20,9 @@ List<RouteBase> flashcardRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
         parentNavigatorKey: rootNavigatorKey,
         path: RoutePaths.flashcardEditTemplate,
         name: RouteNames.flashcardEdit,
-        builder: (_, GoRouterState state) => RoutePlaceholder(
-          routeName: RouteNames.flashcardEdit,
-          params: <String, String>{
-            RoutePaths.deckIdParam:
-                state.pathParameters[RoutePaths.deckIdParam] ?? '',
-            RoutePaths.flashcardIdParam:
-                state.pathParameters[RoutePaths.flashcardIdParam] ?? '',
-          },
+        builder: (_, GoRouterState state) => FlashcardEditorScreen(
+          deckId: state.pathParameters[RoutePaths.deckIdParam] ?? '',
+          flashcardId: state.pathParameters[RoutePaths.flashcardIdParam] ?? '',
         ),
       ),
       GoRoute(

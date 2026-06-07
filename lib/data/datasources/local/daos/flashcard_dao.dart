@@ -38,6 +38,18 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
   Future<int> maxFlashcardSortOrder(String deckId) =>
       flashcardMaxSortOrderInDeck(deckId).getSingle();
 
+  /// Tags attached to a flashcard, returned in storage order.
+  Future<List<FlashcardTagRow>> findFlashcardTags(String flashcardId) =>
+      (select(attachedDatabase.flashcardTags)
+            ..where((FlashcardTags t) => t.flashcardId.equals(flashcardId)))
+          .get();
+
+  /// SRS progress row for a flashcard, if present.
+  Future<FlashcardProgressRow?> findFlashcardProgress(String flashcardId) =>
+      (select(attachedDatabase.flashcardProgress)
+            ..where((FlashcardProgress t) => t.flashcardId.equals(flashcardId)))
+          .getSingleOrNull();
+
   // ── Single-row mutations (Drift query builder) ────────────────────
 
   Future<void> deleteFlashcardById(String id) =>
@@ -52,6 +64,56 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
         FlashcardsCompanion(
           sortOrder: Value<int>(sortOrder),
           updatedAt: Value<int>(updatedAt),
+        ),
+      );
+
+  Future<void> updateFlashcardContent({
+    required String id,
+    required String front,
+    required String back,
+    required String? exampleSentence,
+    required String? pronunciation,
+    required String? hint,
+    required int updatedAt,
+  }) => (update(flashcards)..where((Flashcards t) => t.id.equals(id))).write(
+    FlashcardsCompanion(
+      front: Value<String>(front),
+      back: Value<String>(back),
+      exampleSentence: Value<String?>(exampleSentence),
+      pronunciation: Value<String?>(pronunciation),
+      hint: Value<String?>(hint),
+      updatedAt: Value<int>(updatedAt),
+    ),
+  );
+
+  Future<void> replaceFlashcardTags({
+    required String flashcardId,
+    required List<String> tags,
+  }) async {
+    await (delete(attachedDatabase.flashcardTags)
+          ..where((FlashcardTags t) => t.flashcardId.equals(flashcardId)))
+        .go();
+    for (final String tag in tags) {
+      await into(attachedDatabase.flashcardTags).insert(
+        FlashcardTagsCompanion.insert(flashcardId: flashcardId, tag: tag),
+      );
+    }
+  }
+
+  Future<void> resetFlashcardProgress({
+    required String flashcardId,
+    required int nowMs,
+  }) => (update(attachedDatabase.flashcardProgress)
+        ..where((FlashcardProgress t) => t.flashcardId.equals(flashcardId)))
+      .write(
+        FlashcardProgressCompanion(
+          boxNumber: const Value<int>(1),
+          dueAt: Value<int?>(nowMs),
+          buriedUntil: const Value<int?>(null),
+          isSuspended: const Value<bool>(false),
+          reviewCount: const Value<int>(0),
+          lapseCount: const Value<int>(0),
+          lastStudiedAt: const Value<int?>(null),
         ),
       );
 

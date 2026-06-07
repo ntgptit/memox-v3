@@ -33,8 +33,8 @@ exposes today:
 - `tags` (stored separately via `flashcard_tags`)
 - `sort_order`
 
-Tags are stored separately in `flashcard_tags` and are part of the current flashcard create screen.
-Edit surface tag editing remains future work until the edit route is promoted.
+Tags are stored separately in `flashcard_tags` and are part of the current flashcard create/edit
+screen.
 
 SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.md`.
 
@@ -205,14 +205,15 @@ V1 create/edit note:
 - Flashcard create and edit routes share `FlashcardEditorScreen`.
 - Create mode is selected by `deckId` with no `flashcardId`; edit mode is selected by `deckId` +
   `flashcardId`.
-- The editor owns content create and update only.
+- The editor owns content create, update, and the explicit danger-zone delete action.
 - Current create mode saves front, back, optional example / pronunciation / hint text, and tags.
   It also supports a local "save and add another" checkbox under Tags that saves the current
   card, clears the draft, and keeps the user in the same deck for batch entry. Destination-deck
   retargeting remains future work.
 - Create/edit dirty close and browser/system back require a discard confirmation when unsaved
   content exists.
-- Single-card move/delete/export actions live on the flashcard list row/bulk action surfaces.
+- Single-card move/export actions live on the flashcard list row/bulk action surfaces. The edit
+  route also exposes a delete danger zone with confirmation, matching the current mock.
 - Bury/Suspend live on the study-session card-actions sheet.
 - Flashcard History is Future Proposal and must not be exposed as a live editor/list action in V1.
 - Learned front/back edits keep SRS progress unless the explicit progress-policy dialog chooses

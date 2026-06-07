@@ -492,6 +492,43 @@
   "settingsLearningOverviewTitle": "Learning",
   "settingsStudyDefaultsSubtitle": "Defaults used when a new study session is created.",
   "settingsStudyDefaultsLoading": "Loading study defaults",
+  "settingsLearningDailyGoalSectionTitle": "Daily goal",
+  "settingsLearningGoalToggleTitle": "Set a daily goal",
+  "settingsLearningGoalToggleSubtitleOn": "Track how many cards you complete each day.",
+  "settingsLearningGoalToggleSubtitleOff": "Pause goal tracking without losing your streak.",
+  "settingsLearningGoalOffHint": "Goal is off. Your streak is frozen — it won’t reset while paused.",
+  "settingsLearningCardsPerDayLabel": "Cards per day",
+  "settingsLearningDragHint": "Drag to adjust in steps of 5",
+  "settingsLearningStreakToggleTitle": "Show streak counter",
+  "settingsLearningStreakToggleSubtitle": "Display your current streak on Home and Stats.",
+  "settingsLearningReminderSectionTitle": "Reminder",
+  "settingsLearningReminderHint": "A gentle nudge once a day. Off by default.",
+  "settingsLearningReminderToggleTitle": "Daily reminder",
+  "settingsLearningReminderToggleSubtitleOn": "Nudge me to study every day.",
+  "settingsLearningReminderToggleSubtitleOff": "You decide when to come back.",
+  "settingsLearningReminderTimeLabel": "Reminder time",
+  "settingsLearningReminderTimeValue": "20:00",
+  "settingsLearningNotificationsBlockedTitle": "Notifications are blocked",
+  "settingsLearningNotificationsBlockedBody": "Allow MemoX in your phone’s notification settings to receive the reminder.",
+  "settingsLearningOpenSystemSettings": "Open system settings",
+  "settingsLearningTagsSectionTitle": "Tags",
+  "settingsLearningTagsSubtitle": "{count} tags across all decks",
+  "@settingsLearningTagsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsLearningFutureStudyDefaultsTitle": "Study defaults",
+  "settingsLearningFutureStudyDefaultsHint": "Available in a future update.",
+  "settingsLearningFutureDefaultShuffleTitle": "Default shuffle",
+  "settingsLearningFutureDefaultShuffleSubtitle": "Randomize card order in every session",
+  "settingsLearningFutureDefaultStudyModeTitle": "Default study mode",
+  "settingsLearningFutureDefaultStudyModeSubtitle": "Review, Match, Guess, Recall, or Fill",
+  "settingsLearningFutureExampleSentenceTitle": "Show example sentence",
+  "settingsLearningFutureExampleSentenceSubtitle": "Reveal the example with the meaning",
+  "settingsLearningSavedChip": "Saved",
   "settingsNewStudyBatchSizeLabel": "New Study batch size",
   "settingsReviewBatchSizeLabel": "Review batch size",
   "settingsLearningOverviewSummary": "20 cards / day · 5 study modes",
@@ -556,10 +593,24 @@
   "settingsTagsActionRename": "Rename",
   "settingsTagsActionMerge": "Merge into another tag",
   "settingsTagsActionDelete": "Delete tag (keeps cards)",
+  "settingsTagsContextSheetTitle": "Tag actions",
+  "settingsTagsMostUsedBadge": "Most used",
   "settingsTagsRenameTitle": "Rename tag",
   "settingsTagsRenameLabel": "Tag name",
   "settingsTagsRenameHint": "Enter a new name",
   "settingsTagsRenameConfirm": "Rename",
+  "settingsTagsRenameHelper": "Renaming updates every card that uses {tag}.",
+  "@settingsTagsRenameHelper": {
+    "placeholders": {
+      "tag": { "type": "String" }
+    }
+  },
+  "settingsTagsRenameConflictMessage": "A tag called {tag} already exists. Continuing will merge these two tags.",
+  "@settingsTagsRenameConflictMessage": {
+    "placeholders": {
+      "tag": { "type": "String" }
+    }
+  },
   "settingsTagsRenamedMessage": "Tag renamed.",
   "settingsTagsMergeSheetTitle": "Merge \"{source}\" into…",
   "@settingsTagsMergeSheetTitle": {
@@ -567,6 +618,16 @@
       "source": { "type": "String" }
     }
   },
+  "settingsTagsMergeSheetHint": "Pick the destination tag.",
+  "settingsTagsMergeSheetSummary": "All {count} cards tagged {source} will be re-tagged with the destination tag. The tag {source} will be deleted.",
+  "@settingsTagsMergeSheetSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "source": { "type": "String" }
+    }
+  },
+  "settingsTagsMergeSuggestedSectionTitle": "Suggested",
+  "settingsTagsMergeAllTagsSectionTitle": "All tags",
   "settingsTagsMergeSheetEmpty": "No other tags to merge into.",
   "settingsTagsMergeConfirmTitle": "Merge tags?",
   "settingsTagsMergeConfirmMessage": "All cards tagged \"{source}\" will be re-tagged with \"{destination}\". The tag \"{source}\" will be deleted.",
@@ -588,6 +649,9 @@
   },
   "settingsTagsDeleteConfirm": "Delete",
   "settingsTagsDeletedMessage": "Tag deleted.",
+  "settingsTagsOpErrorTitle": "Couldn't rename tag",
+  "settingsTagsOpErrorBody": "Nothing changed. Try again in a moment.",
+  "settingsTagsRetry": "Retry",
   "flashcardsTagErrorEmpty": "Tag name is required.",
   "flashcardsTagErrorComma": "Tags cannot contain commas.",
   "flashcardsTagErrorTooLong": "Tag too long (max 50 chars).",
@@ -596,6 +660,101 @@
   "settingsAudioSpeechEnabled": "On",
   "settingsAudioSpeechDisabled": "Off",
   "settingsAudioSpeechOverviewSummary": "Korean voice · 0.9× speed",
+  "settingsAudioSpeechSaved": "Saved",
+  "settingsAudioSpeechGeneralSectionTitle": "General",
+  "settingsAudioSpeechAutoPlayTitle": "Auto-play on reveal",
+  "settingsAudioSpeechAutoPlaySubtitle": "Speak the front when a new card appears.",
+  "settingsAudioSpeechPlayAfterGradingTitle": "Play after grading",
+  "settingsAudioSpeechPlayAfterGradingSubtitle": "Replay the term after you rate the card.",
+  "settingsAudioSpeechLanguageSectionTitle": "Language",
+  "settingsAudioSpeechKoreanTabFlag": "한",
+  "settingsAudioSpeechKoreanTabLabel": "Korean",
+  "settingsAudioSpeechEnglishTabFlag": "EN",
+  "settingsAudioSpeechEnglishTabLabel": "English",
+  "settingsAudioSpeechVoiceSectionTitle": "Voice · {language}",
+  "@settingsAudioSpeechVoiceSectionTitle": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechKoreanLanguageLabel": "Korean",
+  "settingsAudioSpeechEnglishLanguageLabel": "English",
+  "settingsAudioSpeechKoreanSampleText": "오늘도 한 단어 더 외워봐요.",
+  "settingsAudioSpeechKoreanSampleHint": "Today, let’s remember one more word.",
+  "settingsAudioSpeechEnglishSampleText": "One word a day keeps forgetting away.",
+  "settingsAudioSpeechKoreanSystemVoiceName": "System default",
+  "settingsAudioSpeechKoreanSystemVoiceMeta": "Uses your phone’s default Korean voice",
+  "settingsAudioSpeechKoreanSujiVoiceName": "Suji",
+  "settingsAudioSpeechKoreanSujiVoiceMeta": "Female · neural · offline",
+  "settingsAudioSpeechKoreanMinhoVoiceName": "Minho",
+  "settingsAudioSpeechKoreanMinhoVoiceMeta": "Male · neural · offline",
+  "settingsAudioSpeechKoreanEunhaVoiceName": "Eunha",
+  "settingsAudioSpeechKoreanEunhaVoiceMeta": "Female · standard",
+  "settingsAudioSpeechEnglishSystemVoiceName": "System default",
+  "settingsAudioSpeechEnglishSystemVoiceMeta": "Uses your phone’s default English voice",
+  "settingsAudioSpeechEnglishEmmaVoiceName": "Emma",
+  "settingsAudioSpeechEnglishEmmaVoiceMeta": "Female · neural · offline",
+  "settingsAudioSpeechEnglishRyanVoiceName": "Ryan",
+  "settingsAudioSpeechEnglishRyanVoiceMeta": "Male · neural · offline",
+  "settingsAudioSpeechDefaultVoiceBadge": "Default",
+  "settingsAudioSpeechNoVoicesTitle": "No {language} voices installed",
+  "@settingsAudioSpeechNoVoicesTitle": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechNoVoicesBody": "Download a {language} voice from your phone’s speech settings to enable playback.",
+  "@settingsAudioSpeechNoVoicesBody": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechOpenSystemSpeech": "Open system speech",
+  "settingsAudioSpeechSpeechRateLabel": "Speech rate",
+  "settingsAudioSpeechSpeechRateMinLabel": "0.3×",
+  "settingsAudioSpeechSpeechRateDefaultLabel": "Default",
+  "settingsAudioSpeechSpeechRateMaxLabel": "0.7×",
+  "settingsAudioSpeechPitchLabel": "Pitch",
+  "settingsAudioSpeechPitchMinLabel": "0.70",
+  "settingsAudioSpeechPitchDefaultLabel": "1.00",
+  "settingsAudioSpeechPitchMaxLabel": "1.50",
+  "settingsAudioSpeechVolumeLabel": "Volume",
+  "settingsAudioSpeechVolumeMinLabel": "0%",
+  "settingsAudioSpeechVolumeMidLabel": "50%",
+  "settingsAudioSpeechVolumeMaxLabel": "100%",
+  "settingsAudioSpeechRateValueLabel": "{value}×",
+  "@settingsAudioSpeechRateValueLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAudioSpeechVolumeValueLabel": "{value}%",
+  "@settingsAudioSpeechVolumeValueLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAudioSpeechResetVoiceSettings": "Reset {language} voice settings",
+  "@settingsAudioSpeechResetVoiceSettings": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechResetAction": "Reset",
+  "settingsAudioSpeechPreviewSectionTitle": "Preview",
+  "settingsAudioSpeechPreviewHint": "A short safe phrase. Only the front of cards is spoken.",
+  "settingsAudioSpeechPreviewVoiceLabel": "Preview voice",
+  "settingsAudioSpeechPlayingLabel": "Playing… tap to stop",
+  "settingsAudioSpeechSupportedLanguagesTitle": "About supported languages",
+  "settingsAudioSpeechSupportedLanguagesBody": "MemoX currently speaks Korean and English. Other-language cards stay silent and never read the back.",
+  "settingsAudioSpeechChangesSavedText": "Changes save automatically.",
+  "settingsAudioSpeechEngineUnavailableTitle": "Text-to-speech is unavailable",
+  "settingsAudioSpeechEngineUnavailableBody": "Install a TTS engine in your phone’s settings to enable voice playback.",
+  "settingsAudioSpeechOpenSystemSettings": "Open system settings",
   "settingsSpeechLabel": "Korean and English pronunciation support",
   "settingsSpeechLoading": "Loading speech settings",
   "settingsSpeechAutoPlayLabel": "Auto-play in study",
@@ -966,6 +1125,22 @@
   "flashcardsDeletedMessage": "Flashcards deleted.",
   "flashcardsEditTitle": "Edit card",
   "flashcardsNewTitle": "New card",
+  "flashcardsLoadErrorTitle": "Couldn't load this card",
+  "flashcardsLoadErrorMessage": "Your data is safe on this device. Try again in a moment.",
+  "flashcardsLoadErrorBackAction": "Back to deck",
+  "flashcardsEditDangerZoneLabel": "Danger zone",
+  "flashcardsEditSaveHelperText": "Changes save to this device only.",
+  "flashcardsEditSaveFailedMessage": "Couldn't save changes. Nothing was lost. Tap Save to try again.",
+  "flashcardsDeleteCardTitle": "Delete this flashcard?",
+  "flashcardsDeleteCardMessage": "Removes the card and its {reviewCount} reviews of history. Other cards in this deck are unaffected.",
+  "@flashcardsDeleteCardMessage": {
+    "placeholders": {
+      "reviewCount": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsDeleteCardAction": "Delete card",
   "flashcardsFieldFrontLabel": "Front",
   "flashcardsFieldFrontHint": "Type the term",
   "flashcardsFieldBackLabel": "Back",

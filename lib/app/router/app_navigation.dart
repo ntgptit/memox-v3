@@ -11,6 +11,9 @@ extension AppNavigation on BuildContext {
   /// Switch to the Library tab root.
   void goLibrary() => goNamed(RouteNames.library);
 
+  /// Switch to the Settings tab root.
+  void goSettings() => goNamed(RouteNames.settings);
+
   /// Open global Library search: `/library/search`.
   void pushLibrarySearch() => pushNamed(RouteNames.librarySearch);
 
@@ -47,4 +50,16 @@ extension AppNavigation on BuildContext {
     RouteNames.deckImport,
     pathParameters: <String, String>{RoutePaths.deckIdParam: deckId},
   );
+
+  /// Open the Account & Sync settings sub-screen.
+  void pushSettingsAccount() => pushNamed(RouteNames.settingsAccount);
+
+  /// Open the Learning settings sub-screen.
+  void pushSettingsLearning() => pushNamed(RouteNames.settingsLearning);
+
+  /// Open the Tag management sub-screen.
+  void pushSettingsLearningTags() => pushNamed(RouteNames.settingsLearningTags);
+
+  /// Open the Audio & Speech settings sub-screen.
+  void pushSettingsAudioSpeech() => pushNamed(RouteNames.settingsAudioSpeech);
 }

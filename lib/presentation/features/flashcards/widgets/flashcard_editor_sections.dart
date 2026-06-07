@@ -7,10 +7,16 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
 
 class FlashcardEditorDeckChip extends StatelessWidget {
-  const FlashcardEditorDeckChip({required this.label, this.onTap, super.key});
+  const FlashcardEditorDeckChip({
+    required this.label,
+    this.onTap,
+    this.showChevron = true,
+    super.key,
+  });
 
   final String label;
   final VoidCallback? onTap;
+  final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +54,14 @@ class FlashcardEditorDeckChip extends StatelessWidget {
             color: scheme.onSurface,
             fontWeight: TypographyTokens.semiBold,
           ),
-          const SizedBox(width: SpacingTokens.xs),
-          Icon(
-            Icons.expand_more,
-            size: SizeTokens.iconSm,
-            color: scheme.onSurfaceVariant,
-          ),
+          if (showChevron) ...<Widget>[
+            const SizedBox(width: SpacingTokens.xs),
+            Icon(
+              Icons.expand_more,
+              size: SizeTokens.iconSm,
+              color: scheme.onSurfaceVariant,
+            ),
+          ],
         ],
       ),
     );
@@ -444,6 +452,85 @@ class FlashcardEditorSaveFailedBanner extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class FlashcardEditorDangerZoneSection extends StatelessWidget {
+  const FlashcardEditorDangerZoneSection({
+    required this.zoneLabel,
+    required this.title,
+    required this.message,
+    required this.actionLabel,
+    required this.onAction,
+    super.key,
+  });
+
+  final String zoneLabel;
+  final String title;
+  final String message;
+  final String actionLabel;
+  final VoidCallback onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const SizedBox(height: SpacingTokens.xs),
+        Container(height: 1, color: scheme.outlineVariant),
+        const SizedBox(height: SpacingTokens.lg),
+        Row(
+          children: <Widget>[
+            Icon(
+              Icons.warning_amber_rounded,
+              size: SizeTokens.iconXs,
+              color: scheme.error,
+            ),
+            const SizedBox(width: SpacingTokens.xs),
+            MxText(
+              zoneLabel,
+              role: MxTextRole.labelLarge,
+              color: scheme.error,
+              fontWeight: TypographyTokens.semiBold,
+            ),
+          ],
+        ),
+        const SizedBox(height: SpacingTokens.sm),
+        Container(
+          padding: const EdgeInsets.all(SpacingTokens.md),
+          decoration: BoxDecoration(
+            color: scheme.error.withValues(alpha: 0.03),
+            borderRadius: RadiusTokens.brLg,
+            border: Border.all(color: scheme.error.withValues(alpha: 0.20)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              MxText(
+                title,
+                role: MxTextRole.titleSmall,
+                color: scheme.onSurface,
+                fontWeight: TypographyTokens.semiBold,
+              ),
+              const SizedBox(height: SpacingTokens.xxs),
+              MxText(
+                message,
+                role: MxTextRole.bodySmall,
+                color: scheme.onSurfaceVariant,
+              ),
+              const SizedBox(height: SpacingTokens.md),
+              MxSecondaryButton(
+                label: actionLabel,
+                onPressed: onAction,
+                variant: MxSecondaryVariant.outlined,
+                size: MxButtonSize.small,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -12,10 +12,10 @@ source_specs:
 > **Shared implementation note (V1).** This route is implemented by the shared
 > Flashcard Editor surface at
 > `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`.
-> Edit mode is selected by the presence of `flashcardId`. The V1 editor is an
-> edit-and-save form only; card deletion/move/export live on the flashcard list
-> row/bulk action surfaces, and bury/suspend live on the study-session
-> card-actions sheet.
+> Edit mode is selected by the presence of `flashcardId`. The current mock for
+> screen 08 includes a danger-zone delete action in the editor, while
+> move/export remain on the flashcard list row/bulk surfaces and bury/suspend
+> stay on the study-session card-actions sheet.
 
 ## Purpose
 
@@ -78,7 +78,7 @@ front/back content changes.
 | Save action                         | Creates one card in the selected deck                        | Updates the same card                                  |
 | Save and add another                | Available only in create mode                                | Hidden                                                 |
 | Starting status                     | Available only in create mode and maps to initial SRS box    | Hidden                                                 |
-| Delete/history/suspend/bury actions | Not shown                                                    | Not shown in the editor in V1                          |
+| Delete/history/suspend/bury actions | Not shown                                                    | Delete shown in danger zone; history/suspend/bury stay out of the editor |
 
 ## Forbidden
 
@@ -132,7 +132,7 @@ front/back content changes.
 | Action       | V1 owner                         | Notes                                                                                      |
 |--------------|----------------------------------|--------------------------------------------------------------------------------------------|
 | Move card    | Flashcard list row/bulk actions  | Preserves progress and tags.                                                               |
-| Delete card  | Flashcard list row/bulk actions  | Requires confirmation and cascades through persistence.                                    |
+| Delete card  | Flashcard list row/bulk actions + editor danger zone | Requires confirmation and cascades through persistence.                  |
 | Export card  | Flashcard list row/bulk actions  | Selection/single-row export surface.                                                       |
 | Bury/Suspend | Study-session card-actions sheet | See `docs/wireframes/25-shared-bottom-sheets.md` §card-actions.                            |
 | View history | Future Proposal                  | Do not expose live in V1. Requires promotion of `docs/wireframes/09-flashcard-history.md`. |
@@ -141,6 +141,7 @@ front/back content changes.
 
 - Discard changes dialog — `docs/wireframes/24-shared-dialogs.md` §discard-changes.
 - Progress policy dialog — inline `MxDialog` composition in the editor.
+- Delete confirmation dialog — inline `MxDialog` composition in the editor danger zone.
 - Tag input sheet — shared tag input sheet from `MxTagInput`.
 
 ## Validation rules
@@ -187,8 +188,9 @@ repository boundary.
 ## Agent rule
 
 - Do NOT clear the form on Save if save fails. Keep dirty state.
-- Do NOT add History, Bury/Suspend, Move, or Delete inside the editor unless this wireframe and the
-  matrix are promoted first.
+- Do NOT add History, Bury/Suspend, or Move inside the editor unless this wireframe and the
+  matrix are promoted first. Delete is part of the current mock and may remain in the editor danger
+  zone.
 - Do NOT implement standalone reset-progress/history semantics that require `last_reset_at` unless
   the migration task is explicitly approved.
 

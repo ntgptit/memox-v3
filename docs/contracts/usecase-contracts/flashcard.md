@@ -44,18 +44,28 @@ Future<Either<Failure, Flashcard>> call({
 
 ```dart
 Future<Either<Failure, Flashcard>> call({
-  required FlashcardId id,
-  String? front, String? back, String? note, String? example, String? pronunciation, String? hint,
-  List<String>? tags,  // if non-null, replace ALL tags
+  required FlashcardId flashcardId,
+  required String front,
+  required String back,
+  String? exampleSentence,
+  String? pronunciation,
+  String? hint,
+  List<String> tags = const [],
+  FlashcardProgressEditPolicy progressPolicy = FlashcardProgressEditPolicy.keepProgress,
 });
 ```
 
+> **Current implementation (verified 2026-06-07).** Shipped as the `Result`-based
+> `UpdateFlashcardUseCase` (`lib/domain/usecases/flashcard/update_flashcard_usecase.dart`).
+
 **Rules:**
 
-- Same validation as create for provided fields.
-- Tag list (if provided) replaces; old tags removed, new tags inserted, dedup applied. Atomic. See
+- Same validation as create for provided fields. Front/back are required after trim; optional
+  example sentence / pronunciation / hint are trimmed and collapsed to `null` when blank.
+- Tag list replaces the current tags, deduped case-insensitively and normalized for storage. See
   `docs/contracts/repository-contracts/flashcard-repository.md`.
-- V1 editor passes `FlashcardProgressEditPolicy.keepProgress` by default.
+- V1 editor passes `FlashcardProgressEditPolicy.keepProgress` by default and only switches to
+  `resetProgress` after the explicit progress-policy dialog.
 - If learned front/back content changes on a card with learning progress, the editor must ask for an
   explicit policy before saving:
     - `keepProgress` preserves existing `flashcard_progress`.
@@ -66,7 +76,7 @@ Future<Either<Failure, Flashcard>> call({
 
 **Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 
-**Test refs:** FC4-FC5.
+**Test refs:** FC4-FC5, `test/domain/usecases/flashcard/update_flashcard_usecase_test.dart::normalizes tags and forwards the reset progress policy`.
 
 ## MoveFlashcardUseCase
 
@@ -227,10 +237,13 @@ Returns flashcards with computed `CardState` (priority: Suspended > Buried > Due
 ## GetFlashcardDetailUseCase
 
 ```dart
-Future<Either<Failure, FlashcardDetail>> call({required FlashcardId id});
+Future<Either<Failure, FlashcardDetail>> call({required FlashcardId flashcardId});
 ```
 
-`FlashcardDetail` = flashcard + tags + progress + deck context.
+> **Current implementation (verified 2026-06-07).** Shipped as the `Result`-based
+> `GetFlashcardDetailUseCase` (`lib/domain/usecases/flashcard/get_flashcard_detail_usecase.dart`).
+
+`FlashcardDetail` = flashcard + tags + progress snapshot + deck context.
 
 ## Forbidden patterns
 

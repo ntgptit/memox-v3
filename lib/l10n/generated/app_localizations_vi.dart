@@ -932,6 +932,112 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsStudyDefaultsLoading => 'Đang tải mặc định học';
 
   @override
+  String get settingsLearningDailyGoalSectionTitle => 'Mục tiêu hằng ngày';
+
+  @override
+  String get settingsLearningGoalToggleTitle => 'Bật mục tiêu hằng ngày';
+
+  @override
+  String get settingsLearningGoalToggleSubtitleOn =>
+      'Theo dõi số thẻ bạn hoàn thành mỗi ngày.';
+
+  @override
+  String get settingsLearningGoalToggleSubtitleOff =>
+      'Tạm dừng theo dõi mục tiêu mà không mất chuỗi ngày.';
+
+  @override
+  String get settingsLearningGoalOffHint =>
+      'Mục tiêu đang tắt. Chuỗi ngày của bạn được tạm dừng — nó sẽ không bị đặt lại khi đang tạm dừng.';
+
+  @override
+  String get settingsLearningCardsPerDayLabel => 'Thẻ mỗi ngày';
+
+  @override
+  String get settingsLearningDragHint => 'Kéo để điều chỉnh theo bước 5';
+
+  @override
+  String get settingsLearningStreakToggleTitle => 'Hiển thị bộ đếm chuỗi ngày';
+
+  @override
+  String get settingsLearningStreakToggleSubtitle =>
+      'Hiển thị chuỗi hiện tại trên Home và Stats.';
+
+  @override
+  String get settingsLearningReminderSectionTitle => 'Nhắc nhở';
+
+  @override
+  String get settingsLearningReminderHint =>
+      'Một lời nhắc nhẹ mỗi ngày. Mặc định tắt.';
+
+  @override
+  String get settingsLearningReminderToggleTitle => 'Nhắc nhở hằng ngày';
+
+  @override
+  String get settingsLearningReminderToggleSubtitleOn =>
+      'Nhắc tôi học mỗi ngày.';
+
+  @override
+  String get settingsLearningReminderToggleSubtitleOff =>
+      'Bạn tự quyết định khi nào quay lại.';
+
+  @override
+  String get settingsLearningReminderTimeLabel => 'Giờ nhắc';
+
+  @override
+  String get settingsLearningReminderTimeValue => '20:00';
+
+  @override
+  String get settingsLearningNotificationsBlockedTitle =>
+      'Thông báo đang bị chặn';
+
+  @override
+  String get settingsLearningNotificationsBlockedBody =>
+      'Hãy cho phép MemoX trong cài đặt thông báo của điện thoại để nhận lời nhắc.';
+
+  @override
+  String get settingsLearningOpenSystemSettings => 'Mở cài đặt hệ thống';
+
+  @override
+  String get settingsLearningTagsSectionTitle => 'Nhãn';
+
+  @override
+  String settingsLearningTagsSubtitle(int count) {
+    return '$count thẻ trong tất cả bộ thẻ';
+  }
+
+  @override
+  String get settingsLearningFutureStudyDefaultsTitle => 'Mặc định học';
+
+  @override
+  String get settingsLearningFutureStudyDefaultsHint =>
+      'Có trong bản cập nhật sau.';
+
+  @override
+  String get settingsLearningFutureDefaultShuffleTitle => 'Xáo trộn mặc định';
+
+  @override
+  String get settingsLearningFutureDefaultShuffleSubtitle =>
+      'Trộn ngẫu nhiên thứ tự thẻ trong mọi phiên';
+
+  @override
+  String get settingsLearningFutureDefaultStudyModeTitle =>
+      'Chế độ học mặc định';
+
+  @override
+  String get settingsLearningFutureDefaultStudyModeSubtitle =>
+      'Ôn tập, Ghép, Đoán, Gợi nhớ hoặc Điền';
+
+  @override
+  String get settingsLearningFutureExampleSentenceTitle => 'Hiển thị câu ví dụ';
+
+  @override
+  String get settingsLearningFutureExampleSentenceSubtitle =>
+      'Hiện câu ví dụ cùng với nghĩa';
+
+  @override
+  String get settingsLearningSavedChip => 'Đã lưu';
+
+  @override
   String get settingsNewStudyBatchSizeLabel => 'Số thẻ New Study';
 
   @override
@@ -1051,6 +1157,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsTagsActionDelete => 'Xóa tag (giữ thẻ)';
 
   @override
+  String get settingsTagsContextSheetTitle => 'Hành động với tag';
+
+  @override
+  String get settingsTagsMostUsedBadge => 'Dùng nhiều nhất';
+
+  @override
   String get settingsTagsRenameTitle => 'Đổi tên tag';
 
   @override
@@ -1063,12 +1175,36 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsTagsRenameConfirm => 'Đổi tên';
 
   @override
+  String settingsTagsRenameHelper(String tag) {
+    return 'Đổi tên sẽ cập nhật mọi thẻ đang dùng $tag.';
+  }
+
+  @override
+  String settingsTagsRenameConflictMessage(String tag) {
+    return 'Tag $tag đã tồn tại. Tiếp tục sẽ gộp hai tag này.';
+  }
+
+  @override
   String get settingsTagsRenamedMessage => 'Đã đổi tên tag.';
 
   @override
   String settingsTagsMergeSheetTitle(String source) {
     return 'Gộp \"$source\" vào…';
   }
+
+  @override
+  String get settingsTagsMergeSheetHint => 'Chọn tag đích.';
+
+  @override
+  String settingsTagsMergeSheetSummary(int count, String source) {
+    return 'Tất cả $count thẻ gắn $source sẽ được gắn lại bằng tag đích. Tag $source sẽ bị xóa.';
+  }
+
+  @override
+  String get settingsTagsMergeSuggestedSectionTitle => 'Gợi ý';
+
+  @override
+  String get settingsTagsMergeAllTagsSectionTitle => 'Tất cả tag';
 
   @override
   String get settingsTagsMergeSheetEmpty => 'Không có tag nào khác để gộp.';
@@ -1107,6 +1243,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsTagsDeletedMessage => 'Đã xóa tag.';
 
   @override
+  String get settingsTagsOpErrorTitle => 'Không thể đổi tên tag';
+
+  @override
+  String get settingsTagsOpErrorBody =>
+      'Không có gì thay đổi. Vui lòng thử lại sau.';
+
+  @override
+  String get settingsTagsRetry => 'Thử lại';
+
+  @override
   String get flashcardsTagErrorEmpty => 'Cần nhập tên tag.';
 
   @override
@@ -1129,6 +1275,217 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsAudioSpeechOverviewSummary => 'Giọng Hàn · tốc độ 0.9×';
+
+  @override
+  String get settingsAudioSpeechSaved => 'Đã lưu';
+
+  @override
+  String get settingsAudioSpeechGeneralSectionTitle => 'Chung';
+
+  @override
+  String get settingsAudioSpeechAutoPlayTitle => 'Tự phát khi lật thẻ';
+
+  @override
+  String get settingsAudioSpeechAutoPlaySubtitle =>
+      'Phát mặt trước khi một thẻ mới xuất hiện.';
+
+  @override
+  String get settingsAudioSpeechPlayAfterGradingTitle => 'Phát sau khi chấm';
+
+  @override
+  String get settingsAudioSpeechPlayAfterGradingSubtitle =>
+      'Phát lại thuật ngữ sau khi bạn chấm thẻ.';
+
+  @override
+  String get settingsAudioSpeechLanguageSectionTitle => 'Ngôn ngữ';
+
+  @override
+  String get settingsAudioSpeechKoreanTabFlag => '한';
+
+  @override
+  String get settingsAudioSpeechKoreanTabLabel => 'Tiếng Hàn';
+
+  @override
+  String get settingsAudioSpeechEnglishTabFlag => 'EN';
+
+  @override
+  String get settingsAudioSpeechEnglishTabLabel => 'Tiếng Anh';
+
+  @override
+  String settingsAudioSpeechVoiceSectionTitle(Object language) {
+    return 'Giọng · $language';
+  }
+
+  @override
+  String get settingsAudioSpeechKoreanLanguageLabel => 'Tiếng Hàn';
+
+  @override
+  String get settingsAudioSpeechEnglishLanguageLabel => 'Tiếng Anh';
+
+  @override
+  String get settingsAudioSpeechKoreanSampleText => '오늘도 한 단어 더 외워봐요.';
+
+  @override
+  String get settingsAudioSpeechKoreanSampleHint =>
+      'Hôm nay, hãy nhớ thêm một từ nữa.';
+
+  @override
+  String get settingsAudioSpeechEnglishSampleText =>
+      'One word a day keeps forgetting away.';
+
+  @override
+  String get settingsAudioSpeechKoreanSystemVoiceName => 'Mặc định hệ thống';
+
+  @override
+  String get settingsAudioSpeechKoreanSystemVoiceMeta =>
+      'Dùng giọng tiếng Hàn mặc định của điện thoại';
+
+  @override
+  String get settingsAudioSpeechKoreanSujiVoiceName => 'Suji';
+
+  @override
+  String get settingsAudioSpeechKoreanSujiVoiceMeta =>
+      'Nữ · neural · ngoại tuyến';
+
+  @override
+  String get settingsAudioSpeechKoreanMinhoVoiceName => 'Minho';
+
+  @override
+  String get settingsAudioSpeechKoreanMinhoVoiceMeta =>
+      'Nam · neural · ngoại tuyến';
+
+  @override
+  String get settingsAudioSpeechKoreanEunhaVoiceName => 'Eunha';
+
+  @override
+  String get settingsAudioSpeechKoreanEunhaVoiceMeta => 'Nữ · tiêu chuẩn';
+
+  @override
+  String get settingsAudioSpeechEnglishSystemVoiceName => 'Mặc định hệ thống';
+
+  @override
+  String get settingsAudioSpeechEnglishSystemVoiceMeta =>
+      'Dùng giọng tiếng Anh mặc định của điện thoại';
+
+  @override
+  String get settingsAudioSpeechEnglishEmmaVoiceName => 'Emma';
+
+  @override
+  String get settingsAudioSpeechEnglishEmmaVoiceMeta =>
+      'Nữ · neural · ngoại tuyến';
+
+  @override
+  String get settingsAudioSpeechEnglishRyanVoiceName => 'Ryan';
+
+  @override
+  String get settingsAudioSpeechEnglishRyanVoiceMeta =>
+      'Nam · neural · ngoại tuyến';
+
+  @override
+  String get settingsAudioSpeechDefaultVoiceBadge => 'Mặc định';
+
+  @override
+  String settingsAudioSpeechNoVoicesTitle(Object language) {
+    return 'Chưa cài giọng $language';
+  }
+
+  @override
+  String settingsAudioSpeechNoVoicesBody(Object language) {
+    return 'Hãy tải một giọng $language trong cài đặt giọng nói của điện thoại để bật phát âm.';
+  }
+
+  @override
+  String get settingsAudioSpeechOpenSystemSpeech => 'Mở cài đặt giọng nói';
+
+  @override
+  String get settingsAudioSpeechSpeechRateLabel => 'Tốc độ phát âm';
+
+  @override
+  String get settingsAudioSpeechSpeechRateMinLabel => '0.3×';
+
+  @override
+  String get settingsAudioSpeechSpeechRateDefaultLabel => 'Mặc định';
+
+  @override
+  String get settingsAudioSpeechSpeechRateMaxLabel => '0.7×';
+
+  @override
+  String get settingsAudioSpeechPitchLabel => 'Cao độ';
+
+  @override
+  String get settingsAudioSpeechPitchMinLabel => '0.70';
+
+  @override
+  String get settingsAudioSpeechPitchDefaultLabel => '1.00';
+
+  @override
+  String get settingsAudioSpeechPitchMaxLabel => '1.50';
+
+  @override
+  String get settingsAudioSpeechVolumeLabel => 'Âm lượng';
+
+  @override
+  String get settingsAudioSpeechVolumeMinLabel => '0%';
+
+  @override
+  String get settingsAudioSpeechVolumeMidLabel => '50%';
+
+  @override
+  String get settingsAudioSpeechVolumeMaxLabel => '100%';
+
+  @override
+  String settingsAudioSpeechRateValueLabel(String value) {
+    return '$value×';
+  }
+
+  @override
+  String settingsAudioSpeechVolumeValueLabel(String value) {
+    return '$value%';
+  }
+
+  @override
+  String settingsAudioSpeechResetVoiceSettings(Object language) {
+    return 'Đặt lại cài đặt giọng $language';
+  }
+
+  @override
+  String get settingsAudioSpeechResetAction => 'Đặt lại';
+
+  @override
+  String get settingsAudioSpeechPreviewSectionTitle => 'Xem trước';
+
+  @override
+  String get settingsAudioSpeechPreviewHint =>
+      'Một câu ngắn an toàn. Chỉ phần mặt trước của thẻ được phát.';
+
+  @override
+  String get settingsAudioSpeechPreviewVoiceLabel => 'Nghe thử giọng';
+
+  @override
+  String get settingsAudioSpeechPlayingLabel => 'Đang phát… chạm để dừng';
+
+  @override
+  String get settingsAudioSpeechSupportedLanguagesTitle =>
+      'Về ngôn ngữ được hỗ trợ';
+
+  @override
+  String get settingsAudioSpeechSupportedLanguagesBody =>
+      'MemoX hiện phát được tiếng Hàn và tiếng Anh. Các thẻ ngôn ngữ khác sẽ im lặng và không bao giờ đọc mặt sau.';
+
+  @override
+  String get settingsAudioSpeechChangesSavedText =>
+      'Mọi thay đổi được lưu tự động.';
+
+  @override
+  String get settingsAudioSpeechEngineUnavailableTitle =>
+      'Text-to-speech không khả dụng';
+
+  @override
+  String get settingsAudioSpeechEngineUnavailableBody =>
+      'Hãy cài một TTS engine trong cài đặt của điện thoại để bật phát âm thanh.';
+
+  @override
+  String get settingsAudioSpeechOpenSystemSettings => 'Mở cài đặt hệ thống';
 
   @override
   String get settingsSpeechLabel => 'Hỗ trợ phát âm tiếng Hàn và tiếng Anh';
@@ -1844,6 +2201,38 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get flashcardsNewTitle => 'Thẻ mới';
+
+  @override
+  String get flashcardsLoadErrorTitle => 'Không thể tải thẻ này';
+
+  @override
+  String get flashcardsLoadErrorMessage =>
+      'Dữ liệu của bạn vẫn an toàn trên thiết bị này. Hãy thử lại sau một lát.';
+
+  @override
+  String get flashcardsLoadErrorBackAction => 'Quay lại bộ thẻ';
+
+  @override
+  String get flashcardsEditDangerZoneLabel => 'Khu vực nguy hiểm';
+
+  @override
+  String get flashcardsEditSaveHelperText =>
+      'Các thay đổi sẽ chỉ lưu trên thiết bị này.';
+
+  @override
+  String get flashcardsEditSaveFailedMessage =>
+      'Không thể lưu thay đổi. Không có gì bị mất. Hãy bấm Lưu để thử lại.';
+
+  @override
+  String get flashcardsDeleteCardTitle => 'Xóa flashcard này?';
+
+  @override
+  String flashcardsDeleteCardMessage(int reviewCount) {
+    return 'Thao tác này sẽ xóa thẻ và $reviewCount lần ôn tập khỏi lịch sử. Các thẻ khác trong bộ này không bị ảnh hưởng.';
+  }
+
+  @override
+  String get flashcardsDeleteCardAction => 'Xóa thẻ';
 
   @override
   String get flashcardsFieldFrontLabel => 'Mặt trước';

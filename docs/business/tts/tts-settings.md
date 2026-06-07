@@ -158,8 +158,13 @@ UI components (e.g., `MxSpeakButton`) react to this stream for play/stop state.
 
 ## Screen behavior
 
-`AudioSpeechSettingsScreen` (route: `/settings/audio-speech`) renders `SpeechSettingsGroup` which
-includes:
+`AudioSpeechSettingsScreen` (route: `/settings/audio-speech`) is currently wired to the mobile UI
+kit mock/gallery screen documented in `docs/wireframes/21-settings-audio-speech.md`. The route
+shows per-language tabs, voice lists, sliders, and preview states for the design surface, while
+the current V1 global/front-language repository contract remains the source of truth for the
+underlying TTS data layer.
+
+The gallery surface includes:
 
 - Auto-play toggle.
 - Front language picker.
@@ -199,8 +204,8 @@ Loading/error states use shared `Mx*` widgets per UI/UX contract.
 
 **Wireframes:**
 
-- `docs/wireframes/21-settings-audio-speech.md` — Current global/front-language TTS settings; Target
-  per-language tabs/settings
+- `docs/wireframes/21-settings-audio-speech.md` — Mobile UI kit mock/gallery for Audio & speech
+  (per-language tabs, voices, sliders, preview)
 - `docs/wireframes/13-study-session-review.md` through `docs/wireframes/17-study-session-fill.md` —
   TTS button per mode (front only, never back)
 

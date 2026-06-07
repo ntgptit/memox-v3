@@ -1005,6 +1005,113 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsStudyDefaultsLoading => 'Loading study defaults';
 
   @override
+  String get settingsLearningDailyGoalSectionTitle => 'Daily goal';
+
+  @override
+  String get settingsLearningGoalToggleTitle => 'Set a daily goal';
+
+  @override
+  String get settingsLearningGoalToggleSubtitleOn =>
+      'Track how many cards you complete each day.';
+
+  @override
+  String get settingsLearningGoalToggleSubtitleOff =>
+      'Pause goal tracking without losing your streak.';
+
+  @override
+  String get settingsLearningGoalOffHint =>
+      'Goal is off. Your streak is frozen — it won’t reset while paused.';
+
+  @override
+  String get settingsLearningCardsPerDayLabel => 'Cards per day';
+
+  @override
+  String get settingsLearningDragHint => 'Drag to adjust in steps of 5';
+
+  @override
+  String get settingsLearningStreakToggleTitle => 'Show streak counter';
+
+  @override
+  String get settingsLearningStreakToggleSubtitle =>
+      'Display your current streak on Home and Stats.';
+
+  @override
+  String get settingsLearningReminderSectionTitle => 'Reminder';
+
+  @override
+  String get settingsLearningReminderHint =>
+      'A gentle nudge once a day. Off by default.';
+
+  @override
+  String get settingsLearningReminderToggleTitle => 'Daily reminder';
+
+  @override
+  String get settingsLearningReminderToggleSubtitleOn =>
+      'Nudge me to study every day.';
+
+  @override
+  String get settingsLearningReminderToggleSubtitleOff =>
+      'You decide when to come back.';
+
+  @override
+  String get settingsLearningReminderTimeLabel => 'Reminder time';
+
+  @override
+  String get settingsLearningReminderTimeValue => '20:00';
+
+  @override
+  String get settingsLearningNotificationsBlockedTitle =>
+      'Notifications are blocked';
+
+  @override
+  String get settingsLearningNotificationsBlockedBody =>
+      'Allow MemoX in your phone’s notification settings to receive the reminder.';
+
+  @override
+  String get settingsLearningOpenSystemSettings => 'Open system settings';
+
+  @override
+  String get settingsLearningTagsSectionTitle => 'Tags';
+
+  @override
+  String settingsLearningTagsSubtitle(int count) {
+    return '$count tags across all decks';
+  }
+
+  @override
+  String get settingsLearningFutureStudyDefaultsTitle => 'Study defaults';
+
+  @override
+  String get settingsLearningFutureStudyDefaultsHint =>
+      'Available in a future update.';
+
+  @override
+  String get settingsLearningFutureDefaultShuffleTitle => 'Default shuffle';
+
+  @override
+  String get settingsLearningFutureDefaultShuffleSubtitle =>
+      'Randomize card order in every session';
+
+  @override
+  String get settingsLearningFutureDefaultStudyModeTitle =>
+      'Default study mode';
+
+  @override
+  String get settingsLearningFutureDefaultStudyModeSubtitle =>
+      'Review, Match, Guess, Recall, or Fill';
+
+  @override
+  String get settingsLearningFutureExampleSentenceTitle =>
+      'Show example sentence';
+
+  @override
+  String get settingsLearningFutureExampleSentenceSubtitle =>
+      'Reveal the example with the meaning';
+
+  @override
+  String get settingsLearningSavedChip => 'Saved';
+
+  @override
   String get settingsNewStudyBatchSizeLabel => 'New Study batch size';
 
   @override
@@ -1127,6 +1234,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTagsActionDelete => 'Delete tag (keeps cards)';
 
   @override
+  String get settingsTagsContextSheetTitle => 'Tag actions';
+
+  @override
+  String get settingsTagsMostUsedBadge => 'Most used';
+
+  @override
   String get settingsTagsRenameTitle => 'Rename tag';
 
   @override
@@ -1139,12 +1252,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTagsRenameConfirm => 'Rename';
 
   @override
+  String settingsTagsRenameHelper(String tag) {
+    return 'Renaming updates every card that uses $tag.';
+  }
+
+  @override
+  String settingsTagsRenameConflictMessage(String tag) {
+    return 'A tag called $tag already exists. Continuing will merge these two tags.';
+  }
+
+  @override
   String get settingsTagsRenamedMessage => 'Tag renamed.';
 
   @override
   String settingsTagsMergeSheetTitle(String source) {
     return 'Merge \"$source\" into…';
   }
+
+  @override
+  String get settingsTagsMergeSheetHint => 'Pick the destination tag.';
+
+  @override
+  String settingsTagsMergeSheetSummary(int count, String source) {
+    return 'All $count cards tagged $source will be re-tagged with the destination tag. The tag $source will be deleted.';
+  }
+
+  @override
+  String get settingsTagsMergeSuggestedSectionTitle => 'Suggested';
+
+  @override
+  String get settingsTagsMergeAllTagsSectionTitle => 'All tags';
 
   @override
   String get settingsTagsMergeSheetEmpty => 'No other tags to merge into.';
@@ -1184,6 +1321,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTagsDeletedMessage => 'Tag deleted.';
 
   @override
+  String get settingsTagsOpErrorTitle => 'Couldn\'t rename tag';
+
+  @override
+  String get settingsTagsOpErrorBody =>
+      'Nothing changed. Try again in a moment.';
+
+  @override
+  String get settingsTagsRetry => 'Retry';
+
+  @override
   String get flashcardsTagErrorEmpty => 'Tag name is required.';
 
   @override
@@ -1206,6 +1353,217 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAudioSpeechOverviewSummary => 'Korean voice · 0.9× speed';
+
+  @override
+  String get settingsAudioSpeechSaved => 'Saved';
+
+  @override
+  String get settingsAudioSpeechGeneralSectionTitle => 'General';
+
+  @override
+  String get settingsAudioSpeechAutoPlayTitle => 'Auto-play on reveal';
+
+  @override
+  String get settingsAudioSpeechAutoPlaySubtitle =>
+      'Speak the front when a new card appears.';
+
+  @override
+  String get settingsAudioSpeechPlayAfterGradingTitle => 'Play after grading';
+
+  @override
+  String get settingsAudioSpeechPlayAfterGradingSubtitle =>
+      'Replay the term after you rate the card.';
+
+  @override
+  String get settingsAudioSpeechLanguageSectionTitle => 'Language';
+
+  @override
+  String get settingsAudioSpeechKoreanTabFlag => '한';
+
+  @override
+  String get settingsAudioSpeechKoreanTabLabel => 'Korean';
+
+  @override
+  String get settingsAudioSpeechEnglishTabFlag => 'EN';
+
+  @override
+  String get settingsAudioSpeechEnglishTabLabel => 'English';
+
+  @override
+  String settingsAudioSpeechVoiceSectionTitle(Object language) {
+    return 'Voice · $language';
+  }
+
+  @override
+  String get settingsAudioSpeechKoreanLanguageLabel => 'Korean';
+
+  @override
+  String get settingsAudioSpeechEnglishLanguageLabel => 'English';
+
+  @override
+  String get settingsAudioSpeechKoreanSampleText => '오늘도 한 단어 더 외워봐요.';
+
+  @override
+  String get settingsAudioSpeechKoreanSampleHint =>
+      'Today, let’s remember one more word.';
+
+  @override
+  String get settingsAudioSpeechEnglishSampleText =>
+      'One word a day keeps forgetting away.';
+
+  @override
+  String get settingsAudioSpeechKoreanSystemVoiceName => 'System default';
+
+  @override
+  String get settingsAudioSpeechKoreanSystemVoiceMeta =>
+      'Uses your phone’s default Korean voice';
+
+  @override
+  String get settingsAudioSpeechKoreanSujiVoiceName => 'Suji';
+
+  @override
+  String get settingsAudioSpeechKoreanSujiVoiceMeta =>
+      'Female · neural · offline';
+
+  @override
+  String get settingsAudioSpeechKoreanMinhoVoiceName => 'Minho';
+
+  @override
+  String get settingsAudioSpeechKoreanMinhoVoiceMeta =>
+      'Male · neural · offline';
+
+  @override
+  String get settingsAudioSpeechKoreanEunhaVoiceName => 'Eunha';
+
+  @override
+  String get settingsAudioSpeechKoreanEunhaVoiceMeta => 'Female · standard';
+
+  @override
+  String get settingsAudioSpeechEnglishSystemVoiceName => 'System default';
+
+  @override
+  String get settingsAudioSpeechEnglishSystemVoiceMeta =>
+      'Uses your phone’s default English voice';
+
+  @override
+  String get settingsAudioSpeechEnglishEmmaVoiceName => 'Emma';
+
+  @override
+  String get settingsAudioSpeechEnglishEmmaVoiceMeta =>
+      'Female · neural · offline';
+
+  @override
+  String get settingsAudioSpeechEnglishRyanVoiceName => 'Ryan';
+
+  @override
+  String get settingsAudioSpeechEnglishRyanVoiceMeta =>
+      'Male · neural · offline';
+
+  @override
+  String get settingsAudioSpeechDefaultVoiceBadge => 'Default';
+
+  @override
+  String settingsAudioSpeechNoVoicesTitle(Object language) {
+    return 'No $language voices installed';
+  }
+
+  @override
+  String settingsAudioSpeechNoVoicesBody(Object language) {
+    return 'Download a $language voice from your phone’s speech settings to enable playback.';
+  }
+
+  @override
+  String get settingsAudioSpeechOpenSystemSpeech => 'Open system speech';
+
+  @override
+  String get settingsAudioSpeechSpeechRateLabel => 'Speech rate';
+
+  @override
+  String get settingsAudioSpeechSpeechRateMinLabel => '0.3×';
+
+  @override
+  String get settingsAudioSpeechSpeechRateDefaultLabel => 'Default';
+
+  @override
+  String get settingsAudioSpeechSpeechRateMaxLabel => '0.7×';
+
+  @override
+  String get settingsAudioSpeechPitchLabel => 'Pitch';
+
+  @override
+  String get settingsAudioSpeechPitchMinLabel => '0.70';
+
+  @override
+  String get settingsAudioSpeechPitchDefaultLabel => '1.00';
+
+  @override
+  String get settingsAudioSpeechPitchMaxLabel => '1.50';
+
+  @override
+  String get settingsAudioSpeechVolumeLabel => 'Volume';
+
+  @override
+  String get settingsAudioSpeechVolumeMinLabel => '0%';
+
+  @override
+  String get settingsAudioSpeechVolumeMidLabel => '50%';
+
+  @override
+  String get settingsAudioSpeechVolumeMaxLabel => '100%';
+
+  @override
+  String settingsAudioSpeechRateValueLabel(String value) {
+    return '$value×';
+  }
+
+  @override
+  String settingsAudioSpeechVolumeValueLabel(String value) {
+    return '$value%';
+  }
+
+  @override
+  String settingsAudioSpeechResetVoiceSettings(Object language) {
+    return 'Reset $language voice settings';
+  }
+
+  @override
+  String get settingsAudioSpeechResetAction => 'Reset';
+
+  @override
+  String get settingsAudioSpeechPreviewSectionTitle => 'Preview';
+
+  @override
+  String get settingsAudioSpeechPreviewHint =>
+      'A short safe phrase. Only the front of cards is spoken.';
+
+  @override
+  String get settingsAudioSpeechPreviewVoiceLabel => 'Preview voice';
+
+  @override
+  String get settingsAudioSpeechPlayingLabel => 'Playing… tap to stop';
+
+  @override
+  String get settingsAudioSpeechSupportedLanguagesTitle =>
+      'About supported languages';
+
+  @override
+  String get settingsAudioSpeechSupportedLanguagesBody =>
+      'MemoX currently speaks Korean and English. Other-language cards stay silent and never read the back.';
+
+  @override
+  String get settingsAudioSpeechChangesSavedText =>
+      'Changes save automatically.';
+
+  @override
+  String get settingsAudioSpeechEngineUnavailableTitle =>
+      'Text-to-speech is unavailable';
+
+  @override
+  String get settingsAudioSpeechEngineUnavailableBody =>
+      'Install a TTS engine in your phone’s settings to enable voice playback.';
+
+  @override
+  String get settingsAudioSpeechOpenSystemSettings => 'Open system settings';
 
   @override
   String get settingsSpeechLabel => 'Korean and English pronunciation support';
@@ -1957,6 +2315,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flashcardsNewTitle => 'New card';
+
+  @override
+  String get flashcardsLoadErrorTitle => 'Couldn\'t load this card';
+
+  @override
+  String get flashcardsLoadErrorMessage =>
+      'Your data is safe on this device. Try again in a moment.';
+
+  @override
+  String get flashcardsLoadErrorBackAction => 'Back to deck';
+
+  @override
+  String get flashcardsEditDangerZoneLabel => 'Danger zone';
+
+  @override
+  String get flashcardsEditSaveHelperText =>
+      'Changes save to this device only.';
+
+  @override
+  String get flashcardsEditSaveFailedMessage =>
+      'Couldn\'t save changes. Nothing was lost. Tap Save to try again.';
+
+  @override
+  String get flashcardsDeleteCardTitle => 'Delete this flashcard?';
+
+  @override
+  String flashcardsDeleteCardMessage(int reviewCount) {
+    return 'Removes the card and its $reviewCount reviews of history. Other cards in this deck are unaffected.';
+  }
+
+  @override
+  String get flashcardsDeleteCardAction => 'Delete card';
 
   @override
   String get flashcardsFieldFrontLabel => 'Front';

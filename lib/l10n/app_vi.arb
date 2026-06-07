@@ -492,6 +492,43 @@
   "settingsLearningOverviewTitle": "Học",
   "settingsStudyDefaultsSubtitle": "Cài đặt mặc định dùng khi tạo phiên học mới.",
   "settingsStudyDefaultsLoading": "Đang tải mặc định học",
+  "settingsLearningDailyGoalSectionTitle": "Mục tiêu hằng ngày",
+  "settingsLearningGoalToggleTitle": "Bật mục tiêu hằng ngày",
+  "settingsLearningGoalToggleSubtitleOn": "Theo dõi số thẻ bạn hoàn thành mỗi ngày.",
+  "settingsLearningGoalToggleSubtitleOff": "Tạm dừng theo dõi mục tiêu mà không mất chuỗi ngày.",
+  "settingsLearningGoalOffHint": "Mục tiêu đang tắt. Chuỗi ngày của bạn được tạm dừng — nó sẽ không bị đặt lại khi đang tạm dừng.",
+  "settingsLearningCardsPerDayLabel": "Thẻ mỗi ngày",
+  "settingsLearningDragHint": "Kéo để điều chỉnh theo bước 5",
+  "settingsLearningStreakToggleTitle": "Hiển thị bộ đếm chuỗi ngày",
+  "settingsLearningStreakToggleSubtitle": "Hiển thị chuỗi hiện tại trên Home và Stats.",
+  "settingsLearningReminderSectionTitle": "Nhắc nhở",
+  "settingsLearningReminderHint": "Một lời nhắc nhẹ mỗi ngày. Mặc định tắt.",
+  "settingsLearningReminderToggleTitle": "Nhắc nhở hằng ngày",
+  "settingsLearningReminderToggleSubtitleOn": "Nhắc tôi học mỗi ngày.",
+  "settingsLearningReminderToggleSubtitleOff": "Bạn tự quyết định khi nào quay lại.",
+  "settingsLearningReminderTimeLabel": "Giờ nhắc",
+  "settingsLearningReminderTimeValue": "20:00",
+  "settingsLearningNotificationsBlockedTitle": "Thông báo đang bị chặn",
+  "settingsLearningNotificationsBlockedBody": "Hãy cho phép MemoX trong cài đặt thông báo của điện thoại để nhận lời nhắc.",
+  "settingsLearningOpenSystemSettings": "Mở cài đặt hệ thống",
+  "settingsLearningTagsSectionTitle": "Nhãn",
+  "settingsLearningTagsSubtitle": "{count} thẻ trong tất cả bộ thẻ",
+  "@settingsLearningTagsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsLearningFutureStudyDefaultsTitle": "Mặc định học",
+  "settingsLearningFutureStudyDefaultsHint": "Có trong bản cập nhật sau.",
+  "settingsLearningFutureDefaultShuffleTitle": "Xáo trộn mặc định",
+  "settingsLearningFutureDefaultShuffleSubtitle": "Trộn ngẫu nhiên thứ tự thẻ trong mọi phiên",
+  "settingsLearningFutureDefaultStudyModeTitle": "Chế độ học mặc định",
+  "settingsLearningFutureDefaultStudyModeSubtitle": "Ôn tập, Ghép, Đoán, Gợi nhớ hoặc Điền",
+  "settingsLearningFutureExampleSentenceTitle": "Hiển thị câu ví dụ",
+  "settingsLearningFutureExampleSentenceSubtitle": "Hiện câu ví dụ cùng với nghĩa",
+  "settingsLearningSavedChip": "Đã lưu",
   "settingsNewStudyBatchSizeLabel": "Số thẻ New Study",
   "settingsReviewBatchSizeLabel": "Số thẻ Review",
   "settingsLearningOverviewSummary": "20 thẻ / ngày · 5 chế độ học",
@@ -556,10 +593,24 @@
   "settingsTagsActionRename": "Đổi tên",
   "settingsTagsActionMerge": "Gộp vào tag khác",
   "settingsTagsActionDelete": "Xóa tag (giữ thẻ)",
+  "settingsTagsContextSheetTitle": "Hành động với tag",
+  "settingsTagsMostUsedBadge": "Dùng nhiều nhất",
   "settingsTagsRenameTitle": "Đổi tên tag",
   "settingsTagsRenameLabel": "Tên tag",
   "settingsTagsRenameHint": "Nhập tên mới",
   "settingsTagsRenameConfirm": "Đổi tên",
+  "settingsTagsRenameHelper": "Đổi tên sẽ cập nhật mọi thẻ đang dùng {tag}.",
+  "@settingsTagsRenameHelper": {
+    "placeholders": {
+      "tag": { "type": "String" }
+    }
+  },
+  "settingsTagsRenameConflictMessage": "Tag {tag} đã tồn tại. Tiếp tục sẽ gộp hai tag này.",
+  "@settingsTagsRenameConflictMessage": {
+    "placeholders": {
+      "tag": { "type": "String" }
+    }
+  },
   "settingsTagsRenamedMessage": "Đã đổi tên tag.",
   "settingsTagsMergeSheetTitle": "Gộp \"{source}\" vào…",
   "@settingsTagsMergeSheetTitle": {
@@ -567,6 +618,16 @@
       "source": { "type": "String" }
     }
   },
+  "settingsTagsMergeSheetHint": "Chọn tag đích.",
+  "settingsTagsMergeSheetSummary": "Tất cả {count} thẻ gắn {source} sẽ được gắn lại bằng tag đích. Tag {source} sẽ bị xóa.",
+  "@settingsTagsMergeSheetSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "source": { "type": "String" }
+    }
+  },
+  "settingsTagsMergeSuggestedSectionTitle": "Gợi ý",
+  "settingsTagsMergeAllTagsSectionTitle": "Tất cả tag",
   "settingsTagsMergeSheetEmpty": "Không có tag nào khác để gộp.",
   "settingsTagsMergeConfirmTitle": "Gộp tag?",
   "settingsTagsMergeConfirmMessage": "Tất cả thẻ gắn \"{source}\" sẽ được gắn lại \"{destination}\". Tag \"{source}\" sẽ bị xóa.",
@@ -588,6 +649,9 @@
   },
   "settingsTagsDeleteConfirm": "Xóa",
   "settingsTagsDeletedMessage": "Đã xóa tag.",
+  "settingsTagsOpErrorTitle": "Không thể đổi tên tag",
+  "settingsTagsOpErrorBody": "Không có gì thay đổi. Vui lòng thử lại sau.",
+  "settingsTagsRetry": "Thử lại",
   "flashcardsTagErrorEmpty": "Cần nhập tên tag.",
   "flashcardsTagErrorComma": "Tag không được chứa dấu phẩy.",
   "flashcardsTagErrorTooLong": "Tag quá dài (tối đa 50 ký tự).",
@@ -596,6 +660,101 @@
   "settingsAudioSpeechEnabled": "Bật",
   "settingsAudioSpeechDisabled": "Tắt",
   "settingsAudioSpeechOverviewSummary": "Giọng Hàn · tốc độ 0.9×",
+  "settingsAudioSpeechSaved": "Đã lưu",
+  "settingsAudioSpeechGeneralSectionTitle": "Chung",
+  "settingsAudioSpeechAutoPlayTitle": "Tự phát khi lật thẻ",
+  "settingsAudioSpeechAutoPlaySubtitle": "Phát mặt trước khi một thẻ mới xuất hiện.",
+  "settingsAudioSpeechPlayAfterGradingTitle": "Phát sau khi chấm",
+  "settingsAudioSpeechPlayAfterGradingSubtitle": "Phát lại thuật ngữ sau khi bạn chấm thẻ.",
+  "settingsAudioSpeechLanguageSectionTitle": "Ngôn ngữ",
+  "settingsAudioSpeechKoreanTabFlag": "한",
+  "settingsAudioSpeechKoreanTabLabel": "Tiếng Hàn",
+  "settingsAudioSpeechEnglishTabFlag": "EN",
+  "settingsAudioSpeechEnglishTabLabel": "Tiếng Anh",
+  "settingsAudioSpeechVoiceSectionTitle": "Giọng · {language}",
+  "@settingsAudioSpeechVoiceSectionTitle": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechKoreanLanguageLabel": "Tiếng Hàn",
+  "settingsAudioSpeechEnglishLanguageLabel": "Tiếng Anh",
+  "settingsAudioSpeechKoreanSampleText": "오늘도 한 단어 더 외워봐요.",
+  "settingsAudioSpeechKoreanSampleHint": "Hôm nay, hãy nhớ thêm một từ nữa.",
+  "settingsAudioSpeechEnglishSampleText": "One word a day keeps forgetting away.",
+  "settingsAudioSpeechKoreanSystemVoiceName": "Mặc định hệ thống",
+  "settingsAudioSpeechKoreanSystemVoiceMeta": "Dùng giọng tiếng Hàn mặc định của điện thoại",
+  "settingsAudioSpeechKoreanSujiVoiceName": "Suji",
+  "settingsAudioSpeechKoreanSujiVoiceMeta": "Nữ · neural · ngoại tuyến",
+  "settingsAudioSpeechKoreanMinhoVoiceName": "Minho",
+  "settingsAudioSpeechKoreanMinhoVoiceMeta": "Nam · neural · ngoại tuyến",
+  "settingsAudioSpeechKoreanEunhaVoiceName": "Eunha",
+  "settingsAudioSpeechKoreanEunhaVoiceMeta": "Nữ · tiêu chuẩn",
+  "settingsAudioSpeechEnglishSystemVoiceName": "Mặc định hệ thống",
+  "settingsAudioSpeechEnglishSystemVoiceMeta": "Dùng giọng tiếng Anh mặc định của điện thoại",
+  "settingsAudioSpeechEnglishEmmaVoiceName": "Emma",
+  "settingsAudioSpeechEnglishEmmaVoiceMeta": "Nữ · neural · ngoại tuyến",
+  "settingsAudioSpeechEnglishRyanVoiceName": "Ryan",
+  "settingsAudioSpeechEnglishRyanVoiceMeta": "Nam · neural · ngoại tuyến",
+  "settingsAudioSpeechDefaultVoiceBadge": "Mặc định",
+  "settingsAudioSpeechNoVoicesTitle": "Chưa cài giọng {language}",
+  "@settingsAudioSpeechNoVoicesTitle": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechNoVoicesBody": "Hãy tải một giọng {language} trong cài đặt giọng nói của điện thoại để bật phát âm.",
+  "@settingsAudioSpeechNoVoicesBody": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechOpenSystemSpeech": "Mở cài đặt giọng nói",
+  "settingsAudioSpeechSpeechRateLabel": "Tốc độ phát âm",
+  "settingsAudioSpeechSpeechRateMinLabel": "0.3×",
+  "settingsAudioSpeechSpeechRateDefaultLabel": "Mặc định",
+  "settingsAudioSpeechSpeechRateMaxLabel": "0.7×",
+  "settingsAudioSpeechPitchLabel": "Cao độ",
+  "settingsAudioSpeechPitchMinLabel": "0.70",
+  "settingsAudioSpeechPitchDefaultLabel": "1.00",
+  "settingsAudioSpeechPitchMaxLabel": "1.50",
+  "settingsAudioSpeechVolumeLabel": "Âm lượng",
+  "settingsAudioSpeechVolumeMinLabel": "0%",
+  "settingsAudioSpeechVolumeMidLabel": "50%",
+  "settingsAudioSpeechVolumeMaxLabel": "100%",
+  "settingsAudioSpeechRateValueLabel": "{value}×",
+  "@settingsAudioSpeechRateValueLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAudioSpeechVolumeValueLabel": "{value}%",
+  "@settingsAudioSpeechVolumeValueLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAudioSpeechResetVoiceSettings": "Đặt lại cài đặt giọng {language}",
+  "@settingsAudioSpeechResetVoiceSettings": {
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "settingsAudioSpeechResetAction": "Đặt lại",
+  "settingsAudioSpeechPreviewSectionTitle": "Xem trước",
+  "settingsAudioSpeechPreviewHint": "Một câu ngắn an toàn. Chỉ phần mặt trước của thẻ được phát.",
+  "settingsAudioSpeechPreviewVoiceLabel": "Nghe thử giọng",
+  "settingsAudioSpeechPlayingLabel": "Đang phát… chạm để dừng",
+  "settingsAudioSpeechSupportedLanguagesTitle": "Về ngôn ngữ được hỗ trợ",
+  "settingsAudioSpeechSupportedLanguagesBody": "MemoX hiện phát được tiếng Hàn và tiếng Anh. Các thẻ ngôn ngữ khác sẽ im lặng và không bao giờ đọc mặt sau.",
+  "settingsAudioSpeechChangesSavedText": "Mọi thay đổi được lưu tự động.",
+  "settingsAudioSpeechEngineUnavailableTitle": "Text-to-speech không khả dụng",
+  "settingsAudioSpeechEngineUnavailableBody": "Hãy cài một TTS engine trong cài đặt của điện thoại để bật phát âm thanh.",
+  "settingsAudioSpeechOpenSystemSettings": "Mở cài đặt hệ thống",
   "settingsSpeechLabel": "Hỗ trợ phát âm tiếng Hàn và tiếng Anh",
   "settingsSpeechLoading": "Đang tải cài đặt giọng nói",
   "settingsSpeechAutoPlayLabel": "Tự phát trong khi học",
@@ -966,6 +1125,22 @@
   "flashcardsDeletedMessage": "Đã xóa flashcard.",
   "flashcardsEditTitle": "Sửa thẻ",
   "flashcardsNewTitle": "Thẻ mới",
+  "flashcardsLoadErrorTitle": "Không thể tải thẻ này",
+  "flashcardsLoadErrorMessage": "Dữ liệu của bạn vẫn an toàn trên thiết bị này. Hãy thử lại sau một lát.",
+  "flashcardsLoadErrorBackAction": "Quay lại bộ thẻ",
+  "flashcardsEditDangerZoneLabel": "Khu vực nguy hiểm",
+  "flashcardsEditSaveHelperText": "Các thay đổi sẽ chỉ lưu trên thiết bị này.",
+  "flashcardsEditSaveFailedMessage": "Không thể lưu thay đổi. Không có gì bị mất. Hãy bấm Lưu để thử lại.",
+  "flashcardsDeleteCardTitle": "Xóa flashcard này?",
+  "flashcardsDeleteCardMessage": "Thao tác này sẽ xóa thẻ và {reviewCount} lần ôn tập khỏi lịch sử. Các thẻ khác trong bộ này không bị ảnh hưởng.",
+  "@flashcardsDeleteCardMessage": {
+    "placeholders": {
+      "reviewCount": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsDeleteCardAction": "Xóa thẻ",
   "flashcardsFieldFrontLabel": "Mặt trước",
   "flashcardsFieldFrontHint": "Nhập thuật ngữ",
   "flashcardsFieldBackLabel": "Mặt sau",

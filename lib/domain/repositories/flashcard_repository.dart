@@ -1,6 +1,8 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
+import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/ids.dart';
 
@@ -24,6 +26,14 @@ abstract interface class FlashcardRepository {
     ContentSortMode sort,
   });
 
+  /// Loads one flashcard's editor detail.
+  ///
+  /// Includes the owning deck, folder breadcrumb, normalized tags, and the
+  /// current learning-progress snapshot for the learned-content policy dialog.
+  Future<Result<FlashcardDetail>> getFlashcardDetail({
+    required FlashcardId flashcardId,
+  });
+
   /// Creates one flashcard in [deckId] plus its initial progress row.
   ///
   /// Errors: `NotFoundFailure` (deck missing), `ValidationFailure` (front or
@@ -36,6 +46,22 @@ abstract interface class FlashcardRepository {
     String? pronunciation,
     String? hint,
     List<String> tags = const <String>[],
+  });
+
+  /// Updates one flashcard's content and tags.
+  ///
+  /// Errors: `NotFoundFailure` (card/deck missing), `ValidationFailure`, and
+  /// `StorageFailure`.
+  Future<Result<Flashcard>> updateFlashcard({
+    required FlashcardId flashcardId,
+    required String front,
+    required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+    List<String> tags = const <String>[],
+    FlashcardProgressEditPolicy progressPolicy =
+        FlashcardProgressEditPolicy.keepProgress,
   });
 
   /// Deletes a single flashcard (its `flashcard_progress` row cascades via FK).

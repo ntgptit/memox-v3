@@ -39,9 +39,9 @@ task with route tests and doc updates.
 | Path                      | Responsibility                                                                                                             | Shell visible |
 |---------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------|
 | `/settings/account`       | Account linking + Drive sync                                                                                               | No            |
-| `/settings/learning`      | Study defaults                                                                                                             | No            |
+| `/settings/learning`      | Learning settings (daily goal, reminder, tags, future study defaults)                                                     | No            |
 | `/settings/learning/tags` | Tag management (new; see `docs/business/tags/tag-system.md` and wireframe `docs/wireframes/22-settings-tag-management.md`) | No            |
-| `/settings/audio-speech`  | TTS settings                                                                                                               | No            |
+| `/settings/audio-speech`  | Audio & speech settings (Korean / English tabs, voice list, sliders, preview)                                             | No            |
 
 Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.settings`,
 `RouteNames.settingsAccount`, `RouteNames.settingsLearning`, `RouteNames.settingsLearningTags`,

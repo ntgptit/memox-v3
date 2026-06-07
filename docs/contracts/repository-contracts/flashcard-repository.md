@@ -47,15 +47,21 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 );
 ```
 
-> **Current implementation (verified 2026-06-06).** The interface above is the
+> **Current implementation (verified 2026-06-07).** The interface above is the
 > **Target** (`Either`-based, full surface). The shipped V1
 > `FlashcardRepository` (`lib/domain/repositories/flashcard_repository.dart`,
 > impl `lib/data/repositories/flashcard_repository_impl.dart`) is a `Result`-based
 > subset for the Flashcard List/editor slice:
+> - `Future<Result<FlashcardDetail>> getFlashcardDetail({flashcardId})` — loads the editor detail
+>   model with deck context, breadcrumb, normalized tags, and the progress snapshot used by the
+>   progress-policy dialog.
 > - `Future<Result<Flashcard>> createFlashcard({deckId, front, back, exampleSentence, pronunciation, hint, tags})`
 >   — trims required fields, stores the optional example sentence / pronunciation / hint when
 >   provided, lowercases/dedupes tags, and inserts the initial `flashcard_progress` row plus
 >   `flashcard_tags` rows in the same transaction.
+> - `Future<Result<Flashcard>> updateFlashcard({flashcardId, front, back, exampleSentence, pronunciation, hint, tags, progressPolicy})`
+>   — updates the content and tags, and optionally resets the current `flashcard_progress` row
+>   when the editor explicitly selects `resetProgress`.
 > - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort})`
 >   — deck + folder breadcrumb + search-filtered cards (front/back/example/pronunciation/hint) +
 >   search-independent `totalCount`
@@ -104,7 +110,9 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 ## Test contract
 
 - Create flashcard with tags → verify progress + tags rows created.
+- Get flashcard detail → verify deck context, breadcrumb, tags, and progress snapshot.
 - Update flashcard tags → verify replace semantics.
+- Update flashcard with reset policy → verify progress row resets to the fresh-card state.
 - Move flashcard → verify progress + tags preserved.
 - Bulk operations → verify atomicity (rollback on one failure).
 - Import chunked → verify chunked transactions, verify duplicate detection.

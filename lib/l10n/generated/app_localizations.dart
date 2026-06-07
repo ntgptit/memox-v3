@@ -1596,6 +1596,186 @@ abstract class AppLocalizations {
   /// **'Loading study defaults'**
   String get settingsStudyDefaultsLoading;
 
+  /// No description provided for @settingsLearningDailyGoalSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get settingsLearningDailyGoalSectionTitle;
+
+  /// No description provided for @settingsLearningGoalToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a daily goal'**
+  String get settingsLearningGoalToggleTitle;
+
+  /// No description provided for @settingsLearningGoalToggleSubtitleOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Track how many cards you complete each day.'**
+  String get settingsLearningGoalToggleSubtitleOn;
+
+  /// No description provided for @settingsLearningGoalToggleSubtitleOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause goal tracking without losing your streak.'**
+  String get settingsLearningGoalToggleSubtitleOff;
+
+  /// No description provided for @settingsLearningGoalOffHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal is off. Your streak is frozen — it won’t reset while paused.'**
+  String get settingsLearningGoalOffHint;
+
+  /// No description provided for @settingsLearningCardsPerDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards per day'**
+  String get settingsLearningCardsPerDayLabel;
+
+  /// No description provided for @settingsLearningDragHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to adjust in steps of 5'**
+  String get settingsLearningDragHint;
+
+  /// No description provided for @settingsLearningStreakToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show streak counter'**
+  String get settingsLearningStreakToggleTitle;
+
+  /// No description provided for @settingsLearningStreakToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display your current streak on Home and Stats.'**
+  String get settingsLearningStreakToggleSubtitle;
+
+  /// No description provided for @settingsLearningReminderSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get settingsLearningReminderSectionTitle;
+
+  /// No description provided for @settingsLearningReminderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A gentle nudge once a day. Off by default.'**
+  String get settingsLearningReminderHint;
+
+  /// No description provided for @settingsLearningReminderToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminder'**
+  String get settingsLearningReminderToggleTitle;
+
+  /// No description provided for @settingsLearningReminderToggleSubtitleOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Nudge me to study every day.'**
+  String get settingsLearningReminderToggleSubtitleOn;
+
+  /// No description provided for @settingsLearningReminderToggleSubtitleOff.
+  ///
+  /// In en, this message translates to:
+  /// **'You decide when to come back.'**
+  String get settingsLearningReminderToggleSubtitleOff;
+
+  /// No description provided for @settingsLearningReminderTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder time'**
+  String get settingsLearningReminderTimeLabel;
+
+  /// No description provided for @settingsLearningReminderTimeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'20:00'**
+  String get settingsLearningReminderTimeValue;
+
+  /// No description provided for @settingsLearningNotificationsBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are blocked'**
+  String get settingsLearningNotificationsBlockedTitle;
+
+  /// No description provided for @settingsLearningNotificationsBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow MemoX in your phone’s notification settings to receive the reminder.'**
+  String get settingsLearningNotificationsBlockedBody;
+
+  /// No description provided for @settingsLearningOpenSystemSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open system settings'**
+  String get settingsLearningOpenSystemSettings;
+
+  /// No description provided for @settingsLearningTagsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get settingsLearningTagsSectionTitle;
+
+  /// No description provided for @settingsLearningTagsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} tags across all decks'**
+  String settingsLearningTagsSubtitle(int count);
+
+  /// No description provided for @settingsLearningFutureStudyDefaultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study defaults'**
+  String get settingsLearningFutureStudyDefaultsTitle;
+
+  /// No description provided for @settingsLearningFutureStudyDefaultsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in a future update.'**
+  String get settingsLearningFutureStudyDefaultsHint;
+
+  /// No description provided for @settingsLearningFutureDefaultShuffleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default shuffle'**
+  String get settingsLearningFutureDefaultShuffleTitle;
+
+  /// No description provided for @settingsLearningFutureDefaultShuffleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Randomize card order in every session'**
+  String get settingsLearningFutureDefaultShuffleSubtitle;
+
+  /// No description provided for @settingsLearningFutureDefaultStudyModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default study mode'**
+  String get settingsLearningFutureDefaultStudyModeTitle;
+
+  /// No description provided for @settingsLearningFutureDefaultStudyModeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review, Match, Guess, Recall, or Fill'**
+  String get settingsLearningFutureDefaultStudyModeSubtitle;
+
+  /// No description provided for @settingsLearningFutureExampleSentenceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show example sentence'**
+  String get settingsLearningFutureExampleSentenceTitle;
+
+  /// No description provided for @settingsLearningFutureExampleSentenceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal the example with the meaning'**
+  String get settingsLearningFutureExampleSentenceSubtitle;
+
+  /// No description provided for @settingsLearningSavedChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get settingsLearningSavedChip;
+
   /// No description provided for @settingsNewStudyBatchSizeLabel.
   ///
   /// In en, this message translates to:
@@ -1764,6 +1944,18 @@ abstract class AppLocalizations {
   /// **'Delete tag (keeps cards)'**
   String get settingsTagsActionDelete;
 
+  /// No description provided for @settingsTagsContextSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag actions'**
+  String get settingsTagsContextSheetTitle;
+
+  /// No description provided for @settingsTagsMostUsedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Most used'**
+  String get settingsTagsMostUsedBadge;
+
   /// No description provided for @settingsTagsRenameTitle.
   ///
   /// In en, this message translates to:
@@ -1788,6 +1980,18 @@ abstract class AppLocalizations {
   /// **'Rename'**
   String get settingsTagsRenameConfirm;
 
+  /// No description provided for @settingsTagsRenameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Renaming updates every card that uses {tag}.'**
+  String settingsTagsRenameHelper(String tag);
+
+  /// No description provided for @settingsTagsRenameConflictMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A tag called {tag} already exists. Continuing will merge these two tags.'**
+  String settingsTagsRenameConflictMessage(String tag);
+
   /// No description provided for @settingsTagsRenamedMessage.
   ///
   /// In en, this message translates to:
@@ -1799,6 +2003,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Merge \"{source}\" into…'**
   String settingsTagsMergeSheetTitle(String source);
+
+  /// No description provided for @settingsTagsMergeSheetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the destination tag.'**
+  String get settingsTagsMergeSheetHint;
+
+  /// No description provided for @settingsTagsMergeSheetSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'All {count} cards tagged {source} will be re-tagged with the destination tag. The tag {source} will be deleted.'**
+  String settingsTagsMergeSheetSummary(int count, String source);
+
+  /// No description provided for @settingsTagsMergeSuggestedSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested'**
+  String get settingsTagsMergeSuggestedSectionTitle;
+
+  /// No description provided for @settingsTagsMergeAllTagsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All tags'**
+  String get settingsTagsMergeAllTagsSectionTitle;
 
   /// No description provided for @settingsTagsMergeSheetEmpty.
   ///
@@ -1854,6 +2082,24 @@ abstract class AppLocalizations {
   /// **'Tag deleted.'**
   String get settingsTagsDeletedMessage;
 
+  /// No description provided for @settingsTagsOpErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t rename tag'**
+  String get settingsTagsOpErrorTitle;
+
+  /// No description provided for @settingsTagsOpErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing changed. Try again in a moment.'**
+  String get settingsTagsOpErrorBody;
+
+  /// No description provided for @settingsTagsRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get settingsTagsRetry;
+
   /// No description provided for @flashcardsTagErrorEmpty.
   ///
   /// In en, this message translates to:
@@ -1901,6 +2147,372 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Korean voice · 0.9× speed'**
   String get settingsAudioSpeechOverviewSummary;
+
+  /// No description provided for @settingsAudioSpeechSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get settingsAudioSpeechSaved;
+
+  /// No description provided for @settingsAudioSpeechGeneralSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get settingsAudioSpeechGeneralSectionTitle;
+
+  /// No description provided for @settingsAudioSpeechAutoPlayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-play on reveal'**
+  String get settingsAudioSpeechAutoPlayTitle;
+
+  /// No description provided for @settingsAudioSpeechAutoPlaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak the front when a new card appears.'**
+  String get settingsAudioSpeechAutoPlaySubtitle;
+
+  /// No description provided for @settingsAudioSpeechPlayAfterGradingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play after grading'**
+  String get settingsAudioSpeechPlayAfterGradingTitle;
+
+  /// No description provided for @settingsAudioSpeechPlayAfterGradingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay the term after you rate the card.'**
+  String get settingsAudioSpeechPlayAfterGradingSubtitle;
+
+  /// No description provided for @settingsAudioSpeechLanguageSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsAudioSpeechLanguageSectionTitle;
+
+  /// No description provided for @settingsAudioSpeechKoreanTabFlag.
+  ///
+  /// In en, this message translates to:
+  /// **'한'**
+  String get settingsAudioSpeechKoreanTabFlag;
+
+  /// No description provided for @settingsAudioSpeechKoreanTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get settingsAudioSpeechKoreanTabLabel;
+
+  /// No description provided for @settingsAudioSpeechEnglishTabFlag.
+  ///
+  /// In en, this message translates to:
+  /// **'EN'**
+  String get settingsAudioSpeechEnglishTabFlag;
+
+  /// No description provided for @settingsAudioSpeechEnglishTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsAudioSpeechEnglishTabLabel;
+
+  /// No description provided for @settingsAudioSpeechVoiceSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice · {language}'**
+  String settingsAudioSpeechVoiceSectionTitle(Object language);
+
+  /// No description provided for @settingsAudioSpeechKoreanLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get settingsAudioSpeechKoreanLanguageLabel;
+
+  /// No description provided for @settingsAudioSpeechEnglishLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsAudioSpeechEnglishLanguageLabel;
+
+  /// No description provided for @settingsAudioSpeechKoreanSampleText.
+  ///
+  /// In en, this message translates to:
+  /// **'오늘도 한 단어 더 외워봐요.'**
+  String get settingsAudioSpeechKoreanSampleText;
+
+  /// No description provided for @settingsAudioSpeechKoreanSampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Today, let’s remember one more word.'**
+  String get settingsAudioSpeechKoreanSampleHint;
+
+  /// No description provided for @settingsAudioSpeechEnglishSampleText.
+  ///
+  /// In en, this message translates to:
+  /// **'One word a day keeps forgetting away.'**
+  String get settingsAudioSpeechEnglishSampleText;
+
+  /// No description provided for @settingsAudioSpeechKoreanSystemVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get settingsAudioSpeechKoreanSystemVoiceName;
+
+  /// No description provided for @settingsAudioSpeechKoreanSystemVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your phone’s default Korean voice'**
+  String get settingsAudioSpeechKoreanSystemVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechKoreanSujiVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Suji'**
+  String get settingsAudioSpeechKoreanSujiVoiceName;
+
+  /// No description provided for @settingsAudioSpeechKoreanSujiVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Female · neural · offline'**
+  String get settingsAudioSpeechKoreanSujiVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechKoreanMinhoVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Minho'**
+  String get settingsAudioSpeechKoreanMinhoVoiceName;
+
+  /// No description provided for @settingsAudioSpeechKoreanMinhoVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Male · neural · offline'**
+  String get settingsAudioSpeechKoreanMinhoVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechKoreanEunhaVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Eunha'**
+  String get settingsAudioSpeechKoreanEunhaVoiceName;
+
+  /// No description provided for @settingsAudioSpeechKoreanEunhaVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Female · standard'**
+  String get settingsAudioSpeechKoreanEunhaVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechEnglishSystemVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get settingsAudioSpeechEnglishSystemVoiceName;
+
+  /// No description provided for @settingsAudioSpeechEnglishSystemVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your phone’s default English voice'**
+  String get settingsAudioSpeechEnglishSystemVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechEnglishEmmaVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Emma'**
+  String get settingsAudioSpeechEnglishEmmaVoiceName;
+
+  /// No description provided for @settingsAudioSpeechEnglishEmmaVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Female · neural · offline'**
+  String get settingsAudioSpeechEnglishEmmaVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechEnglishRyanVoiceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Ryan'**
+  String get settingsAudioSpeechEnglishRyanVoiceName;
+
+  /// No description provided for @settingsAudioSpeechEnglishRyanVoiceMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Male · neural · offline'**
+  String get settingsAudioSpeechEnglishRyanVoiceMeta;
+
+  /// No description provided for @settingsAudioSpeechDefaultVoiceBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get settingsAudioSpeechDefaultVoiceBadge;
+
+  /// No description provided for @settingsAudioSpeechNoVoicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No {language} voices installed'**
+  String settingsAudioSpeechNoVoicesTitle(Object language);
+
+  /// No description provided for @settingsAudioSpeechNoVoicesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a {language} voice from your phone’s speech settings to enable playback.'**
+  String settingsAudioSpeechNoVoicesBody(Object language);
+
+  /// No description provided for @settingsAudioSpeechOpenSystemSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'Open system speech'**
+  String get settingsAudioSpeechOpenSystemSpeech;
+
+  /// No description provided for @settingsAudioSpeechSpeechRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech rate'**
+  String get settingsAudioSpeechSpeechRateLabel;
+
+  /// No description provided for @settingsAudioSpeechSpeechRateMinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'0.3×'**
+  String get settingsAudioSpeechSpeechRateMinLabel;
+
+  /// No description provided for @settingsAudioSpeechSpeechRateDefaultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get settingsAudioSpeechSpeechRateDefaultLabel;
+
+  /// No description provided for @settingsAudioSpeechSpeechRateMaxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'0.7×'**
+  String get settingsAudioSpeechSpeechRateMaxLabel;
+
+  /// No description provided for @settingsAudioSpeechPitchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pitch'**
+  String get settingsAudioSpeechPitchLabel;
+
+  /// No description provided for @settingsAudioSpeechPitchMinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'0.70'**
+  String get settingsAudioSpeechPitchMinLabel;
+
+  /// No description provided for @settingsAudioSpeechPitchDefaultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'1.00'**
+  String get settingsAudioSpeechPitchDefaultLabel;
+
+  /// No description provided for @settingsAudioSpeechPitchMaxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'1.50'**
+  String get settingsAudioSpeechPitchMaxLabel;
+
+  /// No description provided for @settingsAudioSpeechVolumeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get settingsAudioSpeechVolumeLabel;
+
+  /// No description provided for @settingsAudioSpeechVolumeMinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'0%'**
+  String get settingsAudioSpeechVolumeMinLabel;
+
+  /// No description provided for @settingsAudioSpeechVolumeMidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'50%'**
+  String get settingsAudioSpeechVolumeMidLabel;
+
+  /// No description provided for @settingsAudioSpeechVolumeMaxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'100%'**
+  String get settingsAudioSpeechVolumeMaxLabel;
+
+  /// No description provided for @settingsAudioSpeechRateValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}×'**
+  String settingsAudioSpeechRateValueLabel(String value);
+
+  /// No description provided for @settingsAudioSpeechVolumeValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String settingsAudioSpeechVolumeValueLabel(String value);
+
+  /// No description provided for @settingsAudioSpeechResetVoiceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset {language} voice settings'**
+  String settingsAudioSpeechResetVoiceSettings(Object language);
+
+  /// No description provided for @settingsAudioSpeechResetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get settingsAudioSpeechResetAction;
+
+  /// No description provided for @settingsAudioSpeechPreviewSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get settingsAudioSpeechPreviewSectionTitle;
+
+  /// No description provided for @settingsAudioSpeechPreviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A short safe phrase. Only the front of cards is spoken.'**
+  String get settingsAudioSpeechPreviewHint;
+
+  /// No description provided for @settingsAudioSpeechPreviewVoiceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview voice'**
+  String get settingsAudioSpeechPreviewVoiceLabel;
+
+  /// No description provided for @settingsAudioSpeechPlayingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing… tap to stop'**
+  String get settingsAudioSpeechPlayingLabel;
+
+  /// No description provided for @settingsAudioSpeechSupportedLanguagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About supported languages'**
+  String get settingsAudioSpeechSupportedLanguagesTitle;
+
+  /// No description provided for @settingsAudioSpeechSupportedLanguagesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'MemoX currently speaks Korean and English. Other-language cards stay silent and never read the back.'**
+  String get settingsAudioSpeechSupportedLanguagesBody;
+
+  /// No description provided for @settingsAudioSpeechChangesSavedText.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes save automatically.'**
+  String get settingsAudioSpeechChangesSavedText;
+
+  /// No description provided for @settingsAudioSpeechEngineUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text-to-speech is unavailable'**
+  String get settingsAudioSpeechEngineUnavailableTitle;
+
+  /// No description provided for @settingsAudioSpeechEngineUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Install a TTS engine in your phone’s settings to enable voice playback.'**
+  String get settingsAudioSpeechEngineUnavailableBody;
+
+  /// No description provided for @settingsAudioSpeechOpenSystemSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open system settings'**
+  String get settingsAudioSpeechOpenSystemSettings;
 
   /// No description provided for @settingsSpeechLabel.
   ///
@@ -3167,6 +3779,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New card'**
   String get flashcardsNewTitle;
+
+  /// No description provided for @flashcardsLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this card'**
+  String get flashcardsLoadErrorTitle;
+
+  /// No description provided for @flashcardsLoadErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is safe on this device. Try again in a moment.'**
+  String get flashcardsLoadErrorMessage;
+
+  /// No description provided for @flashcardsLoadErrorBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to deck'**
+  String get flashcardsLoadErrorBackAction;
+
+  /// No description provided for @flashcardsEditDangerZoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger zone'**
+  String get flashcardsEditDangerZoneLabel;
+
+  /// No description provided for @flashcardsEditSaveHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes save to this device only.'**
+  String get flashcardsEditSaveHelperText;
+
+  /// No description provided for @flashcardsEditSaveFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save changes. Nothing was lost. Tap Save to try again.'**
+  String get flashcardsEditSaveFailedMessage;
+
+  /// No description provided for @flashcardsDeleteCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this flashcard?'**
+  String get flashcardsDeleteCardTitle;
+
+  /// No description provided for @flashcardsDeleteCardMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes the card and its {reviewCount} reviews of history. Other cards in this deck are unaffected.'**
+  String flashcardsDeleteCardMessage(int reviewCount);
+
+  /// No description provided for @flashcardsDeleteCardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete card'**
+  String get flashcardsDeleteCardAction;
 
   /// No description provided for @flashcardsFieldFrontLabel.
   ///

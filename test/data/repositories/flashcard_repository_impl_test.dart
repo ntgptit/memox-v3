@@ -11,7 +11,9 @@ import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
+import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
 
@@ -80,6 +82,31 @@ void main() {
           .into(db.flashcardTags)
           .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
     }
+  }
+
+  Future<void> setProgress(
+    FlashcardId flashcardId, {
+    required int boxNumber,
+    required int dueAt,
+    required bool isSuspended,
+    required int reviewCount,
+    required int lapseCount,
+    int? buriedUntil,
+    int? lastStudiedAt,
+  }) async {
+    await (db.update(db.flashcardProgress)
+          ..where((FlashcardProgress row) => row.flashcardId.equals(flashcardId)))
+        .write(
+          FlashcardProgressCompanion(
+            boxNumber: Value<int>(boxNumber),
+            dueAt: Value<int?>(dueAt),
+            buriedUntil: Value<int?>(buriedUntil),
+            isSuspended: Value<bool>(isSuspended),
+            reviewCount: Value<int>(reviewCount),
+            lapseCount: Value<int>(lapseCount),
+            lastStudiedAt: Value<int?>(lastStudiedAt),
+          ),
+        );
   }
 
   Future<FlashcardListDetail> load(DeckId deckId, {String? search}) async {
@@ -230,6 +257,114 @@ void main() {
       expect((result as Err<Flashcard>).failure, isA<NotFoundFailure>());
       expect(await db.select(db.flashcards).get(), isEmpty);
       expect(await db.select(db.flashcardProgress).get(), isEmpty);
+    });
+  });
+
+  group('getFlashcardDetail', () {
+    test('returns deck, breadcrumb, tags, and progress snapshot', () async {
+      final Deck deck = await seedDeck();
+      final Result<Flashcard> createdResult = await repo.createFlashcard(
+        deckId: deck.id,
+        front: '안녕하세요',
+        back: 'Hello',
+        exampleSentence: 'Example sentence',
+        pronunciation: 'annyeonghaseyo',
+        hint: 'Greeting root',
+        tags: <String>['noun', 'greeting'],
+      );
+      final Flashcard created = (createdResult as Ok<Flashcard>).value;
+      await setProgress(
+        created.id,
+        boxNumber: 4,
+        dueAt: DateTime.utc(2026, 1, 2).millisecondsSinceEpoch,
+        isSuspended: true,
+        reviewCount: 7,
+        lapseCount: 2,
+        buriedUntil: DateTime.utc(2026, 1, 3).millisecondsSinceEpoch,
+        lastStudiedAt: DateTime.utc(2026, 1, 1).millisecondsSinceEpoch,
+      );
+
+      final Result<FlashcardDetail> result = await repo.getFlashcardDetail(
+        flashcardId: created.id,
+      );
+
+      expect(result, isA<Ok<FlashcardDetail>>());
+      final FlashcardDetail detail = (result as Ok<FlashcardDetail>).value;
+      expect(detail.deck.id, deck.id);
+      expect(detail.breadcrumb.single.name, 'Korean');
+      expect(detail.flashcard.front, '안녕하세요');
+      expect(detail.flashcard.back, 'Hello');
+      expect(detail.tags, unorderedEquals(<String>['noun', 'greeting']));
+      expect(detail.progress, isA<FlashcardProgressSnapshot>());
+      expect(detail.progress!.boxNumber, 4);
+      expect(detail.progress!.isSuspended, isTrue);
+      expect(detail.progress!.reviewCount, 7);
+      expect(detail.progress!.lapseCount, 2);
+    });
+
+    test('unknown card id surfaces a NotFoundFailure', () async {
+      final Result<FlashcardDetail> result = await repo.getFlashcardDetail(
+        flashcardId: 'missing',
+      );
+
+      expect(result, isA<Err<FlashcardDetail>>());
+      expect(
+        (result as Err<FlashcardDetail>).failure,
+        isA<NotFoundFailure>(),
+      );
+    });
+  });
+
+  group('updateFlashcard', () {
+    test('replaces tags and resets progress when asked', () async {
+      final Deck deck = await seedDeck();
+      final Result<Flashcard> createdResult = await repo.createFlashcard(
+        deckId: deck.id,
+        front: '안녕하세요',
+        back: 'Hello',
+        exampleSentence: 'Example sentence',
+        pronunciation: 'annyeonghaseyo',
+        hint: 'Greeting root',
+        tags: <String>['noun', 'greeting'],
+      );
+      final Flashcard created = (createdResult as Ok<Flashcard>).value;
+      await setProgress(
+        created.id,
+        boxNumber: 4,
+        dueAt: DateTime.utc(2026, 1, 2).millisecondsSinceEpoch,
+        isSuspended: true,
+        reviewCount: 7,
+        lapseCount: 2,
+        buriedUntil: DateTime.utc(2026, 1, 3).millisecondsSinceEpoch,
+        lastStudiedAt: DateTime.utc(2026, 1, 1).millisecondsSinceEpoch,
+      );
+
+      final Result<Flashcard> result = await repo.updateFlashcard(
+        flashcardId: created.id,
+        front: '  안녕  ',
+        back: '  Hello there  ',
+        exampleSentence: '  Example sentence  ',
+        pronunciation: '  annyeonghaseyo  ',
+        hint: '  Greeting root  ',
+        tags: <String>['verb', 'noun', 'verb'],
+        progressPolicy: FlashcardProgressEditPolicy.resetProgress,
+      );
+
+      expect(result, isA<Ok<Flashcard>>());
+      final Flashcard updated = (result as Ok<Flashcard>).value;
+      expect(updated.front, '안녕');
+      expect(updated.back, 'Hello there');
+
+      final Result<FlashcardDetail> detailResult = await repo.getFlashcardDetail(
+        flashcardId: created.id,
+      );
+      final FlashcardDetail detail = (detailResult as Ok<FlashcardDetail>).value;
+      expect(detail.tags, unorderedEquals(<String>['verb', 'noun']));
+      expect(detail.progress!.boxNumber, 1);
+      expect(detail.progress!.reviewCount, 0);
+      expect(detail.progress!.lapseCount, 0);
+      expect(detail.progress!.isSuspended, isFalse);
+      expect(detail.progress!.buriedUntil, equals(null));
     });
   });
 

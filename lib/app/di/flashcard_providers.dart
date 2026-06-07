@@ -5,7 +5,9 @@ import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/get_flashcard_detail_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/reorder_flashcards_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/update_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/watch_flashcard_list_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -33,6 +35,10 @@ CreateFlashcardUseCase createFlashcardUseCase(Ref ref) =>
     CreateFlashcardUseCase(ref.watch(flashcardRepositoryProvider));
 
 @Riverpod(keepAlive: true)
+GetFlashcardDetailUseCase getFlashcardDetailUseCase(Ref ref) =>
+    GetFlashcardDetailUseCase(ref.watch(flashcardRepositoryProvider));
+
+@Riverpod(keepAlive: true)
 WatchFlashcardListUseCase watchFlashcardListUseCase(Ref ref) =>
     WatchFlashcardListUseCase(ref.watch(flashcardRepositoryProvider));
 
@@ -43,3 +49,7 @@ DeleteFlashcardUseCase deleteFlashcardUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 ReorderFlashcardsUseCase reorderFlashcardsUseCase(Ref ref) =>
     ReorderFlashcardsUseCase(ref.watch(flashcardRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+UpdateFlashcardUseCase updateFlashcardUseCase(Ref ref) =>
+    UpdateFlashcardUseCase(ref.watch(flashcardRepositoryProvider));
