@@ -4,6 +4,7 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
 /// Study routes, composed by `app_router.dart`.
 ///
@@ -28,12 +29,8 @@ List<RouteBase> studyRoutes(
     parentNavigatorKey: rootNavigatorKey,
     path: RoutePaths.studySessionTemplate,
     name: RouteNames.studySession,
-    builder: (context, state) => RoutePlaceholder(
-      routeName: RouteNames.studySession,
-      params: <String, String>{
-        RoutePaths.sessionIdParam:
-            state.pathParameters[RoutePaths.sessionIdParam] ?? '',
-      },
+    builder: (context, state) => StudySessionScreen(
+      sessionId: state.pathParameters[RoutePaths.sessionIdParam] ?? '',
     ),
     routes: <RouteBase>[
       GoRoute(

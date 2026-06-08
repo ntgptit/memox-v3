@@ -117,6 +117,10 @@ stateDiagram-v2
 - SRS review uses `srs_fill_review`.
 - Attempts must be persisted.
 - Active session must be resumable (see `docs/business/resume/resume-session.md`).
+- The Study Session route (`/library/study/session/:sessionId`) is a real
+  persisted review screen in V1: it loads the session header and ordered
+  session items, shows the first item only with a reveal toggle, and keeps the
+  result route placeholder for a later task.
 - Study Entry V1 must not silently resume an existing scope session. If a
   resumable session exists and the explicit Resume / Start over dialog is not
   implemented yet, the gate returns a controlled `resumeRequired` state and

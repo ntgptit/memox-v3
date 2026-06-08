@@ -20,6 +20,10 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
     studySessions,
   )..where((StudySessions row) => row.id.equals(id))).getSingleOrNull();
 
+  Future<List<StudySessionReviewItemsResult>> loadSessionReviewItems(
+    String sessionId,
+  ) => studySessionReviewItems(sessionId).get();
+
   Future<FolderRow?> findFolder(String id) => (select(
     folders,
   )..where((Folders row) => row.id.equals(id))).getSingleOrNull();

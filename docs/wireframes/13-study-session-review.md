@@ -18,6 +18,13 @@ advances by swipe. Lightest mode in the 5-mode cycle; serves as the **anchor scr
 establishes the visual grammar reused by modes 14-17 (top app bar, progress bar, mode pill
 convention).
 
+> **Current V1 implementation note.** The shipped screen at
+> `/library/study/session/:sessionId` is a minimal persisted review shell: it
+> loads the session header + ordered session items, shows the first card only,
+> keeps the answer hidden until the user taps `Show answer`, and offers a safe
+> exit action. The full swipe-based multi-card review flow below remains the
+> forward target for later mode work. The result route stays a placeholder.
+
 > **Mode pill / progress-bar color convention (applies to wireframes 13-17).** Modes split into two
 > visual families:
 >

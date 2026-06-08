@@ -2542,6 +2542,37 @@ class AppLocalizationsEn extends AppLocalizations {
       'This study flow is not wired yet.';
 
   @override
+  String studySessionProgressLabel(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get studySessionFrontLabel => 'Front';
+
+  @override
+  String get studySessionBackLabel => 'Back';
+
+  @override
+  String get studySessionShowAction => 'Show answer';
+
+  @override
+  String get studySessionHideAction => 'Hide answer';
+
+  @override
+  String get studySessionNotFoundTitle => 'Session not found';
+
+  @override
+  String get studySessionNotFoundMessage =>
+      'This study session no longer exists.';
+
+  @override
+  String get studySessionLoadFailedTitle => 'Couldn\'t load session';
+
+  @override
+  String get studySessionLoadFailedMessage =>
+      'Couldn\'t load this session. Please try again.';
+
+  @override
   String get studyStartNewSessionAction => 'Start';
 
   @override

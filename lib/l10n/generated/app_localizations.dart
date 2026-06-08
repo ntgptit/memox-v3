@@ -4188,6 +4188,60 @@ abstract class AppLocalizations {
   /// **'This study flow is not wired yet.'**
   String get studyEntryUnsupportedMessage;
 
+  /// No description provided for @studySessionProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {total}'**
+  String studySessionProgressLabel(int current, int total);
+
+  /// No description provided for @studySessionFrontLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get studySessionFrontLabel;
+
+  /// No description provided for @studySessionBackLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get studySessionBackLabel;
+
+  /// No description provided for @studySessionShowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Show answer'**
+  String get studySessionShowAction;
+
+  /// No description provided for @studySessionHideAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide answer'**
+  String get studySessionHideAction;
+
+  /// No description provided for @studySessionNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session not found'**
+  String get studySessionNotFoundTitle;
+
+  /// No description provided for @studySessionNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This study session no longer exists.'**
+  String get studySessionNotFoundMessage;
+
+  /// No description provided for @studySessionLoadFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load session'**
+  String get studySessionLoadFailedTitle;
+
+  /// No description provided for @studySessionLoadFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this session. Please try again.'**
+  String get studySessionLoadFailedMessage;
+
   /// No description provided for @studyStartNewSessionAction.
   ///
   /// In en, this message translates to:

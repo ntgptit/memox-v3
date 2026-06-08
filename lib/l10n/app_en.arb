@@ -1214,6 +1214,25 @@
   "studyEntryInvalidMessage": "The study route parameters are invalid.",
   "studyEntryUnsupportedTitle": "Study setup unavailable",
   "studyEntryUnsupportedMessage": "This study flow is not wired yet.",
+  "studySessionProgressLabel": "{current} / {total}",
+  "@studySessionProgressLabel": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionFrontLabel": "Front",
+  "studySessionBackLabel": "Back",
+  "studySessionShowAction": "Show answer",
+  "studySessionHideAction": "Hide answer",
+  "studySessionNotFoundTitle": "Session not found",
+  "studySessionNotFoundMessage": "This study session no longer exists.",
+  "studySessionLoadFailedTitle": "Couldn't load session",
+  "studySessionLoadFailedMessage": "Couldn't load this session. Please try again.",
   "studyStartNewSessionAction": "Start",
   "studyStartNewSessionConfirmTitle": "Start a new session?",
   "studyStartNewSessionConfirmMessage": "Starting a new session will cancel the current unfinished session.",

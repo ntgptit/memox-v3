@@ -98,6 +98,24 @@ abstract final class StudyMapper {
         updatedAt: _dateFromMs(row.updatedAt),
       );
 
+  static StudySessionItem sessionItemFromStorageFields({
+    required String id,
+    required String sessionId,
+    required String flashcardId,
+    required int sortOrder,
+    int? answeredAt,
+    required int createdAt,
+    required int updatedAt,
+  }) => StudySessionItem(
+    id: id,
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+    sortOrder: sortOrder,
+    answeredAt: answeredAt == null ? null : _dateFromMs(answeredAt),
+    createdAt: _dateFromMs(createdAt),
+    updatedAt: _dateFromMs(updatedAt),
+  );
+
   static StudyAttempt fromAttemptRow(StudyAttemptRow row) => StudyAttempt(
     id: row.id,
     sessionItemId: row.sessionItemId,

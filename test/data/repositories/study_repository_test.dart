@@ -1,12 +1,14 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/data/repositories/study_repo_impl.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_scope.dart';
@@ -286,6 +288,60 @@ void main() {
       expect(await db.select(db.studySessionItems).get(), hasLength(1));
     },
   );
+
+  test('missing session returns notFound', () async {
+    final Result<StudySessionReview> result = await repository
+        .loadStudySessionReview(sessionId: 'missing-session');
+
+    expect(result.isErr, isTrue);
+    expect(result.failureOrNull, isA<NotFoundFailure>());
+  });
+
+  test('loadStudySessionReview orders session items by sort_order', () async {
+    const String folderId = 'folder-review';
+    const String deckId = 'deck-review';
+    const String sessionId = 'session-review';
+    const String firstCardId = 'card-first';
+    const String secondCardId = 'card-second';
+    final _StudyDbFixture fixture = _StudyDbFixture(db);
+    await fixture.insertFolder(id: folderId);
+    await fixture.insertDeck(id: deckId, folderId: folderId);
+    await fixture.insertFlashcard(id: firstCardId, deckId: deckId);
+    await fixture.insertFlashcard(id: secondCardId, deckId: deckId);
+    await fixture.insertResumableSession(
+      id: sessionId,
+      entryType: EntryType.deck.name,
+      entryRefId: deckId,
+      studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+    );
+    await fixture.insertStudySessionItem(
+      id: 'item-second',
+      sessionId: sessionId,
+      flashcardId: secondCardId,
+      sortOrder: 2,
+    );
+    await fixture.insertStudySessionItem(
+      id: 'item-first',
+      sessionId: sessionId,
+      flashcardId: firstCardId,
+      sortOrder: 1,
+    );
+
+    final Result<StudySessionReview> result = await repository
+        .loadStudySessionReview(sessionId: sessionId);
+
+    final StudySessionReview review = switch (result) {
+      Ok<StudySessionReview>(:final value) => value,
+      Err<StudySessionReview>(:final failure) =>
+        fail('expected ok, got $failure'),
+    };
+
+    expect(review.items, hasLength(2));
+    expect(review.items.first.sessionItem.id, 'item-first');
+    expect(review.items.first.flashcard.id, firstCardId);
+    expect(review.items.last.sessionItem.id, 'item-second');
+    expect(review.items.last.flashcard.id, secondCardId);
+  });
 
   test(
     'today scope with future due cards returns an all-done empty state',

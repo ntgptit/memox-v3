@@ -2427,6 +2427,36 @@ class AppLocalizationsVi extends AppLocalizations {
       'Luồng học này chưa được nối vào ứng dụng.';
 
   @override
+  String studySessionProgressLabel(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get studySessionFrontLabel => 'Mặt trước';
+
+  @override
+  String get studySessionBackLabel => 'Mặt sau';
+
+  @override
+  String get studySessionShowAction => 'Hiện đáp án';
+
+  @override
+  String get studySessionHideAction => 'Ẩn đáp án';
+
+  @override
+  String get studySessionNotFoundTitle => 'Không tìm thấy phiên học';
+
+  @override
+  String get studySessionNotFoundMessage => 'Phiên học này không còn tồn tại.';
+
+  @override
+  String get studySessionLoadFailedTitle => 'Không thể tải phiên học';
+
+  @override
+  String get studySessionLoadFailedMessage =>
+      'Không thể tải phiên học này. Hãy thử lại.';
+
+  @override
   String get studyStartNewSessionAction => 'Bắt đầu';
 
   @override

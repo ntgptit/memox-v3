@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:memox/app/di/database_providers.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/repositories/study_repo_impl.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_parser.dart';
 import 'package:memox/domain/study/study_entry_route_input.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/study/usecases/study_usecases.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -28,6 +31,10 @@ StudyRepository studyRepository(Ref ref) =>
 @Riverpod(keepAlive: true)
 StartStudySessionUseCase startStudySessionUseCase(Ref ref) =>
     StartStudySessionUseCase(ref.watch(studyRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+LoadStudySessionReviewUseCase loadStudySessionReviewUseCase(Ref ref) =>
+    LoadStudySessionReviewUseCase(ref.watch(studyRepositoryProvider));
 
 @riverpod
 Future<StudyEntryStartResult> studyEntry(
@@ -65,4 +72,26 @@ Future<StudyEntryStartResult> studyEntry(
     Err<StudyEntryStartResult>(:final failure) =>
       throw StudyEntryFailureException(failure),
   };
+}
+
+@riverpod
+Future<StudySessionReview> studySessionReview(
+  Ref ref,
+  SessionId sessionId,
+) async {
+  final Result<StudySessionReview> result = await ref
+      .read(loadStudySessionReviewUseCaseProvider)
+      .call(sessionId: sessionId);
+
+  return switch (result) {
+    Ok<StudySessionReview>(:final value) => value,
+    Err<StudySessionReview>(:final failure) =>
+      throw StudySessionFailureException(failure),
+  };
+}
+
+class StudySessionFailureException implements Exception {
+  const StudySessionFailureException(this.failure);
+
+  final Failure failure;
 }

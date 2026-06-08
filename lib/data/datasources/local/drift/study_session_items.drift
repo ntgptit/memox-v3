@@ -1,5 +1,6 @@
 import 'study_sessions.drift';
 import 'flashcards.drift';
+import 'flashcards.drift';
 
 CREATE TABLE study_session_items (
   id TEXT NOT NULL PRIMARY KEY,
@@ -13,3 +14,30 @@ CREATE TABLE study_session_items (
 
 CREATE INDEX idx_study_session_items_session_sort
   ON study_session_items (session_id, sort_order);
+
+studySessionReviewItems(:sessionId AS TEXT):
+SELECT
+  study_session_items.id,
+  study_session_items.session_id,
+  study_session_items.flashcard_id,
+  study_session_items.sort_order,
+  study_session_items.answered_at,
+  study_session_items.created_at,
+  study_session_items.updated_at,
+  flashcards.id AS card_id,
+  flashcards.deck_id,
+  flashcards.front,
+  flashcards.back,
+  flashcards.example_sentence,
+  flashcards.pronunciation,
+  flashcards.hint,
+  flashcards.sort_order AS card_sort_order,
+  flashcards.created_at AS card_created_at,
+  flashcards.updated_at AS card_updated_at
+FROM study_session_items
+INNER JOIN flashcards
+  ON flashcards.id = study_session_items.flashcard_id
+WHERE study_session_items.session_id = :sessionId
+ORDER BY study_session_items.sort_order,
+  study_session_items.created_at,
+  study_session_items.id;

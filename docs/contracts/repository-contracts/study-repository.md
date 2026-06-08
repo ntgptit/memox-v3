@@ -21,6 +21,7 @@ Stream<Session?> watchSessionById(SessionId id);
 Stream<List<ResumableSession>> watchResumableSessions();
 Future<Either<Failure, ResumableSession?>> findResumable(StudyScope scope);
 Future<Either<Failure, Session>> findById(SessionId id);
+Future<Either<Failure, StudySessionReview>> loadStudySessionReview(SessionId sessionId);
 Future<Either<Failure, List<SessionItem>>> getItemsForSession(SessionId id);
 Future<Either<Failure, SessionAggregate>> computeAggregate(SessionId id);
 
@@ -89,6 +90,7 @@ strict and must surface the corruption instead of hiding it.
 ## Test contract
 
 - Create session with N items → verify rows.
+- Load study session review by id → verify session header + ordered joined items.
 - Resumable matching across all 4 entry types.
 - Status transitions: allowed and forbidden.
 - 30-day expiry.

@@ -3,9 +3,12 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
-import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
+import 'package:memox/data/datasources/local/daos/study_session_dao.dart'
+    as study_dao;
+import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
@@ -18,7 +21,7 @@ import 'package:memox/domain/types/study_type.dart';
 class StudyRepositoryImpl implements StudyRepository {
   StudyRepositoryImpl(this._dao);
 
-  final StudySessionDao _dao;
+  final study_dao.StudySessionDao _dao;
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
@@ -66,6 +69,47 @@ class StudyRepositoryImpl implements StudyRepository {
       return Result<StudyEntryStartResult>.err(violation.failure);
     } catch (error) {
       return Result<StudyEntryStartResult>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_sessions',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<StudySessionReview>> loadStudySessionReview({
+    required SessionId sessionId,
+  }) async {
+    try {
+      final StudySessionRow? sessionRow = await _dao.findSession(sessionId);
+      if (sessionRow == null) {
+        return Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: sessionId),
+        );
+      }
+
+      final List<study_dao.StudySessionReviewItemsResult> itemRows = await _dao
+          .loadSessionReviewItems(sessionId);
+      if (itemRows.isEmpty) {
+        return const Result<StudySessionReview>.err(
+          Failure.storage(
+            operation: StorageOp.read,
+            cause: 'Study session has no items.',
+            table: 'study_session_items',
+          ),
+        );
+      }
+
+      return Result<StudySessionReview>.ok(
+        StudySessionReview(
+          session: StudyMapper.fromSessionRow(sessionRow),
+          items: itemRows.map(_fromSessionReviewRow).toList(growable: false),
+        ),
+      );
+    } catch (error) {
+      return Result<StudySessionReview>.err(
         Failure.storage(
           operation: StorageOp.read,
           cause: error.toString(),
@@ -309,6 +353,33 @@ class StudyRepositoryImpl implements StudyRepository {
   DateTime get _now => DateTime.now().toUtc();
 
   int get _nowMs => _now.millisecondsSinceEpoch;
+
+  StudySessionReviewItem _fromSessionReviewRow(
+    study_dao.StudySessionReviewItemsResult row,
+  ) =>
+      StudySessionReviewItem(
+        sessionItem: StudyMapper.sessionItemFromStorageFields(
+          id: row.id,
+          sessionId: row.sessionId,
+          flashcardId: row.flashcardId,
+          sortOrder: row.sortOrder,
+          answeredAt: row.answeredAt,
+          createdAt: row.createdAt,
+          updatedAt: row.updatedAt,
+        ),
+        flashcard: FlashcardMapper.fromStorageFields(
+          id: row.cardId,
+          deckId: row.deckId,
+          front: row.front,
+          back: row.back,
+          exampleSentence: row.exampleSentence,
+          pronunciation: row.pronunciation,
+          hint: row.hint,
+          sortOrder: row.cardSortOrder,
+          createdAt: row.cardCreatedAt,
+          updatedAt: row.cardUpdatedAt,
+        ),
+      );
 }
 
 class _RuleViolation implements Exception {
@@ -333,7 +404,8 @@ class _ScopeCard {
     required this.isSuspended,
   });
 
-  factory _ScopeCard.fromDeckRow(StudyDeckCardsResult row) => _ScopeCard(
+  factory _ScopeCard.fromDeckRow(study_dao.StudyDeckCardsResult row) =>
+      _ScopeCard(
     flashcardId: row.id,
     boxNumber: row.boxNumber,
     dueAt: row.dueAt == null
@@ -345,9 +417,9 @@ class _ScopeCard {
     isSuspended: row.isSuspended ?? false,
   );
 
-  factory _ScopeCard.fromFolderRow(StudyFolderCardsResult row) =>
+  factory _ScopeCard.fromFolderRow(study_dao.StudyFolderCardsResult row) =>
       _ScopeCard.fromDeckRow(
-        StudyDeckCardsResult(
+        study_dao.StudyDeckCardsResult(
           id: row.id,
           boxNumber: row.boxNumber,
           dueAt: row.dueAt,
@@ -356,9 +428,9 @@ class _ScopeCard {
         ),
       );
 
-  factory _ScopeCard.fromTodayRow(StudyTodayCardsResult row) =>
+  factory _ScopeCard.fromTodayRow(study_dao.StudyTodayCardsResult row) =>
       _ScopeCard.fromDeckRow(
-        StudyDeckCardsResult(
+        study_dao.StudyDeckCardsResult(
           id: row.id,
           boxNumber: row.boxNumber,
           dueAt: row.dueAt,

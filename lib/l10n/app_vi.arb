@@ -1214,6 +1214,25 @@
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",
   "studyEntryUnsupportedTitle": "Thiết lập học chưa sẵn sàng",
   "studyEntryUnsupportedMessage": "Luồng học này chưa được nối vào ứng dụng.",
+  "studySessionProgressLabel": "{current} / {total}",
+  "@studySessionProgressLabel": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionFrontLabel": "Mặt trước",
+  "studySessionBackLabel": "Mặt sau",
+  "studySessionShowAction": "Hiện đáp án",
+  "studySessionHideAction": "Ẩn đáp án",
+  "studySessionNotFoundTitle": "Không tìm thấy phiên học",
+  "studySessionNotFoundMessage": "Phiên học này không còn tồn tại.",
+  "studySessionLoadFailedTitle": "Không thể tải phiên học",
+  "studySessionLoadFailedMessage": "Không thể tải phiên học này. Hãy thử lại.",
   "studyStartNewSessionAction": "Bắt đầu",
   "studyStartNewSessionConfirmTitle": "Bắt đầu phiên mới?",
   "studyStartNewSessionConfirmMessage": "Bắt đầu phiên mới sẽ hủy phiên hiện tại còn dang dở.",

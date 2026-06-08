@@ -49,6 +49,14 @@ class MxIconButton extends StatelessWidget {
     super.key,
   });
 
+  const MxIconButton.toolbar({
+    required this.icon,
+    required this.onPressed,
+    this.tooltip,
+    this.color,
+    super.key,
+  }) : size = MxIconButtonSize.toolbar;
+
   final IconData icon;
   final VoidCallback? onPressed;
   final String? tooltip;

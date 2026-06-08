@@ -6,9 +6,11 @@ import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -17,14 +19,21 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:riverpod/misc.dart';
 
 class _FakeStudyRepository implements StudyRepository {
-  _FakeStudyRepository(this.result);
+  _FakeStudyRepository(this.result, {Result<StudySessionReview>? reviewResult})
+    : reviewResult =
+          reviewResult ??
+          const Result<StudySessionReview>.err(
+            Failure.notFound(entity: 'study_session', id: 'session-1'),
+          );
 
   Result<StudyEntryStartResult> result;
+  final Result<StudySessionReview> reviewResult;
   int startCalls = 0;
 
   @override
@@ -42,6 +51,11 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Result<StudySessionReview>> loadStudySessionReview({
+    required SessionId sessionId,
+  }) async => reviewResult;
 
   @override
   Future<Result<StudySession>> createSession({
@@ -285,12 +299,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(StudyEntryScreen), findsNothing);
-      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
       expect(
         find.widgetWithText(AppBar, RouteNames.studySession),
-        findsOneWidget,
+        findsNothing,
       );
-      expect(find.text('sessionId: session-1'), findsOneWidget);
       expect(repository.startCalls, 1);
     },
   );
@@ -318,12 +332,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(StudyEntryScreen), findsNothing);
-      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
       expect(
         find.widgetWithText(AppBar, RouteNames.studySession),
-        findsOneWidget,
+        findsNothing,
       );
-      expect(find.text('sessionId: session-2'), findsOneWidget);
       expect(repository.startCalls, 1);
     },
   );
@@ -364,20 +378,28 @@ void main() {
   );
 
   testWidgets(
-    'DT6 onOpen: session route renders RoutePlaceholder instead of StudyEntryScreen',
+    'DT6 onOpen: session route renders StudySessionScreen instead of StudyEntryScreen',
     (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.started(sessionId: 'session-1'),
+        ),
+      );
       final GoRouter router = _studyRouter(_studySessionLocation('session-1'));
 
-      await tester.pumpWidget(_routerShell(router));
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(StudyEntryScreen), findsNothing);
-      expect(find.byType(RoutePlaceholder), findsOneWidget);
-      expect(
-        find.widgetWithText(AppBar, RouteNames.studySession),
-        findsOneWidget,
-      );
-      expect(find.text('sessionId: session-1'), findsOneWidget);
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
     },
   );
 
