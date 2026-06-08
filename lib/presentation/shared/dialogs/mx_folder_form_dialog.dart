@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
 import 'package:memox/core/theme/tokens/color_tokens.dart';
@@ -9,6 +10,7 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
@@ -81,7 +83,7 @@ Future<String?> showMxFolderRenameDialog(
   return name;
 }
 
-class _MxFolderFormDialog extends StatefulWidget {
+class _MxFolderFormDialog extends HookWidget {
   const _MxFolderFormDialog({
     required this.mode,
     required this.title,
@@ -107,63 +109,27 @@ class _MxFolderFormDialog extends StatefulWidget {
   final String? helperText;
 
   @override
-  State<_MxFolderFormDialog> createState() => _MxFolderFormDialogState();
-}
-
-class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
-  static const double _dialogMaxWidth = 432;
-  static const double _buttonHeight = 40;
-  static const double _actionButtonWidth = 140;
-  static const List<Color> _swatches = <Color>[
-    ColorTokens.seedIndigo,
-    ColorTokens.seedViolet,
-    ColorTokens.seedTeal,
-    ColorTokens.seedRose,
-    ColorTokens.seedAmber,
-    ColorTokens.seedSage,
-  ];
-  static const List<IconData> _iconChoices = <IconData>[
-    Icons.flag_outlined,
-    Icons.menu_book_outlined,
-    Icons.auto_awesome_outlined,
-    Icons.layers_rounded,
-    Icons.copy_outlined,
-  ];
-
-  late final TextEditingController _controller =
-      TextEditingController.fromValue(
-        TextEditingValue(
-          text: widget.initialValue,
-          selection: TextSelection(
-            baseOffset: 0,
-            extentOffset: widget.initialValue.length,
-          ),
-        ),
-      );
-  int _selectedSwatchIndex = 0;
-  int _selectedIconIndex = 0;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  bool get _canSubmit => StringUtils.trimmed(_controller.text).isNotEmpty;
-
-  void _submit() {
-    if (!_canSubmit) {
-      return;
-    }
-    Navigator.of(context).pop(StringUtils.trimmed(_controller.text));
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final MxTextSubmitState submit = useMxTextSubmitState(
+      initialText: initialValue,
+    );
+    final ValueNotifier<int> selectedSwatchIndex = useState<int>(0);
+    final ValueNotifier<int> selectedIconIndex = useState<int>(0);
+    useEffect(() {
+      if (mode != _MxFolderFormMode.rename || initialValue.isEmpty) {
+        return null;
+      }
+      submit.controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: initialValue.length,
+      );
+      return null;
+    }, <Object?>[mode, initialValue]);
+
     final ColorScheme scheme = context.colorScheme;
     final TextTheme text = context.textTheme;
-    final Color previewColor = _swatches[_selectedSwatchIndex];
-    final IconData previewIcon = _iconChoices[_selectedIconIndex];
+    final Color previewColor = _swatches[selectedSwatchIndex.value];
+    final IconData previewIcon = _iconChoices[selectedIconIndex.value];
     return PopScope(
       canPop: false,
       child: Dialog(
@@ -187,24 +153,36 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                if (widget.mode == _MxFolderFormMode.create)
+                if (mode == _MxFolderFormMode.create)
                   _MxFolderFormCreateHeader(
                     icon: previewIcon,
                     color: previewColor,
-                    title: widget.title,
-                    description: widget.description,
+                    title: title,
+                    description: description,
                   ),
-                if (widget.mode == _MxFolderFormMode.rename)
+                if (mode == _MxFolderFormMode.rename)
                   _MxFolderFormRenameHeader(
-                    title: widget.title,
-                    description: widget.description,
+                    title: title,
+                    description: description,
                   ),
-                _buildFieldSection(scheme: scheme, text: text),
-                if (widget.mode == _MxFolderFormMode.create) ...<Widget>[
-                  _buildColorSection(scheme: scheme),
-                  _buildIconSection(scheme: scheme),
+                _buildFieldSection(
+                  context: context,
+                  scheme: scheme,
+                  text: text,
+                  submit: submit,
+                ),
+                if (mode == _MxFolderFormMode.create) ...<Widget>[
+                  _buildColorSection(
+                    scheme: scheme,
+                    selectedSwatchIndex: selectedSwatchIndex,
+                  ),
+                  _buildIconSection(
+                    scheme: scheme,
+                    selectedSwatchIndex: selectedSwatchIndex,
+                    selectedIconIndex: selectedIconIndex,
+                  ),
                 ],
-                _buildActions(scheme: scheme),
+                _buildActions(context: context, scheme: scheme, submit: submit),
               ],
             ),
           ),
@@ -214,8 +192,10 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
   }
 
   Widget _buildFieldSection({
+    required BuildContext context,
     required ColorScheme scheme,
     required TextTheme text,
+    required MxTextSubmitState submit,
   }) => Padding(
     padding: const EdgeInsets.fromLTRB(
       SpacingTokens.lg,
@@ -226,15 +206,20 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _MxFolderFormSectionLabel(widget.fieldLabel),
+        _MxFolderFormSectionLabel(fieldLabel),
         const SizedBox(height: SpacingTokens.tight),
-        _buildTextField(scheme: scheme, text: text),
-        if (widget.helperText != null) ...<Widget>[
+        _buildTextField(
+          context: context,
+          scheme: scheme,
+          text: text,
+          submit: submit,
+        ),
+        if (helperText != null) ...<Widget>[
           const SizedBox(height: SpacingTokens.tight),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xxs),
             child: Text(
-              widget.helperText!,
+              helperText!,
               style: context.textTheme.labelSmall?.copyWith(
                 color: scheme.onSurfaceVariant,
               ),
@@ -246,7 +231,10 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     ),
   );
 
-  Widget _buildColorSection({required ColorScheme scheme}) => Padding(
+  Widget _buildColorSection({
+    required ColorScheme scheme,
+    required ValueNotifier<int> selectedSwatchIndex,
+  }) => Padding(
     padding: const EdgeInsets.fromLTRB(
       SpacingTokens.lg,
       SpacingTokens.md,
@@ -256,14 +244,21 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _MxFolderFormSectionLabel(widget.colorLabel ?? ''),
+        _MxFolderFormSectionLabel(colorLabel ?? ''),
         const SizedBox(height: SpacingTokens.sm),
-        _buildSwatches(scheme: scheme),
+        _buildSwatches(
+          scheme: scheme,
+          selectedSwatchIndex: selectedSwatchIndex,
+        ),
       ],
     ),
   );
 
-  Widget _buildIconSection({required ColorScheme scheme}) => Padding(
+  Widget _buildIconSection({
+    required ColorScheme scheme,
+    required ValueNotifier<int> selectedSwatchIndex,
+    required ValueNotifier<int> selectedIconIndex,
+  }) => Padding(
     padding: const EdgeInsets.fromLTRB(
       SpacingTokens.lg,
       SpacingTokens.md,
@@ -273,25 +268,35 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _MxFolderFormSectionLabel(widget.iconLabel ?? ''),
+        _MxFolderFormSectionLabel(iconLabel ?? ''),
         const SizedBox(height: SpacingTokens.sm),
-        _buildIconChoices(scheme: scheme),
+        _buildIconChoices(
+          scheme: scheme,
+          selectedSwatchIndex: selectedSwatchIndex,
+          selectedIconIndex: selectedIconIndex,
+        ),
       ],
     ),
   );
 
   Widget _buildTextField({
+    required BuildContext context,
     required ColorScheme scheme,
     required TextTheme text,
+    required MxTextSubmitState submit,
   }) => SizedBox(
     height: SizeTokens.avatar,
     width: double.infinity,
     child: TextField(
-      controller: _controller,
+      controller: submit.controller,
       autofocus: true,
       textInputAction: TextInputAction.done,
-      onChanged: (_) => setState(() {}),
-      onSubmitted: (_) => _submit(),
+      onSubmitted: (_) {
+        if (!submit.canSubmit) {
+          return;
+        }
+        Navigator.of(context).pop(submit.trimmedText);
+      },
       style: text.titleSmall?.copyWith(
         color: scheme.onSurface,
         fontWeight: TypographyTokens.semiBold,
@@ -321,13 +326,17 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     ),
   );
 
-  Widget _buildSwatches({required ColorScheme scheme}) => Row(
+  Widget _buildSwatches({
+    required ColorScheme scheme,
+    required ValueNotifier<int> selectedSwatchIndex,
+  }) => Row(
     children: <Widget>[
       for (int i = 0; i < _swatches.length; i++) ...<Widget>[
         _MxFolderFormColorSwatch(
+          key: ValueKey<String>('folder_form_color_$i'),
           color: _swatches[i],
-          selected: i == _selectedSwatchIndex,
-          onTap: () => setState(() => _selectedSwatchIndex = i),
+          selected: i == selectedSwatchIndex.value,
+          onTap: () => selectedSwatchIndex.value = i,
           surfaceColor: scheme.surfaceContainerHigh,
         ),
         if (i != _swatches.length - 1) const SizedBox(width: SpacingTokens.sm),
@@ -335,14 +344,19 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     ],
   );
 
-  Widget _buildIconChoices({required ColorScheme scheme}) => Row(
+  Widget _buildIconChoices({
+    required ColorScheme scheme,
+    required ValueNotifier<int> selectedSwatchIndex,
+    required ValueNotifier<int> selectedIconIndex,
+  }) => Row(
     children: <Widget>[
       for (int i = 0; i < _iconChoices.length; i++) ...<Widget>[
         _MxFolderFormIconChoiceTile(
+          key: ValueKey<String>('folder_form_icon_$i'),
           icon: _iconChoices[i],
-          selected: i == _selectedIconIndex,
-          color: _swatches[_selectedSwatchIndex],
-          onTap: () => setState(() => _selectedIconIndex = i),
+          selected: i == selectedIconIndex.value,
+          color: _swatches[selectedSwatchIndex.value],
+          onTap: () => selectedIconIndex.value = i,
           scheme: scheme,
         ),
         if (i != _iconChoices.length - 1)
@@ -351,7 +365,11 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
     ],
   );
 
-  Widget _buildActions({required ColorScheme scheme}) => Padding(
+  Widget _buildActions({
+    required BuildContext context,
+    required ColorScheme scheme,
+    required MxTextSubmitState submit,
+  }) => Padding(
     padding: const EdgeInsets.fromLTRB(
       SpacingTokens.lg,
       SpacingTokens.md,
@@ -376,16 +394,18 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
                 borderRadius: RadiusTokens.brMd,
               ),
             ),
-            child: Text(widget.cancelLabel),
+            child: Text(cancelLabel),
           ),
         ),
         const SizedBox(width: SpacingTokens.sm),
         SizedBox(
           width: _actionButtonWidth,
           height: _buttonHeight,
-          child: widget.mode == _MxFolderFormMode.create
+          child: mode == _MxFolderFormMode.create
               ? FilledButton.icon(
-                  onPressed: _canSubmit ? _submit : null,
+                  onPressed: submit.canSubmit
+                      ? () => Navigator.of(context).pop(submit.trimmedText)
+                      : null,
                   style: FilledButton.styleFrom(
                     backgroundColor: scheme.primary,
                     foregroundColor: scheme.onPrimary,
@@ -402,10 +422,12 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
                     Icons.create_new_folder_outlined,
                     size: SizeTokens.iconXs,
                   ),
-                  label: Text(widget.confirmLabel),
+                  label: Text(confirmLabel),
                 )
               : FilledButton(
-                  onPressed: _canSubmit ? _submit : null,
+                  onPressed: submit.canSubmit
+                      ? () => Navigator.of(context).pop(submit.trimmedText)
+                      : null,
                   style: FilledButton.styleFrom(
                     backgroundColor: scheme.primary,
                     foregroundColor: scheme.onPrimary,
@@ -418,10 +440,29 @@ class _MxFolderFormDialogState extends State<_MxFolderFormDialog> {
                       borderRadius: RadiusTokens.brMd,
                     ),
                   ),
-                  child: Text(widget.confirmLabel),
+                  child: Text(confirmLabel),
                 ),
         ),
       ],
     ),
   );
+
+  static const double _dialogMaxWidth = 432;
+  static const double _buttonHeight = 40;
+  static const double _actionButtonWidth = 140;
+  static const List<Color> _swatches = <Color>[
+    ColorTokens.seedIndigo,
+    ColorTokens.seedViolet,
+    ColorTokens.seedTeal,
+    ColorTokens.seedRose,
+    ColorTokens.seedAmber,
+    ColorTokens.seedSage,
+  ];
+  static const List<IconData> _iconChoices = <IconData>[
+    Icons.flag_outlined,
+    Icons.menu_book_outlined,
+    Icons.auto_awesome_outlined,
+    Icons.layers_rounded,
+    Icons.copy_outlined,
+  ];
 }

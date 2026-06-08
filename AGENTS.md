@@ -101,6 +101,7 @@ Document the resolution in the report regardless.
 - Marking task done with empty "Changed doc files" and no explicit reason.
 - Leaving references to old term/route/field after a rename.
 - Trusting docs blindly when code suggests drift.
+- Do not convert shared design-system widgets to `HookWidget`; hooks are presentation-only and must preserve controlled component APIs.
 
 ## Self-audit before declaring done
 

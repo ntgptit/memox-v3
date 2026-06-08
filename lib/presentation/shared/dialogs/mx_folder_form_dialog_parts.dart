@@ -108,6 +108,7 @@ class _MxFolderFormSectionLabel extends StatelessWidget {
 
 class _MxFolderFormColorSwatch extends StatelessWidget {
   const _MxFolderFormColorSwatch({
+    super.key,
     required this.color,
     required this.selected,
     required this.onTap,
@@ -164,6 +165,7 @@ class _MxFolderFormColorSwatch extends StatelessWidget {
 
 class _MxFolderFormIconChoiceTile extends StatelessWidget {
   const _MxFolderFormIconChoiceTile({
+    super.key,
     required this.icon,
     required this.selected,
     required this.color,

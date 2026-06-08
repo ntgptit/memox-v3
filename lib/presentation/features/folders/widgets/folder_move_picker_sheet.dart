@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
@@ -8,6 +9,7 @@ import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/dialogs/mx_bottom_sheet.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
@@ -31,57 +33,25 @@ Future<FolderMoveTarget?> showFolderMovePicker(
   builder: (BuildContext context) => _FolderMovePicker(targets: targets),
 );
 
-class _FolderMovePicker extends StatefulWidget {
+class _FolderMovePicker extends HookWidget {
   const _FolderMovePicker({required this.targets});
 
   final List<FolderMoveTarget> targets;
 
   @override
-  State<_FolderMovePicker> createState() => _FolderMovePickerState();
-}
-
-class _FolderMovePickerState extends State<_FolderMovePicker> {
-  final TextEditingController _controller = TextEditingController();
-  String _search = '';
-  late FolderMoveTarget? _selected = widget.targets
-      .where((FolderMoveTarget t) => t.isCurrentParent)
-      .firstOrNull;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  String _titleOf(AppLocalizations l10n, FolderMoveTarget t) =>
-      t.id == null ? l10n.foldersMoveRootTitle : t.breadcrumb.join(' / ');
-
-  List<FolderMoveTarget> get _visible {
-    final String normalized = StringUtils.normalize(_search);
-    if (normalized.isEmpty) {
-      return widget.targets;
-    }
-    return widget.targets
-        .where(
-          (FolderMoveTarget t) =>
-              t.id == null ||
-              StringUtils.normalize(
-                t.breadcrumb.join(' / '),
-              ).contains(normalized),
-        )
-        .toList(growable: false);
-  }
-
-  bool get _canMove =>
-      _selected != null &&
-      _selected!.isSelectable &&
-      !_selected!.isCurrentParent;
-
-  @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final ColorScheme scheme = context.colorScheme;
-    final List<FolderMoveTarget> visible = _visible;
+    final MxSearchControllerState search = useMxSearchController();
+    final ValueNotifier<FolderMoveTarget?> selectedTarget =
+        useState<FolderMoveTarget?>(
+          targets.where((FolderMoveTarget t) => t.isCurrentParent).firstOrNull,
+        );
+    final List<FolderMoveTarget> visible = _visible(search.text);
+    final bool canMove =
+        selectedTarget.value != null &&
+        selectedTarget.value!.isSelectable &&
+        !selectedTarget.value!.isCurrentParent;
     return SafeArea(
       top: false,
       child: Column(
@@ -104,10 +74,9 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.lg),
             child: MxSearchField(
-              controller: _controller,
+              controller: search.controller,
               hintText: l10n.folderMovePickerSearchHint,
               clearTooltip: l10n.librarySearchClearTooltip,
-              onChanged: (String value) => setState(() => _search = value),
             ),
           ),
           const SizedBox(height: SpacingTokens.sm),
@@ -120,9 +89,9 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
                 return _TargetRow(
                   title: _titleOf(l10n, target),
                   subtitle: _subtitleOf(l10n, target),
-                  selected: identical(target, _selected),
+                  selected: selectedTarget.value == target,
                   enabled: target.isSelectable,
-                  onTap: () => setState(() => _selected = target),
+                  onTap: () => selectedTarget.value = target,
                 );
               },
             ),
@@ -150,8 +119,8 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
                   child: MxActionButton(
                     intent: MxActionIntent.bottomAction,
                     label: l10n.commonMove,
-                    onPressed: _canMove
-                        ? () => Navigator.of(context).pop(_selected)
+                    onPressed: canMove
+                        ? () => Navigator.of(context).pop(selectedTarget.value)
                         : null,
                   ),
                 ),
@@ -161,6 +130,25 @@ class _FolderMovePickerState extends State<_FolderMovePicker> {
         ],
       ),
     );
+  }
+
+  String _titleOf(AppLocalizations l10n, FolderMoveTarget t) =>
+      t.id == null ? l10n.foldersMoveRootTitle : t.breadcrumb.join(' / ');
+
+  List<FolderMoveTarget> _visible(String searchText) {
+    final String normalized = StringUtils.normalize(searchText);
+    if (normalized.isEmpty) {
+      return targets;
+    }
+    return targets
+        .where(
+          (FolderMoveTarget t) =>
+              t.id == null ||
+              StringUtils.normalize(
+                t.breadcrumb.join(' / '),
+              ).contains(normalized),
+        )
+        .toList(growable: false);
   }
 
   String? _subtitleOf(AppLocalizations l10n, FolderMoveTarget t) =>
@@ -201,11 +189,11 @@ class _TargetRow extends StatelessWidget {
       child: MxTappable(
         onTap: enabled ? onTap : null,
         borderRadius: RadiusTokens.brSm,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SpacingTokens.lg,
-              vertical: SpacingTokens.inline,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpacingTokens.lg,
+            vertical: SpacingTokens.inline,
+          ),
           child: Row(
             children: <Widget>[
               Icon(

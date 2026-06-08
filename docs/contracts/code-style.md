@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-01
+last_updated: 2026-06-08
 status: contract
 ---
 
@@ -240,6 +240,26 @@ Forbidden:
   notifier/use case).
 - `BuildContext` only inside build / callbacks; never store.
 - `MediaQuery.of(context)` once at top of build; reuse the result.
+
+## Flutter Hooks policy
+
+- Hooks are allowed only in `lib/presentation/**`.
+- Hooks are forbidden in `lib/domain/**`, `lib/data/**`, `lib/core/**`,
+  `lib/app/router/**`, `lib/app/di/**`, and `lib/app/bootstrap/**`.
+- Use `HookWidget` when a widget only needs local UI lifecycle state.
+- Use `HookConsumerWidget` when a widget needs both hooks and Riverpod.
+- Do not use hooks for business state, SRS state, database state, route state,
+  auth/sync state, or repository/use-case result state.
+- Shared design-system widgets stay controlled and mostly
+  `StatelessWidget`; do not convert `MxTextField`, `MxSearchField`,
+  `MxSliderField`, `MxFlashcard`, `MxRatingBar`, `MxSelfAssessment`,
+  `MxButton`, `MxCard`, `MxScaffold`, `MxAppBar`, or `MxBottomNavigationBar`
+  to hooks unless a documented exception is approved.
+- Custom hooks must start with `use`.
+- Custom shared hooks must not call repositories, use cases, DAOs, or
+  navigation.
+- Do not call hooks conditionally inside `if`, `for`, or callbacks.
+- Do not use `useEffect` for business operations without explicit approval.
 
 ## Forbidden in production code
 

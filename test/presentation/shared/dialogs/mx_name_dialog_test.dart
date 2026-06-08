@@ -45,6 +45,7 @@ void main() {
       tester.getSize(cancelButton).width,
       closeTo(tester.getSize(confirmButton).width, 0.1),
     );
+    expect(tester.widget<FilledButton>(confirmButton).onPressed, isNull);
 
     await tester.tapAt(const Offset(8, 8));
     await tester.pumpAndSettle();

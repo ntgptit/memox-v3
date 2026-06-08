@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:memox/core/theme/extensions/custom_colors.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/border_tokens.dart';
@@ -9,6 +10,7 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
@@ -44,7 +46,7 @@ Future<bool> showMxFolderDeleteDialog(
   return confirmed ?? false;
 }
 
-class _MxFolderDeleteDialog extends StatefulWidget {
+class _MxFolderDeleteDialog extends HookWidget {
   const _MxFolderDeleteDialog({
     required this.folderName,
     required this.summaryText,
@@ -56,6 +58,8 @@ class _MxFolderDeleteDialog extends StatefulWidget {
     required this.confirmHint,
   });
 
+  static const double _dialogMaxWidth = 432;
+
   final String folderName;
   final String summaryText;
   final String title;
@@ -66,48 +70,38 @@ class _MxFolderDeleteDialog extends StatefulWidget {
   final String confirmHint;
 
   @override
-  State<_MxFolderDeleteDialog> createState() => _MxFolderDeleteDialogState();
-}
-
-class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
-  final TextEditingController _controller = TextEditingController();
-  static const double _dialogMaxWidth = 432;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  bool get _canDelete =>
-      StringUtils.trimmed(_controller.text) == widget.folderName;
-
-  void _confirm() {
-    if (!_canDelete) {
-      return;
-    }
-    Navigator.of(context).pop(true);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final MxTextSubmitState submit = useMxTextSubmitState(
+      canSubmit: (String text) => text == folderName,
+    );
     final ColorScheme scheme = context.colorScheme;
     final CustomColors colors = context.customColors;
     final TextTheme text = context.textTheme;
-    return Dialog(
-      insetPadding: const EdgeInsets.all(SpacingTokens.lg),
-      backgroundColor: ColorTokens.transparent,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: _dialogMaxWidth),
-        child: _buildDialogSurface(scheme: scheme, colors: colors, text: text),
+    return PopScope(
+      canPop: false,
+      child: Dialog(
+        insetPadding: const EdgeInsets.all(SpacingTokens.lg),
+        backgroundColor: ColorTokens.transparent,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _dialogMaxWidth),
+          child: _buildDialogSurface(
+            context: context,
+            scheme: scheme,
+            colors: colors,
+            text: text,
+            submit: submit,
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildDialogSurface({
+    required BuildContext context,
     required ColorScheme scheme,
     required CustomColors colors,
     required TextTheme text,
+    required MxTextSubmitState submit,
   }) => DecoratedBox(
     decoration: BoxDecoration(
       color: scheme.surfaceContainerHigh,
@@ -121,7 +115,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
           _buildHeader(scheme),
           const SizedBox(height: SpacingTokens.lg),
           MxText(
-            widget.title,
+            title,
             role: MxTextRole.titleLarge,
             textAlign: TextAlign.center,
             color: scheme.onSurface,
@@ -132,9 +126,9 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
           const SizedBox(height: SpacingTokens.lg),
           _buildReassurance(scheme, colors, text),
           const SizedBox(height: SpacingTokens.lg),
-          _buildConfirmSection(scheme, text),
+          _buildConfirmSection(context, scheme, text, submit),
           const SizedBox(height: SpacingTokens.lg),
-          _buildActions(colors),
+          _buildActions(context, colors, submit),
         ],
       ),
     ),
@@ -154,15 +148,14 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
       ),
       children: <InlineSpan>[
         TextSpan(
-          text: widget.folderName,
+          text: folderName,
           style: TextStyle(
             color: scheme.onSurface,
             fontWeight: TypographyTokens.bold,
           ),
         ),
         TextSpan(
-          text:
-              ' and its ${widget.summaryText} will be removed from your library.',
+          text: ' and its $summaryText will be removed from your library.',
         ),
       ],
     ),
@@ -195,7 +188,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
         const SizedBox(width: SpacingTokens.sm),
         Expanded(
           child: Text(
-            widget.reassuranceText,
+            reassuranceText,
             style: text.bodySmall?.copyWith(
               color: scheme.onSurface,
               height: 1.5,
@@ -206,13 +199,18 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
     ),
   );
 
-  Widget _buildConfirmSection(ColorScheme scheme, TextTheme text) => Column(
+  Widget _buildConfirmSection(
+    BuildContext context,
+    ColorScheme scheme,
+    TextTheme text,
+    MxTextSubmitState submit,
+  ) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: <Widget>[
       Align(
         alignment: Alignment.centerLeft,
         child: MxText(
-          StringUtils.uppercased(widget.confirmLabel),
+          StringUtils.uppercased(confirmLabel),
           role: MxTextRole.labelMedium,
           color: scheme.onSurfaceVariant,
           fontWeight: TypographyTokens.bold,
@@ -220,13 +218,17 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
       ),
       const SizedBox(height: SpacingTokens.xs),
       TextField(
-        controller: _controller,
+        controller: submit.controller,
         autofocus: true,
         textInputAction: TextInputAction.done,
-        onChanged: (_) => setState(() {}),
-        onSubmitted: (_) => _confirm(),
+        onSubmitted: (_) {
+          if (!submit.canSubmit) {
+            return;
+          }
+          Navigator.of(context).pop(true);
+        },
         decoration: InputDecoration(
-          hintText: widget.folderName,
+          hintText: confirmHint,
           filled: true,
           fillColor: scheme.surfaceContainerLowest,
           contentPadding: const EdgeInsets.symmetric(
@@ -239,7 +241,10 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: RadiusTokens.brMd,
-            borderSide: BorderSide(color: scheme.error, width: BorderTokens.focusWidth),
+            borderSide: BorderSide(
+              color: scheme.error,
+              width: BorderTokens.focusWidth,
+            ),
           ),
           hintStyle: text.titleMedium?.copyWith(
             color: scheme.onSurfaceVariant.withValues(
@@ -251,7 +256,11 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
     ],
   );
 
-  Widget _buildActions(CustomColors colors) => Row(
+  Widget _buildActions(
+    BuildContext context,
+    CustomColors colors,
+    MxTextSubmitState submit,
+  ) => Row(
     children: <Widget>[
       Expanded(
         child: OutlinedButton(
@@ -262,14 +271,16 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
               borderRadius: RadiusTokens.brMd,
             ),
           ),
-          child: Text(widget.cancelLabel),
+          child: Text(cancelLabel),
         ),
       ),
       const SizedBox(width: SpacingTokens.md),
       Expanded(
         flex: 2,
         child: FilledButton.icon(
-          onPressed: _canDelete ? _confirm : null,
+          onPressed: submit.canSubmit
+              ? () => Navigator.of(context).pop(true)
+              : null,
           style: FilledButton.styleFrom(
             minimumSize: const Size.fromHeight(SizeTokens.button),
             backgroundColor: colors.destructiveFill,
@@ -279,7 +290,7 @@ class _MxFolderDeleteDialogState extends State<_MxFolderDeleteDialog> {
             ),
           ),
           icon: const Icon(Icons.delete_outline, size: SizeTokens.iconXs),
-          label: Text(widget.deleteButtonLabel),
+          label: Text(deleteButtonLabel),
         ),
       ),
     ],

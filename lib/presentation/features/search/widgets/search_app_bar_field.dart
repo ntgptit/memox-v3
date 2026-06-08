@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/search/viewmodels/search_viewmodel.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 
@@ -12,29 +13,20 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 /// controller, autofocuses on open, and pushes keystrokes into [SearchQuery].
 ///
 /// One-directional per edge: keystrokes drive controller → provider; the field
-/// clear button wipes both. There is no external clear source on this screen,
-/// so no provider → controller listener is needed.
-class SearchAppBarField extends ConsumerStatefulWidget {
+/// clear button wipes both.
+class SearchAppBarField extends HookConsumerWidget {
   const SearchAppBarField({super.key});
 
   @override
-  ConsumerState<SearchAppBarField> createState() => _SearchAppBarFieldState();
-}
-
-class _SearchAppBarFieldState extends ConsumerState<SearchAppBarField> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final String query = ref.watch(searchQueryProvider);
+    final MxSearchControllerState search = useMxSearchController(
+      externalText: query,
+      clearWhenEmpty: true,
+    );
     return MxSearchField(
-      controller: _controller,
+      controller: search.controller,
       autofocus: true,
       hintText: l10n.searchFieldHint,
       clearTooltip: l10n.searchClearTooltip,

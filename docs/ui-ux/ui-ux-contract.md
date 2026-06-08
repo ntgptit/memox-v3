@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-30
+last_updated: 2026-06-08
 applies_to: all UI/UX, shared widgets, theme, l10n
 ---
 
@@ -40,6 +40,10 @@ Missing any applicable state is a bug.
 ## Shared widget rule
 
 Use shared `Mx*` widgets first.
+
+Shared design-system widgets stay controlled and mostly
+`StatelessWidget`. Hook adoption belongs in presentation wiring only, not in
+shared `Mx*` controls, unless there is a strong documented exception.
 
 Preferred primitives:
 

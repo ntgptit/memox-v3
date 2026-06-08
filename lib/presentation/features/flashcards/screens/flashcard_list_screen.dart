@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
@@ -21,6 +21,7 @@ import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
@@ -202,7 +203,7 @@ class _FlashcardListView extends ConsumerWidget {
         if (!toolbar.isReordering)
           Padding(
             padding: const EdgeInsets.only(bottom: SpacingTokens.sm),
-          child: _FlashcardSearch(deckId: deckId),
+            child: _FlashcardSearch(deckId: deckId),
           ),
         Expanded(
           child: MxRetainedAsyncState<FlashcardListDetail>(
@@ -213,8 +214,7 @@ class _FlashcardListView extends ConsumerWidget {
               title: AppLocalizations.of(context).flashcardListErrorTitle,
               message: AppLocalizations.of(context).flashcardListErrorMessage,
               retryLabel: AppLocalizations.of(context).commonRetry,
-              onRetry: () =>
-                  ref.invalidate(flashcardListQueryProvider(deckId)),
+              onRetry: () => ref.invalidate(flashcardListQueryProvider(deckId)),
             ),
             data: (FlashcardListDetail detail) => FlashcardListBody(
               detail: detail,
@@ -370,34 +370,29 @@ class _FlashcardBreadcrumb extends ConsumerWidget {
   }
 }
 
-class _FlashcardSearch extends ConsumerStatefulWidget {
+class _FlashcardSearch extends HookConsumerWidget {
   const _FlashcardSearch({required this.deckId});
 
   final String deckId;
 
   @override
-  ConsumerState<_FlashcardSearch> createState() =>
-      _FlashcardSearchState();
-}
-
-class _FlashcardSearchState extends ConsumerState<_FlashcardSearch> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final String searchTerm = ref.watch(
+      flashcardListToolbarProvider(
+        deckId,
+      ).select((FlashcardListToolbarState state) => state.searchTerm),
+    );
+    final MxSearchControllerState search = useMxSearchController(
+      externalText: searchTerm,
+      clearWhenEmpty: true,
+    );
     return MxSearchField(
-      controller: _controller,
+      controller: search.controller,
       hintText: l10n.flashcardsSearchHint,
       clearTooltip: l10n.librarySearchClearTooltip,
       onChanged: (String value) => ref
-          .read(flashcardListToolbarProvider(widget.deckId).notifier)
+          .read(flashcardListToolbarProvider(deckId).notifier)
           .setSearch(value),
     );
   }

@@ -71,6 +71,14 @@ void main() {
     );
     expect(tester.widget<FilledButton>(deleteButton).onPressed, isNull);
 
+    await tester.tapAt(const Offset(8, 8));
+    await tester.pumpAndSettle();
+    expect(find.text(l10n.folderDeleteDialogTitle), findsOneWidget);
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text(l10n.folderDeleteDialogTitle), findsOneWidget);
+
     await tester.enterText(find.byType(TextField), 'TOPIK II');
     await tester.pump();
 
