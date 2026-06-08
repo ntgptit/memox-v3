@@ -1,0 +1,15 @@
+import 'study_sessions.drift';
+import 'flashcards.drift';
+
+CREATE TABLE study_session_items (
+  id TEXT NOT NULL PRIMARY KEY,
+  session_id TEXT NOT NULL REFERENCES study_sessions (id) ON DELETE CASCADE,
+  flashcard_id TEXT NOT NULL REFERENCES flashcards (id) ON DELETE CASCADE,
+  sort_order INTEGER NOT NULL,
+  answered_at INTEGER,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+) AS StudySessionItemRow;
+
+CREATE INDEX idx_study_session_items_session_sort
+  ON study_session_items (session_id, sort_order);

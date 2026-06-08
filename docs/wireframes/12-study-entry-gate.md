@@ -20,9 +20,10 @@ Most users never see this screen for more than a moment — it's a gate.
 > Current V1 implementation note: the app now ships a real Study Entry screen for
 > `/library/study/today` and `/library/study/:entryType/:entryRefId`. It parses
 > `entryType`, `entryRefId`, `study_type`, and `mode`, shows a preparing state,
-> surfaces invalid parameters as an error state, and currently falls back to an
-> unsupported-gap empty state because the study session lifecycle is not wired
-> yet.
+> surfaces invalid parameters as an error state, renders the empty-scope matrix
+> for zero-eligible-card scopes, and redirects with `pushReplacement` to a
+> persisted session when eligible cards exist. Resume/start-over dialogs remain
+> a deferred follow-up.
 
 ## Behavior tree
 

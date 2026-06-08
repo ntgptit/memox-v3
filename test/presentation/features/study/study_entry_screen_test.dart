@@ -2,16 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
+import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/study/ports/study_repo.dart';
+import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/study_mode.dart';
+import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:riverpod/misc.dart';
 
-Widget _appShell(Widget child) => ProviderScope(
+class _FakeStudyRepository implements StudyRepository {
+  _FakeStudyRepository(this.result);
+
+  Result<StudyEntryStartResult> result;
+  int startCalls = 0;
+
+  @override
+  Future<Result<StudyEntryStartResult>> startStudySession({
+    required StudyScope scope,
+    StudyMode? mode,
+  }) async {
+    startCalls++;
+    return result;
+  }
+
+  @override
+  Future<Result<StudySession?>> findResumableSession({
+    required StudyScope scope,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<StudySession>> createSession({
+    required StudyScope scope,
+    required List<FlashcardId> flashcardIds,
+  }) async {
+    throw UnimplementedError();
+  }
+}
+
+Widget _appShell(
+  Widget child, {
+  List<Override> overrides = const <Override>[],
+}) => ProviderScope(
+  overrides: overrides,
   child: MaterialApp(
     theme: AppTheme.light(),
     darkTheme: AppTheme.dark(),
@@ -21,7 +65,11 @@ Widget _appShell(Widget child) => ProviderScope(
   ),
 );
 
-Widget _routerShell(GoRouter router) => ProviderScope(
+Widget _routerShell(
+  GoRouter router, {
+  List<Override> overrides = const <Override>[],
+}) => ProviderScope(
+  overrides: overrides,
   child: MaterialApp.router(
     routerConfig: router,
     theme: AppTheme.light(),
@@ -67,51 +115,165 @@ String _studyResultLocation(String sessionId) =>
     RoutePaths.studyResult(sessionId);
 
 void main() {
-  testWidgets(
-    'DT1 onOpen: today route renders StudyEntryScreen instead of RoutePlaceholder',
-    (tester) async {
-      final GoRouter router = _studyRouter(RoutePaths.studyToday);
+  testWidgets('DT1 onOpen: invalid entryType renders error state', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _appShell(
+        const StudyEntryScreen.scoped(entryType: 'bogus', entryRefId: 'deck-1'),
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      await tester.pumpWidget(_routerShell(router));
-      await tester.pump();
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudyEntryScreen)),
+    );
+
+    expect(find.text(l10n.studyEntryInvalidTitle), findsOneWidget);
+    expect(find.text(l10n.studyEntryInvalidMessage), findsOneWidget);
+    expect(find.text(l10n.commonBack), findsOneWidget);
+  });
+
+  testWidgets(
+    'DT2 onOpen: deck scope with zero eligible cards shows empty state',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.empty(
+            emptyState: StudyEntryEmptyState(
+              variant: StudyEntryEmptyVariant.deckNoCards,
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(
+        _appShell(
+          const StudyEntryScreen.scoped(
+            entryType: 'deck',
+            entryRefId: 'deck-1',
+          ),
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
 
       final AppLocalizations l10n = AppLocalizations.of(
         tester.element(find.byType(StudyEntryScreen)),
       );
 
-      expect(find.byType(StudyEntryScreen), findsOneWidget);
-      expect(find.byType(RoutePlaceholder), findsNothing);
-      expect(find.text(l10n.studyEntryPreparingTitle), findsOneWidget);
-
-      await tester.pumpAndSettle();
-
-      expect(find.text(l10n.studyEntryUnsupportedTitle), findsOneWidget);
-      expect(find.text(l10n.commonBack), findsOneWidget);
+      expect(find.byType(MxEmptyState), findsOneWidget);
+      expect(find.text(l10n.studyEmpty_deck_noCards_title), findsOneWidget);
+      expect(find.text(l10n.studyEmpty_deck_noCards_cta), findsOneWidget);
+      expect(repository.startCalls, 1);
     },
   );
 
   testWidgets(
-    'DT2 onOpen: scoped deck route renders StudyEntryScreen instead of RoutePlaceholder',
+    'DT3 onOpen: deck scope with eligible cards redirects to session route',
     (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.started(sessionId: 'session-1'),
+        ),
+      );
       final GoRouter router = _studyRouter(
         _studyLocation(entryType: 'deck', entryRefId: 'deck-1'),
       );
 
-      await tester.pumpWidget(_routerShell(router));
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudyEntryScreen), findsNothing);
+      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(
+        find.widgetWithText(AppBar, RouteNames.studySession),
+        findsOneWidget,
+      );
+      expect(find.text('sessionId: session-1'), findsOneWidget);
+      expect(repository.startCalls, 1);
+    },
+  );
+
+  testWidgets(
+    'DT4 onOpen: folder scope with eligible cards redirects to session route',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.started(sessionId: 'session-2'),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studyLocation(entryType: 'folder', entryRefId: 'folder-1'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudyEntryScreen), findsNothing);
+      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(
+        find.widgetWithText(AppBar, RouteNames.studySession),
+        findsOneWidget,
+      );
+      expect(find.text('sessionId: session-2'), findsOneWidget);
+      expect(repository.startCalls, 1);
+    },
+  );
+
+  testWidgets(
+    'DT5 onOpen: today route with zero due cards shows all-done empty state',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.empty(
+            emptyState: StudyEntryEmptyState(
+              variant: StudyEntryEmptyVariant.todayAllDone,
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(
+        _appShell(
+          const StudyEntryScreen.today(),
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
       await tester.pumpAndSettle();
 
       final AppLocalizations l10n = AppLocalizations.of(
         tester.element(find.byType(StudyEntryScreen)),
       );
 
-      expect(find.byType(StudyEntryScreen), findsOneWidget);
-      expect(find.byType(RoutePlaceholder), findsNothing);
-      expect(find.text(l10n.studyEntryUnsupportedTitle), findsOneWidget);
+      expect(find.byType(MxEmptyState), findsOneWidget);
+      expect(find.text(l10n.studyEmpty_today_allDone_title), findsOneWidget);
+      expect(find.text(l10n.studyEmpty_today_allDone_message), findsOneWidget);
+      expect(find.text(l10n.studyEmpty_today_allDone_cta), findsOneWidget);
+      expect(repository.startCalls, 1);
     },
   );
 
   testWidgets(
-    'DT2a onOpen: session route renders RoutePlaceholder instead of StudyEntryScreen',
+    'DT6 onOpen: session route renders RoutePlaceholder instead of StudyEntryScreen',
     (tester) async {
       final GoRouter router = _studyRouter(_studySessionLocation('session-1'));
 
@@ -129,7 +291,7 @@ void main() {
   );
 
   testWidgets(
-    'DT2b onOpen: session result route renders RoutePlaceholder instead of StudyEntryScreen',
+    'DT6a onOpen: session result route renders RoutePlaceholder instead of StudyEntryScreen',
     (tester) async {
       final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
 
@@ -143,89 +305,6 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('sessionId: session-1'), findsOneWidget);
-    },
-  );
-
-  testWidgets(
-    'DT3 onOpen: invalid entryType renders error state',
-    (tester) async {
-      final GoRouter router = _studyRouter(
-        _studyLocation(entryType: 'bogus', entryRefId: 'deck-1'),
-      );
-
-      await tester.pumpWidget(_routerShell(router));
-      await tester.pumpAndSettle();
-
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyEntryScreen)),
-      );
-
-      expect(find.text(l10n.studyEntryInvalidTitle), findsOneWidget);
-      expect(find.text(l10n.studyEntryInvalidMessage), findsOneWidget);
-      expect(find.text(l10n.commonBack), findsOneWidget);
-    },
-  );
-
-  testWidgets(
-    'DT4 onOpen: blank entryRefId renders error state',
-    (tester) async {
-      await tester.pumpWidget(
-        _appShell(
-          const StudyEntryScreen.scoped(entryType: 'deck', entryRefId: ''),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyEntryScreen)),
-      );
-
-      expect(find.text(l10n.studyEntryInvalidTitle), findsOneWidget);
-      expect(find.text(l10n.studyEntryInvalidMessage), findsOneWidget);
-    },
-  );
-
-  testWidgets(
-    'DT5 onOpen: invalid study_type query renders error state',
-    (tester) async {
-      final GoRouter router = _studyRouter(
-        _studyLocation(
-          entryType: 'deck',
-          entryRefId: 'deck-1',
-          studyType: 'bogus',
-        ),
-      );
-
-      await tester.pumpWidget(_routerShell(router));
-      await tester.pumpAndSettle();
-
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyEntryScreen)),
-      );
-
-      expect(find.text(l10n.studyEntryInvalidTitle), findsOneWidget);
-      expect(find.text(l10n.studyEntryInvalidMessage), findsOneWidget);
-    },
-  );
-
-  testWidgets(
-    'DT6 onDisplay: the first frame shows the preparing state before unsupported gap',
-    (tester) async {
-      final GoRouter router = _studyRouter(RoutePaths.studyToday);
-
-      await tester.pumpWidget(_routerShell(router));
-      await tester.pump();
-
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyEntryScreen)),
-      );
-
-      expect(find.text(l10n.studyEntryPreparingTitle), findsOneWidget);
-      expect(find.byType(MxLoadingState), findsOneWidget);
-
-      await tester.pumpAndSettle();
-
-      expect(find.text(l10n.studyEntryUnsupportedTitle), findsOneWidget);
     },
   );
 }

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-08
 applies_to: Drift schema migrations
 ---
 
@@ -109,3 +109,4 @@ If any step is skipped, report it explicitly.
 
 - `lib/data/datasources/local/migrations/**`
 - `lib/data/datasources/local/app_database.dart` (schemaVersion)
+- `lib/data/datasources/local/migrations/v4_add_study_tables.dart`

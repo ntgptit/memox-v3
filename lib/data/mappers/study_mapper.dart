@@ -1,0 +1,111 @@
+import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/domain/entities/study_attempt.dart';
+import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/entities/study_session_item.dart';
+import 'package:memox/domain/types/attempt_result.dart';
+import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_mode.dart';
+import 'package:memox/domain/types/study_type.dart';
+
+/// Maps Drift rows to study domain types.
+abstract final class StudyMapper {
+  StudyMapper._();
+
+  static DateTime _dateFromMs(int ms) =>
+      DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
+
+  static EntryType entryTypeFromStorage(String value) => switch (value) {
+    'folder' => EntryType.folder,
+    'today' => EntryType.today,
+    _ => EntryType.deck,
+  };
+
+  static String entryTypeToStorage(EntryType value) => value.name;
+
+  static StudyType studyTypeFromStorage(String value) => switch (value) {
+    'srs_review' => StudyType.srsReview,
+    _ => StudyType.newCards,
+  };
+
+  static String studyTypeToStorage(StudyType value) => switch (value) {
+    StudyType.newCards => 'new_cards',
+    StudyType.srsReview => 'srs_review',
+  };
+
+  static SessionStatus sessionStatusFromStorage(String value) => switch (value) {
+    'draft' => SessionStatus.draft,
+    'in_progress' => SessionStatus.inProgress,
+    'completed' => SessionStatus.completed,
+    'cancelled' => SessionStatus.cancelled,
+    'failed_to_finalize' => SessionStatus.failedToFinalize,
+    _ => SessionStatus.draft,
+  };
+
+  static String sessionStatusToStorage(SessionStatus value) => switch (value) {
+    SessionStatus.draft => 'draft',
+    SessionStatus.inProgress => 'in_progress',
+    SessionStatus.completed => 'completed',
+    SessionStatus.cancelled => 'cancelled',
+    SessionStatus.failedToFinalize => 'failed_to_finalize',
+  };
+
+  static AttemptResult attemptResultFromStorage(String value) => switch (value) {
+    'perfect' => AttemptResult.perfect,
+    'initial_passed' => AttemptResult.initialPassed,
+    'recovered' => AttemptResult.recovered,
+    'forgot' => AttemptResult.forgot,
+    _ => AttemptResult.forgot,
+  };
+
+  static String attemptResultToStorage(AttemptResult value) => switch (value) {
+    AttemptResult.perfect => 'perfect',
+    AttemptResult.initialPassed => 'initial_passed',
+    AttemptResult.recovered => 'recovered',
+    AttemptResult.forgot => 'forgot',
+  };
+
+  static StudyMode studyModeFromStorage(String value) => switch (value) {
+    'match' => StudyMode.match,
+    'guess' => StudyMode.guess,
+    'recall' => StudyMode.recall,
+    'fill' => StudyMode.fill,
+    _ => StudyMode.review,
+  };
+
+  static String studyModeToStorage(StudyMode value) => value.name;
+
+  static StudySession fromSessionRow(StudySessionRow row) => StudySession(
+    id: row.id,
+    entryType: entryTypeFromStorage(row.entryType),
+    entryRefId: row.entryRefId,
+    studyType: studyTypeFromStorage(row.studyType),
+    status: sessionStatusFromStorage(row.status),
+    startedAt: _dateFromMs(row.startedAt),
+    updatedAt: _dateFromMs(row.updatedAt),
+  );
+
+  static StudySessionItem fromSessionItemRow(StudySessionItemRow row) =>
+      StudySessionItem(
+        id: row.id,
+        sessionId: row.sessionId,
+        flashcardId: row.flashcardId,
+        sortOrder: row.sortOrder,
+        answeredAt: row.answeredAt == null
+            ? null
+            : _dateFromMs(row.answeredAt!),
+        createdAt: _dateFromMs(row.createdAt),
+        updatedAt: _dateFromMs(row.updatedAt),
+      );
+
+  static StudyAttempt fromAttemptRow(StudyAttemptRow row) => StudyAttempt(
+    id: row.id,
+    sessionItemId: row.sessionItemId,
+    result: attemptResultFromStorage(row.result),
+    studyMode: studyModeFromStorage(row.studyMode),
+    boxBefore: row.boxBefore,
+    boxAfter: row.boxAfter,
+    userInput: row.userInput,
+    attemptedAt: _dateFromMs(row.attemptedAt),
+  );
+}

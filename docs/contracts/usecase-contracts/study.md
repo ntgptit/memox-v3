@@ -211,12 +211,8 @@ row badges.
 **Wireframes:** `docs/wireframes/12-study-entry-gate.md` through
 `docs/wireframes/18-study-result.md`
 **Decision table:** rows S*, BS*, GA*, H3, F4*
-**Code paths (verified 2026-05-28):** `lib/domain/study/usecases/study_usecases.dart` (canonical
-owner of all study lifecycle + grading use cases — `StartStudySessionUseCase`,
-`ResumeStudySessionUseCase`, `RestartStudySessionUseCase`, `AnswerFlashcardUseCase`,
-`AnswerCurrentModeBatchUseCase`, `AnswerCurrentModeItemGradesBatchUseCase`,
-`AnswerCurrentMatchModeBatchUseCase`, `SkipFlashcardUseCase`, `CancelStudySessionUseCase`,
-`FinalizeStudySessionUseCase`, `RetryFinalizeUseCase`); `lib/domain/study/strategy/` (per-flow
-strategy + mode-skip rules); `lib/data/repositories/study_repo_impl.dart` (+ helpers). The
-`lib/domain/usecases/study/**` and `lib/domain/srs/**` directories do NOT exist in the current
-codebase.
+**Code paths (verified 2026-05-28):** `lib/domain/study/usecases/study_usecases.dart` (current V1
+entry gate use case: `StartStudySessionUseCase`); `lib/data/repositories/study_repo_impl.dart`
+(scope resolution, empty-state decision, session insert); `lib/data/datasources/local/daos/study_session_dao.dart`
+(scope reads + session/item inserts). The `lib/domain/usecases/study/**` and `lib/domain/srs/**`
+directories do NOT exist in the current codebase.

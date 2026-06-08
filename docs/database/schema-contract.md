@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-08
 applies_to: Drift schema, all tables, migrations
-schema_version: 3 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 4 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract
@@ -13,8 +13,8 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **3**. Tables shipped
-so far (added for the Library feature):
+**Current schema** (`AppDatabase.currentSchemaVersion`): **4**. Tables shipped
+so far (added for the Library + Study features):
 
 | Table                | Columns (current)                                                                                                                                                                                     |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -23,10 +23,12 @@ so far (added for the Library feature):
 | `flashcards`         | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, `created_at`, `updated_at`                                                    |
 | `flashcard_tags`     | `flashcard_id` (FK→flashcards, cascade), `tag` + index `idx_flashcard_tags_tag`                                                                                                                     |
 | `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number`, `due_at?`, `buried_until?`, `is_suspended`, `review_count`, `lapse_count`, `last_studied_at?` + index `idx_flashcard_progress_eligibility` |
+| `study_sessions`     | `id` (PK), `entry_type`, `entry_ref_id?`, `study_type`, `status`, `started_at`, `updated_at` + index `idx_study_sessions_resumable`                                                                |
+| `study_session_items` | `id` (PK), `session_id` (FK→study_sessions, cascade), `flashcard_id` (FK→flashcards, cascade), `sort_order`, `answered_at?`, `created_at`, `updated_at` + index `idx_study_session_items_session_sort` |
+| `study_attempts`     | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before`, `box_after`, `user_input?`, `attempted_at` + index `idx_study_attempts_session_item`           |
 
-Remaining target tables (`study_sessions`,
-`study_session_items`, `study_attempts`, `tts_settings`) land with their
-feature slices. When a new table/column ships, bump
+Remaining target tables (`tts_settings`) land with their
+feature slice. When a new table/column ships, bump
 `AppDatabase.currentSchemaVersion`, add an `onUpgrade` step
 (`docs/database/migration-contract.md`), and update this section.
 
@@ -83,11 +85,8 @@ implementation and require migration before feature implementation.
 | Folders       | `folders`                                                                                                                                                                                 |
 | Decks         | `decks`; `target_language` is Target / Migration Required per `docs/business/deck/deck-management.md`; nullable `folder_id` for root decks is Rejected / Not Applicable                   |
 | Flashcards    | `flashcards`                                                                                                                                                                              |
-| SRS progress  | `flashcard_progress`; `buried_until` and `is_suspended` implemented in schema v10 (P0-2). `last_reset_at` remains Target / Migration Required per `docs/business/history/card-history.md` |
+| SRS progress  | `flashcard_progress`; `buried_until` and `is_suspended` are implemented in the current schema. `last_reset_at` remains Target / Migration Required per `docs/business/history/card-history.md` |
 | Tags          | `flashcard_tags`                                                                                                                                                                          |
-| Sessions      | `study_sessions`                                                                                                                                                                          |
-| Session items | `study_session_items`                                                                                                                                                                     |
-| Attempts      | `study_attempts`                                                                                                                                                                          |
 | TTS settings  | Target: `tts_settings` (single-row, id=`'default'`). If current implementation uses `tts_settings_records`, keep a mapper/migration note before renaming.                                 |
 
 ## Settings stored outside Drift
@@ -138,12 +137,12 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 |-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Add `decks.target_language TEXT NOT NULL DEFAULT 'korean'`                              | `docs/business/deck/deck-management.md`                                       | Migration backfills existing rows to `'korean'`.                                                                                                                                                                                                                                                                      |
 | Rejected / Not Applicable: change `decks.folder_id` from `TEXT NOT NULL` to `TEXT NULL` | `docs/business/deck/deck-management.md`, `docs/wireframes/02-library.md`      | Superseded by product-owner decision. Do not make deck parent nullable; folder-owned deck invariant remains locked.                                                                                                                                                                                                   |
-| ✅ DONE (v10) `flashcard_progress.buried_until INTEGER NULL`                             | `docs/business/study-actions/bury-suspend.md`                                 | Default null. Shipped in schema v10.                                                                                                                                                                                                                                                                                  |
-| ✅ DONE (v10) `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0`                  | `docs/business/study-actions/bury-suspend.md`                                 | Default false. Shipped in schema v10.                                                                                                                                                                                                                                                                                 |
+| ✅ DONE (current) `flashcard_progress.buried_until INTEGER NULL`                         | `docs/business/study-actions/bury-suspend.md`                                 | Default null. Shipped in the current schema.                                                                                                                                                                                                                                                                         |
+| ✅ DONE (current) `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0`              | `docs/business/study-actions/bury-suspend.md`                                 | Default false. Shipped in the current schema.                                                                                                                                                                                                                                                                         |
 | Add `flashcard_progress.last_reset_at INTEGER NULL`                                     | `docs/business/history/card-history.md`                                       | Default null. Updated when user resets a card's progress.                                                                                                                                                                                                                                                             |
 | Add `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`                              | `docs/business/history/card-history.md`                                       | Migration backfill: set to 0 for pre-migration rows (treated as "unknown"; history view displays "—" for box transition on those rows).                                                                                                                                                                               |
 | Add `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`                               | `docs/business/history/card-history.md`                                       | Same migration semantics as `box_before`.                                                                                                                                                                                                                                                                             |
-| ✅ DONE (v10) compound index `flashcard_progress(is_suspended, buried_until, due_at)`    | `docs/business/study-actions/bury-suspend.md`                                 | Added as `idx_flashcard_progress_eligibility`.                                                                                                                                                                                                                                                                        |
+| ✅ DONE (current) compound index `flashcard_progress(is_suspended, buried_until, due_at)` | `docs/business/study-actions/bury-suspend.md`                                 | Added as `idx_flashcard_progress_eligibility`.                                                                                                                                                                                                                                                                        |
 | ✅ DONE (v11) compound index `flashcard_tags(tag, flashcard_id)`                         | `docs/business/tags/tag-system.md`                                            | Added as `idx_flashcard_tags_tag`. Tags are stored lowercased, so a plain index on `tag` supports `LOWER(tag)` lookups for lowercased input.                                                                                                                                                                          |
 | ✅ DONE (v11) lowercase `flashcard_tags.tag` storage                                     | `docs/business/tags/tag-system.md`                                            | Tags are stored lowercased (case-insensitive identity). Schema v11 dedupes case variants per card then lowercases existing rows; writers (`FlashcardDao`, `FlashcardTagDao`) normalize on insert.                                                                                                                     |
 | ✅ DONE (v13) allow `study_attempts.result = 'recovered'`                                | `docs/wireframes/17-study-session-fill.md`, `docs/business/srs/srs-review.md` | Rebuilds the `study_attempts.result` CHECK constraint so hint-tainted Fill exact matches and Mark-correct overrides can persist a passing-but-not-perfect attempt without faking `incorrect`. Runs for any DB below schema 13, including legacy schema-12 files whose CHECK still only allowed `correct`/`incorrect`. |
@@ -223,7 +222,7 @@ This schema is referenced by every business spec that touches persistent state.
 | `folders`                                                                                       | `docs/business/folder/folder-management.md`                                                                               |
 | `decks` (incl. `target_language` pending migration)                                             | `docs/business/deck/deck-management.md`, `docs/business/tts/tts-settings.md`                                              |
 | `flashcards`                                                                                    | `docs/business/flashcard/flashcard-management.md`                                                                         |
-| `flashcard_progress` (incl. `buried_until`, `is_suspended`, `last_reset_at` pending migrations) | `docs/business/srs/srs-review.md`, `docs/business/study-actions/bury-suspend.md`, `docs/business/history/card-history.md` |
+| `flashcard_progress` (incl. `last_reset_at` pending migration)                           | `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`                                                             |
 | `flashcard_tags`                                                                                | `docs/business/tags/tag-system.md`, `docs/business/flashcard/flashcard-management.md`                                     |
 | `study_sessions`                                                                                | `docs/business/study/study-flow.md`, `docs/business/resume/resume-session.md`                                             |
 | `study_session_items`                                                                           | `docs/business/study/study-flow.md`                                                                                       |

@@ -13,6 +13,7 @@ export 'entry_type.dart';
 export 'ids.dart';
 export 'session_status.dart';
 export 'study_mode.dart';
+export 'study_scope.dart';
 export 'study_type.dart';
 export 'target_language.dart';
 export 'tts_language_code.dart';

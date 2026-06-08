@@ -1,0 +1,16 @@
+import 'study_session_items.drift';
+
+CREATE TABLE study_attempts (
+  id TEXT NOT NULL PRIMARY KEY,
+  session_item_id TEXT NOT NULL
+    REFERENCES study_session_items (id) ON DELETE CASCADE,
+  result TEXT NOT NULL,
+  study_mode TEXT NOT NULL,
+  box_before INTEGER NOT NULL DEFAULT 0,
+  box_after INTEGER NOT NULL DEFAULT 0,
+  user_input TEXT,
+  attempted_at INTEGER NOT NULL
+) AS StudyAttemptRow;
+
+CREATE INDEX idx_study_attempts_session_item
+  ON study_attempts (session_item_id, attempted_at DESC);

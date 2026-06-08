@@ -10,9 +10,10 @@ applies_to: study session lifecycle, all study modes
 - `lib/presentation/features/study/**`
 - `lib/domain/**study**`
 - `lib/data/**study**`
-- `lib/data/datasources/local/tables/study_sessions_table.dart`
-- `lib/data/datasources/local/tables/study_session_items_table.dart`
-- `lib/data/datasources/local/tables/study_attempts_table.dart`
+- `lib/data/datasources/local/daos/study_session_dao.dart`
+- `lib/data/datasources/local/drift/study_sessions.drift`
+- `lib/data/datasources/local/drift/study_session_items.drift`
+- `lib/data/datasources/local/drift/study_attempts.drift`
 
 ## Entry types
 
@@ -147,14 +148,14 @@ actionable CTA where possible.
 
 | Case                                                   | Status                                                                                           | Source                                                                                                                                                                                           |
 |--------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `studyEmpty_deck_noCards`                              | ✅ Implemented (Tier 1)                                                                           | `lib/domain/study/usecases/study_usecases.dart` (`_rejectEmptyScope`) + `lib/presentation/features/study/widgets/empty_scope_screen.dart`                                                        |
-| `studyEmpty_deck_noDueCards`                           | ✅ Implemented (Tier 1)                                                                           | `study_usecases.dart` (`_rejectNoDueCards`) + `StudyRepo.countDueCardsInScope` / `nextDueAt` + `empty_scope_screen.dart`                                                                         |
-| `studyEmpty_folder_noCards`                            | ✅ Implemented (Tier 1)                                                                           | `study_usecases.dart` (`_rejectEmptyFolder`) + `StudyRepo.countFlashcardsInScope` + `empty_scope_screen.dart`                                                                                    |
-| `studyEmpty_folder_noDueCards`                         | ✅ Implemented (Tier 1)                                                                           | `study_usecases.dart` (`_rejectNoDueCards`) + `StudyRepo.countDueCardsInScope` / `nextDueAt` + `empty_scope_screen.dart`                                                                         |
-| `studyEmpty_today_allDone`                             | ✅ Implemented (Tier 1)                                                                           | `study_usecases.dart` (`_rejectEmptyToday`) + `StudyRepo.countDueCardsInScope` + `empty_scope_screen.dart`. Streak inset still pending (engagement use cases are `Target`).                      |
-| `studyEmpty_today_noContent`                           | ✅ Implemented (Tier 1)                                                                           | `study_usecases.dart` (`_rejectEmptyToday`) + `StudyRepo.countFlashcardsInScope` + `empty_scope_screen.dart`                                                                                     |
+| `studyEmpty_deck_noCards`                              | ✅ Implemented (Tier 1)                                                                           | `lib/data/repositories/study_repo_impl.dart` (`_resolveEmptyState`) + `lib/presentation/features/study/widgets/study_entry_body.dart`                                                            |
+| `studyEmpty_deck_noDueCards`                           | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`, `nextDueAt`) + `study_entry_body.dart`                                                                                                             |
+| `studyEmpty_folder_noCards`                            | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`) + `study_entry_body.dart`                                                                                                                          |
+| `studyEmpty_folder_noDueCards`                         | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`, `nextDueAt`) + `study_entry_body.dart`                                                                                                             |
+| `studyEmpty_today_allDone`                             | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`) + `study_entry_body.dart`. Streak inset still pending (engagement use cases are `Target`).                                                         |
+| `studyEmpty_today_noContent`                           | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`) + `study_entry_body.dart`                                                                                                                          |
 | `studyEmpty_tag_noCards` / `studyEmpty_tag_noDueCards` | 🔴 Blocked (Tier 2) — `StudyEntryType.tag` not yet defined; needs tag-scope queries + tag picker | `docs/business/tags/tag-system.md`                                                                                                                                                               |
-| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ Implemented (Tier 3, P0-2)                                                                     | `study_usecases.dart` `_rejectEmptyScope` (allSuspended precedes allBuried) + `StudyRepo.countSuspendedInScope` / `countActiveBuriedInScope` + `empty_scope_screen.dart`. Decision rows S4f/S4g. |
+| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ Implemented (Tier 3, P0-2)                                                                     | `lib/data/repositories/study_repo_impl.dart` (`_resolveEmptyState`) + `lib/presentation/features/study/widgets/study_entry_body.dart`. Decision rows S4f/S4g.                                    |
 
 ## "Next due" calculation
 
