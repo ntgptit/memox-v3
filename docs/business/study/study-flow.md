@@ -117,6 +117,10 @@ stateDiagram-v2
 - SRS review uses `srs_fill_review`.
 - Attempts must be persisted.
 - Active session must be resumable (see `docs/business/resume/resume-session.md`).
+- Study Entry V1 must not silently resume an existing scope session. If a
+  resumable session exists and the explicit Resume / Start over dialog is not
+  implemented yet, the gate returns a controlled `resumeRequired` state and
+  waits for user action instead of creating a duplicate session.
 - Exit from active session requires confirmation.
 - Finalization failure must preserve data (status = `failed_to_finalize`).
 - Only one active session per scope at a time. Resume existing instead of creating new (see

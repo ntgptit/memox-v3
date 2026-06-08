@@ -22,8 +22,9 @@ Most users never see this screen for more than a moment — it's a gate.
 > `entryType`, `entryRefId`, `study_type`, and `mode`, shows a preparing state,
 > surfaces invalid parameters as an error state, renders the empty-scope matrix
 > for zero-eligible-card scopes, and redirects with `pushReplacement` to a
-> persisted session when eligible cards exist. Resume/start-over dialogs remain
-> a deferred follow-up.
+> persisted session when eligible cards exist. If a resumable session already
+> exists, V1 now shows a controlled `resumeRequired` state instead of silently
+> resuming. The full Resume / Start over dialog remains deferred.
 
 ## Behavior tree
 
@@ -33,12 +34,8 @@ flowchart TD
     Validate -->|empty matrix matches| Empty[Show empty state]
     Validate -->|content present| Check{Resumable session<br/>for scope?}
     Check -->|no| Create[Create session →<br/>pushReplacement to /session/:id]
-    Check -->|yes| Dialog[Show Resume or Start over dialog]
-    Dialog -->|Resume| Reuse[Open existing session]
-    Dialog -->|Start over| Confirm[Confirm discard]
-    Confirm -->|cancel| Dialog
-    Confirm -->|confirm| Cancel[Cancel previous, create new]
-    Dialog -->|Cancel| Back[Pop back]
+    Check -->|yes| ResumeReq[Show controlled resumeRequired state]
+    ResumeReq --> Back[Pop back]
 ```
 
 ## Layout — most cases (transient)

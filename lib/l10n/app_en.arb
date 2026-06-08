@@ -1198,6 +1198,18 @@
   "studyStartAction": "Study",
   "studyEntryPreparingTitle": "Preparing study session",
   "studyEntryPreparingMessage": "Validating scope and loading study state.",
+  "studyEntryResumeRequiredTitle": "Study session already in progress",
+  "@studyEntryResumeRequiredTitle": {
+    "description": "Title shown when Study Entry finds a resumable session but the resume dialog is not implemented yet."
+  },
+  "studyEntryResumeRequiredMessage": "We found an existing study session for this scope. Resume and start over will be available in a future update.",
+  "@studyEntryResumeRequiredMessage": {
+    "description": "Message shown when Study Entry finds a resumable session and must not auto-resume it yet."
+  },
+  "studyEntryResumeRequiredCta": "Back",
+  "@studyEntryResumeRequiredCta": {
+    "description": "CTA for the controlled resume-required state; it dismisses the gate for now."
+  },
   "studyEntryInvalidTitle": "Can't open study",
   "studyEntryInvalidMessage": "The study route parameters are invalid.",
   "studyEntryUnsupportedTitle": "Study setup unavailable",

@@ -2403,6 +2403,16 @@ class AppLocalizationsVi extends AppLocalizations {
       'Đang xác thực phạm vi và tải trạng thái học.';
 
   @override
+  String get studyEntryResumeRequiredTitle => 'Đã có phiên học đang diễn ra';
+
+  @override
+  String get studyEntryResumeRequiredMessage =>
+      'Chúng tôi đã tìm thấy một phiên học hiện có cho phạm vi này. Tính năng tiếp tục và bắt đầu lại sẽ có trong bản cập nhật sau.';
+
+  @override
+  String get studyEntryResumeRequiredCta => 'Quay lại';
+
+  @override
   String get studyEntryInvalidTitle => 'Không thể mở phần học';
 
   @override

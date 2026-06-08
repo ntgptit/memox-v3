@@ -34,7 +34,7 @@ class StudyRepositoryImpl implements StudyRepository {
     final StudySession? session = (resumable as Ok<StudySession?>).value;
     if (session != null) {
       return Result<StudyEntryStartResult>.ok(
-        StudyEntryStartResult.started(sessionId: session.id),
+        StudyEntryStartResult.resumeRequired(sessionId: session.id),
       );
     }
 
@@ -188,9 +188,9 @@ class StudyRepositoryImpl implements StudyRepository {
         throw _RuleViolation(Failure.notFound(entity: 'deck', id: refId));
       }
       return _ScopeSnapshot(
-        cards: (await _dao.loadDeckCards(refId))
-            .map(_ScopeCard.fromDeckRow)
-            .toList(growable: false),
+        cards: (await _dao.loadDeckCards(
+          refId,
+        )).map(_ScopeCard.fromDeckRow).toList(growable: false),
         now: _now,
       );
     }
@@ -199,9 +199,9 @@ class StudyRepositoryImpl implements StudyRepository {
       throw _RuleViolation(Failure.notFound(entity: 'folder', id: refId));
     }
     return _ScopeSnapshot(
-      cards: (await _dao.loadFolderCards(refId))
-          .map(_ScopeCard.fromFolderRow)
-          .toList(growable: false),
+      cards: (await _dao.loadFolderCards(
+        refId,
+      )).map(_ScopeCard.fromFolderRow).toList(growable: false),
       now: _now,
     );
   }

@@ -1198,6 +1198,18 @@
   "studyStartAction": "Học",
   "studyEntryPreparingTitle": "Đang chuẩn bị phiên học",
   "studyEntryPreparingMessage": "Đang xác thực phạm vi và tải trạng thái học.",
+  "studyEntryResumeRequiredTitle": "Đã có phiên học đang diễn ra",
+  "@studyEntryResumeRequiredTitle": {
+    "description": "Tiêu đề hiển thị khi Study Entry tìm thấy phiên có thể tiếp tục nhưng hộp thoại tiếp tục chưa được triển khai."
+  },
+  "studyEntryResumeRequiredMessage": "Chúng tôi đã tìm thấy một phiên học hiện có cho phạm vi này. Tính năng tiếp tục và bắt đầu lại sẽ có trong bản cập nhật sau.",
+  "@studyEntryResumeRequiredMessage": {
+    "description": "Thông báo hiển thị khi Study Entry tìm thấy phiên có thể tiếp tục và chưa được tự động tiếp tục."
+  },
+  "studyEntryResumeRequiredCta": "Quay lại",
+  "@studyEntryResumeRequiredCta": {
+    "description": "Nút cho trạng thái resumeRequired; hiện chỉ đóng màn hình."
+  },
   "studyEntryInvalidTitle": "Không thể mở phần học",
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",
   "studyEntryUnsupportedTitle": "Thiết lập học chưa sẵn sàng",

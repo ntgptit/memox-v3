@@ -30,6 +30,10 @@ abstract class StudyEntryStartResult with _$StudyEntryStartResult {
   const factory StudyEntryStartResult.started({required SessionId sessionId}) =
       StudyEntryStartStarted;
 
+  const factory StudyEntryStartResult.resumeRequired({
+    required SessionId sessionId,
+  }) = StudyEntryStartResumeRequired;
+
   const factory StudyEntryStartResult.empty({
     required StudyEntryEmptyState emptyState,
   }) = StudyEntryStartEmpty;

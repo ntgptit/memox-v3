@@ -172,6 +172,41 @@ void main() {
   );
 
   testWidgets(
+    'resume-required state shows controlled empty state and does not redirect',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
+        ),
+      );
+
+      await tester.pumpWidget(
+        _appShell(
+          const StudyEntryScreen.scoped(
+            entryType: 'deck',
+            entryRefId: 'deck-1',
+          ),
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyEntryScreen)),
+      );
+
+      expect(find.byType(MxEmptyState), findsOneWidget);
+      expect(find.text(l10n.studyEntryResumeRequiredTitle), findsOneWidget);
+      expect(find.text(l10n.studyEntryResumeRequiredMessage), findsOneWidget);
+      expect(find.text(l10n.studyEntryResumeRequiredCta), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(repository.startCalls, 1);
+    },
+  );
+
+  testWidgets(
     'DT3 onOpen: deck scope with eligible cards redirects to session route',
     (tester) async {
       final _FakeStudyRepository repository = _FakeStudyRepository(

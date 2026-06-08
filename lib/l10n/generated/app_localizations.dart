@@ -4146,6 +4146,24 @@ abstract class AppLocalizations {
   /// **'Validating scope and loading study state.'**
   String get studyEntryPreparingMessage;
 
+  /// Title shown when Study Entry finds a resumable session but the resume dialog is not implemented yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Study session already in progress'**
+  String get studyEntryResumeRequiredTitle;
+
+  /// Message shown when Study Entry finds a resumable session and must not auto-resume it yet.
+  ///
+  /// In en, this message translates to:
+  /// **'We found an existing study session for this scope. Resume and start over will be available in a future update.'**
+  String get studyEntryResumeRequiredMessage;
+
+  /// CTA for the controlled resume-required state; it dismisses the gate for now.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get studyEntryResumeRequiredCta;
+
   /// No description provided for @studyEntryInvalidTitle.
   ///
   /// In en, this message translates to:

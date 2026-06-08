@@ -37,6 +37,9 @@ At most ONE resumable session may exist per scope at any time. Scope = `(entry_t
 
 When the user starts study on a scope that already has a resumable session, the system MUST NOT
 silently create a second session.
+For Study Entry V1, the gate returns a controlled `resumeRequired` state until the explicit
+Resume / Start over dialog is implemented. It does not auto-navigate to the existing session and
+it does not create a duplicate session.
 
 ## Surfaces
 
@@ -104,6 +107,10 @@ Dialog content:
 | Cancel    | "Cancel"                                                                                                                              |
 
 "Start over" requires a second confirmation because it discards progress.
+
+> **V1 note:** the Study Entry gate currently surfaces a controlled
+> `resumeRequired` state for this branch. The dialog above is the future target
+> behavior.
 
 ### 4. Cross-scope resume
 

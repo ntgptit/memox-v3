@@ -15,11 +15,7 @@ import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 
 class StudyEntryBody extends StatelessWidget {
-  const StudyEntryBody({
-    required this.request,
-    required this.value,
-    super.key,
-  });
+  const StudyEntryBody({required this.request, required this.value, super.key});
 
   final StudyEntryRouteInput request;
   final AsyncValue<StudyEntryStartResult> value;
@@ -45,11 +41,13 @@ class StudyEntryBody extends StatelessWidget {
           title: l10n.studyEntryPreparingTitle,
           message: l10n.studyEntryPreparingMessage,
         ),
+        StudyEntryStartResumeRequired(:final sessionId) =>
+          _StudyEntryResumeRequiredState(sessionId: sessionId),
         StudyEntryStartEmpty(:final emptyState) => _StudyEntryEmptyStateView(
           request: request,
           emptyState: emptyState,
         ),
-        _ => const SizedBox.shrink(),
+        StudyEntryStartResult() => const SizedBox.shrink(),
       },
     );
   }
@@ -268,4 +266,24 @@ class _StudyEntryEmptyStateView extends StatelessWidget {
     'today' => EntryType.today,
     _ => EntryType.today,
   };
+}
+
+class _StudyEntryResumeRequiredState extends StatelessWidget {
+  const _StudyEntryResumeRequiredState({required this.sessionId});
+
+  final String sessionId;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
+    return MxEmptyState(
+      key: ValueKey<String>('study-entry-resume-required-$sessionId'),
+      icon: Icons.history,
+      title: l10n.studyEntryResumeRequiredTitle,
+      message: l10n.studyEntryResumeRequiredMessage,
+      actionLabel: l10n.studyEntryResumeRequiredCta,
+      onAction: () => context.pop(),
+    );
+  }
 }

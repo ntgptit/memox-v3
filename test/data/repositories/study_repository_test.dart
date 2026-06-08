@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
+import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/data/repositories/study_repo_impl.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
@@ -90,6 +91,48 @@ class _StudyDbFixture {
             ),
           );
     }
+  }
+
+  Future<void> insertResumableSession({
+    required String id,
+    required String entryType,
+    required String? entryRefId,
+    required String studyType,
+    String status = 'in_progress',
+  }) async {
+    await db
+        .into(db.studySessions)
+        .insert(
+          StudySessionsCompanion.insert(
+            id: id,
+            entryType: entryType,
+            entryRefId: Value<String?>(entryRefId),
+            studyType: studyType,
+            status: status,
+            startedAt: _nowMs,
+            updatedAt: _nowMs,
+          ),
+        );
+  }
+
+  Future<void> insertStudySessionItem({
+    required String id,
+    required String sessionId,
+    required String flashcardId,
+    int sortOrder = 0,
+  }) async {
+    await db
+        .into(db.studySessionItems)
+        .insert(
+          StudySessionItemsCompanion.insert(
+            id: id,
+            sessionId: sessionId,
+            flashcardId: flashcardId,
+            sortOrder: sortOrder,
+            createdAt: _nowMs,
+            updatedAt: _nowMs,
+          ),
+        );
   }
 
   int get _nowMs => DateTime.now().toUtc().millisecondsSinceEpoch;
@@ -199,6 +242,46 @@ void main() {
 
       final StudyEntryStartResult? value = result.valueOrNull;
       expect(value, isA<StudyEntryStartStarted>());
+      expect(await db.select(db.studySessions).get(), hasLength(1));
+      expect(await db.select(db.studySessionItems).get(), hasLength(1));
+    },
+  );
+
+  test(
+    'resumable deck scope returns resumeRequired without duplicate session',
+    () async {
+      const String folderId = 'folder-resume';
+      const String deckId = 'deck-resume';
+      const String cardId = 'card-resume';
+      const String sessionId = 'session-resume';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-resume',
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudyEntryStartResult> result = await repository
+          .startStudySession(
+            scope: const StudyScope(
+              entryType: EntryType.deck,
+              entryRefId: deckId,
+              studyType: StudyType.newCards,
+            ),
+          );
+
+      final StudyEntryStartResult? value = result.valueOrNull;
+      expect(value, isA<StudyEntryStartResumeRequired>());
+      expect((value as StudyEntryStartResumeRequired).sessionId, sessionId);
       expect(await db.select(db.studySessions).get(), hasLength(1));
       expect(await db.select(db.studySessionItems).get(), hasLength(1));
     },

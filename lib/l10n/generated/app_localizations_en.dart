@@ -2517,6 +2517,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Validating scope and loading study state.';
 
   @override
+  String get studyEntryResumeRequiredTitle =>
+      'Study session already in progress';
+
+  @override
+  String get studyEntryResumeRequiredMessage =>
+      'We found an existing study session for this scope. Resume and start over will be available in a future update.';
+
+  @override
+  String get studyEntryResumeRequiredCta => 'Back';
+
+  @override
   String get studyEntryInvalidTitle => 'Can\'t open study';
 
   @override
