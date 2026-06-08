@@ -30,7 +30,10 @@ class FlashcardEditorView extends HookConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool isEditMode = flashcardId?.isNotEmpty == true;
     final FlashcardEditorDraft draft = useFlashcardEditorDraft();
-    final bool isSaving = ref.read(flashcardEditorControllerProvider).isLoading;
+    final AsyncValue<void> actionState = ref.watch(
+      flashcardEditorControllerProvider,
+    );
+    final bool isSaving = actionState.isLoading;
 
     return FlashcardEditorViewContent(
       deckId: deckId,
