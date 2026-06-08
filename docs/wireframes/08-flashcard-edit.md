@@ -220,7 +220,7 @@ repository boundary.
 
 - `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`
 - `lib/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart`
-- `lib/presentation/features/flashcards/widgets/flashcard_editor_form.dart`
+- `lib/presentation/features/flashcards/widgets/flashcard_editor_view.dart`
 - `lib/domain/usecases/flashcard_usecases.dart` → `UpdateFlashcardUseCase`
 - `lib/app/router/route_names.dart` → `RouteNames.flashcardEdit`
 
