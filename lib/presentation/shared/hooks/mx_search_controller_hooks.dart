@@ -22,30 +22,34 @@ final class MxSearchControllerState {
 void useMxClearControllerWhenExternalTextCleared({
   required TextEditingController controller,
   required String externalText,
+  required bool enabled,
 }) {
   useEffect(() {
+    if (!enabled) {
+      return null;
+    }
+
     if (externalText.isEmpty && controller.text.isNotEmpty) {
       controller.clear();
     }
     return null;
-  }, <Object?>[controller, externalText]);
+  }, <Object?>[controller, externalText, enabled]);
 }
 
 /// Creates a local search controller and optionally mirrors external clears.
 MxSearchControllerState useMxSearchController({
   String externalText = '',
-  bool clearWhenEmpty = false,
+  bool clearWhenExternalTextEmpty = false,
 }) {
   final TextEditingController controller = useTextEditingController(
     text: externalText,
   );
   final String text = useMxTextValue(controller);
-  if (clearWhenEmpty) {
-    useMxClearControllerWhenExternalTextCleared(
-      controller: controller,
-      externalText: externalText,
-    );
-  }
+  useMxClearControllerWhenExternalTextCleared(
+    controller: controller,
+    externalText: externalText,
+    enabled: clearWhenExternalTextEmpty,
+  );
   return MxSearchControllerState(
     controller: controller,
     text: text,

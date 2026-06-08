@@ -23,7 +23,7 @@ class SearchAppBarField extends HookConsumerWidget {
     final String query = ref.watch(searchQueryProvider);
     final MxSearchControllerState search = useMxSearchController(
       externalText: query,
-      clearWhenEmpty: true,
+      clearWhenExternalTextEmpty: true,
     );
     return MxSearchField(
       controller: search.controller,

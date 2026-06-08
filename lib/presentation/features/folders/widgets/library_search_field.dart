@@ -21,7 +21,7 @@ class LibrarySearchField extends HookConsumerWidget {
     );
     final MxSearchControllerState search = useMxSearchController(
       externalText: searchTerm,
-      clearWhenEmpty: true,
+      clearWhenExternalTextEmpty: true,
     );
 
     return MxSearchField(

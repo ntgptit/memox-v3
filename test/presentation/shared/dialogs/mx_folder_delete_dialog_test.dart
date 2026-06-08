@@ -63,7 +63,10 @@ void main() {
       find.text(l10n.folderDeleteDialogConfirmLabel.toUpperCase()),
       findsOneWidget,
     );
-    expect(find.byType(TextField), findsOneWidget);
+    final TextField textField = tester.widget<TextField>(
+      find.byType(TextField),
+    );
+    expect(textField.decoration?.hintText, 'TOPIK II');
 
     final Finder deleteButton = find.widgetWithText(
       FilledButton,

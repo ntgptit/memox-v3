@@ -228,7 +228,9 @@ class _MxFolderDeleteDialog extends HookWidget {
           Navigator.of(context).pop(true);
         },
         decoration: InputDecoration(
-          hintText: confirmHint,
+          // Keep `confirmHint` in the API for callers, but show the folder
+          // name because the destructive confirmation requires an exact match.
+          hintText: folderName,
           filled: true,
           fillColor: scheme.surfaceContainerLowest,
           contentPadding: const EdgeInsets.symmetric(
