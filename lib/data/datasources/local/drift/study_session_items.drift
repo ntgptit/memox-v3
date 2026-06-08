@@ -1,6 +1,5 @@
 import 'study_sessions.drift';
 import 'flashcards.drift';
-import 'flashcards.drift';
 
 CREATE TABLE study_session_items (
   id TEXT NOT NULL PRIMARY KEY,
