@@ -17,6 +17,7 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:riverpod/misc.dart';
 
@@ -86,6 +87,24 @@ GoRouter _studyRouter(String initialLocation) {
     navigatorKey: rootNavigatorKey,
     initialLocation: initialLocation,
     routes: studyRoutes(rootNavigatorKey),
+  );
+}
+
+GoRouter _appRouter(String initialLocation) {
+  final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+  return GoRouter(
+    navigatorKey: rootNavigatorKey,
+    initialLocation: initialLocation,
+    routes: <RouteBase>[
+      GoRoute(
+        path: RoutePaths.library,
+        name: RouteNames.library,
+        builder: (_, _) =>
+            const RoutePlaceholder(routeName: RouteNames.library),
+      ),
+      ...studyRoutes(rootNavigatorKey),
+    ],
   );
 }
 
@@ -202,6 +221,43 @@ void main() {
       expect(find.text(l10n.studyEntryResumeRequiredMessage), findsOneWidget);
       expect(find.text(l10n.studyEntryResumeRequiredCta), findsOneWidget);
       expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(repository.startCalls, 1);
+    },
+  );
+
+  testWidgets(
+    'resume-required back action falls back to Library when the navigator cannot pop',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
+        ),
+      );
+      final GoRouter router = _appRouter(
+        _studyLocation(entryType: 'deck', entryRefId: 'deck-1'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final MxActionButton button = tester.widget(find.byType(MxActionButton));
+      button.onPressed!.call();
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(
+        router.routeInformationProvider.value.uri.toString(),
+        RoutePaths.library,
+      );
+      expect(find.byType(StudyEntryScreen), findsNothing);
+      expect(find.byType(MxEmptyState), findsNothing);
       expect(repository.startCalls, 1);
     },
   );

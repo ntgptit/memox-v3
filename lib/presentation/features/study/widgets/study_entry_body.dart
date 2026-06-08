@@ -283,7 +283,15 @@ class _StudyEntryResumeRequiredState extends StatelessWidget {
       title: l10n.studyEntryResumeRequiredTitle,
       message: l10n.studyEntryResumeRequiredMessage,
       actionLabel: l10n.studyEntryResumeRequiredCta,
-      onAction: () => context.pop(),
+      onAction: () => _handleBackAction(context),
     );
+  }
+
+  void _handleBackAction(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
+    context.goLibrary();
   }
 }
