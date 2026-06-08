@@ -1214,6 +1214,7 @@
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",
   "studyEntryUnsupportedTitle": "Thiết lập học chưa sẵn sàng",
   "studyEntryUnsupportedMessage": "Luồng học này chưa được nối vào ứng dụng.",
+  "studySessionTitle": "Phiên học",
   "studySessionProgressLabel": "{current} / {total}",
   "@studySessionProgressLabel": {
     "placeholders": {
@@ -1371,7 +1372,6 @@
       "count": {"type": "int"}
     }
   },
-  "studySessionTitle": "Phiên học",
   "studyCancelAction": "Hủy",
   "studyActionFailed": "Không thể thực hiện thao tác học.",
   "studyFinalizeAction": "Finalize",

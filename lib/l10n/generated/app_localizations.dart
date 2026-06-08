@@ -4188,6 +4188,12 @@ abstract class AppLocalizations {
   /// **'This study flow is not wired yet.'**
   String get studyEntryUnsupportedMessage;
 
+  /// No description provided for @studySessionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study session'**
+  String get studySessionTitle;
+
   /// No description provided for @studySessionProgressLabel.
   ///
   /// In en, this message translates to:
@@ -4511,12 +4517,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start new · {count} cards'**
   String studyStartNewWithCountAction(int count);
-
-  /// No description provided for @studySessionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study session'**
-  String get studySessionTitle;
 
   /// No description provided for @studyCancelAction.
   ///

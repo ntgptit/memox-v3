@@ -1214,6 +1214,7 @@
   "studyEntryInvalidMessage": "The study route parameters are invalid.",
   "studyEntryUnsupportedTitle": "Study setup unavailable",
   "studyEntryUnsupportedMessage": "This study flow is not wired yet.",
+  "studySessionTitle": "Study session",
   "studySessionProgressLabel": "{current} / {total}",
   "@studySessionProgressLabel": {
     "placeholders": {
@@ -1371,7 +1372,6 @@
       "count": {"type": "int"}
     }
   },
-  "studySessionTitle": "Study session",
   "studyCancelAction": "Cancel",
   "studyActionFailed": "Study action failed.",
   "studyFinalizeAction": "Finalize",

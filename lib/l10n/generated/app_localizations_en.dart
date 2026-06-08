@@ -2542,6 +2542,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'This study flow is not wired yet.';
 
   @override
+  String get studySessionTitle => 'Study session';
+
+  @override
   String studySessionProgressLabel(int current, int total) {
     return '$current / $total';
   }
@@ -2797,9 +2800,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String studyStartNewWithCountAction(int count) {
     return 'Start new · $count cards';
   }
-
-  @override
-  String get studySessionTitle => 'Study session';
 
   @override
   String get studyCancelAction => 'Cancel';

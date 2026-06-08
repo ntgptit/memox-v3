@@ -2427,6 +2427,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Luồng học này chưa được nối vào ứng dụng.';
 
   @override
+  String get studySessionTitle => 'Phiên học';
+
+  @override
   String studySessionProgressLabel(int current, int total) {
     return '$current / $total';
   }
@@ -2681,9 +2684,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String studyStartNewWithCountAction(int count) {
     return 'Tạo phiên mới · $count thẻ';
   }
-
-  @override
-  String get studySessionTitle => 'Phiên học';
 
   @override
   String get studyCancelAction => 'Hủy';
