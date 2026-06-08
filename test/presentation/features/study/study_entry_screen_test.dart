@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/core/theme/app_theme.dart';
@@ -59,6 +60,12 @@ String _studyLocation({
   ).toString();
 }
 
+String _studySessionLocation(String sessionId) =>
+    RoutePaths.studySession(sessionId);
+
+String _studyResultLocation(String sessionId) =>
+    RoutePaths.studyResult(sessionId);
+
 void main() {
   testWidgets(
     'DT1 onOpen: today route renders StudyEntryScreen instead of RoutePlaceholder',
@@ -100,6 +107,42 @@ void main() {
       expect(find.byType(StudyEntryScreen), findsOneWidget);
       expect(find.byType(RoutePlaceholder), findsNothing);
       expect(find.text(l10n.studyEntryUnsupportedTitle), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'DT2a onOpen: session route renders RoutePlaceholder instead of StudyEntryScreen',
+    (tester) async {
+      final GoRouter router = _studyRouter(_studySessionLocation('session-1'));
+
+      await tester.pumpWidget(_routerShell(router));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudyEntryScreen), findsNothing);
+      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(
+        find.widgetWithText(AppBar, RouteNames.studySession),
+        findsOneWidget,
+      );
+      expect(find.text('sessionId: session-1'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'DT2b onOpen: session result route renders RoutePlaceholder instead of StudyEntryScreen',
+    (tester) async {
+      final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
+
+      await tester.pumpWidget(_routerShell(router));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudyEntryScreen), findsNothing);
+      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(
+        find.widgetWithText(AppBar, RouteNames.studyResult),
+        findsOneWidget,
+      );
+      expect(find.text('sessionId: session-1'), findsOneWidget);
     },
   );
 

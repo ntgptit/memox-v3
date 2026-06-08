@@ -21,18 +21,9 @@ List<RouteBase> studyRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
           modeQuery: state.uri.queryParameters[RoutePaths.modeQueryParam],
         ),
       ),
-      GoRoute(
-        parentNavigatorKey: rootNavigatorKey,
-        path: RoutePaths.studyEntryTemplate,
-        name: RouteNames.studyEntry,
-        builder: (context, state) => StudyEntryScreen.scoped(
-          entryType: state.pathParameters[RoutePaths.entryTypeParam] ?? '',
-          entryRefId: state.pathParameters[RoutePaths.entryRefIdParam],
-          studyTypeQuery:
-              state.uri.queryParameters[RoutePaths.studyTypeQueryParam],
-          modeQuery: state.uri.queryParameters[RoutePaths.modeQueryParam],
-        ),
-      ),
+      // Declare specific study session routes before the generic scoped entry
+      // route. Otherwise `/library/study/session/:sessionId` can be consumed
+      // as `entryType=session` + `entryRefId=<sessionId>`.
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: RoutePaths.studySessionTemplate,
@@ -57,5 +48,17 @@ List<RouteBase> studyRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
             ),
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: RoutePaths.studyEntryTemplate,
+        name: RouteNames.studyEntry,
+        builder: (context, state) => StudyEntryScreen.scoped(
+          entryType: state.pathParameters[RoutePaths.entryTypeParam] ?? '',
+          entryRefId: state.pathParameters[RoutePaths.entryRefIdParam],
+          studyTypeQuery:
+              state.uri.queryParameters[RoutePaths.studyTypeQueryParam],
+          modeQuery: state.uri.queryParameters[RoutePaths.modeQueryParam],
+        ),
       ),
     ];
