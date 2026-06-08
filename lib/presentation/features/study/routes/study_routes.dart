@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+
+/// Study routes, composed by `app_router.dart`.
+///
+/// Session/result routes remain placeholders until the study lifecycle screens
+/// land. Today and scoped study entry are real screens.
+List<RouteBase> studyRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
+    <RouteBase>[
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: RoutePaths.studyTodayTemplate,
+        name: RouteNames.studyToday,
+        builder: (context, state) => StudyEntryScreen.today(
+          studyTypeQuery:
+              state.uri.queryParameters[RoutePaths.studyTypeQueryParam],
+          modeQuery: state.uri.queryParameters[RoutePaths.modeQueryParam],
+        ),
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: RoutePaths.studyEntryTemplate,
+        name: RouteNames.studyEntry,
+        builder: (context, state) => StudyEntryScreen.scoped(
+          entryType: state.pathParameters[RoutePaths.entryTypeParam] ?? '',
+          entryRefId: state.pathParameters[RoutePaths.entryRefIdParam],
+          studyTypeQuery:
+              state.uri.queryParameters[RoutePaths.studyTypeQueryParam],
+          modeQuery: state.uri.queryParameters[RoutePaths.modeQueryParam],
+        ),
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: RoutePaths.studySessionTemplate,
+        name: RouteNames.studySession,
+        builder: (context, state) => RoutePlaceholder(
+          routeName: RouteNames.studySession,
+          params: <String, String>{
+            RoutePaths.sessionIdParam:
+                state.pathParameters[RoutePaths.sessionIdParam] ?? '',
+          },
+        ),
+        routes: <RouteBase>[
+          GoRoute(
+            path: RoutePaths.resultSegment,
+            name: RouteNames.studyResult,
+            builder: (context, state) => RoutePlaceholder(
+              routeName: RouteNames.studyResult,
+              params: <String, String>{
+                RoutePaths.sessionIdParam:
+                    state.pathParameters[RoutePaths.sessionIdParam] ?? '',
+              },
+            ),
+          ),
+        ],
+      ),
+    ];

@@ -2510,6 +2510,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyStartAction => 'Study';
 
   @override
+  String get studyEntryPreparingTitle => 'Preparing study session';
+
+  @override
+  String get studyEntryPreparingMessage =>
+      'Validating scope and loading study state.';
+
+  @override
+  String get studyEntryInvalidTitle => 'Can\'t open study';
+
+  @override
+  String get studyEntryInvalidMessage =>
+      'The study route parameters are invalid.';
+
+  @override
+  String get studyEntryUnsupportedTitle => 'Study setup unavailable';
+
+  @override
+  String get studyEntryUnsupportedMessage =>
+      'This study flow is not wired yet.';
+
+  @override
   String get studyStartNewSessionAction => 'Start';
 
   @override

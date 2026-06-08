@@ -2396,6 +2396,27 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyStartAction => 'Học';
 
   @override
+  String get studyEntryPreparingTitle => 'Đang chuẩn bị phiên học';
+
+  @override
+  String get studyEntryPreparingMessage =>
+      'Đang xác thực phạm vi và tải trạng thái học.';
+
+  @override
+  String get studyEntryInvalidTitle => 'Không thể mở phần học';
+
+  @override
+  String get studyEntryInvalidMessage =>
+      'Tham số của đường dẫn học không hợp lệ.';
+
+  @override
+  String get studyEntryUnsupportedTitle => 'Thiết lập học chưa sẵn sàng';
+
+  @override
+  String get studyEntryUnsupportedMessage =>
+      'Luồng học này chưa được nối vào ứng dụng.';
+
+  @override
   String get studyStartNewSessionAction => 'Bắt đầu';
 
   @override

@@ -17,6 +17,13 @@ either redirects to existing session or creates a new one and navigates to it.
 
 Most users never see this screen for more than a moment — it's a gate.
 
+> Current V1 implementation note: the app now ships a real Study Entry screen for
+> `/library/study/today` and `/library/study/:entryType/:entryRefId`. It parses
+> `entryType`, `entryRefId`, `study_type`, and `mode`, shows a preparing state,
+> surfaces invalid parameters as an error state, and currently falls back to an
+> unsupported-gap empty state because the study session lifecycle is not wired
+> yet.
+
 ## Behavior tree
 
 ```mermaid
@@ -309,24 +316,17 @@ When scope is empty, this screen renders the appropriate empty state from
 **Code paths:**
 
 - Screen: `lib/presentation/features/study/screens/study_entry_screen.dart` +
-  `lib/presentation/features/study/providers/study_entry_notifier.dart` (`studyEntryStateProvider` +
-  `StudyEntryActionController`). There is no `study_entry_gate_screen.dart`.
-- Resume / Start-over dialog:
-  `lib/presentation/shared/dialogs/mx_dialog_resume_or_start_over.dart` (
-  `MxDialogResumeOrStartOver`, typed `MxResumeChoice`); the Start-over discard confirmation reuses
-  `MxConfirmationDialog`. The gate offers Resume for any resumable session with the same scope
-  `(entry_type, entry_ref_id)`, even when the existing session's `study_flow` differs from the
-  currently requested flow. Cancel pops back to the caller and creates no session. Start over
-  creates the requested flow and passes `restartedFromSessionId` so the repository atomically
-  cancels the old session and creates the replacement.
-- Scope + session lifecycle: `lib/domain/study/usecases/study_usecases.dart` →
-  `StartStudySessionUseCase` (resolves scope + creates session), `ResumeStudySessionUseCase` (covers
-  `listActiveSessions` + `findCandidate(StudyContext)` + `execute(sessionId)`),
-  `RestartStudySessionUseCase` (accepts an optional `modes` override so Start-over preserves a
-  single-mode entry's flow). No separate `resolve_scope_usecase.dart` /
-  `find_resumable_session_usecase.dart` / `create_session_usecase.dart`.
-- Mode flow rules: `lib/domain/study/strategy/study_strategy.dart` + `study_mode_strategy.dart` +
-  `study_strategy_factory.dart`. There is no dedicated `flow_validator.dart`.
+  `lib/presentation/features/study/providers/study_entry_notifier.dart`
+  (`studyEntryProvider`), wired through
+  `lib/presentation/features/study/routes/study_routes.dart`. There is no
+  `study_entry_gate_screen.dart`.
+- Current V1 behavior: parse and validate route params, show preparing/error
+  states, and render an unsupported-gap empty state for valid routes until the
+  session lifecycle layer lands. No session creation, resume dialog, or
+  start-over dialog is wired in code yet.
+- Target session lifecycle remains specified in
+  `docs/business/study/study-flow.md` and
+  `docs/business/resume/resume-session.md`.
 - Route constants: `lib/app/router/route_names.dart` → `RouteNames.studyEntry`,
   `RouteNames.studyToday`.
 

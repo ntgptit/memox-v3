@@ -61,8 +61,8 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard history         | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
 | Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Exposed as a separate route, not from the Library Overview app bar                                                                                                  | Yes           |
-| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
-| Today study               | `/library/study/today`                                                                                                                                                                                                                                                                  | No            |
+| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, and currently stops at the unsupported-gap state until the session lifecycle is wired. Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
+| Today study               | `/library/study/today` (Current V1 opens `StudyEntryScreen.today` and follows the same gate behavior as scoped study)                                                                                                                                                                                                    | No            |
 | Study session             | `/library/study/session/:sessionId`                                                                                                                                                                                                                                                     | No            |
 | Study result              | `/library/study/session/:sessionId/result`                                                                                                                                                                                                                                              | No            |
 
@@ -89,6 +89,9 @@ Notes:
   Today — never global `entry_type=today`); the Resume banner opens the existing `study/session/:id`
   directly without re-entering the gate or creating a session. Flashcard List never creates a
   session itself.
+- Current V1 note: the Study Entry routes are now real screens, but they stop at the unsupported-gap
+  state until the study session lifecycle use cases and persistence are wired. The create/resume
+  edges in the diagram remain the target contract.
 
 ## Push vs Go rules
 

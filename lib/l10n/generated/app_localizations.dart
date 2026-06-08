@@ -4134,6 +4134,42 @@ abstract class AppLocalizations {
   /// **'Study'**
   String get studyStartAction;
 
+  /// No description provided for @studyEntryPreparingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing study session'**
+  String get studyEntryPreparingTitle;
+
+  /// No description provided for @studyEntryPreparingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating scope and loading study state.'**
+  String get studyEntryPreparingMessage;
+
+  /// No description provided for @studyEntryInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t open study'**
+  String get studyEntryInvalidTitle;
+
+  /// No description provided for @studyEntryInvalidMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The study route parameters are invalid.'**
+  String get studyEntryInvalidMessage;
+
+  /// No description provided for @studyEntryUnsupportedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study setup unavailable'**
+  String get studyEntryUnsupportedTitle;
+
+  /// No description provided for @studyEntryUnsupportedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This study flow is not wired yet.'**
+  String get studyEntryUnsupportedMessage;
+
   /// No description provided for @studyStartNewSessionAction.
   ///
   /// In en, this message translates to:
