@@ -39,9 +39,19 @@ Trước khi finish task, tự trả lời theo thứ tự:
    → Update bảng status trong `docs/business/system/overview.md`.
 
 8. **Behavior đã thay đổi nhưng docs cũ vẫn còn ref đến cách cũ?**
-   → Phải sửa **TẤT CẢ** ref. Dùng `grep -rn "{old_term}" docs/` để tìm. Không để lại text inconsistent.
+    → Phải sửa **TẤT CẢ** ref. Dùng `grep -rn "{old_term}" docs/` để tìm. Không để lại text inconsistent.
 
 Nếu không chắc một mục có cần update không, **mặc định LÀ cần update**. Cost của update thừa < cost của drift.
+
+## WBS Maintenance Rule
+
+`docs/project-management/wbs.md` là source of truth cho task breakdown và task allocation của project.
+
+- Bất kỳ task nào tạo, xóa, rename, split, merge, re-scope, promote, defer, hoặc complete một feature/task phải kiểm tra WBS có bị ảnh hưởng không.
+- Nếu task đổi task allocation, implementation status, feature scope, ownership boundary, dependency order, hoặc next-step planning, cùng commit đó phải update `docs/project-management/wbs.md`.
+- Nếu WBS không bị ảnh hưởng, final report phải ghi rõ: `WBS update: not needed — <reason>`.
+- Không để WBS drift sau docs/source.
+- Update WBS là bổ sung; không thay thế business docs, wireframes, decision tables, tests, hoặc schema docs.
 
 ### Code change → required docs (trigger map)
 
