@@ -252,7 +252,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
 | 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, Finish Session when all items are answered, and in-session answer persistence. |
 | 9.9 | Study result route | Implemented | `/library/study/session/:sessionId/result` opens `StudyResultScreen` with completed-session summary and controlled fallback states. |
-| 9.10 | Protected active-session exit | Specified / Partial | Active session exit requires confirmation; verify current V1 shell behavior before extending. |
+| 9.10 | Protected active-session exit | Implemented | Active session exit requires confirmation; confirmed exit leaves the session resumable without canceling it and falls back to Library when the route cannot pop. |
 | 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |
 | 9.12 | Study attempt persistence | Specified / Partial | Attempts must be persisted; full mode implementations may still be pending. |
 | 9.13 | Study mode strategy V1 | Partial | Recall self-grade is resolved through `StudyModeStrategyFactory`; non-recall modes return a controlled unsupported strategy until persisted mode selection is added. |
@@ -417,7 +417,6 @@ This section orders work by product value and risk, not by internal refactor pre
 | --- | --- | --- |
 | P0 | Study result route V1 | Study session has a real V1 shell; result now renders a real summary screen. Needed for usable SRS loop. |
 | P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the real result screen. |
-| P0 | Protected exit confirmation for active study | Study flow doc requires confirmation; prevents accidental session loss. |
 | P1 | Deck import V1 | Route is placeholder but import spec is detailed and user-facing. |
 | P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |
 | P1 | Account settings real screen or explicitly defer | Route exists as placeholder; sync/account docs are large but user-facing settings is not wired. |

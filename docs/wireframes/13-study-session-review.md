@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-28
 route: /library/study/session/:sessionId
 study_mode: review
@@ -131,7 +131,7 @@ swiping (gesture is the primary input).
 | Buried via long-press menu | Long-press the card                        | Bottom-sheet with Bury / Suspend / History / Audio settings. Bury → toast 5s undo; advance. |
 | Last card answered         | Final answer committed                     | Show Finish Session CTA; do not auto-finalize.                                               |
 | Finish Session             | CTA tapped after all cards are answered    | Commit progress transactionally and transition to the placeholder study result via `pushReplacement`. |
-| Exit confirm               | ✕ tapped mid-session                       | Show "Exit session?" dialog.                                                                |
+| Exit confirm               | ✕ tapped mid-session                       | Show a confirmation dialog that says progress is saved and can be resumed later.                                                                |
 
 ## Actions
 
@@ -190,7 +190,7 @@ on card open (silent UI).
 ## Navigation out
 
 - Last card answered → study result (`pushReplacement`).
-- Exit confirmed → pop to caller (Dashboard or scope screen).
+- Exit confirmed → pop to caller when possible, otherwise go Library through the route helper.
 - History action (from sheet) → flashcard history (push, returnable).
 - Audio settings (from sheet) → audio-speech settings (push, returnable).
 
@@ -220,7 +220,7 @@ on card open (silent UI).
 - Card MUST render both sides at once. No reveal step.
 - Swipe MUST be the primary input. Tap fallback is for accessibility only.
 - TTS button is NOT inline in review mode. Surfaces via card-actions sheet.
-- Exit confirmation MUST appear before pop unless session has 0 answered cards.
+- Exit confirmation MUST appear before pop.
 - `box_before` and `box_after` MUST be recorded on every attempt.
 - `example` field MUST render as a pill below the back when non-empty. `note`, `pronunciation`,
   `hint` are NOT shown in this mode (Phase 1).

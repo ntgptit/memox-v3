@@ -2624,6 +2624,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t load this session. Please try again.';
 
   @override
+  String get studySessionExitConfirmTitle => 'Leave this session?';
+
+  @override
+  String get studySessionExitConfirmMessage =>
+      'Your progress is saved and you can resume later.';
+
+  @override
+  String get studySessionExitConfirmAction => 'Leave session';
+
+  @override
+  String get studySessionExitKeepStudyingAction => 'Keep studying';
+
+  @override
   String get studyStartNewSessionAction => 'Start';
 
   @override

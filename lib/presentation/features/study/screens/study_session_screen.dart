@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/app_navigation.dart';
+import 'package:memox/app/router/route_names.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
+import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_callout.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -19,37 +23,80 @@ import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 import 'package:memox/presentation/shared/widgets/study/mx_flashcard.dart';
 
-class StudySessionScreen extends StatelessWidget {
+class StudySessionScreen extends ConsumerStatefulWidget {
   const StudySessionScreen({required this.sessionId, super.key});
 
   final String sessionId;
 
   @override
+  ConsumerState<StudySessionScreen> createState() => _StudySessionScreenState();
+}
+
+class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
+  bool _isExitDialogOpen = false;
+
+  @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
 
-    return MxScaffold(
-      appBar: MxAppBar(
-        titleText: l10n.studySessionTitle,
-        leading: MxIconButton.toolbar(
-          icon: Icons.close,
-          tooltip: l10n.commonClose,
-          onPressed: () => _handleExit(context),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? _) {
+        if (didPop) {
+          return;
+        }
+        unawaited(_handleExit(context));
+      },
+      child: MxScaffold(
+        appBar: MxAppBar(
+          titleText: l10n.studySessionTitle,
+          leading: MxIconButton.toolbar(
+            icon: Icons.close,
+            tooltip: l10n.commonClose,
+            onPressed: () => _handleExit(context),
+          ),
         ),
-      ),
-      body: _StudySessionReviewSection(
-        sessionId: sessionId,
-        onBack: () => _handleExit(context),
+        body: _StudySessionReviewSection(
+          sessionId: widget.sessionId,
+          onBack: () => _handleExit(context),
+        ),
       ),
     );
   }
 
-  void _handleExit(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
+  Future<void> _handleExit(BuildContext context) async {
+    if (_isExitDialogOpen) {
       return;
     }
-    context.goLibrary();
+    final NavigatorState navigator = Navigator.of(context);
+    final GoRouter router = GoRouter.of(context);
+    final bool canPop = context.canPop();
+    _isExitDialogOpen = true;
+    try {
+      final AppLocalizations l10n = AppLocalizations.of(context);
+      final bool confirmed = await showMxConfirmDialog(
+        context,
+        title: l10n.studySessionExitConfirmTitle,
+        message: l10n.studySessionExitConfirmMessage,
+        confirmLabel: l10n.studySessionExitConfirmAction,
+        cancelLabel: l10n.studySessionExitKeepStudyingAction,
+      );
+      if (!mounted) {
+        return;
+      }
+      if (!confirmed) {
+        return;
+      }
+      if (canPop) {
+        navigator.pop();
+        return;
+      }
+      router.goNamed(RouteNames.library);
+    } finally {
+      if (mounted) {
+        _isExitDialogOpen = false;
+      }
+    }
   }
 }
 

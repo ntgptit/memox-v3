@@ -96,7 +96,7 @@ stateDiagram-v2
     draft --> in_progress: start
     in_progress --> in_progress: answer item
     in_progress --> ready_to_finalize: all items answered
-    in_progress --> cancelled: user exit confirmed
+    in_progress --> in_progress: user exit confirmed (screen only)
     ready_to_finalize --> completed: finalize success
     ready_to_finalize --> ready_to_finalize: finalize error
     completed --> [*]
@@ -139,7 +139,9 @@ stateDiagram-v2
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
   the real result screen on success.
-- Exit from active session requires confirmation.
+- Exit from active session requires confirmation. Confirmed exit leaves the
+  screen without cancelling the session; if the route cannot pop, the app
+  returns to Library through the route helper.
 - Finalization failure keeps the user on the study session screen, shows a
   controlled localized error, and leaves the session open for another attempt.
 - Only one active session per scope at a time. Resume existing instead of creating new (see

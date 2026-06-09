@@ -4332,6 +4332,30 @@ abstract class AppLocalizations {
   /// **'Couldn\'t load this session. Please try again.'**
   String get studySessionLoadFailedMessage;
 
+  /// No description provided for @studySessionExitConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this session?'**
+  String get studySessionExitConfirmTitle;
+
+  /// No description provided for @studySessionExitConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress is saved and you can resume later.'**
+  String get studySessionExitConfirmMessage;
+
+  /// No description provided for @studySessionExitConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave session'**
+  String get studySessionExitConfirmAction;
+
+  /// No description provided for @studySessionExitKeepStudyingAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep studying'**
+  String get studySessionExitKeepStudyingAction;
+
   /// No description provided for @studyStartNewSessionAction.
   ///
   /// In en, this message translates to:

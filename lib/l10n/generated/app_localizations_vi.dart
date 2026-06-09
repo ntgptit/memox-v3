@@ -2508,6 +2508,19 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không thể tải phiên học này. Hãy thử lại.';
 
   @override
+  String get studySessionExitConfirmTitle => 'Rời phiên này?';
+
+  @override
+  String get studySessionExitConfirmMessage =>
+      'Tiến độ của bạn đã được lưu và có thể tiếp tục sau.';
+
+  @override
+  String get studySessionExitConfirmAction => 'Rời phiên';
+
+  @override
+  String get studySessionExitKeepStudyingAction => 'Tiếp tục học';
+
+  @override
   String get studyStartNewSessionAction => 'Bắt đầu';
 
   @override

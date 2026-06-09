@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -56,6 +58,7 @@ class _FakeStudyRepository implements StudyRepository {
   int findResumableCalls = 0;
   int latestSummaryCalls = 0;
   int cancelCalls = 0;
+  int restartCalls = 0;
   int createCalls = 0;
   final List<
     ({
@@ -90,6 +93,7 @@ class _FakeStudyRepository implements StudyRepository {
     required StudyScope scope,
     StudyMode? mode,
   }) async {
+    restartCalls++;
     throw UnimplementedError();
   }
 
@@ -302,6 +306,164 @@ StudySessionResult _result({
 }
 
 void main() {
+  testWidgets(
+    'tapping close shows the confirmation dialog and cancel keeps the user on StudySessionScreen',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-exit-cancel',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(
+        _studySessionLocation('session-exit-cancel'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.byTooltip(l10n.commonClose));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.studySessionExitConfirmTitle), findsOneWidget);
+      expect(find.text(l10n.studySessionExitConfirmMessage), findsOneWidget);
+      expect(find.text(l10n.studySessionExitConfirmAction), findsOneWidget);
+      expect(
+        find.text(l10n.studySessionExitKeepStudyingAction),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text(l10n.studySessionExitKeepStudyingAction));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.text(l10n.studySessionExitConfirmTitle), findsNothing);
+      expect(repository.reviewCalls, 1);
+      expect(repository.recordCalls, 0);
+      expect(repository.finalizeCalls, 0);
+      expect(repository.cancelCalls, 0);
+      expect(repository.restartCalls, 0);
+      expect(repository.startCalls, 0);
+      expect(repository.createCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'confirming exit pops the current route when the navigator can pop',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-exit-pop',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(RoutePaths.library);
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      unawaited(
+        router
+            .push(_studySessionLocation('session-exit-pop'))
+            .then<void>((Object? _) {}),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.byTooltip(l10n.commonClose));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studySessionExitConfirmAction));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudySessionScreen), findsNothing);
+      expect(find.text('Library destination'), findsOneWidget);
+      expect(repository.reviewCalls, 1);
+      expect(repository.recordCalls, 0);
+      expect(repository.finalizeCalls, 0);
+      expect(repository.cancelCalls, 0);
+      expect(repository.restartCalls, 0);
+      expect(repository.startCalls, 0);
+      expect(repository.createCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'confirming exit falls back to Library when the route cannot pop',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-exit-library',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(
+        _studySessionLocation('session-exit-library'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.byTooltip(l10n.commonClose));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studySessionExitConfirmAction));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudySessionScreen), findsNothing);
+      expect(find.text('Library destination'), findsOneWidget);
+      expect(repository.reviewCalls, 1);
+      expect(repository.recordCalls, 0);
+      expect(repository.finalizeCalls, 0);
+      expect(repository.cancelCalls, 0);
+      expect(repository.restartCalls, 0);
+      expect(repository.startCalls, 0);
+      expect(repository.createCalls, 0);
+    },
+  );
+
   testWidgets('navigates between cards and resets reveal state', (
     tester,
   ) async {

@@ -63,7 +63,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Exposed as a separate route, not from the Library Overview app bar                                                                                                  | Yes           |
 | Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
 | Today study               | `/library/study/today` (Current V1 opens `StudyEntryScreen.today` and follows the same gate behavior as scoped study, including empty states and session redirect)                                                                                                                                                                                                    | No            |
-| Study session             | `/library/study/session/:sessionId` (Current V1 review screen; opens `StudySessionScreen` with current-card navigation, shows Finish Session only after every card is answered, and `pushReplacement`s to the real result screen on explicit finish)                                                                                                                                                          | No            |
+| Study session             | `/library/study/session/:sessionId` (Current V1 review screen; opens `StudySessionScreen` with current-card navigation, protected exit confirmation, shows Finish Session only after every card is answered, and `pushReplacement`s to the real result screen on explicit finish)                                                                                                                                                          | No            |
 | Study result              | `/library/study/session/:sessionId/result` (Current V1 result screen; opens `StudyResultScreen` with a localized completion summary for completed/finalized sessions and controlled fallback states for invalid/missing and incomplete sessions)                                                                                                                                                              | No            |
 
 Notes:
@@ -152,6 +152,7 @@ stateDiagram-v2
 - Import returns to deck/folder context.
 - Study entry creates or resumes persisted session.
 - Study session route protects accidental exit and waits for explicit Finish Session before leaving the review screen.
+- Study session exit confirmation leaves the session resumable; it does not cancel the session in V1. Confirmed exit pops when the stack can pop and otherwise routes to Library through the shared helper.
 - Study result returns to Library or Home through existing route constants.
 
 ## Invalid route behavior
@@ -178,7 +179,7 @@ When params are invalid or entity is deleted:
 | Folder detail    | Pop to parent folder or library root             |
 | Flashcard list   | Pop to deck's folder                             |
 | Create/edit form | Pop with confirm if dirty                        |
-| Study session    | Confirm dialog, then pop with `cancelled` status |
+| Study session    | Confirm dialog, then pop when possible or go Library; do not cancel in V1 |
 | Study result     | Go to Library or Home, do not allow back into session |
 
 ## Agent checklist

@@ -1,6 +1,7 @@
----
+﻿---
 last_updated: 2026-06-01
 source_specs:
+  - docs/business/study/study-flow.md
   - docs/business/resume/resume-session.md
   - docs/business/account-sync/account-sync.md
   - docs/business/bulk/bulk-operations.md
@@ -150,21 +151,18 @@ Used by: study session screens (13-17), tap ✕.
 │  Exit study session?                  │
 ├───────────────────────────────────────┤
 │                                       │
-│  Your progress for the 8 cards you've │
-│  answered is saved. You can resume    │
-│  the remaining cards later from the   │
-│  Dashboard.                           │
+│  Your progress is saved and you can  │
+│  resume later. Leave this session?    │
 │                                       │
 ├───────────────────────────────────────┤
 │       [ Keep studying ]  [ Exit ]     │
 └───────────────────────────────────────┘
 ```
 
-- On Exit: session marked `in_progress` (default), remains resumable.
-- If user has 0 answered: skip dialog and pop immediately.
+- On Exit: session stays `in_progress` and remains resumable.
+- Exit always shows a confirmation dialog before leaving the screen.
 
 ---
-
 ## §delete-confirm
 
 Used by: deck delete, folder delete, flashcard delete, tag delete, switch/remove account.
