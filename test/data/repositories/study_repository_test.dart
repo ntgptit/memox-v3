@@ -124,6 +124,7 @@ class _StudyDbFixture {
     required String sessionId,
     required String flashcardId,
     int sortOrder = 0,
+    int? answeredAt,
   }) async {
     await db
         .into(db.studySessionItems)
@@ -133,6 +134,7 @@ class _StudyDbFixture {
             sessionId: sessionId,
             flashcardId: flashcardId,
             sortOrder: sortOrder,
+            answeredAt: Value<int?>(answeredAt),
             createdAt: _nowMs,
             updatedAt: _nowMs,
           ),
@@ -381,6 +383,81 @@ void main() {
     expect(review.items.last.sessionItem.id, 'item-second');
     expect(review.items.last.flashcard.id, secondCardId);
   });
+
+  test(
+    'loadStudySessionReview keeps answered items answered after reload',
+    () async {
+      const String folderId = 'folder-review-answered';
+      const String deckId = 'deck-review-answered';
+      const String sessionId = 'session-review-answered';
+      const String firstCardId = 'card-review-first';
+      const String secondCardId = 'card-review-second';
+      const String thirdCardId = 'card-review-third';
+      final int answeredAtMs = DateTime.utc(2026, 1, 1).millisecondsSinceEpoch;
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: firstCardId, deckId: deckId);
+      await fixture.insertFlashcard(id: secondCardId, deckId: deckId);
+      await fixture.insertFlashcard(id: thirdCardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-third',
+        sessionId: sessionId,
+        flashcardId: thirdCardId,
+        sortOrder: 3,
+        answeredAt: answeredAtMs,
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-first',
+        sessionId: sessionId,
+        flashcardId: firstCardId,
+        sortOrder: 1,
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-second',
+        sessionId: sessionId,
+        flashcardId: secondCardId,
+        sortOrder: 2,
+        answeredAt: answeredAtMs,
+      );
+
+      final Result<StudySessionReview> firstLoad = await repository
+          .loadStudySessionReview(sessionId: sessionId);
+      final Result<StudySessionReview> secondLoad = await repository
+          .loadStudySessionReview(sessionId: sessionId);
+
+      final StudySessionReview review = switch (firstLoad) {
+        Ok<StudySessionReview>(:final value) => value,
+        Err<StudySessionReview>(:final failure) => fail(
+          'expected ok, got $failure',
+        ),
+      };
+      final StudySessionReview reloaded = switch (secondLoad) {
+        Ok<StudySessionReview>(:final value) => value,
+        Err<StudySessionReview>(:final failure) => fail(
+          'expected ok, got $failure',
+        ),
+      };
+
+      expect(review, equals(reloaded));
+      expect(review.session.id, sessionId);
+      expect(review.items, hasLength(3));
+      expect(review.items.map((item) => item.sessionItem.id), <String>[
+        'item-first',
+        'item-second',
+        'item-third',
+      ]);
+      expect(review.items.first.sessionItem.answeredAt == null, isTrue);
+      expect(review.items[1].sessionItem.answeredAt != null, isTrue);
+      expect(review.items[2].sessionItem.answeredAt != null, isTrue);
+    },
+  );
 
   test(
     'today scope with future due cards returns an all-done empty state',

@@ -675,6 +675,57 @@ void main() {
   );
 
   testWidgets(
+    'DT1 onOpen: fully answered persisted session shows Finish Session CTA after reload',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-reload-complete',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+            answeredIndices: <int>{0, 1},
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-reload-complete'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(find.text('Front 1'), findsOneWidget);
+      expect(find.text('Back 1'), findsNothing);
+      expect(find.text(l10n.studySessionAllAnsweredMessage), findsOneWidget);
+      expect(find.text(l10n.studyFinalizeAction), findsOneWidget);
+      expect(find.text(l10n.studyForgotAction), findsNothing);
+      expect(find.text(l10n.studyGotItAction), findsNothing);
+      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+      expect(repository.reviewCalls, 1);
+      expect(repository.recordCalls, 0);
+      expect(repository.finalizeCalls, 0);
+      expect(repository.startCalls, 0);
+      expect(repository.restartCalls, 0);
+      expect(repository.cancelCalls, 0);
+    },
+  );
+
+  testWidgets(
     'tapping forgot records an attempt, marks the item answered, and advances to the next unanswered card',
     (tester) async {
       final _FakeStudyRepository repository = _FakeStudyRepository(

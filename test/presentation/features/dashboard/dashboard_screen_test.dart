@@ -184,6 +184,8 @@ DashboardResumeSessionSummary _resumeSummary({
 StudySessionReview _review({
   String sessionId = 'session-1',
   String flashcardId = 'card-1',
+  Set<int> answeredIndices = const <int>{},
+  int totalCount = 1,
 }) => StudySessionReview(
   session: StudySession(
     id: sessionId,
@@ -195,25 +197,27 @@ StudySessionReview _review({
     updatedAt: _utc,
   ),
   items: <StudySessionReviewItem>[
-    StudySessionReviewItem(
-      sessionItem: StudySessionItem(
-        id: 'item-1',
-        sessionId: sessionId,
-        flashcardId: flashcardId,
-        sortOrder: 0,
-        createdAt: _utc,
-        updatedAt: _utc,
+    for (int index = 0; index < totalCount; index++)
+      StudySessionReviewItem(
+        sessionItem: StudySessionItem(
+          id: 'item-${index + 1}',
+          sessionId: sessionId,
+          flashcardId: index == 0 ? flashcardId : 'card-${index + 1}',
+          sortOrder: index,
+          answeredAt: answeredIndices.contains(index) ? _utc : null,
+          createdAt: _utc,
+          updatedAt: _utc,
+        ),
+        flashcard: Flashcard(
+          id: index == 0 ? flashcardId : 'card-${index + 1}',
+          deckId: 'deck-1',
+          front: 'Front ${index + 1}',
+          back: 'Back ${index + 1}',
+          sortOrder: index,
+          createdAt: _utc,
+          updatedAt: _utc,
+        ),
       ),
-      flashcard: Flashcard(
-        id: flashcardId,
-        deckId: 'deck-1',
-        front: 'Front',
-        back: 'Back',
-        sortOrder: 0,
-        createdAt: _utc,
-        updatedAt: _utc,
-      ),
-    ),
   ],
 );
 
@@ -582,51 +586,60 @@ void main() {
     expect(repository.cancelCalls, 0);
   });
 
-  testWidgets('continue routes to the persisted study session', (
-    WidgetTester tester,
-  ) async {
-    final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(
-        _resumeSummary(),
-      ),
-      reviewResult: Result<StudySessionReview>.ok(_review()),
-      startResult: const Result<StudyEntryStartResult>.ok(
-        StudyEntryStartResult.empty(
-          emptyState: StudyEntryEmptyState(
-            variant: StudyEntryEmptyVariant.todayAllDone,
+  testWidgets(
+    'continue opens the persisted session and shows the loaded item state',
+    (WidgetTester tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(
+          _resumeSummary(answeredCount: 1, totalCount: 3),
+        ),
+        reviewResult: Result<StudySessionReview>.ok(
+          _review(totalCount: 3, answeredIndices: <int>{0}),
+        ),
+        startResult: const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.empty(
+            emptyState: StudyEntryEmptyState(
+              variant: StudyEntryEmptyVariant.todayAllDone,
+            ),
           ),
         ),
-      ),
-    );
-    final ({ProviderContainer container, GoRouter router}) harness =
-        await _pumpApp(
-          tester,
-          repository: repository,
-          libraryStream: Stream<LibraryOverviewReadModel>.value(
-            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
-          ),
-        );
-    harness.router.go(RoutePaths.home);
-    await tester.pumpAndSettle();
+      );
+      final ({ProviderContainer container, GoRouter router}) harness =
+          await _pumpApp(
+            tester,
+            repository: repository,
+            libraryStream: Stream<LibraryOverviewReadModel>.value(
+              _libraryModel(
+                folders: <FolderWithCount>[_folderWithCount('root')],
+              ),
+            ),
+          );
+      harness.router.go(RoutePaths.home);
+      await tester.pumpAndSettle();
 
-    final MxActionButton continueButton = tester.widget<MxActionButton>(
-      find.widgetWithText(
-        MxActionButton,
-        AppLocalizations.of(
-          tester.element(find.byType(DashboardScreen)),
-        ).dashboardContinueSessionAction,
-      ),
-    );
-    continueButton.onPressed!();
-    await tester.pumpAndSettle();
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(DashboardScreen)),
+      );
+      await tester.tap(
+        find.widgetWithText(
+          MxActionButton,
+          l10n.dashboardContinueSessionAction,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    expect(
-      harness.router.routeInformationProvider.value.uri.path,
-      RoutePaths.studySession('session-1'),
-    );
-    expect(repository.startCalls, 0);
-    expect(repository.cancelCalls, 0);
-  });
+      expect(
+        harness.router.routeInformationProvider.value.uri.path,
+        RoutePaths.studySession('session-1'),
+      );
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.text('Front 2'), findsOneWidget);
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text(l10n.studySessionProgressLabel(2, 3)), findsOneWidget);
+      expect(repository.startCalls, 0);
+      expect(repository.cancelCalls, 0);
+    },
+  );
 
   testWidgets('Today CTA routes to the study today entry', (
     WidgetTester tester,

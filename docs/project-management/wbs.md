@@ -253,7 +253,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, Finish Session when all items are answered, and in-session answer persistence. |
 | 9.9 | Study result route | Implemented | `/library/study/session/:sessionId/result` opens `StudyResultScreen` with completed-session summary and controlled fallback states. |
 | 9.10 | Protected active-session exit | Implemented | Active session exit requires confirmation; confirmed exit leaves the session resumable without canceling it and falls back to Library when the route cannot pop. |
-| 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |
+| 9.11 | Study session persistence recovery | Implemented / Ongoing | Persisted in-progress sessions reload by sessionId, preserve answered items, and enter the review shell safely even when all items are already answered. |
 | 9.12 | Study attempt persistence | Specified / Partial | Attempts must be persisted; full mode implementations may still be pending. |
 | 9.13 | Study mode strategy V1 | Partial | Recall self-grade is resolved through `StudyModeStrategyFactory`; non-recall modes return a controlled unsupported strategy until persisted mode selection is added. |
 
