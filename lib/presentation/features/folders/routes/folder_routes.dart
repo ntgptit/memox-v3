@@ -7,8 +7,9 @@ import 'package:memox/presentation/features/folders/screens/library_overview_scr
 import 'package:memox/presentation/features/search/screens/global_search_screen.dart';
 
 /// Library-branch route registry, composed by `app_router.dart`
-/// (`memox.app_router_no_feature_screen_imports`). Flashcard create/edit and
-/// deck import remain placeholders until those screens land (07/08/10).
+/// (`memox.app_router_no_feature_screen_imports`). Flashcard create/edit remain
+/// placeholders until those screens land (07/08/10); deck import now resolves
+/// through the hidden flashcard route registry.
 List<RouteBase> libraryBranchRoutes() => <RouteBase>[
   GoRoute(
     path: RoutePaths.library,

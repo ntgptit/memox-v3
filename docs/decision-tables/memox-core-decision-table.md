@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-05-26
+last_updated: 2026-06-09
 applies_to: behavior branches across folder, deck, flashcard, study, SRS, navigation, UI
 ---
 
@@ -68,6 +68,13 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | C26 | Edit editor close        | Existing optional note/tags loaded but unchanged     | Pop immediately without a discard dialog                         | C0+C1    | `test/presentation/features/flashcards/flashcard_editor_edit_screen_test.dart::DT6 onNavigate` |
 | C18 | Create card save         | Destination deck changed before normal Save          | Future Proposal                                                  | —        | Future |
 | C19 | Create card save-and-add | Checkbox under tags checked + valid front/back + optional example/hint/pronunciation/tags | Persist card, clear the draft, keep the same deck, and focus the Front field for another entry | C0+C1    | `test/presentation/features/flashcards/flashcard_editor_screen_test.dart::DT7 onInsert` |
+
+## Import
+
+| ID | Event                  | Condition         | Expected                                                                                                                                         | Coverage | Test                                                                                                                                                                      |
+|----|------------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| I1 | Open deck import route | Deck id present   | Render the real `DeckImportScreen` shell with the route title, shell copy, and source-format cards; do not render `RoutePlaceholder`           | C0+C1    | `test/presentation/features/flashcards/deck_import_screen_test.dart::DT1 onDisplay: valid deck id shows the real import shell`                                         |
+| I2 | Open deck import route | Deck id missing   | Show a controlled danger callout with Back; do not start parsing, file loading, preview, or commit work                                         | C0+C1    | `test/presentation/features/flashcards/deck_import_screen_test.dart::DT2 onDisplay: missing deck id shows controlled invalid-state callout`                            |
 
 ## Study/SRS
 

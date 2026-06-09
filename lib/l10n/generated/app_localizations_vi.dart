@@ -3339,6 +3339,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get flashcardsImportTitle => 'Nhập flashcard';
 
   @override
+  String get flashcardsImportRouteIntroMessage =>
+      'V1 nhập deck chỉ mở shell của route này. Phần đọc tệp, xem trước và commit sẽ làm sau.';
+
+  @override
+  String get flashcardsImportFormatsSectionTitle => 'Định dạng nguồn';
+
+  @override
+  String get flashcardsImportSoonMessage => 'Dự kiến ở lát cắt nhập tiếp theo.';
+
+  @override
+  String get flashcardsImportMissingDeckMessage =>
+      'Màn hình nhập này cần deck ID. Hãy quay lại và mở nhập từ một deck.';
+
+  @override
   String get bulkAddTitle => 'Thêm hàng loạt';
 
   @override

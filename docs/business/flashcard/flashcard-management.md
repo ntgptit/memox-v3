@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-09
 applies_to: flashcard entity and flashcard management feature
 ---
 
@@ -221,13 +221,10 @@ V1 create/edit note:
 
 Deck import screen (`/library/deck/:deckId/import`):
 
-- Format picker (CSV / Excel / Structured text).
-- Format-specific options:
-    - Excel: `excelHasHeader` toggle.
-    - Structured text: separator picker.
-- Source area: paste box (for csv/text) OR "Load file" button (for excel/file).
-- "Preview" action runs parse + validation.
-- Below: preview screen content (see above).
+- Current V1 route shell only.
+- Shows route-level copy and a source-format overview.
+- Does not yet expose the file picker, paste box, preview action, or commit flow.
+- Full parse / preview / commit behavior remains the future preview flow described above.
 
 ## Form rules
 

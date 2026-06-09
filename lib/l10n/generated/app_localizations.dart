@@ -5586,6 +5586,30 @@ abstract class AppLocalizations {
   /// **'Import flashcards'**
   String get flashcardsImportTitle;
 
+  /// No description provided for @flashcardsImportRouteIntroMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck import V1 opens this route shell only. Parsing, file loading, preview, and commit are deferred.'**
+  String get flashcardsImportRouteIntroMessage;
+
+  /// No description provided for @flashcardsImportFormatsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Source formats'**
+  String get flashcardsImportFormatsSectionTitle;
+
+  /// No description provided for @flashcardsImportSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned for the next import slice.'**
+  String get flashcardsImportSoonMessage;
+
+  /// No description provided for @flashcardsImportMissingDeckMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This import route needs a deck ID. Go back and open import from a deck.'**
+  String get flashcardsImportMissingDeckMessage;
+
   /// No description provided for @bulkAddTitle.
   ///
   /// In en, this message translates to:

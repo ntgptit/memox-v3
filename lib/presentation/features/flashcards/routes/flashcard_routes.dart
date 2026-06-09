@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
-import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/flashcards/screens/deck_import_screen.dart';
 import 'package:memox/presentation/features/flashcards/screens/flashcard_editor_screen.dart';
 
-/// Flashcard editor routes, composed by `app_router.dart`.
+/// Flashcard editor and import routes, composed by `app_router.dart`.
 List<RouteBase> flashcardRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
     <RouteBase>[
       GoRoute(
@@ -29,12 +29,8 @@ List<RouteBase> flashcardRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
         parentNavigatorKey: rootNavigatorKey,
         path: RoutePaths.deckImportTemplate,
         name: RouteNames.deckImport,
-        builder: (_, GoRouterState state) => RoutePlaceholder(
-          routeName: RouteNames.deckImport,
-          params: <String, String>{
-            RoutePaths.deckIdParam:
-                state.pathParameters[RoutePaths.deckIdParam] ?? '',
-          },
+        builder: (_, GoRouterState state) => DeckImportScreen(
+          deckId: state.pathParameters[RoutePaths.deckIdParam] ?? '',
         ),
       ),
     ];

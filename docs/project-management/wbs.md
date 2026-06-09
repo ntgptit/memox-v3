@@ -157,7 +157,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 3.5 | Deck delete | Specified / needs source verification | Deletes flashcards and dependent data through persistence rules. |
 | 3.6 | Deck reorder | Specified / needs source verification | Updates `sort_order` only. |
 | 3.7 | Deck target language | Implemented in schema / Partial feature | Required by docs; verify create/edit UI and TTS gate coverage before claiming done. |
-| 3.8 | Deck import route | Placeholder | `/library/deck/:deckId/import` currently renders `RoutePlaceholder`. |
+| 3.8 | Deck import route | Implemented / V1 shell | `/library/deck/:deckId/import` now opens the dedicated shell; parsing, file picker, preview, and commit stay deferred. |
 | 3.9 | Deck export | Specified / needs source verification | Export belongs to export feature scope. |
 | 3.10 | Deck due/card badges | Specified / Partial | Counts stream from DB; due count excludes buried/suspended. |
 
@@ -182,7 +182,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 
 | WBS ID | Deliverable | Status | Acceptance criteria |
 | --- | --- | --- | --- |
-| 5.1 | Deck import route | Placeholder | Route exists but current source uses `RoutePlaceholder`. |
+| 5.1 | Deck import route | Implemented / V1 shell | Route exists and now renders the dedicated import shell instead of `RoutePlaceholder`. |
 | 5.2 | CSV import | Specified | Parse UTF-8 CSV, validate same rules as manual creation. |
 | 5.3 | Excel import | Specified | Read first sheet; header toggle controls row 1. |
 | 5.4 | Structured text import | Specified | Separator supports auto/tab/comma/colon/slash/semicolon/pipe. |
@@ -417,7 +417,7 @@ This section orders work by product value and risk, not by internal refactor pre
 | --- | --- | --- |
 | P0 | Study result route V1 | Study session has a real V1 shell; result now renders a real summary screen. Needed for usable SRS loop. |
 | P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the real result screen. |
-| P1 | Deck import V1 | Route is placeholder but import spec is detailed and user-facing. |
+| P1 | Deck import V2 | Route shell is current; parse, preview, and commit remain the next import slice. |
 | P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |
 | P1 | Account settings real screen or explicitly defer | Route exists as placeholder; sync/account docs are large but user-facing settings is not wired. |
 | P1 | Progress screen V1 | Top-level route is placeholder; users need basic learning feedback. |
@@ -433,7 +433,7 @@ Use one prompt per work package. Do not combine feature + broad refactor.
 
 1. Study Result Screen V1: render completed session summary from persisted data, keep finalization logic minimal or mocked only if already persisted.
 2. Grade Answer / Finalize Session V1: persist attempt, update progress transactionally, route to result.
-3. Deck Import V1: implement source parse + preview + commit transaction for CSV only first.
+3. Deck Import V2: implement source parse + preview + commit transaction for CSV only first.
 4. Flashcard List Status Filters V1: active/suspended/buried/due filters and badges.
 5. Progress Screen V1: due count, box distribution from current progress table only.
 6. Account Settings Placeholder Replacement V1: display linked/unlinked states without full Drive restore first.

@@ -3464,6 +3464,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flashcardsImportTitle => 'Import flashcards';
 
   @override
+  String get flashcardsImportRouteIntroMessage =>
+      'Deck import V1 opens this route shell only. Parsing, file loading, preview, and commit are deferred.';
+
+  @override
+  String get flashcardsImportFormatsSectionTitle => 'Source formats';
+
+  @override
+  String get flashcardsImportSoonMessage =>
+      'Planned for the next import slice.';
+
+  @override
+  String get flashcardsImportMissingDeckMessage =>
+      'This import route needs a deck ID. Go back and open import from a deck.';
+
+  @override
   String get bulkAddTitle => 'Bulk add';
 
   @override
