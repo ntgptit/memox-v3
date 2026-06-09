@@ -3,7 +3,7 @@
 Generated: 2026-06-09  
 Last reviewed: 2026-06-10  
 Repository: `ntgptit/memox-v3`  
-Baseline reviewed: local `main`, latest observed commit `5fbdf96d` (`feat(search): refactor GlobalSearchScreen and SearchAppBarField for improved query handling`). Prior baseline was `a5d990896f6b348a22437bf254f291a4774230ee` (`Fix dashboard zero due study action`); since then deck import gained CSV paste + parse + validation preview (`c1e89cf5`), the flashcard editor gained focus-managed draft handling (`38af6d94`), and global search query handling was refactored (`5fbdf96d`).
+Baseline reviewed: local `main`, latest observed WBS-reviewed commit `dd8688a` (`docs: update WBS and UI kit references for accuracy and traceability`). Prior baseline was `5fbdf96d` (`feat(search): refactor GlobalSearchScreen and SearchAppBarField for improved query handling`); since then deck import gained CSV paste + parse + validation preview (`c1e89cf5`), the flashcard editor gained focus-managed draft handling (`38af6d94`), global search query handling was refactored (`5fbdf96d`), and WBS/UI kit traceability references were corrected (`dd8688a`).
 
 ## 0. Purpose
 
@@ -517,6 +517,8 @@ Every commit that creates, advances, or completes a WBS work package MUST append
 
 - Use the 8-char short hash (e.g. `5fbdf96d`).
 - One commit may map to multiple WBS IDs; list them comma-separated.
+- Feature/source commits should be logged by the WBS update that reviews them.
+- Pure WBS traceability-maintenance commits do not need their own log row.
 - Pure tooling/formatting commits that touch no WBS row may be omitted.
 - The "Baseline reviewed" line at the top still tracks the latest reviewed commit; the log tracks per-task history.
 
@@ -526,6 +528,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `dd8688a` | 2026-06-09 | 20.6, 18.9, 5.1–5.9, 6.1–6.6 | Update WBS and UI kit references for accuracy and traceability |
 | `5fbdf96d` | 2026-06-10 | 6.1–6.6 | Refactor `GlobalSearchScreen` / `SearchAppBarField` query handling |
 | `38af6d94` | 2026-06-09 | 4.2, 4.3 | `FlashcardEditorDraft` focus management in editor view |
 | `c1e89cf5` | 2026-06-09 | 3.8, 5.2, 5.5, 5.7 | Deck import CSV paste + parse + validation preview |
@@ -543,6 +546,3 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 | `f3740591` | 2026-06-09 | 10.4, 11.5 | Study session self grading |
 | `2971d800` | 2026-06-09 | 9.8 | Study session card navigation |
 | `41e049af` | 2026-06-09 | 13.2 | Dashboard today CTA |
-
-> This review pass (UI-kit traceability, import row corrections, README path fix, this log) lands in the next commit; add its short hash as a new top row when committed.
-
