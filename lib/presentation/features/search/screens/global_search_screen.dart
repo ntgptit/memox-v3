@@ -17,16 +17,26 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 /// Searches folders, decks, and flashcards. Renders all five states:
 /// empty/hint (below the 2-char minimum), loading (debounced query in flight),
 /// results (grouped sections), no-results (matched nothing), and error. The
-/// shell `MxAppBar` stays watch-free; `_SearchResultsSection` owns the provider
-/// watch (`memox.template_screen_shell_no_ref_watch`).
-class GlobalSearchScreen extends StatelessWidget {
+/// `GlobalSearchScreen` owns the query watch for app bar sync; the
+/// `_SearchResultsSection` still owns the results watch
+/// (`memox.template_screen_shell_no_ref_watch`).
+class GlobalSearchScreen extends ConsumerWidget {
   const GlobalSearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const MxScaffold(
-    appBar: MxAppBar(title: SearchAppBarField()),
-    body: _SearchResultsSection(),
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String query = ref.watch(searchQueryProvider);
+    return MxScaffold(
+      appBar: MxAppBar(
+        title: SearchAppBarField(
+          query: query,
+          onChanged: (String value) =>
+              ref.read(searchQueryProvider.notifier).setQuery(value),
+        ),
+      ),
+      body: const _SearchResultsSection(),
+    );
+  }
 }
 
 class _SearchResultsSection extends ConsumerWidget {
