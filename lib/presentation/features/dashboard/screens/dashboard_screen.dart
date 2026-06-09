@@ -334,7 +334,9 @@ class _DashboardTodayCard extends StatelessWidget {
             primary: MxActionButton(
               intent: MxActionIntent.cardPrimary,
               label: l10n.dashboardStudyTodayAction,
-              onPressed: () => context.goStudyEntry(entryType: EntryType.today),
+              onPressed: hasDueCards
+                  ? () => context.goStudyEntry(entryType: EntryType.today)
+                  : null,
             ),
           ),
         ],

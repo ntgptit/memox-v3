@@ -69,7 +69,7 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | Static streak placeholder | loaded, goalOff | Current V1 | `MxStatDisplay` or `MxCard` | None; static placeholder only | None | Render as a non-computed placeholder only. Do not show a live streak count. |
 | Goal ring / daily-goal card | loaded, goalOff | Future/Target | `MxMasteryRing` / `MxCard` | Engagement prefs + study_attempts aggregate | None | Excluded from current V1 until engagement is promoted. |
 | Streak-broken banner | streakBroken | Future/Target | `MxCallout` or `MxCard` | Computed broken-streak signal | Dismiss | Requires computed streak state, so it remains out of current V1. |
-| Today CTA / caught-up card | loaded, resumeOnly | Current V1 | `MxCard` + `MxActionButton` | Today due-count provider | `go` to `RoutePaths.studyToday` | The caught-up variant replaces the primary due card when no cards are due. |
+| Today CTA / caught-up card | loaded, resumeOnly | Current V1 | `MxCard` + `MxActionButton` | Today due-count provider | `go` to `RoutePaths.studyToday` only when `dueToday > 0`; otherwise render the caught-up/disabled state and keep the user out of study flow | The caught-up variant replaces the primary due card when no cards are due, and the primary action must be disabled or replaced with a non-study action. |
 | Start new learning CTA | loaded, onboarding, resumeOnly | Missing data | `MxActionButton` / `MxCardActions` | No scope picker source yet | None in V1 | Deferred until a source-backed scope picker exists. |
 | Recent decks section header | loaded, resumeOnly | Current V1 | `MxSectionHeader` | None | None | The section title is part of the screen chrome. |
 | Recent decks header shortcut | loaded, resumeOnly | Visual-only | `MxTextButton` or `MxIconButton` | None | Optional library navigation | Bottom nav already covers `/library`; this shortcut is not a product requirement. |
@@ -87,7 +87,7 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | loading | Section-level skeletons for resume and today cards | Yes | Do not block the whole screen on one slow provider. |
 | onboarding | Zero-content body with an Open Library CTA | Yes | Exclude the legacy Google sign-in/restore copy from V1. |
 | goal off | Hide live goal/streak surfaces; treat as future engagement state | No | Goal persistence and streak computation are not current V1 features. |
-| resume only | Resume card remains visible; Today CTA becomes caught-up | Yes | This is the main no-due / resumable-session combination. |
+| resume only | Resume card remains visible; Today CTA becomes caught-up and disabled | Yes | This is the main no-due / resumable-session combination. The Today action must not enter study flow when no cards are due. |
 | streak broken | One-time broken-streak banner above the resume card | No | Requires computed streak history, which is still future/target. |
 | error | Inline Dashboard error state with retry | Yes | Keep the message localized and do not surface raw failures. |
 | offline | Non-blocking offline banner | No | Visual reference only until the Dashboard has a defined connectivity contract. |

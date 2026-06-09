@@ -15,7 +15,7 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 
 ## V1 release status
 
-- Current V1: due/new/mastery summary, recent decks, resume card, paused-sessions sheet, Today CTA, and Start new learning for Today/Deck/Folder.
+- Current V1: due/new/mastery summary, recent decks, resume card, paused-sessions sheet, and Today CTA that routes to study only when due cards exist.
 - Current V1 placeholder: the stats row may show `Streak` / `0 days` as a simple visual/stat placeholder only. It has no streak computation, no engagement persistence, no settings, no reminder, and no streak-history or daily-goal sheet action.
 - Target/Future: full streak chip/history, daily-goal ring/settings, reminders/notification permissions, Dashboard zero-content onboarding layout, Global Search route/action, and search icon navigation.
 - Current app boot still redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`; changing launch default to Dashboard requires a dedicated navigation task.
@@ -51,7 +51,7 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 │                                       │
 │ ┌───────────────────────────────────┐ │
 │ │ Start today's review              │ │  ← PRIMARY CTA
-│ │ 18 cards due across 3 decks  ▸   │ │     tap → /library/study/today
+│ │ 18 cards due across 3 decks  ▸   │ │     tap → /library/study/today when dueToday > 0
 │ └───────────────────────────────────┘ │
 │                                       │
 │ ┌───────────────────────────────────┐ │
@@ -104,6 +104,8 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 ```
 
 Onboarding state replaces the entire body when `decks = 0 AND flashcards = 0`. Resume/streak/goal sections are hidden.
+
+The Today CTA is disabled and shows caught-up copy when `dueToday == 0`; it must not enter the study flow in that state.
 
 ## Inputs
 

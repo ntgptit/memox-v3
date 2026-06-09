@@ -539,6 +539,59 @@ void main() {
     );
   });
 
+  testWidgets('Today CTA stays disabled when there are no due cards', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(
+              folders: <FolderWithCount>[_folderWithCount('root')],
+              dueToday: 0,
+            ),
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.text(l10n.dashboardNoDueTitle), findsOneWidget);
+    expect(find.text(l10n.dashboardNoDueMessage), findsOneWidget);
+
+    final MxActionButton todayButton = tester.widget<MxActionButton>(
+      find.widgetWithText(MxActionButton, l10n.dashboardStudyTodayAction),
+    );
+    expect(todayButton.onPressed, isNull);
+
+    await tester.tap(
+      find.widgetWithText(MxActionButton, l10n.dashboardStudyTodayAction),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      harness.router.routeInformationProvider.value.uri.path,
+      RoutePaths.home,
+    );
+    expect(repository.startCalls, 0);
+    expect(find.byType(StudySessionScreen), findsNothing);
+  });
+
   testWidgets('future engagement controls are not exposed', (
     WidgetTester tester,
   ) async {
