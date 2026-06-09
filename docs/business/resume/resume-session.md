@@ -131,7 +131,10 @@ On resume:
 2. Compute next item index from session state (do not re-derive from scratch; use persisted pointer
    if present, else first unanswered item by `sort_order`).
 3. Open `StudySessionScreen` at the correct item.
-4. Update `study_sessions.updated_at` to now.
+4. Keep `study_session_items.answered_at` intact.
+
+> **Deferred:** touching `study_sessions.updated_at` on resume is still a product idea,
+> but it is not part of the current V1 recovery coverage.
 
 The session resumes in its current `study_mode` from its `study_flow`. If the flow has multiple
 modes (e.g., `new_full_cycle`), the resumed mode is whichever was active when paused, persisted via
@@ -190,7 +193,8 @@ This is opt-in via notification settings; do not push by default.
 ## Rules
 
 - Resume MUST NOT create a new session; it reuses the existing one.
-- Resume MUST update `updated_at` so the session does not auto-expire.
+- Resume MUST preserve answered item state on reload.
+- Resume SHOULD touch `updated_at` only if the deferred metadata-refresh behavior is explicitly promoted.
 - "Continue studying" surface MUST appear before any "Start new" CTA on the same screen.
 - Discard from banner surfaces MUST require explicit confirmation.
 - Resume from notification deep-links to `/library/study/session/{sessionId}` directly (skip
@@ -217,7 +221,7 @@ This is opt-in via notification settings; do not push by default.
 - Do not implement "Start study" without first checking for resumable session in the scope.
 - Do not silently overwrite a resumable session by creating a new one. Always confirm.
 - Auto-expiry runs only on app open, not via background task. Do not add a scheduler for this.
-- Resume surfaces (Dashboard card, banner, dialog) MUST share the same query source — do not
+- Resume surfaces (Dashboard card, banner, dialog) MUST share the same query source - do not
   implement three independent checks.
 
 ## Related

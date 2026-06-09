@@ -122,6 +122,9 @@ stateDiagram-v2
   Previous/Next navigation with reveal reset on move, shows a Finish Session
   CTA only after every item is answered, and navigates to the real result
   screen after explicit finish.
+- When a persisted session reloads, answered items remain answered, the review
+  controller starts at the first unanswered item, and a fully answered session
+  opens in a finish-ready state instead of creating a new session.
 - Study Entry V1 must not silently resume an existing scope session. If a
   resumable session exists, the gate returns a controlled `resumeRequired`
   state with explicit Resume / Start over / Back actions. Resume opens the
