@@ -1772,7 +1772,7 @@
   "studyCancelConfirmMessage": "Your current study session will stop and you will be taken to the result screen.",
   "studyCancelConfirmAction": "Cancel",
   "flashcardsImportTitle": "Import flashcards",
-  "flashcardsImportRouteIntroMessage": "Deck import V1 now supports CSV paste preview. File picker, Excel, structured text, and commit stay deferred.",
+  "flashcardsImportRouteIntroMessage": "Deck import V1 now supports CSV paste preview and transactional commit. File picker, Excel, and structured text stay deferred.",
   "flashcardsImportFormatsSectionTitle": "Source formats",
   "flashcardsImportSoonMessage": "Planned for the next import slice.",
   "flashcardsImportMissingDeckMessage": "This import route needs a deck ID. Go back and open import from a deck.",
@@ -1959,6 +1959,9 @@
     }
   },
   "importPreviewRowsTitle": "Valid rows",
+  "importPreviewCommitReadyMessage": "Preview is clean. You can import these cards now.",
+  "importCommittingMessage": "Importing cards...",
+  "importFailedMessage": "Import failed. Try again.",
   "importCsvEmptyMessage": "Paste CSV content before previewing.",
   "importCsvFrontAndBackRequiredMessage": "Front and back are required.",
   "importCommitDeferredAction": "Import deferred",

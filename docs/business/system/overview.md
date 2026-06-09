@@ -34,10 +34,10 @@ This overview lists product capabilities. The detailed contract for each lives i
 | --- | --- | --- |
 | Folder CRUD + reorder + move | Specified | `docs/business/folder/folder-management.md` |
 | Deck CRUD + reorder + target language | Specified | `docs/business/deck/deck-management.md` |
-| Deck import | Specified | `docs/business/flashcard/flashcard-management.md` (import section) |
+| Deck import | Implemented / Partial | `docs/business/flashcard/flashcard-management.md` (import section) |
 | Deck export | Specified | `docs/business/export/export.md` |
 | Flashcard CRUD + tag | Specified | `docs/business/flashcard/flashcard-management.md` |
-| Flashcard import preview/validation | Specified | `docs/business/flashcard/flashcard-management.md` (import section) |
+| Flashcard import preview/validation | Implemented / Partial | `docs/business/flashcard/flashcard-management.md` (import section) |
 | Flashcard selection export | Specified | `docs/business/export/export.md` |
 | Study session | Partial | `docs/business/study/study-flow.md` |
 | Resume / continue session | Specified | `docs/business/resume/resume-session.md` |

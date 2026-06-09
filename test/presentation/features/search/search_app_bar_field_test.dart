@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
-import 'package:memox/presentation/features/search/viewmodels/search_viewmodel.dart';
 import 'package:memox/presentation/features/search/widgets/search_app_bar_field.dart';
 
 void main() {
@@ -12,14 +11,18 @@ void main() {
       theme: AppTheme.light(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(appBar: AppBar(title: child)),
+      home: Scaffold(body: child),
     ),
   );
 
   testWidgets('shows keycap when empty and clear icon after typing', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(buildHost(child: const SearchAppBarField()));
+    await tester.pumpWidget(
+      buildHost(
+        child: SearchAppBarField(query: '', onChanged: (_) {}),
+      ),
+    );
 
     expect(find.text('K'), findsOneWidget);
     expect(find.byIcon(Icons.close), findsNothing);
@@ -29,11 +32,6 @@ void main() {
 
     expect(find.text('K'), findsNothing);
     expect(find.byIcon(Icons.close), findsOneWidget);
-    expect(
-      ProviderScope.containerOf(
-        tester.element(find.byType(Scaffold)),
-      ).read(searchQueryProvider),
-      'deck',
-    );
+    expect(find.text('deck'), findsWidgets);
   });
 }

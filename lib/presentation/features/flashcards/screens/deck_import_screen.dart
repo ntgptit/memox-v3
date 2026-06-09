@@ -1,67 +1,115 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:memox/app/di/flashcard_providers.dart';
+import 'package:memox/core/error/failure.dart';
+import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
+import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
-import 'package:memox/presentation/shared/mx_widgets.dart';
+import 'package:memox/presentation/shared/feedback/mx_callout.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
+import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
+import 'package:memox/presentation/shared/hooks/mx_text_controller_hooks.dart';
+import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
+import 'package:memox/presentation/shared/widgets/mx_text.dart';
+import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_list_tile.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
 /// Deck import route for `/library/deck/:deckId/import`.
 ///
-/// V1 exposes CSV paste input + parse + validation preview only. Commit,
-/// file picker, Excel, and structured text remain deferred.
-class DeckImportScreen extends StatefulWidget {
+/// V1 now supports CSV paste preview and transactional commit of valid rows
+/// only. File picker, Excel, and structured text remain deferred.
+class DeckImportScreen extends HookConsumerWidget {
   const DeckImportScreen({required this.deckId, super.key});
 
   final String deckId;
 
   @override
-  State<DeckImportScreen> createState() => _DeckImportScreenState();
-}
-
-class _DeckImportScreenState extends State<DeckImportScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _csvController = TextEditingController();
-  final FocusNode _csvFocusNode = FocusNode();
-
-  _DeckImportCsvPreview? _preview;
-
-  @override
-  void dispose() {
-    _csvController.dispose();
-    _csvFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _previewCsv() {
-    final FormState? formState = _formKey.currentState;
-    if (formState != null && !formState.validate()) {
-      return;
-    }
-
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final _DeckImportCsvPreview nextPreview = _parseCsvPreview(
-      rawCsv: _csvController.text,
-      l10n: l10n,
-    );
-    setState(() {
-      _preview = nextPreview;
-    });
-  }
+    final bool hasDeckId = StringUtils.trimmed(deckId).isNotEmpty;
+    final GlobalKey<FormState> formKey = useMemoized(GlobalKey<FormState>.new);
+    final MxTextSubmitState csvState = useMxTextSubmitState();
+    final FocusNode csvFocusNode = useFocusNode();
+    final ValueNotifier<DeckImportPreview?> preview =
+        useState<DeckImportPreview?>(null);
+    final ValueNotifier<bool> isCommitting = useState<bool>(false);
 
-  void _clearPreviewOnEdit() {
-    if (_preview == null) {
-      return;
-    }
-    setState(() {
-      _preview = null;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context);
-    final bool hasDeckId = StringUtils.trimmed(widget.deckId).isNotEmpty;
     void onBack() => Navigator.of(context).pop();
+
+    void previewCsv() {
+      if (isCommitting.value) {
+        return;
+      }
+      final FormState? formState = formKey.currentState;
+      if (formState != null && !formState.validate()) {
+        return;
+      }
+
+      final DeckImportPreview nextPreview = ref
+          .read(parseDeckImportCsvUseCaseProvider)
+          .call(rawCsv: csvState.controller.text);
+      preview.value = nextPreview;
+    }
+
+    void clearPreviewOnEdit() {
+      if (isCommitting.value || preview.value == null) {
+        return;
+      }
+      preview.value = null;
+    }
+
+    Future<void> commitPreview() async {
+      final DeckImportPreview? currentPreview = preview.value;
+      if (isCommitting.value ||
+          currentPreview == null ||
+          !currentPreview.canCommit) {
+        return;
+      }
+
+      isCommitting.value = true;
+
+      final Result<int> result = await ref
+          .read(commitDeckImportUseCaseProvider)
+          .call(deckId: deckId, preview: currentPreview);
+      if (!context.mounted) {
+        return;
+      }
+
+      isCommitting.value = false;
+
+      final AppLocalizations currentL10n = AppLocalizations.of(context);
+      result.fold(
+        (Failure failure) => showMxSnackbar(
+          context,
+          message: currentL10n.failureMessage(
+            failure,
+            fallback: currentL10n.importFailedMessage,
+          ),
+          isError: true,
+        ),
+        (int committedCount) {
+          showMxSnackbar(
+            context,
+            message: currentL10n.importSuccessMessage(committedCount),
+          );
+          unawaited(Navigator.of(context).maybePop());
+        },
+      );
+    }
 
     return MxScaffold(
       appBar: MxAppBar(
@@ -75,12 +123,14 @@ class _DeckImportScreenState extends State<DeckImportScreen> {
       body: hasDeckId
           ? _DeckImportBody(
               l10n: l10n,
-              formKey: _formKey,
-              csvController: _csvController,
-              csvFocusNode: _csvFocusNode,
-              preview: _preview,
-              onPreview: _previewCsv,
-              onCsvChanged: (_) => _clearPreviewOnEdit(),
+              formKey: formKey,
+              csvState: csvState,
+              csvFocusNode: csvFocusNode,
+              preview: preview.value,
+              isCommitting: isCommitting.value,
+              onPreview: previewCsv,
+              onCommit: commitPreview,
+              onCsvChanged: (_) => clearPreviewOnEdit(),
             )
           : _DeckImportMissingDeckState(l10n: l10n, onBack: onBack),
     );
@@ -91,19 +141,23 @@ class _DeckImportBody extends StatelessWidget {
   const _DeckImportBody({
     required this.l10n,
     required this.formKey,
-    required this.csvController,
+    required this.csvState,
     required this.csvFocusNode,
     required this.preview,
+    required this.isCommitting,
     required this.onPreview,
+    required this.onCommit,
     required this.onCsvChanged,
   });
 
   final AppLocalizations l10n;
   final GlobalKey<FormState> formKey;
-  final TextEditingController csvController;
+  final MxTextSubmitState csvState;
   final FocusNode csvFocusNode;
-  final _DeckImportCsvPreview? preview;
+  final DeckImportPreview? preview;
+  final bool isCommitting;
   final VoidCallback onPreview;
+  final VoidCallback onCommit;
   final ValueChanged<String> onCsvChanged;
 
   @override
@@ -125,39 +179,59 @@ class _DeckImportBody extends StatelessWidget {
               color: context.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(height: SpacingTokens.md),
-            Form(
-              key: formKey,
-              child: MxTextField(
-                controller: csvController,
-                focusNode: csvFocusNode,
-                hintText: l10n.importCsvHint,
-                minLines: 10,
-                maxLines: 12,
-                validator: (String? value) {
-                  final String trimmed = StringUtils.trimmed(value ?? '');
-                  if (trimmed.isEmpty) {
-                    return l10n.importCsvEmptyMessage;
-                  }
-                  return null;
-                },
-                onChanged: onCsvChanged,
+            AbsorbPointer(
+              absorbing: isCommitting,
+              child: Form(
+                key: formKey,
+                child: MxTextField(
+                  controller: csvState.controller,
+                  focusNode: csvFocusNode,
+                  hintText: l10n.importCsvHint,
+                  minLines: 10,
+                  maxLines: 12,
+                  validator: (String? value) {
+                    final String trimmed = StringUtils.trimmed(value ?? '');
+                    if (trimmed.isEmpty) {
+                      return l10n.importCsvEmptyMessage;
+                    }
+                    return null;
+                  },
+                  onChanged: onCsvChanged,
+                ),
               ),
             ),
             const SizedBox(height: SpacingTokens.md),
             MxPrimaryButton(
               label: l10n.importPreviewAction,
               fullWidth: true,
-              onPressed: onPreview,
+              onPressed: isCommitting ? null : onPreview,
             ),
             const SizedBox(height: SpacingTokens.sm),
             MxSecondaryButton(
-              label: l10n.importCommitDeferredAction,
+              label: preview == null
+                  ? l10n.commonImport
+                  : l10n.importCommitCardsAction(preview!.rows.length),
               variant: MxSecondaryVariant.outlined,
               fullWidth: true,
-              onPressed: null,
+              onPressed: preview?.canCommit == true && !isCommitting
+                  ? onCommit
+                  : null,
             ),
-            const SizedBox(height: SpacingTokens.sm),
-            MxCallout(message: l10n.importCommitDeferredMessage),
+            if (isCommitting) ...<Widget>[
+              const SizedBox(height: SpacingTokens.sm),
+              MxCallout(message: l10n.importCommittingMessage),
+            ],
+            if (preview != null) ...<Widget>[
+              const SizedBox(height: SpacingTokens.sm),
+              MxCallout(
+                tone: preview!.canCommit
+                    ? MxCalloutTone.info
+                    : MxCalloutTone.warning,
+                message: preview!.canCommit
+                    ? l10n.importPreviewCommitReadyMessage
+                    : l10n.importValidationIssuesSubtitle,
+              ),
+            ],
           ],
         ),
       ),
@@ -267,7 +341,7 @@ class _DeckImportMissingDeckState extends StatelessWidget {
 class _PreviewRowTile extends StatelessWidget {
   const _PreviewRowTile({required this.row});
 
-  final _DeckImportCsvRow row;
+  final DeckImportPreviewRow row;
 
   @override
   Widget build(BuildContext context) => MxListTile(
@@ -284,218 +358,23 @@ class _PreviewRowTile extends StatelessWidget {
 class _PreviewIssueTile extends StatelessWidget {
   const _PreviewIssueTile({required this.issue});
 
-  final _DeckImportIssue issue;
+  final DeckImportIssue issue;
 
   @override
-  Widget build(BuildContext context) => MxListTile(
-    leading: Icon(Icons.error_outline, color: context.colorScheme.error),
-    title: issue.lineLabel(context),
-    subtitle: issue.message,
-  );
-}
-
-class _DeckImportCsvPreview {
-  const _DeckImportCsvPreview({required this.rows, required this.issues});
-
-  final List<_DeckImportCsvRow> rows;
-  final List<_DeckImportIssue> issues;
-}
-
-class _DeckImportCsvRow {
-  const _DeckImportCsvRow({
-    required this.lineNumber,
-    required this.front,
-    required this.back,
-  });
-
-  final int lineNumber;
-  final String front;
-  final String back;
-}
-
-class _DeckImportIssue {
-  const _DeckImportIssue({required this.lineNumber, required this.message});
-
-  final int lineNumber;
-  final String message;
-
-  String lineLabel(BuildContext context) =>
-      AppLocalizations.of(context).importValidationIssueLine(lineNumber);
-}
-
-class _CsvRecord {
-  const _CsvRecord({required this.lineNumber, required this.cells});
-
-  final int lineNumber;
-  final List<String> cells;
-}
-
-_DeckImportCsvPreview _parseCsvPreview({
-  required String rawCsv,
-  required AppLocalizations l10n,
-}) {
-  final List<_CsvRecord> records = _parseCsvRecords(rawCsv);
-  if (records.isEmpty) {
-    return const _DeckImportCsvPreview(
-      rows: <_DeckImportCsvRow>[],
-      issues: <_DeckImportIssue>[],
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    return MxListTile(
+      leading: Icon(Icons.error_outline, color: context.colorScheme.error),
+      title: l10n.importValidationIssueLine(issue.lineNumber),
+      subtitle: _issueMessage(l10n, issue),
     );
   }
-
-  int startIndex = 0;
-  if (_looksLikeHeader(records.first.cells)) {
-    startIndex = 1;
-  }
-
-  final List<_DeckImportCsvRow> rows = <_DeckImportCsvRow>[];
-  final List<_DeckImportIssue> issues = <_DeckImportIssue>[];
-  for (int index = startIndex; index < records.length; index++) {
-    final _CsvRecord record = records[index];
-    final List<String> trimmedCells = record.cells
-        .map(StringUtils.trimmed)
-        .toList(growable: false);
-    final bool isBlankRow = trimmedCells.every((String cell) => cell.isEmpty);
-    if (isBlankRow) {
-      continue;
-    }
-
-    final String front = trimmedCells.isNotEmpty ? trimmedCells.first : '';
-    final String back = trimmedCells.length > 1 ? trimmedCells[1] : '';
-
-    if (front.isEmpty && back.isEmpty) {
-      issues.add(
-        _DeckImportIssue(
-          lineNumber: record.lineNumber,
-          message: l10n.importCsvFrontAndBackRequiredMessage,
-        ),
-      );
-      continue;
-    }
-    if (front.isEmpty) {
-      issues.add(
-        _DeckImportIssue(
-          lineNumber: record.lineNumber,
-          message: l10n.flashcardEditorFrontError,
-        ),
-      );
-      continue;
-    }
-    if (back.isEmpty) {
-      issues.add(
-        _DeckImportIssue(
-          lineNumber: record.lineNumber,
-          message: l10n.flashcardEditorBackError,
-        ),
-      );
-      continue;
-    }
-
-    rows.add(
-      _DeckImportCsvRow(
-        lineNumber: record.lineNumber,
-        front: front,
-        back: back,
-      ),
-    );
-  }
-
-  return _DeckImportCsvPreview(rows: rows, issues: issues);
 }
 
-List<_CsvRecord> _parseCsvRecords(String rawCsv) {
-  final String normalized = rawCsv
-      .replaceAll('\r\n', '\n')
-      .replaceAll('\r', '\n');
-  final List<_CsvRecord> records = <_CsvRecord>[];
-  List<String> currentRow = <String>[];
-  StringBuffer currentField = StringBuffer();
-  bool inQuotes = false;
-  bool hasRecordContent = false;
-  int lineNumber = 1;
-  int recordStartLine = 1;
-
-  void finishField() {
-    currentRow = <String>[...currentRow, currentField.toString()];
-    currentField = StringBuffer();
-  }
-
-  void finishRecord() {
-    records.add(
-      _CsvRecord(
-        lineNumber: recordStartLine,
-        cells: List<String>.unmodifiable(currentRow),
-      ),
-    );
-    currentRow = <String>[];
-    currentField = StringBuffer();
-    hasRecordContent = false;
-  }
-
-  for (int index = 0; index < normalized.length; index++) {
-    final String char = normalized[index];
-
-    if (!hasRecordContent) {
-      recordStartLine = lineNumber;
-      if (char != '\n') {
-        hasRecordContent = true;
-      }
-    }
-
-    if (inQuotes) {
-      if (char == '"') {
-        final bool isEscapedQuote =
-            index + 1 < normalized.length && normalized[index + 1] == '"';
-        if (isEscapedQuote) {
-          currentField.write('"');
-          index++;
-          continue;
-        }
-        inQuotes = false;
-        continue;
-      }
-
-      currentField.write(char);
-      if (char == '\n') {
-        lineNumber++;
-      }
-      continue;
-    }
-
-    if (char == '"') {
-      if (currentField.isEmpty) {
-        inQuotes = true;
-        continue;
-      }
-      currentField.write(char);
-      continue;
-    }
-    if (char == ',') {
-      finishField();
-      continue;
-    }
-    if (char == '\n') {
-      finishField();
-      finishRecord();
-      lineNumber++;
-      continue;
-    }
-
-    currentField.write(char);
-  }
-
-  if (normalized.isNotEmpty &&
-      (hasRecordContent || currentField.isNotEmpty || currentRow.isNotEmpty)) {
-    finishField();
-    finishRecord();
-  }
-
-  return records;
-}
-
-bool _looksLikeHeader(List<String> cells) {
-  if (cells.length < 2) {
-    return false;
-  }
-  return StringUtils.equalsIgnoreCase(StringUtils.trimmed(cells[0]), 'front') &&
-      StringUtils.equalsIgnoreCase(StringUtils.trimmed(cells[1]), 'back');
-}
+String _issueMessage(AppLocalizations l10n, DeckImportIssue issue) =>
+    switch (issue.code) {
+      DeckImportIssueCode.frontAndBackRequired =>
+        l10n.importCsvFrontAndBackRequiredMessage,
+      DeckImportIssueCode.frontRequired => l10n.flashcardEditorFrontError,
+      DeckImportIssueCode.backRequired => l10n.flashcardEditorBackError,
+    };

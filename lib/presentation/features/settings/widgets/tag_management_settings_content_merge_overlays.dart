@@ -2,7 +2,7 @@
 
 part of 'tag_management_settings_content.dart';
 
-class _RenameTagDialogOverlay extends StatelessWidget {
+class _RenameTagDialogOverlay extends HookWidget {
   const _RenameTagDialogOverlay({
     required this.l10n,
     required this.tag,
@@ -14,13 +14,15 @@ class _RenameTagDialogOverlay extends StatelessWidget {
   final bool conflict;
 
   @override
-  Widget build(BuildContext context) => _buildSheet(context);
-
-  Widget _buildSheet(BuildContext context) {
-    final ColorScheme scheme = context.colorScheme;
-    final TextEditingController controller = TextEditingController(
-      text: conflict ? 'noun' : 'verbs',
+  Widget build(BuildContext context) {
+    final MxTextSubmitState draft = useMxTextSubmitState(
+      initialText: conflict ? 'noun' : 'verbs',
     );
+    return _buildSheet(context, draft);
+  }
+
+  Widget _buildSheet(BuildContext context, MxTextSubmitState draft) {
+    final ColorScheme scheme = context.colorScheme;
     return Positioned.fill(
       child: ColoredBox(
         color: scheme.shadow.withValues(alpha: 0.45),
@@ -35,7 +37,7 @@ class _RenameTagDialogOverlay extends StatelessWidget {
               ),
               l10n: l10n,
               scheme: scheme,
-              controller: controller,
+              draft: draft,
               tag: tag,
               conflict: conflict,
             ),
@@ -50,7 +52,7 @@ class _RenameDialogCard extends StatelessWidget {
   const _RenameDialogCard({
     required this.l10n,
     required this.scheme,
-    required this.controller,
+    required this.draft,
     required this.tag,
     required this.conflict,
     required super.key,
@@ -58,7 +60,7 @@ class _RenameDialogCard extends StatelessWidget {
 
   final AppLocalizations l10n;
   final ColorScheme scheme;
-  final TextEditingController controller;
+  final MxTextSubmitState draft;
   final _TagManagementEntry tag;
   final bool conflict;
 
@@ -67,7 +69,7 @@ class _RenameDialogCard extends StatelessWidget {
     context: context,
     l10n: l10n,
     scheme: scheme,
-    controller: controller,
+    draft: draft,
     tag: tag,
     conflict: conflict,
   );
@@ -77,7 +79,7 @@ Widget _buildRenameDialogCard({
   required BuildContext context,
   required AppLocalizations l10n,
   required ColorScheme scheme,
-  required TextEditingController controller,
+  required MxTextSubmitState draft,
   required _TagManagementEntry tag,
   required bool conflict,
 }) => Container(
@@ -112,7 +114,7 @@ Widget _buildRenameDialogCard({
         ),
         const SizedBox(height: SpacingTokens.lg),
         MxTextField(
-          controller: controller,
+          controller: draft.controller,
           hintText: l10n.settingsTagsRenameHint,
           prominent: true,
           textInputAction: TextInputAction.done,

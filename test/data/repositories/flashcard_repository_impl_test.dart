@@ -12,6 +12,7 @@ import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
+import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -259,6 +260,63 @@ void main() {
       expect(await db.select(db.flashcards).get(), isEmpty);
       expect(await db.select(db.flashcardProgress).get(), isEmpty);
     });
+  });
+
+  group('commitDeckImport', () {
+    test('commits valid rows and seeds progress in one transaction', () async {
+      final Deck deck = await seedDeck();
+
+      final Result<int> result = await repo.commitDeckImport(
+        deckId: deck.id,
+        rows: const <DeckImportPreviewRow>[
+          DeckImportPreviewRow(lineNumber: 2, front: 'Hello', back: 'World'),
+          DeckImportPreviewRow(
+            lineNumber: 3,
+            front: 'Goodbye',
+            back: 'Farewell',
+          ),
+        ],
+      );
+
+      expect(result, isA<Ok<int>>());
+      expect((result as Ok<int>).value, 2);
+
+      final List<FlashcardRow> flashcardRows = await db
+          .select(db.flashcards)
+          .get();
+      expect(flashcardRows, hasLength(2));
+      expect(flashcardRows.map((row) => row.front), <String>[
+        'Hello',
+        'Goodbye',
+      ]);
+      expect(flashcardRows.map((row) => row.sortOrder), <int>[0, 1]);
+
+      final List<FlashcardProgressRow> progressRows = await db
+          .select(db.flashcardProgress)
+          .get();
+      expect(progressRows, hasLength(2));
+      expect(progressRows.every((row) => row.dueAt != null), isTrue);
+    });
+
+    test(
+      'rolls back the whole transaction when a later row fails validation',
+      () async {
+        final Deck deck = await seedDeck();
+
+        final Result<int> result = await repo.commitDeckImport(
+          deckId: deck.id,
+          rows: const <DeckImportPreviewRow>[
+            DeckImportPreviewRow(lineNumber: 2, front: 'Hello', back: 'World'),
+            DeckImportPreviewRow(lineNumber: 3, front: '   ', back: 'Ignored'),
+          ],
+        );
+
+        expect(result, isA<Err<int>>());
+        expect((result as Err<int>).failure, isA<ValidationFailure>());
+        expect(await db.select(db.flashcards).get(), isEmpty);
+        expect(await db.select(db.flashcardProgress).get(), isEmpty);
+      },
+    );
   });
 
   group('getFlashcardDetail', () {

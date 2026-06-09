@@ -62,6 +62,9 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 > - `Future<Result<Flashcard>> updateFlashcard({flashcardId, front, back, exampleSentence, pronunciation, hint, tags, progressPolicy})`
 >   — updates the content and tags, and optionally resets the current `flashcard_progress` row
 >   when the editor explicitly selects `resetProgress`.
+> - `Future<Result<int>> commitDeckImport({deckId, rows})` — inserts valid CSV preview rows for a
+>   deck in one transaction, creating the default `flashcard_progress` row for each insert and
+>   returning the committed count.
 > - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort})`
 >   — deck + folder breadcrumb + search-filtered cards (front/back/example/pronunciation/hint) +
 >   search-independent `totalCount`
@@ -85,6 +88,7 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 | `move` | `flashcards.deck_id` UPDATE + `sort_order` recompute |
 | `delete` | `study_attempts`, `flashcard_tags`, `flashcard_progress`, `flashcards` |
 | `bulk*` | Single transaction for ALL ids in batch |
+| `commitDeckImport` | Valid preview rows + `flashcard_progress` rows (single transaction) |
 | `importChunked` | Each chunk = own transaction (SQLite param limit ~500). Caller treats overall result as committed/aborted as whole. |
 
 ## CardState computation
@@ -115,6 +119,7 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 - Update flashcard with reset policy → verify progress row resets to the fresh-card state.
 - Move flashcard → verify progress + tags preserved.
 - Bulk operations → verify atomicity (rollback on one failure).
+- Deck import commit → verify transactional success and rollback on row validation failure.
 - Import chunked → verify chunked transactions, verify duplicate detection.
 - Filter by status + tags → verify SQL correctness.
 

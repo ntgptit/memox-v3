@@ -5589,7 +5589,7 @@ abstract class AppLocalizations {
   /// No description provided for @flashcardsImportRouteIntroMessage.
   ///
   /// In en, this message translates to:
-  /// **'Deck import V1 now supports CSV paste preview. File picker, Excel, structured text, and commit stay deferred.'**
+  /// **'Deck import V1 now supports CSV paste preview and transactional commit. File picker, Excel, and structured text stay deferred.'**
   String get flashcardsImportRouteIntroMessage;
 
   /// No description provided for @flashcardsImportFormatsSectionTitle.
@@ -6149,6 +6149,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Valid rows'**
   String get importPreviewRowsTitle;
+
+  /// No description provided for @importPreviewCommitReadyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview is clean. You can import these cards now.'**
+  String get importPreviewCommitReadyMessage;
+
+  /// No description provided for @importCommittingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing cards...'**
+  String get importCommittingMessage;
+
+  /// No description provided for @importFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed. Try again.'**
+  String get importFailedMessage;
 
   /// No description provided for @importCsvEmptyMessage.
   ///

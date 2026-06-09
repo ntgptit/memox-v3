@@ -54,19 +54,19 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 ## Import rules
 
 - Target deck must exist.
-- Current V1 deck import is CSV paste preview only. File picker, Excel, structured text, and
-  database commit remain deferred.
+- Current V1 deck import is CSV paste preview + transactional commit for valid preview rows only.
+  File picker, Excel, and structured text remain deferred.
 - Imported rows must pass the same front/back validation as manual creation.
 - Invalid rows must be reported clearly via the preview screen (see "Import preview flow" below).
 - Do not silently create garbage rows.
 - Duplicate detection, skipped-duplicate reporting, and transaction commit stay deferred until the
-  import commit slice is implemented.
+  duplicate-handling slice is implemented. CSV V1 does not parse tags.
 
 ## Import sources
 
 | Source                              | When                              | Notes                                                                                     |
 |-------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------|
-| `ImportSourceFormat.csv`            | Pasted text                       | Current V1: parse + validation preview only. Optional columns are ignored.               |
+| `ImportSourceFormat.csv`            | Pasted text                       | Current V1: parse + validation preview + commit of valid rows only. Optional columns are ignored. |
 | `ImportSourceFormat.excel`          | Future                            | Deferred. First sheet read. `excelHasHeader` toggle decides if row 1 is skipped.         |
 | `ImportSourceFormat.structuredText` | Future                            | Deferred. Separator chosen by user (`auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`). |
 
@@ -92,7 +92,7 @@ Skipped duplicates appear in `FlashcardImportPreparation.skippedDuplicates` with
 
 ## Import preview flow
 
-Current V1 deck import stops at CSV preview. No database write or commit occurs yet.
+Current V1 deck import keeps CSV preview on the same screen and commits valid rows transactionally.
 
 ```mermaid
 flowchart TD
@@ -100,11 +100,10 @@ flowchart TD
     Choose --> Parse[Parse + validate]
     Parse --> Preview[Show preview screen]
     Preview --> Decision{User decision}
-    Decision -->|Edit options & re-parse| Choose
-    Decision -->|Commit| Transaction[Transaction: insert previewItems only]
+    Decision -->|Edit source & re-parse| Choose
+    Decision -->|Commit clean preview| Transaction[Transaction: insert valid preview rows + progress]
     Decision -->|Cancel| Abort[No-op]
-    Transaction --> Result[Result screen: X imported, Y skipped, Z issues]
-    Result --> Done[Return to deck flashcard list]
+    Transaction --> Success[Snackbar + pop back to deck flashcard list]
 ```
 
 ### Preview screen content
@@ -114,7 +113,8 @@ flowchart TD
 | Summary            | "Will import: N cards. Issues: K."                                                          | Always                                                                                                                                                                                                    |
 | Valid rows list    | CSV rows with `front` / `back` columns only.                                               | When at least one valid row exists                                                                                                                                                                         |
 | Validation issues  | Each `ImportValidationIssue` with `lineNumber` + `message`                                  | When `issues.isNotEmpty`                                                                                                                                                                                  |
-| Commit CTA         | Disabled deferred button                                                                     | Always visible in V1, but not actionable                                                                                                                                                                   |
+| Ready callout      | `importPreviewCommitReadyMessage`                                                           | When preview has at least one valid row and no validation issues                                                                                                                                            |
+| Commit CTA         | Transactional commit button                                                                  | Enabled only when preview has at least one valid row and no validation issues                                                                                                                             |
 | Cancel CTA         | Secondary button                                                                            | Future                                                                                                                                                                                                    |
 
 ### Validation issues
@@ -151,21 +151,20 @@ On commit:
 
 1. Open transaction.
 2. Compute next `sort_order` (current max + 1).
-3. Insert each `FlashcardImportPreviewItem.draft` as a new flashcard in target deck, with default
-   SRS progress (box=1, due=now).
-4. Apply tags from each draft.
+3. Insert each valid preview row as a new flashcard in target deck.
+4. Create default SRS progress for each inserted flashcard (`box=1`, `due_at=now`).
 5. Set `created_at`, `updated_at` to now.
 6. Commit transaction.
 
 If transaction fails: surface failure feedback, retain preview state so user can retry.
+The failure snackbar uses `importFailedMessage`.
 
 ### Result screen
 
-> **Future (not in V1).** The standalone result screen below is the target. V1 does not render a
-> separate result step: on a successful commit the screen shows a deferred success snackbar (
-`importSuccessMessage(count)`) and pops back to the Flashcard List. The committed/skipped counts are
-> computed in `FlashcardImportPreparation` but only the imported count is surfaced (via the snackbar).
-> See `docs/wireframes/10-deck-import.md` §V1 verification status.
+> **Future (not in V1).** The standalone result screen below remains the target. V1 does not render a
+> separate result step: on a successful commit the screen shows a localized success snackbar
+> (`importSuccessMessage(count)`) and pops back to the Flashcard List. The imported count is the
+> number of rows actually committed.
 
 After commit:
 
@@ -221,11 +220,12 @@ V1 create/edit note:
 
 Deck import screen (`/library/deck/:deckId/import`):
 
-- Current V1 route exposes CSV paste input, parse, and validation preview only.
-- Shows route-level copy, a CSV textarea, preview action, validation summary, and read-only
-  preview rows.
-- Does not expose the file picker, Excel import, structured text import, or commit flow.
-- Duplicate detection and commit behavior remain future import work.
+ - Current V1 route exposes CSV paste input, parse, validation preview, and an atomic commit CTA for
+   clean preview rows only.
+ - Shows route-level copy, a CSV textarea, preview action, validation summary, valid rows list,
+   ready/committing/failure callouts, and commit feedback.
+ - Does not expose the file picker, Excel import, or structured text import.
+ - Duplicate detection remains future import work.
 
 ## Form rules
 
@@ -255,7 +255,7 @@ files.
 - `docs/wireframes/07-flashcard-create.md` — create flow + save-and-add-another
 - `docs/wireframes/08-flashcard-edit.md` — edit + card actions
 - `docs/wireframes/09-flashcard-history.md` — per-card timeline
-- `docs/wireframes/10-deck-import.md` — preview-only import flow
+- `docs/wireframes/10-deck-import.md` — CSV preview + commit import flow
 - `docs/wireframes/24-shared-dialogs.md` §delete-confirm, §discard-changes
 - `docs/wireframes/25-shared-bottom-sheets.md` §card-context, §tag-picker
 

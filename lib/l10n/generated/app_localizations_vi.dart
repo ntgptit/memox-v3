@@ -3340,7 +3340,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get flashcardsImportRouteIntroMessage =>
-      'V1 nhập deck hiện hỗ trợ xem trước CSV bằng cách dán. Tệp, Excel, text có cấu trúc và commit vẫn để sau.';
+      'V1 nhập deck hiện hỗ trợ xem trước CSV bằng cách dán và commit transaction. Tệp, Excel và text có cấu trúc vẫn để sau.';
 
   @override
   String get flashcardsImportFormatsSectionTitle => 'Định dạng nguồn';
@@ -3715,6 +3715,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get importPreviewRowsTitle => 'Các dòng hợp lệ';
+
+  @override
+  String get importPreviewCommitReadyMessage =>
+      'Bản xem trước đã sạch. Bạn có thể nhập các thẻ này ngay.';
+
+  @override
+  String get importCommittingMessage => 'Đang nhập thẻ...';
+
+  @override
+  String get importFailedMessage => 'Nhập thất bại. Hãy thử lại.';
 
   @override
   String get importCsvEmptyMessage =>

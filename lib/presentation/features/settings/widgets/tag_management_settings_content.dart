@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/shadow_tokens.dart';
@@ -6,6 +7,7 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/shared/hooks/mx_text_controller_hooks.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';

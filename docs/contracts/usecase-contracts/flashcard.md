@@ -144,33 +144,31 @@ Future<Either<Failure, ImportResult>> call({
 });
 ```
 
-> **Current implementation (verified 2026-05-31, Prompt 17).** The single
-`ImportFlashcardsUseCase` / `Either<Failure, …>` signature above is the **Target** style. The
-> shipped code splits this into two `Result`-based use cases in
-`lib/domain/usecases/flashcard_usecases.dart`:
-> - `PrepareFlashcardImportUseCase.execute(...) → Future<Result<FlashcardImportPreparation>>` —
-    parse + validate + dedupe-against-deck (phases 1–5).
-> - `CommitFlashcardImportUseCase.execute({deckId, preparation}) → Future<Result<int>>` — re-applies
-    the duplicate policy, rejects when `!canCommit`, then chunk-inserts in a single transaction (
-    phase 6). Returns the committed count.
+> **Current implementation (verified 2026-06-10).** The single
+`ImportFlashcardsUseCase` / `Either<Failure, …>` signature above is still the **Target** style. The
+> shipped code splits this into two `Result`-based use cases in `lib/domain/usecases/flashcard/`:
+> - `ParseDeckImportCsvUseCase.call({rawCsv}) → DeckImportPreview` — parse pasted CSV, detect an
+>   optional `front,back` header, preserve quoted values / escaped quotes, skip blank rows, and
+>   collect row-level front/back issues.
+> - `CommitDeckImportUseCase.call({deckId, preview}) → Future<Result<int>>` — reject empty deck id,
+>   reject empty valid rows, reject previews with issues, then commit the valid rows in a single
+>   repository transaction. Returns the committed count.
 >
-> Preview is in-line (no preview-only flag); `FlashcardImportPreparation.canCommit` gates the
-> commit. Migration to the `Either`/single-call form is deferred to the approved `fpdart` migration.
+> Preview is in-line and clean preview rows are committed from the same screen. Migration to the
+> `Either`/single-call form is deferred to the approved `fpdart` migration.
 
 **Phases:**
 
-1. Parse source → list of (front, back) candidates.
+1. Parse pasted CSV → list of (front, back) candidates.
 2. Validate each candidate. Issues collected.
-3. Deduplicate within file (in-file duplicates marked).
-4. Compare against existing deck cards (in-deck duplicates marked).
-5. If preview-only call, return `ImportPreview`.
-6. If commit call AND `issues.isEmpty` AND `commit==true`, chunked INSERT in single logical
-   transaction.
+3. Skip blank rows.
+4. If preview call, return the preview model.
+5. If commit call and preview is clean, write the valid rows in a single transaction.
 
 **Errors:** `NotFoundFailure` (deck), `ValidationFailure`, `StorageFailure`, parse errors mapped to
-`ValidationFailure` with line numbers.
+row-level validation issues in the preview model.
 
-**Test refs:** IM1-IM6.
+**Test refs:** IM1-IM6, plus import commit rows/rollback tests in `docs/decision-tables/memox-core-decision-table.md`.
 
 ## WatchFlashcardListUseCase
 

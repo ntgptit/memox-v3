@@ -11,6 +11,7 @@ import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
+import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
@@ -186,65 +187,89 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     final String? trimmedExample = _optionalText(exampleSentence);
     final String? trimmedPronunciation = _optionalText(pronunciation);
     final String? trimmedHint = _optionalText(hint);
-    final Set<String> seenTags = <String>{};
-    final List<String> normalizedTags = <String>[];
-    for (final String tag in tags) {
-      final String normalizedTag = TagValidator.storageValue(tag);
-      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
-        continue;
-      }
-      normalizedTags.add(normalizedTag);
-    }
-
+    final List<String> normalizedTags = _normalizeTags(tags);
     try {
-      final FlashcardRow created = await _dao.transaction(() async {
-        final DeckRow? deckRow = await _folderDao.findDeck(deckId);
-        if (deckRow == null) {
-          throw _RuleViolation(Failure.notFound(entity: 'deck', id: deckId));
-        }
-
-        final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
-        final String id = IdGenerator.newId();
-        final int nextSortOrder =
-            (await _dao.maxFlashcardSortOrder(deckId)) + 1;
-
-        await _dao
-            .into(_dao.flashcards)
-            .insert(
-              FlashcardsCompanion.insert(
-                id: id,
-                deckId: deckId,
-                front: trimmedFront,
-                back: trimmedBack,
-                exampleSentence: Value<String?>(trimmedExample),
-                pronunciation: Value<String?>(trimmedPronunciation),
-                hint: Value<String?>(trimmedHint),
-                sortOrder: Value<int>(nextSortOrder),
-                createdAt: nowMs,
-                updatedAt: nowMs,
-              ),
-            );
-        await _dao
-            .into(_dao.attachedDatabase.flashcardProgress)
-            .insert(
-              FlashcardProgressCompanion.insert(
-                flashcardId: id,
-                dueAt: Value<int?>(nowMs),
-              ),
-            );
-        for (final String tag in normalizedTags) {
-          await _dao
-              .into(_dao.attachedDatabase.flashcardTags)
-              .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
-        }
-        return (await _dao.findFlashcard(id))!;
-      });
+      final DeckRow? deckRow = await _folderDao.findDeck(deckId);
+      if (deckRow == null) {
+        return Result<Flashcard>.err(
+          Failure.notFound(entity: 'deck', id: deckId),
+        );
+      }
+      final FlashcardRow created = await _dao.transaction(
+        () => _insertFlashcard(
+          deckId: deckId,
+          front: trimmedFront,
+          back: trimmedBack,
+          exampleSentence: trimmedExample,
+          pronunciation: trimmedPronunciation,
+          hint: trimmedHint,
+          tags: normalizedTags,
+          nowMs: DateTime.now().toUtc().millisecondsSinceEpoch,
+        ),
+      );
 
       return Result<Flashcard>.ok(FlashcardMapper.fromRow(created));
     } on _RuleViolation catch (violation) {
       return Result<Flashcard>.err(violation.failure);
     } catch (error) {
       return Result<Flashcard>.err(
+        Failure.storage(
+          operation: StorageOp.write,
+          cause: error.toString(),
+          table: 'flashcards',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<int>> commitDeckImport({
+    required String deckId,
+    required List<DeckImportPreviewRow> rows,
+  }) async {
+    if (StringUtils.trimmed(deckId).isEmpty) {
+      return Future<Result<int>>.value(
+        const Result<int>.err(
+          Failure.validation(field: 'deckId', code: ValidationCode.empty),
+        ),
+      );
+    }
+    if (rows.isEmpty) {
+      return Future<Result<int>>.value(
+        const Result<int>.err(
+          Failure.validation(
+            field: 'preview',
+            code: ValidationCode.insufficientContent,
+          ),
+        ),
+      );
+    }
+
+    try {
+      final DeckRow? deckRow = await _folderDao.findDeck(deckId);
+      if (deckRow == null) {
+        return Result<int>.err(Failure.notFound(entity: 'deck', id: deckId));
+      }
+      final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
+      final int committed = await _dao.transaction(() async {
+        int count = 0;
+        for (final DeckImportPreviewRow row in rows) {
+          await _insertFlashcard(
+            deckId: deckId,
+            front: row.front,
+            back: row.back,
+            tags: const <String>[],
+            nowMs: nowMs,
+          );
+          count++;
+        }
+        return count;
+      });
+      return Result<int>.ok(committed);
+    } on _RuleViolation catch (violation) {
+      return Result<int>.err(violation.failure);
+    } catch (error) {
+      return Result<int>.err(
         Failure.storage(
           operation: StorageOp.write,
           cause: error.toString(),
@@ -287,15 +312,7 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     final String? trimmedExample = _optionalText(exampleSentence);
     final String? trimmedPronunciation = _optionalText(pronunciation);
     final String? trimmedHint = _optionalText(hint);
-    final Set<String> seenTags = <String>{};
-    final List<String> normalizedTags = <String>[];
-    for (final String tag in tags) {
-      final String normalizedTag = TagValidator.storageValue(tag);
-      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
-        continue;
-      }
-      normalizedTags.add(normalizedTag);
-    }
+    final List<String> normalizedTags = _normalizeTags(tags);
 
     try {
       final FlashcardRow updated = await _dao.transaction(() async {
@@ -394,6 +411,78 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     }
     final String trimmed = StringUtils.trimmed(value);
     return trimmed.isEmpty ? null : trimmed;
+  }
+
+  static List<String> _normalizeTags(List<String> tags) {
+    final Set<String> seenTags = <String>{};
+    final List<String> normalizedTags = <String>[];
+    for (final String tag in tags) {
+      final String normalizedTag = TagValidator.storageValue(tag);
+      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
+        continue;
+      }
+      normalizedTags.add(normalizedTag);
+    }
+    return normalizedTags;
+  }
+
+  Future<FlashcardRow> _insertFlashcard({
+    required String deckId,
+    required String front,
+    required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+    required List<String> tags,
+    required int nowMs,
+  }) async {
+    final String trimmedFront = StringUtils.trimmed(front);
+    if (trimmedFront.isEmpty) {
+      throw const _RuleViolation(
+        Failure.validation(field: 'front', code: ValidationCode.empty),
+      );
+    }
+
+    final String trimmedBack = StringUtils.trimmed(back);
+    if (trimmedBack.isEmpty) {
+      throw const _RuleViolation(
+        Failure.validation(field: 'back', code: ValidationCode.empty),
+      );
+    }
+
+    final String id = IdGenerator.newId();
+    final int nextSortOrder = (await _dao.maxFlashcardSortOrder(deckId)) + 1;
+
+    await _dao
+        .into(_dao.flashcards)
+        .insert(
+          FlashcardsCompanion.insert(
+            id: id,
+            deckId: deckId,
+            front: trimmedFront,
+            back: trimmedBack,
+            exampleSentence: Value<String?>(exampleSentence),
+            pronunciation: Value<String?>(pronunciation),
+            hint: Value<String?>(hint),
+            sortOrder: Value<int>(nextSortOrder),
+            createdAt: nowMs,
+            updatedAt: nowMs,
+          ),
+        );
+    await _dao
+        .into(_dao.attachedDatabase.flashcardProgress)
+        .insert(
+          FlashcardProgressCompanion.insert(
+            flashcardId: id,
+            dueAt: Value<int?>(nowMs),
+          ),
+        );
+    for (final String tag in tags) {
+      await _dao
+          .into(_dao.attachedDatabase.flashcardTags)
+          .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
+    }
+    return (await _dao.findFlashcard(id))!;
   }
 
   static DateTime? _dateFromMs(int? ms) =>

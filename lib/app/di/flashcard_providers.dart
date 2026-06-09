@@ -3,9 +3,11 @@ import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
+import 'package:memox/domain/usecases/flashcard/commit_deck_import_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/get_flashcard_detail_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/reorder_flashcards_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/update_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/watch_flashcard_list_usecase.dart';
@@ -53,3 +55,11 @@ ReorderFlashcardsUseCase reorderFlashcardsUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 UpdateFlashcardUseCase updateFlashcardUseCase(Ref ref) =>
     UpdateFlashcardUseCase(ref.watch(flashcardRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+ParseDeckImportCsvUseCase parseDeckImportCsvUseCase(Ref ref) =>
+    const ParseDeckImportCsvUseCase();
+
+@Riverpod(keepAlive: true)
+CommitDeckImportUseCase commitDeckImportUseCase(Ref ref) =>
+    CommitDeckImportUseCase(ref.watch(flashcardRepositoryProvider));

@@ -3,6 +3,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
+import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
@@ -100,6 +101,14 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   Future<Result<void>> reorderFlashcards({
     required DeckId deckId,
     required List<FlashcardId> orderedIds,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<int>> commitDeckImport({
+    required DeckId deckId,
+    required List<DeckImportPreviewRow> rows,
   }) {
     throw UnimplementedError();
   }

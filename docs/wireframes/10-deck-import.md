@@ -9,23 +9,29 @@ source_specs:
 
 ## V1 verification status (2026-06-09, Prompt MX-FEATURE-20260609-014)
 
-This screen is **partially Current**. Current V1 is a single-screen CSV paste preview:
+This screen is **partially Current**. Current V1 is a single-screen CSV paste preview + commit:
 route `/library/deck/:deckId/import` opens `DeckImportScreen`, the user pastes CSV, taps
-Preview, sees valid rows plus row-level validation, and the commit CTA stays deferred/disabled.
-File picker, Excel, structured text, duplicate handling, and DB commit remain **Future**.
+Preview, sees valid rows plus row-level validation, and can commit a clean preview transactionally.
+File picker, Excel, structured text, duplicate handling, and the standalone result screen remain
+**Future**.
 
 **Verified Current (behaviour + tests):**
 
 - Route `/library/deck/:deckId/import` opens `DeckImportScreen`; reached only via the Flashcard List
   Import action (`pushDeckImport`).
-- The screen shows route-level copy, a CSV textarea, a Preview action, a deferred commit CTA, and
-  a read-only preview summary after parse.
+- The screen shows route-level copy, a CSV textarea, a Preview action, an enabled commit CTA for
+  clean previews, and a read-only preview summary after parse.
+- Clean previews show the `importPreviewCommitReadyMessage` callout before commit.
+- Committing shows the `importCommittingMessage` callout/spinner, and failures surface
+  `importFailedMessage` while the preview stays on screen.
 - Invalid/missing `deckId` fails safely and shows the controlled danger callout with Back.
 - Empty CSV input is rejected with localized validation.
 - Valid CSV rows preview front/back values after trim.
 - Quoted CSV values parse correctly, including escaped quotes.
 - Invalid rows surface a row number plus localized reason.
-- Preview does not write to DB and does not invoke import commit logic.
+- Preview does not write to DB.
+- Commit writes valid preview rows transactionally, seeds default SRS progress, and shows localized
+  success/failure feedback without a separate result screen.
 
 **Future (Specified, not exposed in V1):**
 

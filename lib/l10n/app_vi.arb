@@ -1772,7 +1772,7 @@
   "studyCancelConfirmMessage": "Phiên học hiện tại sẽ dừng lại và bạn sẽ được đưa đến màn hình kết quả.",
   "studyCancelConfirmAction": "Hủy",
   "flashcardsImportTitle": "Nhập flashcard",
-  "flashcardsImportRouteIntroMessage": "V1 nhập deck hiện hỗ trợ xem trước CSV bằng cách dán. Tệp, Excel, text có cấu trúc và commit vẫn để sau.",
+  "flashcardsImportRouteIntroMessage": "V1 nhập deck hiện hỗ trợ xem trước CSV bằng cách dán và commit transaction. Tệp, Excel và text có cấu trúc vẫn để sau.",
   "flashcardsImportFormatsSectionTitle": "Định dạng nguồn",
   "flashcardsImportSoonMessage": "Dự kiến ở lát cắt nhập tiếp theo.",
   "flashcardsImportMissingDeckMessage": "Màn hình nhập này cần deck ID. Hãy quay lại và mở nhập từ một deck.",
@@ -1959,6 +1959,9 @@
     }
   },
   "importPreviewRowsTitle": "Các dòng hợp lệ",
+  "importPreviewCommitReadyMessage": "Bản xem trước đã sạch. Bạn có thể nhập các thẻ này ngay.",
+  "importCommittingMessage": "Đang nhập thẻ...",
+  "importFailedMessage": "Nhập thất bại. Hãy thử lại.",
   "importCsvEmptyMessage": "Hãy dán nội dung CSV trước khi xem trước.",
   "importCsvFrontAndBackRequiredMessage": "Cần có mặt trước và mặt sau.",
   "importCommitDeferredAction": "Hoãn import",

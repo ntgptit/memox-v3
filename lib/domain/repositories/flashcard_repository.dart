@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
+import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
@@ -46,6 +47,16 @@ abstract interface class FlashcardRepository {
     String? pronunciation,
     String? hint,
     List<String> tags = const <String>[],
+  });
+
+  /// Commits a parsed deck-import preview in one transaction.
+  ///
+  /// Errors: `NotFoundFailure` (deck missing), `ValidationFailure` (empty deck
+  /// id, empty valid rows, or validation issues slipped past the parser), and
+  /// `StorageFailure`.
+  Future<Result<int>> commitDeckImport({
+    required DeckId deckId,
+    required List<DeckImportPreviewRow> rows,
   });
 
   /// Updates one flashcard's content and tags.

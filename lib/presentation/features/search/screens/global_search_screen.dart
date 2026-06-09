@@ -25,6 +25,9 @@ class GlobalSearchScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // guard:allow-screen-watch -- reason: the app bar query must mirror the
+    // provider state so the search field stays in sync with the results
+    // section, which owns the actual search watch.
     final String query = ref.watch(searchQueryProvider);
     return MxScaffold(
       appBar: MxAppBar(

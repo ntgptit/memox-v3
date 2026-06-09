@@ -3465,7 +3465,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flashcardsImportRouteIntroMessage =>
-      'Deck import V1 now supports CSV paste preview. File picker, Excel, structured text, and commit stay deferred.';
+      'Deck import V1 now supports CSV paste preview and transactional commit. File picker, Excel, and structured text stay deferred.';
 
   @override
   String get flashcardsImportFormatsSectionTitle => 'Source formats';
@@ -3842,6 +3842,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importPreviewRowsTitle => 'Valid rows';
+
+  @override
+  String get importPreviewCommitReadyMessage =>
+      'Preview is clean. You can import these cards now.';
+
+  @override
+  String get importCommittingMessage => 'Importing cards...';
+
+  @override
+  String get importFailedMessage => 'Import failed. Try again.';
 
   @override
   String get importCsvEmptyMessage => 'Paste CSV content before previewing.';

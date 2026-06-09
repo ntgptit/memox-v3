@@ -51,7 +51,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 
 - `docs/system-design/MemoX Design System/ui_kits/mobile/README.md` (23-screen mobile gallery, screens `01`–`23`)
 - `docs/system-design/MemoX Design System/ui_kits/mobile/AUDIT.md` (Flutter-handoff audit, token/widget map)
-- Note: the UI kit README now points screen sources at the actual path `lib/presentation/features/**` (corrected 2026-06-10, commit `5fbdf96d` review pass).
+- Note: the UI kit README now points screen sources at the actual path `lib/presentation/features/**` (corrected 2026-06-09, commit `dd8688a`).
 
 ### Source files
 
@@ -165,7 +165,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 3.5 | Deck delete | Specified / needs source verification | Deletes flashcards and dependent data through persistence rules. |
 | 3.6 | Deck reorder | Specified / needs source verification | Updates `sort_order` only. |
 | 3.7 | Deck target language | Implemented in schema / Partial feature | Required by docs; verify create/edit UI and TTS gate coverage before claiming done. |
-| 3.8 | Deck import route | Implemented / V1 (CSV paste) | `/library/deck/:deckId/import` opens `DeckImportScreen`. V1 exposes CSV paste input + parse + validation preview; commit transaction, file picker, Excel, and structured text stay deferred. |
+| 3.8 | Deck import route | Implemented / V1 (CSV paste + commit) | `/library/deck/:deckId/import` opens `DeckImportScreen`. V1 exposes CSV paste input + parse + validation preview + transactional commit; file picker, Excel, and structured text stay deferred. |
 | 3.9 | Deck export | Specified / needs source verification | Export belongs to export feature scope. |
 | 3.10 | Deck due/card badges | Specified / Partial | Counts stream from DB; due count excludes buried/suspended. |
 
@@ -191,15 +191,15 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | WBS ID | Deliverable | Status | Acceptance criteria |
 | --- | --- | --- | --- |
 | 5.1 | Deck import route | Implemented | Route renders `DeckImportScreen` (501-line screen), not `RoutePlaceholder`. |
-| 5.2 | CSV import (paste) | Implemented / Partial | V1 parses pasted CSV text in `DeckImportScreen._parseCsvPreview`; UTF-8 file decoding via picker still deferred. Note: parse logic currently lives in the widget — see §8 risk. |
+| 5.2 | CSV import (paste) | Implemented / Partial | V1 parses pasted CSV text through a domain use case and keeps UTF-8 file decoding via picker deferred. |
 | 5.3 | Excel import | Specified | Read first sheet; header toggle controls row 1. Still deferred. |
 | 5.4 | Structured text import | Specified | Separator supports auto/tab/comma/colon/slash/semicolon/pipe. Still deferred. |
-| 5.5 | Import preparation | Implemented / Partial | Preview builds rows + validation issues from pasted CSV. Skipped-duplicate aggregation needs source verification. |
+| 5.5 | Import preparation | Implemented / Partial | Preview builds rows + validation issues from pasted CSV via a domain use case. Skipped-duplicate aggregation remains future. |
 | 5.6 | Duplicate detection | Specified / needs source verification | Front/back duplicate against import file and existing deck, case-insensitive; verify coverage in current preview. |
-| 5.7 | Import preview screen | Implemented / Partial | In-screen preview (rows + issues + summary) renders before any write; commit not yet wired so no silent commit risk. |
-| 5.8 | Import commit transaction | Specified | Insert preview items, default SRS progress, tags, timestamps in one transaction. Still deferred (next import slice). |
-| 5.9 | Import result feedback | Specified / V1 snackbar | V1 uses snackbar and pops back, not standalone result screen. Pending commit wiring. |
-| 5.10 | Import validation tests | Partial | `test/.../deck_import_screen_test.dart` covers preview/validation paths; transaction rollback tests pending commit implementation. |
+| 5.7 | Import preview screen | Implemented / Partial | In-screen preview (rows + issues + summary) renders before commit; clean preview enables the transactional CTA. |
+| 5.8 | Import commit transaction | Implemented | Insert valid preview rows, default SRS progress, and timestamps in one transaction. |
+| 5.9 | Import result feedback | Implemented / V1 snackbar | V1 uses snackbar and pops back, not a standalone result screen. |
+| 5.10 | Import validation tests | Implemented / Partial | `test/.../deck_import_screen_test.dart` covers preview/validation/commit states; rollback tests cover transactional failure. |
 
 ### 6. Search
 
@@ -457,10 +457,8 @@ This section orders work by product value and risk, not by internal refactor pre
 
 | Priority | Candidate work package | Why |
 | --- | --- | --- |
-| P0 | Study result route V1 | Study session has a real V1 shell; result now renders a real summary screen. Needed for usable SRS loop. |
-| P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the real result screen. |
-| P1 | Deck import commit | CSV paste + parse + validation preview are current; the commit transaction (insert items + default SRS progress + tags in one transaction) is the next slice. Extract parse logic into a use case during this work. |
 | P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |
+| P1 | Deck import duplicate handling | CSV paste + parse + transactional commit are current; skipped-duplicate handling is still deferred. |
 | P1 | Account settings real screen or explicitly defer | Route exists as placeholder; sync/account docs are large but user-facing settings is not wired. |
 | P1 | Progress screen V1 | Top-level route is placeholder; users need basic learning feedback. |
 | P2 | Bulk operations V1 | High utility but large; split into selection mode + one safe action first. |
@@ -473,12 +471,9 @@ This section orders work by product value and risk, not by internal refactor pre
 
 Use one prompt per work package. Do not combine feature + broad refactor.
 
-1. Study Result Screen V1: render completed session summary from persisted data, keep finalization logic minimal or mocked only if already persisted.
-2. Grade Answer / Finalize Session V1: persist attempt, update progress transactionally, route to result.
-3. Deck Import V2: implement source parse + preview + commit transaction for CSV only first.
-4. Flashcard List Status Filters V1: active/suspended/buried/due filters and badges.
-5. Progress Screen V1: due count, box distribution from current progress table only.
-6. Account Settings Placeholder Replacement V1: display linked/unlinked states without full Drive restore first.
+1. Flashcard List Status Filters V1: active/suspended/buried/due filters and badges.
+2. Progress Screen V1: due count, box distribution from current progress table only.
+3. Account Settings Placeholder Replacement V1: display linked/unlinked states without full Drive restore first.
 
 ## 8. Known Risks / Review Notes
 
@@ -491,7 +486,7 @@ Use one prompt per work package. Do not combine feature + broad refactor.
 | Generated files | Manual edits create drift | Regenerate with build_runner/gen-l10n only. |
 | CI not visible | Cannot claim full pass from GitHub checks | Report source-level review unless CI/status checks exist. |
 | Future proposals | Can bloat V1 | Do not implement Future/Blocked/Rejection rows without explicit product promotion. |
-| Import parse logic in UI | `DeckImportScreen._parseCsvPreview` holds CSV parsing/validation in the widget; no import use case/repository exists under `lib/domain` or `lib/data`. Violates UseCase → Repository flow. | Before wiring commit (5.8), extract parse + validation into a domain use case; keep the screen presentational. |
+| Import duplicate handling gap | CSV parse/preview/commit now lives in domain/data, but duplicate detection / skipped-duplicate reporting is still future work. | Keep the CSV commit slice scoped to valid rows only until the duplicate-handling prompt is promoted. |
 
 ## 9. WBS Maintenance Rules
 
