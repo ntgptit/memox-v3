@@ -523,6 +523,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `7b3c1691` | 2026-06-10 | 3.8, 5.2, 5.5, 5.7, 5.8, 5.9, 5.10 | Commit deck import with CSV paste preview and transactional insert flow |
 | `dd8688a` | 2026-06-09 | 20.6, 18.9, 5.1–5.9, 6.1–6.6 | Update WBS and UI kit references for accuracy and traceability |
 | `5fbdf96d` | 2026-06-10 | 6.1–6.6 | Refactor `GlobalSearchScreen` / `SearchAppBarField` query handling |
 | `38af6d94` | 2026-06-09 | 4.2, 4.3 | `FlashcardEditorDraft` focus management in editor view |
