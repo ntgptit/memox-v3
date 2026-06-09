@@ -1202,13 +1202,20 @@
   "@studyEntryResumeRequiredTitle": {
     "description": "Tiêu đề hiển thị khi Study Entry tìm thấy phiên có thể tiếp tục nhưng hộp thoại tiếp tục chưa được triển khai."
   },
-  "studyEntryResumeRequiredMessage": "Chúng tôi đã tìm thấy một phiên học hiện có cho phạm vi này. Tính năng tiếp tục và bắt đầu lại sẽ có trong bản cập nhật sau.",
+  "studyEntryResumeRequiredMessage": "Chúng tôi đã tìm thấy một phiên học hiện có cho phạm vi này. Hãy chọn cách tiếp tục.",
   "@studyEntryResumeRequiredMessage": {
-    "description": "Thông báo hiển thị khi Study Entry tìm thấy phiên có thể tiếp tục và chưa được tự động tiếp tục."
+    "description": "Thông báo hiển thị khi Study Entry tìm thấy phiên có thể tiếp tục và yêu cầu người dùng chọn thao tác."
   },
+  "studyEntryResumeRequiredHeader": "Chọn thao tác",
+  "studyEntryResumeRequiredResumeAction": "Tiếp tục",
+  "studyEntryResumeRequiredStartOverAction": "Bắt đầu lại",
+  "studyEntryResumeRequiredStartOverConfirmTitle": "Bắt đầu lại và bỏ phiên học hiện tại?",
+  "studyEntryResumeRequiredStartOverConfirmMessage": "Thao tác này sẽ hủy phiên học đang có và tạo một phiên mới cho cùng phạm vi học.",
+  "studyEntryResumeRequiredStartOverConfirmAction": "Bắt đầu lại",
+  "studyEntryResumeRequiredStartOverFailed": "Không thể bắt đầu lại. Vui lòng thử lại.",
   "studyEntryResumeRequiredCta": "Quay lại",
   "@studyEntryResumeRequiredCta": {
-    "description": "Nút cho trạng thái resumeRequired; hiện chỉ đóng màn hình."
+    "description": "Nút cũ cho trạng thái resumeRequired."
   },
   "studyEntryInvalidTitle": "Không thể mở phần học",
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",

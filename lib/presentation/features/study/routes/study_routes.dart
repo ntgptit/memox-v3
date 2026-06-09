@@ -8,8 +8,8 @@ import 'package:memox/presentation/features/study/screens/study_session_screen.d
 
 /// Study routes, composed by `app_router.dart`.
 ///
-/// Session/result routes remain placeholders. Today and scoped study entry are
-/// real screens that start persisted sessions when eligible cards exist.
+/// Today and scoped study entry are real screens that start persisted sessions
+/// when eligible cards exist. Session and result routes are real screens too.
 List<RouteBase> studyRoutes(
   GlobalKey<NavigatorState> rootNavigatorKey,
 ) => <RouteBase>[

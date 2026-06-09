@@ -25,6 +25,7 @@ import 'package:memox/presentation/features/study/screens/study_entry_screen.dar
 import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:riverpod/misc.dart';
@@ -38,8 +39,10 @@ class _FakeStudyRepository implements StudyRepository {
           );
 
   Result<StudyEntryStartResult> result;
+  Result<StudyEntryStartResult>? resultAfterCancel;
   final Result<StudySessionReview> reviewResult;
   int startCalls = 0;
+  int cancelCalls = 0;
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
@@ -67,7 +70,11 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<void>> cancelStudySession({
     required SessionId sessionId,
   }) async {
-    throw UnimplementedError();
+    cancelCalls++;
+    if (resultAfterCancel != null) {
+      result = resultAfterCancel!;
+    }
+    return const Result<void>.ok(null);
   }
 
   @override
@@ -248,7 +255,7 @@ void main() {
   );
 
   testWidgets(
-    'resume-required state shows controlled empty state and does not redirect',
+    'resume-required state renders resume, start-over, and back actions',
     (tester) async {
       final _FakeStudyRepository repository = _FakeStudyRepository(
         const Result<StudyEntryStartResult>.ok(
@@ -273,17 +280,67 @@ void main() {
         tester.element(find.byType(StudyEntryScreen)),
       );
 
-      expect(find.byType(MxEmptyState), findsOneWidget);
       expect(find.text(l10n.studyEntryResumeRequiredTitle), findsOneWidget);
       expect(find.text(l10n.studyEntryResumeRequiredMessage), findsOneWidget);
-      expect(find.text(l10n.studyEntryResumeRequiredCta), findsOneWidget);
+      expect(
+        find.widgetWithText(MxActionButton, l10n.studyEntryResumeRequiredResumeAction),
+        findsOneWidget,
+      );
+      expect(
+        find.widgetWithText(
+          MxSecondaryButton,
+          l10n.studyEntryResumeRequiredStartOverAction,
+        ),
+        findsOneWidget,
+      );
+      expect(find.text(l10n.commonBack), findsOneWidget);
       expect(find.byType(RoutePlaceholder), findsNothing);
       expect(repository.startCalls, 1);
     },
   );
 
   testWidgets(
-    'resume-required back action falls back to Library when the navigator cannot pop',
+    'resume-required resume action navigates to the existing session and does not start again',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studyLocation(entryType: 'deck', entryRefId: 'deck-1'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyEntryScreen)),
+      );
+
+      await tester.tap(
+        find.widgetWithText(
+          MxActionButton,
+          l10n.studyEntryResumeRequiredResumeAction,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(repository.startCalls, 1);
+      expect(repository.cancelCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'resume-required back action falls back to Library and does not mutate data',
     (tester) async {
       final _FakeStudyRepository repository = _FakeStudyRepository(
         const Result<StudyEntryStartResult>.ok(
@@ -304,8 +361,16 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final MxActionButton button = tester.widget(find.byType(MxActionButton));
-      button.onPressed!.call();
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyEntryScreen)),
+      );
+
+      final MxSecondaryButton backButton = tester
+          .widgetList<MxSecondaryButton>(find.byType(MxSecondaryButton))
+          .firstWhere(
+            (MxSecondaryButton button) => button.label == l10n.commonBack,
+          );
+      backButton.onPressed!.call();
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);
@@ -316,6 +381,179 @@ void main() {
       expect(find.byType(StudyEntryScreen), findsNothing);
       expect(find.byType(MxEmptyState), findsNothing);
       expect(repository.startCalls, 1);
+      expect(repository.cancelCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'resume-required start over opens the confirmation dialog',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
+        ),
+      );
+
+      await tester.pumpWidget(
+        _appShell(
+          const StudyEntryScreen.scoped(
+            entryType: 'deck',
+            entryRefId: 'deck-1',
+          ),
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyEntryScreen)),
+      );
+
+      final MxSecondaryButton startOverButton = tester
+          .widgetList<MxSecondaryButton>(find.byType(MxSecondaryButton))
+          .firstWhere(
+            (MxSecondaryButton button) =>
+                button.label == l10n.studyEntryResumeRequiredStartOverAction,
+          );
+      startOverButton.onPressed!.call();
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(Dialog),
+          matching: find.text(l10n.studyEntryResumeRequiredStartOverConfirmTitle),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(Dialog),
+          matching: find.text(l10n.studyEntryResumeRequiredStartOverConfirmMessage),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(Dialog),
+          matching: find.widgetWithText(
+            FilledButton,
+            l10n.studyEntryResumeRequiredStartOverConfirmAction,
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(Dialog),
+          matching: find.widgetWithText(OutlinedButton, l10n.commonCancel),
+        ),
+        findsOneWidget,
+      );
+      expect(repository.startCalls, 1);
+      expect(repository.cancelCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'cancelling start over keeps the user on Study Entry and does not mutate data',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
+        ),
+      );
+
+      await tester.pumpWidget(
+        _appShell(
+          const StudyEntryScreen.scoped(
+            entryType: 'deck',
+            entryRefId: 'deck-1',
+          ),
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyEntryScreen)),
+      );
+
+      final MxSecondaryButton startOverButton = tester
+          .widgetList<MxSecondaryButton>(find.byType(MxSecondaryButton))
+          .firstWhere(
+            (MxSecondaryButton button) =>
+                button.label == l10n.studyEntryResumeRequiredStartOverAction,
+          );
+      startOverButton.onPressed!.call();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.commonCancel));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudyEntryScreen), findsOneWidget);
+      expect(find.byType(StudySessionScreen), findsNothing);
+      expect(repository.startCalls, 1);
+      expect(repository.cancelCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'confirmed start over cancels the old session and routes to a new session',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.resumeRequired(sessionId: 'session-old'),
+        ),
+      )..resultAfterCancel = const Result<StudyEntryStartResult>.ok(
+          StudyEntryStartResult.started(sessionId: 'session-new'),
+        );
+      final GoRouter router = _studyRouter(
+        _studyLocation(entryType: 'deck', entryRefId: 'deck-1'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyEntryScreen)),
+      );
+
+      final MxSecondaryButton startOverButton = tester
+          .widgetList<MxSecondaryButton>(find.byType(MxSecondaryButton))
+          .firstWhere(
+            (MxSecondaryButton button) =>
+                button.label == l10n.studyEntryResumeRequiredStartOverAction,
+          );
+      startOverButton.onPressed!.call();
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(Dialog),
+          matching: find.widgetWithText(
+            FilledButton,
+            l10n.studyEntryResumeRequiredStartOverConfirmAction,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(
+        router.routeInformationProvider.value.uri.toString(),
+        RoutePaths.studySession('session-new'),
+      );
+      expect(repository.cancelCalls, 1);
+      expect(repository.startCalls, 2);
     },
   );
 

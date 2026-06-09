@@ -95,8 +95,8 @@ Notes:
   screen after explicit finish.
 - Current V1 note: the Study Entry routes are now real screens that start or resume persisted
   sessions, render the empty-scope matrix when no eligible cards exist, and use
-  `pushReplacement` for the session redirect. The create/resume edges in the diagram remain the
-  target contract for the deferred dialog flow.
+  `pushReplacement` for the session redirect. When a resumable session exists, the gate shows an
+  explicit Resume / Start over / Back choice instead of silently creating a new session.
 
 ## Push vs Go rules
 

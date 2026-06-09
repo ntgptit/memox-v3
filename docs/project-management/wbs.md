@@ -248,7 +248,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.3 | Study entry parsing | Implemented / Ongoing | Validates entry type/ref id/study type/mode query. |
 | 9.4 | Empty scope handling | Implemented / Partial | Deck/folder/today empty states implemented; tag scope blocked. |
 | 9.5 | No silent resume | Implemented | Existing resumable session returns controlled `resumeRequired`. |
-| 9.6 | Resume/start-over dialog | Deferred | Current V1 shows controlled state; full dialog remains future task. |
+| 9.6 | Resume/start-over dialog | Implemented | Study Entry now shows explicit Resume / Start over / Back actions; Start over confirms before canceling and restarting the same scope. |
 | 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
 | 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, Finish Session when all items are answered, and in-session answer persistence. |
 | 9.9 | Study result route | Implemented | `/library/study/session/:sessionId/result` opens `StudyResultScreen` with completed-session summary and controlled fallback states. |

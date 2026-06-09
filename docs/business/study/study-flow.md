@@ -123,9 +123,11 @@ stateDiagram-v2
   CTA only after every item is answered, and navigates to the real result
   screen after explicit finish.
 - Study Entry V1 must not silently resume an existing scope session. If a
-  resumable session exists and the explicit Resume / Start over dialog is not
-  implemented yet, the gate returns a controlled `resumeRequired` state and
-  waits for user action instead of creating a duplicate session.
+  resumable session exists, the gate returns a controlled `resumeRequired`
+  state with explicit Resume / Start over / Back actions. Resume opens the
+  existing session, and Start over confirms before cancelling that session
+  and re-entering the same scope so a duplicate session is not created
+  silently.
 - The Study Session self-grade V1 path reveals the current card, lets the user
   tap Forgot / Got it, persists the attempt plus `study_session_items.answered_at`,
   and keeps `flashcard_progress` unchanged until finalization.

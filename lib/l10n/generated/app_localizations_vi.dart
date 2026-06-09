@@ -2407,7 +2407,31 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyEntryResumeRequiredMessage =>
-      'Chúng tôi đã tìm thấy một phiên học hiện có cho phạm vi này. Tính năng tiếp tục và bắt đầu lại sẽ có trong bản cập nhật sau.';
+      'Chúng tôi đã tìm thấy một phiên học hiện có cho phạm vi này. Hãy chọn cách tiếp tục.';
+
+  @override
+  String get studyEntryResumeRequiredHeader => 'Chọn thao tác';
+
+  @override
+  String get studyEntryResumeRequiredResumeAction => 'Tiếp tục';
+
+  @override
+  String get studyEntryResumeRequiredStartOverAction => 'Bắt đầu lại';
+
+  @override
+  String get studyEntryResumeRequiredStartOverConfirmTitle =>
+      'Bắt đầu lại và bỏ phiên học hiện tại?';
+
+  @override
+  String get studyEntryResumeRequiredStartOverConfirmMessage =>
+      'Thao tác này sẽ hủy phiên học đang có và tạo một phiên mới cho cùng phạm vi học.';
+
+  @override
+  String get studyEntryResumeRequiredStartOverConfirmAction => 'Bắt đầu lại';
+
+  @override
+  String get studyEntryResumeRequiredStartOverFailed =>
+      'Không thể bắt đầu lại. Vui lòng thử lại.';
 
   @override
   String get studyEntryResumeRequiredCta => 'Quay lại';

@@ -4152,13 +4152,55 @@ abstract class AppLocalizations {
   /// **'Study session already in progress'**
   String get studyEntryResumeRequiredTitle;
 
-  /// Message shown when Study Entry finds a resumable session and must not auto-resume it yet.
+  /// Message shown when Study Entry finds a resumable session and asks the user to choose an action.
   ///
   /// In en, this message translates to:
-  /// **'We found an existing study session for this scope. Resume and start over will be available in a future update.'**
+  /// **'We found an existing study session for this scope. Choose how to continue.'**
   String get studyEntryResumeRequiredMessage;
 
-  /// CTA for the controlled resume-required state; it dismisses the gate for now.
+  /// No description provided for @studyEntryResumeRequiredHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an action'**
+  String get studyEntryResumeRequiredHeader;
+
+  /// No description provided for @studyEntryResumeRequiredResumeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get studyEntryResumeRequiredResumeAction;
+
+  /// No description provided for @studyEntryResumeRequiredStartOverAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get studyEntryResumeRequiredStartOverAction;
+
+  /// No description provided for @studyEntryResumeRequiredStartOverConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over and discard the current session?'**
+  String get studyEntryResumeRequiredStartOverConfirmTitle;
+
+  /// No description provided for @studyEntryResumeRequiredStartOverConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will cancel the existing session and create a new one for the same study scope.'**
+  String get studyEntryResumeRequiredStartOverConfirmMessage;
+
+  /// No description provided for @studyEntryResumeRequiredStartOverConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get studyEntryResumeRequiredStartOverConfirmAction;
+
+  /// No description provided for @studyEntryResumeRequiredStartOverFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start over. Try again.'**
+  String get studyEntryResumeRequiredStartOverFailed;
+
+  /// Legacy CTA for the controlled resume-required state.
   ///
   /// In en, this message translates to:
   /// **'Back'**

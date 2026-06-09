@@ -22,11 +22,10 @@ Most users never see this screen for more than a moment — it's a gate.
 > `entryType`, `entryRefId`, `study_type`, and `mode`, shows a preparing state,
 > surfaces invalid parameters as an error state, renders the empty-scope matrix
 > for zero-eligible-card scopes, and redirects with `pushReplacement` to a
-> persisted session when eligible cards exist. The destination `/library/study/session/:sessionId`
-> now opens a real Study Session Review Screen V1 (result stays a placeholder).
-> If a resumable session already exists, V1 now shows a controlled
-> `resumeRequired` state instead of silently resuming. The full Resume / Start
-> over dialog remains deferred.
+> persisted session when eligible cards exist. The destination
+> `/library/study/session/:sessionId` now opens a real Study Session Review Screen V1 and
+> `/library/study/session/:sessionId/result` opens the real result screen. If a resumable
+> session already exists, V1 shows an explicit Resume / Start over / Back choice.
 
 ## Behavior tree
 
@@ -37,6 +36,8 @@ flowchart TD
     Validate -->|content present| Check{Resumable session<br/>for scope?}
     Check -->|no| Create[Create session →<br/>pushReplacement to /session/:id]
     Check -->|yes| ResumeReq[Show controlled resumeRequired state]
+    ResumeReq --> Resume[Resume existing session]
+    ResumeReq --> StartOver[Confirm and start over]
     ResumeReq --> Back[Pop back]
 ```
 

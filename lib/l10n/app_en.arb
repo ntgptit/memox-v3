@@ -1202,13 +1202,20 @@
   "@studyEntryResumeRequiredTitle": {
     "description": "Title shown when Study Entry finds a resumable session but the resume dialog is not implemented yet."
   },
-  "studyEntryResumeRequiredMessage": "We found an existing study session for this scope. Resume and start over will be available in a future update.",
+  "studyEntryResumeRequiredMessage": "We found an existing study session for this scope. Choose how to continue.",
   "@studyEntryResumeRequiredMessage": {
-    "description": "Message shown when Study Entry finds a resumable session and must not auto-resume it yet."
+    "description": "Message shown when Study Entry finds a resumable session and asks the user to choose an action."
   },
+  "studyEntryResumeRequiredHeader": "Choose an action",
+  "studyEntryResumeRequiredResumeAction": "Resume",
+  "studyEntryResumeRequiredStartOverAction": "Start over",
+  "studyEntryResumeRequiredStartOverConfirmTitle": "Start over and discard the current session?",
+  "studyEntryResumeRequiredStartOverConfirmMessage": "This will cancel the existing session and create a new one for the same study scope.",
+  "studyEntryResumeRequiredStartOverConfirmAction": "Start over",
+  "studyEntryResumeRequiredStartOverFailed": "Couldn't start over. Try again.",
   "studyEntryResumeRequiredCta": "Back",
   "@studyEntryResumeRequiredCta": {
-    "description": "CTA for the controlled resume-required state; it dismisses the gate for now."
+    "description": "Legacy CTA for the controlled resume-required state."
   },
   "studyEntryInvalidTitle": "Can't open study",
   "studyEntryInvalidMessage": "The study route parameters are invalid.",

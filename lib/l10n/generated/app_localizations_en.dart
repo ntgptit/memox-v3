@@ -2522,7 +2522,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyEntryResumeRequiredMessage =>
-      'We found an existing study session for this scope. Resume and start over will be available in a future update.';
+      'We found an existing study session for this scope. Choose how to continue.';
+
+  @override
+  String get studyEntryResumeRequiredHeader => 'Choose an action';
+
+  @override
+  String get studyEntryResumeRequiredResumeAction => 'Resume';
+
+  @override
+  String get studyEntryResumeRequiredStartOverAction => 'Start over';
+
+  @override
+  String get studyEntryResumeRequiredStartOverConfirmTitle =>
+      'Start over and discard the current session?';
+
+  @override
+  String get studyEntryResumeRequiredStartOverConfirmMessage =>
+      'This will cancel the existing session and create a new one for the same study scope.';
+
+  @override
+  String get studyEntryResumeRequiredStartOverConfirmAction => 'Start over';
+
+  @override
+  String get studyEntryResumeRequiredStartOverFailed =>
+      'Couldn\'t start over. Try again.';
 
   @override
   String get studyEntryResumeRequiredCta => 'Back';
