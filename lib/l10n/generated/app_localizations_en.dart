@@ -2556,6 +2556,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionBackLabel => 'Back';
 
   @override
+  String get studyPreviousAction => 'Previous';
+
+  @override
+  String get studyNextAction => 'Next';
+
+  @override
   String get studySessionShowAction => 'Show answer';
 
   @override
@@ -3169,9 +3175,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String studyShowAnswerCountdownAction(int seconds) {
     return 'Show (${seconds}s)';
   }
-
-  @override
-  String get studyNextAction => 'Next';
 
   @override
   String get studyAnswerCorrectTitle => 'Correct';

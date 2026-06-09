@@ -4212,6 +4212,18 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get studySessionBackLabel;
 
+  /// No description provided for @studyPreviousAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get studyPreviousAction;
+
+  /// No description provided for @studyNextAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get studyNextAction;
+
   /// No description provided for @studySessionShowAction.
   ///
   /// In en, this message translates to:
@@ -5123,12 +5135,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show ({seconds}s)'**
   String studyShowAnswerCountdownAction(int seconds);
-
-  /// No description provided for @studyNextAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Next'**
-  String get studyNextAction;
 
   /// No description provided for @studyAnswerCorrectTitle.
   ///

@@ -20,10 +20,11 @@ convention).
 
 > **Current V1 implementation note.** The shipped screen at
 > `/library/study/session/:sessionId` is a minimal persisted review shell: it
-> loads the session header + ordered session items, shows the first card only,
-> keeps the answer hidden until the user taps `Show answer`, and offers a safe
-> exit action. The full swipe-based multi-card review flow below remains the
-> forward target for later mode work. The result route stays a placeholder.
+> loads the session header + ordered session items, shows the current card with
+> a reveal toggle, adds Previous/Next controls that reset the reveal state when
+> moving between cards, and offers a safe exit action. The full swipe-based
+> multi-card review flow below remains the forward target for later mode work.
+> The result route stays a placeholder.
 
 > **Mode pill / progress-bar color convention (applies to wireframes 13-17).** Modes split into two
 > visual families:
@@ -139,6 +140,12 @@ swiping (gesture is the primary input).
 | Tap card        | Tap (fallback)            | Open inline Forgot / Perfect prompt (accessibility / motor fallback).       |
 | Long-press card | Long-press                | Open card actions bottom-sheet (Bury / Suspend / History / Audio settings). |
 | Tap ✕           | Tap                       | Show exit confirm dialog.                                                   |
+
+## Current V1 controls
+
+- Previous button is disabled on the first card.
+- Next button is disabled on the last card.
+- Moving Previous/Next resets the answer to hidden before the next card is shown.
 
 ## Dialogs and bottom-sheets used
 

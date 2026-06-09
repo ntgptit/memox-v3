@@ -250,7 +250,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.5 | No silent resume | Implemented | Existing resumable session returns controlled `resumeRequired`. |
 | 9.6 | Resume/start-over dialog | Deferred | Current V1 shows controlled state; full dialog remains future task. |
 | 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
-| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows first item only, reveal toggle. |
+| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle and Previous/Next controls. |
 | 9.9 | Study result route | Placeholder | `/library/study/session/:sessionId/result` remains placeholder. |
 | 9.10 | Protected active-session exit | Specified / Partial | Active session exit requires confirmation; verify current V1 shell behavior before extending. |
 | 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |

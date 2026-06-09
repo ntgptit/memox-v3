@@ -1228,6 +1228,8 @@
   },
   "studySessionFrontLabel": "Front",
   "studySessionBackLabel": "Back",
+  "studyPreviousAction": "Previous",
+  "studyNextAction": "Next",
   "studySessionShowAction": "Show answer",
   "studySessionHideAction": "Hide answer",
   "studySessionNotFoundTitle": "Session not found",

@@ -24,6 +24,7 @@ import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/study/mx_flashcard.dart';
 import 'package:riverpod/misc.dart';
@@ -33,12 +34,18 @@ class _FakeStudyRepository implements StudyRepository {
 
   Result<StudySessionReview> reviewResult;
   int reviewCalls = 0;
+  int startCalls = 0;
+  int findResumableCalls = 0;
+  int latestSummaryCalls = 0;
+  int cancelCalls = 0;
+  int createCalls = 0;
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
     required StudyScope scope,
     StudyMode? mode,
   }) async {
+    startCalls++;
     throw UnimplementedError();
   }
 
@@ -54,12 +61,14 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<StudySession?>> findResumableSession({
     required StudyScope scope,
   }) async {
+    findResumableCalls++;
     throw UnimplementedError();
   }
 
   @override
   Future<Result<DashboardResumeSessionSummary?>>
   findLatestResumableSessionSummary() async {
+    latestSummaryCalls++;
     throw UnimplementedError();
   }
 
@@ -67,6 +76,7 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<void>> cancelStudySession({
     required SessionId sessionId,
   }) async {
+    cancelCalls++;
     throw UnimplementedError();
   }
 
@@ -75,6 +85,7 @@ class _FakeStudyRepository implements StudyRepository {
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,
   }) async {
+    createCalls++;
     throw UnimplementedError();
   }
 }
@@ -108,9 +119,7 @@ String _studySessionLocation(String sessionId) =>
 
 StudySessionReview _review({
   required String sessionId,
-  required String front,
-  required String back,
-  int sortOrder = 0,
+  required List<({String front, String back})> cards,
 }) {
   final DateTime now = DateTime.utc(2026, 1, 1);
   final StudySession session = StudySession(
@@ -126,36 +135,49 @@ StudySessionReview _review({
     id: 'item-$sessionId',
     sessionId: sessionId,
     flashcardId: 'card-$sessionId',
-    sortOrder: sortOrder,
-    createdAt: now,
-    updatedAt: now,
-  );
-  final Flashcard flashcard = Flashcard(
-    id: 'card-$sessionId',
-    deckId: 'deck-1',
-    front: front,
-    back: back,
-    sortOrder: sortOrder,
+    sortOrder: 0,
     createdAt: now,
     updatedAt: now,
   );
   return StudySessionReview(
     session: session,
     items: <StudySessionReviewItem>[
-      StudySessionReviewItem(sessionItem: sessionItem, flashcard: flashcard),
+      for (int index = 0; index < cards.length; index++)
+        StudySessionReviewItem(
+          sessionItem: sessionItem.copyWith(
+            id: 'item-$sessionId-$index',
+            flashcardId: 'card-$sessionId-$index',
+            sortOrder: index,
+            createdAt: now,
+            updatedAt: now,
+          ),
+          flashcard: Flashcard(
+            id: 'card-$sessionId-$index',
+            deckId: 'deck-1',
+            front: cards[index].front,
+            back: cards[index].back,
+            sortOrder: index,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        ),
     ],
   );
 }
 
 void main() {
   testWidgets(
-    'renders the study session route and reveals the answer for the first item',
+    'navigates between cards and resets reveal state',
     (tester) async {
-      const String front = 'Front 1';
-      const String back = 'Back 1';
       final _FakeStudyRepository repository = _FakeStudyRepository(
         Result<StudySessionReview>.ok(
-          _review(sessionId: 'session-1', front: front, back: back),
+          _review(
+            sessionId: 'session-1',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
         ),
       );
       final GoRouter router = _studyRouter(
@@ -175,23 +197,75 @@ void main() {
       final AppLocalizations l10n = AppLocalizations.of(
         tester.element(find.byType(StudySessionScreen)),
       );
+      final Finder previousFinder = find.widgetWithText(
+        MxActionButton,
+        l10n.studyPreviousAction,
+      );
+      final Finder nextFinder = find.widgetWithText(
+        MxActionButton,
+        l10n.studyNextAction,
+      );
+      final Finder showAnswerFinder = find.text(l10n.studySessionShowAction);
 
       expect(find.byType(StudySessionScreen), findsOneWidget);
       expect(find.byType(RoutePlaceholder), findsNothing);
       expect(find.byType(MxFlashcard), findsOneWidget);
       expect(find.text(l10n.studySessionTitle), findsOneWidget);
-      expect(find.text(l10n.studySessionProgressLabel(1, 1)), findsOneWidget);
-      expect(find.text(front), findsOneWidget);
-      expect(find.text(back), findsNothing);
-      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+      expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
+      expect(find.text('Front 1'), findsOneWidget);
+      expect(find.text('Back 1'), findsNothing);
+      expect(find.text('Front 2'), findsNothing);
+      expect(find.text('Back 2'), findsNothing);
+      expect(showAnswerFinder, findsOneWidget);
+      expect(
+        tester.widget<MxActionButton>(previousFinder).onPressed,
+        isNull,
+      );
+      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
       expect(repository.reviewCalls, 1);
+      expect(repository.startCalls, 0);
+      expect(repository.findResumableCalls, 0);
+      expect(repository.latestSummaryCalls, 0);
+      expect(repository.cancelCalls, 0);
+      expect(repository.createCalls, 0);
 
-      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.tap(showAnswerFinder);
       await tester.pumpAndSettle();
 
-      expect(find.text(front), findsNothing);
-      expect(find.text(back), findsOneWidget);
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text('Back 1'), findsOneWidget);
       expect(find.text(l10n.studySessionHideAction), findsOneWidget);
+
+      await tester.tap(nextFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.studySessionProgressLabel(2, 2)), findsOneWidget);
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text('Back 1'), findsNothing);
+      expect(find.text('Front 2'), findsOneWidget);
+      expect(find.text('Back 2'), findsNothing);
+      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+      expect(
+        tester.widget<MxActionButton>(previousFinder).onPressed,
+        isNotNull,
+      );
+      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
+
+      await tester.tap(previousFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
+      expect(find.text('Front 1'), findsOneWidget);
+      expect(find.text('Back 1'), findsNothing);
+      expect(find.text('Front 2'), findsNothing);
+      expect(find.text('Back 2'), findsNothing);
+      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+      expect(find.text(l10n.studySessionHideAction), findsNothing);
+      expect(
+        tester.widget<MxActionButton>(previousFinder).onPressed,
+        isNull,
+      );
+      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
     },
   );
 

@@ -2441,6 +2441,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionBackLabel => 'Mặt sau';
 
   @override
+  String get studyPreviousAction => 'Trước';
+
+  @override
+  String get studyNextAction => 'Tiếp theo';
+
+  @override
   String get studySessionShowAction => 'Hiện đáp án';
 
   @override
@@ -3053,9 +3059,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String studyShowAnswerCountdownAction(int seconds) {
     return 'Hiển thị (${seconds}s)';
   }
-
-  @override
-  String get studyNextAction => 'Tiếp theo';
 
   @override
   String get studyAnswerCorrectTitle => 'Đúng';

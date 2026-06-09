@@ -11,6 +11,7 @@ import 'package:memox/presentation/features/study/viewmodels/study_session_revie
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
@@ -74,12 +75,16 @@ class _StudySessionReviewSection extends ConsumerWidget {
       ),
       AsyncData<StudySessionReview>(:final value) => _StudySessionBody(
         review: value,
-        showAnswer: ref.watch(studySessionRevealAnswerProvider(sessionId)),
-        onToggleAnswer: () {
-          ref.read(
-            studySessionRevealAnswerProvider(sessionId).notifier,
-          ).toggle();
-        },
+        state: ref.watch(studySessionReviewControllerProvider(sessionId)),
+        onToggleAnswer: () => ref
+            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .toggleAnswer(),
+        onPrevious: () => ref
+            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .previous(),
+        onNext: () => ref
+            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .next(value.items.length),
       ),
     };
   }
@@ -128,19 +133,23 @@ class _StudySessionErrorState extends StatelessWidget {
 class _StudySessionBody extends StatelessWidget {
   const _StudySessionBody({
     required this.review,
-    required this.showAnswer,
+    required this.state,
     required this.onToggleAnswer,
+    required this.onPrevious,
+    required this.onNext,
   });
 
   final StudySessionReview review;
-  final bool showAnswer;
+  final StudySessionReviewState state;
   final VoidCallback onToggleAnswer;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final ThemeData theme = Theme.of(context);
-    final StudySessionReviewItem item = review.items.first;
+    final StudySessionReviewItem item = review.items[state.currentIndex];
     final int total = review.items.length;
     final TextTheme textTheme = theme.textTheme;
 
@@ -151,7 +160,7 @@ class _StudySessionBody extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: SpacingTokens.xl),
             Text(
-              l10n.studySessionProgressLabel(1, total),
+              l10n.studySessionProgressLabel(state.currentIndex + 1, total),
               style: textTheme.labelLarge,
             ),
             const SizedBox(height: SpacingTokens.lg),
@@ -164,12 +173,25 @@ class _StudySessionBody extends StatelessWidget {
                 label: l10n.studySessionBackLabel,
                 value: item.flashcard.back,
               ),
-              showBack: showAnswer,
+              showBack: state.isAnswerVisible,
             ),
             const SizedBox(height: SpacingTokens.lg),
+            MxCardActions(
+              secondary: MxActionButton(
+                intent: MxActionIntent.cardSecondary,
+                label: l10n.studyPreviousAction,
+                onPressed: state.currentIndex == 0 ? null : onPrevious,
+              ),
+              primary: MxActionButton(
+                intent: MxActionIntent.cardPrimary,
+                label: l10n.studyNextAction,
+                onPressed: state.currentIndex == total - 1 ? null : onNext,
+              ),
+            ),
+            const SizedBox(height: SpacingTokens.sm),
             MxActionButton(
               intent: MxActionIntent.screenPrimary,
-              label: showAnswer
+              label: state.isAnswerVisible
                   ? l10n.studySessionHideAction
                   : l10n.studySessionShowAction,
               onPressed: onToggleAnswer,
