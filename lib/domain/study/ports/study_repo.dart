@@ -20,6 +20,12 @@ abstract interface class StudyRepository {
     StudyMode? mode,
   });
 
+  Future<Result<StudySession>> restartStudySession({
+    required SessionId previousSessionId,
+    required StudyScope scope,
+    StudyMode? mode,
+  });
+
   Future<Result<StudySessionReview>> loadStudySessionReview({
     required SessionId sessionId,
   });

@@ -16,9 +16,12 @@ import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
+import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
+import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
@@ -39,10 +42,16 @@ class _FakeStudyRepository implements StudyRepository {
           );
 
   Result<StudyEntryStartResult> result;
-  Result<StudyEntryStartResult>? resultAfterCancel;
+  Result<StudySession> restartResult = const Result<StudySession>.err(
+        Failure.notFound(entity: 'study_session', id: 'missing-session'),
+      );
   final Result<StudySessionReview> reviewResult;
   int startCalls = 0;
   int cancelCalls = 0;
+  int restartCalls = 0;
+  SessionId? lastRestartPreviousSessionId;
+  StudyScope? lastRestartScope;
+  StudyMode? lastRestartMode;
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
@@ -61,6 +70,19 @@ class _FakeStudyRepository implements StudyRepository {
   }
 
   @override
+  Future<Result<StudySession>> restartStudySession({
+    required SessionId previousSessionId,
+    required StudyScope scope,
+    StudyMode? mode,
+  }) async {
+    restartCalls++;
+    lastRestartPreviousSessionId = previousSessionId;
+    lastRestartScope = scope;
+    lastRestartMode = mode;
+    return restartResult;
+  }
+
+  @override
   Future<Result<DashboardResumeSessionSummary?>>
   findLatestResumableSessionSummary() async {
     throw UnimplementedError();
@@ -71,9 +93,6 @@ class _FakeStudyRepository implements StudyRepository {
     required SessionId sessionId,
   }) async {
     cancelCalls++;
-    if (resultAfterCancel != null) {
-      result = resultAfterCancel!;
-    }
     return const Result<void>.ok(null);
   }
 
@@ -335,6 +354,7 @@ void main() {
 
       expect(find.byType(StudySessionScreen), findsOneWidget);
       expect(repository.startCalls, 1);
+      expect(repository.restartCalls, 0);
       expect(repository.cancelCalls, 0);
     },
   );
@@ -452,6 +472,7 @@ void main() {
         findsOneWidget,
       );
       expect(repository.startCalls, 1);
+      expect(repository.restartCalls, 0);
       expect(repository.cancelCalls, 0);
     },
   );
@@ -496,6 +517,7 @@ void main() {
       expect(find.byType(StudyEntryScreen), findsOneWidget);
       expect(find.byType(StudySessionScreen), findsNothing);
       expect(repository.startCalls, 1);
+      expect(repository.restartCalls, 0);
       expect(repository.cancelCalls, 0);
     },
   );
@@ -507,8 +529,16 @@ void main() {
         const Result<StudyEntryStartResult>.ok(
           StudyEntryStartResult.resumeRequired(sessionId: 'session-old'),
         ),
-      )..resultAfterCancel = const Result<StudyEntryStartResult>.ok(
-          StudyEntryStartResult.started(sessionId: 'session-new'),
+      )..restartResult = Result<StudySession>.ok(
+          StudySession(
+            id: 'session-new',
+            entryType: EntryType.deck,
+            entryRefId: 'deck-1',
+            studyType: StudyType.newCards,
+            status: SessionStatus.inProgress,
+            startedAt: DateTime.utc(2026, 1, 1),
+            updatedAt: DateTime.utc(2026, 1, 1),
+          ),
         );
       final GoRouter router = _studyRouter(
         _studyLocation(entryType: 'deck', entryRefId: 'deck-1'),
@@ -545,15 +575,24 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump();
 
       expect(find.byType(StudySessionScreen), findsOneWidget);
       expect(
         router.routeInformationProvider.value.uri.toString(),
         RoutePaths.studySession('session-new'),
       );
-      expect(repository.cancelCalls, 1);
-      expect(repository.startCalls, 2);
+      expect(repository.restartCalls, 1);
+      expect(repository.lastRestartPreviousSessionId, 'session-old');
+      expect(repository.lastRestartScope, const StudyScope(
+        entryType: EntryType.deck,
+        entryRefId: 'deck-1',
+        studyType: StudyType.newCards,
+      ));
+      expect(repository.lastRestartMode, isNull);
+      expect(repository.cancelCalls, 0);
+      expect(repository.startCalls, 1);
     },
   );
 

@@ -1,5 +1,6 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
+import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
@@ -21,6 +22,27 @@ class StartStudySessionUseCase {
     required StudyScope scope,
     StudyMode? mode,
   }) => _repository.startStudySession(scope: scope, mode: mode);
+}
+
+/// Restarts a resumable study session by canceling the previous one and
+/// creating a replacement in a single transactional operation.
+///
+/// Failure types: `NotFoundFailure`, `ValidationFailure`, `ConflictFailure`,
+/// `StorageFailure`.
+class RestartStudySessionUseCase {
+  const RestartStudySessionUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<StudySession>> call({
+    required SessionId previousSessionId,
+    required StudyScope scope,
+    StudyMode? mode,
+  }) => _repository.restartStudySession(
+    previousSessionId: previousSessionId,
+    scope: scope,
+    mode: mode,
+  );
 }
 
 /// Loads a persisted study session for the review screen.

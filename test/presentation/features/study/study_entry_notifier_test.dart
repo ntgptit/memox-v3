@@ -28,6 +28,15 @@ class _FakeStudyRepository implements StudyRepository {
   }) async => result;
 
   @override
+  Future<Result<StudySession>> restartStudySession({
+    required SessionId previousSessionId,
+    required StudyScope scope,
+    StudyMode? mode,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Result<StudySession?>> findResumableSession({
     required StudyScope scope,
   }) async {

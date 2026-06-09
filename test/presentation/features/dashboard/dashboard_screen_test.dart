@@ -64,6 +64,15 @@ class _FakeStudyRepository implements StudyRepository {
   }
 
   @override
+  Future<Result<StudySession>> restartStudySession({
+    required SessionId previousSessionId,
+    required StudyScope scope,
+    StudyMode? mode,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Result<StudySessionReview>> loadStudySessionReview({
     required SessionId sessionId,
   }) async => reviewResult;

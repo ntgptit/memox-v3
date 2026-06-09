@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
-import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
@@ -10,6 +11,7 @@ import 'package:memox/domain/study/usecases/study_usecases.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -17,23 +19,25 @@ import 'package:memox/domain/types/study_type.dart';
 class _FakeStudyRepository implements StudyRepository {
   _FakeStudyRepository(this.result);
 
-  Result<StudyEntryStartResult> result;
+  Result<StudySession> result;
+  SessionId? lastPreviousSessionId;
   StudyScope? lastScope;
   StudyMode? lastMode;
 
   @override
-  Future<Result<StudyEntryStartResult>> startStudySession({
+  Future<Result<StudySession>> restartStudySession({
+    required SessionId previousSessionId,
     required StudyScope scope,
     StudyMode? mode,
   }) async {
+    lastPreviousSessionId = previousSessionId;
     lastScope = scope;
     lastMode = mode;
     return result;
   }
 
   @override
-  Future<Result<StudySession>> restartStudySession({
-    required SessionId previousSessionId,
+  Future<Result<StudyEntryStartResult>> startStudySession({
     required StudyScope scope,
     StudyMode? mode,
   }) async {
@@ -101,17 +105,21 @@ class _FakeStudyRepository implements StudyRepository {
 }
 
 void main() {
-  test('forwards scope and mode to the repository', () async {
+  test('forwards previous session id, scope, and mode to the repository', () async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      const Result<StudyEntryStartResult>.ok(
-        StudyEntryStartResult.empty(
-          emptyState: StudyEntryEmptyState(
-            variant: StudyEntryEmptyVariant.deckNoCards,
-          ),
+      Result<StudySession>.ok(
+        StudySession(
+          id: 'session-new',
+          entryType: EntryType.deck,
+          entryRefId: 'deck-1',
+          studyType: StudyType.newCards,
+          status: SessionStatus.inProgress,
+          startedAt: DateTime.utc(2026, 1, 1),
+          updatedAt: DateTime.utc(2026, 1, 1),
         ),
       ),
     );
-    final StartStudySessionUseCase useCase = StartStudySessionUseCase(
+    final RestartStudySessionUseCase useCase = RestartStudySessionUseCase(
       repository,
     );
     const StudyScope scope = StudyScope(
@@ -120,38 +128,38 @@ void main() {
       studyType: StudyType.newCards,
     );
 
-    final Result<StudyEntryStartResult> result = await useCase(
+    final Result<StudySession> result = await useCase(
+      previousSessionId: 'session-old',
       scope: scope,
       mode: StudyMode.review,
     );
 
-    expect(result, isA<Ok<StudyEntryStartResult>>());
+    expect(result.isOk, isTrue);
+    expect(repository.lastPreviousSessionId, 'session-old');
     expect(repository.lastScope, scope);
     expect(repository.lastMode, StudyMode.review);
   });
 
-  test('returns an empty outcome unchanged', () async {
+  test('returns the repository failure unchanged', () async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      const Result<StudyEntryStartResult>.ok(
-        StudyEntryStartResult.empty(
-          emptyState: StudyEntryEmptyState(
-            variant: StudyEntryEmptyVariant.todayAllDone,
-          ),
-        ),
+      const Result<StudySession>.err(
+        Failure.notFound(entity: 'study_session', id: 'missing'),
       ),
     );
-    final StartStudySessionUseCase useCase = StartStudySessionUseCase(
+    final RestartStudySessionUseCase useCase = RestartStudySessionUseCase(
       repository,
     );
 
-    final Result<StudyEntryStartResult> result = await useCase(
+    final Result<StudySession> result = await useCase(
+      previousSessionId: 'session-old',
       scope: const StudyScope(
-        entryType: EntryType.today,
-        entryRefId: null,
-        studyType: StudyType.srsReview,
+        entryType: EntryType.deck,
+        entryRefId: 'deck-1',
+        studyType: StudyType.newCards,
       ),
     );
 
-    expect(result.valueOrNull, isA<StudyEntryStartEmpty>());
+    expect(result.isErr, isTrue);
+    expect(result.failureOrNull, isA<NotFoundFailure>());
   });
 }

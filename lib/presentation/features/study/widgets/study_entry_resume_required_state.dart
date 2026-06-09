@@ -6,7 +6,12 @@ import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/domain/study/study_entry_parser.dart';
 import 'package:memox/domain/study/study_entry_route_input.dart';
+import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/study_mode.dart';
+import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
@@ -70,7 +75,10 @@ class _StudyEntryResumeRequiredStateState
                 MxSectionHeader(label: l10n.studyEntryResumeRequiredHeader),
                 const SizedBox(height: SpacingTokens.md),
                 if (_isWorking) ...<Widget>[
-                  const MxLoadingState(rows: 2),
+                  const SizedBox(
+                    height: 160,
+                    child: MxLoadingState(rows: 2),
+                  ),
                 ] else ...<Widget>[
                   MxActionButton(
                     intent: MxActionIntent.screenPrimary,
@@ -118,6 +126,8 @@ class _StudyEntryResumeRequiredStateState
       return;
     }
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final StudyScope scope = _resolveScope(widget.request);
+    final StudyMode? mode = resolveStudyMode(widget.request.modeQuery);
     final bool confirmed = await showMxConfirmDialog(
       context,
       title: l10n.studyEntryResumeRequiredStartOverConfirmTitle,
@@ -137,13 +147,17 @@ class _StudyEntryResumeRequiredStateState
       _isWorking = true;
     });
 
-    final Result<void> result = await ref
-        .read(cancelStudySessionUseCaseProvider)
-        .call(sessionId: widget.sessionId);
+    final Result<StudySession> result = await ref
+        .read(restartStudySessionUseCaseProvider)
+        .call(
+          previousSessionId: widget.sessionId,
+          scope: scope,
+          mode: mode,
+        );
     if (!mounted) {
       return;
     }
-    if (result is Err<void>) {
+    if (result is Err<StudySession>) {
       setState(() {
         _isWorking = false;
       });
@@ -155,6 +169,22 @@ class _StudyEntryResumeRequiredStateState
       return;
     }
 
-    ref.invalidate(studyEntryProvider(widget.request));
+    final StudySession newSession = (result as Ok<StudySession>).value;
+    context.pushReplacementStudySession(newSession.id);
   }
+}
+
+StudyScope _resolveScope(StudyEntryRouteInput request) {
+  final EntryType entryType = parseStudyEntryType(request.entryType);
+  return StudyScope(
+    entryType: entryType,
+    entryRefId: normalizeStudyEntryRefId(
+      entryType: entryType,
+      entryRefId: request.entryRefId,
+    ),
+    studyType: resolveStudyType(
+      entryType: entryType,
+      studyTypeQuery: request.studyTypeQuery,
+    ),
+  );
 }

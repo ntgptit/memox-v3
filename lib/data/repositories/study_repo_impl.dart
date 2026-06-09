@@ -85,6 +85,84 @@ class StudyRepositoryImpl implements StudyRepository {
   }
 
   @override
+  Future<Result<StudySession>> restartStudySession({
+    required SessionId previousSessionId,
+    required StudyScope scope,
+    StudyMode? mode,
+  }) async {
+    try {
+      final StudySession session = await _dao.transaction(() async {
+        final StudySessionRow? previousRow = await _dao.findSession(
+          previousSessionId,
+        );
+        if (previousRow == null) {
+          throw _RuleViolation(
+            Failure.notFound(entity: 'study_session', id: previousSessionId),
+          );
+        }
+
+        final SessionStatus previousStatus =
+            StudyMapper.sessionStatusFromStorage(previousRow.status);
+        if (previousStatus != SessionStatus.draft &&
+            previousStatus != SessionStatus.inProgress) {
+          throw _RuleViolation(
+            Failure.unsupportedAction(action: 'restart_study_session'),
+          );
+        }
+
+        if (!_matchesRestartScope(previousRow, scope)) {
+          throw _RuleViolation(
+            Failure.unsupportedAction(action: 'restart_study_session'),
+          );
+        }
+
+        final _ScopeSnapshot snapshot = await _loadScopeSnapshot(_dao, scope);
+        final List<FlashcardId> eligibleIds = _eligibleFlashcardIds(
+          scope: scope,
+          snapshot: snapshot,
+        );
+        if (eligibleIds.isEmpty) {
+          throw const _RuleViolation(
+            Failure.validation(
+              field: 'flashcardIds',
+              code: ValidationCode.insufficientContent,
+            ),
+          );
+        }
+
+        final int nowMs = _nowMs;
+        final int cancelledRows = await _dao.cancelStudySession(
+          sessionId: previousSessionId,
+          updatedAtMs: nowMs,
+        );
+        if (cancelledRows == 0) {
+          throw _RuleViolation(
+            Failure.notFound(entity: 'study_session', id: previousSessionId),
+          );
+        }
+
+        return _persistSession(
+          dao: _dao,
+          scope: scope,
+          flashcardIds: eligibleIds,
+          nowMs: nowMs,
+        );
+      });
+      return Result<StudySession>.ok(session);
+    } on _RuleViolation catch (violation) {
+      return Result<StudySession>.err(violation.failure);
+    } catch (error) {
+      return Result<StudySession>.err(
+        Failure.storage(
+          operation: StorageOp.transaction,
+          cause: error.toString(),
+          table: 'study_sessions',
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Result<StudySessionReview>> loadStudySessionReview({
     required SessionId sessionId,
   }) async {
@@ -443,16 +521,43 @@ class StudyRepositoryImpl implements StudyRepository {
   Future<Result<StudySession>> createSession({
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,
-  }) =>
-      _createSession(
-        dao: _dao,
-        scope: scope,
-        flashcardIds: flashcardIds,
-        nowMs: _nowMs,
+  }) async {
+    if (flashcardIds.isEmpty) {
+      return const Result<StudySession>.err(
+        Failure.validation(
+          field: 'flashcardIds',
+          code: ValidationCode.insufficientContent,
+        ),
       );
+    }
+
+    try {
+      final StudySession session = await _dao.transaction(
+        () => _persistSession(
+          dao: _dao,
+          scope: scope,
+          flashcardIds: flashcardIds,
+          nowMs: _nowMs,
+        ),
+      );
+      return Result<StudySession>.ok(session);
+    } catch (error) {
+      return Result<StudySession>.err(
+        Failure.storage(
+          operation: StorageOp.transaction,
+          cause: error.toString(),
+          table: 'study_sessions',
+        ),
+      );
+    }
+  }
 
   DateTime get _now => DateTime.now().toUtc();
 
   int get _nowMs => _now.millisecondsSinceEpoch;
-
 }
+
+bool _matchesRestartScope(StudySessionRow row, StudyScope scope) =>
+    StudyMapper.entryTypeFromStorage(row.entryType) == scope.entryType &&
+    row.entryRefId == scope.entryRefId &&
+    StudyMapper.studyTypeFromStorage(row.studyType) == scope.studyType;

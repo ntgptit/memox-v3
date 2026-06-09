@@ -1,71 +1,40 @@
 part of 'study_repo_impl.dart';
 
-Future<Result<StudySession>> _createSession({
+Future<StudySession> _persistSession({
   required study_dao.StudySessionDao dao,
   required StudyScope scope,
   required List<FlashcardId> flashcardIds,
   required int nowMs,
 }) async {
-  if (flashcardIds.isEmpty) {
-    return const Result<StudySession>.err(
-      Failure.validation(
-        field: 'flashcardIds',
-        code: ValidationCode.insufficientContent,
+  final String sessionId = IdGenerator.newId();
+  await dao.insertStudySession(
+    StudySessionsCompanion.insert(
+      id: sessionId,
+      entryType: scope.entryType.name,
+      entryRefId: Value<String?>(scope.entryRefId),
+      studyType: StudyMapper.studyTypeToStorage(scope.studyType),
+      status: StudyMapper.sessionStatusToStorage(SessionStatus.inProgress),
+      startedAt: nowMs,
+      updatedAt: nowMs,
+    ),
+  );
+  for (int index = 0; index < flashcardIds.length; index++) {
+    await dao.insertStudySessionItem(
+      StudySessionItemsCompanion.insert(
+        id: IdGenerator.newId(),
+        sessionId: sessionId,
+        flashcardId: flashcardIds[index],
+        sortOrder: index,
+        createdAt: nowMs,
+        updatedAt: nowMs,
       ),
     );
   }
-
-  try {
-    final StudySession? session = await dao.transaction(() async {
-      final String sessionId = IdGenerator.newId();
-      await dao.insertStudySession(
-        StudySessionsCompanion.insert(
-          id: sessionId,
-          entryType: scope.entryType.name,
-          entryRefId: Value<String?>(scope.entryRefId),
-          studyType: StudyMapper.studyTypeToStorage(scope.studyType),
-          status: StudyMapper.sessionStatusToStorage(
-            SessionStatus.inProgress,
-          ),
-          startedAt: nowMs,
-          updatedAt: nowMs,
-        ),
-      );
-      for (int index = 0; index < flashcardIds.length; index++) {
-        await dao.insertStudySessionItem(
-          StudySessionItemsCompanion.insert(
-            id: IdGenerator.newId(),
-            sessionId: sessionId,
-            flashcardId: flashcardIds[index],
-            sortOrder: index,
-            createdAt: nowMs,
-            updatedAt: nowMs,
-          ),
-        );
-      }
-      final StudySessionRow? row = await dao.findSession(sessionId);
-      return row == null ? null : StudyMapper.fromSessionRow(row);
-    });
-
-    if (session == null) {
-      return const Result<StudySession>.err(
-        Failure.storage(
-          operation: StorageOp.write,
-          cause: 'Session insert returned null.',
-          table: 'study_sessions',
-        ),
-      );
-    }
-    return Result<StudySession>.ok(session);
-  } catch (error) {
-    return Result<StudySession>.err(
-      Failure.storage(
-        operation: StorageOp.transaction,
-        cause: error.toString(),
-        table: 'study_sessions',
-      ),
-    );
+  final StudySessionRow? row = await dao.findSession(sessionId);
+  if (row == null) {
+    throw StateError('Session insert returned null.');
   }
+  return StudyMapper.fromSessionRow(row);
 }
 
 StudySessionReviewItem _fromSessionReviewRow(

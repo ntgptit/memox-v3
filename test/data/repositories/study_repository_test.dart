@@ -168,6 +168,16 @@ class _ThrowingFinalizeStudySessionDao extends StudySessionDao {
   }
 }
 
+class _ThrowingRestartStudySessionDao extends StudySessionDao {
+  _ThrowingRestartStudySessionDao(super.db);
+
+  @override
+  Future<void> insertStudySessionItem(StudySessionItemsCompanion item) async {
+    await super.insertStudySessionItem(item);
+    throw StateError('boom');
+  }
+}
+
 void main() {
   late AppDatabase db;
   late StudyRepositoryImpl repository;
@@ -424,6 +434,286 @@ void main() {
       expect(result.isErr, isTrue);
       expect(await db.select(db.studySessions).get(), isEmpty);
       expect(await db.select(db.studySessionItems).get(), isEmpty);
+    },
+  );
+
+  test(
+    'restartStudySession cancels the previous session and creates exactly one new active session',
+    () async {
+      const String folderId = 'folder-restart-ok';
+      const String deckId = 'deck-restart-ok';
+      const String cardId = 'card-restart-ok';
+      const String previousSessionId = 'session-restart-old';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-old',
+        sessionId: previousSessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: deckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      final StudySession session = switch (result) {
+        Ok<StudySession>(:final value) => value,
+        Err<StudySession>(:final failure) => fail('expected ok, got $failure'),
+      };
+
+      final List<StudySessionRow> sessions = await db.select(db.studySessions).get();
+      final List<StudySessionItemRow> items = await db.select(db.studySessionItems).get();
+
+      expect(sessions, hasLength(2));
+      expect(
+        sessions.where((StudySessionRow row) => row.status == 'in_progress'),
+        hasLength(1),
+      );
+      expect(
+        sessions.firstWhere((StudySessionRow row) => row.id == previousSessionId)
+            .status,
+        'cancelled',
+      );
+      expect(
+        sessions.firstWhere((StudySessionRow row) => row.id == session.id).status,
+        'in_progress',
+      );
+      expect(items, hasLength(2));
+      expect(items.where((StudySessionItemRow row) => row.sessionId == session.id), hasLength(1));
+    },
+  );
+
+  test(
+    'restartStudySession rolls back the cancel when creating the replacement fails',
+    () async {
+      const String folderId = 'folder-restart-rollback';
+      const String deckId = 'deck-restart-rollback';
+      const String cardId = 'card-restart-rollback';
+      const String previousSessionId = 'session-restart-rollback';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-rollback',
+        sessionId: previousSessionId,
+        flashcardId: cardId,
+      );
+
+      repository = StudyRepositoryImpl(_ThrowingRestartStudySessionDao(db));
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: deckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      expect(result.isErr, isTrue);
+      expect(
+        (await db.select(db.studySessions).get()).single.status,
+        'in_progress',
+      );
+      expect(await db.select(db.studySessionItems).get(), hasLength(1));
+    },
+  );
+
+  test(
+    'restartStudySession rejects a previous session from a different scope and leaves it untouched',
+    () async {
+      const String folderId = 'folder-restart-scope';
+      const String oldDeckId = 'deck-restart-scope-old';
+      const String newDeckId = 'deck-restart-scope-new';
+      const String oldCardId = 'card-restart-scope-old';
+      const String newCardId = 'card-restart-scope-new';
+      const String previousSessionId = 'session-restart-scope';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: oldDeckId, folderId: folderId);
+      await fixture.insertDeck(id: newDeckId, folderId: folderId);
+      await fixture.insertFlashcard(id: oldCardId, deckId: oldDeckId);
+      await fixture.insertFlashcard(id: newCardId, deckId: newDeckId);
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: oldDeckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-scope-old',
+        sessionId: previousSessionId,
+        flashcardId: oldCardId,
+      );
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: newDeckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<UnsupportedActionFailure>());
+      expect(
+        (await db.select(db.studySessions).get()).single.status,
+        'in_progress',
+      );
+      expect(await db.select(db.studySessionItems).get(), hasLength(1));
+    },
+  );
+
+  test(
+    'restartStudySession rejects an empty eligible batch and leaves the previous session untouched',
+    () async {
+      const String folderId = 'folder-restart-empty';
+      const String deckId = 'deck-restart-empty';
+      const String cardId = 'card-restart-empty';
+      const String previousSessionId = 'session-restart-empty';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-empty',
+        sessionId: previousSessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: deckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<ValidationFailure>());
+      expect(
+        (await db.select(db.studySessions).get()).single.status,
+        'in_progress',
+      );
+      expect(await db.select(db.studySessionItems).get(), hasLength(1));
+    },
+  );
+
+  test(
+    'restartStudySession rejects a completed previous session and leaves it untouched',
+    () async {
+      const String folderId = 'folder-restart-complete';
+      const String deckId = 'deck-restart-complete';
+      const String cardId = 'card-restart-complete';
+      const String previousSessionId = 'session-restart-complete';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        status: 'completed',
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-complete',
+        sessionId: previousSessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: deckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<UnsupportedActionFailure>());
+      expect(
+        (await db.select(db.studySessions).get()).single.status,
+        'completed',
+      );
+      expect(await db.select(db.studySessionItems).get(), hasLength(1));
+    },
+  );
+
+  test(
+    'restartStudySession rejects a cancelled previous session and leaves it untouched',
+    () async {
+      const String folderId = 'folder-restart-cancelled';
+      const String deckId = 'deck-restart-cancelled';
+      const String cardId = 'card-restart-cancelled';
+      const String previousSessionId = 'session-restart-cancelled';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        status: 'cancelled',
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-cancelled',
+        sessionId: previousSessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: deckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<UnsupportedActionFailure>());
+      expect(
+        (await db.select(db.studySessions).get()).single.status,
+        'cancelled',
+      );
+      expect(await db.select(db.studySessionItems).get(), hasLength(1));
     },
   );
 

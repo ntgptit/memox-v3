@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-28
 applies_to: resuming in-progress study sessions, conflict between resume and new session
 ---
@@ -264,7 +264,7 @@ This is opt-in via notification settings; do not push by default.
     - `ResumeStudySessionUseCase.execute(sessionId)` — load and return the snapshot for an explicit
       resume.
     - `CancelStudySessionUseCase` — covers the "discard" path (sets status = `cancelled`).
-    - `RestartStudySessionUseCase` — restart-from-scratch path.
+    - `RestartStudySessionUseCase` — restart-from-scratch path that validates scope/status, cancels the old session, and creates the replacement in one transaction.
 - Repository: `lib/data/repositories/study_repo_impl.dart` (no separate
   `study_session_repository.dart` file; the implementation is the unified study repo).
 - DAO: `lib/data/datasources/local/daos/` (look for the study session DAO; helpers in
@@ -273,3 +273,4 @@ This is opt-in via notification settings; do not push by default.
 > **Drift note**: earlier revisions referenced `find_resumable_session_usecase.dart`,
 `discard_session_usecase.dart`, and `study_session_repository.dart`. None of those paths exist
 > today. The behaviors live in the methods listed above.
+
