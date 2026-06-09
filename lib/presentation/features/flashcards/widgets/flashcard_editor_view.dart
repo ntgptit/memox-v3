@@ -14,6 +14,7 @@ import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 
 class FlashcardEditorView extends HookConsumerWidget {
   const FlashcardEditorView({
@@ -29,7 +30,11 @@ class FlashcardEditorView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool isEditMode = flashcardId?.isNotEmpty == true;
-    final FlashcardEditorDraft draft = useFlashcardEditorDraft();
+    final FlashcardEditorDraft draft = useMxFlashcardEditorDraft();
+    useMxRequestFocusAfterFrame(
+      focusNode: draft.frontFocusNode,
+      trigger: draft.focusRequestTick,
+    );
     final AsyncValue<void> actionState = ref.watch(
       flashcardEditorControllerProvider,
     );
@@ -203,12 +208,7 @@ Future<void> _save({
       if (addAnother) {
         draft.resetForAnotherCard();
         showMxSnackbar(context, message: l10n.flashcardsSavedMessage);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!context.mounted) {
-            return;
-          }
-          FocusScope.of(context).requestFocus(draft.frontFocusNode);
-        });
+        draft.requestFrontFocusAfterFrame();
         return;
       }
       showMxSnackbar(
@@ -242,12 +242,7 @@ Future<void> _save({
     if (addAnother) {
       draft.resetForAnotherCard();
       showMxSnackbar(context, message: l10n.flashcardsSavedMessage);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!context.mounted) {
-          return;
-        }
-        FocusScope.of(context).requestFocus(draft.frontFocusNode);
-      });
+      draft.requestFrontFocusAfterFrame();
       return;
     }
     showMxSnackbar(

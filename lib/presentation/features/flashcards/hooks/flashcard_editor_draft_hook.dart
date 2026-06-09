@@ -35,9 +35,11 @@ final class FlashcardEditorDraft {
     required this.didPrefillCard,
     required this.saveFailure,
     required this.loadedDetail,
+    required this.focusRequestTick,
     required this.markDraftChanged,
     required this.setSaveFailure,
     required this.hydrateFromDetail,
+    required this.requestFrontFocusAfterFrame,
     required this.resetForAnotherCard,
     required this.resetForRetry,
     required this.toggleDetails,
@@ -74,9 +76,11 @@ final class FlashcardEditorDraft {
   final bool didPrefillCard;
   final Failure? saveFailure;
   final FlashcardDetail? loadedDetail;
+  final int focusRequestTick;
   final VoidCallback markDraftChanged;
   final void Function(Failure? failure) setSaveFailure;
   final void Function(FlashcardDetail detail) hydrateFromDetail;
+  final VoidCallback requestFrontFocusAfterFrame;
   final VoidCallback resetForAnotherCard;
   final VoidCallback resetForRetry;
   final VoidCallback toggleDetails;
@@ -115,7 +119,7 @@ final class FlashcardEditorDraft {
   }
 }
 
-FlashcardEditorDraft useFlashcardEditorDraft() {
+FlashcardEditorDraft useMxFlashcardEditorDraft() {
   final GlobalKey<FormState> formKey = useMemoized(GlobalKey<FormState>.new);
   final TextEditingController frontController = useTextEditingController();
   final TextEditingController backController = useTextEditingController();
@@ -151,6 +155,7 @@ FlashcardEditorDraft useFlashcardEditorDraft() {
   final ValueNotifier<Failure?> saveFailure = useState<Failure?>(null);
   final ValueNotifier<FlashcardDetail?> loadedDetail =
       useState<FlashcardDetail?>(null);
+  final ValueNotifier<int> focusRequestTick = useState<int>(0);
 
   void markDraftChanged() {
     saveFailure.value = null;
@@ -185,6 +190,10 @@ FlashcardEditorDraft useFlashcardEditorDraft() {
     saveFailure.value = null;
     loadedDetail.value = detail;
     didPrefillCard.value = true;
+  }
+
+  void requestFrontFocusAfterFrame() {
+    focusRequestTick.value += 1;
   }
 
   void resetForAnotherCard() {
@@ -260,9 +269,11 @@ FlashcardEditorDraft useFlashcardEditorDraft() {
     didPrefillCard: didPrefillCard.value,
     saveFailure: saveFailure.value,
     loadedDetail: loadedDetail.value,
+    focusRequestTick: focusRequestTick.value,
     markDraftChanged: markDraftChanged,
     setSaveFailure: updateSaveFailure,
     hydrateFromDetail: hydrateFromDetail,
+    requestFrontFocusAfterFrame: requestFrontFocusAfterFrame,
     resetForAnotherCard: resetForAnotherCard,
     resetForRetry: resetForRetry,
     toggleDetails: toggleDetails,
