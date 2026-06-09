@@ -265,7 +265,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dashboardContinueSessionAction => 'Resume';
+  String get dashboardContinueSessionAction => 'Continue';
 
   @override
   String get dashboardResumeSectionTitle => 'Continue studying';

@@ -306,7 +306,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | --- | --- | --- | --- |
 | 13.1 | Dashboard top-level route | Implemented / Partial | `/home` opens `DashboardScreen`. |
 | 13.2 | Today study shortcut | Implemented / Partial | `dueToday > 0` routes to `RoutePaths.studyTodayTemplate` through Study Entry; `dueToday == 0` shows caught-up/no-due copy, disables Study CTA, and does not enter study flow. |
-| 13.3 | Resume session entry | Specified | Dashboard should surface active/resumable sessions. |
+| 13.3 | Resume session entry | Implemented / V1 | Dashboard surfaces the latest resumable session as a top card with scope, progress, last active, and Continue CTA; hides the card when no resumable session exists; does not surface discard or a paused-session list in V1. |
 | 13.4 | Due count summary | Specified / Partial | Excludes buried/suspended. |
 | 13.5 | Streak stat placeholder | Partial | Product overview says simple `0 days` visual/stat placeholder exists. |
 | 13.6 | Daily goal | Future / Target | SharedPreferences settings; not current full implementation. |

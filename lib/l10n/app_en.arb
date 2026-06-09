@@ -133,7 +133,7 @@
       }
     }
   },
-  "dashboardContinueSessionAction": "Resume",
+  "dashboardContinueSessionAction": "Continue",
   "dashboardResumeSectionTitle": "Continue studying",
   "dashboardDiscardAction": "Discard",
   "dashboardMorePausedSessions": "{count, plural, =1{+ 1 more paused session} other{+ {count} more paused sessions}}",

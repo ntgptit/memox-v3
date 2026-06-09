@@ -8,6 +8,7 @@ import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/flashcard.dart';
@@ -30,6 +31,7 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/dashboard/screens/dashboard_screen.dart';
+import 'package:memox/presentation/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
@@ -46,7 +48,7 @@ class _FakeStudyRepository implements StudyRepository {
     required this.startResult,
   }) : cancelResult = const Result<void>.ok(null);
 
-  Result<DashboardResumeSessionSummary?> resumeSummaryResult;
+  FutureOr<Result<DashboardResumeSessionSummary?>> resumeSummaryResult;
   Result<StudySessionReview> reviewResult;
   Result<StudyEntryStartResult> startResult;
   Result<void> cancelResult;
@@ -84,7 +86,7 @@ class _FakeStudyRepository implements StudyRepository {
 
   @override
   Future<Result<DashboardResumeSessionSummary?>>
-  findLatestResumableSessionSummary() async => resumeSummaryResult;
+  findLatestResumableSessionSummary() async => await resumeSummaryResult;
 
   @override
   Future<Result<StudySession?>> findResumableSession({
@@ -221,11 +223,13 @@ Future<({ProviderContainer container, GoRouter router})> _pumpApp(
   WidgetTester tester, {
   required _FakeStudyRepository repository,
   required Stream<LibraryOverviewReadModel> libraryStream,
+  List<Override> extraOverrides = const <Override>[],
 }) async {
   final ProviderContainer container = ProviderContainer(
     overrides: <Override>[
       studyRepositoryProvider.overrideWithValue(repository),
       libraryOverviewQueryProvider.overrideWith((Ref ref) => libraryStream),
+      ...extraOverrides,
     ],
   );
   addTearDown(container.dispose);
@@ -300,7 +304,7 @@ void main() {
           ),
         );
     harness.router.go(RoutePaths.home);
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     final AppLocalizations l10n = AppLocalizations.of(
       tester.element(find.byType(DashboardScreen)),
@@ -378,6 +382,89 @@ void main() {
     expect(find.textContaining('boom'), findsNothing);
   });
 
+  testWidgets('resume summary error renders controlled state', (
+    WidgetTester tester,
+  ) async {
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: _FakeStudyRepository(
+            resumeSummaryResult:
+                const Result<DashboardResumeSessionSummary?>.ok(null),
+            reviewResult: Result<StudySessionReview>.ok(_review()),
+            startResult: const Result<StudyEntryStartResult>.ok(
+              StudyEntryStartResult.empty(
+                emptyState: StudyEntryEmptyState(
+                  variant: StudyEntryEmptyVariant.todayAllDone,
+                ),
+              ),
+            ),
+          ),
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          extraOverrides: <Override>[
+            dashboardResumeSessionQueryProvider.overrideWithValue(
+              const AsyncError<DashboardResumeSessionSummary?>(
+                Failure.storage(
+                  operation: StorageOp.read,
+                  cause: 'boom',
+                  table: 'study_sessions',
+                ),
+                StackTrace.empty,
+              ),
+            ),
+          ],
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pump();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.byType(MxErrorState), findsOneWidget);
+    expect(find.text(l10n.sharedErrorTitle), findsOneWidget);
+    expect(find.text(l10n.commonRetry), findsOneWidget);
+    expect(find.textContaining('boom'), findsNothing);
+  });
+
+  testWidgets('resume summary loading shows a dashboard-safe skeleton', (
+    WidgetTester tester,
+  ) async {
+    final Completer<Result<DashboardResumeSessionSummary?>> pending =
+        Completer<Result<DashboardResumeSessionSummary?>>();
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: pending.future,
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pump();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.byType(MxSkeleton), findsWidgets);
+    expect(find.text(l10n.dashboardResumeSectionTitle), findsNothing);
+    expect(find.text(l10n.dashboardNoDueTitle), findsOneWidget);
+  });
+
   testWidgets('zero-content dashboard shows onboarding only', (
     WidgetTester tester,
   ) async {
@@ -416,7 +503,44 @@ void main() {
     expect(find.byIcon(Icons.search_rounded), findsNothing);
   });
 
-  testWidgets('resume card shows continue and discard actions', (
+  testWidgets('resume card stays hidden when no resumable session exists', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.text(l10n.dashboardResumeSectionTitle), findsNothing);
+    expect(find.text(l10n.dashboardContinueSessionAction), findsNothing);
+    expect(repository.startCalls, 0);
+    expect(repository.cancelCalls, 0);
+  });
+
+  testWidgets('resume card shows continue CTA and progress', (
     WidgetTester tester,
   ) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
@@ -449,7 +573,13 @@ void main() {
 
     expect(find.text(l10n.dashboardResumeSectionTitle), findsOneWidget);
     expect(find.text(l10n.dashboardContinueSessionAction), findsOneWidget);
-    expect(find.text(l10n.dashboardDiscardAction), findsOneWidget);
+    expect(
+      find.textContaining(l10n.studySessionProgressLabel(2, 5)),
+      findsOneWidget,
+    );
+    expect(find.text(l10n.dashboardDiscardAction), findsNothing);
+    expect(repository.startCalls, 0);
+    expect(repository.cancelCalls, 0);
   });
 
   testWidgets('continue routes to the persisted study session', (
@@ -494,46 +624,8 @@ void main() {
       harness.router.routeInformationProvider.value.uri.path,
       RoutePaths.studySession('session-1'),
     );
-  });
-
-  testWidgets('discard cancel does not cancel the session', (
-    WidgetTester tester,
-  ) async {
-    final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(
-        _resumeSummary(),
-      ),
-      reviewResult: Result<StudySessionReview>.ok(_review()),
-      startResult: const Result<StudyEntryStartResult>.ok(
-        StudyEntryStartResult.empty(
-          emptyState: StudyEntryEmptyState(
-            variant: StudyEntryEmptyVariant.todayAllDone,
-          ),
-        ),
-      ),
-    );
-    final ({ProviderContainer container, GoRouter router}) harness =
-        await _pumpApp(
-          tester,
-          repository: repository,
-          libraryStream: Stream<LibraryOverviewReadModel>.value(
-            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
-          ),
-        );
-    harness.router.go(RoutePaths.home);
-    await tester.pumpAndSettle();
-
-    final AppLocalizations l10n = AppLocalizations.of(
-      tester.element(find.byType(DashboardScreen)),
-    );
-    await tester.tap(find.text(l10n.dashboardDiscardAction));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text(l10n.commonCancel));
-    await tester.pumpAndSettle();
-
+    expect(repository.startCalls, 0);
     expect(repository.cancelCalls, 0);
-    expect(find.byType(StudySessionScreen), findsNothing);
-    expect(find.text('Korean'), findsOneWidget);
   });
 
   testWidgets('Today CTA routes to the study today entry', (

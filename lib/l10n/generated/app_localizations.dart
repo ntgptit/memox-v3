@@ -485,7 +485,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboardContinueSessionAction.
   ///
   /// In en, this message translates to:
-  /// **'Resume'**
+  /// **'Continue'**
   String get dashboardContinueSessionAction;
 
   /// No description provided for @dashboardResumeSectionTitle.

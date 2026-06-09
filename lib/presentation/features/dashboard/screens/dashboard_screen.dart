@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/app/router/app_navigation.dart';
-import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -14,8 +13,6 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
-import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
-import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
@@ -207,12 +204,6 @@ class _DashboardResumeCard extends ConsumerWidget {
           MxLinearProgress(value: progress, height: SpacingTokens.xs),
           const SizedBox(height: SpacingTokens.lg),
           MxCardActions(
-            secondary: MxActionButton(
-              intent: MxActionIntent.cardSecondary,
-              label: l10n.dashboardDiscardAction,
-              onPressed: () =>
-                  _discardSession(ref, context, summary.session.id),
-            ),
             primary: MxActionButton(
               intent: MxActionIntent.cardPrimary,
               label: l10n.dashboardContinueSessionAction,
@@ -233,46 +224,6 @@ class _DashboardResumeCard extends ConsumerWidget {
       EntryType.folder => l10n.progressEntryFolder,
       EntryType.today => l10n.dashboardTodayReviewTitle,
     };
-  }
-
-  Future<void> _discardSession(
-    WidgetRef ref,
-    BuildContext context,
-    String sessionId,
-  ) async {
-    final AppLocalizations l10n = AppLocalizations.of(context);
-    final bool confirmed = await showMxConfirmDialog(
-      context,
-      title: l10n.dashboardDiscardSessionTitle,
-      message: l10n.dashboardDiscardSessionMessage,
-      confirmLabel: l10n.dashboardDiscardAction,
-      cancelLabel: l10n.commonCancel,
-      destructive: true,
-    );
-    if (!confirmed) {
-      return;
-    }
-    if (!context.mounted) {
-      return;
-    }
-
-    final Result<void> result = await ref
-        .read(dashboardProvider.notifier)
-        .discardSession(sessionId);
-    if (!context.mounted) {
-      return;
-    }
-    result.fold(
-      (_) => showMxSnackbar(
-        context,
-        message: l10n.dashboardSessionDiscardFailedMessage,
-        isError: true,
-      ),
-      (void _) {
-        showMxSnackbar(context, message: l10n.dashboardSessionDiscardedMessage);
-        ref.invalidate(dashboardResumeSessionQueryProvider);
-      },
-    );
   }
 }
 

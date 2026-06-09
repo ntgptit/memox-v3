@@ -57,10 +57,11 @@ Display:
 | Progress      | "X / Y cards answered" derived from `study_session_items`       |
 | Last active   | Relative time from `study_sessions.updated_at` (e.g., "2h ago") |
 | Primary CTA   | "Continue" → navigates to `/library/study/session/{sessionId}`  |
-| Secondary CTA | "Discard" → confirms then sets status to `cancelled`            |
+| Secondary CTA | None in V1                                                      |
 
 If multiple resumable sessions exist (e.g., user has paused 2 different deck sessions), show the
-most recently updated one as the card, with "{n - 1} more paused sessions" below leading to a list.
+most recently updated one as the card. V1 does not show a paused-session count note because the
+summary model does not expose remaining-count metadata.
 
 ### 2. Deck / folder / tag context banner
 
@@ -119,7 +120,8 @@ Resumable sessions for different scopes coexist. Example:
 
 - User pauses "Korean N5" deck session.
 - User starts "Today's review" session → allowed, runs in parallel.
-- Both sessions appear in Dashboard "more paused sessions" list.
+- Dashboard V1 shows only the latest resumable session card; a multi-session list is out of scope
+  for this prompt.
 
 ## Resume use case behavior
 
@@ -141,13 +143,12 @@ When user discards a resumable session:
 
 | Action                      | Outcome                                                                            |
 |-----------------------------|------------------------------------------------------------------------------------|
-| Discard from Dashboard card | Confirm dialog → `study_sessions.status = cancelled`, items retained for analytics |
-| Discard from banner         | Confirm dialog → same as above                                                     |
+| Discard from banner         | Confirm dialog → `study_sessions.status = cancelled`, items retained for analytics |
 | "Start over" path           | Same as above, then create new session                                             |
 
 **Implementation status:** Discard from the deck (Flashcard list) and folder
-(Folder detail) resume banners is **Current (Prompt 47)**. All three surfaces
-(Dashboard card, deck banner, folder banner) share one flow,
+(Folder detail) resume banners is **Current (Prompt 47)**. Dashboard V1 does
+not surface discard/cancel. The banner surfaces share one flow,
 `confirmAndDiscardResumeSession`
 (`lib/presentation/shared/study/discard_resume_session.dart`): danger
 `MxConfirmationDialog` → `CancelStudySessionUseCase` via
@@ -191,7 +192,7 @@ This is opt-in via notification settings; do not push by default.
 - Resume MUST NOT create a new session; it reuses the existing one.
 - Resume MUST update `updated_at` so the session does not auto-expire.
 - "Continue studying" surface MUST appear before any "Start new" CTA on the same screen.
-- Discard MUST require explicit confirmation.
+- Discard from banner surfaces MUST require explicit confirmation.
 - Resume from notification deep-links to `/library/study/session/{sessionId}` directly (skip
   Dashboard).
 - Two sessions for the same scope MUST NEVER coexist in active state. Enforce at session creation
@@ -202,7 +203,7 @@ This is opt-in via notification settings; do not push by default.
 - Loading: while checking for resumable sessions.
 - No resumable: hide all "Continue" surfaces (no empty card).
 - One resumable: show single card/banner.
-- Multiple resumable: show most recent + count of others.
+- Multiple resumable: show most recent only; no count note in V1.
 - Cancelled mid-resume (race): show error state, route back to safe ancestor.
 
 ## Performance
