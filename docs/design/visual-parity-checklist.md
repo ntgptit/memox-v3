@@ -62,7 +62,8 @@ checks for mock-driven screen work.
 
 - Run the related widget tests for loaded, loading, empty, error, search/no-results, and key
   actions.
-- Run `flutter analyze` and targeted tests for UI code changes.
+- Run `dart fix --apply` and `dart format .` before `flutter analyze` and targeted tests for UI
+  code changes.
 - Run `python code-verification-guard/guard/run.py check --project . --ruleset memox` when the guard
   is present.
 - For docs-only visual-contract changes, run markdown path/reference checks and `git diff --check`.

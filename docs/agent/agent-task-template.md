@@ -77,6 +77,8 @@ Run these commands and ensure they pass:
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs
+dart fix --apply
+dart format .
 flutter analyze
 flutter test {targeted_test_paths}
 python code-verification-guard/guard/run.py check --project . --ruleset memox   # if guard present in repo; else skip and note in report

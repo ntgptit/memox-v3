@@ -148,7 +148,8 @@ The screen is accepted only when:
 - Due summary appears only when `dueToday > 0`.
 - Empty, search no-results, error, and loading states remain distinct.
 - No unsupported V1 behavior is exposed.
-- `flutter analyze`, targeted widget tests, and guard checks pass for UI code changes.
+- `dart fix --apply` and `dart format .` run before `flutter analyze`, targeted widget tests, and
+  guard checks pass for UI code changes.
 
 ## Related
 

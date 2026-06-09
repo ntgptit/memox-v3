@@ -122,15 +122,19 @@ Run relevant commands:
 ```text
 dart run build_runner build --delete-conflicting-outputs
 python code-verification-guard/guard/run.py check --project .
+dart fix --apply
+dart format .
 flutter analyze
 flutter test <targeted tests>
 ```
 
 Analyze / dart-fix pairing:
 
-- If `flutter analyze` reports diagnostics that are safely fixable, run `dart fix --apply`, inspect
-  the diff, then rerun `flutter analyze`.
-- Do not run `dart fix --apply` as a standalone cleanup step without the follow-up analyzer pass.
+- Before `flutter analyze`, run `dart fix --apply` and `dart format .`.
+- If `flutter analyze` reports diagnostics that are safely fixable, rerun `dart fix --apply`,
+  inspect the diff, then rerun `flutter analyze`.
+- Do not run `dart fix --apply` or `dart format .` as standalone cleanup steps without the
+  follow-up analyzer pass.
 - If a fixable analyzer diagnostic is not applied, report the reason under "Skipped checks or
   risks".
 

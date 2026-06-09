@@ -282,24 +282,27 @@ Expected final response after implementing a UI task:
 ```text
 dart run build_runner build --delete-conflicting-outputs
 python code-verification-guard/guard/run.py check --project . --ruleset memox   # if available
+dart fix --apply
+dart format .
 flutter analyze
 flutter test <targeted tests>
 ```
 
 ### Analyze / dart fix pairing rule
 
-When `flutter analyze` reports diagnostics that `dart fix` can safely apply, run:
+Before `flutter analyze`, first apply all safe automatic fixes and formatting:
 
 ```text
 dart fix --apply
+dart format .
 flutter analyze
 ```
 
-Treat these as a pair: do not run `dart fix --apply` without rerunning
-`flutter analyze`, and do not leave fixable analyzer diagnostics unresolved
+Treat these as a pair: do not run `flutter analyze` until after `dart fix --apply`
+and `dart format .`, and do not leave fixable analyzer diagnostics unresolved
 without either applying the fix or explaining why the fix is unsafe/out of
-scope. After `dart fix --apply`, inspect the diff and keep only changes that
-belong to the current task.
+scope. After `dart fix --apply` and `dart format .`, inspect the diff and keep
+only changes that belong to the current task.
 
 `code-verification-guard` is an optional repo-side tool maintained separately. If it is not present in the working directory (clone), agent SHOULD skip it and note in report: "guard: skipped (tool not present)". The other commands are mandatory.
 

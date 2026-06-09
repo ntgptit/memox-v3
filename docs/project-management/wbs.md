@@ -390,7 +390,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 19.5 | Decision table coverage | Ongoing | Test names reference decision IDs where applicable. |
 | 19.6 | Migration tests | Ongoing | Required for every schema change. |
 | 19.7 | Guard rules | Ongoing | `code-verification-guard` catches project constraints. |
-| 19.8 | Analyzer | Ongoing | `flutter analyze` must pass. |
+| 19.8 | Analyzer | Ongoing | `dart fix --apply` and `dart format .` first, then `flutter analyze` must pass. |
 | 19.9 | Build runner | Ongoing | `dart run build_runner build --delete-conflicting-outputs`. |
 | 19.10 | L10n generation | Ongoing | `flutter gen-l10n` when ARB changes. |
 | 19.11 | CI/status checks | Missing / Unknown | GitHub workflow/status checks were not visible in recent review; source-level review only unless CI exists. |
