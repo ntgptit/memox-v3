@@ -12,6 +12,7 @@ import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -21,8 +22,10 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:riverpod/misc.dart';
 
@@ -88,6 +91,14 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<StudySessionReview>> loadStudySessionReview({
     required SessionId sessionId,
   }) async => reviewResult;
+
+  @override
+  Future<Result<StudySessionResult>> loadStudySessionResult({
+    required SessionId sessionId,
+  }) async =>
+      const Result<StudySessionResult>.err(
+        Failure.notFound(entity: 'study_session', id: 'missing-session'),
+      );
 
   @override
   Future<Result<StudySession>> createSession({
@@ -436,20 +447,31 @@ void main() {
   );
 
   testWidgets(
-    'DT6a onOpen: session result route renders RoutePlaceholder instead of StudyEntryScreen',
-    (tester) async {
-      final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
+    'DT6a onOpen: session result route renders the real StudyResultScreen instead of StudyEntryScreen',
+      (tester) async {
+        final _FakeStudyRepository repository = _FakeStudyRepository(
+          const Result<StudyEntryStartResult>.err(
+            Failure.notFound(entity: 'study_session', id: 'unused'),
+          ),
+          reviewResult: const Result<StudySessionReview>.err(
+            Failure.notFound(entity: 'study_session', id: 'unused'),
+          ),
+        );
+        final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
 
-      await tester.pumpWidget(_routerShell(router));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          _routerShell(
+            router,
+            overrides: <Override>[
+              studyRepositoryProvider.overrideWithValue(repository),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(StudyEntryScreen), findsNothing);
-      expect(find.byType(RoutePlaceholder), findsOneWidget);
-      expect(
-        find.widgetWithText(AppBar, RouteNames.studyResult),
-        findsOneWidget,
-      );
-      expect(find.text('sessionId: session-1'), findsOneWidget);
-    },
-  );
+        expect(find.byType(StudyEntryScreen), findsNothing);
+        expect(find.byType(StudyResultScreen), findsOneWidget);
+        expect(find.byType(MxErrorState), findsOneWidget);
+      },
+    );
 }

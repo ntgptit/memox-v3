@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -32,6 +33,18 @@ class LoadStudySessionReviewUseCase {
 
   Future<Result<StudySessionReview>> call({required SessionId sessionId}) =>
       _repository.loadStudySessionReview(sessionId: sessionId);
+}
+
+/// Loads the persisted study-session result summary for the result screen.
+///
+/// Failure types: `NotFoundFailure`, `StorageFailure`.
+class LoadStudySessionResultUseCase {
+  const LoadStudySessionResultUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<StudySessionResult>> call({required SessionId sessionId}) =>
+      _repository.loadStudySessionResult(sessionId: sessionId);
 }
 
 /// Records an in-session self-grade answer and marks the session item answered.

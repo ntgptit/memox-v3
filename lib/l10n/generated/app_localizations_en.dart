@@ -2896,6 +2896,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyResultCards => 'Cards';
 
   @override
+  String get studyResultAnswered => 'Answered';
+
+  @override
   String get studyResultAttempts => 'Attempts';
 
   @override
@@ -2937,6 +2940,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyResultStudyAgainAction => 'Study';
+
+  @override
+  String get studyResultBackToLibraryAction => 'Back to Library';
+
+  @override
+  String get studyResultBackToHomeAction => 'Go to Home';
 
   @override
   String get studyRetryFinalizeAction => 'Retry';
@@ -3007,6 +3016,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyResultCardsToReviewEmpty => 'No cards need extra review.';
+
+  @override
+  String get studyResultInvalidTitle => 'Can\'t open result';
+
+  @override
+  String get studyResultInvalidMessage =>
+      'The study result route parameters are invalid.';
+
+  @override
+  String get studyResultNotCompleteTitle => 'Result unavailable';
+
+  @override
+  String get studyResultNotCompleteMessage =>
+      'This study session has not been completed yet.';
+
+  @override
+  String studyResultNotCompleteMessageWithStatus(String status) {
+    return 'This study session has not been completed yet. Current status: $status.';
+  }
 
   @override
   String get studyResultRecoveredLabel => 'Recovered';

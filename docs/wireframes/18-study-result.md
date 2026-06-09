@@ -13,6 +13,10 @@ source_specs:
 
 End-of-session summary. Celebrate completion, show what improved, motivate next action (continue streak, study more, view history). Auto-routed after final card answered.
 
+## V1 slice
+
+Current implementation keeps the result route intentionally narrow: it shows the completion header, completed/answered count, total / answered / passed / forgot summary, and library/home exit actions. Accuracy, box-change aggregates, streak/goal, and tough-card drill-in remain future enhancements for the richer target layout below.
+
 ## Layout
 
 ```

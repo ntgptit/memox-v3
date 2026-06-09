@@ -37,6 +37,10 @@ LoadStudySessionReviewUseCase loadStudySessionReviewUseCase(Ref ref) =>
     LoadStudySessionReviewUseCase(ref.watch(studyRepositoryProvider));
 
 @Riverpod(keepAlive: true)
+LoadStudySessionResultUseCase loadStudySessionResultUseCase(Ref ref) =>
+    LoadStudySessionResultUseCase(ref.watch(studyRepositoryProvider));
+
+@Riverpod(keepAlive: true)
 RecordStudySessionAnswerUseCase recordStudySessionAnswerUseCase(Ref ref) =>
     RecordStudySessionAnswerUseCase(ref.watch(studyRepositoryProvider));
 

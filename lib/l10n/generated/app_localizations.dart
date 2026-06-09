@@ -4692,6 +4692,12 @@ abstract class AppLocalizations {
   /// **'Cards'**
   String get studyResultCards;
 
+  /// No description provided for @studyResultAnswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered'**
+  String get studyResultAnswered;
+
   /// No description provided for @studyResultAttempts.
   ///
   /// In en, this message translates to:
@@ -4769,6 +4775,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Study'**
   String get studyResultStudyAgainAction;
+
+  /// No description provided for @studyResultBackToLibraryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Library'**
+  String get studyResultBackToLibraryAction;
+
+  /// No description provided for @studyResultBackToHomeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Home'**
+  String get studyResultBackToHomeAction;
 
   /// No description provided for @studyRetryFinalizeAction.
   ///
@@ -4907,6 +4925,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No cards need extra review.'**
   String get studyResultCardsToReviewEmpty;
+
+  /// No description provided for @studyResultInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t open result'**
+  String get studyResultInvalidTitle;
+
+  /// No description provided for @studyResultInvalidMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The study result route parameters are invalid.'**
+  String get studyResultInvalidMessage;
+
+  /// No description provided for @studyResultNotCompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Result unavailable'**
+  String get studyResultNotCompleteTitle;
+
+  /// No description provided for @studyResultNotCompleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This study session has not been completed yet.'**
+  String get studyResultNotCompleteMessage;
+
+  /// No description provided for @studyResultNotCompleteMessageWithStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'This study session has not been completed yet. Current status: {status}.'**
+  String studyResultNotCompleteMessageWithStatus(String status);
 
   /// No description provided for @studyResultRecoveredLabel.
   ///

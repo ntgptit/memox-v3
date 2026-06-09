@@ -2780,6 +2780,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyResultCards => 'Thẻ';
 
   @override
+  String get studyResultAnswered => 'Đã trả lời';
+
+  @override
   String get studyResultAttempts => 'Lượt trả lời';
 
   @override
@@ -2821,6 +2824,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyResultStudyAgainAction => 'Học';
+
+  @override
+  String get studyResultBackToLibraryAction => 'Về thư viện';
+
+  @override
+  String get studyResultBackToHomeAction => 'Về trang chủ';
 
   @override
   String get studyRetryFinalizeAction => 'Thử lại';
@@ -2891,6 +2900,25 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyResultCardsToReviewEmpty => 'Không có thẻ nào cần ôn thêm.';
+
+  @override
+  String get studyResultInvalidTitle => 'Không thể mở kết quả';
+
+  @override
+  String get studyResultInvalidMessage =>
+      'Tham số của đường dẫn kết quả học không hợp lệ.';
+
+  @override
+  String get studyResultNotCompleteTitle => 'Không có kết quả';
+
+  @override
+  String get studyResultNotCompleteMessage =>
+      'Phiên học này chưa được hoàn tất.';
+
+  @override
+  String studyResultNotCompleteMessageWithStatus(String status) {
+    return 'Phiên học này chưa được hoàn tất. Trạng thái hiện tại: $status.';
+  }
 
   @override
   String get studyResultRecoveredLabel => 'Hồi phục';

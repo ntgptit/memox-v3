@@ -120,8 +120,8 @@ stateDiagram-v2
   persisted review screen in V1: it loads the session header and ordered
   session items, shows the current card with a reveal toggle, supports
   Previous/Next navigation with reveal reset on move, shows a Finish Session
-  CTA only after every item is answered, and keeps the result route placeholder
-  for a later task.
+  CTA only after every item is answered, and navigates to the real result
+  screen after explicit finish.
 - Study Entry V1 must not silently resume an existing scope session. If a
   resumable session exists and the explicit Resume / Start over dialog is not
   implemented yet, the gate returns a controlled `resumeRequired` state and
@@ -131,7 +131,7 @@ stateDiagram-v2
   and keeps `flashcard_progress` unchanged until finalization.
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
-  the result placeholder on success.
+  the real result screen on success.
 - Exit from active session requires confirmation.
 - Finalization failure keeps the user on the study session screen, shows a
   controlled localized error, and leaves the session open for another attempt.

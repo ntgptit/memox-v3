@@ -87,6 +87,24 @@ Future<Either<Failure, StudySessionReview>> call({required SessionId sessionId})
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.
 
+## LoadStudySessionResultUseCase
+
+```dart
+Future<Either<Failure, StudySessionResult>> call({required SessionId sessionId});
+```
+
+**Rules:**
+
+- LOAD session by id.
+- LOAD ordered `study_session_items` joined with `flashcards`.
+- LOAD `study_attempts` for the session and derive the final per-item result summary used by the
+  result screen.
+- Return the persisted session header plus total / answered / forgot / passed counts.
+- Missing session returns `NotFoundFailure`.
+- Empty item list is treated as a storage/integrity error and surfaces as a controlled error state.
+
+**Errors:** `NotFoundFailure`, `StorageFailure`.
+
 ## RecordStudySessionAnswerUseCase
 
 ```dart
@@ -248,9 +266,10 @@ row badges.
 **Wireframes:** `docs/wireframes/12-study-entry-gate.md` through
 `docs/wireframes/18-study-result.md`
 **Decision table:** rows S*, BS*, GA*, H3, F4*
-**Code paths (verified 2026-06-08):** `lib/domain/study/usecases/study_usecases.dart` (current
-V1 entry gate use case: `StartStudySessionUseCase`, plus `LoadStudySessionReviewUseCase`);
+**Code paths (verified 2026-06-09):** `lib/domain/study/usecases/study_usecases.dart` (current
+V1 entry gate use case: `StartStudySessionUseCase`, plus `LoadStudySessionReviewUseCase` and
+`LoadStudySessionResultUseCase`);
 `lib/data/repositories/study_repo_impl.dart` (scope resolution, empty-state decision, session
-insert, session review load); `lib/data/datasources/local/daos/study_session_dao.dart`
+insert, session review load, result summary load); `lib/data/datasources/local/daos/study_session_dao.dart`
 (scope reads + session/item inserts + review join). The `lib/domain/usecases/study/**` and
 `lib/domain/srs/**` directories do NOT exist in the current codebase.

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/core/error/failure.dart';
@@ -13,6 +14,7 @@ import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -24,8 +26,10 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
+import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/study/mx_flashcard.dart';
 import 'package:riverpod/misc.dart';
@@ -33,14 +37,19 @@ import 'package:riverpod/misc.dart';
 class _FakeStudyRepository implements StudyRepository {
   _FakeStudyRepository(
     this.reviewResult, {
+    this.resultResult = const Result<StudySessionResult>.err(
+      Failure.notFound(entity: 'study_session', id: 'unused'),
+    ),
     this.recordResult = const Result<void>.ok(null),
     this.finalizeResult = const Result<void>.ok(null),
   });
 
   Result<StudySessionReview> reviewResult;
+  Result<StudySessionResult> resultResult;
   Result<void> recordResult;
   Result<void> finalizeResult;
   int reviewCalls = 0;
+  int resultCalls = 0;
   int recordCalls = 0;
   int finalizeCalls = 0;
   int startCalls = 0;
@@ -70,6 +79,14 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     reviewCalls++;
     return reviewResult;
+  }
+
+  @override
+  Future<Result<StudySessionResult>> loadStudySessionResult({
+    required SessionId sessionId,
+  }) async {
+    resultCalls++;
+    return resultResult;
   }
 
   @override
@@ -145,6 +162,20 @@ Widget _routerShell(
   ),
 );
 
+Widget _materialShell(
+  Widget child, {
+  List<Override> overrides = const <Override>[],
+}) => ProviderScope(
+  overrides: overrides,
+  child: MaterialApp(
+    theme: AppTheme.light(),
+    darkTheme: AppTheme.dark(),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: child,
+  ),
+);
+
 GoRouter _studyRouter(String initialLocation) {
   final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>();
@@ -152,6 +183,32 @@ GoRouter _studyRouter(String initialLocation) {
     navigatorKey: rootNavigatorKey,
     initialLocation: initialLocation,
     routes: studyRoutes(rootNavigatorKey),
+  );
+}
+
+GoRouter _studyResultRouter(String initialLocation) {
+  final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+  return GoRouter(
+    navigatorKey: rootNavigatorKey,
+    initialLocation: initialLocation,
+    routes: <RouteBase>[
+      GoRoute(
+        path: RoutePaths.home,
+        name: RouteNames.home,
+        builder: (context, state) => const Scaffold(
+          body: Text('Home destination'),
+        ),
+      ),
+      GoRoute(
+        path: RoutePaths.library,
+        name: RouteNames.library,
+        builder: (context, state) => const Scaffold(
+          body: Text('Library destination'),
+        ),
+      ),
+      ...studyRoutes(rootNavigatorKey),
+    ],
   );
 }
 
@@ -198,6 +255,32 @@ StudySessionReview _review({
           ),
         ),
     ],
+  );
+}
+
+StudySessionResult _result({
+  required String sessionId,
+  required SessionStatus status,
+  required int totalCount,
+  required int answeredCount,
+  required int forgotCount,
+  required int passedCount,
+}) {
+  final DateTime now = DateTime.utc(2026, 1, 1);
+  return StudySessionResult(
+    session: StudySession(
+      id: sessionId,
+      entryType: EntryType.deck,
+      entryRefId: 'deck-1',
+      studyType: StudyType.newCards,
+      status: status,
+      startedAt: now,
+      updatedAt: now,
+    ),
+    totalCount: totalCount,
+    answeredCount: answeredCount,
+    forgotCount: forgotCount,
+    passedCount: passedCount,
   );
 }
 
@@ -577,8 +660,7 @@ void main() {
 
       expect(repository.finalizeCalls, 1);
       expect(find.byType(StudySessionScreen), findsNothing);
-      expect(find.byType(RoutePlaceholder), findsOneWidget);
-      expect(find.text('sessionId: session-6'), findsOneWidget);
+      expect(find.byType(StudyResultScreen), findsOneWidget);
     },
   );
 
@@ -731,4 +813,200 @@ void main() {
     expect(repository.reviewCalls, greaterThan(0));
     expect(repository.recordCalls, 0);
   });
+
+  testWidgets(
+    'empty result session id shows a controlled invalid state',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+      );
+
+      await tester.pumpWidget(
+        _materialShell(
+          const StudyResultScreen(sessionId: ''),
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyResultScreen)),
+      );
+
+      expect(find.byType(MxErrorState), findsOneWidget);
+      expect(find.text(l10n.studyResultInvalidTitle), findsOneWidget);
+      expect(find.text(l10n.studyResultInvalidMessage), findsOneWidget);
+      expect(repository.resultCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'result route renders the real Study Result screen and shows the summary counts',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+        resultResult: Result<StudySessionResult>.ok(
+          _result(
+            sessionId: 'session-result',
+            status: SessionStatus.completed,
+            totalCount: 4,
+            answeredCount: 4,
+            forgotCount: 1,
+            passedCount: 3,
+          ),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(
+        RoutePaths.studyResult('session-result'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyResultScreen)),
+      );
+
+      expect(find.byType(StudyResultScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(find.text(l10n.studyResultCompleted), findsOneWidget);
+      expect(find.text(l10n.studyResultCardsCompleted(4, 4)), findsOneWidget);
+      expect(find.text('4'), findsWidgets);
+      expect(repository.resultCalls, 1);
+    },
+  );
+
+  testWidgets(
+    'missing result session shows a controlled not-found state',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+        resultResult: const Result<StudySessionResult>.err(
+          Failure.notFound(entity: 'study_session', id: 'missing-session'),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(
+        RoutePaths.studyResult('missing-session'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyResultScreen)),
+      );
+
+      expect(find.byType(MxErrorState), findsOneWidget);
+      expect(find.text(l10n.studySessionNotFoundTitle), findsOneWidget);
+      expect(find.text(l10n.studySessionNotFoundMessage), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'incomplete result session shows the not-completed state instead of success',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+        resultResult: Result<StudySessionResult>.ok(
+          _result(
+            sessionId: 'session-incomplete',
+            status: SessionStatus.inProgress,
+            totalCount: 4,
+            answeredCount: 2,
+            forgotCount: 0,
+            passedCount: 2,
+          ),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(
+        RoutePaths.studyResult('session-incomplete'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyResultScreen)),
+      );
+
+      expect(find.byType(MxEmptyState), findsOneWidget);
+      expect(find.text(l10n.studyResultNotCompleteTitle), findsOneWidget);
+      expect(find.textContaining(l10n.studyResultNotCompleteMessage), findsOneWidget);
+      expect(find.text(l10n.studyResultCompleted), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'study result CTA navigates using existing route constants',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+        resultResult: Result<StudySessionResult>.ok(
+          _result(
+            sessionId: 'session-cta',
+            status: SessionStatus.completed,
+            totalCount: 1,
+            answeredCount: 1,
+            forgotCount: 0,
+            passedCount: 1,
+          ),
+        ),
+      );
+      final GoRouter router = _studyResultRouter(
+        RoutePaths.studyResult('session-cta'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudyResultScreen)),
+      );
+
+      await tester.tap(find.widgetWithText(MxActionButton, l10n.studyResultBackToLibraryAction));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Library destination'), findsOneWidget);
+    },
+  );
 }

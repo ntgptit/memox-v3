@@ -11,6 +11,7 @@ import 'package:memox/data/repositories/study_repo_record_answer.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -115,6 +116,100 @@ class StudyRepositoryImpl implements StudyRepository {
       );
     } catch (error) {
       return Result<StudySessionReview>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_sessions',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<StudySessionResult>> loadStudySessionResult({
+    required SessionId sessionId,
+  }) async {
+    try {
+      final StudySessionRow? sessionRow = await _dao.findSession(sessionId);
+      if (sessionRow == null) {
+        return Result<StudySessionResult>.err(
+          Failure.notFound(entity: 'study_session', id: sessionId),
+        );
+      }
+
+      final List<study_dao.StudySessionReviewItemsResult> itemRows = await _dao
+          .loadSessionReviewItems(sessionId);
+      if (itemRows.isEmpty) {
+        return const Result<StudySessionResult>.err(
+          Failure.storage(
+            operation: StorageOp.read,
+            cause: 'Study session has no items.',
+            table: 'study_session_items',
+          ),
+        );
+      }
+
+      final List<study_dao.StudySessionAttemptsResult> attemptRows = await _dao
+          .loadSessionAttempts(sessionId);
+      final Map<String, List<study_dao.StudySessionAttemptsResult>>
+      attemptsByItemId = <String, List<study_dao.StudySessionAttemptsResult>>{};
+      for (final study_dao.StudySessionAttemptsResult row in attemptRows) {
+        attemptsByItemId.putIfAbsent(
+          row.sessionItemId,
+          () => <study_dao.StudySessionAttemptsResult>[],
+        ).add(row);
+      }
+
+      final bool isCompleted = StudyMapper.sessionStatusFromStorage(
+            sessionRow.status,
+          ) ==
+          SessionStatus.completed;
+      int answeredCount = 0;
+      int forgotCount = 0;
+      int passedCount = 0;
+      for (final study_dao.StudySessionReviewItemsResult itemRow in itemRows) {
+        if (itemRow.answeredAt != null) {
+          answeredCount++;
+        }
+        final List<study_dao.StudySessionAttemptsResult> itemAttempts =
+            attemptsByItemId[itemRow.id] ??
+            const <study_dao.StudySessionAttemptsResult>[];
+        if (isCompleted && itemRow.answeredAt != null && itemAttempts.isEmpty) {
+          return Result<StudySessionResult>.err(
+            Failure.storage(
+              operation: StorageOp.read,
+              cause: 'Completed study session is missing attempts.',
+              table: 'study_attempts',
+            ),
+          );
+        }
+        if (itemAttempts.isEmpty) {
+          continue;
+        }
+        final AttemptResult finalResult = _finalizeResultForAttempts(
+          itemAttempts,
+        );
+        switch (finalResult) {
+          case AttemptResult.forgot:
+            forgotCount++;
+          case AttemptResult.perfect:
+          case AttemptResult.initialPassed:
+          case AttemptResult.recovered:
+            passedCount++;
+        }
+      }
+
+      return Result<StudySessionResult>.ok(
+        StudySessionResult(
+          session: StudyMapper.fromSessionRow(sessionRow),
+          totalCount: itemRows.length,
+          answeredCount: answeredCount,
+          forgotCount: forgotCount,
+          passedCount: passedCount,
+        ),
+      );
+    } catch (error) {
+      return Result<StudySessionResult>.err(
         Failure.storage(
           operation: StorageOp.read,
           cause: error.toString(),

@@ -1416,6 +1416,7 @@
   "studyResultTitle": "Study result",
   "studyResultHeading": "Session summary",
   "studyResultCards": "Cards",
+  "studyResultAnswered": "Answered",
   "studyResultAttempts": "Attempts",
   "studyResultCorrect": "Correct",
   "studyResultIncorrect": "Incorrect",
@@ -1449,6 +1450,8 @@
   },
   "studyResultReviewMoreAction": "Review",
   "studyResultStudyAgainAction": "Study",
+  "studyResultBackToLibraryAction": "Back to Library",
+  "studyResultBackToHomeAction": "Go to Home",
   "studyRetryFinalizeAction": "Retry",
   "studyResultCompleted": "Completed",
   "studyResultCancelled": "Cancelled",
@@ -1472,6 +1475,18 @@
   "studyResultEmpty": "No cards answered",
   "studyResultCardsToReviewTitle": "Cards to review",
   "studyResultCardsToReviewEmpty": "No cards need extra review.",
+  "studyResultInvalidTitle": "Can't open result",
+  "studyResultInvalidMessage": "The study result route parameters are invalid.",
+  "studyResultNotCompleteTitle": "Result unavailable",
+  "studyResultNotCompleteMessage": "This study session has not been completed yet.",
+  "studyResultNotCompleteMessageWithStatus": "This study session has not been completed yet. Current status: {status}.",
+  "@studyResultNotCompleteMessageWithStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
   "studyResultRecoveredLabel": "Recovered",
   "studyResultForgotLabel": "Forgot",
   "studyResultBoxChangedLabel": "Box {oldBox} → {newBox}",

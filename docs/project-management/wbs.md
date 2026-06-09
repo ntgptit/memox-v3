@@ -105,7 +105,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 1.3.2 | Route constants and builders | Implemented | All paths use `RoutePaths`/`RouteNames`; no raw route strings in widgets. |
 | 1.3.3 | Library branch routes | Implemented / Partial | Library overview, global search, folder detail, flashcard list are wired. |
 | 1.3.4 | Hidden library routes | Partial | Flashcard create/edit are real; deck import remains placeholder. |
-| 1.3.5 | Study routes | Partial | Study entry and study session are real; study result remains placeholder. |
+| 1.3.5 | Study routes | Partial | Study entry and study session are real; study result is now a real screen. |
 | 1.3.6 | Settings routes | Partial | Settings hub, learning, learning/tags, audio-speech are real; account route remains placeholder. |
 | 1.3.7 | Route ordering guard | Implemented / Ongoing | Specific study session route stays before generic study entry route. |
 | 1.3.8 | Invalid route handling | Ongoing | Invalid params render controlled error/safe route, not crash. |
@@ -251,7 +251,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.6 | Resume/start-over dialog | Deferred | Current V1 shows controlled state; full dialog remains future task. |
 | 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
 | 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, Finish Session when all items are answered, and in-session answer persistence. |
-| 9.9 | Study result route | Placeholder | `/library/study/session/:sessionId/result` remains placeholder. |
+| 9.9 | Study result route | Implemented | `/library/study/session/:sessionId/result` opens `StudyResultScreen` with completed-session summary and controlled fallback states. |
 | 9.10 | Protected active-session exit | Specified / Partial | Active session exit requires confirmation; verify current V1 shell behavior before extending. |
 | 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |
 | 9.12 | Study attempt persistence | Specified / Partial | Attempts must be persisted; full mode implementations may still be pending. |
@@ -414,8 +414,8 @@ This section orders work by product value and risk, not by internal refactor pre
 
 | Priority | Candidate work package | Why |
 | --- | --- | --- |
-| P0 | Study result route V1 | Study session has a real V1 shell; result is still placeholder. Needed for usable SRS loop. |
-| P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the placeholder result screen. |
+| P0 | Study result route V1 | Study session has a real V1 shell; result now renders a real summary screen. Needed for usable SRS loop. |
+| P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the real result screen. |
 | P0 | Protected exit confirmation for active study | Study flow doc requires confirmation; prevents accidental session loss. |
 | P1 | Deck import V1 | Route is placeholder but import spec is detailed and user-facing. |
 | P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |

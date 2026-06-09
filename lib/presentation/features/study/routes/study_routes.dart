@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
-import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
 /// Study routes, composed by `app_router.dart`.
@@ -36,12 +36,8 @@ List<RouteBase> studyRoutes(
       GoRoute(
         path: RoutePaths.resultSegment,
         name: RouteNames.studyResult,
-        builder: (context, state) => RoutePlaceholder(
-          routeName: RouteNames.studyResult,
-          params: <String, String>{
-            RoutePaths.sessionIdParam:
-                state.pathParameters[RoutePaths.sessionIdParam] ?? '',
-          },
+        builder: (context, state) => StudyResultScreen(
+          sessionId: state.pathParameters[RoutePaths.sessionIdParam] ?? '',
         ),
       ),
     ],

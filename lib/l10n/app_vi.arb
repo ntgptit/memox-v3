@@ -1416,6 +1416,7 @@
   "studyResultTitle": "Kết quả học",
   "studyResultHeading": "Tổng kết phiên",
   "studyResultCards": "Thẻ",
+  "studyResultAnswered": "Đã trả lời",
   "studyResultAttempts": "Lượt trả lời",
   "studyResultCorrect": "Đúng",
   "studyResultIncorrect": "Sai",
@@ -1449,6 +1450,8 @@
   },
   "studyResultReviewMoreAction": "Ôn",
   "studyResultStudyAgainAction": "Học",
+  "studyResultBackToLibraryAction": "Về thư viện",
+  "studyResultBackToHomeAction": "Về trang chủ",
   "studyRetryFinalizeAction": "Thử lại",
   "studyResultCompleted": "Đã hoàn thành",
   "studyResultCancelled": "Đã hủy",
@@ -1472,6 +1475,18 @@
   "studyResultEmpty": "Chưa trả lời thẻ nào",
   "studyResultCardsToReviewTitle": "Thẻ cần ôn lại",
   "studyResultCardsToReviewEmpty": "Không có thẻ nào cần ôn thêm.",
+  "studyResultInvalidTitle": "Không thể mở kết quả",
+  "studyResultInvalidMessage": "Tham số của đường dẫn kết quả học không hợp lệ.",
+  "studyResultNotCompleteTitle": "Không có kết quả",
+  "studyResultNotCompleteMessage": "Phiên học này chưa được hoàn tất.",
+  "studyResultNotCompleteMessageWithStatus": "Phiên học này chưa được hoàn tất. Trạng thái hiện tại: {status}.",
+  "@studyResultNotCompleteMessageWithStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
   "studyResultRecoveredLabel": "Hồi phục",
   "studyResultForgotLabel": "Quên",
   "studyResultBoxChangedLabel": "Box {oldBox} → {newBox}",

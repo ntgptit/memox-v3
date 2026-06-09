@@ -22,6 +22,7 @@ Stream<List<ResumableSession>> watchResumableSessions();
 Future<Either<Failure, ResumableSession?>> findResumable(StudyScope scope);
 Future<Either<Failure, Session>> findById(SessionId id);
 Future<Either<Failure, StudySessionReview>> loadStudySessionReview(SessionId sessionId);
+Future<Either<Failure, StudySessionResult>> loadStudySessionResult(SessionId sessionId);
 Future<Either<Failure, List<SessionItem>>> getItemsForSession(SessionId id);
 Future<Either<Failure, SessionAggregate>> computeAggregate(SessionId id);
 
@@ -51,6 +52,7 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 |---------------------|-----------------------------------------------------------------------------------|
 | `createSession`     | `study_sessions` INSERT + `study_session_items` INSERTs                           |
 | `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`)     |
+| `loadStudySessionResult` | read `study_sessions` + `study_session_items` + `study_attempts` aggregate     |
 | `finalizeStudySession` | `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE                     |
 | `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
 | `expireOldSessions` | `study_sessions` UPDATE batch                                                     |
