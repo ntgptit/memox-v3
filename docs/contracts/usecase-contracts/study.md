@@ -158,30 +158,26 @@ Future<Either<Failure, FlashcardProgress>> call({
 
 **Test refs:** GA1-GA10, SRS rows.
 
-## FinalizeSessionUseCase
+## FinalizeStudySessionUseCase
 
 ```dart
-Future<Either<Failure, SessionAggregate>> call({required SessionId id});
+Future<Either<Failure, Unit>> call({required SessionId sessionId});
 ```
 
 **Rules:**
 
-- LOAD session. Validate all `study_session_items` answered. Else
-  `ValidationFailure(code: incompleteSession)`.
-- Compute aggregate from `study_attempts`.
-- Atomic: mark session completed + engagement counter updates. On partial failure (attempts saved,
-  aggregate write failed): mark `failed_to_finalize`, return `FinalizationFailure`. See
-  `docs/contracts/repository-contracts/study-repository.md`.
+- LOAD session. Validate all `study_session_items` answered. Else return
+  `FinalizationFailure`.
+- LOAD persisted attempts for each answered item.
+- Repair missing `flashcard_progress` rows during finalization if needed.
+- Atomic: update progress rows and mark session completed in one transaction.
+- On failure, preserve existing data and keep the session open.
 
-**Errors:** `NotFoundFailure`, `ValidationFailure`, `FinalizationFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `FinalizationFailure`, `StorageFailure`.
 
 ## RetryFinalizationUseCase
 
-```dart
-Future<Either<Failure, SessionAggregate>> call({required SessionId id});
-```
-
-Idempotent. Re-runs finalization on a `failed_to_finalize` session.
+Future proposal; no live V1 implementation in this slice.
 
 ## BuryCardUseCase
 

@@ -65,6 +65,13 @@ class _FakeStudyRepository implements StudyRepository {
   }
 
   @override
+  Future<Result<void>> finalizeStudySession({
+    required SessionId sessionId,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Result<StudySession>> createSession({
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,

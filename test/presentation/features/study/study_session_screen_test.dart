@@ -34,12 +34,15 @@ class _FakeStudyRepository implements StudyRepository {
   _FakeStudyRepository(
     this.reviewResult, {
     this.recordResult = const Result<void>.ok(null),
+    this.finalizeResult = const Result<void>.ok(null),
   });
 
   Result<StudySessionReview> reviewResult;
   Result<void> recordResult;
+  Result<void> finalizeResult;
   int reviewCalls = 0;
   int recordCalls = 0;
+  int finalizeCalls = 0;
   int startCalls = 0;
   int findResumableCalls = 0;
   int latestSummaryCalls = 0;
@@ -108,6 +111,14 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     cancelCalls++;
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<void>> finalizeStudySession({
+    required SessionId sessionId,
+  }) async {
+    finalizeCalls++;
+    return finalizeResult;
   }
 
   @override
@@ -332,6 +343,7 @@ void main() {
       expect(find.text('Back 1'), findsNothing);
       expect(find.text(l10n.studyForgotAction), findsNothing);
       expect(find.text(l10n.studyGotItAction), findsNothing);
+      expect(find.text(l10n.studyFinalizeAction), findsNothing);
       expect(showAnswerFinder, findsOneWidget);
       expect(
         tester.widget<MxActionButton>(previousFinder).onPressed,
@@ -467,7 +479,7 @@ void main() {
   );
 
   testWidgets(
-    'when the last unanswered item is graded the screen stays on the session and shows the all-answered copy',
+    'Finish Session CTA appears only after all cards are answered',
     (tester) async {
       final _FakeStudyRepository repository = _FakeStudyRepository(
         Result<StudySessionReview>.ok(
@@ -508,13 +520,119 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(repository.recordCalls, 2);
+      expect(repository.finalizeCalls, 0);
       expect(find.byType(StudySessionScreen), findsOneWidget);
       expect(find.byType(RoutePlaceholder), findsNothing);
       expect(find.text(l10n.studySessionAllAnsweredMessage), findsOneWidget);
+      expect(find.text(l10n.studyFinalizeAction), findsOneWidget);
       expect(find.text('Front 2'), findsOneWidget);
       expect(find.text('Back 2'), findsNothing);
       expect(find.text(l10n.studyForgotAction), findsNothing);
       expect(find.text(l10n.studyGotItAction), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'tapping Finish Session commits the finalization and navigates to the result placeholder',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-6',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-6'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyFinalizeAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.finalizeCalls, 1);
+      expect(find.byType(StudySessionScreen), findsNothing);
+      expect(find.byType(RoutePlaceholder), findsOneWidget);
+      expect(find.text('sessionId: session-6'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'when Finish Session fails the user stays on the session and sees a controlled error',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-7',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+        finalizeResult: const Result<void>.err(
+          Failure.finalization(sessionId: 'session-7'),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-7'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyFinalizeAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.finalizeCalls, 1);
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(find.text(l10n.studySessionFinalizeFailedMessage), findsOneWidget);
+      expect(find.text(l10n.studyFinalizeAction), findsOneWidget);
     },
   );
 

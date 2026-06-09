@@ -68,6 +68,18 @@ class LoadDashboardResumeSessionSummaryUseCase {
       _repository.findLatestResumableSessionSummary();
 }
 
+/// Finalizes a persisted study session after every session item has an answer.
+///
+/// Failure types: `NotFoundFailure`, `FinalizationFailure`, `StorageFailure`.
+class FinalizeStudySessionUseCase {
+  const FinalizeStudySessionUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<void>> call({required SessionId sessionId}) =>
+      _repository.finalizeStudySession(sessionId: sessionId);
+}
+
 /// Cancels a resumable study session.
 ///
 /// Failure types: `StorageFailure`.

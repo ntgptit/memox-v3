@@ -36,6 +36,7 @@ Future<Either<Failure, Unit>> recordStudySessionAnswer({
   required AttemptResult result,
   required StudyMode studyMode,
 });
+Future<Either<Failure, Unit>> finalizeStudySession({required SessionId sessionId});
 Future<Either<Failure, Unit>> markInProgress(SessionId id);
 Future<Either<Failure, Unit>> markCompleted(SessionId id);
 Future<Either<Failure, Unit>> markCancelled(SessionId id);
@@ -50,6 +51,7 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 |---------------------|-----------------------------------------------------------------------------------|
 | `createSession`     | `study_sessions` INSERT + `study_session_items` INSERTs                           |
 | `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`)     |
+| `finalizeStudySession` | `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE                     |
 | `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
 | `expireOldSessions` | `study_sessions` UPDATE batch                                                     |
 
@@ -78,9 +80,7 @@ strict and must surface the corruption instead of hiding it.
 - Session `status` transitions allowed:
     - `draft` → `in_progress` (on first attempt)
     - `draft` / `in_progress` → `completed` (on finalize)
-    - `draft` / `in_progress` → `cancelled` (on user action OR auto-expire)
-    - `in_progress` → `failed_to_finalize` (partial finalize)
-    - `failed_to_finalize` → `completed` (on retry)
+- `draft` / `in_progress` → `cancelled` (on user action OR auto-expire)
 - Any other transition is `UnsupportedActionFailure` at use case layer.
 - New Study batch loading treats flashcards with missing `flashcard_progress`
   rows as new active cards. This keeps repaired or legacy local databases from

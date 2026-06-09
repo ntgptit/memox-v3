@@ -46,6 +46,10 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
     String sessionId,
   ) => studySessionReviewItems(sessionId).get();
 
+  Future<List<StudySessionAttemptsResult>> loadSessionAttempts(
+    String sessionId,
+  ) => studySessionAttempts(sessionId).get();
+
   Future<FolderRow?> findFolder(String id) => (select(
     folders,
   )..where((Folders row) => row.id.equals(id))).getSingleOrNull();
@@ -97,6 +101,10 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) =>
       into(studyAttempts).insert(attempt);
 
+  Future<void> insertFlashcardProgress(
+    FlashcardProgressCompanion progress,
+  ) => into(attachedDatabase.flashcardProgress).insert(progress);
+
   Future<int> markStudySessionItemAnswered({
     required String sessionItemId,
     required int answeredAtMs,
@@ -109,8 +117,45 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
             StudySessionItemsCompanion(
               answeredAt: Value<int?>(answeredAtMs),
               updatedAt: Value<int>(updatedAtMs),
+          ),
+          );
+
+  Future<int> updateFlashcardProgress({
+    required String flashcardId,
+    required int boxNumber,
+    required int dueAtMs,
+    required int reviewCount,
+    required int lapseCount,
+    required int lastStudiedAtMs,
+  }) =>
+      (update(
+        attachedDatabase.flashcardProgress,
+      )..where(
+        (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
+      ))
+          .write(
+            FlashcardProgressCompanion(
+              boxNumber: Value<int>(boxNumber),
+              dueAt: Value<int?>(dueAtMs),
+              reviewCount: Value<int>(reviewCount),
+              lapseCount: Value<int>(lapseCount),
+              lastStudiedAt: Value<int?>(lastStudiedAtMs),
             ),
           );
+
+  Future<int> updateStudySessionStatus({
+    required String sessionId,
+    required String status,
+    required int updatedAtMs,
+  }) =>
+      (update(
+        studySessions,
+      )..where((StudySessions row) => row.id.equals(sessionId))).write(
+        StudySessionsCompanion(
+          status: Value<String>(status),
+          updatedAt: Value<int>(updatedAtMs),
+        ),
+      );
 
   Future<FlashcardProgressRow?> findFlashcardProgress(String flashcardId) =>
       (select(

@@ -39,7 +39,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Flashcard CRUD + tag | Specified | `docs/business/flashcard/flashcard-management.md` |
 | Flashcard import preview/validation | Specified | `docs/business/flashcard/flashcard-management.md` (import section) |
 | Flashcard selection export | Specified | `docs/business/export/export.md` |
-| Study session | Specified | `docs/business/study/study-flow.md` |
+| Study session | Partial | `docs/business/study/study-flow.md` |
 | Resume / continue session | Specified | `docs/business/resume/resume-session.md` |
 | Empty scope handling | Specified | `docs/business/study/study-flow.md` (empty scope matrix) |
 | SRS review (Leitner 8-box) | Specified | `docs/business/srs/srs-review.md` |

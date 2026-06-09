@@ -14,3 +14,23 @@ CREATE TABLE study_attempts (
 
 CREATE INDEX idx_study_attempts_session_item
   ON study_attempts (session_item_id, attempted_at DESC);
+
+studySessionAttempts(:sessionId AS TEXT):
+SELECT
+  study_attempts.id,
+  study_attempts.session_item_id,
+  study_attempts.result,
+  study_attempts.study_mode,
+  study_attempts.box_before,
+  study_attempts.box_after,
+  study_attempts.user_input,
+  study_attempts.attempted_at,
+  study_session_items.flashcard_id,
+  study_session_items.sort_order
+FROM study_attempts
+INNER JOIN study_session_items
+  ON study_session_items.id = study_attempts.session_item_id
+WHERE study_session_items.session_id = :sessionId
+ORDER BY study_session_items.sort_order,
+  study_attempts.attempted_at,
+  study_attempts.id;

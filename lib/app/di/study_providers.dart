@@ -48,6 +48,10 @@ loadDashboardResumeSessionSummaryUseCase(Ref ref) =>
     );
 
 @Riverpod(keepAlive: true)
+FinalizeStudySessionUseCase finalizeStudySessionUseCase(Ref ref) =>
+    FinalizeStudySessionUseCase(ref.watch(studyRepositoryProvider));
+
+@Riverpod(keepAlive: true)
 CancelStudySessionUseCase cancelStudySessionUseCase(Ref ref) =>
     CancelStudySessionUseCase(ref.watch(studyRepositoryProvider));
 

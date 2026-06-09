@@ -2576,7 +2576,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studySessionAllAnsweredMessage =>
-      'All cards are answered. Come back later to keep studying.';
+      'All cards are answered. Finish the session to save your progress.';
+
+  @override
+  String get studySessionFinalizingMessage => 'Finalizing your session...';
+
+  @override
+  String get studySessionFinalizeFailedMessage =>
+      'Couldn\'t finish this session. Please try again.';
 
   @override
   String get studySessionNotFoundTitle => 'Session not found';
@@ -2825,7 +2832,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyActionFailed => 'Study action failed.';
 
   @override
-  String get studyFinalizeAction => 'Finalize';
+  String get studyFinalizeAction => 'Finish session';
 
   @override
   String get studySkipAction => 'Skip';

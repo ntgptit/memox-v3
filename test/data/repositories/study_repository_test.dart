@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart' hide isNotNull;
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
@@ -148,6 +148,22 @@ class _ThrowingStudySessionDao extends StudySessionDao {
   @override
   Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) async {
     await super.insertStudyAttempt(attempt);
+    throw StateError('boom');
+  }
+}
+
+class _ThrowingFinalizeStudySessionDao extends StudySessionDao {
+  _ThrowingFinalizeStudySessionDao(super.db);
+
+  @override
+  Future<int> updateFlashcardProgress({
+    required String flashcardId,
+    required int boxNumber,
+    required int dueAtMs,
+    required int reviewCount,
+    required int lapseCount,
+    required int lastStudiedAtMs,
+  }) async {
     throw StateError('boom');
   }
 }
@@ -515,6 +531,263 @@ void main() {
         isTrue,
       );
       expect((await db.select(db.flashcardProgress).getSingle()).boxNumber, 2);
+    },
+  );
+
+  test(
+    'finalizeStudySession succeeds, repairs missing progress, and applies SRS updates transactionally',
+    () async {
+      const String folderId = 'folder-finalize-ok';
+      const String deckId = 'deck-finalize-ok';
+      const String answeredCardId = 'card-finalize-answered';
+      const String missingProgressCardId = 'card-finalize-missing';
+      const String sessionId = 'session-finalize-ok';
+      const String answeredItemId = 'item-finalize-answered';
+      const String missingProgressItemId = 'item-finalize-missing';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: answeredCardId,
+        deckId: deckId,
+        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        boxNumber: 3,
+      );
+      await fixture.insertFlashcard(
+        id: missingProgressCardId,
+        deckId: deckId,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: answeredItemId,
+        sessionId: sessionId,
+        flashcardId: answeredCardId,
+        sortOrder: 0,
+      );
+      await fixture.insertStudySessionItem(
+        id: missingProgressItemId,
+        sessionId: sessionId,
+        flashcardId: missingProgressCardId,
+        sortOrder: 1,
+      );
+      await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: answeredItemId,
+        result: AttemptResult.perfect,
+        studyMode: StudyMode.recall,
+      );
+      await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: missingProgressItemId,
+        result: AttemptResult.forgot,
+        studyMode: StudyMode.recall,
+      );
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isOk, isTrue);
+
+      final StudySessionRow sessionRow = await db
+          .select(db.studySessions)
+          .getSingle();
+      final List<FlashcardProgressRow> progressRows = await db
+          .select(db.flashcardProgress)
+          .get();
+
+      final FlashcardProgressRow answeredProgress = progressRows.firstWhere(
+        (FlashcardProgressRow row) => row.flashcardId == answeredCardId,
+      );
+      final FlashcardProgressRow repairedProgress = progressRows.firstWhere(
+        (FlashcardProgressRow row) => row.flashcardId == missingProgressCardId,
+      );
+
+      expect(sessionRow.status, 'completed');
+      expect(progressRows, hasLength(2));
+      expect(answeredProgress.boxNumber, 4);
+      expect(answeredProgress.reviewCount, 1);
+      expect(answeredProgress.lapseCount, 0);
+      expect(answeredProgress.dueAt, isA<int>());
+      expect(repairedProgress.boxNumber, 1);
+      expect(repairedProgress.reviewCount, 1);
+      expect(repairedProgress.lapseCount, 1);
+      expect(repairedProgress.dueAt, isA<int>());
+      expect(await db.select(db.studyAttempts).get(), hasLength(2));
+    },
+  );
+
+  test(
+    'finalizeStudySession rejects when any session item is still unanswered',
+    () async {
+      const String folderId = 'folder-finalize-unanswered';
+      const String deckId = 'deck-finalize-unanswered';
+      const String answeredCardId = 'card-finalize-unanswered-answered';
+      const String pendingCardId = 'card-finalize-unanswered-pending';
+      const String sessionId = 'session-finalize-unanswered';
+      const String answeredItemId = 'item-finalize-unanswered-answered';
+      const String pendingItemId = 'item-finalize-unanswered-pending';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: answeredCardId,
+        deckId: deckId,
+        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        boxNumber: 3,
+      );
+      await fixture.insertFlashcard(
+        id: pendingCardId,
+        deckId: deckId,
+        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: answeredItemId,
+        sessionId: sessionId,
+        flashcardId: answeredCardId,
+        sortOrder: 0,
+      );
+      await fixture.insertStudySessionItem(
+        id: pendingItemId,
+        sessionId: sessionId,
+        flashcardId: pendingCardId,
+        sortOrder: 1,
+      );
+      await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: answeredItemId,
+        result: AttemptResult.perfect,
+        studyMode: StudyMode.recall,
+      );
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<FinalizationFailure>());
+      expect((await db.select(db.studySessions).getSingle()).status, 'in_progress');
+      expect(await db.select(db.flashcardProgress).get(), hasLength(2));
+      expect(
+        (await db.select(db.flashcardProgress).get())
+            .firstWhere((row) => row.flashcardId == answeredCardId)
+            .boxNumber,
+        3,
+      );
+      expect(await db.select(db.studyAttempts).get(), hasLength(1));
+    },
+  );
+
+  test(
+    'finalizeStudySession rejects when an answered item has no persisted attempt',
+    () async {
+      const String folderId = 'folder-finalize-no-attempt';
+      const String deckId = 'deck-finalize-no-attempt';
+      const String cardId = 'card-finalize-no-attempt';
+      const String sessionId = 'session-finalize-no-attempt';
+      const String itemId = 'item-finalize-no-attempt';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: nowMs,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await db.into(db.studySessionItems).insert(
+        StudySessionItemsCompanion.insert(
+          id: itemId,
+          sessionId: sessionId,
+          flashcardId: cardId,
+          sortOrder: 0,
+          answeredAt: Value<int?>(nowMs),
+          createdAt: nowMs,
+          updatedAt: nowMs,
+        ),
+      );
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<FinalizationFailure>());
+      expect((await db.select(db.studySessions).getSingle()).status, 'in_progress');
+      expect(await db.select(db.studyAttempts).get(), isEmpty);
+      expect((await db.select(db.flashcardProgress).getSingle()).boxNumber, 2);
+    },
+  );
+
+  test(
+    'finalizeStudySession rolls back progress writes when a write fails',
+    () async {
+      const String folderId = 'folder-finalize-rollback';
+      const String deckId = 'deck-finalize-rollback';
+      const String cardId = 'card-finalize-rollback';
+      const String sessionId = 'session-finalize-rollback';
+      const String itemId = 'item-finalize-rollback';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: itemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+      await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: itemId,
+        result: AttemptResult.perfect,
+        studyMode: StudyMode.recall,
+      );
+
+      repository = StudyRepositoryImpl(_ThrowingFinalizeStudySessionDao(db));
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<StorageFailure>());
+      expect((await db.select(db.studySessions).getSingle()).status, 'in_progress');
+      final FlashcardProgressRow progress = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+      expect(progress.boxNumber, 2);
+      expect(progress.reviewCount, 0);
+      expect(await db.select(db.studyAttempts).get(), hasLength(1));
     },
   );
 }

@@ -42,6 +42,43 @@ class StudySessionReviewController extends _$StudySessionReviewController {
 
   Future<void> gradeGotIt() => _recordAnswer(AttemptResult.perfect);
 
+  Future<bool> finishSession() async {
+    final StudySessionReviewState? current = switch (state) {
+      AsyncData<StudySessionReviewState>(:final value) => value,
+      _ => null,
+    };
+    if (current == null || current.isBusy || !current.allAnswered) {
+      return false;
+    }
+
+    state = AsyncData(
+      current.copyWith(isFinalizing: true, clearFinalizeFailure: true),
+    );
+
+    final Result<void> finalizeResult = await ref
+        .read(finalizeStudySessionUseCaseProvider)
+        .call(sessionId: current.review.session.id);
+
+    switch (finalizeResult) {
+      case Ok<void>():
+        state = AsyncData(
+          current.copyWith(
+            isFinalizing: false,
+            clearFinalizeFailure: true,
+          ),
+        );
+        return true;
+      case Err<void>(:final failure):
+        state = AsyncData(
+          current.copyWith(
+            isFinalizing: false,
+            finalizeFailure: failure,
+          ),
+        );
+        return false;
+    }
+  }
+
   void _updateCurrentState(
     StudySessionReviewState Function(StudySessionReviewState state) mutate,
   ) {
@@ -66,7 +103,11 @@ class StudySessionReviewController extends _$StudySessionReviewController {
 
     final StudySessionReviewItem item = current.currentItem;
     state = AsyncData(
-      current.copyWith(isSaving: true, clearSaveFailure: true),
+      current.copyWith(
+        isSaving: true,
+        clearSaveFailure: true,
+        clearFinalizeFailure: true,
+      ),
     );
 
     final Result<void> recordResult = await ref
@@ -104,7 +145,9 @@ class StudySessionReviewState {
     required this.currentIndex,
     this.isAnswerVisible = false,
     this.isSaving = false,
+    this.isFinalizing = false,
     this.saveFailure,
+    this.finalizeFailure,
   });
 
   factory StudySessionReviewState.fromReview(StudySessionReview review) {
@@ -121,14 +164,18 @@ class StudySessionReviewState {
   final int currentIndex;
   final bool isAnswerVisible;
   final bool isSaving;
+  final bool isFinalizing;
   final Failure? saveFailure;
+  final Failure? finalizeFailure;
 
   StudySessionReviewItem get currentItem => review.items[currentIndex];
 
-  bool get canGoPrevious => currentIndex > 0 && !isSaving;
+  bool get isBusy => isSaving || isFinalizing;
+
+  bool get canGoPrevious => currentIndex > 0 && !isBusy;
 
   bool get canGoNext =>
-      currentIndex < review.items.length - 1 && !isSaving;
+      currentIndex < review.items.length - 1 && !isBusy;
 
   bool get currentItemAnswered => currentItem.sessionItem.answeredAt != null;
 
@@ -139,27 +186,30 @@ class StudySessionReviewState {
   bool get allAnswered => !hasUnansweredItems;
 
   bool get canGradeCurrentItem =>
-      isAnswerVisible && !isSaving && !currentItemAnswered && !allAnswered;
+      isAnswerVisible && !isBusy && !currentItemAnswered && !allAnswered;
 
   StudySessionReviewState toggleAnswer() => copyWith(
     isAnswerVisible: !isAnswerVisible,
     clearSaveFailure: true,
+    clearFinalizeFailure: true,
   );
 
-  StudySessionReviewState previous() => currentIndex == 0 || isSaving
+  StudySessionReviewState previous() => currentIndex == 0 || isBusy
       ? this
       : copyWith(
           currentIndex: currentIndex - 1,
           isAnswerVisible: false,
           clearSaveFailure: true,
+          clearFinalizeFailure: true,
         );
 
-  StudySessionReviewState next() => currentIndex >= review.items.length - 1 || isSaving
+  StudySessionReviewState next() => currentIndex >= review.items.length - 1 || isBusy
       ? this
       : copyWith(
           currentIndex: currentIndex + 1,
           isAnswerVisible: false,
           clearSaveFailure: true,
+          clearFinalizeFailure: true,
         );
 
   StudySessionReviewState markAnswered({
@@ -184,7 +234,9 @@ class StudySessionReviewState {
       currentIndex: nextUnansweredIndex ?? currentIndex,
       isAnswerVisible: false,
       isSaving: false,
+      isFinalizing: false,
       clearSaveFailure: true,
+      clearFinalizeFailure: true,
     );
   }
 
@@ -193,14 +245,21 @@ class StudySessionReviewState {
     int? currentIndex,
     bool? isAnswerVisible,
     bool? isSaving,
+    bool? isFinalizing,
     Failure? saveFailure,
+    Failure? finalizeFailure,
     bool clearSaveFailure = false,
+    bool clearFinalizeFailure = false,
   }) => StudySessionReviewState(
     review: review ?? this.review,
     currentIndex: currentIndex ?? this.currentIndex,
     isAnswerVisible: isAnswerVisible ?? this.isAnswerVisible,
     isSaving: isSaving ?? this.isSaving,
+    isFinalizing: isFinalizing ?? this.isFinalizing,
     saveFailure: clearSaveFailure ? null : saveFailure ?? this.saveFailure,
+    finalizeFailure: clearFinalizeFailure
+        ? null
+        : finalizeFailure ?? this.finalizeFailure,
   );
 
   int? _nextUnansweredIndex(

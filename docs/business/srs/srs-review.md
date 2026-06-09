@@ -25,12 +25,10 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 - `lib/data/**study**`
 - `lib/data/datasources/local/tables/flashcard_progress_table.dart`
 - `lib/data/datasources/local/tables/study_attempts_table.dart`
-- `lib/data/repositories/study_repo_impl_helpers.dart` (`_reviewOutcome`, canonical owner of box
-  transitions at finalization).
-- `lib/domain/study/srs_interval_policy.dart` (`SrsIntervalPolicy`, current runtime owner of
-  interval values).
-- `lib/data/repositories/study_repo_impl_mapping_helpers.dart` (`_intervalForBox`, repository
-  adapter to `SrsIntervalPolicy`).
+- `lib/data/repositories/study_repo_impl.dart` (canonical owner of finalization, box transitions,
+  and due-date calculation in V1).
+- `lib/data/repositories/study_repo_record_answer.dart` (in-session answer recording helper; keeps
+  `flashcard_progress` unchanged until finalization).
 - `lib/domain/study/usecases/study_usecases.dart` (session creation, empty-scope checks, and
   in-session answer orchestration; the legacy `lib/domain/srs/box_intervals.dart` and
   `lib/domain/srs/box_transition.dart` files do NOT exist).
@@ -45,9 +43,10 @@ Important fields:
 - `current_box` (1-8)
 - `review_count`
 - `lapse_count`
-- `last_result`
 - `last_studied_at` (UTC epoch ms)
 - `due_at` (UTC epoch ms)
+
+`last_result` is not part of the current schema and remains a future/reporting concern.
 
 ## Rules
 
@@ -74,10 +73,10 @@ See `docs/business/glossary.md` for result definitions.
 ## Box transition table
 
 This is the authoritative transition contract. The box transition is computed at session
-finalization by `_reviewOutcome` in `lib/data/repositories/study_repo_impl_helpers.dart` (reached
-via `FinalizeStudySessionUseCase` → `StudyRepository.finalizeSession` → `_commitSrs`); the
-in-session `Answer*UseCase` family in `lib/domain/study/usecases/study_usecases.dart` only records
-attempts and re-queues failed cards. Implementation must match this table. There is no standalone
+finalization by `StudyRepositoryImpl.finalizeStudySession` in
+`lib/data/repositories/study_repo_impl.dart`; the in-session
+`Answer*UseCase` family in `lib/domain/study/usecases/study_usecases.dart` only records attempts
+and re-queues failed cards. Implementation must match this table. There is no standalone
 `box_transition.dart` file at present.
 
 Per-card result classification (`forgot` / `recovered` / `perfect`) is shared with the Study Result
@@ -99,13 +98,11 @@ currently unreachable through the standard study flow (see
 
 ## Interval table
 
-Intervals are currently defined by `SrsIntervalPolicy` in
-`lib/domain/study/srs_interval_policy.dart`; finalization reaches the same source through
-`_intervalForBox` in `lib/data/repositories/study_repo_impl_mapping_helpers.dart`, and Learning
-Settings renders that same runtime source. The doc-level table below remains a pending product/docs
-contract; Prompt 12/13 identified that it differs from runtime. Until the interval-ladder product
-decision is made, **code owns runtime behavior** and this table must not be silently rewritten as
-resolved.
+Intervals are currently defined directly in
+`lib/data/repositories/study_repo_impl.dart`; Learning Settings renders that same runtime source.
+The doc-level table below remains a pending product/docs contract; Prompt 12/13 identified that it
+differs from runtime. Until the interval-ladder product decision is made, **code owns runtime
+behavior** and this table must not be silently rewritten as resolved.
 
 | Box | Interval | Approx   | Rationale                                                                |
 |-----|----------|----------|--------------------------------------------------------------------------|
@@ -150,17 +147,17 @@ At session finalization:
 
 1. Persist all attempts (already done during session).
 2. Compute final result per item based on attempt history and flow.
-3. Update progress: `current_box`, `review_count`, `lapse_count`, `last_result`, `last_studied_at`,
-   `due_at`.
+3. Update progress: `current_box`, `review_count`, `lapse_count`, `last_studied_at`, `due_at`.
 4. Update session status to `completed`.
 
 All steps must be in a single transaction. See `docs/database/storage-boundaries.md`.
 
 On failure:
 
-- Set session status to `failed_to_finalize`.
+- Keep the user on the study session screen.
 - Do not partially update progress.
-- Allow retry.
+- Show a controlled error and let the user retry the Finish action after the issue is resolved.
+- The V1 finish flow does not auto-transition to a retry state.
 
 ## Due query contract
 
@@ -175,9 +172,7 @@ The due query must:
 
 Any SRS behavior change must update:
 
-- `lib/data/repositories/study_repo_impl_helpers.dart` (`_reviewOutcome`) and/or
-  `lib/domain/study/srs_interval_policy.dart` (`SrsIntervalPolicy`) plus its repository adapter
-  `lib/data/repositories/study_repo_impl_mapping_helpers.dart` (`_intervalForBox`)
+- `lib/data/repositories/study_repo_impl.dart` (finalization and interval mapping helpers)
 - This doc (transition table and/or interval table)
 - `docs/business/study/study-flow.md` if flow changes
 - Decision table S6-S10
@@ -228,22 +223,16 @@ Any SRS behavior change must update:
 - `lib/domain/study/study_session_round.dart` — round model used by grading flow.
 - `lib/data/datasources/local/tables/study_attempts_table.dart` — persistence of each attempt with
   `box_before`, `box_after`, `result`, `study_mode`, `attempted_at`.
-- `lib/data/datasources/local/tables/flashcard_progress_table.dart` — per-card SRS state (
-  `current_box`, `lapse_count`, `due_at`, `last_result`, `last_studied_at`).
-- `lib/domain/study/srs_interval_policy.dart` — current runtime SRS interval ladder.
-- `lib/data/repositories/study_repo_impl.dart` + helpers (`study_repo_impl_helpers.dart`,
-  `study_repo_impl_mapping_helpers.dart`, `study_repo_impl_models.dart`) — finalization write path;
-  `_reviewOutcome` computes final per-card result/box transition and `_intervalForBox` delegates
-  runtime due intervals to `SrsIntervalPolicy`.
+- `lib/data/datasources/local/tables/flashcard_progress_table.dart` — per-card SRS state
+  (`current_box`, `lapse_count`, `due_at`, `last_studied_at`).
+- `lib/data/repositories/study_repo_impl.dart` — finalization write path; computes the final
+  per-card result from persisted attempts, applies the box transition, and computes runtime due
+  intervals through `_intervalForBox`.
 
 > **Drift note**: earlier revisions of this doc referenced `lib/domain/srs/box_intervals.dart`,
 `lib/domain/srs/box_transition.dart`, `lib/domain/srs/srs_service.dart`,
 `lib/data/repositories/srs_repository.dart`, and
 `lib/domain/usecases/study/grade_attempt_usecase.dart`. **None of those paths exist** in the current
-> codebase (verified by `find lib/domain -name "box_*"` returning empty). Prompt 23 keeps
-`_reviewOutcome` in `lib/data/repositories/study_repo_impl_helpers.dart` as the current transition
-> owner and uses `SrsIntervalPolicy` in `lib/domain/study/srs_interval_policy.dart` as the current
-> interval owner, with `_intervalForBox` in
-`lib/data/repositories/study_repo_impl_mapping_helpers.dart` as the repository adapter. If a future
-> refactor extracts transitions into dedicated domain files, update this list and `CLAUDE.md` in the
-> same commit.
+> codebase (verified by `find lib/domain -name "box_*"` returning empty). The current finalization
+> path lives in `lib/data/repositories/study_repo_impl.dart`. If a future refactor extracts
+> transitions into dedicated domain files, update this list and `CLAUDE.md` in the same commit.

@@ -250,7 +250,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.5 | No silent resume | Implemented | Existing resumable session returns controlled `resumeRequired`. |
 | 9.6 | Resume/start-over dialog | Deferred | Current V1 shows controlled state; full dialog remains future task. |
 | 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
-| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, and in-session answer persistence. |
+| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, Finish Session when all items are answered, and in-session answer persistence. |
 | 9.9 | Study result route | Placeholder | `/library/study/session/:sessionId/result` remains placeholder. |
 | 9.10 | Protected active-session exit | Specified / Partial | Active session exit requires confirmation; verify current V1 shell behavior before extending. |
 | 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |
@@ -279,8 +279,8 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 11.3 | Due-card filtering | Implemented / Ongoing | `due_at <= now`, exclude suspended and currently buried. |
 | 11.4 | New-card default progress | Implemented / Ongoing | New flashcard starts box 1, due now. |
 | 11.5 | Attempt classification | Specified / Partial | `perfect`, `initial_passed`, `recovered`, `forgot`. |
-| 11.6 | Session finalization transaction | Specified / needs source verification | Attempts/progress/session completed in one transaction. |
-| 11.7 | Finalization failure recovery | Specified | Failure sets `failed_to_finalize`, preserves data, allows retry. |
+| 11.6 | Session finalization transaction | Implemented | Attempts, progress, and session completion happen in one transaction; failures roll back without partial writes. |
+| 11.7 | Finalization failure recovery | Partial | Finish failure keeps the session open with a controlled error; retry remains a future result-screen concern. |
 | 11.8 | Progress screen | Placeholder / Partial | `/progress` route currently placeholder. |
 | 11.9 | Box distribution chart | Future / Blocked | Requires box history fields if based on attempts. |
 | 11.10 | Card history | Future / Blocked | Requires `last_reset_at`, `box_before`, `box_after`. |
@@ -415,7 +415,7 @@ This section orders work by product value and risk, not by internal refactor pre
 | Priority | Candidate work package | Why |
 | --- | --- | --- |
 | P0 | Study result route V1 | Study session has a real V1 shell; result is still placeholder. Needed for usable SRS loop. |
-| P0 | Minimal grade/finalize path | App needs actual review completion and progress update, not only reveal answer. |
+| P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the placeholder result screen. |
 | P0 | Protected exit confirmation for active study | Study flow doc requires confirmation; prevents accidental session loss. |
 | P1 | Deck import V1 | Route is placeholder but import spec is detailed and user-facing. |
 | P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |

@@ -4251,8 +4251,20 @@ abstract class AppLocalizations {
   /// No description provided for @studySessionAllAnsweredMessage.
   ///
   /// In en, this message translates to:
-  /// **'All cards are answered. Come back later to keep studying.'**
+  /// **'All cards are answered. Finish the session to save your progress.'**
   String get studySessionAllAnsweredMessage;
+
+  /// No description provided for @studySessionFinalizingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Finalizing your session...'**
+  String get studySessionFinalizingMessage;
+
+  /// No description provided for @studySessionFinalizeFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t finish this session. Please try again.'**
+  String get studySessionFinalizeFailedMessage;
 
   /// No description provided for @studySessionNotFoundTitle.
   ///
@@ -4563,7 +4575,7 @@ abstract class AppLocalizations {
   /// No description provided for @studyFinalizeAction.
   ///
   /// In en, this message translates to:
-  /// **'Finalize'**
+  /// **'Finish session'**
   String get studyFinalizeAction;
 
   /// No description provided for @studySkipAction.

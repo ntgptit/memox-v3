@@ -43,8 +43,7 @@ class _FakeStudyRepository implements StudyRepository {
     required this.resumeSummaryResult,
     required this.reviewResult,
     required this.startResult,
-    this.cancelResult = const Result<void>.ok(null),
-  });
+  }) : cancelResult = const Result<void>.ok(null);
 
   Result<DashboardResumeSessionSummary?> resumeSummaryResult;
   Result<StudySessionReview> reviewResult;
@@ -83,6 +82,13 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     cancelCalls++;
     return cancelResult;
+  }
+
+  @override
+  Future<Result<void>> finalizeStudySession({
+    required SessionId sessionId,
+  }) async {
+    throw UnimplementedError();
   }
 
   @override

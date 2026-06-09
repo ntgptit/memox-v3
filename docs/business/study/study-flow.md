@@ -98,8 +98,7 @@ stateDiagram-v2
     in_progress --> ready_to_finalize: all items answered
     in_progress --> cancelled: user exit confirmed
     ready_to_finalize --> completed: finalize success
-    ready_to_finalize --> failed_to_finalize: finalize error
-    failed_to_finalize --> ready_to_finalize: retry
+    ready_to_finalize --> ready_to_finalize: finalize error
     completed --> [*]
     cancelled --> [*]
 ```
@@ -120,8 +119,9 @@ stateDiagram-v2
 - The Study Session route (`/library/study/session/:sessionId`) is a real
   persisted review screen in V1: it loads the session header and ordered
   session items, shows the current card with a reveal toggle, supports
-  Previous/Next navigation with reveal reset on move, and keeps the result
-  route placeholder for a later task.
+  Previous/Next navigation with reveal reset on move, shows a Finish Session
+  CTA only after every item is answered, and keeps the result route placeholder
+  for a later task.
 - Study Entry V1 must not silently resume an existing scope session. If a
   resumable session exists and the explicit Resume / Start over dialog is not
   implemented yet, the gate returns a controlled `resumeRequired` state and
@@ -129,8 +129,12 @@ stateDiagram-v2
 - The Study Session self-grade V1 path reveals the current card, lets the user
   tap Forgot / Got it, persists the attempt plus `study_session_items.answered_at`,
   and keeps `flashcard_progress` unchanged until finalization.
+- Finalization is explicit. The user must tap Finish Session after all items
+  are answered; the app then commits progress transactionally and navigates to
+  the result placeholder on success.
 - Exit from active session requires confirmation.
-- Finalization failure must preserve data (status = `failed_to_finalize`).
+- Finalization failure keeps the user on the study session screen, shows a
+  controlled localized error, and leaves the session open for another attempt.
 - Only one active session per scope at a time. Resume existing instead of creating new (see
   `docs/business/resume/resume-session.md`).
 

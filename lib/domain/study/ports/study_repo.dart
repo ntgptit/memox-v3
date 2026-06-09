@@ -32,6 +32,8 @@ abstract interface class StudyRepository {
 
   Future<Result<void>> cancelStudySession({required SessionId sessionId});
 
+  Future<Result<void>> finalizeStudySession({required SessionId sessionId});
+
   Future<Result<void>> recordStudySessionAnswer({
     required SessionId sessionId,
     required String sessionItemId,

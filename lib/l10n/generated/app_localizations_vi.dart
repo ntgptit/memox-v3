@@ -2461,7 +2461,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studySessionAllAnsweredMessage =>
-      'Tất cả thẻ đã được trả lời. Hãy quay lại sau để học tiếp.';
+      'Tất cả thẻ đã được trả lời. Hãy hoàn tất phiên để lưu tiến độ.';
+
+  @override
+  String get studySessionFinalizingMessage => 'Đang hoàn tất phiên học...';
+
+  @override
+  String get studySessionFinalizeFailedMessage =>
+      'Không thể hoàn tất phiên học này. Vui lòng thử lại.';
 
   @override
   String get studySessionNotFoundTitle => 'Không tìm thấy phiên học';
@@ -2709,7 +2716,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyActionFailed => 'Không thể thực hiện thao tác học.';
 
   @override
-  String get studyFinalizeAction => 'Finalize';
+  String get studyFinalizeAction => 'Hoàn tất phiên';
 
   @override
   String get studySkipAction => 'Bỏ qua';

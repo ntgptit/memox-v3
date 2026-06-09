@@ -90,6 +90,13 @@ extension AppNavigation on BuildContext {
     extra: RouteExtras.studyNavigationToken,
   );
 
+  /// Replace the current session screen with the study result placeholder.
+  void pushReplacementStudyResult(String sessionId) => pushReplacementNamed(
+    RouteNames.studyResult,
+    pathParameters: <String, String>{RoutePaths.sessionIdParam: sessionId},
+    extra: RouteExtras.studyNavigationToken,
+  );
+
   /// Navigate to the study gate with semantic route parameters.
   void goStudyEntry({
     required EntryType entryType,

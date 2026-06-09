@@ -91,6 +91,10 @@ class _StudySessionReviewSection extends ConsumerWidget {
         onNext: () => ref
             .read(studySessionReviewControllerProvider(sessionId).notifier)
             .next(),
+        onFinish: () => ref
+            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .finishSession(),
+        onFinalized: () => context.pushReplacementStudyResult(sessionId),
       ),
     };
   }
@@ -144,6 +148,8 @@ class _StudySessionBody extends StatelessWidget {
     required this.onGotIt,
     required this.onPrevious,
     required this.onNext,
+    required this.onFinish,
+    required this.onFinalized,
   });
 
   final StudySessionReviewState state;
@@ -152,6 +158,8 @@ class _StudySessionBody extends StatelessWidget {
   final VoidCallback onGotIt;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
+  final Future<bool> Function() onFinish;
+  final VoidCallback onFinalized;
 
   @override
   Widget build(BuildContext context) {
@@ -161,28 +169,7 @@ class _StudySessionBody extends StatelessWidget {
     final StudySessionReviewItem item = state.currentItem;
     final int total = review.items.length;
     final TextTheme textTheme = theme.textTheme;
-    Widget? statusCallout;
-    if (state.saveFailure != null) {
-      statusCallout = MxCallout(
-        tone: MxCalloutTone.danger,
-        message: l10n.failureMessage(
-          state.saveFailure!,
-          fallback: l10n.studySessionRecordFailedMessage,
-        ),
-      );
-    }
-    if (statusCallout == null && state.isSaving) {
-      statusCallout = MxCallout(
-        tone: MxCalloutTone.info,
-        message: l10n.studySessionSavingAnswerMessage,
-      );
-    }
-    if (statusCallout == null && state.allAnswered) {
-      statusCallout = MxCallout(
-        tone: MxCalloutTone.info,
-        message: l10n.studySessionAllAnsweredMessage,
-      );
-    }
+    final Widget? statusCallout = _buildStatusCallout(l10n);
 
     return Center(
       child: SingleChildScrollView(
@@ -226,6 +213,10 @@ class _StudySessionBody extends StatelessWidget {
               ),
               const SizedBox(height: SpacingTokens.sm),
             ],
+            if (state.allAnswered) ...<Widget>[
+              _buildFinishButton(context, l10n),
+              const SizedBox(height: SpacingTokens.sm),
+            ],
             MxCardActions(
               secondary: MxActionButton(
                 intent: MxActionIntent.cardSecondary,
@@ -244,13 +235,69 @@ class _StudySessionBody extends StatelessWidget {
               label: state.isAnswerVisible
                   ? l10n.studySessionHideAction
                   : l10n.studySessionShowAction,
-              onPressed: state.isSaving ? null : onToggleAnswer,
+              onPressed: state.isBusy ? null : onToggleAnswer,
               fullWidth: true,
             ),
             const SizedBox(height: SpacingTokens.xl),
           ],
         ),
       ),
+    );
+  }
+
+  Widget? _buildStatusCallout(AppLocalizations l10n) {
+    if (state.finalizeFailure != null) {
+      return MxCallout(
+        tone: MxCalloutTone.danger,
+        message: l10n.failureMessage(
+          state.finalizeFailure!,
+          fallback: l10n.studySessionFinalizeFailedMessage,
+        ),
+      );
+    }
+    if (state.isFinalizing) {
+      return MxCallout(
+        tone: MxCalloutTone.info,
+        message: l10n.studySessionFinalizingMessage,
+      );
+    }
+    if (state.saveFailure != null) {
+      return MxCallout(
+        tone: MxCalloutTone.danger,
+        message: l10n.failureMessage(
+          state.saveFailure!,
+          fallback: l10n.studySessionRecordFailedMessage,
+        ),
+      );
+    }
+    if (state.isSaving) {
+      return MxCallout(
+        tone: MxCalloutTone.info,
+        message: l10n.studySessionSavingAnswerMessage,
+      );
+    }
+    if (state.allAnswered) {
+      return MxCallout(
+        tone: MxCalloutTone.info,
+        message: l10n.studySessionAllAnsweredMessage,
+      );
+    }
+    return null;
+  }
+
+  Widget _buildFinishButton(BuildContext context, AppLocalizations l10n) {
+    return MxActionButton(
+      intent: MxActionIntent.screenPrimary,
+      label: l10n.studyFinalizeAction,
+      onPressed: state.isBusy
+          ? null
+          : () async {
+              final bool finished = await onFinish();
+              if (!context.mounted) return;
+              if (!finished) return;
+              onFinalized();
+            },
+      fullWidth: true,
     );
   }
 }

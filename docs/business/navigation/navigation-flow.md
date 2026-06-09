@@ -63,7 +63,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Exposed as a separate route, not from the Library Overview app bar                                                                                                  | Yes           |
 | Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
 | Today study               | `/library/study/today` (Current V1 opens `StudyEntryScreen.today` and follows the same gate behavior as scoped study, including empty states and session redirect)                                                                                                                                                                                                    | No            |
-| Study session             | `/library/study/session/:sessionId` (Current V1 review screen; opens `StudySessionScreen` with current-card navigation, result route remains a placeholder)                                                                                                                                                          | No            |
+| Study session             | `/library/study/session/:sessionId` (Current V1 review screen; opens `StudySessionScreen` with current-card navigation, shows Finish Session only after every card is answered, and `pushReplacement`s to the placeholder result route on explicit finish)                                                                                                                                                          | No            |
 | Study result              | `/library/study/session/:sessionId/result`                                                                                                                                                                                                                                              | No            |
 
 Notes:
@@ -151,7 +151,7 @@ stateDiagram-v2
 - Flashcard create/edit returns to flashcard list.
 - Import returns to deck/folder context.
 - Study entry creates or resumes persisted session.
-- Study session route protects accidental exit.
+- Study session route protects accidental exit and waits for explicit Finish Session before leaving the review screen.
 - Study result returns to relevant origin when available.
 
 ## Invalid route behavior

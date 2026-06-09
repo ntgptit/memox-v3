@@ -23,8 +23,9 @@ convention).
 > it loads the session header + ordered session items, shows the current card
 > with a reveal toggle, exposes Forgot / Got it grading after reveal, marks the
 > answered session item in-session, resets reveal state when moving between
-> cards, and offers a safe exit action. The result route stays a placeholder
-> and `flashcard_progress` is not updated yet.
+> cards, offers a safe exit action, and shows a Finish Session CTA only after
+> every card has been answered. The result route stays a placeholder and
+> `flashcard_progress` is not updated until Finish Session succeeds.
 
 > **Mode pill / progress-bar color convention (applies to wireframes 13-17).** Modes split into two
 > visual families:
@@ -128,7 +129,8 @@ swiping (gesture is the primary input).
 | Swiping                    | Drag begins                                | Card follows finger; releasing past the threshold commits a grade.                          |
 | Grading                    | Swipe committed (or tap on grade fallback) | Persist attempt + SRS update; advance to next card with horizontal slide.                   |
 | Buried via long-press menu | Long-press the card                        | Bottom-sheet with Bury / Suspend / History / Audio settings. Bury → toast 5s undo; advance. |
-| Last card                  | Final swipe                                | Transition to finalization → study result via `pushReplacement`.                            |
+| Last card answered         | Final answer committed                     | Show Finish Session CTA; do not auto-finalize.                                               |
+| Finish Session             | CTA tapped after all cards are answered    | Commit progress transactionally and transition to the placeholder study result via `pushReplacement`. |
 | Exit confirm               | ✕ tapped mid-session                       | Show "Exit session?" dialog.                                                                |
 
 ## Actions
@@ -148,7 +150,7 @@ swiping (gesture is the primary input).
 - Moving Previous/Next resets the answer to hidden before the next card is shown.
 - Reveal shows Forgot / Got it actions for the current unanswered card.
 - Grading marks the current session item answered and advances to the next unanswered item when available.
-- When all cards in the session are answered, show the caught-up/ready-later message and disable further grading.
+- When all cards in the session are answered, show the ready-to-finish message, keep browsing available, and show the Finish Session CTA.
 - The swipe-based grading table below is the future review-mode target and does not describe the shipped V1 interaction.
 
 ## Dialogs and bottom-sheets used
@@ -268,8 +270,8 @@ on card open (silent UI).
   *No standalone `grade_attempt_usecase.dart` exists** — grading is the responsibility of these
   classes in the study use-case module.
 - SRS transitions: no standalone `lib/domain/srs/box_transition.dart` exists. Runtime finalization
-  uses `_reviewOutcome` in `lib/data/repositories/study_repo_impl_helpers.dart`; in-session study
-  use cases record attempts and re-queue failed cards.
+  lives in `lib/data/repositories/study_repo_impl.dart`; in-session study use cases record attempts
+  and re-queue failed cards.
 - TTS: see `lib/presentation/features/study/widgets/study_session/study_speak_button.dart` for the
   in-mode button; engine lives behind `lib/presentation/features/tts/providers/`.
 
