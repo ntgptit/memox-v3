@@ -2,7 +2,7 @@
 
 Generated: 2026-06-09  
 Repository: `ntgptit/memox-v3`  
-Baseline reviewed: remote `main`, latest observed commit `ae56dee41dbcfd8e11a02231bf3dcfcf45f588f8` (`fix(study): add study session title localization`).
+Baseline reviewed: remote `main`, latest observed commit `a5d990896f6b348a22437bf254f291a4774230ee` (`Fix dashboard zero due study action`).
 
 ## 0. Purpose
 
@@ -50,6 +50,8 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 
 - `lib/app/router/app_router.dart`
 - `lib/app/router/route_paths.dart`
+- `lib/presentation/features/dashboard/routes/dashboard_routes.dart`
+- `lib/presentation/features/dashboard/screens/dashboard_screen.dart`
 - `lib/presentation/features/folders/routes/folder_routes.dart`
 - `lib/presentation/features/flashcards/routes/flashcard_routes.dart`
 - `lib/presentation/features/study/routes/study_routes.dart`
@@ -99,7 +101,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 
 | WBS ID | Deliverable | Status | Acceptance criteria |
 | --- | --- | --- | --- |
-| 1.3.1 | Top-level shell routes | Partial | `/library`, `/settings` wired to real screens; `/home` and `/progress` currently placeholders. |
+| 1.3.1 | Top-level shell routes | Partial | `/home`, `/library`, `/settings` are wired to real screens; `/progress` remains placeholder. |
 | 1.3.2 | Route constants and builders | Implemented | All paths use `RoutePaths`/`RouteNames`; no raw route strings in widgets. |
 | 1.3.3 | Library branch routes | Implemented / Partial | Library overview, global search, folder detail, flashcard list are wired. |
 | 1.3.4 | Hidden library routes | Partial | Flashcard create/edit are real; deck import remains placeholder. |
@@ -301,8 +303,8 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 
 | WBS ID | Deliverable | Status | Acceptance criteria |
 | --- | --- | --- | --- |
-| 13.1 | Dashboard top-level route | Placeholder / Partial | `/home` currently placeholder in router source. |
-| 13.2 | Today study shortcut | Specified / Partial | Dashboard may route to `/library/study/today`. |
+| 13.1 | Dashboard top-level route | Implemented / Partial | `/home` opens `DashboardScreen`. |
+| 13.2 | Today study shortcut | Implemented / Partial | `dueToday > 0` routes to `RoutePaths.studyTodayTemplate` through Study Entry; `dueToday == 0` shows caught-up/no-due copy, disables Study CTA, and does not enter study flow. |
 | 13.3 | Resume session entry | Specified | Dashboard should surface active/resumable sessions. |
 | 13.4 | Due count summary | Specified / Partial | Excludes buried/suspended. |
 | 13.5 | Streak stat placeholder | Partial | Product overview says simple `0 days` visual/stat placeholder exists. |
@@ -465,4 +467,3 @@ When updating, include:
 - Changed WBS rows only.
 - Evidence paths.
 - Any new priority/backlog adjustment.
-
