@@ -1,8 +1,9 @@
 ﻿# MemoX v3 Work Breakdown Structure (WBS)
 
 Generated: 2026-06-09  
+Last reviewed: 2026-06-10  
 Repository: `ntgptit/memox-v3`  
-Baseline reviewed: remote `main`, latest observed commit `a5d990896f6b348a22437bf254f291a4774230ee` (`Fix dashboard zero due study action`).
+Baseline reviewed: local `main`, latest observed commit `5fbdf96d` (`feat(search): refactor GlobalSearchScreen and SearchAppBarField for improved query handling`). Prior baseline was `a5d990896f6b348a22437bf254f291a4774230ee` (`Fix dashboard zero due study action`); since then deck import gained CSV paste + parse + validation preview (`c1e89cf5`), the flashcard editor gained focus-managed draft handling (`38af6d94`), and global search query handling was refactored (`5fbdf96d`).
 
 ## 0. Purpose
 
@@ -45,6 +46,12 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 - `docs/architecture/clean-architecture-contract.md`
 - `docs/database/schema-contract.md`
 - `docs/checklist/implementation-checklist.md`
+
+### Design / UI kit
+
+- `docs/system-design/MemoX Design System/ui_kits/mobile/README.md` (23-screen mobile gallery, screens `01`–`23`)
+- `docs/system-design/MemoX Design System/ui_kits/mobile/AUDIT.md` (Flutter-handoff audit, token/widget map)
+- Note: the UI kit README now points screen sources at the actual path `lib/presentation/features/**` (corrected 2026-06-10, commit `5fbdf96d` review pass).
 
 ### Source files
 
@@ -110,6 +117,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 1.3.7 | Route ordering guard | Implemented / Ongoing | Specific study session route stays before generic study entry route. |
 | 1.3.8 | Invalid route handling | Ongoing | Invalid params render controlled error/safe route, not crash. |
 | 1.3.9 | Push/go semantics | Ongoing | Follow documented push vs go table for back stack behavior. |
+| 1.3.10 | First-run / onboarding | Rejected | V1 boots directly into Library; `route_paths.dart` comment explicitly forbids replacing this with an onboarding wizard. UI kit screen 01 is reference-only — do not implement without product promotion. |
 
 ### 1.4 Local Database and Persistence
 
@@ -157,7 +165,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 3.5 | Deck delete | Specified / needs source verification | Deletes flashcards and dependent data through persistence rules. |
 | 3.6 | Deck reorder | Specified / needs source verification | Updates `sort_order` only. |
 | 3.7 | Deck target language | Implemented in schema / Partial feature | Required by docs; verify create/edit UI and TTS gate coverage before claiming done. |
-| 3.8 | Deck import route | Implemented / V1 shell | `/library/deck/:deckId/import` now opens the dedicated shell; parsing, file picker, preview, and commit stay deferred. |
+| 3.8 | Deck import route | Implemented / V1 (CSV paste) | `/library/deck/:deckId/import` opens `DeckImportScreen`. V1 exposes CSV paste input + parse + validation preview; commit transaction, file picker, Excel, and structured text stay deferred. |
 | 3.9 | Deck export | Specified / needs source verification | Export belongs to export feature scope. |
 | 3.10 | Deck due/card badges | Specified / Partial | Counts stream from DB; due count excludes buried/suspended. |
 
@@ -182,16 +190,16 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 
 | WBS ID | Deliverable | Status | Acceptance criteria |
 | --- | --- | --- | --- |
-| 5.1 | Deck import route | Implemented / V1 shell | Route exists and now renders the dedicated import shell instead of `RoutePlaceholder`. |
-| 5.2 | CSV import | Specified | Parse UTF-8 CSV, validate same rules as manual creation. |
-| 5.3 | Excel import | Specified | Read first sheet; header toggle controls row 1. |
-| 5.4 | Structured text import | Specified | Separator supports auto/tab/comma/colon/slash/semicolon/pipe. |
-| 5.5 | Import preparation | Specified | Produces preview items, skipped duplicates, validation issues. |
-| 5.6 | Duplicate detection | Specified | Front/back duplicate against import file and existing deck, case-insensitive. |
-| 5.7 | Import preview screen | Specified | User must preview before write; no silent commit. |
-| 5.8 | Import commit transaction | Specified | Insert preview items, default SRS progress, tags, timestamps in one transaction. |
-| 5.9 | Import result feedback | Specified / V1 snackbar | V1 uses snackbar and pops back, not standalone result screen. |
-| 5.10 | Import validation tests | Needed | Cover empty front/back, duplicate, invalid tag, transaction rollback. |
+| 5.1 | Deck import route | Implemented | Route renders `DeckImportScreen` (501-line screen), not `RoutePlaceholder`. |
+| 5.2 | CSV import (paste) | Implemented / Partial | V1 parses pasted CSV text in `DeckImportScreen._parseCsvPreview`; UTF-8 file decoding via picker still deferred. Note: parse logic currently lives in the widget — see §8 risk. |
+| 5.3 | Excel import | Specified | Read first sheet; header toggle controls row 1. Still deferred. |
+| 5.4 | Structured text import | Specified | Separator supports auto/tab/comma/colon/slash/semicolon/pipe. Still deferred. |
+| 5.5 | Import preparation | Implemented / Partial | Preview builds rows + validation issues from pasted CSV. Skipped-duplicate aggregation needs source verification. |
+| 5.6 | Duplicate detection | Specified / needs source verification | Front/back duplicate against import file and existing deck, case-insensitive; verify coverage in current preview. |
+| 5.7 | Import preview screen | Implemented / Partial | In-screen preview (rows + issues + summary) renders before any write; commit not yet wired so no silent commit risk. |
+| 5.8 | Import commit transaction | Specified | Insert preview items, default SRS progress, tags, timestamps in one transaction. Still deferred (next import slice). |
+| 5.9 | Import result feedback | Specified / V1 snackbar | V1 uses snackbar and pops back, not standalone result screen. Pending commit wiring. |
+| 5.10 | Import validation tests | Partial | `test/.../deck_import_screen_test.dart` covers preview/validation paths; transaction rollback tests pending commit implementation. |
 
 ### 6. Search
 
@@ -312,6 +320,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 13.6 | Daily goal | Future / Target | SharedPreferences settings; not current full implementation. |
 | 13.7 | Reminders | Future / Target | SharedPreferences settings; no full reminder flow yet. |
 | 13.8 | Engagement persistence | Future / Target | Longest streak, last goal-met date stored outside Drift. |
+| 13.9 | Stats screen | Future / Specified | UI kit screen 18 (weekly chart + per-deck mastery); distinct from Progress (11.8). No screen/route exists; needs aggregate read model before implementation. |
 
 ### 14. Settings
 
@@ -379,6 +388,39 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 18.6 | Responsive/mobile-first layouts | Ongoing | Avoid overflow on narrow screens. |
 | 18.7 | Accessibility/touch target | Ongoing | Touch targets at least 48dp. |
 | 18.8 | Dark/light theme parity | Ongoing | Verify every new screen in both themes. |
+| 18.9 | UI kit visual contract | Ongoing | `ui_kits/mobile` (23-screen gallery) is the visual reference; implemented screens map below. |
+
+### 18a. UI Kit Screen Traceability (mobile gallery 01–23)
+
+Maps each gallery screen to its WBS work package, implementation status, and source screen file (under `lib/presentation/features/**`). A blank source path means no implemented screen yet.
+
+| UI kit # | Screen | WBS ID | Status | Source screen |
+| --- | --- | --- | --- | --- |
+| 01 | Onboarding | 1.3.10 | Rejected | — (V1 boots to Library; `route_paths.dart` forbids onboarding wizard) |
+| 02 | Dashboard | 13.1–13.8 | Implemented / Partial | `dashboard/screens/dashboard_screen.dart` |
+| 03 | Library overview | 2.1 | Implemented / Partial | `folders/screens/library_overview_screen.dart` |
+| 04 | Folder detail | 2.2 | Implemented / Partial | `folders/screens/folder_detail_screen.dart` |
+| 05 | Library search | 6.1–6.6 | Implemented | `search/screens/global_search_screen.dart` |
+| 06 | Flashcard list | 4.1 | Implemented / Partial | `flashcards/screens/flashcard_list_screen.dart` |
+| 07 | Flashcard create | 4.2 | Implemented | `flashcards/screens/flashcard_editor_screen.dart` |
+| 08 | Flashcard edit | 4.3 | Implemented | `flashcards/screens/flashcard_editor_screen.dart` |
+| 09 | Flashcard history | 4.12 | Future / Blocked | — (needs `last_reset_at`, `box_before`, `box_after`) |
+| 10 | Deck import | 3.8, 5.1–5.9 | Implemented / Partial (CSV paste) | `flashcards/screens/deck_import_screen.dart` |
+| 11 | Tag management | 7.4–7.8 | Implemented / Partial | `settings/screens/tag_management_screen.dart` |
+| 12 | Study · Review | 10.1 | Specified / Partial | `study/screens/study_session_screen.dart` (shared shell) |
+| 13 | Study · Match | 10.2 | Specified / Partial | — (mode strategy unsupported in V1) |
+| 14 | Study · Guess | 10.3 | Specified / Partial | — (mode strategy unsupported in V1) |
+| 15 | Study · Recall | 10.4 | Implemented / Partial | `study/screens/study_session_screen.dart` |
+| 16 | Study · Fill | 10.5 | Specified / Partial | — (mode strategy unsupported in V1) |
+| 17 | Study result | 9.9 | Implemented | `study/screens/study_result_screen.dart` |
+| 18 | Stats | 13.9 | Future / Specified | — (no screen/route; distinct from Progress) |
+| 19 | Progress | 11.8 | Placeholder | — (`/progress` renders `RoutePlaceholder`) |
+| 20 | Settings | 14.1 | Implemented | `settings/screens/settings_screen.dart` |
+| 21 | Account sync | 16.1 | Placeholder | — (`/settings/account` renders `RoutePlaceholder`) |
+| 22 | Learning settings | 14.3 | Implemented | `settings/screens/learning_settings_screen.dart` |
+| 23 | Audio & speech | 15.4 | Implemented / Partial | `settings/screens/audio_speech_settings_screen.dart` |
+
+Study entry (`study/screens/study_entry_screen.dart`, WBS 9.1–9.6) has no dedicated gallery frame; it precedes the study mode screens above.
 
 ### 19. Testing and Verification
 
@@ -417,7 +459,7 @@ This section orders work by product value and risk, not by internal refactor pre
 | --- | --- | --- |
 | P0 | Study result route V1 | Study session has a real V1 shell; result now renders a real summary screen. Needed for usable SRS loop. |
 | P0 | Minimal grade/finalize path | Implemented for study session V1; explicit Finish commits progress and routes to the real result screen. |
-| P1 | Deck import V2 | Route shell is current; parse, preview, and commit remain the next import slice. |
+| P1 | Deck import commit | CSV paste + parse + validation preview are current; the commit transaction (insert items + default SRS progress + tags in one transaction) is the next slice. Extract parse logic into a use case during this work. |
 | P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |
 | P1 | Account settings real screen or explicitly defer | Route exists as placeholder; sync/account docs are large but user-facing settings is not wired. |
 | P1 | Progress screen V1 | Top-level route is placeholder; users need basic learning feedback. |
@@ -449,6 +491,7 @@ Use one prompt per work package. Do not combine feature + broad refactor.
 | Generated files | Manual edits create drift | Regenerate with build_runner/gen-l10n only. |
 | CI not visible | Cannot claim full pass from GitHub checks | Report source-level review unless CI/status checks exist. |
 | Future proposals | Can bloat V1 | Do not implement Future/Blocked/Rejection rows without explicit product promotion. |
+| Import parse logic in UI | `DeckImportScreen._parseCsvPreview` holds CSV parsing/validation in the widget; no import use case/repository exists under `lib/domain` or `lib/data`. Violates UseCase → Repository flow. | Before wiring commit (5.8), extract parse + validation into a domain use case; keep the screen presentational. |
 
 ## 9. WBS Maintenance Rules
 
@@ -467,4 +510,39 @@ When updating, include:
 - Changed WBS rows only.
 - Evidence paths.
 - Any new priority/backlog adjustment.
+
+### Commit tracking rule
+
+Every commit that creates, advances, or completes a WBS work package MUST append a row to the **Commit Traceability Log (§10)** in the same commit, listing the short commit id, date, the WBS ID(s) it touches, and a one-line summary. This keeps a bidirectional link (WBS ID ↔ commit id) without bloating the feature tables with a per-row commit column.
+
+- Use the 8-char short hash (e.g. `5fbdf96d`).
+- One commit may map to multiple WBS IDs; list them comma-separated.
+- Pure tooling/formatting commits that touch no WBS row may be omitted.
+- The "Baseline reviewed" line at the top still tracks the latest reviewed commit; the log tracks per-task history.
+
+## 10. Commit Traceability Log
+
+Append-only, newest first. Each row links a landed commit to the WBS work package(s) it advanced. See the Commit tracking rule in §9.
+
+| Commit | Date | WBS IDs | Summary |
+| --- | --- | --- | --- |
+| `5fbdf96d` | 2026-06-10 | 6.1–6.6 | Refactor `GlobalSearchScreen` / `SearchAppBarField` query handling |
+| `38af6d94` | 2026-06-09 | 4.2, 4.3 | `FlashcardEditorDraft` focus management in editor view |
+| `c1e89cf5` | 2026-06-09 | 3.8, 5.2, 5.5, 5.7 | Deck import CSV paste + parse + validation preview |
+| `66bf1460` | 2026-06-09 | 3.8, 5.1 | Deck import route shell |
+| `0c2b3a50` | 2026-06-09 | 1.3.3 | Fix folder route registry comment (docs/source) |
+| `0cd918dd` | 2026-06-09 | 9.11 | Align persistence recovery decision table |
+| `93dec233` | 2026-06-09 | 9.11, 19.3 | Test session persistence recovery |
+| `7645e9e8` | 2026-06-09 | 13.3 | Simplify continue-studying card v1 |
+| `40e3c8b0` | 2026-06-09 | 9.10 | Confirm active-session exit |
+| `30075fbf` | 2026-06-09 | 9.13, 10.4 | Study mode strategy v1 |
+| `b2ea71ce` | 2026-06-09 | 9.6 | Make start-over restart transactional |
+| `5339d8e5` | 2026-06-09 | 9.6 | Resume / start-over choice v1 |
+| `4477dd86` | 2026-06-09 | 9.9, 10.8 | Study result screen v1 |
+| `d5ae03f0` | 2026-06-09 | 11.6 | Study session finalization |
+| `f3740591` | 2026-06-09 | 10.4, 11.5 | Study session self grading |
+| `2971d800` | 2026-06-09 | 9.8 | Study session card navigation |
+| `41e049af` | 2026-06-09 | 13.2 | Dashboard today CTA |
+
+> This review pass (UI-kit traceability, import row corrections, README path fix, this log) lands in the next commit; add its short hash as a new top row when committed.
 

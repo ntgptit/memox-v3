@@ -1,7 +1,7 @@
 # MemoX — Mobile UI Kit
 
 An interactive click-through gallery of MemoX mobile screens, built in HTML/JSX as a
-visual reference for the Flutter implementation in `lib/features/**`.
+visual reference for the Flutter implementation in `lib/presentation/features/**`.
 
 `index.html` renders every screen as a static phone frame on one scrollable stage, with a
 **Light / Dark** toggle in the header (dark mode is the scoped *Tokyo Nebula* theme). Screens
@@ -65,7 +65,9 @@ side by side.
 
 ## Source mapping
 
-Each screen mirrors a feature page under `lib/features/**` (e.g. study modes →
-`lib/features/study/**`, library/folders/flashcards → `lib/features/library/**` and
-`lib/features/decks/**`, settings/sync/audio → `lib/features/settings/**`). Use the Flutter
-feature folders as the source of truth for behaviour; this kit only fixes the visual language.
+Each screen mirrors a feature page under `lib/presentation/features/**` (e.g. study modes →
+`lib/presentation/features/study/**`, library/folder/flashcard screens →
+`lib/presentation/features/folders/**` and `lib/presentation/features/flashcards/**`, search →
+`lib/presentation/features/search/**`, settings/audio →
+`lib/presentation/features/settings/**`). Use the Flutter feature folders as the source of truth
+for behaviour; this kit only fixes the visual language.
