@@ -3,8 +3,8 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
-import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/study/usecases/study_usecases.dart';
@@ -105,40 +105,43 @@ class _FakeStudyRepository implements StudyRepository {
 }
 
 void main() {
-  test('forwards previous session id, scope, and mode to the repository', () async {
-    final _FakeStudyRepository repository = _FakeStudyRepository(
-      Result<StudySession>.ok(
-        StudySession(
-          id: 'session-new',
-          entryType: EntryType.deck,
-          entryRefId: 'deck-1',
-          studyType: StudyType.newCards,
-          status: SessionStatus.inProgress,
-          startedAt: DateTime.utc(2026, 1, 1),
-          updatedAt: DateTime.utc(2026, 1, 1),
+  test(
+    'forwards previous session id, scope, and mode to the repository',
+    () async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySession>.ok(
+          StudySession(
+            id: 'session-new',
+            entryType: EntryType.deck,
+            entryRefId: 'deck-1',
+            studyType: StudyType.newCards,
+            status: SessionStatus.inProgress,
+            startedAt: DateTime.utc(2026, 1, 1),
+            updatedAt: DateTime.utc(2026, 1, 1),
+          ),
         ),
-      ),
-    );
-    final RestartStudySessionUseCase useCase = RestartStudySessionUseCase(
-      repository,
-    );
-    const StudyScope scope = StudyScope(
-      entryType: EntryType.deck,
-      entryRefId: 'deck-1',
-      studyType: StudyType.newCards,
-    );
+      );
+      final RestartStudySessionUseCase useCase = RestartStudySessionUseCase(
+        repository,
+      );
+      const StudyScope scope = StudyScope(
+        entryType: EntryType.deck,
+        entryRefId: 'deck-1',
+        studyType: StudyType.newCards,
+      );
 
-    final Result<StudySession> result = await useCase(
-      previousSessionId: 'session-old',
-      scope: scope,
-      mode: StudyMode.review,
-    );
+      final Result<StudySession> result = await useCase(
+        previousSessionId: 'session-old',
+        scope: scope,
+        mode: StudyMode.review,
+      );
 
-    expect(result.isOk, isTrue);
-    expect(repository.lastPreviousSessionId, 'session-old');
-    expect(repository.lastScope, scope);
-    expect(repository.lastMode, StudyMode.review);
-  });
+      expect(result.isOk, isTrue);
+      expect(repository.lastPreviousSessionId, 'session-old');
+      expect(repository.lastScope, scope);
+      expect(repository.lastMode, StudyMode.review);
+    },
+  );
 
   test('returns the repository failure unchanged', () async {
     final _FakeStudyRepository repository = _FakeStudyRepository(

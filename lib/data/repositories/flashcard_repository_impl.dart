@@ -71,12 +71,11 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
                     FolderBreadcrumbSegment(id: row.id, name: row.name),
               )
               .toList(growable: false);
-      final List<String> tags = (await _dao.findFlashcardTags(flashcardId))
-          .map((FlashcardTagRow row) => row.tag)
-          .toList(growable: false);
-      final FlashcardProgressRow? progressRow = await _dao.findFlashcardProgress(
+      final List<String> tags = (await _dao.findFlashcardTags(
         flashcardId,
-      );
+      )).map((FlashcardTagRow row) => row.tag).toList(growable: false);
+      final FlashcardProgressRow? progressRow = await _dao
+          .findFlashcardProgress(flashcardId);
       return Result<FlashcardDetail>.ok(
         FlashcardDetail(
           deck: deck,
@@ -317,7 +316,10 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
           updatedAt: nowMs,
         );
         if (progressPolicy == FlashcardProgressEditPolicy.resetProgress) {
-          await _dao.resetFlashcardProgress(flashcardId: flashcardId, nowMs: nowMs);
+          await _dao.resetFlashcardProgress(
+            flashcardId: flashcardId,
+            nowMs: nowMs,
+          );
         }
         await _dao.replaceFlashcardTags(
           flashcardId: flashcardId,

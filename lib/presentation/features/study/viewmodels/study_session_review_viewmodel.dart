@@ -1,46 +1,48 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/study/modes/study_mode_strategy.dart';
+import 'package:memox/domain/study/modes/study_mode_strategy_factory.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
-import 'package:memox/domain/types/study_mode.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_session_review_viewmodel.g.dart';
 
 @riverpod
 class StudySessionReviewController extends _$StudySessionReviewController {
+  late final StudyModeStrategy _studyModeStrategy;
+
   @override
   Future<StudySessionReviewState> build(SessionId sessionId) async {
     final Result<StudySessionReview> result = await ref
         .read(loadStudySessionReviewUseCaseProvider)
         .call(sessionId: sessionId);
 
-    return switch (result) {
-      Ok<StudySessionReview>(:final value) =>
-        StudySessionReviewState.fromReview(value),
-      Err<StudySessionReview>(:final failure) =>
-        throw StudySessionFailureException(failure),
-    };
+    if (result case Ok<StudySessionReview>(:final value)) {
+      _studyModeStrategy = StudyModeStrategyFactory.resolve();
+      return StudySessionReviewState.fromReview(value);
+    }
+    final Err<StudySessionReview> err = result as Err<StudySessionReview>;
+    throw StudySessionFailureException(err.failure);
   }
 
   void toggleAnswer() => _updateCurrentState(
     (StudySessionReviewState state) => state.toggleAnswer(),
   );
 
-  void previous() => _updateCurrentState(
-    (StudySessionReviewState state) => state.previous(),
-  );
+  void previous() =>
+      _updateCurrentState((StudySessionReviewState state) => state.previous());
 
-  void next() => _updateCurrentState(
-    (StudySessionReviewState state) => state.next(),
-  );
+  void next() =>
+      _updateCurrentState((StudySessionReviewState state) => state.next());
 
-  Future<void> gradeForgot() => _recordAnswer(AttemptResult.forgot);
+  Future<void> gradeForgot() =>
+      _recordAnswer((StudyModeStrategy strategy) => strategy.mapForgotAction());
 
-  Future<void> gradeGotIt() => _recordAnswer(AttemptResult.perfect);
+  Future<void> gradeGotIt() =>
+      _recordAnswer((StudyModeStrategy strategy) => strategy.mapGotItAction());
 
   Future<bool> finishSession() async {
     final StudySessionReviewState? current = switch (state) {
@@ -62,18 +64,12 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     switch (finalizeResult) {
       case Ok<void>():
         state = AsyncData(
-          current.copyWith(
-            isFinalizing: false,
-            clearFinalizeFailure: true,
-          ),
+          current.copyWith(isFinalizing: false, clearFinalizeFailure: true),
         );
         return true;
       case Err<void>(:final failure):
         state = AsyncData(
-          current.copyWith(
-            isFinalizing: false,
-            finalizeFailure: failure,
-          ),
+          current.copyWith(isFinalizing: false, finalizeFailure: failure),
         );
         return false;
     }
@@ -92,7 +88,9 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     state = AsyncData(mutate(current));
   }
 
-  Future<void> _recordAnswer(AttemptResult result) async {
+  Future<void> _recordAnswer(
+    AttemptResult Function(StudyModeStrategy strategy) mapResult,
+  ) async {
     final StudySessionReviewState? current = switch (state) {
       AsyncData<StudySessionReviewState>(:final value) => value,
       _ => null,
@@ -102,6 +100,10 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     }
 
     final StudySessionReviewItem item = current.currentItem;
+    if (!_studyModeStrategy.usesRevealSelfGradeFlow) {
+      return;
+    }
+    final AttemptResult result = mapResult(_studyModeStrategy);
     state = AsyncData(
       current.copyWith(
         isSaving: true,
@@ -116,7 +118,7 @@ class StudySessionReviewController extends _$StudySessionReviewController {
           sessionId: current.review.session.id,
           sessionItemId: item.sessionItem.id,
           result: result,
-          studyMode: StudyMode.recall,
+          studyMode: _studyModeStrategy.mode,
         );
 
     switch (recordResult) {
@@ -130,10 +132,7 @@ class StudySessionReviewController extends _$StudySessionReviewController {
         );
       case Err<void>(:final failure):
         state = AsyncData(
-          current.copyWith(
-            isSaving: false,
-            saveFailure: failure,
-          ),
+          current.copyWith(isSaving: false, saveFailure: failure),
         );
     }
   }
@@ -174,8 +173,7 @@ class StudySessionReviewState {
 
   bool get canGoPrevious => currentIndex > 0 && !isBusy;
 
-  bool get canGoNext =>
-      currentIndex < review.items.length - 1 && !isBusy;
+  bool get canGoNext => currentIndex < review.items.length - 1 && !isBusy;
 
   bool get currentItemAnswered => currentItem.sessionItem.answeredAt != null;
 
@@ -203,7 +201,8 @@ class StudySessionReviewState {
           clearFinalizeFailure: true,
         );
 
-  StudySessionReviewState next() => currentIndex >= review.items.length - 1 || isBusy
+  StudySessionReviewState next() =>
+      currentIndex >= review.items.length - 1 || isBusy
       ? this
       : copyWith(
           currentIndex: currentIndex + 1,
@@ -220,7 +219,9 @@ class StudySessionReviewState {
         .map(
           (StudySessionReviewItem item) => item.sessionItem.id == sessionItemId
               ? item.copyWith(
-                  sessionItem: item.sessionItem.copyWith(answeredAt: answeredAt),
+                  sessionItem: item.sessionItem.copyWith(
+                    answeredAt: answeredAt,
+                  ),
                 )
               : item,
         )

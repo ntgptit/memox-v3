@@ -6,17 +6,17 @@ import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/study/study_entry_parser.dart';
 import 'package:memox/domain/study/study_entry_route_input.dart';
-import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
@@ -76,7 +76,7 @@ class _StudyEntryResumeRequiredStateState
                 const SizedBox(height: SpacingTokens.md),
                 if (_isWorking) ...<Widget>[
                   const SizedBox(
-                    height: 160,
+                    height: SizeTokens.buttonLg,
                     child: MxLoadingState(rows: 2),
                   ),
                 ] else ...<Widget>[
@@ -149,11 +149,7 @@ class _StudyEntryResumeRequiredStateState
 
     final Result<StudySession> result = await ref
         .read(restartStudySessionUseCaseProvider)
-        .call(
-          previousSessionId: widget.sessionId,
-          scope: scope,
-          mode: mode,
-        );
+        .call(previousSessionId: widget.sessionId, scope: scope, mode: mode);
     if (!mounted) {
       return;
     }

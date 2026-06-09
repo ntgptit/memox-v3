@@ -128,7 +128,11 @@ class _LibrarySortPill extends StatelessWidget {
             color: tone,
           ),
           const SizedBox(width: SpacingTokens.xs),
-          Icon(Icons.keyboard_arrow_down_rounded, size: SizeTokens.iconTiny, color: tone),
+          Icon(
+            Icons.keyboard_arrow_down_rounded,
+            size: SizeTokens.iconTiny,
+            color: tone,
+          ),
         ],
       ),
     );

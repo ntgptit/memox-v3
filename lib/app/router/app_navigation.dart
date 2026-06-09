@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_extras.dart';
+import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';

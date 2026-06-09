@@ -27,12 +27,12 @@ class StudyResultController extends _$StudyResultController {
         .call(sessionId: trimmedSessionId);
 
     return switch (result) {
-      Ok<StudySessionResult>(:final value) =>
-        switch (value.session.status) {
-          SessionStatus.completed =>
-            StudyResultScreenState.success(result: value),
-          _ => StudyResultScreenState.notCompleted(status: value.session.status),
-        },
+      Ok<StudySessionResult>(:final value) => switch (value.session.status) {
+        SessionStatus.completed => StudyResultScreenState.success(
+          result: value,
+        ),
+        _ => StudyResultScreenState.notCompleted(status: value.session.status),
+      },
       Err<StudySessionResult>(:final failure) => switch (failure) {
         NotFoundFailure() => const StudyResultScreenState.notFound(),
         _ => throw StudyResultFailureException(failure),
@@ -43,8 +43,7 @@ class StudyResultController extends _$StudyResultController {
 
 @freezed
 abstract class StudyResultScreenState with _$StudyResultScreenState {
-  const factory StudyResultScreenState.invalidSessionId() =
-      InvalidSessionId;
+  const factory StudyResultScreenState.invalidSessionId() = InvalidSessionId;
   const factory StudyResultScreenState.notFound() = NotFound;
   const factory StudyResultScreenState.notCompleted({
     required SessionStatus status,

@@ -178,7 +178,11 @@ class _TagManagementPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.sell_outlined, size: SizeTokens.iconTiny, color: scheme.primary),
+          Icon(
+            Icons.sell_outlined,
+            size: SizeTokens.iconTiny,
+            color: scheme.primary,
+          ),
           const SizedBox(width: SpacingTokens.xs),
           MxText(
             label,

@@ -20,12 +20,17 @@ void main() {
     });
 
     test('studyPrimary resolves compact', () {
-      expect(MxActionSpec.of(MxActionIntent.studyPrimary).size, MxButtonSize.compact);
+      expect(
+        MxActionSpec.of(MxActionIntent.studyPrimary).size,
+        MxButtonSize.compact,
+      );
     });
 
     test('inline is smaller than cardPrimary', () {
       final double inline = MxActionSpec.of(MxActionIntent.inline).size.height;
-      final double cardPrimary = MxActionSpec.of(MxActionIntent.cardPrimary).size.height;
+      final double cardPrimary = MxActionSpec.of(
+        MxActionIntent.cardPrimary,
+      ).size.height;
       expect(inline, lessThan(cardPrimary));
     });
 
@@ -52,21 +57,24 @@ void main() {
       }
     });
 
-    test('card / inline / toolbar / dialog intents forbid full-width override', () {
-      for (final MxActionIntent intent in <MxActionIntent>[
-        MxActionIntent.cardPrimary,
-        MxActionIntent.cardSecondary,
-        MxActionIntent.inline,
-        MxActionIntent.toolbar,
-        MxActionIntent.dialogPrimary,
-      ]) {
-        expect(
-          MxActionSpec.of(intent).allowFullWidthOverride,
-          isFalse,
-          reason: '$intent must not allow full-width',
-        );
-      }
-    });
+    test(
+      'card / inline / toolbar / dialog intents forbid full-width override',
+      () {
+        for (final MxActionIntent intent in <MxActionIntent>[
+          MxActionIntent.cardPrimary,
+          MxActionIntent.cardSecondary,
+          MxActionIntent.inline,
+          MxActionIntent.toolbar,
+          MxActionIntent.dialogPrimary,
+        ]) {
+          expect(
+            MxActionSpec.of(intent).allowFullWidthOverride,
+            isFalse,
+            reason: '$intent must not allow full-width',
+          );
+        }
+      },
+    );
 
     test('every intent resolves a spec (exhaustive switch)', () {
       for (final MxActionIntent intent in MxActionIntent.values) {

@@ -16,30 +16,33 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 /// Generated `AppLocalizations` getters cannot be looked up by string key, so
 /// this maps directly to getters rather than returning ARB key names.
 extension MxFailureMessage on AppLocalizations {
-  String failureMessage(Failure failure, {String? duplicate, String? fallback}) =>
-      switch (failure) {
-        ValidationFailure(code: ValidationCode.duplicate) =>
-          duplicate ?? fallback ?? errorUnexpected,
-        ValidationFailure(code: ValidationCode.cycleDetected) =>
-          folderMovePickerCycleReason,
-        ValidationFailure(code: ValidationCode.parentModeLocked) =>
-          folderModeLockedError,
-        // Remaining validation codes have no dedicated snackbar copy yet; the
-        // action-specific fallback is more useful than a bare generic line.
-        ValidationFailure() => fallback ?? errorUnexpected,
-        // The only producers are folder content-mode violations.
-        UnsupportedActionFailure() => folderModeLockedError,
-        NotFoundFailure() => fallback ?? errorNotFound,
-        StorageFailure() => fallback ?? errorStorage,
-        NetworkFailure(:final NetworkErrorKind kind) => switch (kind) {
-          NetworkErrorKind.timeout => errorRequestTimedOut,
-          NetworkErrorKind.parse => errorInvalidData,
-          NetworkErrorKind.offline || NetworkErrorKind.http => errorNetwork,
-        },
-        AuthFailure() => errorConfiguration,
-        ConflictFailure() ||
-        IntegrityFailure() ||
-        CancelledFailure() ||
-        FinalizationFailure() => fallback ?? errorUnexpected,
-      };
+  String failureMessage(
+    Failure failure, {
+    String? duplicate,
+    String? fallback,
+  }) => switch (failure) {
+    ValidationFailure(code: ValidationCode.duplicate) =>
+      duplicate ?? fallback ?? errorUnexpected,
+    ValidationFailure(code: ValidationCode.cycleDetected) =>
+      folderMovePickerCycleReason,
+    ValidationFailure(code: ValidationCode.parentModeLocked) =>
+      folderModeLockedError,
+    // Remaining validation codes have no dedicated snackbar copy yet; the
+    // action-specific fallback is more useful than a bare generic line.
+    ValidationFailure() => fallback ?? errorUnexpected,
+    // The only producers are folder content-mode violations.
+    UnsupportedActionFailure() => folderModeLockedError,
+    NotFoundFailure() => fallback ?? errorNotFound,
+    StorageFailure() => fallback ?? errorStorage,
+    NetworkFailure(:final NetworkErrorKind kind) => switch (kind) {
+      NetworkErrorKind.timeout => errorRequestTimedOut,
+      NetworkErrorKind.parse => errorInvalidData,
+      NetworkErrorKind.offline || NetworkErrorKind.http => errorNetwork,
+    },
+    AuthFailure() => errorConfiguration,
+    ConflictFailure() ||
+    IntegrityFailure() ||
+    CancelledFailure() ||
+    FinalizationFailure() => fallback ?? errorUnexpected,
+  };
 }

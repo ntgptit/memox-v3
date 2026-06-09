@@ -1,50 +1,45 @@
 part of 'audio_speech_settings_content.dart';
 
 class _AudioSpeechGeneralCard extends StatelessWidget {
-  const _AudioSpeechGeneralCard({
-    required this.l10n,
-    required this.disabled,
-  });
+  const _AudioSpeechGeneralCard({required this.l10n, required this.disabled});
 
   final AppLocalizations l10n;
   final bool disabled;
 
   @override
   Widget build(BuildContext context) => Opacity(
-      opacity: disabled ? OpacityTokens.hint : 1,
-      child: IgnorePointer(
-        ignoring: disabled,
-        child: MxCard(
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: <Widget>[
-              MxSettingsTile.toggle(
-                title: l10n.settingsAudioSpeechAutoPlayTitle,
-                subtitle: l10n.settingsAudioSpeechAutoPlaySubtitle,
-                leadingIcon: Icons.play_arrow_outlined,
-                value: false,
-                onChanged: (_) {},
-              ),
-              const _AudioSpeechRowDivider(),
-              Opacity(
-                opacity: 0.5,
-                child: IgnorePointer(
-                  child: MxSettingsTile(
-                    title: l10n.settingsAudioSpeechPlayAfterGradingTitle,
-                    subtitle: l10n.settingsAudioSpeechPlayAfterGradingSubtitle,
-                    leadingIcon: Icons.workspace_premium_outlined,
-                    onTap: null,
-                    trailing: _AudioSpeechSoonChip(
-                      label: l10n.settingsSoonChip,
-                    ),
-                  ),
+    opacity: disabled ? OpacityTokens.hint : 1,
+    child: IgnorePointer(
+      ignoring: disabled,
+      child: MxCard(
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: <Widget>[
+            MxSettingsTile.toggle(
+              title: l10n.settingsAudioSpeechAutoPlayTitle,
+              subtitle: l10n.settingsAudioSpeechAutoPlaySubtitle,
+              leadingIcon: Icons.play_arrow_outlined,
+              value: false,
+              onChanged: (_) {},
+            ),
+            const _AudioSpeechRowDivider(),
+            Opacity(
+              opacity: 0.5,
+              child: IgnorePointer(
+                child: MxSettingsTile(
+                  title: l10n.settingsAudioSpeechPlayAfterGradingTitle,
+                  subtitle: l10n.settingsAudioSpeechPlayAfterGradingSubtitle,
+                  leadingIcon: Icons.workspace_premium_outlined,
+                  onTap: null,
+                  trailing: _AudioSpeechSoonChip(label: l10n.settingsSoonChip),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
 }
 
 class _AudioSpeechLanguageTabs extends StatelessWidget {

@@ -3,17 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/domain/study/study_entry_parser.dart';
 import 'package:memox/domain/study/study_entry_route_input.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/study/widgets/study_entry_resume_required_state.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
-import 'package:memox/presentation/features/study/widgets/study_entry_resume_required_state.dart';
 
 class StudyEntryBody extends StatelessWidget {
   const StudyEntryBody({required this.request, required this.value, super.key});
@@ -43,10 +44,7 @@ class StudyEntryBody extends StatelessWidget {
           message: l10n.studyEntryPreparingMessage,
         ),
         StudyEntryStartResumeRequired(:final sessionId) =>
-          StudyEntryResumeRequiredState(
-            request: request,
-            sessionId: sessionId,
-          ),
+          StudyEntryResumeRequiredState(request: request, sessionId: sessionId),
         StudyEntryStartEmpty(:final emptyState) => _StudyEntryEmptyStateView(
           request: request,
           emptyState: emptyState,
@@ -249,20 +247,7 @@ class _StudyEntryEmptyStateView extends StatelessWidget {
     }
   }
 
-  StudyMode? _modeFromRequest() {
-    final String? mode = request.modeQuery;
-    if (mode == null || mode.isEmpty) {
-      return null;
-    }
-    return switch (mode) {
-      'review' => StudyMode.review,
-      'match' => StudyMode.match,
-      'guess' => StudyMode.guess,
-      'recall' => StudyMode.recall,
-      'fill' => StudyMode.fill,
-      _ => null,
-    };
-  }
+  StudyMode? _modeFromRequest() => resolveStudyMode(request.modeQuery);
 
   EntryType _parseEntryType(String value) => switch (value) {
     'deck' => EntryType.deck,

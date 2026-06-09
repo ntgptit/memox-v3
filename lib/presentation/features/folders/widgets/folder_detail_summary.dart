@@ -58,7 +58,9 @@ class FolderDecksSummary extends StatelessWidget {
                       ? l10n.libraryFolderDueCount(dueTotal)
                       : l10n.folderSummaryAllCaughtUp,
                   role: MxTextRole.labelMedium,
-                  color: dueTotal > 0 ? scheme.primary : scheme.onSurfaceVariant,
+                  color: dueTotal > 0
+                      ? scheme.primary
+                      : scheme.onSurfaceVariant,
                   fontWeight: dueTotal > 0
                       ? TypographyTokens.bold
                       : TypographyTokens.regular,
@@ -79,8 +81,10 @@ class FolderSubfoldersSummary extends StatelessWidget {
 
   final List<FolderWithCount> subfolders;
 
-  int get _cardTotal =>
-      subfolders.fold<int>(0, (int sum, FolderWithCount f) => sum + f.cardCount);
+  int get _cardTotal => subfolders.fold<int>(
+    0,
+    (int sum, FolderWithCount f) => sum + f.cardCount,
+  );
 
   int get _dueTotal =>
       subfolders.fold<int>(0, (int sum, FolderWithCount f) => sum + f.dueCount);
@@ -99,7 +103,10 @@ class FolderSubfoldersSummary extends StatelessWidget {
             label: l10n.folderSummarySubfoldersStat,
           ),
           const _FolderStatDivider(),
-          _FolderStatItem(value: _cardTotal, label: l10n.folderSummaryCardsStat),
+          _FolderStatItem(
+            value: _cardTotal,
+            label: l10n.folderSummaryCardsStat,
+          ),
           const _FolderStatDivider(),
           _FolderStatItem(
             value: dueTotal,

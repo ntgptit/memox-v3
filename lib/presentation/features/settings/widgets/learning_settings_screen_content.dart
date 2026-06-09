@@ -103,7 +103,11 @@ class LearningNavigationRow extends StatelessWidget {
                     borderRadius: RadiusTokens.brMd,
                   ),
                   alignment: Alignment.center,
-                  child: Icon(leadingIcon, size: SizeTokens.iconXs, color: scheme.primary),
+                  child: Icon(
+                    leadingIcon,
+                    size: SizeTokens.iconXs,
+                    color: scheme.primary,
+                  ),
                 ),
                 const SizedBox(width: SpacingTokens.md),
               ],
@@ -216,7 +220,11 @@ class LearningToggleRow extends StatelessWidget {
                     borderRadius: RadiusTokens.brMd,
                   ),
                   alignment: Alignment.center,
-                  child: Icon(leadingIcon, size: SizeTokens.iconXs, color: scheme.primary),
+                  child: Icon(
+                    leadingIcon,
+                    size: SizeTokens.iconXs,
+                    color: scheme.primary,
+                  ),
                 ),
                 const SizedBox(width: SpacingTokens.md),
               ],
@@ -286,7 +294,11 @@ class LearningSettingsRow extends StatelessWidget {
                 borderRadius: RadiusTokens.brMd,
               ),
               alignment: Alignment.center,
-              child: Icon(leadingIcon, size: SizeTokens.iconXs, color: scheme.primary),
+              child: Icon(
+                leadingIcon,
+                size: SizeTokens.iconXs,
+                color: scheme.primary,
+              ),
             ),
             const SizedBox(width: SpacingTokens.md),
             Expanded(
@@ -329,8 +341,8 @@ class LearningSwitch extends StatelessWidget {
     return Semantics(
       toggled: value,
       child: Container(
-      width: SizeTokens.avatar,
-      height: SizeTokens.surfaceBadge,
+        width: SizeTokens.avatar,
+        height: SizeTokens.surfaceBadge,
         decoration: BoxDecoration(
           color: value ? scheme.primary : scheme.surfaceContainerHigh,
           borderRadius: RadiusTokens.brFull,
@@ -416,7 +428,11 @@ class LearningSavedChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(Icons.check, size: SizeTokens.iconTiny, color: context.customColors.mastery),
+            Icon(
+              Icons.check,
+              size: SizeTokens.iconTiny,
+              color: context.customColors.mastery,
+            ),
             const SizedBox(width: SpacingTokens.xxs),
             MxText(
               label,

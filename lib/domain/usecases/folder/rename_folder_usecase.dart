@@ -16,10 +16,7 @@ class RenameFolderUseCase {
 
   final FolderRepository _repository;
 
-  Future<Result<Folder>> call({
-    required FolderId id,
-    required String name,
-  }) {
+  Future<Result<Folder>> call({required FolderId id, required String name}) {
     final String trimmed = StringUtils.trimmed(name);
     if (trimmed.isEmpty) {
       return Future<Result<Folder>>.value(

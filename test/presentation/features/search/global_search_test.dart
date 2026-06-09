@@ -56,20 +56,21 @@ void main() {
     );
   });
 
-  testWidgets('loading state renders the skeleton while the query is in flight', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      _wrap(
-        searchResultsProvider.overrideWith(
-          (Ref ref) => Completer<SearchResults?>().future,
+  testWidgets(
+    'loading state renders the skeleton while the query is in flight',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _wrap(
+          searchResultsProvider.overrideWith(
+            (Ref ref) => Completer<SearchResults?>().future,
+          ),
         ),
-      ),
-    );
-    await tester.pump();
+      );
+      await tester.pump();
 
-    expect(find.byType(MxLoadingState), findsOneWidget);
-  });
+      expect(find.byType(MxLoadingState), findsOneWidget);
+    },
+  );
 
   testWidgets('results state renders grouped sections and "+N more"', (
     WidgetTester tester,
@@ -83,7 +84,12 @@ void main() {
       decks: const <DeckSearchHit>[DeckSearchHit(id: 'd1', name: 'Verbs')],
       deckTotal: 1,
       flashcards: const <FlashcardSearchHit>[
-        FlashcardSearchHit(id: 'c1', deckId: 'd1', front: 'eat', back: 'meokda'),
+        FlashcardSearchHit(
+          id: 'c1',
+          deckId: 'd1',
+          front: 'eat',
+          back: 'meokda',
+        ),
       ],
       flashcardTotal: 1,
     );
@@ -109,9 +115,7 @@ void main() {
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
-      _wrap(
-        searchResultsProvider.overrideWith((Ref ref) async => _results()),
-      ),
+      _wrap(searchResultsProvider.overrideWith((Ref ref) async => _results())),
     );
     await tester.pumpAndSettle();
 

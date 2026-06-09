@@ -32,20 +32,27 @@ final class _RecordingSearchRepository implements SearchRepository {
 }
 
 void main() {
-  test('rejects a sub-minimum query as tooShort without hitting the repo', () async {
-    final repo = _RecordingSearchRepository();
-    final useCase = GlobalSearchUseCase(repo);
+  test(
+    'rejects a sub-minimum query as tooShort without hitting the repo',
+    () async {
+      final repo = _RecordingSearchRepository();
+      final useCase = GlobalSearchUseCase(repo);
 
-    final Result<SearchResults> result = await useCase.call(query: 'a');
+      final Result<SearchResults> result = await useCase.call(query: 'a');
 
-    expect(repo.calls, 0);
-    expect(
-      (result as Err<SearchResults>).failure,
-      isA<ValidationFailure>()
-          .having((ValidationFailure f) => f.code, 'code', ValidationCode.tooShort)
-          .having((ValidationFailure f) => f.field, 'field', 'query'),
-    );
-  });
+      expect(repo.calls, 0);
+      expect(
+        (result as Err<SearchResults>).failure,
+        isA<ValidationFailure>()
+            .having(
+              (ValidationFailure f) => f.code,
+              'code',
+              ValidationCode.tooShort,
+            )
+            .having((ValidationFailure f) => f.field, 'field', 'query'),
+      );
+    },
+  );
 
   test('rejects a whitespace-only query as tooShort', () async {
     final repo = _RecordingSearchRepository();

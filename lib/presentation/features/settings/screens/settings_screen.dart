@@ -345,7 +345,11 @@ class _DisabledSoonChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (icon != null) ...<Widget>[
-            Icon(icon, size: SizeTokens.iconMini, color: scheme.onSurfaceVariant),
+            Icon(
+              icon,
+              size: SizeTokens.iconMini,
+              color: scheme.onSurfaceVariant,
+            ),
             const SizedBox(width: SpacingTokens.tight),
           ],
           MxText(
@@ -373,15 +377,15 @@ class _LeadingIconTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      width: SizeTokens.controlMd,
-      height: SizeTokens.controlMd,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: RadiusTokens.brMd,
-      ),
-      alignment: Alignment.center,
-      child: Icon(icon, size: SizeTokens.iconSm, color: foregroundColor),
-    );
+    width: SizeTokens.controlMd,
+    height: SizeTokens.controlMd,
+    decoration: BoxDecoration(
+      color: backgroundColor,
+      borderRadius: RadiusTokens.brMd,
+    ),
+    alignment: Alignment.center,
+    child: Icon(icon, size: SizeTokens.iconSm, color: foregroundColor),
+  );
 }
 
 class _RowDivider extends StatelessWidget {

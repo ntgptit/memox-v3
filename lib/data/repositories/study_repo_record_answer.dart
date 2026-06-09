@@ -31,8 +31,7 @@ Future<Result<void>> recordStudySessionAnswerTransaction({
       final SessionStatus status = StudyMapper.sessionStatusFromStorage(
         sessionRow.status,
       );
-      if (status != SessionStatus.draft &&
-          status != SessionStatus.inProgress) {
+      if (status != SessionStatus.draft && status != SessionStatus.inProgress) {
         throw _RuleViolation(
           Failure.unsupportedAction(
             action: 'recordStudySessionAnswer:${status.name}',
@@ -52,7 +51,9 @@ Future<Result<void>> recordStudySessionAnswerTransaction({
       final itemRow = matches.first;
       if (itemRow.answeredAt != null) {
         throw _RuleViolation(
-          Failure.unsupportedAction(action: 'recordStudySessionAnswer:answered'),
+          const Failure.unsupportedAction(
+            action: 'recordStudySessionAnswer:answered',
+          ),
         );
       }
 
@@ -94,8 +95,8 @@ Future<Result<void>> recordStudySessionAnswerTransaction({
 }
 
 int _boxAfter(int currentBox, AttemptResult result) => switch (result) {
-  AttemptResult.perfect || AttemptResult.initialPassed =>
-    currentBox >= 8 ? 8 : currentBox + 1,
+  AttemptResult.perfect ||
+  AttemptResult.initialPassed => currentBox >= 8 ? 8 : currentBox + 1,
   AttemptResult.recovered => currentBox,
   AttemptResult.forgot => 1,
 };

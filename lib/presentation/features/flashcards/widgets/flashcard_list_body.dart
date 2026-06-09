@@ -43,10 +43,7 @@ class FlashcardListBody extends StatelessWidget {
 
     // Empty deck wins over an active search term (§States Empty).
     if (detail.totalCount == 0) {
-      return FlashcardEmptyState(
-        onAddCard: onAddCard,
-        onImport: onImport,
-      );
+      return FlashcardEmptyState(onAddCard: onAddCard, onImport: onImport);
     }
 
     if (detail.cards.isEmpty && isSearching) {

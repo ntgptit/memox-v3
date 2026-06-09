@@ -66,7 +66,10 @@ class _LibraryFolderActions extends StatelessWidget {
             ),
             child: Row(
               children: <Widget>[
-                const MxIconTile(icon: Icons.folder_rounded, size: SizeTokens.controlMd),
+                const MxIconTile(
+                  icon: Icons.folder_rounded,
+                  size: SizeTokens.controlMd,
+                ),
                 const SizedBox(width: SpacingTokens.md),
                 Expanded(
                   child: Column(

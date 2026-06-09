@@ -33,14 +33,15 @@ abstract final class StudyMapper {
     StudyType.srsReview => 'srs_review',
   };
 
-  static SessionStatus sessionStatusFromStorage(String value) => switch (value) {
-    'draft' => SessionStatus.draft,
-    'in_progress' => SessionStatus.inProgress,
-    'completed' => SessionStatus.completed,
-    'cancelled' => SessionStatus.cancelled,
-    'failed_to_finalize' => SessionStatus.failedToFinalize,
-    _ => SessionStatus.draft,
-  };
+  static SessionStatus sessionStatusFromStorage(String value) =>
+      switch (value) {
+        'draft' => SessionStatus.draft,
+        'in_progress' => SessionStatus.inProgress,
+        'completed' => SessionStatus.completed,
+        'cancelled' => SessionStatus.cancelled,
+        'failed_to_finalize' => SessionStatus.failedToFinalize,
+        _ => SessionStatus.draft,
+      };
 
   static String sessionStatusToStorage(SessionStatus value) => switch (value) {
     SessionStatus.draft => 'draft',
@@ -50,13 +51,14 @@ abstract final class StudyMapper {
     SessionStatus.failedToFinalize => 'failed_to_finalize',
   };
 
-  static AttemptResult attemptResultFromStorage(String value) => switch (value) {
-    'perfect' => AttemptResult.perfect,
-    'initial_passed' => AttemptResult.initialPassed,
-    'recovered' => AttemptResult.recovered,
-    'forgot' => AttemptResult.forgot,
-    _ => AttemptResult.forgot,
-  };
+  static AttemptResult attemptResultFromStorage(String value) =>
+      switch (value) {
+        'perfect' => AttemptResult.perfect,
+        'initial_passed' => AttemptResult.initialPassed,
+        'recovered' => AttemptResult.recovered,
+        'forgot' => AttemptResult.forgot,
+        _ => AttemptResult.forgot,
+      };
 
   static String attemptResultToStorage(AttemptResult value) => switch (value) {
     AttemptResult.perfect => 'perfect',

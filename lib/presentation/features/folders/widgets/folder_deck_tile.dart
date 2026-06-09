@@ -53,10 +53,10 @@ class FolderDeckTile extends StatelessWidget {
     return MxCard(
       onTap: onTap,
       onLongPress: onShowActions,
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.lg,
-          vertical: SpacingTokens.md,
-        ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.lg,
+        vertical: SpacingTokens.md,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -100,7 +100,7 @@ class FolderDeckTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-            const SizedBox(height: SpacingTokens.sm),
+                const SizedBox(height: SpacingTokens.sm),
                 MxLinearProgress(
                   value: progress,
                   color: context.customColors.masteryHigh,
@@ -110,7 +110,7 @@ class FolderDeckTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: SpacingTokens.md),
-            Icon(Icons.chevron_right, size: SizeTokens.iconMinor, color: tone),
+          Icon(Icons.chevron_right, size: SizeTokens.iconMinor, color: tone),
         ],
       ),
     );
@@ -130,14 +130,14 @@ class _DeckIconTile extends StatelessWidget {
     final Color tint = context.colorScheme.primary;
     return Container(
       key: const ValueKey<String>('folder_deck_leading_tile'),
-              width: SizeTokens.buttonSm,
-              height: SizeTokens.buttonSm,
+      width: SizeTokens.buttonSm,
+      height: SizeTokens.buttonSm,
       decoration: BoxDecoration(
         color: tint.withValues(alpha: OpacityTokens.hover),
         borderRadius: RadiusTokens.brSm,
       ),
       alignment: Alignment.center,
-              child: Icon(Icons.layers_rounded, size: SizeTokens.iconXs, color: tint),
+      child: Icon(Icons.layers_rounded, size: SizeTokens.iconXs, color: tint),
     );
   }
 }
@@ -151,7 +151,7 @@ class _DueCountBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return SizedBox(
-          height: SizeTokens.iconMinor,
+      height: SizeTokens.iconMinor,
       child: Container(
         key: const ValueKey<String>('folder_deck_due_badge'),
         padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.compact),

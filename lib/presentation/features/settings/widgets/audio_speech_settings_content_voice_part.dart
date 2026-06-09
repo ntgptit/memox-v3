@@ -14,10 +14,7 @@ class _AudioSpeechVoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (profile.isEmpty) {
-      return _AudioSpeechVoiceEmptyState(
-        l10n: l10n,
-        profile: profile,
-      );
+      return _AudioSpeechVoiceEmptyState(l10n: l10n, profile: profile);
     }
 
     if (profile.isLoading) {
@@ -92,10 +89,13 @@ class _AudioSpeechVoiceLoadingState extends StatelessWidget {
   Widget build(BuildContext context) => MxCard(
     padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xs),
     child: Column(
-      children: List<Widget>.generate(4, (int index) => _AudioSpeechVoiceSkeletonRow(
+      children: List<Widget>.generate(
+        4,
+        (int index) => _AudioSpeechVoiceSkeletonRow(
           showDivider: index < 3,
           wideTop: index == 0,
-        )),
+        ),
+      ),
     ),
   );
 }
@@ -113,94 +113,98 @@ class _AudioSpeechVoiceLoadedState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Opacity(
-      opacity: engineDisabled ? OpacityTokens.fadeOut : 1,
-      child: IgnorePointer(
-        ignoring: engineDisabled,
-        child: MxCard(
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: <Widget>[
-              for (int index = 0; index < profile.voices.length; index += 1) ...<Widget>[
-                _AudioSpeechVoiceRow(
-                  l10n: l10n,
-                  voice: profile.voices[index],
-                  selected: profile.voices[index].id == profile.selectedVoiceId,
-                  showDivider: index < profile.voices.length - 1,
-                ),
-              ],
-              _AudioSpeechSlider(
-                label: l10n.settingsAudioSpeechSpeechRateLabel,
-                valueLabel: l10n.settingsAudioSpeechRateValueLabel(
-                  profile.rate.toStringAsFixed(2),
-                ),
-                value: profile.rate,
-                min: 0.3,
-                max: 0.7,
-                sublabels: <String>[
-                  l10n.settingsAudioSpeechSpeechRateMinLabel,
-                  l10n.settingsAudioSpeechSpeechRateDefaultLabel,
-                  l10n.settingsAudioSpeechSpeechRateMaxLabel,
-                ],
-              ),
-              _AudioSpeechSlider(
-                label: l10n.settingsAudioSpeechPitchLabel,
-                valueLabel: profile.pitch.toStringAsFixed(2),
-                value: profile.pitch,
-                min: 0.7,
-                max: 1.5,
-                sublabels: <String>[
-                  l10n.settingsAudioSpeechPitchMinLabel,
-                  l10n.settingsAudioSpeechPitchDefaultLabel,
-                  l10n.settingsAudioSpeechPitchMaxLabel,
-                ],
-              ),
-              _AudioSpeechSlider(
-                label: l10n.settingsAudioSpeechVolumeLabel,
-                valueLabel: l10n.settingsAudioSpeechVolumeValueLabel(
-                  (profile.volume * 100).round().toString(),
-                ),
-                value: profile.volume,
-                min: 0,
-                max: 1,
-                sublabels: <String>[
-                  l10n.settingsAudioSpeechVolumeMinLabel,
-                  l10n.settingsAudioSpeechVolumeMidLabel,
-                  l10n.settingsAudioSpeechVolumeMaxLabel,
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SpacingTokens.md,
-                  vertical: SpacingTokens.md,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: MxText(
-                        l10n.settingsAudioSpeechResetVoiceSettings(
-                          profile.languageLabel,
-                        ),
-                        role: MxTextRole.labelMedium,
-                        color: context.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(width: SpacingTokens.md),
-                    MxSecondaryButton(
-                      label: l10n.settingsAudioSpeechResetAction,
-                      onPressed: () {},
-                      icon: Icons.rotate_left_outlined,
-                      variant: MxSecondaryVariant.outlined,
-                      size: MxButtonSize.compact,
-                    ),
-                  ],
-                ),
+    opacity: engineDisabled ? OpacityTokens.fadeOut : 1,
+    child: IgnorePointer(
+      ignoring: engineDisabled,
+      child: MxCard(
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: <Widget>[
+            for (
+              int index = 0;
+              index < profile.voices.length;
+              index += 1
+            ) ...<Widget>[
+              _AudioSpeechVoiceRow(
+                l10n: l10n,
+                voice: profile.voices[index],
+                selected: profile.voices[index].id == profile.selectedVoiceId,
+                showDivider: index < profile.voices.length - 1,
               ),
             ],
-          ),
+            _AudioSpeechSlider(
+              label: l10n.settingsAudioSpeechSpeechRateLabel,
+              valueLabel: l10n.settingsAudioSpeechRateValueLabel(
+                profile.rate.toStringAsFixed(2),
+              ),
+              value: profile.rate,
+              min: 0.3,
+              max: 0.7,
+              sublabels: <String>[
+                l10n.settingsAudioSpeechSpeechRateMinLabel,
+                l10n.settingsAudioSpeechSpeechRateDefaultLabel,
+                l10n.settingsAudioSpeechSpeechRateMaxLabel,
+              ],
+            ),
+            _AudioSpeechSlider(
+              label: l10n.settingsAudioSpeechPitchLabel,
+              valueLabel: profile.pitch.toStringAsFixed(2),
+              value: profile.pitch,
+              min: 0.7,
+              max: 1.5,
+              sublabels: <String>[
+                l10n.settingsAudioSpeechPitchMinLabel,
+                l10n.settingsAudioSpeechPitchDefaultLabel,
+                l10n.settingsAudioSpeechPitchMaxLabel,
+              ],
+            ),
+            _AudioSpeechSlider(
+              label: l10n.settingsAudioSpeechVolumeLabel,
+              valueLabel: l10n.settingsAudioSpeechVolumeValueLabel(
+                (profile.volume * 100).round().toString(),
+              ),
+              value: profile.volume,
+              min: 0,
+              max: 1,
+              sublabels: <String>[
+                l10n.settingsAudioSpeechVolumeMinLabel,
+                l10n.settingsAudioSpeechVolumeMidLabel,
+                l10n.settingsAudioSpeechVolumeMaxLabel,
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SpacingTokens.md,
+                vertical: SpacingTokens.md,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: MxText(
+                      l10n.settingsAudioSpeechResetVoiceSettings(
+                        profile.languageLabel,
+                      ),
+                      role: MxTextRole.labelMedium,
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(width: SpacingTokens.md),
+                  MxSecondaryButton(
+                    label: l10n.settingsAudioSpeechResetAction,
+                    onPressed: () {},
+                    icon: Icons.rotate_left_outlined,
+                    variant: MxSecondaryVariant.outlined,
+                    size: MxButtonSize.compact,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
 }
 
 class _AudioSpeechVoiceRow extends StatelessWidget {
@@ -312,32 +316,32 @@ class _AudioSpeechVoiceSkeletonRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: SpacingTokens.md,
-            vertical: SpacingTokens.md,
-          ),
-          child: Row(
-            children: <Widget>[
-              const MxSkeleton.circle(size: SizeTokens.iconMinor),
-              const SizedBox(width: SpacingTokens.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    MxSkeleton(width: wideTop ? 116 : 92, height: 11),
-                    const SizedBox(height: SpacingTokens.tight),
-                    MxSkeleton(width: wideTop ? 68 : 84, height: 9),
-                  ],
-                ),
-              ),
-              const SizedBox(width: SpacingTokens.sm),
-              const MxSkeleton.circle(size: SizeTokens.iconTile),
-            ],
-          ),
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.md,
+          vertical: SpacingTokens.md,
         ),
-        if (showDivider) const _AudioSpeechRowDivider(),
-      ],
-    );
+        child: Row(
+          children: <Widget>[
+            const MxSkeleton.circle(size: SizeTokens.iconMinor),
+            const SizedBox(width: SpacingTokens.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  MxSkeleton(width: wideTop ? 116 : 92, height: 11),
+                  const SizedBox(height: SpacingTokens.tight),
+                  MxSkeleton(width: wideTop ? 68 : 84, height: 9),
+                ],
+              ),
+            ),
+            const SizedBox(width: SpacingTokens.sm),
+            const MxSkeleton.circle(size: SizeTokens.iconTile),
+          ],
+        ),
+      ),
+      if (showDivider) const _AudioSpeechRowDivider(),
+    ],
+  );
 }

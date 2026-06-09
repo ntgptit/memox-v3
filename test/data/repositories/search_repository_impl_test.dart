@@ -100,10 +100,9 @@ void main() {
       await repo.search(query: '100%', sectionCap: 5),
     );
 
-    expect(
-      results.folders.map((FolderSearchHit f) => f.name),
-      <String>['100% effort'],
-    );
+    expect(results.folders.map((FolderSearchHit f) => f.name), <String>[
+      '100% effort',
+    ]);
   });
 
   test('caps each section at sectionCap but reports the true total', () async {
@@ -146,13 +145,16 @@ void main() {
     expect(results.totalCount, 0);
   });
 
-  test('case-insensitive: upper-cased data matches lower-cased query', () async {
-    await folder('f1', 'KOREAN');
+  test(
+    'case-insensitive: upper-cased data matches lower-cased query',
+    () async {
+      await folder('f1', 'KOREAN');
 
-    final SearchResults results = ok(
-      await repo.search(query: 'korean', sectionCap: 5),
-    );
+      final SearchResults results = ok(
+        await repo.search(query: 'korean', sectionCap: 5),
+      );
 
-    expect(results.folders.single.name, 'KOREAN');
-  });
+      expect(results.folders.single.name, 'KOREAN');
+    },
+  );
 }

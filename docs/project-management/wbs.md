@@ -255,6 +255,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.10 | Protected active-session exit | Specified / Partial | Active session exit requires confirmation; verify current V1 shell behavior before extending. |
 | 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |
 | 9.12 | Study attempt persistence | Specified / Partial | Attempts must be persisted; full mode implementations may still be pending. |
+| 9.13 | Study mode strategy V1 | Partial | Recall self-grade is resolved through `StudyModeStrategyFactory`; non-recall modes return a controlled unsupported strategy until persisted mode selection is added. |
 
 ### 10. Study Modes
 

@@ -52,11 +52,10 @@ sealed class Result<T> {
   };
 
   /// Chains another fallible operation onto the success value.
-  Result<R> flatMap<R>(Result<R> Function(T value) transform) =>
-      switch (this) {
-        Ok<T>(:final value) => transform(value),
-        Err<T>(:final failure) => Err<R>(failure),
-      };
+  Result<R> flatMap<R>(Result<R> Function(T value) transform) => switch (this) {
+    Ok<T>(:final value) => transform(value),
+    Err<T>(:final failure) => Err<R>(failure),
+  };
 }
 
 /// Success branch of a [Result].

@@ -70,27 +70,24 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
 
   /// Fires on any content-tree change (folders/decks/flashcards/progress). Used
   /// as a reactive trigger to rebuild a folder-detail snapshot.
-  Stream<void> watchContentChanges() =>
-      contentRevision().watch().map((_) {});
+  Stream<void> watchContentChanges() => contentRevision().watch().map((_) {});
 
   // ── Single-table reads / mutations (Drift query builder) ──────────
 
   /// Names of the current root folders (for duplicate checks).
   Future<List<String>> rootFolderNames() {
-    final JoinedSelectStatement<Folders, FolderRow> query =
-        selectOnly(folders)
-          ..addColumns(<Expression<Object>>[folders.name])
-          ..where(folders.parentId.isNull());
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[folders.name])
+      ..where(folders.parentId.isNull());
     return query.map((TypedResult row) => row.read(folders.name)!).get();
   }
 
   /// Highest `sort_order` among root folders, or `-1` when there are none.
   Future<int> maxRootSortOrder() async {
     final Expression<int> maxOrder = folders.sortOrder.max();
-    final JoinedSelectStatement<Folders, FolderRow> query =
-        selectOnly(folders)
-          ..addColumns(<Expression<Object>>[maxOrder])
-          ..where(folders.parentId.isNull());
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[maxOrder])
+      ..where(folders.parentId.isNull());
     final int? value = await query
         .map((TypedResult row) => row.read(maxOrder))
         .getSingleOrNull();
@@ -114,9 +111,8 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
     String? parentId,
     String? excludeId,
   }) {
-    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(
-      folders,
-    )..addColumns(<Expression<Object>>[folders.name]);
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[folders.name]);
     query.where(
       parentId == null
           ? folders.parentId.isNull()
@@ -132,9 +128,8 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
   /// `-1` when there are none.
   Future<int> maxChildSortOrder(String? parentId) async {
     final Expression<int> maxOrder = folders.sortOrder.max();
-    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(
-      folders,
-    )..addColumns(<Expression<Object>>[maxOrder]);
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[maxOrder]);
     query.where(
       parentId == null
           ? folders.parentId.isNull()
@@ -150,9 +145,8 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
   /// decide whether an emptied parent reverts to `unlocked`.
   Future<int> childFolderCount(String? parentId) async {
     final Expression<int> total = folders.id.count();
-    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(
-      folders,
-    )..addColumns(<Expression<Object>>[total]);
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[total]);
     query.where(
       parentId == null
           ? folders.parentId.isNull()
@@ -203,20 +197,18 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
 
   /// Names of the direct child folders under [parentId] (for duplicate checks).
   Future<List<String>> childFolderNames(String parentId) {
-    final JoinedSelectStatement<Folders, FolderRow> query =
-        selectOnly(folders)
-          ..addColumns(<Expression<Object>>[folders.name])
-          ..where(folders.parentId.equals(parentId));
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[folders.name])
+      ..where(folders.parentId.equals(parentId));
     return query.map((TypedResult row) => row.read(folders.name)!).get();
   }
 
   /// Highest `sort_order` among child folders of [parentId], or `-1`.
   Future<int> maxChildFolderSortOrder(String parentId) async {
     final Expression<int> maxOrder = folders.sortOrder.max();
-    final JoinedSelectStatement<Folders, FolderRow> query =
-        selectOnly(folders)
-          ..addColumns(<Expression<Object>>[maxOrder])
-          ..where(folders.parentId.equals(parentId));
+    final JoinedSelectStatement<Folders, FolderRow> query = selectOnly(folders)
+      ..addColumns(<Expression<Object>>[maxOrder])
+      ..where(folders.parentId.equals(parentId));
     final int? value = await query
         .map((TypedResult row) => row.read(maxOrder))
         .getSingleOrNull();
@@ -250,9 +242,8 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
 
   Future<void> insertDeck(DecksCompanion deck) => into(decks).insert(deck);
 
-  Future<DeckRow?> findDeck(String id) => (select(
-    decks,
-  )..where((Decks t) => t.id.equals(id))).getSingleOrNull();
+  Future<DeckRow?> findDeck(String id) =>
+      (select(decks)..where((Decks t) => t.id.equals(id))).getSingleOrNull();
 
   /// Number of decks directly under [folderId]. Used to decide whether an
   /// emptied `decks`-mode folder reverts to `unlocked`.
@@ -287,12 +278,11 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
           OrderingTerm(expression: f.createdAt, mode: OrderingMode.desc),
           OrderingTerm(expression: f.sortOrder),
         ]),
-        ContentSortMode.lastStudied || ContentSortMode.manual => OrderBy(
-          <OrderingTerm>[
-            OrderingTerm(expression: f.sortOrder),
-            OrderingTerm(expression: f.createdAt),
-          ],
-        ),
+        ContentSortMode.lastStudied ||
+        ContentSortMode.manual => OrderBy(<OrderingTerm>[
+          OrderingTerm(expression: f.sortOrder),
+          OrderingTerm(expression: f.createdAt),
+        ]),
       };
 
   DeckItems$order _deckOrder(ContentSortMode sort) =>
@@ -305,12 +295,11 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
           OrderingTerm(expression: d.createdAt, mode: OrderingMode.desc),
           OrderingTerm(expression: d.sortOrder),
         ]),
-        ContentSortMode.lastStudied || ContentSortMode.manual => OrderBy(
-          <OrderingTerm>[
-            OrderingTerm(expression: d.sortOrder),
-            OrderingTerm(expression: d.createdAt),
-          ],
-        ),
+        ContentSortMode.lastStudied ||
+        ContentSortMode.manual => OrderBy(<OrderingTerm>[
+          OrderingTerm(expression: d.sortOrder),
+          OrderingTerm(expression: d.createdAt),
+        ]),
       };
 
   static String _searchPattern(String? normalized) =>

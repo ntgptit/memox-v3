@@ -6,10 +6,8 @@ part 'search_results.freezed.dart';
 /// A folder match in global Library search (`docs/wireframes/11-library-search.md`).
 @freezed
 abstract class FolderSearchHit with _$FolderSearchHit {
-  const factory FolderSearchHit({
-    required FolderId id,
-    required String name,
-  }) = _FolderSearchHit;
+  const factory FolderSearchHit({required FolderId id, required String name}) =
+      _FolderSearchHit;
 }
 
 /// A deck match in global Library search.
@@ -51,8 +49,7 @@ abstract class SearchResults with _$SearchResults {
   const SearchResults._();
 
   /// No matches in any section.
-  bool get isEmpty =>
-      folders.isEmpty && decks.isEmpty && flashcards.isEmpty;
+  bool get isEmpty => folders.isEmpty && decks.isEmpty && flashcards.isEmpty;
 
   /// Total matches across every section (un-capped).
   int get totalCount => folderTotal + deckTotal + flashcardTotal;

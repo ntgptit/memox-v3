@@ -12,8 +12,7 @@ extension ThemeContext on BuildContext {
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
   TextTheme get textTheme => Theme.of(this).textTheme;
 
-  CustomColors get customColors =>
-      Theme.of(this).extension<CustomColors>()!;
+  CustomColors get customColors => Theme.of(this).extension<CustomColors>()!;
 
   CustomTextStyles get customTextStyles =>
       Theme.of(this).extension<CustomTextStyles>()!;

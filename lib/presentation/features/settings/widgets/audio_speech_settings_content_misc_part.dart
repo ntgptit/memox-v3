@@ -74,7 +74,11 @@ class _AudioSpeechSupportedLanguagesCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.info_outline, size: SizeTokens.iconSm, color: scheme.primary),
+          Icon(
+            Icons.info_outline,
+            size: SizeTokens.iconSm,
+            color: scheme.primary,
+          ),
           const SizedBox(width: SpacingTokens.sm),
           Expanded(
             child: MxText(

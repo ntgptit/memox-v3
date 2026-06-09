@@ -105,22 +105,20 @@ class _AudioSpeechProfile {
   final bool isLoading;
   final bool isEmpty;
 
-  _AudioSpeechProfile copyWith({
-    bool? isLoading,
-    bool? isEmpty,
-  }) => _AudioSpeechProfile(
-    language: language,
-    languageLabel: languageLabel,
-    sample: sample,
-    sampleHint: sampleHint,
-    rate: rate,
-    pitch: pitch,
-    volume: volume,
-    selectedVoiceId: selectedVoiceId,
-    voices: isEmpty == true ? <_AudioSpeechVoice>[] : voices,
-    isLoading: isLoading ?? this.isLoading,
-    isEmpty: isEmpty ?? this.isEmpty,
-  );
+  _AudioSpeechProfile copyWith({bool? isLoading, bool? isEmpty}) =>
+      _AudioSpeechProfile(
+        language: language,
+        languageLabel: languageLabel,
+        sample: sample,
+        sampleHint: sampleHint,
+        rate: rate,
+        pitch: pitch,
+        volume: volume,
+        selectedVoiceId: selectedVoiceId,
+        voices: isEmpty == true ? <_AudioSpeechVoice>[] : voices,
+        isLoading: isLoading ?? this.isLoading,
+        isEmpty: isEmpty ?? this.isEmpty,
+      );
 }
 
 class _AudioSpeechVoice {

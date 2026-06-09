@@ -13,8 +13,8 @@ import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
-import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -57,12 +57,23 @@ class _FakeStudyRepository implements StudyRepository {
   int latestSummaryCalls = 0;
   int cancelCalls = 0;
   int createCalls = 0;
-  final List<({String sessionId, String sessionItemId, AttemptResult result})>
-      recordedAnswers = <({
-    String sessionId,
-    String sessionItemId,
-    AttemptResult result,
-  })>[];
+  final List<
+    ({
+      String sessionId,
+      String sessionItemId,
+      AttemptResult result,
+      StudyMode studyMode,
+    })
+  >
+  recordedAnswers =
+      <
+        ({
+          String sessionId,
+          String sessionItemId,
+          AttemptResult result,
+          StudyMode studyMode,
+        })
+      >[];
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
@@ -106,13 +117,12 @@ class _FakeStudyRepository implements StudyRepository {
     required StudyMode studyMode,
   }) async {
     recordCalls++;
-    recordedAnswers.add(
-      (
-        sessionId: sessionId,
-        sessionItemId: sessionItemId,
-        result: result,
-      ),
-    );
+    recordedAnswers.add((
+      sessionId: sessionId,
+      sessionItemId: sessionItemId,
+      result: result,
+      studyMode: studyMode,
+    ));
     return recordResult;
   }
 
@@ -205,16 +215,14 @@ GoRouter _studyResultRouter(String initialLocation) {
       GoRoute(
         path: RoutePaths.home,
         name: RouteNames.home,
-        builder: (context, state) => const Scaffold(
-          body: Text('Home destination'),
-        ),
+        builder: (context, state) =>
+            const Scaffold(body: Text('Home destination')),
       ),
       GoRoute(
         path: RoutePaths.library,
         name: RouteNames.library,
-        builder: (context, state) => const Scaffold(
-          body: Text('Library destination'),
-        ),
+        builder: (context, state) =>
+            const Scaffold(body: Text('Library destination')),
       ),
       ...studyRoutes(rootNavigatorKey),
     ],
@@ -294,98 +302,86 @@ StudySessionResult _result({
 }
 
 void main() {
-  testWidgets(
-    'navigates between cards and resets reveal state',
-    (tester) async {
-      final _FakeStudyRepository repository = _FakeStudyRepository(
-        Result<StudySessionReview>.ok(
-          _review(
-            sessionId: 'session-nav',
-            cards: <({String front, String back})>[
-              (front: 'Front 1', back: 'Back 1'),
-              (front: 'Front 2', back: 'Back 2'),
-            ],
-          ),
-        ),
-      );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-nav'),
-      );
-
-      await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
+  testWidgets('navigates between cards and resets reveal state', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      Result<StudySessionReview>.ok(
+        _review(
+          sessionId: 'session-nav',
+          cards: <({String front, String back})>[
+            (front: 'Front 1', back: 'Back 1'),
+            (front: 'Front 2', back: 'Back 2'),
           ],
         ),
-      );
-      await tester.pumpAndSettle();
+      ),
+    );
+    final GoRouter router = _studyRouter(_studySessionLocation('session-nav'));
 
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudySessionScreen)),
-      );
-      final Finder previousFinder = find.widgetWithText(
-        MxActionButton,
-        l10n.studyPreviousAction,
-      );
-      final Finder nextFinder = find.widgetWithText(
-        MxActionButton,
-        l10n.studyNextAction,
-      );
-      final Finder showAnswerFinder = find.text(l10n.studySessionShowAction);
+    await tester.pumpWidget(
+      _routerShell(
+        router,
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
-      expect(find.text('Front 1'), findsOneWidget);
-      expect(find.text('Back 1'), findsNothing);
-      expect(find.text('Front 2'), findsNothing);
-      expect(find.text('Back 2'), findsNothing);
-      expect(
-        tester.widget<MxActionButton>(previousFinder).onPressed,
-        isNull,
-      );
-      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
-      expect(repository.reviewCalls, 1);
-      expect(repository.recordCalls, 0);
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudySessionScreen)),
+    );
+    final Finder previousFinder = find.widgetWithText(
+      MxActionButton,
+      l10n.studyPreviousAction,
+    );
+    final Finder nextFinder = find.widgetWithText(
+      MxActionButton,
+      l10n.studyNextAction,
+    );
+    final Finder showAnswerFinder = find.text(l10n.studySessionShowAction);
 
-      await tester.tap(showAnswerFinder);
-      await tester.pumpAndSettle();
+    expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
+    expect(find.text('Front 1'), findsOneWidget);
+    expect(find.text('Back 1'), findsNothing);
+    expect(find.text('Front 2'), findsNothing);
+    expect(find.text('Back 2'), findsNothing);
+    expect(tester.widget<MxActionButton>(previousFinder).onPressed, isNull);
+    expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
+    expect(repository.reviewCalls, 1);
+    expect(repository.recordCalls, 0);
 
-      expect(find.text('Back 1'), findsOneWidget);
-      expect(find.text(l10n.studySessionHideAction), findsOneWidget);
+    await tester.tap(showAnswerFinder);
+    await tester.pumpAndSettle();
 
-      await tester.tap(nextFinder);
-      await tester.pumpAndSettle();
+    expect(find.text('Back 1'), findsOneWidget);
+    expect(find.text(l10n.studySessionHideAction), findsOneWidget);
 
-      expect(find.text(l10n.studySessionProgressLabel(2, 2)), findsOneWidget);
-      expect(find.text('Front 1'), findsNothing);
-      expect(find.text('Back 1'), findsNothing);
-      expect(find.text('Front 2'), findsOneWidget);
-      expect(find.text('Back 2'), findsNothing);
-      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
-      expect(
-        tester.widget<MxActionButton>(previousFinder).onPressed,
-        isNotNull,
-      );
-      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
+    await tester.tap(nextFinder);
+    await tester.pumpAndSettle();
 
-      await tester.tap(previousFinder);
-      await tester.pumpAndSettle();
+    expect(find.text(l10n.studySessionProgressLabel(2, 2)), findsOneWidget);
+    expect(find.text('Front 1'), findsNothing);
+    expect(find.text('Back 1'), findsNothing);
+    expect(find.text('Front 2'), findsOneWidget);
+    expect(find.text('Back 2'), findsNothing);
+    expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+    expect(tester.widget<MxActionButton>(previousFinder).onPressed, isNotNull);
+    expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
 
-      expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
-      expect(find.text('Front 1'), findsOneWidget);
-      expect(find.text('Back 1'), findsNothing);
-      expect(find.text('Front 2'), findsNothing);
-      expect(find.text('Back 2'), findsNothing);
-      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
-      expect(find.text(l10n.studySessionHideAction), findsNothing);
-      expect(
-        tester.widget<MxActionButton>(previousFinder).onPressed,
-        isNull,
-      );
-      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
-    },
-  );
+    await tester.tap(previousFinder);
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
+    expect(find.text('Front 1'), findsOneWidget);
+    expect(find.text('Back 1'), findsNothing);
+    expect(find.text('Front 2'), findsNothing);
+    expect(find.text('Back 2'), findsNothing);
+    expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+    expect(find.text(l10n.studySessionHideAction), findsNothing);
+    expect(tester.widget<MxActionButton>(previousFinder).onPressed, isNull);
+    expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
+  });
 
   testWidgets(
     'before reveal the grade buttons are hidden and after reveal they appear',
@@ -400,9 +396,7 @@ void main() {
           ),
         ),
       );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-1'),
-      );
+      final GoRouter router = _studyRouter(_studySessionLocation('session-1'));
 
       await tester.pumpWidget(
         _routerShell(
@@ -437,10 +431,7 @@ void main() {
       expect(find.text(l10n.studyGotItAction), findsNothing);
       expect(find.text(l10n.studyFinalizeAction), findsNothing);
       expect(showAnswerFinder, findsOneWidget);
-      expect(
-        tester.widget<MxActionButton>(previousFinder).onPressed,
-        isNull,
-      );
+      expect(tester.widget<MxActionButton>(previousFinder).onPressed, isNull);
       expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
       expect(repository.reviewCalls, 1);
       expect(repository.recordCalls, 0);
@@ -457,10 +448,7 @@ void main() {
       expect(find.text('Back 1'), findsOneWidget);
       expect(find.text(l10n.studyForgotAction), findsOneWidget);
       expect(find.text(l10n.studyGotItAction), findsOneWidget);
-      expect(
-        tester.widget<MxActionButton>(previousFinder).onPressed,
-        isNull,
-      );
+      expect(tester.widget<MxActionButton>(previousFinder).onPressed, isNull);
       expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
       expect(repository.recordCalls, 0);
     },
@@ -481,9 +469,7 @@ void main() {
           ),
         ),
       );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-2'),
-      );
+      final GoRouter router = _studyRouter(_studySessionLocation('session-2'));
 
       await tester.pumpWidget(
         _routerShell(
@@ -508,8 +494,12 @@ void main() {
 
       expect(repository.recordCalls, 1);
       expect(repository.recordedAnswers.single.sessionId, 'session-2');
-      expect(repository.recordedAnswers.single.sessionItemId, 'item-session-2-0');
+      expect(
+        repository.recordedAnswers.single.sessionItemId,
+        'item-session-2-0',
+      );
       expect(repository.recordedAnswers.single.result, AttemptResult.perfect);
+      expect(repository.recordedAnswers.single.studyMode, StudyMode.recall);
       expect(find.text('Front 1'), findsNothing);
       expect(find.text('Back 1'), findsNothing);
       expect(find.text('Front 2'), findsOneWidget);
@@ -536,9 +526,7 @@ void main() {
           ),
         ),
       );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-3'),
-      );
+      final GoRouter router = _studyRouter(_studySessionLocation('session-3'));
 
       await tester.pumpWidget(
         _routerShell(
@@ -561,6 +549,7 @@ void main() {
 
       expect(repository.recordCalls, 1);
       expect(repository.recordedAnswers.single.result, AttemptResult.forgot);
+      expect(repository.recordedAnswers.single.studyMode, StudyMode.recall);
       expect(find.text('Front 1'), findsNothing);
       expect(find.text('Front 2'), findsOneWidget);
       expect(find.text(l10n.studySessionProgressLabel(2, 2)), findsOneWidget);
@@ -570,59 +559,56 @@ void main() {
     },
   );
 
-  testWidgets(
-    'Finish Session CTA appears only after all cards are answered',
-    (tester) async {
-      final _FakeStudyRepository repository = _FakeStudyRepository(
-        Result<StudySessionReview>.ok(
-          _review(
-            sessionId: 'session-4',
-            cards: <({String front, String back})>[
-              (front: 'Front 1', back: 'Back 1'),
-              (front: 'Front 2', back: 'Back 2'),
-            ],
-          ),
-        ),
-      );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-4'),
-      );
-
-      await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
+  testWidgets('Finish Session CTA appears only after all cards are answered', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      Result<StudySessionReview>.ok(
+        _review(
+          sessionId: 'session-4',
+          cards: <({String front, String back})>[
+            (front: 'Front 1', back: 'Back 1'),
+            (front: 'Front 2', back: 'Back 2'),
           ],
         ),
-      );
-      await tester.pumpAndSettle();
+      ),
+    );
+    final GoRouter router = _studyRouter(_studySessionLocation('session-4'));
 
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudySessionScreen)),
-      );
+    await tester.pumpWidget(
+      _routerShell(
+        router,
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.text(l10n.studySessionShowAction));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.studyGotItAction));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.studySessionShowAction));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.studyGotItAction));
-      await tester.pumpAndSettle();
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudySessionScreen)),
+    );
 
-      expect(repository.recordCalls, 2);
-      expect(repository.finalizeCalls, 0);
-      expect(find.byType(StudySessionScreen), findsOneWidget);
-      expect(find.byType(RoutePlaceholder), findsNothing);
-      expect(find.text(l10n.studySessionAllAnsweredMessage), findsOneWidget);
-      expect(find.text(l10n.studyFinalizeAction), findsOneWidget);
-      expect(find.text('Front 2'), findsOneWidget);
-      expect(find.text('Back 2'), findsNothing);
-      expect(find.text(l10n.studyForgotAction), findsNothing);
-      expect(find.text(l10n.studyGotItAction), findsNothing);
-    },
-  );
+    await tester.tap(find.text(l10n.studySessionShowAction));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(l10n.studyGotItAction));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(l10n.studySessionShowAction));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(l10n.studyGotItAction));
+    await tester.pumpAndSettle();
+
+    expect(repository.recordCalls, 2);
+    expect(repository.finalizeCalls, 0);
+    expect(find.byType(StudySessionScreen), findsOneWidget);
+    expect(find.byType(RoutePlaceholder), findsNothing);
+    expect(find.text(l10n.studySessionAllAnsweredMessage), findsOneWidget);
+    expect(find.text(l10n.studyFinalizeAction), findsOneWidget);
+    expect(find.text('Front 2'), findsOneWidget);
+    expect(find.text('Back 2'), findsNothing);
+    expect(find.text(l10n.studyForgotAction), findsNothing);
+    expect(find.text(l10n.studyGotItAction), findsNothing);
+  });
 
   testWidgets(
     'tapping Finish Session commits the finalization and navigates to the result placeholder',
@@ -638,9 +624,7 @@ void main() {
           ),
         ),
       );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-6'),
-      );
+      final GoRouter router = _studyRouter(_studySessionLocation('session-6'));
 
       await tester.pumpWidget(
         _routerShell(
@@ -690,9 +674,7 @@ void main() {
           Failure.finalization(sessionId: 'session-7'),
         ),
       );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-7'),
-      );
+      final GoRouter router = _studyRouter(_studySessionLocation('session-7'));
 
       await tester.pumpWidget(
         _routerShell(
@@ -748,9 +730,7 @@ void main() {
           ),
         ),
       );
-      final GoRouter router = _studyRouter(
-        _studySessionLocation('session-5'),
-      );
+      final GoRouter router = _studyRouter(_studySessionLocation('session-5'));
 
       await tester.pumpWidget(
         _routerShell(
@@ -780,61 +760,31 @@ void main() {
       expect(find.text(l10n.studyForgotAction), findsOneWidget);
       expect(find.text(l10n.studyGotItAction), findsOneWidget);
       expect(
-        tester.widget<MxActionButton>(
-          find.widgetWithText(MxActionButton, l10n.studyGotItAction),
-        ).onPressed,
+        tester
+            .widget<MxActionButton>(
+              find.widgetWithText(MxActionButton, l10n.studyGotItAction),
+            )
+            .onPressed,
         isNotNull,
       );
     },
   );
 
-  testWidgets('shows a controlled not-found state when the session is missing', (
-    tester,
-  ) async {
-    final _FakeStudyRepository repository = _FakeStudyRepository(
-      const Result<StudySessionReview>.err(
-        Failure.notFound(entity: 'study_session', id: 'missing-session'),
-      ),
-    );
-    final GoRouter router = _studyRouter(
-      _studySessionLocation('missing-session'),
-    );
-
-    await tester.pumpWidget(
-      _routerShell(
-        router,
-        overrides: <Override>[
-          studyRepositoryProvider.overrideWithValue(repository),
-        ],
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    final AppLocalizations l10n = AppLocalizations.of(
-      tester.element(find.byType(StudySessionScreen)),
-    );
-
-    expect(find.byType(StudySessionScreen), findsOneWidget);
-    expect(find.byType(MxErrorState), findsOneWidget);
-    expect(find.text(l10n.studySessionNotFoundTitle), findsOneWidget);
-    expect(find.text(l10n.studySessionNotFoundMessage), findsOneWidget);
-    expect(find.text(l10n.commonBack), findsOneWidget);
-    expect(repository.reviewCalls, greaterThan(0));
-    expect(repository.recordCalls, 0);
-  });
-
   testWidgets(
-    'empty result session id shows a controlled invalid state',
+    'shows a controlled not-found state when the session is missing',
     (tester) async {
       final _FakeStudyRepository repository = _FakeStudyRepository(
         const Result<StudySessionReview>.err(
-          Failure.notFound(entity: 'study_session', id: 'unused'),
+          Failure.notFound(entity: 'study_session', id: 'missing-session'),
         ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('missing-session'),
       );
 
       await tester.pumpWidget(
-        _materialShell(
-          const StudyResultScreen(sessionId: ''),
+        _routerShell(
+          router,
           overrides: <Override>[
             studyRepositoryProvider.overrideWithValue(repository),
           ],
@@ -843,15 +793,47 @@ void main() {
       await tester.pumpAndSettle();
 
       final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyResultScreen)),
+        tester.element(find.byType(StudySessionScreen)),
       );
 
+      expect(find.byType(StudySessionScreen), findsOneWidget);
       expect(find.byType(MxErrorState), findsOneWidget);
-      expect(find.text(l10n.studyResultInvalidTitle), findsOneWidget);
-      expect(find.text(l10n.studyResultInvalidMessage), findsOneWidget);
-      expect(repository.resultCalls, 0);
+      expect(find.text(l10n.studySessionNotFoundTitle), findsOneWidget);
+      expect(find.text(l10n.studySessionNotFoundMessage), findsOneWidget);
+      expect(find.text(l10n.commonBack), findsOneWidget);
+      expect(repository.reviewCalls, greaterThan(0));
+      expect(repository.recordCalls, 0);
     },
   );
+
+  testWidgets('empty result session id shows a controlled invalid state', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      const Result<StudySessionReview>.err(
+        Failure.notFound(entity: 'study_session', id: 'unused'),
+      ),
+    );
+
+    await tester.pumpWidget(
+      _materialShell(
+        const StudyResultScreen(sessionId: ''),
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudyResultScreen)),
+    );
+
+    expect(find.byType(MxErrorState), findsOneWidget);
+    expect(find.text(l10n.studyResultInvalidTitle), findsOneWidget);
+    expect(find.text(l10n.studyResultInvalidMessage), findsOneWidget);
+    expect(repository.resultCalls, 0);
+  });
 
   testWidgets(
     'result route renders the real Study Result screen and shows the summary counts',
@@ -898,40 +880,39 @@ void main() {
     },
   );
 
-  testWidgets(
-    'missing result session shows a controlled not-found state',
-    (tester) async {
-      final _FakeStudyRepository repository = _FakeStudyRepository(
-        const Result<StudySessionReview>.err(
-          Failure.notFound(entity: 'study_session', id: 'unused'),
-        ),
-        resultResult: const Result<StudySessionResult>.err(
-          Failure.notFound(entity: 'study_session', id: 'missing-session'),
-        ),
-      );
-      final GoRouter router = _studyResultRouter(
-        RoutePaths.studyResult('missing-session'),
-      );
+  testWidgets('missing result session shows a controlled not-found state', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      const Result<StudySessionReview>.err(
+        Failure.notFound(entity: 'study_session', id: 'unused'),
+      ),
+      resultResult: const Result<StudySessionResult>.err(
+        Failure.notFound(entity: 'study_session', id: 'missing-session'),
+      ),
+    );
+    final GoRouter router = _studyResultRouter(
+      RoutePaths.studyResult('missing-session'),
+    );
 
-      await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
-      );
-      await tester.pumpAndSettle();
+    await tester.pumpWidget(
+      _routerShell(
+        router,
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyResultScreen)),
-      );
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudyResultScreen)),
+    );
 
-      expect(find.byType(MxErrorState), findsOneWidget);
-      expect(find.text(l10n.studySessionNotFoundTitle), findsOneWidget);
-      expect(find.text(l10n.studySessionNotFoundMessage), findsOneWidget);
-    },
-  );
+    expect(find.byType(MxErrorState), findsOneWidget);
+    expect(find.text(l10n.studySessionNotFoundTitle), findsOneWidget);
+    expect(find.text(l10n.studySessionNotFoundMessage), findsOneWidget);
+  });
 
   testWidgets(
     'incomplete result session shows the not-completed state instead of success',
@@ -971,51 +952,55 @@ void main() {
 
       expect(find.byType(MxEmptyState), findsOneWidget);
       expect(find.text(l10n.studyResultNotCompleteTitle), findsOneWidget);
-      expect(find.textContaining(l10n.studyResultNotCompleteMessage), findsOneWidget);
+      expect(
+        find.textContaining(l10n.studyResultNotCompleteMessage),
+        findsOneWidget,
+      );
       expect(find.text(l10n.studyResultCompleted), findsNothing);
     },
   );
 
-  testWidgets(
-    'study result CTA navigates using existing route constants',
-    (tester) async {
-      final _FakeStudyRepository repository = _FakeStudyRepository(
-        const Result<StudySessionReview>.err(
-          Failure.notFound(entity: 'study_session', id: 'unused'),
+  testWidgets('study result CTA navigates using existing route constants', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      const Result<StudySessionReview>.err(
+        Failure.notFound(entity: 'study_session', id: 'unused'),
+      ),
+      resultResult: Result<StudySessionResult>.ok(
+        _result(
+          sessionId: 'session-cta',
+          status: SessionStatus.completed,
+          totalCount: 1,
+          answeredCount: 1,
+          forgotCount: 0,
+          passedCount: 1,
         ),
-        resultResult: Result<StudySessionResult>.ok(
-          _result(
-            sessionId: 'session-cta',
-            status: SessionStatus.completed,
-            totalCount: 1,
-            answeredCount: 1,
-            forgotCount: 0,
-            passedCount: 1,
-          ),
-        ),
-      );
-      final GoRouter router = _studyResultRouter(
-        RoutePaths.studyResult('session-cta'),
-      );
+      ),
+    );
+    final GoRouter router = _studyResultRouter(
+      RoutePaths.studyResult('session-cta'),
+    );
 
-      await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
-      );
-      await tester.pumpAndSettle();
+    await tester.pumpWidget(
+      _routerShell(
+        router,
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyResultScreen)),
-      );
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudyResultScreen)),
+    );
 
-      await tester.tap(find.widgetWithText(MxActionButton, l10n.studyResultBackToLibraryAction));
-      await tester.pumpAndSettle();
+    await tester.tap(
+      find.widgetWithText(MxActionButton, l10n.studyResultBackToLibraryAction),
+    );
+    await tester.pumpAndSettle();
 
-      expect(find.text('Library destination'), findsOneWidget);
-    },
-  );
+    expect(find.text('Library destination'), findsOneWidget);
+  });
 }

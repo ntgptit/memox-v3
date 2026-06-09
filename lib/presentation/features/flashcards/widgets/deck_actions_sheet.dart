@@ -55,7 +55,10 @@ class _DeckActionsSheet extends StatelessWidget {
             ),
             child: Row(
               children: <Widget>[
-                const MxIconTile(icon: Icons.layers_rounded, size: SizeTokens.controlMd),
+                const MxIconTile(
+                  icon: Icons.layers_rounded,
+                  size: SizeTokens.controlMd,
+                ),
                 const SizedBox(width: SpacingTokens.md),
                 Expanded(
                   child: Column(

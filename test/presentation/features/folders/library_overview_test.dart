@@ -143,10 +143,7 @@ void main() {
       );
 
       final MxCard card = tester.widget<MxCard>(find.byType(MxCard));
-      expect(
-        card.padding,
-        const EdgeInsets.all(SpacingTokens.lg),
-      );
+      expect(card.padding, const EdgeInsets.all(SpacingTokens.lg));
     });
 
     testWidgets('folder row renders title, metadata, kebab, and no chevron', (

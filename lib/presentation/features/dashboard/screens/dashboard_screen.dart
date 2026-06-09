@@ -23,13 +23,13 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_stat_display.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -127,11 +127,7 @@ class _DashboardAppBarTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        MxText(
-          title,
-          role: MxTextRole.titleMedium,
-          color: scheme.onSurface,
-        ),
+        MxText(title, role: MxTextRole.titleMedium, color: scheme.onSurface),
         const SizedBox(height: SpacingTokens.xxs),
         MxText(
           subtitle,
@@ -390,19 +386,17 @@ class _DashboardLoadingState extends StatelessWidget {
   const _DashboardLoadingState();
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: const <Widget>[
-        SizedBox(height: SpacingTokens.md),
-        _DashboardResumeCardSkeleton(),
-        SizedBox(height: SpacingTokens.md),
-        _DashboardSectionSkeleton(),
-        SizedBox(height: SpacingTokens.md),
-        _DashboardSectionSkeleton(),
-        SizedBox(height: SpacingTokens.xl),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => ListView(
+    children: const <Widget>[
+      SizedBox(height: SpacingTokens.md),
+      _DashboardResumeCardSkeleton(),
+      SizedBox(height: SpacingTokens.md),
+      _DashboardSectionSkeleton(),
+      SizedBox(height: SpacingTokens.md),
+      _DashboardSectionSkeleton(),
+      SizedBox(height: SpacingTokens.xl),
+    ],
+  );
 }
 
 class _DashboardResumeCardSkeleton extends StatelessWidget {
@@ -431,43 +425,41 @@ class _DashboardSkeletonBlock extends StatelessWidget {
   final bool hasActions;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const MxSkeleton(width: SizeTokens.avatar, height: SizeTokens.avatar),
-            const SizedBox(width: SpacingTokens.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  for (int index = 0; index < lines; index++) ...<Widget>[
-                    FractionallySizedBox(
-                      widthFactor: index == 0 ? 0.8 : 0.55,
-                      alignment: Alignment.centerLeft,
-                      child: const MxSkeleton(height: 12),
-                    ),
-                    if (index != lines - 1)
-                      const SizedBox(height: SpacingTokens.xs),
-                  ],
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const MxSkeleton(width: SizeTokens.avatar, height: SizeTokens.avatar),
+          const SizedBox(width: SpacingTokens.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                for (int index = 0; index < lines; index++) ...<Widget>[
+                  FractionallySizedBox(
+                    widthFactor: index == 0 ? 0.8 : 0.55,
+                    alignment: Alignment.centerLeft,
+                    child: const MxSkeleton(height: 12),
+                  ),
+                  if (index != lines - 1)
+                    const SizedBox(height: SpacingTokens.xs),
                 ],
-              ),
+              ],
             ),
-          ],
-        ),
-        if (hasActions) ...<Widget>[
-          const SizedBox(height: SpacingTokens.lg),
-          const Align(
-            alignment: Alignment.centerRight,
-            child: MxSkeleton(width: 168, height: 40),
           ),
         ],
+      ),
+      if (hasActions) ...<Widget>[
+        const SizedBox(height: SpacingTokens.lg),
+        const Align(
+          alignment: Alignment.centerRight,
+          child: MxSkeleton(width: 168, height: 40),
+        ),
       ],
-    );
-  }
+    ],
+  );
 }
 
 bool _isZeroContent(LibraryOverviewReadModel model) {

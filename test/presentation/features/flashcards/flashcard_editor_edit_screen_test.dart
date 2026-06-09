@@ -157,9 +157,10 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
     Result<FlashcardDetail>? detailResult,
     Result<Flashcard>? updateResult,
     Result<void>? deleteResult,
-  })  : detailResult = detailResult ?? Result<FlashcardDetail>.ok(_freshDetail()),
-        updateResult = updateResult ?? Result<Flashcard>.ok(_savedFlashcard()),
-        deleteResult = deleteResult ?? const Result<void>.ok(null);
+  }) : detailResult =
+           detailResult ?? Result<FlashcardDetail>.ok(_freshDetail()),
+       updateResult = updateResult ?? Result<Flashcard>.ok(_savedFlashcard()),
+       deleteResult = deleteResult ?? const Result<void>.ok(null);
 
   final Result<FlashcardDetail> detailResult;
   final Result<Flashcard> updateResult;
@@ -190,8 +191,7 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   @override
   Future<Result<FlashcardDetail>> getFlashcardDetail({
     required FlashcardId flashcardId,
-  }) async =>
-      detailResult;
+  }) async => detailResult;
 
   @override
   Future<Result<Flashcard>> updateFlashcard({
@@ -228,7 +228,9 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   }
 
   @override
-  Future<Result<void>> deleteFlashcard({required FlashcardId flashcardId}) async {
+  Future<Result<void>> deleteFlashcard({
+    required FlashcardId flashcardId,
+  }) async {
     lastDeleteFlashcardId = flashcardId;
     return deleteResult;
   }
@@ -275,9 +277,9 @@ Widget _wrapApp({
   ThemeData? theme,
 }) => ProviderScope(
   overrides: [
-    flashcardEditorContextQueryProvider(
-      'd1',
-    ).overrideWith((Ref ref) => Stream<FlashcardListDetail>.value(_deckContext())),
+    flashcardEditorContextQueryProvider('d1').overrideWith(
+      (Ref ref) => Stream<FlashcardListDetail>.value(_deckContext()),
+    ),
     getFlashcardDetailUseCaseProvider.overrideWithValue(
       GetFlashcardDetailUseCase(repository),
     ),
@@ -356,33 +358,34 @@ void main() {
         await _openEditor(tester);
 
         expect(find.text("Couldn't load this card"), findsOneWidget);
-      expect(find.text('Back to deck'), findsOneWidget);
-      expect(find.text('Retry'), findsOneWidget);
-    },
-  );
+        expect(find.text('Back to deck'), findsOneWidget);
+        expect(find.text('Retry'), findsOneWidget);
+      },
+    );
 
-    testWidgets('DT7 onNavigate: dirty close asks for discard and keeps editing', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        _wrapApp(repository: _RecordingFlashcardRepository()),
-      );
-      await _openEditor(tester);
+    testWidgets(
+      'DT7 onNavigate: dirty close asks for discard and keeps editing',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapApp(repository: _RecordingFlashcardRepository()),
+        );
+        await _openEditor(tester);
 
-      await tester.enterText(find.byType(TextFormField).at(0), '안녕');
-      await tester.pump();
+        await tester.enterText(find.byType(TextFormField).at(0), '안녕');
+        await tester.pump();
 
-      await tester.tap(find.byIcon(Icons.close));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.close));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Discard changes?'), findsOneWidget);
-      expect(find.text('Keep editing'), findsOneWidget);
+        expect(find.text('Discard changes?'), findsOneWidget);
+        expect(find.text('Keep editing'), findsOneWidget);
 
-      await tester.tap(find.text('Keep editing'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Keep editing'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Danger zone'), findsOneWidget);
-    });
+        expect(find.text('Danger zone'), findsOneWidget);
+      },
+    );
 
     testWidgets('DT3 onEdit: save asks for progress policy and can reset', (
       WidgetTester tester,
@@ -410,7 +413,10 @@ void main() {
       expect(repository.lastUpdateCall!.flashcardId, 'c1');
       expect(repository.lastUpdateCall!.front, '안녕');
       expect(repository.lastUpdateCall!.back, 'Hello');
-      expect(repository.lastUpdateCall!.progressPolicy, FlashcardProgressEditPolicy.resetProgress);
+      expect(
+        repository.lastUpdateCall!.progressPolicy,
+        FlashcardProgressEditPolicy.resetProgress,
+      );
       expect(find.text('Flashcard updated.'), findsOneWidget);
       expect(find.text('Library home'), findsOneWidget);
     });
@@ -465,7 +471,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.byKey(const ValueKey<String>('flashcard_editor_save_failed_banner')),
+        find.byKey(
+          const ValueKey<String>('flashcard_editor_save_failed_banner'),
+        ),
         findsOneWidget,
       );
       expect(find.text('Danger zone'), findsOneWidget);

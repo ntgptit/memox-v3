@@ -101,9 +101,8 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) =>
       into(studyAttempts).insert(attempt);
 
-  Future<void> insertFlashcardProgress(
-    FlashcardProgressCompanion progress,
-  ) => into(attachedDatabase.flashcardProgress).insert(progress);
+  Future<void> insertFlashcardProgress(FlashcardProgressCompanion progress) =>
+      into(attachedDatabase.flashcardProgress).insert(progress);
 
   Future<int> markStudySessionItemAnswered({
     required String sessionItemId,
@@ -112,13 +111,12 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
   }) =>
       (update(
         studySessionItems,
-      )..where((StudySessionItems row) => row.id.equals(sessionItemId)))
-          .write(
-            StudySessionItemsCompanion(
-              answeredAt: Value<int?>(answeredAtMs),
-              updatedAt: Value<int>(updatedAtMs),
-          ),
-          );
+      )..where((StudySessionItems row) => row.id.equals(sessionItemId))).write(
+        StudySessionItemsCompanion(
+          answeredAt: Value<int?>(answeredAtMs),
+          updatedAt: Value<int>(updatedAtMs),
+        ),
+      );
 
   Future<int> updateFlashcardProgress({
     required String flashcardId,
@@ -128,11 +126,9 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
     required int lapseCount,
     required int lastStudiedAtMs,
   }) =>
-      (update(
-        attachedDatabase.flashcardProgress,
-      )..where(
-        (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
-      ))
+      (update(attachedDatabase.flashcardProgress)..where(
+            (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
+          ))
           .write(
             FlashcardProgressCompanion(
               boxNumber: Value<int>(boxNumber),
@@ -158,9 +154,9 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
       );
 
   Future<FlashcardProgressRow?> findFlashcardProgress(String flashcardId) =>
-      (select(
-        attachedDatabase.flashcardProgress,
-      )..where((FlashcardProgress row) => row.flashcardId.equals(flashcardId)))
+      (select(attachedDatabase.flashcardProgress)..where(
+            (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
+          ))
           .getSingleOrNull();
 
   Future<int> cancelStudySession({

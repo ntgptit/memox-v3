@@ -74,8 +74,9 @@ Future<Result<Folder>> moveFolderTxn(
         return row;
       }
       // Includes the folder itself, so a self-move is rejected as a cycle too.
-      final Set<String> subtree =
-          (await dao.descendantFolderIdsDepthFirst(folderId)).toSet();
+      final Set<String> subtree = (await dao.descendantFolderIdsDepthFirst(
+        folderId,
+      )).toSet();
 
       if (newParentId != null) {
         final FolderRow? newParent = await dao.findFolder(newParentId);
@@ -204,8 +205,9 @@ Future<Result<List<FolderMoveTarget>>> folderMoveTargets(
 ) async {
   try {
     final List<FolderRow> all = await dao.allFolders();
-    final Set<String> subtree =
-        (await dao.descendantFolderIdsDepthFirst(folderId)).toSet();
+    final Set<String> subtree = (await dao.descendantFolderIdsDepthFirst(
+      folderId,
+    )).toSet();
     final Map<String, FolderRow> byId = <String, FolderRow>{
       for (final FolderRow f in all) f.id: f,
     };

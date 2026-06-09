@@ -7,13 +7,13 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
+import 'package:memox/presentation/shared/feedback/mx_callout.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
-import 'package:memox/presentation/shared/feedback/mx_callout.dart';
-import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
@@ -70,10 +70,8 @@ class _StudySessionReviewSection extends ConsumerWidget {
 
     return switch (value) {
       AsyncLoading<StudySessionReviewState>() => const MxLoadingState(rows: 3),
-      AsyncError<StudySessionReviewState>(:final error) => _StudySessionErrorState(
-        error: error,
-        onBack: onBack,
-      ),
+      AsyncError<StudySessionReviewState>(:final error) =>
+        _StudySessionErrorState(error: error, onBack: onBack),
       AsyncData<StudySessionReviewState>(:final value) => _StudySessionBody(
         state: value,
         onToggleAnswer: () => ref
@@ -101,10 +99,7 @@ class _StudySessionReviewSection extends ConsumerWidget {
 }
 
 class _StudySessionErrorState extends StatelessWidget {
-  const _StudySessionErrorState({
-    required this.error,
-    required this.onBack,
-  });
+  const _StudySessionErrorState({required this.error, required this.onBack});
 
   final Object error;
   final VoidCallback onBack;
@@ -285,21 +280,20 @@ class _StudySessionBody extends StatelessWidget {
     return null;
   }
 
-  Widget _buildFinishButton(BuildContext context, AppLocalizations l10n) {
-    return MxActionButton(
-      intent: MxActionIntent.screenPrimary,
-      label: l10n.studyFinalizeAction,
-      onPressed: state.isBusy
-          ? null
-          : () async {
-              final bool finished = await onFinish();
-              if (!context.mounted) return;
-              if (!finished) return;
-              onFinalized();
-            },
-      fullWidth: true,
-    );
-  }
+  Widget _buildFinishButton(BuildContext context, AppLocalizations l10n) =>
+      MxActionButton(
+        intent: MxActionIntent.screenPrimary,
+        label: l10n.studyFinalizeAction,
+        onPressed: state.isBusy
+            ? null
+            : () async {
+                final bool finished = await onFinish();
+                if (!context.mounted) return;
+                if (!finished) return;
+                onFinalized();
+              },
+        fullWidth: true,
+      );
 }
 
 class _StudySessionFace extends StatelessWidget {

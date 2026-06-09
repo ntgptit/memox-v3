@@ -12,9 +12,9 @@ import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
-import 'package:memox/domain/types/study_mode.dart';
 
 class _StudyDbFixture {
   _StudyDbFixture(this.db);
@@ -370,8 +370,9 @@ void main() {
 
     final StudySessionReview review = switch (result) {
       Ok<StudySessionReview>(:final value) => value,
-      Err<StudySessionReview>(:final failure) =>
-        fail('expected ok, got $failure'),
+      Err<StudySessionReview>(:final failure) => fail(
+        'expected ok, got $failure',
+      ),
     };
 
     expect(review.items, hasLength(2));
@@ -474,8 +475,12 @@ void main() {
         Err<StudySession>(:final failure) => fail('expected ok, got $failure'),
       };
 
-      final List<StudySessionRow> sessions = await db.select(db.studySessions).get();
-      final List<StudySessionItemRow> items = await db.select(db.studySessionItems).get();
+      final List<StudySessionRow> sessions = await db
+          .select(db.studySessions)
+          .get();
+      final List<StudySessionItemRow> items = await db
+          .select(db.studySessionItems)
+          .get();
 
       expect(sessions, hasLength(2));
       expect(
@@ -483,16 +488,22 @@ void main() {
         hasLength(1),
       );
       expect(
-        sessions.firstWhere((StudySessionRow row) => row.id == previousSessionId)
+        sessions
+            .firstWhere((StudySessionRow row) => row.id == previousSessionId)
             .status,
         'cancelled',
       );
       expect(
-        sessions.firstWhere((StudySessionRow row) => row.id == session.id).status,
+        sessions
+            .firstWhere((StudySessionRow row) => row.id == session.id)
+            .status,
         'in_progress',
       );
       expect(items, hasLength(2));
-      expect(items.where((StudySessionItemRow row) => row.sessionId == session.id), hasLength(1));
+      expect(
+        items.where((StudySessionItemRow row) => row.sessionId == session.id),
+        hasLength(1),
+      );
     },
   );
 
@@ -595,11 +606,7 @@ void main() {
       final _StudyDbFixture fixture = _StudyDbFixture(db);
       await fixture.insertFolder(id: folderId);
       await fixture.insertDeck(id: deckId, folderId: folderId);
-      await fixture.insertFlashcard(
-        id: cardId,
-        deckId: deckId,
-        boxNumber: 2,
-      );
+      await fixture.insertFlashcard(id: cardId, deckId: deckId, boxNumber: 2);
       await fixture.insertResumableSession(
         id: previousSessionId,
         entryType: EntryType.deck.name,
@@ -755,7 +762,9 @@ void main() {
 
       expect(result.isOk, isTrue);
 
-      final List<StudyAttemptRow> attempts = await db.select(db.studyAttempts).get();
+      final List<StudyAttemptRow> attempts = await db
+          .select(db.studyAttempts)
+          .get();
       final StudySessionItemRow updatedItem = await db
           .select(db.studySessionItems)
           .getSingle();
@@ -843,10 +852,7 @@ void main() {
         dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
         boxNumber: 3,
       );
-      await fixture.insertFlashcard(
-        id: missingProgressCardId,
-        deckId: deckId,
-      );
+      await fixture.insertFlashcard(id: missingProgressCardId, deckId: deckId);
       await fixture.insertResumableSession(
         id: sessionId,
         entryType: EntryType.deck.name,
@@ -968,7 +974,10 @@ void main() {
 
       expect(result.isErr, isTrue);
       expect(result.failureOrNull, isA<FinalizationFailure>());
-      expect((await db.select(db.studySessions).getSingle()).status, 'in_progress');
+      expect(
+        (await db.select(db.studySessions).getSingle()).status,
+        'in_progress',
+      );
       expect(await db.select(db.flashcardProgress).get(), hasLength(2));
       expect(
         (await db.select(db.flashcardProgress).get())
@@ -1004,17 +1013,19 @@ void main() {
         entryRefId: deckId,
         studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
       );
-      await db.into(db.studySessionItems).insert(
-        StudySessionItemsCompanion.insert(
-          id: itemId,
-          sessionId: sessionId,
-          flashcardId: cardId,
-          sortOrder: 0,
-          answeredAt: Value<int?>(nowMs),
-          createdAt: nowMs,
-          updatedAt: nowMs,
-        ),
-      );
+      await db
+          .into(db.studySessionItems)
+          .insert(
+            StudySessionItemsCompanion.insert(
+              id: itemId,
+              sessionId: sessionId,
+              flashcardId: cardId,
+              sortOrder: 0,
+              answeredAt: Value<int?>(nowMs),
+              createdAt: nowMs,
+              updatedAt: nowMs,
+            ),
+          );
 
       final Result<void> result = await repository.finalizeStudySession(
         sessionId: sessionId,
@@ -1022,7 +1033,10 @@ void main() {
 
       expect(result.isErr, isTrue);
       expect(result.failureOrNull, isA<FinalizationFailure>());
-      expect((await db.select(db.studySessions).getSingle()).status, 'in_progress');
+      expect(
+        (await db.select(db.studySessions).getSingle()).status,
+        'in_progress',
+      );
       expect(await db.select(db.studyAttempts).get(), isEmpty);
       expect((await db.select(db.flashcardProgress).getSingle()).boxNumber, 2);
     },
@@ -1071,7 +1085,10 @@ void main() {
 
       expect(result.isErr, isTrue);
       expect(result.failureOrNull, isA<StorageFailure>());
-      expect((await db.select(db.studySessions).getSingle()).status, 'in_progress');
+      expect(
+        (await db.select(db.studySessions).getSingle()).status,
+        'in_progress',
+      );
       final FlashcardProgressRow progress = await db
           .select(db.flashcardProgress)
           .getSingle();

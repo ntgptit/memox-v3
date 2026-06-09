@@ -3,8 +3,8 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
-import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/study/usecases/study_usecases.dart';
@@ -106,17 +106,20 @@ void main() {
     useCase = RecordStudySessionAnswerUseCase(repository);
   });
 
-  test('GA1: returns success after recording a perfect self-grade answer', () async {
-    final Result<void> result = await useCase.call(
-      sessionId: 'session-1',
-      sessionItemId: 'item-1',
-      result: AttemptResult.perfect,
-      studyMode: StudyMode.recall,
-    );
+  test(
+    'GA1: returns success after recording a perfect self-grade answer',
+    () async {
+      final Result<void> result = await useCase.call(
+        sessionId: 'session-1',
+        sessionItemId: 'item-1',
+        result: AttemptResult.perfect,
+        studyMode: StudyMode.recall,
+      );
 
-    expect(result.isOk, isTrue);
-    expect(repository.recordCalls, 1);
-  });
+      expect(result.isOk, isTrue);
+      expect(repository.recordCalls, 1);
+    },
+  );
 
   test('GA2: forwards NotFoundFailure from the repository', () async {
     repository = _FakeStudyRepository(

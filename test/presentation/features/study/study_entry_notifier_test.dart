@@ -6,8 +6,8 @@ import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
-import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -108,15 +108,14 @@ void main() {
     ));
     final Completer<Object?> completer = Completer<Object?>();
     final ProviderSubscription<AsyncValue<StudyEntryStartResult>> subscription =
-        container.listen<AsyncValue<StudyEntryStartResult>>(
-      provider,
-      (_, AsyncValue<StudyEntryStartResult> next) {
-        if (next.hasError && !completer.isCompleted) {
-          completer.complete(next.error);
-        }
-      },
-      fireImmediately: true,
-    );
+        container.listen<AsyncValue<StudyEntryStartResult>>(provider, (
+          _,
+          AsyncValue<StudyEntryStartResult> next,
+        ) {
+          if (next.hasError && !completer.isCompleted) {
+            completer.complete(next.error);
+          }
+        }, fireImmediately: true);
     addTearDown(subscription.close);
 
     await expectLater(completer.future, completion(isA<FormatException>()));

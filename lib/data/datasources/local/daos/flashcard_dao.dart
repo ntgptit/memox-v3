@@ -40,9 +40,9 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
 
   /// Tags attached to a flashcard, returned in storage order.
   Future<List<FlashcardTagRow>> findFlashcardTags(String flashcardId) =>
-      (select(attachedDatabase.flashcardTags)
-            ..where((FlashcardTags t) => t.flashcardId.equals(flashcardId)))
-          .get();
+      (select(
+        attachedDatabase.flashcardTags,
+      )..where((FlashcardTags t) => t.flashcardId.equals(flashcardId))).get();
 
   /// SRS progress row for a flashcard, if present.
   Future<FlashcardProgressRow?> findFlashcardProgress(String flashcardId) =>
@@ -90,9 +90,9 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
     required String flashcardId,
     required List<String> tags,
   }) async {
-    await (delete(attachedDatabase.flashcardTags)
-          ..where((FlashcardTags t) => t.flashcardId.equals(flashcardId)))
-        .go();
+    await (delete(
+      attachedDatabase.flashcardTags,
+    )..where((FlashcardTags t) => t.flashcardId.equals(flashcardId))).go();
     for (final String tag in tags) {
       await into(attachedDatabase.flashcardTags).insert(
         FlashcardTagsCompanion.insert(flashcardId: flashcardId, tag: tag),
@@ -103,19 +103,20 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
   Future<void> resetFlashcardProgress({
     required String flashcardId,
     required int nowMs,
-  }) => (update(attachedDatabase.flashcardProgress)
-        ..where((FlashcardProgress t) => t.flashcardId.equals(flashcardId)))
-      .write(
-        FlashcardProgressCompanion(
-          boxNumber: const Value<int>(1),
-          dueAt: Value<int?>(nowMs),
-          buriedUntil: const Value<int?>(null),
-          isSuspended: const Value<bool>(false),
-          reviewCount: const Value<int>(0),
-          lapseCount: const Value<int>(0),
-          lastStudiedAt: const Value<int?>(null),
-        ),
-      );
+  }) =>
+      (update(attachedDatabase.flashcardProgress)
+            ..where((FlashcardProgress t) => t.flashcardId.equals(flashcardId)))
+          .write(
+            FlashcardProgressCompanion(
+              boxNumber: const Value<int>(1),
+              dueAt: Value<int?>(nowMs),
+              buriedUntil: const Value<int?>(null),
+              isSuspended: const Value<bool>(false),
+              reviewCount: const Value<int>(0),
+              lapseCount: const Value<int>(0),
+              lastStudiedAt: const Value<int?>(null),
+            ),
+          );
 
   // ── ORDER BY builder for the `$order` query placeholder ───────────
   //
@@ -131,12 +132,11 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
           OrderingTerm(expression: f.createdAt, mode: OrderingMode.desc),
           OrderingTerm(expression: f.sortOrder),
         ]),
-        ContentSortMode.lastStudied || ContentSortMode.manual => OrderBy(
-          <OrderingTerm>[
-            OrderingTerm(expression: f.sortOrder),
-            OrderingTerm(expression: f.createdAt),
-          ],
-        ),
+        ContentSortMode.lastStudied ||
+        ContentSortMode.manual => OrderBy(<OrderingTerm>[
+          OrderingTerm(expression: f.sortOrder),
+          OrderingTerm(expression: f.createdAt),
+        ]),
       };
 
   static String _searchPattern(String? normalized) =>

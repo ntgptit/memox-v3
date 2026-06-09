@@ -37,9 +37,8 @@ abstract final class AppLayout {
 
 /// `context.contentPadding` / `context.maxContentWidth` helpers.
 extension AppLayoutContext on BuildContext {
-  EdgeInsets get horizontalContentPadding => EdgeInsets.symmetric(
-    horizontal: AppLayout.horizontalPadding(formFactor),
-  );
+  EdgeInsets get horizontalContentPadding =>
+      EdgeInsets.symmetric(horizontal: AppLayout.horizontalPadding(formFactor));
 
   double get maxContentWidth => AppLayout.maxContentWidth;
 }

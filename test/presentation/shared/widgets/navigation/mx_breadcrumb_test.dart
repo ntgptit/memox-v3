@@ -5,9 +5,7 @@ import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart'
 
 Widget _wrap(Widget child) => MaterialApp(
   theme: AppTheme.light(),
-  home: Scaffold(
-    body: SizedBox(width: 400, child: child),
-  ),
+  home: Scaffold(body: SizedBox(width: 400, child: child)),
 );
 
 void main() {

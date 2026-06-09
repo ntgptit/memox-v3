@@ -46,9 +46,8 @@ class _UpdateCall {
 }
 
 class _RecordingFlashcardRepository implements FlashcardRepository {
-  _RecordingFlashcardRepository({
-    Result<Flashcard>? updateResult,
-  }) : updateResult = updateResult ?? Result<Flashcard>.ok(_flashcard());
+  _RecordingFlashcardRepository({Result<Flashcard>? updateResult})
+    : updateResult = updateResult ?? Result<Flashcard>.ok(_flashcard());
 
   final Result<Flashcard> updateResult;
 
@@ -136,10 +135,7 @@ void main() {
       );
 
       expect(result, isA<Err<Flashcard>>());
-      expect(
-        (result as Err<Flashcard>).failure,
-        isA<ValidationFailure>(),
-      );
+      expect((result as Err<Flashcard>).failure, isA<ValidationFailure>());
       expect(repository.lastUpdateCall, isNull);
     });
 

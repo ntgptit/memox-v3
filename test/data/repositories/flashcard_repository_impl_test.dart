@@ -94,8 +94,9 @@ void main() {
     int? buriedUntil,
     int? lastStudiedAt,
   }) async {
-    await (db.update(db.flashcardProgress)
-          ..where((FlashcardProgress row) => row.flashcardId.equals(flashcardId)))
+    await (db.update(db.flashcardProgress)..where(
+          (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
+        ))
         .write(
           FlashcardProgressCompanion(
             boxNumber: Value<int>(boxNumber),
@@ -308,10 +309,7 @@ void main() {
       );
 
       expect(result, isA<Err<FlashcardDetail>>());
-      expect(
-        (result as Err<FlashcardDetail>).failure,
-        isA<NotFoundFailure>(),
-      );
+      expect((result as Err<FlashcardDetail>).failure, isA<NotFoundFailure>());
     });
   });
 
@@ -355,10 +353,10 @@ void main() {
       expect(updated.front, '안녕');
       expect(updated.back, 'Hello there');
 
-      final Result<FlashcardDetail> detailResult = await repo.getFlashcardDetail(
-        flashcardId: created.id,
-      );
-      final FlashcardDetail detail = (detailResult as Ok<FlashcardDetail>).value;
+      final Result<FlashcardDetail> detailResult = await repo
+          .getFlashcardDetail(flashcardId: created.id);
+      final FlashcardDetail detail =
+          (detailResult as Ok<FlashcardDetail>).value;
       expect(detail.tags, unorderedEquals(<String>['verb', 'noun']));
       expect(detail.progress!.boxNumber, 1);
       expect(detail.progress!.reviewCount, 0);

@@ -110,8 +110,11 @@ class _TagManagementEntry {
   final bool busy;
 }
 
-const _TagManagementEntry _selectedTag =
-    _TagManagementEntry(name: 'verb', count: 80, hot: true);
+const _TagManagementEntry _selectedTag = _TagManagementEntry(
+  name: 'verb',
+  count: 80,
+  hot: true,
+);
 
 const List<_TagManagementEntry> _mergeCandidates = <_TagManagementEntry>[
   _TagManagementEntry(name: 'verbs', count: 22),
@@ -135,11 +138,7 @@ List<_TagManagementEntry> _tagEntries({required bool busy}) {
   return tags
       .map(
         (_TagManagementEntry tag) => tag.name == 'business'
-            ? const _TagManagementEntry(
-                name: 'business',
-                count: 9,
-                busy: true,
-              )
+            ? const _TagManagementEntry(name: 'business', count: 9, busy: true)
             : tag,
       )
       .toList(growable: false);

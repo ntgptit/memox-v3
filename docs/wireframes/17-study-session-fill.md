@@ -213,10 +213,10 @@ Per flow validator, fill mode requires:
 If unmet, the flow validator skips this mode in the current card's mode sequence silently. NO toast,
 NO error.
 
-This logic lives under `lib/domain/study/strategy/` (see `study_strategy.dart` +
-`study_strategy_factory.dart`). There is no dedicated `flow_validator.dart` file in the current
-codebase; the skip rule is enforced inside the active study strategy when computing the per-card
-mode sequence.
+This logic lives under `lib/domain/study/modes/` (see `study_mode_strategy.dart` +
+`study_mode_strategy_factory.dart`). There is no dedicated `flow_validator.dart` file in the
+current codebase; the skip rule is enforced inside the active study strategy when computing the
+per-card mode sequence.
 
 ## TTS behavior (per `docs/business/tts/tts-settings.md`)
 
@@ -323,7 +323,8 @@ Same as Recall mode:
   violation candidate — promote to domain when scope allows.
 - Hint revealer: not extracted to a domain file; hint behavior is implemented inside the fill panel.
 - Flow validator (skip rule for trivial fronts): currently lives within
-  `lib/domain/study/strategy/` (see `study_strategy.dart`, `study_strategy_factory.dart`); no
+  `lib/domain/study/modes/` (see `study_mode_strategy.dart`, `study_mode_strategy_factory.dart`);
+  no
   dedicated `flow_validator.dart`.
 - Grading: `lib/domain/study/usecases/study_usecases.dart` → `AnswerFlashcardUseCase`. No standalone
   `grade_attempt_usecase.dart`.

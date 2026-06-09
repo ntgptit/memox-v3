@@ -218,8 +218,9 @@ Any SRS behavior change must update:
   `AnswerCurrentModeItemGradesBatchUseCase`, `AnswerCurrentMatchModeBatchUseCase`). It records
   attempts and re-queues failed cards; final SRS transition is committed later by the data
   repository.
-- `lib/domain/study/strategy/study_strategy.dart` + `study_mode_strategy.dart` +
-  `study_strategy_factory.dart` — per-mode behavior including transition rules.
+- `lib/domain/study/modes/study_mode_strategy.dart` +
+  `recall_study_mode_strategy.dart` + `study_mode_strategy_factory.dart` — per-mode behavior
+  including transition rules.
 - `lib/domain/study/study_session_round.dart` — round model used by grading flow.
 - `lib/data/datasources/local/tables/study_attempts_table.dart` — persistence of each attempt with
   `box_before`, `box_after`, `result`, `study_mode`, `attempted_at`.

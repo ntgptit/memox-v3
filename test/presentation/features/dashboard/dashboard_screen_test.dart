@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/flashcard.dart';
@@ -15,8 +16,8 @@ import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
-import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -31,12 +32,11 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/dashboard/screens/dashboard_screen.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_mastery_ring.dart';
-import 'package:memox/app/router/route_placeholder.dart';
 import 'package:riverpod/misc.dart';
 
 class _FakeStudyRepository implements StudyRepository {
@@ -250,7 +250,9 @@ Future<({ProviderContainer container, GoRouter router})> _pumpApp(
 void main() {
   testWidgets('boots to Library on `/`', (WidgetTester tester) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(
@@ -277,7 +279,9 @@ void main() {
     WidgetTester tester,
   ) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(
@@ -309,7 +313,9 @@ void main() {
 
   testWidgets('loading renders section skeletons', (WidgetTester tester) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(
@@ -343,7 +349,9 @@ void main() {
 
   testWidgets('error renders retry UI', (WidgetTester tester) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(
@@ -374,7 +382,9 @@ void main() {
     WidgetTester tester,
   ) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(
@@ -530,7 +540,9 @@ void main() {
     WidgetTester tester,
   ) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(
@@ -575,7 +587,9 @@ void main() {
     WidgetTester tester,
   ) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
-      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(null),
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
       reviewResult: Result<StudySessionReview>.ok(_review()),
       startResult: const Result<StudyEntryStartResult>.ok(
         StudyEntryStartResult.empty(

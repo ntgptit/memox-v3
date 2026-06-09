@@ -139,10 +139,7 @@ void main() {
         newParentId: c.id,
       );
 
-      expect(
-        (result as Err<Folder>).failure,
-        isA<UnsupportedActionFailure>(),
-      );
+      expect((result as Err<Folder>).failure, isA<UnsupportedActionFailure>());
     });
 
     test('reverts an emptied old parent to unlocked', () async {

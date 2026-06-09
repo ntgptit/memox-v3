@@ -129,9 +129,10 @@ void main() {
     final FolderDetail aDetail =
         ((await repo.watchFolderDetail(ids.a).first) as Ok<FolderDetail>).value;
     expect(aDetail.folder.contentMode, ContentMode.subfolders);
-    expect(aDetail.breadcrumb.map((FolderBreadcrumbSegment s) => s.name), <
-      String
-    >['A']);
+    expect(
+      aDetail.breadcrumb.map((FolderBreadcrumbSegment s) => s.name),
+      <String>['A'],
+    );
     expect(aDetail.subfolders.single.folder.name, 'A1');
     expect(aDetail.decks, isEmpty);
 

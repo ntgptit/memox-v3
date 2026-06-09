@@ -131,6 +131,11 @@ stateDiagram-v2
 - The Study Session self-grade V1 path reveals the current card, lets the user
   tap Forgot / Got it, persists the attempt plus `study_session_items.answered_at`,
   and keeps `flashcard_progress` unchanged until finalization.
+- The review controller resolves a domain `StudyModeStrategy` for the current
+  session. Because the session header does not persist mode yet, V1 uses
+  `StudyMode.recall` as the documented fallback in
+  `StudyModeStrategyFactory.resolve(...)`. Match / Guess / Fill strategy
+  behavior remains future work and does not change the current review shell.
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
   the real result screen on success.
@@ -252,7 +257,7 @@ advances.
   *no `lib/domain/usecases/study/**` directory** — study use cases live under
   `lib/domain/study/usecases/`, parallel to the other feature use-case files in
   `lib/domain/usecases/`.
-- `lib/domain/study/strategy/` (`study_strategy.dart`, `study_mode_strategy.dart`,
-  `study_strategy_factory.dart`) — mode skip rules and per-flow-type behavior. **There is no
-  dedicated `flow_validator.dart`**; validation is part of the active strategy.
+- `lib/domain/study/modes/` (`study_mode_strategy.dart`, `recall_study_mode_strategy.dart`,
+  `study_mode_strategy_factory.dart`) — mode behavior contract and V1 recall fallback. **There is
+  no dedicated `flow_validator.dart`**; validation is part of the active strategy.
 - `lib/presentation/features/study/**`

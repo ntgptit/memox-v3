@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/app/router/app_navigation.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
+import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
-import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_result_viewmodel.dart';
+import 'package:memox/presentation/shared/async/app_async_builder.dart';
+import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_stat_display.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
-import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
-import 'package:memox/core/theme/tokens/size_tokens.dart';
-import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
 class StudyResultScreen extends StatelessWidget {
   const StudyResultScreen({required this.sessionId, super.key});
@@ -186,25 +186,23 @@ class _StudyResultSuccessContent extends StatelessWidget {
   final VoidCallback onBackToHome;
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const SizedBox(height: SpacingTokens.lg),
-          _StudyResultSuccessHeader(result: result),
-          const SizedBox(height: SpacingTokens.lg),
-          _StudyResultBreakdownCard(result: result),
-          const SizedBox(height: SpacingTokens.lg),
-          _StudyResultSuccessActions(
-            onBackToLibrary: onBackToLibrary,
-            onBackToHome: onBackToHome,
-          ),
-          const SizedBox(height: SpacingTokens.lg),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const SizedBox(height: SpacingTokens.lg),
+        _StudyResultSuccessHeader(result: result),
+        const SizedBox(height: SpacingTokens.lg),
+        _StudyResultBreakdownCard(result: result),
+        const SizedBox(height: SpacingTokens.lg),
+        _StudyResultSuccessActions(
+          onBackToLibrary: onBackToLibrary,
+          onBackToHome: onBackToHome,
+        ),
+        const SizedBox(height: SpacingTokens.lg),
+      ],
+    ),
+  );
 }
 
 class _StudyResultSuccessHeader extends StatelessWidget {
@@ -346,22 +344,14 @@ class _StudyResultSuccessActions extends StatelessWidget {
 }
 
 class _StudyResultStat extends StatelessWidget {
-  const _StudyResultStat({
-    required this.value,
-    required this.label,
-  });
+  const _StudyResultStat({required this.value, required this.label});
 
   final String value;
   final String label;
 
   @override
-  Widget build(BuildContext context) {
-    return MxCard(
-      padding: const EdgeInsets.all(SpacingTokens.md),
-      child: MxStatDisplay(
-        value: value,
-        caption: label,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => MxCard(
+    padding: const EdgeInsets.all(SpacingTokens.md),
+    child: MxStatDisplay(value: value, caption: label),
+  );
 }

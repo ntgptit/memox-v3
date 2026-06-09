@@ -29,8 +29,8 @@ Stream<FlashcardListDetail> flashcardEditorContextQuery(
           // ignore: only_throw_errors
           (Failure failure) => throw failure,
           (FlashcardListDetail detail) => detail,
-      ),
-    );
+        ),
+      );
 }
 
 /// Loads the detail for a flashcard edit session.

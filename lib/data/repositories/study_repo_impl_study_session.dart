@@ -63,6 +63,100 @@ StudySessionReviewItem _fromSessionReviewRow(
   ),
 );
 
+Future<Result<StudySessionResult>> _loadStudySessionResult(
+  study_dao.StudySessionDao dao,
+  SessionId sessionId,
+) async {
+  try {
+    final StudySessionRow? sessionRow = await dao.findSession(sessionId);
+    if (sessionRow == null) {
+      return Result<StudySessionResult>.err(
+        Failure.notFound(entity: 'study_session', id: sessionId),
+      );
+    }
+
+    final List<study_dao.StudySessionReviewItemsResult> itemRows = await dao
+        .loadSessionReviewItems(sessionId);
+    if (itemRows.isEmpty) {
+      return const Result<StudySessionResult>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: 'Study session has no items.',
+          table: 'study_session_items',
+        ),
+      );
+    }
+
+    final List<study_dao.StudySessionAttemptsResult> attemptRows = await dao
+        .loadSessionAttempts(sessionId);
+    final Map<String, List<study_dao.StudySessionAttemptsResult>>
+    attemptsByItemId = <String, List<study_dao.StudySessionAttemptsResult>>{};
+    for (final study_dao.StudySessionAttemptsResult row in attemptRows) {
+      attemptsByItemId
+          .putIfAbsent(
+            row.sessionItemId,
+            () => <study_dao.StudySessionAttemptsResult>[],
+          )
+          .add(row);
+    }
+
+    final bool isCompleted =
+        StudyMapper.sessionStatusFromStorage(sessionRow.status) ==
+        SessionStatus.completed;
+    int answeredCount = 0;
+    int forgotCount = 0;
+    int passedCount = 0;
+    for (final study_dao.StudySessionReviewItemsResult itemRow in itemRows) {
+      if (itemRow.answeredAt != null) {
+        answeredCount++;
+      }
+      final List<study_dao.StudySessionAttemptsResult> itemAttempts =
+          attemptsByItemId[itemRow.id] ??
+          const <study_dao.StudySessionAttemptsResult>[];
+      if (isCompleted && itemRow.answeredAt != null && itemAttempts.isEmpty) {
+        return const Result<StudySessionResult>.err(
+          Failure.storage(
+            operation: StorageOp.read,
+            cause: 'Completed study session is missing attempts.',
+            table: 'study_attempts',
+          ),
+        );
+      }
+      if (itemAttempts.isEmpty) {
+        continue;
+      }
+      final AttemptResult finalResult = _finalizeResultForAttempts(
+        itemAttempts,
+      );
+      switch (finalResult) {
+        case AttemptResult.forgot:
+          forgotCount++;
+        case AttemptResult.perfect:
+        case AttemptResult.initialPassed:
+        case AttemptResult.recovered:
+          passedCount++;
+      }
+    }
+
+    return Result<StudySessionResult>.ok(
+      StudySessionResult(
+        session: StudyMapper.fromSessionRow(sessionRow),
+        totalCount: itemRows.length,
+        answeredCount: answeredCount,
+        forgotCount: forgotCount,
+        passedCount: passedCount,
+      ),
+    );
+  } catch (error) {
+    return Result<StudySessionResult>.err(
+      Failure.storage(
+        operation: StorageOp.read,
+        cause: error.toString(),
+        table: 'study_sessions',
+      ),
+    );
+  }
+}
 
 Future<String?> _resolveResumableScopeLabel(
   StudySessionRow row,
@@ -84,9 +178,10 @@ AttemptResult _finalizeResultForAttempts(
   List<study_dao.StudySessionAttemptsResult> attempts,
 ) {
   final List<AttemptResult> results = attempts
-      .map((study_dao.StudySessionAttemptsResult row) {
-        return StudyMapper.attemptResultFromStorage(row.result);
-      })
+      .map(
+        (study_dao.StudySessionAttemptsResult row) =>
+            StudyMapper.attemptResultFromStorage(row.result),
+      )
       .toList(growable: false);
   final AttemptResult lastResult = results.last;
   if (lastResult == AttemptResult.forgot) {
@@ -98,12 +193,13 @@ AttemptResult _finalizeResultForAttempts(
   return lastResult;
 }
 
-int _boxAfterFinalization(int currentBox, AttemptResult result) => switch (result) {
-  AttemptResult.perfect || AttemptResult.initialPassed =>
-    currentBox >= 8 ? 8 : currentBox + 1,
-  AttemptResult.recovered => currentBox,
-  AttemptResult.forgot => 1,
-};
+int _boxAfterFinalization(int currentBox, AttemptResult result) =>
+    switch (result) {
+      AttemptResult.perfect ||
+      AttemptResult.initialPassed => currentBox >= 8 ? 8 : currentBox + 1,
+      AttemptResult.recovered => currentBox,
+      AttemptResult.forgot => 1,
+    };
 
 Duration _intervalForBox(int boxNumber) => switch (boxNumber) {
   1 => const Duration(days: 1),
@@ -221,9 +317,9 @@ Future<_ScopeSnapshot> _loadScopeSnapshot(
       throw _RuleViolation(Failure.notFound(entity: 'deck', id: refId));
     }
     return _ScopeSnapshot(
-      cards: (await dao.loadDeckCards(refId))
-          .map(_ScopeCard.fromDeckRow)
-          .toList(growable: false),
+      cards: (await dao.loadDeckCards(
+        refId,
+      )).map(_ScopeCard.fromDeckRow).toList(growable: false),
       now: now,
     );
   }
@@ -232,9 +328,9 @@ Future<_ScopeSnapshot> _loadScopeSnapshot(
     throw _RuleViolation(Failure.notFound(entity: 'folder', id: refId));
   }
   return _ScopeSnapshot(
-    cards: (await dao.loadFolderCards(refId))
-        .map(_ScopeCard.fromFolderRow)
-        .toList(growable: false),
+    cards: (await dao.loadFolderCards(
+      refId,
+    )).map(_ScopeCard.fromFolderRow).toList(growable: false),
     now: now,
   );
 }

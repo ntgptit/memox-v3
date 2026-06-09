@@ -11,8 +11,8 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
-import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
+import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -29,8 +29,8 @@ import 'package:memox/presentation/features/study/screens/study_result_screen.da
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:riverpod/misc.dart';
 
 class _FakeStudyRepository implements StudyRepository {
@@ -43,8 +43,8 @@ class _FakeStudyRepository implements StudyRepository {
 
   Result<StudyEntryStartResult> result;
   Result<StudySession> restartResult = const Result<StudySession>.err(
-        Failure.notFound(entity: 'study_session', id: 'missing-session'),
-      );
+    Failure.notFound(entity: 'study_session', id: 'missing-session'),
+  );
   final Result<StudySessionReview> reviewResult;
   int startCalls = 0;
   int cancelCalls = 0;
@@ -121,10 +121,9 @@ class _FakeStudyRepository implements StudyRepository {
   @override
   Future<Result<StudySessionResult>> loadStudySessionResult({
     required SessionId sessionId,
-  }) async =>
-      const Result<StudySessionResult>.err(
-        Failure.notFound(entity: 'study_session', id: 'missing-session'),
-      );
+  }) async => const Result<StudySessionResult>.err(
+    Failure.notFound(entity: 'study_session', id: 'missing-session'),
+  );
 
   @override
   Future<Result<StudySession>> createSession({
@@ -302,7 +301,10 @@ void main() {
       expect(find.text(l10n.studyEntryResumeRequiredTitle), findsOneWidget);
       expect(find.text(l10n.studyEntryResumeRequiredMessage), findsOneWidget);
       expect(
-        find.widgetWithText(MxActionButton, l10n.studyEntryResumeRequiredResumeAction),
+        find.widgetWithText(
+          MxActionButton,
+          l10n.studyEntryResumeRequiredResumeAction,
+        ),
         findsOneWidget,
       );
       expect(
@@ -405,77 +407,75 @@ void main() {
     },
   );
 
-  testWidgets(
-    'resume-required start over opens the confirmation dialog',
-    (tester) async {
-      final _FakeStudyRepository repository = _FakeStudyRepository(
-        const Result<StudyEntryStartResult>.ok(
-          StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
-        ),
-      );
+  testWidgets('resume-required start over opens the confirmation dialog', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.resumeRequired(sessionId: 'session-1'),
+      ),
+    );
 
-      await tester.pumpWidget(
-        _appShell(
-          const StudyEntryScreen.scoped(
-            entryType: 'deck',
-            entryRefId: 'deck-1',
-          ),
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
-      );
-      await tester.pumpAndSettle();
+    await tester.pumpWidget(
+      _appShell(
+        const StudyEntryScreen.scoped(entryType: 'deck', entryRefId: 'deck-1'),
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      final AppLocalizations l10n = AppLocalizations.of(
-        tester.element(find.byType(StudyEntryScreen)),
-      );
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudyEntryScreen)),
+    );
 
-      final MxSecondaryButton startOverButton = tester
-          .widgetList<MxSecondaryButton>(find.byType(MxSecondaryButton))
-          .firstWhere(
-            (MxSecondaryButton button) =>
-                button.label == l10n.studyEntryResumeRequiredStartOverAction,
-          );
-      startOverButton.onPressed!.call();
-      await tester.pumpAndSettle();
+    final MxSecondaryButton startOverButton = tester
+        .widgetList<MxSecondaryButton>(find.byType(MxSecondaryButton))
+        .firstWhere(
+          (MxSecondaryButton button) =>
+              button.label == l10n.studyEntryResumeRequiredStartOverAction,
+        );
+    startOverButton.onPressed!.call();
+    await tester.pumpAndSettle();
 
-      expect(
-        find.descendant(
-          of: find.byType(Dialog),
-          matching: find.text(l10n.studyEntryResumeRequiredStartOverConfirmTitle),
+    expect(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.text(l10n.studyEntryResumeRequiredStartOverConfirmTitle),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.text(
+          l10n.studyEntryResumeRequiredStartOverConfirmMessage,
         ),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(
-          of: find.byType(Dialog),
-          matching: find.text(l10n.studyEntryResumeRequiredStartOverConfirmMessage),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.widgetWithText(
+          FilledButton,
+          l10n.studyEntryResumeRequiredStartOverConfirmAction,
         ),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(
-          of: find.byType(Dialog),
-          matching: find.widgetWithText(
-            FilledButton,
-            l10n.studyEntryResumeRequiredStartOverConfirmAction,
-          ),
-        ),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(
-          of: find.byType(Dialog),
-          matching: find.widgetWithText(OutlinedButton, l10n.commonCancel),
-        ),
-        findsOneWidget,
-      );
-      expect(repository.startCalls, 1);
-      expect(repository.restartCalls, 0);
-      expect(repository.cancelCalls, 0);
-    },
-  );
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.widgetWithText(OutlinedButton, l10n.commonCancel),
+      ),
+      findsOneWidget,
+    );
+    expect(repository.startCalls, 1);
+    expect(repository.restartCalls, 0);
+    expect(repository.cancelCalls, 0);
+  });
 
   testWidgets(
     'cancelling start over keeps the user on Study Entry and does not mutate data',
@@ -525,21 +525,23 @@ void main() {
   testWidgets(
     'confirmed start over cancels the old session and routes to a new session',
     (tester) async {
-      final _FakeStudyRepository repository = _FakeStudyRepository(
-        const Result<StudyEntryStartResult>.ok(
-          StudyEntryStartResult.resumeRequired(sessionId: 'session-old'),
-        ),
-      )..restartResult = Result<StudySession>.ok(
-          StudySession(
-            id: 'session-new',
-            entryType: EntryType.deck,
-            entryRefId: 'deck-1',
-            studyType: StudyType.newCards,
-            status: SessionStatus.inProgress,
-            startedAt: DateTime.utc(2026, 1, 1),
-            updatedAt: DateTime.utc(2026, 1, 1),
-          ),
-        );
+      final _FakeStudyRepository repository =
+          _FakeStudyRepository(
+              const Result<StudyEntryStartResult>.ok(
+                StudyEntryStartResult.resumeRequired(sessionId: 'session-old'),
+              ),
+            )
+            ..restartResult = Result<StudySession>.ok(
+              StudySession(
+                id: 'session-new',
+                entryType: EntryType.deck,
+                entryRefId: 'deck-1',
+                studyType: StudyType.newCards,
+                status: SessionStatus.inProgress,
+                startedAt: DateTime.utc(2026, 1, 1),
+                updatedAt: DateTime.utc(2026, 1, 1),
+              ),
+            );
       final GoRouter router = _studyRouter(
         _studyLocation(entryType: 'deck', entryRefId: 'deck-1'),
       );
@@ -585,11 +587,14 @@ void main() {
       );
       expect(repository.restartCalls, 1);
       expect(repository.lastRestartPreviousSessionId, 'session-old');
-      expect(repository.lastRestartScope, const StudyScope(
-        entryType: EntryType.deck,
-        entryRefId: 'deck-1',
-        studyType: StudyType.newCards,
-      ));
+      expect(
+        repository.lastRestartScope,
+        const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: 'deck-1',
+          studyType: StudyType.newCards,
+        ),
+      );
       expect(repository.lastRestartMode, isNull);
       expect(repository.cancelCalls, 0);
       expect(repository.startCalls, 1);
@@ -725,30 +730,30 @@ void main() {
 
   testWidgets(
     'DT6a onOpen: session result route renders the real StudyResultScreen instead of StudyEntryScreen',
-      (tester) async {
-        final _FakeStudyRepository repository = _FakeStudyRepository(
-          const Result<StudyEntryStartResult>.err(
-            Failure.notFound(entity: 'study_session', id: 'unused'),
-          ),
-          reviewResult: const Result<StudySessionReview>.err(
-            Failure.notFound(entity: 'study_session', id: 'unused'),
-          ),
-        );
-        final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        const Result<StudyEntryStartResult>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+        reviewResult: const Result<StudySessionReview>.err(
+          Failure.notFound(entity: 'study_session', id: 'unused'),
+        ),
+      );
+      final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
 
-        await tester.pumpWidget(
-          _routerShell(
-            router,
-            overrides: <Override>[
-              studyRepositoryProvider.overrideWithValue(repository),
-            ],
-          ),
-        );
-        await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        expect(find.byType(StudyEntryScreen), findsNothing);
-        expect(find.byType(StudyResultScreen), findsOneWidget);
-        expect(find.byType(MxErrorState), findsOneWidget);
-      },
-    );
+      expect(find.byType(StudyEntryScreen), findsNothing);
+      expect(find.byType(StudyResultScreen), findsOneWidget);
+      expect(find.byType(MxErrorState), findsOneWidget);
+    },
+  );
 }
