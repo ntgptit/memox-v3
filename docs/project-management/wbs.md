@@ -267,7 +267,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 10.5 | Fill mode | Specified / Partial | Type front, strict character match, mark-correct override, hint taints to recovered. |
 | 10.6 | Mode sequence resolution | Specified | New full cycle: review → match → guess → recall → fill; SRS uses fill. |
 | 10.7 | Mode UI parity | Ongoing | Wireframes 13-17 and shared study scaffold conventions respected. |
-| 10.8 | Current V1 review shell | Implemented | Shows first card only; not full multi-card mode flow. |
+| 10.8 | Current V1 review shell | Implemented | Persisted session review shell with current-card navigation, reveal, Forgot / Got it self-grade, Finish Session after all items are answered, and a placeholder result screen. |
 | 10.9 | Mode persistence tests | Needed | Each mode needs attempt/result/state tests when implemented. |
 
 ### 11. SRS and Progress
