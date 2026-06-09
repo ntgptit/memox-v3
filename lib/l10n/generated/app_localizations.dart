@@ -5589,7 +5589,7 @@ abstract class AppLocalizations {
   /// No description provided for @flashcardsImportRouteIntroMessage.
   ///
   /// In en, this message translates to:
-  /// **'Deck import V1 opens this route shell only. Parsing, file loading, preview, and commit are deferred.'**
+  /// **'Deck import V1 now supports CSV paste preview. File picker, Excel, structured text, and commit stay deferred.'**
   String get flashcardsImportRouteIntroMessage;
 
   /// No description provided for @flashcardsImportFormatsSectionTitle.
@@ -5913,7 +5913,7 @@ abstract class AppLocalizations {
   /// No description provided for @importCsvHint.
   ///
   /// In en, this message translates to:
-  /// **'front,back,note'**
+  /// **'front,back'**
   String get importCsvHint;
 
   /// No description provided for @importTextHint.
@@ -5925,7 +5925,7 @@ abstract class AppLocalizations {
   /// No description provided for @importCsvRulesText.
   ///
   /// In en, this message translates to:
-  /// **'Use front, back, and optional note columns.'**
+  /// **'Use front and back columns. Optional extra columns are ignored in V1.'**
   String get importCsvRulesText;
 
   /// No description provided for @importExcelRulesText.
@@ -6143,6 +6143,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{valid} valid · {invalid} issues · {skipped} skipped'**
   String importPreviewSummaryWithSkipped(int valid, int invalid, int skipped);
+
+  /// No description provided for @importPreviewRowsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid rows'**
+  String get importPreviewRowsTitle;
+
+  /// No description provided for @importCsvEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste CSV content before previewing.'**
+  String get importCsvEmptyMessage;
+
+  /// No description provided for @importCsvFrontAndBackRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Front and back are required.'**
+  String get importCsvFrontAndBackRequiredMessage;
+
+  /// No description provided for @importCommitDeferredAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import deferred'**
+  String get importCommitDeferredAction;
+
+  /// No description provided for @importCommitDeferredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Commit is deferred in V1.'**
+  String get importCommitDeferredMessage;
 
   /// No description provided for @importSkippedDuplicatesTitle.
   ///

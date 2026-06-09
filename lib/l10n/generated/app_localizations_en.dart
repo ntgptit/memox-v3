@@ -3465,7 +3465,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flashcardsImportRouteIntroMessage =>
-      'Deck import V1 opens this route shell only. Parsing, file loading, preview, and commit are deferred.';
+      'Deck import V1 now supports CSV paste preview. File picker, Excel, structured text, and commit stay deferred.';
 
   @override
   String get flashcardsImportFormatsSectionTitle => 'Source formats';
@@ -3694,7 +3694,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importTextContentLabel => 'Structured text';
 
   @override
-  String get importCsvHint => 'front,back,note';
+  String get importCsvHint => 'front,back';
 
   @override
   String get importTextHint =>
@@ -3702,7 +3702,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importCsvRulesText =>
-      'Use front, back, and optional note columns.';
+      'Use front and back columns. Optional extra columns are ignored in V1.';
 
   @override
   String get importExcelRulesText =>
@@ -3839,6 +3839,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String importPreviewSummaryWithSkipped(int valid, int invalid, int skipped) {
     return '$valid valid · $invalid issues · $skipped skipped';
   }
+
+  @override
+  String get importPreviewRowsTitle => 'Valid rows';
+
+  @override
+  String get importCsvEmptyMessage => 'Paste CSV content before previewing.';
+
+  @override
+  String get importCsvFrontAndBackRequiredMessage =>
+      'Front and back are required.';
+
+  @override
+  String get importCommitDeferredAction => 'Import deferred';
+
+  @override
+  String get importCommitDeferredMessage => 'Commit is deferred in V1.';
 
   @override
   String get importSkippedDuplicatesTitle => 'Skipped duplicates';

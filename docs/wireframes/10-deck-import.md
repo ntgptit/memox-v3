@@ -7,48 +7,30 @@ source_specs:
 
 # 10 — Deck Import
 
-## V1 verification status (2026-05-31, Prompt 17)
+## V1 verification status (2026-06-09, Prompt MX-FEATURE-20260609-014)
 
-This screen is **partially Current**. The data model, parsers, duplicate policy, and commit
-transaction below are verified by code and tests. The **UI shape actually shipped in V1 is a
-single-screen inline bulk-add (Design mock `05d`), NOT the 3-step configure → preview → result flow
-drawn in the layout mocks below.** The richer flow is **Future**. Do NOT mark the whole screen
-Current and do NOT implement the 3-step flow as part of ordinary feature work (no visual redesign).
+This screen is **partially Current**. Current V1 is a single-screen CSV paste preview:
+route `/library/deck/:deckId/import` opens `DeckImportScreen`, the user pastes CSV, taps
+Preview, sees valid rows plus row-level validation, and the commit CTA stays deferred/disabled.
+File picker, Excel, structured text, duplicate handling, and DB commit remain **Future**.
 
 **Verified Current (behaviour + tests):**
 
 - Route `/library/deck/:deckId/import` opens `DeckImportScreen`; reached only via the Flashcard List
-  Import action (`pushDeckImport`). Shell navigation hidden (`test/app/router/app_router_test.dart`
-  DT2).
-- Close (✕) pops to the Flashcard List (fallback `goFlashcardList`). The import screen owns no
-  Flashcard List row/bulk actions and exposes no Global Search, History, Drive sync, AI import, OCR
-  import, or tag-scoped study.
-- Invalid/missing `deckId` fails safely: `prepareImport` / `commitImport` surface a typed
-  `NotFoundException` (`FailureType.notFound`) via snackbar, no crash, and no rows are written (
-  `content_repository_test.dart` DT10/DT11).
-- Source modes via top `MxTabBar`: **Text** (paste) and **File** (`.csv` / `.xlsx`, ≤ 10 MB, first
-  sheet only for Excel + "first row is header" toggle).
-- Formats Current: `ImportSourceFormat.csv`, `ImportSourceFormat.structuredText`,
-  `ImportSourceFormat.excel` (DIY xlsx parser — single sheet, no formulas; see §Excel parser scope).
-  Tested in `flashcard_import_support_test.dart` (DT1–DT8) + auto-detect cases.
-- Separator: parser auto-detects tab/comma/slash/pipe/semicolon/colon and `Front:`/`Back:` blocks. *
-  *The UI surfaces only Tab / Comma / Pipe pills** (`_separatorLabels`); the other separators are
-  reachable only via auto-detect, not an explicit control.
-- Validation: front+back required; blank rows skipped; bad rows surfaced as `Line {n}` / `Row {n}`
-  issues; `canCommit = previewItems.isNotEmpty && issues.isEmpty`. Commit button disabled otherwise.
-- Duplicate policy Current: `skipExactDuplicates` only (trim + case-insensitive on front+back).
-  In-file vs in-deck source recorded on each skipped item and surfaced as an aggregate **count badge
-  ** (`content_repository_test.dart` DT8/DT9).
-- Commit: single transaction, inserts importable previewItems only, assigns `sort_order` after
-  existing cards, initialises default SRS progress (box 1, no due). No partial insert when issues
-  exist (`content_repository_test.dart` DT3/DT7). On success: deferred success snackbar + pop to
-  Flashcard List.
+  Import action (`pushDeckImport`).
+- The screen shows route-level copy, a CSV textarea, a Preview action, a deferred commit CTA, and
+  a read-only preview summary after parse.
+- Invalid/missing `deckId` fails safely and shows the controlled danger callout with Back.
+- Empty CSV input is rejected with localized validation.
+- Valid CSV rows preview front/back values after trim.
+- Quoted CSV values parse correctly, including escaped quotes.
+- Invalid rows surface a row number plus localized reason.
+- Preview does not write to DB and does not invoke import commit logic.
 
 **Future (Specified, not exposed in V1):**
 
 - Separate 3-step flow with a standalone Preview route and a standalone **Result/confirmation screen
-  ** (step 3 mock). V1 uses an inline Paste/Preview pill and a footer commit, then returns to the
-  list with a snackbar.
+  ** (step 3 mock). The future target returns to the list with a snackbar after commit.
 - Format **radio** (3 explicit options) + full **7-way separator dropdown** (Auto / Colon / Slash /
   Semicolon as explicit controls).
 - Per-row **Skipped duplicates list** with In file / In deck badges (V1 shows an aggregate count
@@ -60,7 +42,7 @@ Current and do NOT implement the 3-step flow as part of ordinary feature work (n
 - AI import, OCR / image import, cloud file picker — out of V1 scope.
 
 > The "Layout — step 1/2/3", "States", "Actions", and "Forbidden" sections below describe the *
-*Future target flow**. Where they conflict with the implemented bulk-add, this status section is
+*Future target flow**. Where they conflict with the implemented CSV preview, this status section is
 > authoritative for V1.
 
 ## Purpose

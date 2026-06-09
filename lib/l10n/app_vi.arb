@@ -1772,7 +1772,7 @@
   "studyCancelConfirmMessage": "Phiên học hiện tại sẽ dừng lại và bạn sẽ được đưa đến màn hình kết quả.",
   "studyCancelConfirmAction": "Hủy",
   "flashcardsImportTitle": "Nhập flashcard",
-  "flashcardsImportRouteIntroMessage": "V1 nhập deck chỉ mở shell của route này. Phần đọc tệp, xem trước và commit sẽ làm sau.",
+  "flashcardsImportRouteIntroMessage": "V1 nhập deck hiện hỗ trợ xem trước CSV bằng cách dán. Tệp, Excel, text có cấu trúc và commit vẫn để sau.",
   "flashcardsImportFormatsSectionTitle": "Định dạng nguồn",
   "flashcardsImportSoonMessage": "Dự kiến ở lát cắt nhập tiếp theo.",
   "flashcardsImportMissingDeckMessage": "Màn hình nhập này cần deck ID. Hãy quay lại và mở nhập từ một deck.",
@@ -1863,9 +1863,9 @@
   "importExcelHasHeaderLabel": "Dòng đầu là header",
   "importExcelHasHeaderDescription": "Dữ liệu bắt đầu từ dòng 2.",
   "importTextContentLabel": "Text có cấu trúc",
-  "importCsvHint": "front,back,note",
+  "importCsvHint": "front,back",
   "importTextHint": "Front: ...\nBack: ...\nNote: ...\nHoặc mỗi dòng một thẻ: thuật ngữ / định nghĩa",
-  "importCsvRulesText": "Dùng các cột front, back và note tùy chọn.",
+  "importCsvRulesText": "Dùng cột front và back. Cột phụ tùy chọn sẽ bị bỏ qua ở V1.",
   "importExcelRulesText": "Cột A = mặt trước, cột B = mặt sau, cột C = ghi chú.",
   "importTextRulesText": "Dùng các dòng Front:, Back: và Note: tùy chọn.",
   "importSeparatorLabel": "Dấu tách",
@@ -1958,6 +1958,11 @@
       }
     }
   },
+  "importPreviewRowsTitle": "Các dòng hợp lệ",
+  "importCsvEmptyMessage": "Hãy dán nội dung CSV trước khi xem trước.",
+  "importCsvFrontAndBackRequiredMessage": "Cần có mặt trước và mặt sau.",
+  "importCommitDeferredAction": "Hoãn import",
+  "importCommitDeferredMessage": "Commit được hoãn ở V1.",
   "importSkippedDuplicatesTitle": "Duplicate bị bỏ qua",
   "importSkippedDuplicatesSubtitle": "{count} duplicate trùng khớp hoàn toàn sẽ bị bỏ qua.",
   "@importSkippedDuplicatesSubtitle": {

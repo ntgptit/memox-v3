@@ -3340,7 +3340,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get flashcardsImportRouteIntroMessage =>
-      'V1 nhập deck chỉ mở shell của route này. Phần đọc tệp, xem trước và commit sẽ làm sau.';
+      'V1 nhập deck hiện hỗ trợ xem trước CSV bằng cách dán. Tệp, Excel, text có cấu trúc và commit vẫn để sau.';
 
   @override
   String get flashcardsImportFormatsSectionTitle => 'Định dạng nguồn';
@@ -3567,14 +3567,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get importTextContentLabel => 'Text có cấu trúc';
 
   @override
-  String get importCsvHint => 'front,back,note';
+  String get importCsvHint => 'front,back';
 
   @override
   String get importTextHint =>
       'Front: ...\nBack: ...\nNote: ...\nHoặc mỗi dòng một thẻ: thuật ngữ / định nghĩa';
 
   @override
-  String get importCsvRulesText => 'Dùng các cột front, back và note tùy chọn.';
+  String get importCsvRulesText =>
+      'Dùng cột front và back. Cột phụ tùy chọn sẽ bị bỏ qua ở V1.';
 
   @override
   String get importExcelRulesText =>
@@ -3711,6 +3712,23 @@ class AppLocalizationsVi extends AppLocalizations {
   String importPreviewSummaryWithSkipped(int valid, int invalid, int skipped) {
     return '$valid hợp lệ · $invalid lỗi · $skipped bỏ qua';
   }
+
+  @override
+  String get importPreviewRowsTitle => 'Các dòng hợp lệ';
+
+  @override
+  String get importCsvEmptyMessage =>
+      'Hãy dán nội dung CSV trước khi xem trước.';
+
+  @override
+  String get importCsvFrontAndBackRequiredMessage =>
+      'Cần có mặt trước và mặt sau.';
+
+  @override
+  String get importCommitDeferredAction => 'Hoãn import';
+
+  @override
+  String get importCommitDeferredMessage => 'Commit được hoãn ở V1.';
 
   @override
   String get importSkippedDuplicatesTitle => 'Duplicate bị bỏ qua';

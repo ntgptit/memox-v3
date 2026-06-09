@@ -1772,7 +1772,7 @@
   "studyCancelConfirmMessage": "Your current study session will stop and you will be taken to the result screen.",
   "studyCancelConfirmAction": "Cancel",
   "flashcardsImportTitle": "Import flashcards",
-  "flashcardsImportRouteIntroMessage": "Deck import V1 opens this route shell only. Parsing, file loading, preview, and commit are deferred.",
+  "flashcardsImportRouteIntroMessage": "Deck import V1 now supports CSV paste preview. File picker, Excel, structured text, and commit stay deferred.",
   "flashcardsImportFormatsSectionTitle": "Source formats",
   "flashcardsImportSoonMessage": "Planned for the next import slice.",
   "flashcardsImportMissingDeckMessage": "This import route needs a deck ID. Go back and open import from a deck.",
@@ -1863,9 +1863,9 @@
   "importExcelHasHeaderLabel": "First row is header",
   "importExcelHasHeaderDescription": "Data starts at row 2.",
   "importTextContentLabel": "Structured text",
-  "importCsvHint": "front,back,note",
+  "importCsvHint": "front,back",
   "importTextHint": "Front: ...\nBack: ...\nNote: ...\nOr one card per line: term / definition",
-  "importCsvRulesText": "Use front, back, and optional note columns.",
+  "importCsvRulesText": "Use front and back columns. Optional extra columns are ignored in V1.",
   "importExcelRulesText": "Column A = front, Column B = back, Column C = note.",
   "importTextRulesText": "Use Front:, Back:, and optional Note: lines.",
   "importSeparatorLabel": "Separator",
@@ -1958,6 +1958,11 @@
       }
     }
   },
+  "importPreviewRowsTitle": "Valid rows",
+  "importCsvEmptyMessage": "Paste CSV content before previewing.",
+  "importCsvFrontAndBackRequiredMessage": "Front and back are required.",
+  "importCommitDeferredAction": "Import deferred",
+  "importCommitDeferredMessage": "Commit is deferred in V1.",
   "importSkippedDuplicatesTitle": "Skipped duplicates",
   "importSkippedDuplicatesSubtitle": "{count} exact duplicates will be skipped.",
   "@importSkippedDuplicatesSubtitle": {

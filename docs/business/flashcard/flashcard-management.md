@@ -54,20 +54,21 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 ## Import rules
 
 - Target deck must exist.
-- Imported rows must pass same validation as manual creation.
+- Current V1 deck import is CSV paste preview only. File picker, Excel, structured text, and
+  database commit remain deferred.
+- Imported rows must pass the same front/back validation as manual creation.
 - Invalid rows must be reported clearly via the preview screen (see "Import preview flow" below).
 - Do not silently create garbage rows.
-- Import result distinguishes success (committed previewItems), skipped duplicates, and validation
-  issues.
-- Import must use a transaction (see `docs/database/storage-boundaries.md`).
+- Duplicate detection, skipped-duplicate reporting, and transaction commit stay deferred until the
+  import commit slice is implemented.
 
 ## Import sources
 
 | Source                              | When                              | Notes                                                                                     |
 |-------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------|
-| `ImportSourceFormat.csv`            | Pasted text or loaded `.csv` file | Standard CSV (UTF-8).                                                                     |
-| `ImportSourceFormat.excel`          | Loaded `.xlsx` file               | First sheet read. `excelHasHeader` toggle decides if row 1 is skipped.                    |
-| `ImportSourceFormat.structuredText` | Pasted text with custom separator | Separator chosen by user (`auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`). |
+| `ImportSourceFormat.csv`            | Pasted text                       | Current V1: parse + validation preview only. Optional columns are ignored.               |
+| `ImportSourceFormat.excel`          | Future                            | Deferred. First sheet read. `excelHasHeader` toggle decides if row 1 is skipped.         |
+| `ImportSourceFormat.structuredText` | Future                            | Deferred. Separator chosen by user (`auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`). |
 
 `structuredText` with `auto` infers separator by frequency analysis of the first non-empty line.
 
@@ -91,7 +92,7 @@ Skipped duplicates appear in `FlashcardImportPreparation.skippedDuplicates` with
 
 ## Import preview flow
 
-Every import opens a preview screen before any database write. No silent commits.
+Current V1 deck import stops at CSV preview. No database write or commit occurs yet.
 
 ```mermaid
 flowchart TD
@@ -110,12 +111,11 @@ flowchart TD
 
 | Section            | Content                                                                                     | Visibility                                                                                                                                                                                                |
 |--------------------|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Summary            | "Will import: N cards. Skipped: M duplicates. Issues: K."                                   | Always                                                                                                                                                                                                    |
-| Valid rows list    | First 50 rows of `previewItems` with `front` / `back` / `note` columns. "Show all" if more. | Always                                                                                                                                                                                                    |
-| Skipped duplicates | Each `FlashcardImportSkippedDuplicate` with badge ("In file" / "In deck")                   | When `skippedDuplicates.isNotEmpty` — **Future**: V1 surfaces an aggregate "N duplicates skipped" count badge only, not a per-row list (see `docs/wireframes/10-deck-import.md` §V1 verification status). |
+| Summary            | "Will import: N cards. Issues: K."                                                          | Always                                                                                                                                                                                                    |
+| Valid rows list    | CSV rows with `front` / `back` columns only.                                               | When at least one valid row exists                                                                                                                                                                         |
 | Validation issues  | Each `ImportValidationIssue` with `lineNumber` + `message`                                  | When `issues.isNotEmpty`                                                                                                                                                                                  |
-| Commit CTA         | Primary button "Import N cards"                                                             | Enabled only when `canCommit == true`                                                                                                                                                                     |
-| Cancel CTA         | Secondary button                                                                            | Always                                                                                                                                                                                                    |
+| Commit CTA         | Disabled deferred button                                                                     | Always visible in V1, but not actionable                                                                                                                                                                   |
+| Cancel CTA         | Secondary button                                                                            | Future                                                                                                                                                                                                    |
 
 ### Validation issues
 
@@ -126,10 +126,10 @@ Triggered by:
 - Front length exceeds field max → "Line {n}: front exceeds {N} chars."
 - Back length exceeds field max → "Line {n}: back exceeds {N} chars."
 - Tag invalid (empty after trim, or exceeds max length) → "Line {n}: invalid tag '{tag}'."
-- Excel/CSV format error (e.g., unparseable column count) → "Line {n}: row has {x} columns, expected
+- CSV format error (e.g., unparseable column count) → "Line {n}: row has {x} columns, expected
   {y}."
 
-A preparation with any issue cannot be committed (`canCommit = false`). User MUST either:
+In V1 the preview is read-only. The user MUST either:
 
 - Edit the source (paste/file) and re-parse, OR
 - Cancel.
@@ -221,10 +221,11 @@ V1 create/edit note:
 
 Deck import screen (`/library/deck/:deckId/import`):
 
-- Current V1 route shell only.
-- Shows route-level copy and a source-format overview.
-- Does not yet expose the file picker, paste box, preview action, or commit flow.
-- Full parse / preview / commit behavior remains the future preview flow described above.
+- Current V1 route exposes CSV paste input, parse, and validation preview only.
+- Shows route-level copy, a CSV textarea, preview action, validation summary, and read-only
+  preview rows.
+- Does not expose the file picker, Excel import, structured text import, or commit flow.
+- Duplicate detection and commit behavior remain future import work.
 
 ## Form rules
 
