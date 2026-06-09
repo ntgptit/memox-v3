@@ -24,11 +24,11 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 
 - Resume card is a current V1 surface.
 - Today CTA is a current V1 surface.
-- Start new learning CTA is a current V1 surface and must lead into the study scope picker flow.
-- Recent decks are a current V1 surface, but the later implementation still needs a dashboard-specific query hook.
 - A static streak placeholder may appear as a visual/stat placeholder only. It is not computed.
-- Loading, error, offline, onboarding, resume-only, and multi-resume states are all part of the mock contract.
-- App launch still defaults to Library; `/home` is not the boot route yet.
+- Loading, error, onboarding, and resume-only states are part of the current V1 surface.
+- Start new learning and recent-decks surfaces remain deferred until a source-backed picker/query exists.
+- Multi-resume remains deferred until a source-backed paused-session list exists.
+- App launch still defaults to Library; `/home` renders Dashboard V1 but is not the boot route.
 - Dashboard search is not a current V1 action.
 
 ## Explicitly Excluded
@@ -70,12 +70,12 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | Goal ring / daily-goal card | loaded, goalOff | Future/Target | `MxMasteryRing` / `MxCard` | Engagement prefs + study_attempts aggregate | None | Excluded from current V1 until engagement is promoted. |
 | Streak-broken banner | streakBroken | Future/Target | `MxCallout` or `MxCard` | Computed broken-streak signal | Dismiss | Requires computed streak state, so it remains out of current V1. |
 | Today CTA / caught-up card | loaded, resumeOnly | Current V1 | `MxCard` + `MxActionButton` | Today due-count provider | `go` to `RoutePaths.studyToday` | The caught-up variant replaces the primary due card when no cards are due. |
-| Start new learning CTA | loaded, onboarding, resumeOnly | Current V1 | `MxActionButton` / `MxCardActions` | Study scope picker entry | Open scope picker, then route into study entry | Keep deck, folder, and today scopes only; tag scope remains excluded. |
+| Start new learning CTA | loaded, onboarding, resumeOnly | Missing data | `MxActionButton` / `MxCardActions` | No scope picker source yet | None in V1 | Deferred until a source-backed scope picker exists. |
 | Recent decks section header | loaded, resumeOnly | Current V1 | `MxSectionHeader` | None | None | The section title is part of the screen chrome. |
 | Recent decks header shortcut | loaded, resumeOnly | Visual-only | `MxTextButton` or `MxIconButton` | None | Optional library navigation | Bottom nav already covers `/library`; this shortcut is not a product requirement. |
 | Recent deck rows | loaded, resumeOnly | Missing data | `MxCard` + `MxTappable` + `MxIconTile` | Deck list ordered by `updated_at DESC` | Open deck flashcard list | There is no Dashboard-specific recent-decks query yet. |
 | Loading skeletons | loading | Current V1 | `MxRetainedAsyncState` + `MxSkeleton` | Async dashboard providers | None | Keep skeletons per section instead of a full-screen spinner. |
-| Onboarding hero card | onboarding | Current V1 | `MxEmptyState` or `MxCard` + `MxActionButton` | Zero decks + zero flashcards | Create first deck, Import deck | The mock’s calm hero and action pair are in scope; legacy sign-in/restore wording is not. |
+| Onboarding hero card | onboarding | Current V1 | `MxEmptyState` | Zero decks + zero flashcards | Open library | Keep the hero minimal until a source-backed onboarding action exists. |
 | Onboarding reassurance cards | onboarding | Visual-only | `MxCard` + `MxIconTile` + `MxText` | None | None | Calm copy only; no business behavior is attached to these cards. |
 | Bottom navigation | all | Current V1 | `MxBottomNavigationBar` | Shell route state | Home, Library, Progress, Settings | Home is shell-visible, but the app still boots into Library. |
 
@@ -83,9 +83,9 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 
 | Mock state | Current V1 behavior | Implement now? | Notes |
 | ---------- | ------------------- | -------------- | ----- |
-| loaded | Resume card first, then static streak placeholder, Today CTA, Start new learning, recent decks, bottom nav | Yes | Keep the overall density compact and card-driven. |
-| loading | Section-level skeletons for resume, summary, CTA, and recents | Yes | Do not block the whole screen on one slow provider. |
-| onboarding | Zero-content body with create/import actions and calm guidance cards | Yes | Exclude the legacy Google sign-in/restore copy from V1. |
+| loaded | Resume card first, then static streak placeholder, Today CTA, onboarding if zero-content | Yes | Keep the overall density compact and card-driven. |
+| loading | Section-level skeletons for resume and today cards | Yes | Do not block the whole screen on one slow provider. |
+| onboarding | Zero-content body with an Open Library CTA | Yes | Exclude the legacy Google sign-in/restore copy from V1. |
 | goal off | Hide live goal/streak surfaces; treat as future engagement state | No | Goal persistence and streak computation are not current V1 features. |
 | resume only | Resume card remains visible; Today CTA becomes caught-up | Yes | This is the main no-due / resumable-session combination. |
 | streak broken | One-time broken-streak banner above the resume card | No | Requires computed streak history, which is still future/target. |
@@ -100,11 +100,10 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 3. Resume card at the top of the body when a resumable session exists.
 4. Streak placeholder and goal area only when the current V1 placeholder is shown or when future engagement is promoted.
 5. Today CTA or caught-up card.
-6. Start new learning CTA.
-7. Recent decks section.
-8. Bottom navigation.
+6. Onboarding hero when zero content exists.
+7. Bottom navigation.
 
-For onboarding, replace steps 3 through 7 with the zero-content hero and guidance cards.
+For onboarding, render the zero-content hero only.
 
 ## Shared Component Mapping
 
@@ -113,7 +112,7 @@ For onboarding, replace steps 3 through 7 with the zero-content hero and guidanc
 | Screen shell | `MxScaffold` | Use the design-system shell, not a raw `Scaffold`. |
 | App bar | `MxAppBar` | Keep the header compact and localizable. |
 | Card surfaces | `MxCard` | Use tokenized surfaces and ghost borders. |
-| Resume / today / new-learning actions | `MxCardActions` + `MxActionButton` | Keep the primary action visually dominant and the secondary lighter. |
+| Resume / today actions | `MxCardActions` + `MxActionButton` | Keep the primary action visually dominant and the secondary lighter. |
 | Empty state | `MxEmptyState` | Use for onboarding and empty caught-up states. |
 | Error state | `MxErrorState` | Use for query failure. |
 | Offline state | `MxOfflineBanner` | Non-blocking shared feedback. |
@@ -123,21 +122,21 @@ For onboarding, replace steps 3 through 7 with the zero-content hero and guidanc
 | Text roles | `MxText` | Do not hand-roll typography roles in feature widgets. |
 | Bottom navigation | `MxBottomNavigationBar` | Home, Library, Progress, Settings remain shell routes. |
 | Confirm discard | `showMxConfirmDialog` | Use for discard-session confirmation in the later coding task. |
-| Bottom sheet entry | `showMxBottomSheet` | Use for paused sessions and scope picker flows. |
+| Bottom sheet entry | `showMxBottomSheet` | Use for paused sessions when that list flow exists. |
 
 ## Route And Action Mapping
 
 | Mock action | Route / action contract | Notes |
 | --- | --- | --- |
-| Resume card Continue | `RoutePaths.studySession(sessionId)` / `RouteNames.studySession` via `push` | Resume opens the persisted session directly. |
-| Resume card Discard | `showMxConfirmDialog` then `CancelStudySessionUseCase` in the later coding task | Discard is destructive and must confirm. |
+| Resume card Continue | `RoutePaths.studySession(sessionId)` / `RouteNames.studySession` via `go` | Resume opens the persisted session directly. |
+| Resume card Discard | `showMxConfirmDialog` then `CancelStudySessionUseCase` | Discard is destructive and must confirm. |
 | More paused sessions | `showMxBottomSheet` | Opens the paused-sessions list when the list query exists. |
-| Today CTA | `RoutePaths.studyToday` / `RouteNames.studyToday` via `push` | The study entry gate then `pushReplacement`s into the session route. |
-| Start new learning | Scope picker bottom sheet, then `RoutePaths.studyEntryTemplate` / `RouteNames.studyEntry` | Deck, folder, and today are the supported V1 scopes. |
+| Today CTA | `RoutePaths.studyToday` / `RouteNames.studyToday` via `go` | The study entry gate then `pushReplacement`s into the session route. |
+| Start new learning | Deferred | No source-backed scope picker exists yet. |
 | Settings icon | `RoutePaths.settings` / `RouteNames.settings` via `go` | Shell-visible and current V1. |
 | Search icon | Future `/library/search` action | Keep excluded from Dashboard V1. |
 | Recent deck row | `RoutePaths.flashcardList(deckId)` / `RouteNames.flashcardList` via `push` | Open the deck-specific flashcard list. |
-| Bottom-nav Home | `RoutePaths.home` / `RouteNames.home` via `go` | The route exists, but it is still a placeholder. |
+| Bottom-nav Home | `RoutePaths.home` / `RouteNames.home` via `go` | The route exists and now renders Dashboard V1. |
 | Bottom-nav Library / Progress / Settings | `go` to the matching shell route | Shell navigation resets tab stack. |
 
 ## Copy Expectations
@@ -145,7 +144,7 @@ For onboarding, replace steps 3 through 7 with the zero-content hero and guidanc
 - Use the existing `dashboard*` ARB namespace in `lib/l10n/app_en.arb` and `lib/l10n/app_vi.arb`.
 - Do not hardcode the mock’s sample name/date strings.
 - Use `dashboardResumeSectionTitle`, `dashboardContinueSessionAction`, `dashboardDiscardAction`, `dashboardMorePausedSessions`, and `dashboardPausedSessionsSheetTitle` for resume copy.
-- Use `dashboardStartNewLearningAction`, `dashboardScopePickerTitle`, `dashboardScopeToday`, `dashboardScopeDeck`, `dashboardScopeFolder`, and their subtitle keys for the scope picker.
+- `dashboardStartNewLearningAction`, `dashboardScopePickerTitle`, and the scope-picker subtitle keys remain reserved for a future source-backed picker.
 - Use the existing `dashboardRecentDecksTitle`, `dashboardDeckDueSummary`, and `dashboardDeckCaughtUpSummary` keys for recent deck rows.
 - Use `sharedOfflineTitle`, `sharedOfflineMessage`, and `commonRetry` for offline/error feedback.
 - Use `studyEntryResumeRequiredTitle`, `studyEntryResumeRequiredMessage`, and `studyEntryResumeRequiredCta` for the controlled resume-required fallback.
@@ -171,7 +170,7 @@ For onboarding, replace steps 3 through 7 with the zero-content hero and guidanc
 
 ## Open Questions
 
-- None blocking. The remaining gaps are implementation-only: recent decks need a Dashboard query owner, and multi-resume needs the paused-sessions list hook.
+- None blocking. The remaining gaps are implementation-only: start new learning needs a source-backed scope picker, recent decks need a Dashboard query owner, and multi-resume needs the paused-sessions list hook.
 
 ## Next implementation task
 

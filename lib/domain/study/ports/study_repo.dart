@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
@@ -21,9 +22,14 @@ abstract interface class StudyRepository {
     required SessionId sessionId,
   });
 
+  Future<Result<DashboardResumeSessionSummary?>>
+  findLatestResumableSessionSummary();
+
   Future<Result<StudySession?>> findResumableSession({
     required StudyScope scope,
   });
+
+  Future<Result<void>> cancelStudySession({required SessionId sessionId});
 
   Future<Result<StudySession>> createSession({
     required StudyScope scope,

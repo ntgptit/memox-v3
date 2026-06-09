@@ -20,6 +20,28 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
     studySessions,
   )..where((StudySessions row) => row.id.equals(id))).getSingleOrNull();
 
+  Future<StudySessionRow?> findLatestResumableSession({required int nowMs}) =>
+      (select(studySessions)
+            ..where(
+              (StudySessions row) =>
+                  row.status.isIn(const <String>['draft', 'in_progress']) &
+                  row.startedAt.isBiggerThanValue(
+                    nowMs - const Duration(days: 30).inMilliseconds,
+                  ),
+            )
+            ..orderBy(<OrderingTerm Function(StudySessions)>[
+              (StudySessions row) => OrderingTerm(
+                expression: row.updatedAt,
+                mode: OrderingMode.desc,
+              ),
+              (StudySessions row) => OrderingTerm(
+                expression: row.startedAt,
+                mode: OrderingMode.desc,
+              ),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
+
   Future<List<StudySessionReviewItemsResult>> loadSessionReviewItems(
     String sessionId,
   ) => studySessionReviewItems(sessionId).get();
@@ -74,4 +96,17 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
 
   Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) =>
       into(studyAttempts).insert(attempt);
+
+  Future<int> cancelStudySession({
+    required String sessionId,
+    required int updatedAtMs,
+  }) =>
+      (update(
+        studySessions,
+      )..where((StudySessions row) => row.id.equals(sessionId))).write(
+        StudySessionsCompanion(
+          status: const Value<String>('cancelled'),
+          updatedAt: Value<int>(updatedAtMs),
+        ),
+      );
 }

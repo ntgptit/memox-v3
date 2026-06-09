@@ -5,6 +5,7 @@ import 'package:memox/app/router/redirect.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
 import 'package:memox/presentation/features/flashcards/routes/flashcard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/settings/routes/settings_routes.dart';
@@ -54,14 +55,7 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
   branches: <StatefulShellBranch>[
     StatefulShellBranch(
       navigatorKey: _homeNavigatorKey,
-      routes: <RouteBase>[
-        GoRoute(
-          path: RoutePaths.home,
-          name: RouteNames.home,
-          builder: (context, state) =>
-              const RoutePlaceholder(routeName: RouteNames.home),
-        ),
-      ],
+      routes: dashboardRoutes(),
     ),
     StatefulShellBranch(
       navigatorKey: _libraryNavigatorKey,
@@ -81,9 +75,7 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
     ),
     StatefulShellBranch(
       navigatorKey: _settingsNavigatorKey,
-      routes: <RouteBase>[
-        settingsHubRoute(),
-      ],
+      routes: <RouteBase>[settingsHubRoute()],
     ),
   ],
 );

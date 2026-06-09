@@ -7,6 +7,7 @@ import 'package:memox/data/datasources/local/daos/study_session_dao.dart'
     as study_dao;
 import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
+import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
@@ -120,6 +121,51 @@ class StudyRepositoryImpl implements StudyRepository {
   }
 
   @override
+  Future<Result<DashboardResumeSessionSummary?>>
+  findLatestResumableSessionSummary() async {
+    try {
+      final StudySessionRow? sessionRow = await _dao.findLatestResumableSession(
+        nowMs: _nowMs,
+      );
+      if (sessionRow == null) {
+        return const Result<DashboardResumeSessionSummary?>.ok(null);
+      }
+
+      final Result<StudySessionReview> reviewResult =
+          await loadStudySessionReview(sessionId: sessionRow.id);
+      if (reviewResult is Err<StudySessionReview>) {
+        return Result<DashboardResumeSessionSummary?>.err(reviewResult.failure);
+      }
+
+      final StudySessionReview review =
+          (reviewResult as Ok<StudySessionReview>).value;
+      final String? scopeLabel = await _resolveResumableScopeLabel(sessionRow);
+
+      return Result<DashboardResumeSessionSummary?>.ok(
+        DashboardResumeSessionSummary(
+          session: review.session,
+          answeredCount: review.items
+              .where(
+                (StudySessionReviewItem item) =>
+                    item.sessionItem.answeredAt != null,
+              )
+              .length,
+          totalCount: review.items.length,
+          scopeLabel: scopeLabel,
+        ),
+      );
+    } catch (error) {
+      return Result<DashboardResumeSessionSummary?>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_sessions',
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Result<StudySession?>> findResumableSession({
     required StudyScope scope,
   }) async {
@@ -135,6 +181,32 @@ class StudyRepositoryImpl implements StudyRepository {
       return Result<StudySession?>.err(
         Failure.storage(
           operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_sessions',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void>> cancelStudySession({
+    required SessionId sessionId,
+  }) async {
+    try {
+      final int updatedRows = await _dao.cancelStudySession(
+        sessionId: sessionId,
+        updatedAtMs: _nowMs,
+      );
+      if (updatedRows == 0) {
+        return Result<void>.err(
+          Failure.notFound(entity: 'study_session', id: sessionId),
+        );
+      }
+      return const Result<void>.ok(null);
+    } catch (error) {
+      return Result<void>.err(
+        Failure.storage(
+          operation: StorageOp.write,
           cause: error.toString(),
           table: 'study_sessions',
         ),
@@ -356,30 +428,44 @@ class StudyRepositoryImpl implements StudyRepository {
 
   StudySessionReviewItem _fromSessionReviewRow(
     study_dao.StudySessionReviewItemsResult row,
-  ) =>
-      StudySessionReviewItem(
-        sessionItem: StudyMapper.sessionItemFromStorageFields(
-          id: row.id,
-          sessionId: row.sessionId,
-          flashcardId: row.flashcardId,
-          sortOrder: row.sortOrder,
-          answeredAt: row.answeredAt,
-          createdAt: row.createdAt,
-          updatedAt: row.updatedAt,
-        ),
-        flashcard: FlashcardMapper.fromStorageFields(
-          id: row.cardId,
-          deckId: row.deckId,
-          front: row.front,
-          back: row.back,
-          exampleSentence: row.exampleSentence,
-          pronunciation: row.pronunciation,
-          hint: row.hint,
-          sortOrder: row.cardSortOrder,
-          createdAt: row.cardCreatedAt,
-          updatedAt: row.cardUpdatedAt,
-        ),
-      );
+  ) => StudySessionReviewItem(
+    sessionItem: StudyMapper.sessionItemFromStorageFields(
+      id: row.id,
+      sessionId: row.sessionId,
+      flashcardId: row.flashcardId,
+      sortOrder: row.sortOrder,
+      answeredAt: row.answeredAt,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    ),
+    flashcard: FlashcardMapper.fromStorageFields(
+      id: row.cardId,
+      deckId: row.deckId,
+      front: row.front,
+      back: row.back,
+      exampleSentence: row.exampleSentence,
+      pronunciation: row.pronunciation,
+      hint: row.hint,
+      sortOrder: row.cardSortOrder,
+      createdAt: row.cardCreatedAt,
+      updatedAt: row.cardUpdatedAt,
+    ),
+  );
+
+  Future<String?> _resolveResumableScopeLabel(StudySessionRow row) async {
+    switch (StudyMapper.entryTypeFromStorage(row.entryType)) {
+      case EntryType.today:
+        return null;
+      case EntryType.deck:
+        final DeckRow? deckRow = await _dao.findDeck(row.entryRefId ?? '');
+        return deckRow?.name;
+      case EntryType.folder:
+        final FolderRow? folderRow = await _dao.findFolder(
+          row.entryRefId ?? '',
+        );
+        return folderRow?.name;
+    }
+  }
 }
 
 class _RuleViolation implements Exception {
@@ -406,16 +492,19 @@ class _ScopeCard {
 
   factory _ScopeCard.fromDeckRow(study_dao.StudyDeckCardsResult row) =>
       _ScopeCard(
-    flashcardId: row.id,
-    boxNumber: row.boxNumber,
-    dueAt: row.dueAt == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(row.dueAt!, isUtc: true),
-    buriedUntil: row.buriedUntil == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(row.buriedUntil!, isUtc: true),
-    isSuspended: row.isSuspended ?? false,
-  );
+        flashcardId: row.id,
+        boxNumber: row.boxNumber,
+        dueAt: row.dueAt == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(row.dueAt!, isUtc: true),
+        buriedUntil: row.buriedUntil == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(
+                row.buriedUntil!,
+                isUtc: true,
+              ),
+        isSuspended: row.isSuspended ?? false,
+      );
 
   factory _ScopeCard.fromFolderRow(study_dao.StudyFolderCardsResult row) =>
       _ScopeCard.fromDeckRow(

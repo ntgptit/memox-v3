@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
@@ -30,4 +31,28 @@ class LoadStudySessionReviewUseCase {
 
   Future<Result<StudySessionReview>> call({required SessionId sessionId}) =>
       _repository.loadStudySessionReview(sessionId: sessionId);
+}
+
+/// Loads the latest resumable session for the Dashboard resume card.
+///
+/// Failure types: `NotFoundFailure`, `StorageFailure`.
+class LoadDashboardResumeSessionSummaryUseCase {
+  const LoadDashboardResumeSessionSummaryUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<DashboardResumeSessionSummary?>> call() =>
+      _repository.findLatestResumableSessionSummary();
+}
+
+/// Cancels a resumable study session.
+///
+/// Failure types: `StorageFailure`.
+class CancelStudySessionUseCase {
+  const CancelStudySessionUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<void>> call({required SessionId sessionId}) =>
+      _repository.cancelStudySession(sessionId: sessionId);
 }

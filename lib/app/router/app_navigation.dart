@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_extras.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -79,6 +80,14 @@ extension AppNavigation on BuildContext {
   void pushReplacementStudySession(String sessionId) => pushReplacementNamed(
     RouteNames.studySession,
     pathParameters: <String, String>{RoutePaths.sessionIdParam: sessionId},
+    extra: RouteExtras.studyNavigationToken,
+  );
+
+  /// Open a persisted study session: `/library/study/session/:sessionId`.
+  void pushStudySession(String sessionId) => goNamed(
+    RouteNames.studySession,
+    pathParameters: <String, String>{RoutePaths.sessionIdParam: sessionId},
+    extra: RouteExtras.studyNavigationToken,
   );
 
   /// Navigate to the study gate with semantic route parameters.
@@ -102,6 +111,7 @@ extension AppNavigation on BuildContext {
       goNamed(
         RouteNames.studyToday,
         queryParameters: queryParameters,
+        extra: RouteExtras.studyNavigationToken,
       );
       return;
     }
@@ -112,6 +122,7 @@ extension AppNavigation on BuildContext {
         RoutePaths.entryRefIdParam: entryRefId ?? '',
       },
       queryParameters: queryParameters,
+      extra: RouteExtras.studyNavigationToken,
     );
   }
 }

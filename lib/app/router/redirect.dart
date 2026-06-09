@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/router/route_extras.dart';
 import 'package:memox/app/router/route_paths.dart';
 
 /// Top-level GoRouter redirect rules.
@@ -19,6 +20,10 @@ abstract final class AppRedirect {
   /// Returns the location to redirect to, or `null` to proceed as-is.
   static String? resolve(GoRouterState state) {
     final location = state.uri.path;
+
+    if (state.extra == RouteExtras.studyNavigationToken) {
+      return null;
+    }
 
     // Boot / bare root → V1 initial location.
     if (location == RoutePaths.root) {
