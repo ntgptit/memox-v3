@@ -15,6 +15,7 @@ import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -30,15 +31,26 @@ import 'package:memox/presentation/shared/widgets/study/mx_flashcard.dart';
 import 'package:riverpod/misc.dart';
 
 class _FakeStudyRepository implements StudyRepository {
-  _FakeStudyRepository(this.reviewResult);
+  _FakeStudyRepository(
+    this.reviewResult, {
+    this.recordResult = const Result<void>.ok(null),
+  });
 
   Result<StudySessionReview> reviewResult;
+  Result<void> recordResult;
   int reviewCalls = 0;
+  int recordCalls = 0;
   int startCalls = 0;
   int findResumableCalls = 0;
   int latestSummaryCalls = 0;
   int cancelCalls = 0;
   int createCalls = 0;
+  final List<({String sessionId, String sessionItemId, AttemptResult result})>
+      recordedAnswers = <({
+    String sessionId,
+    String sessionItemId,
+    AttemptResult result,
+  })>[];
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
@@ -55,6 +67,24 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     reviewCalls++;
     return reviewResult;
+  }
+
+  @override
+  Future<Result<void>> recordStudySessionAnswer({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required AttemptResult result,
+    required StudyMode studyMode,
+  }) async {
+    recordCalls++;
+    recordedAnswers.add(
+      (
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        result: result,
+      ),
+    );
+    return recordResult;
   }
 
   @override
@@ -120,6 +150,7 @@ String _studySessionLocation(String sessionId) =>
 StudySessionReview _review({
   required String sessionId,
   required List<({String front, String back})> cards,
+  Set<int> answeredIndices = const <int>{},
 }) {
   final DateTime now = DateTime.utc(2026, 1, 1);
   final StudySession session = StudySession(
@@ -131,23 +162,17 @@ StudySessionReview _review({
     startedAt: now,
     updatedAt: now,
   );
-  final StudySessionItem sessionItem = StudySessionItem(
-    id: 'item-$sessionId',
-    sessionId: sessionId,
-    flashcardId: 'card-$sessionId',
-    sortOrder: 0,
-    createdAt: now,
-    updatedAt: now,
-  );
   return StudySessionReview(
     session: session,
     items: <StudySessionReviewItem>[
       for (int index = 0; index < cards.length; index++)
         StudySessionReviewItem(
-          sessionItem: sessionItem.copyWith(
+          sessionItem: StudySessionItem(
             id: 'item-$sessionId-$index',
+            sessionId: sessionId,
             flashcardId: 'card-$sessionId-$index',
             sortOrder: index,
+            answeredAt: answeredIndices.contains(index) ? now : null,
             createdAt: now,
             updatedAt: now,
           ),
@@ -172,7 +197,7 @@ void main() {
       final _FakeStudyRepository repository = _FakeStudyRepository(
         Result<StudySessionReview>.ok(
           _review(
-            sessionId: 'session-1',
+            sessionId: 'session-nav',
             cards: <({String front, String back})>[
               (front: 'Front 1', back: 'Back 1'),
               (front: 'Front 2', back: 'Back 2'),
@@ -181,7 +206,7 @@ void main() {
         ),
       );
       final GoRouter router = _studyRouter(
-        _studySessionLocation('session-1'),
+        _studySessionLocation('session-nav'),
       );
 
       await tester.pumpWidget(
@@ -207,32 +232,22 @@ void main() {
       );
       final Finder showAnswerFinder = find.text(l10n.studySessionShowAction);
 
-      expect(find.byType(StudySessionScreen), findsOneWidget);
-      expect(find.byType(RoutePlaceholder), findsNothing);
-      expect(find.byType(MxFlashcard), findsOneWidget);
-      expect(find.text(l10n.studySessionTitle), findsOneWidget);
       expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
       expect(find.text('Front 1'), findsOneWidget);
       expect(find.text('Back 1'), findsNothing);
       expect(find.text('Front 2'), findsNothing);
       expect(find.text('Back 2'), findsNothing);
-      expect(showAnswerFinder, findsOneWidget);
       expect(
         tester.widget<MxActionButton>(previousFinder).onPressed,
         isNull,
       );
       expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNotNull);
       expect(repository.reviewCalls, 1);
-      expect(repository.startCalls, 0);
-      expect(repository.findResumableCalls, 0);
-      expect(repository.latestSummaryCalls, 0);
-      expect(repository.cancelCalls, 0);
-      expect(repository.createCalls, 0);
+      expect(repository.recordCalls, 0);
 
       await tester.tap(showAnswerFinder);
       await tester.pumpAndSettle();
 
-      expect(find.text('Front 1'), findsNothing);
       expect(find.text('Back 1'), findsOneWidget);
       expect(find.text(l10n.studySessionHideAction), findsOneWidget);
 
@@ -269,6 +284,301 @@ void main() {
     },
   );
 
+  testWidgets(
+    'before reveal the grade buttons are hidden and after reveal they appear',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-1',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-1'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+      final Finder previousFinder = find.widgetWithText(
+        MxActionButton,
+        l10n.studyPreviousAction,
+      );
+      final Finder nextFinder = find.widgetWithText(
+        MxActionButton,
+        l10n.studyNextAction,
+      );
+      final Finder showAnswerFinder = find.text(l10n.studySessionShowAction);
+
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(find.byType(MxFlashcard), findsOneWidget);
+      expect(find.text(l10n.studySessionProgressLabel(1, 1)), findsOneWidget);
+      expect(find.text('Front 1'), findsOneWidget);
+      expect(find.text('Back 1'), findsNothing);
+      expect(find.text(l10n.studyForgotAction), findsNothing);
+      expect(find.text(l10n.studyGotItAction), findsNothing);
+      expect(showAnswerFinder, findsOneWidget);
+      expect(
+        tester.widget<MxActionButton>(previousFinder).onPressed,
+        isNull,
+      );
+      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
+      expect(repository.reviewCalls, 1);
+      expect(repository.recordCalls, 0);
+      expect(repository.startCalls, 0);
+      expect(repository.findResumableCalls, 0);
+      expect(repository.latestSummaryCalls, 0);
+      expect(repository.cancelCalls, 0);
+      expect(repository.createCalls, 0);
+
+      await tester.tap(showAnswerFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text('Back 1'), findsOneWidget);
+      expect(find.text(l10n.studyForgotAction), findsOneWidget);
+      expect(find.text(l10n.studyGotItAction), findsOneWidget);
+      expect(
+        tester.widget<MxActionButton>(previousFinder).onPressed,
+        isNull,
+      );
+      expect(tester.widget<MxActionButton>(nextFinder).onPressed, isNull);
+      expect(repository.recordCalls, 0);
+    },
+  );
+
+  testWidgets(
+    'tapping got it records an attempt, marks the item answered, and advances to the next unanswered card',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-2',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+              (front: 'Front 3', back: 'Back 3'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-2'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+      final Finder showAnswerFinder = find.text(l10n.studySessionShowAction);
+
+      await tester.tap(showAnswerFinder);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.recordCalls, 1);
+      expect(repository.recordedAnswers.single.sessionId, 'session-2');
+      expect(repository.recordedAnswers.single.sessionItemId, 'item-session-2-0');
+      expect(repository.recordedAnswers.single.result, AttemptResult.perfect);
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text('Back 1'), findsNothing);
+      expect(find.text('Front 2'), findsOneWidget);
+      expect(find.text('Back 2'), findsNothing);
+      expect(find.text(l10n.studySessionProgressLabel(2, 3)), findsOneWidget);
+      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+      expect(find.text(l10n.studySessionHideAction), findsNothing);
+      expect(find.text(l10n.studyForgotAction), findsNothing);
+      expect(find.text(l10n.studyGotItAction), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'tapping forgot records an attempt, marks the item answered, and advances to the next unanswered card',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-3',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-3'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyForgotAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.recordCalls, 1);
+      expect(repository.recordedAnswers.single.result, AttemptResult.forgot);
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text('Front 2'), findsOneWidget);
+      expect(find.text(l10n.studySessionProgressLabel(2, 2)), findsOneWidget);
+      expect(find.text(l10n.studyForgotAction), findsNothing);
+      expect(find.text(l10n.studyGotItAction), findsNothing);
+      expect(find.text(l10n.studySessionShowAction), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'when the last unanswered item is graded the screen stays on the session and shows the all-answered copy',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-4',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-4'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.recordCalls, 2);
+      expect(find.byType(StudySessionScreen), findsOneWidget);
+      expect(find.byType(RoutePlaceholder), findsNothing);
+      expect(find.text(l10n.studySessionAllAnsweredMessage), findsOneWidget);
+      expect(find.text('Front 2'), findsOneWidget);
+      expect(find.text('Back 2'), findsNothing);
+      expect(find.text(l10n.studyForgotAction), findsNothing);
+      expect(find.text(l10n.studyGotItAction), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'shows a controlled save failure message and keeps the user on the current card when recording fails',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-5',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+        recordResult: const Result<void>.err(
+          Failure.storage(
+            operation: StorageOp.transaction,
+            cause: 'boom',
+            table: 'study_attempts',
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocation('session-5'),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.tap(find.text(l10n.studySessionShowAction));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.studyGotItAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.recordCalls, 1);
+      expect(find.text(l10n.studySessionProgressLabel(1, 2)), findsOneWidget);
+      expect(find.text('Back 1'), findsOneWidget);
+      expect(find.text('Front 2'), findsNothing);
+      expect(find.text(l10n.studySessionRecordFailedMessage), findsOneWidget);
+      expect(find.text(l10n.studySessionHideAction), findsOneWidget);
+      expect(find.text(l10n.studyForgotAction), findsOneWidget);
+      expect(find.text(l10n.studyGotItAction), findsOneWidget);
+      expect(
+        tester.widget<MxActionButton>(
+          find.widgetWithText(MxActionButton, l10n.studyGotItAction),
+        ).onPressed,
+        isNotNull,
+      );
+    },
+  );
+
   testWidgets('shows a controlled not-found state when the session is missing', (
     tester,
   ) async {
@@ -301,5 +611,6 @@ void main() {
     expect(find.text(l10n.studySessionNotFoundMessage), findsOneWidget);
     expect(find.text(l10n.commonBack), findsOneWidget);
     expect(repository.reviewCalls, greaterThan(0));
+    expect(repository.recordCalls, 0);
   });
 }

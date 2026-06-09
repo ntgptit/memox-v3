@@ -7,11 +7,13 @@ import 'package:memox/data/datasources/local/daos/study_session_dao.dart'
     as study_dao;
 import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
+import 'package:memox/data/repositories/study_repo_record_answer.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -213,6 +215,21 @@ class StudyRepositoryImpl implements StudyRepository {
       );
     }
   }
+
+  @override
+  Future<Result<void>> recordStudySessionAnswer({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required AttemptResult result,
+    required StudyMode studyMode,
+  }) async => recordStudySessionAnswerTransaction(
+    dao: _dao,
+    sessionId: sessionId,
+    sessionItemId: sessionItemId,
+    result: result,
+    studyMode: studyMode,
+    nowMs: _nowMs,
+  );
 
   @override
   Future<Result<StudySession>> createSession({

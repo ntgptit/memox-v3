@@ -4236,6 +4236,24 @@ abstract class AppLocalizations {
   /// **'Hide answer'**
   String get studySessionHideAction;
 
+  /// No description provided for @studySessionSavingAnswerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving your answer...'**
+  String get studySessionSavingAnswerMessage;
+
+  /// No description provided for @studySessionRecordFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save this answer. Please try again.'**
+  String get studySessionRecordFailedMessage;
+
+  /// No description provided for @studySessionAllAnsweredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards are answered. Come back later to keep studying.'**
+  String get studySessionAllAnsweredMessage;
+
   /// No description provided for @studySessionNotFoundTitle.
   ///
   /// In en, this message translates to:

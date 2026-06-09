@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
@@ -13,6 +12,8 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart'
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/feedback/mx_callout.dart';
+import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
@@ -63,28 +64,33 @@ class _StudySessionReviewSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<StudySessionReview> value = ref.watch(
-      studySessionReviewProvider(sessionId),
+    final AsyncValue<StudySessionReviewState> value = ref.watch(
+      studySessionReviewControllerProvider(sessionId),
     );
 
     return switch (value) {
-      AsyncLoading<StudySessionReview>() => const MxLoadingState(rows: 3),
-      AsyncError<StudySessionReview>(:final error) => _StudySessionErrorState(
+      AsyncLoading<StudySessionReviewState>() => const MxLoadingState(rows: 3),
+      AsyncError<StudySessionReviewState>(:final error) => _StudySessionErrorState(
         error: error,
         onBack: onBack,
       ),
-      AsyncData<StudySessionReview>(:final value) => _StudySessionBody(
-        review: value,
-        state: ref.watch(studySessionReviewControllerProvider(sessionId)),
+      AsyncData<StudySessionReviewState>(:final value) => _StudySessionBody(
+        state: value,
         onToggleAnswer: () => ref
             .read(studySessionReviewControllerProvider(sessionId).notifier)
             .toggleAnswer(),
+        onForgot: () => ref
+            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .gradeForgot(),
+        onGotIt: () => ref
+            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .gradeGotIt(),
         onPrevious: () => ref
             .read(studySessionReviewControllerProvider(sessionId).notifier)
             .previous(),
         onNext: () => ref
             .read(studySessionReviewControllerProvider(sessionId).notifier)
-            .next(value.items.length),
+            .next(),
       ),
     };
   }
@@ -132,16 +138,18 @@ class _StudySessionErrorState extends StatelessWidget {
 
 class _StudySessionBody extends StatelessWidget {
   const _StudySessionBody({
-    required this.review,
     required this.state,
     required this.onToggleAnswer,
+    required this.onForgot,
+    required this.onGotIt,
     required this.onPrevious,
     required this.onNext,
   });
 
-  final StudySessionReview review;
   final StudySessionReviewState state;
   final VoidCallback onToggleAnswer;
+  final VoidCallback onForgot;
+  final VoidCallback onGotIt;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
 
@@ -149,9 +157,32 @@ class _StudySessionBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final ThemeData theme = Theme.of(context);
-    final StudySessionReviewItem item = review.items[state.currentIndex];
+    final StudySessionReview review = state.review;
+    final StudySessionReviewItem item = state.currentItem;
     final int total = review.items.length;
     final TextTheme textTheme = theme.textTheme;
+    Widget? statusCallout;
+    if (state.saveFailure != null) {
+      statusCallout = MxCallout(
+        tone: MxCalloutTone.danger,
+        message: l10n.failureMessage(
+          state.saveFailure!,
+          fallback: l10n.studySessionRecordFailedMessage,
+        ),
+      );
+    }
+    if (statusCallout == null && state.isSaving) {
+      statusCallout = MxCallout(
+        tone: MxCalloutTone.info,
+        message: l10n.studySessionSavingAnswerMessage,
+      );
+    }
+    if (statusCallout == null && state.allAnswered) {
+      statusCallout = MxCallout(
+        tone: MxCalloutTone.info,
+        message: l10n.studySessionAllAnsweredMessage,
+      );
+    }
 
     return Center(
       child: SingleChildScrollView(
@@ -176,16 +207,35 @@ class _StudySessionBody extends StatelessWidget {
               showBack: state.isAnswerVisible,
             ),
             const SizedBox(height: SpacingTokens.lg),
+            if (statusCallout != null) ...<Widget>[
+              statusCallout,
+              const SizedBox(height: SpacingTokens.md),
+            ],
+            if (state.isAnswerVisible || state.isSaving) ...<Widget>[
+              MxCardActions(
+                secondary: MxActionButton(
+                  intent: MxActionIntent.cardSecondary,
+                  label: l10n.studyForgotAction,
+                  onPressed: state.canGradeCurrentItem ? onForgot : null,
+                ),
+                primary: MxActionButton(
+                  intent: MxActionIntent.cardPrimary,
+                  label: l10n.studyGotItAction,
+                  onPressed: state.canGradeCurrentItem ? onGotIt : null,
+                ),
+              ),
+              const SizedBox(height: SpacingTokens.sm),
+            ],
             MxCardActions(
               secondary: MxActionButton(
                 intent: MxActionIntent.cardSecondary,
                 label: l10n.studyPreviousAction,
-                onPressed: state.currentIndex == 0 ? null : onPrevious,
+                onPressed: state.canGoPrevious ? onPrevious : null,
               ),
               primary: MxActionButton(
                 intent: MxActionIntent.cardPrimary,
                 label: l10n.studyNextAction,
-                onPressed: state.currentIndex == total - 1 ? null : onNext,
+                onPressed: state.canGoNext ? onNext : null,
               ),
             ),
             const SizedBox(height: SpacingTokens.sm),
@@ -194,7 +244,7 @@ class _StudySessionBody extends StatelessWidget {
               label: state.isAnswerVisible
                   ? l10n.studySessionHideAction
                   : l10n.studySessionShowAction,
-              onPressed: onToggleAnswer,
+              onPressed: state.isSaving ? null : onToggleAnswer,
               fullWidth: true,
             ),
             const SizedBox(height: SpacingTokens.xl),

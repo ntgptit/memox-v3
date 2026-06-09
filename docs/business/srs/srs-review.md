@@ -133,6 +133,17 @@ update whichever side is chosen in the same commit. The current mismatch is trac
 | `review_count` | Every finalized review (any result) |
 | `lapse_count`  | Only on `forgot` result             |
 
+## In-session self-grade V1
+
+The current Study Session recall shell records answer attempts during the session:
+
+- Reveal the current card.
+- Tap `Forgot` or `Got it`.
+- Persist a `study_attempts` row and set `study_session_items.answered_at`.
+- Do not update `flashcard_progress` yet.
+
+This keeps progress commits and box transitions in the finalization path, while the active session can move to the next unanswered item immediately.
+
 ## Finalization
 
 At session finalization:

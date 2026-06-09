@@ -19,12 +19,12 @@ establishes the visual grammar reused by modes 14-17 (top app bar, progress bar,
 convention).
 
 > **Current V1 implementation note.** The shipped screen at
-> `/library/study/session/:sessionId` is a minimal persisted review shell: it
-> loads the session header + ordered session items, shows the current card with
-> a reveal toggle, adds Previous/Next controls that reset the reveal state when
-> moving between cards, and offers a safe exit action. The full swipe-based
-> multi-card review flow below remains the forward target for later mode work.
-> The result route stays a placeholder.
+> `/library/study/session/:sessionId` is a minimal persisted self-grade shell:
+> it loads the session header + ordered session items, shows the current card
+> with a reveal toggle, exposes Forgot / Got it grading after reveal, marks the
+> answered session item in-session, resets reveal state when moving between
+> cards, and offers a safe exit action. The result route stays a placeholder
+> and `flashcard_progress` is not updated yet.
 
 > **Mode pill / progress-bar color convention (applies to wireframes 13-17).** Modes split into two
 > visual families:
@@ -146,6 +146,10 @@ swiping (gesture is the primary input).
 - Previous button is disabled on the first card.
 - Next button is disabled on the last card.
 - Moving Previous/Next resets the answer to hidden before the next card is shown.
+- Reveal shows Forgot / Got it actions for the current unanswered card.
+- Grading marks the current session item answered and advances to the next unanswered item when available.
+- When all cards in the session are answered, show the caught-up/ready-later message and disable further grading.
+- The swipe-based grading table below is the future review-mode target and does not describe the shipped V1 interaction.
 
 ## Dialogs and bottom-sheets used
 
@@ -154,6 +158,8 @@ swiping (gesture is the primary input).
 - Bury/suspend undo toast — `docs/wireframes/25-shared-bottom-sheets.md` §undo-toast.
 
 ## SRS handling on answer
+
+Current V1 self-grade uses Forgot / Got it after reveal and records the attempt in-session. The swipe rows below remain the forward target for the full review-mode design.
 
 Per `docs/business/srs/srs-review.md`:
 

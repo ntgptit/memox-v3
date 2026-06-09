@@ -97,6 +97,27 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) =>
       into(studyAttempts).insert(attempt);
 
+  Future<int> markStudySessionItemAnswered({
+    required String sessionItemId,
+    required int answeredAtMs,
+    required int updatedAtMs,
+  }) =>
+      (update(
+        studySessionItems,
+      )..where((StudySessionItems row) => row.id.equals(sessionItemId)))
+          .write(
+            StudySessionItemsCompanion(
+              answeredAt: Value<int?>(answeredAtMs),
+              updatedAt: Value<int>(updatedAtMs),
+            ),
+          );
+
+  Future<FlashcardProgressRow?> findFlashcardProgress(String flashcardId) =>
+      (select(
+        attachedDatabase.flashcardProgress,
+      )..where((FlashcardProgress row) => row.flashcardId.equals(flashcardId)))
+          .getSingleOrNull();
+
   Future<int> cancelStudySession({
     required String sessionId,
     required int updatedAtMs,

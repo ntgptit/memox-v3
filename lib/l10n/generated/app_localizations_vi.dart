@@ -2453,6 +2453,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionHideAction => 'Ẩn đáp án';
 
   @override
+  String get studySessionSavingAnswerMessage => 'Đang lưu câu trả lời...';
+
+  @override
+  String get studySessionRecordFailedMessage =>
+      'Không thể lưu câu trả lời này. Vui lòng thử lại.';
+
+  @override
+  String get studySessionAllAnsweredMessage =>
+      'Tất cả thẻ đã được trả lời. Hãy quay lại sau để học tiếp.';
+
+  @override
   String get studySessionNotFoundTitle => 'Không tìm thấy phiên học';
 
   @override

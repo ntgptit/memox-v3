@@ -10,9 +10,11 @@ import 'package:memox/data/repositories/study_repo_impl.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/types/study_mode.dart';
 
 class _StudyDbFixture {
   _StudyDbFixture(this.db);
@@ -138,6 +140,16 @@ class _StudyDbFixture {
   }
 
   int get _nowMs => DateTime.now().toUtc().millisecondsSinceEpoch;
+}
+
+class _ThrowingStudySessionDao extends StudySessionDao {
+  _ThrowingStudySessionDao(super.db);
+
+  @override
+  Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) async {
+    await super.insertStudyAttempt(attempt);
+    throw StateError('boom');
+  }
 }
 
 void main() {
@@ -396,6 +408,113 @@ void main() {
       expect(result.isErr, isTrue);
       expect(await db.select(db.studySessions).get(), isEmpty);
       expect(await db.select(db.studySessionItems).get(), isEmpty);
+    },
+  );
+
+  test(
+    'recordStudySessionAnswer inserts one attempt and marks the session item answered without updating flashcard_progress',
+    () async {
+      const String folderId = 'folder-answer';
+      const String deckId = 'deck-answer';
+      const String cardId = 'card-answer';
+      const String sessionId = 'session-answer';
+      const String sessionItemId = 'item-answer';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        boxNumber: 3,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<void> result = await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        result: AttemptResult.perfect,
+        studyMode: StudyMode.recall,
+      );
+
+      expect(result.isOk, isTrue);
+
+      final List<StudyAttemptRow> attempts = await db.select(db.studyAttempts).get();
+      final StudySessionItemRow updatedItem = await db
+          .select(db.studySessionItems)
+          .getSingle();
+      final FlashcardProgressRow progress = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+
+      expect(attempts, hasLength(1));
+      expect(attempts.single.sessionItemId, sessionItemId);
+      expect(attempts.single.result, 'perfect');
+      expect(attempts.single.studyMode, 'recall');
+      expect(attempts.single.boxBefore, 3);
+      expect(attempts.single.boxAfter, 4);
+      expect(updatedItem.answeredAt != null, isTrue);
+      expect(progress.boxNumber, 3);
+      expect(progress.reviewCount, 0);
+      expect(progress.lapseCount, 0);
+    },
+  );
+
+  test(
+    'recordStudySessionAnswer rolls back attempt and answered_at when the transaction fails',
+    () async {
+      const String folderId = 'folder-answer-fail';
+      const String deckId = 'deck-answer-fail';
+      const String cardId = 'card-answer-fail';
+      const String sessionId = 'session-answer-fail';
+      const String sessionItemId = 'item-answer-fail';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      repository = StudyRepositoryImpl(_ThrowingStudySessionDao(db));
+
+      final Result<void> result = await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        result: AttemptResult.forgot,
+        studyMode: StudyMode.recall,
+      );
+
+      expect(result.isErr, isTrue);
+      expect(await db.select(db.studyAttempts).get(), isEmpty);
+      expect(
+        (await db.select(db.studySessionItems).getSingle()).answeredAt == null,
+        isTrue,
+      );
+      expect((await db.select(db.flashcardProgress).getSingle()).boxNumber, 2);
     },
   );
 }

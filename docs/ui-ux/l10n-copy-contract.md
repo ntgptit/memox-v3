@@ -52,6 +52,9 @@ Examples:
 | `study_recall_show_answer` | Show answer |
 | `study_recall_grade_forgot` | Forgot |
 | `study_recall_grade_got_it` | Got it |
+| `study_session_saving_answer_message` | Saving your answer... |
+| `study_session_record_failed_message` | Couldn't save this answer. Please try again. |
+| `study_session_all_answered_message` | All cards are answered. Come back later to keep studying. |
 | `study_fill_button_hint` | Hint |
 | `study_fill_button_check` | Check |
 | `study_fill_button_mark_correct` | Mark correct |

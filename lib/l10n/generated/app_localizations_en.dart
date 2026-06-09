@@ -2568,6 +2568,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionHideAction => 'Hide answer';
 
   @override
+  String get studySessionSavingAnswerMessage => 'Saving your answer...';
+
+  @override
+  String get studySessionRecordFailedMessage =>
+      'Couldn\'t save this answer. Please try again.';
+
+  @override
+  String get studySessionAllAnsweredMessage =>
+      'All cards are answered. Come back later to keep studying.';
+
+  @override
   String get studySessionNotFoundTitle => 'Session not found';
 
   @override

@@ -87,6 +87,31 @@ Future<Either<Failure, StudySessionReview>> call({required SessionId sessionId})
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.
 
+## RecordStudySessionAnswerUseCase
+
+```dart
+Future<Either<Failure, Unit>> call({
+  required SessionId sessionId,
+  required String sessionItemId,
+  required AttemptResult result,
+  required StudyMode studyMode,
+});
+```
+
+**Rules:**
+
+- LOAD session. Validate status=`draft` or `in_progress`.
+- LOAD ordered session items for the session and locate the current session item.
+- LOAD the linked flashcard's current progress row to derive `box_before` / `box_after`.
+- Atomic: insert `study_attempts` and update `study_session_items.answered_at` in one transaction.
+- Do **not** update `flashcard_progress`.
+- `Forgot` persists as `AttemptResult.forgot`.
+- `Got it` persists as the passing path used by the current recall V1 flow (`AttemptResult.perfect`).
+- If the session item is already answered, return `UnsupportedActionFailure`.
+- If the last unanswered item is answered, leave the session open; do not finalize or navigate to result.
+
+**Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
+
 ## CancelSessionUseCase
 
 ```dart

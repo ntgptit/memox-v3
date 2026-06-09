@@ -126,6 +126,9 @@ stateDiagram-v2
   resumable session exists and the explicit Resume / Start over dialog is not
   implemented yet, the gate returns a controlled `resumeRequired` state and
   waits for user action instead of creating a duplicate session.
+- The Study Session self-grade V1 path reveals the current card, lets the user
+  tap Forgot / Got it, persists the attempt plus `study_session_items.answered_at`,
+  and keeps `flashcard_progress` unchanged until finalization.
 - Exit from active session requires confirmation.
 - Finalization failure must preserve data (status = `failed_to_finalize`).
 - Only one active session per scope at a time. Resume existing instead of creating new (see

@@ -2,6 +2,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -30,6 +31,13 @@ abstract interface class StudyRepository {
   });
 
   Future<Result<void>> cancelStudySession({required SessionId sessionId});
+
+  Future<Result<void>> recordStudySessionAnswer({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required AttemptResult result,
+    required StudyMode studyMode,
+  });
 
   Future<Result<StudySession>> createSession({
     required StudyScope scope,

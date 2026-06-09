@@ -30,6 +30,12 @@ Future<Either<Failure, Session>> createSession({
   required StudyScope scope,
   required List<FlashcardId> flashcardIds,
 });
+Future<Either<Failure, Unit>> recordStudySessionAnswer({
+  required SessionId sessionId,
+  required String sessionItemId,
+  required AttemptResult result,
+  required StudyMode studyMode,
+});
 Future<Either<Failure, Unit>> markInProgress(SessionId id);
 Future<Either<Failure, Unit>> markCompleted(SessionId id);
 Future<Either<Failure, Unit>> markCancelled(SessionId id);
@@ -43,6 +49,7 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 | Operation           | Tables touched                                                                    |
 |---------------------|-----------------------------------------------------------------------------------|
 | `createSession`     | `study_sessions` INSERT + `study_session_items` INSERTs                           |
+| `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`)     |
 | `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
 | `expireOldSessions` | `study_sessions` UPDATE batch                                                     |
 
@@ -79,6 +86,8 @@ strict and must surface the corruption instead of hiding it.
   rows as new active cards. This keeps repaired or legacy local databases from
   failing Study Entry after the scope count has already found cards; progress is
   upserted when the session finalizes.
+- In-session self-grade V1 records attempts and marks `study_session_items.answered_at`
+  only. It does not update `flashcard_progress`; box changes remain finalization-owned.
 
 ## Forbidden
 

@@ -18,6 +18,7 @@ import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -82,6 +83,16 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     cancelCalls++;
     return cancelResult;
+  }
+
+  @override
+  Future<Result<void>> recordStudySessionAnswer({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required AttemptResult result,
+    required StudyMode studyMode,
+  }) async {
+    throw UnimplementedError();
   }
 
   @override

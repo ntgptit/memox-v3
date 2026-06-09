@@ -250,7 +250,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 9.5 | No silent resume | Implemented | Existing resumable session returns controlled `resumeRequired`. |
 | 9.6 | Resume/start-over dialog | Deferred | Current V1 shows controlled state; full dialog remains future task. |
 | 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
-| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle and Previous/Next controls. |
+| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, and in-session answer persistence. |
 | 9.9 | Study result route | Placeholder | `/library/study/session/:sessionId/result` remains placeholder. |
 | 9.10 | Protected active-session exit | Specified / Partial | Active session exit requires confirmation; verify current V1 shell behavior before extending. |
 | 9.11 | Study session persistence recovery | Specified / needs source verification | Session status and items survive app restart. |
@@ -263,7 +263,7 @@ MemoX is a local-first flashcard learning app. Core learning must work offline; 
 | 10.1 | Review mode | Specified / Partial | Both sides shown; swipe right/left semantics; no reveal step. |
 | 10.2 | Match mode | Specified / Partial | 5-pair board, per-pair persistence, one board per 5 cards. |
 | 10.3 | Guess mode | Specified / Partial | Front to back, 5 option cards, auto-advance countdown. |
-| 10.4 | Recall mode | Specified / Partial | Flip-card self-grade; no typed recall in V1. |
+| 10.4 | Recall mode | Implemented / Partial | Flip-card self-grade V1: reveal, Forgot / Got it grading, and next-unanswered advancement; no typed recall in V1. |
 | 10.5 | Fill mode | Specified / Partial | Type front, strict character match, mark-correct override, hint taints to recovered. |
 | 10.6 | Mode sequence resolution | Specified | New full cycle: review → match → guess → recall → fill; SRS uses fill. |
 | 10.7 | Mode UI parity | Ongoing | Wireframes 13-17 and shared study scaffold conventions respected. |
