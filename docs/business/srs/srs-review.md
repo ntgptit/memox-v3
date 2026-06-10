@@ -52,9 +52,12 @@ Important fields:
 - New flashcard starts at `current_box = 1` with `due_at = now`.
 - Due card: `due_at <= now`.
 - **Daily new-card limit (BE V1, WBS 4.5.10):** at most `dailyNewLimit` new cards (default 20)
-  enter study per local day. New-card eligibility queries must respect the remaining quota for the
-  day; cards beyond the quota stay queued for following days. This cap only trims new-card
-  eligibility and does not hide due review cards.
+  enter study per local day. Daily usage is derived from persisted `study_session_items` belonging
+  to new-card sessions whose `started_at` falls within the current local-day window
+  (`start <= started_at < end`). Cancelled new-card sessions still consume quota in BE V1 because
+  the persisted items are the source of truth. New-card eligibility queries must respect the
+  remaining quota for the day; cards beyond the quota stay queued for following days. This cap only
+  trims new-card eligibility and does not hide due review cards.
   Rationale: a new card defaults to `due_at = now`, so without a limit a 500-row import floods
   "Today" with 500 cards at once — the primary burnout driver in SRS apps.
 - Deleted flashcards must not appear in due list (foreign key enforced).

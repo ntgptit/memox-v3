@@ -144,6 +144,10 @@ Status notes (see `docs/business/glossary.md` §Status terms):
   Rationale: unbounded recursive folder scopes create 300-card sessions that combine badly with
   all-or-nothing finalization — abandoning at card 150 yields zero SRS credit. Small batches cap
   the loss and create completion moments.
+- **Daily new-card limit (BE V1, WBS 4.5.10):** new-card study is capped per local day from the
+  persisted `study_session_items` of earlier new-card sessions. The quota uses the local-day window
+  (`start <= started_at < end`), cancelled new-card sessions still consume quota in V1, and
+  `srs_review` sessions are not reduced by this cap.
 - **Today-session snapshot rule:** session items are snapshotted at creation. Cards that become
   due AFTER the session was created are NOT injected into the running session; they surface on
   the Dashboard/gate after finalization. The all-done empty state means "all due at session
