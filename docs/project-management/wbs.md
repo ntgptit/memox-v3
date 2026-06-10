@@ -356,6 +356,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 | `44407390` | 2026-06-10 | 6.6.1, 6.9.1 | Import duplicate detection + structured text backend |
 | `a35f32f1` | 2026-06-10 | 2.17.1, 2.18.1 | Flashcard list status + tag backend filters |
 | `4d1eba04` | 2026-06-10 | 7.1.1, 7.2.1, 7.3.1, 7.4.1 | Progress read model backend V1 |
+| `bde2a3dc` | 2026-06-10 | 1.1.7, 9.8 | Reconcile 43 docs with source reality: downgrade phantom Implemented claims (bury/suspend, resume banners, TTS, progress screen, Prompt 45/46/47), correct shipped-but-marked-pending schema claims, repoint scope gate to WBS §6, flag open product decisions (SRS demotion, perfect vs initial_passed, streak pause) |
 | `aa5f9a76` | 2026-06-10 | 4.6.2 | Verify SRS box transition + interval ladder vs doc contract; table-driven tests S11–S15; fix phantom decision-table test refs |
 | `7b3c1691` | 2026-06-10 | 3.8, 5.2, 5.5, 5.7, 5.8, 5.9, 5.10 | Commit deck import with CSV paste preview and transactional insert flow |
 | `dd8688a` | 2026-06-09 | 20.6, 18.9, 5.1–5.9, 6.1–6.6 | Update WBS and UI kit references for accuracy and traceability |
