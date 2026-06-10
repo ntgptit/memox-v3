@@ -1,492 +1,314 @@
-﻿# MemoX v3 Work Breakdown Structure (WBS)
+# MemoX v3 Work Breakdown Structure (WBS)
 
-Generated: 2026-06-09  
-Last reviewed: 2026-06-10  
-Repository: `ntgptit/memox-v3`  
-Baseline reviewed: local `main`, latest observed WBS-reviewed commit `dd8688a` (`docs: update WBS and UI kit references for accuracy and traceability`). Prior baseline was `5fbdf96d` (`feat(search): refactor GlobalSearchScreen and SearchAppBarField for improved query handling`); since then deck import gained CSV paste + parse + validation preview (`c1e89cf5`), the flashcard editor gained focus-managed draft handling (`38af6d94`), global search query handling was refactored (`5fbdf96d`), and WBS/UI kit traceability references were corrected (`dd8688a`).
+Generated: 2026-06-09
+Last reviewed: 2026-06-10
+Repository: `ntgptit/memox-v3`
+Baseline reviewed: local `main` = remote `origin/main` at `e7b9af69` (`docs(wbs): add deck import transaction traceability`). This revision rebuilds the WBS as a whole-project, function-level delivery plan: every major flow is decomposed into BE (local-backend) and FE (presentation) function rows with explicit dependencies, evidence paths, and verified commit anchors.
 
 ## 0. Purpose
 
-This WBS decomposes MemoX into product, architecture, data, UI, test, and delivery work packages. It is intended for planning, tracking, and creating narrow AI-agent prompts.
+This WBS is the delivery plan for the whole MemoX project. It decomposes every user-facing flow into function-level work packages so that each row is independently deliverable, testable, and reviewable by an AI agent in a single narrow prompt.
 
 MemoX is a local-first flashcard learning app. Core learning must work offline; Google account and Drive backup are optional. The local database is the source of truth, and UI/business behavior must follow the business docs, wireframes, decision tables, and source contracts.
+
+Terminology used by the `Layer` column:
+
+- **BE** — MemoX local backend inside Flutter: domain model, use case, repository port, repository implementation, Drift table/DAO/query, transaction, provider wiring, backend/unit tests.
+- **FE** — Flutter presentation: screen, widget, Riverpod presentation state, navigation, loading/empty/error states, ARB/l10n copy, widget tests.
+- **Integration** — behavior that spans BE and FE (navigation wiring, cross-flow consistency, end-to-end transactions visible to the user).
+- **Docs** — business docs, wireframes, decision tables, contracts.
+- **Test** — quality gates that are not owned by a single feature row.
 
 ## 1. Status Legend
 
 | Status | Meaning |
 | --- | --- |
-| Implemented | Confirmed by current docs and/or source route/schema wiring. |
-| Partial | Some visible/source pieces exist, but behavior is not complete. |
-| Specified | Product/spec docs exist, implementation needs source verification or work. |
-| Target | Intended future behavior, not safe to implement without promotion/checklist. |
+| Implemented | Confirmed by current source, tests, and/or docs evidence. |
+| Partial | Some source pieces exist, but the function is not complete (e.g. UI shell without data wiring). |
+| Specified | Product/spec docs exist; implementation work is still needed. |
+| Target | Intended future behavior; not safe to implement without promotion/checklist. |
 | Future | Future proposal; do not implement without explicit approval. |
 | Blocked | Requires prerequisite schema/contract/product decision. |
 | Rejected | Explicitly out of scope; do not implement. |
-
-## 2. Source Evidence Reviewed
-
-### Business / product docs
-
-- `docs/business/system/overview.md`
-- `docs/business/navigation/navigation-flow.md`
-- `docs/business/folder/folder-management.md`
-- `docs/business/deck/deck-management.md`
-- `docs/business/flashcard/flashcard-management.md`
-- `docs/business/study/study-flow.md`
-- `docs/business/srs/srs-review.md`
-- `docs/business/study-actions/bury-suspend.md`
-- `docs/business/tags/tag-system.md`
-- `docs/business/bulk/bulk-operations.md`
-- `docs/business/search/global-search.md`
-- `docs/business/tts/tts-settings.md`
-- `docs/business/account-sync/account-sync.md`
-
-### Architecture / data / checklist docs
-
-- `docs/architecture/clean-architecture-contract.md`
-- `docs/database/schema-contract.md`
-- `docs/checklist/implementation-checklist.md`
-
-### Design / UI kit
-
-- `docs/system-design/MemoX Design System/ui_kits/mobile/README.md` (23-screen mobile gallery, screens `01`–`23`)
-- `docs/system-design/MemoX Design System/ui_kits/mobile/AUDIT.md` (Flutter-handoff audit, token/widget map)
-- Note: the UI kit README now points screen sources at the actual path `lib/presentation/features/**` (corrected 2026-06-09, commit `dd8688a`).
-
-### Source files
-
-- `lib/app/router/app_router.dart`
-- `lib/app/router/route_paths.dart`
-- `lib/presentation/features/dashboard/routes/dashboard_routes.dart`
-- `lib/presentation/features/dashboard/screens/dashboard_screen.dart`
-- `lib/presentation/features/folders/routes/folder_routes.dart`
-- `lib/presentation/features/flashcards/routes/flashcard_routes.dart`
-- `lib/presentation/features/study/routes/study_routes.dart`
-- `lib/presentation/features/settings/routes/settings_routes.dart`
-- `lib/data/datasources/local/app_database.dart`
-
-## 3. Product-Level WBS
-
-### 1. MemoX App
-
-| WBS ID | Work package | Current status | Main evidence / notes |
-| --- | --- | --- | --- |
-| 1.1 | Product scope and app principles | Specified | Local-first, offline core learning, optional login/backup, mobile-first calm UX. |
-| 1.2 | App architecture foundation | Implemented / Ongoing | Clean Architecture layers: `app`, `core`, `domain`, `data`, `presentation`, `l10n`. |
-| 1.3 | Navigation foundation | Implemented / Ongoing | GoRouter, `RouteNames`, `RoutePaths`, shell routes, hidden child routes. |
-| 1.4 | Drift local database foundation | Implemented / Ongoing | Current schema version 4, `.drift` schema includes folders/decks/flashcards/tags/progress/study tables. |
-| 1.5 | Design system and shared UI | Partial / Ongoing | Shared `Mx*` widgets used across screens; continue enforcing stateless/controlled patterns. |
-| 1.6 | Localization | Implemented / Ongoing | ARB + generated l10n. Must update on every user-facing copy change. |
-| 1.7 | Quality gates | Implemented / Ongoing | Analyzer, tests, build_runner, guard, doc-code parity checklist. |
-| 1.8 | Release/platform readiness | Partial | Flutter targets include web/android/windows priority; platform-specific DB/sync require continued verification. |
-
-## 4. Detailed WBS
-
-### 1.1 Product Scope and Governance
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 1.1.1 | Product overview maintenance | Implemented / Ongoing | `docs/business/system/overview.md` reflects current/future capability status. |
-| 1.1.2 | Business glossary and terminology | Specified | Entity/type names match source enums and user-facing behavior. |
-| 1.1.3 | Feature scope control | Ongoing | Future/Target rows are not implemented without promotion. |
-| 1.1.4 | Decision table maintenance | Ongoing | Every new behavior branch has a decision row and test reference. |
-| 1.1.5 | WBS maintenance | New | Update this file after major feature promotion or source/doc parity change. |
-
-### 1.2 Architecture Foundation
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 1.2.1 | App layer bootstrap | Implemented | Router, DI, shell are wired only in `lib/app/**`. |
-| 1.2.2 | Core utilities/theme/errors | Implemented / Ongoing | Theme tokens, failure/result contracts, constants, id utilities remain reusable. |
-| 1.2.3 | Domain layer contracts | Implemented / Ongoing | Entities, types, use cases, repository ports contain no data/presentation dependencies. |
-| 1.2.4 | Data layer contracts | Implemented / Ongoing | Drift DAO/repository implementations map storage rows to domain models. |
-| 1.2.5 | Presentation feature isolation | Implemented / Ongoing | Feature routes may be imported; private widgets/viewmodels are not imported across feature folders. |
-| 1.2.6 | Shared UI promotion rule | Ongoing | Repeated UI patterns become `lib/presentation/shared/**`, not duplicated per feature. |
-| 1.2.7 | Generated file discipline | Ongoing | `*.g.dart`, `*.freezed.dart`, l10n generated files, and Drift generated DB files are not manually edited. |
-
-### 1.3 Navigation and Routing
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 1.3.1 | Top-level shell routes | Partial | `/home`, `/library`, `/settings` are wired to real screens; `/progress` remains placeholder. |
-| 1.3.2 | Route constants and builders | Implemented | All paths use `RoutePaths`/`RouteNames`; no raw route strings in widgets. |
-| 1.3.3 | Library branch routes | Implemented / Partial | Library overview, global search, folder detail, flashcard list are wired. |
-| 1.3.4 | Hidden library routes | Partial | Flashcard create/edit are real; deck import remains placeholder. |
-| 1.3.5 | Study routes | Partial | Study entry and study session are real; study result is now a real screen. |
-| 1.3.6 | Settings routes | Partial | Settings hub, learning, learning/tags, audio-speech are real; account route remains placeholder. |
-| 1.3.7 | Route ordering guard | Implemented / Ongoing | Specific study session route stays before generic study entry route. |
-| 1.3.8 | Invalid route handling | Ongoing | Invalid params render controlled error/safe route, not crash. |
-| 1.3.9 | Push/go semantics | Ongoing | Follow documented push vs go table for back stack behavior. |
-| 1.3.10 | First-run / onboarding | Rejected | V1 boots directly into Library; `route_paths.dart` comment explicitly forbids replacing this with an onboarding wizard. UI kit screen 01 is reference-only — do not implement without product promotion. |
-
-### 1.4 Local Database and Persistence
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 1.4.1 | Drift schema version 4 | Implemented | `AppDatabase.currentSchemaVersion = 4`; migrations v2/v3/v4 wired. |
-| 1.4.2 | `.drift` table/query layout | Implemented / Ongoing | Schema and SQL stay in `.drift`, not long raw SQL in Dart. |
-| 1.4.3 | Folders table | Implemented | Hierarchical folders with content mode and sort order. |
-| 1.4.4 | Decks table | Implemented | Folder-owned decks with non-null `folder_id`; root-level decks rejected. |
-| 1.4.5 | Flashcards table | Implemented | Front/back and optional detail fields; deck-owned. |
-| 1.4.6 | Flashcard tags table | Implemented | Per-card lowercased tags with tag index. |
-| 1.4.7 | Flashcard progress table | Implemented | Box/due/review/lapse plus bury/suspend fields. |
-| 1.4.8 | Study tables | Implemented | Sessions, session items, attempts are present. |
-| 1.4.9 | TTS settings storage | Specified / needs source verification | Docs describe current Drift-backed single-row settings; verify against current schema before task. |
-| 1.4.10 | Account link storage | Specified | SharedPreferences, not Drift. |
-| 1.4.11 | Per-account DB isolation | Specified / Target implementation | DB filename must depend on guest vs Google subject id. |
-| 1.4.12 | Schema migration process | Ongoing | Any schema change bumps version, adds `onUpgrade`, updates docs/tests/generated files. |
-| 1.4.13 | Transaction safety | Ongoing | Multi-table writes use transactions: import, session creation/finalization, tags, bulk ops, sync restore. |
-
-## 5. Feature WBS
-
-### 2. Library and Content Organization
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 2.1 | Library overview screen | Implemented / Partial | Shows library entry, top-level content, safe loading/empty/error states. |
-| 2.2 | Folder detail screen | Implemented / Partial | Shows child folders/decks and study entry points. |
-| 2.3 | Folder create | Specified / needs source verification | Required trimmed name; parent mode locks to subfolders. |
-| 2.4 | Folder rename | Specified / needs source verification | Required trimmed name, localized validation/error states. |
-| 2.5 | Folder delete | Specified / needs source verification | Safe confirmation; cascade/dependent cleanup according to persistence rules. |
-| 2.6 | Folder move | Specified / needs source verification | Prevent cycle; validate parent mode. |
-| 2.7 | Folder reorder | Specified / needs source verification | Updates `sort_order` only when current sort mode allows manual reorder. |
-| 2.8 | Folder content mode guard | Specified / Partial | Parent may contain subfolders or decks, not both; must be enforced outside UI. |
-| 2.9 | Folder due/card counts | Specified / Partial | Counts stream from DB, not computed in widget. |
-| 2.10 | Folder empty/error/loading states | Ongoing | Use shared `MxLoadingState`, `MxEmptyState`, `MxErrorState`. |
-
-### 3. Deck Management
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 3.1 | Folder-owned deck invariant | Implemented / Ongoing | Every deck belongs to exactly one folder; root decks are rejected. |
-| 3.2 | Deck list inside folder | Implemented / Partial | Folder detail lists decks when folder mode allows decks. |
-| 3.3 | Deck create | Specified / needs source verification | Required trimmed name; parent folder locks to `decks`. |
-| 3.4 | Deck rename | Specified / needs source verification | Required trimmed name; localized validation. |
-| 3.5 | Deck delete | Specified / needs source verification | Deletes flashcards and dependent data through persistence rules. |
-| 3.6 | Deck reorder | Specified / needs source verification | Updates `sort_order` only. |
-| 3.7 | Deck target language | Implemented in schema / Partial feature | Required by docs; verify create/edit UI and TTS gate coverage before claiming done. |
-| 3.8 | Deck import route | Implemented / V1 (CSV paste + commit) | `/library/deck/:deckId/import` opens `DeckImportScreen`. V1 exposes CSV paste input + parse + validation preview + transactional commit; file picker, Excel, and structured text stay deferred. |
-| 3.9 | Deck export | Specified / needs source verification | Export belongs to export feature scope. |
-| 3.10 | Deck due/card badges | Specified / Partial | Counts stream from DB; due count excludes buried/suspended. |
-
-### 4. Flashcard Management
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 4.1 | Flashcard list screen | Implemented / Partial | `/library/deck/:deckId/flashcards` is real. |
-| 4.2 | Flashcard create screen | Implemented | Route opens `FlashcardEditorScreen` with deck id. |
-| 4.3 | Flashcard edit screen | Implemented | Route opens `FlashcardEditorScreen` with deck id + flashcard id. |
-| 4.4 | Required content validation | Specified / needs source verification | Front/back required after trim. |
-| 4.5 | Optional fields | Implemented / Partial | Example, pronunciation, hint are schema-backed and store blank as null. |
-| 4.6 | Tag input on flashcard editor | Implemented / Partial | Tags trim, lowercase, validate non-empty, dedupe case-insensitively. |
-| 4.7 | Flashcard delete | Specified / needs source verification | Related local data removed by cascade/persistence rules. |
-| 4.8 | Flashcard reorder | Specified / needs source verification | Reorder updates `sort_order`. |
-| 4.9 | Status filter chips | Pending / Partial | Active/Suspended/Buried/Due filters are specified; verify current UI coverage. |
-| 4.10 | Tag filter chips | Specified / Partial | Multi-select AND semantics inside current deck. |
-| 4.11 | Suspended/buried badges | Pending / Partial | Docs list as still pending in flashcard list. |
-| 4.12 | Flashcard history | Future / Blocked | Requires `last_reset_at`, `box_before`, `box_after`; not V1 current. |
-
-### 5. Import
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 5.1 | Deck import route | Implemented | Route renders `DeckImportScreen` (501-line screen), not `RoutePlaceholder`. |
-| 5.2 | CSV import (paste) | Implemented / Partial | V1 parses pasted CSV text through a domain use case and keeps UTF-8 file decoding via picker deferred. |
-| 5.3 | Excel import | Specified | Read first sheet; header toggle controls row 1. Still deferred. |
-| 5.4 | Structured text import | Specified | Separator supports auto/tab/comma/colon/slash/semicolon/pipe. Still deferred. |
-| 5.5 | Import preparation | Implemented / Partial | Preview builds rows + validation issues from pasted CSV via a domain use case. Skipped-duplicate aggregation remains future. |
-| 5.6 | Duplicate detection | Specified / needs source verification | Front/back duplicate against import file and existing deck, case-insensitive; verify coverage in current preview. |
-| 5.7 | Import preview screen | Implemented / Partial | In-screen preview (rows + issues + summary) renders before commit; clean preview enables the transactional CTA. |
-| 5.8 | Import commit transaction | Implemented | Insert valid preview rows, default SRS progress, and timestamps in one transaction. |
-| 5.9 | Import result feedback | Implemented / V1 snackbar | V1 uses snackbar and pops back, not a standalone result screen. |
-| 5.10 | Import validation tests | Implemented / Partial | `test/.../deck_import_screen_test.dart` covers preview/validation/commit states; rollback tests cover transactional failure. |
-
-### 6. Search
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 6.1 | Global library search route | Implemented | `/library/search` opens `GlobalSearchScreen`. |
-| 6.2 | Folder/deck/flashcard search sections | Implemented / Current | Grouped results with per-section cap and counts. |
-| 6.3 | Search ranking | Specified / needs source verification | Exact match → starts-with → substring → recency tie-break. |
-| 6.4 | LIKE escaping | Specified / critical | Escape `%`, `_`, `\`; no raw query as LIKE pattern. |
-| 6.5 | Min query + debounce | Specified / needs source verification | 2-char minimum, 300ms debounce. |
-| 6.6 | Result navigation | Specified / Current | Folder → folder detail; deck → flashcard list; flashcard → owning deck. |
-| 6.7 | Tags search section | Future / Blocked | Requires tag subsystem promotion. |
-| 6.8 | Recent searches | Future / Blocked | Requires approved SharedPreferences dependency usage. |
-| 6.9 | Popular tags landing | Future / Blocked | Requires tag subsystem. |
-| 6.10 | Inline local search | Implemented / Partial | Library/folder/flashcard/tag management scope-local filters. |
-
-### 7. Tags
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 7.1 | Tag storage | Implemented | `flashcard_tags` table; tag is lowercased text per flashcard. |
-| 7.2 | Tag validation | Implemented / Ongoing | Trim, non-empty, max length, comma forbidden, leading `#` handling if supported. |
-| 7.3 | Tag filter in flashcard list | Specified / Partial | Multi-select AND semantics; clear filters empty state. |
-| 7.4 | Tag management route | Implemented route | `/settings/learning/tags` opens `SettingsTagManagementScreen`. |
-| 7.5 | Tag list/count/search | Specified / needs source verification | Distinct tags, usage count, search by substring. |
-| 7.6 | Tag rename | Specified / needs source verification | Transactional; conflict behaves as merge with confirmation. |
-| 7.7 | Tag merge | Specified / needs source verification | Transactional, dedupe duplicate tag rows. |
-| 7.8 | Tag delete | Specified / needs source verification | Confirmation; removes tag rows only, not cards. |
-| 7.9 | Study by tag | Blocked / Future | Requires `StudyEntryType.tag`, tag-scope queries, routes/tests. |
-| 7.10 | Tag result section in global search | Future | Not current V1. |
-| 7.11 | Bulk tag operations | Specified / Future | Add/remove/replace tags on selected cards transactionally. |
-
-### 8. Bulk Operations
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 8.1 | Selection mode | Specified / needs source verification | Long-press/select action enters ephemeral selection mode. |
-| 8.2 | Select all visible | Specified | Selects current filtered snapshot, not re-evaluated at action execution. |
-| 8.3 | Bulk delete | Specified | Confirmation, single transaction, cascade applies. |
-| 8.4 | Bulk move to deck | Specified | Validates target deck/folder mode; preserves progress/tags; recomputes sort order. |
-| 8.5 | Bulk add/remove tags | Specified | Transactional; toast undo. |
-| 8.6 | Bulk suspend/unsuspend | Specified / Pending | Updates progress state transactionally; toast undo. |
-| 8.7 | Bulk bury/unbury | Specified / Pending | Sets/clears `buried_until`; toast undo. |
-| 8.8 | Bulk reset progress | Specified / Blocked | Requires `last_reset_at`; must not delete attempts. |
-| 8.9 | Bulk export | Specified / needs source verification | Builds CSV/Excel from selected cards. |
-| 8.10 | Bulk performance | Specified | Use bulk SQL/chunking; avoid per-row transaction loops. |
-
-### 9. Study Entry and Session
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 9.1 | Study entry route for deck/folder | Implemented | `/library/study/:entryType/:entryRefId`, supports deck/folder. |
-| 9.2 | Today study route | Implemented | `/library/study/today`. |
-| 9.3 | Study entry parsing | Implemented / Ongoing | Validates entry type/ref id/study type/mode query. |
-| 9.4 | Empty scope handling | Implemented / Partial | Deck/folder/today empty states implemented; tag scope blocked. |
-| 9.5 | No silent resume | Implemented | Existing resumable session returns controlled `resumeRequired`. |
-| 9.6 | Resume/start-over dialog | Implemented | Study Entry now shows explicit Resume / Start over / Back actions; Start over confirms before canceling and restarting the same scope. |
-| 9.7 | Session creation | Implemented | Persisted `study_sessions` + `study_session_items`, transactional. |
-| 9.8 | Study session route | Implemented V1 shell | Loads persisted session + ordered items, shows the current card with reveal toggle, Forgot / Got it grading, Previous/Next controls, Finish Session when all items are answered, and in-session answer persistence. |
-| 9.9 | Study result route | Implemented | `/library/study/session/:sessionId/result` opens `StudyResultScreen` with completed-session summary and controlled fallback states. |
-| 9.10 | Protected active-session exit | Implemented | Active session exit requires confirmation; confirmed exit leaves the session resumable without canceling it and falls back to Library when the route cannot pop. |
-| 9.11 | Study session persistence recovery | Implemented / Ongoing | Persisted in-progress sessions reload by sessionId, preserve answered items, and enter the review shell safely even when all items are already answered. |
-| 9.12 | Study attempt persistence | Specified / Partial | Attempts must be persisted; full mode implementations may still be pending. |
-| 9.13 | Study mode strategy V1 | Partial | Recall self-grade is resolved through `StudyModeStrategyFactory`; non-recall modes return a controlled unsupported strategy until persisted mode selection is added. |
-
-### 10. Study Modes
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 10.1 | Review mode | Specified / Partial | Both sides shown; swipe right/left semantics; no reveal step. |
-| 10.2 | Match mode | Specified / Partial | 5-pair board, per-pair persistence, one board per 5 cards. |
-| 10.3 | Guess mode | Specified / Partial | Front to back, 5 option cards, auto-advance countdown. |
-| 10.4 | Recall mode | Implemented / Partial | Flip-card self-grade V1: reveal, Forgot / Got it grading, and next-unanswered advancement; no typed recall in V1. |
-| 10.5 | Fill mode | Specified / Partial | Type front, strict character match, mark-correct override, hint taints to recovered. |
-| 10.6 | Mode sequence resolution | Specified | New full cycle: review → match → guess → recall → fill; SRS uses fill. |
-| 10.7 | Mode UI parity | Ongoing | Wireframes 13-17 and shared study scaffold conventions respected. |
-| 10.8 | Current V1 review shell | Implemented | Persisted session review shell with current-card navigation, reveal, Forgot / Got it self-grade, Finish Session after all items are answered, and the real result screen. |
-| 10.9 | Mode persistence tests | Needed | Each mode needs attempt/result/state tests when implemented. |
-
-### 11. SRS and Progress
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 11.1 | Flashcard progress state | Implemented | Box/due/review/lapse fields exist. |
-| 11.2 | Leitner 8-box transition contract | Specified / Partial | UI does not update SRS directly; finalization computes outcome. |
-| 11.3 | Due-card filtering | Implemented / Ongoing | `due_at <= now`, exclude suspended and currently buried. |
-| 11.4 | New-card default progress | Implemented / Ongoing | New flashcard starts box 1, due now. |
-| 11.5 | Attempt classification | Specified / Partial | `perfect`, `initial_passed`, `recovered`, `forgot`. |
-| 11.6 | Session finalization transaction | Implemented | Attempts, progress, and session completion happen in one transaction; failures roll back without partial writes. |
-| 11.7 | Finalization failure recovery | Partial | Finish failure keeps the session open with a controlled error; retry remains a future result-screen concern. |
-| 11.8 | Progress screen | Placeholder / Partial | `/progress` route currently placeholder. |
-| 11.9 | Box distribution chart | Future / Blocked | Requires box history fields if based on attempts. |
-| 11.10 | Card history | Future / Blocked | Requires `last_reset_at`, `box_before`, `box_after`. |
-
-### 12. Bury and Suspend
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 12.1 | Bury card | Implemented in study / Partial elsewhere | Sets `buried_until`; no attempt; preserves SRS. |
-| 12.2 | Suspend card | Implemented in study / Partial elsewhere | Sets `is_suspended`; no attempt; preserves SRS. |
-| 12.3 | Due/new query exclusion | Implemented | Suspended and current buried cards excluded from study queues/due counts. |
-| 12.4 | Active-session removal | Implemented | Bury/suspend current card removes from queue and advances/finalizes. |
-| 12.5 | Undo for active-session reinsert | Pending | Docs note undo currently reverts progress only, not active-session reinsert. |
-| 12.6 | Flashcard list badges | Pending | Suspended/buried badges on cards. |
-| 12.7 | Flashcard list filters | Pending / Partial | Active/Suspended/Buried/Due chips. |
-| 12.8 | Bulk suspend/unsuspend | Pending | Via bulk operations. |
-| 12.9 | Unsuspend from list | Pending | Surface in suspended filter/detail. |
-
-### 13. Dashboard and Engagement
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 13.1 | Dashboard top-level route | Implemented / Partial | `/home` opens `DashboardScreen`. |
-| 13.2 | Today study shortcut | Implemented / Partial | `dueToday > 0` routes to `RoutePaths.studyTodayTemplate` through Study Entry; `dueToday == 0` shows caught-up/no-due copy, disables Study CTA, and does not enter study flow. |
-| 13.3 | Resume session entry | Implemented / V1 | Dashboard surfaces the latest resumable session as a top card with scope, progress, last active, and Continue CTA; hides the card when no resumable session exists; does not surface discard or a paused-session list in V1. |
-| 13.4 | Due count summary | Specified / Partial | Excludes buried/suspended. |
-| 13.5 | Streak stat placeholder | Partial | Product overview says simple `0 days` visual/stat placeholder exists. |
-| 13.6 | Daily goal | Future / Target | SharedPreferences settings; not current full implementation. |
-| 13.7 | Reminders | Future / Target | SharedPreferences settings; no full reminder flow yet. |
-| 13.8 | Engagement persistence | Future / Target | Longest streak, last goal-met date stored outside Drift. |
-| 13.9 | Stats screen | Future / Specified | UI kit screen 18 (weekly chart + per-deck mastery); distinct from Progress (11.8). No screen/route exists; needs aggregate read model before implementation. |
-
-### 14. Settings
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 14.1 | Settings hub | Implemented | `/settings` opens `SettingsScreen`. |
-| 14.2 | Account settings route | Placeholder | `/settings/account` currently RoutePlaceholder. |
-| 14.3 | Learning settings route | Implemented | `/settings/learning` opens `LearningSettingsScreen`. |
-| 14.4 | Tag management route | Implemented | `/settings/learning/tags` opens `SettingsTagManagementScreen`. |
-| 14.5 | Audio/speech settings route | Implemented | `/settings/audio-speech` opens `AudioSpeechSettingsScreen`. |
-| 14.6 | Appearance/locale settings | Future | Disabled/future rows on Settings Hub. |
-| 14.7 | Study defaults | Partial | Learning settings current V1 defaults; daily goal/reminder future. |
-| 14.8 | Settings loading/error states | Ongoing | Use shared `Mx*` states and l10n. |
-
-### 15. TTS / Audio Speech
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 15.1 | TTS service abstraction | Specified / needs source verification | Domain talks through `TtsService`, not Flutter plugin directly. |
-| 15.2 | Flutter TTS platform service | Specified / needs source verification | Platform implementation under data/services. |
-| 15.3 | Global/front-language settings | Specified / Current V1 | Single settings row, not independent per-language settings. |
-| 15.4 | Audio/speech settings screen | Implemented / Partial | Route real; docs say surface follows mock/gallery while data contract remains global/front-language. |
-| 15.5 | Voice selection | Specified | Filter by language; clear voice on language change. |
-| 15.6 | Rate/pitch/volume normalization | Specified | Clamp on read/write. |
-| 15.7 | Speak front only policy | Specified | Back/note are not spoken. |
-| 15.8 | Deck target-language TTS gate | Blocked / Partial | Depends on deck target_language flow and source verification. |
-| 15.9 | Auto-play on reveal | Specified / Partial | Applies only study-session flashcard reveal. |
-| 15.10 | Independent Korean/English setting sets | Target / Future | Do not implement without migration/product decision. |
-
-### 16. Account and Drive Sync
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 16.1 | Account settings route | Placeholder | `/settings/account` not wired to real screen yet. |
-| 16.2 | Optional Google account linking | Specified | App works fully offline as guest. |
-| 16.3 | Drive AppData authorization | Specified | Only `drive.appdata` scope; cannot access normal Drive files. |
-| 16.4 | Cloud account link store | Specified | SharedPreferences, corruption-tolerant. |
-| 16.5 | Account statuses | Specified | signedOut/signedIn/needsDriveAuthorization/unconfigured/unsupported/error. |
-| 16.6 | Guest → signed-in choice | Specified | User chooses attach guest data or fresh account DB. |
-| 16.7 | Per-account database context | Specified | Guest and Google account DB names isolated. |
-| 16.8 | Manual backup upload | Specified | Requires linked authorized account. |
-| 16.9 | Manual restore | Specified | Conflict/safety protection, platform snapshot gateway. |
-| 16.10 | Web snapshot gateway | Specified | Uses WasmDatabase/sqlite3.wasm/drift worker. |
-| 16.11 | IO snapshot gateway | Specified | Copy/restore SQLite file via temp file and reopen DB. |
-| 16.12 | Sync metadata | Specified | SharedPreferences-backed metadata. |
-
-### 17. Export
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 17.1 | Deck export | Specified / needs source verification | Deck is export unit. |
-| 17.2 | Flashcard selection export | Specified / needs source verification | Export selected flashcards. |
-| 17.3 | Bulk export | Specified | Builds CSV/Excel from selected. |
-| 17.4 | Export with metadata | Out of scope | Use Drive sync for backup; do not add metadata export unless approved. |
-
-### 18. UI / Design System
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 18.1 | MemoX design tokens | Implemented / Ongoing | No raw colors/styles/durations in feature UI. |
-| 18.2 | Shared layout scaffolds | Implemented / Ongoing | Use `MxScaffold`, list/form/study scaffolds where applicable. |
-| 18.3 | Shared state widgets | Implemented / Ongoing | Loading/empty/error states consistent. |
-| 18.4 | Shared action buttons | Implemented / Ongoing | Touch targets and disabled states pass UI contract. |
-| 18.5 | Shared dialogs/bottom sheets | Specified / Partial | Confirmation and picker patterns should be reused. |
-| 18.6 | Responsive/mobile-first layouts | Ongoing | Avoid overflow on narrow screens. |
-| 18.7 | Accessibility/touch target | Ongoing | Touch targets at least 48dp. |
-| 18.8 | Dark/light theme parity | Ongoing | Verify every new screen in both themes. |
-| 18.9 | UI kit visual contract | Ongoing | `ui_kits/mobile` (23-screen gallery) is the visual reference; implemented screens map below. |
-
-### 18a. UI Kit Screen Traceability (mobile gallery 01–23)
-
-Maps each gallery screen to its WBS work package, implementation status, and source screen file (under `lib/presentation/features/**`). A blank source path means no implemented screen yet.
-
-| UI kit # | Screen | WBS ID | Status | Source screen |
-| --- | --- | --- | --- | --- |
-| 01 | Onboarding | 1.3.10 | Rejected | — (V1 boots to Library; `route_paths.dart` forbids onboarding wizard) |
-| 02 | Dashboard | 13.1–13.8 | Implemented / Partial | `dashboard/screens/dashboard_screen.dart` |
-| 03 | Library overview | 2.1 | Implemented / Partial | `folders/screens/library_overview_screen.dart` |
-| 04 | Folder detail | 2.2 | Implemented / Partial | `folders/screens/folder_detail_screen.dart` |
-| 05 | Library search | 6.1–6.6 | Implemented | `search/screens/global_search_screen.dart` |
-| 06 | Flashcard list | 4.1 | Implemented / Partial | `flashcards/screens/flashcard_list_screen.dart` |
-| 07 | Flashcard create | 4.2 | Implemented | `flashcards/screens/flashcard_editor_screen.dart` |
-| 08 | Flashcard edit | 4.3 | Implemented | `flashcards/screens/flashcard_editor_screen.dart` |
-| 09 | Flashcard history | 4.12 | Future / Blocked | — (needs `last_reset_at`, `box_before`, `box_after`) |
-| 10 | Deck import | 3.8, 5.1–5.9 | Implemented / Partial (CSV paste) | `flashcards/screens/deck_import_screen.dart` |
-| 11 | Tag management | 7.4–7.8 | Implemented / Partial | `settings/screens/tag_management_screen.dart` |
-| 12 | Study · Review | 10.1 | Specified / Partial | `study/screens/study_session_screen.dart` (shared shell) |
-| 13 | Study · Match | 10.2 | Specified / Partial | — (mode strategy unsupported in V1) |
-| 14 | Study · Guess | 10.3 | Specified / Partial | — (mode strategy unsupported in V1) |
-| 15 | Study · Recall | 10.4 | Implemented / Partial | `study/screens/study_session_screen.dart` |
-| 16 | Study · Fill | 10.5 | Specified / Partial | — (mode strategy unsupported in V1) |
-| 17 | Study result | 9.9 | Implemented | `study/screens/study_result_screen.dart` |
-| 18 | Stats | 13.9 | Future / Specified | — (no screen/route; distinct from Progress) |
-| 19 | Progress | 11.8 | Placeholder | — (`/progress` renders `RoutePlaceholder`) |
-| 20 | Settings | 14.1 | Implemented | `settings/screens/settings_screen.dart` |
-| 21 | Account sync | 16.1 | Placeholder | — (`/settings/account` renders `RoutePlaceholder`) |
-| 22 | Learning settings | 14.3 | Implemented | `settings/screens/learning_settings_screen.dart` |
-| 23 | Audio & speech | 15.4 | Implemented / Partial | `settings/screens/audio_speech_settings_screen.dart` |
-
-Study entry (`study/screens/study_entry_screen.dart`, WBS 9.1–9.6) has no dedicated gallery frame; it precedes the study mode screens above.
-
-### 19. Testing and Verification
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 19.1 | Unit tests for domain/use cases | Ongoing | Business rules covered close to domain. |
-| 19.2 | Repository/DAO tests | Ongoing | Transactions, migrations, ordering, scope queries covered. |
-| 19.3 | Widget tests | Ongoing | Loading/empty/error/saving and key behavior covered. |
-| 19.4 | Router tests | Ongoing | Route order, placeholders, invalid routes, RouteNames/RoutePaths. |
-| 19.5 | Decision table coverage | Ongoing | Test names reference decision IDs where applicable. |
-| 19.6 | Migration tests | Ongoing | Required for every schema change. |
-| 19.7 | Guard rules | Ongoing | `code-verification-guard` catches project constraints. |
-| 19.8 | Analyzer | Ongoing | `dart fix --apply` and `dart format .` first, then `flutter analyze` must pass. |
-| 19.9 | Build runner | Ongoing | `dart run build_runner build --delete-conflicting-outputs`. |
-| 19.10 | L10n generation | Ongoing | `flutter gen-l10n` when ARB changes. |
-| 19.11 | CI/status checks | Missing / Unknown | GitHub workflow/status checks were not visible in recent review; source-level review only unless CI exists. |
-
-### 20. Documentation and Planning
-
-| WBS ID | Deliverable | Status | Acceptance criteria |
-| --- | --- | --- | --- |
-| 20.1 | Business docs | Ongoing | Feature behavior, edge cases, status updated with source changes. |
-| 20.2 | Wireframes | Ongoing | UI behavior maps to current/target wireframe status. |
-| 20.3 | Decision tables | Ongoing | Behavior branches have rows and tests. |
-| 20.4 | Contracts | Ongoing | Use case/repository/type/error contracts match source. |
-| 20.5 | Database docs | Ongoing | Schema version, migration, storage boundaries updated. |
-| 20.6 | WBS document | New | Use this file as planning input, not as implementation approval. |
-| 20.7 | Prompt library | Ongoing | Break large features into V1 slices for GPT 5.4 mini high. |
-| 20.8 | Risk register | Needed | Track docs/source drift, future rows accidentally implemented, CI gaps. |
-
-## 6. Current Priority Backlog Derived From WBS
-
-This section orders work by product value and risk, not by internal refactor preference.
-
-| Priority | Candidate work package | Why |
+| Ongoing | Continuous quality gate; never "done", enforced on every task. |
+
+## 2. Delivery Guidance
+
+MemoX priority is a **usable flashcard/SRS app**. The WBS must drive real user flow, not architecture-only progress.
+
+- Do not build all BE at once; do not create one huge "build all backend" task.
+- Do not build isolated FE shells without a real data contract behind them.
+- Every flow is decomposed into BE function and FE function tasks; FE rows normally depend on their BE row.
+- Preferred sequence inside each function: **BE function → BE tests → FE wiring → FE/widget tests → integration behavior → docs/decision-table parity → polish only if needed**.
+- New tasks should move the app toward: create content → study content → resume study → finish session → see progress.
+- One prompt per row. Do not combine a feature row with a broad refactor.
+
+## 3. Source Evidence Reviewed
+
+- Business/product docs: `docs/business/**` (system overview, navigation, folder, deck, flashcard, study, srs, study-actions, tags, bulk, search, tts, account-sync).
+- Architecture/data docs: `docs/architecture/clean-architecture-contract.md`, `docs/database/schema-contract.md`, `docs/checklist/implementation-checklist.md`.
+- UI kit: `docs/system-design/MemoX Design System/ui_kits/mobile/README.md` (23-screen gallery), `docs/system-design/MemoX Design System/ui_kits/mobile/AUDIT.md`.
+- Source: `lib/app/router/**`, `lib/app/di/**`, `lib/domain/**`, `lib/data/**`, `lib/presentation/features/**`, `lib/presentation/shared/**`.
+- Tests: `test/**` (49 test files at baseline).
+- Commit history: `git log` on `main` (81 commits at baseline); commit anchors below were verified via `git log --diff-filter=A` per file.
+
+## 4. Function-Level Delivery Plan
+
+Row format: `WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action`.
+
+Commit ID rules: implemented rows carry the verified commit that landed the function (file-creation or feature commit verified from history); planned/future rows carry `TBD`. The commit of the current WBS update is never written into rows (it is unknown until commit); §10 tracks per-commit history.
+
+### Group 1 — Project foundation
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1.1.1 | Foundation | Architecture baseline | BE | Clean Architecture skeleton (`app`/`core`/`domain`/`data`/`presentation`) with DI providers | Implemented | none | `lib/app/di/**`, `lib/domain/**`, `lib/data/**` | `0b48f360` | No action |
+| 1.1.2 | Foundation | Design system baseline | FE | Theme tokens + `Mx*` shared widget kit | Implemented | none | `lib/core/theme/**`, `lib/presentation/shared/**` | `ed0e5402` | Extend tokens/widgets only per approved feature need |
+| 1.1.3 | Foundation | Routing baseline | FE | GoRouter shell, `RouteNames`/`RoutePaths` constants, placeholder discipline | Implemented | none | `lib/app/router/app_router.dart` | `0b48f360` | No action |
+| 1.1.4 | Foundation | l10n baseline | FE | ARB en/vi + generated localizations pipeline | Implemented | none | `lib/l10n/app_en.arb`, `lib/l10n/app_vi.arb` | `6c17a461` | No action |
+| 1.1.5 | Foundation | Drift/database baseline | BE | `.drift` schema layout, `AppDatabase` v4, migration infrastructure v2–v4 | Implemented | none | `lib/data/datasources/local/app_database.dart`, `lib/data/datasources/local/migrations/**`, `test/data/migrations/**` | `68c67656` | No action; any schema change follows §9 rules |
+| 1.1.6 | Foundation | Guard/verification baseline | Test | Analyzer + `dart fix`/`format` + targeted tests workflow; guard ruleset when present | Partial | none | `docs/checklist/implementation-checklist.md` | TBD | Add CI status checks (see 9.10) |
+| 1.1.7 | Foundation | Docs baseline | Docs | Business docs, wireframes, contracts, decision tables as source of truth | Implemented | none | `docs/business/index.md`, `docs/decision-tables/memox-core-decision-table.md` | TBD | Maintain parity per commit (history spans many commits; no single anchor) |
+
+### Group 2 — Content management
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2.1.1 | Content management | Folder Create BE V1 | BE | Validated root/subfolder create use cases + repo + DAO + tests | Implemented | 1.1.5 | `lib/domain/usecases/folder/create_root_folder_usecase.dart`, `lib/domain/usecases/folder/create_subfolder_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart` | `a736ed16` | No action |
+| 2.1.2 | Content management | Folder Create FE V1 | FE | Create-folder dialog, form state, submit, error/loading | Implemented | 2.1.1 | `lib/presentation/shared/dialogs/`, `test/presentation/shared/dialogs/mx_folder_form_dialog_test.dart` | `486dc8ba` | No action |
+| 2.2.1 | Content management | Folder Rename BE V1 | BE | Validated rename use case + repo + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/rename_folder_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart` | `68c67656` | No action |
+| 2.2.2 | Content management | Folder Rename FE V1 | FE | Rename dialog via folder actions sheet | Implemented | 2.2.1 | `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart`, `test/presentation/features/folders/library_folder_actions_sheet_test.dart` | `486dc8ba` | No action |
+| 2.3.1 | Content management | Folder Delete BE V1 | BE | Transactional cascade delete per persistence rules + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/delete_folder_usecase.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart` | `3759ad5e` | No action |
+| 2.3.2 | Content management | Folder Delete FE V1 | FE | Confirmation dialog + success/error state | Implemented | 2.3.1 | `lib/presentation/shared/dialogs/mx_folder_delete_dialog.dart`, `test/presentation/shared/dialogs/mx_folder_delete_dialog_test.dart` | `3759ad5e` | No action |
+| 2.4.1 | Content management | Folder Move BE V1 | BE | Cycle-safe move + move-target query + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/move_folder_usecase.dart`, `lib/domain/usecases/folder/get_folder_move_targets_usecase.dart` | `68c67656` | No action |
+| 2.4.2 | Content management | Folder Move FE V1 | FE | Move picker sheet + states | Implemented | 2.4.1 | `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart`, `test/presentation/features/folders/folder_move_picker_sheet_test.dart` | `68c67656` | No action |
+| 2.5.1 | Content management | Folder Reorder BE V1 | BE | `sort_order` reorder use case + DAO + tests | Specified | 2.1.1 | TBD | TBD | Implement BE usecase/repository/DAO/tests |
+| 2.5.2 | Content management | Folder Reorder FE V1 | FE | Manual reorder UI when sort mode allows | Specified | 2.5.1 | TBD | TBD | Wire reorder gesture to BE; widget tests |
+| 2.6.1 | Content management | Folder content-mode guard BE | BE | Parent holds subfolders or decks, never both; enforced outside UI | Partial | 2.1.1 | `lib/domain/types/content_mode.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart` | `f925140f` | Verify enforcement coverage in repository tests; add missing cases |
+| 2.7.1 | Content management | Deck Create BE V1 | BE | Validated deck create (folder-owned, mode lock) + tests | Implemented | 2.6.1 | `lib/domain/usecases/deck/create_deck_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart` | `f925140f` | No action |
+| 2.7.2 | Content management | Deck Create FE V1 | FE | Create-deck flow from folder detail | Implemented | 2.7.1 | `lib/presentation/features/folders/screens/folder_detail_screen.dart`, `test/presentation/features/folders/folder_detail_test.dart` | `f925140f` | No action |
+| 2.8.1 | Content management | Deck Rename BE V1 | BE | Validated deck rename use case + repo method + tests | Specified | 2.7.1 | TBD (no rename method exists on `FolderRepository`) | TBD | Implement BE usecase/repository/DAO/tests |
+| 2.8.2 | Content management | Deck Rename FE V1 | FE | Rename entry in deck actions sheet + dialog + states | Specified | 2.8.1 | `lib/presentation/features/flashcards/widgets/deck_actions_sheet.dart` (sheet exists; rename action TBD) | TBD | Wire rename action to BE; widget tests |
+| 2.9.1 | Content management | Deck Delete BE V1 | BE | Transactional deck delete with flashcard/progress cleanup + tests | Implemented | 2.7.1 | `lib/domain/usecases/deck/delete_deck_usecase.dart` | `486232bd` | No action |
+| 2.9.2 | Content management | Deck Delete FE V1 | FE | Confirmation + success/error state from deck actions | Implemented | 2.9.1 | `lib/presentation/features/flashcards/widgets/deck_actions_sheet.dart` | `486232bd` | No action |
+| 2.10.1 | Content management | Deck Reorder BE V1 | BE | `sort_order` reorder use case + tests | Specified | 2.7.1 | TBD | TBD | Implement BE usecase/repository/DAO/tests |
+| 2.10.2 | Content management | Deck Reorder FE V1 | FE | Manual reorder UI | Specified | 2.10.1 | TBD | TBD | Wire to BE; widget tests |
+| 2.11.1 | Content management | Flashcard Create BE V1 | BE | Front/back required-after-trim validation, optional fields, default SRS progress + tests | Implemented | 1.1.5 | `lib/domain/usecases/flashcard/create_flashcard_usecase.dart`, `test/domain/usecases/flashcard/create_flashcard_usecase_test.dart` | `c0f1df5d` | No action |
+| 2.11.2 | Content management | Flashcard Create FE V1 | FE | Editor screen (create mode), draft hook, save-and-add-another, states | Implemented | 2.11.1 | `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`, `test/presentation/features/flashcards/flashcard_editor_screen_test.dart` | `c0f1df5d` | No action |
+| 2.12.1 | Content management | Flashcard Update BE V1 | BE | Validated update use case + tests | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/update_flashcard_usecase.dart`, `test/domain/usecases/flashcard/update_flashcard_usecase_test.dart` | `6593874b` | No action |
+| 2.12.2 | Content management | Flashcard Edit FE V1 | FE | Editor screen (edit mode) + states | Implemented | 2.12.1 | `test/presentation/features/flashcards/flashcard_editor_edit_screen_test.dart` | `6593874b` | No action |
+| 2.13.1 | Content management | Flashcard Delete BE V1 | BE | Delete use case with cascade per persistence rules | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/delete_flashcard_usecase.dart` | `486232bd` | No action |
+| 2.13.2 | Content management | Flashcard Delete FE V1 | FE | Row actions sheet delete + confirmation + states | Implemented | 2.13.1 | `lib/presentation/features/flashcards/widgets/flashcard_row_actions_sheet.dart`, `test/presentation/features/flashcards/flashcard_list_test.dart` | `486232bd` | No action |
+| 2.14.1 | Content management | Flashcard Reorder BE V1 | BE | `sort_order` reorder use case + repo method | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/reorder_flashcards_usecase.dart` | `486232bd` | Add/verify dedicated reorder tests |
+| 2.14.2 | Content management | Flashcard Reorder FE V1 | FE | Reorder UI in flashcard list | Specified | 2.14.1 | TBD | TBD | Wire reorder gesture to BE; widget tests |
+| 2.15.1 | Content management | Flashcard Tags BE V1 | BE | Tag validation (trim/lowercase/dedupe), `flashcard_tags` table + migration | Implemented | 1.1.5 | `lib/domain/tag/tag_validator.dart`, `lib/data/datasources/local/migrations/v3_add_flashcard_tags.dart` | `e20b5ba7` | No action |
+| 2.15.2 | Content management | Flashcard Tags FE V1 | FE | Tag input section in editor | Implemented | 2.15.1 | `lib/presentation/features/flashcards/widgets/flashcard_editor_tags_section.dart` | `e20b5ba7` | No action |
+| 2.16.1 | Content management | Parent-child validation BE | BE | Deck must belong to folder; flashcard must belong to deck (non-null FK + repo checks) | Implemented | 1.1.5 | `lib/data/datasources/local/drift/**` (non-null `folder_id`/`deck_id`) | `68c67656` | No action |
+| 2.16.2 | Content management | Parent-child guard FE | Integration | Invalid actions prevented in UI with controlled error, not crash | Partial | 2.16.1 | feature screens use `Result`/failure mapping | `484b6a42` | Audit controlled-error coverage for invalid parent actions |
+| 2.17.1 | Content management | Flashcard status filter BE V1 | BE | List query filters for active/suspended/buried/due + tests | Specified | 2.15.1 | `lib/data/datasources/local/drift/flashcard_progress.drift` (fields exist; list filter query TBD) | TBD | Implement filter queries + repo/usecase + tests |
+| 2.17.2 | Content management | Flashcard status filter/badges FE V1 | FE | Filter chips + suspended/buried badges in flashcard list | Specified | 2.17.1 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire chips/badges to BE; widget tests |
+| 2.18.1 | Content management | Flashcard tag filter BE V1 | BE | Multi-select AND tag filter inside deck + tests | Specified | 2.15.1 | `docs/business/tags/tag-system.md` | TBD | Implement tag filter query + tests |
+| 2.18.2 | Content management | Flashcard tag filter FE V1 | FE | Tag filter chips + clear-filters empty state | Specified | 2.18.1 | `docs/business/tags/tag-system.md` | TBD | Wire to BE; widget tests |
+
+### Group 3 — Library flow
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 3.1.1 | Library | Library overview load BE | BE | `watchLibraryOverview` stream query, stable ordering + tests | Implemented | 1.1.5 | `lib/domain/usecases/folder/watch_library_overview_usecase.dart`, `test/data/repositories/folder_read_queries_test.dart` | `a736ed16` | No action |
+| 3.1.2 | Library | Library overview FE | FE | Overview screen, sections, loading/empty/error, new-user empty state | Implemented | 3.1.1 | `lib/presentation/features/folders/screens/library_overview_screen.dart`, `test/presentation/features/folders/library_overview_test.dart` | `a736ed16` | No action |
+| 3.2.1 | Library | Folder detail load BE | BE | `watchFolderDetail` stream (children, decks, counts) + tests | Implemented | 3.1.1 | `lib/domain/usecases/folder/watch_folder_detail_usecase.dart`, `test/data/repositories/folder_read_queries_test.dart` | `7600ea75` | No action |
+| 3.2.2 | Library | Folder detail FE | FE | Folder detail screen, tiles, summary, states, navigation | Implemented | 3.2.1 | `lib/presentation/features/folders/screens/folder_detail_screen.dart`, `test/presentation/features/folders/folder_detail_test.dart` | `7600ea75` | No action |
+| 3.3.1 | Library | Deck → flashcard list navigation | Integration | Deck tile opens `/library/deck/:deckId/flashcards` | Implemented | 3.2.2, 3.4.2 | `lib/presentation/features/flashcards/routes/flashcard_routes.dart` | `486232bd` | No action |
+| 3.4.1 | Library | Flashcard list load BE | BE | `watchFlashcardList` stream + tests | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `test/data/repositories/flashcard_repository_impl_test.dart` | `486232bd` | No action |
+| 3.4.2 | Library | Flashcard list FE | FE | List screen (8 states incl. empty/loading/error/search) | Implemented | 3.4.1 | `lib/presentation/features/flashcards/screens/flashcard_list_screen.dart`, `test/presentation/features/flashcards/flashcard_list_test.dart` | `486232bd` | No action |
+| 3.5.1 | Library | Global search BE | BE | Search use case + repo, LIKE escaping, ranking, min-query/debounce contract + tests | Implemented | 1.1.5 | `lib/domain/usecases/search/global_search_usecase.dart`, `test/data/repositories/search_repository_impl_test.dart` | `486232bd` | No action |
+| 3.5.2 | Library | Global search FE | FE | `/library/search` screen with 5 states, grouped sections | Implemented | 3.5.1 | `lib/presentation/features/search/screens/global_search_screen.dart`, `test/presentation/features/search/global_search_test.dart` | `486232bd` | No action |
+| 3.5.3 | Library | Search result navigation | Integration | Folder → detail; deck → flashcard list; flashcard → owning deck | Implemented | 3.5.2 | `lib/presentation/features/search/widgets/search_results_view.dart` | `486232bd` | No action |
+| 3.6.1 | Library | Error retry state | FE | Centralized failure mapping + refetch feedback on library screens | Implemented | 3.1.2 | `lib/app/feedback/**`, `test/app/feedback/mx_app_feedback_observer_test.dart` | `484b6a42` | No action |
+| 3.7.1 | Library | Folder/deck due+card counts BE | BE | Counts stream from DB; due excludes buried/suspended | Partial | 3.2.1 | `lib/data/datasources/local/drift/folder_queries.drift` | `3759ad5e` | Verify due-badge coverage across overview/detail; add tests |
+| 3.8.1 | Library | Tags/recent/popular search sections | FE | Tag search section, recent searches, popular tags landing | Future | 8.5.1 | `docs/business/search/global-search.md` | TBD | Do not implement before tag subsystem promotion |
+
+### Group 4 — Study/SRS flow
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 4.1.1 | Study/SRS | Study entry eligibility BE | BE | Scope queries (deck/folder/today), empty/all-suspended outcomes + tests | Implemented | 1.1.5 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/domain/study/start_study_session_usecase_test.dart` | `ead94e76` | No action |
+| 4.1.2 | Study/SRS | Study entry FE | FE | Entry gate screen with empty/error/resume-required states | Implemented | 4.1.1 | `lib/presentation/features/study/screens/study_entry_screen.dart`, `test/presentation/features/study/study_entry_screen_test.dart` | `0a7a4c60` | No action |
+| 4.2.1 | Study/SRS | Session creation BE | BE | Transactional `study_sessions` + `study_session_items` insert + tests | Implemented | 4.1.1 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/data/repositories/study_repository_test.dart` | `ead94e76` | No action |
+| 4.2.2 | Study/SRS | No-silent-resume gate BE | BE | Existing resumable session returns controlled `resumeRequired` | Implemented | 4.2.1 | `lib/domain/study/study_entry_start_result.dart` | `8582fcb2` | No action |
+| 4.2.3 | Study/SRS | Resume/start-over choice FE | FE | Explicit Resume / Start over / Back actions; transactional restart | Implemented | 4.2.2 | `lib/presentation/features/study/widgets/study_entry_resume_required_state.dart`, `test/domain/study/restart_study_session_usecase_test.dart` | `5339d8e5` | No action |
+| 4.3.1 | Study/SRS | Session item loading BE | BE | Load persisted session + ordered items by sessionId | Implemented | 4.2.1 | `lib/domain/study/ports/study_repo.dart` (`loadStudySessionReview`) | `3ab00a9a` | No action |
+| 4.3.2 | Study/SRS | Session review shell FE | FE | Current card, reveal toggle, Previous/Next navigation | Implemented | 4.3.1 | `lib/presentation/features/study/screens/study_session_screen.dart`, `test/presentation/features/study/study_session_screen_test.dart` | `2971d800` | No action |
+| 4.4.1 | Study/SRS | Submit self-grade BE | BE | `recordStudySessionAnswer` attempt persistence + tests | Implemented | 4.3.1 | `lib/data/repositories/study_repo_record_answer.dart`, `test/domain/usecases/study/record_study_session_answer_usecase_test.dart` | `f3740591` | No action |
+| 4.4.2 | Study/SRS | Self-grade FE (Forgot / Got it) | FE | Grading controls + answered-state advancement | Implemented | 4.4.1 | `test/presentation/features/study/study_session_review_viewmodel_test.dart` | `f3740591` | No action |
+| 4.5.1 | Study/SRS | Study mode strategy V1 BE | BE | `StudyModeStrategyFactory`: recall supported, others controlled-unsupported | Partial | 4.3.1 | `lib/domain/study/modes/study_mode_strategy_factory.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart` | `30075fbf` | Implement next mode slice (one mode per prompt) |
+| 4.5.2 | Study/SRS | Review mode BE V1 | BE | Both-sides item strategy + attempt semantics + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
+| 4.5.3 | Study/SRS | Review mode FE V1 | FE | Review mode UI per wireframe 13 | Specified | 4.5.2 | `docs/wireframes/13-study-session-review.md` | TBD | Wire UI to strategy; widget tests |
+| 4.5.4 | Study/SRS | Match mode BE V1 | BE | 5-pair board strategy, per-pair persistence + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
+| 4.5.5 | Study/SRS | Match mode FE V1 | FE | Match board UI | Specified | 4.5.4 | `docs/wireframes/14-study-session-match.md` | TBD | Wire UI; widget tests |
+| 4.5.6 | Study/SRS | Guess mode BE V1 | BE | 5-option selection strategy + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
+| 4.5.7 | Study/SRS | Guess mode FE V1 | FE | Guess UI with auto-advance countdown | Specified | 4.5.6 | `docs/wireframes/15-study-session-guess.md` | TBD | Wire UI; widget tests |
+| 4.5.8 | Study/SRS | Fill mode BE V1 | BE | Strict character match, mark-correct override, hint taint + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
+| 4.5.9 | Study/SRS | Fill mode FE V1 | FE | Typed-input fill UI | Specified | 4.5.8 | `docs/wireframes/17-study-session-fill.md` | TBD | Wire UI; widget tests |
+| 4.6.1 | Study/SRS | Finish session BE | BE | Finalization transaction: attempts → SRS outcome → session complete, rollback on failure | Implemented | 4.4.1 | `lib/data/repositories/study_repo_impl.dart`, `test/data/repositories/study_repository_test.dart` | `d5ae03f0` | No action |
+| 4.6.2 | Study/SRS | SRS progress update BE | BE | Leitner outcome transitions + due-date computation in finalization | Partial | 4.6.1 | `lib/data/repositories/study_repo_impl.dart`, `docs/business/srs/srs-review.md` | `d5ae03f0` | Verify full 8-box interval table against `docs/business/srs/srs-review.md`; add table-driven tests |
+| 4.6.3 | Study/SRS | Finalization failure recovery | Integration | Finish failure keeps session open with controlled error; retry affordance | Partial | 4.6.1 | `test/data/repositories/study_repository_test.dart` (rollback) | `d5ae03f0` | Add retry affordance on result/finish failure path |
+| 4.7.1 | Study/SRS | Result summary BE | BE | `loadStudySessionResult` completed-session summary | Implemented | 4.6.1 | `lib/domain/models/study_session_result.dart` | `4477dd86` | No action |
+| 4.7.2 | Study/SRS | Result screen FE | FE | `/library/study/session/:sessionId/result` with fallback states | Implemented | 4.7.1 | `lib/presentation/features/study/screens/study_result_screen.dart` | `4477dd86` | No action |
+| 4.8.1 | Study/SRS | Session persistence recovery | Integration | In-progress sessions reload by sessionId preserving answered items | Implemented | 4.3.1 | `test/presentation/features/study/study_session_screen_test.dart` (recovery coverage) | `93dec233` | No action |
+| 4.9.1 | Study/SRS | Protected active-session exit FE | FE | Exit confirmation; confirmed exit keeps session resumable | Implemented | 4.3.2 | `lib/presentation/features/study/screens/study_session_screen.dart` | `40e3c8b0` | No action |
+| 4.10.1 | Study/SRS | Cancel/discard session BE | BE | `cancelStudySession` used by transactional start-over | Implemented | 4.2.1 | `lib/domain/study/ports/study_repo.dart` | `b2ea71ce` | No action |
+| 4.11.1 | Study/SRS | Bury/suspend queue exclusion BE | BE | Due/new queries exclude suspended and currently-buried cards | Implemented | 4.1.1 | `lib/data/datasources/local/drift/study_scope_queries.drift` | `ead94e76` | No action |
+| 4.11.2 | Study/SRS | In-session bury/suspend action BE | BE | Bury/suspend current card: set fields, no attempt, preserve SRS + tests | Specified | 4.4.1 | `docs/business/study-actions/bury-suspend.md` (no action source found) | TBD | Implement BE action + tests |
+| 4.11.3 | Study/SRS | In-session bury/suspend action FE | FE | Action UI, queue removal, undo affordance | Specified | 4.11.2 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire UI to BE; widget tests |
+| 4.12.1 | Study/SRS | Study by tag | BE | `StudyEntryType.tag` scope queries + routes + tests | Blocked | 8.5.1 | `docs/business/tags/tag-system.md` | TBD | Requires tag subsystem promotion |
+
+### Group 5 — Dashboard flow
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 5.1.1 | Dashboard | Continue Studying summary BE | BE | `loadDashboardResumeSessionSummary` (scope, progress, last active) | Implemented | 4.2.1 | `lib/domain/models/dashboard_resume_session_summary.dart` | `7645e9e8` | No action |
+| 5.1.2 | Dashboard | Continue Studying card FE | FE | Resume card with Continue CTA; hidden when none | Implemented | 5.1.1 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart`, `test/presentation/features/dashboard/dashboard_screen_test.dart` | `7645e9e8` | No action |
+| 5.2.1 | Dashboard | Due-today summary BE | BE | `dueToday` from library overview read model (excludes buried/suspended) | Implemented | 3.1.1 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart` (consumes `libraryOverviewQueryProvider`) | `b2d0740f` | No action |
+| 5.2.2 | Dashboard | Today study CTA FE | FE | `dueToday > 0` routes to today study; zero state disables CTA | Implemented | 5.2.1 | `test/presentation/features/dashboard/dashboard_screen_test.dart` | `a5d99089` | No action |
+| 5.3.1 | Dashboard | New-user empty dashboard FE | FE | Controlled empty/caught-up states | Implemented | 5.2.2 | `test/presentation/features/dashboard/dashboard_screen_test.dart` | `b2d0740f` | No action |
+| 5.4.1 | Dashboard | Progress summary on dashboard | BE | Streak/goal stats read model (currently `0 days` placeholder visual) | Specified | 7.4.1 | `docs/business/engagement/dashboard-engagement.md` | TBD | Define read model after Progress BE (Group 7) lands |
+| 5.5.1 | Dashboard | Dashboard data refresh | Integration | Refresh on retry and on return from study flow | Partial | 5.1.2 | `lib/presentation/features/dashboard/viewmodels/dashboard_viewmodel.dart` (invalidate on retry) | `b2d0740f` | Verify/refresh on study-flow return; add test |
+
+### Group 6 — Import flow
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 6.1.1 | Import | Import route + screen shell | FE | `/library/deck/:deckId/import` opens `DeckImportScreen` | Implemented | 3.3.1 | `lib/presentation/features/flashcards/screens/deck_import_screen.dart` | `66bf1460` | No action |
+| 6.2.1 | Import | CSV parse BE | BE | Pasted-CSV parse use case + tests | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`, `test/domain/usecases/flashcard/deck_import_usecases_test.dart` | `c1e89cf5` | No action |
+| 6.2.2 | Import | Row validation BE | BE | Per-row validation issues in preview model | Implemented | 6.2.1 | `lib/domain/models/flashcard_import_preview.dart` | `c1e89cf5` | No action |
+| 6.3.1 | Import | Preview FE (valid/invalid rows) | FE | In-screen preview: rows + issues + summary; clean preview enables CTA | Implemented | 6.2.2 | `test/presentation/features/flashcards/deck_import_screen_test.dart` | `c1e89cf5` | No action |
+| 6.4.1 | Import | Transactional commit BE | BE | Insert valid rows + default SRS progress in one transaction; rollback tests | Implemented | 6.2.2 | `lib/domain/usecases/flashcard/commit_deck_import_usecase.dart`, `test/presentation/features/flashcards/deck_import_screen_test.dart` | `7b3c1691` | No action |
+| 6.4.2 | Import | No silent partial import | Integration | Commit only proceeds on clean preview; all-or-nothing insert | Implemented | 6.4.1 | `test/presentation/features/flashcards/deck_import_screen_test.dart` | `7b3c1691` | No action |
+| 6.5.1 | Import | Result summary FE | FE | V1 snackbar + pop back (standalone result screen deferred) | Implemented | 6.4.1 | `lib/presentation/features/flashcards/screens/deck_import_screen.dart` | `7b3c1691` | No action |
+| 6.6.1 | Import | Duplicate detection BE V1 | BE | Case-insensitive front/back dup check vs file + existing deck + tests | Specified | 6.2.2 | `docs/business/flashcard/flashcard-management.md` (import section) | TBD | Implement BE detection + skipped-duplicate aggregation + tests |
+| 6.6.2 | Import | Duplicate preview FE V1 | FE | Duplicate rows surfaced in preview with skip policy | Specified | 6.6.1 | `docs/wireframes/10-deck-import.md` | TBD | Wire to BE; widget tests |
+| 6.7.1 | Import | File picker entry FE | FE | File selection (UTF-8 CSV file) replacing paste-only input | Specified | 6.2.1 | `docs/wireframes/10-deck-import.md` | TBD | Needs dependency approval if picker package required |
+| 6.8.1 | Import | Excel import BE | BE | First-sheet read, header toggle | Future | 6.6.1 | `docs/business/flashcard/flashcard-management.md` | TBD | Do not implement without dependency approval |
+| 6.9.1 | Import | Structured text import BE | BE | Separator auto/tab/comma/colon/slash/semicolon/pipe | Specified | 6.2.1 | `docs/business/flashcard/flashcard-management.md` | TBD | Implement after duplicate handling |
+
+### Group 7 — Progress/reporting flow
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 7.1.1 | Progress | Due summary query BE V1 | BE | Aggregate due-card counts (global/per-deck) excluding buried/suspended + tests | Specified | 4.11.1 | `lib/data/datasources/local/drift/flashcard_progress.drift` (fields exist; aggregates TBD) | TBD | Implement aggregate DAO queries + repo + usecase + tests |
+| 7.2.1 | Progress | Box distribution query BE V1 | BE | Card counts per Leitner box from current progress table + tests | Specified | 7.1.1 | `lib/data/datasources/local/drift/flashcard_progress.drift` | TBD | Implement query + tests (no schema change needed) |
+| 7.3.1 | Progress | Study statistics BE V1 | BE | Session/attempt-based stats (sessions finished, answers recorded) + tests | Specified | 4.6.1 | `lib/data/datasources/local/drift/**` (study tables exist) | TBD | Implement stats queries + tests |
+| 7.4.1 | Progress | Progress read model BE V1 | BE | Combined progress read model + provider wiring | Specified | 7.1.1, 7.2.1, 7.3.1 | TBD | TBD | Compose use case + provider; unit tests |
+| 7.5.1 | Progress | Progress screen FE V1 | FE | Replace `/progress` placeholder with real screen (due, box distribution, stats) | Specified | 7.4.1 | `lib/app/router/app_router.dart:72` (placeholder) | TBD | Wire screen to read model; widget tests |
+| 7.5.2 | Progress | Progress states FE | FE | Empty/loading/error states for progress screen | Specified | 7.5.1 | shared `Mx*` state widgets | TBD | Cover states in widget tests |
+| 7.6.1 | Progress | Review history query BE | BE | Per-card history (box_before/box_after/last_reset_at) | Blocked | 7.3.1 | `docs/business/history/card-history.md` (requires schema fields not in v4) | TBD | Requires schema migration decision before work |
+| 7.7.1 | Progress | Dashboard/progress consistency | Integration | Same due/progress numbers on dashboard and progress screen | Specified | 7.5.1, 5.2.1 | TBD | TBD | Shared read model or consistency test |
+
+### Group 8 — Settings/app operations
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 8.1.1 | Settings | Settings hub FE shell | FE | `/settings` hub rendering mock sections (account row uses mock data) | Partial | 1.1.3 | `lib/presentation/features/settings/screens/settings_screen.dart` (static mock preview, `_mockAppVersion`) | `6593874b` | Replace mock account/version data when real contracts exist |
+| 8.2.1 | Settings | Learning settings BE persistence | BE | Persisted study-default settings contract + storage + tests | Specified | 1.1.5 | TBD (no persistence behind screen) | TBD | Define settings storage contract (Drift vs SharedPreferences per docs) + implement |
+| 8.2.2 | Settings | Learning settings FE wiring | FE | Wire `/settings/learning` shell to real persisted state | Partial | 8.2.1 | `lib/presentation/features/settings/screens/learning_settings_screen.dart` (static mock preview) | `6593874b` | Wire screen to real provider after 8.2.1 |
+| 8.3.1 | Settings | Tag management BE V1 | BE | Distinct tag list/count/search + transactional rename/merge/delete + tests | Specified | 2.15.1 | `docs/business/tags/tag-system.md` (no domain usecases/repo exist) | TBD | Implement usecases/repository/DAO/tests |
+| 8.3.2 | Settings | Tag management FE wiring | FE | Wire `/settings/learning/tags` shell to real data + operations | Partial | 8.3.1 | `lib/presentation/features/settings/screens/tag_management_screen.dart` (static mock preview), `test/presentation/features/settings/tag_management_screen_test.dart` | `6593874b` | Wire screen to real provider after 8.3.1 |
+| 8.4.1 | Settings | TTS service BE | BE | `TtsService` abstraction + platform implementation + settings storage + tests | Specified | 1.1.5 | `docs/business/tts/tts-settings.md` (no service source exists) | TBD | Implement service + settings persistence |
+| 8.4.2 | Settings | Audio/speech settings FE wiring | FE | Wire `/settings/audio-speech` shell to real TTS settings | Partial | 8.4.1 | `lib/presentation/features/settings/screens/audio_speech_settings_screen.dart` (static mock preview) | `6593874b` | Wire screen to real provider after 8.4.1 |
+| 8.4.3 | Settings | Auto-play on reveal | Integration | Study-session reveal triggers TTS per settings | Specified | 8.4.1, 4.3.2 | `docs/business/tts/tts-settings.md` | TBD | Implement after TTS service lands |
+| 8.5.1 | Settings | Account settings screen V1 | FE | Replace `/settings/account` placeholder with linked/unlinked display | Specified | 1.1.3 | `lib/presentation/features/settings/routes/settings_routes.dart:19` (placeholder) | TBD | Display-only V1 before any Drive work |
+| 8.6.1 | Settings | Google account linking BE | BE | Optional sign-in, account statuses, SharedPreferences link store | Specified | 8.5.1 | `docs/business/account-sync/account-sync.md` | TBD | High-risk; defer until core loop complete |
+| 8.6.2 | Settings | Drive backup/restore BE | BE | AppData-scope upload/restore via platform snapshot gateways | Specified | 8.6.1 | `docs/business/account-sync/account-sync.md` | TBD | Defer; requires 8.6.1 |
+| 8.7.1 | Settings | Deck/flashcard export BE | BE | CSV export of deck/selected cards + tests | Specified | 2.11.1 | `docs/business/export/export.md` | TBD | Implement after import duplicate handling |
+| 8.8.1 | Settings | Appearance/locale settings | FE | Theme/language switches | Future | 8.2.1 | settings hub disabled rows | TBD | Do not implement without promotion |
+| 8.9.1 | Settings | Bulk operations V1 | BE | Selection-scoped transactional bulk action (start with bulk delete) + tests | Specified | 2.13.1 | `docs/business/bulk/bulk-operations.md` | TBD | Split: selection mode FE + one safe BE action first |
+| 8.9.2 | Settings | Bulk selection mode FE | FE | Long-press selection mode in flashcard list | Specified | 8.9.1 | `docs/business/bulk/bulk-operations.md` | TBD | Implement with first bulk action |
+
+### Group 9 — Cross-cutting quality
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 9.1 | Quality | Route contract gate | Test | No raw route strings; `RouteNames`/`RoutePaths` only; route-order guard | Ongoing | 1.1.3 | router tests under `test/**` | TBD | Enforce on every route change |
+| 9.2 | Quality | Riverpod usage gate | Test | No `ref.watch` in callbacks; watch/read/listen per state contract | Ongoing | 1.1.1 | `docs/state/state-management-contract.md` | TBD | Enforce per task |
+| 9.3 | Quality | Hooks boundary gate | Test | Hooks only in approved presentation scopes | Ongoing | 1.1.1 | `lib/presentation/features/flashcards/hooks/**` | `75675b94` | Enforce per task |
+| 9.4 | Quality | Transaction safety gate | Test | Multi-table writes always transactional (import, session, finalize, future bulk/tags) | Ongoing | 1.1.5 | `test/data/repositories/study_repository_test.dart` | TBD | Enforce per task |
+| 9.5 | Quality | Schema/migration gate | Test | Version bump + `onUpgrade` + migration test + schema docs per change | Ongoing | 1.1.5 | `test/data/migrations/**` | TBD | Enforce per schema change |
+| 9.6 | Quality | l10n coverage gate | Test | No hardcoded user-facing strings; ARB keys per copy change | Ongoing | 1.1.4 | `lib/l10n/app_en.arb`, `lib/l10n/app_vi.arb` | TBD | Enforce per task |
+| 9.7 | Quality | State-coverage gate | Test | Loading/empty/error/no-results states on every screen | Ongoing | 1.1.2 | shared `Mx*` state widgets | TBD | Enforce per screen task |
+| 9.8 | Quality | Docs-code parity gate | Docs | 8-step pre-commit parity check per `CLAUDE.md` | Ongoing | 1.1.7 | `CLAUDE.md`, `docs/checklist/implementation-checklist.md` | TBD | Enforce per commit |
+| 9.9 | Quality | Guard/analyzer/test gate | Test | `dart fix` + `dart format` + `flutter analyze` + targeted tests (+ guard when present) | Ongoing | 1.1.6 | `docs/checklist/implementation-checklist.md` | TBD | Enforce per task |
+| 9.10 | Quality | CI status checks | Test | GitHub workflow running analyze/test on PRs | Specified | 1.1.6 | TBD (no workflow visible) | TBD | Add minimal CI workflow |
+
+### Group 10 — Release readiness
+
+| WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 10.1 | Release | MVP smoke path | Integration | Create folder → deck → cards → study → finish → see progress, verified end-to-end | Partial | 2.x, 4.x, 7.5.1 | study/content flows implemented; progress screen missing | TBD | Complete Group 7; then script/checklist the smoke path |
+| 10.2 | Release | Android readiness | Integration | DB path, lifecycle, back behavior verified on Android | Specified | 10.1 | `lib/data/datasources/local/connection/database_connection_native.dart` | TBD | Manual verification pass + fixes |
+| 10.3 | Release | Web readiness | Integration | Wasm/worker DB connection verified on web | Partial | 10.1 | `lib/data/datasources/local/connection/database_connection_web.dart` | `68c67656` | Verify persistence + study flow on web |
+| 10.4 | Release | Windows readiness | Integration | Desktop DB + layout verified on Windows | Specified | 10.1 | `lib/data/datasources/local/connection/database_connection_native.dart` | TBD | Manual verification pass + fixes |
+| 10.5 | Release | Known deferred list | Docs | Maintained register of deferred/Future/Rejected scope | Implemented | 1.1.7 | §6 of this file | TBD | Keep updated per promotion/deferral |
+| 10.6 | Release | Release acceptance checklist | Docs | Final acceptance checklist (smoke path, platforms, quality gates) | Specified | 10.1 | TBD | TBD | Author when Group 7 lands |
+
+## 5. Next 10 Tasks (in delivery order)
+
+Backend-first per flow; each row is one agent prompt.
+
+1. **7.1.1 Progress due summary query BE V1** — aggregate due counts from existing tables; tests.
+2. **7.2.1 + 7.3.1 + 7.4.1 Progress read model BE V1** — box distribution + stats + composed read model; tests.
+3. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests (incl. 7.5.2 states).
+4. **2.17.1 Flashcard status filter BE V1** — active/suspended/buried/due list queries; tests.
+5. **2.17.2 Flashcard status filter/badges FE V1** — chips + badges in flashcard list; widget tests.
+6. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
+7. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
+8. **8.3.1 Tag management BE V1** — tag list/count/search + transactional rename/merge/delete; tests.
+9. **8.3.2 Tag management FE wiring V1** — wire the existing shell to real data/operations; widget tests.
+10. **2.8.1 + 2.8.2 Deck rename BE + FE V1** — rename use case/repo/DAO/tests, then sheet action wiring.
+
+## 6. Deferred / Future / Rejected Register
+
+| Item | Status | Reason / unblock condition |
 | --- | --- | --- |
-| P1 | Flashcard list filters/badges for active/suspended/buried/due | Bury/suspend schema and study behavior exist; list visibility is still pending. |
-| P1 | Deck import duplicate handling | CSV paste + parse + transactional commit are current; skipped-duplicate handling is still deferred. |
-| P1 | Account settings real screen or explicitly defer | Route exists as placeholder; sync/account docs are large but user-facing settings is not wired. |
-| P1 | Progress screen V1 | Top-level route is placeholder; users need basic learning feedback. |
-| P2 | Bulk operations V1 | High utility but large; split into selection mode + one safe action first. |
-| P2 | Tag management behavior hardening | Route exists; verify list/search/rename/merge/delete coverage. |
-| P2 | Dashboard V1 | Top-level route placeholder; useful after study result/progress loop works. |
-| P3 | Full mode implementations | Review/match/guess/recall/fill are specified; implement as small mode-specific slices. |
-| P3 | Drive sync/account linking | Valuable but high-risk; do after core offline learning loop is reliable. |
+| Onboarding wizard (UI kit screen 01) | Rejected | V1 boots to Library; `lib/app/router/route_paths.dart` comment forbids onboarding. |
+| Card history (UI kit screen 09) | Blocked | Requires `last_reset_at`, `box_before`, `box_after` schema fields (7.6.1). |
+| Tags/recent/popular search sections | Future | Requires tag subsystem promotion (8.3.1) and SharedPreferences approval. |
+| Excel import | Future | Requires dependency approval (6.8.1). |
+| Daily goal / reminders / engagement persistence | Future | SharedPreferences-backed; not promoted. |
+| Independent Korean/English TTS setting sets | Target | Requires migration/product decision. |
+| Stats screen (UI kit screen 18) | Future | Needs aggregate read model; distinct from Progress screen (7.5.1). |
+| Export with metadata | Rejected | Use Drive sync for backup instead. |
+| Drive sync / account linking | Specified, deferred | High-risk; after core offline loop incl. progress (8.6.x). |
+| Bulk reset progress | Blocked | Requires `last_reset_at`. |
 
-## 7. Recommended Next Agent Prompt Themes
-
-Use one prompt per work package. Do not combine feature + broad refactor.
-
-1. Flashcard List Status Filters V1: active/suspended/buried/due filters and badges.
-2. Progress Screen V1: due count, box distribution from current progress table only.
-3. Account Settings Placeholder Replacement V1: display linked/unlinked states without full Drive restore first.
-
-## 8. Known Risks / Review Notes
+## 7. Known Risks / Review Notes
 
 | Risk | Impact | Mitigation |
 | --- | --- | --- |
-| Docs can be ahead of source | Agent may implement future behavior accidentally | Always check source + docs; identify Current vs Target/Future. |
-| Route comments may drift | Misleading source comments can cause wrong prompt scope | Trust actual route builders and docs over stale comments; update comment in narrow task if touched. |
-| Study mode docs are large | Agent may try to implement all modes at once | Split one mode or one session transition per prompt. |
-| Schema changes are high risk | Missing migration breaks existing DB | Require version bump, onUpgrade step, migration test, schema doc update. |
-| Generated files | Manual edits create drift | Regenerate with build_runner/gen-l10n only. |
-| CI not visible | Cannot claim full pass from GitHub checks | Report source-level review unless CI/status checks exist. |
-| Future proposals | Can bloat V1 | Do not implement Future/Blocked/Rejection rows without explicit product promotion. |
-| Import duplicate handling gap | CSV parse/preview/commit now lives in domain/data, but duplicate detection / skipped-duplicate reporting is still future work. | Keep the CSV commit slice scoped to valid rows only until the duplicate-handling prompt is promoted. |
+| Settings screens are static mock previews | Agents may assume settings persist; they do not | 8.1–8.4 rows mark shells as Partial with BE rows Specified; wire FE only after BE lands. |
+| Prior WBS over-claimed in-session bury/suspend as implemented | Wrong baseline for study-action prompts | Re-verified against source: only queue exclusion (4.11.1) is implemented; action rows reset to Specified (4.11.2/4.11.3). |
+| SRS interval table not verified against docs | Finalization may diverge from `docs/business/srs/srs-review.md` | 4.6.2 is Partial with explicit verification next action. |
+| Docs can be ahead of source | Agent may implement Future behavior accidentally | Check source + docs; respect §6 register. |
+| Schema changes are high risk | Missing migration breaks existing DBs | 9.5 gate: version bump + onUpgrade + migration test + docs per change. |
+| CI not visible | Cannot claim full pass from GitHub checks | 9.10 Specified; report source-level verification until CI exists. |
+| Commit anchors for docs-baseline rows | History spans many commits; no single anchor | Rows 1.1.7/9.x use `TBD` by design; §10 log carries per-commit history. |
+
+## 8. Legacy WBS ID Mapping
+
+The Commit Traceability Log (§10) rows dated before 2026-06-10 reference the **legacy** WBS IDs from the previous revision of this file. Mapping of the most-referenced legacy IDs:
+
+| Legacy ID(s) | Legacy meaning | Current ID(s) |
+| --- | --- | --- |
+| 3.8, 5.1–5.10 | Deck import route + import feature | 6.1.1–6.9.1 |
+| 6.1–6.6 | Global search | 3.5.1–3.5.3 |
+| 4.2, 4.3 | Flashcard create/edit screens | 2.11.2, 2.12.2 |
+| 9.6–9.13 | Study entry/session/resume | 4.1.x–4.5.1, 4.8.1–4.10.1 |
+| 10.4, 10.8 | Recall mode / review shell | 4.4.x, 4.3.2 |
+| 11.5, 11.6 | Attempt classification / finalization | 4.4.1, 4.6.1 |
+| 13.2, 13.3 | Dashboard today CTA / resume card | 5.2.2, 5.1.2 |
+| 1.3.3 | Library branch routes | 1.1.3, 3.3.1 |
+| 19.3 | Widget tests | 9.7 |
+| 20.6, 18.9 | WBS document / UI kit contract | this file, 1.1.2 |
 
 ## 9. WBS Maintenance Rules
 
@@ -494,8 +316,8 @@ Update this WBS when:
 
 - A placeholder route becomes a real screen.
 - A Future/Target feature is promoted to Current.
-- A schema migration changes current DB version.
-- A feature's implementation status changes.
+- A schema migration changes the current DB version.
+- A function row's implementation status changes (BE, FE, or Integration separately).
 - New docs or decision-table rows materially change scope.
 - Source reveals a doc-code parity drift that affects planning.
 
@@ -504,11 +326,19 @@ When updating, include:
 - New baseline commit.
 - Changed WBS rows only.
 - Evidence paths.
-- Any new priority/backlog adjustment.
+- Any new priority/next-task adjustment.
+
+Status discipline:
+
+- BE and FE status are tracked on separate rows; never mark a feature Implemented because one side exists.
+- UI shells without real data wiring stay Partial (FE) with the BE row Specified.
+- Implemented requires source + test/docs evidence and, where practical, a verified commit anchor.
+- Never invent commit hashes; use `TBD` when history cannot be verified.
+- Do not write the current WBS-update commit hash into rows; report it in the task output and §10.
 
 ### Commit tracking rule
 
-Every commit that creates, advances, or completes a WBS work package MUST append a row to the **Commit Traceability Log (§10)** in the same commit, listing the short commit id, date, the WBS ID(s) it touches, and a one-line summary. This keeps a bidirectional link (WBS ID ↔ commit id) without bloating the feature tables with a per-row commit column.
+Every commit that creates, advances, or completes a WBS work package MUST append a row to the **Commit Traceability Log (§10)** in the same commit, listing the short commit id, date, the WBS ID(s) it touches, and a one-line summary. This keeps a bidirectional link (WBS ID ↔ commit id) without bloating the feature tables with per-row commit churn.
 
 - Use the 8-char short hash (e.g. `5fbdf96d`).
 - One commit may map to multiple WBS IDs; list them comma-separated.
@@ -516,10 +346,11 @@ Every commit that creates, advances, or completes a WBS work package MUST append
 - Pure WBS traceability-maintenance commits do not need their own log row.
 - Pure tooling/formatting commits that touch no WBS row may be omitted.
 - The "Baseline reviewed" line at the top still tracks the latest reviewed commit; the log tracks per-task history.
+- Log rows dated before 2026-06-10 use legacy WBS IDs; see §8 for the mapping.
 
 ## 10. Commit Traceability Log
 
-Append-only, newest first. Each row links a landed commit to the WBS work package(s) it advanced. See the Commit tracking rule in §9.
+Append-only, newest first. Each row links a landed commit to the WBS work package(s) it advanced. See the Commit tracking rule in §9. Rows before 2026-06-10 reference legacy WBS IDs (§8).
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
