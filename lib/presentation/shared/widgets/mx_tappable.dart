@@ -4,7 +4,7 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 
 /// The single shaped tap primitive every interactive surface routes through.
 ///
-/// Per the MemoX guard rule `memox.no_raw_ink_surface`, this is the **only**
+/// Per the MemoX guard rule `memox.design_system.no_raw_ink_surface`, this is the **only**
 /// place allowed to use a raw `InkWell` — feature and shared widgets compose
 /// `MxTappable` instead of hand-rolling `InkWell` / `InkResponse` / tap-only
 /// `GestureDetector`. It guarantees hover/focus/pressed overlays clipped to the

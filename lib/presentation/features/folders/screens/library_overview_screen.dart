@@ -61,7 +61,7 @@ class LibraryOverviewScreen extends ConsumerWidget {
 }
 
 /// Reactive content section — kept out of the screen shell so the shell build
-/// stays watch-free (`memox.template_screen_shell_no_ref_watch`).
+/// stays watch-free (`memox.screen_shell.template_shell_no_ref_watch`).
 class _LibraryOverviewView extends ConsumerWidget {
   const _LibraryOverviewView();
 

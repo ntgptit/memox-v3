@@ -19,7 +19,7 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 /// results (grouped sections), no-results (matched nothing), and error. The
 /// `GlobalSearchScreen` owns the query watch for app bar sync; the
 /// `_SearchResultsSection` still owns the results watch
-/// (`memox.template_screen_shell_no_ref_watch`).
+/// (`memox.screen_shell.template_shell_no_ref_watch`).
 class GlobalSearchScreen extends ConsumerWidget {
   const GlobalSearchScreen({super.key});
 

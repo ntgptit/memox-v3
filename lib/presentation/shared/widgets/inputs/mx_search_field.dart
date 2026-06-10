@@ -9,7 +9,7 @@ import 'package:memox/core/theme/tokens/size_tokens.dart';
 /// §SearchField).
 ///
 /// Feature code must not use raw `TextField` / `SearchBar`
-/// (`memox.feature_raw_flutter_widget_usage`); compose this. The clear button
+/// (`memox.design_system.no_raw_text_input`); compose this. The clear button
 /// appears only when [controller] has text.
 ///
 /// Purpose:

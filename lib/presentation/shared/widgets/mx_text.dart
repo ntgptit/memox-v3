@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 
 /// Semantic typography role — feature code selects intent, not a Material slot
-/// (`memox.features_no_direct_text_theme`).
+/// (`memox.design_system.no_direct_text_theme`).
 enum MxTextRole {
   displaySmall,
   headlineMedium,
@@ -21,7 +21,7 @@ enum MxTextRole {
 /// The sanctioned way for feature code to render text: pick an [MxTextRole] and
 /// the same UI intent resolves to the same scale everywhere. This is the one
 /// shared widget allowed to expose a public role API
-/// (`memox.shared_widget_no_public_mx_text_role_api` excludes this file).
+/// (`memox.shared_widget.no_public_mx_text_role_api` excludes this file).
 ///
 /// Purpose:
 /// Provides a reusable MemoX display widget that stays aligned with the design system.

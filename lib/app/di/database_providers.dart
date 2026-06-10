@@ -7,7 +7,7 @@ part 'database_providers.g.dart';
 ///
 /// Infrastructure provider — `keepAlive` so the expensive connection is not
 /// torn down with screen-scoped consumers
-/// (`memox.infrastructure_provider_keep_alive_required`). Closed on dispose
+/// (`memox.state_management.infrastructure_provider_keep_alive`). Closed on dispose
 /// (e.g. account switch invalidation).
 @Riverpod(keepAlive: true)
 AppDatabase appDatabase(Ref ref) {

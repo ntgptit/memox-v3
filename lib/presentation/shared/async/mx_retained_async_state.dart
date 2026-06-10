@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Lives in `shared/async` (app-wiring-adjacent), not the provider-free
 /// `shared/widgets` layer. Distinct from `AppAsyncBuilder` in that the
 /// **first** load renders a [skeletonBuilder] (not a high-contrast spinner) —
-/// required by `memox.retained_async_state_requires_skeleton` — and previous
+/// required by `memox.performance.retained_async_state_requires_skeleton` — and previous
 /// [data] is retained while a watched provider refetches
-/// (`memox.async_refetch_blanks_screen`).
+/// (`memox.performance.no_refetch_blank_screen`).
 ///
 /// Purpose:
 /// Provides a reusable MemoX async widget that stays aligned with the design system.

@@ -7,7 +7,7 @@ import 'package:memox/presentation/features/folders/screens/library_overview_scr
 import 'package:memox/presentation/features/search/screens/global_search_screen.dart';
 
 /// Library-branch route registry, composed by `app_router.dart`
-/// (`memox.app_router_no_feature_screen_imports`). `libraryBranchRoutes()`
+/// (`memox.routing.app_router_no_feature_screen_imports`). `libraryBranchRoutes()`
 /// owns the visible library branch routes; hidden flashcard create/edit/import
 /// routes are registered separately by `flashcardRoutes(...)`.
 List<RouteBase> libraryBranchRoutes() => <RouteBase>[

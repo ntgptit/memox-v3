@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 
 /// App bar wrapper — feature code must not use raw `AppBar`
-/// (`memox.feature_raw_flutter_widget_usage`).
+/// (`memox.design_system.no_raw_app_bar`).
 ///
 /// Styling (flat, transparent tint, title style) comes from the themed
 /// `AppBarTheme`. Pass [titleText] for the common case or [title] for a custom

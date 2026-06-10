@@ -6,7 +6,7 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
 /// The sanctioned snackbar surface — feature code must route transient feedback
 /// through this helper instead of raw `SnackBar` / `ScaffoldMessenger`
-/// (`memox.snackbar_usage`, `memox.snackbar_messenger_usage`).
+/// (`memox.design_system.no_raw_snackbar`, `memox.design_system.no_direct_scaffold_messenger`).
 ///
 /// [message] is caller-supplied (localized). [isError] adds an error-accent
 /// leading icon while keeping the shared snackbar surface tone from the mock.

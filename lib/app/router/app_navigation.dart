@@ -7,7 +7,7 @@ import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_type.dart';
 
-/// The single sanctioned navigation surface (`memox.common_navigation_extension_usage`).
+/// The single sanctioned navigation surface (`memox.routing.use_shared_navigation_extension`).
 ///
 /// UI code navigates through these semantic methods instead of raw `GoRouter`
 /// APIs, so route names/params stay centralized in `RouteNames` / `RoutePaths`.

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Floating action button wrapper — regular or extended (labelled pill).
 ///
 /// Feature code must not use raw `FloatingActionButton`
-/// (`memox.feature_raw_flutter_widget_usage`); compose this instead. Styling
+/// (`memox.design_system.no_raw_fab`); compose this instead. Styling
 /// (container color, level-2 elevation, radius) comes from the themed
 /// `FloatingActionButtonThemeData`.
 ///
