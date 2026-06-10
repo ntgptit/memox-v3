@@ -385,7 +385,9 @@ Future<Set<FlashcardId>> _loadConsumedNewFlashcardIdsToday(
     localNow.month,
     localNow.day,
   );
+  final DateTime localDayEnd = localDayStart.add(const Duration(days: 1));
   final int localDayStartMs = localDayStart.millisecondsSinceEpoch;
+  final int localDayEndMs = localDayEnd.millisecondsSinceEpoch;
   final rows =
       await (dao.select(dao.studySessionItems).join([
             innerJoin(
@@ -396,9 +398,10 @@ Future<Set<FlashcardId>> _loadConsumedNewFlashcardIdsToday(
             dao.studySessions.studyType.equals(
                   StudyMapper.studyTypeToStorage(StudyType.newCards),
                 ) &
-                dao.studySessions.startedAt.isBiggerThanValue(
-                  localDayStartMs - 1,
-                ),
+                dao.studySessions.startedAt.isBiggerOrEqualValue(
+                  localDayStartMs,
+                ) &
+                dao.studySessions.startedAt.isSmallerThanValue(localDayEndMs),
           ))
           .get();
   return rows
