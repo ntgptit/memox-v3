@@ -82,16 +82,16 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 2.3.2 | Content management | Folder Delete FE V1 | FE | Confirmation dialog + success/error state | Implemented | 2.3.1 | `lib/presentation/shared/dialogs/mx_folder_delete_dialog.dart`, `test/presentation/shared/dialogs/mx_folder_delete_dialog_test.dart` | `3759ad5e` | No action |
 | 2.4.1 | Content management | Folder Move BE V1 | BE | Cycle-safe move + move-target query + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/move_folder_usecase.dart`, `lib/domain/usecases/folder/get_folder_move_targets_usecase.dart` | `68c67656` | No action |
 | 2.4.2 | Content management | Folder Move FE V1 | FE | Move picker sheet + states | Implemented | 2.4.1 | `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart`, `test/presentation/features/folders/folder_move_picker_sheet_test.dart` | `68c67656` | No action |
-| 2.5.1 | Content management | Folder Reorder BE V1 | BE | `sort_order` reorder use case + DAO + tests | Specified | 2.1.1 | TBD | TBD | Implement BE usecase/repository/DAO/tests |
+| 2.5.1 | Content management | Folder Reorder BE V1 | BE | `sort_order` reorder use case + DAO + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/reorder_folders_usecase.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart`, `lib/data/repositories/folder_repository_impl.dart`, `test/data/repositories/folder_repository_impl_test.dart`, `test/domain/usecases/folder/reorder_folders_usecase_test.dart` | `48e55584` | No action |
 | 2.5.2 | Content management | Folder Reorder FE V1 | FE | Manual reorder UI when sort mode allows | Specified | 2.5.1 | TBD | TBD | Wire reorder gesture to BE; widget tests |
-| 2.6.1 | Content management | Folder content-mode guard BE | BE | Parent holds subfolders or decks, never both; enforced outside UI | Partial | 2.1.1 | `lib/domain/types/content_mode.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart` | `f925140f` | Verify enforcement coverage in repository tests; add missing cases |
+| 2.6.1 | Content management | Folder content-mode guard BE | BE | Parent holds subfolders or decks, never both; enforced outside UI | Implemented | 2.1.1 | `lib/domain/types/content_mode.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart`, `test/data/repositories/folder_repository_impl_test.dart` | `48e55584` | No action |
 | 2.7.1 | Content management | Deck Create BE V1 | BE | Validated deck create (folder-owned, mode lock) + tests | Implemented | 2.6.1 | `lib/domain/usecases/deck/create_deck_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart` | `f925140f` | No action |
 | 2.7.2 | Content management | Deck Create FE V1 | FE | Create-deck flow from folder detail | Implemented | 2.7.1 | `lib/presentation/features/folders/screens/folder_detail_screen.dart`, `test/presentation/features/folders/folder_detail_test.dart` | `f925140f` | No action |
-| 2.8.1 | Content management | Deck Rename BE V1 | BE | Validated deck rename use case + repo method + tests | Specified | 2.7.1 | TBD (no rename method exists on `FolderRepository`) | TBD | Implement BE usecase/repository/DAO/tests |
+| 2.8.1 | Content management | Deck Rename BE V1 | BE | Validated deck rename use case + repo method + tests | Implemented | 2.7.1 | `lib/domain/usecases/deck/rename_deck_usecase.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart`, `lib/data/repositories/folder_repository_impl.dart`, `test/data/repositories/folder_repository_impl_test.dart`, `test/domain/usecases/deck/rename_deck_usecase_test.dart` | `48e55584` | No action |
 | 2.8.2 | Content management | Deck Rename FE V1 | FE | Rename entry in deck actions sheet + dialog + states | Specified | 2.8.1 | `lib/presentation/features/flashcards/widgets/deck_actions_sheet.dart` (sheet exists; rename action TBD) | TBD | Wire rename action to BE; widget tests |
 | 2.9.1 | Content management | Deck Delete BE V1 | BE | Transactional deck delete with flashcard/progress cleanup + tests | Implemented | 2.7.1 | `lib/domain/usecases/deck/delete_deck_usecase.dart` | `486232bd` | No action |
 | 2.9.2 | Content management | Deck Delete FE V1 | FE | Confirmation + success/error state from deck actions | Implemented | 2.9.1 | `lib/presentation/features/flashcards/widgets/deck_actions_sheet.dart` | `486232bd` | No action |
-| 2.10.1 | Content management | Deck Reorder BE V1 | BE | `sort_order` reorder use case + tests | Specified | 2.7.1 | TBD | TBD | Implement BE usecase/repository/DAO/tests |
+| 2.10.1 | Content management | Deck Reorder BE V1 | BE | `sort_order` reorder use case + tests | Implemented | 2.7.1 | `lib/domain/usecases/deck/reorder_decks_usecase.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart`, `lib/data/repositories/folder_repository_impl.dart`, `test/data/repositories/folder_repository_impl_test.dart`, `test/domain/usecases/deck/reorder_decks_usecase_test.dart` | `48e55584` | No action |
 | 2.10.2 | Content management | Deck Reorder FE V1 | FE | Manual reorder UI | Specified | 2.10.1 | TBD | TBD | Wire to BE; widget tests |
 | 2.11.1 | Content management | Flashcard Create BE V1 | BE | Front/back required-after-trim validation, optional fields, default SRS progress + tests | Implemented | 1.1.5 | `lib/domain/usecases/flashcard/create_flashcard_usecase.dart`, `test/domain/usecases/flashcard/create_flashcard_usecase_test.dart` | `c0f1df5d` | No action |
 | 2.11.2 | Content management | Flashcard Create FE V1 | FE | Editor screen (create mode), draft hook, save-and-add-another, states | Implemented | 2.11.1 | `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`, `test/presentation/features/flashcards/flashcard_editor_screen_test.dart` | `c0f1df5d` | No action |
@@ -99,7 +99,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 2.12.2 | Content management | Flashcard Edit FE V1 | FE | Editor screen (edit mode) + states | Implemented | 2.12.1 | `test/presentation/features/flashcards/flashcard_editor_edit_screen_test.dart` | `6593874b` | No action |
 | 2.13.1 | Content management | Flashcard Delete BE V1 | BE | Delete use case with cascade per persistence rules | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/delete_flashcard_usecase.dart` | `486232bd` | No action |
 | 2.13.2 | Content management | Flashcard Delete FE V1 | FE | Row actions sheet delete + confirmation + states | Implemented | 2.13.1 | `lib/presentation/features/flashcards/widgets/flashcard_row_actions_sheet.dart`, `test/presentation/features/flashcards/flashcard_list_test.dart` | `486232bd` | No action |
-| 2.14.1 | Content management | Flashcard Reorder BE V1 | BE | `sort_order` reorder use case + repo method | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/reorder_flashcards_usecase.dart` | `486232bd` | Add/verify dedicated reorder tests |
+| 2.14.1 | Content management | Flashcard Reorder BE V1 | BE | `sort_order` reorder use case + repo method | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/reorder_flashcards_usecase.dart`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart` | `48e55584` | No action |
 | 2.14.2 | Content management | Flashcard Reorder FE V1 | FE | Reorder UI in flashcard list | Specified | 2.14.1 | TBD | TBD | Wire reorder gesture to BE; widget tests |
 | 2.15.1 | Content management | Flashcard Tags BE V1 | BE | Tag validation (trim/lowercase/dedupe), `flashcard_tags` table + migration | Implemented | 1.1.5 | `lib/domain/tag/tag_validator.dart`, `lib/data/datasources/local/migrations/v3_add_flashcard_tags.dart` | `e20b5ba7` | No action |
 | 2.15.2 | Content management | Flashcard Tags FE V1 | FE | Tag input section in editor | Implemented | 2.15.1 | `lib/presentation/features/flashcards/widgets/flashcard_editor_tags_section.dart` | `e20b5ba7` | No action |
@@ -255,21 +255,16 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 Backend-first per flow; each row is one agent prompt.
 
-1. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
-2. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
-3. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
-4. **7.7.1 Dashboard/progress consistency** — keep due/progress numbers aligned across surfaces.
-5. **8.1.1 Settings hub FE shell** — replace mock account/version data when contracts exist.
-6. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
-7. **8.2.2 Learning settings FE wiring** — wire `/settings/learning` shell to real persisted state.
-8. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
-9. **8.3.2 Tag management FE wiring** — wire `/settings/learning/tags` shell to real data + operations.
-10. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
-6. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
-7. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
-8. **8.3.1 Tag management BE V1** — tag list/count/search + transactional rename/merge/delete; tests.
-9. **8.3.2 Tag management FE wiring V1** — wire the existing shell to real data/operations; widget tests.
-10. **2.8.1 + 2.8.2 Deck rename BE + FE V1** — rename use case/repo/DAO/tests, then sheet action wiring.
+1. **2.17.1 Flashcard status filter BE V1** — list query filters for active/suspended/buried/due + tests.
+2. **2.18.1 Flashcard tag filter BE V1** — multi-select AND tag filter inside deck + tests.
+3. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
+4. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
+5. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
+6. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
+7. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
+8. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
+9. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
+10. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
 
 ## 6. Deferred / Future / Rejected Register
 
