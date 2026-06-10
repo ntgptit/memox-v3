@@ -354,7 +354,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
-| `9ec54dd9` | 2026-06-10 | 4.6.2 | Verify SRS box transition + interval ladder vs doc contract; table-driven tests S11–S15; fix phantom decision-table test refs |
+| `aa5f9a76` | 2026-06-10 | 4.6.2 | Verify SRS box transition + interval ladder vs doc contract; table-driven tests S11–S15; fix phantom decision-table test refs |
 | `7b3c1691` | 2026-06-10 | 3.8, 5.2, 5.5, 5.7, 5.8, 5.9, 5.10 | Commit deck import with CSV paste preview and transactional insert flow |
 | `dd8688a` | 2026-06-09 | 20.6, 18.9, 5.1–5.9, 6.1–6.6 | Update WBS and UI kit references for accuracy and traceability |
 | `5fbdf96d` | 2026-06-10 | 6.1–6.6 | Refactor `GlobalSearchScreen` / `SearchAppBarField` query handling |
