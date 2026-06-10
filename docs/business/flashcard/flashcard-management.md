@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-09
+last_updated: 2026-06-10
 applies_to: flashcard entity and flashcard management feature
 ---
 
@@ -55,12 +55,13 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 
 - Target deck must exist.
 - Current V1 deck import is CSV paste preview + transactional commit for valid preview rows only.
-  File picker, Excel, and structured text remain deferred.
+  File picker and Excel remain deferred. Structured text is supported in the backend pipeline;
+  UI entry remains deferred.
 - Imported rows must pass the same front/back validation as manual creation.
 - Invalid rows must be reported clearly via the preview screen (see "Import preview flow" below).
 - Do not silently create garbage rows.
-- Duplicate detection, skipped-duplicate reporting, and transaction commit stay deferred until the
-  duplicate-handling slice is implemented. CSV V1 does not parse tags.
+- Duplicate detection, skipped-duplicate reporting, and transaction commit are implemented in the
+  backend pipeline. CSV V1 does not parse tags.
 
 ## Import sources
 
@@ -68,9 +69,10 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 |-------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------|
 | `ImportSourceFormat.csv`            | Pasted text                       | Current V1: parse + validation preview + commit of valid rows only. Optional columns are ignored. |
 | `ImportSourceFormat.excel`          | Future                            | Deferred. First sheet read. `excelHasHeader` toggle decides if row 1 is skipped.         |
-| `ImportSourceFormat.structuredText` | Future                            | Deferred. Separator chosen by user (`auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`). |
+| `ImportSourceFormat.structuredText` | Backend-supported, UI deferred     | Separator supported: `auto`, `tab`, `comma`, `colon`, `slash`, `semicolon`, `pipe`.      |
 
-`structuredText` with `auto` infers separator by frequency analysis of the first non-empty line.
+`structuredText` with `auto` infers separator by frequency analysis of the first non-empty line;
+ties are treated as invalid input.
 
 ## Duplicate policy
 
@@ -93,6 +95,7 @@ Skipped duplicates appear in `FlashcardImportPreparation.skippedDuplicates` with
 ## Import preview flow
 
 Current V1 deck import keeps CSV preview on the same screen and commits valid rows transactionally.
+Structured text uses the same backend parse/validate/commit pipeline.
 
 ```mermaid
 flowchart TD

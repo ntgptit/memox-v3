@@ -186,11 +186,11 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 6.4.1 | Import | Transactional commit BE | BE | Insert valid rows + default SRS progress in one transaction; rollback tests | Implemented | 6.2.2 | `lib/domain/usecases/flashcard/commit_deck_import_usecase.dart`, `test/presentation/features/flashcards/deck_import_screen_test.dart` | `7b3c1691` | No action |
 | 6.4.2 | Import | No silent partial import | Integration | Commit only proceeds on clean preview; all-or-nothing insert | Implemented | 6.4.1 | `test/presentation/features/flashcards/deck_import_screen_test.dart` | `7b3c1691` | No action |
 | 6.5.1 | Import | Result summary FE | FE | V1 snackbar + pop back (standalone result screen deferred) | Implemented | 6.4.1 | `lib/presentation/features/flashcards/screens/deck_import_screen.dart` | `7b3c1691` | No action |
-| 6.6.1 | Import | Duplicate detection BE V1 | BE | Case-insensitive front/back dup check vs file + existing deck + tests | Specified | 6.2.2 | `docs/business/flashcard/flashcard-management.md` (import section) | TBD | Implement BE detection + skipped-duplicate aggregation + tests |
+| 6.6.1 | Import | Duplicate detection BE V1 | BE | Case-insensitive front/back dup check vs file + existing deck + tests | Implemented | 6.2.2 | `lib/domain/usecases/flashcard/prepare_deck_import_usecase.dart`, `lib/domain/repositories/flashcard_repository.dart`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/domain/usecases/flashcard/deck_import_usecases_test.dart`, `test/data/repositories/flashcard_repository_impl_test.dart` | `44407390` | No action |
 | 6.6.2 | Import | Duplicate preview FE V1 | FE | Duplicate rows surfaced in preview with skip policy | Specified | 6.6.1 | `docs/wireframes/10-deck-import.md` | TBD | Wire to BE; widget tests |
 | 6.7.1 | Import | File picker entry FE | FE | File selection (UTF-8 CSV file) replacing paste-only input | Specified | 6.2.1 | `docs/wireframes/10-deck-import.md` | TBD | Needs dependency approval if picker package required |
 | 6.8.1 | Import | Excel import BE | BE | First-sheet read, header toggle | Future | 6.6.1 | `docs/business/flashcard/flashcard-management.md` | TBD | Do not implement without dependency approval |
-| 6.9.1 | Import | Structured text import BE | BE | Separator auto/tab/comma/colon/slash/semicolon/pipe | Specified | 6.2.1 | `docs/business/flashcard/flashcard-management.md` | TBD | Implement after duplicate handling |
+| 6.9.1 | Import | Structured text import BE | BE | Separator auto/tab/comma/colon/slash/semicolon/pipe | Implemented | 6.2.1 | `lib/domain/usecases/flashcard/prepare_deck_import_usecase.dart`, `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`, `lib/domain/models/flashcard_import_preview.dart`, `test/domain/usecases/flashcard/deck_import_usecases_test.dart` | `44407390` | No action |
 
 ### Group 7 — Progress/reporting flow
 
@@ -255,14 +255,13 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 Backend-first per flow; each row is one agent prompt.
 
-1. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
-2. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
-3. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
-4. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
-5. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
+1. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
+2. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
+3. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
+4. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
+5. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
 6. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
 7. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
-8. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
 
 ## 6. Deferred / Future / Rejected Register
 
