@@ -20,6 +20,8 @@ import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/flashcard_status_filter.dart';
 
+part 'flashcard_repository_impl_imports.dart';
+
 /// Drift-backed [FlashcardRepository].
 ///
 /// Reads compose the [FlashcardDao] (cards + detail + count) with the
@@ -114,6 +116,12 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     }
   }
 
+  @override
+  Future<Result<List<Flashcard>>> existingByFrontBackPairs(
+    String deckId,
+    List<({String front, String back})> pairs,
+  ) => _existingByFrontBackPairs(this, deckId, pairs);
+
   Future<Result<FlashcardListDetail>> _load(
     String deckId,
     String? normalizedSearch,
@@ -177,6 +185,12 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   }
 
   @override
+  Future<Result<int>> commitDeckImport({
+    required String deckId,
+    required List<DeckImportPreviewRow> rows,
+  }) => _commitDeckImport(this, deckId: deckId, rows: rows);
+
+  @override
   Future<Result<Flashcard>> createFlashcard({
     required String deckId,
     required String front,
@@ -217,6 +231,7 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       }
       final FlashcardRow created = await _dao.transaction(
         () => _insertFlashcard(
+          this,
           deckId: deckId,
           front: trimmedFront,
           back: trimmedBack,
@@ -233,63 +248,6 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       return Result<Flashcard>.err(violation.failure);
     } catch (error) {
       return Result<Flashcard>.err(
-        Failure.storage(
-          operation: StorageOp.write,
-          cause: error.toString(),
-          table: 'flashcards',
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Result<int>> commitDeckImport({
-    required String deckId,
-    required List<DeckImportPreviewRow> rows,
-  }) async {
-    if (StringUtils.trimmed(deckId).isEmpty) {
-      return Future<Result<int>>.value(
-        const Result<int>.err(
-          Failure.validation(field: 'deckId', code: ValidationCode.empty),
-        ),
-      );
-    }
-    if (rows.isEmpty) {
-      return Future<Result<int>>.value(
-        const Result<int>.err(
-          Failure.validation(
-            field: 'preview',
-            code: ValidationCode.insufficientContent,
-          ),
-        ),
-      );
-    }
-
-    try {
-      final DeckRow? deckRow = await _folderDao.findDeck(deckId);
-      if (deckRow == null) {
-        return Result<int>.err(Failure.notFound(entity: 'deck', id: deckId));
-      }
-      final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
-      final int committed = await _dao.transaction(() async {
-        int count = 0;
-        for (final DeckImportPreviewRow row in rows) {
-          await _insertFlashcard(
-            deckId: deckId,
-            front: row.front,
-            back: row.back,
-            tags: const <String>[],
-            nowMs: nowMs,
-          );
-          count++;
-        }
-        return count;
-      });
-      return Result<int>.ok(committed);
-    } on _RuleViolation catch (violation) {
-      return Result<int>.err(violation.failure);
-    } catch (error) {
-      return Result<int>.err(
         Failure.storage(
           operation: StorageOp.write,
           cause: error.toString(),
@@ -475,27 +433,6 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     }
   }
 
-  static String? _optionalText(String? value) {
-    if (value == null) {
-      return null;
-    }
-    final String trimmed = StringUtils.trimmed(value);
-    return trimmed.isEmpty ? null : trimmed;
-  }
-
-  static List<String> _normalizeTags(List<String> tags) {
-    final Set<String> seenTags = <String>{};
-    final List<String> normalizedTags = <String>[];
-    for (final String tag in tags) {
-      final String normalizedTag = TagValidator.storageValue(tag);
-      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
-        continue;
-      }
-      normalizedTags.add(normalizedTag);
-    }
-    return normalizedTags;
-  }
-
   static List<Flashcard> _filterByTags(
     List<Flashcard> cards,
     List<FlashcardTagRow> tagRows,
@@ -514,65 +451,6 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         .toList(growable: false);
   }
 
-  Future<FlashcardRow> _insertFlashcard({
-    required String deckId,
-    required String front,
-    required String back,
-    String? exampleSentence,
-    String? pronunciation,
-    String? hint,
-    required List<String> tags,
-    required int nowMs,
-  }) async {
-    final String trimmedFront = StringUtils.trimmed(front);
-    if (trimmedFront.isEmpty) {
-      throw const _RuleViolation(
-        Failure.validation(field: 'front', code: ValidationCode.empty),
-      );
-    }
-
-    final String trimmedBack = StringUtils.trimmed(back);
-    if (trimmedBack.isEmpty) {
-      throw const _RuleViolation(
-        Failure.validation(field: 'back', code: ValidationCode.empty),
-      );
-    }
-
-    final String id = IdGenerator.newId();
-    final int nextSortOrder = (await _dao.maxFlashcardSortOrder(deckId)) + 1;
-
-    await _dao
-        .into(_dao.flashcards)
-        .insert(
-          FlashcardsCompanion.insert(
-            id: id,
-            deckId: deckId,
-            front: trimmedFront,
-            back: trimmedBack,
-            exampleSentence: Value<String?>(exampleSentence),
-            pronunciation: Value<String?>(pronunciation),
-            hint: Value<String?>(hint),
-            sortOrder: Value<int>(nextSortOrder),
-            createdAt: nowMs,
-            updatedAt: nowMs,
-          ),
-        );
-    await _dao
-        .into(_dao.attachedDatabase.flashcardProgress)
-        .insert(
-          FlashcardProgressCompanion.insert(
-            flashcardId: id,
-            dueAt: Value<int?>(nowMs),
-          ),
-        );
-    for (final String tag in tags) {
-      await _dao
-          .into(_dao.attachedDatabase.flashcardTags)
-          .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
-    }
-    return (await _dao.findFlashcard(id))!;
-  }
-
   static DateTime? _dateFromMs(int? ms) =>
       ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
 
@@ -588,10 +466,4 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     }
     return null;
   }
-}
-
-class _RuleViolation implements Exception {
-  const _RuleViolation(this.failure);
-
-  final Failure failure;
 }

@@ -196,6 +196,12 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   }) async => detailResult;
 
   @override
+  Future<Result<List<Flashcard>>> existingByFrontBackPairs(
+    DeckId deckId,
+    List<({String front, String back})> pairs,
+  ) async => const Result<List<Flashcard>>.ok(<Flashcard>[]);
+
+  @override
   Future<Result<Flashcard>> updateFlashcard({
     required FlashcardId flashcardId,
     required String front,

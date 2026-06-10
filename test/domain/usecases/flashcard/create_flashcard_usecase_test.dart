@@ -70,6 +70,14 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   }
 
   @override
+  Future<Result<List<Flashcard>>> existingByFrontBackPairs(
+    DeckId deckId,
+    List<({String front, String back})> pairs,
+  ) {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Result<Flashcard>> updateFlashcard({
     required FlashcardId flashcardId,
     required String front,

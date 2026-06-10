@@ -42,6 +42,16 @@ abstract interface class FlashcardRepository {
     required FlashcardId flashcardId,
   });
 
+  /// Finds cards in [deckId] whose normalized front/back pairs match any of
+  /// [pairs].
+  ///
+  /// Used by deck-import preparation to detect duplicates before commit. A
+  /// missing deck yields `NotFoundFailure`.
+  Future<Result<List<Flashcard>>> existingByFrontBackPairs(
+    DeckId deckId,
+    List<({String front, String back})> pairs,
+  );
+
   /// Creates one flashcard in [deckId] plus its initial progress row.
   ///
   /// Errors: `NotFoundFailure` (deck missing), `ValidationFailure` (front or

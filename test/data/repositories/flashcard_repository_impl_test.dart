@@ -741,6 +741,50 @@ void main() {
     });
   });
 
+  group('existingByFrontBackPairs', () {
+    test(
+      'matches normalized front/back pairs only within the target deck',
+      () async {
+        final Deck deck = await seedDeck();
+        final Folder otherFolder =
+            (await folderRepo.createRootFolder(name: 'Other') as Ok<Folder>)
+                .value;
+        final Deck otherDeck =
+            (await folderRepo.createDeck(
+                      parentFolderId: otherFolder.id,
+                      name: 'Other deck',
+                      targetLanguage: TargetLanguage.korean,
+                    )
+                    as Ok<Deck>)
+                .value;
+
+        await addCard(deck.id, 'c1', 'Hello', 'World', 0);
+        await addCard(otherDeck.id, 'c2', 'Hello', 'World', 0);
+
+        final Result<List<Flashcard>> result = await repo
+            .existingByFrontBackPairs(deck.id, <({String front, String back})>[
+              (front: ' hello ', back: ' world '),
+              (front: 'missing', back: 'card'),
+            ]);
+
+        expect(result, isA<Ok<List<Flashcard>>>());
+        final Ok<List<Flashcard>> okResult = result as Ok<List<Flashcard>>;
+        expect(okResult.value, hasLength(1));
+        expect(okResult.value.single.id, 'c1');
+      },
+    );
+
+    test('returns NotFoundFailure for a missing deck id', () async {
+      final Result<List<Flashcard>> result = await repo
+          .existingByFrontBackPairs('missing', <({String front, String back})>[
+            (front: 'Hello', back: 'World'),
+          ]);
+
+      expect(result, isA<Err<List<Flashcard>>>());
+      expect((result as Err<List<Flashcard>>).failure, isA<NotFoundFailure>());
+    });
+  });
+
   group('commitDeckImport', () {
     test('commits valid rows and seeds progress in one transaction', () async {
       final Deck deck = await seedDeck();

@@ -13,6 +13,7 @@ class ParseDeckImportCsvUseCase {
     final List<_CsvRecord> records = _parseCsvRecords(rawCsv);
     if (records.isEmpty) {
       return const DeckImportPreview(
+        totalRowCount: 0,
         rows: <DeckImportPreviewRow>[],
         issues: <DeckImportIssue>[],
       );
@@ -75,7 +76,11 @@ class ParseDeckImportCsvUseCase {
       );
     }
 
-    return DeckImportPreview(rows: rows, issues: issues);
+    return DeckImportPreview(
+      totalRowCount: rows.length + issues.length,
+      rows: rows,
+      issues: issues,
+    );
   }
 }
 

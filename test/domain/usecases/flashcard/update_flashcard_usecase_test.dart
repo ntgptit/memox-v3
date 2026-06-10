@@ -101,6 +101,14 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   }
 
   @override
+  Future<Result<List<Flashcard>>> existingByFrontBackPairs(
+    DeckId deckId,
+    List<({String front, String back})> pairs,
+  ) {
+    throw UnimplementedError();
+  }
+
+  @override
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     DeckId deckId, {
     String? searchTerm,

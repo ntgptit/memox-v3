@@ -377,4 +377,6 @@ String _issueMessage(AppLocalizations l10n, DeckImportIssue issue) =>
         l10n.importCsvFrontAndBackRequiredMessage,
       DeckImportIssueCode.frontRequired => l10n.flashcardEditorFrontError,
       DeckImportIssueCode.backRequired => l10n.flashcardEditorBackError,
+      DeckImportIssueCode.invalidFormat =>
+        l10n.importCsvFrontAndBackRequiredMessage,
     };
