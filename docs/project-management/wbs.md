@@ -378,6 +378,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `b63998a7` | 2026-06-10 | 2.19–2.21, 4.1.3, 4.1.4, 4.2.4, 4.4.3, 4.5.10, 4.6.4, 4.10.2, 8.1.2, 8.2.1, 8.7.1, 8.7.2 | Adopt BA-review improvements: resolve C1/M2/M3 (first-attempt SRS, result terms, streak pause), spec recall-default SRS review, session batch limit, daily new limit, due-day normalization, deck move, dup soft-warning, delete blast-radius, export priority, mock-state release rules; reorder next-10 |
 | `e84f5115` | 2026-06-10 | 6.6.1 | Prevent import duplicate commit bypass with repository guard + tests |
 | `44407390` | 2026-06-10 | 6.6.1, 6.9.1 | Import duplicate detection + structured text backend |
 | `a35f32f1` | 2026-06-10 | 2.17.1, 2.18.1 | Flashcard list status + tag backend filters |
