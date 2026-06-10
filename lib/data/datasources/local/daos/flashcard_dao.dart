@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 
 part 'flashcard_dao.g.dart';
 
@@ -24,11 +25,19 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
     required String deckId,
     required ContentSortMode sort,
     String? normalizedSearch,
+    required FlashcardStatusFilter statusFilter,
+    required int nowMs,
   }) => flashcardListItems(
     deckId,
     _searchPattern(normalizedSearch),
+    statusFilter.name,
+    nowMs,
     _flashcardOrder(sort),
   ).get();
+
+  /// Tags attached to cards in [deckId], returned in deck order.
+  Future<List<FlashcardTagRow>> loadFlashcardTagsInDeck(String deckId) =>
+      flashcardTagsInDeck(deckId).get();
 
   /// Total cards in [deckId] regardless of search.
   Future<int> countFlashcards(String deckId) =>
@@ -123,7 +132,7 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
   // Mirrors `FolderDao._deckOrder`. `lastStudied` falls back to manual order
   // here — the read model carries no SRS data yet (study layer is Future).
   FlashcardListItems$order _flashcardOrder(ContentSortMode sort) =>
-      (Flashcards f) => switch (sort) {
+      (Flashcards f, FlashcardProgress p) => switch (sort) {
         ContentSortMode.name => OrderBy(<OrderingTerm>[
           OrderingTerm(expression: f.front),
           OrderingTerm(expression: f.sortOrder),

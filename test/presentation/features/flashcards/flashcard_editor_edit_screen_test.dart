@@ -16,6 +16,7 @@ import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
@@ -224,6 +225,9 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
     DeckId deckId, {
     String? searchTerm,
     ContentSortMode sort = ContentSortMode.manual,
+    FlashcardStatusFilter statusFilter = FlashcardStatusFilter.all,
+    List<String> selectedTags = const <String>[],
+    DateTime? now,
   }) {
     throw UnimplementedError();
   }

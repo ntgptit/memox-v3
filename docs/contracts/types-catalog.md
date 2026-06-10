@@ -232,6 +232,25 @@ enum ContentSortMode {
 Source: `docs/wireframes/02-library.md` §Sort options. Used by
 `FolderRepository.watchLibraryOverview` + `WatchLibraryOverviewUseCase`.
 
+### FlashcardStatusFilter
+
+**Status:** Current.
+
+Deck flashcard list status filter values. This is the backend selector for the
+flashcard list read path, not a persisted field.
+
+```dart
+enum FlashcardStatusFilter {
+  all,
+  active,
+  due,
+  suspended,
+  buried,
+}
+```
+
+Source: `docs/business/study-actions/bury-suspend.md`, `docs/business/tags/tag-system.md`.
+
 ### TargetLanguage
 
 The language of a deck's front field. Drives TTS gating.

@@ -14,7 +14,9 @@ import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
+import 'package:memox/domain/tag/tag_validator.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
 
@@ -60,6 +62,13 @@ void main() {
     String? pronunciation,
     String? hint,
     List<String> tags = const <String>[],
+    bool withProgress = false,
+    int? dueAt,
+    int? buriedUntil,
+    bool isSuspended = false,
+    int reviewCount = 0,
+    int lapseCount = 0,
+    int? lastStudiedAt,
   }) async {
     final int now = DateTime.now().toUtc().millisecondsSinceEpoch;
     await db
@@ -78,10 +87,32 @@ void main() {
             updatedAt: now,
           ),
         );
+    if (withProgress) {
+      await db
+          .into(db.flashcardProgress)
+          .insert(
+            FlashcardProgressCompanion.insert(
+              flashcardId: id,
+              dueAt: Value<int?>(dueAt),
+              buriedUntil: Value<int?>(buriedUntil),
+              isSuspended: Value<bool>(isSuspended),
+              reviewCount: Value<int>(reviewCount),
+              lapseCount: Value<int>(lapseCount),
+              lastStudiedAt: Value<int?>(lastStudiedAt),
+            ),
+          );
+    }
+    final Set<String> seenTags = <String>{};
     for (final String tag in tags) {
+      final String normalizedTag = TagValidator.storageValue(tag);
+      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) {
+        continue;
+      }
       await db
           .into(db.flashcardTags)
-          .insert(FlashcardTagsCompanion.insert(flashcardId: id, tag: tag));
+          .insert(
+            FlashcardTagsCompanion.insert(flashcardId: id, tag: normalizedTag),
+          );
     }
   }
 
@@ -111,9 +142,21 @@ void main() {
         );
   }
 
-  Future<FlashcardListDetail> load(DeckId deckId, {String? search}) async {
+  Future<FlashcardListDetail> load(
+    DeckId deckId, {
+    String? search,
+    FlashcardStatusFilter statusFilter = FlashcardStatusFilter.all,
+    List<String> selectedTags = const <String>[],
+    DateTime? now,
+  }) async {
     final Result<FlashcardListDetail> result = await repo
-        .watchFlashcardList(deckId, searchTerm: search)
+        .watchFlashcardList(
+          deckId,
+          searchTerm: search,
+          statusFilter: statusFilter,
+          selectedTags: selectedTags,
+          now: now,
+        )
         .first;
     return (result as Ok<FlashcardListDetail>).value;
   }
@@ -208,6 +251,442 @@ void main() {
         (result as Err<FlashcardListDetail>).failure,
         isA<NotFoundFailure>(),
       );
+    });
+
+    test('statusFilter all matches the default list order', () async {
+      final Deck deck = await seedDeck();
+      await addCard(deck.id, 'c1', '안녕하세요', 'Hello', 0);
+      await addCard(deck.id, 'c2', '감사합니다', 'Thank you', 1);
+
+      final FlashcardListDetail defaultDetail = await load(deck.id);
+      final FlashcardListDetail allDetail = await load(
+        deck.id,
+        statusFilter: FlashcardStatusFilter.all,
+      );
+
+      expect(allDetail.cards.map((c) => c.id), <String>['c1', 'c2']);
+      expect(
+        allDetail.cards.map((c) => c.id),
+        defaultDetail.cards.map((c) => c.id),
+      );
+      expect(allDetail.totalCount, 2);
+    });
+
+    test(
+      'active filters exclude suspended and currently buried cards and keep expired-buried cards',
+      () async {
+        final Deck deck = await seedDeck();
+        final DateTime now = DateTime.utc(2026, 1, 15, 12);
+        await addCard(deck.id, 'active', 'Active', 'Card', 0);
+        await addCard(
+          deck.id,
+          'suspended',
+          'Suspended',
+          'Card',
+          1,
+          withProgress: true,
+          dueAt: now.millisecondsSinceEpoch - 1000,
+          isSuspended: true,
+        );
+        await addCard(
+          deck.id,
+          'buried',
+          'Buried',
+          'Card',
+          2,
+          withProgress: true,
+          dueAt: now.millisecondsSinceEpoch - 1000,
+          buriedUntil: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+        );
+        await addCard(
+          deck.id,
+          'expired',
+          'Expired',
+          'Card',
+          3,
+          withProgress: true,
+          dueAt: now.millisecondsSinceEpoch + 1000,
+          buriedUntil: now
+              .subtract(const Duration(days: 1))
+              .millisecondsSinceEpoch,
+        );
+
+        final FlashcardListDetail detail = await load(
+          deck.id,
+          statusFilter: FlashcardStatusFilter.active,
+          now: now,
+        );
+
+        expect(detail.cards.map((c) => c.id), <String>['active', 'expired']);
+        expect(detail.totalCount, 4);
+      },
+    );
+
+    test(
+      'due filters include past-due and due-now cards and exclude future-due, suspended, and buried cards',
+      () async {
+        final Deck deck = await seedDeck();
+        final Folder otherFolder =
+            (await folderRepo.createRootFolder(name: 'Other') as Ok<Folder>)
+                .value;
+        final Deck otherDeck =
+            (await folderRepo.createDeck(
+                      parentFolderId: otherFolder.id,
+                      name: 'Other deck',
+                      targetLanguage: TargetLanguage.korean,
+                    )
+                    as Ok<Deck>)
+                .value;
+        final DateTime now = DateTime.utc(2026, 1, 15, 12);
+        await addCard(
+          deck.id,
+          'past',
+          'Past due',
+          'Alpha',
+          0,
+          withProgress: true,
+          dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+        );
+        await addCard(
+          deck.id,
+          'now',
+          'Due now',
+          'Beta',
+          1,
+          withProgress: true,
+          dueAt: now.millisecondsSinceEpoch,
+        );
+        await addCard(
+          deck.id,
+          'future',
+          'Future due',
+          'Gamma',
+          2,
+          withProgress: true,
+          dueAt: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+        );
+        await addCard(
+          deck.id,
+          'suspended',
+          'Suspended due',
+          'Delta',
+          3,
+          withProgress: true,
+          dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+          isSuspended: true,
+        );
+        await addCard(
+          deck.id,
+          'buried',
+          'Buried due',
+          'Epsilon',
+          4,
+          withProgress: true,
+          dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+          buriedUntil: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+        );
+        await addCard(
+          deck.id,
+          'expired',
+          'Expired buried due',
+          'Zeta',
+          5,
+          withProgress: true,
+          dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+          buriedUntil: now
+              .subtract(const Duration(days: 1))
+              .millisecondsSinceEpoch,
+        );
+        await addCard(
+          otherDeck.id,
+          'other',
+          'Other deck due',
+          'Eta',
+          0,
+          withProgress: true,
+          dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+        );
+
+        final FlashcardListDetail detail = await load(
+          deck.id,
+          statusFilter: FlashcardStatusFilter.due,
+          now: now,
+        );
+
+        expect(detail.cards.map((c) => c.id), <String>[
+          'past',
+          'now',
+          'expired',
+        ]);
+        expect(detail.totalCount, 6);
+      },
+    );
+
+    test('due filters compose with search term', () async {
+      final Deck deck = await seedDeck();
+      final DateTime now = DateTime.utc(2026, 1, 15, 12);
+      await addCard(
+        deck.id,
+        'past',
+        'Alpha past due',
+        'Alpha',
+        0,
+        withProgress: true,
+        dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+      );
+      await addCard(
+        deck.id,
+        'now',
+        'Beta due now',
+        'Beta',
+        1,
+        withProgress: true,
+        dueAt: now.millisecondsSinceEpoch,
+      );
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        search: 'beta',
+        statusFilter: FlashcardStatusFilter.due,
+        now: now,
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['now']);
+      expect(detail.totalCount, 2);
+    });
+
+    test('suspended filter returns only suspended cards', () async {
+      final Deck deck = await seedDeck();
+      final DateTime now = DateTime.utc(2026, 1, 15, 12);
+      await addCard(
+        deck.id,
+        's1',
+        'Suspended one',
+        'Card',
+        0,
+        withProgress: true,
+        dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+        isSuspended: true,
+      );
+      await addCard(
+        deck.id,
+        's2',
+        'Suspended two',
+        'Card',
+        1,
+        withProgress: true,
+        dueAt: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+        buriedUntil: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+        isSuspended: true,
+      );
+      await addCard(
+        deck.id,
+        'active',
+        'Active',
+        'Card',
+        2,
+        withProgress: true,
+        dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+      );
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        statusFilter: FlashcardStatusFilter.suspended,
+        now: now,
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['s1', 's2']);
+      expect(detail.totalCount, 3);
+    });
+
+    test('buried filter returns only currently buried cards', () async {
+      final Deck deck = await seedDeck();
+      final DateTime now = DateTime.utc(2026, 1, 15, 12);
+      await addCard(
+        deck.id,
+        'buried1',
+        'Buried one',
+        'Card',
+        0,
+        withProgress: true,
+        dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+        buriedUntil: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+      );
+      await addCard(
+        deck.id,
+        'buried2',
+        'Buried two',
+        'Card',
+        1,
+        withProgress: true,
+        dueAt: now.millisecondsSinceEpoch,
+        buriedUntil: now.add(const Duration(days: 2)).millisecondsSinceEpoch,
+        isSuspended: true,
+      );
+      await addCard(
+        deck.id,
+        'expired',
+        'Expired buried',
+        'Card',
+        2,
+        withProgress: true,
+        dueAt: now.millisecondsSinceEpoch,
+        buriedUntil: now
+            .subtract(const Duration(days: 1))
+            .millisecondsSinceEpoch,
+      );
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        statusFilter: FlashcardStatusFilter.buried,
+        now: now,
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['buried1', 'buried2']);
+      expect(detail.totalCount, 3);
+    });
+
+    test('empty selected tags returns all cards', () async {
+      final Deck deck = await seedDeck();
+      await addCard(deck.id, 'c1', 'One', 'Alpha', 0, tags: <String>['weak']);
+      await addCard(deck.id, 'c2', 'Two', 'Beta', 1, tags: <String>['grammar']);
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        selectedTags: const <String>[],
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['c1', 'c2']);
+      expect(detail.totalCount, 2);
+    });
+
+    test('single normalized tag filter stays deck-scoped', () async {
+      final Deck deck = await seedDeck();
+      final Folder otherFolder =
+          (await folderRepo.createRootFolder(name: 'Other') as Ok<Folder>)
+              .value;
+      final Deck otherDeck =
+          (await folderRepo.createDeck(
+                    parentFolderId: otherFolder.id,
+                    name: 'Other deck',
+                    targetLanguage: TargetLanguage.korean,
+                  )
+                  as Ok<Deck>)
+              .value;
+      await addCard(deck.id, 'c1', 'One', 'Alpha', 0, tags: <String>['weak']);
+      await addCard(deck.id, 'c3', 'Three', 'Gamma', 1, tags: <String>['WEAK']);
+      await addCard(
+        otherDeck.id,
+        'c2',
+        'Two',
+        'Beta',
+        0,
+        tags: <String>['WEAK'],
+      );
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        selectedTags: <String>['#WEAK'],
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['c1', 'c3']);
+      expect(detail.totalCount, 2);
+    });
+
+    test('multiple selected tags use AND semantics', () async {
+      final Deck deck = await seedDeck();
+      await addCard(
+        deck.id,
+        'both',
+        'Both tags',
+        'Alpha',
+        0,
+        tags: <String>['weak', 'grammar'],
+      );
+      await addCard(
+        deck.id,
+        'one',
+        'One tag',
+        'Beta',
+        1,
+        tags: <String>['weak'],
+      );
+      await addCard(
+        deck.id,
+        'other',
+        'Other tag',
+        'Gamma',
+        2,
+        tags: <String>['grammar'],
+      );
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        selectedTags: <String>['grammar', 'weak'],
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['both']);
+      expect(detail.totalCount, 3);
+    });
+
+    test('tag filter composes with search term and status filter', () async {
+      final Deck deck = await seedDeck();
+      final DateTime now = DateTime.utc(2026, 1, 15, 12);
+      await addCard(
+        deck.id,
+        'match',
+        'Beta weak due',
+        'Alpha',
+        0,
+        tags: <String>['weak', 'grammar'],
+        withProgress: true,
+        dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+      );
+      await addCard(
+        deck.id,
+        'wrongTag',
+        'Beta other due',
+        'Beta',
+        1,
+        tags: <String>['other'],
+        withProgress: true,
+        dueAt: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+      );
+      await addCard(
+        deck.id,
+        'wrongStatus',
+        'Beta weak future',
+        'Gamma',
+        2,
+        tags: <String>['weak'],
+        withProgress: true,
+        dueAt: now.add(const Duration(days: 1)).millisecondsSinceEpoch,
+      );
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        search: 'beta',
+        statusFilter: FlashcardStatusFilter.due,
+        selectedTags: <String>['WEAK'],
+        now: now,
+      );
+
+      expect(detail.cards.map((c) => c.id), <String>['match']);
+      expect(detail.totalCount, 3);
+    });
+
+    test('tag no-results keeps totalCount consistent', () async {
+      final Deck deck = await seedDeck();
+      await addCard(deck.id, 'c1', 'One', 'Alpha', 0, tags: <String>['weak']);
+      await addCard(deck.id, 'c2', 'Two', 'Beta', 1, tags: <String>['grammar']);
+
+      final FlashcardListDetail detail = await load(
+        deck.id,
+        selectedTags: <String>['missing'],
+      );
+
+      expect(detail.cards, isEmpty);
+      expect(detail.totalCount, 2);
     });
   });
 

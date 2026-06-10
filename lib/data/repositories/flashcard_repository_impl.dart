@@ -18,6 +18,7 @@ import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/tag/tag_validator.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 
 /// Drift-backed [FlashcardRepository].
 ///
@@ -36,14 +37,20 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     String deckId, {
     String? searchTerm,
     ContentSortMode sort = ContentSortMode.manual,
+    FlashcardStatusFilter statusFilter = FlashcardStatusFilter.all,
+    List<String> selectedTags = const <String>[],
+    DateTime? now,
   }) {
     final String? normalized =
         (searchTerm == null || StringUtils.trimmed(searchTerm).isEmpty)
         ? null
         : StringUtils.normalize(searchTerm);
+    final List<String> normalizedTags = _normalizeTags(selectedTags);
+    final int nowMs = (now ?? DateTime.now().toUtc()).millisecondsSinceEpoch;
 
     return _folderDao.watchContentChanges().asyncMap(
-      (_) => _load(deckId, normalized, sort),
+      (_) =>
+          _load(deckId, normalized, sort, statusFilter, normalizedTags, nowMs),
     );
   }
 
@@ -111,6 +118,9 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     String deckId,
     String? normalizedSearch,
     ContentSortMode sort,
+    FlashcardStatusFilter statusFilter,
+    List<String> normalizedTags,
+    int nowMs,
   ) async {
     try {
       final DeckRow? deckRow = await _folderDao.findDeck(deckId);
@@ -133,7 +143,17 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         deckId: deckId,
         sort: sort,
         normalizedSearch: normalizedSearch,
+        statusFilter: statusFilter,
+        nowMs: nowMs,
       )).map(FlashcardMapper.fromRow).toList(growable: false);
+
+      final List<Flashcard> filteredCards = normalizedTags.isEmpty
+          ? cards
+          : _filterByTags(
+              cards,
+              await _dao.loadFlashcardTagsInDeck(deckId),
+              normalizedTags,
+            );
 
       final int totalCount = await _dao.countFlashcards(deckId);
 
@@ -141,7 +161,7 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         FlashcardListDetail(
           deck: deck,
           breadcrumb: breadcrumb,
-          cards: cards,
+          cards: filteredCards,
           totalCount: totalCount,
         ),
       );
@@ -403,6 +423,8 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       final List<FlashcardRow> currentRows = await _dao.getFlashcards(
         deckId: deckId,
         sort: ContentSortMode.manual,
+        statusFilter: FlashcardStatusFilter.all,
+        nowMs: DateTime.now().toUtc().millisecondsSinceEpoch,
       );
       final Map<String, FlashcardRow> currentById = <String, FlashcardRow>{
         for (final FlashcardRow row in currentRows) row.id: row,
@@ -472,6 +494,24 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       normalizedTags.add(normalizedTag);
     }
     return normalizedTags;
+  }
+
+  static List<Flashcard> _filterByTags(
+    List<Flashcard> cards,
+    List<FlashcardTagRow> tagRows,
+    List<String> selectedTags,
+  ) {
+    final Map<String, Set<String>> tagsByCardId = <String, Set<String>>{};
+    for (final FlashcardTagRow row in tagRows) {
+      tagsByCardId.putIfAbsent(row.flashcardId, () => <String>{}).add(row.tag);
+    }
+
+    return cards
+        .where((Flashcard card) {
+          final Set<String> tags = tagsByCardId[card.id] ?? const <String>{};
+          return selectedTags.every(tags.contains);
+        })
+        .toList(growable: false);
   }
 
   Future<FlashcardRow> _insertFlashcard({

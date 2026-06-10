@@ -47,7 +47,7 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 );
 ```
 
-> **Current implementation (verified 2026-06-07).** The interface above is the
+> **Current implementation (verified 2026-06-10).** The interface above is the
 > **Target** (`Either`-based, full surface). The shipped V1
 > `FlashcardRepository` (`lib/domain/repositories/flashcard_repository.dart`,
 > impl `lib/data/repositories/flashcard_repository_impl.dart`) is a `Result`-based
@@ -65,9 +65,8 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 > - `Future<Result<int>> commitDeckImport({deckId, rows})` — inserts valid CSV preview rows for a
 >   deck in one transaction, creating the default `flashcard_progress` row for each insert and
 >   returning the committed count.
-> - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort})`
->   — deck + folder breadcrumb + search-filtered cards (front/back/example/pronunciation/hint) +
->   search-independent `totalCount`
+> - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort, statusFilter, selectedTags, now})`
+>   — deck + folder breadcrumb + search/status/tag-filtered cards (search still matches front/back/example/pronunciation/hint; status is deck-scoped `all` / `active` / `due` / `suspended` / `buried`; tags use AND semantics) + search-independent `totalCount`; `now` is a test-controlled clock override for due/buried predicates
 >   (composes `FlashcardDao` with `FolderDao` for the breadcrumb + content-revision stream).
 > - `Future<Result<void>> deleteFlashcard({flashcardId})` — single-card delete (progress
 >   cascades via FK).

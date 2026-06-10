@@ -5,6 +5,7 @@ import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/types/ids.dart';
 
 /// Flashcard data access contract
@@ -16,15 +17,21 @@ import 'package:memox/domain/types/ids.dart';
 /// V1 single-card mutations (delete, manual reorder).
 abstract interface class FlashcardRepository {
   /// Streams a deck's Flashcard List read model: the deck, its folder
-  /// breadcrumb, the (search-filtered) cards, and the deck's full card total.
+  /// breadcrumb, the (search/status/tag-filtered) cards, and the deck's full
+  /// card total.
   ///
   /// A missing/deleted deck yields `NotFoundFailure`. [searchTerm] filters the
   /// cards by front/back/example (`docs/wireframes/06-flashcard-list.md`); it
-  /// never affects `totalCount`. [sort] drives the row order.
+  /// never affects `totalCount`. [statusFilter] narrows by flashcard state,
+  /// [selectedTags] uses AND semantics, [now] is a test-controlled override for
+  /// due/buried predicates, and [sort] drives the row order.
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     DeckId deckId, {
     String? searchTerm,
     ContentSortMode sort,
+    FlashcardStatusFilter statusFilter,
+    List<String> selectedTags,
+    DateTime? now,
   });
 
   /// Loads one flashcard's editor detail.

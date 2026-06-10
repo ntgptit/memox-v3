@@ -180,11 +180,14 @@ Stream<Either<Failure, FlashcardListDetail>> call(
 });
 ```
 
-> **Current implementation (verified 2026-06-06).** Shipped as the `Result`-based
+> **Current implementation (verified 2026-06-10).** Shipped as the `Result`-based
 > `WatchFlashcardListUseCase` (`lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`)
-> over `FlashcardRepository.watchFlashcardList`. This is the V1 list-watch — the
-> unfiltered (search-only) precursor to `WatchFlashcardsByFilterUseCase`; status/tag
-> filters and computed `CardState` are Future.
+> over `FlashcardRepository.watchFlashcardList`. The shipped V1 list-watch now supports
+> deck-scoped search + status + tag filters (`all` / `active` / `due` / `suspended` / `buried`),
+> with multi-select AND tag filtering and a test-controlled `now` override for due/buried
+> predicates. `totalCount` still reflects the full deck total so the UI can distinguish empty-deck
+> from no-results states. The computed `CardState`/`WatchFlashcardsByFilterUseCase` target remains
+> Future.
 
 **Rules:**
 
