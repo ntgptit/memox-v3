@@ -255,11 +255,16 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 Backend-first per flow; each row is one agent prompt.
 
-1. **7.1.1 Progress due summary query BE V1** — aggregate due counts from existing tables; tests.
-2. **7.2.1 + 7.3.1 + 7.4.1 Progress read model BE V1** — box distribution + stats + composed read model; tests.
-3. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests (incl. 7.5.2 states).
-4. **2.17.1 Flashcard status filter BE V1** — active/suspended/buried/due list queries; tests.
-5. **2.17.2 Flashcard status filter/badges FE V1** — chips + badges in flashcard list; widget tests.
+1. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
+2. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
+3. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
+4. **7.7.1 Dashboard/progress consistency** — keep due/progress numbers aligned across surfaces.
+5. **8.1.1 Settings hub FE shell** — replace mock account/version data when contracts exist.
+6. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
+7. **8.2.2 Learning settings FE wiring** — wire `/settings/learning` shell to real persisted state.
+8. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
+9. **8.3.2 Tag management FE wiring** — wire `/settings/learning/tags` shell to real data + operations.
+10. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
 6. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
 7. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
 8. **8.3.1 Tag management BE V1** — tag list/count/search + transactional rename/merge/delete; tests.
