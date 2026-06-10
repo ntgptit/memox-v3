@@ -79,6 +79,7 @@ Future<Result<void>> recordStudySessionAnswerTransaction({
         answeredAtMs: nowMs,
         updatedAtMs: nowMs,
       );
+      await dao.touchStudySession(sessionId: sessionId, updatedAtMs: nowMs);
     });
     return const Result<void>.ok(null);
   } on _RuleViolation catch (violation) {

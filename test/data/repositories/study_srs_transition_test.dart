@@ -22,11 +22,14 @@ const Map<int, Duration> _intervalByBox = <int, Duration>{
 };
 
 class _SrsFixture {
-  _SrsFixture(this.db);
+  _SrsFixture(this.db, {DateTime? now}) : _now = now ?? _srsTestNow;
 
   final AppDatabase db;
+  final DateTime _now;
 
-  int get nowMs => DateTime.now().toUtc().millisecondsSinceEpoch;
+  DateTime get now => _now;
+
+  int get nowMs => _now.toUtc().millisecondsSinceEpoch;
 
   Future<void> seedDeck({
     required String folderId,
@@ -148,33 +151,41 @@ class _SrsFixture {
   )..where((FlashcardProgress t) => t.flashcardId.equals(cardId))).getSingle();
 }
 
+late DateTime _srsTestNow;
+
 void _expectDueAtMatchesInterval({
   required FlashcardProgressRow progress,
   required int box,
-  required int beforeMs,
-  required int afterMs,
+  required DateTime now,
 }) {
-  final int interval = _intervalByBox[box]!.inMilliseconds;
+  final DateTime localNow = now.toLocal();
+  final DateTime expectedDueAt = DateTime(
+    localNow.year,
+    localNow.month,
+    localNow.day,
+  ).add(_intervalByBox[box]!);
   final int dueAt = progress.dueAt!;
   expect(
     dueAt,
-    greaterThanOrEqualTo(beforeMs + interval),
-    reason: 'box $box due_at must be at least now + interval[$box]',
-  );
-  expect(
-    dueAt,
-    lessThanOrEqualTo(afterMs + interval),
-    reason: 'box $box due_at must be at most now + interval[$box]',
+    expectedDueAt.millisecondsSinceEpoch,
+    reason:
+        'box $box due_at must normalize to local midnight of the target day',
   );
 }
 
 void main() {
   late AppDatabase db;
   late StudyRepositoryImpl repository;
+  late DateTime now;
 
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
-    repository = StudyRepositoryImpl(StudySessionDao(db));
+    now = DateTime(2026, 1, 15, 15, 30);
+    _srsTestNow = now;
+    repository = StudyRepositoryImpl(
+      StudySessionDao(db),
+      now: () => _srsTestNow,
+    );
   });
 
   tearDown(() async {
@@ -197,11 +208,9 @@ void main() {
         );
       }
 
-      final int beforeMs = fixture.nowMs;
       final Result<void> result = await repository.finalizeStudySession(
         sessionId: 'session-s11',
       );
-      final int afterMs = fixture.nowMs;
 
       expect(result.isOk, isTrue);
       for (int box = 1; box <= 7; box++) {
@@ -215,12 +224,7 @@ void main() {
         );
         expect(progress.reviewCount, 1);
         expect(progress.lapseCount, 0);
-        _expectDueAtMatchesInterval(
-          progress: progress,
-          box: box + 1,
-          beforeMs: beforeMs,
-          afterMs: afterMs,
-        );
+        _expectDueAtMatchesInterval(progress: progress, box: box + 1, now: now);
       }
     },
   );
@@ -239,11 +243,9 @@ void main() {
         attemptResults: const <String>['perfect'],
       );
 
-      final int beforeMs = fixture.nowMs;
       final Result<void> result = await repository.finalizeStudySession(
         sessionId: 'session-s14',
       );
-      final int afterMs = fixture.nowMs;
 
       expect(result.isOk, isTrue);
       final FlashcardProgressRow progress = await fixture.progressOf(
@@ -251,12 +253,7 @@ void main() {
       );
       expect(progress.boxNumber, 8);
       expect(progress.lapseCount, 0);
-      _expectDueAtMatchesInterval(
-        progress: progress,
-        box: 8,
-        beforeMs: beforeMs,
-        afterMs: afterMs,
-      );
+      _expectDueAtMatchesInterval(progress: progress, box: 8, now: now);
     },
   );
 
@@ -274,11 +271,9 @@ void main() {
         attemptResults: const <String>['forgot'],
       );
 
-      final int beforeMs = fixture.nowMs;
       final Result<void> result = await repository.finalizeStudySession(
         sessionId: 'session-s12',
       );
-      final int afterMs = fixture.nowMs;
 
       expect(result.isOk, isTrue);
       final FlashcardProgressRow progress = await fixture.progressOf(
@@ -287,12 +282,7 @@ void main() {
       expect(progress.boxNumber, 1);
       expect(progress.reviewCount, 1);
       expect(progress.lapseCount, 1);
-      _expectDueAtMatchesInterval(
-        progress: progress,
-        box: 1,
-        beforeMs: beforeMs,
-        afterMs: afterMs,
-      );
+      _expectDueAtMatchesInterval(progress: progress, box: 1, now: now);
     },
   );
 
@@ -310,11 +300,9 @@ void main() {
         attemptResults: const <String>['forgot', 'perfect'],
       );
 
-      final int beforeMs = fixture.nowMs;
       final Result<void> result = await repository.finalizeStudySession(
         sessionId: 'session-s13',
       );
-      final int afterMs = fixture.nowMs;
 
       expect(result.isOk, isTrue);
       final FlashcardProgressRow progress = await fixture.progressOf(
@@ -323,12 +311,7 @@ void main() {
       expect(progress.boxNumber, 4);
       expect(progress.reviewCount, 1);
       expect(progress.lapseCount, 0);
-      _expectDueAtMatchesInterval(
-        progress: progress,
-        box: 4,
-        beforeMs: beforeMs,
-        afterMs: afterMs,
-      );
+      _expectDueAtMatchesInterval(progress: progress, box: 4, now: now);
     },
   );
 }

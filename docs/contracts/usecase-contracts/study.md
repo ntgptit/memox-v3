@@ -37,7 +37,7 @@ Future<Either<Failure, ResumableSession?>> call({required StudyScope scope});
 **Rules:**
 
 - Match `study_sessions` where `(entry_type, entry_ref_id)` equals scope AND
-  `status IN (draft, in_progress)` AND `started_at > now - 30 days`.
+  `status IN (draft, in_progress)` AND `updated_at > now - 30 days`.
 - Return most recent match (or null).
 
 **Errors:** `StorageFailure`.
@@ -121,7 +121,8 @@ Future<Either<Failure, Unit>> call({
 - LOAD session. Validate status=`draft` or `in_progress`.
 - LOAD ordered session items for the session and locate the current session item.
 - LOAD the linked flashcard's current progress row to derive `box_before` / `box_after`.
-- Atomic: insert `study_attempts` and update `study_session_items.answered_at` in one transaction.
+- Atomic: insert `study_attempts`, update `study_session_items.answered_at`, and touch
+  `study_sessions.updated_at` in one transaction.
 - Do **not** update `flashcard_progress`.
 - `Forgot` persists as `AttemptResult.forgot`.
 - `Got it` persists as the passing path used by the current recall V1 flow (`AttemptResult.perfect`).

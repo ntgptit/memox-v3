@@ -51,7 +51,7 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 | Operation           | Tables touched                                                                    |
 |---------------------|-----------------------------------------------------------------------------------|
 | `createSession`     | `study_sessions` INSERT + `study_session_items` INSERTs                           |
-| `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`)     |
+| `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`) + `study_sessions` UPDATE (`updated_at`) |
 | `loadStudySessionResult` | read `study_sessions` + `study_session_items` + `study_attempts` aggregate     |
 | `finalizeStudySession` | `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE                     |
 | `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
@@ -64,9 +64,9 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 - `entry_type` equals scope.entryType
 - `entry_ref_id` equals scope.entryRefId (NULL-safe)
 - `status` is resumable/active according to the DAO query
-- `started_at` > now - 30 days
+- `updated_at` > now - 30 days
 
-Order by `started_at DESC`, return first.
+Order by `updated_at DESC`, return first.
 
 Study type and flow are not part of the conflict key. A paused session for the
 same scope blocks starting another session even when the requested mode/flow is

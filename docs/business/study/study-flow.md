@@ -137,10 +137,10 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - Today entry does not require entry ref id.
 - Folder study collects cards recursively from all descendant decks.
 - SRS review defaults to `srs_recall_review` (recall); `srs_fill_review` is opt-in (Target).
-- **Session batch limit (Target, WBS 4.2.4):** a session contains at most `maxSessionItems`
-  eligible cards (default 20; named constant, later a Learning Setting). When the scope has more
-  eligible cards, the session takes the first batch (due-date order for review, sort order for
-  new) and, after finalization, the result screen offers "Study next batch" re-entering the gate.
+- **Session batch limit (BE V1, WBS 4.2.4):** a session contains at most `maxSessionItems`
+  eligible cards (default 20; named constant). When the scope has more eligible cards, the
+  backend takes the first batch (due-date order for review, sort order for new) before
+  persisting `study_session_items`.
   Rationale: unbounded recursive folder scopes create 300-card sessions that combine badly with
   all-or-nothing finalization — abandoning at card 150 yields zero SRS credit. Small batches cap
   the loss and create completion moments.

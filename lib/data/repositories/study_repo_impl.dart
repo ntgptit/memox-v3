@@ -14,6 +14,7 @@ import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/study/study_session_limits.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -25,9 +26,11 @@ import 'package:memox/domain/types/study_type.dart';
 part 'study_repo_impl_study_session.dart';
 
 class StudyRepositoryImpl implements StudyRepository {
-  StudyRepositoryImpl(this._dao);
+  StudyRepositoryImpl(this._dao, {DateTime Function()? now})
+    : _nowProvider = now ?? DateTime.now;
 
   final study_dao.StudySessionDao _dao;
+  final DateTime Function() _nowProvider;
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
@@ -48,7 +51,12 @@ class StudyRepositoryImpl implements StudyRepository {
     }
 
     try {
-      final _ScopeSnapshot snapshot = await _loadScopeSnapshot(_dao, scope);
+      final DateTime now = _now;
+      final _ScopeSnapshot snapshot = await _loadScopeSnapshot(
+        _dao,
+        scope,
+        now: now,
+      );
       final StudyEntryEmptyState? emptyState = _resolveEmptyState(
         scope: scope,
         snapshot: snapshot,
@@ -116,7 +124,12 @@ class StudyRepositoryImpl implements StudyRepository {
           );
         }
 
-        final _ScopeSnapshot snapshot = await _loadScopeSnapshot(_dao, scope);
+        final DateTime now = _now;
+        final _ScopeSnapshot snapshot = await _loadScopeSnapshot(
+          _dao,
+          scope,
+          now: now,
+        );
         final List<FlashcardId> eligibleIds = _eligibleFlashcardIds(
           scope: scope,
           snapshot: snapshot,
@@ -130,7 +143,7 @@ class StudyRepositoryImpl implements StudyRepository {
           );
         }
 
-        final int nowMs = _nowMs;
+        final int nowMs = now.millisecondsSinceEpoch;
         final int cancelledRows = await _dao.cancelStudySession(
           sessionId: previousSessionId,
           updatedAtMs: nowMs,
@@ -346,7 +359,8 @@ class StudyRepositoryImpl implements StudyRepository {
               .add(row);
         }
 
-        final int nowMs = _nowMs;
+        final DateTime now = _now;
+        final int nowMs = now.millisecondsSinceEpoch;
         for (final study_dao.StudySessionReviewItemsResult itemRow
             in itemRows) {
           if (itemRow.answeredAt == null) {
@@ -367,7 +381,7 @@ class StudyRepositoryImpl implements StudyRepository {
               .findFlashcardProgress(itemRow.flashcardId);
           final int currentBox = progressRow?.boxNumber ?? 1;
           final int nextBox = _boxAfterFinalization(currentBox, finalResult);
-          final int dueAtMs = nowMs + _intervalForBox(nextBox).inMilliseconds;
+          final int dueAtMs = _dueAtForInterval(now, nextBox);
           final int reviewCount = (progressRow?.reviewCount ?? 0) + 1;
           final int lapseCount =
               (progressRow?.lapseCount ?? 0) +
@@ -437,7 +451,10 @@ class StudyRepositoryImpl implements StudyRepository {
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,
   }) async {
-    if (flashcardIds.isEmpty) {
+    final List<FlashcardId> cappedFlashcardIds = _capSessionFlashcardIds(
+      flashcardIds,
+    );
+    if (cappedFlashcardIds.isEmpty) {
       return const Result<StudySession>.err(
         Failure.validation(
           field: 'flashcardIds',
@@ -447,12 +464,13 @@ class StudyRepositoryImpl implements StudyRepository {
     }
 
     try {
+      final DateTime now = _now;
       final StudySession session = await _dao.transaction(
         () => _persistSession(
           dao: _dao,
           scope: scope,
-          flashcardIds: flashcardIds,
-          nowMs: _nowMs,
+          flashcardIds: cappedFlashcardIds,
+          nowMs: now.millisecondsSinceEpoch,
         ),
       );
       return Result<StudySession>.ok(session);
@@ -467,7 +485,7 @@ class StudyRepositoryImpl implements StudyRepository {
     }
   }
 
-  DateTime get _now => DateTime.now().toUtc();
+  DateTime get _now => _nowProvider();
 
   int get _nowMs => _now.millisecondsSinceEpoch;
 }

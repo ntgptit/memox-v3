@@ -64,15 +64,15 @@ User picks entry_type + scope
 | Suspend           | Hide a card from study queues indefinitely until user unsuspends | `docs/business/study-actions/bury-suspend.md` |
 | Resumable session | Study session with status `in_progress` or `draft`               | `docs/business/resume/resume-session.md`      |
 | Continue surface  | Dashboard card or screen banner promoting resume                 | `docs/business/resume/resume-session.md`      |
-| Auto-expiry       | Resumable session older than 30 days stops being surfaced (V1: query filter; explicit cancel is Target) | `docs/business/resume/resume-session.md`      |
+| Auto-expiry       | Resumable session older than 30 days stops being surfaced (V1: `updated_at`-anchored query filter; explicit cancel is Target) | `docs/business/resume/resume-session.md`      |
 
 ## Engagement terms
 
 | Term           | Definition                                                   | Defined in                                         |
 |----------------|--------------------------------------------------------------|----------------------------------------------------|
 | Daily goal     | Target number of card answers per local-day                  | `docs/business/engagement/dashboard-engagement.md` |
-| Daily new limit | Max new cards entering study per local-day (Target, default 20) | `docs/business/srs/srs-review.md`              |
-| Session batch  | Max cards per study session (`maxSessionItems`, Target, default 20) | `docs/business/study/study-flow.md`          |
+| Daily new limit | Max new cards entering study per local-day (default 20)        | `docs/business/srs/srs-review.md`              |
+| Session batch  | Max cards per study session (`maxSessionItems`, default 20)    | `docs/business/study/study-flow.md`          |
 | Daily progress | Count of answers today against the goal                      | `docs/business/engagement/dashboard-engagement.md` |
 | Streak         | Consecutive local-days the user met the goal                 | `docs/business/engagement/dashboard-engagement.md` |
 | Goal-met day   | A local-day where progress reached the goal                  | `docs/business/engagement/dashboard-engagement.md` |

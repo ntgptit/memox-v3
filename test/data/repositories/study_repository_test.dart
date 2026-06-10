@@ -17,14 +17,16 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 
 class _StudyDbFixture {
-  _StudyDbFixture(this.db);
+  _StudyDbFixture(this.db, {DateTime? now}) : _now = now ?? _studyTestNow;
 
   final AppDatabase db;
+  final DateTime _now;
 
   Future<void> insertFolder({
     required String id,
     String? parentId,
     String contentMode = 'decks',
+    int sortOrder = 0,
   }) => db
       .into(db.folders)
       .insert(
@@ -33,13 +35,17 @@ class _StudyDbFixture {
           parentId: Value<String?>(parentId),
           name: 'Folder $id',
           contentMode: Value<String>(contentMode),
-          sortOrder: const Value<int>(0),
+          sortOrder: Value<int>(sortOrder),
           createdAt: _nowMs,
           updatedAt: _nowMs,
         ),
       );
 
-  Future<void> insertDeck({required String id, required String folderId}) => db
+  Future<void> insertDeck({
+    required String id,
+    required String folderId,
+    int sortOrder = 0,
+  }) => db
       .into(db.decks)
       .insert(
         DecksCompanion.insert(
@@ -47,7 +53,7 @@ class _StudyDbFixture {
           folderId: folderId,
           name: 'Deck $id',
           targetLanguage: const Value<String>('korean'),
-          sortOrder: const Value<int>(0),
+          sortOrder: Value<int>(sortOrder),
           createdAt: _nowMs,
           updatedAt: _nowMs,
         ),
@@ -60,6 +66,7 @@ class _StudyDbFixture {
     int? boxNumber,
     int? buriedUntil,
     bool isSuspended = false,
+    int sortOrder = 0,
   }) async {
     await db
         .into(db.flashcards)
@@ -69,7 +76,7 @@ class _StudyDbFixture {
             deckId: deckId,
             front: 'Front $id',
             back: 'Back $id',
-            sortOrder: const Value<int>(0),
+            sortOrder: Value<int>(sortOrder),
             createdAt: _nowMs,
             updatedAt: _nowMs,
           ),
@@ -103,6 +110,8 @@ class _StudyDbFixture {
     required String? entryRefId,
     required String studyType,
     String status = 'in_progress',
+    int? startedAt,
+    int? updatedAt,
   }) async {
     await db
         .into(db.studySessions)
@@ -113,8 +122,8 @@ class _StudyDbFixture {
             entryRefId: Value<String?>(entryRefId),
             studyType: studyType,
             status: status,
-            startedAt: _nowMs,
-            updatedAt: _nowMs,
+            startedAt: startedAt ?? _nowMs,
+            updatedAt: updatedAt ?? _nowMs,
           ),
         );
   }
@@ -141,8 +150,10 @@ class _StudyDbFixture {
         );
   }
 
-  int get _nowMs => DateTime.now().toUtc().millisecondsSinceEpoch;
+  int get _nowMs => _now.toUtc().millisecondsSinceEpoch;
 }
+
+late DateTime _studyTestNow;
 
 class _ThrowingStudySessionDao extends StudySessionDao {
   _ThrowingStudySessionDao(super.db);
@@ -184,11 +195,14 @@ void main() {
   late AppDatabase db;
   late StudyRepositoryImpl repository;
   late StudySessionDao dao;
+  late DateTime now;
 
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
     dao = StudySessionDao(db);
-    repository = StudyRepositoryImpl(dao);
+    _studyTestNow = DateTime(2026, 1, 15, 15, 30);
+    now = _studyTestNow;
+    repository = StudyRepositoryImpl(dao, now: () => _studyTestNow);
   });
 
   tearDown(() async {
@@ -329,6 +343,117 @@ void main() {
     },
   );
 
+  test(
+    'findResumableSession keeps old started_at sessions resumable when updated_at is fresh and ignores stale updated_at sessions',
+    () async {
+      const String folderId = 'folder-resume-expiry';
+      const String deckId = 'deck-resume-expiry';
+      const String qualifyingSessionId = 'session-resume-fresh';
+      const String staleSessionId = 'session-resume-stale';
+      const String cardId = 'card-resume-expiry';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: qualifyingSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        startedAt: _studyTestNow
+            .toUtc()
+            .subtract(const Duration(days: 45))
+            .millisecondsSinceEpoch,
+        updatedAt: _studyTestNow
+            .toUtc()
+            .subtract(const Duration(days: 1))
+            .millisecondsSinceEpoch,
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-resume-fresh',
+        sessionId: qualifyingSessionId,
+        flashcardId: cardId,
+      );
+      await fixture.insertResumableSession(
+        id: staleSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        startedAt: _studyTestNow
+            .toUtc()
+            .subtract(const Duration(days: 1))
+            .millisecondsSinceEpoch,
+        updatedAt: _studyTestNow
+            .toUtc()
+            .subtract(const Duration(days: 45))
+            .millisecondsSinceEpoch,
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-resume-stale',
+        sessionId: staleSessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudySession?> result = await repository
+          .findResumableSession(
+            scope: const StudyScope(
+              entryType: EntryType.deck,
+              entryRefId: deckId,
+              studyType: StudyType.newCards,
+            ),
+          );
+
+      final StudySession? session = result.valueOrNull;
+      expect(session?.id, qualifyingSessionId);
+      expect(session?.startedAt, isA<DateTime>());
+      expect(await db.select(db.studySessions).get(), hasLength(2));
+    },
+  );
+
+  test(
+    'findResumableSession excludes sessions with stale updated_at even when started_at is recent',
+    () async {
+      const String folderId = 'folder-resume-expiry-null';
+      const String deckId = 'deck-resume-expiry-null';
+      const String sessionId = 'session-resume-expiry-null';
+      const String cardId = 'card-resume-expiry-null';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        startedAt: _studyTestNow
+            .toUtc()
+            .subtract(const Duration(days: 1))
+            .millisecondsSinceEpoch,
+        updatedAt: _studyTestNow
+            .toUtc()
+            .subtract(const Duration(days: 45))
+            .millisecondsSinceEpoch,
+      );
+      await fixture.insertStudySessionItem(
+        id: 'item-resume-expiry-null',
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<StudySession?> result = await repository
+          .findResumableSession(
+            scope: const StudyScope(
+              entryType: EntryType.deck,
+              entryRefId: deckId,
+              studyType: StudyType.newCards,
+            ),
+          );
+
+      expect(result.valueOrNull, null);
+    },
+  );
+
   test('missing session returns notFound', () async {
     final Result<StudySessionReview> result = await repository
         .loadStudySessionReview(sessionId: 'missing-session');
@@ -459,6 +584,38 @@ void main() {
     },
   );
 
+  test('loadStudySessionReview does not mutate session updated_at', () async {
+    const String folderId = 'folder-review-read';
+    const String deckId = 'deck-review-read';
+    const String sessionId = 'session-review-read';
+    const String cardId = 'card-review-read';
+    final _StudyDbFixture fixture = _StudyDbFixture(db);
+    await fixture.insertFolder(id: folderId);
+    await fixture.insertDeck(id: deckId, folderId: folderId);
+    await fixture.insertFlashcard(id: cardId, deckId: deckId);
+    await fixture.insertResumableSession(
+      id: sessionId,
+      entryType: EntryType.deck.name,
+      entryRefId: deckId,
+      studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+    );
+    await fixture.insertStudySessionItem(
+      id: 'item-review-read',
+      sessionId: sessionId,
+      flashcardId: cardId,
+    );
+
+    final int beforeUpdatedAt =
+        (await db.select(db.studySessions).getSingle()).updatedAt;
+    final Result<StudySessionReview> result = await repository
+        .loadStudySessionReview(sessionId: sessionId);
+    expect(result.isOk, isTrue);
+    final int afterUpdatedAt =
+        (await db.select(db.studySessions).getSingle()).updatedAt;
+
+    expect(afterUpdatedAt, beforeUpdatedAt);
+  });
+
   test(
     'today scope with future due cards returns an all-done empty state',
     () async {
@@ -471,10 +628,7 @@ void main() {
       await fixture.insertFlashcard(
         id: cardId,
         deckId: deckId,
-        dueAt: DateTime.now()
-            .toUtc()
-            .add(const Duration(days: 1))
-            .millisecondsSinceEpoch,
+        dueAt: now.toUtc().add(const Duration(days: 1)).millisecondsSinceEpoch,
         boxNumber: 2,
       );
 
@@ -496,6 +650,198 @@ void main() {
       expect(await db.select(db.studySessions).get(), isEmpty);
     },
   );
+
+  test('deck scope caps eligible cards at 20 and preserves order', () async {
+    const String folderId = 'folder-cap-deck';
+    const String deckId = 'deck-cap-deck';
+    final _StudyDbFixture fixture = _StudyDbFixture(db);
+    await fixture.insertFolder(id: folderId);
+    await fixture.insertDeck(id: deckId, folderId: folderId);
+    for (int index = 0; index < 25; index++) {
+      await fixture.insertFlashcard(
+        id: 'card-$index',
+        deckId: deckId,
+        sortOrder: index,
+      );
+    }
+
+    final Result<StudyEntryStartResult> result = await repository
+        .startStudySession(
+          scope: const StudyScope(
+            entryType: EntryType.deck,
+            entryRefId: deckId,
+            studyType: StudyType.newCards,
+          ),
+        );
+
+    final StudyEntryStartResult? value = result.valueOrNull;
+    expect(value, isA<StudyEntryStartStarted>());
+    final String sessionId = (value as StudyEntryStartStarted).sessionId;
+    final List<StudySessionItemRow> items = await db
+        .select(db.studySessionItems)
+        .get();
+
+    expect(items, hasLength(20));
+    expect(
+      items.map((row) => row.sortOrder),
+      List<int>.generate(20, (int i) => i),
+    );
+    expect(
+      items.map((row) => row.flashcardId),
+      List<String>.generate(20, (int i) => 'card-$i'),
+    );
+    expect(
+      items.every((StudySessionItemRow row) => row.sessionId == sessionId),
+      isTrue,
+    );
+  });
+
+  test(
+    'deck scope includes all eligible cards when fewer than 20 exist',
+    () async {
+      const String folderId = 'folder-under-cap';
+      const String deckId = 'deck-under-cap';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      for (int index = 0; index < 19; index++) {
+        await fixture.insertFlashcard(
+          id: 'card-under-$index',
+          deckId: deckId,
+          sortOrder: index,
+        );
+      }
+
+      final Result<StudyEntryStartResult> result = await repository
+          .startStudySession(
+            scope: const StudyScope(
+              entryType: EntryType.deck,
+              entryRefId: deckId,
+              studyType: StudyType.newCards,
+            ),
+          );
+
+      final StudyEntryStartResult? value = result.valueOrNull;
+      expect(value, isA<StudyEntryStartStarted>());
+      expect(await db.select(db.studySessionItems).get(), hasLength(19));
+    },
+  );
+
+  test(
+    'deck scope includes all eligible cards when exactly 20 exist',
+    () async {
+      const String folderId = 'folder-exact-cap';
+      const String deckId = 'deck-exact-cap';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      for (int index = 0; index < 20; index++) {
+        await fixture.insertFlashcard(
+          id: 'card-exact-$index',
+          deckId: deckId,
+          sortOrder: index,
+        );
+      }
+
+      final Result<StudyEntryStartResult> result = await repository
+          .startStudySession(
+            scope: const StudyScope(
+              entryType: EntryType.deck,
+              entryRefId: deckId,
+              studyType: StudyType.newCards,
+            ),
+          );
+
+      final StudyEntryStartResult? value = result.valueOrNull;
+      expect(value, isA<StudyEntryStartStarted>());
+      expect(await db.select(db.studySessionItems).get(), hasLength(20));
+    },
+  );
+
+  test('folder recursive scope caps eligible cards at 20', () async {
+    const String folderId = 'folder-cap-folder';
+    const String firstDeckId = 'deck-cap-folder-a';
+    const String secondDeckId = 'deck-cap-folder-b';
+    final _StudyDbFixture fixture = _StudyDbFixture(db);
+    await fixture.insertFolder(id: folderId);
+    await fixture.insertDeck(id: firstDeckId, folderId: folderId, sortOrder: 0);
+    await fixture.insertDeck(
+      id: secondDeckId,
+      folderId: folderId,
+      sortOrder: 1,
+    );
+    for (int index = 0; index < 12; index++) {
+      await fixture.insertFlashcard(
+        id: 'card-a-$index',
+        deckId: firstDeckId,
+        sortOrder: index,
+      );
+    }
+    for (int index = 0; index < 13; index++) {
+      await fixture.insertFlashcard(
+        id: 'card-b-$index',
+        deckId: secondDeckId,
+        sortOrder: index,
+      );
+    }
+
+    final Result<StudyEntryStartResult> result = await repository
+        .startStudySession(
+          scope: const StudyScope(
+            entryType: EntryType.folder,
+            entryRefId: folderId,
+            studyType: StudyType.newCards,
+          ),
+        );
+
+    final StudyEntryStartResult? value = result.valueOrNull;
+    expect(value, isA<StudyEntryStartStarted>());
+    final List<StudySessionItemRow> items = await db
+        .select(db.studySessionItems)
+        .get();
+
+    expect(items, hasLength(20));
+    expect(items.first.flashcardId, 'card-a-0');
+    expect(items.last.flashcardId, 'card-b-7');
+  });
+
+  test('today scope caps due cards at 20 and keeps due ordering', () async {
+    const String folderId = 'folder-cap-today';
+    const String deckId = 'deck-cap-today';
+    final _StudyDbFixture fixture = _StudyDbFixture(db);
+    await fixture.insertFolder(id: folderId);
+    await fixture.insertDeck(id: deckId, folderId: folderId);
+    for (int index = 0; index < 25; index++) {
+      await fixture.insertFlashcard(
+        id: 'card-today-$index',
+        deckId: deckId,
+        dueAt: _studyTestNow
+            .toUtc()
+            .subtract(Duration(days: index + 1))
+            .millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+    }
+
+    final Result<StudyEntryStartResult> result = await repository
+        .startStudySession(
+          scope: const StudyScope(
+            entryType: EntryType.today,
+            entryRefId: null,
+            studyType: StudyType.srsReview,
+          ),
+        );
+
+    final StudyEntryStartResult? value = result.valueOrNull;
+    expect(value, isA<StudyEntryStartStarted>());
+    final List<StudySessionItemRow> items = await db
+        .select(db.studySessionItems)
+        .get();
+
+    expect(items, hasLength(20));
+    expect(items.first.flashcardId, 'card-today-24');
+    expect(items.last.flashcardId, 'card-today-5');
+  });
 
   test(
     'createSession rolls back session writes when an item insert fails',
@@ -579,6 +925,70 @@ void main() {
       expect(items, hasLength(2));
       expect(
         items.where((StudySessionItemRow row) => row.sessionId == session.id),
+        hasLength(1),
+      );
+    },
+  );
+
+  test(
+    'restartStudySession cancels the previous session before creating a capped replacement batch',
+    () async {
+      const String folderId = 'folder-restart-cap';
+      const String deckId = 'deck-restart-cap';
+      const String previousSessionId = 'session-restart-cap-old';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertResumableSession(
+        id: previousSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      for (int index = 0; index < 25; index++) {
+        await fixture.insertFlashcard(
+          id: 'card-restart-$index',
+          deckId: deckId,
+          sortOrder: index,
+        );
+      }
+      await fixture.insertStudySessionItem(
+        id: 'item-restart-cap-old',
+        sessionId: previousSessionId,
+        flashcardId: 'card-restart-0',
+      );
+
+      final Result<StudySession> result = await repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: const StudyScope(
+          entryType: EntryType.deck,
+          entryRefId: deckId,
+          studyType: StudyType.newCards,
+        ),
+      );
+
+      final StudySession session = switch (result) {
+        Ok<StudySession>(:final value) => value,
+        Err<StudySession>(:final failure) => fail('expected ok, got $failure'),
+      };
+      final List<StudySessionItemRow> items = await db
+          .select(db.studySessionItems)
+          .get();
+
+      expect(
+        (await db.select(db.studySessions).get())
+            .firstWhere((StudySessionRow row) => row.id == previousSessionId)
+            .status,
+        'cancelled',
+      );
+      expect(
+        items.where((StudySessionItemRow row) => row.sessionId == session.id),
+        hasLength(20),
+      );
+      expect(
+        items.where(
+          (StudySessionItemRow row) => row.sessionId == previousSessionId,
+        ),
         hasLength(1),
       );
     },
@@ -815,7 +1225,7 @@ void main() {
       await fixture.insertFlashcard(
         id: cardId,
         deckId: deckId,
-        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
         boxNumber: 3,
       );
       await fixture.insertResumableSession(
@@ -829,6 +1239,10 @@ void main() {
         sessionId: sessionId,
         flashcardId: cardId,
       );
+
+      final int sessionUpdatedBefore =
+          (await db.select(db.studySessions).getSingle()).updatedAt;
+      _studyTestNow = _studyTestNow.add(const Duration(minutes: 5));
 
       final Result<void> result = await repository.recordStudySessionAnswer(
         sessionId: sessionId,
@@ -845,6 +1259,9 @@ void main() {
       final StudySessionItemRow updatedItem = await db
           .select(db.studySessionItems)
           .getSingle();
+      final StudySessionRow updatedSession = await db
+          .select(db.studySessions)
+          .getSingle();
       final FlashcardProgressRow progress = await db
           .select(db.flashcardProgress)
           .getSingle();
@@ -856,6 +1273,7 @@ void main() {
       expect(attempts.single.boxBefore, 3);
       expect(attempts.single.boxAfter, 4);
       expect(updatedItem.answeredAt != null, isTrue);
+      expect(updatedSession.updatedAt, greaterThan(sessionUpdatedBefore));
       expect(progress.boxNumber, 3);
       expect(progress.reviewCount, 0);
       expect(progress.lapseCount, 0);
@@ -876,7 +1294,7 @@ void main() {
       await fixture.insertFlashcard(
         id: cardId,
         deckId: deckId,
-        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
         boxNumber: 2,
       );
       await fixture.insertResumableSession(
@@ -926,7 +1344,7 @@ void main() {
       await fixture.insertFlashcard(
         id: answeredCardId,
         deckId: deckId,
-        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
         boxNumber: 3,
       );
       await fixture.insertFlashcard(id: missingProgressCardId, deckId: deckId);
@@ -1011,13 +1429,13 @@ void main() {
       await fixture.insertFlashcard(
         id: answeredCardId,
         deckId: deckId,
-        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
         boxNumber: 3,
       );
       await fixture.insertFlashcard(
         id: pendingCardId,
         deckId: deckId,
-        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
         boxNumber: 2,
       );
       await fixture.insertResumableSession(
@@ -1075,7 +1493,7 @@ void main() {
       const String sessionId = 'session-finalize-no-attempt';
       const String itemId = 'item-finalize-no-attempt';
       final _StudyDbFixture fixture = _StudyDbFixture(db);
-      final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
+      final int nowMs = now.toUtc().millisecondsSinceEpoch;
       await fixture.insertFolder(id: folderId);
       await fixture.insertDeck(id: deckId, folderId: folderId);
       await fixture.insertFlashcard(
@@ -1133,7 +1551,7 @@ void main() {
       await fixture.insertFlashcard(
         id: cardId,
         deckId: deckId,
-        dueAt: DateTime.now().toUtc().millisecondsSinceEpoch,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
         boxNumber: 2,
       );
       await fixture.insertResumableSession(

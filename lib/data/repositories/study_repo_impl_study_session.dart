@@ -201,6 +201,18 @@ int _boxAfterFinalization(int currentBox, AttemptResult result) =>
       AttemptResult.forgot => 1,
     };
 
+int _dueAtForInterval(DateTime now, int boxNumber) {
+  final DateTime localNow = now.toLocal();
+  final DateTime localStudyDayStart = DateTime(
+    localNow.year,
+    localNow.month,
+    localNow.day,
+  );
+  return localStudyDayStart
+      .add(_intervalForBox(boxNumber))
+      .millisecondsSinceEpoch;
+}
+
 Duration _intervalForBox(int boxNumber) => switch (boxNumber) {
   1 => const Duration(days: 1),
   2 => const Duration(days: 2),
@@ -293,9 +305,9 @@ class _ScopeCard {
 
 Future<_ScopeSnapshot> _loadScopeSnapshot(
   study_dao.StudySessionDao dao,
-  StudyScope scope,
-) async {
-  final DateTime now = DateTime.now().toUtc();
+  StudyScope scope, {
+  required DateTime now,
+}) async {
   if (scope.entryType == EntryType.today) {
     return _ScopeSnapshot(
       cards: (await dao.loadTodayCards())
@@ -340,7 +352,7 @@ List<FlashcardId> _eligibleFlashcardIds({
   required _ScopeSnapshot snapshot,
 }) {
   final DateTime now = snapshot.now;
-  return snapshot.cards
+  final List<_ScopeCard> eligibleCards = snapshot.cards
       .where((card) => card.isVisible(now))
       .where(
         (card) => switch (scope.studyType) {
@@ -348,8 +360,23 @@ List<FlashcardId> _eligibleFlashcardIds({
           StudyType.srsReview => card.isDueEligible(now),
         },
       )
+      .toList(growable: false);
+
+  final List<_ScopeCard> cappedEligibleCards =
+      scope.studyType == StudyType.newCards
+      ? eligibleCards.take(dailyNewLimit).toList(growable: false)
+      : eligibleCards;
+  return cappedEligibleCards
+      .take(maxSessionItems)
       .map((card) => card.flashcardId)
       .toList(growable: false);
+}
+
+List<FlashcardId> _capSessionFlashcardIds(List<FlashcardId> flashcardIds) {
+  if (flashcardIds.length <= maxSessionItems) {
+    return flashcardIds;
+  }
+  return flashcardIds.take(maxSessionItems).toList(growable: false);
 }
 
 StudyEntryEmptyState? _resolveEmptyState({

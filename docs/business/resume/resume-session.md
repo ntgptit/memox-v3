@@ -136,8 +136,8 @@ On resume:
 3. Open `StudySessionScreen` at the correct item.
 4. Keep `study_session_items.answered_at` intact.
 
-> **Deferred:** touching `study_sessions.updated_at` on resume is still a product idea,
-> but it is not part of the current V1 recovery coverage.
+> Read-only resume/open flows do not touch `study_sessions.updated_at`. Activity writes such as
+> answer recording, cancel, and finalize do.
 
 The session resumes in its current `study_mode` from its `study_flow`. If the flow has multiple
 modes (e.g., `new_full_cycle`), the resumed mode is whichever was active when paused, persisted via
@@ -172,17 +172,9 @@ finalized reviews.)
 
 ## Auto-expiry
 
-A resumable session older than **30 days** stops being surfaced. **Current V1 mechanism: query
-filter** — the resumable-session queries only match sessions with `started_at > now - 30 days`
-(see the `SessionStatus` doc comment in `lib/domain/types/session_status.dart` and the DAO
-resumable queries). The session row itself is NOT mutated; it simply no longer appears on any
-resume surface.
-
-**Adopted correction (2026-06-10, WBS 4.10.2 — NOT yet implemented):** the expiry anchor must be
-`updated_at`, not `started_at`. "Not touched for 30 days" means no activity — a session the user
-resumes and answers in every week is alive even when it started 31 days ago; anchoring on
-`started_at` expires it mid-use. Change the DAO filter (and any future cleanup job) to
-`updated_at > now - 30 days` and update the `SessionStatus` doc comment in the same change.
+A resumable session older than **30 days** stops being surfaced. The resumable-session queries
+match sessions with `updated_at > now - 30 days` so the expiry anchor is activity, not creation.
+The session row itself is NOT mutated; it simply no longer appears on any resume surface.
 
 Target (not yet implemented): an explicit cleanup that sets expired sessions to `cancelled` on
 app open with a one-time notice ("Your paused {scope} session expired and was discarded"). Until
@@ -215,7 +207,7 @@ This is opt-in via notification settings; do not push by default.
 
 - Resume MUST NOT create a new session; it reuses the existing one.
 - Resume MUST preserve answered item state on reload.
-- Resume SHOULD touch `updated_at` only if the deferred metadata-refresh behavior is explicitly promoted.
+- Resume SHOULD not touch `updated_at`; the activity anchor is advanced by write operations only.
 - "Continue studying" surface MUST appear before any "Start new" CTA on the same screen.
 - Discard from banner surfaces MUST require explicit confirmation.
 - Resume from notification deep-links to `/library/study/session/{sessionId}` directly (skip
@@ -304,4 +296,3 @@ This is opt-in via notification settings; do not push by default.
 `discard_session_usecase.dart`, `study_session_repository.dart`,
 `ResumeStudySessionUseCase`, and `study_repo_impl_helpers.dart`. None of those paths exist
 > today. The behaviors live in the methods listed above.
-

@@ -191,7 +191,7 @@ enum SessionStatus {
 
 **Storage:** `study_sessions.status` TEXT, snake_case (`draft`, `in_progress`, `completed`, `cancelled`, `failed_to_finalize`).
 
-**Resumable when:** `status IN (draft, inProgress)` AND `started_at > now - 30 days`.
+**Resumable when:** `status IN (draft, inProgress)` AND `updated_at > now - 30 days`.
 
 Source: `docs/business/resume/resume-session.md`.
 

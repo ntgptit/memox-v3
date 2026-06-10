@@ -122,7 +122,7 @@ The Today CTA is disabled and shows caught-up copy when `dueToday == 0`; it must
 | Data | Source | Refresh trigger |
 | --- | --- | --- |
 | Greeting (time-of-day) | local time via `clock.now()` | once per build |
-| Resumable session (most recent + count) | `study_sessions` filtered by `status in (draft, in_progress)` AND `started_at > now - 30d` | stream from DB |
+| Resumable session (most recent + count) | `study_sessions` filtered by `status in (draft, in_progress)` AND `updated_at > now - 30d` | stream from DB |
 | Current streak | `engagement_preferences` SharedPreferences | watch + foreground event |
 | Daily goal target + today's progress | `engagement_preferences` + `study_attempts` today count | stream from DB + prefs |
 | Today's due count across all decks | `flashcard_progress` filtered by `due_at <= now AND NOT suspended AND (buried_until IS NULL OR buried_until <= now)` | stream from DB |

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/domain/study/study_session_limits.dart';
 import 'package:memox/domain/types/study_scope.dart';
 
 part 'study_session_dao.g.dart';
@@ -25,8 +26,11 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
             ..where(
               (StudySessions row) =>
                   row.status.isIn(const <String>['draft', 'in_progress']) &
-                  row.startedAt.isBiggerThanValue(
-                    nowMs - const Duration(days: 30).inMilliseconds,
+                  row.updatedAt.isBiggerThanValue(
+                    nowMs -
+                        const Duration(
+                          days: resumableSessionExpiryDays,
+                        ).inMilliseconds,
                   ),
             )
             ..orderBy(<OrderingTerm Function(StudySessions)>[
@@ -70,11 +74,18 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
                       ? row.entryRefId.isNull()
                       : row.entryRefId.equals(scope.entryRefId!)) &
                   row.status.isIn(const <String>['draft', 'in_progress']) &
-                  row.startedAt.isBiggerThanValue(
-                    nowMs - const Duration(days: 30).inMilliseconds,
+                  row.updatedAt.isBiggerThanValue(
+                    nowMs -
+                        const Duration(
+                          days: resumableSessionExpiryDays,
+                        ).inMilliseconds,
                   ),
             )
             ..orderBy(<OrderingTerm Function(StudySessions)>[
+              (StudySessions row) => OrderingTerm(
+                expression: row.updatedAt,
+                mode: OrderingMode.desc,
+              ),
               (StudySessions row) => OrderingTerm(
                 expression: row.startedAt,
                 mode: OrderingMode.desc,
@@ -152,6 +163,14 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
           updatedAt: Value<int>(updatedAtMs),
         ),
       );
+
+  Future<int> touchStudySession({
+    required String sessionId,
+    required int updatedAtMs,
+  }) =>
+      (update(studySessions)
+            ..where((StudySessions row) => row.id.equals(sessionId)))
+          .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAtMs)));
 
   Future<FlashcardProgressRow?> findFlashcardProgress(String flashcardId) =>
       (select(attachedDatabase.flashcardProgress)..where(

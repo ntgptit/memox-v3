@@ -51,12 +51,12 @@ Important fields:
 - Box range is 1 to 8 inclusive.
 - New flashcard starts at `current_box = 1` with `due_at = now`.
 - Due card: `due_at <= now`.
-- **Daily new-card limit (Target, WBS 8.2.x):** at most `dailyNewLimit` new cards (default 20,
-  range 5–100, Learning Settings) enter study per local day. New-card eligibility queries must
-  respect the remaining quota for the day; cards beyond the quota stay queued for following days.
+- **Daily new-card limit (BE V1, WBS 4.5.10):** at most `dailyNewLimit` new cards (default 20)
+  enter study per local day. New-card eligibility queries must respect the remaining quota for the
+  day; cards beyond the quota stay queued for following days. This cap only trims new-card
+  eligibility and does not hide due review cards.
   Rationale: a new card defaults to `due_at = now`, so without a limit a 500-row import floods
-  "Today" with 500 cards at once — the primary burnout driver in SRS apps. The limit must exist in
-  the settings contract BEFORE settings persistence ships (adding it later changes the due query).
+  "Today" with 500 cards at once — the primary burnout driver in SRS apps.
 - Deleted flashcards must not appear in due list (foreign key enforced).
 - Review result must update progress through domain/use case/repository flow.
 - UI must not update SRS box directly.
@@ -125,14 +125,12 @@ ladder **matches this table exactly** and is pinned by table-driven tests
 (`test/data/repositories/study_srs_transition_test.dart`). Any change to either side must update
 both in the same commit.
 
-**Due-time normalization (Adopted target 2026-06-10, WBS 4.6.4 — NOT yet implemented):**
-`due_at` should be normalized to the **local midnight of the target day**
+**Due-time normalization (BE V1, WBS 4.6.4):**
+`due_at` is normalized to the **local midnight of the target day**
 (`localMidnight(studyDay + interval)`), not `finalize_instant + interval`. Rationale: with exact
 timestamps a card finalized at 15:47 becomes due at 15:47 the next day, so "due today" counts
 drift upward during the day ("0 cards" in the morning, "12 cards" by evening) and users stop
-trusting the number. This also aligns with bury's existing local-midnight semantics. Current
-implemented behavior is exact-instant; changing it requires updating finalization + the
-transition tests in the same commit.
+trusting the number. This also aligns with bury's existing local-midnight semantics.
 
 | Box | Interval | Approx   | Rationale                                                                |
 |-----|----------|----------|--------------------------------------------------------------------------|
