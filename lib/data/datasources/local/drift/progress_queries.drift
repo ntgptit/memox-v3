@@ -1,0 +1,74 @@
+import 'flashcard_progress.drift';
+import 'study_attempts.drift';
+import 'study_sessions.drift';
+import 'study_session_items.drift';
+import 'decks.drift';
+import 'folders.drift';
+import 'flashcards.drift';
+
+progressDueDeckSummaries(:now AS INT):
+SELECT
+  decks.id AS deck_id,
+  decks.name AS deck_name,
+  decks.folder_id AS parent_folder_id,
+  SUM(
+    CASE
+      WHEN flashcard_progress.flashcard_id IS NOT NULL
+        AND flashcard_progress.is_suspended = FALSE
+        AND (
+          flashcard_progress.buried_until IS NULL
+          OR flashcard_progress.buried_until <= :now
+        )
+        AND flashcard_progress.due_at IS NOT NULL
+        AND flashcard_progress.due_at <= :now
+      THEN 1
+      ELSE 0
+    END
+  ) AS due_count
+FROM decks
+INNER JOIN folders ON folders.id = decks.folder_id
+LEFT JOIN flashcards ON flashcards.deck_id = decks.id
+LEFT JOIN flashcard_progress ON flashcard_progress.flashcard_id = flashcards.id
+GROUP BY
+  decks.id,
+  decks.name,
+  decks.folder_id,
+  folders.sort_order,
+  folders.created_at,
+  folders.id,
+  decks.sort_order,
+  decks.created_at
+ORDER BY
+  folders.sort_order,
+  folders.created_at,
+  folders.id,
+  decks.sort_order,
+  decks.created_at,
+  decks.id;
+
+progressInvalidBoxCount:
+SELECT COUNT(*) AS invalid_count
+FROM flashcard_progress
+WHERE box_number < 1 OR box_number > 8;
+
+progressBoxDistribution:
+SELECT
+  flashcard_progress.box_number,
+  COUNT(*) AS card_count
+FROM flashcard_progress
+WHERE flashcard_progress.box_number BETWEEN 1 AND 8
+GROUP BY flashcard_progress.box_number
+ORDER BY flashcard_progress.box_number;
+
+progressStudyStatistics:
+SELECT
+  (SELECT COUNT(*) FROM study_sessions WHERE status = 'completed')
+    AS completed_session_count,
+  (SELECT COUNT(*) FROM study_attempts) AS total_attempt_count,
+  (
+    SELECT COUNT(*)
+    FROM study_attempts
+    WHERE result IN ('perfect', 'initial_passed', 'recovered')
+  ) AS correct_count,
+  (SELECT COUNT(*) FROM study_attempts WHERE result = 'forgot') AS forgot_count,
+  (SELECT MAX(attempted_at) FROM study_attempts) AS last_studied_at;
