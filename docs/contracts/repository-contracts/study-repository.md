@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-10
 status: contract
 ---
 
@@ -38,6 +38,14 @@ Future<Either<Failure, Unit>> recordStudySessionAnswer({
   required StudyMode studyMode,
 });
 Future<Either<Failure, Unit>> finalizeStudySession({required SessionId sessionId});
+Future<Either<Failure, Unit>> buryStudySessionCard({
+  required SessionId sessionId,
+  required FlashcardId flashcardId,
+});
+Future<Either<Failure, Unit>> suspendStudySessionCard({
+  required SessionId sessionId,
+  required FlashcardId flashcardId,
+});
 Future<Either<Failure, Unit>> markInProgress(SessionId id);
 Future<Either<Failure, Unit>> markCompleted(SessionId id);
 Future<Either<Failure, Unit>> markCancelled(SessionId id);
@@ -54,6 +62,8 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 | `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`) + `study_sessions` UPDATE (`updated_at`) |
 | `loadStudySessionResult` | read `study_sessions` + `study_session_items` + `study_attempts` aggregate     |
 | `finalizeStudySession` | `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE                     |
+| `buryStudySessionCard` | `flashcard_progress` UPDATE/INSERT + `study_session_items` DELETE + `study_sessions` UPDATE |
+| `suspendStudySessionCard` | `flashcard_progress` UPDATE/INSERT + `study_session_items` DELETE + `study_sessions` UPDATE |
 | `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
 | `expireOldSessions` | `study_sessions` UPDATE batch                                                     |
 
@@ -90,6 +100,11 @@ strict and must surface the corruption instead of hiding it.
   upserted when the session finalizes.
 - In-session self-grade V1 records attempts and marks `study_session_items.answered_at`
   only. It does not update `flashcard_progress`; box changes remain finalization-owned.
+- In-session bury/suspend is transactional and scoped to the active session:
+  it requires `status = in_progress`, validates that the flashcard is still in
+  the session and unanswered, removes the matching `study_session_items` row,
+  updates only `buried_until` or `is_suspended`, and touches
+  `study_sessions.updated_at`.
 
 ## Forbidden
 

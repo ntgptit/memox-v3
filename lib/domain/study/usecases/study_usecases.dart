@@ -126,3 +126,37 @@ class CancelStudySessionUseCase {
   Future<Result<void>> call({required SessionId sessionId}) =>
       _repository.cancelStudySession(sessionId: sessionId);
 }
+
+/// Buries the current in-session card until tomorrow local midnight + 1 second.
+///
+/// Failure types: `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
+class BuryStudySessionCardUseCase {
+  const BuryStudySessionCardUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<void>> call({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+  }) => _repository.buryStudySessionCard(
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+  );
+}
+
+/// Suspends the current in-session card indefinitely.
+///
+/// Failure types: `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
+class SuspendStudySessionCardUseCase {
+  const SuspendStudySessionCardUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<void>> call({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+  }) => _repository.suspendStudySessionCard(
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+  );
+}

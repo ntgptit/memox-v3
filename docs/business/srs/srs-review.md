@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-28
+last_updated: 2026-06-10
 applies_to: SRS algorithm, flashcard_progress, review session finalization
 ---
 
@@ -65,6 +65,10 @@ Important fields:
 - UI must not update SRS box directly.
 - SRS review must use study session tables.
 - Do not add separate review tables unless schema change is explicitly approved.
+- In-session bury/suspend is not a review result: it removes the current
+  session item from the queue, updates only `buried_until` or
+  `is_suspended`, preserves `current_box` / `due_at` / `review_count` /
+  `lapse_count`, and touches `study_sessions.updated_at`.
 
 ## Review results
 

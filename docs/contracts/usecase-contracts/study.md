@@ -85,7 +85,7 @@ Future<Either<Failure, StudySessionReview>> call({required SessionId sessionId})
 - Missing session returns `NotFoundFailure`.
 - Empty item list is treated as a storage/integrity error and surfaces as a controlled error state.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 
 ## LoadStudySessionResultUseCase
 
@@ -103,7 +103,7 @@ Future<Either<Failure, StudySessionResult>> call({required SessionId sessionId})
 - Missing session returns `NotFoundFailure`.
 - Empty item list is treated as a storage/integrity error and surfaces as a controlled error state.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 
 ## RecordStudySessionAnswerUseCase
 
@@ -198,36 +198,51 @@ Future<Either<Failure, Unit>> call({required SessionId sessionId});
 
 Future proposal; no live V1 implementation in this slice.
 
-## BuryCardUseCase
+## BuryStudySessionCardUseCase
 
 ```dart
-Future<Either<Failure, FlashcardProgress>> call({required FlashcardId id});
+Future<Either<Failure, Unit>> call({
+  required SessionId sessionId,
+  required FlashcardId flashcardId,
+});
 ```
 
 **Rules:**
 
-- UPDATE `flashcard_progress.buried_until = next local midnight`.
-- SRS state (current_box, due_at) UNCHANGED.
+- Validate the session exists and is `in_progress`.
+- Validate the flashcard is part of that session and not already answered.
+- UPDATE `flashcard_progress.buried_until = tomorrow local midnight + 1 second`.
+- Remove the matching `study_session_items` row from the active session queue.
+- Do **not** insert `study_attempts`.
+- Keep `current_box`, `due_at`, `review_count`, and `lapse_count` unchanged.
+- Touch `study_sessions.updated_at`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.
 
-**Test refs:** BS1.
+**Test refs:** BS1, BS2, BS10, BS12, BS15.
 
-## SuspendCardUseCase / UnsuspendCardUseCase
+## SuspendStudySessionCardUseCase
 
 ```dart
-Future<Either<Failure, FlashcardProgress>> suspend({required FlashcardId id});
-Future<Either<Failure, FlashcardProgress>> unsuspend({required FlashcardId id});
+Future<Either<Failure, Unit>> call({
+  required SessionId sessionId,
+  required FlashcardId flashcardId,
+});
 ```
 
 **Rules:**
 
-- Toggle `flashcard_progress.is_suspended`.
-- SRS state UNCHANGED.
+- Validate the session exists and is `in_progress`.
+- Validate the flashcard is part of that session and not already answered.
+- UPDATE `flashcard_progress.is_suspended = true`.
+- Remove the matching `study_session_items` row from the active session queue.
+- Do **not** insert `study_attempts`.
+- Keep `current_box`, `due_at`, `review_count`, and `lapse_count` unchanged.
+- Touch `study_sessions.updated_at`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.
 
-**Test refs:** BS2.
+**Test refs:** BS4, BS5, BS11, BS12, BS13, BS16.
 
 ## GetSessionStateUseCase
 

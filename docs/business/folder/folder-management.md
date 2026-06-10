@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-10
 applies_to: folder entity and folder management feature
 ---
 
@@ -89,6 +89,10 @@ Folder list/detail should support:
 - Manual reorder only when current sort mode allows it.
 - Create subfolder/deck actions according to content mode.
 - Safe delete confirmation.
+- Folder detail and Library overview count cards from the database source of
+  truth: `cardCount` includes suspended and buried cards, while `dueCount`
+  excludes suspended and currently-buried cards and still counts expired
+  buried cards.
 
 ## Performance
 

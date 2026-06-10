@@ -115,6 +115,11 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertFlashcardProgress(FlashcardProgressCompanion progress) =>
       into(attachedDatabase.flashcardProgress).insert(progress);
 
+  Future<int> deleteStudySessionItem({required String sessionItemId}) =>
+      (delete(
+        studySessionItems,
+      )..where((StudySessionItems row) => row.id.equals(sessionItemId))).go();
+
   Future<int> markStudySessionItemAnswered({
     required String sessionItemId,
     required int answeredAtMs,
@@ -148,6 +153,28 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
               lapseCount: Value<int>(lapseCount),
               lastStudiedAt: Value<int?>(lastStudiedAtMs),
             ),
+          );
+
+  Future<int> updateFlashcardProgressBuriedUntil({
+    required String flashcardId,
+    required int buriedUntilMs,
+  }) =>
+      (update(attachedDatabase.flashcardProgress)..where(
+            (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
+          ))
+          .write(
+            FlashcardProgressCompanion(buriedUntil: Value<int?>(buriedUntilMs)),
+          );
+
+  Future<int> updateFlashcardProgressSuspended({
+    required String flashcardId,
+    required bool isSuspended,
+  }) =>
+      (update(attachedDatabase.flashcardProgress)..where(
+            (FlashcardProgress row) => row.flashcardId.equals(flashcardId),
+          ))
+          .write(
+            FlashcardProgressCompanion(isSuspended: Value<bool>(isSuspended)),
           );
 
   Future<int> updateStudySessionStatus({

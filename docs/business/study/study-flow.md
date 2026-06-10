@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-28
+last_updated: 2026-06-10
 applies_to: study session lifecycle, all study modes
 ---
 
@@ -172,6 +172,11 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - The Study Session self-grade V1 path reveals the current card, lets the user
   tap Forgot / Got it, persists the attempt plus `study_session_items.answered_at`,
   and keeps `flashcard_progress` unchanged until finalization.
+- In-session bury/suspend is a separate active-session action, not an answer:
+  it removes the matching `study_session_items` row from the current queue,
+  does not create a `study_attempts` row, preserves `current_box` / `due_at`
+  / `review_count` / `lapse_count`, updates only `buried_until` or
+  `is_suspended`, and touches `study_sessions.updated_at`.
 - The review controller resolves a domain `StudyModeStrategy` for the current
   session. Because the session header does not persist mode yet, V1 uses
   `StudyMode.recall` as the documented fallback in

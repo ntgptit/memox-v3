@@ -45,6 +45,16 @@ abstract interface class StudyRepository {
 
   Future<Result<void>> finalizeStudySession({required SessionId sessionId});
 
+  Future<Result<void>> buryStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+  });
+
+  Future<Result<void>> suspendStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+  });
+
   Future<Result<void>> recordStudySessionAnswer({
     required SessionId sessionId,
     required String sessionItemId,

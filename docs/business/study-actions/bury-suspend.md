@@ -1,12 +1,12 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-10
 applies_to: bury (skip card today), suspend (hide card indefinitely)
 ---
 
 # Bury and Suspend
 
-> **Status: Partial — schema + queue exclusion Current; all user actions Specified (verified
-> 2026-06-10).**
+> **Status: Partial — schema + queue exclusion Current; in-session BE Implemented; flashcard-list
+> / bulk / undo surfaces Specified (verified 2026-06-10).**
 >
 > **Current:** the schema fields `flashcard_progress.buried_until INTEGER NULL` and
 > `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0` exist
@@ -15,12 +15,14 @@ applies_to: bury (skip card today), suspend (hide card indefinitely)
 > (`lib/data/datasources/local/drift/study_scope_queries.drift`); the empty-scope variants
 > `studyEmpty_allBuried` / `studyEmpty_allSuspended` render on the Study Entry gate.
 >
-> **Specified (NOT implemented):** bury/suspend/unbury/unsuspend use cases; the in-session
-> card-actions sheet (no `DropCurrentStudyItemUseCase` / `StudyRepo.dropCurrentItemFromSession`
-> exists — earlier revisions over-claimed these); active-session removal; toast undo;
-> flashcard-list state badges + status filter chips; bulk suspend/unsuspend; unsuspend from the
-> flashcard list. WBS rows 4.11.2/4.11.3 and 2.17.x track this work
-> (`docs/project-management/wbs.md`).
+> **Implemented (BE V1):** in-session bury/suspend use cases remove the current
+> `study_session_items` row from the active session queue, do not create a
+> `study_attempts` row, preserve SRS fields (`current_box`, `due_at`, `review_count`,
+> `lapse_count`), and touch `study_sessions.updated_at`.
+>
+> **Specified (NOT implemented):** flashcard-list state badges + status filter chips; bulk
+> suspend/unsuspend; unsuspend from the flashcard list; undo toast/reinsert behavior. WBS rows
+> 4.11.3 and 2.17.x track the remaining surfaces (`docs/project-management/wbs.md`).
 
 ## Purpose
 
@@ -209,7 +211,7 @@ Both bury and suspend support bulk operations from flashcard list multi-select (
   unsuspend.
 - Do NOT add user-configurable bury durations. Keep it "until tomorrow" only.
 - Do NOT introduce a "bury for N days" variant without updating this doc.
-- Toast undo MUST revert the state; not implementing undo is a bug.
+- Undo UI remains deferred to WBS 4.11.3; when it lands, it must revert the state.
 - Due query MUST be updated in ALL places (deck study, folder study, today, due count badges) —
   search the codebase for `due_at <= now` and update each.
 
@@ -255,5 +257,5 @@ Both bury and suspend support bulk operations from flashcard list multi-select (
   buried+suspended
 - `lib/data/repositories/study_repo_impl_study_session.dart` — `isVisible` eligibility +
   all-buried/all-suspended empty-state resolution
-- Bury/suspend use cases do NOT exist yet (`lib/domain/usecases/study/**` is not a real
-  directory); implement them under `lib/domain/study/usecases/` when WBS 4.11.2 is picked up.
+- In-session bury/suspend use cases live under `lib/domain/study/usecases/study_usecases.dart`
+  and are implemented by `lib/data/repositories/study_repo_impl.dart`.

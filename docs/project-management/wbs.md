@@ -130,7 +130,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 3.5.2 | Library | Global search FE | FE | `/library/search` screen with 5 states, grouped sections | Implemented | 3.5.1 | `lib/presentation/features/search/screens/global_search_screen.dart`, `test/presentation/features/search/global_search_test.dart` | `486232bd` | No action |
 | 3.5.3 | Library | Search result navigation | Integration | Folder → detail; deck → flashcard list; flashcard → owning deck | Implemented | 3.5.2 | `lib/presentation/features/search/widgets/search_results_view.dart` | `486232bd` | No action |
 | 3.6.1 | Library | Error retry state | FE | Centralized failure mapping + refetch feedback on library screens | Implemented | 3.1.2 | `lib/app/feedback/**`, `test/app/feedback/mx_app_feedback_observer_test.dart` | `484b6a42` | No action |
-| 3.7.1 | Library | Folder/deck due+card counts BE | BE | Counts stream from DB; due excludes buried/suspended | Partial | 3.2.1 | `lib/data/datasources/local/drift/folder_queries.drift` | `3759ad5e` | Verify due-badge coverage across overview/detail; add tests |
+| 3.7.1 | Library | Folder/deck due+card counts BE | BE | Counts stream from DB; due excludes buried/suspended | Implemented | 3.2.1 | `lib/data/datasources/local/drift/folder_queries.drift`, `lib/data/repositories/folder_repository_impl.dart`, `test/data/repositories/folder_deck_due_counts_test.dart`, `test/data/repositories/folder_repository_impl_test.dart` | `3759ad5e` | No action |
 | 3.8.1 | Library | Tags/recent/popular search sections | FE | Tag search section, recent searches, popular tags landing | Future | 8.5.1 | `docs/business/search/global-search.md` | TBD | Do not implement before tag subsystem promotion |
 
 ### Group 4 — Study/SRS flow
@@ -170,8 +170,8 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 4.9.1 | Study/SRS | Protected active-session exit FE | FE | Exit confirmation; confirmed exit keeps session resumable | Implemented | 4.3.2 | `lib/presentation/features/study/screens/study_session_screen.dart` | `40e3c8b0` | No action |
 | 4.10.1 | Study/SRS | Cancel/discard session BE | BE | `cancelStudySession` used by transactional start-over | Implemented | 4.2.1 | `lib/domain/study/ports/study_repo.dart` | `b2ea71ce` | No action |
 | 4.10.2 | Study/SRS | Resume expiry anchor `updated_at` | BE | 30-day resumable filter anchors on `updated_at` (activity), not `started_at` | Implemented | 4.2.1 | `docs/business/resume/resume-session.md` §Auto-expiry, `lib/data/datasources/local/daos/study_session_dao.dart`, `lib/data/repositories/study_repo_record_answer.dart`, `test/data/repositories/study_repository_test.dart` | `53fae583` | Read-only resume/open remains non-mutating |
-| 4.11.1 | Study/SRS | Bury/suspend queue exclusion BE | BE | Due/new queries exclude suspended and currently-buried cards | Implemented | 4.1.1 | `lib/data/datasources/local/drift/study_scope_queries.drift` | `ead94e76` | No action |
-| 4.11.2 | Study/SRS | In-session bury/suspend action BE | BE | Bury/suspend current card: set fields, no attempt, preserve SRS + tests | Specified | 4.4.1 | `docs/business/study-actions/bury-suspend.md` (no action source found) | TBD | Implement BE action + tests |
+| 4.11.1 | Study/SRS | Bury/suspend queue exclusion BE | BE | Due/new queries exclude suspended and currently-buried cards | Implemented | 4.1.1 | `lib/data/datasources/local/drift/study_scope_queries.drift`, `test/data/repositories/study_eligibility_bury_suspend_test.dart`, `test/data/repositories/study_session_card_action_test.dart` | `ead94e76` | No action |
+| 4.11.2 | Study/SRS | In-session bury/suspend action BE | BE | Bury/suspend current card: set fields, no attempt, preserve SRS + tests | Implemented | 4.4.1 | `lib/domain/study/ports/study_repo.dart`, `lib/domain/study/usecases/study_usecases.dart`, `lib/data/repositories/study_repo_impl.dart`, `lib/data/repositories/study_repo_impl_study_actions.dart`, `lib/data/datasources/local/daos/study_session_dao.dart`, `test/data/repositories/study_session_card_action_test.dart`, `test/data/repositories/study_eligibility_bury_suspend_test.dart` | TBD | No action |
 | 4.11.3 | Study/SRS | In-session bury/suspend action FE | FE | Action UI, queue removal, undo affordance | Specified | 4.11.2 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire UI to BE; widget tests |
 | 4.12.1 | Study/SRS | Study by tag | BE | `StudyEntryType.tag` scope queries + routes + tests | Blocked | 8.5.1 | `docs/business/tags/tag-system.md` | TBD | Requires tag subsystem promotion |
 
@@ -272,18 +272,17 @@ Reprioritized per BA review 2026-06-10: fix the study entry path and protect use
 
 1. **7.1.1 + 7.2.1 + 7.3.1 + 7.4.1 Progress read model BE V1** — due summary, box distribution,
    stats, composed read model; tests.
-2. **4.11.2 In-session bury/suspend action BE V1** — bury or suspend the current card without
-   changing progress; keeps the core loop moving.
-3. **4.1.3 Deck study CTA FE V1** — study-entry section on Flashcard List; the only study entry
+2. **4.1.3 Deck study CTA FE V1** — study-entry section on Flashcard List; the only study entry
    today is the Dashboard Today CTA, so the core loop has one fragile door.
-4. **4.1.4 Folder study CTA FE V1** — same wiring on Folder Detail.
-5. **2.21.1 Folder delete blast-radius confirm FE V1** — delete dialog shows subtree counts;
+3. **4.1.4 Folder study CTA FE V1** — same wiring on Folder Detail.
+4. **2.21.1 Folder delete blast-radius confirm FE V1** — delete dialog shows subtree counts;
    pairs with export as the data-safety duo.
-6. **7.5.1 + 7.5.2 Progress screen FE V1** — replace `/progress` placeholder; states; widget tests.
-7. **2.17.1 + 2.17.2 Flashcard status filters** — BE queries then chips/badges.
-8. **8.7.2 Deck export FE V1** — share/save action (needs `share_plus` approval — stop and ask).
-9. **6.6.2 Import duplicate preview FE V1** — surface backend-detected duplicates in preview.
-10. **4.1.3 Deck study CTA FE V1** — keep the study-entry path visible in the queue while backend priorities continue.
+5. **7.5.1 + 7.5.2 Progress screen FE V1** — replace `/progress` placeholder; states; widget tests.
+6. **2.17.1 + 2.17.2 Flashcard status filters** — BE queries then chips/badges.
+7. **8.7.2 Deck export FE V1** — share/save action (needs `share_plus` approval — stop and ask).
+8. **6.6.2 Import duplicate preview FE V1** — surface backend-detected duplicates in preview.
+9. **4.11.3 In-session bury/suspend action FE V1** — action UI, queue removal, undo affordance.
+10. **8.1.2 Settings release polish FE V1** — hide fabricated mock state before release; cheap cleanup before user testing.
 
 ## 6. Deferred / Future / Rejected Register
 

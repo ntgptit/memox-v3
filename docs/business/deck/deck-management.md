@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-10
 applies_to: deck entity and deck management feature
 ---
 
@@ -111,8 +111,9 @@ Deck actions may include:
 ## Performance
 
 - Decks list >50 items in a folder: use `ListView.builder`.
-- Card count badge: stream from database.
-- Due count badge: stream from database, not recomputed in widget.
+- Card count badge: stream from database and include suspended/buried cards.
+- Due count badge: stream from database, exclude suspended/currently-buried
+  cards, and include cards whose bury has expired. Do not recompute in widget.
 
 ## Agent rule
 

@@ -23,6 +23,7 @@ import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 
+part 'study_repo_impl_study_actions.dart';
 part 'study_repo_impl_study_session.dart';
 
 class StudyRepositoryImpl implements StudyRepository {
@@ -317,6 +318,30 @@ class StudyRepositoryImpl implements StudyRepository {
       );
     }
   }
+
+  @override
+  Future<Result<void>> buryStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+  }) async => _applyStudySessionCardAction(
+    dao: _dao,
+    action: _StudySessionCardAction.bury,
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+    nowMs: _nowMs,
+  );
+
+  @override
+  Future<Result<void>> suspendStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+  }) async => _applyStudySessionCardAction(
+    dao: _dao,
+    action: _StudySessionCardAction.suspend,
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+    nowMs: _nowMs,
+  );
 
   @override
   Future<Result<void>> finalizeStudySession({
