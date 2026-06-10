@@ -151,7 +151,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 4.5.8 | Study/SRS | Fill mode BE V1 | BE | Strict character match, mark-correct override, hint taint + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
 | 4.5.9 | Study/SRS | Fill mode FE V1 | FE | Typed-input fill UI | Specified | 4.5.8 | `docs/wireframes/17-study-session-fill.md` | TBD | Wire UI; widget tests |
 | 4.6.1 | Study/SRS | Finish session BE | BE | Finalization transaction: attempts → SRS outcome → session complete, rollback on failure | Implemented | 4.4.1 | `lib/data/repositories/study_repo_impl.dart`, `test/data/repositories/study_repository_test.dart` | `d5ae03f0` | No action |
-| 4.6.2 | Study/SRS | SRS progress update BE | BE | Leitner outcome transitions + due-date computation in finalization | Partial | 4.6.1 | `lib/data/repositories/study_repo_impl.dart`, `docs/business/srs/srs-review.md` | `d5ae03f0` | Verify full 8-box interval table against `docs/business/srs/srs-review.md`; add table-driven tests |
+| 4.6.2 | Study/SRS | SRS progress update BE | BE | Leitner outcome transitions + due-date computation in finalization | Implemented | 4.6.1 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/data/repositories/study_srs_transition_test.dart` (verified equal to `docs/business/srs/srs-review.md` transition + interval tables, decision rows S11–S15) | `d5ae03f0` | No action |
 | 4.6.3 | Study/SRS | Finalization failure recovery | Integration | Finish failure keeps session open with controlled error; retry affordance | Partial | 4.6.1 | `test/data/repositories/study_repository_test.dart` (rollback) | `d5ae03f0` | Add retry affordance on result/finish failure path |
 | 4.7.1 | Study/SRS | Result summary BE | BE | `loadStudySessionResult` completed-session summary | Implemented | 4.6.1 | `lib/domain/models/study_session_result.dart` | `4477dd86` | No action |
 | 4.7.2 | Study/SRS | Result screen FE | FE | `/library/study/session/:sessionId/result` with fallback states | Implemented | 4.7.1 | `lib/presentation/features/study/screens/study_result_screen.dart` | `4477dd86` | No action |
@@ -286,8 +286,8 @@ Backend-first per flow; each row is one agent prompt.
 | Risk | Impact | Mitigation |
 | --- | --- | --- |
 | Settings screens are static mock previews | Agents may assume settings persist; they do not | 8.1–8.4 rows mark shells as Partial with BE rows Specified; wire FE only after BE lands. |
-| Prior WBS over-claimed in-session bury/suspend as implemented | Wrong baseline for study-action prompts | Re-verified against source: only queue exclusion (4.11.1) is implemented; action rows reset to Specified (4.11.2/4.11.3). |
-| SRS interval table not verified against docs | Finalization may diverge from `docs/business/srs/srs-review.md` | 4.6.2 is Partial with explicit verification next action. |
+| Prior WBS over-claimed in-session bury/suspend as implemented | Wrong baseline for study-action prompts | Re-verified against source: only queue exclusion (4.11.1) is implemented; action rows reset to Specified (4.11.2/4.11.3). `docs/business/study-actions/bury-suspend.md` still claims "Status: Implemented (P0-2), Schema v10" with use cases that do not exist (current schema is v4) — doc downgrade awaits user decision (drift reported 2026-06-10). |
+| Stale SRS doc claims (2026-06-10 verification) | `docs/business/srs/srs-review.md` claims interval table "differs from runtime" (it now matches exactly), claims `box_before`/`box_after` are pending migration (columns exist in `lib/data/datasources/local/drift/study_attempts.drift`), and references the non-existent `docs/checklist/product-decisions-pending-2026-05-29.md` | Runtime verified equal to doc tables; table-driven tests added (4.6.2 Implemented). Doc cleanup awaits user decision (drift reported 2026-06-10). |
 | Docs can be ahead of source | Agent may implement Future behavior accidentally | Check source + docs; respect §6 register. |
 | Schema changes are high risk | Missing migration breaks existing DBs | 9.5 gate: version bump + onUpgrade + migration test + docs per change. |
 | CI not visible | Cannot claim full pass from GitHub checks | 9.10 Specified; report source-level verification until CI exists. |
@@ -354,6 +354,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `9ec54dd9` | 2026-06-10 | 4.6.2 | Verify SRS box transition + interval ladder vs doc contract; table-driven tests S11–S15; fix phantom decision-table test refs |
 | `7b3c1691` | 2026-06-10 | 3.8, 5.2, 5.5, 5.7, 5.8, 5.9, 5.10 | Commit deck import with CSV paste preview and transactional insert flow |
 | `dd8688a` | 2026-06-09 | 20.6, 18.9, 5.1–5.9, 6.1–6.6 | Update WBS and UI kit references for accuracy and traceability |
 | `5fbdf96d` | 2026-06-10 | 6.1–6.6 | Refactor `GlobalSearchScreen` / `SearchAppBarField` query handling |
