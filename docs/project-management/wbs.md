@@ -378,6 +378,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `93efe3e1` | 2026-06-10 | 8.7.1 | Guard-compliance cleanup for deck export filename sanitizing helper |
 | `b63998a7` | 2026-06-10 | 2.19–2.21, 4.1.3, 4.1.4, 4.2.4, 4.4.3, 4.5.10, 4.6.4, 4.10.2, 8.1.2, 8.2.1, 8.7.1, 8.7.2 | Adopt BA-review improvements: resolve C1/M2/M3 (first-attempt SRS, result terms, streak pause), spec recall-default SRS review, session batch limit, daily new limit, due-day normalization, deck move, dup soft-warning, delete blast-radius, export priority, mock-state release rules; reorder next-10 |
 | `a91fe342` | 2026-06-10 | 8.7.1 | Implement deck export CSV backend V1 with deterministic front/back CSV and safe filename generation |
 | `e84f5115` | 2026-06-10 | 6.6.1 | Prevent import duplicate commit bypass with repository guard + tests |
