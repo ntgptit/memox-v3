@@ -265,6 +265,19 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
         ),
       );
 
+  Future<void> updateDeckFolder(
+    String id,
+    String folderId,
+    int sortOrder,
+    int updatedAt,
+  ) => (update(decks)..where((Decks t) => t.id.equals(id))).write(
+    DecksCompanion(
+      folderId: Value<String>(folderId),
+      sortOrder: Value<int>(sortOrder),
+      updatedAt: Value<int>(updatedAt),
+    ),
+  );
+
   /// Number of decks directly under [folderId]. Used to decide whether an
   /// emptied `decks`-mode folder reverts to `unlocked`.
   Future<int> childDeckCount(String folderId) async {

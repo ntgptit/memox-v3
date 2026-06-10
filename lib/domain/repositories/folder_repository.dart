@@ -76,6 +76,17 @@ abstract interface class FolderRepository {
     required String name,
   });
 
+  /// Moves [deckId] to another folder in one transaction. The destination
+  /// folder must allow decks (`unlocked` or `decks`). An unchanged folder is a
+  /// no-op that returns the deck unchanged.
+  ///
+  /// Errors: `NotFoundFailure`, `ValidationFailure(duplicate)`,
+  /// `UnsupportedActionFailure`, `StorageFailure`.
+  Future<Result<Deck>> moveDeck({
+    required DeckId deckId,
+    required FolderId newParentId,
+  });
+
   /// Renames [folderId] to [name] (assumed trimmed). Enforces case-insensitive
   /// sibling-name uniqueness; an unchanged name is a no-op that returns the
   /// folder unchanged.

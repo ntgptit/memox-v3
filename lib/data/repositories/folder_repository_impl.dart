@@ -267,6 +267,12 @@ class FolderRepositoryImpl implements FolderRepository {
   }) => renameDeckTxn(_dao, deckId, name);
 
   @override
+  Future<Result<Deck>> moveDeck({
+    required String deckId,
+    required String newParentId,
+  }) => moveDeckTxn(_dao, deckId, newParentId);
+
+  @override
   Future<Result<Folder>> renameFolder({
     required String folderId,
     required String name,

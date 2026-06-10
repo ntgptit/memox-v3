@@ -183,6 +183,87 @@ Future<Result<Folder>> moveFolderTxn(
   }
 }
 
+/// Moves [deckId] to [newParentId] in one transaction: sibling-name checks,
+/// appends to the destination, locks the destination if it was unlocked, and
+/// reverts an emptied source folder to `unlocked`. An unchanged folder is a
+/// no-op.
+Future<Result<Deck>> moveDeckTxn(
+  FolderDao dao,
+  String deckId,
+  String newParentId,
+) async {
+  try {
+    final DeckRow moved = await dao.transaction(() async {
+      final DeckRow? row = await dao.findDeck(deckId);
+      if (row == null) {
+        throw _RuleViolation(Failure.notFound(entity: 'deck', id: deckId));
+      }
+
+      if (row.folderId == newParentId) {
+        return row;
+      }
+
+      final FolderRow? newParent = await dao.findFolder(newParentId);
+      if (newParent == null) {
+        throw _RuleViolation(
+          Failure.notFound(entity: 'folder', id: newParentId),
+        );
+      }
+
+      final ContentMode newParentMode = FolderMapper.contentModeFromStorage(
+        newParent.contentMode,
+      );
+      if (newParentMode == ContentMode.subfolders) {
+        throw const _RuleViolation(
+          Failure.unsupportedAction(action: 'move_deck_into_subfolders_folder'),
+        );
+      }
+
+      final String normalized = StringUtils.normalize(row.name);
+      final List<String> destSiblings = await dao.deckNames(
+        newParentId,
+        excludeId: deckId,
+      );
+      if (destSiblings.any(
+        (String n) => StringUtils.normalize(n) == normalized,
+      )) {
+        throw const _RuleViolation(
+          Failure.validation(field: 'name', code: ValidationCode.duplicate),
+        );
+      }
+
+      final int nowMs = _nowMs();
+      await dao.updateDeckFolder(
+        deckId,
+        newParentId,
+        (await dao.maxDeckSortOrder(newParentId)) + 1,
+        nowMs,
+      );
+
+      if (newParentMode == ContentMode.unlocked) {
+        await dao.setFolderContentMode(
+          newParentId,
+          FolderMapper.contentModeToStorage(ContentMode.decks),
+        );
+      }
+
+      if ((await dao.childDeckCount(row.folderId)) == 0) {
+        await dao.setFolderContentMode(
+          row.folderId,
+          FolderMapper.contentModeToStorage(ContentMode.unlocked),
+        );
+      }
+
+      return (await dao.findDeck(deckId))!;
+    });
+    return Result<Deck>.ok(DeckMapper.fromRow(moved));
+  } on _RuleViolation catch (violation) {
+    return Result<Deck>.err(violation.failure);
+  } catch (error) {
+    return _writeStorageErr<Deck>(error);
+  }
+}
+
 /// Persists a full reorder of the direct child folders under [parentId]
 /// (`null` = Library root). [orderedIds] must contain the complete sibling set
 /// exactly once each.

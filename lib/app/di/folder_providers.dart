@@ -4,6 +4,7 @@ import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/usecases/deck/create_deck_usecase.dart';
 import 'package:memox/domain/usecases/deck/delete_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/move_deck_usecase.dart';
 import 'package:memox/domain/usecases/deck/rename_deck_usecase.dart';
 import 'package:memox/domain/usecases/deck/reorder_decks_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
@@ -54,6 +55,10 @@ CreateDeckUseCase createDeckUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 DeleteDeckUseCase deleteDeckUseCase(Ref ref) =>
     DeleteDeckUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+MoveDeckUseCase moveDeckUseCase(Ref ref) =>
+    MoveDeckUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 RenameDeckUseCase renameDeckUseCase(Ref ref) =>

@@ -16,6 +16,13 @@ class RenameDeckCall {
   final String name;
 }
 
+class MoveDeckCall {
+  const MoveDeckCall({required this.deckId, required this.newParentId});
+
+  final DeckId deckId;
+  final FolderId newParentId;
+}
+
 class ReorderFoldersCall {
   const ReorderFoldersCall({required this.parentId, required this.orderedIds});
 
@@ -33,18 +40,22 @@ class ReorderDecksCall {
 class FolderRepositoryTestDouble implements FolderRepository {
   FolderRepositoryTestDouble({
     Result<Deck>? renameDeckResult,
+    Result<Deck>? moveDeckResult,
     Result<void>? reorderFoldersResult,
     Result<void>? reorderDecksResult,
   }) : renameDeckResult = renameDeckResult ?? Result<Deck>.ok(_deck()),
+       moveDeckResult = moveDeckResult ?? Result<Deck>.ok(_deck()),
        reorderFoldersResult =
            reorderFoldersResult ?? const Result<void>.ok(null),
        reorderDecksResult = reorderDecksResult ?? const Result<void>.ok(null);
 
   final Result<Deck> renameDeckResult;
+  final Result<Deck> moveDeckResult;
   final Result<void> reorderFoldersResult;
   final Result<void> reorderDecksResult;
 
   RenameDeckCall? lastRenameDeckCall;
+  MoveDeckCall? lastMoveDeckCall;
   ReorderFoldersCall? lastReorderFoldersCall;
   ReorderDecksCall? lastReorderDecksCall;
 
@@ -55,6 +66,15 @@ class FolderRepositoryTestDouble implements FolderRepository {
   }) async {
     lastRenameDeckCall = RenameDeckCall(deckId: deckId, name: name);
     return renameDeckResult;
+  }
+
+  @override
+  Future<Result<Deck>> moveDeck({
+    required DeckId deckId,
+    required FolderId newParentId,
+  }) async {
+    lastMoveDeckCall = MoveDeckCall(deckId: deckId, newParentId: newParentId);
+    return moveDeckResult;
   }
 
   @override
