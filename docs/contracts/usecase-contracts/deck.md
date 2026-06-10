@@ -14,6 +14,31 @@ status: contract
 > `docs/database/migrations/nullable-deck-parent-migration.md` is retained only
 > as a rejected historical design note. Do not implement it.
 
+> **Current implementation note (2026-06-10, Prompt MX-BE-CONTENT-ORDERING-RENAME-BATCH-20260610-001):**
+> `RenameDeckUseCase` and `ReorderDecksUseCase` are implemented over the existing `Result`-based
+> contract and wired in `lib/app/di/folder_providers.dart`. Code:
+> `lib/domain/usecases/deck/{rename_deck,reorder_decks}_usecase.dart`, backed by
+> `FolderRepository.{renameDeck,reorderDecks}`. Tests:
+> `test/domain/usecases/deck/rename_deck_usecase_test.dart`,
+> `test/domain/usecases/deck/reorder_decks_usecase_test.dart`,
+> `test/data/repositories/folder_repository_impl_test.dart` (deck rename/reorder rows).
+
+## RenameDeckUseCase
+
+```dart
+Future<Either<Failure, Deck>> call({required DeckId deckId, required String name});
+```
+
+**Rules:**
+
+- Trim name. Reject empty.
+- Repository enforces case-insensitive sibling uniqueness and keeps the deck's folder ownership
+  and `sort_order` unchanged.
+
+**Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
+
+**Test refs:** `test/domain/usecases/deck/rename_deck_usecase_test.dart`.
+
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
 > error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
 > ordinary feature implementation. First run an approved dependency/API migration task, or use the

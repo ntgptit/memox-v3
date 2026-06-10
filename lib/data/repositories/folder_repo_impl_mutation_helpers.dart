@@ -3,10 +3,13 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
+import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
+import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 
 /// Transaction bodies for the Library folder action-sheet mutations, kept out of
 /// `folder_repository_impl.dart` so the repository class stays within the file
@@ -52,6 +55,43 @@ Future<Result<Folder>> renameFolderTxn(
     return Result<Folder>.err(violation.failure);
   } catch (error) {
     return _writeStorageErr<Folder>(error);
+  }
+}
+
+/// Renames [deckId] to [name] (assumed trimmed). Sibling-name uniqueness is
+/// case-insensitive; an unchanged name is a no-op.
+Future<Result<Deck>> renameDeckTxn(
+  FolderDao dao,
+  String deckId,
+  String name,
+) async {
+  try {
+    final DeckRow updated = await dao.transaction(() async {
+      final DeckRow? row = await dao.findDeck(deckId);
+      if (row == null) {
+        throw _RuleViolation(Failure.notFound(entity: 'deck', id: deckId));
+      }
+      if (row.name == name) {
+        return row;
+      }
+      final String normalized = StringUtils.normalize(name);
+      final List<String> siblings = await dao.deckNames(
+        row.folderId,
+        excludeId: deckId,
+      );
+      if (siblings.any((String n) => StringUtils.normalize(n) == normalized)) {
+        throw const _RuleViolation(
+          Failure.validation(field: 'name', code: ValidationCode.duplicate),
+        );
+      }
+      await dao.updateDeckName(deckId, name, _nowMs());
+      return (await dao.findDeck(deckId))!;
+    });
+    return Result<Deck>.ok(DeckMapper.fromRow(updated));
+  } on _RuleViolation catch (violation) {
+    return Result<Deck>.err(violation.failure);
+  } catch (error) {
+    return _writeStorageErr<Deck>(error);
   }
 }
 
@@ -140,6 +180,140 @@ Future<Result<Folder>> moveFolderTxn(
     return Result<Folder>.err(violation.failure);
   } catch (error) {
     return _writeStorageErr<Folder>(error);
+  }
+}
+
+/// Persists a full reorder of the direct child folders under [parentId]
+/// (`null` = Library root). [orderedIds] must contain the complete sibling set
+/// exactly once each.
+Future<Result<void>> reorderFoldersTxn(
+  FolderDao dao,
+  String? parentId,
+  List<String> orderedIds,
+) async {
+  try {
+    await dao.transaction(() async {
+      if (orderedIds.isEmpty) {
+        throw const _RuleViolation(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.insufficientContent,
+          ),
+        );
+      }
+      _rejectDuplicateIds(orderedIds);
+
+      final List<FolderRow> all = await dao.allFolders();
+      final List<FolderRow> currentChildren = all
+          .where((FolderRow row) => row.parentId == parentId)
+          .toList(growable: false);
+      final Map<String, FolderRow> currentById = <String, FolderRow>{
+        for (final FolderRow row in currentChildren) row.id: row,
+      };
+
+      for (final String id in orderedIds) {
+        if (currentById.containsKey(id)) {
+          continue;
+        }
+        final FolderRow? row = await dao.findFolder(id);
+        if (row == null) {
+          throw _RuleViolation(Failure.notFound(entity: 'folder', id: id));
+        }
+        throw const _RuleViolation(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.invalidFormat,
+          ),
+        );
+      }
+
+      if (orderedIds.length != currentChildren.length) {
+        throw const _RuleViolation(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.insufficientContent,
+          ),
+        );
+      }
+
+      final int nowMs = _nowMs();
+      for (int index = 0; index < orderedIds.length; index++) {
+        await dao.updateFolderParent(orderedIds[index], parentId, index, nowMs);
+      }
+    });
+    return const Result<void>.ok(null);
+  } on _RuleViolation catch (violation) {
+    return Result<void>.err(violation.failure);
+  } catch (error) {
+    return _writeStorageErr<void>(error);
+  }
+}
+
+/// Persists a full reorder of the decks under [parentId]. [orderedIds] must
+/// contain the complete sibling set exactly once each.
+Future<Result<void>> reorderDecksTxn(
+  FolderDao dao,
+  String parentId,
+  List<String> orderedIds,
+) async {
+  try {
+    await dao.transaction(() async {
+      if (orderedIds.isEmpty) {
+        throw const _RuleViolation(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.insufficientContent,
+          ),
+        );
+      }
+      _rejectDuplicateIds(orderedIds);
+
+      final List<DeckItemsResult> currentDecks = await dao.getDeckItems(
+        folderId: parentId,
+        nowMs: 0,
+        sort: ContentSortMode.manual,
+        normalizedSearch: null,
+      );
+      final Map<String, DeckItemsResult> currentById =
+          <String, DeckItemsResult>{
+            for (final DeckItemsResult row in currentDecks) row.id: row,
+          };
+
+      for (final String id in orderedIds) {
+        if (currentById.containsKey(id)) {
+          continue;
+        }
+        final DeckRow? row = await dao.findDeck(id);
+        if (row == null) {
+          throw _RuleViolation(Failure.notFound(entity: 'deck', id: id));
+        }
+        throw const _RuleViolation(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.invalidFormat,
+          ),
+        );
+      }
+
+      if (orderedIds.length != currentDecks.length) {
+        throw const _RuleViolation(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.insufficientContent,
+          ),
+        );
+      }
+
+      final int nowMs = _nowMs();
+      for (int index = 0; index < orderedIds.length; index++) {
+        await dao.updateDeckSortOrder(orderedIds[index], index, nowMs);
+      }
+    });
+    return const Result<void>.ok(null);
+  } on _RuleViolation catch (violation) {
+    return Result<void>.err(violation.failure);
+  } catch (error) {
+    return _writeStorageErr<void>(error);
   }
 }
 
@@ -285,6 +459,17 @@ Result<T> _writeStorageErr<T>(Object error) => Result<T>.err(
     table: 'folders',
   ),
 );
+
+void _rejectDuplicateIds(List<String> orderedIds) {
+  final Set<String> seen = <String>{};
+  for (final String id in orderedIds) {
+    if (!seen.add(id)) {
+      throw const _RuleViolation(
+        Failure.validation(field: 'orderedIds', code: ValidationCode.duplicate),
+      );
+    }
+  }
+}
 
 /// Carries a business [Failure] out of a Drift transaction so it converts to a
 /// `Result` at the boundary (and the transaction rolls back).

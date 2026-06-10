@@ -261,6 +261,12 @@ class FolderRepositoryImpl implements FolderRepository {
   }
 
   @override
+  Future<Result<Deck>> renameDeck({
+    required String deckId,
+    required String name,
+  }) => renameDeckTxn(_dao, deckId, name);
+
+  @override
   Future<Result<Folder>> renameFolder({
     required String folderId,
     required String name,
@@ -271,6 +277,18 @@ class FolderRepositoryImpl implements FolderRepository {
     required String folderId,
     required String? newParentId,
   }) => moveFolderTxn(_dao, folderId, newParentId);
+
+  @override
+  Future<Result<void>> reorderFolders({
+    required String? parentId,
+    required List<String> orderedIds,
+  }) => reorderFoldersTxn(_dao, parentId, orderedIds);
+
+  @override
+  Future<Result<void>> reorderDecks({
+    required String parentId,
+    required List<String> orderedIds,
+  }) => reorderDecksTxn(_dao, parentId, orderedIds);
 
   @override
   Future<Result<void>> deleteFolder({required String folderId}) =>

@@ -29,6 +29,8 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | F7 | Move folder       | Target self/descendant     | Reject                                                                                                                | C1       | `test/features/folders/move_folder_test.dart::F7`                                                                                                                        |
 | F8 | Delete folder     | Confirmed                  | Delete nested content safely                                                                                          | C0+C1    | `test/features/folders/delete_folder_test.dart::F8`                                                                                                                      |
 | F9 | Delete last child | Folder becomes unlocked    | Mode returns to unlocked                                                                                              | C1       | `test/features/folders/delete_folder_test.dart::F9`                                                                                                                      |
+| F10 | Reorder folders  | Full sibling list           | Persist deterministic `sort_order` transactionally                                                                    | C0+C1    | `test/data/repositories/folder_repository_impl_test.dart::reorderFolders`                                                                                                 |
+| F11 | Reorder folders  | Duplicate/missing/cross-parent/partial list | Reject and preserve the previous order                                                                               | C1       | `test/data/repositories/folder_repository_impl_test.dart::reorderFolders`                                                                                                 |
 
 ## Deck
 
@@ -37,8 +39,11 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | D1 | Create deck | Valid folder/name  | Persist deck                   | C0+C1    | `test/features/decks/create_deck_test.dart::D1`   |
 | D2 | Create deck | Empty name         | Reject                         | C1       | `test/features/decks/create_deck_test.dart::D2`   |
 | D3 | Delete deck | Confirmed          | Delete deck and dependent data | C0+C1    | `test/features/decks/delete_deck_test.dart::D3`   |
-| D4 | Reorder     | Manual sort active | Update sort order only         | C0+C1    | `test/features/decks/reorder_deck_test.dart::D4`  |
+| D4 | Reorder     | Manual sort active | Persist deterministic `sort_order` transactionally | C0+C1    | `test/data/repositories/folder_repository_impl_test.dart::reorderDecks`  |
 | D5 | Start study | Empty deck         | Do not create session          | C1       | `test/features/study/start_session_test.dart::D5` |
+| D6 | Rename deck | Trimmed valid title | Update name only; preserve folder ownership and `sort_order` | C0+C1 | `test/domain/usecases/deck/rename_deck_usecase_test.dart` |
+| D7 | Rename deck | Blank title        | Reject                         | C1       | `test/domain/usecases/deck/rename_deck_usecase_test.dart` |
+| D8 | Reorder decks | Duplicate/missing/cross-folder/partial list | Reject and preserve the previous order | C1 | `test/data/repositories/folder_repository_impl_test.dart::reorderDecks` |
 
 ## Flashcard
 
@@ -71,6 +76,8 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | C26 | Edit editor close        | Existing optional note/tags loaded but unchanged     | Pop immediately without a discard dialog                         | C0+C1    | `test/presentation/features/flashcards/flashcard_editor_edit_screen_test.dart::DT6 onNavigate` |
 | C18 | Create card save         | Destination deck changed before normal Save          | Future Proposal                                                  | —        | Future |
 | C19 | Create card save-and-add | Checkbox under tags checked + valid front/back + optional example/hint/pronunciation/tags | Persist card, clear the draft, keep the same deck, and focus the Front field for another entry | C0+C1    | `test/presentation/features/flashcards/flashcard_editor_screen_test.dart::DT7 onInsert` |
+| C33 | Reorder cards            | Full sibling list in same deck                       | Persist deterministic `sort_order` transactionally               | C0+C1    | `test/data/repositories/flashcard_repository_impl_test.dart::reorderFlashcards` |
+| C34 | Reorder cards            | Duplicate/missing/cross-deck/partial list            | Reject and preserve the previous order                           | C1       | `test/data/repositories/flashcard_repository_impl_test.dart::reorderFlashcards` |
 
 ## Import
 

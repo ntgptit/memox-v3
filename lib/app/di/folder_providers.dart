@@ -4,12 +4,15 @@ import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/usecases/deck/create_deck_usecase.dart';
 import 'package:memox/domain/usecases/deck/delete_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/rename_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/reorder_decks_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_subfolder_usecase.dart';
 import 'package:memox/domain/usecases/folder/delete_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/get_folder_move_targets_usecase.dart';
 import 'package:memox/domain/usecases/folder/move_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/rename_folder_usecase.dart';
+import 'package:memox/domain/usecases/folder/reorder_folders_usecase.dart';
 import 'package:memox/domain/usecases/folder/watch_folder_detail_usecase.dart';
 import 'package:memox/domain/usecases/folder/watch_library_overview_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -53,12 +56,24 @@ DeleteDeckUseCase deleteDeckUseCase(Ref ref) =>
     DeleteDeckUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
+RenameDeckUseCase renameDeckUseCase(Ref ref) =>
+    RenameDeckUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
 RenameFolderUseCase renameFolderUseCase(Ref ref) =>
     RenameFolderUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 MoveFolderUseCase moveFolderUseCase(Ref ref) =>
     MoveFolderUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+ReorderFoldersUseCase reorderFoldersUseCase(Ref ref) =>
+    ReorderFoldersUseCase(ref.watch(folderRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+ReorderDecksUseCase reorderDecksUseCase(Ref ref) =>
+    ReorderDecksUseCase(ref.watch(folderRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 DeleteFolderUseCase deleteFolderUseCase(Ref ref) =>

@@ -387,6 +387,54 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     required List<String> orderedIds,
   }) async {
     try {
+      if (orderedIds.isEmpty) {
+        return const Result<void>.err(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.insufficientContent,
+          ),
+        );
+      }
+      final Failure? duplicateFailure = _duplicateIdsFailure(orderedIds);
+      if (duplicateFailure != null) {
+        return Result<void>.err(duplicateFailure);
+      }
+
+      final List<FlashcardRow> currentRows = await _dao.getFlashcards(
+        deckId: deckId,
+        sort: ContentSortMode.manual,
+      );
+      final Map<String, FlashcardRow> currentById = <String, FlashcardRow>{
+        for (final FlashcardRow row in currentRows) row.id: row,
+      };
+
+      for (final String id in orderedIds) {
+        if (currentById.containsKey(id)) {
+          continue;
+        }
+        final FlashcardRow? row = await _dao.findFlashcard(id);
+        if (row == null) {
+          return Result<void>.err(
+            Failure.notFound(entity: 'flashcard', id: id),
+          );
+        }
+        return const Result<void>.err(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.invalidFormat,
+          ),
+        );
+      }
+
+      if (orderedIds.length != currentRows.length) {
+        return const Result<void>.err(
+          Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.insufficientContent,
+          ),
+        );
+      }
+
       await _dao.transaction(() async {
         final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
         for (int index = 0; index < orderedIds.length; index++) {
@@ -487,6 +535,19 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
 
   static DateTime? _dateFromMs(int? ms) =>
       ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
+
+  static Failure? _duplicateIdsFailure(List<String> orderedIds) {
+    final Set<String> seen = <String>{};
+    for (final String id in orderedIds) {
+      if (!seen.add(id)) {
+        return const Failure.validation(
+          field: 'orderedIds',
+          code: ValidationCode.duplicate,
+        );
+      }
+    }
+    return null;
+  }
 }
 
 class _RuleViolation implements Exception {

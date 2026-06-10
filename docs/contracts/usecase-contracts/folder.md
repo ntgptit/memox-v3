@@ -5,15 +5,16 @@ status: contract
 
 # Folder Use Cases Contract
 
-> **Implementation status (2026-06-06, Prompt 49D):** `RenameFolderUseCase`, `MoveFolderUseCase`,
-> `DeleteFolderUseCase`, and `GetFolderMoveTargetsUseCase` are **implemented** over the existing
-> `Result<Failure, T>` contract (not yet `Either`) and wired in `lib/app/di/folder_providers.dart`.
-> Code: `lib/domain/usecases/folder/{rename_folder,move_folder,delete_folder,get_folder_move_targets}_usecase.dart`,
-> backed by `FolderRepository.{renameFolder,moveFolder,deleteFolder,getFolderMoveTargets}`. They power
-> the Library Overview folder action sheet (`docs/wireframes/02-library.md` §Overflow sheet). Tests:
-> `test/data/repositories/folder_repository_impl_test.dart` (F8-F12) +
-> `test/presentation/features/folders/library_overview_test.dart`. `ReorderFoldersUseCase` remains
-> Future.
+> **Implementation status (2026-06-10, Prompt MX-BE-CONTENT-ORDERING-RENAME-BATCH-20260610-001):**
+> `RenameFolderUseCase`, `MoveFolderUseCase`, `DeleteFolderUseCase`,
+> `GetFolderMoveTargetsUseCase`, and `ReorderFoldersUseCase` are **implemented** over the existing
+> `Result<Failure, T>` contract (not yet `Either`) and wired in
+> `lib/app/di/folder_providers.dart`. Code:
+> `lib/domain/usecases/folder/{rename_folder,move_folder,delete_folder,get_folder_move_targets,reorder_folders}_usecase.dart`,
+> backed by `FolderRepository.{renameFolder,moveFolder,deleteFolder,getFolderMoveTargets,reorderFolders}`.
+> They power the Library Overview folder action sheet (`docs/wireframes/02-library.md` §Overflow
+> sheet). Tests: `test/data/repositories/folder_repository_impl_test.dart` (F8-F11) +
+> `test/domain/usecases/folder/reorder_folders_usecase_test.dart`.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
@@ -158,7 +159,7 @@ Future<Either<Failure, Unit>> call({required FolderId? parentId, required List<F
 
 **Errors:** `ValidationFailure`, `StorageFailure`.
 
-**Test refs:** F13.
+**Test refs:** `test/domain/usecases/folder/reorder_folders_usecase_test.dart`.
 
 ## GetFolderDetailUseCase
 

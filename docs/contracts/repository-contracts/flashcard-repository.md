@@ -72,7 +72,8 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 > - `Future<Result<void>> deleteFlashcard({flashcardId})` — single-card delete (progress
 >   cascades via FK).
 > - `Future<Result<void>> reorderFlashcards({deckId, orderedIds})` — writes `sort_order` by
->   list position in one transaction.
+>   list position in one transaction after validating the full sibling set. Empty, duplicate,
+>   missing, wrong-deck, and partial reorder lists are rejected.
 >
 > Deck deletion lives on `FolderRepository.deleteDeck` (cascades cards, reverts an emptied
 > parent folder to `unlocked`). `watchByDeck` (filtered + `CardState`), `move`, all `bulk*`,
@@ -118,6 +119,7 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 - Update flashcard tags → verify replace semantics.
 - Update flashcard with reset policy → verify progress row resets to the fresh-card state.
 - Move flashcard → verify progress + tags preserved.
+- Reorder flashcards → verify full-list validation, transactional update, and rollback on failure.
 - Bulk operations → verify atomicity (rollback on one failure).
 - Deck import commit → verify transactional success and rollback on row validation failure.
 - Import chunked → verify chunked transactions, verify duplicate detection.

@@ -8,12 +8,15 @@ status: contract
 > **Implemented surface (2026-06-06, Prompt 49D):** the live `FolderRepository` uses the existing
 > `Result<T>` contract (not yet `Either`) and these method names:
 > `renameFolder({folderId, name})`, `moveFolder({folderId, newParentId})`,
+> `renameDeck({deckId, name})`, `reorderFolders({parentId, orderedIds})`,
+> `reorderDecks({parentId, orderedIds})`,
 > `deleteFolder({folderId})` → `Result<void>`, and `getFolderMoveTargets({folderId})` →
 > `Result<List<FolderMoveTarget>>` (root + all folders, blocked rows annotated, never hidden). The
 > `Either`/`Unit` signatures below are the target style. Move locks the destination to `subfolders`
 > when unlocked and reverts an emptied old parent to `unlocked`; cycle and decks-lock rejections are
-> enforced before the update. Backed by `FolderDao.{updateFolderName,updateFolderParent,
-> deleteFolderById,descendantFolderIdsDepthFirst,siblingFolderNames,childFolderCount,allFolders}`.
+> enforced before the update. Backed by `FolderDao.{updateFolderName,updateDeckName,
+> updateFolderParent,updateDeckSortOrder,deleteFolderById,descendantFolderIdsDepthFirst,
+> siblingFolderNames,deckNames,childFolderCount,allFolders,getDeckItems}`.
 > Tests: `test/data/repositories/folder_repository_impl_test.dart`.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
@@ -58,6 +61,8 @@ Future<Either<Failure, Unit>> updateContentMode(FolderId id, ContentMode newMode
 | `move` | `folders` UPDATE + new parent mode + old parent mode (if children=0 → unlocked) |
 | `delete` | `folders` recursive cascade: subfolders, decks under them, flashcards, flashcard_progress, flashcard_tags, study_attempts referencing those flashcards, study_sessions referencing this folder |
 | `reorder` | `folders` batch UPDATE of `sort_order` |
+| `renameDeck` | `decks` UPDATE |
+| `reorderDecks` | `decks` batch UPDATE of `sort_order` |
 
 ## Constraints enforced at repo layer
 
@@ -89,9 +94,10 @@ Future<Either<Failure, Unit>> updateContentMode(FolderId id, ContentMode newMode
   - Create root folder.
   - Create subfolder + verify parent mode update.
   - Create deck in folder + verify parent mode update.
+  - Rename deck + verify folder ownership and `sort_order` stay intact.
   - Move folder + cycle detection.
   - Delete cascade.
-  - Reorder.
+  - Reorder folders and decks.
   - Sibling uniqueness rejection.
 - Domain test (mock repo):
   - Use case orchestration tested with mocktail.

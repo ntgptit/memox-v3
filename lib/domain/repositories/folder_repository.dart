@@ -65,6 +65,17 @@ abstract interface class FolderRepository {
     required TargetLanguage targetLanguage,
   });
 
+  /// Renames [deckId] to [name] (assumed trimmed). Enforces case-insensitive
+  /// sibling-name uniqueness; an unchanged name is a no-op that returns the
+  /// deck unchanged.
+  ///
+  /// Errors: `NotFoundFailure`, `ValidationFailure(duplicate)`,
+  /// `StorageFailure`.
+  Future<Result<Deck>> renameDeck({
+    required DeckId deckId,
+    required String name,
+  });
+
   /// Renames [folderId] to [name] (assumed trimmed). Enforces case-insensitive
   /// sibling-name uniqueness; an unchanged name is a no-op that returns the
   /// folder unchanged.
@@ -86,6 +97,29 @@ abstract interface class FolderRepository {
   Future<Result<Folder>> moveFolder({
     required FolderId folderId,
     required FolderId? newParentId,
+  });
+
+  /// Persists a full reorder of the direct child folders under [parentId]
+  /// (`null` = Library root). [orderedIds] must contain the complete sibling
+  /// set exactly once each; the repository writes deterministic `sort_order`
+  /// values in a single transaction.
+  ///
+  /// Errors: `ValidationFailure` (empty, duplicate, partial, or wrong-scope
+  /// ids), `NotFoundFailure` (missing folder id), `StorageFailure`.
+  Future<Result<void>> reorderFolders({
+    required FolderId? parentId,
+    required List<FolderId> orderedIds,
+  });
+
+  /// Persists a full reorder of the decks under [parentId]. [orderedIds] must
+  /// contain the complete sibling set exactly once each; the repository writes
+  /// deterministic `sort_order` values in a single transaction.
+  ///
+  /// Errors: `ValidationFailure` (empty, duplicate, partial, or wrong-scope
+  /// ids), `NotFoundFailure` (missing deck id), `StorageFailure`.
+  Future<Result<void>> reorderDecks({
+    required FolderId parentId,
+    required List<DeckId> orderedIds,
   });
 
   /// Deletes [folderId] and its whole subtree (descendant folders, their decks,

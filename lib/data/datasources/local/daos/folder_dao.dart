@@ -220,11 +220,15 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
         FoldersCompanion(contentMode: Value<String>(mode)),
       );
 
-  /// Names of the decks directly under [folderId] (for duplicate checks).
-  Future<List<String>> deckNames(String folderId) {
+  /// Names of the decks directly under [folderId] (for duplicate checks),
+  /// optionally skipping [excludeId].
+  Future<List<String>> deckNames(String folderId, {String? excludeId}) {
     final JoinedSelectStatement<Decks, DeckRow> query = selectOnly(decks)
       ..addColumns(<Expression<Object>>[decks.name])
       ..where(decks.folderId.equals(folderId));
+    if (excludeId != null) {
+      query.where(decks.id.equals(excludeId).not());
+    }
     return query.map((TypedResult row) => row.read(decks.name)!).get();
   }
 
@@ -244,6 +248,22 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
 
   Future<DeckRow?> findDeck(String id) =>
       (select(decks)..where((Decks t) => t.id.equals(id))).getSingleOrNull();
+
+  Future<void> updateDeckName(String id, String name, int updatedAt) =>
+      (update(decks)..where((Decks t) => t.id.equals(id))).write(
+        DecksCompanion(
+          name: Value<String>(name),
+          updatedAt: Value<int>(updatedAt),
+        ),
+      );
+
+  Future<void> updateDeckSortOrder(String id, int sortOrder, int updatedAt) =>
+      (update(decks)..where((Decks t) => t.id.equals(id))).write(
+        DecksCompanion(
+          sortOrder: Value<int>(sortOrder),
+          updatedAt: Value<int>(updatedAt),
+        ),
+      );
 
   /// Number of decks directly under [folderId]. Used to decide whether an
   /// emptied `decks`-mode folder reverts to `unlocked`.

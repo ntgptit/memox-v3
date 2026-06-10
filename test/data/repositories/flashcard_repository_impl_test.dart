@@ -462,7 +462,121 @@ void main() {
       expect(result, isA<Ok<void>>());
       final FlashcardListDetail detail = await load(deck.id);
       expect(detail.cards.map((c) => c.id), <String>['c3', 'c1', 'c2']);
+      final FlashcardDao dao = FlashcardDao(db);
+      expect((await dao.findFlashcard('c3'))?.sortOrder, 0);
+      expect((await dao.findFlashcard('c1'))?.sortOrder, 1);
+      expect((await dao.findFlashcard('c2'))?.sortOrder, 2);
     });
+
+    test(
+      'rejects duplicate flashcard ids and leaves the order unchanged',
+      () async {
+        final Deck deck = await seedDeck();
+        await addCard(deck.id, 'c1', 'A', 'a', 0);
+        await addCard(deck.id, 'c2', 'B', 'b', 1);
+        await addCard(deck.id, 'c3', 'C', 'c', 2);
+
+        final Result<void> result = await repo.reorderFlashcards(
+          deckId: deck.id,
+          orderedIds: <String>['c3', 'c1', 'c1'],
+        );
+
+        expect(result, isA<Err<void>>());
+        expect(
+          (result as Err<void>).failure,
+          isA<ValidationFailure>().having(
+            (ValidationFailure f) => f.code,
+            'code',
+            ValidationCode.duplicate,
+          ),
+        );
+
+        final FlashcardListDetail detail = await load(deck.id);
+        expect(detail.cards.map((c) => c.id), <String>['c1', 'c2', 'c3']);
+      },
+    );
+
+    test('rejects missing flashcard ids', () async {
+      final Deck deck = await seedDeck();
+      await addCard(deck.id, 'c1', 'A', 'a', 0);
+      await addCard(deck.id, 'c2', 'B', 'b', 1);
+
+      final Result<void> result = await repo.reorderFlashcards(
+        deckId: deck.id,
+        orderedIds: <String>['missing', 'c1'],
+      );
+
+      expect(result, isA<Err<void>>());
+      expect((result as Err<void>).failure, isA<NotFoundFailure>());
+
+      final FlashcardListDetail detail = await load(deck.id);
+      expect(detail.cards.map((c) => c.id), <String>['c1', 'c2']);
+    });
+
+    test('rejects flashcard ids from another deck scope', () async {
+      final Deck deckA = await seedDeck();
+      await addCard(deckA.id, 'a1', 'A1', 'a1', 0);
+      await addCard(deckA.id, 'a2', 'A2', 'a2', 1);
+
+      final Folder folderB =
+          ((await folderRepo.createRootFolder(name: 'Other')) as Ok<Folder>)
+              .value;
+      final Deck deckB =
+          (await folderRepo.createDeck(
+                    parentFolderId: folderB.id,
+                    name: 'Other deck',
+                    targetLanguage: TargetLanguage.korean,
+                  )
+                  as Ok<Deck>)
+              .value;
+      await addCard(deckB.id, 'b1', 'B1', 'b1', 0);
+
+      final Result<void> result = await repo.reorderFlashcards(
+        deckId: deckA.id,
+        orderedIds: <String>['b1', 'a1', 'a2'],
+      );
+
+      expect(result, isA<Err<void>>());
+      expect(
+        (result as Err<void>).failure,
+        isA<ValidationFailure>().having(
+          (ValidationFailure f) => f.code,
+          'code',
+          ValidationCode.invalidFormat,
+        ),
+      );
+
+      final FlashcardListDetail detail = await load(deckA.id);
+      expect(detail.cards.map((c) => c.id), <String>['a1', 'a2']);
+    });
+
+    test(
+      'rejects partial reorder lists and leaves the previous order unchanged',
+      () async {
+        final Deck deck = await seedDeck();
+        await addCard(deck.id, 'c1', 'A', 'a', 0);
+        await addCard(deck.id, 'c2', 'B', 'b', 1);
+        await addCard(deck.id, 'c3', 'C', 'c', 2);
+
+        final Result<void> result = await repo.reorderFlashcards(
+          deckId: deck.id,
+          orderedIds: <String>['c3', 'c1'],
+        );
+
+        expect(result, isA<Err<void>>());
+        expect(
+          (result as Err<void>).failure,
+          isA<ValidationFailure>().having(
+            (ValidationFailure f) => f.code,
+            'code',
+            ValidationCode.insufficientContent,
+          ),
+        );
+
+        final FlashcardListDetail detail = await load(deck.id);
+        expect(detail.cards.map((c) => c.id), <String>['c1', 'c2', 'c3']);
+      },
+    );
   });
 
   group('deleteDeck (FolderRepository)', () {
