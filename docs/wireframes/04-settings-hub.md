@@ -17,6 +17,12 @@ status indicators.
 
 Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settings mutation owner.
 
+> **Release rule (adopted 2026-06-10, WBS 8.1.2):** the hub currently shows MOCK data as if real —
+> a fake signed-in account ("alex@memox.app", "Synced 2h ago") and a fake app version. Before any
+> release/testing with real users: hide or disable the account row until real account state
+> exists (show "Not signed in" / Soon), and read the version from package info. A user must never
+> see fabricated state presented as their own.
+
 | Aspect                                           | V1 status                                | Notes                                                                                                                                   |
 |--------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | `/settings` route + shell navigation             | Current                                  | `/settings` renders `SettingsScreen` inside the app shell.                                                                              |
@@ -24,7 +30,7 @@ Prompt 21 (2026-05-31) verified Settings Hub as a navigation owner, not a settin
 | Appearance / Language rows                       | Current (disabled Future rows)           | Render as disabled rows with a Soon badge; no route is exposed.                                                                         |
 | About row                                        | Current (dialog) / Target (bottom-sheet) | Current code opens Flutter's `AboutDialog`. The About bottom-sheet remains release-polish target behavior.                              |
 | Hub-owned mutation                               | Current absent                           | Hub rows navigate only. Account/Drive, study defaults, TTS, and tag mutation live in their sub-screens/viewmodels.                      |
-| Subtitle source                                  | Partial                                  | Account status uses account/sync state. Learning, Audio/Speech, and Tags overview subtitles are V1 summaries, not full live aggregates. |
+| Subtitle source                                  | Partial — **mock data on screen**        | The current screen renders MOCK account data (`alex@memox.app`) and a mock app version (`_mockAppVersion = '1.4.2 (build 248)'`) from the static preview. No real account/sync state exists. |
 | Async state                                      | Current                                  | Provider-backed rows keep rows visible and use row-level skeleton/error states; the hub has no full-screen empty state.                 |
 
 ## Layout

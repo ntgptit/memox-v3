@@ -44,7 +44,14 @@ study mode.
 | `new_guess_only`  | guess                                  | Targeted practice        |
 | `new_recall_only` | recall                                 | Targeted practice        |
 | `new_fill_only`   | fill                                   | Targeted practice        |
-| `srs_fill_review` | fill                                   | All SRS review           |
+| `srs_recall_review` | recall                               | **All SRS review (default, adopted 2026-06-10)** — V1 runtime already resolves recall |
+| `srs_fill_review` | fill                                   | SRS review, opt-in per session (Target) |
+
+> **Adopted decision (2026-06-10):** SRS review defaults to **recall**, not fill. Forcing every
+> due review through strict typed input (fill) — especially for Korean front text — is the
+> heaviest possible interaction and would push users to skip reviews. Fill stays available as an
+> opt-in flow for users who want production practice. The V1 runtime fallback
+> (`StudyModeStrategyFactory` → recall) already matches this default.
 
 ## Study modes
 
@@ -78,7 +85,7 @@ flowchart TD
     DefaultNew -->|absent| NewType[study_type = new - default]
     DefaultNew -->|srs_review| SrsType
     NewType --> NewFlow[Pick new_* flow]
-    SrsType --> SrsFlow[study_flow = srs_fill_review]
+    SrsType --> SrsFlow[study_flow = srs_recall_review - default; srs_fill_review opt-in]
     NewFlow --> Resolve[Resolve cards from scope]
     SrsFlow --> ResolveDue[Resolve due cards in scope]
     Resolve --> Empty{Scope empty?}
@@ -129,7 +136,18 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - Folder entry requires folder id.
 - Today entry does not require entry ref id.
 - Folder study collects cards recursively from all descendant decks.
-- SRS review uses `srs_fill_review`.
+- SRS review defaults to `srs_recall_review` (recall); `srs_fill_review` is opt-in (Target).
+- **Session batch limit (Target, WBS 4.2.4):** a session contains at most `maxSessionItems`
+  eligible cards (default 20; named constant, later a Learning Setting). When the scope has more
+  eligible cards, the session takes the first batch (due-date order for review, sort order for
+  new) and, after finalization, the result screen offers "Study next batch" re-entering the gate.
+  Rationale: unbounded recursive folder scopes create 300-card sessions that combine badly with
+  all-or-nothing finalization — abandoning at card 150 yields zero SRS credit. Small batches cap
+  the loss and create completion moments.
+- **Today-session snapshot rule:** session items are snapshotted at creation. Cards that become
+  due AFTER the session was created are NOT injected into the running session; they surface on
+  the Dashboard/gate after finalization. The all-done empty state means "all due at session
+  start" — copy must not promise the rest of the day.
 - Attempts must be persisted.
 - Active session must be resumable (see `docs/business/resume/resume-session.md`).
 - The Study Session route (`/library/study/session/:sessionId`) is a real
@@ -216,9 +234,15 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 - Incorrect answer creates attempt.
 - Retry behavior depends on selected flow/mode. **V1 records exactly one attempt per item** (a
   second answer on an answered item is rejected); multi-attempt retry is Target for future modes.
-- Before implementing any re-queue/retry mode, resolve the open SRS demotion decision in
-  `docs/business/srs/srs-review.md` (§Box transition table) — re-queue-until-pass would make
-  `forgot` unreachable at finalization.
+- Re-queue/retry modes follow the **adopted first-attempt-decides-SRS contract** in
+  `docs/business/srs/srs-review.md` (§Box transition table): a first-attempt `forgot` demotes the
+  card even when the re-queued pass completes the session; the re-queue IS the in-session
+  relearning step.
+- **Answer re-grade before finalization (Target, WBS 4.4.3):** until the session is finalized,
+  the user may change the grade of an answered item (mistap protection). Implementation appends a
+  correcting attempt; the SRS classifier handles the sequence per the adopted contract. Requires
+  relaxing the current "reject second answer" rule in `recordStudySessionAnswer` together with
+  the C1 classifier change — ship the two together.
 - Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 

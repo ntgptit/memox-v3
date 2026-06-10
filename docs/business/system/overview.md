@@ -49,6 +49,12 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Bury / suspend cards | Partial (schema + queue exclusion Implemented; user actions Specified) | `docs/business/study-actions/bury-suspend.md` |
 | Tag filter + study-by-tag + management | Specified | `docs/business/tags/tag-system.md` |
 | Bulk operations on flashcards | Specified | `docs/business/bulk/bulk-operations.md` |
+| Deck move between folders | Specified | `docs/business/deck/deck-management.md` |
+| Session batch limit (`maxSessionItems`) | Specified | `docs/business/study/study-flow.md` |
+| Daily new-card limit | Specified | `docs/business/srs/srs-review.md` |
+| Answer re-grade before finalize | Specified (ships with first retry mode) | `docs/business/study/study-flow.md` |
+| Manual-create duplicate soft-warning | Specified | `docs/business/flashcard/flashcard-management.md` |
+| Due-time local-midnight normalization | Specified | `docs/business/srs/srs-review.md` |
 | Card history view | Future Proposal — Migration Required | `docs/business/history/card-history.md` |
 | Inline/scope-local search | V1 guideline | `docs/business/search/global-search.md` |
 | Global search screen (folders/decks/flashcards) | Implemented | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |

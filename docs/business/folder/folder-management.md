@@ -66,6 +66,17 @@ stateDiagram-v2
 - Moving folder must not create cycle.
 - Deleting last child returns folder to `unlocked`.
 - Deleting folder deletes nested content according to persistence rules.
+- **Delete confirmation must state the blast radius (Specified, WBS 2.21.x):** the confirm dialog
+  must show concrete counts ("This deletes {d} decks, {c} cards and all study progress") computed
+  from the subtree, not a generic message. When the subtree card count exceeds a threshold (e.g.,
+  100), require a stronger confirmation (type folder name or double-confirm). Rationale: MemoX is
+  local-first with no working backup/export yet — a one-tap cascade delete is the single biggest
+  data-loss risk in the app, and study progress is unrecoverable.
+- **Content-mode lock — UX validation flag (2026-06-10):** the subfolders-XOR-decks lock is a
+  MemoX-specific constraint that peer apps do not have and users may experience as a "why can't
+  I?" error. Keep the rule for now, but treat first-user feedback on the lock-mode snackbar as a
+  trigger to revisit (options: allow mixed content, or improve the affordance so the locked
+  option is visibly disabled with an inline explanation instead of a rejection snackbar).
 
 ## Screen behavior
 

@@ -5,20 +5,22 @@ applies_to: deck export, flashcard selection export, CSV/Excel formats
 
 # Export
 
-## Source files to inspect
+> **Status: Specified — nothing implemented (verified 2026-06-10).** No export use case,
+> repository method, writer, or UI action exists in the current codebase; the file list below is
+> the **target structure** from a previous iteration. The `share_plus` dependency is not in
+> `pubspec.yaml` and requires approval before the FE slice.
+>
+> **Priority note (BA review 2026-06-10):** MemoX is local-first with NO working backup path —
+> export CSV is currently the only cheap way for users to get their content out, and the data-loss
+> guard until Drive sync lands. Deck-level CSV export (BE) is scheduled early in the WBS next-10
+> (8.7.1) ahead of Drive sync. V1 cut: CSV only, deck scope only; Excel and selection-scope follow.
 
-- `lib/domain/value_objects/content_actions.dart` (ExportFormat, ExportData)
-- `lib/domain/usecases/deck_usecases.dart` (export deck use case)
-- `lib/domain/usecases/flashcard_usecases.dart` (export flashcards use case)
-- `lib/data/repositories/flashcard_export_writer.dart` (FlashcardExportWriter, FlashcardExportRow)
-- `lib/data/repositories/deck_repository_impl.dart` (`exportDeck`)
-- `lib/data/repositories/flashcard_repository_impl.dart` (`exportFlashcards`, `_exportPayload`)
-- `lib/data/repositories/repository_support.dart` (`sanitizeFileName`, `escapeCsvCell`)
-- `lib/presentation/features/flashcards/actions/flashcard_export.dart` (`pickFlashcardExportFormat`, `shareFlashcardExport`)
-- `lib/presentation/features/decks/actions/deck_quick_actions.dart` (deck export entry)
-- `lib/presentation/features/decks/viewmodels/deck_action_viewmodel.dart` (`exportDeck`)
-- `lib/presentation/features/flashcards/viewmodels/flashcard_list_viewmodel.dart` (`exportFlashcards`)
-- `lib/presentation/features/flashcards/screens/flashcard_list_screen.dart` (export trigger)
+## Target source structure (none exist yet)
+
+- `lib/domain/usecases/deck/export_deck_usecase.dart`
+- `lib/data/repositories/` export writer + CSV escaping helpers
+- `lib/presentation/features/flashcards/**` export trigger on deck actions sheet
+- Share/save via `share_plus` (`XFile.fromData`) — dependency approval required
 
 ## Scope
 

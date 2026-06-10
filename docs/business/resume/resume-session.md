@@ -178,6 +178,12 @@ filter** — the resumable-session queries only match sessions with `started_at 
 resumable queries). The session row itself is NOT mutated; it simply no longer appears on any
 resume surface.
 
+**Adopted correction (2026-06-10, WBS 4.10.2 — NOT yet implemented):** the expiry anchor must be
+`updated_at`, not `started_at`. "Not touched for 30 days" means no activity — a session the user
+resumes and answers in every week is alive even when it started 31 days ago; anchoring on
+`started_at` expires it mid-use. Change the DAO filter (and any future cleanup job) to
+`updated_at > now - 30 days` and update the `SessionStatus` doc comment in the same change.
+
 Target (not yet implemented): an explicit cleanup that sets expired sessions to `cancelled` on
 app open with a one-time notice ("Your paused {scope} session expired and was discarded"). Until
 that lands, be aware that expired sessions remain `in_progress` in the database — any new query

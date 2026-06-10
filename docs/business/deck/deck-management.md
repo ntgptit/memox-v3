@@ -84,6 +84,11 @@ Users can edit each deck to set the correct value once the deck edit form expose
 - Deck target language is required (default `korean`).
 - Deck can be created only in folder mode `unlocked` or `decks`.
 - Creating deck sets parent folder mode to `decks`.
+- **Move deck to another folder (Specified, WBS 2.19.x):** a deck may move to any folder whose
+  mode is `unlocked` or `decks`; the move sets the target folder's mode to `decks`, appends the
+  deck at the end of the target's `sort_order`, may return the source folder to `unlocked` when
+  it loses its last deck, and never touches flashcards/progress/tags. Folders and flashcards both
+  have move; decks — the unit most often filed in the wrong place — must too.
 - Empty deck cannot start study.
 - Deleting deck deletes related flashcards and local dependent data through persistence rules.
 - Reorder updates `sort_order` only.

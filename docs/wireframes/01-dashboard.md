@@ -17,6 +17,10 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 
 - Current V1: due/new/mastery summary, recent decks, resume card, paused-sessions sheet, and Today CTA that routes to study only when due cards exist.
 - Current V1 placeholder: the stats row may show `Streak` / `0 days` as a simple visual/stat placeholder only. It has no streak computation, no engagement persistence, no settings, no reminder, and no streak-history or daily-goal sheet action.
+- **Release rule (adopted 2026-06-10, WBS 8.1.2):** this placeholder violates this screen's own
+  Forbidden rule ("hide streak chip when streak is 0") — a dead `0 days` stat reads as a broken
+  feature. Remove/hide the streak placeholder before any release until real engagement data
+  exists.
 - Target/Future: full streak chip/history, daily-goal ring/settings, reminders/notification permissions, Dashboard zero-content onboarding layout, Global Search route/action, and search icon navigation.
 - Current app boot still redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`; changing launch default to Dashboard requires a dedicated navigation task.
 

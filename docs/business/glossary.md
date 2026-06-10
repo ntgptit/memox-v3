@@ -71,6 +71,8 @@ User picks entry_type + scope
 | Term           | Definition                                                   | Defined in                                         |
 |----------------|--------------------------------------------------------------|----------------------------------------------------|
 | Daily goal     | Target number of card answers per local-day                  | `docs/business/engagement/dashboard-engagement.md` |
+| Daily new limit | Max new cards entering study per local-day (Target, default 20) | `docs/business/srs/srs-review.md`              |
+| Session batch  | Max cards per study session (`maxSessionItems`, Target, default 20) | `docs/business/study/study-flow.md`          |
 | Daily progress | Count of answers today against the goal                      | `docs/business/engagement/dashboard-engagement.md` |
 | Streak         | Consecutive local-days the user met the goal                 | `docs/business/engagement/dashboard-engagement.md` |
 | Goal-met day   | A local-day where progress reached the goal                  | `docs/business/engagement/dashboard-engagement.md` |
@@ -170,20 +172,17 @@ answered, awaiting explicit Finish" (see `docs/business/study/study-flow.md` §S
 
 ## Result terms (per-attempt SRS outcome)
 
-| Result           | Meaning                                        |
-|------------------|------------------------------------------------|
-| `initial_passed` | Correct on first try                           |
-| `perfect`        | Correct without any retry within current cycle |
-| `recovered`      | Correct after retry                            |
-| `forgot`         | Failed, will lapse                             |
+| Result           | Meaning (adopted contract 2026-06-10)                                                    |
+|------------------|--------------------------------------------------------------------------------------------|
+| `perfect`        | Correct, clean attempt ("Got it"); box +1                                                   |
+| `recovered`      | Single passing-but-imperfect attempt (fill hint-taint / Mark-correct override); box stays. Redefined — "forgot then passed in-session" now finalizes as `forgot`. |
+| `forgot`         | First attempt failed; box → 1, lapse +1, even if re-queued and passed later in the session |
+| `initial_passed` | **Never emitted.** Kept in enum/storage for compatibility; identical transition to `perfect`. Reviving it requires a new product decision. |
 
-> **⚠ Open definition gap:** `perfect` and `initial_passed` currently have identical box
-> transitions (n → n+1) and near-identical definitions. V1 emits only `perfect` / `forgot` from
-> the self-grade UI; `initial_passed` is defined in the enum but never emitted. Before any
-> multi-attempt mode emits `initial_passed`, the product owner must define when it applies versus
-> `perfect` (e.g., first-attempt-of-mode vs all-attempts-across-cycle) and update this table,
-> `docs/business/srs/srs-review.md`, and the decision table together. Do not pick a meaning
-> ad hoc.
+> Adopted decision (2026-06-10): modes emit only `perfect` / `recovered` / `forgot`. The
+> first-attempt-decides-SRS rule and the `recovered` redefinition live in
+> `docs/business/srs/srs-review.md` §Box transition table; the classifier/code change lands with
+> the first retry mode (WBS 4.5.x), not before.
 
 ## Agent rule
 

@@ -51,6 +51,12 @@ Important fields:
 - Box range is 1 to 8 inclusive.
 - New flashcard starts at `current_box = 1` with `due_at = now`.
 - Due card: `due_at <= now`.
+- **Daily new-card limit (Target, WBS 8.2.x):** at most `dailyNewLimit` new cards (default 20,
+  range 5–100, Learning Settings) enter study per local day. New-card eligibility queries must
+  respect the remaining quota for the day; cards beyond the quota stay queued for following days.
+  Rationale: a new card defaults to `due_at = now`, so without a limit a 500-row import floods
+  "Today" with 500 cards at once — the primary burnout driver in SRS apps. The limit must exist in
+  the settings contract BEFORE settings persistence ships (adding it later changes the due query).
 - Deleted flashcards must not appear in due list (foreign key enforced).
 - Review result must update progress through domain/use case/repository flow.
 - UI must not update SRS box directly.
@@ -61,12 +67,12 @@ Important fields:
 
 See `docs/business/glossary.md` for result definitions.
 
-| Result           | When it applies                                        |
-|------------------|--------------------------------------------------------|
-| `initial_passed` | Correct on first attempt for this card in this session |
-| `perfect`        | Correct without any retry within the session cycle     |
-| `recovered`      | Correct after at least one retry within the session    |
-| `forgot`         | Failed (used up retries or explicit "I don't know")    |
+| Result           | When it applies (adopted contract 2026-06-10)                                                      |
+|------------------|------------------------------------------------------------------------------------------------------|
+| `perfect`        | Correct, clean attempt (V1 "Got it")                                                                  |
+| `recovered`      | Single passing-but-imperfect attempt: fill hint-taint or Mark-correct override (Target; redefined — no longer "forgot then passed", which now finalizes as `forgot`) |
+| `forgot`         | First attempt failed (V1 "Forgot"); under retry modes, a first-attempt fail stays `forgot` even after a same-session re-queue pass |
+| `initial_passed` | **Never emitted** (kept in the enum/storage codec for compatibility; identical transition to `perfect`). Reviving it requires a new product decision. |
 
 ## Box transition table
 
@@ -83,14 +89,24 @@ Per-card result classification at finalization (implemented in
 `forgot` but last attempt passing → `recovered` (box stays, no lapse); all attempts passing →
 the last attempt's result (`perfect` / `initial_passed`, box +1).
 
-> **⚠ Open product decision (C1 — SRS demotion reachability).** Current V1 records exactly ONE
-> attempt per item (`recordStudySessionAnswer` rejects a second answer), so tapping `Forgot` DOES
-> finalize as `forgot` and the card drops to box 1. The earlier target design ("failed cards are
-> re-queued until passed within a mode") would make `forgot` unreachable in a normally-completed
-> session — `lapse_count` would never increment and no card would ever demote. Before implementing
-> any retry/re-queue mode (match / guess / fill), the product owner must decide how a re-queued
-> card's final result maps to the transition table so the demotion path stays reachable. Do not
-> implement re-queue behavior until this is resolved.
+> **✅ Adopted decision (2026-06-10, C1 — SRS demotion reachability): first attempt decides SRS.**
+> When retry/re-queue modes land, the FIRST attempt recorded for an item in the session determines
+> the SRS outcome: first attempt `forgot` → final result `forgot` (box → 1, lapse +1) **even if
+> the card is re-queued and passed later in the same session**. Re-queued passes are in-session
+> relearning: they are recorded as attempts and satisfy session completion, but do not change the
+> SRS outcome. This keeps demotion reachable, gives the learner a same-session repetition of every
+> forgotten card (the relearning step), and keeps the interval table unchanged.
+>
+> Consequences for the implementation when the first retry mode is built (do these together):
+>
+> - `_finalizeResultForAttempts` must switch from last-attempt to **first-attempt** classification
+>   for the forgot path; update `test/data/repositories/study_srs_transition_test.dart` (S13
+>   changes meaning) and decision rows S13/S20 in the same change.
+> - `recovered` is **redefined**: it no longer means "forgot then passed" (that is now `forgot`);
+>   it means a single passing-but-imperfect attempt (fill hint-taint, Mark-correct override).
+>   Transition stays: box unchanged, no lapse. Update `docs/business/glossary.md` together.
+> - Current V1 (one attempt per item, last-attempt classifier) produces identical user-visible
+>   behavior, so no code change is required before retry modes land.
 
 | Current box | Result           | Next box | Next due              |
 |-------------|------------------|----------|-----------------------|
@@ -108,6 +124,15 @@ Intervals are defined in `_intervalForBox`
 ladder **matches this table exactly** and is pinned by table-driven tests
 (`test/data/repositories/study_srs_transition_test.dart`). Any change to either side must update
 both in the same commit.
+
+**Due-time normalization (Adopted target 2026-06-10, WBS 4.6.4 — NOT yet implemented):**
+`due_at` should be normalized to the **local midnight of the target day**
+(`localMidnight(studyDay + interval)`), not `finalize_instant + interval`. Rationale: with exact
+timestamps a card finalized at 15:47 becomes due at 15:47 the next day, so "due today" counts
+drift upward during the day ("0 cards" in the morning, "12 cards" by evening) and users stop
+trusting the number. This also aligns with bury's existing local-midnight semantics. Current
+implemented behavior is exact-instant; changing it requires updating finalization + the
+transition tests in the same commit.
 
 | Box | Interval | Approx   | Rationale                                                                |
 |-----|----------|----------|--------------------------------------------------------------------------|

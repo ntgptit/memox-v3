@@ -48,6 +48,11 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 - Tags must be non-empty after trim.
 - Tags are deduplicated case-insensitively per flashcard.
 - Flashcard must not be edited under wrong deck.
+- **Manual-create duplicate soft-warning (Specified, WBS 2.20.x):** when saving a card whose
+  trimmed, case-insensitive `front`+`back` matches an existing card in the same deck, show a
+  non-blocking warning ("A card with this front/back already exists — save anyway?"). Do NOT hard
+  reject. Rationale: import already detects duplicates; manual create silently allowing them is
+  inconsistent.
 - Delete removes related local data according to persistence rules.
 
 ## Import rules

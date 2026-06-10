@@ -109,6 +109,11 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 2.17.2 | Content management | Flashcard status filter/badges FE V1 | FE | Filter chips + suspended/buried badges in flashcard list | Specified | 2.17.1 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire chips/badges to BE; widget tests |
 | 2.18.1 | Content management | Flashcard tag filter BE V1 | BE | Multi-select AND tag filter inside deck + tests | Implemented | 2.15.1 | `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart`, `test/domain/usecases/flashcard/watch_flashcard_list_usecase_test.dart` | `a35f32f1` | No action |
 | 2.18.2 | Content management | Flashcard tag filter FE V1 | FE | Tag filter chips + clear-filters empty state | Specified | 2.18.1 | `docs/business/tags/tag-system.md` | TBD | Wire to BE; widget tests |
+| 2.19.1 | Content management | Deck Move BE V1 | BE | Move deck to another folder (mode validation, sort append, source unlock) + tests | Specified | 2.7.1 | `docs/business/deck/deck-management.md` §Rules | TBD | Implement usecase/repo/DAO/tests |
+| 2.19.2 | Content management | Deck Move FE V1 | FE | Move action in deck actions sheet + folder picker | Specified | 2.19.1 | `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart` (reuse picker pattern) | TBD | Wire to BE; widget tests |
+| 2.20.1 | Content management | Manual duplicate soft-warning BE V1 | BE | Case-insensitive front+back duplicate check on create/edit save | Specified | 2.11.1 | `docs/business/flashcard/flashcard-management.md` §Rules | TBD | Implement check + tests |
+| 2.20.2 | Content management | Manual duplicate soft-warning FE V1 | FE | Non-blocking "save anyway?" confirm in editor | Specified | 2.20.1 | `docs/business/flashcard/flashcard-management.md` §Rules | TBD | Wire to BE; widget tests |
+| 2.21.1 | Content management | Folder delete blast-radius confirm FE V1 | FE | Delete dialog shows subtree counts; stronger confirm above threshold | Specified | 2.3.2 | `docs/business/folder/folder-management.md` §Rules | TBD | Extend delete dialog + tests |
 
 ### Group 3 — Library flow
 
@@ -134,13 +139,17 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4.1.1 | Study/SRS | Study entry eligibility BE | BE | Scope queries (deck/folder/today), empty/all-suspended outcomes + tests | Implemented | 1.1.5 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/domain/study/start_study_session_usecase_test.dart` | `ead94e76` | No action |
 | 4.1.2 | Study/SRS | Study entry FE | FE | Entry gate screen with empty/error/resume-required states | Implemented | 4.1.1 | `lib/presentation/features/study/screens/study_entry_screen.dart`, `test/presentation/features/study/study_entry_screen_test.dart` | `0a7a4c60` | No action |
+| 4.1.3 | Study/SRS | Deck study CTA FE V1 | FE | Study-entry section on Flashcard List: Study deck + Today CTAs routing through the gate | Specified | 4.1.1 | `docs/wireframes/06-flashcard-list.md` (component row 4 target) | TBD | **Top priority** — the only study entry today is the Dashboard Today CTA; the study button must live next to the content |
+| 4.1.4 | Study/SRS | Folder study CTA FE V1 | FE | Study folder + Today CTAs on Folder Detail routing through the gate | Specified | 4.1.1 | `docs/wireframes/05-folder-detail.md` | TBD | Wire CTAs to gate routes; widget tests |
 | 4.2.1 | Study/SRS | Session creation BE | BE | Transactional `study_sessions` + `study_session_items` insert + tests | Implemented | 4.1.1 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/data/repositories/study_repository_test.dart` | `ead94e76` | No action |
 | 4.2.2 | Study/SRS | No-silent-resume gate BE | BE | Existing resumable session returns controlled `resumeRequired` | Implemented | 4.2.1 | `lib/domain/study/study_entry_start_result.dart` | `8582fcb2` | No action |
 | 4.2.3 | Study/SRS | Resume/start-over choice FE | FE | Explicit Resume / Start over / Back actions; transactional restart | Implemented | 4.2.2 | `lib/presentation/features/study/widgets/study_entry_resume_required_state.dart`, `test/domain/study/restart_study_session_usecase_test.dart` | `5339d8e5` | No action |
+| 4.2.4 | Study/SRS | Session batch limit BE V1 | BE | Cap session at `maxSessionItems` (default 20); "Study next batch" re-entry after finalize | Specified | 4.2.1 | `docs/business/study/study-flow.md` §Rules | TBD | Implement cap in session creation + result-screen CTA; tests |
 | 4.3.1 | Study/SRS | Session item loading BE | BE | Load persisted session + ordered items by sessionId | Implemented | 4.2.1 | `lib/domain/study/ports/study_repo.dart` (`loadStudySessionReview`) | `3ab00a9a` | No action |
 | 4.3.2 | Study/SRS | Session review shell FE | FE | Current card, reveal toggle, Previous/Next navigation | Implemented | 4.3.1 | `lib/presentation/features/study/screens/study_session_screen.dart`, `test/presentation/features/study/study_session_screen_test.dart` | `2971d800` | No action |
 | 4.4.1 | Study/SRS | Submit self-grade BE | BE | `recordStudySessionAnswer` attempt persistence + tests | Implemented | 4.3.1 | `lib/data/repositories/study_repo_record_answer.dart`, `test/domain/usecases/study/record_study_session_answer_usecase_test.dart` | `f3740591` | No action |
 | 4.4.2 | Study/SRS | Self-grade FE (Forgot / Got it) | FE | Grading controls + answered-state advancement | Implemented | 4.4.1 | `test/presentation/features/study/study_session_review_viewmodel_test.dart` | `f3740591` | No action |
+| 4.4.3 | Study/SRS | Answer re-grade before finalize | BE | Allow correcting an answered item's grade until finalization (append attempt) | Specified | 4.4.1, 4.5.10 | `docs/business/study/study-flow.md` §Retry behavior | TBD | Ship together with 4.5.10 (same answer-recording rule) |
 | 4.5.1 | Study/SRS | Study mode strategy V1 BE | BE | `StudyModeStrategyFactory`: recall supported, others controlled-unsupported | Partial | 4.3.1 | `lib/domain/study/modes/study_mode_strategy_factory.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart` | `30075fbf` | Implement next mode slice (one mode per prompt) |
 | 4.5.2 | Study/SRS | Review mode BE V1 | BE | Both-sides item strategy + attempt semantics + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
 | 4.5.3 | Study/SRS | Review mode FE V1 | FE | Review mode UI per wireframe 13 | Specified | 4.5.2 | `docs/wireframes/13-study-session-review.md` | TBD | Wire UI to strategy; widget tests |
@@ -150,14 +159,17 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 4.5.7 | Study/SRS | Guess mode FE V1 | FE | Guess UI with auto-advance countdown | Specified | 4.5.6 | `docs/wireframes/15-study-session-guess.md` | TBD | Wire UI; widget tests |
 | 4.5.8 | Study/SRS | Fill mode BE V1 | BE | Strict character match, mark-correct override, hint taint + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
 | 4.5.9 | Study/SRS | Fill mode FE V1 | FE | Typed-input fill UI | Specified | 4.5.8 | `docs/wireframes/17-study-session-fill.md` | TBD | Wire UI; widget tests |
+| 4.5.10 | Study/SRS | First-attempt SRS classifier (C1 adopted) | BE | Switch `_finalizeResultForAttempts` to first-attempt-decides + re-queue relearning + `recovered` redefinition; update S13/S20 tests | Specified | 4.5.1 | `docs/business/srs/srs-review.md` §Box transition table (adopted decision 2026-06-10) | TBD | Ship with the first retry mode; do not implement re-queue without it |
 | 4.6.1 | Study/SRS | Finish session BE | BE | Finalization transaction: attempts → SRS outcome → session complete, rollback on failure | Implemented | 4.4.1 | `lib/data/repositories/study_repo_impl.dart`, `test/data/repositories/study_repository_test.dart` | `d5ae03f0` | No action |
 | 4.6.2 | Study/SRS | SRS progress update BE | BE | Leitner outcome transitions + due-date computation in finalization | Implemented | 4.6.1 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/data/repositories/study_srs_transition_test.dart` (verified equal to `docs/business/srs/srs-review.md` transition + interval tables, decision rows S11–S15) | `d5ae03f0` | No action |
 | 4.6.3 | Study/SRS | Finalization failure recovery | Integration | Finish failure keeps session open with controlled error; retry affordance | Partial | 4.6.1 | `test/data/repositories/study_repository_test.dart` (rollback) | `d5ae03f0` | Add retry affordance on result/finish failure path |
+| 4.6.4 | Study/SRS | Due-time local-midnight normalization | BE | `due_at = localMidnight(studyDay + interval)` so due-today counts are stable across the day | Specified | 4.6.2 | `docs/business/srs/srs-review.md` §Interval table (adopted target) | TBD | Update finalization + transition tests together |
 | 4.7.1 | Study/SRS | Result summary BE | BE | `loadStudySessionResult` completed-session summary | Implemented | 4.6.1 | `lib/domain/models/study_session_result.dart` | `4477dd86` | No action |
 | 4.7.2 | Study/SRS | Result screen FE | FE | `/library/study/session/:sessionId/result` with fallback states | Implemented | 4.7.1 | `lib/presentation/features/study/screens/study_result_screen.dart` | `4477dd86` | No action |
 | 4.8.1 | Study/SRS | Session persistence recovery | Integration | In-progress sessions reload by sessionId preserving answered items | Implemented | 4.3.1 | `test/presentation/features/study/study_session_screen_test.dart` (recovery coverage) | `93dec233` | No action |
 | 4.9.1 | Study/SRS | Protected active-session exit FE | FE | Exit confirmation; confirmed exit keeps session resumable | Implemented | 4.3.2 | `lib/presentation/features/study/screens/study_session_screen.dart` | `40e3c8b0` | No action |
 | 4.10.1 | Study/SRS | Cancel/discard session BE | BE | `cancelStudySession` used by transactional start-over | Implemented | 4.2.1 | `lib/domain/study/ports/study_repo.dart` | `b2ea71ce` | No action |
+| 4.10.2 | Study/SRS | Resume expiry anchor `updated_at` | BE | 30-day resumable filter anchors on `updated_at` (activity), not `started_at` | Specified | 4.2.1 | `docs/business/resume/resume-session.md` §Auto-expiry (adopted correction) | TBD | Change DAO filter + `SessionStatus` doc comment + tests |
 | 4.11.1 | Study/SRS | Bury/suspend queue exclusion BE | BE | Due/new queries exclude suspended and currently-buried cards | Implemented | 4.1.1 | `lib/data/datasources/local/drift/study_scope_queries.drift` | `ead94e76` | No action |
 | 4.11.2 | Study/SRS | In-session bury/suspend action BE | BE | Bury/suspend current card: set fields, no attempt, preserve SRS + tests | Specified | 4.4.1 | `docs/business/study-actions/bury-suspend.md` (no action source found) | TBD | Implement BE action + tests |
 | 4.11.3 | Study/SRS | In-session bury/suspend action FE | FE | Action UI, queue removal, undo affordance | Specified | 4.11.2 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire UI to BE; widget tests |
@@ -210,7 +222,8 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 8.1.1 | Settings | Settings hub FE shell | FE | `/settings` hub rendering mock sections (account row uses mock data) | Partial | 1.1.3 | `lib/presentation/features/settings/screens/settings_screen.dart` (static mock preview, `_mockAppVersion`) | `6593874b` | Replace mock account/version data when real contracts exist |
-| 8.2.1 | Settings | Learning settings BE persistence | BE | Persisted study-default settings contract + storage + tests | Specified | 1.1.5 | TBD (no persistence behind screen) | TBD | Define settings storage contract (Drift vs SharedPreferences per docs) + implement |
+| 8.1.2 | Settings | Hide fabricated state before release | FE | Hide/disable mock account row + mock version on Settings hub; remove dead `0 days` streak placeholder on Dashboard | Specified | 8.1.1 | `docs/wireframes/04-settings-hub.md` + `docs/wireframes/01-dashboard.md` (Release rules 2026-06-10) | TBD | Required before any release/user testing; cheap |
+| 8.2.1 | Settings | Learning settings BE persistence | BE | Persisted study-default settings contract + storage + tests. Contract MUST include `dailyNewLimit` (default 20) and `goalDisabledSince` from day one | Specified | 1.1.5 | `docs/business/srs/srs-review.md` §Rules, `docs/business/engagement/dashboard-engagement.md` (adopted decisions 2026-06-10) | TBD | Define settings storage contract + implement; adding `dailyNewLimit` later changes the due query |
 | 8.2.2 | Settings | Learning settings FE wiring | FE | Wire `/settings/learning` shell to real persisted state | Partial | 8.2.1 | `lib/presentation/features/settings/screens/learning_settings_screen.dart` (static mock preview) | `6593874b` | Wire screen to real provider after 8.2.1 |
 | 8.3.1 | Settings | Tag management BE V1 | BE | Distinct tag list/count/search + transactional rename/merge/delete + tests | Specified | 2.15.1 | `docs/business/tags/tag-system.md` (no domain usecases/repo exist) | TBD | Implement usecases/repository/DAO/tests |
 | 8.3.2 | Settings | Tag management FE wiring | FE | Wire `/settings/learning/tags` shell to real data + operations | Partial | 8.3.1 | `lib/presentation/features/settings/screens/tag_management_screen.dart` (static mock preview), `test/presentation/features/settings/tag_management_screen_test.dart` | `6593874b` | Wire screen to real provider after 8.3.1 |
@@ -220,7 +233,8 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 8.5.1 | Settings | Account settings screen V1 | FE | Replace `/settings/account` placeholder with linked/unlinked display | Specified | 1.1.3 | `lib/presentation/features/settings/routes/settings_routes.dart:19` (placeholder) | TBD | Display-only V1 before any Drive work |
 | 8.6.1 | Settings | Google account linking BE | BE | Optional sign-in, account statuses, SharedPreferences link store | Specified | 8.5.1 | `docs/business/account-sync/account-sync.md` | TBD | High-risk; defer until core loop complete |
 | 8.6.2 | Settings | Drive backup/restore BE | BE | AppData-scope upload/restore via platform snapshot gateways | Specified | 8.6.1 | `docs/business/account-sync/account-sync.md` | TBD | Defer; requires 8.6.1 |
-| 8.7.1 | Settings | Deck/flashcard export BE | BE | CSV export of deck/selected cards + tests | Specified | 2.11.1 | `docs/business/export/export.md` | TBD | Implement after import duplicate handling |
+| 8.7.1 | Settings | Deck export CSV BE V1 | BE | CSV export of one deck (escaping, file name sanitizing) + tests | Specified | 2.11.1 | `docs/business/export/export.md` (priority note 2026-06-10) | TBD | **Early priority** — only data-out path until Drive sync; V1 cut: CSV, deck scope only |
+| 8.7.2 | Settings | Deck export FE V1 | FE | Export action on deck actions sheet → share/save (`share_plus`, needs dependency approval) | Specified | 8.7.1 | `docs/business/export/export.md` | TBD | Stop-and-ask for `share_plus` approval before wiring |
 | 8.8.1 | Settings | Appearance/locale settings | FE | Theme/language switches | Future | 8.2.1 | settings hub disabled rows | TBD | Do not implement without promotion |
 | 8.9.1 | Settings | Bulk operations V1 | BE | Selection-scoped transactional bulk action (start with bulk delete) + tests | Specified | 2.13.1 | `docs/business/bulk/bulk-operations.md` | TBD | Split: selection mode FE + one safe BE action first |
 | 8.9.2 | Settings | Bulk selection mode FE | FE | Long-press selection mode in flashcard list | Specified | 8.9.1 | `docs/business/bulk/bulk-operations.md` | TBD | Implement with first bulk action |
@@ -253,15 +267,27 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 ## 5. Next 10 Tasks (in delivery order)
 
-Backend-first per flow; each row is one agent prompt.
+Reprioritized per BA review 2026-06-10: fix the study entry path and protect user data first;
+"look back" features (Progress) come after the core loop is whole. Each row is one agent prompt.
 
-1. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
-2. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
-3. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
-4. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
-5. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
-6. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
-7. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
+1. **4.1.3 Deck study CTA FE V1** — study-entry section on Flashcard List; the only study entry
+   today is the Dashboard Today CTA, so the core loop has one fragile door.
+2. **4.1.4 Folder study CTA FE V1** — same wiring on Folder Detail.
+3. **8.7.1 Deck export CSV BE V1** — only data-out/backup path until Drive sync; data-loss guard.
+4. **8.7.2 Deck export FE V1** — share/save action (needs `share_plus` approval — stop and ask).
+5. **4.2.4 Session batch limit BE V1** — cap sessions at `maxSessionItems`; protects effort under
+   all-or-nothing finalization.
+6. **2.21.1 Folder delete blast-radius confirm FE V1** — delete dialog shows subtree counts;
+   pairs with export as the data-safety duo.
+7. **7.1.1 + 7.2.1 + 7.3.1 + 7.4.1 Progress read model BE V1** — due summary, box distribution,
+   stats, composed read model; tests.
+8. **7.5.1 + 7.5.2 Progress screen FE V1** — replace `/progress` placeholder; states; widget tests.
+9. **2.17.1 + 2.17.2 Flashcard status filters** — BE queries then chips/badges.
+10. **6.6.2 Import duplicate preview FE V1** — surface backend-detected duplicates in preview.
+
+Deferred-but-coupled pair (schedule with the first retry mode, not before): **4.5.10
+first-attempt SRS classifier (C1)** + **4.4.3 answer re-grade** — both change the same
+answer-recording rule.
 
 ## 6. Deferred / Future / Rejected Register
 

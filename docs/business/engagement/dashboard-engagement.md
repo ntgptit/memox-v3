@@ -63,13 +63,13 @@ Set in Settings → Learning (`/settings/learning`). UI is a slider with current
 
 When user disables daily goal (`goalEnabled = false`), all engagement surfaces hide. Streak is paused (does not break, but does not advance either).
 
-> **⚠ Design constraint (resolve before implementation):** "paused" cannot be derived from
-> `study_attempts` alone — a pure recomputation would see the disabled days as missed days and
-> break the streak. Implementing pause REQUIRES persisting the disabled window (e.g., a
-> `goalDisabledSince` date in the settings store, treated as goal-met-neutral when computing
-> consecutive days) or an equivalent marker. If that persistence is rejected, change this rule to
-> "disabling the goal resets the streak" instead. Do not implement streaks while this is
-> unresolved.
+> **✅ Adopted decision (2026-06-10):** pause is implemented by persisting the disabled window.
+> The settings store keeps `goalDisabledSince` (YYYY-MM-DD local, null when goal enabled). Streak
+> computation treats every day in `[goalDisabledSince, reEnableDate]` as **goal-met-neutral**
+> (neither breaks nor extends the streak); on re-enable, `goalDisabledSince` is cleared and
+> counting resumes from the re-enable day. Multiple disable windows only need the latest one
+> because a streak is a contiguous suffix of days. A pure recomputation from `study_attempts`
+> alone is NOT sufficient — it would see disabled days as missed days and break the streak.
 
 ## Daily progress
 
