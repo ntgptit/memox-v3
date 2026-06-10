@@ -48,10 +48,10 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 - Tags must be non-empty after trim.
 - Tags are deduplicated case-insensitively per flashcard.
 - Flashcard must not be edited under wrong deck.
-- **Manual-create duplicate soft-warning (Specified, WBS 2.20.x):** when saving a card whose
-  trimmed, case-insensitive `front`+`back` matches an existing card in the same deck, show a
-  non-blocking warning ("A card with this front/back already exists — save anyway?"). Do NOT hard
-  reject. Rationale: import already detects duplicates; manual create silently allowing them is
+- **Manual-create duplicate soft-warning (Implemented BE, WBS 2.20.1):** when saving a card whose
+  trimmed, case-insensitive `front`+`back` matches an existing card in the same deck, surface a
+  non-blocking warning result for the editor flow. Do NOT hard reject; create/update still save the
+  card. Rationale: import already detects duplicates; manual create silently allowing them is
   inconsistent.
 - Delete removes related local data according to persistence rules.
 
@@ -298,6 +298,9 @@ files.
 
 - `lib/data/datasources/local/drift/` (flashcards + flashcard_progress tables)
 - `lib/data/datasources/local/drift/flashcard_tags.drift`
+- `lib/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase.dart`
+- `lib/domain/models/flashcard_duplicate_check_result.dart`
+- `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart`
 - `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`,
   `prepare_deck_import_usecase.dart`, `commit_deck_import_usecase.dart` (import pipeline)
 - `lib/data/repositories/flashcard_repository_impl_imports.dart`

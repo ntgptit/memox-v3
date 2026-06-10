@@ -5,14 +5,14 @@ applies_to: deck entity and deck management feature
 
 # Deck Management
 
-> **Status: Partial — schema + rename/reorder backend Current; FE wiring and language picker UI
+> **Status: Partial — schema + rename/reorder/move backend Current; FE wiring and language picker UI
 > Specified; root-level decks Rejected / Out of Scope (verified 2026-06-10).**
 >
 > The `decks.target_language TEXT NOT NULL DEFAULT 'korean'` column **exists in the current
 > schema** (`lib/data/datasources/local/drift/`; the create path persists it) — no migration is
-> pending for it. Deck rename and reorder **backends are implemented** (`RenameDeckUseCase`,
-> `ReorderDecksUseCase` over `FolderRepository.renameDeck/reorderDecks`, commit `48e55584`, with
-> tests). What remains Specified: wiring rename/reorder into the deck actions UI, the
+> pending for it. Deck rename, reorder, and move **backends are implemented** (`RenameDeckUseCase`,
+> `ReorderDecksUseCase`, `MoveDeckUseCase` over `FolderRepository.renameDeck/reorderDecks/moveDeck`,
+> commits `48e55584` and `7c34ea3c`, with tests). What remains Specified: wiring rename/reorder/move into the deck actions UI, the
 > target-language picker in deck create/edit UI, and TTS gating (blocked on the TTS service, WBS
 > 8.4.x — not on schema).
 >

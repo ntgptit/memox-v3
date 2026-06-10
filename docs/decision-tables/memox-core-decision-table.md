@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-06-09
+last_updated: 2026-06-10
 applies_to: behavior branches across folder, deck, flashcard, study, SRS, navigation, UI
 ---
 
@@ -46,6 +46,8 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | D6 | Rename deck | Trimmed valid title | Update name only; preserve folder ownership and `sort_order` | C0+C1 | `test/domain/usecases/deck/rename_deck_usecase_test.dart` |
 | D7 | Rename deck | Blank title        | Reject                         | C1       | `test/domain/usecases/deck/rename_deck_usecase_test.dart` |
 | D8 | Reorder decks | Duplicate/missing/cross-folder/partial list | Reject and preserve the previous order | C1 | `test/data/repositories/folder_repository_impl_test.dart::reorderDecks` |
+| D9 | Move deck | Target folder allows decks | Move to the target folder, append at the end, and update source/target folder modes transactionally | C0+C1 | `test/data/repositories/folder_repository_impl_move_deck_test.dart::moveDeck moves a deck from one folder to an unlocked folder`, `test/data/repositories/folder_repository_impl_move_deck_test.dart::moveDeck moves a deck into a decks-mode folder and appends sort order` |
+| D10 | Move deck | Target folder missing / subfolders / duplicate sibling / same folder | Reject missing or disallowed destinations, reject duplicate sibling names case-insensitively, and no-op on same folder | C1 | `test/data/repositories/folder_repository_impl_move_deck_test.dart::moveDeck rejects moves into subfolders-mode folders`, `test/data/repositories/folder_repository_impl_move_deck_test.dart::moveDeck returns not found for a missing target folder`, `test/data/repositories/folder_repository_impl_move_deck_test.dart::moveDeck rejects duplicate names in the target folder case-insensitively`, `test/data/repositories/folder_repository_impl_move_deck_test.dart::moveDeck moving to the same folder is a no-op` |
 
 ## Flashcard
 
@@ -85,6 +87,7 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | C37 | Flashcard list filters   | Status/search composition and deterministic order   | Search composes with status filter; filtered rows keep stable deck order                                   | C0+C1    | `test/data/repositories/flashcard_repository_impl_test.dart::due filters compose with search term` |
 | C38 | Flashcard list filters   | Tag empty / single / multi / normalization / scope   | Empty selected tags return all cards; single normalized tag filter stays deck-scoped; multi-tag filter uses AND semantics and keeps stable order | C0+C1    | `test/data/repositories/flashcard_repository_impl_test.dart::empty selected tags returns all cards`, `test/data/repositories/flashcard_repository_impl_test.dart::single normalized tag filter stays deck-scoped`, `test/data/repositories/flashcard_repository_impl_test.dart::multiple selected tags use AND semantics` |
 | C39 | Flashcard list filters   | Tag composition / no-results                        | Tag filter composes with search + status; no-results keeps `totalCount` at the full deck total | C0+C1    | `test/data/repositories/flashcard_repository_impl_test.dart::tag filter composes with search term and status filter`, `test/data/repositories/flashcard_repository_impl_test.dart::tag no-results keeps totalCount consistent` |
+| C40 | Manual duplicate check   | Create/edit save with same-deck duplicate front/back | Return `hasDuplicate=true` without blocking save; edit mode ignores the current card; missing deck/card and blank fields return typed failures | C0+C1    | `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart::returns no duplicate when nothing matches`, `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart::detects a duplicate in the same deck after trim and case fold`, `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart::ignores the edited flashcard itself`, `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart::returns not found when the edited flashcard is missing`, `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart::returns not found when the deck is missing`, `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart::returns validation failure for blank front/back` |
 
 ## Import
 
@@ -230,9 +233,9 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | TG2  | Tag dedup                 | Same tag different case          | Keep one (case-insensitive)                     | C0+C1    | `test/features/flashcards/tag_input_test.dart::TG2`  |
 | TG3  | Tag filter                | Multi-select chips               | Apply AND filter                                | C0+C1    | `test/features/flashcards/tag_filter_test.dart::TG3` |
 | TG4  | Study by tag              | `entry_type=tag`                 | Resolve cards across decks                      | C0+C1    | `test/features/study/study_by_tag_test.dart::TG4`    |
-| TG5  | Tag rename                | Collides with existing tag       | Prompt to merge                                 | C1       | `test/features/tags/tag_management_test.dart::TG5`   |
-| TG6  | Tag merge                 | Source has cards target also has | Dedup tag rows on merge                         | C1       | `test/features/tags/tag_management_test.dart::TG6`   |
-| TG7  | Tag delete                | Confirmation                     | Remove from all cards in transaction            | C0+C1    | `test/features/tags/tag_management_test.dart::TG7`   |
+| TG5  | Tag rename                | Collides with existing tag       | Return conflict on direct rename; use explicit merge action for intentional combination | C1       | `test/data/repositories/tag_repository_impl_test.dart::rename returns conflict on rename collision and leaves rows unchanged`   |
+| TG6  | Tag merge                 | Source has cards target also has | Dedup tag rows on merge                         | C1       | `test/data/repositories/tag_repository_impl_test.dart::merge moves source tags into the target and dedupes target rows`   |
+| TG7  | Tag delete                | Confirmation                     | Remove from all cards in transaction            | C0+C1    | `test/data/repositories/tag_repository_impl_test.dart::delete removes tag rows only and leaves cards intact`   |
 | TG8  | Bulk add tag              | 1000 cards                       | Single transaction, dedup per card              | C1       | `test/features/flashcards/bulk_tag_test.dart::TG8`   |
 | TG9  | Tag input                 | Contains comma `,`               | Reject with inline error; do not strip silently | C0+C1    | `test/features/flashcards/tag_input_test.dart::TG9`  |
 | TG10 | Tag input                 | Exceeds 50 chars after trim      | Reject with inline error                        | C1       | `test/features/flashcards/tag_input_test.dart::TG10` |
@@ -243,7 +246,7 @@ Agents may split into feature-specific decision tables when a feature grows beyo
 | ID  | Event                  | Condition                       | Expected                                   | Coverage | Test                                                   |
 |-----|------------------------|---------------------------------|--------------------------------------------|----------|--------------------------------------------------------|
 | BK1 | Long-press card        | Normal mode                     | Enter selection mode                       | C0       | `test/features/flashcards/bulk_select_test.dart::BK1`  |
-| BK2 | Bulk delete            | Confirm                         | Atomic delete in one transaction           | C0+C1    | `test/features/flashcards/bulk_delete_test.dart::BK2`  |
+| BK2 | Bulk delete            | Confirm, selected snapshot, some missing IDs | Atomic delete in one transaction; missing rows are skipped and reported; tags/progress cascade as in single delete | C0+C1    | `test/data/repositories/flashcard_bulk_repository_impl_test.dart::deletes a single existing card with cascade intact`, `test/data/repositories/flashcard_bulk_repository_impl_test.dart::skips missing ids and reports the skipped count`, `test/data/repositories/flashcard_bulk_repository_impl_test.dart::mixed existing and missing ids delete surviving cards only`  |
 | BK3 | Bulk move              | Target deck valid               | Cards moved; SRS + tags preserved          | C0+C1    | `test/features/flashcards/bulk_move_test.dart::BK3`    |
 | BK4 | Bulk move              | Target folder mode = subfolders | Reject                                     | C1       | `test/features/flashcards/bulk_move_test.dart::BK4`    |
 | BK5 | Bulk suspend           | Toast appears                   | Undo within 5s reverts                     | C1       | `test/features/flashcards/bulk_suspend_test.dart::BK5` |

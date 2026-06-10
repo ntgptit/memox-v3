@@ -1,9 +1,12 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-10
 applies_to: flashcard tags — creation, filtering, study-by-tag, management
 ---
 
 # Tag System
+
+> **Status: Partial — backend tag management (list/search/rename/merge/delete) is implemented over
+> `flashcard_tags`; FE wiring and study-by-tag remain Specified / Future.**
 
 ## Purpose
 
@@ -117,7 +120,7 @@ Route: `/settings/learning/tags`. Learning Settings owns only the navigation ent
 | --- | --- |
 | List all tags | Shows every distinct tag across all decks, with usage count (number of cards using it) |
 | Search | Filter visible tags by typed substring |
-| Rename | Inline edit; updates all `flashcard_tags` rows in a transaction |
+| Rename | Inline edit; updates all `flashcard_tags` rows in a transaction; collision returns conflict unless the explicit merge action is used |
 | Merge | Select 2+ tags → "Merge into..." → pick target; all cards re-tagged to target, source tags removed |
 | Delete | Removes the tag from all cards. Confirmation required. |
 | Study | Blocked/Future: requires `StudyEntryType.tag`; not exposed in Current V1 |
@@ -126,7 +129,7 @@ Route: `/settings/learning/tags`. Learning Settings owns only the navigation ent
 ### Rename rules
 
 - New name must pass tag validation (non-empty after trim).
-- New name conflicting with existing tag (case-insensitive) → behaves as merge: confirm before proceeding.
+- New name conflicting with existing tag (case-insensitive) → returns conflict; use explicit merge when the intent is to combine tags.
 - Rename is a transaction: all rows updated atomically.
 
 ### Merge rules
@@ -201,7 +204,7 @@ All bulk operations are transactional.
 - Do NOT scope tags per-deck. Tags are global by name.
 - Multi-select tag filter MUST use AND, not OR. Document intentionally chooses AND for precision.
 - Study-by-tag is `entry_type=tag`. Do not piggyback on `entry_type=deck` with a tag param.
-- Tag rename collision MUST prompt user (do not silently merge).
+- Tag rename collision MUST return conflict unless the explicit merge path is used.
 - Tag input MUST reject commas at validation time. Show inline error: "Tags cannot contain commas." Do not strip silently — user might be trying something the app cannot represent.
 - Tag max length 50 chars after trim. Reject longer at validation time.
 

@@ -1,9 +1,12 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-10
 applies_to: multi-select bulk operations on flashcards
 ---
 
 # Bulk Operations
+
+> **Status: Partial — backend bulk delete is implemented; selection-mode FE and the other bulk
+> actions remain Specified / Future.**
 
 ## Purpose
 
@@ -45,7 +48,7 @@ Selection state is ephemeral (in-memory). Navigating away or filter change clear
 
 | Action              | Behavior                                                                                   |
 |---------------------|--------------------------------------------------------------------------------------------|
-| Bulk delete         | Confirmation → delete selected cards in one transaction. Cascade applies.                  |
+| Bulk delete         | Confirmation → delete selected cards in one transaction. Cascade applies; missing IDs are skipped and reported. |
 | Bulk move to deck   | Picker → select target deck → move selected cards. Validates target deck mode.             |
 | Bulk add tag(s)     | Tag input/picker → append tags to each selected card (deduped).                            |
 | Bulk remove tag(s)  | Tag picker (limited to tags present on selection) → remove from each.                      |
@@ -128,6 +131,8 @@ Toast-undo MUST genuinely revert via inverse transaction.
 - Bulk operations are account-scoped (no cross-account move possible).
 - Bulk "reset progress" MUST set `last_reset_at = now` on each affected `flashcard_progress` row (
   see `docs/business/history/card-history.md`). It MUST NOT delete attempts.
+- Bulk delete V1 is the only backend bulk operation currently implemented; selection-mode FE and
+  the non-delete actions remain future work.
 
 ## Performance
 
