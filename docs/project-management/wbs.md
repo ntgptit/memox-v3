@@ -196,10 +196,10 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 7.1.1 | Progress | Due summary query BE V1 | BE | Aggregate due-card counts (global/per-deck) excluding buried/suspended + tests | Specified | 4.11.1 | `lib/data/datasources/local/drift/flashcard_progress.drift` (fields exist; aggregates TBD) | TBD | Implement aggregate DAO queries + repo + usecase + tests |
-| 7.2.1 | Progress | Box distribution query BE V1 | BE | Card counts per Leitner box from current progress table + tests | Specified | 7.1.1 | `lib/data/datasources/local/drift/flashcard_progress.drift` | TBD | Implement query + tests (no schema change needed) |
-| 7.3.1 | Progress | Study statistics BE V1 | BE | Session/attempt-based stats (sessions finished, answers recorded) + tests | Specified | 4.6.1 | `lib/data/datasources/local/drift/**` (study tables exist) | TBD | Implement stats queries + tests |
-| 7.4.1 | Progress | Progress read model BE V1 | BE | Combined progress read model + provider wiring | Specified | 7.1.1, 7.2.1, 7.3.1 | TBD | TBD | Compose use case + provider; unit tests |
+| 7.1.1 | Progress | Due summary query BE V1 | BE | Aggregate due-card counts (global/per-deck) excluding buried/suspended + tests | Implemented | 4.11.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | `4d1eba04` | No action |
+| 7.2.1 | Progress | Box distribution query BE V1 | BE | Card counts per Leitner box from current progress table + tests | Implemented | 7.1.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | `4d1eba04` | No action |
+| 7.3.1 | Progress | Study statistics BE V1 | BE | Session/attempt-based stats (sessions finished, answers recorded) + tests | Implemented | 4.6.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | `4d1eba04` | No action |
+| 7.4.1 | Progress | Progress read model BE V1 | BE | Combined progress read model + provider wiring | Implemented | 7.1.1, 7.2.1, 7.3.1 | `lib/domain/models/progress_read_model.dart`, `lib/domain/repositories/progress_repository.dart`, `lib/domain/usecases/progress/load_progress_read_model_usecase.dart`, `lib/app/di/progress_providers.dart`, `test/domain/usecases/progress/load_progress_read_model_usecase_test.dart` | `4d1eba04` | No action |
 | 7.5.1 | Progress | Progress screen FE V1 | FE | Replace `/progress` placeholder with real screen (due, box distribution, stats) | Specified | 7.4.1 | `lib/app/router/app_router.dart:72` (placeholder) | TBD | Wire screen to read model; widget tests |
 | 7.5.2 | Progress | Progress states FE | FE | Empty/loading/error states for progress screen | Specified | 7.5.1 | shared `Mx*` state widgets | TBD | Cover states in widget tests |
 | 7.6.1 | Progress | Review history query BE | BE | Per-card history (box_before/box_after/last_reset_at) | Blocked | 7.3.1 | `docs/business/history/card-history.md` (requires schema fields not in v4) | TBD | Requires schema migration decision before work |
@@ -354,6 +354,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `4d1eba04` | 2026-06-10 | 7.1.1, 7.2.1, 7.3.1, 7.4.1 | Progress read model backend V1 |
 | `aa5f9a76` | 2026-06-10 | 4.6.2 | Verify SRS box transition + interval ladder vs doc contract; table-driven tests S11–S15; fix phantom decision-table test refs |
 | `7b3c1691` | 2026-06-10 | 3.8, 5.2, 5.5, 5.7, 5.8, 5.9, 5.10 | Commit deck import with CSV paste preview and transactional insert flow |
 | `dd8688a` | 2026-06-09 | 20.6, 18.9, 5.1–5.9, 6.1–6.6 | Update WBS and UI kit references for accuracy and traceability |
