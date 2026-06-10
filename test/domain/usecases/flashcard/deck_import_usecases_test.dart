@@ -5,6 +5,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/deck_csv_export.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
@@ -38,6 +39,11 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
     lastCommitDeckId = deckId;
     lastCommitRows = rows;
     return commitResult;
+  }
+
+  @override
+  Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId}) {
+    throw UnimplementedError();
   }
 
   @override

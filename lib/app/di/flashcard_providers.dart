@@ -6,6 +6,7 @@ import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/usecases/flashcard/commit_deck_import_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/export_deck_csv_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/get_flashcard_detail_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/prepare_deck_import_usecase.dart';
@@ -68,3 +69,7 @@ PrepareDeckImportUseCase prepareDeckImportUseCase(Ref ref) =>
 @Riverpod(keepAlive: true)
 CommitDeckImportUseCase commitDeckImportUseCase(Ref ref) =>
     CommitDeckImportUseCase(ref.watch(flashcardRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+ExportDeckCsvUseCase exportDeckCsvUseCase(Ref ref) =>
+    ExportDeckCsvUseCase(ref.watch(flashcardRepositoryProvider));

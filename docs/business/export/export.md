@@ -1,26 +1,27 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-10
 applies_to: deck export, flashcard selection export, CSV/Excel formats
 ---
 
 # Export
 
-> **Status: Specified — nothing implemented (verified 2026-06-10).** No export use case,
-> repository method, writer, or UI action exists in the current codebase; the file list below is
-> the **target structure** from a previous iteration. The `share_plus` dependency is not in
-> `pubspec.yaml` and requires approval before the FE slice.
+> **Status: BE V1 partially implemented (verified 2026-06-10).** Deck CSV export is now present in
+> the backend slice; FE share/save wiring remains deferred and still requires approval for
+> `share_plus`.
 >
 > **Priority note (BA review 2026-06-10):** MemoX is local-first with NO working backup path —
 > export CSV is currently the only cheap way for users to get their content out, and the data-loss
 > guard until Drive sync lands. Deck-level CSV export (BE) is scheduled early in the WBS next-10
 > (8.7.1) ahead of Drive sync. V1 cut: CSV only, deck scope only; Excel and selection-scope follow.
 
-## Target source structure (none exist yet)
+## Target source structure
 
-- `lib/domain/usecases/deck/export_deck_usecase.dart`
-- `lib/data/repositories/` export writer + CSV escaping helpers
+- `lib/domain/models/deck_csv_export.dart`
+- `lib/domain/usecases/flashcard/export_deck_csv_usecase.dart`
+- `lib/data/repositories/flashcard_export_writer.dart`
+- `lib/data/repositories/flashcard_repository_impl.dart`
 - `lib/presentation/features/flashcards/**` export trigger on deck actions sheet
-- Share/save via `share_plus` (`XFile.fromData`) — dependency approval required
+- Share/save via `share_plus` (`XFile.fromData`) remains FE-only and still requires dependency approval
 
 ## Scope
 
@@ -44,14 +45,12 @@ User picks format via `pickFlashcardExportFormat(context)` bottom sheet (`MxBott
 
 ## Exported columns
 
-Both formats export exactly three columns in this order:
+V1 deck CSV exports exactly two columns in this order:
 
 | Column | Source | Empty handling |
 | --- | --- | --- |
 | `front` | Flashcard front | Always present (required field) |
 | `back` | Flashcard back | Always present (required field) |
-| `note` | Flashcard note | Empty string when null |
-
 Row 1 is the header row.
 
 NOT exported:
@@ -62,23 +61,23 @@ NOT exported:
 - Deck/folder metadata
 - Timestamps
 
-This intentionally produces a portable, study-content-only file. Round-tripping (export then import) preserves only front/back/note.
+This intentionally produces a portable, study-content-only file. Round-tripping (export then import) preserves only front/back.
 
 ## File naming
 
 | Entry | Base name | Final name |
 | --- | --- | --- |
-| Deck export | `sanitizeFileName(deck.name)` | `{sanitized_deck_name}.csv` or `.xlsx` |
+| Deck export | `sanitizeFileName(deck.name)` | `{sanitized_deck_name}.csv` |
 | Flashcard selection export | `'flashcards_export'` (literal) | `flashcards_export.csv` or `.xlsx` |
 
-`sanitizeFileName` (in `repository_support.dart`) removes characters unsafe for filesystem paths and shells. Inspect that helper before changing the rule.
+`sanitizeFileName` (in `flashcard_export_writer.dart`) trims whitespace, replaces path separators and unsafe characters, collapses repeats, and falls back to a deterministic deck-id-based name when the title sanitizes to blank.
 
 ## CSV format details
 
-- Encoding: UTF-8 (bytes via `utf8.encode`).
+- Encoding: UTF-8.
 - Line separator: `\n` (Unix line ending).
-- Header row: `front,back,note`.
-- Cells escaped via `escapeCsvCell` (inspect `repository_support.dart`).
+- Header row: `front,back`.
+- Cells escaped via `escapeCsvCell` (inspect `flashcard_export_writer.dart`).
 - No BOM.
 
 Standard CSV escaping applies (quote cells containing comma, newline, or quote; double inner quotes).
@@ -97,20 +96,19 @@ This is intentionally minimal. Do not add styling, formulas, or multi-sheet outp
 
 Export does NOT write to a fixed path. Instead:
 
-1. Repository returns `Result<ExportData>` containing `fileName`, `mimeType`, `bytes`.
-2. Presentation layer calls `shareFlashcardExport(export)` which uses `share_plus` `XFile.fromData`.
-3. Platform share sheet appears. User picks destination (save to Drive, send via Messages, save to Files, etc.).
+1. Repository returns `Result<DeckCsvExport>` containing `deckId`, `deckName`, `fileName`, `csvText`, and `exportedRowCount`.
+2. Presentation layer share/save wiring remains FE-only and deferred.
+3. The backend export itself is read-only and does not write to disk.
 
 Rationale: lets the user choose destination per export, no permission to write to user file system, works uniformly across iOS/Android/desktop/web.
 
 ## Rules
 
-- Export source MUST be a non-empty card list. Empty deck export still produces a file with header only (no failure), but UI may skip the share step. Inspect viewmodel for current behavior.
+- Export source MUST be a deck scope. Empty deck export still produces a valid CSV with header only.
 - Export does NOT mutate any data. Read-only operation.
-- Format conversion lives in `FlashcardExportWriter` static methods (`buildCsv`, `buildExcel`). Do not duplicate.
-- Repository builds rows from entities; writer is entity-agnostic (`FlashcardExportRow`).
-- MIME type comes from `FlashcardExportWriter.csvMimeType` / `excelMimeType` constants. Do not hardcode at call sites.
-- File extension MUST match format (`.csv` for csv, `.xlsx` for excel).
+- Format conversion lives in `FlashcardExportWriter.buildCsv`. Do not duplicate.
+- Repository builds CSV rows from flashcard content only.
+- File extension MUST be `.csv` for the deck CSV V1 slice.
 
 ## UI behavior
 
@@ -147,7 +145,7 @@ flowchart TD
 ## Agent rule
 
 - Do not add new export columns (example/pronunciation/hint/tags/SRS) without updating this doc, both export use cases, both repository impls, the writer, and tests.
-- Do not write export files to disk directly. Always go through share sheet via `shareFlashcardExport`.
+- Do not write export files to disk directly in this slice. FE share/save wiring remains deferred.
 - Do not introduce a new export format (JSON, Anki .apkg, etc.) without updating `ExportFormat` enum, picker, writer, and this doc.
 - File name MUST come from `sanitizeFileName` for deck export and the literal `'flashcards_export'` for selection export. Do not let user-provided names skip sanitization.
 
@@ -160,7 +158,7 @@ flowchart TD
 
 **Schema:**
 
-- `docs/database/schema-contract.md` → exports read from `flashcards` (front, back, note only — per simple scope decision); SRS progress not exported
+- `docs/database/schema-contract.md` → exports read from `flashcards` (front, back only — per V1 scope decision); SRS progress not exported
 
 **Decision table:**
 

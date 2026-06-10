@@ -8,8 +8,10 @@ import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/flashcard_mapper.dart';
+import 'package:memox/data/repositories/flashcard_export_writer.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/deck_csv_export.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
@@ -21,6 +23,7 @@ import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/flashcard_status_filter.dart';
 
 part 'flashcard_repository_impl_imports.dart';
+part 'flashcard_repository_impl_export.dart';
 
 /// Drift-backed [FlashcardRepository].
 ///
@@ -115,6 +118,10 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       );
     }
   }
+
+  @override
+  Future<Result<DeckCsvExport>> exportDeckCsv({required String deckId}) =>
+      _exportDeckCsv(this, deckId: deckId);
 
   @override
   Future<Result<List<Flashcard>>> existingByFrontBackPairs(

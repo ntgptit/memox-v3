@@ -1,5 +1,6 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/deck_csv_export.dart';
 import 'package:memox/domain/models/flashcard_detail.dart';
 import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
@@ -75,6 +76,12 @@ abstract interface class FlashcardRepository {
     required DeckId deckId,
     required List<DeckImportPreviewRow> rows,
   });
+
+  /// Exports all cards in [deckId] to a CSV payload and a safe file name.
+  ///
+  /// The export is read-only. V1 uses `front` and `back` columns only; a
+  /// missing deck yields `NotFoundFailure`.
+  Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId});
 
   /// Updates one flashcard's content and tags.
   ///

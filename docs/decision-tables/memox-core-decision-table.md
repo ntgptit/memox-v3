@@ -332,12 +332,12 @@ Future until the tag subsystem and `shared_preferences` are approved (`docs/wire
 | ID  | Event            | Condition             | Expected                                                   | Coverage | Test                                                            |
 |-----|------------------|-----------------------|------------------------------------------------------------|----------|-----------------------------------------------------------------|
 | EX1 | Pick format      | User dismisses sheet  | No-op, no error                                            | C1       | `test/features/flashcards/export_picker_test.dart::EX1`         |
-| EX2 | Export deck      | Format=csv            | CSV bytes + `.csv` filename = sanitized deck name          | C0+C1    | `test/data/repositories/deck_export_test.dart::EX2`             |
+| EX2 | Export deck      | Format=csv            | CSV text with `front,back` only + `.csv` filename = sanitized deck name | C0+C1    | `test/data/repositories/deck_export_test.dart::EX2`             |
 | EX3 | Export deck      | Format=excel          | XLSX bytes + `.xlsx` filename = sanitized deck name        | C0+C1    | `test/data/repositories/deck_export_test.dart::EX3`             |
 | EX4 | Export selection | Non-empty IDs         | Bytes + filename `flashcards_export.{csv\|xlsx}`           | C0+C1    | `test/data/repositories/flashcard_export_test.dart::EX4`        |
-| EX5 | Export           | Always                | Columns are `front,back,note` only (header row first)      | C0+C1    | `test/data/repositories/flashcard_export_writer_test.dart::EX5` |
+| EX5 | Export           | Always                | Columns are `front,back` only (header row first)           | C0+C1    | `test/data/repositories/flashcard_export_writer_test.dart::EX5` |
 | EX6 | Export delivery  | Build success         | Hand off via `shareFlashcardExport` → platform share sheet | C0       | `test/features/flashcards/export_share_test.dart::EX6`          |
-| EX7 | Export filename  | Deck has unsafe chars | Filename sanitized via `sanitizeFileName`                  | C1       | `test/data/repositories/sanitize_filename_test.dart::EX7`       |
+| EX7 | Export filename  | Deck has unsafe chars | Filename sanitized via `sanitizeFileName`                  | C1       | `test/data/repositories/flashcard_export_writer_test.dart::EX7`  |
 
 ## TTS
 

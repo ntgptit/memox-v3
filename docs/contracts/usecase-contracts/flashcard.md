@@ -116,6 +116,28 @@ Future<Either<Failure, Unit>> call({required FlashcardId id});
 
 **Test refs:** FC7.
 
+## ExportDeckCsvUseCase
+
+```dart
+Future<Either<Failure, DeckCsvExport>> call({required DeckId deckId});
+```
+
+> **Current implementation (verified 2026-06-10).** Shipped as the `Result`-based
+`ExportDeckCsvUseCase` (`lib/domain/usecases/flashcard/export_deck_csv_usecase.dart`) over
+`FlashcardRepository.exportDeckCsv`. V1 exports one deck to CSV using `front,back` columns only.
+Empty decks return a valid header-only CSV. The repository returns the safe file name, deck id,
+deck name, CSV text, and exported row count.
+
+**Rules:**
+
+- Trim `deckId` and reject blanks with `ValidationFailure(field: deckId, code: empty)`.
+- Delegate deck existence and CSV building to the repository.
+- Export is read-only. It does not mutate database rows.
+
+**Errors:** `ValidationFailure`, `NotFoundFailure`, `StorageFailure`.
+
+**Test refs:** `test/domain/usecases/flashcard/export_deck_csv_usecase_test.dart`.
+
 ## ResetFlashcardProgressUseCase (Future / migration-required standalone action)
 
 ```dart

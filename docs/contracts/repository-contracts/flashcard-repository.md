@@ -28,6 +28,7 @@ Future<Either<Failure, List<Flashcard>>> existingByFrontBackPairs(
   DeckId deckId,
   List<({String front, String back})> pairs,
 );
+Future<Either<Failure, DeckCsvExport>> exportDeckCsv(DeckId deckId);
 
 // Mutations
 Future<Either<Failure, Flashcard>> create(FlashcardCreationData data);
@@ -65,6 +66,10 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 > - `Future<Result<int>> commitDeckImport({deckId, rows})` — inserts valid CSV preview rows for a
 >   deck in one transaction, creating the default `flashcard_progress` row for each insert and
 >   returning the committed count.
+> - `Future<Result<DeckCsvExport>> exportDeckCsv({deckId})` — exports one deck as a deterministic
+>   CSV payload using `front,back` columns only. Empty decks return a valid header-only CSV. The
+>   repository also returns a safe file name derived from the deck name with a deterministic
+>   deck-id fallback.
 > - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, sort, statusFilter, selectedTags, now})`
 >   — deck + folder breadcrumb + search/status/tag-filtered cards (search still matches front/back/example/pronunciation/hint; status is deck-scoped `all` / `active` / `due` / `suspended` / `buried`; tags use AND semantics) + search-independent `totalCount`; `now` is a test-controlled clock override for due/buried predicates
 >   (composes `FlashcardDao` with `FolderDao` for the breadcrumb + content-revision stream).
@@ -122,6 +127,7 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 - Bulk operations → verify atomicity (rollback on one failure).
 - Deck import commit → verify transactional success and rollback on row validation failure.
 - Import chunked → verify chunked transactions, verify duplicate detection.
+- Deck export CSV → verify missing-deck failure, header-only empty export, deterministic row order, CSV escaping, safe file name, and read-only behavior.
 - Filter by status + tags → verify SQL correctness.
 
 ## Related
