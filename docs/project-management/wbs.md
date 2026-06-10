@@ -233,7 +233,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 8.5.1 | Settings | Account settings screen V1 | FE | Replace `/settings/account` placeholder with linked/unlinked display | Specified | 1.1.3 | `lib/presentation/features/settings/routes/settings_routes.dart:19` (placeholder) | TBD | Display-only V1 before any Drive work |
 | 8.6.1 | Settings | Google account linking BE | BE | Optional sign-in, account statuses, SharedPreferences link store | Specified | 8.5.1 | `docs/business/account-sync/account-sync.md` | TBD | High-risk; defer until core loop complete |
 | 8.6.2 | Settings | Drive backup/restore BE | BE | AppData-scope upload/restore via platform snapshot gateways | Specified | 8.6.1 | `docs/business/account-sync/account-sync.md` | TBD | Defer; requires 8.6.1 |
-| 8.7.1 | Settings | Deck export CSV BE V1 | BE | CSV export of one deck (escaping, file name sanitizing) + tests | Specified | 2.11.1 | `docs/business/export/export.md` (priority note 2026-06-10) | TBD | **Early priority** — only data-out path until Drive sync; V1 cut: CSV, deck scope only |
+| 8.7.1 | Settings | Deck export CSV BE V1 | BE | CSV export of one deck (escaping, file name sanitizing) + tests | Implemented | 2.11.1 | `lib/domain/models/deck_csv_export.dart`, `lib/domain/usecases/flashcard/export_deck_csv_usecase.dart`, `lib/data/repositories/flashcard_export_writer.dart`, `lib/data/repositories/flashcard_repository_impl_export.dart`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/domain/usecases/flashcard/export_deck_csv_usecase_test.dart`, `test/data/repositories/deck_export_test.dart`, `test/data/repositories/flashcard_export_writer_test.dart` | `a91fe342` | **Early priority** — only data-out path until Drive sync; V1 cut: CSV, deck scope only |
 | 8.7.2 | Settings | Deck export FE V1 | FE | Export action on deck actions sheet → share/save (`share_plus`, needs dependency approval) | Specified | 8.7.1 | `docs/business/export/export.md` | TBD | Stop-and-ask for `share_plus` approval before wiring |
 | 8.8.1 | Settings | Appearance/locale settings | FE | Theme/language switches | Future | 8.2.1 | settings hub disabled rows | TBD | Do not implement without promotion |
 | 8.9.1 | Settings | Bulk operations V1 | BE | Selection-scoped transactional bulk action (start with bulk delete) + tests | Specified | 2.13.1 | `docs/business/bulk/bulk-operations.md` | TBD | Split: selection mode FE + one safe BE action first |
@@ -273,17 +273,17 @@ Reprioritized per BA review 2026-06-10: fix the study entry path and protect use
 1. **4.1.3 Deck study CTA FE V1** — study-entry section on Flashcard List; the only study entry
    today is the Dashboard Today CTA, so the core loop has one fragile door.
 2. **4.1.4 Folder study CTA FE V1** — same wiring on Folder Detail.
-3. **8.7.1 Deck export CSV BE V1** — only data-out/backup path until Drive sync; data-loss guard.
-4. **8.7.2 Deck export FE V1** — share/save action (needs `share_plus` approval — stop and ask).
-5. **4.2.4 Session batch limit BE V1** — cap sessions at `maxSessionItems`; protects effort under
+3. **4.2.4 Session batch limit BE V1** — cap sessions at `maxSessionItems`; protects effort under
    all-or-nothing finalization.
-6. **2.21.1 Folder delete blast-radius confirm FE V1** — delete dialog shows subtree counts;
+4. **2.21.1 Folder delete blast-radius confirm FE V1** — delete dialog shows subtree counts;
    pairs with export as the data-safety duo.
-7. **7.1.1 + 7.2.1 + 7.3.1 + 7.4.1 Progress read model BE V1** — due summary, box distribution,
+5. **7.1.1 + 7.2.1 + 7.3.1 + 7.4.1 Progress read model BE V1** — due summary, box distribution,
    stats, composed read model; tests.
-8. **7.5.1 + 7.5.2 Progress screen FE V1** — replace `/progress` placeholder; states; widget tests.
-9. **2.17.1 + 2.17.2 Flashcard status filters** — BE queries then chips/badges.
-10. **6.6.2 Import duplicate preview FE V1** — surface backend-detected duplicates in preview.
+6. **7.5.1 + 7.5.2 Progress screen FE V1** — replace `/progress` placeholder; states; widget tests.
+7. **2.17.1 + 2.17.2 Flashcard status filters** — BE queries then chips/badges.
+8. **8.7.2 Deck export FE V1** — share/save action (needs `share_plus` approval — stop and ask).
+9. **6.6.2 Import duplicate preview FE V1** — surface backend-detected duplicates in preview.
+10. **4.1.3 Deck study CTA FE V1** — keep the study-entry path visible in the queue while backend priorities continue.
 
 Deferred-but-coupled pair (schedule with the first retry mode, not before): **4.5.10
 first-attempt SRS classifier (C1)** + **4.4.3 answer re-grade** — both change the same
@@ -379,6 +379,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
 | `b63998a7` | 2026-06-10 | 2.19–2.21, 4.1.3, 4.1.4, 4.2.4, 4.4.3, 4.5.10, 4.6.4, 4.10.2, 8.1.2, 8.2.1, 8.7.1, 8.7.2 | Adopt BA-review improvements: resolve C1/M2/M3 (first-attempt SRS, result terms, streak pause), spec recall-default SRS review, session batch limit, daily new limit, due-day normalization, deck move, dup soft-warning, delete blast-radius, export priority, mock-state release rules; reorder next-10 |
+| `a91fe342` | 2026-06-10 | 8.7.1 | Implement deck export CSV backend V1 with deterministic front/back CSV and safe filename generation |
 | `e84f5115` | 2026-06-10 | 6.6.1 | Prevent import duplicate commit bypass with repository guard + tests |
 | `44407390` | 2026-06-10 | 6.6.1, 6.9.1 | Import duplicate detection + structured text backend |
 | `a35f32f1` | 2026-06-10 | 2.17.1, 2.18.1 | Flashcard list status + tag backend filters |

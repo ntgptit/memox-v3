@@ -70,7 +70,7 @@ abstract final class FlashcardExportWriter {
   }
 
   static bool _isReservedWindowsName(String value) {
-    final String upper = value.toUpperCase();
+    final String upper = StringUtils.uppercased(value);
     return _reservedWindowsNames.contains(upper);
   }
 
