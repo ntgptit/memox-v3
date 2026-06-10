@@ -1,4 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/app/di/flashcard_providers.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/utils/string_utils.dart';
@@ -486,6 +488,21 @@ void main() {
         ]);
       },
     );
+
+    test('provider wiring resolves the prepare use case', () {
+      final _RecordingFlashcardRepository repository =
+          _RecordingFlashcardRepository();
+      final ProviderContainer container = ProviderContainer(
+        overrides: [flashcardRepositoryProvider.overrideWithValue(repository)],
+      );
+      addTearDown(container.dispose);
+
+      final PrepareDeckImportUseCase useCase = container.read(
+        prepareDeckImportUseCaseProvider,
+      );
+
+      expect(useCase, isA<PrepareDeckImportUseCase>());
+    });
 
     test(
       'commit rejects a preview that contains only duplicates and invalid rows',

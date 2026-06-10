@@ -83,6 +83,43 @@ Future<Result<int>> _commitDeckImport(
     if (deckRow == null) {
       return Result<int>.err(Failure.notFound(entity: 'deck', id: deckId));
     }
+
+    final List<({String front, String back})> validPairs =
+        <({String front, String back})>[];
+    final Set<String> seenImportKeys = <String>{};
+    for (final DeckImportPreviewRow row in rows) {
+      final String trimmedFront = StringUtils.trimmed(row.front);
+      final String trimmedBack = StringUtils.trimmed(row.back);
+      if (trimmedFront.isEmpty || trimmedBack.isEmpty) {
+        continue;
+      }
+
+      final String key = _pairKey(trimmedFront, trimmedBack);
+      if (!seenImportKeys.add(key)) {
+        return const Result<int>.err(
+          Failure.validation(field: 'preview', code: ValidationCode.duplicate),
+        );
+      }
+      validPairs.add((front: trimmedFront, back: trimmedBack));
+    }
+
+    final Result<List<Flashcard>> existingResult =
+        await _existingByFrontBackPairs(repo, deckId, validPairs);
+    if (existingResult is Err<List<Flashcard>>) {
+      return Result<int>.err(existingResult.failure);
+    }
+
+    final Set<String> existingKeys = <String>{
+      for (final Flashcard card
+          in (existingResult as Ok<List<Flashcard>>).value)
+        _pairKey(card.front, card.back),
+    };
+    if (existingKeys.isNotEmpty) {
+      return const Result<int>.err(
+        Failure.validation(field: 'preview', code: ValidationCode.duplicate),
+      );
+    }
+
     final int nowMs = DateTime.now().toUtc().millisecondsSinceEpoch;
     final int committed = await repo._dao.transaction(() async {
       int count = 0;

@@ -822,6 +822,92 @@ void main() {
     });
 
     test(
+      'rejects duplicate rows inside the commit input before writing anything',
+      () async {
+        final Deck deck = await seedDeck();
+
+        final Result<int> result = await repo.commitDeckImport(
+          deckId: deck.id,
+          rows: const <DeckImportPreviewRow>[
+            DeckImportPreviewRow(lineNumber: 2, front: 'Hello', back: 'World'),
+            DeckImportPreviewRow(
+              lineNumber: 3,
+              front: ' hello ',
+              back: ' world ',
+            ),
+          ],
+        );
+
+        expect(result, isA<Err<int>>());
+        expect(
+          (result as Err<int>).failure,
+          isA<ValidationFailure>().having(
+            (ValidationFailure failure) => failure.code,
+            'code',
+            ValidationCode.duplicate,
+          ),
+        );
+        expect(await db.select(db.flashcards).get(), isEmpty);
+        expect(await db.select(db.flashcardProgress).get(), isEmpty);
+      },
+    );
+
+    test(
+      'rejects rows duplicated against existing flashcards in the same deck',
+      () async {
+        final Deck deck = await seedDeck();
+        await addCard(deck.id, 'existing', 'Hello', 'World', 0);
+
+        final Result<int> result = await repo.commitDeckImport(
+          deckId: deck.id,
+          rows: const <DeckImportPreviewRow>[
+            DeckImportPreviewRow(lineNumber: 2, front: 'hello', back: 'world'),
+            DeckImportPreviewRow(lineNumber: 3, front: 'Bye', back: 'See ya'),
+          ],
+        );
+
+        expect(result, isA<Err<int>>());
+        expect(
+          (result as Err<int>).failure,
+          isA<ValidationFailure>().having(
+            (ValidationFailure failure) => failure.code,
+            'code',
+            ValidationCode.duplicate,
+          ),
+        );
+        expect(await db.select(db.flashcards).get(), hasLength(1));
+        expect(await db.select(db.flashcardProgress).get(), isEmpty);
+      },
+    );
+
+    test('allows the same pair when it exists in another deck', () async {
+      final Deck deck = await seedDeck();
+      final Folder otherFolder =
+          (await folderRepo.createRootFolder(name: 'Other') as Ok<Folder>)
+              .value;
+      final Deck otherDeck =
+          (await folderRepo.createDeck(
+                    parentFolderId: otherFolder.id,
+                    name: 'Other deck',
+                    targetLanguage: TargetLanguage.korean,
+                  )
+                  as Ok<Deck>)
+              .value;
+      await addCard(otherDeck.id, 'other', 'Hello', 'World', 0);
+
+      final Result<int> result = await repo.commitDeckImport(
+        deckId: deck.id,
+        rows: const <DeckImportPreviewRow>[
+          DeckImportPreviewRow(lineNumber: 2, front: 'hello', back: 'world'),
+        ],
+      );
+
+      expect(result, isA<Ok<int>>());
+      expect((result as Ok<int>).value, 1);
+      expect(await db.select(db.flashcards).get(), hasLength(2));
+    });
+
+    test(
       'rolls back the whole transaction when a later row fails validation',
       () async {
         final Deck deck = await seedDeck();
