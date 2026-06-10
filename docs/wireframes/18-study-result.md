@@ -194,8 +194,8 @@ Current implementation keeps the result route intentionally narrow: it shows the
 
 - Screen: `lib/presentation/features/study/screens/study_result_screen.dart`.
 - Viewmodel: `lib/presentation/features/study/viewmodels/` (no standalone `study_result_notifier.dart`; the result screen consumes the same session viewmodels as `study_session_screen`).
-- Finalization: `lib/domain/study/usecases/study_usecases.dart` → `FinalizeStudySessionUseCase` (success path) + `RetryFinalizeUseCase` (failure recovery). There is no separate `lib/domain/usecases/study/finalize_session_usecase.dart` file.
-- Engagement / completion: **no `record_completion_usecase.dart` exists today**. Engagement use cases (streak, daily-goal completion) are missing from the domain layer — see audit `docs/checklist/wireframe-code-parity-assessment.md` §3.2. Streak chip on this screen is blocked on that gap.
+- Finalization: `lib/domain/study/usecases/study_usecases.dart` → `FinalizeStudySessionUseCase` (success path). There is no `RetryFinalizeUseCase` — finalize failure keeps the session open and the user re-taps Finish (decision row S10). There is no separate `lib/domain/usecases/study/finalize_session_usecase.dart` file.
+- Engagement / completion: **no `record_completion_usecase.dart` exists today**. Engagement use cases (streak, daily-goal completion) are missing from the domain layer (engagement is Future/Target — `docs/business/engagement/dashboard-engagement.md`). Streak chip on this screen is blocked on that gap.
 - Route constant: `lib/app/router/route_names.dart` → `RouteNames.studyResult`.
 
 **Related wireframes:**

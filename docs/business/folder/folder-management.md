@@ -10,7 +10,7 @@ applies_to: folder entity and folder management feature
 - `lib/presentation/features/folders/**`
 - `lib/domain/**folder**`
 - `lib/data/**folder**`
-- `lib/data/datasources/local/tables/folders_table.dart`
+- `lib/data/datasources/local/drift/` (folders table + folder queries)
 
 ## Data
 
@@ -122,8 +122,8 @@ flow.
 
 **Source files to inspect:**
 
-- `lib/data/datasources/local/tables/folders_table.dart`
+- `lib/data/datasources/local/drift/` (folders table + folder queries)
 - `lib/domain/entities/folder.dart`
 - `lib/domain/repositories/folder_repository.dart`
 - `lib/domain/usecases/folder/**`
-- `lib/presentation/features/library/**` (folder views)
+- `lib/presentation/features/folders/**` (folder views)

@@ -517,11 +517,19 @@ When fingerprints match, this dialog still appears but the warning is softer and
 
 **Contracts:** Dialogs invoke use cases listed per spec above; primary refs: `docs/contracts/usecase-contracts/study.md` (resume/discard/finalize), `docs/contracts/usecase-contracts/folder.md`/`docs/contracts/usecase-contracts/deck.md`/`docs/contracts/usecase-contracts/flashcard.md` (delete + rename), `docs/contracts/usecase-contracts/bulk.md` (bulk-delete), `docs/contracts/usecase-contracts/history.md` (reset progress), `docs/contracts/usecase-contracts/account-sync.md` (restore-warning). UI behavior shaped by `docs/contracts/error-contract.md` recovery rules.
 
-**Code paths:**
-- Shared dialogs live under `lib/presentation/shared/dialogs/**` (each as its own widget file), built on `MxDialog` / `MxConfirmationDialog`.
-- Naming: `MxDialogResumeOrStartOver`, `MxDialogDiscardSession`, `MxDialogDiscardChanges`, `MxDialogExitSession`, `MxDialogDeleteConfirm`, `MxDialogBulkDelete`, `MxDialogResetProgress`, `MxDialogRename`, `MxFolderFormDialog`, `MxDialogRestoreWarning`
-- Implemented so far: `MxDialogResumeOrStartOver` (`mx_dialog_resume_or_start_over.dart`, Prompt 05) returns typed `MxResumeChoice?`; §discard-session is composed from `MxConfirmationDialog` (danger tone) by the entry gate, Dashboard/Progress resume surfaces, and (Prompt 47) the deck/folder resume banners via the shared `confirmAndDiscardResumeSession` flow (`lib/presentation/shared/study/discard_resume_session.dart`).
-- Return contracts follow the Current V1 list above: confirmation dialogs use `bool`, name dialogs use `String?`, and resume/start-over uses typed `MxResumeChoice?`.
+**Code paths (verified 2026-06-10):**
+- Shared dialogs live under `lib/presentation/shared/dialogs/**` (each as its own widget file).
+- Implemented so far: `mx_confirm_dialog.dart` (`MxConfirmDialog`), `mx_folder_delete_dialog.dart`,
+  `mx_folder_form_dialog.dart` (+ parts), `mx_name_dialog.dart`, `mx_bottom_sheet.dart`.
+- The resume/start-over choice is NOT a shared dialog: the Study Entry gate renders inline
+  Resume / Start over / Back actions
+  (`lib/presentation/features/study/widgets/study_entry_resume_required_state.dart`); the
+  start-over confirmation composes the shared confirm dialog.
+- The naming set `MxDialogResumeOrStartOver`, `MxDialogDiscardSession`, `MxDialogExitSession`,
+  `MxDialogBulkDelete`, `MxDialogResetProgress`, `MxDialogRestoreWarning` and the
+  `confirmAndDiscardResumeSession` flow are **target names from a previous iteration** — none of
+  those files exist; create them only when their owning features are built.
+- Return contracts: confirmation dialogs use `bool`, name dialogs use `String?`.
 
 **Related wireframes:**
 - Used by virtually every screen; see "Used by:" list in each dialog section

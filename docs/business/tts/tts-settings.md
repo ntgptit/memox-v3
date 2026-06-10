@@ -5,40 +5,43 @@ applies_to: TTS settings, speech playback, audio settings screen
 
 # TTS Settings
 
-> **Status: Current V1 global/front-language settings; Target per-language independence.** Current
-> settings persist as one Drift-backed row in the `tts_settings` table through `TtsSettingsDao` and
-`TtsSettingsRepositoryImpl`. Independent Korean/English setting sets remain Target/Future and must
-> not be treated as Current. Per-deck TTS gating policy depends on `decks.target_language` from
-`docs/database/schema-contract.md` §Pending schema changes.
+> **Status: Specified — no TTS backend exists yet (verified 2026-06-10).** The current code has
+> only a static mock Audio & Speech settings screen
+> (`lib/presentation/features/settings/screens/audio_speech_settings_screen.dart`) with **no
+> persistence, no `tts_settings` table, no DAO/repository/service, and no
+> `lib/presentation/features/tts/` feature**. Earlier revisions of this doc claimed a Drift-backed
+> `tts_settings` row as Current; that described a previous project iteration.
+> `docs/database/schema-contract.md` correctly lists `tts_settings` as a remaining target table.
+> The contract below (single global/front-language row) is the **target** for the first TTS slice
+> (WBS 8.4.1). Independent Korean/English setting sets remain a further Target/Future step beyond
+> that. Per-deck TTS gating uses `decks.target_language`, which already exists in the current
+> schema.
 
 ## Source files to inspect
 
-- `lib/domain/services/tts_service.dart` (TtsService, TtsSettings, TtsLanguage, TtsVoice, TtsState,
-  TtsTextSide)
-- `lib/domain/services/tts_playback_policy.dart` (TtsPlaybackPolicy)
-- `lib/domain/usecases/tts_usecases.dart` (SpeakFlashcardUseCase)
+Current (the only TTS-related surface that exists):
+
+- `lib/presentation/features/settings/screens/audio_speech_settings_screen.dart` (static mock
+  preview with state variants)
+- `lib/presentation/features/settings/widgets/audio_speech_settings_content*.dart`
+
+Target structure when WBS 8.4.1 is implemented (none of these exist yet):
+
+- `lib/domain/services/tts_service.dart` (TtsService, TtsSettings, TtsLanguage, TtsVoice, TtsState)
 - `lib/domain/repositories/tts_settings_repository.dart`
 - `lib/data/repositories/tts_settings_repository_impl.dart`
-- `lib/data/datasources/local/daos/tts_settings_dao.dart`
-- `lib/data/datasources/local/tables/tts_settings_records_table.dart`
+- `lib/data/datasources/local/daos/tts_settings_dao.dart` + `tts_settings.drift`
 - `lib/data/services/flutter_tts_service.dart` (platform implementation)
-- `lib/presentation/features/tts/providers/tts_settings_notifier.dart`
-- `lib/presentation/features/tts/providers/tts_controller_notifier.dart`
-- `lib/presentation/features/settings/screens/audio_speech_settings_screen.dart`
-- `lib/presentation/features/settings/widgets/speech_settings_group.dart`
-- `lib/presentation/features/settings/widgets/speech_audio_sliders.dart`
-- `lib/app/di/tts_providers.dart`
+- DI providers under `lib/app/di/`
 
 ## Data
 
-Current V1 storage is the Drift `tts_settings` table (Dart table class `TtsSettingsRecords`) through
-`TtsSettingsDao` and `TtsSettingsRepositoryImpl`.
+**Target storage** (not yet implemented): a Drift `tts_settings` table using a single-row pattern
+with id = `'default'`. Adding it requires a schema version bump + migration + tests per
+`docs/database/migration-contract.md`.
 
-The table is a single-row pattern with id = `'default'`.
-
-Status: Current for the global/front-language settings row. Target/Future for independent
-per-language settings; do not add separate per-language storage in a normal parity task without an
-approved migration/product decision.
+Independent per-language settings remain Target/Future beyond the first slice; do not add
+separate per-language storage without an approved migration/product decision.
 
 Fields:
 
@@ -106,7 +109,7 @@ Source of truth: constants in `TtsSettings` (`minRate`, `maxRate`, `defaultRate`
 - Available voices come from the platform via `TtsService.availableVoices(language)`.
 - Voices are filtered by language tag.
 - `frontVoiceName` stores the platform-specific voice identifier.
-- Current V1 has one global/front-language `frontVoiceName`, not per-language voice storage.
+- The first slice (target) has one global/front-language `frontVoiceName`, not per-language voice storage.
 - Changing `frontLanguage` MUST clear `frontVoiceName` (via `clearFrontVoice: true` in `copyWith`)
   because the stored voice belongs to the previous front language.
 - When the stored voice name is no longer available on the device, the expanded selector falls back
@@ -191,8 +194,8 @@ Loading/error states use shared `Mx*` widgets per UI/UX contract.
 
 ## Agent rule
 
-- Do not introduce a separate TTS settings table. Preserve the current `tts_settings` single-row
-  pattern unless an approved migration/product decision explicitly changes it.
+- Do not introduce a separate TTS settings table. Implement (and then preserve) the `tts_settings`
+  single-row pattern unless an approved migration/product decision explicitly changes it.
 - Do not bypass `TtsPlaybackPolicy` to speak back/note. If a new playable side is needed, update the
   policy first and document here.
 - Do not add per-deck TTS override without updating this doc and schema.
@@ -211,10 +214,9 @@ Loading/error states use shared `Mx*` widgets per UI/UX contract.
 
 **Schema:**
 
-- Current V1 settings table: `tts_settings` via
-  `lib/data/datasources/local/tables/tts_settings_records_table.dart` (`TtsSettingsRecords` Dart
-  class).
-- Schema: `decks.target_language` gates TTS when the deck-language migration is active.
+- Target settings table: `tts_settings` (single-row, id=`'default'`) — NOT yet in the schema; see
+  `docs/database/schema-contract.md` §Target table areas.
+- Schema: `decks.target_language` (already in the current schema) gates TTS per deck.
 
 **Decision table:**
 

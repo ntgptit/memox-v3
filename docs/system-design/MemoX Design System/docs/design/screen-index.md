@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-06-06
 status: contract
 applies_to: UI mock-to-code implementation
@@ -83,7 +83,7 @@ blocks. The router is authoritative for what actually renders:
 | Issue | Type | Affected | Reason | Recommended action |
 | --- | --- | --- | --- | --- |
 | Wireframes mark Dashboard/Progress screens "Current/tested" but feature folders are absent on this ref | Unknown source | Dashboard, Progress | Doc ahead of code, or implementation on an unmerged branch | Confirm branch/state of truth; if `main` is canonical, update the wireframes' `V1 verification status` blocks; treat screens as Future for new work |
-| `05-folder-detail.md` claims hero mastery card + study/resume CTAs went Current (Prompt 45/47/50); `folder_detail_screen.dart` comment says they are Future ("the study layer is not built") and the code renders none of them | Business/state conflict | Folder detail | Wireframe ahead of code | Follow code (study layer absent) for now; reconcile wireframe; do not render hero/study CTAs with placeholder data |
+| `05-folder-detail.md` claims hero mastery card + study/resume CTAs went Current (Prompt 45/47/50); `folder_detail_screen.dart` comment says they are Future ("the study layer is not built") and the code renders none of them | Business/state conflict | Folder detail | Wireframe ahead of code | Reconciled 2026-06-10: wireframe + navigation/resume business docs corrected to Future; still do not render hero/study CTAs with placeholder data |
 | Overflow ⋮ on Folder Detail app bar is rendered with `onPressed: null` (disabled) | Mock-only element | Folder detail | No folder-level action sheet wired on Folder Detail (it exists on Library Overview rows) | Keep disabled/visual-only until folder overflow actions are promoted |
 | Visual language naming: `wireframes/index.md` cross-ref calls the theme "Slate Meridian, Plus Jakarta Sans"; design system README calls it "Tokyo Pure Light / Tokyo Nebula, Plus Jakarta Sans" | Unknown source | All screens (color/theme contract) | Stale theme name in one cross-reference | Treat design-system README + `colors_and_type.css` as canonical (Tokyo Pure Light/Nebula); fix the wireframe cross-ref |
 

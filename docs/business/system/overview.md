@@ -32,18 +32,21 @@ This overview lists product capabilities. The detailed contract for each lives i
 
 | Capability | Status | Spec location |
 | --- | --- | --- |
-| Folder CRUD + reorder + move | Specified | `docs/business/folder/folder-management.md` |
-| Deck CRUD + reorder + target language | Specified | `docs/business/deck/deck-management.md` |
-| Deck import | Implemented / Partial | `docs/business/flashcard/flashcard-management.md` (import section) |
+| Folder CRUD + move | Implemented (create/rename/move/delete with tests) | `docs/business/folder/folder-management.md` |
+| Folder reorder | Partial (BE use case implemented, commit `48e55584`; FE wiring Specified) | `docs/business/folder/folder-management.md` |
+| Deck create/delete + target language column | Implemented (create/delete; `target_language` in schema) | `docs/business/deck/deck-management.md` |
+| Deck rename / reorder | Partial (BE implemented, commit `48e55584`; FE wiring Specified) | `docs/business/deck/deck-management.md` |
+| Deck target-language picker UI | Specified | `docs/business/deck/deck-management.md` |
+| Deck import | Implemented / Partial (CSV paste + duplicate detection + structured-text backend; file picker/Excel UI deferred) | `docs/business/flashcard/flashcard-management.md` (import section) |
 | Deck export | Specified | `docs/business/export/export.md` |
-| Flashcard CRUD + tag | Specified | `docs/business/flashcard/flashcard-management.md` |
+| Flashcard CRUD + tag | Implemented (create/edit/delete/list/tags with tests; reorder BE only) | `docs/business/flashcard/flashcard-management.md` |
 | Flashcard import preview/validation | Implemented / Partial | `docs/business/flashcard/flashcard-management.md` (import section) |
 | Flashcard selection export | Specified | `docs/business/export/export.md` |
 | Study session | Partial | `docs/business/study/study-flow.md` |
-| Resume / continue session | Specified | `docs/business/resume/resume-session.md` |
+| Resume / continue session | Partial (gate resume/start-over + Dashboard card Implemented; deck/folder banners Future) | `docs/business/resume/resume-session.md` |
 | Empty scope handling | Specified | `docs/business/study/study-flow.md` (empty scope matrix) |
-| SRS review (Leitner 8-box) | Specified | `docs/business/srs/srs-review.md` |
-| Bury / suspend cards | Specified | `docs/business/study-actions/bury-suspend.md` |
+| SRS review (Leitner 8-box) | Implemented (finalization transitions + intervals, table-driven tests) | `docs/business/srs/srs-review.md` |
+| Bury / suspend cards | Partial (schema + queue exclusion Implemented; user actions Specified) | `docs/business/study-actions/bury-suspend.md` |
 | Tag filter + study-by-tag + management | Specified | `docs/business/tags/tag-system.md` |
 | Bulk operations on flashcards | Specified | `docs/business/bulk/bulk-operations.md` |
 | Card history view | Future Proposal — Migration Required | `docs/business/history/card-history.md` |
@@ -61,7 +64,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Export with metadata (tags, SRS, etc.) | Out of scope | use Drive sync for backup |
 | Multi-language TTS | Out of scope (current phase) | English/Korean only; deck `target_language` gates playback |
 
-Agents must not implement capabilities outside this table without first creating or extending a spec doc. Agents also must not implement rows marked Future Proposal without promoting them in `docs/checklist/v1-implementation-scope-2026-05-29.md`.
+Agents must not implement capabilities outside this table without first creating or extending a spec doc. Agents also must not implement rows marked Future Proposal without an explicit promotion: update this table's status AND the corresponding row in the Deferred / Future / Rejected register of `docs/project-management/wbs.md` (§6) in the same commit. (The former gate file `v1-implementation-scope-2026-05-29.md` no longer exists; the WBS register is the promotion record.)
 
 ## Product principles
 

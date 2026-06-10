@@ -5,26 +5,21 @@ applies_to: deck entity and deck management feature
 
 # Deck Management
 
-> **Status: Partial Target — Migration Required for `target_language`; root-level decks Rejected /
-Out of Scope.** Folder-owned deck CRUD itself is implementable today. However, the `target_language`
-> field (referenced throughout this spec) is a pending column from `docs/database/schema-contract.md`
-> §Pending schema changes:
+> **Status: Partial — schema + rename/reorder backend Current; FE wiring and language picker UI
+> Specified; root-level decks Rejected / Out of Scope (verified 2026-06-10).**
 >
-> - `decks.target_language TEXT NOT NULL DEFAULT 'korean'`
+> The `decks.target_language TEXT NOT NULL DEFAULT 'korean'` column **exists in the current
+> schema** (`lib/data/datasources/local/drift/`; the create path persists it) — no migration is
+> pending for it. Deck rename and reorder **backends are implemented** (`RenameDeckUseCase`,
+> `ReorderDecksUseCase` over `FolderRepository.renameDeck/reorderDecks`, commit `48e55584`, with
+> tests). What remains Specified: wiring rename/reorder into the deck actions UI, the
+> target-language picker in deck create/edit UI, and TTS gating (blocked on the TTS service, WBS
+> 8.4.x — not on schema).
 >
-> Migration backfills existing decks to `'korean'`; user adjusts per-deck after. Blocks (until
-> migration): TTS gating in study modes 13-17, settings audio-speech screen, target-language picker in
-> deck create/edit flows.
->
-> Prompt 43A supersedes the Prompt 42/42B root-level deck direction. Product
-> ownership rejected root-level decks: every deck must belong to exactly one
-> folder, `decks.folder_id` stays non-null, and deck create/move/reorder/duplicate
-> APIs remain folder-bound.
->
-> The Prompt 42B nullable deck parent design at
-> `docs/database/migrations/nullable-deck-parent-migration.md` is retained only as
-> a rejected historical note. It must not be used as recommended implementation
-> direction.
+> Product ownership rejected root-level decks: every deck must belong to exactly one folder,
+> `decks.folder_id` stays non-null, and deck create/move/reorder/duplicate APIs remain
+> folder-bound. The historical nullable-deck-parent design is Rejected and its design note no
+> longer exists in this repo; do not reintroduce it.
 
 ## Source files to inspect
 
@@ -32,7 +27,7 @@ Out of Scope.** Folder-owned deck CRUD itself is implementable today. However, t
 - `lib/presentation/features/flashcards/**`
 - `lib/domain/**deck**`
 - `lib/data/**deck**`
-- `lib/data/datasources/local/tables/decks_table.dart`
+- `lib/data/datasources/local/drift/` (decks table definition)
 
 ## Data
 
@@ -75,8 +70,8 @@ with an English voice → wrong pronunciation. Forcing a per-deck declaration pr
 
 ### Migration
 
-Existing decks (pre-feature) get `target_language = korean` as default during migration. Users can
-edit each deck to set the correct value.
+No migration is pending: the column shipped with the current schema and defaults to `'korean'`.
+Users can edit each deck to set the correct value once the deck edit form exposes the picker.
 
 ## Rules
 
@@ -132,10 +127,9 @@ Do not add a separate deck detail route unless route contract and navigation doc
 **Schema:**
 
 - `docs/database/schema-contract.md` → `decks` table (`id`, `folder_id`, `name`, `target_language`,
-  `sort_order`, timestamps). `target_language` is one of the 6 pending migrations.
-- `docs/database/migrations/nullable-deck-parent-migration.md` → rejected Prompt
-  42B design; nullable `decks.folder_id` is Not Applicable while the folder-owned
-  deck invariant holds.
+  `sort_order`, timestamps). All columns including `target_language` are in the current schema.
+- Nullable `decks.folder_id` is Rejected / Not Applicable while the folder-owned deck invariant
+  holds (the historical design note file no longer exists in this repo).
 
 **Decision table:**
 
@@ -155,10 +149,14 @@ Do not add a separate deck detail route unless route contract and navigation doc
 - `docs/business/export/export.md` — deck is the export unit
 - `docs/business/navigation/navigation-flow.md` — `/library/deck/:deckId/...` routes
 
-**Source files to inspect:**
+**Source files to inspect (verified 2026-06-10):**
 
-- `lib/data/datasources/local/tables/decks_table.dart`
+- `lib/data/datasources/local/drift/` (decks table definition)
 - `lib/domain/entities/deck.dart`
-- `lib/domain/repositories/deck_repository.dart`
-- `lib/domain/usecases/deck/**`
-- `lib/presentation/features/deck/**`
+- `lib/domain/repositories/folder_repository.dart` — deck operations live on the folder
+  repository (`createDeck`, `deleteDeck`, `renameDeck`, `reorderDecks`); there is NO separate
+  `deck_repository.dart`
+- `lib/domain/usecases/deck/**` (`create_deck_usecase.dart`, `delete_deck_usecase.dart`,
+  `rename_deck_usecase.dart`, `reorder_decks_usecase.dart`)
+- `lib/presentation/features/folders/**` (deck tiles in Folder Detail) and
+  `lib/presentation/features/flashcards/**` (deck actions sheet)

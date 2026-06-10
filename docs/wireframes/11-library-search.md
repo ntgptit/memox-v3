@@ -4,7 +4,7 @@ status: Current — global search screen (folders/decks/flashcards); tags sectio
 route: /library/search
 source_specs:
   - docs/business/search/global-search.md
-related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
+related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # 11 — Library Search

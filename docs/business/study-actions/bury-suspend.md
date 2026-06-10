@@ -5,21 +5,22 @@ applies_to: bury (skip card today), suspend (hide card indefinitely)
 
 # Bury and Suspend
 
-> **Status: Implemented (P0-2).** Schema v10 added `flashcard_progress.buried_until INTEGER NULL`
-> and `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0` (+ index
-`idx_flashcard_progress_eligibility`). Implemented: bury/suspend/unbury/unsuspend use cases +
-> repository persistence; study-batch + due-count filtering (excludes suspended and currently-buried;
-> expired bury re-enters); empty-scope variants `studyEmpty_allBuried` / `studyEmpty_allSuspended`;
-> the card-actions bottom sheet (Edit / Bury / Suspend) reachable via the overflow trigger in all five
-> study mode views (review/match/guess/recall/fill) + the session app bar; and **active-session
-removal** — burying/suspending the current card abandons it (no attempt, SRS preserved), removes it
-> from the queue so it does not reappear in the session, and advances or finalizes the session (
-`DropCurrentStudyItemUseCase` → `StudyRepo.dropCurrentItemFromSession`).
+> **Status: Partial — schema + queue exclusion Current; all user actions Specified (verified
+> 2026-06-10).**
 >
-> **Still pending (separate tasks):** undo re-insert of a buried/suspended card into the *active*
-> session (undo currently reverts the progress state only); flashcard-list state badges + status
-> filter chips; bulk suspend/unsuspend; unsuspend from the flashcard list; optional long-press
-> shortcut alongside the overflow trigger.
+> **Current:** the schema fields `flashcard_progress.buried_until INTEGER NULL` and
+> `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0` exist
+> (`lib/data/datasources/local/drift/flashcard_progress.drift`); study scope queries and due
+> counting exclude suspended and currently-buried cards and an expired bury re-enters
+> (`lib/data/datasources/local/drift/study_scope_queries.drift`); the empty-scope variants
+> `studyEmpty_allBuried` / `studyEmpty_allSuspended` render on the Study Entry gate.
+>
+> **Specified (NOT implemented):** bury/suspend/unbury/unsuspend use cases; the in-session
+> card-actions sheet (no `DropCurrentStudyItemUseCase` / `StudyRepo.dropCurrentItemFromSession`
+> exists — earlier revisions over-claimed these); active-session removal; toast undo;
+> flashcard-list state badges + status filter chips; bulk suspend/unsuspend; unsuspend from the
+> flashcard list. WBS rows 4.11.2/4.11.3 and 2.17.x track this work
+> (`docs/project-management/wbs.md`).
 
 ## Purpose
 
@@ -33,20 +34,16 @@ punish the user for normal human behavior. This document specs two escape hatche
 
 ## Data model
 
-Add two fields to `flashcard_progress`:
+Two fields on `flashcard_progress` (already present in the current schema):
 
 | Field          | Type         | Default | Meaning                                                                         |
 |----------------|--------------|---------|---------------------------------------------------------------------------------|
 | `buried_until` | INTEGER NULL | NULL    | UTC epoch ms; card is hidden from study queues while `buried_until > now`.      |
 | `is_suspended` | BOOL         | `false` | When true, card is hidden from all study queues regardless of due/buried state. |
 
-Schema migration required (see `docs/database/migration-contract.md`). Adds two columns to
-`flashcard_progress` with safe defaults.
-
-Indexes:
-
-- Add to existing index on `flashcard_progress(due_at)` → consider compound index covering
-  `is_suspended` and `buried_until` for fast due queries. Verify query plan after migration.
+No migration is pending: both columns and the eligibility index
+(`idx_flashcard_progress_eligibility` covering `is_suspended`, `buried_until`, `due_at`) are in
+the current schema (`lib/data/datasources/local/drift/flashcard_progress.drift`).
 
 ## Bury
 
@@ -186,7 +183,7 @@ Both bury and suspend support bulk operations from flashcard list multi-select (
 | Card buried, then user deletes the card                                    | Deletion cascades normally; `buried_until` is irrelevant.                                                                                         |
 | Card suspended, then deck is deleted                                       | Cascade delete via existing rules.                                                                                                                |
 | Bury card during folder study (recursive scope)                            | Bury affects only that card globally. Other decks in folder unaffected.                                                                           |
-| Time zone changes while a card is buried                                   | `buried_until` is stored as UTC epoch ms; effective unbury time tracks correctly across timezone changes.                                         |
+| Time zone changes while a card is buried                                   | `buried_until` is a fixed UTC instant computed from the local midnight **at bury time**. After a timezone change the card returns at that same instant, which may no longer align with the new local midnight. Accepted: do not recompute on timezone change. |
 
 ## Required UI states
 
@@ -229,8 +226,9 @@ Both bury and suspend support bulk operations from flashcard list multi-select (
 **Schema:**
 
 - `docs/database/schema-contract.md` → `flashcard_progress.buried_until INTEGER NULL`,
-  `flashcard_progress.is_suspended BOOL` (both in 6 pending migrations)
-- Recommended index: `flashcard_progress(is_suspended, buried_until, due_at)`
+  `flashcard_progress.is_suspended BOOL` (both shipped in the current schema)
+- Index: `idx_flashcard_progress_eligibility` on
+  `flashcard_progress(is_suspended, buried_until, due_at)` (shipped)
 
 **Decision table:**
 
@@ -249,8 +247,13 @@ Both bury and suspend support bulk operations from flashcard list multi-select (
 - `docs/business/bulk/bulk-operations.md` — bulk suspend/unsuspend in selection mode
 - `docs/business/flashcard/flashcard-management.md` — state badge priority on card row
 
-**Source files to inspect:**
+**Source files to inspect (verified 2026-06-10):**
 
-- `lib/domain/usecases/study/bury_card_usecase.dart`
-- `lib/domain/usecases/study/suspend_card_usecase.dart`
-- `lib/data/repositories/flashcard_progress_repository.dart` (queue queries filter buried+suspended)
+- `lib/data/datasources/local/drift/flashcard_progress.drift` — `buried_until` / `is_suspended`
+  columns + eligibility index
+- `lib/data/datasources/local/drift/study_scope_queries.drift` — queue queries filter
+  buried+suspended
+- `lib/data/repositories/study_repo_impl_study_session.dart` — `isVisible` eligibility +
+  all-buried/all-suspended empty-state resolution
+- Bury/suspend use cases do NOT exist yet (`lib/domain/usecases/study/**` is not a real
+  directory); implement them under `lib/domain/study/usecases/` when WBS 4.11.2 is picked up.

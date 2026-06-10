@@ -38,7 +38,7 @@ This doc adds rules and surfaces, not new tables.
 ## Tag identity
 
 - Tag identity is case-insensitive across the app (`#Verb` and `#verb` are the same tag).
-- Storage and display form (V1): tags are stored **lowercased**. The `flashcard_tags` table has only a `tag` column (no separate display-name column), so V1 does not preserve original casing — input is lowercased on write (validator + DAO) and rendered lowercased. Schema v11 backfills existing rows to lowercase (see `docs/database/migration-contract.md`).
+- Storage and display form (V1): tags are stored **lowercased**. The `flashcard_tags` table has only a `tag` column (no separate display-name column), so V1 does not preserve original casing — input is lowercased on write (validator + DAO) and rendered lowercased. Tags shipped lowercased from the v3 tags migration; no backfill is pending.
 - Cross-deck tags: tags are global by name. `#weak` in deck A and `#weak` in deck B refer to the same tag conceptually for filter/study purposes.
 
 ## Tag filter in flashcard list

@@ -73,18 +73,24 @@ Direction notes:
 ```mermaid
 flowchart TD
     Entry[User picks entry] --> Type{Entry type?}
-    Type -->|deck| NewType[study_type = new]
-    Type -->|folder| NewType
+    Type -->|deck / folder| DefaultNew{study_type query?}
     Type -->|today| SrsType[study_type = srs_review]
+    DefaultNew -->|absent| NewType[study_type = new - default]
+    DefaultNew -->|srs_review| SrsType
     NewType --> NewFlow[Pick new_* flow]
     SrsType --> SrsFlow[study_flow = srs_fill_review]
     NewFlow --> Resolve[Resolve cards from scope]
-    SrsFlow --> ResolveDue[Resolve due cards]
+    SrsFlow --> ResolveDue[Resolve due cards in scope]
     Resolve --> Empty{Scope empty?}
     ResolveDue --> Empty
     Empty -->|yes| Reject[Do not create session]
     Empty -->|no| Create[Create session and items]
 ```
+
+Defaults: `deck`/`folder` entries default to `study_type = new` but accept
+`?study_type=srs_review` for a scope-limited due review (see the empty scope matrix rows
+`deck + srs_review` / `folder + srs_review` and
+`docs/business/navigation/navigation-flow.md`). `today` is always `srs_review`.
 
 ## Session lifecycle
 
@@ -92,16 +98,26 @@ See `docs/business/glossary.md` for status definitions.
 
 ```mermaid
 stateDiagram-v2
-    [*] --> draft: create
-    draft --> in_progress: start
+    [*] --> in_progress: create (V1 persists sessions directly as in_progress)
     in_progress --> in_progress: answer item
-    in_progress --> ready_to_finalize: all items answered
+    in_progress --> ready_to_finalize: all items answered (derived, not persisted)
     in_progress --> in_progress: user exit confirmed (screen only)
+    in_progress --> cancelled: discard / start over
     ready_to_finalize --> completed: finalize success
-    ready_to_finalize --> ready_to_finalize: finalize error
+    ready_to_finalize --> ready_to_finalize: finalize error (status stays in_progress)
+    ready_to_finalize --> cancelled: discard / start over
     completed --> [*]
     cancelled --> [*]
 ```
+
+Status notes (see `docs/business/glossary.md` §Status terms):
+
+- `ready_to_finalize` is a **derived UI state** ("all items answered"), not a persisted
+  `study_sessions.status` value.
+- `draft` exists in the `SessionStatus` enum but V1 persists new sessions directly as
+  `in_progress` (`_persistSession`); treat `draft` as resumable if encountered.
+- `failed_to_finalize` exists in the enum but is **never written in V1**: a failed finalize
+  rolls back and the session stays `in_progress` (decision row S10).
 
 ## Rules
 
@@ -198,7 +214,11 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 ## Retry behavior
 
 - Incorrect answer creates attempt.
-- Retry behavior depends on selected flow/mode.
+- Retry behavior depends on selected flow/mode. **V1 records exactly one attempt per item** (a
+  second answer on an answered item is rejected); multi-attempt retry is Target for future modes.
+- Before implementing any re-queue/retry mode, resolve the open SRS demotion decision in
+  `docs/business/srs/srs-review.md` (§Box transition table) — re-queue-until-pass would make
+  `forgot` unreachable at finalization.
 - Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 
@@ -218,11 +238,11 @@ advances.
 **Wireframes:**
 
 - `docs/wireframes/12-study-entry-gate.md` — pre-session router + empty matrix
-- `docs/wireframes/13-study-session-review.md` — review mode (front→back flip)
-- `docs/wireframes/14-study-session-match.md` — match mode (front→back multiple choice)
+- `docs/wireframes/13-study-session-review.md` — review mode (both sides shown, swipe grade)
+- `docs/wireframes/14-study-session-match.md` — match mode (5-pair board)
 - `docs/wireframes/15-study-session-guess.md` — guess mode (front → back, rich option cards)
-- `docs/wireframes/16-study-session-recall.md` — recall mode (free text)
-- `docs/wireframes/17-study-session-fill.md` — fill mode (char-by-char)
+- `docs/wireframes/16-study-session-recall.md` — recall mode (flip-card self-grade; no text input in V1)
+- `docs/wireframes/17-study-session-fill.md` — fill mode (typed front, strict match)
 - `docs/wireframes/18-study-result.md` — end-of-session summary
 - `docs/wireframes/25-shared-bottom-sheets.md` §scope-picker, §paused-sessions
 
@@ -254,9 +274,9 @@ advances.
 
 **Source files to inspect:**
 
-- `lib/data/datasources/local/tables/study_sessions_table.dart`
-- `lib/data/datasources/local/tables/study_session_items_table.dart`
-- `lib/data/datasources/local/tables/study_attempts_table.dart`
+- `lib/data/datasources/local/drift/study_sessions.drift`
+- `lib/data/datasources/local/drift/study_session_items.drift`
+- `lib/data/datasources/local/drift/study_attempts.drift`
 - `lib/domain/study/usecases/study_usecases.dart` (the entire study lifecycle: start, resume,
   restart, answer, skip, cancel, finalize, retry-finalize). There is *
   *no `lib/domain/usecases/study/**` directory** — study use cases live under

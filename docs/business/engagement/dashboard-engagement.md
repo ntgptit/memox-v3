@@ -39,7 +39,10 @@ Scope: personal-use app for now. Decisions favor simplicity and non-intrusivenes
 
 ### Storage
 
-Setting lives in user settings (not Drift entity table). Use `study_settings_store.dart` pattern (SharedPreferences-backed) — see `lib/data/settings/study_settings_store.dart` for placement convention.
+Setting lives in user settings (not Drift entity table), SharedPreferences-backed. (No settings
+store exists in code yet — `lib/data/settings/study_settings_store.dart` is the target placement
+when this Future feature is promoted; the `shared_preferences` dependency itself requires
+approval.)
 
 | Field | Type | Default |
 | --- | --- | --- |
@@ -60,6 +63,14 @@ Set in Settings → Learning (`/settings/learning`). UI is a slider with current
 
 When user disables daily goal (`goalEnabled = false`), all engagement surfaces hide. Streak is paused (does not break, but does not advance either).
 
+> **⚠ Design constraint (resolve before implementation):** "paused" cannot be derived from
+> `study_attempts` alone — a pure recomputation would see the disabled days as missed days and
+> break the streak. Implementing pause REQUIRES persisting the disabled window (e.g., a
+> `goalDisabledSince` date in the settings store, treated as goal-met-neutral when computing
+> consecutive days) or an equivalent marker. If that persistence is rejected, change this rule to
+> "disabling the goal resets the streak" instead. Do not implement streaks while this is
+> unresolved.
+
 ## Daily progress
 
 ### Calculation
@@ -71,6 +82,11 @@ WHERE attempted_at >= <todayStartLocalEpochMs>
 ```
 
 Day boundaries computed from device's current timezone. Cross-timezone travel: see "Edge cases" below.
+
+Note: this intentionally counts ALL attempts recorded today, **including attempts from sessions
+that were later discarded/cancelled** — daily progress measures effort, not finalized SRS reviews
+(which commit only at finalization; see `docs/business/srs/srs-review.md` §Finalization and
+`docs/business/resume/resume-session.md` §Cancel / discard behavior).
 
 ### Display
 

@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-28
 route: /library/study/session/:sessionId
 study_mode: recall
@@ -9,6 +9,15 @@ source_specs:
 ---
 
 # 16 — Study Session: Recall Mode
+
+> **Drift correction (2026-06-10):** this mode is **Implemented as the V1 flip-card self-grade shell** (reveal + Forgot/Got it) in the current codebase. V1 implements
+> only the recall self-grade flow through the shared shell
+> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
+> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
+> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
+> **target structure** from a previous iteration and do NOT exist — verify against
+> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
+> in `docs/project-management/wbs.md`.
 
 ## Purpose
 
@@ -307,8 +316,9 @@ Same as other modes:
   `recallRevealTransitionDuration`)
 - `lib/core/theme/tokens/app_motion.dart` — single source of truth for
   `MxDurations.recallAnswerTimeout = Duration(seconds: 20)`
-- `lib/domain/study/usecases/study_usecases.dart` (`AnswerFlashcardUseCase` etc. — grading lives
-  here, not in a `grade_attempt_usecase.dart`)
+- `lib/domain/study/usecases/study_usecases.dart` (`RecordStudySessionAnswerUseCase` — grading
+  lives here, not in a `grade_attempt_usecase.dart`; the `AnswerFlashcardUseCase` family from a
+  previous iteration does NOT exist)
 
 **Related wireframes:**
 

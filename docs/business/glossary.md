@@ -64,7 +64,7 @@ User picks entry_type + scope
 | Suspend           | Hide a card from study queues indefinitely until user unsuspends | `docs/business/study-actions/bury-suspend.md` |
 | Resumable session | Study session with status `in_progress` or `draft`               | `docs/business/resume/resume-session.md`      |
 | Continue surface  | Dashboard card or screen banner promoting resume                 | `docs/business/resume/resume-session.md`      |
-| Auto-expiry       | Resumable session older than 30 days auto-cancelled on next open | `docs/business/resume/resume-session.md`      |
+| Auto-expiry       | Resumable session older than 30 days stops being surfaced (V1: query filter; explicit cancel is Target) | `docs/business/resume/resume-session.md`      |
 
 ## Engagement terms
 
@@ -154,14 +154,19 @@ User picks entry_type + scope
 
 ## Status terms (study session lifecycle)
 
-| Status               | Meaning                             |
-|----------------------|-------------------------------------|
-| `draft`              | Created but not started             |
-| `in_progress`        | User is actively studying           |
-| `ready_to_finalize`  | All items answered, awaiting commit |
-| `completed`          | Finalized successfully              |
-| `failed_to_finalize` | Finalize failed, recoverable        |
-| `cancelled`          | User exited before completion       |
+Persisted values of `study_sessions.status` (enum `SessionStatus`,
+`lib/domain/types/session_status.dart`):
+
+| Status               | Meaning                                                                                          |
+|----------------------|--------------------------------------------------------------------------------------------------|
+| `draft`              | Created but no attempts yet. Defined in the enum; V1 persists new sessions directly as `in_progress`. |
+| `in_progress`        | User is actively studying (V1 creation status)                                                   |
+| `completed`          | Finalized successfully                                                                           |
+| `failed_to_finalize` | Defined in the enum but never written in V1 — a failed finalize rolls back and stays `in_progress` (decision row S10) |
+| `cancelled`          | User discarded / started over                                                                    |
+
+`ready_to_finalize` is **NOT a persisted status**: it is the derived UI state "all items
+answered, awaiting explicit Finish" (see `docs/business/study/study-flow.md` §Session lifecycle).
 
 ## Result terms (per-attempt SRS outcome)
 
@@ -171,6 +176,14 @@ User picks entry_type + scope
 | `perfect`        | Correct without any retry within current cycle |
 | `recovered`      | Correct after retry                            |
 | `forgot`         | Failed, will lapse                             |
+
+> **⚠ Open definition gap:** `perfect` and `initial_passed` currently have identical box
+> transitions (n → n+1) and near-identical definitions. V1 emits only `perfect` / `forgot` from
+> the self-grade UI; `initial_passed` is defined in the enum but never emitted. Before any
+> multi-attempt mode emits `initial_passed`, the product owner must define when it applies versus
+> `perfect` (e.g., first-attempt-of-mode vs all-attempts-across-cycle) and update this table,
+> `docs/business/srs/srs-review.md`, and the decision table together. Do not pick a meaning
+> ad hoc.
 
 ## Agent rule
 

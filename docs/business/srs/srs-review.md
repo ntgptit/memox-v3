@@ -5,17 +5,14 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 
 # SRS Review
 
-> **Status: Target — Partial Migration Required.** Box transition logic itself is implementable
-> today on `flashcard_progress` and `study_attempts`. However, persisting per-attempt box transitions
-> for history requires the following columns from `docs/database/schema-contract.md` §Pending schema
-> changes:
->
-> - `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`
-> - `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`
->
-> `GradeAttemptUseCase` MUST populate both columns on every insert. Pre-migration rows are
-> backfilled with `0`. Blocks (until migration): card history timeline, study result box-change
-> aggregates, progress screen box distribution from attempts.
+> **Status: Current (data + finalization) / Target (history surfaces).** Box transition and
+> interval computation are implemented in `StudyRepositoryImpl.finalizeStudySession` and verified by
+> `test/data/repositories/study_srs_transition_test.dart` (decision rows S11–S15). The columns
+> `study_attempts.box_before` / `box_after` **exist in the current schema**
+> (`lib/data/datasources/local/drift/study_attempts.drift`) and are populated on every attempt
+> insert by `recordStudySessionAnswer`. What remains Target: `flashcard_progress.last_reset_at`
+> (needed only by the Future card-history/reset features), the card history timeline screen, study
+> result box-change aggregates, and the progress-screen box distribution chart.
 
 ## Source files to inspect
 
@@ -23,10 +20,11 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 - `lib/domain/**study**`
 - `lib/data/**progress**`
 - `lib/data/**study**`
-- `lib/data/datasources/local/tables/flashcard_progress_table.dart`
-- `lib/data/datasources/local/tables/study_attempts_table.dart`
-- `lib/data/repositories/study_repo_impl.dart` (canonical owner of finalization, box transitions,
-  and due-date calculation in V1).
+- `lib/data/datasources/local/drift/flashcard_progress.drift`
+- `lib/data/datasources/local/drift/study_attempts.drift`
+- `lib/data/repositories/study_repo_impl.dart` (canonical owner of finalization in V1).
+- `lib/data/repositories/study_repo_impl_study_session.dart` (`_finalizeResultForAttempts`,
+  `_boxAfterFinalization`, `_intervalForBox` — transitions and due-date calculation).
 - `lib/data/repositories/study_repo_record_answer.dart` (in-session answer recording helper; keeps
   `flashcard_progress` unchanged until finalization).
 - `lib/domain/study/usecases/study_usecases.dart` (session creation, empty-scope checks, and
@@ -79,13 +77,20 @@ finalization by `StudyRepositoryImpl.finalizeStudySession` in
 and re-queues failed cards. Implementation must match this table. There is no standalone
 `box_transition.dart` file at present.
 
-Per-card result classification (`forgot` / `recovered` / `perfect`) is shared with the Study Result
-breakdown: `forgot` = no passing attempt this session (box → 1, lapse +1); `recovered` = at least
-one passing attempt but not all `correct` (box stays, no lapse); `perfect` = every attempt
-`correct` (box + 1). Note: because failed cards are re-queued until passed within a mode, a
-normally-completed session never finalizes a card with zero passing attempts, so `forgot` is
-currently unreachable through the standard study flow (see
-`docs/checklist/wireframe-code-parity-assessment.md`).
+Per-card result classification at finalization (implemented in
+`_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`): the
+**last** attempt decides — last attempt `forgot` → `forgot` (box → 1, lapse +1); any earlier
+`forgot` but last attempt passing → `recovered` (box stays, no lapse); all attempts passing →
+the last attempt's result (`perfect` / `initial_passed`, box +1).
+
+> **⚠ Open product decision (C1 — SRS demotion reachability).** Current V1 records exactly ONE
+> attempt per item (`recordStudySessionAnswer` rejects a second answer), so tapping `Forgot` DOES
+> finalize as `forgot` and the card drops to box 1. The earlier target design ("failed cards are
+> re-queued until passed within a mode") would make `forgot` unreachable in a normally-completed
+> session — `lapse_count` would never increment and no card would ever demote. Before implementing
+> any retry/re-queue mode (match / guess / fill), the product owner must decide how a re-queued
+> card's final result maps to the transition table so the demotion path stays reachable. Do not
+> implement re-queue behavior until this is resolved.
 
 | Current box | Result           | Next box | Next due              |
 |-------------|------------------|----------|-----------------------|
@@ -98,11 +103,11 @@ currently unreachable through the standard study flow (see
 
 ## Interval table
 
-Intervals are currently defined directly in
-`lib/data/repositories/study_repo_impl.dart`; Learning Settings renders that same runtime source.
-The doc-level table below remains a pending product/docs contract; Prompt 12/13 identified that it
-differs from runtime. Until the interval-ladder product decision is made, **code owns runtime
-behavior** and this table must not be silently rewritten as resolved.
+Intervals are defined in `_intervalForBox`
+(`lib/data/repositories/study_repo_impl_study_session.dart`). Verified 2026-06-10: the runtime
+ladder **matches this table exactly** and is pinned by table-driven tests
+(`test/data/repositories/study_srs_transition_test.dart`). Any change to either side must update
+both in the same commit.
 
 | Box | Interval | Approx   | Rationale                                                                |
 |-----|----------|----------|--------------------------------------------------------------------------|
@@ -120,8 +125,7 @@ successive review feels like a small step. Larger jumps reserved for boxes 6+ wh
 already stable.
 
 When implementation differs from this table, record the mismatch as a product/docs decision and
-update whichever side is chosen in the same commit. The current mismatch is tracked in
-`docs/checklist/product-decisions-pending-2026-05-29.md`.
+update whichever side is chosen in the same commit. (No mismatch exists as of 2026-06-10.)
 
 ## Counter rules
 
@@ -172,11 +176,13 @@ The due query must:
 
 Any SRS behavior change must update:
 
-- `lib/data/repositories/study_repo_impl.dart` (finalization and interval mapping helpers)
+- `lib/data/repositories/study_repo_impl.dart` and
+  `lib/data/repositories/study_repo_impl_study_session.dart` (finalization and interval helpers)
 - This doc (transition table and/or interval table)
 - `docs/business/study/study-flow.md` if flow changes
-- Decision table S6-S10
-- Targeted tests in `test/domain/srs/**`
+- Decision table rows S6-S15
+- Targeted tests in `test/data/repositories/study_srs_transition_test.dart` and
+  `test/data/repositories/study_repository_test.dart`
 
 ## Related
 
@@ -211,24 +217,24 @@ Any SRS behavior change must update:
   box)
 - `docs/business/flashcard/flashcard-management.md` — reset progress sets box=1, last_reset_at=now
 
-**Source files to inspect (verified 2026-05-28):**
+**Source files to inspect (verified 2026-06-10):**
 
-- `lib/domain/study/usecases/study_usecases.dart` — owns session creation, empty-scope checks, and
-  in-session answer orchestration (`AnswerFlashcardUseCase`, `AnswerCurrentModeBatchUseCase`,
-  `AnswerCurrentModeItemGradesBatchUseCase`, `AnswerCurrentMatchModeBatchUseCase`). It records
-  attempts and re-queues failed cards; final SRS transition is committed later by the data
-  repository.
+- `lib/domain/study/usecases/study_usecases.dart` — session lifecycle use cases
+  (`StartStudySessionUseCase`, `RestartStudySessionUseCase`, `RecordStudySessionAnswerUseCase`,
+  `FinalizeStudySessionUseCase`, `CancelStudySessionUseCase`, review/result loaders). In-session
+  answers record attempts only; the final SRS transition is committed by the data repository at
+  finalization. The `Answer*BatchUseCase` family from earlier revisions does NOT exist.
 - `lib/domain/study/modes/study_mode_strategy.dart` +
   `recall_study_mode_strategy.dart` + `study_mode_strategy_factory.dart` — per-mode behavior
-  including transition rules.
-- `lib/domain/study/study_session_round.dart` — round model used by grading flow.
-- `lib/data/datasources/local/tables/study_attempts_table.dart` — persistence of each attempt with
-  `box_before`, `box_after`, `result`, `study_mode`, `attempted_at`.
-- `lib/data/datasources/local/tables/flashcard_progress_table.dart` — per-card SRS state
-  (`current_box`, `lapse_count`, `due_at`, `last_studied_at`).
-- `lib/data/repositories/study_repo_impl.dart` — finalization write path; computes the final
-  per-card result from persisted attempts, applies the box transition, and computes runtime due
-  intervals through `_intervalForBox`.
+  contract; V1 supports recall with a controlled-unsupported fallback for other modes.
+- `lib/data/datasources/local/drift/study_attempts.drift` — persistence of each attempt with
+  `box_before`, `box_after`, `result`, `study_mode`, `user_input`, `attempted_at`.
+- `lib/data/datasources/local/drift/flashcard_progress.drift` — per-card SRS state
+  (`box_number`, `lapse_count`, `due_at`, `last_studied_at`, `buried_until`, `is_suspended`).
+- `lib/data/repositories/study_repo_impl.dart` +
+  `lib/data/repositories/study_repo_impl_study_session.dart` — finalization write path; computes
+  the final per-card result from persisted attempts, applies the box transition, and computes
+  runtime due intervals through `_intervalForBox`.
 
 > **Drift note**: earlier revisions of this doc referenced `lib/domain/srs/box_intervals.dart`,
 `lib/domain/srs/box_transition.dart`, `lib/domain/srs/srs_service.dart`,

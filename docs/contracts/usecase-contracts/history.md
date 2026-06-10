@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-29
 status: Future Proposal — Migration Required
 ---
@@ -15,9 +15,10 @@ V1 and also requires schema migration before implementation.
 
 ## V1 rule
 
-Do not implement these use cases in V1 unless Card History is promoted in
-`docs/checklist/v1-implementation-scope-2026-05-29.md` and the migration for `last_reset_at`,
-`box_before`, and `box_after` is included.
+Do not implement these use cases in V1 unless Card History is promoted (update
+`docs/business/system/overview.md` + the WBS §6 register in `docs/project-management/wbs.md`)
+and the migration for `last_reset_at` is included. (`box_before` / `box_after` already exist in
+the current schema.)
 
 ## Future Proposal: GetCardHistoryUseCase
 

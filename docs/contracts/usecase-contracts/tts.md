@@ -7,20 +7,24 @@ status: contract
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
-Current V1 uses global/front-language settings, the shared TTS service path, and front-only playback. Per-language independent settings and deck `target_language` gating remain Target/Future unless code + tests explicitly prove them.
+> **Status correction (2026-06-10):** NO TTS runtime exists in the current codebase — no
+> `TtsService`, no `TtsController`, no `SpeakFlashcardUseCase`, no `TtsSettingsDao`, no
+> `tts_settings` table. The Audio & Speech settings screen is a static mock. Everything in this
+> contract, including the "runtime owners" table below, is the **target** structure for WBS 8.4.x
+> (`docs/business/tts/tts-settings.md`). The first slice is global/front-language settings with
+> front-only playback; per-language independent settings and deck `target_language` gating are a
+> further Target/Future step.
 
-## Current V1 Runtime Owners
+## Target Runtime Owners (first slice — none exist yet)
 
-Current code does not expose the target `SpeakFrontUseCase` / `ListVoicesUseCase` / per-language settings API below. The shipped owners are:
-
-| Behavior | Current owner |
+| Behavior | Target owner |
 | --- | --- |
 | Manual preview / explicit text speech | `TtsController.speakText` → `SpeakFlashcardUseCase.speakText` → `TtsService.speak` |
 | Auto-play front text | `TtsController.autoPlayTextSide` gated by `TtsSettings.autoPlay` and `TtsPlaybackPolicy` |
 | Front-only playback policy | `TtsPlaybackPolicy` and `SpeakFlashcardUseCase.speakFlashcardSide` |
 | Global/front-language settings load/save | `TtsSettingsNotifier` → `TtsSettingsRepositoryImpl` → `TtsSettingsDao` |
 | Voice listing | `ttsVoicesProvider(language)` → `TtsService.availableVoices(language)` |
-| Storage | Drift table `tts_settings` via `TtsSettingsRecords` Dart table class |
+| Storage | Drift table `tts_settings` (single-row; requires schema migration) |
 
 ## Target Use Cases
 

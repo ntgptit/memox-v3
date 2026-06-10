@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-28
 route: /library/study/session/:sessionId
 study_mode: fill
@@ -9,6 +9,15 @@ source_specs:
 ---
 
 # 17 — Study Session: Fill Mode
+
+> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.8/4.5.9) in the current codebase. V1 implements
+> only the recall self-grade flow through the shared shell
+> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
+> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
+> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
+> **target structure** from a previous iteration and do NOT exist — verify against
+> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
+> in `docs/project-management/wbs.md`.
 
 ## Purpose
 
@@ -317,16 +326,16 @@ Same as Recall mode:
   `lib/presentation/features/study/widgets/study_session/fill/fill_prompt_card.dart` +
   `fill_answer_cards.dart` + `fill_actions.dart`.
 - Motion: `lib/presentation/features/study/widgets/study_session/fill/fill_motion.dart`.
-- Strict matcher: **no standalone `strict_matcher.dart` in `lib/domain/study/`**. Match logic
-  currently lives in the presentation viewmodel / `fill_actions.dart`. Audit
-  `docs/checklist/wireframe-code-parity-assessment.md` §3.10 flags this as a Clean-Architecture
-  violation candidate — promote to domain when scope allows.
+- Strict matcher: **no standalone `strict_matcher.dart` in `lib/domain/study/`**. When fill mode
+  is built, put match logic in the domain strategy (not the presentation layer) — a previous
+  iteration kept it in presentation and that was flagged as a Clean-Architecture violation.
 - Hint revealer: not extracted to a domain file; hint behavior is implemented inside the fill panel.
 - Flow validator (skip rule for trivial fronts): currently lives within
   `lib/domain/study/modes/` (see `study_mode_strategy.dart`, `study_mode_strategy_factory.dart`);
   no
   dedicated `flow_validator.dart`.
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `AnswerFlashcardUseCase`. No standalone
+- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
+  (the `AnswerFlashcardUseCase` name from a previous iteration does NOT exist). No standalone
   `grade_attempt_usecase.dart`.
 
 **Related wireframes:**

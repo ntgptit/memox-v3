@@ -2,7 +2,7 @@
 last_updated: 2026-06-06
 applies_to: V1 global search (folders/decks/flashcards) + inline/scope-local search
 status: Current — global search screen for folders/decks/flashcards; tags + recent + popular are Future Proposal
-related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
+related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # Search
@@ -45,7 +45,7 @@ screen.
 | Case sensitivity | Case-insensitive.                                                  |
 | Whitespace       | Trim around query; collapse repeated internal whitespace.          |
 | Partial match    | Substring match.                                                   |
-| Special chars    | Escape `%` and `_` before LIKE queries.                            |
+| Special chars    | Escape `%`, `_`, and the escape character `\` itself before LIKE queries (declare `ESCAPE '\'`). |
 
 ## Inline scope-local search rules
 

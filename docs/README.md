@@ -22,11 +22,10 @@ Do not implement from assumption when repo contracts already exist.
 
 ## Current V1 scope guard
 
-The authoritative V1 scope guard is:
-
-```text
-docs/checklist/v1-implementation-scope-2026-05-29.md
-```
+The authoritative V1 scope guard is the Deferred / Future / Rejected register in
+`docs/project-management/wbs.md` (§6) plus the capability table in
+`docs/business/system/overview.md`. (The former standalone gate file
+`v1-implementation-scope-2026-05-29.md` no longer exists.)
 
 Important V1 decisions:
 
@@ -61,7 +60,7 @@ Important V1 decisions:
 | Area                         | Document                                               |
 |------------------------------|--------------------------------------------------------|
 | Docs manifest                | `docs/MANIFEST.md`                                     |
-| V1 scope guard               | `docs/checklist/v1-implementation-scope-2026-05-29.md` |
+| V1 scope guard               | `docs/project-management/wbs.md` (§6 register)         |
 | Business index               | `docs/business/index.md`                               |
 | Glossary                     | `docs/business/glossary.md`                            |
 | Product overview             | `docs/business/system/overview.md`                     |

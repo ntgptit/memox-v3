@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-28
 route: /library/study/session/:sessionId
 study_mode: guess
@@ -9,6 +9,15 @@ source_specs:
 ---
 
 # 15 — Study Session: Guess Mode
+
+> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.6/4.5.7) in the current codebase. V1 implements
+> only the recall self-grade flow through the shared shell
+> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
+> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
+> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
+> **target structure** from a previous iteration and do NOT exist — verify against
+> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
+> in `docs/project-management/wbs.md`.
 
 ## Purpose
 
@@ -300,7 +309,8 @@ Same as Review mode.
 - Description fallback chain (note → example → back-truncate): no dedicated
   `option_description_builder.dart` file. Construction happens inline within
   `guess_option_models.dart`; if the chain becomes more complex, extract to domain.
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `AnswerFlashcardUseCase`. No standalone
+- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
+  (the `AnswerFlashcardUseCase` name from a previous iteration does NOT exist). No standalone
   `grade_attempt_usecase.dart`.
 - Motion / countdown:
   `lib/presentation/features/study/widgets/study_session/guess/guess_motion.dart` re-exports

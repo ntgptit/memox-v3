@@ -191,9 +191,11 @@ chips+charts+box layout is the Future analytics target.
 
 ## 13. Data/content contract
 
-- **Real data (V1):** `LibraryOverviewReadModel` (due/new/mastery/card counts)
-  via `WatchLibraryOverviewUseCase`; active sessions via
-  `ResumeStudySessionUseCase.listActiveSessions()`.
+- **Target data (no Progress screen exists yet — `/progress` is a placeholder):**
+  `LibraryOverviewReadModel` (due/new/mastery/card counts) via the existing library overview
+  use case; session info via the existing study session use cases
+  (`lib/domain/study/usecases/study_usecases.dart` — note: no `ResumeStudySessionUseCase`
+  class exists).
 - **Future analytics data:** `study_attempts` aggregates (range), `flashcard_progress`
   box distribution / suspended / buried — none have a use case yet.
 - **Mock/demo data (do NOT copy):** "124 this week", "88%", box counts, "7 days".

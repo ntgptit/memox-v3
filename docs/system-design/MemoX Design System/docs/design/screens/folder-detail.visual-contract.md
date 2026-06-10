@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-06-06
 status: contract
 route: /library/folder/:id
@@ -360,7 +360,7 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 
 | Issue | Type | Affected element | Reason | Recommended action |
 | --- | --- | --- | --- | --- |
-| Wireframe says hero mastery card + Study/Today CTAs + Resume banner are Current (Prompt 45/47/50); code comment + render path say Future ("study layer is not built") | Business conflict / State conflict | Hero card, study/resume CTAs | Wireframe ahead of code on this ref | Follow code; keep Future; reconcile `05-folder-detail.md`; never fake mastery/new/due-from-session data |
+| Wireframe says hero mastery card + Study/Today CTAs + Resume banner are Current (Prompt 45/47/50); code comment + render path say Future ("study layer is not built") | Business conflict / State conflict | Hero card, study/resume CTAs | Wireframe ahead of code on this ref | Reconciled 2026-06-10: `05-folder-detail.md` + related business docs corrected to Future; never fake mastery/new/due-from-session data |
 | Overflow ⋮ rendered disabled (`onPressed: null`) | Mock-only element | App-bar overflow | No folder-level action sheet wired on Folder Detail | Keep disabled until a folder action sheet (Rename/Move/Delete/Sort) is promoted |
 | `ContentSortMode` exists in toolbar state but no sort UI is rendered; wireframe says `MxSearchSortToolbar` is Current | State conflict | Sort control | Code uses plain `MxSearchField`, not the sort toolbar | Treat sort UI as Future; if promoted, use the shared `MxSearchSortToolbar`, do not fork |
 | Deck row tap targets `/library/deck/:deckId/flashcards`, but Flashcard list is not implemented | Future scope | Deck row navigation | Flashcard feature absent on this ref | Acceptable as nav intent; flashcard list must land (P2) for the tap to resolve |

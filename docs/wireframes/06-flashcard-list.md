@@ -197,18 +197,18 @@ Manage flashcards in one deck: browse, filter, edit, multi-select for bulk opera
 | Deck detail (name, target_language, count, parent path) | `decks` + folder chain | watch |
 | Flashcards filtered | `flashcards JOIN flashcard_progress JOIN flashcard_tags` with WHERE clause matching filters | stream |
 | Tag list for current deck (for filter chip) | distinct tags in deck | watch |
-| Resumable session for this deck | **Current (Prompt 46).** `StudyRepo.findResumeCandidate` for `entry_type='deck', entry_ref_id=:deckId` (status IN draft/in_progress) | re-resolves on content/session revision |
-| Today's due count for deck (for Today CTA) | **Current (Prompt 46).** `StudyRepo.countDueCardsInScope` over the deck (`entry_type=deck`) | re-resolves on content/session revision |
+| Resumable session for this deck | **Future.** Target: `StudyRepository.findResumableSession` for `entry_type='deck', entry_ref_id=:deckId` (status IN draft/in_progress). No banner/data wiring exists in V1. | re-resolves on content/session revision |
+| Today's due count for deck (for Today CTA) | **Future.** Target: due-count query over the deck scope (`entry_type=deck`). No CTA/data wiring exists in V1. | re-resolves on content/session revision |
 | Per-row computed `CardState` (Suspended > Buried > Due > Active) | derived from flashcard_progress | watch |
 | Selection state (mode + selected IDs) | in-memory (NotifierState) | local |
 
 ## Forbidden
 
 - ❌ Show note/example/pronunciation/hint inline in row.
-- ❌ Display "Today (0)" — hide the Today CTA when 0 due (Current rule, Prompt 46).
+- ❌ Display "Today (0)" — hide the Today CTA when 0 due (target rule; the Today CTA itself is Future).
 - ❌ Use `?type=srs_review` — the query param is `study_type` (`RoutePaths.studyTypeQueryParam`).
 - ❌ Use global `entry_type=today` for the deck Today CTA — it is `entry_type=deck` filtered to due via `study_type=srs_review`.
-- ❌ Start a session directly from Flashcard List — Study deck / Today / Resume must go through the Study Entry Gate (or resume the existing session); the gate owns empty-scope validation and session creation (Current rule, Prompt 46).
+- ❌ Start a session directly from Flashcard List — Study deck / Today / Resume must go through the Study Entry Gate (or resume the existing session); the gate owns empty-scope validation and session creation (target rule; these CTAs are Future on this screen).
 - ❌ Remove the resume banner after one view. It persists until session resumed or discarded.
 - ❌ Long-press → open context sheet directly. Long-press MUST enter selection mode. **(Future target — see V1 verification status. V1 long-press opens the row action sheet; selection is entered via the "Select" action or the per-row star toggle.)**
 - ❌ Bulk action applies to filtered-out cards. Snapshot selected IDs at confirmation time.
@@ -219,14 +219,19 @@ Manage flashcards in one deck: browse, filter, edit, multi-select for bulk opera
 
 ## Components
 
-Listed in **render order top-to-bottom** as they appear in `lib/presentation/features/flashcards/screens/flashcard_list_screen.dart`. Each row maps 1-1 to a `*_section.dart` widget — keep this mapping intact when refactoring; reviewers verify by spec ↔ widget filename.
+Target render order top-to-bottom. **Note (2026-06-10):** only some of the widget files below
+exist in code today (`flashcard_list_body.dart`, `flashcard_detail_card_row.dart`,
+`flashcard_empty_state_section.dart`, `flashcard_list_skeleton.dart`,
+`flashcard_row_actions_sheet.dart`, `deck_actions_sheet.dart`). Rows pointing at other
+`*_section.dart` filenames are the **target structure** for when those sections are built — do
+not treat a filename here as proof the widget exists; check `lib/presentation/features/flashcards/widgets/`.
 
 | Order | Component | Code widget | Spec |
 | --- | --- | --- | --- |
 | 1 | App bar | (inline in screen scaffold) | Title = deck name. Back. Search (in-deck). Overflow ⋮. |
 | 2 | Header section | `flashcard_header_section.dart` | Renders title + overflow + search. Replaces app bar inline when needed (responsive). |
 | 3 | Breadcrumb subtitle | `flashcard_breadcrumb_section.dart` | "Library / {folderPath} / {deckName}". 2nd line "{n} cards · {targetLanguage}". |
-| 4 | Deck study-entry section | `flashcard_study_entry_section.dart` | **Current (Prompt 46).** Resume banner (`deck_resume_banner`) + deck-level study card (`deck_study_card`) with Today (`deck_study_today_action`, `study_type=srs_review`) and Study-deck (`deck_study_deck_action`, default new study) CTAs. Fed by `deckStudyEntryProvider`. Today hidden at 0 due; whole section hidden when no cards and no resume. Renders above the deck summary. Never starts a session directly. |
+| 4 | Deck study-entry section | `flashcard_study_entry_section.dart` (target) | **Future — not built.** Target: Resume banner + deck-level study card with Today (`study_type=srs_review`) and Study-deck (default new study) CTAs. Today hidden at 0 due; whole section hidden when no cards and no resume. Renders above the deck summary. Never starts a session directly. |
 | 5 | Deck summary | `flashcard_deck_summary_section.dart` | Total cards · due-today badge · mastery progress chip. Single row above the study CTAs. |
 | 6 | Study modes | `flashcard_study_modes_section.dart` | Per-mode study tiles (Review / Match / Guess / Recall / Fill) + the Mix card; all route through the Study Entry Gate (`entry_type=deck`, default new study). Disabled on empty deck. The deck-level "Study deck" / "Today" CTA pair lives in the study-entry section (order 4). |
 | 7 | Progress section | `flashcard_progress_section.dart` | Optional in-deck progress widget (e.g., box distribution or due timeline). Rendered only when `state.progress != null`. |
@@ -253,8 +258,8 @@ Render order is enforced by reviewer checklist — see "Pre-commit parity check"
 | No results (search filters every row) | **Deck has cards** (`totalCount > 0`) but the active search term matches none (`items.isEmpty && searchTerm.isNotEmpty`) | Show `FlashcardNoResultsSection` (`ValueKey('flashcard_no_results')`) with "Clear" CTA that resets the toolbar search term. Distinct from empty-deck. **Current (Prompt 16, classification corrected Prompt 16B).** |
 | Filtered empty (status/tag filters) | Status/tag filters applied, no match | Show filtered empty with "Clear filters" CTA. **Future** — status/tag filter chips are not yet implemented (see V1 verification status). |
 | Selection mode | Row "Select" action or per-row star toggle. Long-press opens the row action sheet; long-press-to-select is a Future target only. | App bar swaps; checkboxes show; bulk bar appears. |
-| Resume present | **Current (Prompt 46).** Deck has resumable session | Show Resume banner above the study card. Resume opens that session; no new session created. |
-| Today present | **Current (Prompt 46).** Deck `dueCount > 0` | Show Today CTA in the study card (`study_type=srs_review`). Hidden at zero. |
+| Resume present | **Future.** Deck has resumable session | Show Resume banner above the study card. Resume opens that session; no new session created. |
+| Today present | **Future.** Deck `dueCount > 0` | Show Today CTA in the study card (`study_type=srs_review`). Hidden at zero. |
 | Loading bulk action | After confirm | Disable bulk bar; show progress indicator if > 1s. |
 | Bulk error | Transaction failed | Toast error; restore selection state. |
 
@@ -268,10 +273,10 @@ Render order is enforced by reviewer checklist — see "Pre-commit parity check"
 | Long-press card | Long-press | **Current (V1):** open the row action sheet (Edit / Move / Export / Select / Delete). Selection mode is entered via the sheet's "Select" action or the per-row star toggle, NOT by long-press. (Long-press-to-select is a **Future** target — see V1 verification status / §Forbidden.) |
 | Tap filter dropdown | Tap | Open filter picker bottom-sheet. **(Future** — status filter chips not yet implemented.) |
 | Tap tag chip filter | Tap | Open tag picker bottom-sheet (multi-select, AND). **(Future** — tag filter chips not yet implemented; tag-scoped study remains Future/Blocked.) |
-| Tap "Study deck" | Tap | **Current (Prompt 46).** Navigate to study entry gate `/library/study/deck/:deckId` (no explicit `study_type` → default new study). |
-| Tap "Today (n)" | Tap | **Current (Prompt 46).** Navigate to study entry gate `/library/study/deck/:deckId?study_type=srs_review` (deck-scoped review of due cards). NOT `entry_type=today` (which is global) and NOT `?type=`. |
-| Tap resume banner Resume | Tap | **Current (Prompt 46).** Open the existing session (`context.goStudySession`); never creates a new session. |
-| Tap resume banner Discard | Tap | **Current (Prompt 47).** Show danger discard confirmation; on confirm cancel the paused session (shared `confirmAndDiscardResumeSession` → `CancelStudySessionUseCase`), refresh banner away. Cancel does nothing. Never creates a session. |
+| Tap "Study deck" | Tap | **Future (CTA not built).** Target: navigate to study entry gate `/library/study/deck/:deckId` (no explicit `study_type` → default new study). The gate route itself is Current. |
+| Tap "Today (n)" | Tap | **Future (CTA not built).** Target: navigate to study entry gate `/library/study/deck/:deckId?study_type=srs_review` (deck-scoped review of due cards). NOT `entry_type=today` (which is global) and NOT `?type=`. The query param is Current at the gate. |
+| Tap resume banner Resume | Tap | **Future (banner not built).** Target: open the existing session; never creates a new session. |
+| Tap resume banner Discard | Tap | **Future (banner not built).** Target: danger discard confirmation; on confirm cancel the paused session via `CancelStudySessionUseCase`, refresh banner away. Cancel does nothing. Never creates a session. |
 | Tap FAB | Tap | Action sheet: New flashcard / Import. |
 | Tap overflow ⋮ | Tap | Menu: Edit deck / Move deck / Delete deck / Export / Sort by / Select. |
 | Pull to refresh | Pull | Re-run query. |
@@ -295,7 +300,7 @@ Render order is enforced by reviewer checklist — see "Pre-commit parity check"
 
 ## Dialogs and bottom-sheets used
 
-- Resume discard dialog — **Current (Prompt 47).** `MxConfirmationDialog` (danger) composed via the shared discard flow: `docs/wireframes/24-shared-dialogs.md` §discard-session.
+- Resume discard dialog — **Future (banner not built).** Target: `MxConfirmationDialog` (danger) per `docs/wireframes/24-shared-dialogs.md` §discard-session.
 - New flashcard create flow — see screen 07.
 - Import flow — see screen 10.
 - Filter picker bottom-sheet — `docs/wireframes/25-shared-bottom-sheets.md` §filter-status.

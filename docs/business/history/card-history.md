@@ -1,27 +1,22 @@
 ---
-last_updated: 2026-05-29
+last_updated: 2026-06-10
 applies_to: future per-card study history view, attempt timeline
-status: Future Proposal — Migration Required
-related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
+status: Future Proposal — partial migration required (last_reset_at only)
+related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # Card History
 
-> **Status: Future Proposal — Migration Required.** This is not V1 implementation scope. Do not
-> build the screen, route, use cases, repository queries, or entry links until the feature is promoted
-> in `docs/checklist/v1-implementation-scope-2026-05-29.md`.
+> **Status: Future Proposal.** This is not V1 implementation scope. Do not build the screen,
+> route, use cases, repository queries, or entry links until the feature is promoted (update
+> `docs/business/system/overview.md` + the WBS §6 register in the same commit).
 >
-> **Migration dependency.** This spec depends on the following columns from
-`docs/database/schema-contract.md` §Pending schema changes:
->
-> - `flashcard_progress.last_reset_at INTEGER NULL`
-> - `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`
-> - `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`
->
-> Migration MUST run before card-history view, reset progress, or any attempt insert that needs box
-> transition. Backfill: pre-migration `study_attempts` rows get `box_before=0`, `box_after=0`; UI
-> renders `0` as `—`. Blocks: card history screen, reset progress (single + bulk), study result
-> box-change aggregates, progress screen box-distribution chart.
+> **Data dependencies (verified 2026-06-10):** `study_attempts.box_before` / `box_after` already
+> exist in the current schema (shipped with the v4 study tables) and are populated on every
+> attempt insert — they no longer block anything. The ONLY pending column is
+> `flashcard_progress.last_reset_at INTEGER NULL`, which blocks: progress reset (single + bulk)
+> and the reset divider in the timeline. The history timeline itself is blocked by feature
+> promotion, not by schema.
 
 ## V1 decision
 

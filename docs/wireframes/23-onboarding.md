@@ -6,7 +6,7 @@ source_specs:
   - docs/business/system/overview.md
   - docs/business/account-sync/account-sync.md
   - docs/business/engagement/dashboard-engagement.md
-related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
+related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # 23 — Onboarding / Zero-Content Guidance
@@ -118,9 +118,8 @@ Future scope may include:
 
 Future promotion requires updating:
 
-- `docs/checklist/v1-implementation-scope-2026-05-29.md`
-- `docs/checklist/screen-function-task-matrix.md`
-- `docs/checklist/wireframe-code-parity-assessment.md`
+- `docs/business/system/overview.md` (capability table) + the Deferred / Future / Rejected
+  register in `docs/project-management/wbs.md` (§6)
 - State/use case contracts for onboarding.
 
 ## Agent rule

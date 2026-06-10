@@ -32,7 +32,7 @@ project-root/
 1. `CLAUDE.md` at project root — read fully, especially Doc-code parity rule and Path convention.
 2. `AGENTS.md` at project root — short agent contract.
 3. `docs/MANIFEST.md` — this file.
-4. `docs/checklist/v1-implementation-scope-2026-05-29.md` — current V1 scope guard.
+4. `docs/project-management/wbs.md` — delivery plan + §6 Deferred / Future / Rejected register (the V1 scope guard).
 5. `docs/business/glossary.md` — domain terms.
 6. `docs/business/index.md` — feature map.
 7. `docs/business/system/overview.md` — product capability map.
@@ -62,7 +62,10 @@ explicitly promotes it and includes required migration/decomposition work.
 
 ## V1 scope decision summary
 
-The V1 scope guard is `docs/checklist/v1-implementation-scope-2026-05-29.md`.
+The V1 scope guard is the Deferred / Future / Rejected register in
+`docs/project-management/wbs.md` (§6) plus the capability table in
+`docs/business/system/overview.md`. (The former standalone gate file
+`v1-implementation-scope-2026-05-29.md` no longer exists.)
 
 | Feature                   | V1 status                | Notes                                                     |
 |---------------------------|--------------------------|-----------------------------------------------------------|
@@ -111,7 +114,7 @@ Incorrect:
 |-------------------------------------------------------------------|------------------------------------------------------------|
 | Agent hard rules, path convention, import direction               | project-root `CLAUDE.md`                                   |
 | Agent responsibilities and reporting                              | project-root `AGENTS.md`                                   |
-| V1 scope gate                                                     | `docs/checklist/v1-implementation-scope-2026-05-29.md`     |
+| V1 scope gate                                                     | `docs/project-management/wbs.md` (§6 register) + `docs/business/system/overview.md` |
 | Business behavior, edge cases                                     | `docs/business/**`                                         |
 | UI states, copy, layout                                           | `docs/wireframes/**`                                       |
 | Per-screen mock-to-code visual mapping                            | `docs/design/**`                                           |

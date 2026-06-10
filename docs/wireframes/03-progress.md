@@ -14,11 +14,20 @@ source_specs:
 Long-form analytics surface. Dashboard shows "today"; Progress shows trends and totals. Read-only.
 
 Status in `docs/business/system/overview.md`: "Progress tracking — Partially specified (data only)".
-As of Prompt 20 (2026-05-31), the shipped V1 screen is a read-only Progress Overview focused on
-library summary metrics and active session recovery. The chart-heavy analytics layout below remains
-a target/Future analytics specification unless explicitly listed as Current in the V1 table.
+> **Drift correction (2026-06-10):** earlier revisions of this section described a shipped
+> read-only Progress Overview screen ("Prompt 20": `ProgressScreen`,
+> `lib/presentation/features/progress/`, `progressOverviewProvider`,
+> `ResumeStudySessionUseCase.listActiveSessions()`, ready/failed session cards, and dedicated
+> progress tests). **None of that exists in this codebase** — `/progress` renders
+> `RoutePlaceholder` (`lib/app/router/app_router.dart`) and there is no
+> `lib/presentation/features/progress/` feature, no progress provider, and no
+> `ResumeStudySessionUseCase`. Those claims described a previous project iteration. The Progress
+> screen is planned as WBS 7.x in `docs/project-management/wbs.md` (aggregate BE read model first,
+> then FE wiring). **Treat every "Current" row in the tables below as describing that previous
+> iteration's target behavior, NOT this repo's state** — in this repo only the placeholder route +
+> shell navigation are Current.
 
-## V1 verification status
+## V1 verification status (legacy table — see drift correction above)
 
 | Section / behavior                       | Status                                      | Current owner                                                                                                | Notes                                                                                                                                                                                                                                                       |
 |------------------------------------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -231,28 +240,20 @@ do not add dialogs unless promoted by a later scope decision.
 
 **Schema / storage:**
 
-- Current V1: library overview counts are read through existing content queries; active-session
-  recovery reads persisted `study_sessions`, `study_session_items`, and related flashcard data
-  through `ResumeStudySessionUseCase`.
-- Future analytics: `study_attempts` (range aggregates) and `flashcard_progress` (box distribution
-  snapshot, `is_suspended`, `buried_until`).
+- Target: summary counts via library overview queries; session info via persisted
+  `study_sessions` / `study_session_items`; analytics via `study_attempts` (range aggregates) and
+  `flashcard_progress` (box distribution snapshot, `is_suspended`, `buried_until`).
 
 **Contracts:** `docs/contracts/usecase-contracts/srs.md`,
-`docs/contracts/usecase-contracts/engagement.md`. A dedicated progress repository/use-case contract
-does not exist in V1; current summary metrics are owned by `WatchLibraryOverviewUseCase` and
-active-session recovery is owned by `ResumeStudySessionUseCase`.
+`docs/contracts/usecase-contracts/engagement.md`. A dedicated progress repository/use-case
+contract does not exist yet; define it with WBS 7.4.1.
 
-**Code paths:**
+**Code paths (target — only the router entry exists today):**
 
-- `lib/presentation/features/progress/screens/progress_screen.dart`
-- `lib/presentation/features/progress/providers/progress_session_notifier.dart`
-- `lib/presentation/features/progress/widgets/progress_content.dart`
-- `lib/presentation/features/progress/widgets/progress_overview_section.dart`
-- `lib/presentation/features/progress/widgets/active_session_section.dart`
-- `lib/presentation/features/progress/widgets/study_session_card.dart`
-- `lib/domain/usecases/content_query_usecases.dart` (`WatchLibraryOverviewUseCase`)
-- `lib/domain/study/usecases/study_usecases.dart` (`ResumeStudySessionUseCase`,
-  finalize/cancel/retry use cases)
+- `lib/app/router/app_router.dart` → `/progress` currently renders `RoutePlaceholder` (Current)
+- `lib/presentation/features/progress/**` — target feature folder (does NOT exist yet; WBS 7.5.x)
+- `lib/domain/usecases/folder/watch_library_overview_usecase.dart` (existing overview read model)
+- `lib/domain/study/usecases/study_usecases.dart` (existing session use cases)
 - `lib/app/router/route_names.dart` → `RouteNames.progress`
 
 **Related wireframes:**

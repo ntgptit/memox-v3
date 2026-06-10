@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-06-02
 status: contract
 ---
@@ -11,7 +11,7 @@ status: contract
 > `decks.folder_id` column is non-null. Keep every deck folder-owned.
 >
 > **Prompt 42B design note (2026-06-02):**
-> `docs/database/migrations/nullable-deck-parent-migration.md` is retained only
+> The nullable-deck-parent design (formerly `docs/database/migrations/nullable-deck-parent-migration.md`, file removed) is retained only
 > as a rejected historical design note. Do not implement it.
 
 > **Current implementation note (2026-06-10, Prompt MX-BE-CONTENT-ORDERING-RENAME-BATCH-20260610-001):**
@@ -171,7 +171,7 @@ Used by deck-level study CTA enable/disable and Today CTA subtitle.
 
 **Business spec:** `docs/business/deck/deck-management.md`
 **Repository:** `docs/contracts/repository-contracts/deck-repository.md`
-**Rejected migration design:** `docs/database/migrations/nullable-deck-parent-migration.md`
+**Rejected migration design:** nullable deck parent (design note removed; decision recorded in `docs/business/deck/deck-management.md`)
 **Wireframes:** `docs/wireframes/02-library.md`, `docs/wireframes/05-folder-detail.md`,
 `docs/wireframes/06-flashcard-list.md`
 **TTS gate:** `docs/business/tts/tts-settings.md`

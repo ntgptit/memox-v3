@@ -10,9 +10,8 @@ applies_to: flashcard entity and flashcard management feature
 - `lib/presentation/features/flashcards/**`
 - `lib/domain/**flashcard**`
 - `lib/data/**flashcard**`
-- `lib/data/datasources/local/tables/flashcards_table.dart`
+- `lib/data/datasources/local/drift/` (flashcards + flashcard_progress tables)
 - `lib/data/datasources/local/drift/flashcard_tags.drift`
-- `lib/data/datasources/local/tables/flashcard_progress_table.dart`
 
 ## Data
 
@@ -54,14 +53,15 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 ## Import rules
 
 - Target deck must exist.
-- Current V1 deck import is CSV paste preview + transactional commit for valid preview rows only.
-  File picker and Excel remain deferred. Structured text is supported in the backend pipeline;
-  UI entry remains deferred.
+- Current V1 deck import is CSV paste preview + transactional commit for valid preview rows only
+  (`parse_deck_import_csv_usecase.dart`, `prepare_deck_import_usecase.dart`,
+  `commit_deck_import_usecase.dart`). File picker and Excel remain deferred. Structured text is
+  supported in the backend pipeline; UI entry remains deferred.
 - Imported rows must pass the same front/back validation as manual creation.
 - Invalid rows must be reported clearly via the preview screen (see "Import preview flow" below).
 - Do not silently create garbage rows.
 - Duplicate detection, skipped-duplicate reporting, and transaction commit are implemented in the
-  backend pipeline. CSV V1 does not parse tags.
+  backend pipeline (commit `44407390` + bypass guard `e84f5115`). CSV V1 does not parse tags.
 
 ## Import sources
 
@@ -76,7 +76,8 @@ ties are treated as invalid input.
 
 ## Duplicate policy
 
-`FlashcardImportDuplicatePolicy.skipExactDuplicates` is the only policy supported.
+`FlashcardImportDuplicatePolicy.skipExactDuplicates` is the only policy supported (implemented in
+the backend pipeline; preview-surface UI for duplicates remains deferred).
 
 Duplicate detection:
 
@@ -95,7 +96,7 @@ Skipped duplicates appear in `FlashcardImportPreparation.skippedDuplicates` with
 ## Import preview flow
 
 Current V1 deck import keeps CSV preview on the same screen and commits valid rows transactionally.
-Structured text uses the same backend parse/validate/commit pipeline.
+Structured text uses the same backend parse/validate/commit pipeline (UI entry deferred).
 
 ```mermaid
 flowchart TD
@@ -228,7 +229,8 @@ Deck import screen (`/library/deck/:deckId/import`):
  - Shows route-level copy, a CSV textarea, preview action, validation summary, valid rows list,
    ready/committing/failure callouts, and commit feedback.
  - Does not expose the file picker, Excel import, or structured text import.
- - Duplicate detection remains future import work.
+ - Duplicate detection runs in the backend pipeline and blocks duplicate commits; a richer
+   duplicate-preview surface in the UI remains deferred.
 
 ## Form rules
 
@@ -289,10 +291,11 @@ files.
 
 **Source files to inspect:**
 
-- `lib/data/datasources/local/tables/flashcards_table.dart`
-- `lib/data/datasources/local/tables/flashcard_progress_table.dart`
+- `lib/data/datasources/local/drift/` (flashcards + flashcard_progress tables)
 - `lib/data/datasources/local/drift/flashcard_tags.drift`
-- `lib/data/repositories/flashcard_import_*.dart`
+- `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`,
+  `prepare_deck_import_usecase.dart`, `commit_deck_import_usecase.dart` (import pipeline)
+- `lib/data/repositories/flashcard_repository_impl_imports.dart`
 - `lib/domain/entities/flashcard.dart`
 - `lib/domain/usecases/flashcard/**`
-- `lib/presentation/features/flashcard/**`
+- `lib/presentation/features/flashcards/**`

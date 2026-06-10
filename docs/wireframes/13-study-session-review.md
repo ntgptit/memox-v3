@@ -11,6 +11,15 @@ source_specs:
 
 # 13 — Study Session: Review Mode
 
+> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.2/4.5.3) in the current codebase. V1 implements
+> only the recall self-grade flow through the shared shell
+> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
+> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
+> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
+> **target structure** from a previous iteration and do NOT exist — verify against
+> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
+> in `docs/project-management/wbs.md`.
+
 ## Purpose
 
 Front + back shown together on a single card. User reads, self-evaluates whether they knew it, then
@@ -265,10 +274,10 @@ on card open (silent UI).
 - Swipe gesture:
   `lib/presentation/features/study/widgets/study_session/review/review_page_scroll_behavior.dart` (
   no standalone `swipe_to_grade.dart`; behavior is embedded in the page scroll behaviour widget).
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `AnswerFlashcardUseCase` (single
-  attempt), `AnswerCurrentModeBatchUseCase` / `AnswerCurrentModeItemGradesBatchUseCase` (batch). *
-  *No standalone `grade_attempt_usecase.dart` exists** — grading is the responsibility of these
-  classes in the study use-case module.
+- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
+  (the only in-session answer path today; the `AnswerFlashcardUseCase` / `Answer*BatchUseCase`
+  family from a previous iteration does NOT exist). No standalone `grade_attempt_usecase.dart`
+  exists either.
 - SRS transitions: no standalone `lib/domain/srs/box_transition.dart` exists. Runtime finalization
   lives in `lib/data/repositories/study_repo_impl.dart`; in-session study use cases record attempts
   and re-queue failed cards.

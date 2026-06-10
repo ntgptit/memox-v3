@@ -60,11 +60,16 @@ Selection state is ephemeral (in-memory). Navigating away or filter change clear
 
 All bulk operations MUST run in a single transaction:
 
-- Atomicity: all or nothing. Partial application would leave inconsistent state.
+- Atomicity: all applied changes commit together or not at all.
 - Performance: a single transaction for 1000 row update beats 1000 transactions.
 
 If a bulk operation fails mid-transaction, the entire transaction rolls back and the UI shows an
 error. No partial commit.
+
+One defined exception to "operate on every selected ID": selected cards that no longer exist at
+execution time are **skipped and reported** ("X cards no longer exist and were skipped") — the
+operation still applies atomically to all surviving cards in one transaction. Missing rows are
+the ONLY skip condition; any other per-row failure aborts and rolls back the whole transaction.
 
 ## Confirmation requirements
 
@@ -87,7 +92,9 @@ Toast-undo MUST genuinely revert via inverse transaction.
 - Target deck must be in a folder whose mode allows decks (existing rule).
 - Cards moved retain `flashcard_progress` (SRS state preserved across deck moves).
 - Cards moved retain `flashcard_tags` (tags global by name, so they remain).
-- `sort_order` recomputed: appended to end of target deck.
+- `sort_order` recomputed: appended to end of target deck. The undo path MUST snapshot each
+  card's original `(deck_id, sort_order)` before the move so toast-undo can restore the exact
+  previous positions (required by the "real inverse operation" rule below).
 - Source deck card count decreases; target deck card count increases.
 - If target == source: no-op, dismiss with toast.
 

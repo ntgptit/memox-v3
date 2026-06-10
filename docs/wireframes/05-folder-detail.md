@@ -93,7 +93,7 @@ banner are **Future** (the study layer is not built).
 │ Library / Korean                      │  ← Breadcrumb
 ├───────────────────────────────────────┤
 │                                       │
-│ ⚠ You have a paused study session     │  ← RESUME BANNER (Current; Resume P45, Discard P47)
+│ ⚠ You have a paused study session     │  ← RESUME BANNER (Future in V1; study layer not built)
 │   for this folder.                    │
 │   [Resume]  [Discard]                 │
 ├───────────────────────────────────────┤
@@ -315,17 +315,17 @@ banner are **Future** (the study layer is not built).
 
 - `docs/business/folder/folder-management.md`
 - `docs/business/deck/deck-management.md`
-- `docs/business/resume/resume-session.md` (Current banner: Resume + Discard)
+- `docs/business/resume/resume-session.md` (resume banner is Future for this screen)
 
 **Decision rows:**
 
 - Folder management (mode lock, mode-choice empty state)
-- Resume section (Current for this screen: Resume opens session; Discard cancels it)
+- Resume section (Future for this screen; when built: Resume opens session, Discard cancels it)
 
 **Schema / storage:**
 
 - `folders.content_mode`, `folders.parent_id`
-- Resume (Current for this screen): `study_sessions` filtered by entry_type=folder; Discard cancels
+- Resume (Future for this screen): `study_sessions` filtered by entry_type=folder; Discard cancels
   via `CancelStudySessionUseCase` (no new session)
 
 **Contracts:** `docs/contracts/usecase-contracts/folder.md`,

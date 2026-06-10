@@ -5,7 +5,7 @@ route: future /library/deck/:deckId/flashcards/:flashcardId/history
 source_specs:
   - docs/business/history/card-history.md
   - docs/business/study-actions/bury-suspend.md
-related_decision: docs/checklist/product-decisions-pending-2026-05-29.md
+related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # 09 — Flashcard History

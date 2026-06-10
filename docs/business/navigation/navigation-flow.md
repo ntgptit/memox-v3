@@ -61,7 +61,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard history         | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
 | Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Exposed as a separate route, not from the Library Overview app bar                                                                                                  | Yes           |
-| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped (Current, Prompt 46) or folder-scoped (Current, Prompt 45) due review; optional `?mode=` selects a single study mode | No            |
+| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped or folder-scoped due review (Current — parsed by the gate; the deck/folder screen CTAs that would link here are Future); optional `?mode=` selects a single study mode | No            |
 | Today study               | `/library/study/today` (Current V1 opens `StudyEntryScreen.today` and follows the same gate behavior as scoped study, including empty states and session redirect)                                                                                                                                                                                                    | No            |
 | Study session             | `/library/study/session/:sessionId` (Current V1 review screen; opens `StudySessionScreen` with current-card navigation, protected exit confirmation, shows Finish Session only after every card is answered, and `pushReplacement`s to the real result screen on explicit finish)                                                                                                                                                          | No            |
 | Study result              | `/library/study/session/:sessionId/result` (Current V1 result screen; opens `StudyResultScreen` with a localized completion summary for completed/finalized sessions and controlled fallback states for invalid/missing and incomplete sessions)                                                                                                                                                              | No            |
@@ -79,16 +79,19 @@ Notes:
   affordance in the app bar. The tags result section, recent searches, and popular-tags landing
   remain Future Proposal pending the tag subsystem + a `shared_preferences` dependency
   (`docs/business/search/global-search.md`).
-- Folder Detail surfaces Study folder / Today / Resume entry points (Current, Prompt 45). Study
-  folder and Today route through the Study Entry gate (`entry_type=folder`, with
+- Folder Detail study entry points (Study folder / Today / Resume banner) are **Future — not
+  built** (`folder_detail_screen.dart` documents the study layer as Future). Target behavior when
+  built: Study folder and Today route through the Study Entry gate (`entry_type=folder`, with
   `study_type=srs_review` for Today); the Resume banner opens the existing `study/session/:id`
-  directly without re-entering the gate or creating a session. Folder Detail never creates a session
-  itself.
-- Flashcard List surfaces Study deck / Today / Resume entry points (Current, Prompt 46). Study deck
-  and Today route through the Study Entry gate (`entry_type=deck`, with `study_type=srs_review` for
-  Today — never global `entry_type=today`); the Resume banner opens the existing `study/session/:id`
-  directly without re-entering the gate or creating a session. Flashcard List never creates a
+  directly without re-entering the gate or creating a session. Folder Detail never creates a
   session itself.
+- Flashcard List study entry points (Study deck / Today / Resume banner) are **Future — not
+  built**. Target behavior when built: Study deck and Today route through the Study Entry gate
+  (`entry_type=deck`, with `study_type=srs_review` for Today — never global `entry_type=today`);
+  the Resume banner opens the existing `study/session/:id` directly without re-entering the gate
+  or creating a session. Flashcard List never creates a session itself.
+- The `?study_type=srs_review` query parameter itself IS Current — the gate parses and honors it
+  (`lib/domain/study/study_entry_parser.dart`); only the in-screen CTA surfaces above are Future.
 - Study Session is a real review screen in V1: it loads a persisted session and ordered session
   items, shows the current card with a reveal toggle, supports Previous/Next navigation with
   reveal reset on move, and now routes to the real `/library/study/session/:sessionId/result`

@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-06-02
 status: contract
 ---
@@ -12,7 +12,7 @@ status: contract
 > ids). Keep this folder-owned deck invariant.
 >
 > **Prompt 42B design note (2026-06-02):**
-> `docs/database/migrations/nullable-deck-parent-migration.md` is retained only
+> The nullable-deck-parent design (formerly `docs/database/migrations/nullable-deck-parent-migration.md`, file removed) is retained only
 > as a rejected historical design note. Do not use it as implementation
 > guidance.
 
@@ -84,6 +84,6 @@ Future<Either<Failure, Unit>> reorder(FolderId parentId, List<DeckId> orderedIds
 **Business spec:** `docs/business/deck/deck-management.md`
 **Use cases:** `docs/contracts/usecase-contracts/deck.md`
 **Schema:** `docs/database/schema-contract.md` `decks` table
-**Rejected migration design:** `docs/database/migrations/nullable-deck-parent-migration.md`
+**Rejected migration design:** nullable deck parent (design note removed; decision recorded in `docs/business/deck/deck-management.md`)
 **Code paths:** `lib/domain/repositories/deck_repository.dart`,
 `lib/data/repositories/deck_repository_impl.dart`, `lib/data/datasources/local/daos/deck_dao.dart`

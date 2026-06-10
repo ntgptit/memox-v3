@@ -13,8 +13,8 @@ spec'd the surfaces and rules.
 
 ## Source files to inspect
 
-- `lib/data/datasources/local/tables/study_sessions_table.dart`
-- `lib/data/datasources/local/tables/study_session_items_table.dart`
+- `lib/data/datasources/local/drift/study_sessions.drift`
+- `lib/data/datasources/local/drift/study_session_items.drift`
 - `lib/domain/study/usecases/**` (look for resume/create session use cases)
 - `lib/presentation/features/dashboard/**`
 - `lib/presentation/features/study/**`
@@ -25,11 +25,13 @@ spec'd the surfaces and rules.
 A "resumable session" is a study session whose status is `in_progress` (see
 `docs/business/glossary.md`).
 
-Status `draft` is treated as resumable too (created but never started), but it should be rare;
-created sessions auto-advance to `in_progress` on first answer or first item display, depending on
-impl.
+Status `draft` is treated as resumable too, but V1 never persists it: sessions are created
+directly as `in_progress` (`_persistSession` in
+`lib/data/repositories/study_repo_impl_study_session.dart`).
 
-Statuses `ready_to_finalize`, `completed`, `cancelled`, `failed_to_finalize` are NOT resumable.
+Statuses `completed`, `cancelled`, and `failed_to_finalize` are NOT resumable.
+(`ready_to_finalize` is a derived UI state, not a persisted status — see
+`docs/business/study/study-flow.md` §Session lifecycle.)
 
 ## Constraint
 
@@ -63,9 +65,10 @@ If multiple resumable sessions exist (e.g., user has paused 2 different deck ses
 most recently updated one as the card. V1 does not show a paused-session count note because the
 summary model does not expose remaining-count metadata.
 
-### 2. Deck / folder / tag context banner
+### 2. Deck / folder / tag context banner (Target — NOT built in V1)
 
-When the user opens a screen whose scope has a resumable session:
+Target behavior when the user opens a screen whose scope has a resumable session (no banner
+exists in the current code; see "Implementation status" below):
 
 | Screen                                                                   | Behavior                                                                             |
 |--------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
@@ -149,24 +152,36 @@ When user discards a resumable session:
 | Discard from banner         | Confirm dialog → `study_sessions.status = cancelled`, items retained for analytics |
 | "Start over" path           | Same as above, then create new session                                             |
 
-**Implementation status:** Discard from the deck (Flashcard list) and folder
-(Folder detail) resume banners is **Current (Prompt 47)**. Dashboard V1 does
-not surface discard/cancel. The banner surfaces share one flow,
-`confirmAndDiscardResumeSession`
-(`lib/presentation/shared/study/discard_resume_session.dart`): danger
-`MxConfirmationDialog` → `CancelStudySessionUseCase` via
-`progressSessionActionControllerProvider` (bumps `studySessionDataRevisionProvider`
-so every banner refreshes away). Discard never creates a new session and adds no
-schema/SRS change. Cancelling the confirmation does nothing. Tag-scoped banners
-remain Future/Blocked (no `StudyEntryType.tag`).
+**Implementation status (verified 2026-06-10):** Deck/folder/tag resume **banners are NOT built**
+— Flashcard List and Folder Detail render no resume banner and no discard flow
+(`folder_detail_screen.dart` documents the study layer as Future). The only Current discard-like
+path is **Start over** on the Study Entry gate (confirm → `RestartStudySessionUseCase` cancels the
+old session and creates the replacement transactionally). `CancelStudySessionUseCase` exists and
+is the building block for future banner discard. The flow names from earlier revisions
+(`confirmAndDiscardResumeSession`, `progressSessionActionControllerProvider`,
+`studySessionDataRevisionProvider`) do NOT exist in this codebase. Tag-scoped banners remain
+Future/Blocked (no `StudyEntryType.tag`).
 
-Discarded sessions do NOT delete attempts. SRS progress already recorded for answered items in the
-cancelled session REMAINS (those reviews counted).
+Discarded sessions do NOT delete attempts (`study_attempts` rows are retained for analytics).
+**SRS progress is NOT updated for a discarded session**: progress commits only at finalization
+(see `docs/business/srs/srs-review.md` §Finalization), and a cancelled session never finalizes.
+Answers given in a discarded session therefore do not count as SRS reviews. (They still count
+toward the attempt-based daily-progress metric — see
+`docs/business/engagement/dashboard-engagement.md`, which intentionally measures effort, not
+finalized reviews.)
 
 ## Auto-expiry
 
-A resumable session that has not been touched for **30 days** is auto-cancelled on next app open.
-The user is shown a one-time notice: "Your paused {scope} session expired and was discarded."
+A resumable session older than **30 days** stops being surfaced. **Current V1 mechanism: query
+filter** — the resumable-session queries only match sessions with `started_at > now - 30 days`
+(see the `SessionStatus` doc comment in `lib/domain/types/session_status.dart` and the DAO
+resumable queries). The session row itself is NOT mutated; it simply no longer appears on any
+resume surface.
+
+Target (not yet implemented): an explicit cleanup that sets expired sessions to `cancelled` on
+app open with a one-time notice ("Your paused {scope} session expired and was discarded"). Until
+that lands, be aware that expired sessions remain `in_progress` in the database — any new query
+over sessions must apply the same 30-day filter or it will resurface them.
 
 Rationale: prevents stale sessions from clogging UI indefinitely. 30 days is long enough to cover
 travel/illness but short enough to clean up abandoned sessions.
@@ -263,19 +278,24 @@ This is opt-in via notification settings; do not push by default.
 **Source files to inspect (verified 2026-05-28):**
 
 - Use cases live inside `lib/domain/study/usecases/study_usecases.dart`:
-    - `ResumeStudySessionUseCase.listActiveSessions()` — multi-resume list query.
-    - `ResumeStudySessionUseCase.findCandidate(StudyContext)` — find the most recent in-progress
-      session matching the given entry scope.
-    - `ResumeStudySessionUseCase.execute(sessionId)` — load and return the snapshot for an explicit
-      resume.
+    - `StartStudySessionUseCase` — start gate; returns `resumeRequired` when a resumable session
+      exists for the scope (no silent resume, no duplicate session).
+    - `LoadDashboardResumeSessionSummaryUseCase` — Dashboard "Continue studying" card data
+      (latest resumable session summary).
+    - `LoadStudySessionReviewUseCase` — loads a persisted session + items for an explicit resume.
     - `CancelStudySessionUseCase` — covers the "discard" path (sets status = `cancelled`).
-    - `RestartStudySessionUseCase` — restart-from-scratch path that validates scope/status, cancels the old session, and creates the replacement in one transaction.
-- Repository: `lib/data/repositories/study_repo_impl.dart` (no separate
-  `study_session_repository.dart` file; the implementation is the unified study repo).
-- DAO: `lib/data/datasources/local/daos/` (look for the study session DAO; helpers in
-  `lib/data/repositories/study_repo_impl_helpers.dart`).
+    - `RestartStudySessionUseCase` — restart-from-scratch path that validates scope/status,
+      cancels the old session, and creates the replacement in one transaction.
+    - There is NO `ResumeStudySessionUseCase` class; resume = open the existing session via the
+      session route.
+- Repository: `lib/data/repositories/study_repo_impl.dart` +
+  `lib/data/repositories/study_repo_impl_study_session.dart` (`findResumableSession`,
+  `findLatestResumableSessionSummary`).
+- DAO: `lib/data/datasources/local/daos/study_session_dao.dart` (resumable queries with the
+  30-day filter).
 
 > **Drift note**: earlier revisions referenced `find_resumable_session_usecase.dart`,
-`discard_session_usecase.dart`, and `study_session_repository.dart`. None of those paths exist
+`discard_session_usecase.dart`, `study_session_repository.dart`,
+`ResumeStudySessionUseCase`, and `study_repo_impl_helpers.dart`. None of those paths exist
 > today. The behaviors live in the methods listed above.
 

@@ -187,7 +187,7 @@ When scope is empty, this screen renders the appropriate empty state from
 |----------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `entryType` (path param)   | URL    | one of `deck`, `folder`, `today`, `tag`. `today` is a literal route segment with no `entryRefId`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `entryRefId` (path param)  | URL    | required when entryType ∈ (`deck`, `folder`, `tag`); absent for `today`. For `tag`: sorted lowercased comma-joined names.                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `study_type` (query param) | URL    | optional; values are `StudyType.storageValue` (`new` / `srs_review`). When absent the entry default applies (`deck`/`folder` → `new`, `today` → `srs_review`). Set to `srs_review` from the Folder Detail **Today** CTA (Current, Prompt 45) and the Flashcard List deck **Today** CTA (Current, Prompt 46) so a folder/deck scope reviews due cards. Parsed in `study_entry_screen.dart` (`_resolveStudyType`); routed via `RoutePaths.studyTypeQueryParam`. An unrecognized value fails fast (`ArgumentError`) and surfaces through the gate's existing error handling. |
+| `study_type` (query param) | URL    | optional; values are `StudyType.storageValue` (`new` / `srs_review`). When absent the entry default applies (`deck`/`folder` → `new`, `today` → `srs_review`). Parsing/honoring this param is Current; the Folder Detail and Flashcard List **Today** CTAs that would set it are Future (those screens have no study CTAs yet). Parsed in `study_entry_screen.dart` (`_resolveStudyType`); routed via `RoutePaths.studyTypeQueryParam`. An unrecognized value fails fast (`ArgumentError`) and surfaces through the gate's existing error handling. |
 | `mode` (query param)       | URL    | optional single `StudyMode.storageValue`; selects a single-mode flow.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ## Data to load
@@ -242,12 +242,13 @@ When scope is empty, this screen renders the appropriate empty state from
 
 - Dashboard "Start today's review" → `/library/study/today`.
 - Dashboard "Start new learning" → scope picker → here.
-- Deck "Study deck" CTA → `/library/study/deck/:deckId` (Current, Prompt 46; no explicit
-  `study_type` → default new study).
-- Deck "Today" CTA → `/library/study/deck/:deckId?study_type=srs_review` (Current, Prompt 46;
+- Deck "Study deck" CTA → `/library/study/deck/:deckId` (CTA is Future — Flashcard List has no
+  study CTAs yet; the route itself is Current. No explicit `study_type` → default new study).
+- Deck "Today" CTA → `/library/study/deck/:deckId?study_type=srs_review` (CTA is Future;
   deck-scoped due review, NOT global `entry_type=today`).
-- Folder "Study folder" CTA → `/library/study/folder/:folderId` (Current, Prompt 45).
-- Folder "Today" CTA → `/library/study/folder/:folderId?study_type=srs_review` (Current, Prompt 45;
+- Folder "Study folder" CTA → `/library/study/folder/:folderId` (CTA is Future — Folder Detail
+  has no study CTAs yet; the route itself is Current).
+- Folder "Today" CTA → `/library/study/folder/:folderId?study_type=srs_review` (CTA is Future;
   folder-scoped due review).
 - Tag list "Study tag" action → `/library/study/tag/<lowercased,comma-joined>` (Future/Blocked; not
   exposed).

@@ -1,4 +1,4 @@
----
+﻿---
 last_updated: 2026-05-28
 route: /library/study/session/:sessionId
 study_mode: match
@@ -8,6 +8,15 @@ source_specs:
 ---
 
 # 14 — Study Session: Match Mode
+
+> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.4/4.5.5) in the current codebase. V1 implements
+> only the recall self-grade flow through the shared shell
+> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
+> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
+> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
+> **target structure** from a previous iteration and do NOT exist — verify against
+> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
+> in `docs/project-management/wbs.md`.
 
 ## Purpose
 
@@ -228,7 +237,7 @@ Same as Review mode.
 - Board: `lib/presentation/features/study/widgets/study_session/match/match_board.dart` + `match_mode_tile.dart` + `match_tile_models.dart`.
 - Board size: `lib/presentation/features/study/widgets/study_session/match/match_batching.dart` → `const matchVisiblePairLimit = 5`. Take the next 5 items from session order via `visibleMatchBatch(items, startIndex)`.
 - Seeded shuffle: `lib/presentation/features/study/widgets/study_session/match/match_seed.dart` (NOT in `lib/domain/study/`). Deterministic per `sessionId + boardIndex` so resume preserves layout.
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `AnswerCurrentMatchModeBatchUseCase` for the match-specific batch grade path; no standalone `grade_attempt_usecase.dart`.
+- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase` is the only in-session answer path today; a match-specific batch grade path (the previous iteration's `AnswerCurrentMatchModeBatchUseCase`) must be designed when this mode is built. No standalone `grade_attempt_usecase.dart`.
 
 **Related wireframes:**
 
