@@ -105,9 +105,9 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 2.15.2 | Content management | Flashcard Tags FE V1 | FE | Tag input section in editor | Implemented | 2.15.1 | `lib/presentation/features/flashcards/widgets/flashcard_editor_tags_section.dart` | `e20b5ba7` | No action |
 | 2.16.1 | Content management | Parent-child validation BE | BE | Deck must belong to folder; flashcard must belong to deck (non-null FK + repo checks) | Implemented | 1.1.5 | `lib/data/datasources/local/drift/**` (non-null `folder_id`/`deck_id`) | `68c67656` | No action |
 | 2.16.2 | Content management | Parent-child guard FE | Integration | Invalid actions prevented in UI with controlled error, not crash | Partial | 2.16.1 | feature screens use `Result`/failure mapping | `484b6a42` | Audit controlled-error coverage for invalid parent actions |
-| 2.17.1 | Content management | Flashcard status filter BE V1 | BE | List query filters for active/suspended/buried/due + tests | Specified | 2.15.1 | `lib/data/datasources/local/drift/flashcard_progress.drift` (fields exist; list filter query TBD) | TBD | Implement filter queries + repo/usecase + tests |
+| 2.17.1 | Content management | Flashcard status filter BE V1 | BE | List query filters for active/suspended/buried/due + tests | Implemented | 2.15.1 | `lib/domain/types/flashcard_status_filter.dart`, `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart` | `a35f32f1` | No action |
 | 2.17.2 | Content management | Flashcard status filter/badges FE V1 | FE | Filter chips + suspended/buried badges in flashcard list | Specified | 2.17.1 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire chips/badges to BE; widget tests |
-| 2.18.1 | Content management | Flashcard tag filter BE V1 | BE | Multi-select AND tag filter inside deck + tests | Specified | 2.15.1 | `docs/business/tags/tag-system.md` | TBD | Implement tag filter query + tests |
+| 2.18.1 | Content management | Flashcard tag filter BE V1 | BE | Multi-select AND tag filter inside deck + tests | Implemented | 2.15.1 | `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart`, `test/domain/usecases/flashcard/watch_flashcard_list_usecase_test.dart` | `a35f32f1` | No action |
 | 2.18.2 | Content management | Flashcard tag filter FE V1 | FE | Tag filter chips + clear-filters empty state | Specified | 2.18.1 | `docs/business/tags/tag-system.md` | TBD | Wire to BE; widget tests |
 
 ### Group 3 — Library flow
@@ -255,16 +255,14 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 Backend-first per flow; each row is one agent prompt.
 
-1. **2.17.1 Flashcard status filter BE V1** — list query filters for active/suspended/buried/due + tests.
-2. **2.18.1 Flashcard tag filter BE V1** — multi-select AND tag filter inside deck + tests.
-3. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
-4. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
-5. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
-6. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
-7. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
-8. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
-9. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
-10. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
+1. **6.6.1 Import duplicate detection BE V1** — dup check vs file + deck, skipped-duplicate aggregation; tests.
+2. **7.6.1 Review history query BE** — per-card history read model deferred until schema allows it.
+3. **8.2.1 Learning settings BE persistence** — persisted study-default settings contract + storage + tests.
+4. **8.3.1 Tag management BE V1** — distinct tag list/count/search + transactional operations + tests.
+5. **8.4.1 TTS service BE** — `TtsService` abstraction + platform implementation + settings storage + tests.
+6. **7.5.1 Progress screen FE V1** — replace `/progress` placeholder, wire to read model; widget tests.
+7. **7.5.2 Progress states FE** — empty/loading/error states for progress screen; widget tests.
+8. **6.6.2 Import duplicate preview FE V1** — surface duplicates in preview; widget tests.
 
 ## 6. Deferred / Future / Rejected Register
 
@@ -354,6 +352,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `a35f32f1` | 2026-06-10 | 2.17.1, 2.18.1 | Flashcard list status + tag backend filters |
 | `4d1eba04` | 2026-06-10 | 7.1.1, 7.2.1, 7.3.1, 7.4.1 | Progress read model backend V1 |
 | `aa5f9a76` | 2026-06-10 | 4.6.2 | Verify SRS box transition + interval ladder vs doc contract; table-driven tests S11–S15; fix phantom decision-table test refs |
 | `7b3c1691` | 2026-06-10 | 3.8, 5.2, 5.5, 5.7, 5.8, 5.9, 5.10 | Commit deck import with CSV paste preview and transactional insert flow |
