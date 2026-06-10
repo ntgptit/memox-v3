@@ -877,6 +877,14 @@ void main() {
         entryType: EntryType.deck.name,
         entryRefId: deckId,
         studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        startedAt: _studyTestNow
+            .subtract(const Duration(days: 1))
+            .toUtc()
+            .millisecondsSinceEpoch,
+        updatedAt: _studyTestNow
+            .subtract(const Duration(days: 1))
+            .toUtc()
+            .millisecondsSinceEpoch,
       );
       await fixture.insertStudySessionItem(
         id: 'item-restart-old',
@@ -944,6 +952,14 @@ void main() {
         entryType: EntryType.deck.name,
         entryRefId: deckId,
         studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        startedAt: _studyTestNow
+            .subtract(const Duration(days: 1))
+            .toUtc()
+            .millisecondsSinceEpoch,
+        updatedAt: _studyTestNow
+            .subtract(const Duration(days: 1))
+            .toUtc()
+            .millisecondsSinceEpoch,
       );
       for (int index = 0; index < 25; index++) {
         await fixture.insertFlashcard(

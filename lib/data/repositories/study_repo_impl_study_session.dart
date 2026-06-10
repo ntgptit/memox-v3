@@ -232,10 +232,15 @@ class _RuleViolation implements Exception {
 }
 
 class _ScopeSnapshot {
-  const _ScopeSnapshot({required this.cards, required this.now});
+  const _ScopeSnapshot({
+    required this.cards,
+    required this.now,
+    required this.consumedNewFlashcardIdsToday,
+  });
 
   final List<_ScopeCard> cards;
   final DateTime now;
+  final Set<FlashcardId> consumedNewFlashcardIdsToday;
 }
 
 class _ScopeCard {
@@ -308,12 +313,18 @@ Future<_ScopeSnapshot> _loadScopeSnapshot(
   StudyScope scope, {
   required DateTime now,
 }) async {
+  final Set<FlashcardId> consumedNewFlashcardIdsToday =
+      scope.studyType == StudyType.newCards
+      ? await _loadConsumedNewFlashcardIdsToday(dao, now)
+      : const <FlashcardId>{};
+
   if (scope.entryType == EntryType.today) {
     return _ScopeSnapshot(
       cards: (await dao.loadTodayCards())
           .map(_ScopeCard.fromTodayRow)
           .toList(growable: false),
       now: now,
+      consumedNewFlashcardIdsToday: consumedNewFlashcardIdsToday,
     );
   }
 
@@ -333,6 +344,7 @@ Future<_ScopeSnapshot> _loadScopeSnapshot(
         refId,
       )).map(_ScopeCard.fromDeckRow).toList(growable: false),
       now: now,
+      consumedNewFlashcardIdsToday: consumedNewFlashcardIdsToday,
     );
   }
 
@@ -344,39 +356,54 @@ Future<_ScopeSnapshot> _loadScopeSnapshot(
       refId,
     )).map(_ScopeCard.fromFolderRow).toList(growable: false),
     now: now,
+    consumedNewFlashcardIdsToday: consumedNewFlashcardIdsToday,
   );
 }
 
 List<FlashcardId> _eligibleFlashcardIds({
   required StudyScope scope,
   required _ScopeSnapshot snapshot,
-}) {
-  final DateTime now = snapshot.now;
-  final List<_ScopeCard> eligibleCards = snapshot.cards
-      .where((card) => card.isVisible(now))
-      .where(
-        (card) => switch (scope.studyType) {
-          StudyType.newCards => card.isNewEligible(now),
-          StudyType.srsReview => card.isDueEligible(now),
-        },
-      )
-      .toList(growable: false);
-
-  final List<_ScopeCard> cappedEligibleCards =
-      scope.studyType == StudyType.newCards
-      ? eligibleCards.take(dailyNewLimit).toList(growable: false)
-      : eligibleCards;
-  return cappedEligibleCards
-      .take(maxSessionItems)
-      .map((card) => card.flashcardId)
-      .toList(growable: false);
-}
+}) => _eligibleCards(
+  scope: scope,
+  snapshot: snapshot,
+).take(maxSessionItems).map((card) => card.flashcardId).toList(growable: false);
 
 List<FlashcardId> _capSessionFlashcardIds(List<FlashcardId> flashcardIds) {
   if (flashcardIds.length <= maxSessionItems) {
     return flashcardIds;
   }
   return flashcardIds.take(maxSessionItems).toList(growable: false);
+}
+
+Future<Set<FlashcardId>> _loadConsumedNewFlashcardIdsToday(
+  study_dao.StudySessionDao dao,
+  DateTime now,
+) async {
+  final DateTime localNow = now.toLocal();
+  final DateTime localDayStart = DateTime(
+    localNow.year,
+    localNow.month,
+    localNow.day,
+  );
+  final int localDayStartMs = localDayStart.millisecondsSinceEpoch;
+  final rows =
+      await (dao.select(dao.studySessionItems).join([
+            innerJoin(
+              dao.studySessions,
+              dao.studySessionItems.sessionId.equalsExp(dao.studySessions.id),
+            ),
+          ])..where(
+            dao.studySessions.studyType.equals(
+                  StudyMapper.studyTypeToStorage(StudyType.newCards),
+                ) &
+                dao.studySessions.startedAt.isBiggerThanValue(
+                  localDayStartMs - 1,
+                ),
+          ))
+          .get();
+  return rows
+      .map((row) => row.readTable(dao.studySessionItems).flashcardId)
+      .toSet();
 }
 
 StudyEntryEmptyState? _resolveEmptyState({
@@ -440,7 +467,8 @@ List<_ScopeCard> _eligibleCards({
   required _ScopeSnapshot snapshot,
 }) {
   final DateTime now = snapshot.now;
-  return snapshot.cards
+  final Set<FlashcardId> consumedIds = snapshot.consumedNewFlashcardIdsToday;
+  final List<_ScopeCard> eligibleCards = snapshot.cards
       .where((card) => card.isVisible(now))
       .where(
         (card) => switch (scope.studyType) {
@@ -448,7 +476,18 @@ List<_ScopeCard> _eligibleCards({
           StudyType.srsReview => card.isDueEligible(now),
         },
       )
+      .where((card) => !consumedIds.contains(card.flashcardId))
       .toList(growable: false);
+
+  if (scope.studyType == StudyType.newCards) {
+    final int remainingDailyQuota = dailyNewLimit - consumedIds.length;
+    if (remainingDailyQuota <= 0) {
+      return const <_ScopeCard>[];
+    }
+    return eligibleCards.take(remainingDailyQuota).toList(growable: false);
+  }
+
+  return eligibleCards;
 }
 
 DateTime? _nextDueAt(List<_ScopeCard> cards, DateTime now) {
