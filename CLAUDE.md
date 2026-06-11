@@ -117,7 +117,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
 
 | Task type | Đọc trước |
 | --- | --- |
-| Bất kỳ task nào | `docs/business/index.md`, `docs/business/glossary.md`, **3 universal contracts above** |
+| Bất kỳ task nào | `docs/_generated/repo-map.md` (cold-start snapshot — đọc TRƯỚC khi tự khám phá repo; nếu stale thì `node tool/doc_guard/run.mjs generate`), `docs/business/index.md`, `docs/business/glossary.md`, **3 universal contracts above** |
 | Thêm/sửa use case | `docs/contracts/usecase-contracts/{entity}.md` + business spec + decision rows |
 | Thêm/sửa repository | `docs/contracts/repository-contracts/{entity}-repository.md` + use case contract |
 | Thêm/sửa screen | Wireframe của screen đó + related `docs/business/**` + `docs/ui-ux/ui-ux-contract.md` + `docs/system-design/MemoX Design System/README.md` + Implementation refs trong wireframe (→ tự link đến contracts) |
@@ -307,11 +307,33 @@ Expected final response after implementing a UI task:
 ```text
 dart run build_runner build --delete-conflicting-outputs
 python code-verification-guard/guard/run.py check --project . --ruleset memox   # if available
+node tool/doc_guard/run.mjs check                                               # docs/process gate
 dart fix --apply
 dart format .
 flutter analyze
 flutter test <targeted tests>
 ```
+
+### doc_guard (docs/process gate)
+
+`node tool/doc_guard/run.mjs check` lints what `code-verification-guard` cannot: claims docs make
+about the repo (backtick paths exist, Dart symbols exist, `test/...::name` refs resolve, WBS row
+format + commit hashes + status vocabulary, ARB duplicate/missing keys, schema-contract version
+vs code). It fails only on NEW findings; pre-existing ones live in `tool/doc_guard/baseline.json`
+(burn down over time — after fixing baselined findings, refresh with
+`node tool/doc_guard/run.mjs check --update-baseline`).
+
+Companions:
+
+- `node tool/doc_guard/run.mjs generate` — regenerates `docs/_generated/repo-map.md` (cold-start
+  summary: schema, routes + placeholders, use cases, screens, tests). Regenerate it in any commit
+  that changes routes, schema, use cases, or screens.
+- `node tool/doc_guard/run.mjs terms <old>` — finds leftover refs after a term rename (replaces
+  the manual `grep -rn "{old_term}" docs/` step).
+- `python tool/golden_diff/diff.py <actual.png> <expected.png>` — pixel-diff a Flutter
+  golden/screenshot against the mock shot; outputs mismatch % + diff region (cross-reference with
+  `ui_kits/mobile/specs/` bboxes). Use it as the visual-parity feedback loop, especially for
+  agents without image input.
 
 ### Analyze / dart fix pairing rule
 

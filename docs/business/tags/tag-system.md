@@ -239,9 +239,11 @@ All bulk operations are transactional.
 - `docs/business/search/global-search.md` — tag is one of the 4 result types
 - `docs/business/navigation/navigation-flow.md` — `/library/study/tag/<tags>` route + `/settings/learning/tags` route
 
-**Source files to inspect:**
+**Source files to inspect (verified 2026-06-11):**
 
 - `lib/data/datasources/local/drift/flashcard_tags.drift`
-- `lib/domain/usecases/tag_usecases.dart` (watch/add/remove/rename/merge/delete)
-- `lib/presentation/features/settings/screens/tag_management_screen.dart`
-- `lib/presentation/features/settings/providers/tag_management_notifier.dart`
+- `lib/domain/usecases/tag/` (`watch_tags_with_count_usecase.dart`, `rename_tag_usecase.dart`,
+  `merge_tags_usecase.dart`, `delete_tag_usecase.dart`)
+- `lib/domain/repositories/tag_repository.dart` + `lib/domain/models/tag_with_count.dart`
+- `lib/presentation/features/settings/screens/tag_management_screen.dart` (still a static mock
+  shell — FE wiring is WBS 8.3.2; a `tag_management_notifier` does not exist yet)

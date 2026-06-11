@@ -5,6 +5,10 @@ applies_to: Google account linking, Google Drive AppData sync, per-account datab
 
 # Account and Drive Sync
 
+> **Status: Specified — nothing implemented (verified 2026-06-11).** `/settings/account` renders
+> `RoutePlaceholder`; no account/sync entity, repository, service, store, or screen exists in
+> `lib/`. Every source path in this document is the planned target structure for WBS 8.5.x/8.6.x.
+
 This document covers two tightly coupled features:
 
 1. **Google account linking** — optional sign-in with a Google account.
@@ -15,6 +19,10 @@ Drive sync is unavailable without a linked Google account with Drive AppData aut
 optional; the app works fully offline as a guest.
 
 ## Source files to inspect
+
+> **Target structure — NONE of these files exist yet (verified 2026-06-11).** Account/Drive sync
+> is Specified; the file lists below are the planned layout for when WBS 8.5.x/8.6.x is
+> implemented. Do not treat any path here as existing code.
 
 ### Account
 

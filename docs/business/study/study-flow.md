@@ -311,10 +311,9 @@ advances.
 - `lib/data/datasources/local/drift/study_session_items.drift`
 - `lib/data/datasources/local/drift/study_attempts.drift`
 - `lib/domain/study/usecases/study_usecases.dart` (the entire study lifecycle: start, resume,
-  restart, answer, skip, cancel, finalize, retry-finalize). There is *
-  *no `lib/domain/usecases/study/**` directory** — study use cases live under
-  `lib/domain/study/usecases/`, parallel to the other feature use-case files in
-  `lib/domain/usecases/`.
+  restart, answer, cancel, finalize). A `lib/domain/usecases/study/**` directory does NOT exist —
+  study use cases live under `lib/domain/study/usecases/`, parallel to the other feature
+  use-case files in `lib/domain/usecases/`.
 - `lib/domain/study/modes/` (`study_mode_strategy.dart`, `recall_study_mode_strategy.dart`,
   `study_mode_strategy_factory.dart`) — mode behavior contract and V1 recall fallback. **There is
   no dedicated `flow_validator.dart`**; validation is part of the active strategy.

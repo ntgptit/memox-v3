@@ -5,6 +5,11 @@ applies_to: Riverpod providers, viewmodels, notifiers
 
 # State Management Contract
 
+> **Status: Target contract — written ahead of the code (verified 2026-06-11).** The per-notifier
+> contracts below describe the intended provider/notifier surface; many named notifiers/providers
+> belong to features that are still Specified/Future and do not exist in `lib/` yet. Check
+> `docs/_generated/repo-map.md` (or grep) before assuming a named provider exists.
+
 ## Source files to inspect
 
 - `lib/presentation/features/**/viewmodels/**`
