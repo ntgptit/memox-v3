@@ -75,7 +75,7 @@ Bảng này map giữa loại thay đổi code và các file docs BẮT BUỘC k
 | `lib/data/repositories/study_repo_impl_study_session.dart` (`_intervalForBox`) | `docs/business/srs/srs-review.md` (interval table) + `test/data/repositories/study_srs_transition_test.dart` |
 | `lib/data/repositories/study_repo_impl_study_session.dart` (`_finalizeResultForAttempts`, `_boxAfterFinalization`) | `docs/business/srs/srs-review.md` (transition table) + `test/data/repositories/study_srs_transition_test.dart` |
 | `lib/app/router/route_names.dart` / `route_paths.dart` | `docs/business/navigation/navigation-flow.md` |
-| `lib/presentation/features/**/screens/*.dart` | Wireframe tương ứng trong `docs/wireframes/*.md` |
+| `lib/presentation/features/**/screens/*.dart` | Wireframe tương ứng trong `docs/wireframes/*.md` + screenshot mock trong `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` (tra `shots/INDEX.md`) + visual contract trong `docs/design/screens/*.visual-contract.md` nếu có |
 | `lib/presentation/features/**/widgets/dialog_*.dart` hoặc `*_dialog.dart` | `docs/wireframes/24-shared-dialogs.md` (nếu là shared dialog) |
 | `lib/presentation/features/**/widgets/*_sheet.dart` hoặc bottom sheet | `docs/wireframes/25-shared-bottom-sheets.md` (nếu là shared sheet) |
 | `lib/presentation/features/study/**` (5 mode files) | `docs/wireframes/13-17-study-session-*.md` + `docs/business/study/study-flow.md` |
@@ -205,9 +205,17 @@ This convention applies to **backtick references** in markdown body text and tab
 
 When implementing or modifying UI screens, the mock design is a contract, not a loose inspiration.
 
+**Mock reference resolution (bắt buộc):** the canonical visual mock for every screen is the PNG
+set under `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` (one light + one dark
+PNG per state; look up files via `shots/INDEX.md`). Do NOT "read the design" from the kit's
+`index.html` source — open the PNGs (agents can read images). Consult `index.html` only for
+exact copy text / control order, jumping via the line index in the kit's `README.md`.
+
 Before coding any UI screen:
 
-1. Identify the exact target mock/design reference.
+1. Identify the exact target mock/design reference: **ALL `shots/` PNGs for that screen — every
+   state the kit ships, not just the loaded state** — plus the screen's
+   `docs/design/screens/*.visual-contract.md` when it exists.
 2. Identify the exact target screen/route/component.
 3. Create a short mapping table before implementation:
 
@@ -215,7 +223,10 @@ Before coding any UI screen:
    * Existing code/component
    * Implementation plan
    * Scope status: Current / Future / Rejected / Unknown
-4. Do not start coding until every visible mock element is mapped or explicitly marked out of scope.
+4. Map every state variant from `shots/INDEX.md` for the screen to a row in the screen's state
+   handling (or explicitly mark it Future/Rejected/out-of-scope). A state that exists in the kit
+   but is silently missing from the implementation plan is a parity failure.
+5. Do not start coding until every visible mock element is mapped or explicitly marked out of scope.
 
 Implementation rules:
 
@@ -229,7 +240,8 @@ Implementation rules:
 * If the mock and documentation conflict, stop and document the conflict instead of guessing.
 
 Required UI parity checklist:
-Before finishing a UI task, verify:
+Before finishing a UI task, verify (compare against the `shots/` PNGs for the screen, both
+light and dark, across ALL states in scope):
 
 * Header/app bar matches the mock.
 * Search/filter/sort controls match approved scope.

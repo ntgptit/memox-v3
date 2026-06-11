@@ -62,3 +62,7 @@ app.*.map.json
 
 # Flutter generated registrants
 **/generated_plugin_registrant.dart
+
+# UI kit screenshot exporter
+tool/ui_kit_shots/node_modules/
+tool/ui_kit_shots/package-lock.json

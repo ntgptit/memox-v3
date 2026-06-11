@@ -13,6 +13,11 @@ agents to the exact per-screen visual contract when one exists.
 
 ## Rules
 
+- **Canonical mock source = screenshots.** Every approved kit screen state ships as a light + dark
+  PNG pair under `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` (manifest:
+  `shots/INDEX.md`). Read the PNGs for the target screen — ALL states, both themes — as the visual
+  contract input. Do NOT derive the design by reading the kit's `index.html` JSX; consult its
+  source only for exact copy/control order via the line index in the kit `README.md`.
 - Do not implement a screen from an unapproved mock.
 - Do not use an old mock when this index points to a newer approved source.
 - Do not start UI code from `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
@@ -27,19 +32,28 @@ agents to the exact per-screen visual contract when one exists.
 
 | Screen           | Route       | Mock source                                                                                                                 | Wireframe                            | Visual contract                                           | Current status                     | Main implementation files                                                                                                                                                                                              |
 |------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------|--------------------------------------|-----------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Library Overview | `/library`  | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `03 · Library overview` (`03a`-`03f`)                  | `docs/wireframes/02-library.md`      | `docs/design/screens/library-overview.visual-contract.md` | Current V1 partial                 | `lib/presentation/features/folders/screens/library_overview_screen.dart`, `lib/presentation/features/folders/widgets/library_overview_body.dart`, `lib/presentation/features/folders/widgets/library_folder_tile.dart` |
-| Dashboard        | `/home`     | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `02 · Dashboard`                                       | `docs/wireframes/01-dashboard.md`    | `docs/design/screens/dashboard.visual-contract.md`         | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
-| Progress         | `/progress` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `19 · Progress`; `18 · Stats` is legacy reference only | `docs/wireframes/03-progress.md`     | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
-| Settings         | `/settings` | `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` - `20 · Settings`                                        | `docs/wireframes/04-settings-hub.md` | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
+| Library Overview | `/library`  | `ui_kits/mobile/shots/03-library-overview--*` (11 states × light/dark; see `shots/INDEX.md`)                                | `docs/wireframes/02-library.md`      | `docs/design/screens/library-overview.visual-contract.md` | Current V1 partial                 | `lib/presentation/features/folders/screens/library_overview_screen.dart`, `lib/presentation/features/folders/widgets/library_overview_body.dart`, `lib/presentation/features/folders/widgets/library_folder_tile.dart` |
+| Dashboard        | `/home`     | `ui_kits/mobile/shots/02-dashboard--*` (9 states × light/dark)                                                              | `docs/wireframes/01-dashboard.md`    | `docs/design/screens/dashboard.visual-contract.md`         | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
+| Progress         | `/progress` | `ui_kits/mobile/shots/19-progress--*` (7 states × light/dark); `shots/18-stats--*` is legacy reference only                 | `docs/wireframes/03-progress.md`     | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
+| Settings         | `/settings` | `ui_kits/mobile/shots/20-settings--*` (5 states × light/dark)                                                               | `docs/wireframes/04-settings-hub.md` | TBD                                                       | Partial / mixed Current and Future | TBD                                                                                                                                                                                                                    |
+
+Screens not yet listed here: resolve the mock source via
+`docs/system-design/MemoX Design System/ui_kits/mobile/shots/INDEX.md` (all 23 screens, 135
+states, light + dark are covered there).
 
 ## Agent Workflow
 
-1. Find the target screen in this index.
-2. Read the listed visual contract when present.
-3. Read the listed wireframe and its implementation refs.
-4. Read `docs/design/design-token-mapping.md` and `docs/design/component-visual-contract.md`.
-5. Implement only elements marked Current, unless the task explicitly promotes a Future item.
-6. Run `docs/design/visual-parity-checklist.md` before reporting completion.
+1. Find the target screen in this index (or in `shots/INDEX.md` for screens not listed here).
+2. **Open the `shots/` PNGs for the screen — every state, light + dark.** Each kit state must map
+   to a row in your implementation plan or be explicitly marked Future/Rejected/out-of-scope; a
+   kit state silently missing from the plan is a parity failure (per `CLAUDE.md` §UI Mock Design
+   Parity).
+3. Read the listed visual contract when present.
+4. Read the listed wireframe and its implementation refs.
+5. Read `docs/design/design-token-mapping.md` and `docs/design/component-visual-contract.md`.
+6. Implement only elements marked Current, unless the task explicitly promotes a Future item.
+7. Run `docs/design/visual-parity-checklist.md` before reporting completion, comparing against
+   the `shots/` PNGs.
 
 ## Related
 

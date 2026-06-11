@@ -1,0 +1,12 @@
+{
+  "name": "memox-ui-kit-shots",
+  "private": true,
+  "type": "module",
+  "description": "Exports per-screen, per-state PNG screenshots (light + dark) from docs/system-design/MemoX Design System/ui_kits/mobile/index.html so AI agents can consume the UI kit visually.",
+  "scripts": {
+    "export": "node export_shots.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}
