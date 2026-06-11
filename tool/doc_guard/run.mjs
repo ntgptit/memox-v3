@@ -213,9 +213,12 @@ function checkWbs() {
 
 // ── check 5: ARB hygiene ─────────────────────────────────────────────────────
 function arbKeys(path) {
+  // Count TOP-LEVEL keys only (exactly 2-space indent in ARB files); deeper
+  // indents are metadata inside "@key" blocks (description/placeholders/...)
+  // where repeated names are normal JSON structure, not duplicates.
   const counts = new Map();
   for (const line of readFileSync(path, 'utf8').split('\n')) {
-    const m = line.match(/^\s*"([^"@][^"]*)"\s*:/);
+    const m = line.match(/^ {2}"([^"@][^"]*)"\s*:/);
     if (m) counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
   }
   return counts;
