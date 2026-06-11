@@ -373,6 +373,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `dacfefe5` | 2026-06-11 | 1.1.2, 1.1.7, 9.8 | UI kit agent-consumption path: export 270 per-state mock PNGs (23 screens × 135 states × light/dark) + `shots/INDEX.md` manifest via `tool/ui_kit_shots/`; line-index in kit README; CLAUDE.md + mock-design-index route UI tasks to shots with all-states parity rule |
 | `7c34ea3c` | 2026-06-10 | 2.19.1, 2.20.1, 8.3.1, 8.9.1 | Add backend content operations for deck move, manual duplicate soft-warning, tag management, and bulk delete |
 | `d50cceb2` | 2026-06-10 | 3.7.1, 4.11.1, 4.11.2 | Add in-session bury/suspend backend, due-count coverage, and study eligibility regressions |
 | `48795861` | 2026-06-10 | 4.5.10 | Bound daily new quota to the local-day window and keep cancelled new-card sessions consuming quota |
