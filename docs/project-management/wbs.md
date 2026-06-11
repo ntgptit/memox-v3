@@ -257,6 +257,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 9.12 | Quality | doc_guard baseline burn-down | Docs | Reduce `tool/doc_guard/baseline.json` (57 findings: decision-table phantom test refs, wireframe target-widget refs, contract stale paths) to zero | Specified | 9.11 | `tool/doc_guard/baseline.json` | TBD | Fix per area when touching it; refresh with `--update-baseline` |
 | 9.13 | Quality | Repo-map cold-start snapshot | Docs | `docs/_generated/repo-map.md` generated summary (schema, routes+placeholders, use cases, screens, tests) for agent session bootstrap | Implemented | 9.11 | `docs/_generated/repo-map.md`, `tool/doc_guard/run.mjs` (`generate`) | `4d936642` | Regenerate in commits that change routes/schema/use cases/screens |
 | 9.14 | Quality | Golden-diff visual parity runner | Test | `python tool/golden_diff/diff.py`: pixel-diff Flutter golden vs mock shot, mismatch % + diff region; text feedback loop for no-vision agents | Implemented | 1.1.6 | `tool/golden_diff/diff.py` (runner only; the per-screen golden-test gate remains Specified) | `4d936642` | Add golden tests with each UI task (start at 4.1.3) and wire diff into its verification |
+| 9.15 | Quality | Unified verify entry point | Test | `node tool/verify/run.mjs`: one command running the whole verification chain in canonical order with scope auto-detection (docs-only vs code), pairing rules applied, single summary table | Implemented | 9.11 | `tool/verify/run.mjs`, `CLAUDE.md` §Verification commands; smoke-verified on both chains (docs + code with targeted test) | `259baae8` | Agents run this instead of the individual commands |
 
 ### Group 10 — Release readiness
 
@@ -377,6 +378,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `259baae8` | 2026-06-11 | 9.15 | Unified verify entry (`tool/verify/run.mjs`): scope auto-detection, canonical chain order, single summary; CLAUDE.md points agents at one command |
 | `4d936642` | 2026-06-11 | 9.11, 9.12, 9.13, 9.14 | Token-saving toolchain: doc_guard gate (path/symbol/test-ref/WBS/ARB/schema checks + baseline of 57 pre-existing findings), repo-map cold-start generator, golden-diff runner; status headers fixed on account-sync/state-contract/tag-system docs; wired into CLAUDE.md verification chain |
 | `0ce64355` | 2026-06-11 | 1.1.2, 1.1.7, 9.8 | DOM-spec exporter for low-vision agents: 23 `specs/*.md` (measured element trees + token-resolved styles + per-state deltas) via `export_specs.mjs`; routed in kit README, mock-design-index, CLAUDE.md |
 | `dacfefe5` | 2026-06-11 | 1.1.2, 1.1.7, 9.8 | UI kit agent-consumption path: export 270 per-state mock PNGs (23 screens × 135 states × light/dark) + `shots/INDEX.md` manifest via `tool/ui_kit_shots/`; line-index in kit README; CLAUDE.md + mock-design-index route UI tasks to shots with all-states parity rule |
