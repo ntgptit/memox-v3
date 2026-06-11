@@ -60,6 +60,8 @@ Important V1 decisions:
 | Area                         | Document                                               |
 |------------------------------|--------------------------------------------------------|
 | Docs manifest                | `docs/MANIFEST.md`                                     |
+| AI tooling (shots/specs/doc_guard/verify/golden_diff) | `tool/README.md`              |
+| Generated wiki (repo-map, where-is) | `docs/_generated/repo-map.md`, `docs/_generated/where-is.md` |
 | V1 scope guard               | `docs/project-management/wbs.md` (§6 register)         |
 | Business index               | `docs/business/index.md`                               |
 | Glossary                     | `docs/business/glossary.md`                            |
