@@ -1,4 +1,4 @@
-﻿# MemoX v3 Work Breakdown Structure (WBS)
+# MemoX v3 Work Breakdown Structure (WBS)
 
 Generated: 2026-06-09
 Last reviewed: 2026-06-10
