@@ -304,6 +304,23 @@ Expected final response after implementing a UI task:
 
 ## Verification commands
 
+**Single entry (preferred — run ONE command, read ONE summary):**
+
+```text
+node tool/verify/run.mjs                        # auto-detects docs-only vs code scope
+node tool/verify/run.mjs --test <test paths>    # code chain + targeted tests
+node tool/verify/run.mjs --docs | --code | --full
+```
+
+`tool/verify/run.mjs` runs the canonical chain in order with the pairing rules applied
+(docs scope: doc_guard → guard → `git diff --check`; code scope: gen-l10n nếu ARB đổi →
+build_runner → guard → doc_guard → `dart fix --apply` → `dart format .` → `flutter analyze` →
+targeted `flutter test` → `git diff --check`), prints a pass/fail/skipped summary table, and
+exits non-zero on any failure. After it runs `dart fix`/`dart format`, vẫn phải inspect diff và
+chỉ giữ thay đổi thuộc task hiện tại.
+
+Individual commands (fallback / debugging one step):
+
 ```text
 dart run build_runner build --delete-conflicting-outputs
 python code-verification-guard/guard/run.py check --project . --ruleset memox   # if available
