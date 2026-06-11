@@ -18,6 +18,11 @@ agents to the exact per-screen visual contract when one exists.
   `shots/INDEX.md`). Read the PNGs for the target screen — ALL states, both themes — as the visual
   contract input. Do NOT derive the design by reading the kit's `index.html` JSX; consult its
   source only for exact copy/control order via the line index in the kit `README.md`.
+- **No/weak image input? Use the DOM specs.** Agents that cannot read images reliably use
+  `docs/system-design/MemoX Design System/ui_kits/mobile/specs/` (manifest: `specs/INDEX.md`):
+  one file per screen with the measured element tree (text, bounding boxes, token-resolved
+  styles) for the base state + added/removed deltas per remaining state. Agents WITH vision
+  should still use the specs for exact numbers (spacing, sizes, token names) alongside the PNGs.
 - Do not implement a screen from an unapproved mock.
 - Do not use an old mock when this index points to a newer approved source.
 - Do not start UI code from `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
@@ -44,10 +49,11 @@ states, light + dark are covered there).
 ## Agent Workflow
 
 1. Find the target screen in this index (or in `shots/INDEX.md` for screens not listed here).
-2. **Open the `shots/` PNGs for the screen — every state, light + dark.** Each kit state must map
-   to a row in your implementation plan or be explicitly marked Future/Rejected/out-of-scope; a
-   kit state silently missing from the plan is a parity failure (per `CLAUDE.md` §UI Mock Design
-   Parity).
+2. **Open the `shots/` PNGs for the screen — every state, light + dark** (vision agents), and/or
+   read the screen's `specs/NN-*.md` DOM spec (text agents; vision agents use it for exact
+   numbers). Each kit state must map to a row in your implementation plan or be explicitly marked
+   Future/Rejected/out-of-scope; a kit state silently missing from the plan is a parity failure
+   (per `CLAUDE.md` §UI Mock Design Parity).
 3. Read the listed visual contract when present.
 4. Read the listed wireframe and its implementation refs.
 5. Read `docs/design/design-token-mapping.md` and `docs/design/component-visual-contract.md`.

@@ -8,16 +8,24 @@ visual reference for the Flutter implementation in `lib/presentation/features/**
 `index.html` is a single ~10.5k-line JSX file whose real output is **pixels** — do NOT try to
 "read the design" from its source. The consumable artifacts are:
 
-1. **`shots/` — canonical visual reference.** Every screen × state × theme is exported as a PNG
-   (390px frame, light + dark). `shots/INDEX.md` maps screen/state → file. For any UI task, the
-   mock reference is the PNG(s) for that screen — open the image, not the HTML.
-2. **`AUDIT.md`** — Flutter-handoff notes, token/widget map, and flagged product decisions.
-3. **Line index below** — when you must consult the JSX source (exact copy text, control order,
+1. **`shots/` — canonical visual reference** (for agents WITH image input, e.g. Claude Code).
+   Every screen × state × theme is exported as a PNG (390px frame, light + dark).
+   `shots/INDEX.md` maps screen/state → file. For any UI task, the mock reference is the PNG(s)
+   for that screen — open the image, not the HTML.
+2. **`specs/` — measured DOM spec** (for agents WITHOUT strong image input, e.g. small Codex
+   models — and as the exact-numbers companion for everyone). One markdown file per screen:
+   full element tree of the base state (text, bounding boxes, `--memox-*` token-resolved
+   colors/fonts/radii/padding) plus an added/removed delta per remaining state.
+   `specs/INDEX.md` is the manifest. These are machine-measured facts from the rendered DOM —
+   more precise than reading pixels.
+3. **`AUDIT.md`** — Flutter-handoff notes, token/widget map, and flagged product decisions.
+4. **Line index below** — when you must consult the JSX source (exact copy text, control order,
    conditional visibility), jump straight to the component's line range instead of scanning the
    whole file.
 
-Regenerate shots after any `index.html` change:
-`cd tool/ui_kit_shots && npm install && npm run export` (needs Chrome + network).
+Regenerate after any `index.html` change:
+`cd tool/ui_kit_shots && npm install && npm run export:all` (needs Chrome + network;
+`export` = shots only, `export:specs` = specs only).
 
 ### Source line index (`index.html`)
 

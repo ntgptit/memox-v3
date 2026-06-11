@@ -4,7 +4,9 @@
   "type": "module",
   "description": "Exports per-screen, per-state PNG screenshots (light + dark) from docs/system-design/MemoX Design System/ui_kits/mobile/index.html so AI agents can consume the UI kit visually.",
   "scripts": {
-    "export": "node export_shots.mjs"
+    "export": "node export_shots.mjs",
+    "export:specs": "node export_specs.mjs",
+    "export:all": "node export_shots.mjs && node export_specs.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"

@@ -208,8 +208,11 @@ When implementing or modifying UI screens, the mock design is a contract, not a 
 **Mock reference resolution (bắt buộc):** the canonical visual mock for every screen is the PNG
 set under `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` (one light + one dark
 PNG per state; look up files via `shots/INDEX.md`). Do NOT "read the design" from the kit's
-`index.html` source — open the PNGs (agents can read images). Consult `index.html` only for
-exact copy text / control order, jumping via the line index in the kit's `README.md`.
+`index.html` source — open the PNGs (agents can read images). For exact measurements (bounding
+boxes, spacing, token names) and for agents WITHOUT image input, use the measured DOM specs
+under `.../ui_kits/mobile/specs/` (one file per screen, base tree + per-state deltas; manifest
+`specs/INDEX.md`). Consult `index.html` only for exact copy text / control order, jumping via
+the line index in the kit's `README.md`.
 
 Before coding any UI screen:
 
