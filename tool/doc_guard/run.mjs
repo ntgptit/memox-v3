@@ -1,4 +1,4 @@
-// doc_guard — docs/process linter + repo-map generator for MemoX.
+﻿// doc_guard — docs/process linter + repo-map generator for MemoX.
 //
 // Guards the zone `code-verification-guard` does not cover: claims made by docs
 // about the codebase. Saves agent tokens by replacing the recurring manual
@@ -8,7 +8,7 @@
 //
 // Usage (from repo root or this dir; zero npm dependencies):
 //   node tool/doc_guard/run.mjs check        # all doc/process checks (CI gate)
-//   node tool/doc_guard/run.mjs generate     # regenerate docs/_generated/repo-map.md
+//   node tool/doc_guard/run.mjs generate     # regenerate docs/_generated/{repo-map,where-is}.md
 //   node tool/doc_guard/run.mjs terms <old>  # find leftover refs to a renamed term
 //
 // Exit codes: 0 = clean (warnings allowed), 1 = errors found, 2 = tool failure.
@@ -284,6 +284,100 @@ function countGlob(dir, suffix = '.dart') {
   return walk(abs).filter((p) => p.endsWith(suffix) && !/\.(g|freezed)\.dart$/.test(p)).map(rel);
 }
 
+// ── generate: docs/_generated/where-is.md ────────────────────────────────────
+// Deterministic feature -> location index. The registry below holds STABLE doc
+// paths and source-name PATTERNS; actual file lists are resolved live against
+// the repo on every `generate`, so the index cannot drift (and doc_guard
+// path-checks the generated output like any other doc). One row answers
+// "where is X handled?" without any searching.
+const WHERE_IS = [
+  { f: 'Folder create', docs: ['docs/business/folder/folder-management.md', 'docs/contracts/usecase-contracts/folder.md', 'docs/wireframes/24-shared-dialogs.md'], src: ['create_root_folder', 'create_subfolder', 'mx_folder_form_dialog'], shots: ['03','04'], wbs: '2.1.x' },
+  { f: 'Folder rename', docs: ['docs/business/folder/folder-management.md', 'docs/contracts/usecase-contracts/folder.md'], src: ['rename_folder', 'library_folder_actions_sheet', 'mx_name_dialog'], shots: ['03','04'], wbs: '2.2.x' },
+  { f: 'Folder delete', docs: ['docs/business/folder/folder-management.md', 'docs/contracts/usecase-contracts/folder.md'], src: ['delete_folder', 'mx_folder_delete_dialog'], shots: ['03','04'], wbs: '2.3.x, 2.21.1' },
+  { f: 'Folder move', docs: ['docs/business/folder/folder-management.md', 'docs/contracts/usecase-contracts/folder.md'], src: ['move_folder', 'folder_move'], shots: ['04'], wbs: '2.4.x' },
+  { f: 'Folder reorder', docs: ['docs/business/folder/folder-management.md'], src: ['reorder_folders'], shots: ['04'], wbs: '2.5.x' },
+  { f: 'Folder content-mode lock', docs: ['docs/business/folder/folder-management.md', 'docs/business/glossary.md'], src: ['content_mode'], shots: ['04'], wbs: '2.6.1' },
+  { f: 'Library overview', docs: ['docs/business/folder/folder-management.md', 'docs/wireframes/02-library.md', 'docs/design/screens/library-overview.visual-contract.md'], src: ['library_overview', 'library_folder_tile', 'library_sections', 'library_skeleton', 'watch_library_overview'], shots: ['03'], wbs: '3.1.x' },
+  { f: 'Folder detail screen', docs: ['docs/business/folder/folder-management.md', 'docs/wireframes/05-folder-detail.md'], src: ['folder_detail', 'folder_deck_tile', 'folder_subfolder_tile', 'watch_folder_detail'], shots: ['04'], wbs: '3.2.x' },
+  { f: 'Deck create', docs: ['docs/business/deck/deck-management.md', 'docs/contracts/usecase-contracts/deck.md'], src: ['create_deck'], shots: ['04'], wbs: '2.7.x' },
+  { f: 'Deck rename', docs: ['docs/business/deck/deck-management.md', 'docs/contracts/usecase-contracts/deck.md'], src: ['rename_deck'], shots: ['06'], wbs: '2.8.x' },
+  { f: 'Deck delete', docs: ['docs/business/deck/deck-management.md'], src: ['delete_deck', 'deck_actions_sheet'], shots: ['06'], wbs: '2.9.x' },
+  { f: 'Deck reorder', docs: ['docs/business/deck/deck-management.md'], src: ['reorder_decks'], shots: ['04'], wbs: '2.10.x' },
+  { f: 'Deck move', docs: ['docs/business/deck/deck-management.md'], src: ['move_deck'], shots: ['04'], wbs: '2.19.x' },
+  { f: 'Deck import (CSV/structured)', docs: ['docs/business/flashcard/flashcard-management.md', 'docs/wireframes/10-deck-import.md'], src: ['deck_import', 'flashcard_import', 'flashcard_repository_impl_imports'], shots: ['10'], wbs: '6.x' },
+  { f: 'Import duplicate policy', docs: ['docs/business/flashcard/flashcard-management.md'], src: ['prepare_deck_import', 'flashcard_import_preview'], shots: ['10'], wbs: '6.6.x' },
+  { f: 'Manual duplicate soft-warning', docs: ['docs/business/flashcard/flashcard-management.md'], src: ['check_manual_duplicate', 'flashcard_duplicate_check', 'duplicate_behavior'], shots: ['07'], wbs: '2.20.x' },
+  { f: 'Deck export (CSV)', docs: ['docs/business/export/export.md'], src: ['export_deck', 'flashcard_export'], shots: [], wbs: '8.7.x' },
+  { f: 'Flashcard create/edit', docs: ['docs/business/flashcard/flashcard-management.md', 'docs/wireframes/07-flashcard-create.md', 'docs/wireframes/08-flashcard-edit.md'], src: ['flashcard_editor', 'create_flashcard', 'update_flashcard', 'get_flashcard_detail'], shots: ['07','08'], wbs: '2.11.x, 2.12.x' },
+  { f: 'Flashcard delete', docs: ['docs/business/flashcard/flashcard-management.md'], src: ['delete_flashcard', 'flashcard_row_actions'], shots: ['06'], wbs: '2.13.x' },
+  { f: 'Flashcard reorder', docs: ['docs/business/flashcard/flashcard-management.md'], src: ['reorder_flashcards'], shots: ['06'], wbs: '2.14.x' },
+  { f: 'Flashcard list screen', docs: ['docs/business/flashcard/flashcard-management.md', 'docs/wireframes/06-flashcard-list.md'], src: ['flashcard_list', 'flashcard_detail_card_row', 'flashcard_empty_state', 'watch_flashcard_list'], shots: ['06'], wbs: '3.4.x' },
+  { f: 'Flashcard tags (input/validation)', docs: ['docs/business/tags/tag-system.md', 'docs/contracts/usecase-contracts/tag.md'], src: ['tag_validator', 'flashcard_tags', 'editor_tags'], shots: ['07'], wbs: '2.15.x' },
+  { f: 'Global search', docs: ['docs/business/search/global-search.md', 'docs/wireframes/11-library-search.md'], src: ['search'], shots: ['05'], wbs: '3.5.x' },
+  { f: 'Study entry gate', docs: ['docs/business/study/study-flow.md', 'docs/wireframes/12-study-entry-gate.md', 'docs/contracts/usecase-contracts/study.md'], src: ['study_entry'], shots: [], wbs: '4.1.x' },
+  { f: 'Study session create/resume/restart', docs: ['docs/business/study/study-flow.md', 'docs/business/resume/resume-session.md'], src: ['study_repo_impl_study_session', 'study_usecases', 'study_repo.dart', 'restart_study', 'start_study'], shots: [], wbs: '4.2.x' },
+  { f: 'Study review shell (current card/reveal)', docs: ['docs/business/study/study-flow.md', 'docs/wireframes/16-study-session-recall.md'], src: ['study_session_screen', 'study_session_review', 'study_session_item'], shots: ['15'], wbs: '4.3.x' },
+  { f: 'Self-grade answer recording', docs: ['docs/business/srs/srs-review.md', 'docs/business/study/study-flow.md'], src: ['record_answer', 'record_study_session_answer'], shots: ['15'], wbs: '4.4.x' },
+  { f: 'Study modes / strategy', docs: ['docs/business/study/study-flow.md', 'docs/wireframes/13-study-session-review.md'], src: ['study_mode_strategy', 'recall_study_mode', 'study_mode.dart'], shots: ['12','13','14','15','16'], wbs: '4.5.x' },
+  { f: 'Finalization + SRS transitions', docs: ['docs/business/srs/srs-review.md', 'docs/contracts/usecase-contracts/srs.md'], src: ['study_repo_impl.dart', 'srs_transition'], shots: [], wbs: '4.6.x' },
+  { f: 'SRS data model (box/due/progress)', docs: ['docs/business/srs/srs-review.md', 'docs/database/schema-contract.md'], src: ['attempt_result', 'box_number', 'flashcard_progress'], shots: [], wbs: '4.6.x' },
+  { f: 'Study result screen', docs: ['docs/business/study/study-flow.md', 'docs/wireframes/18-study-result.md'], src: ['study_result'], shots: ['17'], wbs: '4.7.x' },
+  { f: 'Bury / suspend', docs: ['docs/business/study-actions/bury-suspend.md'], src: ['bury', 'suspend'], shots: ['06'], wbs: '4.11.x, 2.17.x' },
+  { f: 'Dashboard', docs: ['docs/business/engagement/dashboard-engagement.md', 'docs/wireframes/01-dashboard.md', 'docs/design/screens/dashboard.visual-contract.md'], src: ['dashboard'], shots: ['02'], wbs: '5.x' },
+  { f: 'Progress read model / screen', docs: ['docs/wireframes/03-progress.md', 'docs/contracts/repository-contracts/progress-repository.md'], src: ['progress_dao', 'progress_queries', 'progress_repo', 'progress_read_model', 'usecases/progress', 'progress_providers'], shots: ['19'], wbs: '7.x' },
+  { f: 'Tag management (settings)', docs: ['docs/business/tags/tag-system.md', 'docs/wireframes/22-settings-tag-management.md'], src: ['tag_repo', 'usecases/tag/', 'tags_with_count', 'tag_management'], shots: ['11'], wbs: '8.3.x' },
+  { f: 'Bulk operations', docs: ['docs/business/bulk/bulk-operations.md', 'docs/contracts/usecase-contracts/bulk.md'], src: ['bulk'], shots: ['06'], wbs: '8.9.x' },
+  { f: 'Settings hub', docs: ['docs/wireframes/04-settings-hub.md'], src: ['settings_screen', 'settings/routes'], shots: ['20'], wbs: '8.1.x' },
+  { f: 'Learning settings', docs: ['docs/wireframes/20-settings-learning.md', 'docs/business/engagement/dashboard-engagement.md'], src: ['learning_settings'], shots: ['22'], wbs: '8.2.x' },
+  { f: 'Audio / TTS', docs: ['docs/business/tts/tts-settings.md', 'docs/wireframes/21-settings-audio-speech.md'], src: ['audio_speech', 'tts_'], shots: ['23'], wbs: '8.4.x' },
+  { f: 'Account & Drive sync', docs: ['docs/business/account-sync/account-sync.md', 'docs/wireframes/19-settings-account.md'], src: ['account_sync', 'drive_sync', 'cloud_account'], shots: ['21'], wbs: '8.5.x, 8.6.x' },
+  { f: 'Router / navigation', docs: ['docs/business/navigation/navigation-flow.md'], src: ['app/router'], shots: [], wbs: '1.1.3' },
+  { f: 'Schema / migrations', docs: ['docs/database/schema-contract.md', 'docs/database/migration-contract.md', 'docs/database/drift-guide.md'], src: ['migrations/', 'app_database', '.drift'], shots: [], wbs: '1.1.5' },
+];
+
+function whereIs() {
+  const inv = walk(join(repoRoot, 'lib'))
+    .concat(walk(join(repoRoot, 'test')))
+    .map(rel)
+    .filter((p) => !/\.(g|freezed)\.dart$/.test(p) && !p.startsWith('lib/l10n/generated'));
+
+  const cap = (arr, n) =>
+    arr.length === 0
+      ? '—'
+      : arr.slice(0, n).map((p) => `\`${p}\``).join('<br>') + (arr.length > n ? `<br>*+${arr.length - n} more*` : '');
+
+  const rows = WHERE_IS.map((e) => {
+    const match = (p) => e.src.some((pat) => p.toLowerCase().includes(pat.toLowerCase()));
+    const srcHits = inv.filter((p) => p.startsWith('lib/') && match(p));
+    const testHits = inv.filter((p) => p.startsWith('test/') && match(p));
+    for (const d of e.docs) {
+      if (!existsSync(join(repoRoot, d))) console.warn(`where-is: doc missing for "${e.f}": ${d}`);
+    }
+    const docsCell = e.docs.map((d) => `\`${d}\``).join('<br>');
+    const shotsCell = e.shots.length ? e.shots.map((s) => `\`shots/${s}-*\``).join('<br>') : '—';
+    return `| ${e.f} | ${docsCell} | ${cap(srcHits, 5)} | ${cap(testHits, 4)} | ${shotsCell} | ${e.wbs} |`;
+  });
+
+  const out = [
+    '# Where-Is Index (auto-generated — DO NOT EDIT)',
+    '',
+    'Generated by `node tool/doc_guard/run.mjs generate`. One row answers "where is X handled?" —',
+    'docs to read, source files (resolved LIVE against the repo at generation time), tests, mock',
+    'shots prefix (under `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` — see its',
+    '`INDEX.md`; DOM specs in sibling `specs/`), and WBS rows. `—` means not built yet — check the',
+    'WBS row status before assuming anything exists. If this file looks stale, regenerate it.',
+    '',
+    '| Feature | Docs | Source | Tests | Mock | WBS |',
+    '| --- | --- | --- | --- | --- | --- |',
+    ...rows,
+    '',
+  ];
+  const outDir = join(repoRoot, 'docs', '_generated');
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(join(outDir, 'where-is.md'), out.join('\n'));
+  console.log(`generated docs/_generated/where-is.md (${WHERE_IS.length} features)`);
+}
+
 // ── generate: docs/_generated/repo-map.md ────────────────────────────────────
 function generate() {
   const { all: lib } = libSource();
@@ -394,6 +488,7 @@ function runChecks() {
 const cmd = process.argv[2];
 if (cmd === 'generate') {
   generate();
+  whereIs();
 } else if (cmd === 'terms') {
   const old = process.argv[3];
   if (!old) { console.error('usage: run.mjs terms <old-term>'); process.exit(2); }

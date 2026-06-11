@@ -117,7 +117,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
 
 | Task type | Đọc trước |
 | --- | --- |
-| Bất kỳ task nào | `docs/_generated/repo-map.md` (cold-start snapshot — đọc TRƯỚC khi tự khám phá repo; nếu stale thì `node tool/doc_guard/run.mjs generate`), `docs/business/index.md`, `docs/business/glossary.md`, **3 universal contracts above** |
+| Bất kỳ task nào | `docs/_generated/repo-map.md` (cold-start snapshot) + row liên quan trong `docs/_generated/where-is.md` (feature → docs/source/tests/mock/WBS — đọc TRƯỚC khi tự grep; nếu stale thì `node tool/doc_guard/run.mjs generate`), `docs/business/index.md`, `docs/business/glossary.md`, **3 universal contracts above** |
 | Thêm/sửa use case | `docs/contracts/usecase-contracts/{entity}.md` + business spec + decision rows |
 | Thêm/sửa repository | `docs/contracts/repository-contracts/{entity}-repository.md` + use case contract |
 | Thêm/sửa screen | Wireframe của screen đó + related `docs/business/**` + `docs/ui-ux/ui-ux-contract.md` + `docs/system-design/MemoX Design System/README.md` + Implementation refs trong wireframe (→ tự link đến contracts) |

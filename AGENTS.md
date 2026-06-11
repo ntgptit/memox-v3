@@ -29,9 +29,9 @@ Code and docs ship in the SAME commit when behavior, schema, route, rule, or con
 
 | Phase | Duty |
 | --- | --- |
-| Before | Read `CLAUDE.md`, then the docs listed in `CLAUDE.md` §Required reading by task. Do drift check. |
+| Before | Read `docs/_generated/repo-map.md` + the relevant row of `docs/_generated/where-is.md` (cold-start: schema/routes/status + per-feature file locations — do NOT re-explore the repo by hand). Then `CLAUDE.md` §Required reading by task. Do drift check. |
 | During | Follow contracts; don't invent behavior; update docs alongside code. |
-| After | Run `CLAUDE.md` §Pre-commit parity check. Run verification commands. File report (see below). |
+| After | Run `CLAUDE.md` §Pre-commit parity check. Run `node tool/verify/run.mjs` (single-entry verification chain — auto-detects docs vs code scope; pass `--test <paths>` for targeted tests). File report (see below). |
 
 ## Drift detection
 
@@ -112,10 +112,23 @@ For every "no" below, the task is NOT done — go back and fix:
 3. Every new route in `docs/business/navigation/navigation-flow.md`?
 4. Every schema change in `docs/database/schema-contract.md` AND `docs/database/migration-contract.md`?
 5. Every new user-facing string in ARB AND referenced in wireframe?
-6. Every rename grepped (`grep -rn "{old}" docs/`) and confirmed clean?
+6. Every rename checked (`node tool/doc_guard/run.mjs terms <old>`) and confirmed clean?
 7. Every new decision-table-worthy branch added as a row with a test?
 8. Report contains "Changed doc files" with explicit content?
 
 ## Where to look for what
 
 This file delegates the catalog of "where to look for what" to `CLAUDE.md` §Required reading by task. Do not duplicate that mapping here.
+
+Fast lookups (generated, linted — prefer these over manual searching):
+
+| Question | Read |
+| --- | --- |
+| What exists in this repo right now? | `docs/_generated/repo-map.md` |
+| Where is feature X handled (docs/source/tests/mock/WBS)? | `docs/_generated/where-is.md` |
+| What does screen NN look like? (vision agents) | `docs/system-design/MemoX Design System/ui_kits/mobile/shots/INDEX.md` |
+| Exact element sizes/tokens of screen NN? (text/no-vision agents) | `docs/system-design/MemoX Design System/ui_kits/mobile/specs/INDEX.md` |
+| Is my doc claim consistent with the repo? | `node tool/doc_guard/run.mjs check` |
+| Does my screen match the mock? (no-vision feedback) | `python tool/golden_diff/diff.py <actual> <expected>` |
+
+If a generated file looks stale (commit far behind HEAD), run `node tool/doc_guard/run.mjs generate` first.
