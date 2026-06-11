@@ -101,10 +101,10 @@ Ví dụ một dòng trong spec (chính xác đến từng px, màu theo tên to
 
 | | |
 | --- | --- |
-| **Mục đích** | Thay 7 lệnh verify rời + các pairing rule phải nhớ bằng MỘT lệnh, MỘT bảng tổng kết. Agent không còn lý do chạy lẻ tẻ hay bỏ sót gate. |
-| **Cách hoạt động** | Tự phát hiện scope từ `git status`: chỉ docs đổi → docs chain (~10 giây: `doc_guard` → guard → `git diff --check`); có `.dart`/pubspec đổi → code chain đầy đủ theo đúng thứ tự chuẩn: `gen-l10n` (chỉ khi ARB đổi) → `build_runner` → guard → `doc_guard` → `dart fix --apply` → `dart format .` → `flutter analyze` → `flutter test` (targeted) → `git diff --check`. In bảng pass/fail/skipped kèm lý do + thời gian; exit ≠ 0 nếu bất kỳ bước nào fail. |
-| **Cách chạy** | `node tool/verify/run.mjs` (auto-detect) · `--test <đường-dẫn-test...>` (code chain + test nhắm đích) · `--docs` / `--code` / `--full` (ép scope; `--full` chạy toàn bộ test — chậm). |
-| **Lưu ý** | Sau khi nó chạy `dart fix`/`dart format`, vẫn phải xem diff và chỉ giữ thay đổi thuộc task hiện tại (rule trong `CLAUDE.md`). |
+| **Mục đích** | Thay 7 lệnh verify rời + các pairing rule phải nhớ bằng MỘT lệnh, MỘT bảng tổng kết — và **ép buộc** điều đó: chạy lệnh rời không sinh pass-marker nên không commit được. |
+| **Cách hoạt động** | Tự phát hiện scope từ `git status`: chỉ docs đổi → docs chain (~10 giây); có `.dart`/pubspec đổi → code chain đầy đủ đúng thứ tự chuẩn: `gen-l10n` (chỉ khi ARB đổi) → `build_runner` → guard → `doc_guard` → `dart fix --apply` → `dart format .` → `flutter analyze` → `flutter test` (targeted) → `git diff --check`. **PASS (docs/code) ghi `tool/verify/.last-pass.json`** chứa hash trạng thái nội dung tree; pre-commit hook gọi `--check-marker` — commit bị từ chối khi không có marker khớp, hoặc khi stage code mà marker chỉ là docs-chain. Sửa bất kỳ file nào sau PASS → hash lệch → phải chạy lại. |
+| **Cách chạy** | **Inner loop khi đang dev**: `node tool/verify/run.mjs --quick [--test <paths>]` (analyze + test nhắm đích, nhanh, KHÔNG marker — không dùng để commit). **Cuối task**: `--test <paths>` (code) hoặc `--docs` (docs-only) hoặc auto-detect / `--code` / `--full`. |
+| **Lưu ý** | Sau khi nó chạy `dart fix`/`dart format`, vẫn phải xem diff và chỉ giữ thay đổi thuộc task hiện tại. KHÔNG chạy `flutter analyze`/`flutter test`/`build_runner`... trực tiếp — đó là hard-rule violation (`CLAUDE.md` §Hard rules). |
 
 ## 4. Artifacts sinh ra — tra cứu nhanh
 
@@ -144,14 +144,15 @@ Ví dụ một dòng trong spec (chính xác đến từng px, màu theo tên to
 
 | Tool / lệnh | Tác nhân trigger | Thời điểm | Điều kiện trigger | Bắt buộc? | Được wire ở đâu |
 | --- | --- | --- | --- | --- | --- |
-| `verify` | AI agent (mọi loại) | Cuối mỗi task, TRƯỚC khi commit/báo cáo | Có bất kỳ thay đổi nào (tự phát hiện scope docs/code từ `git status`) | **Bắt buộc** — báo cáo thiếu kết quả verify = task bị reject | `CLAUDE.md` §Verification, `AGENTS.md` phase "After", `docs/checklist/implementation-checklist.md` §Verification |
+| `verify --quick` | AI agent | TRONG lúc dev (inner loop), thay cho việc chạy `flutter analyze`/`test` trực tiếp | Muốn feedback nhanh giữa chừng | **Bắt buộc dùng thay lệnh rời** (hard rule); không sinh marker | `CLAUDE.md` §Hard rules + §Verification |
+| `verify` (full) | AI agent (mọi loại) | Cuối mỗi task, TRƯỚC khi commit/báo cáo | Có bất kỳ thay đổi nào (tự phát hiện scope docs/code) | **Bắt buộc + cưỡng chế** — PASS ghi pass-marker; không có marker thì hook chặn commit | `CLAUDE.md` §Verification, `AGENTS.md` phase "After", `docs/checklist/implementation-checklist.md` §Verification, `.githooks/pre-commit` |
 | `doc_guard check` | (a) `verify` gọi tự động; (b) **git pre-commit hook** chạy tự động; (c) agent chạy tay khi sửa nhiều docs | Mỗi lần verify + mỗi lần `git commit` | Luôn chạy được (~3s); hook block commit khi có finding MỚI | **Bắt buộc** (tự động qua 2 đường trên) | `tool/verify/run.mjs`, `.githooks/pre-commit` |
 | `doc_guard generate` | AI agent | Trong commit có thay đổi route / schema / use case / screen; hoặc khi thấy `repo-map.md` ghi commit tụt xa HEAD | Một trong các thay đổi trên xảy ra | Bắt buộc theo điều kiện | `CLAUDE.md` §Verification, `AGENTS.md` §Fast lookups |
 | `doc_guard check --update-baseline` | AI agent / người | CHỈ sau khi đã fix bớt finding trong baseline (burn-down WBS 9.12) | Vừa fix xong finding cũ; KHÔNG dùng để "cho qua" finding mới | Tùy chọn có kiểm soát | `tool/doc_guard/baseline.json` |
 | `doc_guard terms <old>` | AI agent | Ngay sau khi rename thuật ngữ/route/field | Có rename xảy ra | **Bắt buộc khi rename** (CLAUDE.md parity bước 8, AGENTS.md self-audit #6) | `CLAUDE.md`, `AGENTS.md` |
 | `ui_kit_shots export:all` | AI agent / người chỉnh design | Sau BẤT KỲ thay đổi nào của `ui_kits/mobile/index.html` | Kit đổi (state mới, màn mới, style đổi) | **Bắt buộc khi kit đổi** — không regen = shots/specs nói dối | Kit `README.md` §How agents consume |
 | `golden_diff` | AI agent làm UI task | Sau khi render golden/screenshot của màn hình vừa implement | Có golden PNG của màn hình + shot mock tương ứng | Bắt buộc cho UI task (gate per-screen kích hoạt từ WBS 4.1.3) | `CLAUDE.md` §Verification, WBS 9.14 |
-| **pre-commit hook** | git (tự động) | Mỗi `git commit` | Clone đã chạy MỘT LẦN: `git config core.hooksPath .githooks` | Tự động sau khi kích hoạt; bypass khẩn cấp: `--no-verify` (phải fix trước khi push) | `.githooks/pre-commit` |
+| **pre-commit hook** | git (tự động) | Mỗi `git commit` | Clone đã chạy MỘT LẦN: `git config core.hooksPath .githooks` | Gọi `verify --check-marker`: chặn commit khi không có pass-marker khớp trạng thái tree, hoặc stage code mà marker là docs-chain. Bypass khẩn cấp: `--no-verify` (phải nêu lý do trong report) | `.githooks/pre-commit` → `tool/verify/run.mjs --check-marker` |
 
 Quy tắc nhớ nhanh cho agent: **verify trước mọi commit; generate khi đổi cấu trúc; terms khi
 rename; export khi kit đổi; golden_diff khi làm UI; hook lo phần còn lại tự động.**

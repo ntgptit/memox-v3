@@ -186,6 +186,7 @@ This convention applies to **backtick references** in markdown body text and tab
 - KHÔNG để docs reference đến term/route/field cũ sau khi rename.
 - KHÔNG đánh dấu task "done" nếu chưa pass Pre-commit parity check.
 - KHÔNG báo cáo complete nếu `code-verification-guard` tồn tại trong repo mà chưa chạy pass. Nếu tool không tồn tại, ghi rõ: `guard: skipped (tool not present)`.
+- **KHÔNG chạy lệnh verification rời** (`flutter analyze`, `flutter test`, `dart fix`, `dart format`, `build_runner`, `flutter gen-l10n`, guard, doc_guard) trực tiếp — KỂ CẢ trong lúc đang dev. Mọi bước verification đi qua MỘT entry: `node tool/verify/run.mjs` (inner loop: `--quick [--test <paths>]`; cuối task: full chain). Verify PASS ghi pass-marker gắn với trạng thái nội dung tree; **pre-commit hook từ chối commit không có marker hợp lệ** — chạy lẻ tẻ không sinh marker nên không commit được. Sửa file sau khi PASS → marker hết hiệu lực → chạy lại verify.
 
 ## Mandatory workflow
 
@@ -304,17 +305,20 @@ Expected final response after implementing a UI task:
 
 ## Verification commands
 
-**Single entry (preferred — run ONE command, read ONE summary):**
+**Single entry (BẮT BUỘC — xem Hard rules; lệnh rời không sinh marker nên không commit được):**
 
 ```text
-node tool/verify/run.mjs                        # auto-detects docs-only vs code scope
-node tool/verify/run.mjs --test <test paths>    # code chain + targeted tests
-node tool/verify/run.mjs --docs | --code | --full
+node tool/verify/run.mjs --quick [--test <paths>]   # INNER LOOP khi đang dev: analyze (+ test nhắm đích), nhanh, KHÔNG marker
+node tool/verify/run.mjs --test <test paths>        # cuối task code: full chain + targeted tests → ghi pass-marker
+node tool/verify/run.mjs --docs                     # cuối task docs-only (~10s) → ghi pass-marker
+node tool/verify/run.mjs                            # auto-detect scope | --code | --full
 ```
 
 The entry runs the canonical chain in order with the analyze/dart-fix pairing rules applied,
-prints one pass/fail/skipped summary, and exits non-zero on any failure. Rules that survive
-the automation:
+prints one pass/fail/skipped summary, and exits non-zero on any failure. A docs/code PASS writes
+`tool/verify/.last-pass.json` bound to the tree's content state; the pre-commit hook
+(`--check-marker`) rejects commits without a matching marker, and requires a **code-chain**
+marker when staged changes include code. Rules that survive the automation:
 
 - Sau khi nó chạy `dart fix`/`dart format`: inspect diff, chỉ giữ thay đổi thuộc task hiện tại;
   fixable diagnostic không apply phải có lý do trong report.

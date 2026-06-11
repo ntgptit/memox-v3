@@ -1,10 +1,10 @@
-// verify — single-entry verification chain for MemoX.
-//
-// Replaces running the CLAUDE.md verification commands one by one. Detects the
-// change scope from `git status` (docs-only vs code) and runs the right steps
-// in the canonical order with the pairing rules applied (dart fix -> dart
-// format -> flutter analyze), then prints one summary table. Agents run ONE
-// command and read ONE result block.
+// verify — THE single verification entry for MemoX. Individual verification
+// commands (flutter analyze/test, dart fix/format, build_runner, guards) must
+// NOT be run directly; every step goes through this tool — including the inner
+// dev loop (`--quick`). Enforcement: a successful docs/code run writes a
+// pass-marker bound to the exact content state of the working tree, and the
+// pre-commit hook rejects commits whose state has no matching marker. Piecemeal
+// runs produce no marker, so they cannot be committed.
 //
 // Usage:
 //   node tool/verify/run.mjs                  # auto-detect scope from git status
@@ -12,21 +12,85 @@
 //   node tool/verify/run.mjs --code           # full code chain, no tests
 //   node tool/verify/run.mjs --test <paths..> # code chain + targeted flutter tests
 //   node tool/verify/run.mjs --full           # code chain + ALL flutter tests (slow)
+//   node tool/verify/run.mjs --quick [--test <paths..>]
+//                                             # inner loop: analyze (+ targeted tests) only.
+//                                             # Fast feedback while developing; writes NO marker.
+//   node tool/verify/run.mjs --check-marker   # used by .githooks/pre-commit: exit 0 when the
+//                                             # current tree state has a valid pass-marker.
 //
 // Exit code: 0 = every executed step passed, 1 = at least one step failed.
 
-import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync, spawnSync } from 'node:child_process';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const markerPath = join(repoRoot, 'tool', 'verify', '.last-pass.json');
 const args = process.argv.slice(2);
 const has = (f) => args.includes(f);
 const testTargets = (() => {
   const i = args.indexOf('--test');
   return i >= 0 ? args.slice(i + 1).filter((a) => !a.startsWith('--')) : [];
 })();
+
+// ── content-state hash ───────────────────────────────────────────────────────
+// Identifies the exact uncommitted content of the tree, independent of whether
+// files are staged. `git add` does not change it; any edit does. The marker
+// file itself is excluded.
+function stateHash() {
+  const out = execSync('git status --porcelain', { cwd: repoRoot }).toString();
+  const entries = [];
+  for (const line of out.split('\n').filter(Boolean)) {
+    let path = line.slice(3).trim().replace(/^"|"$/g, '');
+    if (path.includes(' -> ')) path = path.split(' -> ')[1].replace(/^"|"$/g, '');
+    if (path === 'tool/verify/.last-pass.json') continue;
+    const abs = join(repoRoot, path);
+    const content = existsSync(abs) ? readFileSync(abs) : Buffer.from('DELETED');
+    entries.push(`${path}:${createHash('sha1').update(content).digest('hex')}`);
+  }
+  entries.sort();
+  const head = execSync('git rev-parse HEAD', { cwd: repoRoot }).toString().trim();
+  return createHash('sha1').update(head + '\n' + entries.join('\n')).digest('hex');
+}
+
+// ── --check-marker (called by .githooks/pre-commit) ──────────────────────────
+if (has('--check-marker')) {
+  if (!existsSync(markerPath)) {
+    console.error('pre-commit: no verify pass-marker. Run `node tool/verify/run.mjs` (or --docs / --test <paths>) before committing.');
+    process.exit(1);
+  }
+  let marker;
+  try {
+    marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+  } catch {
+    console.error('pre-commit: unreadable pass-marker. Re-run `node tool/verify/run.mjs`.');
+    process.exit(1);
+  }
+  if (marker.stateHash !== stateHash()) {
+    console.error('pre-commit: tree changed since the last verify PASS (or verify was never run on this state).');
+    console.error('Run `node tool/verify/run.mjs` again — piecemeal verification commands do not count.');
+    process.exit(1);
+  }
+  const staged = execSync('git diff --cached --name-only', { cwd: repoRoot })
+    .toString()
+    .split('\n')
+    .filter(Boolean);
+  const codeStaged = staged.some(
+    (f) => (f.startsWith('lib/') || f.startsWith('test/') || f === 'pubspec.yaml') && !f.endsWith('.md'),
+  );
+  if (codeStaged && marker.mode !== 'code') {
+    console.error(`pre-commit: staged changes include code but the pass-marker is from the "${marker.mode}" chain.`);
+    console.error('Run the code chain: `node tool/verify/run.mjs --test <targeted tests>`.');
+    process.exit(1);
+  }
+  if (codeStaged && !marker.testsRan) {
+    console.error('pre-commit: WARNING — code is staged but no tests ran in the verifying chain (no --test/--full).');
+    console.error('Allowed, but the final report must justify the skip.');
+  }
+  process.exit(0);
+}
 
 // ── scope detection ──────────────────────────────────────────────────────────
 function changedFiles() {
@@ -38,7 +102,8 @@ function changedFiles() {
 }
 
 let mode;
-if (has('--docs')) mode = 'docs';
+if (has('--quick')) mode = 'quick';
+else if (has('--docs')) mode = 'docs';
 else if (has('--code') || has('--full') || testTargets.length) mode = 'code';
 else {
   const files = changedFiles();
@@ -76,7 +141,13 @@ function step(name, cmd, { skip, optional } = {}) {
 // ── chains ───────────────────────────────────────────────────────────────────
 const guardPresent = existsSync(join(repoRoot, 'code-verification-guard', 'guard', 'run.py'));
 
-if (mode === 'docs') {
+if (mode === 'quick') {
+  // Inner dev loop: fast feedback through the same entry. No marker — quick
+  // runs are not commit-worthy verification.
+  step('flutter analyze', 'flutter analyze');
+  if (testTargets.length) step('flutter test (targeted)', `flutter test ${testTargets.join(' ')}`);
+  else results.push({ name: 'flutter test', status: 'skipped', note: 'pass --test <paths> for tests in quick mode' });
+} else if (mode === 'docs') {
   step('doc_guard', 'node tool/doc_guard/run.mjs check');
   step('guard', 'python code-verification-guard/guard/run.py check --project . --ruleset memox', {
     skip: guardPresent ? undefined : 'tool not present',
@@ -109,6 +180,16 @@ if (failed.length) {
   console.log(`\nverify: FAILED (${failed.map((f) => f.name).join(', ')})`);
   process.exit(1);
 }
-console.log('\nverify: PASS');
-console.log('reminder: after dart fix/format, inspect the diff and keep only changes belonging to the task.');
+
+if (mode === 'quick') {
+  console.log('\nverify: PASS (quick — inner loop only, no commit marker written)');
+} else {
+  const testsRan = has('--full') || testTargets.length > 0;
+  writeFileSync(
+    markerPath,
+    JSON.stringify({ mode, stateHash: stateHash(), testsRan, at: new Date().toISOString() }, null, 2),
+  );
+  console.log(`\nverify: PASS (${mode} chain — commit marker written; edits after this point require a re-run)`);
+  console.log('after dart fix/format: inspect the diff and keep only changes belonging to the task.');
+}
 process.exit(0);

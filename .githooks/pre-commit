@@ -1,20 +1,21 @@
 #!/bin/sh
-# MemoX pre-commit hook — fast docs/process gate (~3s).
-# Blocks commits that introduce NEW doc drift (phantom paths/symbols/test refs,
-# WBS format violations) or whitespace errors. The full chain (analyze/tests)
-# stays in `node tool/verify/run.mjs` — too slow for every commit.
+# MemoX pre-commit hook — enforces the single-entry verification process.
+#
+# A commit is allowed ONLY when `node tool/verify/run.mjs` has PASSED on the
+# exact current content of the tree (the run writes a state-bound pass-marker).
+# Running verification commands piecemeal produces no marker → commit blocked.
+# Editing any file after a PASS invalidates the marker → re-run verify.
 #
 # Activate once per clone:  git config core.hooksPath .githooks
-# Bypass in emergencies:    git commit --no-verify  (then fix before push)
+# Bypass in emergencies:    git commit --no-verify  (must be justified in the report)
 
-# Graceful skip when node is unavailable (e.g. CI image without node).
-command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping doc_guard"; exit 0; }
+command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping verify-marker check"; exit 0; }
 
-echo "pre-commit: doc_guard check..."
-node tool/doc_guard/run.mjs check || {
+node tool/verify/run.mjs --check-marker || {
   echo ""
-  echo "pre-commit BLOCKED: new doc-drift findings above."
-  echo "Fix them (or, for intentionally-unbuilt references, add a status/target marker)."
+  echo "pre-commit BLOCKED: run the single verification entry, then commit:"
+  echo "  docs-only change:  node tool/verify/run.mjs --docs"
+  echo "  code change:       node tool/verify/run.mjs --test <targeted test paths>"
   exit 1
 }
 
