@@ -117,26 +117,28 @@ Run before declaring task done. Tick each:
 
 ## Verification
 
-Run relevant commands:
+**Run the single entry point** (it executes the whole chain in canonical order with the
+analyze/dart-fix pairing rules applied, auto-detecting docs-only vs code scope):
+
+```text
+node tool/verify/run.mjs --test <targeted test paths>
+```
+
+Variants: no flags = auto-detect scope; `--docs` / `--code` / `--full`. See `tool/README.md` §3.5.
+
+After it runs `dart fix --apply` / `dart format .`: inspect the diff and keep only changes
+belonging to the current task. If a fixable analyzer diagnostic is intentionally not applied,
+report the reason under "Skipped checks or risks".
+
+Individual commands (fallback for debugging a single step only — do NOT use as the normal path):
 
 ```text
 dart run build_runner build --delete-conflicting-outputs
-python code-verification-guard/guard/run.py check --project .
-dart fix --apply
-dart format .
-flutter analyze
+python code-verification-guard/guard/run.py check --project . --ruleset memox
+node tool/doc_guard/run.mjs check
+dart fix --apply && dart format . && flutter analyze
 flutter test <targeted tests>
 ```
-
-Analyze / dart-fix pairing:
-
-- Before `flutter analyze`, run `dart fix --apply` and `dart format .`.
-- If `flutter analyze` reports diagnostics that are safely fixable, rerun `dart fix --apply`,
-  inspect the diff, then rerun `flutter analyze`.
-- Do not run `dart fix --apply` or `dart format .` as standalone cleanup steps without the
-  follow-up analyzer pass.
-- If a fixable analyzer diagnostic is not applied, report the reason under "Skipped checks or
-  risks".
 
 All must pass. If any is skipped, justify in final report.
 
@@ -185,8 +187,10 @@ NEVER leave this section silently empty.
 <which IDs touched, which tests added/updated>
 
 ## Verification result
+- verify entry (`tool/verify/run.mjs`): PASS/FAIL + scope (docs/code) — paste the summary table
 - build_runner: pass/fail/skipped
 - guard: pass/fail/skipped
+- doc_guard: <n> new errors / <n> baselined
 - analyzer: pass/fail/skipped
 - tests: <count> passed, <count> failed
 

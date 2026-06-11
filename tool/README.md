@@ -138,8 +138,59 @@ Ví dụ một dòng trong spec (chính xác đến từng px, màu theo tên to
 | `ui_kit_shots` | Node + `npm install` trong thư mục + Google Chrome + mạng | puppeteer-core dùng Chrome hệ thống, không tải browser |
 | `golden_diff` | Python 3 + Pillow (`pip install Pillow`) | |
 | `code-verification-guard` | Tool riêng có sẵn trong repo (Python) | Không thuộc `tool/`; được `verify` gọi tự động |
+| pre-commit hook | `git config core.hooksPath .githooks` (một lần / clone) | Tự chạy `doc_guard check` + whitespace check mỗi commit |
 
-## 7. Lịch sử & truy vết
+## 7. Trigger matrix — tool nào chạy khi nào, bởi ai, điều kiện gì
+
+| Tool / lệnh | Tác nhân trigger | Thời điểm | Điều kiện trigger | Bắt buộc? | Được wire ở đâu |
+| --- | --- | --- | --- | --- | --- |
+| `verify` | AI agent (mọi loại) | Cuối mỗi task, TRƯỚC khi commit/báo cáo | Có bất kỳ thay đổi nào (tự phát hiện scope docs/code từ `git status`) | **Bắt buộc** — báo cáo thiếu kết quả verify = task bị reject | `CLAUDE.md` §Verification, `AGENTS.md` phase "After", `docs/checklist/implementation-checklist.md` §Verification |
+| `doc_guard check` | (a) `verify` gọi tự động; (b) **git pre-commit hook** chạy tự động; (c) agent chạy tay khi sửa nhiều docs | Mỗi lần verify + mỗi lần `git commit` | Luôn chạy được (~3s); hook block commit khi có finding MỚI | **Bắt buộc** (tự động qua 2 đường trên) | `tool/verify/run.mjs`, `.githooks/pre-commit` |
+| `doc_guard generate` | AI agent | Trong commit có thay đổi route / schema / use case / screen; hoặc khi thấy `repo-map.md` ghi commit tụt xa HEAD | Một trong các thay đổi trên xảy ra | Bắt buộc theo điều kiện | `CLAUDE.md` §Verification, `AGENTS.md` §Fast lookups |
+| `doc_guard check --update-baseline` | AI agent / người | CHỈ sau khi đã fix bớt finding trong baseline (burn-down WBS 9.12) | Vừa fix xong finding cũ; KHÔNG dùng để "cho qua" finding mới | Tùy chọn có kiểm soát | `tool/doc_guard/baseline.json` |
+| `doc_guard terms <old>` | AI agent | Ngay sau khi rename thuật ngữ/route/field | Có rename xảy ra | **Bắt buộc khi rename** (CLAUDE.md parity bước 8, AGENTS.md self-audit #6) | `CLAUDE.md`, `AGENTS.md` |
+| `ui_kit_shots export:all` | AI agent / người chỉnh design | Sau BẤT KỲ thay đổi nào của `ui_kits/mobile/index.html` | Kit đổi (state mới, màn mới, style đổi) | **Bắt buộc khi kit đổi** — không regen = shots/specs nói dối | Kit `README.md` §How agents consume |
+| `golden_diff` | AI agent làm UI task | Sau khi render golden/screenshot của màn hình vừa implement | Có golden PNG của màn hình + shot mock tương ứng | Bắt buộc cho UI task (gate per-screen kích hoạt từ WBS 4.1.3) | `CLAUDE.md` §Verification, WBS 9.14 |
+| **pre-commit hook** | git (tự động) | Mỗi `git commit` | Clone đã chạy MỘT LẦN: `git config core.hooksPath .githooks` | Tự động sau khi kích hoạt; bypass khẩn cấp: `--no-verify` (phải fix trước khi push) | `.githooks/pre-commit` |
+
+Quy tắc nhớ nhanh cho agent: **verify trước mọi commit; generate khi đổi cấu trúc; terms khi
+rename; export khi kit đổi; golden_diff khi làm UI; hook lo phần còn lại tự động.**
+
+## 8. Tái sử dụng cho dự án khác (portability)
+
+Các tool được viết zero-framework (Node thuần / Python thuần) nên copy được, nhưng mỗi tool có
+phần **generic** (giữ nguyên) và phần **MemoX-specific** (phải sửa). Bảng dưới liệt kê chính xác
+chỗ cần đụng:
+
+| Tool | Mức độ generic | Phải sửa gì khi copy sang dự án khác |
+| --- | --- | --- |
+| `golden_diff/diff.py` | ✅ **100% generic** | Không sửa gì — so 2 PNG bất kỳ. Copy là chạy. |
+| `verify/run.mjs` | 🔶 Khung generic, steps theo stack | (1) Danh sách step trong 2 chain (hiện là Flutter: build_runner/analyze/flutter test → thay bằng lệnh của stack mới, vd `npm run lint`/`pytest`); (2) hàm phát hiện scope: prefix `lib/`, `test/`, `pubspec.yaml` → đổi theo cây dự án; (3) điều kiện `arbTouched` (Flutter l10n) → bỏ hoặc thay. |
+| `doc_guard/run.mjs` — check 1–3 (path/symbol/test-ref) | 🔶 Gần generic | (1) `prefixes` trong `checkPaths` (`docs/`, `lib/`, `test/`, `tool/` → đổi theo cây mới); (2) `SYMBOL_SUFFIX` regex (suffix class theo convention dự án, vd `Controller\|Service\|Handler` cho Spring); (3) danh sách `NEGATION` markers giữ nguyên được, thêm từ khóa status của dự án mới. |
+| `doc_guard` — checkWbs | 🔴 MemoX-specific | Gắn với format WBS của repo này (10 cột, §4/§10, `WBS_STATUS` vocabulary). Dự án khác: sửa section anchors + số cột + vocabulary, hoặc xóa hàm nếu không dùng WBS kiểu này. |
+| `doc_guard` — checkArb / checkSchema | 🔴 Stack-specific (Flutter ARB / Drift) | Thay bằng checker tương đương của stack mới (vd: i18n JSON keys; schema từ JPA entities / Prisma schema so với doc). Cấu trúc hàm giữ nguyên: parse nguồn-sự-thật-trong-code → so với doc. |
+| `doc_guard generate` — repo-map | 🔴 Parser theo stack | 3 hàm parse: `driftTables` (đọc `.drift`), `routeInventory` (đọc GoRouter constants + `RoutePlaceholder`), đếm glob theo cây Flutter. Viết lại parser cho stack mới (vd: parse `@RestController` cho route map Spring). Khung output + ý tưởng giữ nguyên. |
+| `doc_guard generate` — where-is | 🔶 Engine generic, registry theo dự án | Engine resolve-pattern giữ nguyên. Viết lại mảng `WHERE_IS` (~40 entries): feature + doc paths + source-name patterns của dự án mới. Đây là phần tốn công nhất (~1-2 giờ) nhưng chỉ làm một lần. |
+| `ui_kit_shots/*` | 🔴 Gắn với DOM của kit này | Selectors (`.row`, `.stepper`, `.phone`, `.frame-wrap`, `.st-label`) + cơ chế stepper/lazy-render là của kit MemoX. Kit HTML khác: sửa selectors + vòng lặp state cho khớp cấu trúc gallery mới. Ý tưởng (headless render → chụp per-state + walk DOM → spec) tái dùng nguyên vẹn. |
+| `.githooks/pre-commit` | ✅ Generic | Chỉ cần `tool/doc_guard` tồn tại; nhớ chạy lại `git config core.hooksPath .githooks` ở clone mới. |
+
+**Quy trình copy đề xuất (cho một dự án mới):**
+
+1. Copy nguyên thư mục `tool/` + `.githooks/` + `.gitattributes`.
+2. Xóa/sửa các checker stack-specific trong `doc_guard/run.mjs` (checkWbs/checkArb/checkSchema)
+   và parser trong `generate` theo bảng trên.
+3. Sửa step list + scope detection trong `verify/run.mjs` theo stack.
+4. Chạy `doc_guard check` lần đầu → tune `NEGATION`/`prefixes` đến khi false-positive sạch →
+   `--update-baseline` để chốt finding tồn đọng.
+5. Viết registry `WHERE_IS` cho ~feature chính của dự án; chạy `generate`.
+6. Kích hoạt hook: `git config core.hooksPath .githooks`.
+7. Wire vào tài liệu agent của dự án (tương đương `CLAUDE.md`/`AGENTS.md`): verify entry +
+   repo-map/where-is vào required reading + trigger matrix.
+
+Thứ tự giá trị khi copy: **verify + doc_guard check (1 ngày) → repo-map/where-is (nửa ngày) →
+golden_diff (miễn phí) → shots/specs (chỉ khi có HTML design kit).**
+
+## 9. Lịch sử & truy vết
 
 Mỗi công cụ được đăng ký trong WBS (`docs/project-management/wbs.md` §Group 9, rows 9.11–9.16)
 với commit anchor đã verify; lịch sử per-commit nằm ở §10 Commit Traceability Log. Khi thêm/sửa

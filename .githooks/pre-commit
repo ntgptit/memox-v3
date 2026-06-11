@@ -1,0 +1,26 @@
+#!/bin/sh
+# MemoX pre-commit hook — fast docs/process gate (~3s).
+# Blocks commits that introduce NEW doc drift (phantom paths/symbols/test refs,
+# WBS format violations) or whitespace errors. The full chain (analyze/tests)
+# stays in `node tool/verify/run.mjs` — too slow for every commit.
+#
+# Activate once per clone:  git config core.hooksPath .githooks
+# Bypass in emergencies:    git commit --no-verify  (then fix before push)
+
+# Graceful skip when node is unavailable (e.g. CI image without node).
+command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping doc_guard"; exit 0; }
+
+echo "pre-commit: doc_guard check..."
+node tool/doc_guard/run.mjs check || {
+  echo ""
+  echo "pre-commit BLOCKED: new doc-drift findings above."
+  echo "Fix them (or, for intentionally-unbuilt references, add a status/target marker)."
+  exit 1
+}
+
+git diff --cached --check || {
+  echo "pre-commit BLOCKED: whitespace errors in staged changes."
+  exit 1
+}
+
+exit 0

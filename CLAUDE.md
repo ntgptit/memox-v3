@@ -39,7 +39,7 @@ Trước khi finish task, tự trả lời theo thứ tự:
    → Update bảng status trong `docs/business/system/overview.md`.
 
 8. **Behavior đã thay đổi nhưng docs cũ vẫn còn ref đến cách cũ?**
-    → Phải sửa **TẤT CẢ** ref. Dùng `grep -rn "{old_term}" docs/` để tìm. Không để lại text inconsistent.
+    → Phải sửa **TẤT CẢ** ref. Dùng `node tool/doc_guard/run.mjs terms <old_term>` để tìm. Không để lại text inconsistent.
 
 Nếu không chắc một mục có cần update không, **mặc định LÀ cần update**. Cost của update thừa < cost của drift.
 
@@ -312,77 +312,21 @@ node tool/verify/run.mjs --test <test paths>    # code chain + targeted tests
 node tool/verify/run.mjs --docs | --code | --full
 ```
 
-`tool/verify/run.mjs` runs the canonical chain in order with the pairing rules applied
-(docs scope: doc_guard → guard → `git diff --check`; code scope: gen-l10n nếu ARB đổi →
-build_runner → guard → doc_guard → `dart fix --apply` → `dart format .` → `flutter analyze` →
-targeted `flutter test` → `git diff --check`), prints a pass/fail/skipped summary table, and
-exits non-zero on any failure. After it runs `dart fix`/`dart format`, vẫn phải inspect diff và
-chỉ giữ thay đổi thuộc task hiện tại.
+The entry runs the canonical chain in order with the analyze/dart-fix pairing rules applied,
+prints one pass/fail/skipped summary, and exits non-zero on any failure. Rules that survive
+the automation:
 
-Individual commands (fallback / debugging one step):
+- Sau khi nó chạy `dart fix`/`dart format`: inspect diff, chỉ giữ thay đổi thuộc task hiện tại;
+  fixable diagnostic không apply phải có lý do trong report.
+- `code-verification-guard` không có trong clone → verify tự skip; report ghi
+  `guard: skipped (tool not present)`.
+- Drift docs (path/symbol/test-ref ma, WBS format, ARB) bị chặn bởi `doc_guard` bên trong verify
+  và bởi pre-commit hook (`.githooks/` — kích hoạt: `git config core.hooksPath .githooks`).
+- Rename thuật ngữ: `node tool/doc_guard/run.mjs terms <old>`. Đổi route/schema/usecase/screen:
+  `node tool/doc_guard/run.mjs generate` (regen wiki) trong cùng commit.
+- Visual parity cho UI task: `python tool/golden_diff/diff.py <golden> <mock-shot>`.
 
-```text
-dart run build_runner build --delete-conflicting-outputs
-python code-verification-guard/guard/run.py check --project . --ruleset memox   # if available
-node tool/doc_guard/run.mjs check                                               # docs/process gate
-dart fix --apply
-dart format .
-flutter analyze
-flutter test <targeted tests>
-```
-
-### doc_guard (docs/process gate)
-
-`node tool/doc_guard/run.mjs check` lints what `code-verification-guard` cannot: claims docs make
-about the repo (backtick paths exist, Dart symbols exist, `test/...::name` refs resolve, WBS row
-format + commit hashes + status vocabulary, ARB duplicate/missing keys, schema-contract version
-vs code). It fails only on NEW findings; pre-existing ones live in `tool/doc_guard/baseline.json`
-(burn down over time — after fixing baselined findings, refresh with
-`node tool/doc_guard/run.mjs check --update-baseline`).
-
-Companions:
-
-- `node tool/doc_guard/run.mjs generate` — regenerates `docs/_generated/repo-map.md` (cold-start
-  summary: schema, routes + placeholders, use cases, screens, tests). Regenerate it in any commit
-  that changes routes, schema, use cases, or screens.
-- `node tool/doc_guard/run.mjs terms <old>` — finds leftover refs after a term rename (replaces
-  the manual `grep -rn "{old_term}" docs/` step).
-- `python tool/golden_diff/diff.py <actual.png> <expected.png>` — pixel-diff a Flutter
-  golden/screenshot against the mock shot; outputs mismatch % + diff region (cross-reference with
-  `ui_kits/mobile/specs/` bboxes). Use it as the visual-parity feedback loop, especially for
-  agents without image input.
-
-### Analyze / dart fix pairing rule
-
-Before `flutter analyze`, first apply all safe automatic fixes and formatting:
-
-```text
-dart fix --apply
-dart format .
-flutter analyze
-```
-
-Treat these as a pair: do not run `flutter analyze` until after `dart fix --apply`
-and `dart format .`, and do not leave fixable analyzer diagnostics unresolved
-without either applying the fix or explaining why the fix is unsafe/out of
-scope. After `dart fix --apply` and `dart format .`, inspect the diff and keep
-only changes that belong to the current task.
-
-`code-verification-guard` is an optional repo-side tool maintained separately. If it is not present in the working directory (clone), agent SHOULD skip it and note in report: "guard: skipped (tool not present)". The other commands are mandatory.
-
-Doc parity verification (chạy trước khi finish):
-
-```bash
-# Tìm refs đến term/file đã rename trong toàn bộ docs
-grep -rn "{old_term}" docs/
-
-# Verify cross-refs trong wireframes không bị broken
-cd docs/wireframes && for f in *.md; do
-  grep -oE "[0-9]{2}-[a-z-]+\.md" "$f" | sort -u | while read r; do
-    [ -f "$r" ] || echo "BROKEN in $f: $r"
-  done
-done
-```
+Chi tiết từng tool, lệnh rời để debug một bước, trigger matrix, portability: `tool/README.md`.
 
 ## When in doubt
 

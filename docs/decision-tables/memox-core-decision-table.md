@@ -9,6 +9,32 @@ This file captures high-value behavior branches.
 
 Agents may split into feature-specific decision tables when a feature grows beyond ~50 rows.
 
+## Section index (jump here — do NOT read the whole file)
+
+This file is ~400 lines. Read only the section(s) your task touches; the required-reading rule
+is satisfied by the relevant section, not the whole table.
+
+| Section | Row IDs | Anchor |
+| --- | --- | --- |
+| Folder | F1–F12 | [#folder](#folder) |
+| Deck | D1–D9 | [#deck](#deck) |
+| Flashcard | C1–C20, V* | [#flashcard](#flashcard) |
+| Import | I1–I12 | [#import](#import) |
+| Study/SRS | S1–S27 | [#studysrs](#studysrs) |
+| Bury / Suspend | BS1–BS16 | [#bury--suspend](#bury--suspend) |
+| Resume session | R1–R10 | [#resume-session](#resume-session) |
+| Progress Overview | P* | [#progress-overview](#progress-overview) |
+| Tags | T-tags/G* | [#tags](#tags) |
+| Bulk operations | B* | [#bulk-operations](#bulk-operations) |
+| Search | SR* | [#search](#search) |
+| Card history | H1–H8 | [#card-history](#card-history) |
+| Daily engagement | E* | [#daily-engagement](#daily-engagement) |
+| Navigation/UI | N*/U* | [#navigationui](#navigationui) |
+| Study Result | RES* | [#study-result](#study-result) |
+| Export | X* | [#export](#export) |
+| TTS | T1–T12 | [#tts](#tts) |
+| Account / Drive sync | A*/DS* | [#account--drive-sync](#account--drive-sync) |
+
 ## Convention
 
 - `ID` is stable. Tests reference it.

@@ -1,0 +1,14 @@
+# Normalize line endings: repo stores LF, working tree checks out LF on every OS.
+# This silences the "LF will be replaced by CRLF" warning flood on Windows that
+# buried real git output for AI agents (every git command printed dozens of them).
+* text=auto eol=lf
+
+# Binary assets — never touch line endings.
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.jar binary
