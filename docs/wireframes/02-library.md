@@ -22,14 +22,17 @@ Screen-level visual contract: `docs/design/screens/library-overview.visual-contr
 **Prompt 49 scope (2026-06-04):** visual/layout parity for the Library Overview mock states (
 loaded · loading · empty · error · search · overflow reference) against
 `docs/system-design/MemoX Design System/ui_kits/mobile/index.html` §"03 · Library overview". No
-schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local;
-the `/library/search` global-search route is separate from Library Overview and is not exposed
-from this app bar. Root-level decks remain **Rejected / Out of Scope**. The mock's overflow sheet is now **implemented and Current** (see "Overflow sheet —
-now Current" below, Prompt 49D); the row kebab and long-press open the folder action sheet. Card
-padding/radius and bottom-nav density remained a separate Design Token /
+schema/SRS/domain/repository/use-case behavior change. Library search stays inline/scope-local and
+is V1 folder-only; the inline hint is `Search folders`. The `/library/search` global-search route
+is separate from Library Overview and is not exposed from this app bar. Root-level decks remain
+**Rejected / Out of Scope**. The mock's overflow sheet is now **implemented and Current** (see
+"Overflow sheet — now Current" below, Prompt 49D); the row kebab and long-press open the folder
+action sheet. Card padding/radius and bottom-nav density remained a separate Design Token /
 Density Foundation follow-up and were not changed in Prompt 49. **Resolved (2026-06-05):** card
 surface aligns to the design system — `16dp` radius (`lg`) + `16dp` padding (`--memox-space-card`),
-applied in `MxCard`. Bottom-nav density is still open.
+applied in `MxCard`. Bottom-nav density is still open. The current PNG/spec text
+`Search decks, cards, tags` is an approved stale mock/spec variance for V1 until the source design
+is regenerated.
 
 **Prompt 49B scope (2026-06-04):** fixes the **loaded-state visual drift** left by Prompt 49 against
 the same mock §"03 · Library overview". No schema/SRS/repository/use-case change. Changes are
@@ -39,7 +42,8 @@ presentation-only:
   target** — rendered disabled because Library has no approved filter/sort sheet yet (no unsupported
   action is exposed).
 - Search below the title is **always-visible inline** scope-local search (no toggle). The inline
-  field itself never navigates. It is the only visible search entry on Library Overview.
+  field itself never navigates. It is the only visible search entry on Library Overview. V1 search
+  targets folders only; deck/card/tag search is Future.
 - The static `All` filter chip is **removed** from the loaded header.
 - Loaded state renders a `{n} FOLDERS` section header with the mock sort pill on the right
   (`librarySortRecentLabel` / "Recent"). The pill is visual parity for the mock; the sort sheet
@@ -109,7 +113,7 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 - Inline search (Prompt 49B: always visible below the title, no toggle): scope-local within Library.
   When a term is active the query broadens to match **any folder by name across the tree** (
   `listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to
-  Global Search; does not mutate persisted `sort_order`.
+  Global Search; does not mutate persisted `sort_order`. The supported hint is `Search folders`.
 - Loaded section header: `{n} FOLDERS` overline with the mock sort pill (`librarySortRecentLabel`)
   on the right. Its horizontal inset is intentionally tight so it does not feel double-padded
   inside the shared screen shell.

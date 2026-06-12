@@ -50,7 +50,7 @@ If these sources conflict, do not guess. Follow `CLAUDE.md` drift detection.
 | Header title `Library`       | Current                          | Existing route title.                                                                                              |
 | Header sliders/filter icon   | Current visual-only              | No approved filter/sort sheet; render disabled.                                                                    |
 | Inline search field          | Current                          | Library-local folder search only.                                                                                  |
-| Search decks/cards/tags hint | Rejected for Library Overview V1 | Global Search and cross-type search are Future. Hint must match folder-only scope.                                 |
+| Search decks/cards/tags hint | Approved mock/spec variance      | Canonical PNG/spec text still shows `Search decks, cards, tags`, but V1 search is folder-only and uses `Search folders`. The variance is documented until source design regeneration. |
 | Due summary card             | Current partial                  | Only aggregate `dueToday` exists; no folder-span subtitle, estimate, chevron, or study launch.                     |
 | Folder cards                 | Current                          | Root renders top-level folders only.                                                                               |
 | Folder progress/mastery bar  | Future                           | No approved progress/mastery field in current Library read model.                                                  |
@@ -73,7 +73,7 @@ If these sources conflict, do not guess. Follow `CLAUDE.md` drift detection.
 | Screen background | Full-screen themed surface                                 | `MxScaffold`                           | Theme surface role only                          | No raw hex in feature widgets.                  |
 | Header            | Large `Library` title, left aligned                        | `MxAppBar`                             | App bar theme                                    | Use l10n title.                                 |
 | Header action     | Sliders/tune icon on right                                 | `MxIconButton(Icons.tune_rounded)`     | Disabled while visual-only                       | No fake filter behavior.                        |
-| Search field      | Rounded full-width field below title                       | `LibrarySearchField` + `MxSearchField` | Shared input component                           | Hint must say folder scope.                     |
+| Search field      | Rounded full-width field below title                       | `LibrarySearchField` + `MxSearchField` | Shared input component                           | Hint must say `Search folders`; PNG/spec text is stale for V1. |
 | Due summary       | Card with bolt icon and due count                          | `LibraryDueSummaryCard`                | `MxCard`, `MxIconTile`, `MxText`                 | Non-interactive; no subtitle until data exists. |
 | Section header    | `{n} folders` overline/count                               | `LibraryFolderCountHeader`             | `MxSectionHeader`                                | No sort pill in V1.                             |
 | Folder card       | Card surface, icon tile, title, metadata, due badge, kebab | `LibraryFolderTile`                    | `MxCard`, `MxIconTile`, `MxIconButton`, `MxText` | No chevron.                                     |
@@ -132,6 +132,7 @@ Forbidden:
 - Do not show a root-level deck row.
 - Do not expose root New deck or Import.
 - Do not expose a sort UI control.
+- Do not claim deck/card/tag search in Library Overview V1; that scope is Future.
 - Do not fake progress, mastery, folder-span subtitle, study duration, or new-card data.
 - Do not expose the mock's "Study due cards" / "Archive folder" overflow actions (out of scope).
 

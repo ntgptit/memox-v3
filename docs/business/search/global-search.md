@@ -31,7 +31,7 @@ screen.
 
 | Surface          | Scope                          | Searchable fields                                               |
 |------------------|--------------------------------|-----------------------------------------------------------------|
-| Library overview | Visible/root folders and decks | folder name, deck name                                          |
+| Library overview | Visible/root folders only      | folder name                                                     |
 | Folder detail    | Current folder content         | folder name, deck name                                          |
 | Flashcard list   | Current deck only              | front, back, note, pronunciation, example, hint where supported |
 | Tag management   | Tags only                      | tag name                                                        |
@@ -53,6 +53,7 @@ These rules govern the **inline** filters on existing screens (not the global sc
 
 - Search/filter must not mutate data.
 - Inline search must stay inside the current screen's scope.
+- Library overview V1 inline search is folder-only; deck/card/tag search is Future.
 - No recent-search persistence yet (needs `shared_preferences`).
 - No popular-tags landing section yet (needs the tag subsystem).
 - Inline filters do not group cross-scope results; cross-scope grouping lives in the global
