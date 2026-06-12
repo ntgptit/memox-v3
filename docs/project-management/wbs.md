@@ -380,6 +380,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `eb91cbc2` | 2026-06-12 | 4.5.6 | Enforce Guess mode availability so the builder only emits the full 5-option set |
 | `c77b5989` | 2026-06-12 | 4.5.1, 4.5.2, 4.5.6 | Add Review strategy, Guess strategy, and deterministic Guess option builder; wire factory and persistence tests |
 | `c183a52b` | 2026-06-12 | 8.2.1 | Add test-only SharedPreferences async harness so learning-settings persistence tests can run against the in-memory platform |
 | `e5cb99ea` | 2026-06-12 | 8.2.1 | Implement SharedPreferences-backed learning settings persistence, repository, use cases, DI, and study-cap integration |
