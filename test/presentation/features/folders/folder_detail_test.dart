@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
+import 'package:memox/domain/usecases/folder/get_folder_move_targets_usecase.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
@@ -23,6 +29,8 @@ import 'package:memox/presentation/features/folders/widgets/folder_subfolder_til
 import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 
 Folder _folder(String name, {ContentMode mode = ContentMode.decks}) => Folder(
   id: name,
@@ -104,18 +112,19 @@ Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
       ),
     );
 
-Widget _wrapScreen(Stream<FolderDetail> stream) => ProviderScope(
-  overrides: [
-    folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
-  ],
-  child: MaterialApp(
-    locale: const Locale('en'),
-    theme: AppTheme.light(),
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    home: const FolderDetailScreen(folderId: 'f1'),
-  ),
-);
+Widget _wrapScreen(Stream<FolderDetail> stream, {ThemeData? theme}) =>
+    ProviderScope(
+      overrides: [
+        folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
+      ],
+      child: MaterialApp(
+        locale: const Locale('en'),
+        theme: theme ?? AppTheme.light(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const FolderDetailScreen(folderId: 'f1'),
+      ),
+    );
 
 Widget _wrapScreenWithSortLauncher(Stream<FolderDetail> stream) =>
     ProviderScope(
@@ -200,6 +209,57 @@ Widget _wrapDeckTile(FolderDeckTile tile) => MaterialApp(
   home: Scaffold(body: Center(child: tile)),
 );
 
+Widget _wrapScreenWithMoveTargets(Stream<FolderDetail> stream) => ProviderScope(
+  overrides: [
+    folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
+    getFolderMoveTargetsUseCaseProvider.overrideWithValue(
+      _FakeFolderMoveTargetsUseCase(),
+    ),
+  ],
+  child: MaterialApp(
+    locale: const Locale('en'),
+    theme: AppTheme.light(),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: const FolderDetailScreen(folderId: 'f1'),
+  ),
+);
+
+List<FolderMoveTarget> _moveTargets() => <FolderMoveTarget>[
+  const FolderMoveTarget(
+    id: null,
+    breadcrumb: <String>[],
+    isCurrentParent: false,
+  ),
+  const FolderMoveTarget(
+    id: 'parent',
+    breadcrumb: <String>['Korean'],
+    isCurrentParent: true,
+  ),
+  const FolderMoveTarget(
+    id: 'grammar',
+    breadcrumb: <String>['Korean', 'Grammar'],
+    isCurrentParent: false,
+  ),
+];
+
+final class _UnusedFolderRepository implements FolderRepository {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+final class _FakeFolderMoveTargetsUseCase extends FolderMoveTargetsUseCase {
+  _FakeFolderMoveTargetsUseCase() : super(_UnusedFolderRepository());
+
+  @override
+  Future<Result<List<FolderMoveTarget>>> call({
+    required FolderId folderId,
+  }) async => Result<List<FolderMoveTarget>>.ok(_moveTargets());
+}
+
+AppLocalizations _l10n(WidgetTester tester) =>
+    AppLocalizations.of(tester.element(find.byType(Scaffold)));
+
 void main() {
   group('FolderDetailBody — Decks state (1/8)', () {
     testWidgets('summary card shows decks · cards line and the due total', (
@@ -228,6 +288,9 @@ void main() {
         find.widgetWithText(MxActionButton, 'Start study · 8 due'),
       );
       expect(startStudyButton.onPressed, isNotNull);
+      expect(find.text('62%'), findsNothing);
+      expect(find.text('6 new'), findsNothing);
+      expect(find.text('Most due'), findsNothing);
       expect(find.byType(FolderDeckTile), findsNWidgets(2));
     });
 
@@ -292,6 +355,66 @@ void main() {
       expect(find.byType(FolderDecksSummary), findsNothing);
       expect(find.byType(FolderSubfoldersSummary), findsNothing);
     });
+
+    testWidgets(
+      'DT13 onNavigate: tapping New deck in unlocked empty opens the deck '
+      'create dialog',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapScreen(
+            Stream<FolderDetail>.value(_detail(mode: ContentMode.unlocked)),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final AppLocalizations l10n = _l10n(tester);
+        await tester.tap(find.byType(MxPrimaryButton));
+        await tester.pumpAndSettle();
+
+        expect(
+          find.descendant(
+            of: find.byType(Dialog),
+            matching: find.text(l10n.deckCreateDialogTitle),
+          ),
+          findsOneWidget,
+        );
+        expect(find.byType(TextField), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'DT14 onNavigate: tapping New subfolder in unlocked empty opens the '
+      'folder create dialog',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapScreen(
+            Stream<FolderDetail>.value(_detail(mode: ContentMode.unlocked)),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final AppLocalizations l10n = _l10n(tester);
+        await tester.tap(find.byType(MxSecondaryButton));
+        await tester.pumpAndSettle();
+
+        expect(
+          find.descendant(
+            of: find.byType(Dialog),
+            matching: find.text(l10n.subfolderCreateDialogTitle),
+          ),
+          findsOneWidget,
+        );
+        expect(find.byType(TextField), findsOneWidget);
+        expect(
+          find.text(l10n.folderCreateColorLabel.toUpperCase()),
+          findsOneWidget,
+        );
+        expect(
+          find.text(l10n.folderCreateIconLabel.toUpperCase()),
+          findsOneWidget,
+        );
+      },
+    );
   });
 
   group('FolderDetailBody — Search empty (4/8)', () {
@@ -383,7 +506,47 @@ void main() {
     });
   });
 
-  group('FolderDetailScreen — Search / Sort (6/8)', () {
+  group('FolderDetailScreen — Overflow move sheet (6/8)', () {
+    testWidgets(
+      'DT15 onNavigate: tapping Move in the overflow sheet opens the folder '
+      'move picker',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapScreenWithMoveTargets(
+            Stream<FolderDetail>.value(
+              _detail(
+                decks: <DeckWithCount>[
+                  _deck('Vocab 1', cardCount: 40, dueCount: 4),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final AppLocalizations l10n = _l10n(tester);
+        final Finder appBarKebab = find.descendant(
+          of: find.byType(AppBar),
+          matching: find.byIcon(Icons.more_vert),
+        );
+
+        await tester.tap(appBarKebab);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(l10n.libraryFolderActionsMove));
+        await tester.pumpAndSettle();
+
+        expect(find.text(l10n.foldersMoveTitle), findsOneWidget);
+        expect(find.text(l10n.foldersMoveRootTitle), findsOneWidget);
+        expect(find.text('Korean / Grammar'), findsOneWidget);
+        expect(
+          find.widgetWithText(MxActionButton, l10n.commonMove),
+          findsOneWidget,
+        );
+      },
+    );
+  });
+
+  group('FolderDetailScreen — Search / Sort (7/8)', () {
     Future<void> pumpLoaded(WidgetTester tester) async {
       await tester.pumpWidget(
         _wrapScreenWithSortLauncher(
@@ -482,7 +645,7 @@ void main() {
     });
   });
 
-  group('FolderDetailScreen — Loading (6/8) & Error (7/8)', () {
+  group('FolderDetailScreen — Loading (8/8) & Error (8/8)', () {
     testWidgets('loading renders the skeleton and no content rows', (
       WidgetTester tester,
     ) async {
@@ -509,7 +672,44 @@ void main() {
     });
   });
 
-  group('FolderDetailScreen — Overflow (Delete 8/8 · Move 9/8)', () {
+  group('FolderDetailScreen — Theme / mock-copy smoke', () {
+    testWidgets(
+      'DT16 onDisplay: builds in both light and dark themes without mock-'
+      'only copy',
+      (WidgetTester tester) async {
+        for (final ThemeData theme in <ThemeData>[
+          AppTheme.light(),
+          AppTheme.dark(),
+        ]) {
+          await tester.pumpWidget(
+            _wrapScreen(
+              Stream<FolderDetail>.value(
+                _detail(
+                  decks: <DeckWithCount>[
+                    _deck(
+                      'Vocab 1',
+                      cardCount: 62,
+                      dueCount: 8,
+                      lastStudiedAt: DateTime.utc(2026, 6, 6, 10),
+                    ),
+                  ],
+                ),
+              ),
+              theme: theme,
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          expect(find.byType(FolderDetailScreen), findsOneWidget);
+          expect(find.text('62%'), findsNothing);
+          expect(find.text('6 new'), findsNothing);
+          expect(find.text('Most due'), findsNothing);
+        }
+      },
+    );
+  });
+
+  group('FolderDetailScreen — Overflow (Delete)', () {
     Future<void> pumpLoaded(
       WidgetTester tester, {
       ContentMode mode = ContentMode.decks,

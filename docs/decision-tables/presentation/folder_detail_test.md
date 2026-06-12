@@ -16,6 +16,7 @@ Test file: `test/presentation/features/folders/folder_detail_test.dart`
 | DT8 | search sheet updates the toolbar state | user taps the Folder Detail search icon | Folder Detail opens the controlled search sheet | Search sheet shows a working `MxSearchField`; typing updates `folderDetailToolbar.searchTerm` and clear resets it | C0+C1 |
 | DT9 | sort sheet updates the toolbar state | user taps the Folder Detail sort pill | Folder Detail opens the controlled sort sheet | Sort sheet shows only supported `ContentSortMode` options (`manual`, `name`, `newest`); choosing one updates `folderDetailToolbar.sort` | C0+C1 |
 | DT10 | search yields no matches | toolbar search term hides all children | Folder Detail renders the search-empty branch | Search empty state shows the query-aware title and clear action | C0+C1 |
+| DT16 | dark theme renders the loaded screen | loaded Folder Detail stream under `AppTheme.dark()` | Folder Detail builds in both light and dark themes | Screen renders without mock-only mastery/new/Most due copy (`62%`, `6 new`, `Most due`) | C0+C1 |
 
 ## Decision table: row actions
 
@@ -23,3 +24,11 @@ Test file: `test/presentation/features/folders/folder_detail_test.dart`
 | --- | --- | --- | --- | --- | --- |
 | DT11 | subfolder row long-pressed | subfolder read model and `onShowSubfolderActions` are wired | User long-presses a subfolder row | Shared folder action sheet opens with Rename / Move / Delete and optional Import when the child folder is deck-mode | C0+C1 |
 | DT12 | deck row long-pressed | deck read model and `onShowDeckActions` are wired | User long-presses a deck row | Shared deck action sheet opens with Import flashcards / Reorder cards / Delete deck | C0+C1 |
+
+## Decision table: onNavigate
+
+| ID | Branch / condition | Given | When | Then | Coverage |
+| --- | --- | --- | --- | --- | --- |
+| DT13 | unlocked empty deck choice is tapped | folder read model has `contentMode == unlocked` | User taps the `New deck` choice in the empty state | The deck create dialog opens with the deck title and single text field | C0+C1 |
+| DT14 | unlocked empty subfolder choice is tapped | folder read model has `contentMode == unlocked` | User taps the `New subfolder` choice in the empty state | The folder create dialog opens with the folder title plus color/icon sections | C0+C1 |
+| DT15 | overflow Move action is selected | loaded folder detail has a working move-target provider | User opens the folder overflow sheet and taps Move | The move picker opens with the move title, current root entry, and selectable destinations | C0+C1 |
