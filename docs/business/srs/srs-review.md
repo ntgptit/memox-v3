@@ -81,6 +81,8 @@ See `docs/business/glossary.md` for result definitions.
 | `forgot`         | First attempt failed (V1 "Forgot"); under retry modes, a first-attempt fail stays `forgot` even after a same-session re-queue pass |
 | `initial_passed` | **Never emitted** (kept in the enum/storage codec for compatibility; identical transition to `perfect`). Reviving it requires a new product decision. |
 
+Guess mode follows the clean-attempt contract above: a correct tap emits `perfect`, not `initial_passed`.
+
 ## Box transition table
 
 This is the authoritative transition contract. The box transition is computed at session

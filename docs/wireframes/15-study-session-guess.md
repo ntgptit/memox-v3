@@ -207,10 +207,11 @@ Options list is **scrollable** when content exceeds viewport. Each option card h
 
 ## SRS handling
 
-- Correct tap: `result = initial_passed`; `box_after = min(current+1, 8)`.
+- Correct tap: `result = perfect`; `box_after = min(current+1, 8)`.
 - Wrong tap: `result = forgot`; `box_after = 1`; `lapse_count++`.
 
 `recovered` does not apply (single-attempt per card in this mode).
+`initial_passed` remains compatibility-only and is not emitted by Guess mode.
 
 ## TTS behavior
 
