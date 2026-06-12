@@ -57,8 +57,8 @@ The 4 SRS grading outcomes. **Pass/fail only** (no Hard/Easy variants).
 
 ```dart
 enum AttemptResult {
-  perfect,        // Exact match, first attempt, no recovery needed
-  initialPassed,  // Correct on first attempt (used in multi-attempt flows)
+  perfect,        // Exact match, clean attempt
+  initialPassed,  // Compatibility-only legacy value; never emitted by current modes
   recovered,      // User missed initially but corrected (typo override, close match)
   forgot,         // Wrong answer
 }
@@ -71,14 +71,14 @@ enum AttemptResult {
 - Do not assume `AttemptResult` is already the current persisted shape of `study_attempts.result`.
 - Persisting these values requires mapper/storage alignment and tests.
 
-**Target storage:** `study_attempts.result` TEXT, snake_case (`perfect`, `initial_passed`, `recovered`, `forgot`) after the approved migration/mapper update.
+**Target storage:** `study_attempts.result` TEXT, snake_case (`perfect`, `initial_passed`, `recovered`, `forgot`) after the approved migration/mapper update. `initial_passed` remains compatibility-only and must never be emitted by current study modes.
 
 **Target mapping to SRS box change:**
 
 | Result | box_after |
 | --- | --- |
 | `perfect` | `current + 1` (cap 8) |
-| `initialPassed` | `current + 1` (cap 8) |
+| `initialPassed` | `current + 1` (cap 8); compatibility-only legacy codec value |
 | `recovered` | `current` (stay) |
 | `forgot` | `1` (reset) + `lapse_count++` |
 
@@ -105,7 +105,7 @@ The 5 modes of card interaction.
 ```dart
 enum StudyMode {
   review,   // Both sides shown together on one card; swipe-to-grade (right=perfect, left=forgot)
-  match,    // 5-pair board (10 cells); tap-pair to match; per-pair persistence
+  match,    // 5-pair board (10 cells); tap-pair to match; append-only evaluation persistence
   guess,    // Front shown; pick correct back from 5 rich option cards (title + description)
   recall,   // Front shown; tap Show answer to reveal; self-grade Forgot / Got it (no text input in v1)
   fill,     // Back shown as hint; type front in plain text input; strict match

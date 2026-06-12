@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/domain/study/modes/match_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy_factory.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -17,12 +18,24 @@ void main() {
     expect(strategy.mapGotItAction(), AttemptResult.perfect);
   });
 
-  test('returns a controlled unsupported strategy for non-recall modes', () {
-    for (final StudyMode mode in StudyMode.values) {
-      if (mode == StudyMode.recall) {
-        continue;
-      }
+  test('returns the match strategy for StudyMode.match', () {
+    final strategy = StudyModeStrategyFactory.resolve(
+      studyMode: StudyMode.match,
+    );
 
+    expect(strategy, isA<MatchStudyModeStrategy>());
+    expect(strategy.mode, StudyMode.match);
+    expect(strategy.usesRevealSelfGradeFlow, isFalse);
+    expect(strategy.mapForgotAction, throwsUnsupportedError);
+    expect(strategy.mapGotItAction, throwsUnsupportedError);
+  });
+
+  test('keeps review, guess, and fill unsupported', () {
+    for (final StudyMode mode in <StudyMode>[
+      StudyMode.review,
+      StudyMode.guess,
+      StudyMode.fill,
+    ]) {
       final strategy = StudyModeStrategyFactory.resolve(studyMode: mode);
 
       expect(strategy.mode, mode);

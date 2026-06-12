@@ -32,9 +32,10 @@ lib/data/datasources/local/
   drift/
     folders.drift              # table  (AS FolderRow)
     decks.drift                # table  (AS DeckRow)
-    flashcards.drift           # table  (AS FlashcardRow)
-    flashcard_progress.drift   # table + index (AS FlashcardProgressRow)
-    folder_queries.drift       # named SQL queries (imports the table files)
+  flashcards.drift           # table  (AS FlashcardRow)
+  flashcard_progress.drift   # table + index (AS FlashcardProgressRow)
+  study_match_evaluations.drift # table + indexes (AS StudyMatchEvaluationRow)
+  folder_queries.drift       # named SQL queries (imports the table files)
   daos/
     folder_dao.dart            # thin wrappers: bind params / build ORDER BY, call generated methods
     folder_dao.g.dart          # generated — do NOT edit

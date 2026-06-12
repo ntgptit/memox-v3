@@ -79,22 +79,27 @@ See `docs/business/glossary.md` for result definitions.
 | `perfect`        | Correct, clean attempt (V1 "Got it")                                                                  |
 | `recovered`      | Single passing-but-imperfect attempt: fill hint-taint or Mark-correct override (Target; redefined — no longer "forgot then passed", which now finalizes as `forgot`) |
 | `forgot`         | First attempt failed (V1 "Forgot"); under retry modes, a first-attempt fail stays `forgot` even after a same-session re-queue pass |
-| `initial_passed` | **Never emitted** (kept in the enum/storage codec for compatibility; identical transition to `perfect`). Reviving it requires a new product decision. |
+| `initial_passed` | Compatibility-only legacy storage codec value; never emitted by current modes. Reviving it requires a new product decision. |
 
 ## Box transition table
 
-This is the authoritative transition contract. The box transition is computed at session
-finalization by `StudyRepositoryImpl.finalizeStudySession` in
-`lib/data/repositories/study_repo_impl.dart`; the in-session
-`Answer*UseCase` family in `lib/domain/study/usecases/study_usecases.dart` only records attempts
-and re-queues failed cards. Implementation must match this table. There is no standalone
-`box_transition.dart` file at present.
+This is the authoritative transition contract for one-terminal-attempt flows. The box transition
+is computed at session finalization by `StudyRepositoryImpl.finalizeStudySession` in
+`lib/data/repositories/study_repo_impl.dart`; the in-session `Answer*UseCase` family in
+`lib/domain/study/usecases/study_usecases.dart` only records attempts and re-queues failed cards.
+Implementation must match this table. There is no standalone `box_transition.dart` file at
+present.
 
 Per-card result classification at finalization (implemented in
-`_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`): the
-**last** attempt decides — last attempt `forgot` → `forgot` (box → 1, lapse +1); any earlier
-`forgot` but last attempt passing → `recovered` (box stays, no lapse); all attempts passing →
-the last attempt's result (`perfect` / `initial_passed`, box +1).
+`_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`) for the
+current one-terminal-attempt flows: the **last** attempt decides — last attempt `forgot` →
+`forgot` (box → 1, lapse +1); any earlier `forgot` but last attempt passing → `recovered` (box
+stays, no lapse); all attempts passing → the last attempt's result (`perfect` / compatibility-only
+`initial_passed`, box +1).
+
+Match finalization is separate: it derives a single terminal result per session item from
+`study_match_evaluations`, mapping a clean correct pair to `perfect` and any wrong-before-correct
+or never-correct path to `forgot`.
 
 > **✅ Adopted decision (2026-06-10, C1 — SRS demotion reachability): first attempt decides SRS.**
 > When retry/re-queue modes land, the FIRST attempt recorded for an item in the session determines
@@ -118,9 +123,9 @@ the last attempt's result (`perfect` / `initial_passed`, box +1).
 | Current box | Result           | Next box | Next due              |
 |-------------|------------------|----------|-----------------------|
 | n (1-7)     | `perfect`        | n + 1    | now + interval[n + 1] |
-| n (1-7)     | `initial_passed` | n + 1    | now + interval[n + 1] |
+| n (1-7)     | `initial_passed` | n + 1    | Compatibility-only legacy codec path; not emitted by current modes |
 | 8           | `perfect`        | 8 (stay) | now + interval[8]     |
-| 8           | `initial_passed` | 8 (stay) | now + interval[8]     |
+| 8           | `initial_passed` | 8 (stay) | Compatibility-only legacy codec path; not emitted by current modes |
 | n (1-8)     | `recovered`      | n (stay) | now + interval[n]     |
 | n (1-8)     | `forgot`         | 1        | now + interval[1]     |
 
@@ -179,7 +184,8 @@ This keeps progress commits and box transitions in the finalization path, while 
 
 At session finalization:
 
-1. Persist all attempts (already done during session).
+1. Persist all attempts (already done during session for one-terminal flows; Match appends
+   evaluations during the session and derives terminal attempts here).
 2. Compute final result per item based on attempt history and flow.
 3. Update progress: `current_box`, `review_count`, `lapse_count`, `last_studied_at`, `due_at`.
 4. Update session status to `completed`.

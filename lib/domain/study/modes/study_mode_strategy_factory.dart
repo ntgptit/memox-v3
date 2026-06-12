@@ -1,3 +1,4 @@
+import 'package:memox/domain/study/modes/match_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -12,6 +13,9 @@ abstract final class StudyModeStrategyFactory {
     final StudyMode resolvedMode = studyMode ?? StudyMode.recall;
     if (resolvedMode == StudyMode.recall) {
       return const RecallStudyModeStrategy();
+    }
+    if (resolvedMode == StudyMode.match) {
+      return const MatchStudyModeStrategy();
     }
     return _UnsupportedStudyModeStrategy(resolvedMode);
   }

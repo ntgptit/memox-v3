@@ -241,8 +241,10 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 ## Retry behavior
 
 - Incorrect answer creates attempt.
-- Retry behavior depends on selected flow/mode. **V1 records exactly one attempt per item** (a
-  second answer on an answered item is rejected); multi-attempt retry is Target for future modes.
+- Retry behavior depends on selected flow/mode. Recall/Review/Guess/Fill V1 records exactly one
+  attempt per item (a second answer on an answered item is rejected). Match persists append-only
+  evaluations and derives one terminal attempt per item at finalization; multi-attempt retry for
+  other modes remains Target for future modes.
 - Re-queue/retry modes follow the **adopted first-attempt-decides-SRS contract** in
   `docs/business/srs/srs-review.md` (§Box transition table): a first-attempt `forgot` demotes the
   card even when the re-queued pass completes the session; the re-queue IS the in-session
@@ -252,6 +254,8 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
   correcting attempt; the SRS classifier handles the sequence per the adopted contract. Requires
   relaxing the current "reject second answer" rule in `recordStudySessionAnswer` together with
   the C1 classifier change — ship the two together.
+- Match uses the same local-evaluation principle, but it persists append-only board evaluations
+  rather than terminal attempts until finalization derives the SRS history.
 - Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 

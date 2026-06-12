@@ -41,7 +41,7 @@ MemoX priority is a **usable flashcard/SRS app**. The WBS must drive real user f
 - Every flow is decomposed into BE function and FE function tasks; FE rows normally depend on their BE row.
 - Preferred sequence inside each function: **BE function → BE tests → FE wiring → FE/widget tests → integration behavior → docs/decision-table parity → polish only if needed**.
 - New tasks should move the app toward: create content → study content → resume study → finish session → see progress.
-- One prompt per row. Do not combine a feature row with a broad refactor.
+- One prompt may cover up to 7 tightly coupled WBS rows/subtasks when they share a subsystem and dependency chain. List every row/subtask explicitly, stop before unrelated subsystems, and do not mix BE/FE unless the prompt says to.
 
 ## 3. Source Evidence Reviewed
 

@@ -4,6 +4,7 @@ import 'package:memox/data/datasources/local/connection/database_connection.dart
 import 'package:memox/data/datasources/local/migrations/v2_add_flashcard_optional_fields.dart';
 import 'package:memox/data/datasources/local/migrations/v3_add_flashcard_tags.dart';
 import 'package:memox/data/datasources/local/migrations/v4_add_study_tables.dart';
+import 'package:memox/data/datasources/local/migrations/v5_add_study_match_evaluations.dart';
 
 part 'app_database.g.dart';
 
@@ -24,6 +25,7 @@ part 'app_database.g.dart';
     'drift/study_sessions.drift',
     'drift/study_session_items.drift',
     'drift/study_attempts.drift',
+    'drift/study_match_evaluations.drift',
   },
 )
 class AppDatabase extends _$AppDatabase {
@@ -34,7 +36,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Bump and add an `onUpgrade` step for every schema change
   /// (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 4;
+  static const int currentSchemaVersion = 5;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -54,6 +56,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 4) {
         await addStudyTables(m, this);
+      }
+      if (from < 5) {
+        await addStudyMatchEvaluations(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

@@ -91,6 +91,42 @@ class RecordStudySessionAnswerUseCase {
   );
 }
 
+/// Records an append-only Match evaluation without finalizing progress.
+///
+/// Failure types: `NotFoundFailure`, `UnsupportedActionFailure`,
+/// `StorageFailure`.
+class RecordMatchEvaluationUseCase {
+  const RecordMatchEvaluationUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<void>> call({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required FlashcardId flashcardId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+    required StudyMode studyMode,
+  }) => _repository.recordMatchEvaluation(
+    sessionId: sessionId,
+    sessionItemId: sessionItemId,
+    flashcardId: flashcardId,
+    boardIndex: boardIndex,
+    pairId: pairId,
+    selectedFrontCellId: selectedFrontCellId,
+    selectedBackCellId: selectedBackCellId,
+    expectedFrontFlashcardId: expectedFrontFlashcardId,
+    expectedBackFlashcardId: expectedBackFlashcardId,
+    isCorrect: isCorrect,
+    studyMode: studyMode,
+  );
+}
+
 /// Loads the latest resumable session for the Dashboard resume card.
 ///
 /// Failure types: `NotFoundFailure`, `StorageFailure`.

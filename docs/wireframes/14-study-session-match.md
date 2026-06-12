@@ -9,12 +9,12 @@ source_specs:
 
 # 14 — Study Session: Match Mode
 
-> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.4/4.5.5) in the current codebase. V1 implements
-> only the recall self-grade flow through the shared shell
-> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
-> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
-> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
-> **target structure** from a previous iteration and do NOT exist — verify against
+> **Drift correction (2026-06-12):** the Match backend slice now includes the dedicated
+> append-only evaluation path plus transactional finalization derivation; the visual UI is still
+> Specified and not built. The shared shell at
+> `lib/presentation/features/study/screens/study_session_screen.dart` still owns the current
+> runtime route, and any `lib/presentation/features/study/widgets/study_session/**` paths below are
+> the target structure from the previous UI iteration and do NOT exist — verify against
 > `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
 > in `docs/project-management/wbs.md`.
 
@@ -141,8 +141,8 @@ No external decoy pool needed — the 5 cards on the board provide their own dis
 | --- | --- | --- |
 | Board idle | Board loaded, no selection | 10 neutral cells, board indicator showing pairs left. |
 | One selected | First cell tapped | Cell turns solid blue; await second tap. |
-| Pair correct | Second tap on the matching cell | Both turn muted green with `✓`; persist attempt as `initial_passed`; decrement pairs-left. |
-| Pair wrong | Second tap on a non-matching cell | Both red-flash for ~600ms; persist attempt as `forgot` against the FIRST-tapped card; both deselect; mistake count++. |
+| Pair correct | Second tap on the matching cell | Both turn muted green with `✓`; append a Match evaluation row with `is_correct=true`; decrement pairs-left. |
+| Pair wrong | Second tap on a non-matching cell | Both red-flash for ~600ms; append a Match evaluation row with `is_correct=false` against the FIRST-tapped card; both deselect; mistake count++. |
 | Board cleared | Last pair matched | Cross-fade to next board (or finalize if last). |
 | TTS gating | (Not applicable) | No inline TTS in match mode. |
 
@@ -151,8 +151,8 @@ No external decoy pool needed — the 5 cards on the board provide their own dis
 | Action | Trigger | Result |
 | --- | --- | --- |
 | Tap unmatched cell (no selection) | Tap | Select cell (blue). |
-| Tap selected cell (deselect) | Tap the already-selected cell | Deselect (no attempt recorded). |
-| Tap another unmatched cell | Tap (second selection) | Evaluate pair: match (green + persist `initial_passed`) or wrong (red flash + persist `forgot`). |
+| Tap selected cell (deselect) | Tap the already-selected cell | Deselect (no evaluation row recorded). |
+| Tap another unmatched cell | Tap (second selection) | Evaluate pair: match (green + append `is_correct=true`) or wrong (red flash + append `is_correct=false`). |
 | Tap matched cell | Tap | No-op (cell is locked). |
 | Tap ✕ | Tap | Exit confirm dialog. |
 | Long-press cell | Long-press | Open card actions sheet (Bury / Suspend / History / Audio settings) targeting the card that owns that cell. |
@@ -165,14 +165,22 @@ No external decoy pool needed — the 5 cards on the board provide their own dis
 
 ## SRS handling
 
-Each pair-evaluation persists ONE `study_attempts` row keyed to the **first-tapped cell's card**:
+Each pair-evaluation persists ONE append-only `study_match_evaluations` row keyed to the
+**first-tapped cell's card**:
 
-- Pair correct → `result = initial_passed`; `box_after = min(current+1, 8)`.
-- Pair wrong → `result = forgot` on the first-tapped card; `box_after = 1`; `lapse_count++`. The second-tapped card is NOT marked at this moment (it gets its own attempt when it is later involved in a match).
+- Pair correct → `is_correct = true`.
+- Pair wrong → `is_correct = false` on the first-tapped card; the second-tapped card is NOT marked
+  at this moment (it gets its own evaluation when it is later involved in a match).
 
-Edge case: if the user wrong-taps several times before correctly matching a card, only the LAST attempt for that card on this board is what determines the SRS state, since SRS state is overwritten on each attempt. The `study_attempts` table preserves each attempt for history.
+Edge case: if the user wrong-taps several times before correctly matching a card, each evaluation is
+preserved in order. Finalization derives one terminal `study_attempts` row for that card:
 
-Note: `result = recovered` does NOT apply in match mode (single-attempt-per-card model within the board). For multi-attempt flows in `new_full_cycle`, `recovered` may be triggered via later modes for the same card.
+- any wrong evaluation before the correct match -> `forgot`
+- correct match with no prior wrong evaluation -> `perfect`
+- no correct match before finalization -> `forgot`
+
+`result = recovered` does NOT apply in match mode (single terminal result per card). For multi-
+attempt flows in `new_full_cycle`, `recovered` may be triggered via later modes for the same card.
 
 ## Navigation in/out
 
@@ -188,7 +196,7 @@ Same as Review mode.
 
 - Board precomputed on entry; no per-tap query.
 - Shuffle uses seeded RNG (per session, so resume returns to the same board layout — see resume spec).
-- Persist per pair-evaluation in background; UI advances immediately on the visual feedback.
+- Persist each pair evaluation in background; UI advances immediately on the visual feedback.
 
 ## Accessibility
 
@@ -200,7 +208,8 @@ Same as Review mode.
 ## Rules
 
 - Match mode requires ≥ 5 cards remaining in session at board-start. If fewer, mode is unavailable.
-- Each pair-evaluation MUST persist an attempt against the first-tapped card (right or wrong).
+- Each pair-evaluation MUST persist a Match evaluation row against the first-tapped card (right or
+  wrong).
 - A matched pair is permanently locked; the cells become non-interactive.
 - Mistake counter is per-session, not per-board.
 - TTS button MUST NOT appear on cells.
@@ -208,7 +217,9 @@ Same as Review mode.
 ## Agent rule
 
 - Do NOT introduce decoys from other cards. Board is self-contained.
-- Persistence is per-evaluation, not per-board. Wrong-evaluation against the first-tapped card MUST persist `forgot` immediately.
+- Persistence is per-evaluation, not per-board. Wrong-evaluation against the first-tapped card MUST
+  persist a Match evaluation row immediately; terminal `study_attempts` rows are derived at
+  finalization.
 - Auto-flip / reveal is NOT a thing in match mode — both fronts and backs are visible from the start.
 - Mistake counter increments only on wrong-pair, not on deselecting the same cell.
 - Mode pill copy is exactly `MATCH`. Color: blue family.
@@ -218,7 +229,7 @@ Same as Review mode.
 **Business specs:**
 
 - `docs/business/study/study-flow.md` (match mode — board format, mode availability)
-- `docs/business/srs/srs-review.md` (initial_passed / forgot transitions)
+- `docs/business/srs/srs-review.md` (perfect / forgot derivation from Match evaluations)
 
 **Decision rows:**
 
@@ -226,7 +237,7 @@ Same as Review mode.
 
 **Schema / storage:**
 
-- INSERT `study_attempts` per pair-evaluation with `study_mode='match'`
+- INSERT `study_match_evaluations` per pair-evaluation with `study_mode` implicit in the session
 - Board layout NOT persisted (recomputed deterministically from `sessionId` + board index using seeded RNG, so resume works)
 
 **Contracts:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase, `docs/contracts/usecase-contracts/srs.md`

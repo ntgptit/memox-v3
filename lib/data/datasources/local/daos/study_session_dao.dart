@@ -10,6 +10,7 @@ part 'study_session_dao.g.dart';
     '../drift/study_sessions.drift',
     '../drift/study_session_items.drift',
     '../drift/study_attempts.drift',
+    '../drift/study_match_evaluations.drift',
     '../drift/study_scope_queries.drift',
   },
 )
@@ -53,6 +54,10 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
   Future<List<StudySessionAttemptsResult>> loadSessionAttempts(
     String sessionId,
   ) => studySessionAttempts(sessionId).get();
+
+  Future<List<StudyMatchEvaluationsRow>> loadMatchEvaluations(
+    String sessionId,
+  ) => studyMatchEvaluationsBySession(sessionId).get();
 
   Future<FolderRow?> findFolder(String id) => (select(
     folders,
@@ -111,6 +116,10 @@ class StudySessionDao extends DatabaseAccessor<AppDatabase>
 
   Future<void> insertStudyAttempt(StudyAttemptsCompanion attempt) =>
       into(studyAttempts).insert(attempt);
+
+  Future<void> insertStudyMatchEvaluation(
+    StudyMatchEvaluationsCompanion evaluation,
+  ) => into(studyMatchEvaluations).insert(evaluation);
 
   Future<void> insertFlashcardProgress(FlashcardProgressCompanion progress) =>
       into(attachedDatabase.flashcardProgress).insert(progress);

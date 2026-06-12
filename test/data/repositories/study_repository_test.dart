@@ -1,12 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:flutter_test/flutter_test.dart' hide isNotNull;
+import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/data/repositories/study_repo_impl.dart';
+import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
@@ -1345,6 +1346,178 @@ void main() {
   );
 
   test(
+    'recordMatchEvaluation persists append-only rows in order without updating answered_at or flashcard_progress',
+    () async {
+      const String folderId = 'folder-match-record';
+      const String deckId = 'deck-match-record';
+      const String cardId = 'card-match-record';
+      const String sessionId = 'session-match-record';
+      const String sessionItemId = 'item-match-record';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 3,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<void> firstResult = await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-0',
+        selectedFrontCellId: 'front-0',
+        selectedBackCellId: 'back-0',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: false,
+        studyMode: StudyMode.match,
+      );
+      final Result<void> secondResult = await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-1',
+        selectedFrontCellId: 'front-1',
+        selectedBackCellId: 'back-1',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: true,
+        studyMode: StudyMode.match,
+      );
+
+      final Result<List<StudyMatchEvaluation>> loadResult = await repository
+          .loadMatchEvaluations(sessionId: sessionId);
+      final List<StudyMatchEvaluation> evaluations =
+          loadResult.valueOrNull ?? const <StudyMatchEvaluation>[];
+      final StudySessionItemRow sessionItem = await db
+          .select(db.studySessionItems)
+          .getSingle();
+      final FlashcardProgressRow progress = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+
+      expect(firstResult.isOk, isTrue);
+      expect(secondResult.isOk, isTrue);
+      expect(evaluations, hasLength(2));
+      expect(evaluations.first.isCorrect, isFalse);
+      expect(evaluations.first.attemptOrder, 0);
+      expect(evaluations.last.isCorrect, isTrue);
+      expect(evaluations.last.attemptOrder, 1);
+      expect(sessionItem.answeredAt, equals(null));
+      expect(progress.boxNumber, 3);
+      expect(progress.reviewCount, 0);
+      expect(progress.lapseCount, 0);
+    },
+  );
+
+  test(
+    'recordMatchEvaluation rejects closed sessions, missing items, and non-match modes',
+    () async {
+      const String folderId = 'folder-match-reject';
+      const String deckId = 'deck-match-reject';
+      const String cardId = 'card-match-reject';
+      const String closedSessionId = 'session-match-reject-closed';
+      const String openSessionId = 'session-match-reject-open';
+      const String closedSessionItemId = 'item-match-reject-closed';
+      const String openSessionItemId = 'item-match-reject-open';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(id: cardId, deckId: deckId);
+      await fixture.insertResumableSession(
+        id: closedSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+        status: 'completed',
+      );
+      await fixture.insertStudySessionItem(
+        id: closedSessionItemId,
+        sessionId: closedSessionId,
+        flashcardId: cardId,
+      );
+      await fixture.insertResumableSession(
+        id: openSessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: openSessionItemId,
+        sessionId: openSessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<void> closedSessionResult = await repository
+          .recordMatchEvaluation(
+            sessionId: closedSessionId,
+            sessionItemId: closedSessionItemId,
+            flashcardId: cardId,
+            boardIndex: 0,
+            pairId: 'pair-closed',
+            selectedFrontCellId: 'front-closed',
+            selectedBackCellId: 'back-closed',
+            expectedFrontFlashcardId: cardId,
+            expectedBackFlashcardId: cardId,
+            isCorrect: true,
+            studyMode: StudyMode.match,
+          );
+      final Result<void> missingItemResult = await repository
+          .recordMatchEvaluation(
+            sessionId: openSessionId,
+            sessionItemId: 'missing-item',
+            flashcardId: cardId,
+            boardIndex: 0,
+            pairId: 'pair-missing',
+            selectedFrontCellId: 'front-missing',
+            selectedBackCellId: 'back-missing',
+            expectedFrontFlashcardId: cardId,
+            expectedBackFlashcardId: cardId,
+            isCorrect: true,
+            studyMode: StudyMode.match,
+          );
+      final Result<void> wrongModeResult = await repository
+          .recordMatchEvaluation(
+            sessionId: openSessionId,
+            sessionItemId: openSessionItemId,
+            flashcardId: cardId,
+            boardIndex: 0,
+            pairId: 'pair-wrong-mode',
+            selectedFrontCellId: 'front-wrong-mode',
+            selectedBackCellId: 'back-wrong-mode',
+            expectedFrontFlashcardId: cardId,
+            expectedBackFlashcardId: cardId,
+            isCorrect: true,
+            studyMode: StudyMode.recall,
+          );
+
+      expect(
+        closedSessionResult.failureOrNull,
+        isA<UnsupportedActionFailure>(),
+      );
+      expect(missingItemResult.failureOrNull, isA<NotFoundFailure>());
+      expect(wrongModeResult.failureOrNull, isA<UnsupportedActionFailure>());
+      expect(await db.select(db.studyMatchEvaluations).get(), isEmpty);
+    },
+  );
+
+  test(
     'finalizeStudySession succeeds, repairs missing progress, and applies SRS updates transactionally',
     () async {
       const String folderId = 'folder-finalize-ok';
@@ -1426,6 +1599,265 @@ void main() {
       expect(repairedProgress.lapseCount, 1);
       expect(repairedProgress.dueAt, isA<int>());
       expect(await db.select(db.studyAttempts).get(), hasLength(2));
+    },
+  );
+
+  test(
+    'finalizeStudySession derives perfect for clean Match evaluations and completes the session',
+    () async {
+      const String folderId = 'folder-match-perfect';
+      const String deckId = 'deck-match-perfect';
+      const String cardId = 'card-match-perfect';
+      const String sessionId = 'session-match-perfect';
+      const String sessionItemId = 'item-match-perfect';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 3,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+      await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-perfect',
+        selectedFrontCellId: 'front-perfect',
+        selectedBackCellId: 'back-perfect',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: true,
+        studyMode: StudyMode.match,
+      );
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isOk, isTrue);
+      expect(
+        (await db.select(db.studySessions).getSingle()).status,
+        'completed',
+      );
+      final StudySessionItemRow finalizedItem = await db
+          .select(db.studySessionItems)
+          .getSingle();
+      final StudyAttemptRow finalAttempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      final FlashcardProgressRow progress = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+
+      expect(finalizedItem.answeredAt != null, isTrue);
+      expect(finalAttempt.result, 'perfect');
+      expect(finalAttempt.studyMode, 'match');
+      expect(progress.boxNumber, 4);
+      expect(progress.reviewCount, 1);
+      expect(progress.lapseCount, 0);
+    },
+  );
+
+  test(
+    'finalizeStudySession derives forgot when a wrong Match evaluation happens before the correct one',
+    () async {
+      const String folderId = 'folder-match-forgot';
+      const String deckId = 'deck-match-forgot';
+      const String cardId = 'card-match-forgot';
+      const String sessionId = 'session-match-forgot';
+      const String sessionItemId = 'item-match-forgot';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+      await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-fail',
+        selectedFrontCellId: 'front-fail',
+        selectedBackCellId: 'back-fail',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: false,
+        studyMode: StudyMode.match,
+      );
+      await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-success',
+        selectedFrontCellId: 'front-success',
+        selectedBackCellId: 'back-success',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: true,
+        studyMode: StudyMode.match,
+      );
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isOk, isTrue);
+      final StudyAttemptRow finalAttempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      final FlashcardProgressRow progress = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+
+      expect(finalAttempt.result, 'forgot');
+      expect(progress.boxNumber, 1);
+      expect(progress.lapseCount, 1);
+    },
+  );
+
+  test(
+    'finalizeStudySession derives forgot for Match items that never get a correct evaluation and rolls back on failure',
+    () async {
+      const String folderId = 'folder-match-never-correct';
+      const String deckId = 'deck-match-never-correct';
+      const String cardId = 'card-match-never-correct';
+      const String sessionId = 'session-match-never-correct';
+      const String sessionItemId = 'item-match-never-correct';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+      await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-wrong',
+        selectedFrontCellId: 'front-wrong',
+        selectedBackCellId: 'back-wrong',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: false,
+        studyMode: StudyMode.match,
+      );
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isOk, isTrue);
+      final StudyAttemptRow finalAttempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      expect(finalAttempt.result, 'forgot');
+    },
+  );
+
+  test(
+    'finalizeStudySession rolls back Match progress writes when a write fails',
+    () async {
+      const String folderId = 'folder-match-rollback';
+      const String deckId = 'deck-match-rollback';
+      const String cardId = 'card-match-rollback';
+      const String sessionId = 'session-match-rollback';
+      const String sessionItemId = 'item-match-rollback';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+      await repository.recordMatchEvaluation(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        flashcardId: cardId,
+        boardIndex: 0,
+        pairId: 'pair-rollback',
+        selectedFrontCellId: 'front-rollback',
+        selectedBackCellId: 'back-rollback',
+        expectedFrontFlashcardId: cardId,
+        expectedBackFlashcardId: cardId,
+        isCorrect: true,
+        studyMode: StudyMode.match,
+      );
+
+      repository = StudyRepositoryImpl(_ThrowingFinalizeStudySessionDao(db));
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: sessionId,
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<StorageFailure>());
+      expect(
+        (await db.select(db.studySessions).getSingle()).status,
+        'in_progress',
+      );
+      expect(await db.select(db.studyAttempts).get(), isEmpty);
+      expect(
+        (await db.select(db.studySessionItems).getSingle()).answeredAt == null,
+        isTrue,
+      );
     },
   );
 
