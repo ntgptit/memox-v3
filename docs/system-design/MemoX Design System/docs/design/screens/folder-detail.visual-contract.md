@@ -22,6 +22,12 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
 > so no mastery percentage or new-count placeholder is rendered. This contract
 > follows the **current code path** plus the canonical PNG mock. See §16.
 
+> Approved mock variance for this ref: the `04-folder-detail` PNG/spec set may
+> show `62%`, `23 due · 6 new`, `Start study · 23 due`, and `Most due` in the
+> measured artifacts. Treat those values as visual intent only when they exceed
+> current data/route support. `newest` is the current supported sort mode and is
+> the behavior behind the mock's `Recent` label in decks mode.
+
 ## 1. Screen identity
 
 - **Screen name:** Folder Detail
@@ -107,7 +113,7 @@ Driven by `folderDetailQueryProvider(folderId)` (`AsyncValue<FolderDetail>`) +
 | State | Trigger | Visible regions | Hidden regions | Primary CTA | Secondary CTA | Shared state widget | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Initial / Loading | Query pending | App bar, breadcrumb*, **skeleton rows** | Real rows, FAB (FAB null until `detail` loads) | — | — | `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` | *Breadcrumb renders only once `detail` is available. No tappable rows while loading. |
-| Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, mastery unknown shell, search icon, sort pill, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | Disabled Start study shell | — | Deck rows = `FolderDeckTile`. Tap → flashcard list (Future target). |
+| Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, mastery unknown shell, search icon, sort pill, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | Disabled Start study shell | — | Deck rows = `FolderDeckTile`. The mock's `62%`, `6 new`, and enabled `Start study · {due}` values are approved variance here, not V1 source of truth. Tap → flashcard list (Future target). |
 | Loaded — subfolders | `contentMode == subfolders` | App bar, breadcrumb, stat summary strip, search icon, sort pill, subfolder rows, New-subfolder FAB | Deck rows, unlocked choice | `MxFab.extended` New subfolder | — | — | Subfolder rows = `FolderSubfolderTile`. Tap → child `pushFolderDetail`. |
 | Empty — unlocked | `contentMode == unlocked` (no children) | App bar, breadcrumb, empty chip/card/buttons/banner | Rows, FAB | "New subfolder" | "New deck" | `FolderUnlockedEmpty` | Choice locks mode on first create. Must NOT auto-unlock or show both in a FAB. |
 | Empty — locked | Locked but zero children (all deleted) | App bar, breadcrumb, "empty" message + FAB | Rows | mode FAB | — | (empty surface) | Do not auto-unlock; keep mode FAB only. |
@@ -143,11 +149,11 @@ existing widget/token covers an element.
 | Error / not-found | Safe failure surface | `MxErrorState` | error-state theme; `iconXl` `folder_off_outlined` | error | **Current** | Localized title/message + Retry. |
 | Create FAB | Add child by mode | `MxFab.extended` | `SizeTokens.fab`; `RadiusTokens.brXl`; primary/onPrimary | decks/subfolders loaded | **Current** | Mode-locked label & icon. Unlocked → no FAB. |
 | New folder / deck dialog | Name the new child | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` for folder cases; `showMxNameDialog` remains for deck naming | dialog theme `brLg`; level2–3; scrim 32% | on FAB / choice tap | **Current** | Folder dialog is mock-aligned with preview tile + color/icon pickers on create and helper text on rename; duplicate/mode-lock errors → `showMxSnackbar`. |
-| Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | `MxCard` + `MxIconTile` | decks mode | **Visual-only** | Rendered as a shell without a numeric mastery value or ring; no fake percentage is shown. |
-| Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | decks mode | **Visual-only** | Study layer not built; the visible button remains disabled and never carries fake due-count copy. |
+| Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | `MxCard` + `MxIconTile` | decks mode | **Visual-only** | Rendered as a shell without a numeric mastery value or ring; the mock's `62%` is approved variance and must not be faked. |
+| Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | decks mode | **Visual-only** | Study layer not built; the mock's `Start study · {due}` and `{n} new` copy are approved variance and the visible button remains disabled in code. |
 | Resume banner (+ Discard) | Continue/cancel paused session | `MxCallout` + `showMxConfirmDialog` | callout/dialog themes | (mock) | **Future** | No session layer on this ref. |
 | "{n} new" subtitle | New-card count | — | — | decks mode | **Future** | No folder-scope new-card read model exists; do not render a placeholder count. |
-| Sort control | Reorder rows | local pill | — | loaded | **Current** | Controlled sort sheet uses `ContentSortMode`; only `manual`, `name`, and `newest` are exposed here. `lastStudied` stays hidden because the Folder Detail query path does not support truthful last-studied ordering on this ref. |
+| Sort control | Reorder rows | local pill | — | loaded | **Current** | Controlled sort sheet uses `ContentSortMode`; only `manual`, `name`, and `newest` are exposed here. In the mock, `newest` is labeled `Recent` in decks mode. The subfolders mock label `Most due` is approved variance and remains unsupported on this ref. `lastStudied` stays hidden because the Folder Detail query path does not support truthful last-studied ordering on this ref. |
 
 ## 6. Typography contract
 

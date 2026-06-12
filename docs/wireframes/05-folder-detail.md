@@ -54,6 +54,10 @@ study UI.
   not support truthful last-studied ordering. True-empty vs search no-results
   is Current (true empty = no unfiltered direct children; no-results = active
   search hides existing children).
+- The PNG/spec values in `docs/system-design/MemoX Design System/ui_kits/mobile/shots/04-folder-detail--*.png`
+  are approved visual variance where they exceed current support: the decks shot
+  may label `newest` as `Recent`, while the `62%`, `6 new`, `Start study · 23 due`,
+  and `Most due` artifacts remain mock-only and are not V1 source of truth.
 - Per-folder sort state exists on the toolbar (`ContentSortMode`) but this
   screen normalizes unsupported values back to `manual`.
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
