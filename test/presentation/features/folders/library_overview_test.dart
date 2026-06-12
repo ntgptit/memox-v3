@@ -22,6 +22,7 @@ import 'package:memox/presentation/features/folders/viewmodels/library_overview_
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/library_overview_body.dart';
 import 'package:memox/presentation/features/folders/widgets/library_sections.dart';
+import 'package:memox/presentation/features/progress/screens/progress_screen.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
@@ -80,6 +81,16 @@ final class _PendingCreateRootFolderUseCase extends CreateRootFolderUseCase {
   Future<Result<Folder>> call({required String name}) => completer.future;
 }
 
+final class _RecordingNavigatorObserver extends NavigatorObserver {
+  int pushCount = 0;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    pushCount++;
+    super.didPush(route, previousRoute);
+  }
+}
+
 Widget _wrapBody(
   LibraryOverviewReadModel model, {
   bool isSearching = false,
@@ -102,12 +113,19 @@ Widget _wrapBody(
 /// Wraps the full screen so the inline search field, body, and the
 /// `MxRetainedAsyncState` (loading / error) wiring are exercised end-to-end.
 /// The library-overview query stream is supplied per test via [stream].
-Widget _wrapScreen(Stream<LibraryOverviewReadModel> stream) => ProviderScope(
+Widget _wrapScreen(
+  Stream<LibraryOverviewReadModel> stream, {
+  ThemeData? theme,
+  NavigatorObserver? observer,
+}) => ProviderScope(
   overrides: [libraryOverviewQueryProvider.overrideWith((Ref ref) => stream)],
   child: MaterialApp(
-    theme: AppTheme.light(),
+    theme: theme ?? AppTheme.light(),
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
+    navigatorObservers: observer == null
+        ? const <NavigatorObserver>[]
+        : <NavigatorObserver>[observer],
     home: const LibraryOverviewScreen(),
   ),
 );
@@ -171,6 +189,27 @@ void main() {
       expect(find.byIcon(Icons.more_vert), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsNothing);
     });
+
+    testWidgets(
+      'active search with matches keeps rows visible but hides the overview '
+      'summary/header',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapBody(
+            _model(
+              folders: <FolderWithCount>[_item('Korean')],
+              dueToday: 18,
+              totalFolderCount: 3,
+            ),
+            isSearching: true,
+          ),
+        );
+
+        expect(find.text('Korean'), findsOneWidget);
+        expect(find.byType(LibraryDueSummary), findsNothing);
+        expect(find.byType(LibraryFolderHeader), findsNothing);
+      },
+    );
 
     testWidgets('folder row renders subtitle and new count when available', (
       WidgetTester tester,
@@ -500,6 +539,49 @@ void main() {
     );
   });
 
+  group('LibraryOverviewScreen — Search / theme smoke', () {
+    testWidgets('inline search does not navigate to global search', (
+      WidgetTester tester,
+    ) async {
+      final _RecordingNavigatorObserver observer =
+          _RecordingNavigatorObserver();
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<LibraryOverviewReadModel>.value(_model(totalFolderCount: 3)),
+          observer: observer,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), 'korean');
+      await tester.pumpAndSettle();
+
+      expect(observer.pushCount, 1);
+      expect(find.text('Library'), findsWidgets);
+    });
+
+    testWidgets('builds in both light and dark themes', (
+      WidgetTester tester,
+    ) async {
+      for (final ThemeData theme in <ThemeData>[
+        AppTheme.light(),
+        AppTheme.dark(),
+      ]) {
+        await tester.pumpWidget(
+          _wrapScreen(
+            Stream<LibraryOverviewReadModel>.value(_model(totalFolderCount: 1)),
+            theme: theme,
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.byType(LibraryOverviewScreen), findsOneWidget);
+        expect(find.text('Library'), findsWidgets);
+        expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
+      }
+    });
+  });
+
   group('LibraryActionController — Lifecycle', () {
     test(
       'createFolder returns after auto-dispose without writing disposed state',
@@ -642,7 +724,7 @@ void main() {
 
     // Switch to the Progress tab → its placeholder (route name) renders.
     await tester.tap(find.text('Progress'));
-    await tester.pumpAndSettle();
-    expect(find.text('progress'), findsWidgets);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(ProgressScreen), findsOneWidget);
   });
 }

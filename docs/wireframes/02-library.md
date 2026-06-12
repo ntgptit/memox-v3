@@ -113,7 +113,9 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 - Inline search (Prompt 49B: always visible below the title, no toggle): scope-local within Library.
   When a term is active the query broadens to match **any folder by name across the tree** (
   `listAllFolders` + normalized contains); empty term restores top-level folders. Never routes to
-  Global Search; does not mutate persisted `sort_order`. The supported hint is `Search folders`.
+  Global Search; does not mutate persisted `sort_order`. When search is active and results exist,
+  the overview summary card and folder-count header are hidden so the screen matches the search
+  mock's simplified list layout. The supported hint is `Search folders`.
 - Loaded section header: `{n} FOLDERS` overline with the mock sort pill (`librarySortRecentLabel`)
   on the right. Its horizontal inset is intentionally tight so it does not feel double-padded
   inside the shared screen shell; the pill is visual parity only and non-interactive.

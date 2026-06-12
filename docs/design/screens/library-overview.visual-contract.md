@@ -99,8 +99,9 @@ is regenerated.
 | `03b`   | Loading           | Initial query pending                                       | Inline search shell plus skeleton folder rows                                                   | No folder tap                                                     | Async query pending                                              | Use `MxRetainedAsyncState.skeletonBuilder` and `LibrarySkeleton`. |
 | `03c`   | True empty        | `totalFolderCount == 0`                                     | Empty state with create-folder CTA                                                              | Create folder opens dialog                                        | `totalFolderCount`                                               | Do not expose New deck or Import from root.                       |
 | `03d`   | Error             | Query failure                                               | `MxErrorState` with retry                                                                       | Retry invalidates query                                           | Async error/failure                                              | No raw exception text.                                            |
-| `03e`   | Search no-results | Search active, total folders > 0, visible folder list empty | Search empty state with Clear CTA                                                               | Clear search term                                                 | `searchTerm`, `folders`, `totalFolderCount`                      | Do not navigate to Global Search.                                 |
-| `03f`   | Overflow sheet    | Kebab tap or folder-row long-press                          | Folder action sheet: Rename / Move / Import flashcards (decks-mode only) / Delete                | Each action dispatches its dialog/picker/navigation               | Folder mutation use cases + `getFolderMoveTargets`               | Current. "Study due cards" / "Archive folder" stay out of scope.  |
+| `03e`   | Search results    | Search active, visible folder list non-empty                | Search field + filtered folder rows only; hide due summary and folder-count header               | Tap folder or kebab; no overview summary controls                 | `searchTerm`, `folders`                                          | Search stays folder-only and inline.                              |
+| `03f`   | Search no-results | Search active, total folders > 0, visible folder list empty | Search empty state with Clear CTA                                                               | Clear search term                                                 | `searchTerm`, `folders`, `totalFolderCount`                      | Do not navigate to Global Search.                                 |
+| `03g`   | Overflow sheet    | Kebab tap or folder-row long-press                          | Folder action sheet: Rename / Move / Import flashcards (decks-mode only) / Delete                | Each action dispatches its dialog/picker/navigation               | Folder mutation use cases + `getFolderMoveTargets`               | Current. "Study due cards" / "Archive folder" stay out of scope.  |
 
 ## Folder Card Contract
 
@@ -138,6 +139,8 @@ Forbidden:
 - Do not expose root New deck or Import.
 - Do not expose an interactive sort sheet/control; the non-interactive
   `Recent` pill is allowed as current visual parity.
+- Do not keep the overview summary card or folder-count header visible while
+  a search term is active and matching rows are shown.
 - Do not claim deck/card/tag search in Library Overview V1; that scope is Future.
 - Do not fake progress, mastery, new-card data, or unsupported study-launch
   data. The due summary subtitle/duration may be shown only when derived from
