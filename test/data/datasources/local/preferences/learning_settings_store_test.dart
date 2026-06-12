@@ -1,11 +1,24 @@
+// ignore_for_file: depend_on_referenced_packages -- reason: test-only SharedPreferencesAsync platform helpers live in the transitive platform_interface package.
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/preferences/learning_settings_store.dart';
 import 'package:memox/domain/models/learning_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 void main() {
+  late SharedPreferencesAsyncPlatform? previousPlatform;
+
   setUp(() {
+    previousPlatform = SharedPreferencesAsyncPlatform.instance;
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
     SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+
+  tearDown(() {
+    SharedPreferencesAsyncPlatform.instance = previousPlatform;
   });
 
   test('fresh storage returns defaults', () async {
