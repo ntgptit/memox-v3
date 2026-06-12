@@ -22,9 +22,8 @@ source_specs:
 ## Purpose
 
 Production-mode typed recall. User reads a definition / hint, then types the front term (in the
-target language) in a free-text field. Strict string matcher decides correct / wrong; user can
-override `wrong` to `recovered` if it's just a typo. The highest-effort mode in v1; strongest
-reinforcement.
+target language) in a free-text field. Strict string matcher decides correct / wrong. The highest-
+effort mode in v1; strongest reinforcement.
 
 > **Important deviation from earlier drafts.** Fill mode in v1 uses a **plain free-text input**, NOT
 > a per-character cell row (`▢ ▢ ▢ ▢`). User types the full term in a normal text field. The cell-row
@@ -152,7 +151,7 @@ card). The Korean / target-language IME is invoked normally.
 | TTS icon `🔊`                        | Top-right of input card. Visible **only after feedback** (correct or wrong). Speaks `front`. Hidden when `deck.target_language = unsupported`.                                             |
 | Retry icon `↺`                       | Bottom-left of input card in wrong state. Tap clears feedback and returns to typing state with the previous input pre-filled (one retry per card).                                         |
 | Hint button                          | Bottom row, left. Outlined. Reveals 1 character at a time (max half the front length). Each reveal disables `perfect` upgrade for this card.                                               |
-| Check button                         | Bottom row, right. Filled primary. Enabled iff input is non-empty. Submits the answer.                                                                                                     |
+| Check button                         | Bottom row, right. Filled primary. Enabled iff input is non-empty. Evaluates the answer locally.                                                                                            |
 | Mark correct button (wrong feedback) | Outlined. Tap maps wrong → `recovered`.                                                                                                                                                    |
 | Try again button (wrong feedback)    | Filled primary. Tap returns to typing state with cleared input.                                                                                                                            |
 | Next button (correct feedback)       | Filled primary, full-width. Auto-advance 0.8s; tappable to skip.                                                                                                                           |
@@ -180,7 +179,7 @@ is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-
 | Checking                   | Check tapped                    | Compare; show feedback; switch input card to correct or wrong state.                                                                                                              |
 | Correct                    | Exact match                     | Input card shows answer with ✓; TTS icon appears; Next button visible; auto-advance 0.8s.                                                                                         |
 | Wrong                      | Mismatch                        | Input card shows user input (red) above correct (default); TTS icon appears; Mark correct / Try again buttons visible; no auto-advance.                                           |
-| Retry                      | Try again tapped                | Return to typing state; input cleared; hint reveals retained (still tainted); attempt is NOT re-persisted (the prior wrong attempt stays in the history). One retry per card max. |
+| Retry                      | Try again tapped                | Return to typing state; input cleared; hint reveals retained (still tainted); no attempt is persisted yet. One retry per card max.                                                   |
 | Buried via long-press      | Long-press hint card            | Open card actions sheet.                                                                                                                                                          |
 | Skipped (mode unavailable) | Front too short or trivial      | Auto-skip to next mode in flow without recording attempt.                                                                                                                         |
 | Last card                  | Final grading                   | Finalize → study result.                                                                                                                                                          |
@@ -192,9 +191,9 @@ is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-
 |----------------------------------------------|------------|-----------------------------------------------------------------|
 | Type into input                              | IME        | Live update of the input label.                                 |
 | Tap Hint                                     | Tap        | Reveal one more character; taint card (max result = recovered). |
-| Tap Check                                    | Tap        | Submit; compute match; show feedback; persist attempt.          |
-| Tap Mark correct (wrong state)               | Tap        | Override result to `recovered`; persist; next card.             |
-| Tap Try again (wrong state, retry available) | Tap        | Return to typing; clear input; do not re-persist.               |
+| Tap Check                                    | Tap        | Submit; compute match; show feedback. Terminal persistence happens only when the answer is committed. |
+| Tap Mark correct (wrong state)               | Tap        | Commit the terminal answer as `recovered`.                     |
+| Tap Try again (wrong state, retry available) | Tap        | Return to typing; clear input; keep the current answer local only. |
 | Tap Next (correct state)                     | Tap        | Skip auto-advance; next card.                                   |
 | Tap ↺ retry icon (wrong state)               | Tap        | Same as Try again.                                              |
 | Tap 🔊 (post-feedback only)                  | Tap        | Speak `front`.                                                  |
@@ -208,9 +207,9 @@ is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-
 |-------------|-------------------------------------------------------------------------|-----------------------|
 | `perfect`   | Exact match, no hint used                                               | `min(current+1, 8)`   |
 | `recovered` | Exact match with hint used OR Mark correct override on wrong            | `current` (stay)      |
-| `forgot`    | Wrong with no override (Try again unused or used and then user gave up) | `1` (`lapse_count++`) |
+| `forgot`    | Wrong committed as the terminal answer                                  | `1` (`lapse_count++`) |
 
-Persist via `GradeAttemptUseCase` with `study_mode = 'fill'`.
+Terminal persistence uses `GradeAttemptUseCase` with `study_mode = 'fill'`.
 
 ## When fill mode is unavailable
 
@@ -283,9 +282,9 @@ Same as Recall mode:
 - Plain text input ONLY in v1 (no cell row).
 - Matching is strict (no case folding, no diacritic stripping).
 - Correct → `perfect` (or `recovered` if hint used).
-- Wrong → `forgot` (or `recovered` if Mark correct override used).
+- Wrong stays local until the user commits the terminal answer.
 - Auto-advance only on Correct; Wrong requires explicit action.
-- Try again allows ONE retry per card; second wrong commits the original `forgot` attempt.
+- Try again allows ONE retry per card and does not persist.
 - TTS icon hidden during typing; appears only after feedback.
 - Auto-play TTS disabled in this mode regardless of settings.
 

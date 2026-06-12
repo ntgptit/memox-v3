@@ -5,7 +5,7 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 
 # SRS Review
 
-> **Status: Current (data + finalization) / Target (history surfaces).** Box transition and
+> **Status: Current (one-terminal-attempt flows + finalization) / Target (history surfaces).** Box transition and
 > interval computation are implemented in `StudyRepositoryImpl.finalizeStudySession` and verified by
 > `test/data/repositories/study_srs_transition_test.dart` (decision rows S11–S15). The columns
 > `study_attempts.box_before` / `box_after` **exist in the current schema**
@@ -94,28 +94,32 @@ and re-queues failed cards. Implementation must match this table. There is no st
 
 Per-card result classification at finalization (implemented in
 `_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`): the
-**last** attempt decides — last attempt `forgot` → `forgot` (box → 1, lapse +1); any earlier
-`forgot` but last attempt passing → `recovered` (box stays, no lapse); all attempts passing →
-the last attempt's result (`perfect` / `initial_passed`, box +1).
+current V1 runtime only has one terminal persisted attempt per item, so the **last** attempt is
+also the only attempt. That makes the current classifier observationally equivalent to
+`perfect` / `recovered` / `forgot` on single-attempt flows.
 
 > **✅ Adopted decision (2026-06-10, C1 — SRS demotion reachability): first attempt decides SRS.**
-> When retry/re-queue modes land, the FIRST attempt recorded for an item in the session determines
-> the SRS outcome: first attempt `forgot` → final result `forgot` (box → 1, lapse +1) **even if
-> the card is re-queued and passed later in the same session**. Re-queued passes are in-session
-> relearning: they are recorded as attempts and satisfy session completion, but do not change the
-> SRS outcome. This keeps demotion reachable, gives the learner a same-session repetition of every
-> forgotten card (the relearning step), and keeps the interval table unchanged.
+> When a future retry/re-queue mode actually appends multiple attempts before finalization, the
+> FIRST persisted attempt for that item will determine the SRS outcome: first attempt `forgot` →
+> final result `forgot` (box → 1, lapse +1) even if the card is re-queued and passed later in the
+> same session. Re-queued passes are in-session relearning: they are recorded as attempts and
+> satisfy session completion, but do not change the SRS outcome.
 >
-> Consequences for the implementation when the first retry mode is built (do these together):
+> For the current repo slice, that rule is deferred because Fill V1 still persists one terminal
+> attempt per item. No classifier change is required for Fill BE V1.
 >
-> - `_finalizeResultForAttempts` must switch from last-attempt to **first-attempt** classification
->   for the forgot path; update `test/data/repositories/study_srs_transition_test.dart` (S13
->   changes meaning) and decision rows S13/S20 in the same change.
-> - `recovered` is **redefined**: it no longer means "forgot then passed" (that is now `forgot`);
->   it means a single passing-but-imperfect attempt (fill hint-taint, Mark-correct override).
->   Transition stays: box unchanged, no lapse. Update `docs/business/glossary.md` together.
-> - Current V1 (one attempt per item, last-attempt classifier) produces identical user-visible
->   behavior, so no code change is required before retry modes land.
+> Consequences for the implementation when the first append-attempt retry mode is built (do these
+> together):
+>
+> - `_finalizeResultForAttempts` must switch from the current single-terminal-attempt behavior to
+>   **first-attempt** classification for the forgot path; update
+>   `test/data/repositories/study_srs_transition_test.dart` (S13 changes meaning) and decision rows
+>   S13/S20 in the same change.
+> - `recovered` is **redefined** only for that future append-attempt flow: it no longer means
+>   "forgot then passed" (that is now `forgot`); it means a single passing-but-imperfect attempt
+>   (fill hint-taint, Mark-correct override). Transition stays: box unchanged, no lapse. Update
+>   `docs/business/glossary.md` together.
+> - Fill V1 and the current self-grade flows stay on the existing one-terminal-attempt contract.
 
 | Current box | Result           | Next box | Next due              |
 |-------------|------------------|----------|-----------------------|

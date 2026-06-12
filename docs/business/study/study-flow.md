@@ -61,7 +61,7 @@ study mode.
 | `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. Per-pair persistence; one board per 5 cards.                               |
 | `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit.                                                             |
 | `recall` | front → back             | Show front, tap "Show answer" to reveal back, self-grade with Forgot / Got it. **No text input in v1**; typed-answer recall is a Future Proposal.                                   |
-| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match; "Mark correct" override path. Optional Hint button taints result to max `recovered`. |
+| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match; "Mark correct" override path. Optional Hint button taints the terminal result to max `recovered`. |
 
 Direction notes:
 
@@ -241,19 +241,17 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 
 ## Retry behavior
 
-- Incorrect answer creates attempt.
-- Retry behavior depends on selected flow/mode. **V1 records exactly one attempt per item** (a
-  second answer on an answered item is rejected); multi-attempt retry is Target for future modes.
+- Incorrect answer creates local feedback, not a persisted attempt by itself.
+- Retry behavior depends on selected flow/mode. **V1 records exactly one terminal persisted
+  attempt per item**; a second answer on an answered item is rejected in the current backend.
 - Re-queue/retry modes follow the **adopted first-attempt-decides-SRS contract** in
-  `docs/business/srs/srs-review.md` (§Box transition table): a first-attempt `forgot` demotes the
-  card even when the re-queued pass completes the session; the re-queue IS the in-session
-  relearning step.
+  `docs/business/srs/srs-review.md` (§Box transition table), but that contract only matters when a
+  future mode appends multiple attempts before finalization.
 - **Answer re-grade before finalization (Target, WBS 4.4.3):** until the session is finalized,
-  the user may change the grade of an answered item (mistap protection). Implementation appends a
-  correcting attempt; the SRS classifier handles the sequence per the adopted contract. Requires
-  relaxing the current "reject second answer" rule in `recordStudySessionAnswer` together with
-  the C1 classifier change — ship the two together.
-- Retry state must be persisted through session items or domain-supported queue.
+  the user may change the grade of an answered item (mistap protection). That future path requires
+  a separate append-attempt contract and is not required for Fill BE V1.
+- Fill V1 uses local evaluation before terminal persistence: Check evaluates the answer, Try again
+  stays local, and Mark correct or a committed wrong answer writes the single terminal attempt.
 - UI must not be the only source of retry state.
 
 ## Performance
