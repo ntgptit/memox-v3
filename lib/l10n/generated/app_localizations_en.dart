@@ -1486,15 +1486,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get folderDetailSearchHint => 'Search this folder';
 
   @override
-  String get folderDetailMasteryLabel => 'Folder mastery';
+  String get folderDetailSearchSheetTitle => 'Search this folder';
+
+  @override
+  String get folderDetailMasteryUnavailableLabel => 'Mastery unavailable';
 
   @override
   String get folderDetailStartStudyLabel => 'Start study';
 
   @override
-  String folderDetailStartStudyWithDueLabel(int count) {
-    return 'Start study · $count due';
-  }
+  String get folderDetailSortSheetTitle => 'Sort folder';
+
+  @override
+  String get folderDetailSortManualLabel => 'Manual order';
+
+  @override
+  String get folderDetailSortNameLabel => 'Name';
+
+  @override
+  String get folderDetailSortNewestLabel => 'Newest';
+
+  @override
+  String get folderDetailSortLastStudiedLabel => 'Last studied';
 
   @override
   String get folderDetailMostDueLabel => 'Most due';

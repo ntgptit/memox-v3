@@ -7,6 +7,7 @@ import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_deck_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_summary.dart';
@@ -25,6 +26,7 @@ class FolderDetailBody extends StatelessWidget {
     required this.detail,
     required this.isSearching,
     required this.searchTerm,
+    required this.sort,
     required this.onStartStudy,
     required this.onNewSubfolder,
     required this.onNewDeck,
@@ -39,6 +41,7 @@ class FolderDetailBody extends StatelessWidget {
   final FolderDetail detail;
   final bool isSearching;
   final String searchTerm;
+  final ContentSortMode sort;
   final VoidCallback? onStartStudy;
   final VoidCallback onNewSubfolder;
   final VoidCallback onNewDeck;
@@ -89,10 +92,11 @@ class FolderDetailBody extends StatelessWidget {
       ContentMode.decks => l10n.libraryFolderDecksCount(decks.length),
       ContentMode.unlocked => '',
     };
-    final String sortLabel = switch (mode) {
-      ContentMode.subfolders => l10n.folderDetailMostDueLabel,
-      ContentMode.decks => l10n.librarySortRecentLabel,
-      ContentMode.unlocked => '',
+    final String sortLabel = switch (sort) {
+      ContentSortMode.manual => l10n.folderDetailSortManualLabel,
+      ContentSortMode.name => l10n.folderDetailSortNameLabel,
+      ContentSortMode.newest => l10n.folderDetailSortNewestLabel,
+      ContentSortMode.lastStudied => l10n.folderDetailSortLastStudiedLabel,
     };
     final List<Widget> children = hasChildren
         ? _buildChildren(

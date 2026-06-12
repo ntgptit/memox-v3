@@ -767,16 +767,14 @@
   },
   "libraryOverflowTooltip": "Folder actions",
   "folderDetailSearchHint": "Search this folder",
-  "folderDetailMasteryLabel": "Folder mastery",
+  "folderDetailSearchSheetTitle": "Search this folder",
+  "folderDetailMasteryUnavailableLabel": "Mastery unavailable",
   "folderDetailStartStudyLabel": "Start study",
-  "folderDetailStartStudyWithDueLabel": "Start study · {count} due",
-  "@folderDetailStartStudyWithDueLabel": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "folderDetailSortSheetTitle": "Sort folder",
+  "folderDetailSortManualLabel": "Manual order",
+  "folderDetailSortNameLabel": "Name",
+  "folderDetailSortNewestLabel": "Newest",
+  "folderDetailSortLastStudiedLabel": "Last studied",
   "folderDetailMostDueLabel": "Most due",
   "folderDetailEmptyFolderChipLabel": "Empty folder",
   "folderDetailEmptyTitle": "What goes in here?",

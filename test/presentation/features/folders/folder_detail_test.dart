@@ -7,6 +7,7 @@ import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
@@ -85,6 +86,7 @@ Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
           detail: detail,
           isSearching: isSearching,
           searchTerm: 'grammar',
+          sort: ContentSortMode.manual,
           onStartStudy: () {},
           onNewSubfolder: () {},
           onNewDeck: () {},
@@ -109,6 +111,35 @@ Widget _wrapScreen(Stream<FolderDetail> stream) => ProviderScope(
     home: const FolderDetailScreen(folderId: 'f1'),
   ),
 );
+
+Widget _wrapScreenWithSortLauncher(Stream<FolderDetail> stream) =>
+    ProviderScope(
+      overrides: [
+        folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
+      ],
+      child: MaterialApp(
+        locale: const Locale('en'),
+        theme: AppTheme.light(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Stack(
+          children: <Widget>[
+            const FolderDetailScreen(folderId: 'f1'),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) =>
+                    TextButton(
+                      onPressed: () =>
+                          showFolderDetailSortSheet(context, ref, 'f1'),
+                      child: const Text('open sort sheet'),
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
 
 Widget _wrapDeckTile(FolderDeckTile tile) => MaterialApp(
   locale: const Locale('en'),
@@ -135,12 +166,13 @@ void main() {
       );
 
       expect(find.byType(FolderDecksSummary), findsOneWidget);
-      expect(find.text('Folder mastery'), findsOneWidget);
+      expect(find.text('Mastery unavailable'), findsOneWidget);
       expect(find.text('2 decks · 120 cards'), findsOneWidget);
       // Folder-scope total (4 + 4) is distinct from each deck's "4 due" badge.
-      expect(find.text('8 due · 6 new'), findsOneWidget);
+      expect(find.text('8 due'), findsOneWidget);
+      expect(find.textContaining('new'), findsNothing);
       expect(find.text('4 due'), findsNWidgets(2));
-      expect(find.text('Start study · 8 due'), findsOneWidget);
+      expect(find.text('Start study'), findsOneWidget);
       expect(find.byType(FolderDeckTile), findsNWidgets(2));
     });
 
@@ -179,7 +211,6 @@ void main() {
       expect(find.text('cards'), findsOneWidget);
       expect(find.text('due total'), findsOneWidget);
       expect(find.byIcon(Icons.search), findsOneWidget);
-      expect(find.text('Most due'), findsOneWidget);
       // 2 subfolders, 198 cards, 12 due.
       expect(find.text('198'), findsOneWidget);
       expect(find.text('12'), findsOneWidget);
@@ -290,6 +321,79 @@ void main() {
       expect(find.text('Import flashcards'), findsOneWidget);
       expect(find.text('Reorder cards'), findsOneWidget);
       expect(find.text('Delete deck'), findsOneWidget);
+    });
+  });
+
+  group('FolderDetailScreen — Search / Sort (6/8)', () {
+    Future<void> pumpLoaded(WidgetTester tester) async {
+      await tester.pumpWidget(
+        _wrapScreenWithSortLauncher(
+          Stream<FolderDetail>.value(
+            _detail(
+              decks: <DeckWithCount>[
+                _deck('Vocab 1', cardCount: 40, dueCount: 4),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('search icon opens a controlled search sheet and updates the '
+        'toolbar state', (WidgetTester tester) async {
+      await pumpLoaded(tester);
+
+      final BuildContext scaffoldContext = tester.element(
+        find.byType(Scaffold),
+      );
+      final AppLocalizations l10n = AppLocalizations.of(scaffoldContext);
+      final ProviderContainer container = ProviderScope.containerOf(
+        scaffoldContext,
+      );
+
+      await tester.tap(find.byTooltip(l10n.folderDetailSearchHint).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.folderDetailSearchSheetTitle), findsOneWidget);
+      expect(find.byType(TextField), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'grammar');
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(folderDetailToolbarProvider('f1')).searchTerm,
+        'grammar',
+      );
+
+      await tester.tap(find.byTooltip(l10n.librarySearchClearTooltip));
+      await tester.pumpAndSettle();
+
+      expect(container.read(folderDetailToolbarProvider('f1')).searchTerm, '');
+    });
+
+    testWidgets('sort pill opens a controlled sort sheet and updates the '
+        'toolbar state', (WidgetTester tester) async {
+      await pumpLoaded(tester);
+
+      final BuildContext scaffoldContext = tester.element(
+        find.byType(Scaffold),
+      );
+      final ProviderContainer container = ProviderScope.containerOf(
+        scaffoldContext,
+      );
+
+      await tester.tap(find.text('open sort sheet'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Name'), findsOneWidget);
+      await tester.tap(find.text('Name').last);
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(folderDetailToolbarProvider('f1')).sort,
+        ContentSortMode.name,
+      );
     });
   });
 

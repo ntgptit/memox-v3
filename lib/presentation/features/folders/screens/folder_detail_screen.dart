@@ -4,25 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
+import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_actions.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
 import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
+import 'package:memox/presentation/shared/dialogs/mx_bottom_sheet.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
+import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_list_tile.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
 /// Folder Detail — browse a folder's children (subfolders OR decks), with
 /// breadcrumb and a mode-constrained create FAB. The canonical mock also shows
@@ -40,6 +48,9 @@ class FolderDetailScreen extends ConsumerWidget {
       folderDetailQueryProvider(folderId),
     );
     final FolderDetail? detail = query.asData?.value;
+    final FolderDetailToolbarState toolbar = ref.watch(
+      folderDetailToolbarProvider(folderId),
+    );
 
     return MxScaffold(
       appBar: MxAppBar(
@@ -55,7 +66,12 @@ class FolderDetailScreen extends ConsumerWidget {
         ],
       ),
       floatingActionButton: _buildFab(context, ref, detail),
-      body: _FolderDetailView(folderId: folderId),
+      body: _FolderDetailView(
+        folderId: folderId,
+        sort: toolbar.sort,
+        onSearchTap: () => showFolderDetailSearchSheet(context, folderId),
+        onSortTap: () => showFolderDetailSortSheet(context, ref, folderId),
+      ),
     );
   }
 
@@ -81,9 +97,17 @@ class FolderDetailScreen extends ConsumerWidget {
 }
 
 class _FolderDetailView extends ConsumerWidget {
-  const _FolderDetailView({required this.folderId});
+  const _FolderDetailView({
+    required this.folderId,
+    required this.sort,
+    required this.onSearchTap,
+    required this.onSortTap,
+  });
 
   final String folderId;
+  final ContentSortMode sort;
+  final VoidCallback onSearchTap;
+  final VoidCallback onSortTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,6 +137,7 @@ class _FolderDetailView extends ConsumerWidget {
               detail: detail,
               isSearching: toolbar.isSearching,
               searchTerm: toolbar.searchTerm,
+              sort: sort,
               onStartStudy: null,
               onNewSubfolder: () =>
                   createSubfolderDialog(context, ref, folderId),
@@ -124,8 +149,8 @@ class _FolderDetailView extends ConsumerWidget {
                   showFolderDetailSubfolderActions(context, ref, item),
               onShowDeckActions: (DeckWithCount item) =>
                   showFolderDetailDeckActions(context, ref, item),
-              onSearchTap: () {},
-              onSortTap: () {},
+              onSearchTap: onSearchTap,
+              onSortTap: onSortTap,
             ),
           ),
         ),
@@ -243,4 +268,150 @@ Future<void> createDeckDialog(
     ),
     (_) {},
   );
+}
+
+Future<void> showFolderDetailSearchSheet(
+  BuildContext context,
+  String folderId,
+) async {
+  await showMxBottomSheet<void>(
+    context,
+    builder: (BuildContext context) =>
+        _FolderDetailSearchSheet(folderId: folderId),
+  );
+}
+
+Future<void> showFolderDetailSortSheet(
+  BuildContext context,
+  WidgetRef ref,
+  String folderId,
+) async {
+  final ContentSortMode currentSort = ref
+      .read(folderDetailToolbarProvider(folderId))
+      .sort;
+  await showMxBottomSheet<void>(
+    context,
+    builder: (BuildContext context) => _FolderDetailSortSheet(
+      currentSort: currentSort,
+      onSelected: (ContentSortMode sort) => ref
+          .read(folderDetailToolbarProvider(folderId).notifier)
+          .setSort(sort),
+    ),
+  );
+}
+
+class _FolderDetailSearchSheet extends HookConsumerWidget {
+  const _FolderDetailSearchSheet({required this.folderId});
+
+  final String folderId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    final FolderDetailToolbarState toolbar = ref.watch(
+      folderDetailToolbarProvider(folderId),
+    );
+    final search = useMxSearchController(
+      externalText: toolbar.searchTerm,
+      clearWhenExternalTextEmpty: true,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        SpacingTokens.screenPadding,
+        SpacingTokens.sm,
+        SpacingTokens.screenPadding,
+        SpacingTokens.screenPadding,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          MxSectionHeader(label: l10n.folderDetailSearchSheetTitle),
+          const SizedBox(height: SpacingTokens.md),
+          MxSearchField(
+            controller: search.controller,
+            hintText: l10n.folderDetailSearchHint,
+            clearTooltip: l10n.librarySearchClearTooltip,
+            autofocus: true,
+            onChanged: (String value) => ref
+                .read(folderDetailToolbarProvider(folderId).notifier)
+                .setSearch(value),
+            onClear: () => ref
+                .read(folderDetailToolbarProvider(folderId).notifier)
+                .clearSearch(),
+          ),
+          const SizedBox(height: SpacingTokens.lg),
+          MxSecondaryButton(
+            label: l10n.commonClose,
+            onPressed: () => Navigator.of(context).pop(),
+            fullWidth: true,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FolderDetailSortSheet extends StatelessWidget {
+  const _FolderDetailSortSheet({
+    required this.currentSort,
+    required this.onSelected,
+  });
+
+  final ContentSortMode currentSort;
+  final ValueChanged<ContentSortMode> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    final List<({ContentSortMode mode, String label})>
+    options = <({ContentSortMode mode, String label})>[
+      (mode: ContentSortMode.manual, label: l10n.folderDetailSortManualLabel),
+      (mode: ContentSortMode.name, label: l10n.folderDetailSortNameLabel),
+      (mode: ContentSortMode.newest, label: l10n.folderDetailSortNewestLabel),
+      (
+        mode: ContentSortMode.lastStudied,
+        label: l10n.folderDetailSortLastStudiedLabel,
+      ),
+    ];
+
+    return SafeArea(
+      top: false,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              SpacingTokens.screenPadding,
+              SpacingTokens.sm,
+              SpacingTokens.screenPadding,
+              SpacingTokens.sm,
+            ),
+            child: MxSectionHeader(label: l10n.folderDetailSortSheetTitle),
+          ),
+          for (final ({ContentSortMode mode, String label}) option in options)
+            MxListTile(
+              title: option.label,
+              leading: Icon(
+                Icons.sort_rounded,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              trailing: currentSort == option.mode
+                  ? Icon(
+                      Icons.check_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
+              onTap: () {
+                onSelected(option.mode);
+                Navigator.of(context).pop();
+              },
+            ),
+          const SizedBox(height: SpacingTokens.md),
+        ],
+      ),
+    );
+  }
 }

@@ -767,16 +767,14 @@
   },
   "libraryOverflowTooltip": "Tùy chọn thư mục",
   "folderDetailSearchHint": "Tìm trong thư mục này",
-  "folderDetailMasteryLabel": "Độ thành thạo của thư mục",
+  "folderDetailSearchSheetTitle": "Tìm trong thư mục này",
+  "folderDetailMasteryUnavailableLabel": "Chưa có độ thành thạo",
   "folderDetailStartStudyLabel": "Bắt đầu học",
-  "folderDetailStartStudyWithDueLabel": "Bắt đầu học · {count} đến hạn",
-  "@folderDetailStartStudyWithDueLabel": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "folderDetailSortSheetTitle": "Sắp xếp thư mục",
+  "folderDetailSortManualLabel": "Thứ tự thủ công",
+  "folderDetailSortNameLabel": "Tên",
+  "folderDetailSortNewestLabel": "Mới nhất",
+  "folderDetailSortLastStudiedLabel": "Lần học gần nhất",
   "folderDetailMostDueLabel": "Đến hạn nhiều nhất",
   "folderDetailEmptyFolderChipLabel": "Thư mục trống",
   "folderDetailEmptyTitle": "Thư mục này chứa gì?",

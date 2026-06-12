@@ -2468,11 +2468,17 @@ abstract class AppLocalizations {
   /// **'Search this folder'**
   String get folderDetailSearchHint;
 
-  /// No description provided for @folderDetailMasteryLabel.
+  /// No description provided for @folderDetailSearchSheetTitle.
   ///
   /// In en, this message translates to:
-  /// **'Folder mastery'**
-  String get folderDetailMasteryLabel;
+  /// **'Search this folder'**
+  String get folderDetailSearchSheetTitle;
+
+  /// No description provided for @folderDetailMasteryUnavailableLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mastery unavailable'**
+  String get folderDetailMasteryUnavailableLabel;
 
   /// No description provided for @folderDetailStartStudyLabel.
   ///
@@ -2480,11 +2486,35 @@ abstract class AppLocalizations {
   /// **'Start study'**
   String get folderDetailStartStudyLabel;
 
-  /// No description provided for @folderDetailStartStudyWithDueLabel.
+  /// No description provided for @folderDetailSortSheetTitle.
   ///
   /// In en, this message translates to:
-  /// **'Start study · {count} due'**
-  String folderDetailStartStudyWithDueLabel(int count);
+  /// **'Sort folder'**
+  String get folderDetailSortSheetTitle;
+
+  /// No description provided for @folderDetailSortManualLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual order'**
+  String get folderDetailSortManualLabel;
+
+  /// No description provided for @folderDetailSortNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get folderDetailSortNameLabel;
+
+  /// No description provided for @folderDetailSortNewestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get folderDetailSortNewestLabel;
+
+  /// No description provided for @folderDetailSortLastStudiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last studied'**
+  String get folderDetailSortLastStudiedLabel;
 
   /// No description provided for @folderDetailMostDueLabel.
   ///

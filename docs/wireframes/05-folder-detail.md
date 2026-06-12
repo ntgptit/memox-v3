@@ -16,10 +16,10 @@ This screen is partially Current. The folder **browser** (subfolders / decks /
 unlocked modes, breadcrumb, search/sort affordances, true-empty vs
 search-no-results, mode-constrained create FAB, folder-scope summary, and the
 overflow rename/move/delete actions) is Current. The **study layer** (mastery
-source of truth, due-based study routing, resume banner, "{n} new") is **not
-built** and is Future here. Per-deck last-studied metadata and compact progress
-bars are Current because they are derived from the existing deck read model,
-not the study UI.
+source of truth, due-based study routing, resume banner) is **not built** and
+is Future here. Per-deck last-studied metadata and compact progress bars are
+Current because they are derived from the existing deck read model, not the
+study UI.
 
 > Drift correction (2026-06-06): earlier revisions of this file described a
 > `FolderHeroCard` (`folder_hero_card.dart`), `FolderSectionTitle`
@@ -38,18 +38,20 @@ not the study UI.
   mode renders the dual-CTA mode-choice empty state (`FolderUnlockedEmpty`).
 - **Folder-scope summary is Current** (`folder_detail_summary.dart`), shown only
   when the folder has children (hidden for the empty-locked and unlocked states):
-    - decks mode → `FolderDecksSummary`: a card with the mastery shell, the
-      `{deckCount} decks · {cardCount} cards` line, the due/new line, and a
-      disabled Start study CTA shell. Totals are summed from the loaded decks
-      (`DeckWithCount.cardCount` / `dueCount`) — no placeholder.
+    - decks mode → `FolderDecksSummary`: a card with a non-numeric mastery
+      shell, the `{deckCount} decks · {cardCount} cards` line, the real due
+      line, and a disabled Start study CTA shell. Totals are summed from the
+      loaded decks (`DeckWithCount.cardCount` / `dueCount`) — no placeholder
+      mastery percentage or new count.
     - subfolders mode → `FolderSubfoldersSummary`: a three-stat strip
       (subfolders · cards · due total) summed from the direct children
       (`FolderWithCount.cardCount` / `dueCount`).
 - Section-header overline (`{n} subfolders` / `{n} decks`) via `MxSectionHeader`
   above the children list.
-- Search affordance and sort pill are visible in the header. True-empty vs
-  search no-results is Current (true empty = no unfiltered direct children;
-  no-results = active search hides existing children).
+- Search affordance and sort pill are visible in the header and open controlled
+  sheets. True-empty vs search no-results is Current (true empty = no
+  unfiltered direct children; no-results = active search hides existing
+  children).
 - Per-folder sort state exists on the toolbar (`ContentSortMode`).
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
   Current.
@@ -210,7 +212,7 @@ overflow actions (rename / move / delete). Folder-level study routing and the Re
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | App bar back                    | Returns to parent folder or Library.                                                                                                                                                                                                                                                                                                                                                                             |
 | Breadcrumb                      | Full path from Library to current. Tap any segment to jump.                                                                                                                                                                                                                                                                                                                                                      |
-| Folder-scope summary            | **Current.** `FolderDecksSummary` (mastery shell + decks · cards + due/new + Start study shell) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; the mastery value and study CTA remain visual shells. |
+| Folder-scope summary            | **Current.** `FolderDecksSummary` (non-numeric mastery shell + decks · cards + due + disabled Start study) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; no fake mastery percentage or new-count placeholder. |
 | Resume banner                   | **Future.** Study layer not built. No resumable-session read for this scope.                                                                                                                                                                                                                                                                                                                                    |
 | Study folder CTA                | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Today CTA                       | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
@@ -218,7 +220,7 @@ overflow actions (rename / move / delete). Folder-level study routing and the Re
 | Deck row (decks mode)           | Icon + name + optional "{m} due" badge + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
 | FAB                             | **Current.** Plus button. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                                                           |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
-| Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`); the controls are visual shells only. |
+| Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Search opens a controlled sheet; sort opens a controlled picker. Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`). |
 
 ## States
 

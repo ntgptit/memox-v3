@@ -10,15 +10,15 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
-import 'package:memox/presentation/shared/widgets/status/mx_mastery_ring.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
 /// Folder-scope summary cards above the children list.
 ///
 /// The canonical Folder Detail mock shows a mastery summary card in the decks
-/// state, plus the direct-children stat strip in subfolders state. The mastery
-/// ring, "new" count, and Start-study CTA are visual shells here because the
-/// read model does not yet expose folder-scoped study data.
+/// state, plus the direct-children stat strip in subfolders state. The current
+/// read model does not expose folder-scoped study data, so this summary uses a
+/// non-numeric "mastery unavailable" shell and omits any fake new-count value.
 class FolderDecksSummary extends StatelessWidget {
   const FolderDecksSummary({
     required this.decks,
@@ -28,9 +28,6 @@ class FolderDecksSummary extends StatelessWidget {
 
   final List<DeckWithCount> decks;
   final VoidCallback? onStartStudy;
-
-  static const double _masteryShell = 0.62;
-  static const int _newCountShell = 6;
 
   int get _cardTotal =>
       decks.fold<int>(0, (int sum, DeckWithCount d) => sum + d.cardCount);
@@ -45,9 +42,8 @@ class FolderDecksSummary extends StatelessWidget {
     final String countsLine =
         '${l10n.libraryFolderDecksCount(decks.length)} · '
         '${l10n.libraryFolderCardsCount(_cardTotal)}';
-    final String dueAndNewLine = dueTotal > 0
-        ? '${l10n.libraryFolderDueCount(dueTotal)} · '
-              '${l10n.libraryFolderNewCount(_newCountShell)}'
+    final String dueLine = dueTotal > 0
+        ? l10n.libraryFolderDueCount(dueTotal)
         : l10n.folderSummaryAllCaughtUp;
 
     return MxCard(
@@ -57,7 +53,10 @@ class FolderDecksSummary extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const MxMasteryRing(pct: _masteryShell, size: 58),
+              const MxIconTile(
+                icon: Icons.insights_outlined,
+                size: SizeTokens.avatar,
+              ),
               const SizedBox(width: SpacingTokens.md),
               Expanded(
                 child: Column(
@@ -65,9 +64,8 @@ class FolderDecksSummary extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     MxText(
-                      l10n.folderDetailMasteryLabel,
+                      l10n.folderDetailMasteryUnavailableLabel,
                       role: MxTextRole.labelMedium,
-                      fontWeight: TypographyTokens.bold,
                       color: context.colorScheme.onSurfaceVariant,
                     ),
                     const SizedBox(height: SpacingTokens.xxs),
@@ -77,27 +75,10 @@ class FolderDecksSummary extends StatelessWidget {
                       fontWeight: TypographyTokens.bold,
                     ),
                     const SizedBox(height: SpacingTokens.xxs),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: SpacingTokens.tight,
-                          height: SpacingTokens.tight,
-                          decoration: BoxDecoration(
-                            color: context.colorScheme.primary,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: SpacingTokens.xs),
-                        Expanded(
-                          child: MxText(
-                            dueAndNewLine,
-                            role: MxTextRole.labelMedium,
-                            color: context.colorScheme.onSurfaceVariant,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+                    MxText(
+                      dueLine,
+                      role: MxTextRole.labelMedium,
+                      color: context.colorScheme.onSurfaceVariant,
                     ),
                   ],
                 ),
@@ -107,9 +88,7 @@ class FolderDecksSummary extends StatelessWidget {
           const SizedBox(height: SpacingTokens.md),
           MxActionButton(
             intent: MxActionIntent.studyPrimary,
-            label: dueTotal > 0
-                ? l10n.folderDetailStartStudyWithDueLabel(dueTotal)
-                : l10n.folderDetailStartStudyLabel,
+            label: l10n.folderDetailStartStudyLabel,
             icon: Icons.play_arrow_outlined,
             fullWidth: true,
             onPressed: onStartStudy,

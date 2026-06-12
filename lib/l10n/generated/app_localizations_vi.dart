@@ -1464,15 +1464,28 @@ class AppLocalizationsVi extends AppLocalizations {
   String get folderDetailSearchHint => 'Tìm trong thư mục này';
 
   @override
-  String get folderDetailMasteryLabel => 'Độ thành thạo của thư mục';
+  String get folderDetailSearchSheetTitle => 'Tìm trong thư mục này';
+
+  @override
+  String get folderDetailMasteryUnavailableLabel => 'Chưa có độ thành thạo';
 
   @override
   String get folderDetailStartStudyLabel => 'Bắt đầu học';
 
   @override
-  String folderDetailStartStudyWithDueLabel(int count) {
-    return 'Bắt đầu học · $count đến hạn';
-  }
+  String get folderDetailSortSheetTitle => 'Sắp xếp thư mục';
+
+  @override
+  String get folderDetailSortManualLabel => 'Thứ tự thủ công';
+
+  @override
+  String get folderDetailSortNameLabel => 'Tên';
+
+  @override
+  String get folderDetailSortNewestLabel => 'Mới nhất';
+
+  @override
+  String get folderDetailSortLastStudiedLabel => 'Lần học gần nhất';
 
   @override
   String get folderDetailMostDueLabel => 'Đến hạn nhiều nhất';
