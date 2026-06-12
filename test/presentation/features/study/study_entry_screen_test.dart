@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/learning_settings_providers.dart';
 import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
@@ -12,8 +13,10 @@ import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
+import 'package:memox/domain/models/learning_settings.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/repositories/learning_settings_repository.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -177,6 +180,18 @@ class _FakeStudyRepository implements StudyRepository {
   }
 }
 
+class _FakeLearningSettingsRepository implements LearningSettingsRepository {
+  const _FakeLearningSettingsRepository();
+
+  @override
+  Future<Result<LearningSettings>> load() async =>
+      const Result<LearningSettings>.ok(LearningSettings.defaults);
+
+  @override
+  Future<Result<void>> save(LearningSettings settings) async =>
+      const Result<void>.ok(null);
+}
+
 Widget _appShell(
   Widget child, {
   List<Override> overrides = const <Override>[],
@@ -214,6 +229,13 @@ GoRouter _studyRouter(String initialLocation) {
     routes: studyRoutes(rootNavigatorKey),
   );
 }
+
+List<Override> _studyEntryOverrides(StudyRepository repository) => <Override>[
+  learningSettingsRepositoryProvider.overrideWithValue(
+    const _FakeLearningSettingsRepository(),
+  ),
+  studyRepositoryProvider.overrideWithValue(repository),
+];
 
 GoRouter _appRouter(String initialLocation) {
   final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -297,9 +319,7 @@ void main() {
             entryType: 'deck',
             entryRefId: 'deck-1',
           ),
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
+          overrides: _studyEntryOverrides(repository),
         ),
       );
       await tester.pumpAndSettle();
@@ -330,9 +350,7 @@ void main() {
             entryType: 'deck',
             entryRefId: 'deck-1',
           ),
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
+          overrides: _studyEntryOverrides(repository),
         ),
       );
       await tester.pumpAndSettle();
@@ -376,12 +394,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
@@ -417,12 +430,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
@@ -462,9 +470,7 @@ void main() {
     await tester.pumpWidget(
       _appShell(
         const StudyEntryScreen.scoped(entryType: 'deck', entryRefId: 'deck-1'),
-        overrides: <Override>[
-          studyRepositoryProvider.overrideWithValue(repository),
-        ],
+        overrides: _studyEntryOverrides(repository),
       ),
     );
     await tester.pumpAndSettle();
@@ -535,9 +541,7 @@ void main() {
             entryType: 'deck',
             entryRefId: 'deck-1',
           ),
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
+          overrides: _studyEntryOverrides(repository),
         ),
       );
       await tester.pumpAndSettle();
@@ -590,12 +594,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
@@ -657,12 +656,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
@@ -690,12 +684,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
@@ -726,9 +715,7 @@ void main() {
       await tester.pumpWidget(
         _appShell(
           const StudyEntryScreen.today(),
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
+          overrides: _studyEntryOverrides(repository),
         ),
       );
       await tester.pumpAndSettle();
@@ -756,12 +743,7 @@ void main() {
       final GoRouter router = _studyRouter(_studySessionLocation('session-1'));
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
@@ -785,12 +767,7 @@ void main() {
       final GoRouter router = _studyRouter(_studyResultLocation('session-1'));
 
       await tester.pumpWidget(
-        _routerShell(
-          router,
-          overrides: <Override>[
-            studyRepositoryProvider.overrideWithValue(repository),
-          ],
-        ),
+        _routerShell(router, overrides: _studyEntryOverrides(repository)),
       );
       await tester.pumpAndSettle();
 
