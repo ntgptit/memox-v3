@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:memox/app/di/database_providers.dart';
+import 'package:memox/app/di/learning_settings_providers.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
@@ -30,11 +31,17 @@ StudyRepository studyRepository(Ref ref) =>
 
 @Riverpod(keepAlive: true)
 StartStudySessionUseCase startStudySessionUseCase(Ref ref) =>
-    StartStudySessionUseCase(ref.watch(studyRepositoryProvider));
+    StartStudySessionUseCase(
+      ref.watch(studyRepositoryProvider),
+      ref.watch(learningSettingsRepositoryProvider),
+    );
 
 @Riverpod(keepAlive: true)
 RestartStudySessionUseCase restartStudySessionUseCase(Ref ref) =>
-    RestartStudySessionUseCase(ref.watch(studyRepositoryProvider));
+    RestartStudySessionUseCase(
+      ref.watch(studyRepositoryProvider),
+      ref.watch(learningSettingsRepositoryProvider),
+    );
 
 @Riverpod(keepAlive: true)
 LoadStudySessionReviewUseCase loadStudySessionReviewUseCase(Ref ref) =>

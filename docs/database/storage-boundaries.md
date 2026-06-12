@@ -121,11 +121,18 @@ When in doubt about whether to use Stream or Future: use Stream.
 
 **Business specs touching non-Drift storage:**
 
-- `docs/business/engagement/dashboard-engagement.md` → daily goal, streak, reminder time in SharedPreferences
+- `docs/business/engagement/dashboard-engagement.md` → learning settings, streak, reminder time in SharedPreferences
 - `docs/business/tts/tts-settings.md` → per-language TTS settings in SharedPreferences
 - `docs/business/search/global-search.md` → recent searches in SharedPreferences
 - `docs/business/account-sync/account-sync.md` → Drive manifest (remote), account-scoped DB file path
 - `docs/business/flashcard/flashcard-management.md` → "Save and add another" toggle (session memory, NOT persisted)
+
+**Settings stored outside Drift**
+
+| Setting | Store | Key | Default | Notes |
+| --- | --- | --- | --- | --- |
+| Daily new-card limit | SharedPreferences (`lib/data/datasources/local/preferences/learning_settings_store.dart`) | `learning.dailyNewLimit` | `20` | Caps new-card eligibility in study entry. |
+| Goal disabled since | SharedPreferences (`lib/data/datasources/local/preferences/learning_settings_store.dart`) | `learning.goalDisabledSince` | `null` | Local `YYYY-MM-DD`; cleared when the goal is enabled. |
 
 **Decision table:**
 

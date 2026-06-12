@@ -33,6 +33,7 @@ class _FakeStudyRepository implements StudyRepository {
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
     required StudyScope scope,
+    int dailyNewLimit = 20,
     StudyMode? mode,
   }) async {
     throw UnimplementedError();
@@ -69,6 +70,7 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<StudySession>> restartStudySession({
     required SessionId previousSessionId,
     required StudyScope scope,
+    int dailyNewLimit = 20,
     StudyMode? mode,
   }) async {
     throw UnimplementedError();

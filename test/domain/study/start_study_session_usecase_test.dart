@@ -2,8 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
+import 'package:memox/domain/models/learning_settings.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/repositories/learning_settings_repository.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/study/usecases/study_usecases.dart';
@@ -20,14 +22,17 @@ class _FakeStudyRepository implements StudyRepository {
   Result<StudyEntryStartResult> result;
   StudyScope? lastScope;
   StudyMode? lastMode;
+  int? lastDailyNewLimit;
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
     required StudyScope scope,
+    int dailyNewLimit = LearningSettings.defaultDailyNewLimit,
     StudyMode? mode,
   }) async {
     lastScope = scope;
     lastMode = mode;
+    lastDailyNewLimit = dailyNewLimit;
     return result;
   }
 
@@ -35,6 +40,7 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<StudySession>> restartStudySession({
     required SessionId previousSessionId,
     required StudyScope scope,
+    int dailyNewLimit = LearningSettings.defaultDailyNewLimit,
     StudyMode? mode,
   }) async {
     throw UnimplementedError();
@@ -116,6 +122,20 @@ class _FakeStudyRepository implements StudyRepository {
   }
 }
 
+class _FakeLearningSettingsRepository implements LearningSettingsRepository {
+  _FakeLearningSettingsRepository(this.result);
+
+  Result<LearningSettings> result;
+
+  @override
+  Future<Result<LearningSettings>> load() async => result;
+
+  @override
+  Future<Result<void>> save(LearningSettings settings) async {
+    throw UnimplementedError();
+  }
+}
+
 void main() {
   test('forwards scope and mode to the repository', () async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
@@ -127,8 +147,15 @@ void main() {
         ),
       ),
     );
+    final _FakeLearningSettingsRepository settingsRepository =
+        _FakeLearningSettingsRepository(
+          const Result<LearningSettings>.ok(
+            LearningSettings(dailyNewLimit: 35, goalDisabledSince: null),
+          ),
+        );
     final StartStudySessionUseCase useCase = StartStudySessionUseCase(
       repository,
+      settingsRepository,
     );
     const StudyScope scope = StudyScope(
       entryType: EntryType.deck,
@@ -144,6 +171,7 @@ void main() {
     expect(result, isA<Ok<StudyEntryStartResult>>());
     expect(repository.lastScope, scope);
     expect(repository.lastMode, StudyMode.review);
+    expect(repository.lastDailyNewLimit, 35);
   });
 
   test('returns an empty outcome unchanged', () async {
@@ -156,8 +184,13 @@ void main() {
         ),
       ),
     );
+    final _FakeLearningSettingsRepository settingsRepository =
+        _FakeLearningSettingsRepository(
+          const Result<LearningSettings>.ok(LearningSettings.defaults),
+        );
     final StartStudySessionUseCase useCase = StartStudySessionUseCase(
       repository,
+      settingsRepository,
     );
 
     final Result<StudyEntryStartResult> result = await useCase(

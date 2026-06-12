@@ -363,9 +363,11 @@ Future<_ScopeSnapshot> _loadScopeSnapshot(
 List<FlashcardId> _eligibleFlashcardIds({
   required StudyScope scope,
   required _ScopeSnapshot snapshot,
+  required int dailyNewLimit,
 }) => _eligibleCards(
   scope: scope,
   snapshot: snapshot,
+  dailyNewLimit: dailyNewLimit,
 ).take(maxSessionItems).map((card) => card.flashcardId).toList(growable: false);
 
 List<FlashcardId> _capSessionFlashcardIds(List<FlashcardId> flashcardIds) {
@@ -412,6 +414,7 @@ Future<Set<FlashcardId>> _loadConsumedNewFlashcardIdsToday(
 StudyEntryEmptyState? _resolveEmptyState({
   required StudyScope scope,
   required _ScopeSnapshot snapshot,
+  required int dailyNewLimit,
 }) {
   final DateTime now = snapshot.now;
   final List<_ScopeCard> cards = snapshot.cards;
@@ -442,6 +445,7 @@ StudyEntryEmptyState? _resolveEmptyState({
   final List<_ScopeCard> eligibleCards = _eligibleCards(
     scope: scope,
     snapshot: snapshot,
+    dailyNewLimit: dailyNewLimit,
   );
   if (eligibleCards.isNotEmpty) {
     return null;
@@ -468,6 +472,7 @@ StudyEntryEmptyState? _resolveEmptyState({
 List<_ScopeCard> _eligibleCards({
   required StudyScope scope,
   required _ScopeSnapshot snapshot,
+  required int dailyNewLimit,
 }) {
   final DateTime now = snapshot.now;
   final Set<FlashcardId> consumedIds = snapshot.consumedNewFlashcardIdsToday;

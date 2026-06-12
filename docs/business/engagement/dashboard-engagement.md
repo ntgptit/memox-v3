@@ -39,15 +39,13 @@ Scope: personal-use app for now. Decisions favor simplicity and non-intrusivenes
 
 ### Storage
 
-Setting lives in user settings (not Drift entity table), SharedPreferences-backed. (No settings
-store exists in code yet — `lib/data/settings/study_settings_store.dart` is the target placement
-when this Future feature is promoted; the `shared_preferences` dependency itself requires
-approval.)
+Setting lives in user settings (not Drift entity table), SharedPreferences-backed.
+Implementation now lives at `lib/data/datasources/local/preferences/learning_settings_store.dart`.
 
 | Field | Type | Default |
 | --- | --- | --- |
-| `dailyGoal` | int | 20 |
-| `goalEnabled` | bool | `true` |
+| `dailyNewLimit` | int | 20 |
+| `goalDisabledSince` | string? | `null` |
 
 ### Range
 
@@ -292,7 +290,7 @@ All queries SHOULD be cheap (indexed on `attempted_at`, `due_at`, `status`). If 
 
 **Schema:**
 
-- SharedPreferences keys (see `docs/database/storage-boundaries.md`): `goalEnabled`, `dailyGoal`, `streakEnabled`, `reminderEnabled`, `reminderTime`, `lastGoalMetDate`, `currentStreak`, `longestStreak`, `firstLaunchCompletedAt`
+- SharedPreferences keys (see `docs/database/storage-boundaries.md`): `learning.dailyNewLimit`, `learning.goalDisabledSince`, `streakEnabled`, `reminderEnabled`, `reminderTime`, `lastGoalMetDate`, `currentStreak`, `longestStreak`, `firstLaunchCompletedAt`
 
 **Decision table:**
 

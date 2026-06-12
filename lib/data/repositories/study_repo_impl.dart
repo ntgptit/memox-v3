@@ -10,6 +10,7 @@ import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/data/repositories/study_repo_record_answer.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
+import 'package:memox/domain/models/learning_settings.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
@@ -36,6 +37,7 @@ class StudyRepositoryImpl implements StudyRepository {
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
     required StudyScope scope,
+    int dailyNewLimit = LearningSettings.defaultDailyNewLimit,
     StudyMode? mode,
   }) async {
     final Result<StudySession?> resumable = await findResumableSession(
@@ -61,6 +63,7 @@ class StudyRepositoryImpl implements StudyRepository {
       final StudyEntryEmptyState? emptyState = _resolveEmptyState(
         scope: scope,
         snapshot: snapshot,
+        dailyNewLimit: dailyNewLimit,
       );
       if (emptyState != null) {
         return Result<StudyEntryStartResult>.ok(
@@ -71,6 +74,7 @@ class StudyRepositoryImpl implements StudyRepository {
       final List<FlashcardId> eligibleIds = _eligibleFlashcardIds(
         scope: scope,
         snapshot: snapshot,
+        dailyNewLimit: dailyNewLimit,
       );
       final Result<StudySession> created = await createSession(
         scope: scope,
@@ -97,6 +101,7 @@ class StudyRepositoryImpl implements StudyRepository {
   Future<Result<StudySession>> restartStudySession({
     required SessionId previousSessionId,
     required StudyScope scope,
+    int dailyNewLimit = LearningSettings.defaultDailyNewLimit,
     StudyMode? mode,
   }) async {
     try {
@@ -134,6 +139,7 @@ class StudyRepositoryImpl implements StudyRepository {
         final List<FlashcardId> eligibleIds = _eligibleFlashcardIds(
           scope: scope,
           snapshot: snapshot,
+          dailyNewLimit: dailyNewLimit,
         );
         if (eligibleIds.isEmpty) {
           throw const _RuleViolation(

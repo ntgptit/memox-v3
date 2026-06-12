@@ -3,8 +3,10 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
+import 'package:memox/domain/models/learning_settings.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/repositories/learning_settings_repository.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/study/usecases/study_usecases.dart';
@@ -23,22 +25,26 @@ class _FakeStudyRepository implements StudyRepository {
   SessionId? lastPreviousSessionId;
   StudyScope? lastScope;
   StudyMode? lastMode;
+  int? lastDailyNewLimit;
 
   @override
   Future<Result<StudySession>> restartStudySession({
     required SessionId previousSessionId,
     required StudyScope scope,
+    int dailyNewLimit = LearningSettings.defaultDailyNewLimit,
     StudyMode? mode,
   }) async {
     lastPreviousSessionId = previousSessionId;
     lastScope = scope;
     lastMode = mode;
+    lastDailyNewLimit = dailyNewLimit;
     return result;
   }
 
   @override
   Future<Result<StudyEntryStartResult>> startStudySession({
     required StudyScope scope,
+    int dailyNewLimit = LearningSettings.defaultDailyNewLimit,
     StudyMode? mode,
   }) async {
     throw UnimplementedError();
@@ -120,6 +126,20 @@ class _FakeStudyRepository implements StudyRepository {
   }
 }
 
+class _FakeLearningSettingsRepository implements LearningSettingsRepository {
+  _FakeLearningSettingsRepository(this.result);
+
+  Result<LearningSettings> result;
+
+  @override
+  Future<Result<LearningSettings>> load() async => result;
+
+  @override
+  Future<Result<void>> save(LearningSettings settings) async {
+    throw UnimplementedError();
+  }
+}
+
 void main() {
   test(
     'forwards previous session id, scope, and mode to the repository',
@@ -137,8 +157,15 @@ void main() {
           ),
         ),
       );
+      final _FakeLearningSettingsRepository settingsRepository =
+          _FakeLearningSettingsRepository(
+            const Result<LearningSettings>.ok(
+              LearningSettings(dailyNewLimit: 30, goalDisabledSince: null),
+            ),
+          );
       final RestartStudySessionUseCase useCase = RestartStudySessionUseCase(
         repository,
+        settingsRepository,
       );
       const StudyScope scope = StudyScope(
         entryType: EntryType.deck,
@@ -156,6 +183,7 @@ void main() {
       expect(repository.lastPreviousSessionId, 'session-old');
       expect(repository.lastScope, scope);
       expect(repository.lastMode, StudyMode.review);
+      expect(repository.lastDailyNewLimit, 30);
     },
   );
 
@@ -165,8 +193,13 @@ void main() {
         Failure.notFound(entity: 'study_session', id: 'missing'),
       ),
     );
+    final _FakeLearningSettingsRepository settingsRepository =
+        _FakeLearningSettingsRepository(
+          const Result<LearningSettings>.ok(LearningSettings.defaults),
+        );
     final RestartStudySessionUseCase useCase = RestartStudySessionUseCase(
       repository,
+      settingsRepository,
     );
 
     final Result<StudySession> result = await useCase(
