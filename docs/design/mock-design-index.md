@@ -56,13 +56,16 @@ states, light + dark are covered there).
    (per `CLAUDE.md` §UI Mock Design Parity).
 3. Read the listed visual contract when present.
 4. Read the listed wireframe and its implementation refs.
-5. Read `docs/design/design-token-mapping.md` and `docs/design/component-visual-contract.md`.
+5. Read `docs/design/design-language.md` (taste contract for decisions the mock does not
+   answer), `docs/design/design-token-mapping.md`, and
+   `docs/design/component-visual-contract.md`.
 6. Implement only elements marked Current, unless the task explicitly promotes a Future item.
 7. Run `docs/design/visual-parity-checklist.md` before reporting completion, comparing against
    the `shots/` PNGs.
 
 ## Related
 
+- `docs/design/design-language.md`
 - `docs/system-design/mock-design-doc-mapping.md`
 - `docs/system-design/MemoX Design System/README.md`
 - `docs/system-design/MemoX Design System/ui_kits/mobile/README.md`
