@@ -26,6 +26,11 @@ scope, wireframes, shared components, and design tokens.
 
 If these sources conflict, do not guess. Follow `CLAUDE.md` drift detection.
 
+The auto-generated DOM spec may still contain stale mock copy such as `Search
+decks, cards, tags`. For V1 behavior, this visual contract plus
+`docs/wireframes/02-library.md` override that copy until the source design/spec
+is regenerated.
+
 ## Implementation Files
 
 | Concern                                         | File                                                                           |
@@ -131,9 +136,12 @@ Forbidden:
 - Do not show a chevron on Library folder cards.
 - Do not show a root-level deck row.
 - Do not expose root New deck or Import.
-- Do not expose a sort UI control.
+- Do not expose an interactive sort sheet/control; the non-interactive
+  `Recent` pill is allowed as current visual parity.
 - Do not claim deck/card/tag search in Library Overview V1; that scope is Future.
-- Do not fake progress, mastery, folder-span subtitle, study duration, or new-card data.
+- Do not fake progress, mastery, new-card data, or unsupported study-launch
+  data. The due summary subtitle/duration may be shown only when derived from
+  the approved aggregate read model.
 - Do not expose the mock's "Study due cards" / "Archive folder" overflow actions (out of scope).
 
 ## Acceptance Criteria For Future UI Work
