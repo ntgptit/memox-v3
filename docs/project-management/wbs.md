@@ -381,6 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `b1b925ea` | 2026-06-12 | 4.5.1, 4.5.2, 4.5.6, 4.5.8, 8.2.1 | Restore study mode strategy wiring and WBS parity for previously implemented Review/Guess/Fill and learning-settings rows |
 | `8fe3ce3a` | 2026-06-12 | 4.5.4 | Match persistence backend wave: append-only Match evaluation schema/migration, repository API, transactional finalization derivation, factory wiring, tests, and contract/docs updates |
 | `3b4c3232` | 2026-06-12 | 7.4.2, 7.5.1, 7.5.2 | Progress screen V1: overview BE (range activity, study-day streak, card states), kit-mock screen with all 7 states, widget + golden tests, docs reconciled |
 | `dbb96759` | 2026-06-12 | 9.15 | Enforce single-entry verification after piecemeal relapse: `--quick` inner loop qua cùng entry, pass-marker gắn content-state, hook `--check-marker` chặn commit chưa verify; CLAUDE.md hard rule cấm lệnh verify rời |
