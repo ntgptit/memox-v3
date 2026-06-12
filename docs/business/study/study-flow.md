@@ -183,6 +183,20 @@ Status notes (see `docs/business/glossary.md` §Status terms):
   `StudyModeStrategyFactory.resolve(...)`. Explicit resolution supports
   `review`, `guess`, `fill`, and `match`; the active review shell still falls
   back to recall when no mode is persisted.
+- `StudyModeStrategy` is a **sealed** base
+  (`lib/domain/study/modes/study_mode_strategy.dart`) with three interaction
+  families declared in the same file: `BinaryGradeStudyModeStrategy`
+  (recall / review / guess — one card collapses to a binary pass/fail mapped
+  to an `AttemptResult` via `mapGotItAction` / `mapForgotAction`),
+  `TypedAnswerStudyModeStrategy` (fill — terminal result computed by the
+  strict typed-answer evaluator), and `BoardStudyModeStrategy` (match —
+  append-only pair evaluations, terminal attempts derived at finalization,
+  no per-card grading API). Callers pattern-match on the family instead of
+  branching on `StudyMode`; mode → strategy mapping lives only in
+  `StudyModeStrategyFactory.resolve(...)` (exhaustive `switch`, so an
+  unwired new mode fails at compile time). Fill and Match expose no
+  Forgot / Got-it methods at all (previously they threw
+  `UnsupportedError`).
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
   the real result screen on success.

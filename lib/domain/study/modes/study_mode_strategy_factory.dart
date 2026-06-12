@@ -6,11 +6,34 @@ import 'package:memox/domain/study/modes/review_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy.dart';
 import 'package:memox/domain/types/study_mode.dart';
 
-/// Creates the mode strategy for the current study session.
+/// **Factory** — the single place that maps `StudyMode → StudyModeStrategy`.
+///
+/// Any other code that needs per-mode behavior must go through [resolve]
+/// (or pattern-match on the strategy it returns); branching on [StudyMode]
+/// directly inside viewmodels/widgets defeats the Strategy pattern and is
+/// forbidden.
+///
+/// ## Why an exhaustive `switch`, not a registry map
+///
+/// In DI-container ecosystems (e.g. Spring) factories are usually built as a
+/// `Map<Enum, Strategy>` auto-populated by the container, keyed by something
+/// like `getStudyMode()`. Dart has no classpath scanning, so such a map
+/// would be hand-written anyway — and a map lookup only fails at **runtime**
+/// when an entry is missing. The `switch` below is exhaustive over the
+/// [StudyMode] enum, so adding a new enum value without wiring its strategy
+/// is a **compile-time** error. Keep it a `switch`; do not "modernize" it
+/// into a map.
+///
+/// Strategies are stateless `const` objects, so the factory is `static` and
+/// needs no Riverpod provider. If a strategy ever grows a real dependency
+/// (repository, evaluator service), move resolution behind a provider at
+/// that point — not before.
 abstract final class StudyModeStrategyFactory {
-  /// Resolves the active mode strategy.
+  /// Resolves the active mode strategy for the current study session.
   ///
-  /// V1 fallback: when the session mode is not yet persisted, use recall.
+  /// V1 fallback: the session header does not persist its mode yet, so a
+  /// `null` [studyMode] resolves to [StudyMode.recall] — the documented
+  /// default in `docs/business/study/study-flow.md` (decision row S45).
   static StudyModeStrategy resolve({StudyMode? studyMode}) {
     final StudyMode resolvedMode = studyMode ?? StudyMode.recall;
     return switch (resolvedMode) {

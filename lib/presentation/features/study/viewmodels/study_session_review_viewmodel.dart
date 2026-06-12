@@ -38,11 +38,13 @@ class StudySessionReviewController extends _$StudySessionReviewController {
   void next() =>
       _updateCurrentState((StudySessionReviewState state) => state.next());
 
-  Future<void> gradeForgot() =>
-      _recordAnswer((StudyModeStrategy strategy) => strategy.mapForgotAction());
+  Future<void> gradeForgot() => _recordAnswer(
+    (BinaryGradeStudyModeStrategy strategy) => strategy.mapForgotAction(),
+  );
 
-  Future<void> gradeGotIt() =>
-      _recordAnswer((StudyModeStrategy strategy) => strategy.mapGotItAction());
+  Future<void> gradeGotIt() => _recordAnswer(
+    (BinaryGradeStudyModeStrategy strategy) => strategy.mapGotItAction(),
+  );
 
   Future<bool> finishSession() async {
     final StudySessionReviewState? current = switch (state) {
@@ -89,7 +91,7 @@ class StudySessionReviewController extends _$StudySessionReviewController {
   }
 
   Future<void> _recordAnswer(
-    AttemptResult Function(StudyModeStrategy strategy) mapResult,
+    AttemptResult Function(BinaryGradeStudyModeStrategy strategy) mapResult,
   ) async {
     final StudySessionReviewState? current = switch (state) {
       AsyncData<StudySessionReviewState>(:final value) => value,
@@ -100,10 +102,16 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     }
 
     final StudySessionReviewItem item = current.currentItem;
-    if (!_studyModeStrategy.usesRevealSelfGradeFlow) {
+    // This screen only handles the V1 reveal/self-grade flow. The type check
+    // is what allows calling the binary-grade mapping at all (Fill/Match
+    // strategies no longer expose it), and the flag keeps review/guess on
+    // their own future flows even though they are binary-grade too.
+    final StudyModeStrategy strategy = _studyModeStrategy;
+    if (strategy is! BinaryGradeStudyModeStrategy ||
+        !strategy.usesRevealSelfGradeFlow) {
       return;
     }
-    final AttemptResult result = mapResult(_studyModeStrategy);
+    final AttemptResult result = mapResult(strategy);
     state = AsyncData(
       current.copyWith(
         isSaving: true,

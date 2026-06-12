@@ -5,6 +5,7 @@ import 'package:memox/domain/study/modes/guess_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/match_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/review_study_mode_strategy.dart';
+import 'package:memox/domain/study/modes/study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy_factory.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -16,10 +17,13 @@ void main() {
     );
 
     expect(strategy, isA<RecallStudyModeStrategy>());
+    expect(strategy, isA<BinaryGradeStudyModeStrategy>());
     expect(strategy.mode, StudyMode.recall);
     expect(strategy.usesRevealSelfGradeFlow, isTrue);
-    expect(strategy.mapForgotAction(), AttemptResult.forgot);
-    expect(strategy.mapGotItAction(), AttemptResult.perfect);
+    final BinaryGradeStudyModeStrategy recallStrategy =
+        strategy as BinaryGradeStudyModeStrategy;
+    expect(recallStrategy.mapForgotAction(), AttemptResult.forgot);
+    expect(recallStrategy.mapGotItAction(), AttemptResult.perfect);
   });
 
   test('returns the match strategy for StudyMode.match', () {
@@ -28,10 +32,11 @@ void main() {
     );
 
     expect(strategy, isA<MatchStudyModeStrategy>());
+    // Board family: no per-card grading API exists to call by design.
+    expect(strategy, isA<BoardStudyModeStrategy>());
+    expect(strategy, isNot(isA<BinaryGradeStudyModeStrategy>()));
     expect(strategy.mode, StudyMode.match);
     expect(strategy.usesRevealSelfGradeFlow, isFalse);
-    expect(strategy.mapForgotAction, throwsUnsupportedError);
-    expect(strategy.mapGotItAction, throwsUnsupportedError);
   });
 
   test('returns the review strategy for StudyMode.review', () {
@@ -40,10 +45,13 @@ void main() {
     );
 
     expect(strategy, isA<ReviewStudyModeStrategy>());
+    expect(strategy, isA<BinaryGradeStudyModeStrategy>());
     expect(strategy.mode, StudyMode.review);
     expect(strategy.usesRevealSelfGradeFlow, isFalse);
-    expect(strategy.mapForgotAction(), AttemptResult.forgot);
-    expect(strategy.mapGotItAction(), AttemptResult.perfect);
+    final BinaryGradeStudyModeStrategy reviewStrategy =
+        strategy as BinaryGradeStudyModeStrategy;
+    expect(reviewStrategy.mapForgotAction(), AttemptResult.forgot);
+    expect(reviewStrategy.mapGotItAction(), AttemptResult.perfect);
   });
 
   test('returns the guess strategy for StudyMode.guess', () {
@@ -52,24 +60,28 @@ void main() {
     );
 
     expect(strategy, isA<GuessStudyModeStrategy>());
+    expect(strategy, isA<BinaryGradeStudyModeStrategy>());
     expect(strategy.mode, StudyMode.guess);
     expect(strategy.usesRevealSelfGradeFlow, isFalse);
-    expect(strategy.mapForgotAction(), AttemptResult.forgot);
-    expect(strategy.mapGotItAction(), AttemptResult.perfect);
+    final BinaryGradeStudyModeStrategy guessStrategy =
+        strategy as BinaryGradeStudyModeStrategy;
+    expect(guessStrategy.mapForgotAction(), AttemptResult.forgot);
+    expect(guessStrategy.mapGotItAction(), AttemptResult.perfect);
   });
 
-  test('returns a Fill strategy for StudyMode.fill', () {
+  test('returns the fill strategy for StudyMode.fill', () {
     final strategy = StudyModeStrategyFactory.resolve(
       studyMode: StudyMode.fill,
     );
 
     expect(strategy, isA<FillStudyModeStrategy>());
+    // Typed-answer family: graded by the evaluator, no Forgot/Got-it API.
+    expect(strategy, isA<TypedAnswerStudyModeStrategy>());
+    expect(strategy, isNot(isA<BinaryGradeStudyModeStrategy>()));
     expect(strategy.mode, StudyMode.fill);
     expect(strategy.usesRevealSelfGradeFlow, isFalse);
     final FillStudyModeStrategy fillStrategy =
         strategy as FillStudyModeStrategy;
-    expect(fillStrategy.mapForgotAction, throwsUnsupportedError);
-    expect(fillStrategy.mapGotItAction, throwsUnsupportedError);
     expect(
       fillStrategy
           .evaluateAnswer(
@@ -91,6 +103,24 @@ void main() {
       isNot(AttemptResult.initialPassed),
     );
     expect(fillStrategy.isAvailable('  가나다  '), isTrue);
+  });
+
+  test('every study mode resolves into exactly one interaction family', () {
+    for (final StudyMode mode in StudyMode.values) {
+      final StudyModeStrategy strategy = StudyModeStrategyFactory.resolve(
+        studyMode: mode,
+      );
+
+      expect(strategy.mode, mode);
+      // Sealed base: this switch is compile-time exhaustive. Adding a new
+      // interaction family without classifying it here will not compile.
+      final bool isClassified = switch (strategy) {
+        BinaryGradeStudyModeStrategy() => true,
+        TypedAnswerStudyModeStrategy() => true,
+        BoardStudyModeStrategy() => true,
+      };
+      expect(isClassified, isTrue);
+    }
   });
 
   test('fill availability rejects trivial fronts', () {
