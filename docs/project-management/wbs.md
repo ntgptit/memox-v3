@@ -153,7 +153,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 4.5.1 | Study/SRS | Study mode strategy V1 BE | BE | `StudyModeStrategyFactory`: recall supported, others controlled-unsupported | Partial | 4.3.1 | `lib/domain/study/modes/study_mode_strategy_factory.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart` | `30075fbf` | Implement next mode slice (one mode per prompt) |
 | 4.5.2 | Study/SRS | Review mode BE V1 | BE | Both-sides item strategy + attempt semantics + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
 | 4.5.3 | Study/SRS | Review mode FE V1 | FE | Review mode UI per wireframe 13 | Specified | 4.5.2 | `docs/wireframes/13-study-session-review.md` | TBD | Wire UI to strategy; widget tests |
-| 4.5.4 | Study/SRS | Match mode BE V1 | BE | 5-pair board strategy, append-only evaluation persistence, transactional finalization derivation + tests | Implemented | 4.5.1 | `docs/business/study/study-flow.md` | `e58f7f97` | No action |
+| 4.5.4 | Study/SRS | Match mode BE V1 | BE | 5-pair board strategy, append-only evaluation persistence, transactional finalization derivation + tests | Implemented | 4.5.1 | `docs/business/study/study-flow.md` | `8fe3ce3a` | No action |
 | 4.5.5 | Study/SRS | Match mode FE V1 | FE | Match board UI | Specified | 4.5.4 | `docs/wireframes/14-study-session-match.md` | TBD | Wire UI; widget tests |
 | 4.5.6 | Study/SRS | Guess mode BE V1 | BE | 5-option selection strategy + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
 | 4.5.7 | Study/SRS | Guess mode FE V1 | FE | Guess UI with auto-advance countdown | Specified | 4.5.6 | `docs/wireframes/15-study-session-guess.md` | TBD | Wire UI; widget tests |
@@ -381,7 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
-| `e58f7f97` | 2026-06-12 | 4.5.4 | Match persistence backend wave: append-only Match evaluation schema/migration, repository API, transactional finalization derivation, factory wiring, tests, and contract/docs updates |
+| `8fe3ce3a` | 2026-06-12 | 4.5.4 | Match persistence backend wave: append-only Match evaluation schema/migration, repository API, transactional finalization derivation, factory wiring, tests, and contract/docs updates |
 | `3b4c3232` | 2026-06-12 | 7.4.2, 7.5.1, 7.5.2 | Progress screen V1: overview BE (range activity, study-day streak, card states), kit-mock screen with all 7 states, widget + golden tests, docs reconciled |
 | `dbb96759` | 2026-06-12 | 9.15 | Enforce single-entry verification after piecemeal relapse: `--quick` inner loop qua cùng entry, pass-marker gắn content-state, hook `--check-marker` chặn commit chưa verify; CLAUDE.md hard rule cấm lệnh verify rời |
 | `0dacbc83` | 2026-06-11 | 9.17, 9.15, 9.11, 1.1.7 | Agent-friendliness pass: `.gitattributes` (hết CRLF noise), pre-commit hook chạy doc_guard, CLAUDE.md 393→263 dòng (gỡ khối bash/verify lỗi thời), implementation-checklist trỏ verify entry, decision-table section index, tool/README thêm trigger matrix + portability guide; checkArb sửa đếm key top-level |
