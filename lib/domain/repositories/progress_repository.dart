@@ -6,6 +6,8 @@ abstract interface class ProgressRepository {
     required DateTime now,
   });
 
+  Future<Result<Map<DateTime, int>>> loadAttemptCountsByDay();
+
   Future<Result<BoxDistribution>> loadBoxDistribution();
 
   Future<Result<StudyStatistics>> loadStudyStatistics();

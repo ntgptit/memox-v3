@@ -72,3 +72,9 @@ SELECT
   ) AS correct_count,
   (SELECT COUNT(*) FROM study_attempts WHERE result = 'forgot') AS forgot_count,
   (SELECT MAX(attempted_at) FROM study_attempts) AS last_studied_at;
+
+progressAttemptCountsByDay:
+SELECT
+  study_attempts.attempted_at
+FROM study_attempts
+ORDER BY study_attempts.attempted_at;

@@ -42,6 +42,11 @@ class _RecordingProgressRepository implements ProgressRepository {
   }
 
   @override
+  Future<Result<Map<DateTime, int>>> loadAttemptCountsByDay() async {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Result<BoxDistribution>> loadBoxDistribution() async {
     throw UnimplementedError();
   }

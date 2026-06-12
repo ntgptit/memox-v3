@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-12
 applies_to: daily goal, streak, study reminders, landing screen, Dashboard motivation surfaces
 ---
 
@@ -95,6 +95,17 @@ Dashboard shows:
 - Pulse animation when goal is met for the first time today.
 
 When `progress >= goal`: visual stays celebratory until midnight (gold ring, checkmark icon). Subsequent answers do not break the celebration.
+
+### Backend summary contract
+
+Dashboard also has a backend-only progress summary for later FE wiring:
+
+- `dueTodayCount` reuses the existing Progress due-summary rules, including the suspended/buried exclusion logic.
+- `todayAttemptCount` comes from `study_attempts` grouped by the device's current local day.
+- `dailyGoal` comes from persisted learning settings. If the goal is disabled, the summary returns a controlled disabled state.
+- `currentStreak` is computed from persisted attempt history while the goal is enabled. If the goal is disabled, the summary returns an unknown streak state instead of fabricating a number.
+
+This contract is not yet wired into Dashboard UI in the current prompt.
 
 ## Streak
 

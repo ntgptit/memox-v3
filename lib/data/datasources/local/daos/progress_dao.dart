@@ -19,4 +19,7 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
 
   Future<ProgressStudyStatisticsResult> loadStudyStatistics() =>
       progressStudyStatistics().getSingle();
+
+  Future<List<int>> loadAttemptCountsByDay() =>
+      progressAttemptCountsByDay().get();
 }

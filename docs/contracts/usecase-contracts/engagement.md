@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-12
 status: contract
 ---
 
@@ -11,6 +11,28 @@ status: contract
 > existing repository error/result pattern until that migration is approved.
 
 Daily goal, streak, reminder, recent decks, dashboard aggregate.
+
+## LoadDashboardProgressSummaryUseCase
+
+```dart
+Future<Either<Failure, DashboardProgressSummary>> call({required DateTime now});
+```
+
+Aggregates dashboard-ready progress data without wiring Dashboard UI:
+
+- `dueTodayCount` reuses the existing Progress due-summary contract.
+- `todayAttemptCount` comes from `study_attempts` grouped by the device's current local day.
+- `dailyGoal` comes from persisted learning settings.
+- `currentStreak` is computed from persisted attempt history while the goal is enabled.
+
+**Rules:**
+
+- Do not fabricate streak or goal values.
+- If the goal is disabled, return a controlled disabled goal state and an unknown streak state.
+- Due-count exclusions must match Progress/Library rules (suspended and currently buried excluded).
+- Empty database returns zero-safe dashboard progress values.
+
+**Errors:** `StorageFailure`.
 
 ## GetDashboardStateUseCase
 
@@ -122,7 +144,9 @@ Set SharedPreferences `firstLaunchCompletedAt = now`.
 - ❌ Reset streak on goal-off. Freeze instead.
 - ❌ Schedule reminder before permission granted.
 - ❌ Multiple reminders per day. Cancel previous on reschedule.
-- ❌ Streak computation based on `study_attempts` scan. Use `lastGoalMetDate` flag.
+- ❌ Stateful streak persistence/mutation based on `study_attempts` scan. Use `lastGoalMetDate`
+  flag for the settings-backed streak use case. Read-only dashboard summaries may derive streak
+  from persisted attempt history for display.
 
 ## Related
 
@@ -139,5 +163,6 @@ preferences live in SharedPreferences (not a Drift repository); see
 `docs/wireframes/18-study-result.md`
 **Decision table:** rows under "Dashboard engagement"
 **Code paths:** `lib/domain/usecases/engagement/**`,
+`lib/domain/usecases/progress/load_dashboard_progress_summary_usecase.dart`,
 `lib/data/datasources/local/preferences/engagement_preferences.dart`,
 `lib/core/notifications/reminder_scheduler.dart`
