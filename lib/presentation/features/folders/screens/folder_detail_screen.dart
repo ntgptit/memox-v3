@@ -9,6 +9,8 @@ import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_actions.dart';
@@ -138,7 +140,13 @@ class _FolderDetailView extends ConsumerWidget {
               isSearching: toolbar.isSearching,
               searchTerm: toolbar.searchTerm,
               sort: sort,
-              onStartStudy: null,
+              onStartStudy: detail.folder.contentMode == ContentMode.decks
+                  ? () => context.goStudyEntry(
+                      entryType: EntryType.folder,
+                      entryRefId: folderId,
+                      studyType: StudyType.srsReview,
+                    )
+                  : null,
               onNewSubfolder: () =>
                   createSubfolderDialog(context, ref, folderId),
               onNewDeck: () => createDeckDialog(context, ref, folderId),

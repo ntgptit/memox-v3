@@ -39,12 +39,17 @@ class FolderDecksSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final int dueTotal = _dueTotal;
+    final bool canStartStudy = dueTotal > 0 && onStartStudy != null;
     final String countsLine =
         '${l10n.libraryFolderDecksCount(decks.length)} · '
         '${l10n.libraryFolderCardsCount(_cardTotal)}';
     final String dueLine = dueTotal > 0
         ? l10n.libraryFolderDueCount(dueTotal)
         : l10n.folderSummaryAllCaughtUp;
+    final String startStudyLabel = dueTotal > 0
+        ? '${l10n.folderDetailStartStudyLabel} · '
+              '${l10n.libraryFolderDueCount(dueTotal)}'
+        : l10n.folderDetailStartStudyLabel;
 
     return MxCard(
       child: Column(
@@ -88,10 +93,10 @@ class FolderDecksSummary extends StatelessWidget {
           const SizedBox(height: SpacingTokens.md),
           MxActionButton(
             intent: MxActionIntent.studyPrimary,
-            label: l10n.folderDetailStartStudyLabel,
+            label: startStudyLabel,
             icon: Icons.play_arrow_outlined,
             fullWidth: true,
-            onPressed: onStartStudy,
+            onPressed: canStartStudy ? onStartStudy : null,
           ),
         ],
       ),

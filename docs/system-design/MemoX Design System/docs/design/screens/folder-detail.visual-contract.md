@@ -13,14 +13,15 @@ Flutter implementation. This contract is written against the **code on this ref*
 (`folder_detail_screen.dart` and the `features/folders/**` widgets), not the
 aspirational sections of `docs/wireframes/05-folder-detail.md`.
 
-> ⚠️ **Read this first — doc/code conflict.** `05-folder-detail.md` ("Prompt
-> 45/47/50") describes a **hero mastery card**, **Study folder / Today CTAs**,
-> a **Resume banner**, and an **overflow ⋮ action menu** as *Current*. The
+> ⚠️ **Read this first — doc/code conflict.** Older revisions of
+> `05-folder-detail.md` ("Prompt 45/47/50") described a **hero mastery card**,
+> **Study folder / Today CTAs**, a **Resume banner**, and an **overflow ⋮ action
+> menu** as *Current*. The
 > shipped `folder_detail_screen.dart` now renders the overflow folder actions
 > sheet, plus an unknown-state mastery shell, controlled search/sort sheets, and
-> a disabled Start study CTA shell. The study layer itself is still not built,
-> so no mastery percentage or new-count placeholder is rendered. This contract
-> follows the **current code path** plus the canonical PNG mock. See §16.
+> a route-backed Start study CTA that becomes enabled when real due data exists.
+> The mastery percentage and new-count placeholder are still not rendered. This
+> contract follows the **current code path** plus the canonical PNG mock. See §16.
 
 > Approved mock variance for this ref: the `04-folder-detail` PNG/spec set may
 > show `62%`, `23 due · 6 new`, `Start study · 23 due`, and `Most due` in the
@@ -59,10 +60,10 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
   - `lib/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart`
   - `lib/presentation/features/folders/routes/folder_routes.dart`
 - **Scope status:** **Partial.**
-- **Out-of-scope items (Future / Visual-only):** study routing and session
-  behavior. The visible mastery card is an unknown-state shell, the Start study
-  CTA is disabled, and search/sort use controlled sheets rather than inline
-  controls.
+- **Out-of-scope items (Future / Visual-only):** study session behavior. The
+  visible mastery card is an unknown-state shell, the Start study CTA is
+  enabled only from real due data, and search/sort use controlled sheets rather
+  than inline controls.
 
 ## 2. Source priority
 
@@ -113,7 +114,7 @@ Driven by `folderDetailQueryProvider(folderId)` (`AsyncValue<FolderDetail>`) +
 | State | Trigger | Visible regions | Hidden regions | Primary CTA | Secondary CTA | Shared state widget | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Initial / Loading | Query pending | App bar, breadcrumb*, **skeleton rows** | Real rows, FAB (FAB null until `detail` loads) | — | — | `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` | *Breadcrumb renders only once `detail` is available. No tappable rows while loading. |
-| Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, mastery unknown shell, search icon, sort pill, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | Disabled Start study shell | — | Deck rows = `FolderDeckTile`. The mock's `62%`, `6 new`, and enabled `Start study · {due}` values are approved variance here, not V1 source of truth. Tap → flashcard list (Future target). |
+| Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, mastery unknown shell, search icon, sort pill, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | Start study CTA enabled when dueTotal > 0; disabled shell when dueTotal == 0 | `MxActionButton` | Deck rows = `FolderDeckTile`. The mock's `62%` and `6 new` values remain approved variance here, not V1 source of truth. Tap Start study → folder-scoped Study Entry (`EntryType.folder`, `StudyType.srsReview`). |
 | Loaded — subfolders | `contentMode == subfolders` | App bar, breadcrumb, stat summary strip, search icon, sort pill, subfolder rows, New-subfolder FAB | Deck rows, unlocked choice | `MxFab.extended` New subfolder | — | — | Subfolder rows = `FolderSubfolderTile`. Tap → child `pushFolderDetail`. |
 | Empty — unlocked | `contentMode == unlocked` (no children) | App bar, breadcrumb, empty chip/card/buttons/banner | Rows, FAB | "New subfolder" | "New deck" | `FolderUnlockedEmpty` | Choice locks mode on first create. Must NOT auto-unlock or show both in a FAB. |
 | Empty — locked | Locked but zero children (all deleted) | App bar, breadcrumb, "empty" message + FAB | Rows | mode FAB | — | (empty surface) | Do not auto-unlock; keep mode FAB only. |
@@ -150,7 +151,7 @@ existing widget/token covers an element.
 | Create FAB | Add child by mode | `MxFab.extended` | `SizeTokens.fab`; `RadiusTokens.brXl`; primary/onPrimary | decks/subfolders loaded | **Current** | Mode-locked label & icon. Unlocked → no FAB. |
 | New folder / deck dialog | Name the new child | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` for folder cases; `showMxNameDialog` remains for deck naming | dialog theme `brLg`; level2–3; scrim 32% | on FAB / choice tap | **Current** | Folder dialog is mock-aligned with preview tile + color/icon pickers on create and helper text on rename; duplicate/mode-lock errors → `showMxSnackbar`. |
 | Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | `MxCard` + `MxIconTile` | decks mode | **Visual-only** | Rendered as a shell without a numeric mastery value or ring; the mock's `62%` is approved variance and must not be faked. |
-| Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | decks mode | **Visual-only** | Study layer not built; the mock's `Start study · {due}` and `{n} new` copy are approved variance and the visible button remains disabled in code. |
+| Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | decks mode, dueTotal > 0 | **Current** | Start Study is enabled only when real deck due data exists; label is `Start study · {count} due` and taps route to folder-scoped Study Entry. When dueTotal == 0 the CTA stays disabled. |
 | Resume banner (+ Discard) | Continue/cancel paused session | `MxCallout` + `showMxConfirmDialog` | callout/dialog themes | (mock) | **Future** | No session layer on this ref. |
 | "{n} new" subtitle | New-card count | — | — | decks mode | **Future** | No folder-scope new-card read model exists; do not render a placeholder count. |
 | Sort control | Reorder rows | local pill | — | loaded | **Current** | Controlled sort sheet uses `ContentSortMode`; only `manual`, `name`, and `newest` are exposed here. In the mock, `newest` is labeled `Recent` in decks mode. The subfolders mock label `Most due` is approved variance and remains unsupported on this ref. `lastStudied` stays hidden because the Folder Detail query path does not support truthful last-studied ordering on this ref. |
@@ -369,7 +370,7 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 
 | Issue | Type | Affected element | Reason | Recommended action |
 | --- | --- | --- | --- | --- |
-| Wireframe says hero mastery card + Study/Today CTAs + Resume banner are Current (Prompt 45/47/50); code comment + render path say Future ("study layer is not built") | Business conflict / State conflict | Hero card, study/resume CTAs | Wireframe ahead of code on this ref | Reconciled 2026-06-10: `05-folder-detail.md` + related business docs corrected to Future; never fake mastery/new/due-from-session data |
+| Wireframe now agrees that Start study is Current in decks mode when real due data exists, while the hero mastery card, `{n} new`, Today CTA, and Resume banner remain Future | Business conflict / State conflict | Hero card, study/resume CTAs | Code and wireframe aligned for the CTA branch | Keep mastery/new-count data fake-free and do not promote Today/Resume without a session model |
 | Overflow ⋮ opens folder action sheet | Mock-only element | App-bar overflow | Folder action sheet now wired on Folder Detail | Keep the same Rename/Move/Delete flow and avoid adding unrelated actions |
 | `ContentSortMode` exists in toolbar state and a controlled sort sheet is wired | Resolved | Sort control | Code now promotes the local pill into a working bottom sheet | Keep sort state local to `FolderDetailToolbar`, expose only supported modes here, and mirror the same options in docs/tests |
 | Deck row tap targets `/library/deck/:deckId/flashcards`, but Flashcard list is not implemented | Future scope | Deck row navigation | Flashcard feature absent on this ref | Acceptable as nav intent; flashcard list must land (P2) for the tap to resolve |

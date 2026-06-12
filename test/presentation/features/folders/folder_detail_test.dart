@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
@@ -8,6 +11,7 @@ import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
+import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
@@ -18,6 +22,7 @@ import 'package:memox/presentation/features/folders/widgets/folder_detail_summar
 import 'package:memox/presentation/features/folders/widgets/folder_subfolder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 
 Folder _folder(String name, {ContentMode mode = ContentMode.decks}) => Folder(
   id: name,
@@ -141,6 +146,52 @@ Widget _wrapScreenWithSortLauncher(Stream<FolderDetail> stream) =>
       ),
     );
 
+Future<({ProviderContainer container, GoRouter router})> _wrapScreenWithRouter(
+  WidgetTester tester, {
+  required Stream<FolderDetail> stream,
+}) async {
+  final ProviderContainer container = ProviderContainer(
+    overrides: [
+      folderDetailQueryProvider('f1').overrideWith((Ref ref) => stream),
+    ],
+  );
+  addTearDown(container.dispose);
+
+  final GoRouter router = GoRouter(
+    initialLocation: RoutePaths.folderDetail('f1'),
+    routes: <RouteBase>[
+      GoRoute(
+        path: RoutePaths.folderDetailTemplate,
+        builder: (BuildContext context, GoRouterState state) =>
+            FolderDetailScreen(
+              folderId: state.pathParameters[RoutePaths.idParam]!,
+            ),
+      ),
+      GoRoute(
+        name: RouteNames.studyEntry,
+        path: RoutePaths.studyEntryTemplate,
+        builder: (BuildContext context, GoRouterState state) =>
+            const Scaffold(body: Text('study entry')),
+      ),
+    ],
+  );
+
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: container,
+      child: MaterialApp.router(
+        routerConfig: router,
+        locale: const Locale('en'),
+        theme: AppTheme.light(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+  return (container: container, router: router);
+}
+
 Widget _wrapDeckTile(FolderDeckTile tile) => MaterialApp(
   locale: const Locale('en'),
   theme: AppTheme.light(),
@@ -173,7 +224,10 @@ void main() {
       expect(find.textContaining('new'), findsNothing);
       expect(find.textContaining('%'), findsNothing);
       expect(find.text('4 due'), findsNWidgets(2));
-      expect(find.text('Start study'), findsOneWidget);
+      final MxActionButton startStudyButton = tester.widget<MxActionButton>(
+        find.widgetWithText(MxActionButton, 'Start study · 8 due'),
+      );
+      expect(startStudyButton.onPressed, isNotNull);
       expect(find.byType(FolderDeckTile), findsNWidgets(2));
     });
 
@@ -188,6 +242,10 @@ void main() {
 
       expect(find.text('All caught up'), findsOneWidget);
       expect(find.textContaining('due'), findsNothing);
+      final MxActionButton startStudyButton = tester.widget<MxActionButton>(
+        find.widgetWithText(MxActionButton, 'Start study'),
+      );
+      expect(startStudyButton.onPressed, isNull);
     });
   });
 
@@ -505,6 +563,78 @@ void main() {
         findsOneWidget,
       );
       expect(find.text(l10n.folderDeleteDialogReassurance), findsOneWidget);
+    });
+  });
+
+  group('FolderDetailScreen — Start study CTA (8/8)', () {
+    testWidgets(
+      'enables Start study with real due data and routes to Study Entry',
+      (WidgetTester tester) async {
+        final ({ProviderContainer container, GoRouter router}) harness =
+            await _wrapScreenWithRouter(
+              tester,
+              stream: Stream<FolderDetail>.value(
+                _detail(
+                  decks: <DeckWithCount>[
+                    _deck('Vocab 1', dueCount: 3),
+                    _deck('Vocab 2', dueCount: 5),
+                  ],
+                ),
+              ),
+            );
+
+        final Finder startStudyFinder = find.widgetWithText(
+          MxActionButton,
+          'Start study · 8 due',
+        );
+        final MxActionButton startStudyButton = tester.widget<MxActionButton>(
+          startStudyFinder,
+        );
+        expect(startStudyButton.onPressed, isNotNull);
+
+        await tester.tap(startStudyFinder);
+        await tester.pumpAndSettle();
+
+        expect(
+          harness.router.routeInformationProvider.value.uri.path,
+          RoutePaths.studyEntry(EntryType.folder.name, 'f1'),
+        );
+        expect(
+          harness
+              .router
+              .routeInformationProvider
+              .value
+              .uri
+              .queryParameters[RoutePaths.studyTypeQueryParam],
+          'srs_review',
+        );
+        expect(find.text('study entry'), findsOneWidget);
+        expect(
+          harness.container.read(folderDetailToolbarProvider('f1')).sort,
+          ContentSortMode.manual,
+        );
+      },
+    );
+
+    testWidgets('keeps Start study disabled when there are no due cards', (
+      WidgetTester tester,
+    ) async {
+      await _wrapScreenWithRouter(
+        tester,
+        stream: Stream<FolderDetail>.value(
+          _detail(
+            decks: <DeckWithCount>[
+              _deck('Vocab 1', cardCount: 62),
+              _deck('Vocab 2', cardCount: 58),
+            ],
+          ),
+        ),
+      );
+
+      final MxActionButton startStudyButton = tester.widget<MxActionButton>(
+        find.widgetWithText(MxActionButton, 'Start study'),
+      );
+      expect(startStudyButton.onPressed, isNull);
     });
   });
 
