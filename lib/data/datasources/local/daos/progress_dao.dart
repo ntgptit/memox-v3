@@ -32,4 +32,7 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
 
   Future<int> loadBuriedTodayCount({required int nowMs}) =>
       progressBuriedTodayCount(nowMs).getSingle();
+
+  Future<List<int>> loadAttemptCountsByDay() =>
+      progressAttemptCountsByDay().get();
 }

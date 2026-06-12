@@ -58,6 +58,10 @@ class _FakeProgressRepository implements ProgressRepository {
   Future<Result<ProgressReadModel>> loadProgressReadModel({
     required DateTime now,
   }) => throw UnimplementedError();
+
+  @override
+  Future<Result<Map<DateTime, int>>> loadAttemptCountsByDay() =>
+      throw UnimplementedError();
 }
 
 final DateTime _today = DateTime(2026, 6, 10);

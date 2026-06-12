@@ -119,6 +119,26 @@ class _ProgressFixture {
         );
   }
 
+  Future<void> insertSession({
+    required String id,
+    required int startedAtMs,
+    String status = 'in_progress',
+  }) async {
+    await db
+        .into(db.studySessions)
+        .insert(
+          StudySessionsCompanion.insert(
+            id: id,
+            entryType: 'deck',
+            entryRefId: const Value<String?>(null),
+            studyType: 'new_cards',
+            status: status,
+            startedAt: startedAtMs,
+            updatedAt: startedAtMs,
+          ),
+        );
+  }
+
   Future<void> insertSessionItem({
     required String id,
     required String sessionId,
@@ -756,6 +776,90 @@ void main() {
         model.studyStatistics.lastStudiedAt,
         DateTime.fromMillisecondsSinceEpoch(nowMs - 5000, isUtc: true),
       );
+    },
+  );
+
+  test(
+    'attempt counts by day return local-day buckets in ascending order',
+    () async {
+      final _ProgressFixture fixture = _ProgressFixture(db, now);
+      await fixture.insertFolder(
+        id: 'folder-1',
+        name: 'Folder 1',
+        sortOrder: 0,
+      );
+      await fixture.insertDeck(
+        id: 'deck-1',
+        folderId: 'folder-1',
+        name: 'Deck 1',
+        sortOrder: 0,
+      );
+      await fixture.insertCard(
+        id: 'card-1',
+        deckId: 'deck-1',
+        front: 'Card 1',
+        back: 'Card 1',
+        dueAtMs: now.millisecondsSinceEpoch,
+      );
+      await fixture.insertSession(
+        id: 'session-1',
+        startedAtMs: nowMs - 86_400_000,
+      );
+      await fixture.insertSessionItem(
+        id: 'item-1',
+        sessionId: 'session-1',
+        flashcardId: 'card-1',
+        sortOrder: 0,
+        answeredAtMs: nowMs - 86_400_000,
+      );
+      await fixture.insertAttempt(
+        id: 'attempt-yesterday',
+        sessionItemId: 'item-1',
+        result: 'perfect',
+        studyMode: 'recall',
+        attemptedAtMs: nowMs - 86_400_000,
+        boxBefore: 1,
+        boxAfter: 2,
+      );
+      await fixture.insertSession(id: 'session-2', startedAtMs: nowMs);
+      await fixture.insertSessionItem(
+        id: 'item-2',
+        sessionId: 'session-2',
+        flashcardId: 'card-1',
+        sortOrder: 0,
+        answeredAtMs: nowMs,
+      );
+      await fixture.insertAttempt(
+        id: 'attempt-today-1',
+        sessionItemId: 'item-2',
+        result: 'perfect',
+        studyMode: 'recall',
+        attemptedAtMs: nowMs,
+        boxBefore: 2,
+        boxAfter: 3,
+      );
+      await fixture.insertAttempt(
+        id: 'attempt-today-2',
+        sessionItemId: 'item-2',
+        result: 'forgot',
+        studyMode: 'recall',
+        attemptedAtMs: nowMs + 1000,
+        boxBefore: 3,
+        boxAfter: 1,
+      );
+
+      final Result<Map<DateTime, int>> result = await repo
+          .loadAttemptCountsByDay();
+
+      expect(result, isA<Ok<Map<DateTime, int>>>());
+      final Map<DateTime, int> countsByDay =
+          (result as Ok<Map<DateTime, int>>).value;
+      expect(countsByDay.keys.toList(), <DateTime>[
+        DateTime(2026, 1, 9),
+        DateTime(2026, 1, 10),
+      ]);
+      expect(countsByDay[DateTime(2026, 1, 9)], 1);
+      expect(countsByDay[DateTime(2026, 1, 10)], 2);
     },
   );
 }

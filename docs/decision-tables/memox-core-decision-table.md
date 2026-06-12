@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-06-10
+last_updated: 2026-06-12
 applies_to: behavior branches across folder, deck, flashcard, study, SRS, navigation, UI
 ---
 
@@ -268,6 +268,7 @@ is satisfied by the relevant section, not the whole table.
 | P16 | Compute streak     | Consecutive study days exist; today has no attempt yet | Current streak counts back from yesterday (an unfinished today does not break it); longest streak scans whole history | C1 | `test/data/repositories/progress_repository_overview_test.dart::streak counts consecutive study days; an unfinished today does not break it` |
 | P17 | Load card states   | Suspended, currently-buried, and bury-expired cards exist | Count suspended cards and `buried_until > now` cards only; expired burials are excluded | C1 | `test/data/repositories/progress_repository_overview_test.dart::card state counts include suspended and currently-buried only` |
 | P18 | Load overview      | Empty database, any range | Return zero-safe overview (zero totals, zero streak, zero card states, full zero-filled day buckets for week/month) | C1 | `test/data/repositories/progress_repository_overview_test.dart::empty database returns zero-safe overview for every range` |
+| P19 | Dashboard progress summary | Same persisted dataset as Progress read model | Due count matches Progress due summary; attempt counts come from `study_attempts`; empty DB returns zero-safe dashboard summary | C1 | `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart::provider wiring resolves the dashboard progress summary use case`, `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart::empty data returns a zero-safe dashboard summary`, `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart::computes due counts, daily progress, and streak from persisted data` |
 
 ## Tags
 
@@ -349,6 +350,8 @@ Future until the tag subsystem and `shared_preferences` are approved (`docs/wire
 | EN10 | Onboarding               | Zero content                                                         | Show onboarding state on Dashboard                                                                      | C0+C1    | `test/features/dashboard/onboarding_test.dart::EN10`          |
 | EN11 | Day boundary             | Local timezone midnight                                              | Day rollover at local midnight                                                                          | C1       | `test/features/engagement/day_boundary_test.dart::EN11`       |
 | EN12 | Dashboard V1 placeholder | Static streak stat is rendered before full engagement is implemented | Show simple `0 days` stat only; expose no daily-goal, reminder, streak-history, or global-search action | C1       | `test/presentation/dashboard_screen_test.dart::DT8 onDisplay` |
+| EN13 | Dashboard progress summary | Goal enabled and attempts exist                                     | Return due-today count, today progress, and computed streak from persisted attempt history              | C1       | `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart::computes due counts, daily progress, and streak from persisted data` |
+| EN14 | Dashboard progress summary | Goal disabled                                                       | Return a controlled disabled goal state and unknown streak; do not fabricate progress numbers         | C1       | `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart::disabled goal returns a disabled goal state and unknown streak` |
 
 ## Navigation/UI
 
@@ -496,6 +499,3 @@ parity rule).
 
 - Every C0 row MUST have at least one test referenced by ID.
 - Every new branch logic in code MUST add a row before merge.
-
-
-

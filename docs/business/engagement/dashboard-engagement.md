@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-12
 applies_to: daily goal, streak, study reminders, landing screen, Dashboard motivation surfaces
 ---
 
@@ -39,15 +39,13 @@ Scope: personal-use app for now. Decisions favor simplicity and non-intrusivenes
 
 ### Storage
 
-Setting lives in user settings (not Drift entity table), SharedPreferences-backed. (No settings
-store exists in code yet — `lib/data/settings/study_settings_store.dart` is the target placement
-when this Future feature is promoted; the `shared_preferences` dependency itself requires
-approval.)
+Setting lives in user settings (not Drift entity table), SharedPreferences-backed.
+Implementation now lives at `lib/data/datasources/local/preferences/learning_settings_store.dart`.
 
 | Field | Type | Default |
 | --- | --- | --- |
-| `dailyGoal` | int | 20 |
-| `goalEnabled` | bool | `true` |
+| `dailyNewLimit` | int | 20 |
+| `goalDisabledSince` | string? | `null` |
 
 ### Range
 
@@ -55,7 +53,7 @@ approval.)
 - Max: 200
 - Step: 5
 
-Outside range is rejected at validation; values are clamped on read for safety.
+Outside range is rejected at validation. Corrupt or invalid persisted values recover to the default `20` on read for safety.
 
 ### Configuration
 
@@ -97,6 +95,17 @@ Dashboard shows:
 - Pulse animation when goal is met for the first time today.
 
 When `progress >= goal`: visual stays celebratory until midnight (gold ring, checkmark icon). Subsequent answers do not break the celebration.
+
+### Backend summary contract
+
+Dashboard also has a backend-only progress summary for later FE wiring:
+
+- `dueTodayCount` reuses the existing Progress due-summary rules, including the suspended/buried exclusion logic.
+- `todayAttemptCount` comes from `study_attempts` grouped by the device's current local day.
+- `dailyGoal` comes from persisted learning settings. If the goal is disabled, the summary returns a controlled disabled state.
+- `currentStreak` is computed from persisted attempt history while the goal is enabled. If the goal is disabled, the summary returns an unknown streak state instead of fabricating a number.
+
+This contract is not yet wired into Dashboard UI in the current prompt.
 
 ## Streak
 
@@ -292,7 +301,7 @@ All queries SHOULD be cheap (indexed on `attempted_at`, `due_at`, `status`). If 
 
 **Schema:**
 
-- SharedPreferences keys (see `docs/database/storage-boundaries.md`): `goalEnabled`, `dailyGoal`, `streakEnabled`, `reminderEnabled`, `reminderTime`, `lastGoalMetDate`, `currentStreak`, `longestStreak`, `firstLaunchCompletedAt`
+- SharedPreferences keys (see `docs/database/storage-boundaries.md`): `learning.dailyNewLimit`, `learning.goalDisabledSince`, `streakEnabled`, `reminderEnabled`, `reminderTime`, `lastGoalMetDate`, `currentStreak`, `longestStreak`, `firstLaunchCompletedAt`
 
 **Decision table:**
 

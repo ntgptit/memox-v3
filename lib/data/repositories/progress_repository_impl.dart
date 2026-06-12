@@ -243,6 +243,27 @@ class ProgressRepositoryImpl implements ProgressRepository {
   }
 
   @override
+  Future<Result<Map<DateTime, int>>> loadAttemptCountsByDay() async {
+    try {
+      final List<int> rows = await _dao.loadAttemptCountsByDay();
+      final Map<DateTime, int> countsByDay = <DateTime, int>{};
+      for (final int attemptedAt in rows) {
+        final DateTime localDay = _localDayFromEpochMs(attemptedAt);
+        countsByDay[localDay] = (countsByDay[localDay] ?? 0) + 1;
+      }
+      return Result<Map<DateTime, int>>.ok(countsByDay);
+    } catch (error) {
+      return Result<Map<DateTime, int>>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_attempts',
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Result<BoxDistribution>> loadBoxDistribution() async {
     try {
       final int invalidBoxCount = await _dao.invalidBoxCount();
@@ -347,5 +368,13 @@ class ProgressRepositoryImpl implements ProgressRepository {
         studyStatistics: (studyStatistics as Ok<StudyStatistics>).value,
       ),
     );
+  }
+
+  DateTime _localDayFromEpochMs(int epochMs) {
+    final DateTime localDateTime = DateTime.fromMillisecondsSinceEpoch(
+      epochMs,
+      isUtc: true,
+    ).toLocal();
+    return DateTime(localDateTime.year, localDateTime.month, localDateTime.day);
   }
 }

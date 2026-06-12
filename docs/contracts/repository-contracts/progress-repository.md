@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-12
 status: contract
 ---
 
@@ -22,6 +22,7 @@ Future<Either<Failure, List<FlashcardProgress>>> getDueInScope(StudyScope scope,
 Future<Either<Failure, int>> countSuspended();
 Future<Either<Failure, int>> countBuriedToday();
 Future<Either<Failure, Map<BoxNumber, int>>> getBoxDistribution();
+Future<Either<Failure, Map<DateTime, int>>> loadAttemptCountsByDay();
 
 // Attempts
 Stream<List<StudyAttempt>> watchAttemptsByCard(FlashcardId id, {DateTime? before, int limit = 50});
@@ -63,6 +64,7 @@ These methods rely on indexes (recommend in `docs/database/schema-contract.md`):
 - `watchAttemptsByCard` → `study_attempts(flashcard_id, attempted_at DESC)`
 - `getBoxDistribution` → cheap aggregate, no special index
 - `countSuspended` / `countBuriedToday` → `flashcard_progress(is_suspended, buried_until, due_at)`
+- `loadAttemptCountsByDay` → `study_attempts(attempted_at)` grouped by device-local calendar day
 
 ## Constraints
 
@@ -90,6 +92,7 @@ These methods rely on indexes (recommend in `docs/database/schema-contract.md`):
 - Suspend toggle → SRS state unchanged.
 - Box distribution aggregate.
 - Time-range attempt count aggregate.
+- Local-day attempt count aggregate for dashboard progress summary / streak computation.
 
 ## Related
 
@@ -107,4 +110,4 @@ These methods rely on indexes (recommend in `docs/database/schema-contract.md`):
 - `lib/domain/repositories/study_attempt_repository.dart` (may be split or unified)
 - `lib/data/repositories/progress_repository_impl.dart`
 - `lib/data/datasources/local/daos/flashcard_progress_dao.dart`
-- `lib/data/datasources/local/daos/study_attempt_dao.dart`
+- `lib/data/datasources/local/daos/progress_dao.dart`

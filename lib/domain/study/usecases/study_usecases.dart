@@ -1,8 +1,10 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
+import 'package:memox/domain/models/learning_settings.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/repositories/learning_settings_repository.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -14,14 +16,26 @@ import 'package:memox/domain/types/study_scope.dart';
 ///
 /// Failure types: `StorageFailure`.
 class StartStudySessionUseCase {
-  const StartStudySessionUseCase(this._repository);
+  const StartStudySessionUseCase(this._repository, this._settingsRepository);
 
   final StudyRepository _repository;
+  final LearningSettingsRepository _settingsRepository;
 
   Future<Result<StudyEntryStartResult>> call({
     required StudyScope scope,
     StudyMode? mode,
-  }) => _repository.startStudySession(scope: scope, mode: mode);
+  }) async {
+    final Result<LearningSettings> settings = await _settingsRepository.load();
+    return switch (settings) {
+      Ok<LearningSettings>(:final value) => _repository.startStudySession(
+        scope: scope,
+        dailyNewLimit: value.dailyNewLimit,
+        mode: mode,
+      ),
+      Err<LearningSettings>(:final failure) =>
+        Result<StudyEntryStartResult>.err(failure),
+    };
+  }
 }
 
 /// Restarts a resumable study session by canceling the previous one and
@@ -30,19 +44,29 @@ class StartStudySessionUseCase {
 /// Failure types: `NotFoundFailure`, `ValidationFailure`, `ConflictFailure`,
 /// `StorageFailure`.
 class RestartStudySessionUseCase {
-  const RestartStudySessionUseCase(this._repository);
+  const RestartStudySessionUseCase(this._repository, this._settingsRepository);
 
   final StudyRepository _repository;
+  final LearningSettingsRepository _settingsRepository;
 
   Future<Result<StudySession>> call({
     required SessionId previousSessionId,
     required StudyScope scope,
     StudyMode? mode,
-  }) => _repository.restartStudySession(
-    previousSessionId: previousSessionId,
-    scope: scope,
-    mode: mode,
-  );
+  }) async {
+    final Result<LearningSettings> settings = await _settingsRepository.load();
+    return switch (settings) {
+      Ok<LearningSettings>(:final value) => _repository.restartStudySession(
+        previousSessionId: previousSessionId,
+        scope: scope,
+        dailyNewLimit: value.dailyNewLimit,
+        mode: mode,
+      ),
+      Err<LearningSettings>(:final failure) => Result<StudySession>.err(
+        failure,
+      ),
+    };
+  }
 }
 
 /// Loads a persisted study session for the review screen.

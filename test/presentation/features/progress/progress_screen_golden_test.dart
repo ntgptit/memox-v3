@@ -47,6 +47,10 @@ class _FakeProgressRepository implements ProgressRepository {
   Future<Result<ProgressReadModel>> loadProgressReadModel({
     required DateTime now,
   }) => throw UnimplementedError();
+
+  @override
+  Future<Result<Map<DateTime, int>>> loadAttemptCountsByDay() =>
+      throw UnimplementedError();
 }
 
 /// Wednesday, so a week range ends mid-week like the mock.

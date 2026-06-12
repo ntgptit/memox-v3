@@ -125,7 +125,10 @@ Future<Either<Failure, Unit>> call({
   `study_sessions.updated_at` in one transaction.
 - Do **not** update `flashcard_progress`.
 - `Forgot` persists as `AttemptResult.forgot`.
-- `Got it` persists as the passing path used by the current recall V1 flow (`AttemptResult.perfect`).
+- `Got it` persists as the passing path used by the current recall/review/guess V1 flows (`AttemptResult.perfect`).
+- Fill V1 also uses this one-terminal-attempt path: the caller precomputes
+  `AttemptResult.perfect` / `AttemptResult.recovered` / `AttemptResult.forgot`
+  from the strict typed-answer evaluator, then records that terminal result.
 - If the session item is already answered, return `UnsupportedActionFailure`.
 - If the last unanswered item is answered, leave the session open; do not finalize or navigate to result.
 

@@ -19,6 +19,7 @@ Repositories are the data-layer boundary. Domain layer interfaces, data layer im
 | `docs/contracts/repository-contracts/flashcard-repository.md` | Flashcards + progress + tags as a unit; bulk; import chunked |
 | `docs/contracts/repository-contracts/study-repository.md`     | Sessions + session items + status transitions                |
 | `docs/contracts/repository-contracts/progress-repository.md`  | flashcard_progress + study_attempts (SRS state)              |
+| `docs/contracts/repository-contracts/learning-settings-repository.md` | SharedPreferences learning defaults                          |
 | `docs/contracts/repository-contracts/tag-repository.md`       | flashcard_tags global ops, rename, merge, delete             |
 | `docs/contracts/repository-contracts/sync-repository.md`      | Drive App Folder, fingerprint, snapshot, restore             |
 

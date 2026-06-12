@@ -25,6 +25,7 @@ entity / capability.
 | `docs/contracts/usecase-contracts/history.md`      | Read-only timeline + lifetime stats                           |
 | `docs/contracts/usecase-contracts/search.md`       | Global recursive search                                       |
 | `docs/contracts/usecase-contracts/engagement.md`   | Daily goal, streak, reminder, dashboard aggregate             |
+| `docs/contracts/usecase-contracts/learning-settings.md` | Persisted learning defaults and validation                 |
 | `docs/contracts/usecase-contracts/account-sync.md` | Google sign-in, account-scoped DB, Drive backup/restore       |
 | `docs/contracts/usecase-contracts/tts.md`          | TTS playback, settings, voice listing                         |
 
