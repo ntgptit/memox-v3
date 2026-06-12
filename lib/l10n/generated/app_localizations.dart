@@ -2318,6 +2318,12 @@ abstract class AppLocalizations {
   /// **'Clear search'**
   String get librarySearchClearTooltip;
 
+  /// No description provided for @librarySearchShortcutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'K'**
+  String get librarySearchShortcutLabel;
+
   /// No description provided for @libraryNewFolderLabel.
   ///
   /// In en, this message translates to:

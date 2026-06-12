@@ -1345,6 +1345,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get librarySearchClearTooltip => 'Xóa tìm kiếm';
 
   @override
+  String get librarySearchShortcutLabel => 'K';
+
+  @override
   String get libraryNewFolderLabel => 'Thư mục mới';
 
   @override

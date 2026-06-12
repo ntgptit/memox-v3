@@ -683,6 +683,7 @@
   "libraryFilterTooltip": "Bộ lọc",
   "librarySearchHint": "Tìm thư mục",
   "librarySearchClearTooltip": "Xóa tìm kiếm",
+  "librarySearchShortcutLabel": "K",
   "libraryNewFolderLabel": "Thư mục mới",
   "libraryLoadFailedTitle": "Không tải được thư viện",
   "libraryLoadFailedMessage": "Đã xảy ra lỗi khi tải các thư mục của bạn.",

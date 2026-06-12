@@ -1359,6 +1359,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get librarySearchClearTooltip => 'Clear search';
 
   @override
+  String get librarySearchShortcutLabel => 'K';
+
+  @override
   String get libraryNewFolderLabel => 'New folder';
 
   @override

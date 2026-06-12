@@ -683,6 +683,7 @@
   "libraryFilterTooltip": "Filters",
   "librarySearchHint": "Search folders",
   "librarySearchClearTooltip": "Clear search",
+  "librarySearchShortcutLabel": "K",
   "libraryNewFolderLabel": "New folder",
   "libraryLoadFailedTitle": "Couldn't load your library",
   "libraryLoadFailedMessage": "Something went wrong while loading your folders.",

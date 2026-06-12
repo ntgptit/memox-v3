@@ -450,11 +450,18 @@ void main() {
     ) async {
       await tester.pumpWidget(
         _wrapScreen(
-          Stream<LibraryOverviewReadModel>.value(_model(totalFolderCount: 1)),
+          Stream<LibraryOverviewReadModel>.value(
+            _model(
+              folders: <FolderWithCount>[_item('Alpha')],
+              totalFolderCount: 1,
+            ),
+          ),
         ),
       );
       await tester.pumpAndSettle();
 
+      expect(find.text('Search folders'), findsOneWidget);
+      expect(find.text('K'), findsOneWidget);
       expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
       expect(find.byIcon(Icons.search_rounded), findsNothing);
     });
@@ -579,6 +586,36 @@ void main() {
         expect(find.text('Library'), findsWidgets);
         expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
       }
+    });
+
+    testWidgets('recent sort pill and due summary stay non-interactive', (
+      WidgetTester tester,
+    ) async {
+      final _RecordingNavigatorObserver observer =
+          _RecordingNavigatorObserver();
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<LibraryOverviewReadModel>.value(
+            _model(
+              folders: <FolderWithCount>[_item('Alpha', dueCount: 5)],
+              dueToday: 12,
+              totalFolderCount: 1,
+            ),
+          ),
+          observer: observer,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Recent'), findsOneWidget);
+      expect(find.textContaining('due today'), findsOneWidget);
+
+      await tester.tap(find.text('Recent'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.textContaining('due today'));
+      await tester.pumpAndSettle();
+
+      expect(observer.pushCount, 1);
     });
   });
 
