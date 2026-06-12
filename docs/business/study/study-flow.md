@@ -61,7 +61,7 @@ study mode.
 | `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. Per-pair persistence; one board per 5 cards.                               |
 | `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit.                                                             |
 | `recall` | front → back             | Show front, tap "Show answer" to reveal back, self-grade with Forgot / Got it. **No text input in v1**; typed-answer recall is a Future Proposal.                                   |
-| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match; "Mark correct" override path. Optional Hint button taints the terminal result to max `recovered`. |
+| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict trim-only match; optional Hint button taints the single terminal result to max `recovered`. "Mark correct" commits that terminal result without append-attempt correction. |
 
 Direction notes:
 
@@ -180,9 +180,9 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - The review controller resolves a domain `StudyModeStrategy` for the current
   session. Because the session header does not persist mode yet, V1 uses
   `StudyMode.recall` as the documented fallback when no mode is supplied.
-  Explicit resolution now supports `review` and `guess` on the backend, while
-  `match` / `fill` remain controlled-unsupported and do not change the current
-  review shell.
+  Explicit resolution now supports `review`, `guess`, and backend Fill
+  strategy resolution; `match` remains controlled-unsupported and does not
+  change the current review shell.
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
   the real result screen on success.
@@ -250,8 +250,9 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 - **Answer re-grade before finalization (Target, WBS 4.4.3):** until the session is finalized,
   the user may change the grade of an answered item (mistap protection). That future path requires
   a separate append-attempt contract and is not required for Fill BE V1.
-- Fill V1 uses local evaluation before terminal persistence: Check evaluates the answer, Try again
-  stays local, and Mark correct or a committed wrong answer writes the single terminal attempt.
+- Fill V1 uses local evaluation before the single terminal persistence: Check evaluates the answer,
+  Try again stays local, and Mark correct or a committed wrong answer writes the one terminal
+  attempt.
 - UI must not be the only source of retry state.
 
 ## Performance

@@ -159,7 +159,7 @@ card). The Korean / target-language IME is invoked normally.
 ## Matching rules (v1)
 
 - Trim both sides.
-- **Strict character match** for the target language (no case folding, no diacritic stripping).
+- **Strict trim-only character match** for the target language (no case folding, no diacritic stripping).
 - Result:
 
 | Outcome     | Definition                              | result                                                                  | box_after                                                       |
@@ -168,7 +168,8 @@ card). The Korean / target-language IME is invoked normally.
 | Mismatch    | Otherwise                               | `forgot` initially; can be overridden to `recovered` via "Mark correct" | `1` for forgot, `current` for recovered                         |
 
 Hint button usage rule: once the user reveals any hint character, the maximum result for this card
-is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-time.
+is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-time, and the
+session still persists only one terminal attempt for the card.
 
 ## States
 
@@ -179,7 +180,7 @@ is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-
 | Checking                   | Check tapped                    | Compare; show feedback; switch input card to correct or wrong state.                                                                                                              |
 | Correct                    | Exact match                     | Input card shows answer with ✓; TTS icon appears; Next button visible; auto-advance 0.8s.                                                                                         |
 | Wrong                      | Mismatch                        | Input card shows user input (red) above correct (default); TTS icon appears; Mark correct / Try again buttons visible; no auto-advance.                                           |
-| Retry                      | Try again tapped                | Return to typing state; input cleared; hint reveals retained (still tainted); no attempt is persisted yet. One retry per card max.                                                   |
+| Retry                      | Try again tapped                | Return to typing state; input cleared; hint reveals retained (still tainted); no attempt is persisted yet. One retry per card max; still one terminal persisted attempt total.      |
 | Buried via long-press      | Long-press hint card            | Open card actions sheet.                                                                                                                                                          |
 | Skipped (mode unavailable) | Front too short or trivial      | Auto-skip to next mode in flow without recording attempt.                                                                                                                         |
 | Last card                  | Final grading                   | Finalize → study result.                                                                                                                                                          |
@@ -192,7 +193,7 @@ is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-
 | Type into input                              | IME        | Live update of the input label.                                 |
 | Tap Hint                                     | Tap        | Reveal one more character; taint card (max result = recovered). |
 | Tap Check                                    | Tap        | Submit; compute match; show feedback. Terminal persistence happens only when the answer is committed. |
-| Tap Mark correct (wrong state)               | Tap        | Commit the terminal answer as `recovered`.                     |
+| Tap Mark correct (wrong state)               | Tap        | Commit the one terminal answer as `recovered`.                |
 | Tap Try again (wrong state, retry available) | Tap        | Return to typing; clear input; keep the current answer local only. |
 | Tap Next (correct state)                     | Tap        | Skip auto-advance; next card.                                   |
 | Tap ↺ retry icon (wrong state)               | Tap        | Same as Try again.                                              |
@@ -209,7 +210,7 @@ is `recovered` (not `perfect`). This is enforced at grade-time, not at hint-tap-
 | `recovered` | Exact match with hint used OR Mark correct override on wrong            | `current` (stay)      |
 | `forgot`    | Wrong committed as the terminal answer                                  | `1` (`lapse_count++`) |
 
-Terminal persistence uses `GradeAttemptUseCase` with `study_mode = 'fill'`.
+Terminal persistence uses `RecordStudySessionAnswerUseCase` with `study_mode = 'fill'`.
 
 ## When fill mode is unavailable
 
@@ -282,7 +283,7 @@ Same as Recall mode:
 - Plain text input ONLY in v1 (no cell row).
 - Matching is strict (no case folding, no diacritic stripping).
 - Correct → `perfect` (or `recovered` if hint used).
-- Wrong stays local until the user commits the terminal answer.
+- Wrong stays local until the user commits the one terminal answer.
 - Auto-advance only on Correct; Wrong requires explicit action.
 - Try again allows ONE retry per card and does not persist.
 - TTS icon hidden during typing; appears only after feedback.

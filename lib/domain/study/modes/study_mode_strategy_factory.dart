@@ -1,3 +1,4 @@
+import 'package:memox/domain/study/modes/fill_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/guess_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/review_study_mode_strategy.dart';
@@ -16,8 +17,8 @@ abstract final class StudyModeStrategyFactory {
       StudyMode.recall => const RecallStudyModeStrategy(),
       StudyMode.review => const ReviewStudyModeStrategy(),
       StudyMode.guess => const GuessStudyModeStrategy(),
-      StudyMode.match ||
-      StudyMode.fill => _UnsupportedStudyModeStrategy(resolvedMode),
+      StudyMode.fill => const FillStudyModeStrategy(),
+      StudyMode.match => _UnsupportedStudyModeStrategy(resolvedMode),
     };
   }
 }

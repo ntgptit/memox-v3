@@ -96,7 +96,7 @@ Per-card result classification at finalization (implemented in
 `_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`): the
 current V1 runtime only has one terminal persisted attempt per item, so the **last** attempt is
 also the only attempt. That makes the current classifier observationally equivalent to
-`perfect` / `recovered` / `forgot` on single-attempt flows.
+`perfect` / `recovered` / `forgot` on single-attempt flows, including Fill V1.
 
 > **✅ Adopted decision (2026-06-10, C1 — SRS demotion reachability): first attempt decides SRS.**
 > When a future retry/re-queue mode actually appends multiple attempts before finalization, the
