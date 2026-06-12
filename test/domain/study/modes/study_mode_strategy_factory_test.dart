@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/domain/study/modes/guess_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
+import 'package:memox/domain/study/modes/review_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy_factory.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -17,12 +19,32 @@ void main() {
     expect(strategy.mapGotItAction(), AttemptResult.perfect);
   });
 
-  test('returns a controlled unsupported strategy for non-recall modes', () {
-    for (final StudyMode mode in StudyMode.values) {
-      if (mode == StudyMode.recall) {
-        continue;
-      }
+  test('returns the review strategy for StudyMode.review', () {
+    final strategy = StudyModeStrategyFactory.resolve(
+      studyMode: StudyMode.review,
+    );
 
+    expect(strategy, isA<ReviewStudyModeStrategy>());
+    expect(strategy.mode, StudyMode.review);
+    expect(strategy.usesRevealSelfGradeFlow, isFalse);
+    expect(strategy.mapForgotAction(), AttemptResult.forgot);
+    expect(strategy.mapGotItAction(), AttemptResult.perfect);
+  });
+
+  test('returns the guess strategy for StudyMode.guess', () {
+    final strategy = StudyModeStrategyFactory.resolve(
+      studyMode: StudyMode.guess,
+    );
+
+    expect(strategy, isA<GuessStudyModeStrategy>());
+    expect(strategy.mode, StudyMode.guess);
+    expect(strategy.usesRevealSelfGradeFlow, isFalse);
+    expect(strategy.mapForgotAction(), AttemptResult.forgot);
+    expect(strategy.mapGotItAction(), AttemptResult.perfect);
+  });
+
+  test('returns controlled unsupported strategies for match and fill', () {
+    for (final StudyMode mode in <StudyMode>[StudyMode.match, StudyMode.fill]) {
       final strategy = StudyModeStrategyFactory.resolve(studyMode: mode);
 
       expect(strategy.mode, mode);

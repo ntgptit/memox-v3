@@ -179,9 +179,10 @@ Status notes (see `docs/business/glossary.md` §Status terms):
   `is_suspended`, and touches `study_sessions.updated_at`.
 - The review controller resolves a domain `StudyModeStrategy` for the current
   session. Because the session header does not persist mode yet, V1 uses
-  `StudyMode.recall` as the documented fallback in
-  `StudyModeStrategyFactory.resolve(...)`. Match / Guess / Fill strategy
-  behavior remains future work and does not change the current review shell.
+  `StudyMode.recall` as the documented fallback when no mode is supplied.
+  Explicit resolution now supports `review` and `guess` on the backend, while
+  `match` / `fill` remain controlled-unsupported and do not change the current
+  review shell.
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
   the real result screen on success.
@@ -315,6 +316,8 @@ advances.
   study use cases live under `lib/domain/study/usecases/`, parallel to the other feature
   use-case files in `lib/domain/usecases/`.
 - `lib/domain/study/modes/` (`study_mode_strategy.dart`, `recall_study_mode_strategy.dart`,
-  `study_mode_strategy_factory.dart`) — mode behavior contract and V1 recall fallback. **There is
-  no dedicated `flow_validator.dart`**; validation is part of the active strategy.
+  `review_study_mode_strategy.dart`, `guess_study_mode_strategy.dart`,
+  `study_mode_strategy_factory.dart`) — mode behavior contract, V1 recall
+  fallback, and explicit review/guess support. **There is no dedicated
+  `flow_validator.dart`**; validation is part of the active strategy.
 - `lib/presentation/features/study/**`

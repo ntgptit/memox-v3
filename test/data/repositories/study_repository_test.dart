@@ -1297,6 +1297,110 @@ void main() {
   );
 
   test(
+    'recordStudySessionAnswer persists review mode with the perfect result',
+    () async {
+      const String folderId = 'folder-review-answer';
+      const String deckId = 'deck-review-answer';
+      const String cardId = 'card-review-answer';
+      const String sessionId = 'session-review-answer';
+      const String sessionItemId = 'item-review-answer';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 2,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<void> result = await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        result: AttemptResult.perfect,
+        studyMode: StudyMode.review,
+      );
+
+      expect(result.isOk, isTrue);
+
+      final StudyAttemptRow attempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      expect(attempt.result, 'perfect');
+      expect(attempt.studyMode, 'review');
+      expect(attempt.boxBefore, 2);
+      expect(attempt.boxAfter, 3);
+      expect(
+        (await db.select(db.studySessionItems).getSingle()).answeredAt != null,
+        isTrue,
+      );
+    },
+  );
+
+  test(
+    'recordStudySessionAnswer persists guess mode with the forgot result',
+    () async {
+      const String folderId = 'folder-guess-answer';
+      const String deckId = 'deck-guess-answer';
+      const String cardId = 'card-guess-answer';
+      const String sessionId = 'session-guess-answer';
+      const String sessionItemId = 'item-guess-answer';
+      final _StudyDbFixture fixture = _StudyDbFixture(db);
+      await fixture.insertFolder(id: folderId);
+      await fixture.insertDeck(id: deckId, folderId: folderId);
+      await fixture.insertFlashcard(
+        id: cardId,
+        deckId: deckId,
+        dueAt: now.toUtc().millisecondsSinceEpoch,
+        boxNumber: 4,
+      );
+      await fixture.insertResumableSession(
+        id: sessionId,
+        entryType: EntryType.deck.name,
+        entryRefId: deckId,
+        studyType: StudyMapper.studyTypeToStorage(StudyType.newCards),
+      );
+      await fixture.insertStudySessionItem(
+        id: sessionItemId,
+        sessionId: sessionId,
+        flashcardId: cardId,
+      );
+
+      final Result<void> result = await repository.recordStudySessionAnswer(
+        sessionId: sessionId,
+        sessionItemId: sessionItemId,
+        result: AttemptResult.forgot,
+        studyMode: StudyMode.guess,
+      );
+
+      expect(result.isOk, isTrue);
+
+      final StudyAttemptRow attempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      expect(attempt.result, 'forgot');
+      expect(attempt.studyMode, 'guess');
+      expect(attempt.boxBefore, 4);
+      expect(attempt.boxAfter, 1);
+      expect(
+        (await db.select(db.studySessionItems).getSingle()).answeredAt != null,
+        isTrue,
+      );
+    },
+  );
+
+  test(
     'recordStudySessionAnswer rolls back attempt and answered_at when the transaction fails',
     () async {
       const String folderId = 'folder-answer-fail';

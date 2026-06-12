@@ -1,4 +1,6 @@
+import 'package:memox/domain/study/modes/guess_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
+import 'package:memox/domain/study/modes/review_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -10,10 +12,13 @@ abstract final class StudyModeStrategyFactory {
   /// V1 fallback: when the session mode is not yet persisted, use recall.
   static StudyModeStrategy resolve({StudyMode? studyMode}) {
     final StudyMode resolvedMode = studyMode ?? StudyMode.recall;
-    if (resolvedMode == StudyMode.recall) {
-      return const RecallStudyModeStrategy();
-    }
-    return _UnsupportedStudyModeStrategy(resolvedMode);
+    return switch (resolvedMode) {
+      StudyMode.recall => const RecallStudyModeStrategy(),
+      StudyMode.review => const ReviewStudyModeStrategy(),
+      StudyMode.guess => const GuessStudyModeStrategy(),
+      StudyMode.match ||
+      StudyMode.fill => _UnsupportedStudyModeStrategy(resolvedMode),
+    };
   }
 }
 
