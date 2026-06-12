@@ -193,6 +193,92 @@ AttemptResult _finalizeResultForAttempts(
   return lastResult;
 }
 
+Future<void> _finalizeMatchStudySession({
+  required study_dao.StudySessionDao dao,
+  required SessionId sessionId,
+  required List<study_dao.StudySessionReviewItemsResult> itemRows,
+  required DateTime now,
+}) async {
+  final List<StudyMatchEvaluationsRow> evaluationRows = await dao
+      .loadMatchEvaluations(sessionId);
+  final Map<String, List<StudyMatchEvaluationsRow>> evaluationsByItemId =
+      <String, List<StudyMatchEvaluationsRow>>{};
+  for (final StudyMatchEvaluationsRow row in evaluationRows) {
+    evaluationsByItemId
+        .putIfAbsent(row.sessionItemId, () => <StudyMatchEvaluationsRow>[])
+        .add(row);
+  }
+
+  final int nowMs = now.millisecondsSinceEpoch;
+  for (final study_dao.StudySessionReviewItemsResult itemRow in itemRows) {
+    final List<StudyMatchEvaluationsRow> itemEvaluations =
+        evaluationsByItemId[itemRow.id] ?? const <StudyMatchEvaluationsRow>[];
+    final AttemptResult finalResult = _finalizeResultForMatchEvaluations(
+      itemEvaluations,
+    );
+    final FlashcardProgressRow? progressRow = await dao.findFlashcardProgress(
+      itemRow.flashcardId,
+    );
+    final int currentBox = progressRow?.boxNumber ?? 1;
+    final int nextBox = _boxAfterFinalization(currentBox, finalResult);
+    final int dueAtMs = _dueAtForInterval(now, nextBox);
+    final int reviewCount = (progressRow?.reviewCount ?? 0) + 1;
+    final int lapseCount =
+        (progressRow?.lapseCount ?? 0) +
+        (finalResult == AttemptResult.forgot ? 1 : 0);
+
+    await dao.insertStudyAttempt(
+      StudyAttemptsCompanion.insert(
+        id: IdGenerator.newId(),
+        sessionItemId: itemRow.id,
+        result: StudyMapper.attemptResultToStorage(finalResult),
+        studyMode: StudyMapper.studyModeToStorage(StudyMode.match),
+        boxBefore: Value<int>(currentBox),
+        boxAfter: Value<int>(nextBox),
+        attemptedAt: nowMs,
+      ),
+    );
+    await dao.markStudySessionItemAnswered(
+      sessionItemId: itemRow.id,
+      answeredAtMs: nowMs,
+      updatedAtMs: nowMs,
+    );
+
+    if (progressRow == null) {
+      await dao.insertFlashcardProgress(
+        FlashcardProgressCompanion.insert(flashcardId: itemRow.flashcardId),
+      );
+    }
+
+    final int updatedRows = await dao.updateFlashcardProgress(
+      flashcardId: itemRow.flashcardId,
+      boxNumber: nextBox,
+      dueAtMs: dueAtMs,
+      reviewCount: reviewCount,
+      lapseCount: lapseCount,
+      lastStudiedAtMs: nowMs,
+    );
+    if (updatedRows == 0) {
+      throw _RuleViolation(Failure.finalization(sessionId: sessionId));
+    }
+  }
+}
+
+AttemptResult _finalizeResultForMatchEvaluations(
+  List<StudyMatchEvaluationsRow> evaluations,
+) {
+  bool sawWrongBeforeCorrect = false;
+  for (final StudyMatchEvaluationsRow row in evaluations) {
+    if (row.isCorrect) {
+      return sawWrongBeforeCorrect
+          ? AttemptResult.forgot
+          : AttemptResult.perfect;
+    }
+    sawWrongBeforeCorrect = true;
+  }
+  return AttemptResult.forgot;
+}
+
 int _boxAfterFinalization(int currentBox, AttemptResult result) =>
     switch (result) {
       AttemptResult.perfect ||

@@ -1,7 +1,5 @@
-import 'package:memox/domain/study/modes/fill_study_mode_strategy.dart';
-import 'package:memox/domain/study/modes/guess_study_mode_strategy.dart';
+import 'package:memox/domain/study/modes/match_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/recall_study_mode_strategy.dart';
-import 'package:memox/domain/study/modes/review_study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -13,13 +11,13 @@ abstract final class StudyModeStrategyFactory {
   /// V1 fallback: when the session mode is not yet persisted, use recall.
   static StudyModeStrategy resolve({StudyMode? studyMode}) {
     final StudyMode resolvedMode = studyMode ?? StudyMode.recall;
-    return switch (resolvedMode) {
-      StudyMode.recall => const RecallStudyModeStrategy(),
-      StudyMode.review => const ReviewStudyModeStrategy(),
-      StudyMode.guess => const GuessStudyModeStrategy(),
-      StudyMode.fill => const FillStudyModeStrategy(),
-      StudyMode.match => _UnsupportedStudyModeStrategy(resolvedMode),
-    };
+    if (resolvedMode == StudyMode.recall) {
+      return const RecallStudyModeStrategy();
+    }
+    if (resolvedMode == StudyMode.match) {
+      return const MatchStudyModeStrategy();
+    }
+    return _UnsupportedStudyModeStrategy(resolvedMode);
   }
 }
 

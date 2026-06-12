@@ -5,7 +5,7 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 
 # SRS Review
 
-> **Status: Current (one-terminal-attempt flows + finalization) / Target (history surfaces).** Box transition and
+> **Status: Current (data + finalization) / Target (history surfaces).** Box transition and
 > interval computation are implemented in `StudyRepositoryImpl.finalizeStudySession` and verified by
 > `test/data/repositories/study_srs_transition_test.dart` (decision rows S11–S15). The columns
 > `study_attempts.box_before` / `box_after` **exist in the current schema**
@@ -79,54 +79,53 @@ See `docs/business/glossary.md` for result definitions.
 | `perfect`        | Correct, clean attempt (V1 "Got it")                                                                  |
 | `recovered`      | Single passing-but-imperfect attempt: fill hint-taint or Mark-correct override (Target; redefined — no longer "forgot then passed", which now finalizes as `forgot`) |
 | `forgot`         | First attempt failed (V1 "Forgot"); under retry modes, a first-attempt fail stays `forgot` even after a same-session re-queue pass |
-| `initial_passed` | **Never emitted** (kept in the enum/storage codec for compatibility; identical transition to `perfect`). Reviving it requires a new product decision. |
-
-Guess mode follows the clean-attempt contract above: a correct tap emits `perfect`, not `initial_passed`.
+| `initial_passed` | Compatibility-only legacy storage codec value; never emitted by current modes. Reviving it requires a new product decision. |
 
 ## Box transition table
 
-This is the authoritative transition contract. The box transition is computed at session
-finalization by `StudyRepositoryImpl.finalizeStudySession` in
-`lib/data/repositories/study_repo_impl.dart`; the in-session
-`Answer*UseCase` family in `lib/domain/study/usecases/study_usecases.dart` only records attempts
-and re-queues failed cards. Implementation must match this table. There is no standalone
-`box_transition.dart` file at present.
+This is the authoritative transition contract for one-terminal-attempt flows. The box transition
+is computed at session finalization by `StudyRepositoryImpl.finalizeStudySession` in
+`lib/data/repositories/study_repo_impl.dart`; the in-session `Answer*UseCase` family in
+`lib/domain/study/usecases/study_usecases.dart` only records attempts and re-queues failed cards.
+Implementation must match this table. There is no standalone `box_transition.dart` file at
+present.
 
 Per-card result classification at finalization (implemented in
-`_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`): the
-current V1 runtime only has one terminal persisted attempt per item, so the **last** attempt is
-also the only attempt. That makes the current classifier observationally equivalent to
-`perfect` / `recovered` / `forgot` on single-attempt flows, including Fill V1.
+`_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`) for the
+current one-terminal-attempt flows: the **last** attempt decides — last attempt `forgot` →
+`forgot` (box → 1, lapse +1); any earlier `forgot` but last attempt passing → `recovered` (box
+stays, no lapse); all attempts passing → the last attempt's result (`perfect` / compatibility-only
+`initial_passed`, box +1).
+
+Match finalization is separate: it derives a single terminal result per session item from
+`study_match_evaluations`, mapping a clean correct pair to `perfect` and any wrong-before-correct
+or never-correct path to `forgot`.
 
 > **✅ Adopted decision (2026-06-10, C1 — SRS demotion reachability): first attempt decides SRS.**
-> When a future retry/re-queue mode actually appends multiple attempts before finalization, the
-> FIRST persisted attempt for that item will determine the SRS outcome: first attempt `forgot` →
-> final result `forgot` (box → 1, lapse +1) even if the card is re-queued and passed later in the
-> same session. Re-queued passes are in-session relearning: they are recorded as attempts and
-> satisfy session completion, but do not change the SRS outcome.
+> When retry/re-queue modes land, the FIRST attempt recorded for an item in the session determines
+> the SRS outcome: first attempt `forgot` → final result `forgot` (box → 1, lapse +1) **even if
+> the card is re-queued and passed later in the same session**. Re-queued passes are in-session
+> relearning: they are recorded as attempts and satisfy session completion, but do not change the
+> SRS outcome. This keeps demotion reachable, gives the learner a same-session repetition of every
+> forgotten card (the relearning step), and keeps the interval table unchanged.
 >
-> For the current repo slice, that rule is deferred because Fill V1 still persists one terminal
-> attempt per item. No classifier change is required for Fill BE V1.
+> Consequences for the implementation when the first retry mode is built (do these together):
 >
-> Consequences for the implementation when the first append-attempt retry mode is built (do these
-> together):
->
-> - `_finalizeResultForAttempts` must switch from the current single-terminal-attempt behavior to
->   **first-attempt** classification for the forgot path; update
->   `test/data/repositories/study_srs_transition_test.dart` (S13 changes meaning) and decision rows
->   S13/S20 in the same change.
-> - `recovered` is **redefined** only for that future append-attempt flow: it no longer means
->   "forgot then passed" (that is now `forgot`); it means a single passing-but-imperfect attempt
->   (fill hint-taint, Mark-correct override). Transition stays: box unchanged, no lapse. Update
->   `docs/business/glossary.md` together.
-> - Fill V1 and the current self-grade flows stay on the existing one-terminal-attempt contract.
+> - `_finalizeResultForAttempts` must switch from last-attempt to **first-attempt** classification
+>   for the forgot path; update `test/data/repositories/study_srs_transition_test.dart` (S13
+>   changes meaning) and decision rows S13/S20 in the same change.
+> - `recovered` is **redefined**: it no longer means "forgot then passed" (that is now `forgot`);
+>   it means a single passing-but-imperfect attempt (fill hint-taint, Mark-correct override).
+>   Transition stays: box unchanged, no lapse. Update `docs/business/glossary.md` together.
+> - Current V1 (one attempt per item, last-attempt classifier) produces identical user-visible
+>   behavior, so no code change is required before retry modes land.
 
 | Current box | Result           | Next box | Next due              |
 |-------------|------------------|----------|-----------------------|
 | n (1-7)     | `perfect`        | n + 1    | now + interval[n + 1] |
-| n (1-7)     | `initial_passed` | n + 1    | now + interval[n + 1] |
+| n (1-7)     | `initial_passed` | n + 1    | Compatibility-only legacy codec path; not emitted by current modes |
 | 8           | `perfect`        | 8 (stay) | now + interval[8]     |
-| 8           | `initial_passed` | 8 (stay) | now + interval[8]     |
+| 8           | `initial_passed` | 8 (stay) | Compatibility-only legacy codec path; not emitted by current modes |
 | n (1-8)     | `recovered`      | n (stay) | now + interval[n]     |
 | n (1-8)     | `forgot`         | 1        | now + interval[1]     |
 
@@ -185,7 +184,8 @@ This keeps progress commits and box transitions in the finalization path, while 
 
 At session finalization:
 
-1. Persist all attempts (already done during session).
+1. Persist all attempts (already done during session for one-terminal flows; Match appends
+   evaluations during the session and derives terminal attempts here).
 2. Compute final result per item based on attempt history and flow.
 3. Update progress: `current_box`, `review_count`, `lapse_count`, `last_studied_at`, `due_at`.
 4. Update session status to `completed`.

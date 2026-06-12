@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-08
 applies_to: Drift schema, all tables, migrations
-schema_version: 4 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 5 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract
@@ -26,6 +26,7 @@ so far (added for the Library + Study features):
 | `study_sessions`     | `id` (PK), `entry_type`, `entry_ref_id?`, `study_type`, `status`, `started_at`, `updated_at` + index `idx_study_sessions_resumable`                                                                |
 | `study_session_items` | `id` (PK), `session_id` (FK→study_sessions, cascade), `flashcard_id` (FK→flashcards, cascade), `sort_order`, `answered_at?`, `created_at`, `updated_at` + index `idx_study_session_items_session_sort` |
 | `study_attempts`     | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before`, `box_after`, `user_input?`, `attempted_at` + index `idx_study_attempts_session_item`           |
+| `study_match_evaluations` | `id` (PK), `session_id` (FK→study_sessions, cascade), `session_item_id` (FK→study_session_items, cascade), `flashcard_id` (FK→flashcards, cascade), `board_index`, `pair_id`, `selected_front_cell_id`, `selected_back_cell_id`, `expected_front_flashcard_id`, `expected_back_flashcard_id`, `is_correct`, `attempt_order`, `evaluated_at`, `created_at` + indexes `idx_study_match_evaluations_session`, `idx_study_match_evaluations_session_item` |
 
 Remaining target tables (`tts_settings`) land with their
 feature slice. When a new table/column ships, bump
@@ -129,6 +130,8 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 - `study_attempts.box_before` / `box_after` — ✅ shipped with the v4 study tables and populated on
   every attempt insert. Only `flashcard_progress.last_reset_at` remains reserved for the Future
   Proposal Card History feature unless promoted.
+- `study_match_evaluations` — ✅ shipped with the v5 study tables; append-only Match evaluation
+  history used to derive terminal attempts during finalization.
 - `decks.target_language` — ✅ shipped in the current schema (initial deck table); no migration
   pending.
 - `decks.folder_id` nullable is Rejected / Not Applicable.
@@ -143,6 +146,7 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 | Add `flashcard_progress.last_reset_at INTEGER NULL`                                     | `docs/business/history/card-history.md`                                       | Default null. Updated when user resets a card's progress.                                                                                                                                                                                                                                                             |
 | ✅ DONE (v4) `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`                      | `docs/business/history/card-history.md`                                       | Shipped with the v4 study tables; populated on every attempt insert. Default 0 = "unknown"; history view displays "—" for 0.                                                                                                                                                                                          |
 | ✅ DONE (v4) `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`                       | `docs/business/history/card-history.md`                                       | Same semantics as `box_before`.                                                                                                                                                                                                                                                                                       |
+| ✅ DONE (v5) `study_match_evaluations` append-only Match evaluation table                 | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. |
 | ✅ DONE (current) compound index `flashcard_progress(is_suspended, buried_until, due_at)` | `docs/business/study-actions/bury-suspend.md`                                 | Added as `idx_flashcard_progress_eligibility`.                                                                                                                                                                                                                                                                        |
 | ✅ DONE (v3) index `flashcard_tags(tag)`                                                 | `docs/business/tags/tag-system.md`                                            | Added as `idx_flashcard_tags_tag` with the v3 tags migration. Tags are stored lowercased, so a plain index on `tag` supports lowercased-input lookups.                                                                                                                                                                |
 | ✅ DONE (v3) lowercase `flashcard_tags.tag` storage                                      | `docs/business/tags/tag-system.md`                                            | Tags are stored lowercased (case-insensitive identity); the validator + DAO normalize on insert. (The "schema v11 backfill" in earlier revisions belongs to a previous project iteration — this repo's tags shipped lowercased from v3.)                                                                              |
@@ -170,7 +174,9 @@ erDiagram
     decks ||--o{ study_sessions : entry
     folders ||--o{ study_sessions : entry
     study_sessions ||--o{ study_session_items : contains
+    study_sessions ||--o{ study_match_evaluations : records
     study_session_items ||--o{ study_attempts : has
+    study_session_items ||--o{ study_match_evaluations : evaluates
     flashcards ||--o{ study_session_items : references
 ```
 
@@ -185,7 +191,10 @@ erDiagram
 | `flashcards`          | `flashcard_tags`      | Cascade                                                    |
 | `flashcards`          | `study_session_items` | Cascade                                                    |
 | `study_sessions`      | `study_session_items` | Cascade                                                    |
+| `study_sessions`      | `study_match_evaluations` | Cascade                                                |
 | `study_session_items` | `study_attempts`      | Cascade                                                    |
+| `study_session_items` | `study_match_evaluations` | Cascade                                               |
+| `flashcards`          | `study_match_evaluations` | Cascade                                               |
 
 ## Schema change checklist
 
@@ -228,6 +237,7 @@ This schema is referenced by every business spec that touches persistent state.
 | `study_sessions`                                                                                | `docs/business/study/study-flow.md`, `docs/business/resume/resume-session.md`                                             |
 | `study_session_items`                                                                           | `docs/business/study/study-flow.md`                                                                                       |
 | `study_attempts` (incl. `box_before`, `box_after` pending migrations)                           | `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`                                                |
+| `study_match_evaluations`                                                                       | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`                                                     |
 
 **Related contracts:**
 

@@ -12,6 +12,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
@@ -130,6 +131,30 @@ class _FakeStudyRepository implements StudyRepository {
       studyMode: studyMode,
     ));
     return recordResult;
+  }
+
+  @override
+  Future<Result<void>> recordMatchEvaluation({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required FlashcardId flashcardId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+    required StudyMode studyMode,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<List<StudyMatchEvaluation>>> loadMatchEvaluations({
+    required SessionId sessionId,
+  }) async {
+    throw UnimplementedError();
   }
 
   @override

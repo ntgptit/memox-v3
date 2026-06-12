@@ -58,10 +58,10 @@ study mode.
 | Mode     | Direction                | Interaction                                                                                                                                                                         |
 |----------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `review` | both sides shown         | Front and back rendered together on one card; user swipes (right = perfect, left = forgot). No reveal step.                                                                         |
-| `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. The current backend slice only builds this board deterministically; per-pair persistence and supported strategy wiring remain blocked until the wider Match contract is approved.                               |
+| `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. Per-pair persistence; one board per 5 cards.                               |
 | `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit.                                                             |
 | `recall` | front → back             | Show front, tap "Show answer" to reveal back, self-grade with Forgot / Got it. **No text input in v1**; typed-answer recall is a Future Proposal.                                   |
-| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict trim-only match; optional Hint button taints the single terminal result to max `recovered`. "Mark correct" commits that terminal result without append-attempt correction. |
+| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match; "Mark correct" override path. Optional Hint button taints result to max `recovered`. |
 
 Direction notes:
 
@@ -70,9 +70,6 @@ Direction notes:
 - `guess` and `recall` cover front→back recognition at increasing effort (multiple-choice vs free
   recall).
 - `fill` is the only production-direction mode in v1 (user produces the front).
-- Match board composition may be implemented as a pure domain helper, but that does not make
-  `StudyMode.match` supported; the factory remains controlled-unsupported until the per-evaluation
-  persistence contract is approved.
 - See wireframes `docs/wireframes/13-study-session-review.md` through
   `docs/wireframes/17-study-session-fill.md` for full UI details.
 - Recall mode in v1 is **flip-card self-grade**, not typed recall. The typed variant is a Future
@@ -182,10 +179,9 @@ Status notes (see `docs/business/glossary.md` §Status terms):
   `is_suspended`, and touches `study_sessions.updated_at`.
 - The review controller resolves a domain `StudyModeStrategy` for the current
   session. Because the session header does not persist mode yet, V1 uses
-  `StudyMode.recall` as the documented fallback when no mode is supplied.
-  Explicit resolution now supports `review`, `guess`, and backend Fill
-  strategy resolution; `match` remains controlled-unsupported and does not
-  change the current review shell.
+  `StudyMode.recall` as the documented fallback in
+  `StudyModeStrategyFactory.resolve(...)`. Match / Guess / Fill strategy
+  behavior remains future work and does not change the current review shell.
 - Finalization is explicit. The user must tap Finish Session after all items
   are answered; the app then commits progress transactionally and navigates to
   the real result screen on success.
@@ -244,18 +240,23 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
 
 ## Retry behavior
 
-- Incorrect answer creates local feedback, not a persisted attempt by itself.
-- Retry behavior depends on selected flow/mode. **V1 records exactly one terminal persisted
-  attempt per item**; a second answer on an answered item is rejected in the current backend.
+- Incorrect answer creates attempt.
+- Retry behavior depends on selected flow/mode. Recall/Review/Guess/Fill V1 records exactly one
+  attempt per item (a second answer on an answered item is rejected). Match persists append-only
+  evaluations and derives one terminal attempt per item at finalization; multi-attempt retry for
+  other modes remains Target for future modes.
 - Re-queue/retry modes follow the **adopted first-attempt-decides-SRS contract** in
-  `docs/business/srs/srs-review.md` (§Box transition table), but that contract only matters when a
-  future mode appends multiple attempts before finalization.
+  `docs/business/srs/srs-review.md` (§Box transition table): a first-attempt `forgot` demotes the
+  card even when the re-queued pass completes the session; the re-queue IS the in-session
+  relearning step.
 - **Answer re-grade before finalization (Target, WBS 4.4.3):** until the session is finalized,
-  the user may change the grade of an answered item (mistap protection). That future path requires
-  a separate append-attempt contract and is not required for Fill BE V1.
-- Fill V1 uses local evaluation before the single terminal persistence: Check evaluates the answer,
-  Try again stays local, and Mark correct or a committed wrong answer writes the one terminal
-  attempt.
+  the user may change the grade of an answered item (mistap protection). Implementation appends a
+  correcting attempt; the SRS classifier handles the sequence per the adopted contract. Requires
+  relaxing the current "reject second answer" rule in `recordStudySessionAnswer` together with
+  the C1 classifier change — ship the two together.
+- Match uses the same local-evaluation principle, but it persists append-only board evaluations
+  rather than terminal attempts until finalization derives the SRS history.
+- Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 
 ## Performance
@@ -318,8 +319,6 @@ advances.
   study use cases live under `lib/domain/study/usecases/`, parallel to the other feature
   use-case files in `lib/domain/usecases/`.
 - `lib/domain/study/modes/` (`study_mode_strategy.dart`, `recall_study_mode_strategy.dart`,
-  `review_study_mode_strategy.dart`, `guess_study_mode_strategy.dart`,
-  `study_mode_strategy_factory.dart`) — mode behavior contract, V1 recall
-  fallback, and explicit review/guess support. **There is no dedicated
-  `flow_validator.dart`**; validation is part of the active strategy.
+  `study_mode_strategy_factory.dart`) — mode behavior contract and V1 recall fallback. **There is
+  no dedicated `flow_validator.dart`**; validation is part of the active strategy.
 - `lib/presentation/features/study/**`

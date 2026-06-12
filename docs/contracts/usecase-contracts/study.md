@@ -134,6 +134,38 @@ Future<Either<Failure, Unit>> call({
 
 **Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
 
+## RecordMatchEvaluationUseCase
+
+```dart
+Future<Either<Failure, Unit>> call({
+  required SessionId sessionId,
+  required String sessionItemId,
+  required int boardIndex,
+  required String pairId,
+  required String selectedFrontCellId,
+  required String selectedBackCellId,
+  required String expectedFrontFlashcardId,
+  required String expectedBackFlashcardId,
+  required bool isCorrect,
+  required StudyMode studyMode,
+});
+```
+
+**Rules:**
+
+- LOAD session. Validate status=`draft` or `in_progress`.
+- LOAD the target session item and verify it belongs to the session.
+- Validate the session is in Match mode.
+- Atomic: insert a single append-only `study_match_evaluations` row with a per-session-item
+  attempt order and touch `study_sessions.updated_at`.
+- Do **not** update `study_session_items.answered_at`.
+- Do **not** update `flashcard_progress`.
+- Do **not** call `recordStudySessionAnswer`.
+- `isCorrect=true` is the clean Match evaluation path; `isCorrect=false` is the wrong path.
+- The `studyMode` argument must be `StudyMode.match`; other modes return `UnsupportedActionFailure`.
+
+**Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
+
 ## CancelSessionUseCase
 
 ```dart
@@ -188,11 +220,15 @@ Future<Either<Failure, Unit>> call({required SessionId sessionId});
 
 **Rules:**
 
-- LOAD session. Validate all `study_session_items` answered. Else return
-  `FinalizationFailure`.
+- LOAD session. For one-terminal-attempt flows, validate all
+  `study_session_items` answered. Else return `FinalizationFailure`.
 - LOAD persisted attempts for each answered item.
+- For Match sessions, LOAD append-only Match evaluations, derive one terminal
+  result per session item, and insert the terminal `study_attempts` rows in the
+  same transaction before applying SRS transitions.
 - Repair missing `flashcard_progress` rows during finalization if needed.
-- Atomic: update progress rows and mark session completed in one transaction.
+- Atomic: update progress rows, insert Match-derived terminal attempts when
+  applicable, and mark session completed in one transaction.
 - On failure, preserve existing data and keep the session open.
 
 **Errors:** `NotFoundFailure`, `FinalizationFailure`, `StorageFailure`.

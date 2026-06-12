@@ -37,6 +37,21 @@ Future<Either<Failure, Unit>> recordStudySessionAnswer({
   required AttemptResult result,
   required StudyMode studyMode,
 });
+Future<Either<Failure, Unit>> recordMatchEvaluation({
+  required SessionId sessionId,
+  required String sessionItemId,
+  required int boardIndex,
+  required String pairId,
+  required String selectedFrontCellId,
+  required String selectedBackCellId,
+  required String expectedFrontFlashcardId,
+  required String expectedBackFlashcardId,
+  required bool isCorrect,
+  required StudyMode studyMode,
+});
+Future<Either<Failure, List<MatchEvaluation>>> loadMatchEvaluations(
+  SessionId sessionId,
+);
 Future<Either<Failure, Unit>> finalizeStudySession({required SessionId sessionId});
 Future<Either<Failure, Unit>> buryStudySessionCard({
   required SessionId sessionId,
@@ -60,8 +75,9 @@ Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days 
 |---------------------|-----------------------------------------------------------------------------------|
 | `createSession`     | `study_sessions` INSERT + `study_session_items` INSERTs                           |
 | `recordStudySessionAnswer` | `study_attempts` INSERT + `study_session_items` UPDATE (`answered_at`) + `study_sessions` UPDATE (`updated_at`) |
+| `recordMatchEvaluation` | `study_match_evaluations` INSERT + `study_sessions` UPDATE (`updated_at`)          |
 | `loadStudySessionResult` | read `study_sessions` + `study_session_items` + `study_attempts` aggregate     |
-| `finalizeStudySession` | `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE                     |
+| `finalizeStudySession` | One-terminal-attempt flows: `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE; Match branch: `study_match_evaluations` read + `study_attempts` INSERT + `flashcard_progress` UPDATE/INSERT + `study_sessions` UPDATE |
 | `buryStudySessionCard` | `flashcard_progress` UPDATE/INSERT + `study_session_items` DELETE + `study_sessions` UPDATE |
 | `suspendStudySessionCard` | `flashcard_progress` UPDATE/INSERT + `study_session_items` DELETE + `study_sessions` UPDATE |
 | `markCompleted`     | `study_sessions` UPDATE + optional engagement update (handled by caller use case) |
@@ -100,6 +116,10 @@ strict and must surface the corruption instead of hiding it.
   upserted when the session finalizes.
 - In-session self-grade V1 records attempts and marks `study_session_items.answered_at`
   only. It does not update `flashcard_progress`; box changes remain finalization-owned.
+- Match evaluation rows are append-only and do not mark session items answered; they still
+  refresh `study_sessions.updated_at` so the active session remains resumable.
+- Match finalization derives one terminal `study_attempts` row per session item,
+  then applies the normal SRS transition logic in the same transaction.
 - In-session bury/suspend is transactional and scoped to the active session:
   it requires `status = in_progress`, validates that the flashcard is still in
   the session and unanswered, removes the matching `study_session_items` row,
@@ -117,6 +137,9 @@ strict and must surface the corruption instead of hiding it.
 
 - Create session with N items → verify rows.
 - Load study session review by id → verify session header + ordered joined items.
+- Record Match evaluations in order and verify append-only rows.
+- Finalize Match sessions → derive one terminal attempt per item and preserve
+  transactional rollback on failure.
 - Resumable matching across all 4 entry types.
 - Status transitions: allowed and forbidden.
 - 30-day expiry.
@@ -135,4 +158,3 @@ strict and must surface the corruption instead of hiding it.
 - `lib/domain/study/ports/study_repo.dart`
 - `lib/data/repositories/study_repo_impl.dart`
 - `lib/data/datasources/local/daos/study_session_dao.dart`
-- `lib/data/datasources/local/daos/study_session_item_dao.dart`

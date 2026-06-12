@@ -1,5 +1,6 @@
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/entities/study_attempt.dart';
+import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/types/attempt_result.dart';
@@ -127,5 +128,24 @@ abstract final class StudyMapper {
     boxAfter: row.boxAfter,
     userInput: row.userInput,
     attemptedAt: _dateFromMs(row.attemptedAt),
+  );
+
+  static StudyMatchEvaluation fromMatchEvaluationRow(
+    StudyMatchEvaluationsRow row,
+  ) => StudyMatchEvaluation(
+    id: row.id,
+    sessionId: row.sessionId,
+    sessionItemId: row.sessionItemId,
+    flashcardId: row.flashcardId,
+    boardIndex: row.boardIndex,
+    pairId: row.pairId,
+    selectedFrontCellId: row.selectedFrontCellId,
+    selectedBackCellId: row.selectedBackCellId,
+    expectedFrontFlashcardId: row.expectedFrontFlashcardId,
+    expectedBackFlashcardId: row.expectedBackFlashcardId,
+    isCorrect: row.isCorrect,
+    attemptOrder: row.attemptOrder,
+    evaluatedAt: _dateFromMs(row.evaluatedAt),
+    createdAt: _dateFromMs(row.createdAt),
   );
 }

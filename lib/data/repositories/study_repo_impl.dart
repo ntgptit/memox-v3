@@ -8,6 +8,7 @@ import 'package:memox/data/datasources/local/daos/study_session_dao.dart'
 import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/data/repositories/study_repo_record_answer.dart';
+import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/learning_settings.dart';
@@ -25,6 +26,7 @@ import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 
 part 'study_repo_impl_study_actions.dart';
+part 'study_repo_impl_match.dart';
 part 'study_repo_impl_study_session.dart';
 
 class StudyRepositoryImpl implements StudyRepository {
@@ -378,64 +380,81 @@ class StudyRepositoryImpl implements StudyRepository {
 
         final List<study_dao.StudySessionAttemptsResult> attemptRows =
             await _dao.loadSessionAttempts(sessionId);
-        final Map<String, List<study_dao.StudySessionAttemptsResult>>
-        attemptsByItemId =
-            <String, List<study_dao.StudySessionAttemptsResult>>{};
-        for (final study_dao.StudySessionAttemptsResult row in attemptRows) {
-          attemptsByItemId
-              .putIfAbsent(
-                row.sessionItemId,
-                () => <study_dao.StudySessionAttemptsResult>[],
-              )
-              .add(row);
+        final List<StudyMatchEvaluationsRow> matchRows = await _dao
+            .loadMatchEvaluations(sessionId);
+        final bool hasMatchEvaluations = matchRows.isNotEmpty;
+        if (hasMatchEvaluations && attemptRows.isNotEmpty) {
+          throw _RuleViolation(Failure.finalization(sessionId: sessionId));
         }
 
         final DateTime now = _now;
         final int nowMs = now.millisecondsSinceEpoch;
-        for (final study_dao.StudySessionReviewItemsResult itemRow
-            in itemRows) {
-          if (itemRow.answeredAt == null) {
-            throw _RuleViolation(Failure.finalization(sessionId: sessionId));
-          }
-
-          final List<study_dao.StudySessionAttemptsResult> itemAttempts =
-              attemptsByItemId[itemRow.id] ??
-              const <study_dao.StudySessionAttemptsResult>[];
-          if (itemAttempts.isEmpty) {
-            throw _RuleViolation(Failure.finalization(sessionId: sessionId));
-          }
-
-          final AttemptResult finalResult = _finalizeResultForAttempts(
-            itemAttempts,
+        if (hasMatchEvaluations) {
+          await _finalizeMatchStudySession(
+            dao: _dao,
+            sessionId: sessionId,
+            itemRows: itemRows,
+            now: now,
           );
-          final FlashcardProgressRow? progressRow = await _dao
-              .findFlashcardProgress(itemRow.flashcardId);
-          final int currentBox = progressRow?.boxNumber ?? 1;
-          final int nextBox = _boxAfterFinalization(currentBox, finalResult);
-          final int dueAtMs = _dueAtForInterval(now, nextBox);
-          final int reviewCount = (progressRow?.reviewCount ?? 0) + 1;
-          final int lapseCount =
-              (progressRow?.lapseCount ?? 0) +
-              (finalResult == AttemptResult.forgot ? 1 : 0);
+        }
+        if (!hasMatchEvaluations) {
+          final Map<String, List<study_dao.StudySessionAttemptsResult>>
+          attemptsByItemId =
+              <String, List<study_dao.StudySessionAttemptsResult>>{};
+          for (final study_dao.StudySessionAttemptsResult row in attemptRows) {
+            attemptsByItemId
+                .putIfAbsent(
+                  row.sessionItemId,
+                  () => <study_dao.StudySessionAttemptsResult>[],
+                )
+                .add(row);
+          }
 
-          if (progressRow == null) {
-            await _dao.insertFlashcardProgress(
-              FlashcardProgressCompanion.insert(
-                flashcardId: itemRow.flashcardId,
-              ),
+          for (final study_dao.StudySessionReviewItemsResult itemRow
+              in itemRows) {
+            if (itemRow.answeredAt == null) {
+              throw _RuleViolation(Failure.finalization(sessionId: sessionId));
+            }
+
+            final List<study_dao.StudySessionAttemptsResult> itemAttempts =
+                attemptsByItemId[itemRow.id] ??
+                const <study_dao.StudySessionAttemptsResult>[];
+            if (itemAttempts.isEmpty) {
+              throw _RuleViolation(Failure.finalization(sessionId: sessionId));
+            }
+
+            final AttemptResult finalResult = _finalizeResultForAttempts(
+              itemAttempts,
             );
-          }
+            final FlashcardProgressRow? progressRow = await _dao
+                .findFlashcardProgress(itemRow.flashcardId);
+            final int currentBox = progressRow?.boxNumber ?? 1;
+            final int nextBox = _boxAfterFinalization(currentBox, finalResult);
+            final int dueAtMs = _dueAtForInterval(now, nextBox);
+            final int reviewCount = (progressRow?.reviewCount ?? 0) + 1;
+            final int lapseCount =
+                (progressRow?.lapseCount ?? 0) +
+                (finalResult == AttemptResult.forgot ? 1 : 0);
 
-          final int updatedRows = await _dao.updateFlashcardProgress(
-            flashcardId: itemRow.flashcardId,
-            boxNumber: nextBox,
-            dueAtMs: dueAtMs,
-            reviewCount: reviewCount,
-            lapseCount: lapseCount,
-            lastStudiedAtMs: nowMs,
-          );
-          if (updatedRows == 0) {
-            throw _RuleViolation(Failure.finalization(sessionId: sessionId));
+            if (progressRow == null) {
+              await _dao.insertFlashcardProgress(
+                FlashcardProgressCompanion.insert(
+                  flashcardId: itemRow.flashcardId,
+                ),
+              );
+            }
+
+            final int updatedRows = await _dao.updateFlashcardProgress(
+              flashcardId: itemRow.flashcardId,
+              boxNumber: nextBox,
+              dueAtMs: dueAtMs,
+              reviewCount: reviewCount,
+              lapseCount: lapseCount,
+              lastStudiedAtMs: nowMs,
+            );
+            if (updatedRows == 0) {
+              throw _RuleViolation(Failure.finalization(sessionId: sessionId));
+            }
           }
         }
 
@@ -476,6 +495,56 @@ class StudyRepositoryImpl implements StudyRepository {
     studyMode: studyMode,
     nowMs: _nowMs,
   );
+
+  @override
+  Future<Result<void>> recordMatchEvaluation({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required FlashcardId flashcardId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+    required StudyMode studyMode,
+  }) async => _recordMatchEvaluationTransaction(
+    dao: _dao,
+    sessionId: sessionId,
+    sessionItemId: sessionItemId,
+    flashcardId: flashcardId,
+    boardIndex: boardIndex,
+    pairId: pairId,
+    selectedFrontCellId: selectedFrontCellId,
+    selectedBackCellId: selectedBackCellId,
+    expectedFrontFlashcardId: expectedFrontFlashcardId,
+    expectedBackFlashcardId: expectedBackFlashcardId,
+    isCorrect: isCorrect,
+    studyMode: studyMode,
+    nowMs: _nowMs,
+  );
+
+  @override
+  Future<Result<List<StudyMatchEvaluation>>> loadMatchEvaluations({
+    required SessionId sessionId,
+  }) async {
+    try {
+      final List<StudyMatchEvaluationsRow> rows = await _dao
+          .loadMatchEvaluations(sessionId);
+      return Result<List<StudyMatchEvaluation>>.ok(
+        rows.map(StudyMapper.fromMatchEvaluationRow).toList(growable: false),
+      );
+    } catch (error) {
+      return Result<List<StudyMatchEvaluation>>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_match_evaluations',
+        ),
+      );
+    }
+  }
 
   @override
   Future<Result<StudySession>> createSession({
