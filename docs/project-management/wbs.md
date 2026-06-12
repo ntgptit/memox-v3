@@ -184,7 +184,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 5.2.1 | Dashboard | Due-today summary BE | BE | `dueToday` from library overview read model (excludes buried/suspended) | Implemented | 3.1.1 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart` (consumes `libraryOverviewQueryProvider`) | `b2d0740f` | No action |
 | 5.2.2 | Dashboard | Today study CTA FE | FE | `dueToday > 0` routes to today study; zero state disables CTA | Implemented | 5.2.1 | `test/presentation/features/dashboard/dashboard_screen_test.dart` | `a5d99089` | No action |
 | 5.3.1 | Dashboard | New-user empty dashboard FE | FE | Controlled empty/caught-up states | Implemented | 5.2.2 | `test/presentation/features/dashboard/dashboard_screen_test.dart` | `b2d0740f` | No action |
-| 5.4.1 | Dashboard | Progress summary on dashboard | BE | Dashboard progress summary read model + provider wiring (due today, goal, streak) | Implemented | 7.4.1 | `lib/domain/models/dashboard_progress_summary.dart`, `lib/domain/usecases/progress/load_dashboard_progress_summary_usecase.dart`, `lib/data/repositories/progress_repository_impl.dart`, `lib/app/di/progress_providers.dart`, `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart`, `test/data/repositories/progress_repository_impl_test.dart`, `docs/business/engagement/dashboard-engagement.md` | TBD | No action |
+| 5.4.1 | Dashboard | Progress summary on dashboard | BE | Dashboard progress summary read model + provider wiring (due today, goal, streak) | Implemented | 7.4.1 | `lib/domain/models/dashboard_progress_summary.dart`, `lib/domain/usecases/progress/load_dashboard_progress_summary_usecase.dart`, `lib/data/repositories/progress_repository_impl.dart`, `lib/app/di/progress_providers.dart`, `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart`, `test/data/repositories/progress_repository_impl_test.dart`, `docs/business/engagement/dashboard-engagement.md` | `1359edb4` | No action |
 | 5.5.1 | Dashboard | Dashboard data refresh | Integration | Refresh on retry and on return from study flow | Partial | 5.1.2 | `lib/presentation/features/dashboard/viewmodels/dashboard_viewmodel.dart` (invalidate on retry) | `b2d0740f` | Verify/refresh on study-flow return; add test |
 
 ### Group 6 — Import flow
@@ -216,7 +216,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 7.5.1 | Progress | Progress screen FE V1 | FE | `/progress` renders the kit-mock screen: range tabs, cards-studied chart, accuracy + delta + sparkline, box distribution, streak, card states | Implemented | 7.4.2 | `lib/presentation/features/progress/**`, `test/presentation/features/progress/progress_screen_test.dart`, `test/presentation/features/progress/progress_screen_golden_test.dart` | `3b4c3232` | No action |
 | 7.5.2 | Progress | Progress states FE | FE | Loading/empty/error/insufficient/partial states per kit mock, data-driven per section | Implemented | 7.5.1 | `test/presentation/features/progress/progress_screen_test.dart` (states), goldens for 7 states × light/dark | `3b4c3232` | No action |
 | 7.6.1 | Progress | Review history query BE | BE | Per-card history (box_before/box_after/last_reset_at) | Blocked | 7.3.1 | `docs/business/history/card-history.md` (requires schema fields not in v4) | TBD | Requires schema migration decision before work |
-| 7.7.1 | Progress | Dashboard/progress consistency | Integration | Same due/progress numbers on dashboard and progress screen | Implemented | 7.5.1, 5.2.1 | `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart`, `test/data/repositories/progress_repository_impl_test.dart` | TBD | No action |
+| 7.7.1 | Progress | Dashboard/progress consistency | Integration | Same due/progress numbers on dashboard and progress screen | Implemented | 7.5.1, 5.2.1 | `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart`, `test/data/repositories/progress_repository_impl_test.dart` | `1359edb4` | No action |
 
 ### Group 8 — Settings/app operations
 
@@ -381,6 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `1359edb4` | 2026-06-12 | 5.4.1, 7.7.1 | Dashboard progress summary backend V1: progress summary read model, provider wiring, local-day attempt aggregation, and consistency coverage |
 | `b1b925ea` | 2026-06-12 | 4.5.1, 4.5.2, 4.5.6, 4.5.8, 8.2.1 | Restore study mode strategy wiring and WBS parity for previously implemented Review/Guess/Fill and learning-settings rows |
 | `8fe3ce3a` | 2026-06-12 | 4.5.4 | Match persistence backend wave: append-only Match evaluation schema/migration, repository API, transactional finalization derivation, factory wiring, tests, and contract/docs updates |
 | `3b4c3232` | 2026-06-12 | 7.4.2, 7.5.1, 7.5.2 | Progress screen V1: overview BE (range activity, study-day streak, card states), kit-mock screen with all 7 states, widget + golden tests, docs reconciled |
