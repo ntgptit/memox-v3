@@ -84,11 +84,15 @@ Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
         body: FolderDetailBody(
           detail: detail,
           isSearching: isSearching,
+          searchTerm: 'grammar',
+          onStartStudy: () {},
           onNewSubfolder: () {},
           onNewDeck: () {},
           onClearSearch: () {},
           onShowSubfolderActions: (FolderWithCount _) {},
           onShowDeckActions: (DeckWithCount _) {},
+          onSearchTap: () {},
+          onSortTap: () {},
         ),
       ),
     );
@@ -131,10 +135,12 @@ void main() {
       );
 
       expect(find.byType(FolderDecksSummary), findsOneWidget);
+      expect(find.text('Folder mastery'), findsOneWidget);
       expect(find.text('2 decks · 120 cards'), findsOneWidget);
       // Folder-scope total (4 + 4) is distinct from each deck's "4 due" badge.
-      expect(find.text('8 due'), findsOneWidget);
+      expect(find.text('8 due · 6 new'), findsOneWidget);
       expect(find.text('4 due'), findsNWidgets(2));
+      expect(find.text('Start study · 8 due'), findsOneWidget);
       expect(find.byType(FolderDeckTile), findsNWidgets(2));
     });
 
@@ -172,6 +178,8 @@ void main() {
       expect(find.text('subfolders'), findsOneWidget);
       expect(find.text('cards'), findsOneWidget);
       expect(find.text('due total'), findsOneWidget);
+      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.text('Most due'), findsOneWidget);
       // 2 subfolders, 198 cards, 12 due.
       expect(find.text('198'), findsOneWidget);
       expect(find.text('12'), findsOneWidget);
@@ -187,6 +195,10 @@ void main() {
       await tester.pumpWidget(_wrapBody(_detail(mode: ContentMode.unlocked)));
 
       expect(find.byType(FolderUnlockedEmpty), findsOneWidget);
+      expect(find.text('EMPTY FOLDER'), findsOneWidget);
+      expect(find.text('What goes in here?'), findsOneWidget);
+      expect(find.text('New deck'), findsOneWidget);
+      expect(find.text('New subfolder'), findsOneWidget);
       expect(find.byType(FolderDecksSummary), findsNothing);
       expect(find.byType(FolderSubfoldersSummary), findsNothing);
     });
@@ -204,8 +216,9 @@ void main() {
         find.byKey(const ValueKey<String>('folder_search_no_results')),
         findsOneWidget,
       );
-      // No summary card while there is nothing to summarise.
-      expect(find.byType(FolderDecksSummary), findsNothing);
+      expect(find.textContaining('No items match'), findsOneWidget);
+      // The mock keeps the summary shell visible even while search returns no hits.
+      expect(find.byType(FolderDecksSummary), findsOneWidget);
     });
 
     testWidgets('empty-but-locked (not searching) shows locked empty, not '

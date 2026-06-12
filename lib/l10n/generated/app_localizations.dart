@@ -2468,6 +2468,66 @@ abstract class AppLocalizations {
   /// **'Search this folder'**
   String get folderDetailSearchHint;
 
+  /// No description provided for @folderDetailMasteryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder mastery'**
+  String get folderDetailMasteryLabel;
+
+  /// No description provided for @folderDetailStartStudyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start study'**
+  String get folderDetailStartStudyLabel;
+
+  /// No description provided for @folderDetailStartStudyWithDueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start study · {count} due'**
+  String folderDetailStartStudyWithDueLabel(int count);
+
+  /// No description provided for @folderDetailMostDueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Most due'**
+  String get folderDetailMostDueLabel;
+
+  /// No description provided for @folderDetailEmptyFolderChipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty folder'**
+  String get folderDetailEmptyFolderChipLabel;
+
+  /// No description provided for @folderDetailEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What goes in here?'**
+  String get folderDetailEmptyTitle;
+
+  /// No description provided for @folderDetailEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add decks to study cards directly, or nest subfolders to keep things organized. Folders hold one or the other once you start.'**
+  String get folderDetailEmptyMessage;
+
+  /// No description provided for @folderDetailEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Once this folder holds decks or subfolders, the other option moves into the overflow menu.'**
+  String get folderDetailEmptyHint;
+
+  /// No description provided for @folderDetailNoResultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No items match \"{query}\"'**
+  String folderDetailNoResultsTitle(String query);
+
+  /// No description provided for @folderDetailNoResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different spelling or clear the search to see everything.'**
+  String get folderDetailNoResultsMessage;
+
   /// No description provided for @folderNotFoundTitle.
   ///
   /// In en, this message translates to:

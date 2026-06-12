@@ -16,11 +16,11 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
 > ⚠️ **Read this first — doc/code conflict.** `05-folder-detail.md` ("Prompt
 > 45/47/50") describes a **hero mastery card**, **Study folder / Today CTAs**,
 > a **Resume banner**, and an **overflow ⋮ action menu** as *Current*. The
-> shipped `folder_detail_screen.dart` does **not** render any of them — its own
-> doc comment states *"Study CTAs / resume banner / hero mastery are Future
-> here (the study layer is not built)"*, and the overflow ⋮ button is rendered
-> **disabled** (`onPressed: null`). This contract follows the **code**: those
-> elements are **Future / Visual-only**. See §16.
+> shipped `folder_detail_screen.dart` now renders the overflow folder actions
+> sheet, plus the mastery shell, search/sort affordances, and a Start study CTA
+> shell. The study layer itself is still not built, so the mastery value and
+> Start study flow remain **visual-only**. This contract follows the **current
+> code path** plus the canonical PNG mock. See §16.
 
 ## 1. Screen identity
 
@@ -28,9 +28,9 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
 - **Route:** `/library/folder/:id` (`RoutePaths.folderDetailTemplate`,
   `RouteNames.folderDetail`); built via `RoutePaths.folderDetail(folderId)`.
 - **Feature / module:** `folders` (`lib/presentation/features/folders/**`).
-- **User purpose:** Browse the children of one folder — **either** subfolders
-  **or** decks, never both — with breadcrumb navigation, scope-local inline
-  search, and a mode-constrained create action.
+- **User purpose:** Browse the children of one folder - **either** subfolders
+  **or** decks, never both - with breadcrumb navigation, a mode-constrained
+  create action, and visible search/sort affordances.
 - **Mock source:** `index.html` group `04 · Folder detail` (states: decks ·
   subfolders · unlocked · search empty · loading · error · delete · move sheet).
 - **Related business docs:** `docs/business/folder/folder-management.md`,
@@ -53,10 +53,9 @@ aspirational sections of `docs/wireframes/05-folder-detail.md`.
   - `lib/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart`
   - `lib/presentation/features/folders/routes/folder_routes.dart`
 - **Scope status:** **Partial.**
-- **Out-of-scope items (Future / Visual-only):** hero mastery card, folder-span
-  subtitle, "{n} new" counts, Study folder / Today CTAs, Resume banner +
-  discard, the overflow ⋮ action menu (rendered disabled), sort UI control,
-  Global Search. Per-folder / per-deck mastery ring remains Future.
+- **Out-of-scope items (Future / Visual-only):** study routing and session
+  behavior. The visible mastery card, "{n} new" subtitle, Start study CTA,
+  search icon, sort pill, and overflow sheet are currently shell UI here.
 
 ## 2. Source priority
 
@@ -82,17 +81,17 @@ layer, hero card, or overflow actions before those are promoted in code.
 ## 3. Screen layout overview
 
 Top → bottom. Root is `MxScaffold` with an `MxAppBar` and a mode-dependent
-`MxFab.extended`. The body is a `Column`: breadcrumb, search field, then an
-`Expanded` async region.
+`MxFab.extended`. The body is a `Column`: breadcrumb, then an `Expanded` async
+region that holds the summary shell, search icon / sort pill header, and the
+loaded rows or empty states.
 
 | Region | Position | Fixed/Scrollable | Visual weight | Token mapping | Shared widget | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| App bar | Top | Fixed | Low–medium | `SizeTokens.appbar`; app-bar theme surface; title = `MxTextRole` title | `MxAppBar` (`titleText: folder.name`) | Back affordance auto from router. Trailing overflow ⋮ is **disabled** (`MxIconButton(Icons.more_vert, onPressed: null)`). |
+| App bar | Top | Fixed | Low–medium | `SizeTokens.appbar`; app-bar theme surface; title = `MxTextRole` title | `MxAppBar` (`titleText: folder.name`) | Back affordance auto from router. Trailing overflow ⋮ opens the folder action sheet. |
 | Breadcrumb | Below app bar | Fixed | Low | bottom gap `SpacingTokens.sm`; `onSurfaceVariant` text | `MxBreadcrumb` (`MxBreadcrumbSegment[]`) | First segment = `Library` → `context.goLibrary()`; then each ancestor → `context.pushFolderDetail(id)`. Hidden until folder loads. |
-| Search field | Below breadcrumb | Fixed | Low | bottom gap `SpacingTokens.sm`; input via `SizeTokens.input` | `MxSearchField` | Hint `l10n.folderDetailSearchHint` (folder-scoped). Drives `folderDetailToolbar.setSearch`. |
-| Content (async) | Fills remainder | Scrollable | High | screen horizontal padding via owning shell; row gap `SpacingTokens.sm` | `MxRetainedAsyncState<FolderDetail>` → `FolderDetailBody` | Switches loading (skeleton) / error / data. Data branch renders rows or empty/search-empty per `FolderDetailBody`. |
+| Content (async) | Fills remainder | Scrollable | High | screen horizontal padding via owning shell; row gap `SpacingTokens.sm` | `MxRetainedAsyncState<FolderDetail>` → `FolderDetailBody` | Switches loading (skeleton) / error / data. Data branch renders the summary shell, search/sort affordances, rows, or empty/search-empty per `FolderDetailBody`. |
 | Children list | Inside content | Scrollable | High | card padding `cardPadding`/`lg`; row gap `sm`; radius `RadiusTokens.brLg` | `LibraryFolderTile` (subfolders), `FolderDeckTile` (decks) | One mode only, from `folder.contentMode`. |
-| Unlocked empty | Inside content (unlocked) | Fixed/centered | Medium | section gap `xl`/`sectionGap`; icon `SizeTokens.iconXl` | `FolderUnlockedEmpty` | Mode-choice: "New subfolder" / "New deck" + mode-lock explanation. |
+| Unlocked empty | Inside content (unlocked) | Fixed/centered | Medium | section gap `xl`/`sectionGap`; icon `SizeTokens.iconXl` | `FolderUnlockedEmpty` | Mode-choice chip + info card + "New subfolder" / "New deck" buttons and mode-lock explanation. |
 | FAB | Bottom-right, over content | Fixed | Medium (accent) | `SizeTokens.fab`; radius `RadiusTokens.brXl` (xxl 28) | `MxFab.extended` | subfolders → `create_new_folder_outlined` + `folderNewSubfolderLabel`; decks → `add` + `folderNewDeckLabel`; unlocked → **no FAB** (choice lives in body). |
 
 `SafeArea`: provided by `MxScaffold`; wrap body content in `SafeArea` and keep
@@ -106,13 +105,13 @@ Driven by `folderDetailQueryProvider(folderId)` (`AsyncValue<FolderDetail>`) +
 
 | State | Trigger | Visible regions | Hidden regions | Primary CTA | Secondary CTA | Shared state widget | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Initial / Loading | Query pending | App bar, breadcrumb*, search shell, **skeleton rows** | Real rows, FAB (FAB null until `detail` loads) | — | — | `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` | *Breadcrumb renders only once `detail` is available. No tappable rows while loading. |
-| Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, search, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | — | — | Deck rows = `FolderDeckTile`. Tap → flashcard list (Future target). |
-| Loaded — subfolders | `contentMode == subfolders` | App bar, breadcrumb, search, subfolder rows, New-subfolder FAB | Deck rows, unlocked choice | `MxFab.extended` New subfolder | — | — | Subfolder rows = `FolderSubfolderTile`. Tap → child `pushFolderDetail`. |
-| Empty — unlocked | `contentMode == unlocked` (no children) | App bar, breadcrumb, search, **mode-choice empty** | Rows, FAB | "New subfolder" | "New deck" | `FolderUnlockedEmpty` | Choice locks mode on first create. Must NOT auto-unlock or show both in a FAB. |
-| Empty — locked | Locked but zero children (all deleted) | App bar, breadcrumb, search, "empty" message + FAB | Rows | mode FAB | — | (empty surface) | Do not auto-unlock; keep mode FAB only. |
-| Search active | `isSearching == true`, matches exist | App bar, breadcrumb, search (with clear), filtered rows | Unlocked choice | mode FAB | — | — | Filtering is folder-scope-local. |
-| Search — no results | `isSearching == true`, no matches but children exist | App bar, breadcrumb, search, **search-empty** w/ Clear | Rows | "Clear search" (`onClearSearch`) | — | `MxEmptyState` (via `FolderDetailBody`) | Do not route to Global Search. |
+| Initial / Loading | Query pending | App bar, breadcrumb*, **skeleton rows** | Real rows, FAB (FAB null until `detail` loads) | — | — | `MxRetainedAsyncState.skeletonBuilder` → `LibrarySkeleton` | *Breadcrumb renders only once `detail` is available. No tappable rows while loading. |
+| Loaded — decks | Query returns folder with `contentMode == decks` | App bar, breadcrumb, mastery summary shell, search icon, sort pill, deck rows, `add` FAB | Subfolder rows, unlocked choice | `MxFab.extended` New deck | Start study CTA shell | — | Deck rows = `FolderDeckTile`. Tap → flashcard list (Future target). |
+| Loaded — subfolders | `contentMode == subfolders` | App bar, breadcrumb, stat summary strip, search icon, sort pill, subfolder rows, New-subfolder FAB | Deck rows, unlocked choice | `MxFab.extended` New subfolder | — | — | Subfolder rows = `FolderSubfolderTile`. Tap → child `pushFolderDetail`. |
+| Empty — unlocked | `contentMode == unlocked` (no children) | App bar, breadcrumb, empty chip/card/buttons/banner | Rows, FAB | "New subfolder" | "New deck" | `FolderUnlockedEmpty` | Choice locks mode on first create. Must NOT auto-unlock or show both in a FAB. |
+| Empty — locked | Locked but zero children (all deleted) | App bar, breadcrumb, "empty" message + FAB | Rows | mode FAB | — | (empty surface) | Do not auto-unlock; keep mode FAB only. |
+| Search active | `isSearching == true`, matches exist | App bar, breadcrumb, search icon, sort pill, filtered rows | Unlocked choice | mode FAB | — | — | Filtering is folder-scope-local. |
+| Search — no results | `isSearching == true`, no matches but children exist | App bar, breadcrumb, search icon, sort pill, **search-empty** w/ Clear | Rows | "Clear search" (`onClearSearch`) | — | `MxEmptyState` (via `FolderDetailBody`) | Do not route to Global Search. |
 | Error / not found | Query error (invalid/deleted `:id`) | App bar, breadcrumb*, search shell, **error state** | Rows, FAB | "Retry" (`commonRetry`) | back | `MxErrorState` (`Icons.folder_off_outlined`, `folderNotFoundTitle/Message`) | Retry = `ref.invalidate(folderDetailQueryProvider)`. No raw exception text. |
 | Submitting (create) | `folderActionController` loading | unchanged list + dialog busy | — | dialog confirm (busy) | dialog cancel | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` busy + `showMxSnackbar` on failure | Drift stream refreshes list on success; failure → localized snackbar. |
 | Resume present / Study CTAs | (mock) folder has session/due | — | — | — | — | — | **Future** — not rendered in code. Do not implement from the mock. |
@@ -126,9 +125,10 @@ existing widget/token covers an element.
 | --- | --- | --- | --- | --- | --- | --- |
 | App bar title (folder name) | Identify current folder | `MxAppBar(titleText:)` | App-bar theme; title type role; `onSurface` | All loaded states | **Current** | One line, ellipsis; from `detail.folder.name`. |
 | Back affordance | Pop to parent | `MxAppBar` default leading + router | App-bar theme; `iconMd` | All | **Current** | Router-provided; pops to parent/Library. |
-| Overflow ⋮ (app bar) | Folder actions (rename/move/delete/sort) | `MxIconButton(Icons.more_vert)` | `SizeTokens.iconMd`/`touch`; `onSurfaceVariant` | All loaded | **Visual-only** | Rendered with `onPressed: null` (disabled). Folder-level action sheet not wired on this screen yet. |
+| Overflow ⋮ (app bar) | Folder actions (rename/move/delete/sort) | `MxIconButton(Icons.more_vert)` | `SizeTokens.iconMd`/`touch`; `onSurfaceVariant` | All loaded | **Current** | Opens the folder action sheet with Rename / Move / Delete. |
 | Breadcrumb | Show + jump ancestor path | `MxBreadcrumb` / `MxBreadcrumbSegment` | `SpacingTokens.sm` gap; `onSurfaceVariant`; `labelMedium` | Loaded (hidden until data) | **Current** | `Library` + ancestors; middle-ellipsis past ~3 levels (do not lose first/last). |
-| Inline search field | Folder-scope-local search | `MxSearchField` | `SizeTokens.input`; `RadiusTokens.brMd`; focus = 1px `primary` | All | **Current** | Hint `folderDetailSearchHint`; clear tooltip `librarySearchClearTooltip`. |
+| Search icon | Folder-scope-local search affordance | `MxIconButton(Icons.search)` | `SizeTokens.iconMd`/`touch`; `onSurfaceVariant` | Loaded | **Visual-only** | Hint `folderDetailSearchHint`; no inline field is rendered on this ref. |
+| Sort pill | Folder-sort affordance | local pill | surface container; `onSurfaceVariant` | Loaded | **Visual-only** | Shows `Recent` in decks mode and `Most due` in subfolders mode. |
 | Subfolder row | Open child folder | `FolderSubfolderTile` | custom 36×36 leading tile with `RadiusTokens.brSm`; `MxCard` padding `12px 14px`; text roles | subfolders mode | **Current** | Folder icon + name + optional `{m} due` badge on the top row, `{n} decks · {c} cards` metadata, compact progress bar, and chevron. Tap → child folder detail. |
 | Deck row | Open deck's flashcards | `FolderDeckTile` | custom 36×36 leading tile with `RadiusTokens.brSm`; `MxCard` padding `12px 14px`; text/icon roles | decks mode | **Current** | Icon tile + name + optional `{m} due` badge on the top row, `{n} cards · last {relative time}` meta when `lastStudiedAt` is present, compact progress bar, and chevron. Tap → flashcard list (Future target screen). |
 | Deck due badge | Show due count | within `FolderDeckTile` | 18px chip height; `0 7px` inset; `brFull`/text | decks mode, when `due > 0` | **Current** | Show only when due > 0; never "0 due". Uses the deck aggregate `dueCount`. |
@@ -142,11 +142,11 @@ existing widget/token covers an element.
 | Error / not-found | Safe failure surface | `MxErrorState` | error-state theme; `iconXl` `folder_off_outlined` | error | **Current** | Localized title/message + Retry. |
 | Create FAB | Add child by mode | `MxFab.extended` | `SizeTokens.fab`; `RadiusTokens.brXl`; primary/onPrimary | decks/subfolders loaded | **Current** | Mode-locked label & icon. Unlocked → no FAB. |
 | New folder / deck dialog | Name the new child | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` for folder cases; `showMxNameDialog` remains for deck naming | dialog theme `brLg`; level2–3; scrim 32% | on FAB / choice tap | **Current** | Folder dialog is mock-aligned with preview tile + color/icon pickers on create and helper text on rename; duplicate/mode-lock errors → `showMxSnackbar`. |
-| Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | would be `MxCard` + `MxMasteryRing` | (mock) | **Future** | Not rendered. No folder mastery read model; never fake a percent. |
-| Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | (mock) | **Future** | Study layer not built; must route through Study Entry Gate when promoted. |
+| Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | `MxCard` + `MxMasteryRing` | decks mode | **Visual-only** | Rendered as a shell using loaded deck totals; mastery value itself is not backed by a folder read model. |
+| Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | decks mode | **Visual-only** | Study layer not built; the visible button remains disabled until the study entry flow exists. |
 | Resume banner (+ Discard) | Continue/cancel paused session | `MxCallout` + `MxConfirmationDialog` | callout/dialog themes | (mock) | **Future** | No session layer on this ref. |
-| "{n} new" subtitle | New-card count | — | — | (mock) | **Future** | `Needs design-system decision` only if promoted; no read model exists — do not render. |
-| Sort control | Reorder rows | (none rendered) | — | (mock) | **Future** | `ContentSortMode` exists in `folderDetailToolbar` state, but no sort UI is rendered; `MxSearchSortToolbar` is **not** used by the shipped screen. |
+| "{n} new" subtitle | New-card count | — | — | decks mode | **Visual-only** | Rendered as shell copy for the mock; no folder-scope new-card read model exists. |
+| Sort control | Reorder rows | local pill | — | loaded | **Visual-only** | `ContentSortMode` still exists in toolbar state, but no interactive sort menu is wired. |
 
 ## 6. Typography contract
 
@@ -175,10 +175,10 @@ Theme roles only (Material 3 seeded scheme; Tokyo Pure Light / Tokyo Nebula).
 | Page background | `context.colorScheme.surface` | via `MxScaffold`. |
 | App bar surface | app-bar theme (glass: page surface @ `OpacityTokens.surfaceGlass` + blur) | through `MxAppBar`; do not re-tint. |
 | Card surface (rows) | `surfaceContainerLowest` via `MxCard` | `1px` ghost border (15% outlineVariant); no shadow. |
-| Input surface | shared input surface via `MxSearchField` | focus = `1px` solid `primary`. |
+| Search affordance | shared icon-button surface via `MxIconButton` | focus = `1px` solid `primary`. |
 | Primary action (FAB, primary buttons) | `context.colorScheme.primary` / `onPrimary` | mock light primary ≈ `#5265F5` (ref only). |
 | Secondary action | `secondary`/outline via `MxSecondaryButton` | for unlocked-choice buttons. |
-| Disabled (overflow ⋮) | content @ `OpacityTokens` disabled (38%) | `onPressed: null` drives Material disabled. |
+| Overflow ⋮ | app-bar action surface | opens the folder action sheet; no disabled state on this ref. |
 | Border / outline | ghost border via `MxCard`; `BorderTokens`/outlineVariant | never a hand-rolled border. |
 | Divider | `outlineVariant` (low) | only if rows use dividers; cards prefer gaps. |
 | Due-badge tint | `primaryContainer` / approved primary opacity | tokenized, not raw. |
@@ -193,7 +193,7 @@ Theme roles only (Material 3 seeded scheme; Tokyo Pure Light / Tokyo Nebula).
 | --- | --- | --- | --- | --- | --- | --- |
 | Screen horizontal | `SpacingTokens.screenPadding` (or owning shell) | — | — | — | wider gutters ≥600dp | Don't hardcode 24. |
 | Breadcrumb block | — | bottom `SpacingTokens.sm` | — | — | wraps/ellipsis | Matches code (`EdgeInsets.only(bottom: sm)`). |
-| Search field block | — | bottom `SpacingTokens.sm` | `RadiusTokens.brMd` | `SizeTokens.input` | full width | Matches code. |
+| Header controls | — | bottom `SpacingTokens.sm` | pill radius / icon touch | shared icon-button + local pill | full width | Search icon and sort pill replace the inline search field on this ref. |
 | Row card | `12px 14px` | between rows `SpacingTokens.sm` (`listItemGap`) | `RadiusTokens.brLg` | — | 2-col grid ≥600dp | Ghost border. |
 | Leading icon tile | — | tile→text `SpacingTokens.md`; tile `36px`, icon `17px` | `RadiusTokens.brSm` | custom local tile | fixed | Folder-detail rows use a compact custom tile, not the shared 44dp `MxIconTile`. |
 | Due badge | `0 7px` inset | — | `RadiusTokens.brFull` | 18px height | — | Pill. |
@@ -213,15 +213,15 @@ Behavior must be backed by docs/code. Mock-only behavior is marked `Future`/`Vis
 | Tap subfolder row | tap | Push child folder detail | nav | `context.pushFolderDetail(childId)` | **Current** | — |
 | Tap deck row | tap | Push deck flashcard list | nav | `RoutePaths.flashcardList(deckId)` | **Current** intent; **target screen Future** | Flashcard list not implemented; nav resolves to placeholder/none on this ref. |
 | Long-press row | long-press | Open item context sheet (Rename/Move/Delete) | sheet | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `MxConfirmationDialog` | **Current** (verify on Folder Detail) | Confirm wiring; same sheets used by Library rows. |
-| Type in search | input change | Filter children locally | `folderDetailToolbar.setSearch` | `MxSearchField.onChanged` | **Current** | Debounce/refresh via stream. |
-| Clear search | search-empty CTA / clear icon | Reset term, show full list | `folderDetailToolbar.clearSearch` | `onClearSearch` | **Current** | — |
+| Tap search icon | tap | (visual-only affordance) | — | `MxIconButton(Icons.search)` | **Visual-only** | No inline search field is rendered on this ref. |
+| Tap sort pill | tap | (visual-only affordance) | — | local sort pill | **Visual-only** | Sort state exists, but the control is not interactive yet. |
 | Tap FAB (decks) | tap | Open New deck name dialog | create deck | `createDeckDialog` → `folderActionController.createDeck` | **Current** | Success → stream refresh; failure → snackbar. |
 | Tap FAB (subfolders) | tap | Open New subfolder name dialog | create subfolder | `createSubfolderDialog` → `createSubfolder` | **Current** | — |
 | Unlocked choice tap | tap | Create first child, lock mode | create + mode lock | `onNewSubfolder` / `onNewDeck` | **Current** | First child locks `content_mode`. |
 | Mode-lock violation | stale concurrent action | Reject + localized snackbar (not generic error) | — | `UnsupportedActionFailure` → `folderModeLockedError` | **Current** | Typed messages per direction. |
 | Retry | error CTA | Re-run query | invalidate | `ref.invalidate(folderDetailQueryProvider)` | **Current** | — |
-| Tap overflow ⋮ | tap | (none) | — | `MxIconButton(onPressed: null)` | **Visual-only** | Disabled until folder action menu is wired. |
-| Study folder / Today / Resume | tap | route to Study Entry Gate / open session | — | — | **Future** | Not rendered; never start a session from this screen. |
+| Tap overflow ⋮ | tap | open folder action sheet | sheet | `MxIconButton(onPressed: showFolderDetailActions)` | **Current** | Rename / Move / Delete are available here. |
+| Study folder / Today / Resume | tap | (not built) | — | — | **Future** | Not rendered; never start a session from this screen. |
 | Pull to refresh | pull | (not specified for this screen) | — | — | **Unknown** | Stream auto-refreshes; confirm if a manual refresh is desired. |
 
 ## 10. Motion and animation contract
@@ -242,11 +242,11 @@ No infinite decorative loops on content.
 
 ## 11. Accessibility contract
 
-- **Screen-reader order:** app bar (title, back, disabled ⋮) → breadcrumb
-  (single region; segments are buttons) → search field → children list → FAB.
-- **Semantic labels:** overflow ⋮ tooltip `libraryOverflowTooltip`; search clear
-  `librarySearchClearTooltip`; FAB label is its visible text. Row chevrons are
-  decorative (`ExcludeSemantics`); the row itself is the control.
+- **Screen-reader order:** app bar (title, back, overflow ⋮) → breadcrumb
+  (single region; segments are buttons) → header controls → children list → FAB.
+- **Semantic labels:** overflow ⋮ tooltip `libraryOverflowTooltip`; search icon
+  tooltip `folderDetailSearchHint`; FAB label is its visible text. Row chevrons
+  are decorative (`ExcludeSemantics`); the row itself is the control.
 - **Touch targets:** min `SizeTokens.touch` (48dp); keep `IconButton` default
   padded target (do not shrink constraints).
 - **Focus order:** matches DOM/visual order; visible focus ring = `primary`.
@@ -342,7 +342,7 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 - [ ] All mock elements documented (table §5).
 - [ ] All Current-scope elements implementable with existing widgets/tokens.
 - [ ] Future/Visual-only elements clearly marked (hero, study/resume CTAs,
-      overflow ⋮, "{n} new", sort UI).
+      "{n} new", search icon, sort pill).
 - [ ] No raw hex required.
 - [ ] No random spacing values required (tokens only).
 - [ ] No raw `TextStyle` where `MxText`/role applies.
@@ -361,8 +361,8 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 | Issue | Type | Affected element | Reason | Recommended action |
 | --- | --- | --- | --- | --- |
 | Wireframe says hero mastery card + Study/Today CTAs + Resume banner are Current (Prompt 45/47/50); code comment + render path say Future ("study layer is not built") | Business conflict / State conflict | Hero card, study/resume CTAs | Wireframe ahead of code on this ref | Reconciled 2026-06-10: `05-folder-detail.md` + related business docs corrected to Future; never fake mastery/new/due-from-session data |
-| Overflow ⋮ rendered disabled (`onPressed: null`) | Mock-only element | App-bar overflow | No folder-level action sheet wired on Folder Detail | Keep disabled until a folder action sheet (Rename/Move/Delete/Sort) is promoted |
-| `ContentSortMode` exists in toolbar state but no sort UI is rendered; wireframe says `MxSearchSortToolbar` is Current | State conflict | Sort control | Code uses plain `MxSearchField`, not the sort toolbar | Treat sort UI as Future; if promoted, use the shared `MxSearchSortToolbar`, do not fork |
+| Overflow ⋮ opens folder action sheet | Mock-only element | App-bar overflow | Folder action sheet now wired on Folder Detail | Keep the same Rename/Move/Delete flow and avoid adding unrelated actions |
+| `ContentSortMode` exists in toolbar state but no sort UI is wired | State conflict | Sort control | Code shows a local pill, not the full sort toolbar | Treat sort UI as visual-only until the menu is actually promoted |
 | Deck row tap targets `/library/deck/:deckId/flashcards`, but Flashcard list is not implemented | Future scope | Deck row navigation | Flashcard feature absent on this ref | Acceptable as nav intent; flashcard list must land (P2) for the tap to resolve |
 | Per-deck due badge depends on whether `FolderDeckItem` exposes a due count | Missing source | Deck due badge | Model field unconfirmed in this read | Verify `domain/models/folder_detail.dart`; if absent, mark badge Future |
 | Long-press item-context sheet wiring on Folder Detail (vs Library Overview) unconfirmed | Unknown source | Row long-press | Not visible in `folder_detail_screen.dart` (handled in body/tiles) | Verify in `folder_deck_tile.dart` / `library_folder_tile.dart`; document actual behavior |

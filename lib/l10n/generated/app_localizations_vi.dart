@@ -1464,6 +1464,43 @@ class AppLocalizationsVi extends AppLocalizations {
   String get folderDetailSearchHint => 'Tìm trong thư mục này';
 
   @override
+  String get folderDetailMasteryLabel => 'Độ thành thạo của thư mục';
+
+  @override
+  String get folderDetailStartStudyLabel => 'Bắt đầu học';
+
+  @override
+  String folderDetailStartStudyWithDueLabel(int count) {
+    return 'Bắt đầu học · $count đến hạn';
+  }
+
+  @override
+  String get folderDetailMostDueLabel => 'Đến hạn nhiều nhất';
+
+  @override
+  String get folderDetailEmptyFolderChipLabel => 'Thư mục trống';
+
+  @override
+  String get folderDetailEmptyTitle => 'Thư mục này chứa gì?';
+
+  @override
+  String get folderDetailEmptyMessage =>
+      'Thêm bộ thẻ để học thẻ trực tiếp, hoặc lồng các thư mục con để sắp xếp gọn hơn. Khi đã bắt đầu, thư mục chỉ giữ một trong hai.';
+
+  @override
+  String get folderDetailEmptyHint =>
+      'Khi thư mục này đã có bộ thẻ hoặc thư mục con, tùy chọn còn lại sẽ chuyển vào menu mở rộng.';
+
+  @override
+  String folderDetailNoResultsTitle(String query) {
+    return 'Không có mục nào khớp \"$query\"';
+  }
+
+  @override
+  String get folderDetailNoResultsMessage =>
+      'Hãy thử cách viết khác hoặc xóa tìm kiếm để xem tất cả.';
+
+  @override
   String get folderNotFoundTitle => 'Không tìm thấy thư mục';
 
   @override

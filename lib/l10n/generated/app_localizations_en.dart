@@ -1486,6 +1486,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get folderDetailSearchHint => 'Search this folder';
 
   @override
+  String get folderDetailMasteryLabel => 'Folder mastery';
+
+  @override
+  String get folderDetailStartStudyLabel => 'Start study';
+
+  @override
+  String folderDetailStartStudyWithDueLabel(int count) {
+    return 'Start study · $count due';
+  }
+
+  @override
+  String get folderDetailMostDueLabel => 'Most due';
+
+  @override
+  String get folderDetailEmptyFolderChipLabel => 'Empty folder';
+
+  @override
+  String get folderDetailEmptyTitle => 'What goes in here?';
+
+  @override
+  String get folderDetailEmptyMessage =>
+      'Add decks to study cards directly, or nest subfolders to keep things organized. Folders hold one or the other once you start.';
+
+  @override
+  String get folderDetailEmptyHint =>
+      'Once this folder holds decks or subfolders, the other option moves into the overflow menu.';
+
+  @override
+  String folderDetailNoResultsTitle(String query) {
+    return 'No items match \"$query\"';
+  }
+
+  @override
+  String get folderDetailNoResultsMessage =>
+      'Try a different spelling or clear the search to see everything.';
+
+  @override
   String get folderNotFoundTitle => 'Folder not found';
 
   @override

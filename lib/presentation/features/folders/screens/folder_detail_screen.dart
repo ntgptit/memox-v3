@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
-import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
@@ -18,19 +17,17 @@ import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
-import 'package:memox/presentation/shared/hooks/mx_hooks.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
-import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 
 /// Folder Detail — browse a folder's children (subfolders OR decks), with
-/// breadcrumb, inline search, and a mode-constrained create FAB
-/// (`docs/wireframes/05-folder-detail.md`). Study CTAs / resume banner / hero
-/// mastery are Future here (the study layer is not built).
+/// breadcrumb and a mode-constrained create FAB. The canonical mock also shows
+/// a mastery summary shell, sort/search affordances, and a visible study CTA
+/// shell.
 class FolderDetailScreen extends ConsumerWidget {
   const FolderDetailScreen({required this.folderId, super.key});
 
@@ -39,8 +36,6 @@ class FolderDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    // guard:allow-screen-watch -- reason: the app bar title and the
-    // mode-constrained FAB both need the loaded folder (name + content_mode).
     final AsyncValue<FolderDetail> query = ref.watch(
       folderDetailQueryProvider(folderId),
     );
@@ -80,7 +75,6 @@ class FolderDetailScreen extends ConsumerWidget {
         label: l10n.folderNewDeckLabel,
         onPressed: () => createDeckDialog(context, ref, folderId),
       ),
-      // Unlocked offers its choice inline in the body, not via a FAB.
       ContentMode.unlocked => null,
     };
   }
@@ -96,17 +90,13 @@ class _FolderDetailView extends ConsumerWidget {
     final AsyncValue<FolderDetail> query = ref.watch(
       folderDetailQueryProvider(folderId),
     );
-    final bool isSearching = ref
-        .watch(folderDetailToolbarProvider(folderId))
-        .isSearching;
+    final FolderDetailToolbarState toolbar = ref.watch(
+      folderDetailToolbarProvider(folderId),
+    );
 
     return Column(
       children: <Widget>[
         _FolderBreadcrumb(folderId: folderId),
-        Padding(
-          padding: const EdgeInsets.only(bottom: SpacingTokens.sm),
-          child: _FolderSearchField(folderId: folderId),
-        ),
         Expanded(
           child: MxRetainedAsyncState<FolderDetail>(
             value: query,
@@ -121,7 +111,9 @@ class _FolderDetailView extends ConsumerWidget {
             ),
             data: (FolderDetail detail) => FolderDetailBody(
               detail: detail,
-              isSearching: isSearching,
+              isSearching: toolbar.isSearching,
+              searchTerm: toolbar.searchTerm,
+              onStartStudy: null,
               onNewSubfolder: () =>
                   createSubfolderDialog(context, ref, folderId),
               onNewDeck: () => createDeckDialog(context, ref, folderId),
@@ -132,6 +124,8 @@ class _FolderDetailView extends ConsumerWidget {
                   showFolderDetailSubfolderActions(context, ref, item),
               onShowDeckActions: (DeckWithCount item) =>
                   showFolderDetailDeckActions(context, ref, item),
+              onSearchTap: () {},
+              onSortTap: () {},
             ),
           ),
         ),
@@ -166,38 +160,7 @@ class _FolderBreadcrumb extends ConsumerWidget {
           onTap: () => context.pushFolderDetail(seg.id),
         ),
     ];
-    return Padding(
-      padding: const EdgeInsets.only(bottom: SpacingTokens.sm),
-      child: MxBreadcrumb(segments: segments),
-    );
-  }
-}
-
-class _FolderSearchField extends HookConsumerWidget {
-  const _FolderSearchField({required this.folderId});
-
-  final String folderId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations l10n = AppLocalizations.of(context);
-    final String searchTerm = ref.watch(
-      folderDetailToolbarProvider(
-        folderId,
-      ).select((FolderDetailToolbarState state) => state.searchTerm),
-    );
-    final MxSearchControllerState search = useMxSearchController(
-      externalText: searchTerm,
-      clearWhenExternalTextEmpty: true,
-    );
-    return MxSearchField(
-      controller: search.controller,
-      hintText: l10n.folderDetailSearchHint,
-      clearTooltip: l10n.librarySearchClearTooltip,
-      onChanged: (String value) => ref
-          .read(folderDetailToolbarProvider(folderId).notifier)
-          .setSearch(value),
-    );
+    return MxBreadcrumb(segments: segments);
   }
 }
 

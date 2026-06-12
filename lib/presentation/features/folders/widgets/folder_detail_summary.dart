@@ -7,20 +7,30 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
+import 'package:memox/presentation/shared/widgets/status/mx_mastery_ring.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
-/// Folder-scope summary cards above the children list
-/// (`docs/wireframes/05-folder-detail.md` §Layout). Counts are derived from the
-/// loaded children — no mastery ring, "{n} new", or Start-study CTA, which need
-/// study-layer data the read model does not carry yet (Future).
-
-/// Decks-mode summary: total decks · cards plus a folder-scope due line.
+/// Folder-scope summary cards above the children list.
+///
+/// The canonical Folder Detail mock shows a mastery summary card in the decks
+/// state, plus the direct-children stat strip in subfolders state. The mastery
+/// ring, "new" count, and Start-study CTA are visual shells here because the
+/// read model does not yet expose folder-scoped study data.
 class FolderDecksSummary extends StatelessWidget {
-  const FolderDecksSummary({required this.decks, super.key});
+  const FolderDecksSummary({
+    required this.decks,
+    required this.onStartStudy,
+    super.key,
+  });
 
   final List<DeckWithCount> decks;
+  final VoidCallback? onStartStudy;
+
+  static const double _masteryShell = 0.62;
+  static const int _newCountShell = 6;
 
   int get _cardTotal =>
       decks.fold<int>(0, (int sum, DeckWithCount d) => sum + d.cardCount);
@@ -31,42 +41,78 @@ class FolderDecksSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final ColorScheme scheme = context.colorScheme;
     final int dueTotal = _dueTotal;
     final String countsLine =
         '${l10n.libraryFolderDecksCount(decks.length)} · '
         '${l10n.libraryFolderCardsCount(_cardTotal)}';
+    final String dueAndNewLine = dueTotal > 0
+        ? '${l10n.libraryFolderDueCount(dueTotal)} · '
+              '${l10n.libraryFolderNewCount(_newCountShell)}'
+        : l10n.folderSummaryAllCaughtUp;
 
     return MxCard(
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const MxIconTile(icon: Icons.layers_rounded),
-          const SizedBox(width: SpacingTokens.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                MxText(
-                  countsLine,
-                  role: MxTextRole.titleSmall,
-                  fontWeight: TypographyTokens.bold,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const MxMasteryRing(pct: _masteryShell, size: 58),
+              const SizedBox(width: SpacingTokens.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    MxText(
+                      l10n.folderDetailMasteryLabel,
+                      role: MxTextRole.labelMedium,
+                      fontWeight: TypographyTokens.bold,
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(height: SpacingTokens.xxs),
+                    MxText(
+                      countsLine,
+                      role: MxTextRole.titleSmall,
+                      fontWeight: TypographyTokens.bold,
+                    ),
+                    const SizedBox(height: SpacingTokens.xxs),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: SpacingTokens.tight,
+                          height: SpacingTokens.tight,
+                          decoration: BoxDecoration(
+                            color: context.colorScheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: SpacingTokens.xs),
+                        Expanded(
+                          child: MxText(
+                            dueAndNewLine,
+                            role: MxTextRole.labelMedium,
+                            color: context.colorScheme.onSurfaceVariant,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                const SizedBox(height: SpacingTokens.xxs),
-                MxText(
-                  dueTotal > 0
-                      ? l10n.libraryFolderDueCount(dueTotal)
-                      : l10n.folderSummaryAllCaughtUp,
-                  role: MxTextRole.labelMedium,
-                  color: dueTotal > 0
-                      ? scheme.primary
-                      : scheme.onSurfaceVariant,
-                  fontWeight: dueTotal > 0
-                      ? TypographyTokens.bold
-                      : TypographyTokens.regular,
-                ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          const SizedBox(height: SpacingTokens.md),
+          MxActionButton(
+            intent: MxActionIntent.studyPrimary,
+            label: dueTotal > 0
+                ? l10n.folderDetailStartStudyWithDueLabel(dueTotal)
+                : l10n.folderDetailStartStudyLabel,
+            icon: Icons.play_arrow_outlined,
+            fullWidth: true,
+            onPressed: onStartStudy,
           ),
         ],
       ),
@@ -75,7 +121,7 @@ class FolderDecksSummary extends StatelessWidget {
 }
 
 /// Subfolders-mode summary: a three-stat strip (subfolders · cards · due total)
-/// over the folder's direct children. No folder-level study CTA here.
+/// over the folder's direct children.
 class FolderSubfoldersSummary extends StatelessWidget {
   const FolderSubfoldersSummary({required this.subfolders, super.key});
 
@@ -156,8 +202,7 @@ class _FolderStatItem extends StatelessWidget {
   }
 }
 
-/// Hairline separator between stats — a tokenized 1px [ColoredBox] (no raw
-/// `VerticalDivider`).
+/// Hairline separator between stats — a tokenized 1px [ColoredBox].
 class _FolderStatDivider extends StatelessWidget {
   const _FolderStatDivider();
 

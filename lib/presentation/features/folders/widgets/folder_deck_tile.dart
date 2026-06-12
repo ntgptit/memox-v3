@@ -8,6 +8,7 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/relative_time.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_accent.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
@@ -15,10 +16,6 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 /// A deck row inside a `decks`-mode folder (`docs/wireframes/05-folder-detail.md`
 /// §Deck row): leading icon-tile, name + due badge, card count + last studied,
 /// progress bar, and a chevron.
-///
-/// The long-press use [onShowActions] (the deck action sheet); when null the
-/// affordance is disabled — no unsupported action is exposed (the
-/// deck/flashcard mutations are not built yet).
 class FolderDeckTile extends StatelessWidget {
   const FolderDeckTile({
     required this.item,
@@ -36,7 +33,8 @@ class FolderDeckTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final Color tone = context.colorScheme.onSurfaceVariant;
+    final Color tone = folderAccentFor(item.deck.id);
+    final Color onSurfaceVariant = context.colorScheme.onSurfaceVariant;
     final DateTime now = referenceNow ?? DateTime.now();
     final double progress = item.cardCount == 0
         ? 0
@@ -60,7 +58,7 @@ class FolderDeckTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const _DeckIconTile(),
+          _DeckIconTile(color: tone),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
             child: Column(
@@ -96,21 +94,25 @@ class FolderDeckTile extends StatelessWidget {
                           lastStudiedLabel,
                         ),
                   role: MxTextRole.labelMedium,
-                  color: tone,
+                  color: onSurfaceVariant,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: SpacingTokens.sm),
                 MxLinearProgress(
                   value: progress,
-                  color: context.customColors.masteryHigh,
+                  color: tone,
                   height: SpacingTokens.xs,
                 ),
               ],
             ),
           ),
           const SizedBox(width: SpacingTokens.md),
-          Icon(Icons.chevron_right, size: SizeTokens.iconMinor, color: tone),
+          Icon(
+            Icons.chevron_right,
+            size: SizeTokens.iconMinor,
+            color: onSurfaceVariant,
+          ),
         ],
       ),
     );
@@ -123,23 +125,22 @@ String _formatRelativeTimeAgo({
 }) => l10n.relativeTimeAgo(relativeTime.unit.name, relativeTime.count);
 
 class _DeckIconTile extends StatelessWidget {
-  const _DeckIconTile();
+  const _DeckIconTile({required this.color});
+
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    final Color tint = context.colorScheme.primary;
-    return Container(
-      key: const ValueKey<String>('folder_deck_leading_tile'),
-      width: SizeTokens.buttonSm,
-      height: SizeTokens.buttonSm,
-      decoration: BoxDecoration(
-        color: tint.withValues(alpha: OpacityTokens.hover),
-        borderRadius: RadiusTokens.brSm,
-      ),
-      alignment: Alignment.center,
-      child: Icon(Icons.layers_rounded, size: SizeTokens.iconXs, color: tint),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+    key: const ValueKey<String>('folder_deck_leading_tile'),
+    width: SizeTokens.buttonSm,
+    height: SizeTokens.buttonSm,
+    decoration: BoxDecoration(
+      color: color.withValues(alpha: OpacityTokens.hover),
+      borderRadius: RadiusTokens.brSm,
+    ),
+    alignment: Alignment.center,
+    child: Icon(Icons.layers_rounded, size: SizeTokens.iconXs, color: color),
+  );
 }
 
 class _DueCountBadge extends StatelessWidget {

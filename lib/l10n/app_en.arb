@@ -767,6 +767,30 @@
   },
   "libraryOverflowTooltip": "Folder actions",
   "folderDetailSearchHint": "Search this folder",
+  "folderDetailMasteryLabel": "Folder mastery",
+  "folderDetailStartStudyLabel": "Start study",
+  "folderDetailStartStudyWithDueLabel": "Start study · {count} due",
+  "@folderDetailStartStudyWithDueLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailMostDueLabel": "Most due",
+  "folderDetailEmptyFolderChipLabel": "Empty folder",
+  "folderDetailEmptyTitle": "What goes in here?",
+  "folderDetailEmptyMessage": "Add decks to study cards directly, or nest subfolders to keep things organized. Folders hold one or the other once you start.",
+  "folderDetailEmptyHint": "Once this folder holds decks or subfolders, the other option moves into the overflow menu.",
+  "folderDetailNoResultsTitle": "No items match \"{query}\"",
+  "@folderDetailNoResultsTitle": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "folderDetailNoResultsMessage": "Try a different spelling or clear the search to see everything.",
   "folderNotFoundTitle": "Folder not found",
   "folderNotFoundMessage": "This folder may have been moved or deleted.",
   "folderEmptyLockedTitle": "This folder is empty",

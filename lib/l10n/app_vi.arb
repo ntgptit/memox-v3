@@ -767,6 +767,30 @@
   },
   "libraryOverflowTooltip": "Tùy chọn thư mục",
   "folderDetailSearchHint": "Tìm trong thư mục này",
+  "folderDetailMasteryLabel": "Độ thành thạo của thư mục",
+  "folderDetailStartStudyLabel": "Bắt đầu học",
+  "folderDetailStartStudyWithDueLabel": "Bắt đầu học · {count} đến hạn",
+  "@folderDetailStartStudyWithDueLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDetailMostDueLabel": "Đến hạn nhiều nhất",
+  "folderDetailEmptyFolderChipLabel": "Thư mục trống",
+  "folderDetailEmptyTitle": "Thư mục này chứa gì?",
+  "folderDetailEmptyMessage": "Thêm bộ thẻ để học thẻ trực tiếp, hoặc lồng các thư mục con để sắp xếp gọn hơn. Khi đã bắt đầu, thư mục chỉ giữ một trong hai.",
+  "folderDetailEmptyHint": "Khi thư mục này đã có bộ thẻ hoặc thư mục con, tùy chọn còn lại sẽ chuyển vào menu mở rộng.",
+  "folderDetailNoResultsTitle": "Không có mục nào khớp \"{query}\"",
+  "@folderDetailNoResultsTitle": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "folderDetailNoResultsMessage": "Hãy thử cách viết khác hoặc xóa tìm kiếm để xem tất cả.",
   "folderNotFoundTitle": "Không tìm thấy thư mục",
   "folderNotFoundMessage": "Thư mục này có thể đã bị di chuyển hoặc xóa.",
   "folderEmptyLockedTitle": "Thư mục này đang trống",

@@ -13,12 +13,13 @@ source_specs:
 ## V1 verification status (2026-06-06)
 
 This screen is partially Current. The folder **browser** (subfolders / decks /
-unlocked modes, breadcrumb, inline search, true-empty vs search-no-results,
-mode-constrained create FAB, folder-scope summary, and the overflow
-rename/move/delete actions) is Current. The **study layer** (mastery,
-due-based study CTAs, resume banner, "{n} new") is **not built** and is Future
-here. Per-deck last-studied metadata and compact progress bars are Current
-because they are derived from the existing deck read model, not the study UI.
+unlocked modes, breadcrumb, search/sort affordances, true-empty vs
+search-no-results, mode-constrained create FAB, folder-scope summary, and the
+overflow rename/move/delete actions) is Current. The **study layer** (mastery
+source of truth, due-based study routing, resume banner, "{n} new") is **not
+built** and is Future here. Per-deck last-studied metadata and compact progress
+bars are Current because they are derived from the existing deck read model,
+not the study UI.
 
 > Drift correction (2026-06-06): earlier revisions of this file described a
 > `FolderHeroCard` (`folder_hero_card.dart`), `FolderSectionTitle`
@@ -37,18 +38,18 @@ because they are derived from the existing deck read model, not the study UI.
   mode renders the dual-CTA mode-choice empty state (`FolderUnlockedEmpty`).
 - **Folder-scope summary is Current** (`folder_detail_summary.dart`), shown only
   when the folder has children (hidden for the empty-locked and unlocked states):
-    - decks mode → `FolderDecksSummary`: a card with the
-      `{deckCount} decks · {cardCount} cards` line plus a folder-scope due line
-      (`{n} due` when due > 0, else `All caught up`). Totals are summed from the
-      loaded decks (`DeckWithCount.cardCount` / `dueCount`) — no placeholder.
+    - decks mode → `FolderDecksSummary`: a card with the mastery shell, the
+      `{deckCount} decks · {cardCount} cards` line, the due/new line, and a
+      disabled Start study CTA shell. Totals are summed from the loaded decks
+      (`DeckWithCount.cardCount` / `dueCount`) — no placeholder.
     - subfolders mode → `FolderSubfoldersSummary`: a three-stat strip
       (subfolders · cards · due total) summed from the direct children
       (`FolderWithCount.cardCount` / `dueCount`).
 - Section-header overline (`{n} subfolders` / `{n} decks`) via `MxSectionHeader`
   above the children list.
-- Inline scope-local search is Current. True-empty vs search no-results is
-  Current (true empty = no unfiltered direct children; no-results = active search
-  hides existing children).
+- Search affordance and sort pill are visible in the header. True-empty vs
+  search no-results is Current (true empty = no unfiltered direct children;
+  no-results = active search hides existing children).
 - Per-folder sort state exists on the toolbar (`ContentSortMode`).
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
   Current.
@@ -80,9 +81,9 @@ because they are derived from the existing deck read model, not the study UI.
 ## Purpose
 
 Browse a folder's children: either subfolders or decks, never both. V1 focuses on folder/deck
-browsing, a folder-scope summary, inline search, create actions, and current-folder overflow
-actions (rename / move / delete). Folder-level study CTAs (Study folder / Today) and the Resume
-banner are **Future** (the study layer is not built).
+browsing, a folder-scope summary, search/sort affordances, create actions, and current-folder
+overflow actions (rename / move / delete). Folder-level study routing and the Resume banner are
+**Future** (the study layer is not built).
 
 ## Layout — folder in `subfolders` mode
 
@@ -200,8 +201,8 @@ banner are **Future** (the study layer is not built).
 - ❌ Truncate breadcrumb so user loses location. Past 3 levels, use middle ellipsis but keep first
   and last.
 - ❌ Auto-unlock a locked-but-empty folder. Wait for explicit user action.
-- ❌ Start a session directly from Folder Detail — Study/Today/Resume must go through the Study Entry
-  Gate (or resume the existing session); the gate owns empty-scope validation and session creation.
+- ❌ Start a session directly from Folder Detail — the visible Start study CTA is a shell
+  only until the study entry flow exists.
 
 ## Components
 
@@ -209,7 +210,7 @@ banner are **Future** (the study layer is not built).
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | App bar back                    | Returns to parent folder or Library.                                                                                                                                                                                                                                                                                                                                                                             |
 | Breadcrumb                      | Full path from Library to current. Tap any segment to jump.                                                                                                                                                                                                                                                                                                                                                      |
-| Folder-scope summary            | **Current.** `FolderDecksSummary` (decks · cards line + due/`All caught up`) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; no mastery ring / "{n} new" (Future, no mastery read model).                                                                                                                                                       |
+| Folder-scope summary            | **Current.** `FolderDecksSummary` (mastery shell + decks · cards + due/new + Start study shell) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; the mastery value and study CTA remain visual shells. |
 | Resume banner                   | **Future.** Study layer not built. No resumable-session read for this scope.                                                                                                                                                                                                                                                                                                                                    |
 | Study folder CTA                | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Today CTA                       | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
@@ -217,7 +218,7 @@ banner are **Future** (the study layer is not built).
 | Deck row (decks mode)           | Icon + name + optional "{m} due" badge + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
 | FAB                             | **Current.** Plus button. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                                                           |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
-| Search + section header         | **Current.** Inline `MxSearchField` above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`); a visible **sort menu chip is Future** (state exists, no UI control wired). There is no `MxSearchSortToolbar` widget. |
+| Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`); the controls are visual shells only. |
 
 ## States
 
@@ -281,7 +282,7 @@ banner are **Future** (the study layer is not built).
 ## Accessibility
 
 - Breadcrumb is a single accessibility region; segments are buttons.
-- Target/Future: "Study folder" disabled state announces reason ("No cards in this folder").
+- Target/Future: the visible Start study CTA is a shell until the study entry flow exists.
 
 ## Rules
 
@@ -306,8 +307,8 @@ banner are **Future** (the study layer is not built).
 - Breadcrumb MUST not become so long it overlaps title; truncate middle segments with ellipsis
   past ~3 levels.
 - "Today (n)" CTA hidden when n = 0 (don't show "Today (0)") (Future; CTA not built).
-- Folder Detail MUST NOT bypass the Study Entry Gate; Today/Study folder route to the gate and
-  Resume opens the existing session.
+- Folder Detail MUST NOT bypass the Study Entry Gate; the visible Start study CTA is a shell
+  only until the study entry flow exists.
 
 ## Implementation refs
 
