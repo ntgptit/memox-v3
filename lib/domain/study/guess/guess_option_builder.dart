@@ -11,26 +11,28 @@ final class GuessOptionBuilder {
   static const int maxOptionCount = 5;
   static const int maxDecoyCount = maxOptionCount - 1;
 
+  static bool canBuild({
+    required Flashcard current,
+    required Iterable<Flashcard> scopeCards,
+  }) =>
+      _validDecoyCount(current: current, scopeCards: scopeCards) >=
+      maxDecoyCount;
+
   static List<GuessOption> build({
     required String sessionId,
     required Flashcard current,
     required Iterable<Flashcard> scopeCards,
   }) {
-    final String currentBackKey = _normalizedKey(current.back);
-    final Map<String, Flashcard> uniqueDecoysByBack = <String, Flashcard>{};
-    for (final Flashcard card in scopeCards) {
-      if (card.id == current.id) {
-        continue;
-      }
-
-      final String backKey = _normalizedKey(card.back);
-      if (backKey.isEmpty || backKey == currentBackKey) {
-        continue;
-      }
-
-      uniqueDecoysByBack.putIfAbsent(backKey, () => card);
+    if (!canBuild(current: current, scopeCards: scopeCards)) {
+      throw UnsupportedError(
+        'Guess mode requires at least 4 valid unique decoys.',
+      );
     }
 
+    final Map<String, Flashcard> uniqueDecoysByBack = _uniqueDecoysByBack(
+      current: current,
+      scopeCards: scopeCards,
+    );
     final String seedKey = '$sessionId|${current.id}';
     final List<Flashcard> decoys = uniqueDecoysByBack.values.toList()
       ..sort(
@@ -63,6 +65,32 @@ final class GuessOptionBuilder {
     );
     return options;
   }
+
+  static Map<String, Flashcard> _uniqueDecoysByBack({
+    required Flashcard current,
+    required Iterable<Flashcard> scopeCards,
+  }) {
+    final String currentBackKey = _normalizedKey(current.back);
+    final Map<String, Flashcard> uniqueDecoysByBack = <String, Flashcard>{};
+    for (final Flashcard card in scopeCards) {
+      if (card.id == current.id) {
+        continue;
+      }
+
+      final String backKey = _normalizedKey(card.back);
+      if (backKey.isEmpty || backKey == currentBackKey) {
+        continue;
+      }
+
+      uniqueDecoysByBack.putIfAbsent(backKey, () => card);
+    }
+    return uniqueDecoysByBack;
+  }
+
+  static int _validDecoyCount({
+    required Flashcard current,
+    required Iterable<Flashcard> scopeCards,
+  }) => _uniqueDecoysByBack(current: current, scopeCards: scopeCards).length;
 
   static int _compareBySeed(String seedKey, Flashcard left, Flashcard right) {
     final int leftScore = _stableHash('$seedKey|${left.id}');
