@@ -21,8 +21,8 @@ create, import, or restore data.
 
 ## Prompt 26 V1 honesty sweep — 2026-06-01
 
-- Full onboarding is still **Future Proposal**: no `/onboarding` route, no
-  `lib/presentation/features/onboarding/**`, no first-launch preference gate, and no multi-step
+- Full onboarding is still **Future Proposal**: no `/onboarding` route, no onboarding feature
+  under `lib/presentation/features/`, no first-launch preference gate, and no multi-step
   wizard.
 - Current V1 uses existing owner surfaces only. Library true-empty owns its local Create folder CTA;
   Folder Detail owns mode-appropriate New subfolder / New deck CTAs; Flashcard List owns Add
@@ -96,7 +96,7 @@ V1 should preserve current route behavior unless a separate navigation task chan
 
 ## V1 forbidden behavior
 
-- Do not create `lib/presentation/features/onboarding/**`.
+- Do not create an onboarding feature under `lib/presentation/features/`.
 - Do not add an onboarding route.
 - Do not add a multi-step tutorial carousel.
 - Do not add a first-launch welcome screen in V1.

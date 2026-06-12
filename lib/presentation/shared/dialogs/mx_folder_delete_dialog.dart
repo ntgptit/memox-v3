@@ -21,7 +21,7 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 Future<bool> showMxFolderDeleteDialog(
   BuildContext context, {
   required String folderName,
-  required String summaryText,
+  required String removalMessage,
   required String title,
   required String reassuranceText,
   required String confirmLabel,
@@ -34,7 +34,7 @@ Future<bool> showMxFolderDeleteDialog(
     barrierDismissible: false,
     builder: (BuildContext context) => _MxFolderDeleteDialog(
       folderName: folderName,
-      summaryText: summaryText,
+      removalMessage: removalMessage,
       title: title,
       reassuranceText: reassuranceText,
       confirmLabel: confirmLabel,
@@ -49,7 +49,7 @@ Future<bool> showMxFolderDeleteDialog(
 class _MxFolderDeleteDialog extends HookWidget {
   const _MxFolderDeleteDialog({
     required this.folderName,
-    required this.summaryText,
+    required this.removalMessage,
     required this.title,
     required this.reassuranceText,
     required this.confirmLabel,
@@ -61,7 +61,7 @@ class _MxFolderDeleteDialog extends HookWidget {
   static const double _dialogMaxWidth = 432;
 
   final String folderName;
-  final String summaryText;
+  final String removalMessage;
   final String title;
   final String reassuranceText;
   final String confirmLabel;
@@ -154,9 +154,7 @@ class _MxFolderDeleteDialog extends HookWidget {
             fontWeight: TypographyTokens.bold,
           ),
         ),
-        TextSpan(
-          text: ' and its $summaryText will be removed from your library.',
-        ),
+        TextSpan(text: removalMessage),
       ],
     ),
     textAlign: TextAlign.center,

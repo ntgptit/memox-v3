@@ -1,0 +1,24 @@
+# WIP Handoff
+
+- Branch name: `wip/20260612-progress`
+- Current status: Work in progress on the progress feature, with related docs, localization, routing, data, and presentation files modified but not fully verified.
+- Changed areas:
+  - Progress domain/data layer: `lib/domain/...`, `lib/data/...`
+  - Progress UI and routing: `lib/presentation/features/progress/...`, `lib/app/router/app_router.dart`
+  - Shared UI and providers touched by the feature: `lib/app/di/progress_providers.dart`, `lib/presentation/shared/...`
+  - Docs and wireframes: `docs/_generated/...`, `docs/business/...`, `docs/wireframes/...`, `docs/decision-tables/...`
+  - Localization and generated outputs: `lib/l10n/...`
+  - Tests: `test/...`
+- What appears done:
+  - A new progress feature flow was added with route, screen, viewmodel, widgets, and supporting use case/repository/DAO wiring.
+  - Documentation and wireframe references were updated to reflect the new progress-related work.
+  - Test coverage has started for the new progress read model and related UI behavior.
+- What is not done or unknown:
+  - I did not complete the feature or verify that the app/tests are green.
+  - Generated localization files and other generated outputs may still need regeneration or cleanup.
+  - It is not clear whether all docs/code parity requirements are satisfied yet.
+- Recommended next steps:
+  - Run the repo verification flow for the affected progress/docs/l10n scope.
+  - Check for any failing analyzer/tests and finish the remaining progress-screen or data-layer gaps.
+  - Confirm generated files are in sync with source ARB/docs changes.
+- File/module to continue from: `lib/presentation/features/progress/screens/progress_screen.dart` and `lib/presentation/features/progress/viewmodels/progress_viewmodel.dart`

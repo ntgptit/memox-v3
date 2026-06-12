@@ -110,12 +110,6 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get commonBack;
 
-  /// No description provided for @commonOk.
-  ///
-  /// In en, this message translates to:
-  /// **'OK'**
-  String get commonOk;
-
   /// No description provided for @commonCancel.
   ///
   /// In en, this message translates to:
@@ -127,12 +121,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get commonClose;
-
-  /// Accessibility label for the drag handle at the top of a modal bottom sheet.
-  ///
-  /// In en, this message translates to:
-  /// **'Dismiss bottom sheet'**
-  String get bottomSheetDragHandleLabel;
 
   /// No description provided for @commonCreate.
   ///
@@ -152,12 +140,6 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get commonDelete;
 
-  /// No description provided for @commonSort.
-  ///
-  /// In en, this message translates to:
-  /// **'Sort'**
-  String get commonSort;
-
   /// No description provided for @commonSave.
   ///
   /// In en, this message translates to:
@@ -176,12 +158,6 @@ abstract class AppLocalizations {
   /// **'Import'**
   String get commonImport;
 
-  /// No description provided for @commonExport.
-  ///
-  /// In en, this message translates to:
-  /// **'Export'**
-  String get commonExport;
-
   /// No description provided for @commonMove.
   ///
   /// In en, this message translates to:
@@ -193,90 +169,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear'**
   String get commonClear;
-
-  /// No description provided for @commonSelect.
-  ///
-  /// In en, this message translates to:
-  /// **'Select'**
-  String get commonSelect;
-
-  /// No description provided for @commonSelectAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Select all'**
-  String get commonSelectAll;
-
-  /// No description provided for @commonSaveOrder.
-  ///
-  /// In en, this message translates to:
-  /// **'Save order'**
-  String get commonSaveOrder;
-
-  /// No description provided for @commonOverview.
-  ///
-  /// In en, this message translates to:
-  /// **'Overview'**
-  String get commonOverview;
-
-  /// No description provided for @commonNever.
-  ///
-  /// In en, this message translates to:
-  /// **'Never'**
-  String get commonNever;
-
-  /// No description provided for @commonReorder.
-  ///
-  /// In en, this message translates to:
-  /// **'Reorder'**
-  String get commonReorder;
-
-  /// No description provided for @commonNoValidDestinationFound.
-  ///
-  /// In en, this message translates to:
-  /// **'No valid destination found.'**
-  String get commonNoValidDestinationFound;
-
-  /// No description provided for @commonDefaultOrderUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Default order updated.'**
-  String get commonDefaultOrderUpdated;
-
-  /// No description provided for @commonPercentValue.
-  ///
-  /// In en, this message translates to:
-  /// **'{value}%'**
-  String commonPercentValue(int value);
-
-  /// No description provided for @commonSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Search'**
-  String get commonSearch;
-
-  /// No description provided for @sortManual.
-  ///
-  /// In en, this message translates to:
-  /// **'Manual'**
-  String get sortManual;
-
-  /// No description provided for @sortName.
-  ///
-  /// In en, this message translates to:
-  /// **'Name'**
-  String get sortName;
-
-  /// No description provided for @sortNewest.
-  ///
-  /// In en, this message translates to:
-  /// **'Newest'**
-  String get sortNewest;
-
-  /// No description provided for @sortLastStudied.
-  ///
-  /// In en, this message translates to:
-  /// **'Last studied'**
-  String get sortLastStudied;
 
   /// No description provided for @homeTitle.
   ///
@@ -302,30 +194,6 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settingsTitle;
 
-  /// No description provided for @appShellHomePlaceholderDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Home dashboard foundation is not wired yet.'**
-  String get appShellHomePlaceholderDescription;
-
-  /// No description provided for @appShellProgressPlaceholderDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Progress foundation is not wired yet.'**
-  String get appShellProgressPlaceholderDescription;
-
-  /// No description provided for @appShellSettingsPlaceholderDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings foundation is not wired yet.'**
-  String get appShellSettingsPlaceholderDescription;
-
-  /// No description provided for @dashboardTodayLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get dashboardTodayLabel;
-
   /// No description provided for @dashboardGreetingTitle.
   ///
   /// In en, this message translates to:
@@ -338,83 +206,11 @@ abstract class AppLocalizations {
   /// **'Ready to study today?'**
   String get dashboardGreetingSubtitle;
 
-  /// No description provided for @dashboardHeading.
-  ///
-  /// In en, this message translates to:
-  /// **'Today\'s study focus'**
-  String get dashboardHeading;
-
-  /// No description provided for @dashboardSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Review, study new cards, or continue a session.'**
-  String get dashboardSubtitle;
-
   /// No description provided for @dashboardTodayReviewTitle.
   ///
   /// In en, this message translates to:
   /// **'Today Review'**
   String get dashboardTodayReviewTitle;
-
-  /// No description provided for @dashboardOverdueLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Overdue'**
-  String get dashboardOverdueLabel;
-
-  /// No description provided for @dashboardReviewReadyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} cards are ready for SRS review.'**
-  String dashboardReviewReadyMessage(int count);
-
-  /// No description provided for @dashboardReviewEmptyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'No review cards are due. Open your library to add cards.'**
-  String get dashboardReviewEmptyMessage;
-
-  /// No description provided for @dashboardReviewCompactStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{0 due} =1{1 due} other{{count} due}}'**
-  String dashboardReviewCompactStatus(int count);
-
-  /// No description provided for @dashboardReviewNowAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Review'**
-  String get dashboardReviewNowAction;
-
-  /// No description provided for @dashboardDueNowLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Due now'**
-  String get dashboardDueNowLabel;
-
-  /// No description provided for @dashboardDueNowSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'{cardCount, plural, =1{1 card} other{{cardCount} cards}} across {deckCount, plural, =1{1 deck} other{{deckCount} decks}}'**
-  String dashboardDueNowSummary(int cardCount, int deckCount);
-
-  /// No description provided for @dashboardReviewTimeEstimate.
-  ///
-  /// In en, this message translates to:
-  /// **'About {minutes, plural, =1{1 minute} other{{minutes} minutes}}'**
-  String dashboardReviewTimeEstimate(int minutes);
-
-  /// No description provided for @dashboardStartReviewAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start review'**
-  String get dashboardStartReviewAction;
-
-  /// No description provided for @dashboardAllCaughtUpTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'All caught up'**
-  String get dashboardAllCaughtUpTitle;
 
   /// No description provided for @dashboardNewStudyTitle.
   ///
@@ -422,65 +218,11 @@ abstract class AppLocalizations {
   /// **'New Study'**
   String get dashboardNewStudyTitle;
 
-  /// No description provided for @dashboardNewCardsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'New cards available'**
-  String get dashboardNewCardsLabel;
-
-  /// No description provided for @dashboardNewStudyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} new cards are ready.'**
-  String dashboardNewStudyMessage(int count);
-
   /// No description provided for @dashboardNewStudyEmptyMessage.
   ///
   /// In en, this message translates to:
   /// **'Add or import cards before starting a new study session.'**
   String get dashboardNewStudyEmptyMessage;
-
-  /// No description provided for @dashboardNewStudyCompactStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{0 new} =1{1 new} other{{count} new}}'**
-  String dashboardNewStudyCompactStatus(int count);
-
-  /// No description provided for @dashboardStartNewStudyAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start'**
-  String get dashboardStartNewStudyAction;
-
-  /// No description provided for @dashboardResumeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Resume'**
-  String get dashboardResumeTitle;
-
-  /// No description provided for @dashboardActiveSessionsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Active sessions'**
-  String get dashboardActiveSessionsLabel;
-
-  /// No description provided for @dashboardResumeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} sessions can be continued or finalized.'**
-  String dashboardResumeMessage(int count);
-
-  /// No description provided for @dashboardResumeEmptyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'No active session. Start studying to resume later.'**
-  String get dashboardResumeEmptyMessage;
-
-  /// No description provided for @dashboardResumeCompactStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{0 active} =1{1 active} other{{count} active}}'**
-  String dashboardResumeCompactStatus(int count);
 
   /// No description provided for @dashboardContinueSessionAction.
   ///
@@ -494,165 +236,11 @@ abstract class AppLocalizations {
   /// **'Continue studying'**
   String get dashboardResumeSectionTitle;
 
-  /// No description provided for @dashboardDiscardAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Discard'**
-  String get dashboardDiscardAction;
-
-  /// No description provided for @dashboardMorePausedSessions.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{+ 1 more paused session} other{+ {count} more paused sessions}}'**
-  String dashboardMorePausedSessions(int count);
-
-  /// No description provided for @dashboardPausedSessionsSheetTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 paused session} other{{count} paused sessions}}'**
-  String dashboardPausedSessionsSheetTitle(int count);
-
-  /// No description provided for @dashboardDiscardSessionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Discard this session?'**
-  String get dashboardDiscardSessionTitle;
-
-  /// No description provided for @dashboardDiscardSessionMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Your progress on answered cards is kept, but the remaining cards in this session will be abandoned.'**
-  String get dashboardDiscardSessionMessage;
-
-  /// No description provided for @dashboardSessionDiscardedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Session discarded.'**
-  String get dashboardSessionDiscardedMessage;
-
-  /// No description provided for @dashboardSessionDiscardFailedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t discard the session. Try again.'**
-  String get dashboardSessionDiscardFailedMessage;
-
-  /// No description provided for @dashboardStartNewLearningAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start new learning'**
-  String get dashboardStartNewLearningAction;
-
-  /// No description provided for @dashboardScopePickerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'What do you want to study?'**
-  String get dashboardScopePickerTitle;
-
-  /// No description provided for @dashboardScopeToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get dashboardScopeToday;
-
-  /// No description provided for @dashboardScopeTodaySubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No cards due now} =1{1 card due now} other{{count} cards due now}}'**
-  String dashboardScopeTodaySubtitle(int count);
-
-  /// No description provided for @dashboardScopeDeck.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck'**
-  String get dashboardScopeDeck;
-
-  /// No description provided for @dashboardScopeDeckSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a deck to study'**
-  String get dashboardScopeDeckSubtitle;
-
-  /// No description provided for @dashboardScopeFolder.
-  ///
-  /// In en, this message translates to:
-  /// **'Folder'**
-  String get dashboardScopeFolder;
-
-  /// No description provided for @dashboardScopeFolderSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a folder to study'**
-  String get dashboardScopeFolderSubtitle;
-
-  /// No description provided for @dashboardScopeDeckPickerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a deck'**
-  String get dashboardScopeDeckPickerTitle;
-
-  /// No description provided for @dashboardScopeFolderPickerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a folder'**
-  String get dashboardScopeFolderPickerTitle;
-
-  /// No description provided for @dashboardScopeDeckSearchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search decks'**
-  String get dashboardScopeDeckSearchHint;
-
-  /// No description provided for @dashboardScopeFolderSearchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search folders'**
-  String get dashboardScopeFolderSearchHint;
-
-  /// No description provided for @dashboardScopeDeckEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No decks yet. Create a deck first.'**
-  String get dashboardScopeDeckEmpty;
-
-  /// No description provided for @dashboardScopeFolderEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No folders yet.'**
-  String get dashboardScopeFolderEmpty;
-
-  /// No description provided for @dashboardLibraryHealthTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Library health'**
-  String get dashboardLibraryHealthTitle;
-
-  /// No description provided for @dashboardLibraryHealthSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'{folderCount, plural, =0{0 folders} =1{1 folder} other{{folderCount} folders}} · {deckCount, plural, =0{0 decks} =1{1 deck} other{{deckCount} decks}} · {cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}'**
-  String dashboardLibraryHealthSummary(
-    int folderCount,
-    int deckCount,
-    int cardCount,
-  );
-
-  /// No description provided for @dashboardMasteryLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Mastery'**
-  String get dashboardMasteryLabel;
-
   /// No description provided for @dashboardStreakDays.
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 day} other{{count} days}}'**
   String dashboardStreakDays(int count);
-
-  /// No description provided for @dashboardMasteredCards.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
-  String dashboardMasteredCards(int count);
 
   /// No description provided for @dashboardDueTodayTitle.
   ///
@@ -665,12 +253,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} cards ready to review'**
   String dashboardDueTodayMessage(int count);
-
-  /// No description provided for @dashboardLibrarySummary.
-  ///
-  /// In en, this message translates to:
-  /// **'{folderCount} folders · {cardCount} cards'**
-  String dashboardLibrarySummary(int folderCount, int cardCount);
 
   /// No description provided for @dashboardNoDueTitle.
   ///
@@ -696,138 +278,6 @@ abstract class AppLocalizations {
   /// **'View library'**
   String get dashboardOpenLibraryAction;
 
-  /// No description provided for @dashboardLibraryProgressTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Library progress'**
-  String get dashboardLibraryProgressTitle;
-
-  /// No description provided for @dashboardLibraryProgressMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{percent}% mastery'**
-  String dashboardLibraryProgressMessage(int percent);
-
-  /// No description provided for @dashboardRecentDecksTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent decks'**
-  String get dashboardRecentDecksTitle;
-
-  /// No description provided for @dashboardPickUpTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick up where you left off'**
-  String get dashboardPickUpTitle;
-
-  /// No description provided for @dashboardStartDeckTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Start a deck'**
-  String get dashboardStartDeckTitle;
-
-  /// No description provided for @dashboardDeckStats.
-  ///
-  /// In en, this message translates to:
-  /// **'{cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}'**
-  String dashboardDeckStats(int cardCount);
-
-  /// No description provided for @dashboardDeckDueSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'{dueCount, plural, =1{1 due} other{{dueCount} due}} · {cardCount, plural, =1{1 card} other{{cardCount} cards}}'**
-  String dashboardDeckDueSummary(int dueCount, int cardCount);
-
-  /// No description provided for @dashboardDeckCaughtUpSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'All caught up · {cardCount, plural, =1{1 card} other{{cardCount} cards}}'**
-  String dashboardDeckCaughtUpSummary(int cardCount);
-
-  /// No description provided for @progressOverviewHeading.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning overview'**
-  String get progressOverviewHeading;
-
-  /// No description provided for @progressOverviewSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Track review pressure, library mastery, and open session recovery.'**
-  String get progressOverviewSubtitle;
-
-  /// No description provided for @progressReviewDueCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Due now'**
-  String get progressReviewDueCount;
-
-  /// No description provided for @progressActiveSessionsHeading.
-  ///
-  /// In en, this message translates to:
-  /// **'Active sessions'**
-  String get progressActiveSessionsHeading;
-
-  /// No description provided for @progressActiveSessionsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Resume, finalize, retry, or cancel the study sessions that are still open.'**
-  String get progressActiveSessionsSubtitle;
-
-  /// No description provided for @progressActiveSessionsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get progressActiveSessionsCount;
-
-  /// No description provided for @progressReadySessionsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready'**
-  String get progressReadySessionsCount;
-
-  /// No description provided for @progressFailedSessionsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Needs retry'**
-  String get progressFailedSessionsCount;
-
-  /// No description provided for @progressEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No active study sessions'**
-  String get progressEmptyTitle;
-
-  /// No description provided for @progressEmptyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Start studying from Library. Sessions that are in progress or waiting to finalize will appear here.'**
-  String get progressEmptyMessage;
-
-  /// No description provided for @progressSessionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{studyType} · {entryType}'**
-  String progressSessionTitle(Object studyType, Object entryType);
-
-  /// No description provided for @progressSessionCardProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'{completed} of {total} study steps · {remaining} remaining'**
-  String progressSessionCardProgress(int completed, int total, int remaining);
-
-  /// No description provided for @progressSessionCurrentCard.
-  ///
-  /// In en, this message translates to:
-  /// **'Current card: {card}'**
-  String progressSessionCurrentCard(Object card);
-
-  /// No description provided for @progressSessionStartedAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Started {date} at {time}'**
-  String progressSessionStartedAt(Object date, Object time);
-
   /// No description provided for @progressEntryDeck.
   ///
   /// In en, this message translates to:
@@ -840,77 +290,11 @@ abstract class AppLocalizations {
   /// **'Folder'**
   String get progressEntryFolder;
 
-  /// No description provided for @progressEntryToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get progressEntryToday;
-
-  /// No description provided for @progressSessionStatusInProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'In progress'**
-  String get progressSessionStatusInProgress;
-
-  /// No description provided for @progressSessionStatusReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready to finalize'**
-  String get progressSessionStatusReady;
-
-  /// No description provided for @progressSessionStatusFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Finalize failed'**
-  String get progressSessionStatusFailed;
-
-  /// No description provided for @progressCancelConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel this study session?'**
-  String get progressCancelConfirmTitle;
-
-  /// No description provided for @progressCancelConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The current session will stop. Completed attempts remain in its history, but pending cards are abandoned.'**
-  String get progressCancelConfirmMessage;
-
-  /// No description provided for @progressSessionCancelledMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Session cancelled.'**
-  String get progressSessionCancelledMessage;
-
-  /// No description provided for @progressSessionFinalizedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Session finalized.'**
-  String get progressSessionFinalizedMessage;
-
-  /// No description provided for @progressSessionRetryFinalizeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Finalize retried.'**
-  String get progressSessionRetryFinalizeMessage;
-
-  /// No description provided for @progressSessionActionFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Session action failed.'**
-  String get progressSessionActionFailed;
-
   /// No description provided for @settingsAppearanceTitle.
   ///
   /// In en, this message translates to:
   /// **'Appearance'**
   String get settingsAppearanceTitle;
-
-  /// No description provided for @settingsPersonalizationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Personalization'**
-  String get settingsPersonalizationTitle;
 
   /// No description provided for @settingsStudySectionTitle.
   ///
@@ -942,12 +326,6 @@ abstract class AppLocalizations {
   /// **'Account'**
   String get settingsAccountTitle;
 
-  /// No description provided for @settingsAccountLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading account'**
-  String get settingsAccountLoading;
-
   /// No description provided for @settingsAccountLinkedOverviewTitle.
   ///
   /// In en, this message translates to:
@@ -972,84 +350,6 @@ abstract class AppLocalizations {
   /// **'Signing in...'**
   String get settingsAccountSigningIn;
 
-  /// No description provided for @settingsAccountSubtitleSignedOut.
-  ///
-  /// In en, this message translates to:
-  /// **'Link Google now so Drive sync can be enabled later.'**
-  String get settingsAccountSubtitleSignedOut;
-
-  /// No description provided for @settingsAccountSubtitleReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Google Drive app data access is ready for future sync.'**
-  String get settingsAccountSubtitleReady;
-
-  /// No description provided for @settingsAccountSubtitleReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Reconnect Drive access before sync can run.'**
-  String get settingsAccountSubtitleReconnect;
-
-  /// No description provided for @settingsAccountSubtitleConfig.
-  ///
-  /// In en, this message translates to:
-  /// **'Google sign-in is not configured for this build.'**
-  String get settingsAccountSubtitleConfig;
-
-  /// No description provided for @settingsAccountSubtitleUnsupported.
-  ///
-  /// In en, this message translates to:
-  /// **'Google sign-in is not available on this platform.'**
-  String get settingsAccountSubtitleUnsupported;
-
-  /// No description provided for @settingsAccountSubtitleError.
-  ///
-  /// In en, this message translates to:
-  /// **'Google account could not be updated.'**
-  String get settingsAccountSubtitleError;
-
-  /// No description provided for @settingsAccountSignedOut.
-  ///
-  /// In en, this message translates to:
-  /// **'No Google account is linked.'**
-  String get settingsAccountSignedOut;
-
-  /// No description provided for @settingsAccountMissingConfig.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Google OAuth client IDs to enable account linking.'**
-  String get settingsAccountMissingConfig;
-
-  /// No description provided for @settingsAccountUnsupported.
-  ///
-  /// In en, this message translates to:
-  /// **'Use Android, iOS, or web to link Google account.'**
-  String get settingsAccountUnsupported;
-
-  /// No description provided for @settingsAccountDriveReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Google Drive ready'**
-  String get settingsAccountDriveReady;
-
-  /// No description provided for @settingsAccountDriveReconnectRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Google Drive reconnect required'**
-  String get settingsAccountDriveReconnectRequired;
-
-  /// No description provided for @settingsAccountOverviewSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{status}\n{email}'**
-  String settingsAccountOverviewSubtitle(Object status, Object email);
-
-  /// No description provided for @settingsAccountOverviewSyncedSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{email} · synced {time}'**
-  String settingsAccountOverviewSyncedSubtitle(Object email, Object time);
-
   /// No description provided for @settingsAccountOverviewSyncedMockSubtitle.
   ///
   /// In en, this message translates to:
@@ -1067,456 +367,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get settingsOverviewSyncRetry;
-
-  /// No description provided for @settingsAccountDriveAuthorizationRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Grant Google Drive app data access to prepare sync.'**
-  String get settingsAccountDriveAuthorizationRequired;
-
-  /// No description provided for @settingsAccountSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in with Google'**
-  String get settingsAccountSignIn;
-
-  /// No description provided for @settingsAccountReconnectDrive.
-  ///
-  /// In en, this message translates to:
-  /// **'Reconnect Google Drive'**
-  String get settingsAccountReconnectDrive;
-
-  /// No description provided for @settingsAccountSkipDrive.
-  ///
-  /// In en, this message translates to:
-  /// **'Use without cloud backup'**
-  String get settingsAccountSkipDrive;
-
-  /// No description provided for @settingsAccountSignOut.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out'**
-  String get settingsAccountSignOut;
-
-  /// No description provided for @settingsAccountSignOutConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out of Google?'**
-  String get settingsAccountSignOutConfirmTitle;
-
-  /// No description provided for @settingsAccountSignOutConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Drive backup is kept. Sign in again later to restore it.'**
-  String get settingsAccountSignOutConfirmMessage;
-
-  /// No description provided for @settingsAccountDisconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnect Google'**
-  String get settingsAccountDisconnect;
-
-  /// No description provided for @settingsAccountDisconnectConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnect Google account?'**
-  String get settingsAccountDisconnectConfirmTitle;
-
-  /// No description provided for @settingsAccountDisconnectConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This revokes Drive access tokens for this app. The Drive backup itself is kept. Use this on shared or lost devices.'**
-  String get settingsAccountDisconnectConfirmMessage;
-
-  /// No description provided for @settingsAccountDisconnectedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Google account disconnected. Drive access tokens revoked.'**
-  String get settingsAccountDisconnectedMessage;
-
-  /// No description provided for @settingsAccountSignInCanceled.
-  ///
-  /// In en, this message translates to:
-  /// **'Google sign-in was canceled.'**
-  String get settingsAccountSignInCanceled;
-
-  /// No description provided for @settingsAccountSignInFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Google sign-in failed. Try again.'**
-  String get settingsAccountSignInFailed;
-
-  /// No description provided for @settingsAccountLastSignedIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Last signed in {at}'**
-  String settingsAccountLastSignedIn(Object at);
-
-  /// No description provided for @settingsAccountSignedOutMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Signed out. Local flashcards stay on this device.'**
-  String get settingsAccountSignedOutMessage;
-
-  /// No description provided for @settingsDriveSyncTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Drive sync'**
-  String get settingsDriveSyncTitle;
-
-  /// No description provided for @settingsDriveSyncLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading sync state'**
-  String get settingsDriveSyncLoading;
-
-  /// No description provided for @settingsDriveSyncSubtitleSignedOut.
-  ///
-  /// In en, this message translates to:
-  /// **'Link Google account before syncing.'**
-  String get settingsDriveSyncSubtitleSignedOut;
-
-  /// No description provided for @settingsDriveSyncSubtitleUnconfigured.
-  ///
-  /// In en, this message translates to:
-  /// **'Google sign-in is not configured for this build.'**
-  String get settingsDriveSyncSubtitleUnconfigured;
-
-  /// No description provided for @settingsDriveSyncSubtitleReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Reconnect Drive access before sync can run.'**
-  String get settingsDriveSyncSubtitleReconnect;
-
-  /// No description provided for @settingsDriveSyncSubtitleNoRemote.
-  ///
-  /// In en, this message translates to:
-  /// **'Create the first Drive backup from this device.'**
-  String get settingsDriveSyncSubtitleNoRemote;
-
-  /// No description provided for @settingsDriveSyncSubtitleSynced.
-  ///
-  /// In en, this message translates to:
-  /// **'Local data matches the latest Drive snapshot.'**
-  String get settingsDriveSyncSubtitleSynced;
-
-  /// No description provided for @settingsDriveSyncSubtitleReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Manual sync is ready.'**
-  String get settingsDriveSyncSubtitleReady;
-
-  /// No description provided for @settingsDriveSyncSubtitleConflict.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose which copy should win.'**
-  String get settingsDriveSyncSubtitleConflict;
-
-  /// No description provided for @settingsDriveSyncSubtitleUnsupportedSchema.
-  ///
-  /// In en, this message translates to:
-  /// **'Update the app before restoring this Drive copy.'**
-  String get settingsDriveSyncSubtitleUnsupportedSchema;
-
-  /// No description provided for @settingsDriveSyncSubtitleError.
-  ///
-  /// In en, this message translates to:
-  /// **'Drive sync could not complete.'**
-  String get settingsDriveSyncSubtitleError;
-
-  /// No description provided for @settingsDriveSyncSignedOut.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in with Google to sync the local database with Drive.'**
-  String get settingsDriveSyncSignedOut;
-
-  /// No description provided for @settingsDriveSyncUnconfigured.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Google OAuth client IDs to enable Drive sync.'**
-  String get settingsDriveSyncUnconfigured;
-
-  /// No description provided for @settingsDriveSyncReconnectRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Reconnect Google Drive in Account first.'**
-  String get settingsDriveSyncReconnectRequired;
-
-  /// No description provided for @settingsDriveSyncNoRemote.
-  ///
-  /// In en, this message translates to:
-  /// **'No Drive snapshot exists yet.'**
-  String get settingsDriveSyncNoRemote;
-
-  /// No description provided for @settingsDriveSyncSynced.
-  ///
-  /// In en, this message translates to:
-  /// **'Google Drive is up to date.'**
-  String get settingsDriveSyncSynced;
-
-  /// No description provided for @settingsDriveSyncReady.
-  ///
-  /// In en, this message translates to:
-  /// **'A Drive snapshot is available.'**
-  String get settingsDriveSyncReady;
-
-  /// No description provided for @settingsDriveSyncConflictStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Local and Drive data both changed.'**
-  String get settingsDriveSyncConflictStatus;
-
-  /// No description provided for @settingsDriveSyncUnsupportedSchema.
-  ///
-  /// In en, this message translates to:
-  /// **'The Drive copy was created by a newer database schema.'**
-  String get settingsDriveSyncUnsupportedSchema;
-
-  /// No description provided for @settingsDriveSyncLastSynced.
-  ///
-  /// In en, this message translates to:
-  /// **'Last synced: {value}'**
-  String settingsDriveSyncLastSynced(Object value);
-
-  /// No description provided for @settingsDriveSyncRemoteDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Drive copy from: {device}'**
-  String settingsDriveSyncRemoteDevice(Object device);
-
-  /// No description provided for @settingsDriveSyncAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync now'**
-  String get settingsDriveSyncAction;
-
-  /// No description provided for @settingsDriveSyncDirectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose sync direction'**
-  String get settingsDriveSyncDirectionTitle;
-
-  /// No description provided for @settingsDriveSyncDirectionMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose which copy is the source of truth for this sync.'**
-  String get settingsDriveSyncDirectionMessage;
-
-  /// No description provided for @settingsDriveSyncUploadLocalAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload local data to Drive'**
-  String get settingsDriveSyncUploadLocalAction;
-
-  /// No description provided for @settingsDriveSyncUploadLocalSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Use this device as latest and replace the Drive snapshot.'**
-  String get settingsDriveSyncUploadLocalSubtitle;
-
-  /// No description provided for @settingsDriveSyncRestoreDriveAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Download Drive data to this device'**
-  String get settingsDriveSyncRestoreDriveAction;
-
-  /// No description provided for @settingsDriveSyncRestoreDriveSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Use the Drive snapshot as latest and replace local data.'**
-  String get settingsDriveSyncRestoreDriveSubtitle;
-
-  /// No description provided for @settingsDriveSyncRestoreUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'No Drive snapshot is available to download.'**
-  String get settingsDriveSyncRestoreUnavailable;
-
-  /// No description provided for @settingsDriveSyncUploadConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload local data?'**
-  String get settingsDriveSyncUploadConfirmTitle;
-
-  /// No description provided for @settingsDriveSyncUploadConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This will replace the Google Drive snapshot with this device\'s current database and settings.'**
-  String get settingsDriveSyncUploadConfirmMessage;
-
-  /// No description provided for @settingsDriveSyncUploadConfirmAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload to Drive'**
-  String get settingsDriveSyncUploadConfirmAction;
-
-  /// No description provided for @settingsDriveSyncRestoreConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Restore Drive copy?'**
-  String get settingsDriveSyncRestoreConfirmTitle;
-
-  /// No description provided for @settingsDriveSyncRestoreConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Restoring from Drive will replace this device\'s local database and settings with backup data. Recent local changes that were not uploaded may be lost. Upload local data first if you are unsure, and continue only if you trust this Drive backup.'**
-  String get settingsDriveSyncRestoreConfirmMessage;
-
-  /// No description provided for @settingsDriveSyncRestoreConfirmAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Restore from Drive'**
-  String get settingsDriveSyncRestoreConfirmAction;
-
-  /// No description provided for @settingsDriveSyncBackupSource.
-  ///
-  /// In en, this message translates to:
-  /// **'Backup from {device} • {when}'**
-  String settingsDriveSyncBackupSource(Object device, Object when);
-
-  /// No description provided for @settingsDriveSyncBackupAppVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'App version: {version}'**
-  String settingsDriveSyncBackupAppVersion(Object version);
-
-  /// No description provided for @settingsDriveSyncCrossDeviceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Overwrite backup from another device?'**
-  String get settingsDriveSyncCrossDeviceTitle;
-
-  /// No description provided for @settingsDriveSyncCrossDeviceMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The current Google Drive backup was created by a DIFFERENT device. Uploading from this device will replace it. Make sure that other device does not still hold data you want to keep.'**
-  String get settingsDriveSyncCrossDeviceMessage;
-
-  /// No description provided for @settingsDriveSyncCrossDeviceContinue.
-  ///
-  /// In en, this message translates to:
-  /// **'Overwrite anyway'**
-  String get settingsDriveSyncCrossDeviceContinue;
-
-  /// No description provided for @settingsDriveSyncRestoreCrossDeviceWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning: this backup was created on a different device. Restoring replaces this device\'s local data with that device\'s data.'**
-  String get settingsDriveSyncRestoreCrossDeviceWarning;
-
-  /// No description provided for @settingsDriveSyncUploadInProgressTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Backing up to Google Drive'**
-  String get settingsDriveSyncUploadInProgressTitle;
-
-  /// No description provided for @settingsDriveSyncUploadInProgressMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Please keep the app open. Do not close or switch accounts.'**
-  String get settingsDriveSyncUploadInProgressMessage;
-
-  /// No description provided for @settingsDriveSyncRestoreInProgressTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Restoring from Google Drive'**
-  String get settingsDriveSyncRestoreInProgressTitle;
-
-  /// No description provided for @settingsDriveSyncRestoreInProgressMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Please keep the app open. The app will refresh when restore completes.'**
-  String get settingsDriveSyncRestoreInProgressMessage;
-
-  /// No description provided for @settingsDriveSyncUploaded.
-  ///
-  /// In en, this message translates to:
-  /// **'Local data backed up to Google Drive.'**
-  String get settingsDriveSyncUploaded;
-
-  /// No description provided for @settingsDriveSyncRestored.
-  ///
-  /// In en, this message translates to:
-  /// **'Drive copy restored.'**
-  String get settingsDriveSyncRestored;
-
-  /// No description provided for @settingsDriveSyncNoChanges.
-  ///
-  /// In en, this message translates to:
-  /// **'Already up to date.'**
-  String get settingsDriveSyncNoChanges;
-
-  /// No description provided for @settingsDriveSyncCanceled.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync canceled.'**
-  String get settingsDriveSyncCanceled;
-
-  /// No description provided for @settingsDriveSyncFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Drive sync failed. Try again.'**
-  String get settingsDriveSyncFailed;
-
-  /// No description provided for @settingsDriveSyncConflictTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Resolve sync conflict'**
-  String get settingsDriveSyncConflictTitle;
-
-  /// No description provided for @settingsDriveSyncConflictMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Local data and the Drive copy both changed since the last sync.'**
-  String get settingsDriveSyncConflictMessage;
-
-  /// No description provided for @settingsDriveSyncKeepLocal.
-  ///
-  /// In en, this message translates to:
-  /// **'Keep local data'**
-  String get settingsDriveSyncKeepLocal;
-
-  /// No description provided for @settingsDriveSyncKeepLocalSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload this device\'s database and replace the Drive snapshot.'**
-  String get settingsDriveSyncKeepLocalSubtitle;
-
-  /// No description provided for @settingsDriveSyncUseDrive.
-  ///
-  /// In en, this message translates to:
-  /// **'Use Drive copy'**
-  String get settingsDriveSyncUseDrive;
-
-  /// No description provided for @settingsDriveSyncUseDriveSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Restore the Drive snapshot over this device\'s local database.'**
-  String get settingsDriveSyncUseDriveSubtitle;
-
-  /// No description provided for @settingsThemeModeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Theme mode'**
-  String get settingsThemeModeLabel;
-
-  /// No description provided for @settingsThemeSystem.
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get settingsThemeSystem;
-
-  /// No description provided for @settingsThemeLight.
-  ///
-  /// In en, this message translates to:
-  /// **'Light'**
-  String get settingsThemeLight;
-
-  /// No description provided for @settingsThemeDark.
-  ///
-  /// In en, this message translates to:
-  /// **'Dark'**
-  String get settingsThemeDark;
 
   /// No description provided for @settingsAppearanceOverviewSubtitle.
   ///
@@ -1542,59 +392,11 @@ abstract class AppLocalizations {
   /// **'English'**
   String get settingsLanguageOverviewSubtitle;
 
-  /// No description provided for @settingsLocaleLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'App language'**
-  String get settingsLocaleLabel;
-
-  /// No description provided for @settingsLocaleSystem.
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get settingsLocaleSystem;
-
-  /// No description provided for @settingsLocaleEnglish.
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get settingsLocaleEnglish;
-
-  /// No description provided for @settingsLocaleVietnamese.
-  ///
-  /// In en, this message translates to:
-  /// **'Vietnamese'**
-  String get settingsLocaleVietnamese;
-
-  /// No description provided for @settingsStudyDefaultsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study defaults'**
-  String get settingsStudyDefaultsTitle;
-
-  /// No description provided for @settingsLearningExperienceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning experience'**
-  String get settingsLearningExperienceTitle;
-
   /// No description provided for @settingsLearningOverviewTitle.
   ///
   /// In en, this message translates to:
   /// **'Learning'**
   String get settingsLearningOverviewTitle;
-
-  /// No description provided for @settingsStudyDefaultsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Defaults used when a new study session is created.'**
-  String get settingsStudyDefaultsSubtitle;
-
-  /// No description provided for @settingsStudyDefaultsLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading study defaults'**
-  String get settingsStudyDefaultsLoading;
 
   /// No description provided for @settingsLearningDailyGoalSectionTitle.
   ///
@@ -1776,18 +578,6 @@ abstract class AppLocalizations {
   /// **'Saved'**
   String get settingsLearningSavedChip;
 
-  /// No description provided for @settingsNewStudyBatchSizeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'New Study batch size'**
-  String get settingsNewStudyBatchSizeLabel;
-
-  /// No description provided for @settingsReviewBatchSizeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Review batch size'**
-  String get settingsReviewBatchSizeLabel;
-
   /// No description provided for @settingsLearningOverviewSummary.
   ///
   /// In en, this message translates to:
@@ -1799,48 +589,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 card} other{{count} cards}}'**
   String settingsCardsCountValue(int count);
-
-  /// No description provided for @settingsSrsIntervalsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'SRS intervals'**
-  String get settingsSrsIntervalsTitle;
-
-  /// No description provided for @settingsSrsIntervalsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Current runtime schedule'**
-  String get settingsSrsIntervalsSubtitle;
-
-  /// No description provided for @settingsSrsIntervalBoxLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Box {box}'**
-  String settingsSrsIntervalBoxLabel(int box);
-
-  /// No description provided for @settingsSrsIntervalToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get settingsSrsIntervalToday;
-
-  /// No description provided for @settingsSrsIntervalDays.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 day} other{{count} days}}'**
-  String settingsSrsIntervalDays(int count);
-
-  /// No description provided for @settingsTagsSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Tags'**
-  String get settingsTagsSectionTitle;
-
-  /// No description provided for @settingsManageTagsLearningSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Open tag management'**
-  String get settingsManageTagsLearningSubtitle;
 
   /// No description provided for @settingsManageTagsTitle.
   ///
@@ -1883,18 +631,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Most cards'**
   String get settingsTagsSortMostCards;
-
-  /// No description provided for @settingsTagsSortNameAsc.
-  ///
-  /// In en, this message translates to:
-  /// **'A → Z'**
-  String get settingsTagsSortNameAsc;
-
-  /// No description provided for @settingsTagsSortNameDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Z → A'**
-  String get settingsTagsSortNameDesc;
 
   /// No description provided for @settingsTagsEmptyTitle.
   ///
@@ -1962,12 +698,6 @@ abstract class AppLocalizations {
   /// **'Rename tag'**
   String get settingsTagsRenameTitle;
 
-  /// No description provided for @settingsTagsRenameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Tag name'**
-  String get settingsTagsRenameLabel;
-
   /// No description provided for @settingsTagsRenameHint.
   ///
   /// In en, this message translates to:
@@ -1991,12 +721,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A tag called {tag} already exists. Continuing will merge these two tags.'**
   String settingsTagsRenameConflictMessage(String tag);
-
-  /// No description provided for @settingsTagsRenamedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Tag renamed.'**
-  String get settingsTagsRenamedMessage;
 
   /// No description provided for @settingsTagsMergeSheetTitle.
   ///
@@ -2028,35 +752,11 @@ abstract class AppLocalizations {
   /// **'All tags'**
   String get settingsTagsMergeAllTagsSectionTitle;
 
-  /// No description provided for @settingsTagsMergeSheetEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No other tags to merge into.'**
-  String get settingsTagsMergeSheetEmpty;
-
-  /// No description provided for @settingsTagsMergeConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Merge tags?'**
-  String get settingsTagsMergeConfirmTitle;
-
-  /// No description provided for @settingsTagsMergeConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'All cards tagged \"{source}\" will be re-tagged with \"{destination}\". The tag \"{source}\" will be deleted.'**
-  String settingsTagsMergeConfirmMessage(String source, String destination);
-
   /// No description provided for @settingsTagsMergeConfirmAction.
   ///
   /// In en, this message translates to:
   /// **'Merge'**
   String get settingsTagsMergeConfirmAction;
-
-  /// No description provided for @settingsTagsMergedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Tags merged.'**
-  String get settingsTagsMergedMessage;
 
   /// No description provided for @settingsTagsDeleteTitle.
   ///
@@ -2075,12 +775,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get settingsTagsDeleteConfirm;
-
-  /// No description provided for @settingsTagsDeletedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Tag deleted.'**
-  String get settingsTagsDeletedMessage;
 
   /// No description provided for @settingsTagsOpErrorTitle.
   ///
@@ -2118,29 +812,11 @@ abstract class AppLocalizations {
   /// **'Tag too long (max 50 chars).'**
   String get flashcardsTagErrorTooLong;
 
-  /// No description provided for @settingsSpeechTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Speech'**
-  String get settingsSpeechTitle;
-
   /// No description provided for @settingsAudioSpeechTitle.
   ///
   /// In en, this message translates to:
   /// **'Audio & speech'**
   String get settingsAudioSpeechTitle;
-
-  /// No description provided for @settingsAudioSpeechEnabled.
-  ///
-  /// In en, this message translates to:
-  /// **'On'**
-  String get settingsAudioSpeechEnabled;
-
-  /// No description provided for @settingsAudioSpeechDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Off'**
-  String get settingsAudioSpeechDisabled;
 
   /// No description provided for @settingsAudioSpeechOverviewSummary.
   ///
@@ -2514,228 +1190,6 @@ abstract class AppLocalizations {
   /// **'Open system settings'**
   String get settingsAudioSpeechOpenSystemSettings;
 
-  /// No description provided for @settingsSpeechLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Korean and English pronunciation support'**
-  String get settingsSpeechLabel;
-
-  /// No description provided for @settingsSpeechLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading speech settings'**
-  String get settingsSpeechLoading;
-
-  /// No description provided for @settingsSpeechAutoPlayLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-play in study'**
-  String get settingsSpeechAutoPlayLabel;
-
-  /// No description provided for @settingsSpeechTextToSpeechLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Text-to-Speech'**
-  String get settingsSpeechTextToSpeechLabel;
-
-  /// No description provided for @settingsSpeechAutoPlaySubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatically pronounce cards after study transitions.'**
-  String get settingsSpeechAutoPlaySubtitle;
-
-  /// No description provided for @settingsSpeechVoiceSelectionLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Voice selection'**
-  String get settingsSpeechVoiceSelectionLabel;
-
-  /// No description provided for @settingsSpeechFrontLanguageLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Front language'**
-  String get settingsSpeechFrontLanguageLabel;
-
-  /// No description provided for @settingsSpeechKorean.
-  ///
-  /// In en, this message translates to:
-  /// **'Korean'**
-  String get settingsSpeechKorean;
-
-  /// No description provided for @settingsSpeechEnglish.
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get settingsSpeechEnglish;
-
-  /// No description provided for @settingsSpeechRateLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Speech rate'**
-  String get settingsSpeechRateLabel;
-
-  /// No description provided for @settingsSpeechRateValue.
-  ///
-  /// In en, this message translates to:
-  /// **'{value}x'**
-  String settingsSpeechRateValue(double value);
-
-  /// No description provided for @settingsSpeechPitchLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Voice pitch'**
-  String get settingsSpeechPitchLabel;
-
-  /// No description provided for @settingsSpeechPitchValue.
-  ///
-  /// In en, this message translates to:
-  /// **'{value}x'**
-  String settingsSpeechPitchValue(double value);
-
-  /// No description provided for @settingsSpeechVolumeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Volume'**
-  String get settingsSpeechVolumeLabel;
-
-  /// No description provided for @settingsSpeechVolumeValue.
-  ///
-  /// In en, this message translates to:
-  /// **'{value}%'**
-  String settingsSpeechVolumeValue(int value);
-
-  /// No description provided for @settingsSpeechFrontVoiceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Front voice'**
-  String get settingsSpeechFrontVoiceLabel;
-
-  /// No description provided for @settingsSpeechSystemVoice.
-  ///
-  /// In en, this message translates to:
-  /// **'System voice'**
-  String get settingsSpeechSystemVoice;
-
-  /// No description provided for @settingsSpeechStoredVoice.
-  ///
-  /// In en, this message translates to:
-  /// **'Device voice'**
-  String get settingsSpeechStoredVoice;
-
-  /// No description provided for @settingsSpeechKoreanVoiceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Korean voice {index}'**
-  String settingsSpeechKoreanVoiceLabel(Object index);
-
-  /// No description provided for @settingsSpeechEnglishVoiceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'English voice {index}'**
-  String settingsSpeechEnglishVoiceLabel(Object index);
-
-  /// No description provided for @settingsSpeechVoiceDeviceSource.
-  ///
-  /// In en, this message translates to:
-  /// **'Device'**
-  String get settingsSpeechVoiceDeviceSource;
-
-  /// No description provided for @settingsSpeechVoiceOnlineSource.
-  ///
-  /// In en, this message translates to:
-  /// **'Online'**
-  String get settingsSpeechVoiceOnlineSource;
-
-  /// No description provided for @settingsSpeechVoiceMale.
-  ///
-  /// In en, this message translates to:
-  /// **'Male'**
-  String get settingsSpeechVoiceMale;
-
-  /// No description provided for @settingsSpeechVoiceFemale.
-  ///
-  /// In en, this message translates to:
-  /// **'Female'**
-  String get settingsSpeechVoiceFemale;
-
-  /// No description provided for @settingsSpeechLoadingVoices.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading voices...'**
-  String get settingsSpeechLoadingVoices;
-
-  /// No description provided for @settingsSpeechNoVoices.
-  ///
-  /// In en, this message translates to:
-  /// **'No {language} voice was reported by this device.'**
-  String settingsSpeechNoVoices(Object language);
-
-  /// No description provided for @settingsSpeechPreviewKorean.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview Korean'**
-  String get settingsSpeechPreviewKorean;
-
-  /// No description provided for @settingsSpeechPreviewEnglish.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview English'**
-  String get settingsSpeechPreviewEnglish;
-
-  /// No description provided for @settingsSpeechPreviewSelected.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview audio'**
-  String get settingsSpeechPreviewSelected;
-
-  /// No description provided for @settingsSpeechVoiceOptions.
-  ///
-  /// In en, this message translates to:
-  /// **'Voice options'**
-  String get settingsSpeechVoiceOptions;
-
-  /// No description provided for @settingsSpeechHideVoiceOptions.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide voice options'**
-  String get settingsSpeechHideVoiceOptions;
-
-  /// No description provided for @settingsSpeechKoreanPreviewText.
-  ///
-  /// In en, this message translates to:
-  /// **'안녕하세요'**
-  String get settingsSpeechKoreanPreviewText;
-
-  /// No description provided for @settingsSpeechEnglishPreviewText.
-  ///
-  /// In en, this message translates to:
-  /// **'Hello'**
-  String get settingsSpeechEnglishPreviewText;
-
-  /// No description provided for @settingsSpeechPreviewTextLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Test text'**
-  String get settingsSpeechPreviewTextLabel;
-
-  /// No description provided for @settingsSpeechPreviewTextHelper.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave empty to use the default sample.'**
-  String get settingsSpeechPreviewTextHelper;
-
-  /// No description provided for @settingsSpeechPreviewTextHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Type or paste any text to test...'**
-  String get settingsSpeechPreviewTextHint;
-
-  /// No description provided for @settingsSpeechPreviewClearTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear test text'**
-  String get settingsSpeechPreviewClearTooltip;
-
   /// No description provided for @settingsAboutMemoXTitle.
   ///
   /// In en, this message translates to:
@@ -2747,12 +1201,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version {version}'**
   String settingsAboutVersion(Object version);
-
-  /// No description provided for @settingsAboutVersionUnknown.
-  ///
-  /// In en, this message translates to:
-  /// **'Version unavailable'**
-  String get settingsAboutVersionUnknown;
 
   /// No description provided for @settingsAboutMessage.
   ///
@@ -2766,209 +1214,11 @@ abstract class AppLocalizations {
   /// **'MemoX'**
   String get settingsAboutLegalese;
 
-  /// No description provided for @settingsUpdatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings updated.'**
-  String get settingsUpdatedMessage;
-
-  /// No description provided for @appRouterErrorTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Navigation error'**
-  String get appRouterErrorTitle;
-
-  /// No description provided for @errorConfiguration.
-  ///
-  /// In en, this message translates to:
-  /// **'The app configuration is invalid.'**
-  String get errorConfiguration;
-
-  /// No description provided for @errorRequestTimedOut.
-  ///
-  /// In en, this message translates to:
-  /// **'The request timed out.'**
-  String get errorRequestTimedOut;
-
-  /// No description provided for @errorInvalidData.
-  ///
-  /// In en, this message translates to:
-  /// **'The received data is invalid.'**
-  String get errorInvalidData;
-
-  /// No description provided for @errorUnsupportedAction.
-  ///
-  /// In en, this message translates to:
-  /// **'This action is not supported right now.'**
-  String get errorUnsupportedAction;
-
-  /// No description provided for @errorNetwork.
-  ///
-  /// In en, this message translates to:
-  /// **'A network problem occurred.'**
-  String get errorNetwork;
-
-  /// No description provided for @errorStorage.
-  ///
-  /// In en, this message translates to:
-  /// **'A local storage problem occurred.'**
-  String get errorStorage;
-
-  /// No description provided for @errorNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'The requested resource could not be found.'**
-  String get errorNotFound;
-
   /// No description provided for @errorUnexpected.
   ///
   /// In en, this message translates to:
   /// **'Something went wrong.'**
   String get errorUnexpected;
-
-  /// No description provided for @errorFolderContainsDecks.
-  ///
-  /// In en, this message translates to:
-  /// **'This folder already contains decks. Create a deck here or choose another folder for subfolders.'**
-  String get errorFolderContainsDecks;
-
-  /// No description provided for @errorFolderContainsSubfolders.
-  ///
-  /// In en, this message translates to:
-  /// **'This folder already contains subfolders. Create a subfolder here or choose another folder for decks.'**
-  String get errorFolderContainsSubfolders;
-
-  /// No description provided for @foldersNewSubfolderTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'New subfolder'**
-  String get foldersNewSubfolderTooltip;
-
-  /// No description provided for @foldersNewDeckTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'New deck'**
-  String get foldersNewDeckTooltip;
-
-  /// No description provided for @foldersCreateChoiceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'What do you want to create?'**
-  String get foldersCreateChoiceTitle;
-
-  /// No description provided for @foldersNewSubfolderTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'New subfolder'**
-  String get foldersNewSubfolderTitle;
-
-  /// No description provided for @foldersFolderNameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Folder name'**
-  String get foldersFolderNameLabel;
-
-  /// No description provided for @foldersFolderNameHint.
-  ///
-  /// In en, this message translates to:
-  /// **'e.g. Listening practice'**
-  String get foldersFolderNameHint;
-
-  /// No description provided for @foldersMoreActionsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'More actions'**
-  String get foldersMoreActionsTooltip;
-
-  /// No description provided for @foldersActionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Folder actions'**
-  String get foldersActionsTitle;
-
-  /// No description provided for @foldersReorder.
-  ///
-  /// In en, this message translates to:
-  /// **'Reorder'**
-  String get foldersReorder;
-
-  /// No description provided for @foldersReorderManualOnlyHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch sort back to manual to reorder.'**
-  String get foldersReorderManualOnlyHint;
-
-  /// No description provided for @foldersImportChoiceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Import flashcards'**
-  String get foldersImportChoiceTitle;
-
-  /// No description provided for @foldersImportCreateDeckAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Create new deck'**
-  String get foldersImportCreateDeckAction;
-
-  /// No description provided for @foldersImportExistingDeckAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add to existing deck'**
-  String get foldersImportExistingDeckAction;
-
-  /// No description provided for @foldersImportChooseDeckTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose deck'**
-  String get foldersImportChooseDeckTitle;
-
-  /// No description provided for @foldersImportNoDecksHint.
-  ///
-  /// In en, this message translates to:
-  /// **'No decks in this folder yet.'**
-  String get foldersImportNoDecksHint;
-
-  /// No description provided for @foldersStatusSubfolders.
-  ///
-  /// In en, this message translates to:
-  /// **'Contains {subfolderCount} subfolders'**
-  String foldersStatusSubfolders(int subfolderCount);
-
-  /// No description provided for @foldersStatusDecks.
-  ///
-  /// In en, this message translates to:
-  /// **'Contains {deckCount} decks · {totalCardCount} cards'**
-  String foldersStatusDecks(int deckCount, int totalCardCount);
-
-  /// No description provided for @foldersSegmentSubfolders.
-  ///
-  /// In en, this message translates to:
-  /// **'Subfolders'**
-  String get foldersSegmentSubfolders;
-
-  /// No description provided for @foldersSegmentDecks.
-  ///
-  /// In en, this message translates to:
-  /// **'Decks'**
-  String get foldersSegmentDecks;
-
-  /// No description provided for @foldersSubfolderDeckHint.
-  ///
-  /// In en, this message translates to:
-  /// **'To add decks here, organize them in a subfolder.'**
-  String get foldersSubfolderDeckHint;
-
-  /// No description provided for @foldersDeckStats.
-  ///
-  /// In en, this message translates to:
-  /// **'{cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}'**
-  String foldersDeckStats(int cardCount);
-
-  /// No description provided for @foldersSubfolderCreatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Subfolder created.'**
-  String get foldersSubfolderCreatedMessage;
 
   /// No description provided for @foldersRenameTitle.
   ///
@@ -3006,18 +1256,6 @@ abstract class AppLocalizations {
   /// **'Folder moved.'**
   String get foldersMovedMessage;
 
-  /// No description provided for @foldersDeleteTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete folder'**
-  String get foldersDeleteTitle;
-
-  /// No description provided for @foldersDeleteMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This will delete the full subtree, including decks and flashcards.'**
-  String get foldersDeleteMessage;
-
   /// No description provided for @foldersDeletedMessage.
   ///
   /// In en, this message translates to:
@@ -3048,341 +1286,11 @@ abstract class AppLocalizations {
   /// **'Delete folder'**
   String get folderDeleteDialogDeleteButton;
 
-  /// No description provided for @foldersManualReorderWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'Manual reorder is only available in manual sort.'**
-  String get foldersManualReorderWarning;
-
-  /// No description provided for @foldersSummaryUnlocked.
-  ///
-  /// In en, this message translates to:
-  /// **'This folder is empty and can hold subfolders or decks.'**
-  String get foldersSummaryUnlocked;
-
-  /// No description provided for @foldersEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'This folder is empty'**
-  String get foldersEmptyTitle;
-
-  /// No description provided for @foldersEmptyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a direction first. A folder can contain subfolders or decks, not both.'**
-  String get foldersEmptyMessage;
-
-  /// No description provided for @foldersEmptySubfoldersTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No subfolders yet'**
-  String get foldersEmptySubfoldersTitle;
-
-  /// No description provided for @foldersEmptySubfoldersMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Create a subfolder to keep this branch organized.'**
-  String get foldersEmptySubfoldersMessage;
-
-  /// No description provided for @foldersEmptyDecksTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No decks yet'**
-  String get foldersEmptyDecksTitle;
-
-  /// No description provided for @foldersEmptyDecksMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Create a deck to start adding flashcards here.'**
-  String get foldersEmptyDecksMessage;
-
-  /// No description provided for @foldersNoResultsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No matching items'**
-  String get foldersNoResultsTitle;
-
-  /// No description provided for @foldersNoResultsMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear search or try a different term.'**
-  String get foldersNoResultsMessage;
-
-  /// No description provided for @foldersClearSearchAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear'**
-  String get foldersClearSearchAction;
-
-  /// No description provided for @libraryCreateFolderTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Create folder'**
-  String get libraryCreateFolderTooltip;
-
-  /// No description provided for @libraryCreateFolderDialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create folder'**
-  String get libraryCreateFolderDialogTitle;
-
-  /// No description provided for @libraryFolderCreatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Folder created.'**
-  String get libraryFolderCreatedMessage;
-
-  /// No description provided for @libraryDueTodayPrefix.
-  ///
-  /// In en, this message translates to:
-  /// **'You have '**
-  String get libraryDueTodayPrefix;
-
-  /// No description provided for @libraryDueTodaySuffix.
-  ///
-  /// In en, this message translates to:
-  /// **' items due today'**
-  String get libraryDueTodaySuffix;
-
-  /// No description provided for @libraryStudyNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Study now  →'**
-  String get libraryStudyNow;
-
-  /// No description provided for @libraryFoldersSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Folders'**
-  String get libraryFoldersSectionTitle;
-
-  /// No description provided for @libraryManageFoldersSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage your folder tree'**
-  String get libraryManageFoldersSubtitle;
-
-  /// No description provided for @librarySearchResultsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Search results'**
-  String get librarySearchResultsSubtitle;
-
-  /// No description provided for @libraryHeroDueToday.
-  ///
-  /// In en, this message translates to:
-  /// **'Due today: {count}'**
-  String libraryHeroDueToday(int count);
-
-  /// No description provided for @libraryFolderStats.
-  ///
-  /// In en, this message translates to:
-  /// **'{subfolderCount, plural, =0{0 subfolders} =1{1 subfolder} other{{subfolderCount} subfolders}} · {deckCount, plural, =0{0 decks} =1{1 deck} other{{deckCount} decks}} · {cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}}'**
-  String libraryFolderStats(int subfolderCount, int deckCount, int cardCount);
-
-  /// No description provided for @libraryFolderMastery.
-  ///
-  /// In en, this message translates to:
-  /// **'Mastery {percent}%'**
-  String libraryFolderMastery(int percent);
-
-  /// No description provided for @libraryEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing here yet'**
-  String get libraryEmptyTitle;
-
-  /// No description provided for @libraryEmptyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Create a folder to organize your decks.'**
-  String get libraryEmptyMessage;
-
-  /// No description provided for @libraryLoadFailedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t load your library'**
-  String get libraryLoadFailedTitle;
-
-  /// No description provided for @libraryLoadFailedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Something went wrong while loading your folders.'**
-  String get libraryLoadFailedMessage;
-
-  /// No description provided for @libraryOverflowTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Folder actions'**
-  String get libraryOverflowTooltip;
-
-  /// No description provided for @libraryFiltersTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Filters'**
-  String get libraryFiltersTooltip;
-
-  /// No description provided for @librarySearchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search folders'**
-  String get librarySearchHint;
-
-  /// No description provided for @libraryNewFolderLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'New folder'**
-  String get libraryNewFolderLabel;
-
-  /// No description provided for @libraryFolderCountLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} folders'**
-  String libraryFolderCountLabel(int count);
-
-  /// No description provided for @libraryDueSummaryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card due today} other{{count} cards due today}}'**
-  String libraryDueSummaryTitle(int count);
-
-  /// No description provided for @decksCreateTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create deck'**
-  String get decksCreateTitle;
-
-  /// No description provided for @decksNameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck name'**
-  String get decksNameLabel;
-
-  /// No description provided for @decksNameHint.
-  ///
-  /// In en, this message translates to:
-  /// **'e.g. Core vocabulary'**
-  String get decksNameHint;
-
-  /// No description provided for @decksCreatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck created.'**
-  String get decksCreatedMessage;
-
-  /// No description provided for @decksMoreActionsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'More actions'**
-  String get decksMoreActionsTooltip;
-
-  /// No description provided for @decksActionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck actions'**
-  String get decksActionsTitle;
-
-  /// No description provided for @decksDuplicateAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Duplicate'**
-  String get decksDuplicateAction;
-
-  /// No description provided for @decksExportAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Export deck'**
-  String get decksExportAction;
-
-  /// No description provided for @decksOverviewSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{cardCount} cards · {dueToday} due today · {masteryPercent}% mastery'**
-  String decksOverviewSubtitle(int cardCount, int dueToday, int masteryPercent);
-
-  /// No description provided for @decksLastStudiedLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Last studied: {date}'**
-  String decksLastStudiedLabel(Object date);
-
   /// No description provided for @folderDetailDeckMeta.
   ///
   /// In en, this message translates to:
   /// **'{cardCount} cards · last {relativeTime}'**
   String folderDetailDeckMeta(int cardCount, String relativeTime);
-
-  /// No description provided for @decksManageContentTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage content'**
-  String get decksManageContentTitle;
-
-  /// No description provided for @decksManageContentSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Open flashcards, import into this deck, or continue editing content.'**
-  String get decksManageContentSubtitle;
-
-  /// No description provided for @decksEmptyStudyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add cards before studying'**
-  String get decksEmptyStudyTitle;
-
-  /// No description provided for @decksEmptyStudyMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This deck has no flashcards yet. Add or import cards first.'**
-  String get decksEmptyStudyMessage;
-
-  /// No description provided for @decksStudyUnavailableNoCards.
-  ///
-  /// In en, this message translates to:
-  /// **'Study is available after this deck has at least one flashcard.'**
-  String get decksStudyUnavailableNoCards;
-
-  /// No description provided for @decksRenameTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Rename deck'**
-  String get decksRenameTitle;
-
-  /// No description provided for @decksUpdatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck updated.'**
-  String get decksUpdatedMessage;
-
-  /// No description provided for @decksMoveTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Move deck'**
-  String get decksMoveTitle;
-
-  /// No description provided for @decksMovedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck moved.'**
-  String get decksMovedMessage;
-
-  /// No description provided for @decksDuplicateTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Duplicate deck'**
-  String get decksDuplicateTitle;
-
-  /// No description provided for @decksCurrentFolderTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Current folder'**
-  String get decksCurrentFolderTitle;
-
-  /// No description provided for @decksDuplicatedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Deck duplicated.'**
-  String get decksDuplicatedMessage;
 
   /// No description provided for @decksDeleteTitle.
   ///
@@ -3402,24 +1310,6 @@ abstract class AppLocalizations {
   /// **'Deck deleted.'**
   String get decksDeletedMessage;
 
-  /// No description provided for @flashcardsOpenListAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Open'**
-  String get flashcardsOpenListAction;
-
-  /// No description provided for @flashcardsAddAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get flashcardsAddAction;
-
-  /// No description provided for @flashcardsAddTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Add flashcard'**
-  String get flashcardsAddTooltip;
-
   /// No description provided for @flashcardsActionsTitle.
   ///
   /// In en, this message translates to:
@@ -3431,84 +1321,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search flashcards'**
   String get flashcardsSearchHint;
-
-  /// No description provided for @flashcardsPreviewDialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview card'**
-  String get flashcardsPreviewDialogTitle;
-
-  /// No description provided for @flashcardsDeckSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'{cardCount, plural, =0{0 cards} =1{1 card} other{{cardCount} cards}} · {masteryPercent}% mastery'**
-  String flashcardsDeckSummary(int cardCount, int masteryPercent);
-
-  /// No description provided for @flashcardsStudyModesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study modes'**
-  String get flashcardsStudyModesTitle;
-
-  /// No description provided for @flashcardsProgressTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your progress'**
-  String get flashcardsProgressTitle;
-
-  /// No description provided for @flashcardsProgressSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Progress is derived from this deck\'s SRS state.'**
-  String get flashcardsProgressSubtitle;
-
-  /// No description provided for @flashcardsProgressNew.
-  ///
-  /// In en, this message translates to:
-  /// **'New'**
-  String get flashcardsProgressNew;
-
-  /// No description provided for @flashcardsProgressLearning.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning'**
-  String get flashcardsProgressLearning;
-
-  /// No description provided for @flashcardsProgressMastered.
-  ///
-  /// In en, this message translates to:
-  /// **'Mastered'**
-  String get flashcardsProgressMastered;
-
-  /// No description provided for @flashcardsProgressCountValue.
-  ///
-  /// In en, this message translates to:
-  /// **'{count}'**
-  String flashcardsProgressCountValue(int count);
-
-  /// No description provided for @flashcardsCardsSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cards'**
-  String get flashcardsCardsSectionTitle;
-
-  /// No description provided for @flashcardsLearnDeckAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study this deck'**
-  String get flashcardsLearnDeckAction;
-
-  /// No description provided for @flashcardsBulkSelected.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} selected'**
-  String flashcardsBulkSelected(int count);
-
-  /// No description provided for @flashcardsBulkSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Move, export, or delete the selected flashcards.'**
-  String get flashcardsBulkSubtitle;
 
   /// No description provided for @flashcardsEmptyTitle.
   ///
@@ -3612,12 +1424,6 @@ abstract class AppLocalizations {
   /// **'example · hint · pronunciation'**
   String get flashcardEditorMoreFieldsSummary;
 
-  /// No description provided for @flashcardEditorNoteLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Note'**
-  String get flashcardEditorNoteLabel;
-
   /// No description provided for @flashcardEditorExampleLabel.
   ///
   /// In en, this message translates to:
@@ -3666,24 +1472,6 @@ abstract class AppLocalizations {
   /// **'Front and back are required to save.'**
   String get flashcardEditorSaveHelperText;
 
-  /// No description provided for @flashcardEditorSampleFront.
-  ///
-  /// In en, this message translates to:
-  /// **'안녕하세요'**
-  String get flashcardEditorSampleFront;
-
-  /// No description provided for @flashcardEditorSampleBack.
-  ///
-  /// In en, this message translates to:
-  /// **'Hello'**
-  String get flashcardEditorSampleBack;
-
-  /// No description provided for @flashcardEditorSampleNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Greeting used on first contact.'**
-  String get flashcardEditorSampleNote;
-
   /// No description provided for @flashcardEditorSampleExample.
   ///
   /// In en, this message translates to:
@@ -3701,18 +1489,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start with a casual greeting.'**
   String get flashcardEditorSampleHint;
-
-  /// No description provided for @flashcardEditorSampleTagGreet.
-  ///
-  /// In en, this message translates to:
-  /// **'greet'**
-  String get flashcardEditorSampleTagGreet;
-
-  /// No description provided for @flashcardEditorSampleTagN5.
-  ///
-  /// In en, this message translates to:
-  /// **'N5'**
-  String get flashcardEditorSampleTagN5;
 
   /// No description provided for @flashcardEditorFrontError.
   ///
@@ -3732,53 +1508,11 @@ abstract class AppLocalizations {
   /// **'Couldn\'t save this flashcard. Try again.'**
   String get flashcardEditorSaveFailedMessage;
 
-  /// No description provided for @flashcardsMoveTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Move flashcards'**
-  String get flashcardsMoveTitle;
-
-  /// No description provided for @flashcardsMoveProgressKeptNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning progress will be kept after moving.'**
-  String get flashcardsMoveProgressKeptNote;
-
-  /// No description provided for @flashcardsMovedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Flashcards moved.'**
-  String get flashcardsMovedMessage;
-
-  /// No description provided for @flashcardsDeleteTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete flashcards'**
-  String get flashcardsDeleteTitle;
-
-  /// No description provided for @flashcardsDeleteMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This will permanently delete the selected flashcards.'**
-  String get flashcardsDeleteMessage;
-
-  /// No description provided for @flashcardsDeletedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Flashcards deleted.'**
-  String get flashcardsDeletedMessage;
-
   /// No description provided for @flashcardsEditTitle.
   ///
   /// In en, this message translates to:
   /// **'Edit card'**
   String get flashcardsEditTitle;
-
-  /// No description provided for @flashcardsNewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'New card'**
-  String get flashcardsNewTitle;
 
   /// No description provided for @flashcardsLoadErrorTitle.
   ///
@@ -3834,131 +1568,11 @@ abstract class AppLocalizations {
   /// **'Delete card'**
   String get flashcardsDeleteCardAction;
 
-  /// No description provided for @flashcardsFieldFrontLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Front'**
-  String get flashcardsFieldFrontLabel;
-
-  /// No description provided for @flashcardsFieldFrontHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Type the term'**
-  String get flashcardsFieldFrontHint;
-
-  /// No description provided for @flashcardsFieldBackLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get flashcardsFieldBackLabel;
-
-  /// No description provided for @flashcardsFieldBackHint.
-  ///
-  /// In en, this message translates to:
-  /// **'English, Vietnamese, or both — comma-separated reads cleanest.'**
-  String get flashcardsFieldBackHint;
-
-  /// No description provided for @flashcardsFieldNoteLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Note'**
-  String get flashcardsFieldNoteLabel;
-
-  /// No description provided for @flashcardsFieldNoteHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Optional extra note'**
-  String get flashcardsFieldNoteHint;
-
-  /// No description provided for @flashcardsFieldExampleLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Example sentence'**
-  String get flashcardsFieldExampleLabel;
-
-  /// No description provided for @flashcardsFieldExampleHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a sentence using this term…'**
-  String get flashcardsFieldExampleHint;
-
   /// No description provided for @flashcardsFieldTagsLabel.
   ///
   /// In en, this message translates to:
   /// **'Tags'**
   String get flashcardsFieldTagsLabel;
-
-  /// No description provided for @flashcardsFieldTagsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Add tag'**
-  String get flashcardsFieldTagsHint;
-
-  /// No description provided for @flashcardsFieldPronunciationLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Pronunciation'**
-  String get flashcardsFieldPronunciationLabel;
-
-  /// No description provided for @flashcardsFieldPronunciationHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Romanization or phonetic spelling'**
-  String get flashcardsFieldPronunciationHint;
-
-  /// No description provided for @flashcardsFieldHintLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Hint'**
-  String get flashcardsFieldHintLabel;
-
-  /// No description provided for @flashcardsFieldHintHint.
-  ///
-  /// In en, this message translates to:
-  /// **'A clue that jogs memory without giving the answer.'**
-  String get flashcardsFieldHintHint;
-
-  /// No description provided for @flashcardsFieldStartingStatusLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Starting status'**
-  String get flashcardsFieldStartingStatusLabel;
-
-  /// No description provided for @flashcardsStatusNew.
-  ///
-  /// In en, this message translates to:
-  /// **'New'**
-  String get flashcardsStatusNew;
-
-  /// No description provided for @flashcardsStatusLearning.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning'**
-  String get flashcardsStatusLearning;
-
-  /// No description provided for @flashcardsStatusReviewing.
-  ///
-  /// In en, this message translates to:
-  /// **'Reviewing'**
-  String get flashcardsStatusReviewing;
-
-  /// No description provided for @flashcardsRecordPronunciationTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Record pronunciation'**
-  String get flashcardsRecordPronunciationTooltip;
-
-  /// No description provided for @flashcardsListenPronunciationTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Listen to pronunciation'**
-  String get flashcardsListenPronunciationTooltip;
-
-  /// No description provided for @flashcardsTagsAddAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add tag'**
-  String get flashcardsTagsAddAction;
 
   /// No description provided for @flashcardsTagsSheetTitle.
   ///
@@ -3972,65 +1586,11 @@ abstract class AppLocalizations {
   /// **'Add'**
   String get flashcardsTagsConfirmAction;
 
-  /// No description provided for @flashcardsOptionalSuffix.
-  ///
-  /// In en, this message translates to:
-  /// **'optional'**
-  String get flashcardsOptionalSuffix;
-
-  /// No description provided for @flashcardsFieldLabelOptional.
-  ///
-  /// In en, this message translates to:
-  /// **'{label} · optional'**
-  String flashcardsFieldLabelOptional(String label);
-
-  /// No description provided for @flashcardsShowAdvanced.
-  ///
-  /// In en, this message translates to:
-  /// **'Show advanced fields'**
-  String get flashcardsShowAdvanced;
-
-  /// No description provided for @flashcardsHideAdvanced.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide advanced'**
-  String get flashcardsHideAdvanced;
-
-  /// No description provided for @flashcardsDeckPickerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Saving to'**
-  String get flashcardsDeckPickerLabel;
-
-  /// No description provided for @flashcardsDeckPickerSheetTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Save card to'**
-  String get flashcardsDeckPickerSheetTitle;
-
   /// No description provided for @flashcardsSaveAndAddNextTooltip.
   ///
   /// In en, this message translates to:
   /// **'Save and add another'**
   String get flashcardsSaveAndAddNextTooltip;
-
-  /// No description provided for @flashcardsLongContentHelper.
-  ///
-  /// In en, this message translates to:
-  /// **'Supports multiple lines. Keep the full answer readable during study.'**
-  String get flashcardsLongContentHelper;
-
-  /// No description provided for @flashcardsNoteHelper.
-  ///
-  /// In en, this message translates to:
-  /// **'Optional context, examples, or memory hints.'**
-  String get flashcardsNoteHelper;
-
-  /// No description provided for @flashcardsSaveAndAddNext.
-  ///
-  /// In en, this message translates to:
-  /// **'Save & add another'**
-  String get flashcardsSaveAndAddNext;
 
   /// No description provided for @flashcardsSavedMessage.
   ///
@@ -4043,12 +1603,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save changes'**
   String get flashcardsSaveChanges;
-
-  /// No description provided for @flashcardsSaveAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Save card'**
-  String get flashcardsSaveAction;
 
   /// No description provided for @flashcardsLearningContentChangedTitle.
   ///
@@ -4116,24 +1670,6 @@ abstract class AppLocalizations {
   /// **'Study'**
   String get studyEntryTitle;
 
-  /// No description provided for @studyEntryHeading.
-  ///
-  /// In en, this message translates to:
-  /// **'Start a study session'**
-  String get studyEntryHeading;
-
-  /// No description provided for @studyEntrySubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a flow and snapshot settings for this session.'**
-  String get studyEntrySubtitle;
-
-  /// No description provided for @studyStartAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study'**
-  String get studyStartAction;
-
   /// No description provided for @studyEntryPreparingTitle.
   ///
   /// In en, this message translates to:
@@ -4200,12 +1736,6 @@ abstract class AppLocalizations {
   /// **'Couldn\'t start over. Try again.'**
   String get studyEntryResumeRequiredStartOverFailed;
 
-  /// Legacy CTA for the controlled resume-required state.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get studyEntryResumeRequiredCta;
-
   /// No description provided for @studyEntryInvalidTitle.
   ///
   /// In en, this message translates to:
@@ -4217,18 +1747,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The study route parameters are invalid.'**
   String get studyEntryInvalidMessage;
-
-  /// No description provided for @studyEntryUnsupportedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study setup unavailable'**
-  String get studyEntryUnsupportedTitle;
-
-  /// No description provided for @studyEntryUnsupportedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This study flow is not wired yet.'**
-  String get studyEntryUnsupportedMessage;
 
   /// No description provided for @studySessionTitle.
   ///
@@ -4259,12 +1777,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Previous'**
   String get studyPreviousAction;
-
-  /// No description provided for @studyNextAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Next'**
-  String get studyNextAction;
 
   /// No description provided for @studySessionShowAction.
   ///
@@ -4356,401 +1868,17 @@ abstract class AppLocalizations {
   /// **'Keep studying'**
   String get studySessionExitKeepStudyingAction;
 
-  /// No description provided for @studyStartNewSessionAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start'**
-  String get studyStartNewSessionAction;
-
-  /// No description provided for @studyStartNewSessionConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Start a new session?'**
-  String get studyStartNewSessionConfirmTitle;
-
-  /// No description provided for @studyStartNewSessionConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Starting a new session will cancel the current unfinished session.'**
-  String get studyStartNewSessionConfirmMessage;
-
-  /// No description provided for @studyRestartAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Restart'**
-  String get studyRestartAction;
-
-  /// No description provided for @studyResumeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Session in progress'**
-  String get studyResumeTitle;
-
-  /// No description provided for @studyResumeAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get studyResumeAction;
-
-  /// No description provided for @studyContinueSessionAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get studyContinueSessionAction;
-
-  /// No description provided for @studyResumeChoiceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Resume previous session?'**
-  String get studyResumeChoiceTitle;
-
-  /// No description provided for @studyResumeChoiceMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You have a paused study session for this scope. Resume where you left off, or start over?'**
-  String get studyResumeChoiceMessage;
-
-  /// No description provided for @studyResumeChoiceResumeAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Resume'**
-  String get studyResumeChoiceResumeAction;
-
-  /// No description provided for @folderResumeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You have a paused study session for this folder.'**
-  String get folderResumeMessage;
-
-  /// No description provided for @folderStudyEntryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study this folder'**
-  String get folderStudyEntryTitle;
-
-  /// No description provided for @folderStudyTodayAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study due cards'**
-  String get folderStudyTodayAction;
-
-  /// No description provided for @folderStudyFolderAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study folder'**
-  String get folderStudyFolderAction;
-
-  /// No description provided for @folderStudyDueCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card due today} other{{count} cards due today}}'**
-  String folderStudyDueCount(int count);
-
-  /// No description provided for @folderStudyCardCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
-  String folderStudyCardCount(int count);
-
-  /// No description provided for @folderDetailMasteryOverline.
-  ///
-  /// In en, this message translates to:
-  /// **'Folder mastery'**
-  String get folderDetailMasteryOverline;
-
-  /// No description provided for @folderDetailDeckCountAndCards.
-  ///
-  /// In en, this message translates to:
-  /// **'{deckCount, plural, =1{1 deck} other{{deckCount} decks}} · {cardCount, plural, =1{1 card} other{{cardCount} cards}}'**
-  String folderDetailDeckCountAndCards(int deckCount, int cardCount);
-
-  /// No description provided for @folderDetailDueCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 due} other{{count} due}}'**
-  String folderDetailDueCount(int count);
-
-  /// No description provided for @folderDetailStartStudyDueAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start study · {count, plural, =1{1 due} other{{count} due}}'**
-  String folderDetailStartStudyDueAction(int count);
-
-  /// No description provided for @folderDetailStartStudyAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start study'**
-  String get folderDetailStartStudyAction;
-
-  /// No description provided for @folderDetailDecksSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 deck} other{{count} decks}}'**
-  String folderDetailDecksSectionTitle(int count);
-
-  /// No description provided for @folderDetailSubfoldersSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 subfolder} other{{count} subfolders}}'**
-  String folderDetailSubfoldersSectionTitle(int count);
-
-  /// No description provided for @deckResumeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You have a paused study session for this deck.'**
-  String get deckResumeMessage;
-
-  /// No description provided for @deckStudyEntryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study this deck'**
-  String get deckStudyEntryTitle;
-
-  /// No description provided for @deckStudyTodayAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study due cards'**
-  String get deckStudyTodayAction;
-
-  /// No description provided for @deckStudyDeckAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study deck'**
-  String get deckStudyDeckAction;
-
-  /// No description provided for @deckStudyDueCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card due today} other{{count} cards due today}}'**
-  String deckStudyDueCount(int count);
-
-  /// No description provided for @deckStudyCardCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
-  String deckStudyCardCount(int count);
-
-  /// No description provided for @studyStartOverAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start over'**
-  String get studyStartOverAction;
-
-  /// No description provided for @studyFlowTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Study flow'**
-  String get studyFlowTitle;
-
-  /// No description provided for @studyTypeNew.
-  ///
-  /// In en, this message translates to:
-  /// **'New Study'**
-  String get studyTypeNew;
-
-  /// No description provided for @studyTypeReview.
-  ///
-  /// In en, this message translates to:
-  /// **'SRS Review'**
-  String get studyTypeReview;
-
-  /// No description provided for @studyTodayReviewOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Today supports SRS Review due and overdue cards in v1.'**
-  String get studyTodayReviewOnly;
-
-  /// No description provided for @studySettingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Session settings'**
-  String get studySettingsTitle;
-
-  /// No description provided for @studyBatchSizeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Batch size: {count}'**
-  String studyBatchSizeLabel(int count);
-
-  /// No description provided for @studyBatchSizeRangeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{min}-{max} cards'**
-  String studyBatchSizeRangeLabel(int min, int max);
-
-  /// No description provided for @studyDecreaseBatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Decrease batch size'**
-  String get studyDecreaseBatch;
-
-  /// No description provided for @studyIncreaseBatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Increase batch size'**
-  String get studyIncreaseBatch;
-
-  /// No description provided for @studyShuffleCards.
-  ///
-  /// In en, this message translates to:
-  /// **'Shuffle flashcards'**
-  String get studyShuffleCards;
-
-  /// No description provided for @studyShuffleAnswers.
-  ///
-  /// In en, this message translates to:
-  /// **'Shuffle answers'**
-  String get studyShuffleAnswers;
-
-  /// No description provided for @studyPrioritizeOverdue.
-  ///
-  /// In en, this message translates to:
-  /// **'Prioritize overdue cards'**
-  String get studyPrioritizeOverdue;
-
-  /// No description provided for @studyBatchSizeShortLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Batch size'**
-  String get studyBatchSizeShortLabel;
-
-  /// No description provided for @studyStartWithCountAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start · {count} cards'**
-  String studyStartWithCountAction(int count);
-
-  /// No description provided for @studyStartNewWithCountAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Start new · {count} cards'**
-  String studyStartNewWithCountAction(int count);
-
-  /// No description provided for @studyCancelAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get studyCancelAction;
-
-  /// No description provided for @studyActionFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Study action failed.'**
-  String get studyActionFailed;
-
   /// No description provided for @studyFinalizeAction.
   ///
   /// In en, this message translates to:
   /// **'Finish session'**
   String get studyFinalizeAction;
 
-  /// No description provided for @studySkipAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip'**
-  String get studySkipAction;
-
-  /// No description provided for @studyTextSettingsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Text settings'**
-  String get studyTextSettingsTooltip;
-
-  /// No description provided for @studyAudioTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio'**
-  String get studyAudioTooltip;
-
-  /// No description provided for @studyMoreActionsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'More actions'**
-  String get studyMoreActionsTooltip;
-
-  /// No description provided for @studyEditCardTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit card'**
-  String get studyEditCardTooltip;
-
-  /// No description provided for @studyCardAudioTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Play card audio'**
-  String get studyCardAudioTooltip;
-
-  /// No description provided for @studyStopAudioTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop audio'**
-  String get studyStopAudioTooltip;
-
-  /// No description provided for @studyReviewTextSettingsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Text settings'**
-  String get studyReviewTextSettingsTooltip;
-
-  /// No description provided for @studyReviewAudioTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio'**
-  String get studyReviewAudioTooltip;
-
-  /// No description provided for @studyReviewMoreActionsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'More actions'**
-  String get studyReviewMoreActionsTooltip;
-
-  /// No description provided for @studyReviewEditCardTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit card'**
-  String get studyReviewEditCardTooltip;
-
-  /// No description provided for @studyReviewCardAudioTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Play card audio'**
-  String get studyReviewCardAudioTooltip;
-
-  /// No description provided for @studyReviewProgressPercent.
-  ///
-  /// In en, this message translates to:
-  /// **'{percent}%'**
-  String studyReviewProgressPercent(int percent);
-
-  /// No description provided for @studySessionEnded.
-  ///
-  /// In en, this message translates to:
-  /// **'This session has ended.'**
-  String get studySessionEnded;
-
-  /// No description provided for @studyViewResultAction.
-  ///
-  /// In en, this message translates to:
-  /// **'View'**
-  String get studyViewResultAction;
-
-  /// No description provided for @studyProgressModeRound.
-  ///
-  /// In en, this message translates to:
-  /// **'{mode} · round {round}'**
-  String studyProgressModeRound(Object mode, int round);
-
   /// No description provided for @studyResultTitle.
   ///
   /// In en, this message translates to:
   /// **'Study result'**
   String get studyResultTitle;
-
-  /// No description provided for @studyResultHeading.
-  ///
-  /// In en, this message translates to:
-  /// **'Session summary'**
-  String get studyResultHeading;
 
   /// No description provided for @studyResultCards.
   ///
@@ -4764,83 +1892,11 @@ abstract class AppLocalizations {
   /// **'Answered'**
   String get studyResultAnswered;
 
-  /// No description provided for @studyResultAttempts.
-  ///
-  /// In en, this message translates to:
-  /// **'Attempts'**
-  String get studyResultAttempts;
-
-  /// No description provided for @studyResultCorrect.
-  ///
-  /// In en, this message translates to:
-  /// **'Correct'**
-  String get studyResultCorrect;
-
-  /// No description provided for @studyResultIncorrect.
-  ///
-  /// In en, this message translates to:
-  /// **'Incorrect'**
-  String get studyResultIncorrect;
-
-  /// No description provided for @studyResultBoxUp.
-  ///
-  /// In en, this message translates to:
-  /// **'Box increased'**
-  String get studyResultBoxUp;
-
-  /// No description provided for @studyResultBoxDown.
-  ///
-  /// In en, this message translates to:
-  /// **'Box decreased'**
-  String get studyResultBoxDown;
-
-  /// No description provided for @studyResultRemaining.
-  ///
-  /// In en, this message translates to:
-  /// **'Remaining'**
-  String get studyResultRemaining;
-
-  /// No description provided for @studyResultAccuracyLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Accuracy'**
-  String get studyResultAccuracyLabel;
-
-  /// No description provided for @studyResultAttemptAccuracyLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Attempt accuracy'**
-  String get studyResultAttemptAccuracyLabel;
-
-  /// No description provided for @studyResultRetryCardsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry cards'**
-  String get studyResultRetryCardsLabel;
-
-  /// No description provided for @studyResultCardsMastered.
-  ///
-  /// In en, this message translates to:
-  /// **'Cards mastered: {mastered}/{total}'**
-  String studyResultCardsMastered(int mastered, int total);
-
   /// No description provided for @studyResultCardsCompleted.
   ///
   /// In en, this message translates to:
   /// **'{completed} of {total} cards completed'**
   String studyResultCardsCompleted(int completed, int total);
-
-  /// No description provided for @studyResultReviewMoreAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Review'**
-  String get studyResultReviewMoreAction;
-
-  /// No description provided for @studyResultStudyAgainAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study'**
-  String get studyResultStudyAgainAction;
 
   /// No description provided for @studyResultBackToLibraryAction.
   ///
@@ -4853,12 +1909,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to Home'**
   String get studyResultBackToHomeAction;
-
-  /// No description provided for @studyRetryFinalizeAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get studyRetryFinalizeAction;
 
   /// No description provided for @studyResultCompleted.
   ///
@@ -4878,12 +1928,6 @@ abstract class AppLocalizations {
   /// **'Finalize failed. Retry when ready.'**
   String get studyResultFailedFinalize;
 
-  /// No description provided for @studyResultReadyFinalize.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready to finalize'**
-  String get studyResultReadyFinalize;
-
   /// No description provided for @studyResultInProgress.
   ///
   /// In en, this message translates to:
@@ -4896,29 +1940,11 @@ abstract class AppLocalizations {
   /// **'Draft'**
   String get studyResultDraft;
 
-  /// No description provided for @studyResultDoneAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get studyResultDoneAction;
-
-  /// No description provided for @studyResultStudyMoreAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Study more'**
-  String get studyResultStudyMoreAction;
-
   /// No description provided for @studyResultBreakdownTitle.
   ///
   /// In en, this message translates to:
   /// **'Results'**
   String get studyResultBreakdownTitle;
-
-  /// No description provided for @studyResultPerfect.
-  ///
-  /// In en, this message translates to:
-  /// **'Perfect'**
-  String get studyResultPerfect;
 
   /// No description provided for @studyResultPassed.
   ///
@@ -4926,71 +1952,11 @@ abstract class AppLocalizations {
   /// **'Passed'**
   String get studyResultPassed;
 
-  /// No description provided for @studyResultRecovered.
-  ///
-  /// In en, this message translates to:
-  /// **'Recovered'**
-  String get studyResultRecovered;
-
   /// No description provided for @studyResultForgot.
   ///
   /// In en, this message translates to:
   /// **'Forgot'**
   String get studyResultForgot;
-
-  /// No description provided for @studyResultBoxChangesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Box changes'**
-  String get studyResultBoxChangesTitle;
-
-  /// No description provided for @studyResultBoxAdvanced.
-  ///
-  /// In en, this message translates to:
-  /// **'Advanced'**
-  String get studyResultBoxAdvanced;
-
-  /// No description provided for @studyResultBoxStayed.
-  ///
-  /// In en, this message translates to:
-  /// **'Stayed'**
-  String get studyResultBoxStayed;
-
-  /// No description provided for @studyResultBoxReset.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset to box 1'**
-  String get studyResultBoxReset;
-
-  /// No description provided for @studyResultBoxReachedMax.
-  ///
-  /// In en, this message translates to:
-  /// **'Reached box 8'**
-  String get studyResultBoxReachedMax;
-
-  /// No description provided for @studyResultFailedFinalizeBanner.
-  ///
-  /// In en, this message translates to:
-  /// **'Some data couldn\'t be saved. Please retry.'**
-  String get studyResultFailedFinalizeBanner;
-
-  /// No description provided for @studyResultEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No cards answered'**
-  String get studyResultEmpty;
-
-  /// No description provided for @studyResultCardsToReviewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cards to review'**
-  String get studyResultCardsToReviewTitle;
-
-  /// No description provided for @studyResultCardsToReviewEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No cards need extra review.'**
-  String get studyResultCardsToReviewEmpty;
 
   /// No description provided for @studyResultInvalidTitle.
   ///
@@ -5010,155 +1976,11 @@ abstract class AppLocalizations {
   /// **'Result unavailable'**
   String get studyResultNotCompleteTitle;
 
-  /// No description provided for @studyResultNotCompleteMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This study session has not been completed yet.'**
-  String get studyResultNotCompleteMessage;
-
   /// No description provided for @studyResultNotCompleteMessageWithStatus.
   ///
   /// In en, this message translates to:
   /// **'This study session has not been completed yet. Current status: {status}.'**
   String studyResultNotCompleteMessageWithStatus(String status);
-
-  /// No description provided for @studyResultRecoveredLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Recovered'**
-  String get studyResultRecoveredLabel;
-
-  /// No description provided for @studyResultForgotLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Forgot'**
-  String get studyResultForgotLabel;
-
-  /// No description provided for @studyResultBoxChangedLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Box {oldBox} → {newBox}'**
-  String studyResultBoxChangedLabel(int oldBox, int newBox);
-
-  /// No description provided for @studyModeReview.
-  ///
-  /// In en, this message translates to:
-  /// **'Review'**
-  String get studyModeReview;
-
-  /// No description provided for @studyModeMatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Match'**
-  String get studyModeMatch;
-
-  /// No description provided for @studyModeGuess.
-  ///
-  /// In en, this message translates to:
-  /// **'Guess'**
-  String get studyModeGuess;
-
-  /// No description provided for @studyModeRecall.
-  ///
-  /// In en, this message translates to:
-  /// **'Recall'**
-  String get studyModeRecall;
-
-  /// No description provided for @studyModeFill.
-  ///
-  /// In en, this message translates to:
-  /// **'Fill'**
-  String get studyModeFill;
-
-  /// No description provided for @studyModeReviewSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Flip cards on SRS schedule'**
-  String get studyModeReviewSubtitle;
-
-  /// No description provided for @studyModeMatchSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pair fronts & backs'**
-  String get studyModeMatchSubtitle;
-
-  /// No description provided for @studyModeGuessSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Multiple choice A / B / C / D'**
-  String get studyModeGuessSubtitle;
-
-  /// No description provided for @studyModeRecallSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Write from memory'**
-  String get studyModeRecallSubtitle;
-
-  /// No description provided for @studyModeFillSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Complete the blank'**
-  String get studyModeFillSubtitle;
-
-  /// No description provided for @studyModeMixTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Mix'**
-  String get studyModeMixTitle;
-
-  /// No description provided for @studyModeMixSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'All 5 modes, one session'**
-  String get studyModeMixSubtitle;
-
-  /// No description provided for @studyModeMixBadge.
-  ///
-  /// In en, this message translates to:
-  /// **'Adaptive'**
-  String get studyModeMixBadge;
-
-  /// No description provided for @studyModeMixSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Review · Match · Guess · Recall · Fill'**
-  String get studyModeMixSummary;
-
-  /// No description provided for @deckBreakdownTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Card breakdown'**
-  String get deckBreakdownTitle;
-
-  /// No description provided for @deckBreakdownNew.
-  ///
-  /// In en, this message translates to:
-  /// **'New'**
-  String get deckBreakdownNew;
-
-  /// No description provided for @deckBreakdownLearning.
-  ///
-  /// In en, this message translates to:
-  /// **'Learning'**
-  String get deckBreakdownLearning;
-
-  /// No description provided for @deckBreakdownReviewing.
-  ///
-  /// In en, this message translates to:
-  /// **'Reviewing'**
-  String get deckBreakdownReviewing;
-
-  /// No description provided for @deckBreakdownMastered.
-  ///
-  /// In en, this message translates to:
-  /// **'Mastered'**
-  String get deckBreakdownMastered;
-
-  /// No description provided for @libraryDeckDueSuffix.
-  ///
-  /// In en, this message translates to:
-  /// **'· {dueCount} due'**
-  String libraryDeckDueSuffix(int dueCount);
 
   /// No description provided for @relativeTimeAgo.
   ///
@@ -5166,221 +1988,23 @@ abstract class AppLocalizations {
   /// **'{unit, select, justNow{just now} minutes{{count, plural, =1{1 minute ago} other{{count} minutes ago}}} hours{{count, plural, =1{1 hour ago} other{{count} hours ago}}} days{{count, plural, =1{1 day ago} other{{count} days ago}}} weeks{{count, plural, =1{1 week ago} other{{count} weeks ago}}} months{{count, plural, =1{1 month ago} other{{count} months ago}}} years{{count, plural, =1{1 year ago} other{{count} years ago}}} other{just now}}'**
   String relativeTimeAgo(String unit, int count);
 
-  /// No description provided for @libraryDeckAllCaughtUp.
-  ///
-  /// In en, this message translates to:
-  /// **'All caught up'**
-  String get libraryDeckAllCaughtUp;
-
-  /// No description provided for @libraryFilterAll.
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get libraryFilterAll;
-
-  /// No description provided for @deckMasteryLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Mastery'**
-  String get deckMasteryLabel;
-
-  /// No description provided for @deckMasteryProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'{mastered} of {total} cards mastered'**
-  String deckMasteryProgress(int mastered, int total);
-
-  /// No description provided for @studyReadyToFinalizeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready to finalize'**
-  String get studyReadyToFinalizeTitle;
-
-  /// No description provided for @studyReadyToFinalizeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'All required items are passed. Finalize to commit SRS progress.'**
-  String get studyReadyToFinalizeMessage;
-
-  /// No description provided for @studyChooseMatchingAnswer.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose the matching answer.'**
-  String get studyChooseMatchingAnswer;
-
-  /// No description provided for @studyTypeMatchingAnswer.
-  ///
-  /// In en, this message translates to:
-  /// **'Type the matching answer.'**
-  String get studyTypeMatchingAnswer;
-
-  /// No description provided for @studyAnswerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Answer'**
-  String get studyAnswerLabel;
-
-  /// No description provided for @studySubmitAnswer.
-  ///
-  /// In en, this message translates to:
-  /// **'Submit'**
-  String get studySubmitAnswer;
-
-  /// No description provided for @studyHelpAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Help'**
-  String get studyHelpAction;
-
-  /// No description provided for @studyCheckAnswerAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Check'**
-  String get studyCheckAnswerAction;
-
-  /// No description provided for @studyFillNoAnswerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'No answer entered'**
-  String get studyFillNoAnswerLabel;
-
-  /// No description provided for @studyCorrectAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Correct'**
-  String get studyCorrectAction;
-
-  /// No description provided for @studyIncorrectAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Incorrect'**
-  String get studyIncorrectAction;
-
-  /// No description provided for @studyRememberedAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Remembered'**
-  String get studyRememberedAction;
-
   /// No description provided for @studyForgotAction.
   ///
   /// In en, this message translates to:
   /// **'Forgot'**
   String get studyForgotAction;
 
-  /// No description provided for @studyShowAnswerAction.
+  /// No description provided for @studyNextAction.
   ///
   /// In en, this message translates to:
-  /// **'Show'**
-  String get studyShowAnswerAction;
-
-  /// No description provided for @studyShowAnswerCountdownAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Show ({seconds}s)'**
-  String studyShowAnswerCountdownAction(int seconds);
-
-  /// No description provided for @studyAnswerCorrectTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Correct'**
-  String get studyAnswerCorrectTitle;
-
-  /// No description provided for @studyAnswerIncorrectTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Not quite'**
-  String get studyAnswerIncorrectTitle;
-
-  /// No description provided for @studyCorrectAnswerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Correct answer: {answer}'**
-  String studyCorrectAnswerLabel(Object answer);
-
-  /// No description provided for @studyYourAnswerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Your answer: {answer}'**
-  String studyYourAnswerLabel(Object answer);
-
-  /// No description provided for @studyMarkCorrectAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark correct'**
-  String get studyMarkCorrectAction;
-
-  /// No description provided for @studyTryAgainAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Try again'**
-  String get studyTryAgainAction;
-
-  /// No description provided for @studyHintAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Hint'**
-  String get studyHintAction;
+  /// **'Next'**
+  String get studyNextAction;
 
   /// No description provided for @studyGotItAction.
   ///
   /// In en, this message translates to:
   /// **'Got it'**
   String get studyGotItAction;
-
-  /// No description provided for @studyReviewSwipeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Swipe or tap Next'**
-  String get studyReviewSwipeHint;
-
-  /// No description provided for @studyReviewMeaningLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Meaning'**
-  String get studyReviewMeaningLabel;
-
-  /// No description provided for @studyGuessPromptLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'What is this?'**
-  String get studyGuessPromptLabel;
-
-  /// No description provided for @studyGuessAutoAdvanceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Next card in {seconds}s'**
-  String studyGuessAutoAdvanceLabel(String seconds);
-
-  /// No description provided for @studyMatchBoardStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Board {board} of {totalBoards} · {pairsLeft, plural, =1{1 pair left} other{{pairsLeft} pairs left}}'**
-  String studyMatchBoardStatus(int board, int totalBoards, num pairsLeft);
-
-  /// No description provided for @studyMatchMistakesLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{mistakes, plural, =0{No mistakes} =1{1 mistake} other{{mistakes} mistakes}}'**
-  String studyMatchMistakesLabel(num mistakes);
-
-  /// No description provided for @studyCounterFormat.
-  ///
-  /// In en, this message translates to:
-  /// **'{current} / {total}'**
-  String studyCounterFormat(int current, int total);
-
-  /// No description provided for @studyContinueAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get studyContinueAction;
-
-  /// No description provided for @studyEmptyAnswerMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter an answer before submitting.'**
-  String get studyEmptyAnswerMessage;
 
   /// Empty-scope title shown when a user opens Study on a deck with zero flashcards. P0-1 Tier 1; copy pending product review.
   ///
@@ -5399,12 +2023,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All caught up'**
   String get studyEmpty_deck_noDueCards_title;
-
-  /// Empty-scope subtitle showing when the next deck card becomes due. Omitted when no future due date exists.
-  ///
-  /// In en, this message translates to:
-  /// **'Next due {relativeTime}.'**
-  String studyEmpty_deck_noDueCards_subtitle(String relativeTime);
 
   /// Empty-scope CTA that restarts study on the deck as a New Study session.
   ///
@@ -5429,12 +2047,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All caught up for this folder'**
   String get studyEmpty_folder_noDueCards_title;
-
-  /// Empty-scope subtitle showing when the next folder card becomes due. Omitted when no future due date exists.
-  ///
-  /// In en, this message translates to:
-  /// **'Next due {relativeTime}.'**
-  String studyEmpty_folder_noDueCards_subtitle(String relativeTime);
 
   /// Empty-scope CTA that restarts study on the folder as a New Study session.
   ///
@@ -5526,60 +2138,6 @@ abstract class AppLocalizations {
   /// **'View flashcards'**
   String get studyEmpty_allSuspended_cta;
 
-  /// Title of the card-actions bottom sheet shown during a study session.
-  ///
-  /// In en, this message translates to:
-  /// **'Card actions'**
-  String get cardActionsTitle;
-
-  /// Card-actions sheet entry that buries the current card until tomorrow.
-  ///
-  /// In en, this message translates to:
-  /// **'Bury until tomorrow'**
-  String get cardActionBury;
-
-  /// Card-actions sheet entry that suspends the current card indefinitely.
-  ///
-  /// In en, this message translates to:
-  /// **'Suspend card'**
-  String get cardActionSuspend;
-
-  /// Snackbar shown after burying a card.
-  ///
-  /// In en, this message translates to:
-  /// **'Card buried until tomorrow.'**
-  String get studyCardBuriedMessage;
-
-  /// Snackbar shown after suspending a card.
-  ///
-  /// In en, this message translates to:
-  /// **'Card suspended.'**
-  String get studyCardSuspendedMessage;
-
-  /// Generic undo action label used by bury/suspend toasts.
-  ///
-  /// In en, this message translates to:
-  /// **'Undo'**
-  String get commonUndo;
-
-  /// No description provided for @studyCancelConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel this session?'**
-  String get studyCancelConfirmTitle;
-
-  /// No description provided for @studyCancelConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Your current study session will stop and you will be taken to the result screen.'**
-  String get studyCancelConfirmMessage;
-
-  /// No description provided for @studyCancelConfirmAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get studyCancelConfirmAction;
-
   /// No description provided for @flashcardsImportTitle.
   ///
   /// In en, this message translates to:
@@ -5592,209 +2150,11 @@ abstract class AppLocalizations {
   /// **'Deck import V1 now supports CSV paste preview and transactional commit. File picker, Excel, and structured text stay deferred.'**
   String get flashcardsImportRouteIntroMessage;
 
-  /// No description provided for @flashcardsImportFormatsSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Source formats'**
-  String get flashcardsImportFormatsSectionTitle;
-
-  /// No description provided for @flashcardsImportSoonMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Planned for the next import slice.'**
-  String get flashcardsImportSoonMessage;
-
   /// No description provided for @flashcardsImportMissingDeckMessage.
   ///
   /// In en, this message translates to:
   /// **'This import route needs a deck ID. Go back and open import from a deck.'**
   String get flashcardsImportMissingDeckMessage;
-
-  /// No description provided for @bulkAddTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Bulk add'**
-  String get bulkAddTitle;
-
-  /// No description provided for @bulkAddBreadcrumbLeaf.
-  ///
-  /// In en, this message translates to:
-  /// **'Bulk add'**
-  String get bulkAddBreadcrumbLeaf;
-
-  /// No description provided for @bulkAddTabPaste.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste'**
-  String get bulkAddTabPaste;
-
-  /// No description provided for @bulkAddTabPreview.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview'**
-  String get bulkAddTabPreview;
-
-  /// No description provided for @bulkAddTabPreviewWithCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview ({count})'**
-  String bulkAddTabPreviewWithCount(int count);
-
-  /// No description provided for @bulkAddPasteHint.
-  ///
-  /// In en, this message translates to:
-  /// **'연구자\tresearcher\n공부하다\tto study\n도서관\tlibrary'**
-  String get bulkAddPasteHint;
-
-  /// No description provided for @bulkAddHelper.
-  ///
-  /// In en, this message translates to:
-  /// **'One card per line. Separate the term and meaning with a tab or two spaces. Paste straight from a spreadsheet — it just works.'**
-  String get bulkAddHelper;
-
-  /// No description provided for @bulkAddCardsReady.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card ready} other{{count} cards ready}}'**
-  String bulkAddCardsReady(int count);
-
-  /// No description provided for @bulkAddNoDuplicates.
-  ///
-  /// In en, this message translates to:
-  /// **'No duplicates'**
-  String get bulkAddNoDuplicates;
-
-  /// No description provided for @bulkAddDuplicatesSkipped.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 duplicate skipped} other{{count} duplicates skipped}}'**
-  String bulkAddDuplicatesSkipped(int count);
-
-  /// No description provided for @bulkAddIssuesCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 issue} other{{count} issues}}'**
-  String bulkAddIssuesCount(int count);
-
-  /// No description provided for @bulkAddCommit.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Add 1 card} other{Add {count} cards}}'**
-  String bulkAddCommit(int count);
-
-  /// No description provided for @bulkAddFooterSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 card · {deckName}} other{{count} cards · {deckName}}}'**
-  String bulkAddFooterSummary(int count, String deckName);
-
-  /// No description provided for @bulkAddEmptyPaste.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste your list to see a preview.'**
-  String get bulkAddEmptyPaste;
-
-  /// No description provided for @bulkAddHelpTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Format help'**
-  String get bulkAddHelpTooltip;
-
-  /// No description provided for @bulkAddSeparatorLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'SEPARATOR'**
-  String get bulkAddSeparatorLabel;
-
-  /// No description provided for @bulkAddSourceTabText.
-  ///
-  /// In en, this message translates to:
-  /// **'Text'**
-  String get bulkAddSourceTabText;
-
-  /// No description provided for @bulkAddSourceTabFile.
-  ///
-  /// In en, this message translates to:
-  /// **'File'**
-  String get bulkAddSourceTabFile;
-
-  /// No description provided for @bulkAddFileEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No file loaded'**
-  String get bulkAddFileEmptyTitle;
-
-  /// No description provided for @bulkAddFileEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a CSV (.csv) or Excel (.xlsx) file up to 10 MB. Only the first sheet is read for Excel.'**
-  String get bulkAddFileEmptyDescription;
-
-  /// No description provided for @bulkAddFileChooseAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose file'**
-  String get bulkAddFileChooseAction;
-
-  /// No description provided for @bulkAddFileSizeError.
-  ///
-  /// In en, this message translates to:
-  /// **'File exceeds 10 MB. Please choose a smaller file.'**
-  String get bulkAddFileSizeError;
-
-  /// No description provided for @bulkAddFileFormatHint.
-  ///
-  /// In en, this message translates to:
-  /// **'CSV · XLSX · 10 MB max'**
-  String get bulkAddFileFormatHint;
-
-  /// No description provided for @exportFormatChoiceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Export as'**
-  String get exportFormatChoiceTitle;
-
-  /// No description provided for @exportFormatCsvLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'CSV'**
-  String get exportFormatCsvLabel;
-
-  /// No description provided for @exportFormatCsvDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Plain text · opens in any spreadsheet'**
-  String get exportFormatCsvDescription;
-
-  /// No description provided for @exportFormatExcelLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Excel (.xlsx)'**
-  String get exportFormatExcelLabel;
-
-  /// No description provided for @exportFormatExcelDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Native Excel workbook · single sheet'**
-  String get exportFormatExcelDescription;
-
-  /// No description provided for @bulkAddFileLoadedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{name}'**
-  String bulkAddFileLoadedTitle(String name);
-
-  /// No description provided for @bulkAddFileSizeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{size} KB'**
-  String bulkAddFileSizeLabel(String size);
-
-  /// No description provided for @bulkAddFooterTrailing.
-  ///
-  /// In en, this message translates to:
-  /// **'cards · {deckName}'**
-  String bulkAddFooterTrailing(String deckName);
 
   /// No description provided for @importSourceTitle.
   ///
@@ -5802,113 +2162,11 @@ abstract class AppLocalizations {
   /// **'Import from'**
   String get importSourceTitle;
 
-  /// No description provided for @importSourceSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Import is preview-first and atomic. Any invalid line blocks the entire write.'**
-  String get importSourceSubtitle;
-
-  /// No description provided for @importCsvLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'CSV'**
-  String get importCsvLabel;
-
-  /// No description provided for @importExcelLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Excel'**
-  String get importExcelLabel;
-
-  /// No description provided for @importTextFormatLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Text'**
-  String get importTextFormatLabel;
-
-  /// No description provided for @importLoadFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Load file'**
-  String get importLoadFile;
-
-  /// No description provided for @importSelectExcelFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Excel file'**
-  String get importSelectExcelFile;
-
-  /// No description provided for @importChangeFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Change'**
-  String get importChangeFile;
-
-  /// No description provided for @importRemoveFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove'**
-  String get importRemoveFile;
-
-  /// No description provided for @importFileReadyToPreview.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready to preview'**
-  String get importFileReadyToPreview;
-
-  /// No description provided for @importDetectedRowsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 row detected} other{{count} rows detected}}'**
-  String importDetectedRowsLabel(int count);
-
   /// No description provided for @importCsvContentLabel.
   ///
   /// In en, this message translates to:
   /// **'CSV content'**
   String get importCsvContentLabel;
-
-  /// No description provided for @importExcelFileLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Excel file'**
-  String get importExcelFileLabel;
-
-  /// No description provided for @importExcelNoFileTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No Excel file loaded'**
-  String get importExcelNoFileTitle;
-
-  /// No description provided for @importExcelNoFileDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Load a .xlsx file. Column A is front, column B is back, and column C is optional note.'**
-  String get importExcelNoFileDescription;
-
-  /// No description provided for @importExcelLoadedFileDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview reads the first sheet from A1. Use the header option if row 1 contains labels.'**
-  String get importExcelLoadedFileDescription;
-
-  /// No description provided for @importExcelHasHeaderLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'First row is header'**
-  String get importExcelHasHeaderLabel;
-
-  /// No description provided for @importExcelHasHeaderDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Data starts at row 2.'**
-  String get importExcelHasHeaderDescription;
-
-  /// No description provided for @importTextContentLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Structured text'**
-  String get importTextContentLabel;
 
   /// No description provided for @importCsvHint.
   ///
@@ -5916,161 +2174,11 @@ abstract class AppLocalizations {
   /// **'front,back'**
   String get importCsvHint;
 
-  /// No description provided for @importTextHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Front: ...\nBack: ...\nNote: ...\nOr one card per line: term / definition'**
-  String get importTextHint;
-
   /// No description provided for @importCsvRulesText.
   ///
   /// In en, this message translates to:
   /// **'Use front and back columns. Optional extra columns are ignored in V1.'**
   String get importCsvRulesText;
-
-  /// No description provided for @importExcelRulesText.
-  ///
-  /// In en, this message translates to:
-  /// **'Column A = front, Column B = back, Column C = note.'**
-  String get importExcelRulesText;
-
-  /// No description provided for @importTextRulesText.
-  ///
-  /// In en, this message translates to:
-  /// **'Use Front:, Back:, and optional Note: lines.'**
-  String get importTextRulesText;
-
-  /// No description provided for @importSeparatorLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Separator'**
-  String get importSeparatorLabel;
-
-  /// No description provided for @importSeparatorAuto.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get importSeparatorAuto;
-
-  /// No description provided for @importSeparatorTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Tab'**
-  String get importSeparatorTab;
-
-  /// No description provided for @importSeparatorComma.
-  ///
-  /// In en, this message translates to:
-  /// **'Comma'**
-  String get importSeparatorComma;
-
-  /// No description provided for @importSeparatorColon.
-  ///
-  /// In en, this message translates to:
-  /// **'Colon'**
-  String get importSeparatorColon;
-
-  /// No description provided for @importSeparatorSlash.
-  ///
-  /// In en, this message translates to:
-  /// **'Slash'**
-  String get importSeparatorSlash;
-
-  /// No description provided for @importSeparatorSemicolon.
-  ///
-  /// In en, this message translates to:
-  /// **'Semicolon'**
-  String get importSeparatorSemicolon;
-
-  /// No description provided for @importSeparatorPipe.
-  ///
-  /// In en, this message translates to:
-  /// **'Pipe'**
-  String get importSeparatorPipe;
-
-  /// No description provided for @importSeparatorAutoDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Detects clear line separators before preview.'**
-  String get importSeparatorAutoDescription;
-
-  /// No description provided for @importSeparatorTabDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'term<Tab>definition'**
-  String get importSeparatorTabDescription;
-
-  /// No description provided for @importSeparatorCommaDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'term, definition'**
-  String get importSeparatorCommaDescription;
-
-  /// No description provided for @importSeparatorColonDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'term: definition'**
-  String get importSeparatorColonDescription;
-
-  /// No description provided for @importSeparatorSlashDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'term / definition'**
-  String get importSeparatorSlashDescription;
-
-  /// No description provided for @importSeparatorSemicolonDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'term; definition'**
-  String get importSeparatorSemicolonDescription;
-
-  /// No description provided for @importSeparatorPipeDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'term | definition'**
-  String get importSeparatorPipeDescription;
-
-  /// No description provided for @importDuplicateHandlingTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Duplicate handling'**
-  String get importDuplicateHandlingTitle;
-
-  /// No description provided for @importDuplicatePolicySkipExact.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip exact duplicates'**
-  String get importDuplicatePolicySkipExact;
-
-  /// No description provided for @importDuplicatePolicySkipExactDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Same front with a different back will still be imported.'**
-  String get importDuplicatePolicySkipExactDescription;
-
-  /// No description provided for @importDuplicatePolicyImportAnyway.
-  ///
-  /// In en, this message translates to:
-  /// **'Import anyway'**
-  String get importDuplicatePolicyImportAnyway;
-
-  /// No description provided for @importDuplicatePolicyImportAnywayDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Future option: create every valid row, even when front and back match an existing card.'**
-  String get importDuplicatePolicyImportAnywayDescription;
-
-  /// No description provided for @importDuplicatePolicyUpdateExisting.
-  ///
-  /// In en, this message translates to:
-  /// **'Update existing cards'**
-  String get importDuplicatePolicyUpdateExisting;
-
-  /// No description provided for @importDuplicatePolicyUpdateExistingDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Future option: update matched cards instead of creating new duplicates.'**
-  String get importDuplicatePolicyUpdateExistingDescription;
 
   /// No description provided for @importPreviewAction.
   ///
@@ -6089,18 +2197,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Imported {count} flashcards.'**
   String importSuccessMessage(int count);
-
-  /// No description provided for @importLoadedFileMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Loaded {fileName}.'**
-  String importLoadedFileMessage(Object fileName);
-
-  /// No description provided for @importFileUnavailableMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This file cannot be read. Choose another CSV, text, or .xlsx file.'**
-  String get importFileUnavailableMessage;
 
   /// No description provided for @importValidationIssuesTitle.
   ///
@@ -6138,12 +2234,6 @@ abstract class AppLocalizations {
   /// **'{valid} valid · {invalid} issues'**
   String importPreviewSummary(int valid, int invalid);
 
-  /// No description provided for @importPreviewSummaryWithSkipped.
-  ///
-  /// In en, this message translates to:
-  /// **'{valid} valid · {invalid} issues · {skipped} skipped'**
-  String importPreviewSummaryWithSkipped(int valid, int invalid, int skipped);
-
   /// No description provided for @importPreviewRowsTitle.
   ///
   /// In en, this message translates to:
@@ -6180,42 +2270,6 @@ abstract class AppLocalizations {
   /// **'Front and back are required.'**
   String get importCsvFrontAndBackRequiredMessage;
 
-  /// No description provided for @importCommitDeferredAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Import deferred'**
-  String get importCommitDeferredAction;
-
-  /// No description provided for @importCommitDeferredMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Commit is deferred in V1.'**
-  String get importCommitDeferredMessage;
-
-  /// No description provided for @importSkippedDuplicatesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Skipped duplicates'**
-  String get importSkippedDuplicatesTitle;
-
-  /// No description provided for @importSkippedDuplicatesSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} exact duplicates will be skipped.'**
-  String importSkippedDuplicatesSubtitle(int count);
-
-  /// No description provided for @importSkippedDuplicateInFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Exact duplicate in this file'**
-  String get importSkippedDuplicateInFile;
-
-  /// No description provided for @importSkippedDuplicateInDeck.
-  ///
-  /// In en, this message translates to:
-  /// **'Exact duplicate in this deck'**
-  String get importSkippedDuplicateInDeck;
-
   /// No description provided for @importNothingTitle.
   ///
   /// In en, this message translates to:
@@ -6234,47 +2288,11 @@ abstract class AppLocalizations {
   /// **'Something went wrong'**
   String get sharedErrorTitle;
 
-  /// No description provided for @sharedTryAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Try again'**
-  String get sharedTryAgain;
-
-  /// No description provided for @sharedShowDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Show details'**
-  String get sharedShowDetails;
-
-  /// No description provided for @sharedHideDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide details'**
-  String get sharedHideDetails;
-
-  /// No description provided for @sharedFullscreenTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Fullscreen'**
-  String get sharedFullscreenTooltip;
-
   /// No description provided for @sharedStreakLabel.
   ///
   /// In en, this message translates to:
   /// **'Streak'**
   String get sharedStreakLabel;
-
-  /// No description provided for @sharedOfflineTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'You\'re offline'**
-  String get sharedOfflineTitle;
-
-  /// No description provided for @sharedOfflineMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Check your internet connection and try again. Your local flashcards still work.'**
-  String get sharedOfflineMessage;
 
   /// No description provided for @commonRetry.
   ///
@@ -6288,11 +2306,47 @@ abstract class AppLocalizations {
   /// **'Filters'**
   String get libraryFilterTooltip;
 
+  /// No description provided for @librarySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search folders'**
+  String get librarySearchHint;
+
   /// No description provided for @librarySearchClearTooltip.
   ///
   /// In en, this message translates to:
   /// **'Clear search'**
   String get librarySearchClearTooltip;
+
+  /// No description provided for @libraryNewFolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New folder'**
+  String get libraryNewFolderLabel;
+
+  /// No description provided for @libraryLoadFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your library'**
+  String get libraryLoadFailedTitle;
+
+  /// No description provided for @libraryLoadFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong while loading your folders.'**
+  String get libraryLoadFailedMessage;
+
+  /// No description provided for @libraryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet'**
+  String get libraryEmptyTitle;
+
+  /// No description provided for @libraryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a folder to organize your decks.'**
+  String get libraryEmptyMessage;
 
   /// No description provided for @librarySearchNoResultsTitle.
   ///
@@ -6348,6 +2402,18 @@ abstract class AppLocalizations {
   /// **'Couldn\'t create the folder. Please try again.'**
   String get libraryCreateFolderError;
 
+  /// No description provided for @libraryFolderCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} folders'**
+  String libraryFolderCountLabel(int count);
+
+  /// No description provided for @libraryDueSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card due today} other{{count} cards due today}}'**
+  String libraryDueSummaryTitle(int count);
+
   /// No description provided for @libraryDueSummarySubtitle.
   ///
   /// In en, this message translates to:
@@ -6389,6 +2455,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} due'**
   String libraryFolderDueCount(int count);
+
+  /// No description provided for @libraryOverflowTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder actions'**
+  String get libraryOverflowTooltip;
 
   /// No description provided for @folderDetailSearchHint.
   ///
@@ -6450,6 +2522,12 @@ abstract class AppLocalizations {
   /// **'New deck'**
   String get folderNewDeckLabel;
 
+  /// No description provided for @folderDeleteDialogRemovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **' and its {summaryText} will be removed from your library.'**
+  String folderDeleteDialogRemovalMessage(String summaryText);
+
   /// No description provided for @subfolderCreateDialogTitle.
   ///
   /// In en, this message translates to:
@@ -6503,12 +2581,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t create that. Please try again.'**
   String get folderChildCreateError;
-
-  /// No description provided for @folderModeLockedError.
-  ///
-  /// In en, this message translates to:
-  /// **'This folder can\'t hold that item type.'**
-  String get folderModeLockedError;
 
   /// No description provided for @libraryFolderActionsRename.
   ///
@@ -6581,12 +2653,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'due total'**
   String get folderSummaryDueStat;
-
-  /// No description provided for @librarySearchOpenTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Search library'**
-  String get librarySearchOpenTooltip;
 
   /// No description provided for @searchFieldHint.
   ///
@@ -6767,6 +2833,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t save the new order.'**
   String get flashcardReorderError;
+
+  /// No description provided for @progressRangeWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get progressRangeWeek;
+
+  /// No description provided for @progressRangeMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get progressRangeMonth;
+
+  /// No description provided for @progressRangeAllTime.
+  ///
+  /// In en, this message translates to:
+  /// **'All time'**
+  String get progressRangeAllTime;
+
+  /// No description provided for @progressCardsStudiedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards studied'**
+  String get progressCardsStudiedTitle;
+
+  /// No description provided for @progressCardsStudiedCaptionWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'over the past 7 days'**
+  String get progressCardsStudiedCaptionWeek;
+
+  /// No description provided for @progressCardsStudiedCaptionMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'over the past 28 days'**
+  String get progressCardsStudiedCaptionMonth;
+
+  /// No description provided for @progressCardsStudiedCaptionAllTime.
+  ///
+  /// In en, this message translates to:
+  /// **'all time'**
+  String get progressCardsStudiedCaptionAllTime;
+
+  /// No description provided for @progressAccuracyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy'**
+  String get progressAccuracyTitle;
+
+  /// No description provided for @progressVsPreviousWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'vs previous week'**
+  String get progressVsPreviousWeek;
+
+  /// No description provided for @progressVsPreviousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'vs previous month'**
+  String get progressVsPreviousMonth;
+
+  /// No description provided for @progressBoxDistributionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Box distribution'**
+  String get progressBoxDistributionTitle;
+
+  /// No description provided for @progressBoxTotalCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'total cards across boxes'**
+  String get progressBoxTotalCaption;
+
+  /// No description provided for @progressBoxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'B{box}'**
+  String progressBoxLabel(int box);
+
+  /// No description provided for @progressBoxLegendLeast.
+  ///
+  /// In en, this message translates to:
+  /// **'B1 · least known'**
+  String get progressBoxLegendLeast;
+
+  /// No description provided for @progressBoxLegendBest.
+  ///
+  /// In en, this message translates to:
+  /// **'B8 · best known'**
+  String get progressBoxLegendBest;
+
+  /// No description provided for @progressStreakTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get progressStreakTitle;
+
+  /// No description provided for @progressStreakCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get progressStreakCurrent;
+
+  /// No description provided for @progressStreakLongest.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest'**
+  String get progressStreakLongest;
+
+  /// No description provided for @progressStreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day} other{{count} days}}'**
+  String progressStreakDays(int count);
+
+  /// No description provided for @progressCardStatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card states'**
+  String get progressCardStatesTitle;
+
+  /// No description provided for @progressSuspendedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspended'**
+  String get progressSuspendedTitle;
+
+  /// No description provided for @progressSuspendedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of rotation until you resume them'**
+  String get progressSuspendedSubtitle;
+
+  /// No description provided for @progressSuspendedCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'in your library'**
+  String get progressSuspendedCaption;
+
+  /// No description provided for @progressBuriedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buried today'**
+  String get progressBuriedTitle;
+
+  /// No description provided for @progressBuriedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped until tomorrow'**
+  String get progressBuriedSubtitle;
+
+  /// No description provided for @progressBuriedCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'today only'**
+  String get progressBuriedCaption;
+
+  /// No description provided for @progressFooterWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only summary · last 7 days'**
+  String get progressFooterWeek;
+
+  /// No description provided for @progressFooterMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only summary · last 28 days'**
+  String get progressFooterMonth;
+
+  /// No description provided for @progressFooterAllTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only summary · all time'**
+  String get progressFooterAllTime;
+
+  /// No description provided for @progressChartEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No study sessions in this range yet. Start any deck to begin tracking trends.'**
+  String get progressChartEmptyHint;
+
+  /// No description provided for @progressChartInsufficientHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Only 1 day of data so far.} other{Only {count} days of data so far.}}'**
+  String progressChartInsufficientHint(int count);
+
+  /// No description provided for @progressTrendBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Trend appears after {days} days of data.'**
+  String progressTrendBanner(int days);
+
+  /// No description provided for @progressAccuracyEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy appears once you\'ve answered cards.'**
+  String get progressAccuracyEmptyHint;
+
+  /// No description provided for @progressBoxEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards spread across boxes as you study them.'**
+  String get progressBoxEmptyHint;
+
+  /// No description provided for @progressStreakEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A streak starts after one study session.'**
+  String get progressStreakEmptyHint;
+
+  /// No description provided for @progressErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t summarise your progress'**
+  String get progressErrorTitle;
+
+  /// No description provided for @progressErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your study history is safe on this device. Try again in a moment.'**
+  String get progressErrorMessage;
 }
 
 class _AppLocalizationsDelegate

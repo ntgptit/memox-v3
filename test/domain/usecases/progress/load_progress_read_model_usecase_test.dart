@@ -7,6 +7,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
+import 'package:memox/domain/types/progress_range.dart';
 import 'package:memox/domain/usecases/progress/load_progress_read_model_usecase.dart';
 import 'package:riverpod/misc.dart';
 
@@ -43,6 +44,14 @@ class _RecordingProgressRepository implements ProgressRepository {
 
   @override
   Future<Result<BoxDistribution>> loadBoxDistribution() async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<ProgressOverview>> loadProgressOverview({
+    required DateTime now,
+    required ProgressRange range,
+  }) async {
     throw UnimplementedError();
   }
 

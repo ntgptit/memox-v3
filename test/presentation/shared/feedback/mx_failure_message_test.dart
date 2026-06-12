@@ -41,14 +41,14 @@ void main() {
         l10n.failureMessage(
           const Failure.storage(operation: StorageOp.read, cause: 'x'),
         ),
-        l10n.errorStorage,
+        l10n.errorUnexpected,
       );
     });
 
     test('unsupported action maps to the folder mode-locked copy', () {
       expect(
         l10n.failureMessage(const Failure.unsupportedAction()),
-        l10n.folderModeLockedError,
+        l10n.folderModeLockHint,
       );
     });
 
@@ -69,14 +69,14 @@ void main() {
         l10n.failureMessage(
           const Failure.network(kind: NetworkErrorKind.timeout),
         ),
-        l10n.errorRequestTimedOut,
+        l10n.errorUnexpected,
       );
     });
 
     test('not-found without a fallback uses the generic not-found copy', () {
       expect(
         l10n.failureMessage(const Failure.notFound(entity: 'folder')),
-        l10n.errorNotFound,
+        l10n.errorUnexpected,
       );
     });
   });

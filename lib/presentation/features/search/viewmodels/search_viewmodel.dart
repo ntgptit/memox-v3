@@ -51,7 +51,7 @@ Future<SearchResults?> searchResults(Ref ref) async {
   final Result<SearchResults> result = await useCase.call(query: query);
   return result.fold(
     // Surface the Failure as AsyncError for the screen's error state.
-    // ignore: only_throw_errors
+    // ignore: only_throw_errors -- reason: query failures must reach the shared error state.
     (Failure failure) => throw failure,
     (SearchResults value) => value,
   );

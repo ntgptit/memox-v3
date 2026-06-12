@@ -60,6 +60,28 @@ WHERE flashcard_progress.box_number BETWEEN 1 AND 8
 GROUP BY flashcard_progress.box_number
 ORDER BY flashcard_progress.box_number;
 
+progressAttemptsBetween(:start_ms AS INT, :end_ms AS INT):
+SELECT attempted_at, result
+FROM study_attempts
+WHERE attempted_at >= :start_ms AND attempted_at < :end_ms
+ORDER BY attempted_at;
+
+-- Raw timestamps; local-day grouping happens in Dart (`toLocal()`), because the
+-- sqlite3 build used by Flutter tests on Windows returns NULL for the
+-- 'localtime' modifier.
+progressAttemptTimestamps:
+SELECT attempted_at FROM study_attempts ORDER BY attempted_at;
+
+progressSuspendedCount:
+SELECT COUNT(*) AS suspended_count
+FROM flashcard_progress
+WHERE is_suspended = TRUE;
+
+progressBuriedTodayCount(:now AS INT):
+SELECT COUNT(*) AS buried_count
+FROM flashcard_progress
+WHERE buried_until IS NOT NULL AND buried_until > :now;
+
 progressStudyStatistics:
 SELECT
   (SELECT COUNT(*) FROM study_sessions WHERE status = 'completed')

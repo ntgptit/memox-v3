@@ -26,7 +26,7 @@ Stream<FlashcardListDetail> flashcardEditorContextQuery(
       .call(deckId)
       .map(
         (Result<FlashcardListDetail> result) => result.fold(
-          // ignore: only_throw_errors
+          // ignore: only_throw_errors -- reason: Riverpod stream query surfaces repository Failure as AsyncError.
           (Failure failure) => throw failure,
           (FlashcardListDetail detail) => detail,
         ),
@@ -44,7 +44,7 @@ Future<FlashcardDetail> flashcardEditorDetailQuery(
     flashcardId: flashcardId,
   );
   return result.fold(
-    // ignore: only_throw_errors
+    // ignore: only_throw_errors -- reason: async query surfaces repository Failure as AsyncError.
     (Failure failure) => throw failure,
     (FlashcardDetail detail) => detail,
   );

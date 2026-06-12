@@ -34,18 +34,22 @@ const testTargets = (() => {
   const i = args.indexOf('--test');
   return i >= 0 ? args.slice(i + 1).filter((a) => !a.startsWith('--')) : [];
 })();
+// Golden workflow stays inside the single entry: forwarded to `flutter test`.
+const goldenFlag = has('--update-goldens') ? ' --update-goldens' : '';
 
 // ── content-state hash ───────────────────────────────────────────────────────
 // Identifies the exact uncommitted content of the tree, independent of whether
 // files are staged. `git add` does not change it; any edit does. The marker
 // file itself is excluded.
 function stateHash() {
-  const out = execSync('git status --porcelain', { cwd: repoRoot }).toString();
+  // -uall lists untracked files individually; the default collapses a new
+  // directory into one `dir/` entry, which is unreadable as a file.
+  const out = execSync('git status --porcelain -uall', { cwd: repoRoot }).toString();
   const entries = [];
   for (const line of out.split('\n').filter(Boolean)) {
     let path = line.slice(3).trim().replace(/^"|"$/g, '');
     if (path.includes(' -> ')) path = path.split(' -> ')[1].replace(/^"|"$/g, '');
-    if (path === 'tool/verify/.last-pass.json') continue;
+    if (path === 'tool/verify/.last-pass.json' || path.endsWith('/')) continue;
     const abs = join(repoRoot, path);
     const content = existsSync(abs) ? readFileSync(abs) : Buffer.from('DELETED');
     entries.push(`${path}:${createHash('sha1').update(content).digest('hex')}`);
@@ -94,7 +98,7 @@ if (has('--check-marker')) {
 
 // ── scope detection ──────────────────────────────────────────────────────────
 function changedFiles() {
-  const out = execSync('git status --porcelain', { cwd: repoRoot }).toString();
+  const out = execSync('git status --porcelain -uall', { cwd: repoRoot }).toString();
   return out
     .split('\n')
     .filter(Boolean)
@@ -145,7 +149,7 @@ if (mode === 'quick') {
   // Inner dev loop: fast feedback through the same entry. No marker — quick
   // runs are not commit-worthy verification.
   step('flutter analyze', 'flutter analyze');
-  if (testTargets.length) step('flutter test (targeted)', `flutter test ${testTargets.join(' ')}`);
+  if (testTargets.length) step('flutter test (targeted)', `flutter test${goldenFlag} ${testTargets.join(' ')}`);
   else results.push({ name: 'flutter test', status: 'skipped', note: 'pass --test <paths> for tests in quick mode' });
 } else if (mode === 'docs') {
   step('doc_guard', 'node tool/doc_guard/run.mjs check');
@@ -164,7 +168,7 @@ if (mode === 'quick') {
   step('dart format', 'dart format .');
   step('flutter analyze', 'flutter analyze');
   if (has('--full')) step('flutter test (ALL)', 'flutter test');
-  else if (testTargets.length) step('flutter test (targeted)', `flutter test ${testTargets.join(' ')}`);
+  else if (testTargets.length) step('flutter test (targeted)', `flutter test${goldenFlag} ${testTargets.join(' ')}`);
   else results.push({ name: 'flutter test', status: 'skipped', note: 'no targets — pass --test <paths> or --full' });
   step('git diff --check', 'git diff --check');
 }

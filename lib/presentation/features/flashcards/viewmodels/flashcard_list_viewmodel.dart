@@ -70,7 +70,7 @@ Stream<FlashcardListDetail> flashcardListQuery(Ref ref, String deckId) {
       .call(deckId, searchTerm: toolbar.searchTerm, sort: toolbar.sort)
       .map(
         (Result<FlashcardListDetail> result) => result.fold(
-          // ignore: only_throw_errors
+          // ignore: only_throw_errors -- reason: Riverpod stream query surfaces repository Failure as AsyncError.
           (Failure failure) => throw failure,
           (FlashcardListDetail detail) => detail,
         ),

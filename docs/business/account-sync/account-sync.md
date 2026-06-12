@@ -20,53 +20,41 @@ optional; the app works fully offline as a guest.
 
 ## Source files to inspect
 
-> **Target structure — NONE of these files exist yet (verified 2026-06-11).** Account/Drive sync
-> is Specified; the file lists below are the planned layout for when WBS 8.5.x/8.6.x is
-> implemented. Do not treat any path here as existing code.
+> **Target structure — only the auth gateway and OAuth config exist today (verified 2026-06-11).**
+> Account/Drive sync is Specified; the remaining items below are planned layout for when WBS
+> 8.5.x/8.6.x is implemented.
 
-### Account
+### Current implemented code
 
-- `lib/domain/entities/cloud_account_link.dart` (CloudAccountLink, CloudProvider,
-  DriveAuthorizationState, AccountLinkStatus, googleDriveAppDataScope)
-- `lib/domain/entities/account_database_context.dart` (AccountDatabaseContext,
-  AccountDatabaseContextResolver, GuestDatabaseSignInChoice)
-- `lib/domain/repositories/cloud_account_repository.dart`
-- `lib/domain/services/google_account_auth_service.dart` (GoogleAccountAuthService,
-  GoogleAccountAuthResult, DriveAccessTokenResult)
-- `lib/domain/usecases/cloud_account_usecases.dart`
-- `lib/data/settings/cloud_account_store.dart` (CloudAccountStore — SharedPreferences-backed)
+- `lib/core/auth/google_auth.dart`
 - `lib/core/config/google_oauth_config.dart`
-- `lib/presentation/features/settings/screens/account_settings_screen.dart`
-- `lib/presentation/features/settings/viewmodels/account_settings_viewmodel.dart`
-- `lib/presentation/features/settings/widgets/account_settings_group.dart`
-- `lib/presentation/features/settings/widgets/google_account_web_button*.dart`
 
-### Drive sync
+### Planned account layer
 
-- `lib/domain/entities/drive_sync_models.dart` (DriveSyncManifest, DriveSyncSnapshot,
-  DriveSyncRemoteSnapshot, DriveSyncMetadata, DriveSyncStatus, DriveSyncRunResult, all status/action
-  enums)
-- `lib/domain/repositories/drive_sync_repository.dart`
-- `lib/domain/usecases/drive_sync_usecases.dart` (LoadDriveSyncStatusUseCase,
-  UploadLocalDriveSnapshotUseCase, RestoreDriveSnapshotUseCase)
-- `lib/data/repositories/google_drive_sync_repository.dart`
-- `lib/data/repositories/google_drive_sync_repository_helpers.dart`
-- `lib/data/sync/google_drive_app_data_client.dart` (Drive AppData REST client)
-- `lib/data/sync/local_database_snapshot_gateway_contract.dart` (interface — `exportDatabase()`,
-  `restoreDatabase()`, `currentSchemaVersion`)
-- `lib/data/sync/local_database_snapshot_gateway_io.dart` (mobile + desktop with file IO; uses
-  `package:path_provider` temp directory)
-- `lib/data/sync/local_database_snapshot_gateway_web.dart` (browser; uses `WasmDatabase` +
-  `sqlite3.wasm` + `drift_worker.dart.js`)
-- `lib/data/sync/local_database_snapshot_gateway_stub.dart` (fallback for platforms without sqlite
-  support — throws `UnsupportedError`)
-- `lib/data/sync/app_settings_snapshot_store.dart`
-- `lib/data/sync/drive_sync_metadata_store.dart` (SharedPreferences-backed)
-- `lib/data/sync/drive_sync_snapshot_codec.dart`
-- `lib/data/sync/drive_sync_json.dart`
-- `lib/app/services/drive_sync_runtime_effects.dart`
-- `lib/presentation/features/settings/viewmodels/drive_sync_settings_viewmodel.dart`
-- `lib/presentation/features/settings/widgets/drive_sync_settings_group.dart`
+- domain entity for cloud account link with provider, drive-authorization state, account status,
+  and Drive AppData scope constant
+- domain entity for account-scoped database context and guest-sign-in choice
+- cloud account repository interface
+- Google auth gateway abstraction and auth result models
+- cloud-account use-case bundle
+- SharedPreferences-backed cloud account store
+- account settings screen, viewmodel, and shared settings group
+- Google web sign-in button variant
+
+### Planned Drive sync layer
+
+- domain entities for Drive sync manifest, snapshot, remote snapshot, metadata, status, run result,
+  and action enums
+- Drive sync repository interface
+- Drive sync use-case bundle for load/upload/restore
+- Google Drive sync repository and helper modules
+- Drive AppData REST client
+- local database snapshot gateway contract plus IO, web, and stub implementations
+- app settings snapshot store
+- Drive sync metadata store
+- Drive sync snapshot codec and JSON helpers
+- Drive sync runtime effects helper
+- Drive sync settings viewmodel and shared settings group
 
 ## Provider
 
@@ -120,16 +108,16 @@ Driver: `CloudAccountLink.driveAppDataAuthorized` returns true only when
 
 ## Account use cases
 
-| Use case                                | Purpose                                           |
-|-----------------------------------------|---------------------------------------------------|
-| `LoadCloudAccountLinkUseCase`           | Read current link from store.                     |
-| `RestoreGoogleAccountUseCase`           | Silent re-auth on app start (lightweight, no UI). |
-| `SignInGoogleAccountUseCase`            | Interactive sign-in + Drive scope grant.          |
-| `AuthorizeGoogleDriveUseCase`           | Add Drive scope to existing link.                 |
-| `SignOutGoogleAccountUseCase`           | Local sign-out, keep tokens revocable.            |
-| `DisconnectGoogleAccountUseCase`        | Revoke server-side consent, clear local link.     |
-| `PersistGoogleAccountAuthResultUseCase` | Persist auth result from external trigger.        |
-| `GetDriveAppDataAccessTokenUseCase`     | Get a Drive access token for an API call.         |
+| Use case                             | Purpose                                           |
+|--------------------------------------|---------------------------------------------------|
+| Load cloud account link              | Read current link from store.                     |
+| Restore Google account               | Silent re-auth on app start (lightweight, no UI). |
+| Sign in with Google                  | Interactive sign-in + Drive scope grant.          |
+| Authorize Google Drive               | Add Drive scope to existing link.                 |
+| Sign out Google account              | Local sign-out, keep tokens revocable.            |
+| Disconnect Google account            | Revoke server-side consent, clear local link.     |
+| Persist Google auth result           | Persist auth result from external trigger.        |
+| Get Drive AppData access token       | Get a Drive access token for an API call.         |
 
 Sign-out vs disconnect:
 
@@ -148,22 +136,22 @@ The Drift database file name is parameterized by account:
 | Guest (no link) | `{AppConstants.localDatabaseName}_guest`                 |
 | Google account  | `{AppConstants.localDatabaseName}_{normalizedSubjectId}` |
 
-Source: `AccountDatabaseContext.guest()` / `AccountDatabaseContext.googleAccount(subjectId)`.
+Source: AccountDatabaseContext.guest() / AccountDatabaseContext.googleAccount(subjectId).
 
-`subjectId` is normalized: non-alphanumeric chars (except `_-`) become `_`. Empty normalized id
-throws `ArgumentError`.
+subjectId is normalized: non-alphanumeric chars (except _-) become _. Empty normalized id throws
+ArgumentError.
 
 ### Guest → signed-in transition
 
-When a guest signs into a Google account, the user chooses via `GuestDatabaseSignInChoice`:
+When a guest signs into a Google account, the user chooses via GuestDatabaseSignInChoice:
 
 | Choice                       | Behavior                                                              |
 |------------------------------|-----------------------------------------------------------------------|
 | `attachGuestData`            | Migrate guest data into the new account database (one-time merge).    |
 | `createFreshAccountDatabase` | Start the account database empty; guest data remains in the guest DB. |
 
-Resolved via `AccountDatabaseContextResolver.resolveGuestSignIn`. Result is
-`AccountDatabaseTransition` with `shouldAttachGuestData` flag.
+Resolved via AccountDatabaseContextResolver.resolveGuestSignIn. Result is AccountDatabaseTransition
+with shouldAttachGuestData flag.
 
 ### Sign-out behavior
 
@@ -173,7 +161,7 @@ Guest database resumes as the active one.
 ### Rules
 
 - The app MUST never write account A's data into account B's database.
-- `AccountDatabaseContext.belongsTo(link)` verifies a context matches a link before opening the
+- AccountDatabaseContext.belongsTo(link) verifies a context matches a link before opening the
   database for that account.
 - Switching accounts MUST close the current `AppDatabase` and open the next account's database file.
 
@@ -407,8 +395,8 @@ flowchart TD
 | `refreshDatabaseProvider` | Re-invalidate the database provider. Riverpod consumers reload.               |
 | `reloadApp`               | Hard reload required (rarely; usually used when bootstrap path needs re-run). |
 
-The presentation layer reads `restoreEffect` and triggers the appropriate refresh via
-`drive_sync_runtime_effects.dart`. Do not skip this step — UI will show stale data.
+The presentation layer reads restoreEffect and triggers the appropriate refresh via the runtime
+effects helper. Do not skip this step — UI will show stale data.
 
 ## Sync flow diagrams
 
@@ -470,17 +458,17 @@ flowchart TD
 - Remote schema version > local app schema version → `unsupportedSchema`. Block restore, prompt app
   update.
 - Metadata is per-account. Switching accounts does not carry metadata.
-- All errors are caught and returned via `DriveSyncRunResult.failed`. Do not surface raw exceptions
-  to UI.
+- All errors are caught and returned via the DriveSyncRunResult failed path. Do not surface raw
+  exceptions to UI.
 - Restore replaces local data ENTIRELY (no merge). The current impl is replacement-only.
-- Restore side effect MUST be processed (`drive_sync_runtime_effects.dart`) or UI shows stale data.
+- Restore side effect MUST be processed by the runtime effects helper or UI shows stale data.
 
 ## Routes
 
 | Route                    | Purpose                 | Constant                                                                               |
 |--------------------------|-------------------------|----------------------------------------------------------------------------------------|
 | `/settings`              | Settings root           | `RoutePaths.settings`, `RouteNames.settings`                                           |
-| `/settings/account`      | Account + sync settings | segment `RoutePaths.settingsAccountSegment`, name `RouteNames.settingsAccount`         |
+| /settings/account        | Account + sync settings | segment RoutePaths.settingsAccountSegment, name RouteNames.settingsAccount         |
 | `/settings/learning`     | Study defaults          | segment `RoutePaths.settingsLearningSegment`, name `RouteNames.settingsLearning`       |
 | `/settings/audio-speech` | TTS settings            | segment `RoutePaths.settingsAudioSpeechSegment`, name `RouteNames.settingsAudioSpeech` |
 
@@ -490,7 +478,7 @@ Both account and Drive sync UI live on the Account settings screen.
 
 ### Account settings screen
 
-`AccountSettingsScreen` renders `AccountSettingsGroup` and `DriveSyncSettingsGroup`.
+AccountSettingsScreen renders AccountSettingsGroup and DriveSyncSettingsGroup.
 
 Account section:
 
@@ -517,14 +505,14 @@ the account is `signedIn` with Drive authorized and the status allows a manual o
 
 ### Web platform
 
-Has a separate sign-in button (`google_account_web_button_web.dart`). `requiresPlatformSignInButton`
-on `GoogleAccountAuthService` indicates whether to render the platform-provided widget vs. a custom
+Has a separate sign-in button (google_account_web_button_web.dart). requiresPlatformSignInButton
+on the Google auth gateway indicates whether to render the platform-provided widget vs. a custom
 button.
 
 ## Required UI states
 
 - Loading: status load in progress.
-- Each `AccountLinkStatus` and `DriveSyncStatusKind` value: explicit UI mapping.
+- Each AccountLinkStatus and DriveSyncStatusKind value: explicit UI mapping.
 - Action in progress: disable triggers, show indicator.
 - Action result: success feedback or error feedback.
 - Cross-device warning when `remoteIsFromOtherDevice` and upload would overwrite.
@@ -540,13 +528,13 @@ button.
 
 - Account link MUST stay in SharedPreferences. Moving it to Drift would break per-account database
   isolation.
-- Database file name comes from `AccountDatabaseContext.databaseName`. Do not construct elsewhere.
-- Do not add a second cloud provider without extending `CloudProvider` enum, `CloudAccountStore`
+- Database file name comes from AccountDatabaseContext.databaseName. Do not construct elsewhere.
+- Do not add a second cloud provider without extending the CloudProvider enum, CloudAccountStore
   schema, and adding a new auth service.
 - Do not request additional OAuth scopes beyond Drive AppData without security review and updating
-  `googleDriveAppDataScope`.
-- Restore effect (`DriveSyncRestoreEffect`) MUST be observed by the presentation layer. Skipping it
-  leaves UI bound to a stale `AppDatabase`.
+  googleDriveAppDataScope.
+- Restore effect (DriveSyncRestoreEffect) MUST be observed by the presentation layer. Skipping it
+  leaves UI bound to a stale AppDatabase.
 - Manifest version, snapshot format version, and account link schema version are independent
   integers. Bump only the relevant one when changing format.
 - All sync errors must funnel through `DriveSyncRunResult.failed` with a user-safe message. No raw
@@ -563,11 +551,11 @@ button.
 
 **Wireframes:**
 
-- `docs/wireframes/19-settings-account.md` — signed-in/out states, fingerprint match indicator,
+- docs/wireframes/19-settings-account.md — signed-in/out states, fingerprint match indicator,
   upload/restore controls, pre-snapshot notice
-- `docs/wireframes/23-onboarding.md` — Future full onboarding may delegate restore entry to this
+- docs/wireframes/23-onboarding.md — Future full onboarding may delegate restore entry to this
   Account Settings flow; V1 has no standalone onboarding route or restore wizard
-- `docs/wireframes/24-shared-dialogs.md` §restore-warning (two-tier with 5s timeout),
+- docs/wireframes/24-shared-dialogs.md §restore-warning (two-tier with 5s timeout),
   §delete-confirm (strong variant for account removal with typed ERASE confirmation)
 
 **Schema:**
@@ -592,12 +580,12 @@ button.
 
 **Source files to inspect:**
 
-- `lib/domain/usecases/cloud_account_usecases.dart`
-- `lib/domain/usecases/drive_sync_usecases.dart`
-- `lib/data/repositories/google_drive_sync_repository.dart`
-- `lib/data/sync/**` (snapshot codec, snapshot gateways, metadata, manifest JSON)
-- `lib/presentation/features/settings/screens/account_settings_screen.dart`
-- `lib/presentation/features/settings/widgets/account_settings_group.dart`
-- `lib/presentation/features/settings/widgets/drive_sync_settings_group.dart`
-- `lib/presentation/features/settings/viewmodels/account_settings_viewmodel.dart`
-- `lib/presentation/features/settings/viewmodels/drive_sync_settings_viewmodel.dart`
+- cloud-account use-case bundle
+- drive-sync use-case bundle
+- Google Drive sync repository
+- drive-sync snapshot / gateway / metadata / manifest JSON modules
+- account settings screen
+- account settings group
+- drive sync settings group
+- account settings viewmodel
+- drive sync settings viewmodel

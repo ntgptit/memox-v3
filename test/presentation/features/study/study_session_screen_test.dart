@@ -1182,7 +1182,11 @@ void main() {
       expect(find.byType(MxEmptyState), findsOneWidget);
       expect(find.text(l10n.studyResultNotCompleteTitle), findsOneWidget);
       expect(
-        find.textContaining(l10n.studyResultNotCompleteMessage),
+        find.textContaining(
+          l10n.studyResultNotCompleteMessageWithStatus(
+            l10n.studyResultInProgress,
+          ),
+        ),
         findsOneWidget,
       );
       expect(find.text(l10n.studyResultCompleted), findsNothing);

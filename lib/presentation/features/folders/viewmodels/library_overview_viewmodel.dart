@@ -62,7 +62,7 @@ Stream<LibraryOverviewReadModel> libraryOverviewQuery(Ref ref) {
       .map(
         (Result<LibraryOverviewReadModel> result) => result.fold(
           // Surface the Failure as AsyncError for the screen's error section.
-          // ignore: only_throw_errors
+          // ignore: only_throw_errors -- reason: Riverpod stream query surfaces repository Failure as AsyncError.
           (Failure failure) => throw failure,
           (LibraryOverviewReadModel model) => model,
         ),

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-12
 route: /progress
 source_specs:
   - docs/business/engagement/dashboard-engagement.md
@@ -13,250 +13,243 @@ source_specs:
 
 Long-form analytics surface. Dashboard shows "today"; Progress shows trends and totals. Read-only.
 
-Status in `docs/business/system/overview.md`: "Progress tracking — Partially specified (data only)".
-> **Drift correction (2026-06-10):** earlier revisions of this section described a shipped
-> read-only Progress Overview screen ("Prompt 20": `ProgressScreen`,
-> `lib/presentation/features/progress/`, `progressOverviewProvider`,
-> `ResumeStudySessionUseCase.listActiveSessions()`, ready/failed session cards, and dedicated
-> progress tests). **None of that exists in this codebase** — `/progress` renders
-> `RoutePlaceholder` (`lib/app/router/app_router.dart`) and there is no
-> `lib/presentation/features/progress/` feature, no progress provider, and no
-> `ResumeStudySessionUseCase`. Those claims described a previous project iteration. The Progress
-> screen is planned as WBS 7.x in `docs/project-management/wbs.md` (aggregate BE read model first,
-> then FE wiring). **Treat every "Current" row in the tables below as describing that previous
-> iteration's target behavior, NOT this repo's state** — in this repo only the placeholder route +
-> shell navigation are Current.
+> **Status (2026-06-12):** Progress V1 is implemented. `/progress` renders `ProgressScreen`
+> (`lib/presentation/features/progress/screens/progress_screen.dart`) with range tabs,
+> cards-studied chart, accuracy + delta + sparkline, box distribution, streak, and card-state
+> counts, backed by `LoadProgressOverviewUseCase` →
+> `ProgressRepository.loadProgressOverview`. The kit mock
+> (`docs/system-design/MemoX Design System/ui_kits/mobile/shots/19-progress--*.png`) is the
+> canonical visual reference; goldens live at
+> `test/presentation/features/progress/goldens/`.
 
-## V1 verification status (legacy table — see drift correction above)
+## V1 verification status
 
-| Section / behavior                       | Status                                      | Current owner                                                                                                | Notes                                                                                                                                                                                                                                                       |
-|------------------------------------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `/progress` route                        | Current                                     | `RouteNames.progress` / `RoutePaths.progress` in `lib/app/router/route_names.dart`; `progressBranchRoutes()` | Direct route opens `ProgressScreen` inside the shell. No new top-level route was added.                                                                                                                                                                     |
-| Bottom/app navigation to Progress        | Current                                     | `AppNavigation.goProgress()` + shell branch                                                                  | Covered by router tests; shell navigation stays visible on `/progress`.                                                                                                                                                                                     |
-| Read-only screen                         | Current                                     | `lib/presentation/features/progress/screens/progress_screen.dart`                                            | No edit actions, no Flashcard History, no Global Search, no Drive sync, no Settings mutation, no tag-scoped study.                                                                                                                                          |
-| Initial loading                          | Current                                     | `MxRetainedAsyncState` in `ProgressOverviewSection`                                                          | First load shows shared loading UI, not a blank screen.                                                                                                                                                                                                     |
-| Error / retry                            | Current                                     | `MxRetainedAsyncState` + `MxErrorState`                                                                      | Repository/provider failure maps to safe shared error state with Try again; raw exception text is not shown by default.                                                                                                                                     |
-| Empty state                              | Current                                     | `ActiveSessionsEmptyState`                                                                                   | Empty means no active/resumable study sessions. It does not invent fake analytics data. CTA opens Library.                                                                                                                                                  |
-| Due/new/mastery summary                  | Current                                     | `progressOverviewProvider` → `WatchLibraryOverviewUseCase.execute(ContentQuery())`                           | Renders Due now, New cards available, and Mastery from the same library overview read model used by the app's content layer.                                                                                                                                |
-| Total cards                              | Current (data loaded), not directly labeled | `ProgressOverviewState.cardCount`                                                                            | Loaded from `LibraryOverviewReadModel.cardCount`; V1 UI uses it indirectly through library/mastery context and does not display a separate "Total cards" stat.                                                                                              |
-| Active / ready / failed session counts   | Current                                     | `ResumeStudySessionUseCase.listActiveSessions()`                                                             | Renders active session summary plus per-session cards.                                                                                                                                                                                                      |
-| Recent active session list               | Current                                     | `StudySessionCard`                                                                                           | Shows active/ready/failed sessions ordered by repository result, with localized status, current card when present, formatted started date/time, progress steps, Continue/Finalize/Retry/Cancel actions. This is not historical completed-session analytics. |
-| Cards-studied chart                      | Future                                      | Not implemented                                                                                              | No daily attempt aggregate use case/repository exists in V1.                                                                                                                                                                                                |
-| Accuracy chart / review accuracy         | Future                                      | Not implemented                                                                                              | No range accuracy aggregate is rendered.                                                                                                                                                                                                                    |
-| Box distribution                         | Future                                      | Not implemented                                                                                              | `flashcard_progress.current_box` exists for SRS, but Progress does not render the 1-8 distribution yet.                                                                                                                                                     |
-| Streak / daily goal / engagement widgets | Future                                      | Not implemented                                                                                              | Engagement remains out of Prompt 20 scope. Do not implement from this wireframe target block.                                                                                                                                                               |
-| Suspended / buried links                 | Future                                      | Not implemented                                                                                              | No `/library/search?filter=...` Global Search route is available in V1.                                                                                                                                                                                     |
-| Flashcard History / study history list   | Future                                      | Not implemented                                                                                              | Flashcard History remains Future Proposal and must not be exposed from Progress.                                                                                                                                                                            |
+| Section / behavior                       | Status  | Current owner                                                                                                | Notes |
+|------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------|-------|
+| `/progress` route                        | Current | `RouteNames.progress` / `RoutePaths.progress`; `progressRoutes()` in `lib/presentation/features/progress/routes/progress_routes.dart` | Shell branch renders `ProgressScreen`; placeholder removed. |
+| Bottom/app navigation to Progress        | Current | Shell branch + bottom nav                                                                                    | Shell navigation stays visible on `/progress`. |
+| Read-only screen                         | Current | `ProgressScreen`                                                                                             | No edit actions, no Flashcard History, no Global Search entry, no Settings mutation. |
+| Range tabs (Week / Month / All time)     | Current | `ProgressRangeTabs` + `ProgressRangeController`                                                              | Default Week. Week = last 7 local days; Month = last 28 local days (4 full weeks, matches the 28-bar mock chart); All time = whole history, no day buckets. |
+| Cards-studied section                    | Current | `ProgressCardsStudiedCard` + `ProgressBarChart`                                                              | Total + per-day bar chart. Today's bar full primary, past bars softened, zero days show a thin stub. Chart hidden for All time. |
+| Accuracy section                         | Current | `ProgressAccuracyCard` + `ProgressSparkline`                                                                 | Range accuracy %, delta vs previous range (needs previous-range attempts; hidden for All time), per-day sparkline (needs ≥ 2 distinct study days). |
+| Box distribution                         | Current | `ProgressBoxDistributionCard`                                                                                | Total + B1..B8 horizontal bars; B1–B5 primary, B6–B8 mastery green, opacity ramps toward B8. Snapshot, not range-filtered. |
+| Streak section                           | Current | `ProgressStreakCard`; computed in `ProgressRepositoryImpl._computeStreak` from `study_attempts`              | Study-day streak (any attempt counts), NOT the engagement daily-goal streak. An unfinished today does not break the current streak. |
+| Suspended / buried counts                | Current | `ProgressCardStatesCard`                                                                                     | Read-only counts. Navigation chevrons to filtered lists are Future (WBS 2.17.x). |
+| Per-section empty/insufficient states    | Current | `ProgressHintBox`, `ProgressInfoBanner`                                                                      | Data-driven: each section shows its own dashed hint box when its slice is empty; chart needs ≥ 3 distinct study days (`kProgressTrendMinDays`). |
+| Loading state                            | Current | `MxRetainedAsyncState` skeleton builder                                                                      | Tabs stay visible above three skeleton section cards. |
+| Error / retry                            | Current | `MxErrorState` via `MxRetainedAsyncState`                                                                    | Failure maps to the shared retryable error state; raw exception text is never shown. |
+| Help (?) app-bar action                  | Future  | Not implemented                                                                                              | Visible in the kit mock; no help content exists yet. |
+| Suspended/buried navigation links        | Future  | Not implemented                                                                                              | Mock shows chevrons; filtered flashcard-list navigation is WBS 2.17.x. |
+| Daily goal / engagement widgets          | Future  | Not implemented                                                                                              | Engagement goal streak stays on Dashboard scope. |
+| Flashcard History / study history list   | Future  | Not implemented                                                                                              | Flashcard History remains a Future Proposal and must not be exposed from Progress. |
+| Tap chart bar/point interactions         | Future  | Not implemented                                                                                              | Read-only charts in V1. |
 
 ## V1 metric semantics
 
-| Metric               | Empty value                  | Calculation / source                                                                                        | Test coverage                                                                                          |
-|----------------------|------------------------------|-------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| Due now              | `0`                          | `overdueCount + dueTodayCount` from `LibraryOverviewReadModel`                                              | `test/presentation/progress_session_notifier_test.dart`, `test/presentation/progress_screen_test.dart` |
-| New cards available  | `0`                          | `newCardCount` from `LibraryOverviewReadModel`                                                              | Same as above                                                                                          |
-| Mastery              | `0%`                         | `masteryPercent` from `LibraryOverviewReadModel`                                                            | Same as above                                                                                          |
-| Active sessions      | `0`                          | `sessions.length` from `ResumeStudySessionUseCase.listActiveSessions()`                                     | Same as above + integration flow tests                                                                 |
-| Ready sessions       | `0`                          | Count of `SessionStatus.readyToFinalize` snapshots                                                          | Same as above                                                                                          |
-| Failed sessions      | `0`                          | Count of `SessionStatus.failedToFinalize` snapshots                                                         | Same as above                                                                                          |
-| Per-session progress | `0` when total steps are `0` | `completedAttempts / max(summary.totalCards, sessionFlashcards.length) * totalModeCount`, clamped to `0..1` | `test/presentation/progress_screen_test.dart`                                                          |
+| Metric                | Empty value | Calculation / source                                                                                            | Test coverage |
+|-----------------------|-------------|------------------------------------------------------------------------------------------------------------------|----------------|
+| Cards studied (range) | `0` + hint  | Attempt count bucketed per local day from `study_attempts` (`progressAttemptsBetween`); All time uses whole-history totals | `test/data/repositories/progress_repository_overview_test.dart` |
+| Accuracy (range)      | hint box    | correct / total within range; correct = result IN (`perfect`, `initial_passed`, `recovered`)                     | Same + `test/presentation/features/progress/progress_screen_test.dart` |
+| Accuracy delta        | hidden      | Range accuracy minus previous-range accuracy (same length window immediately before); hidden when previous range has no attempts or range is All time | Same |
+| Box distribution      | `0` + hint  | `flashcard_progress` GROUP BY `box_number`, zero-filled 1..8; integrity failure on out-of-range boxes             | `test/data/repositories/progress_repository_impl_test.dart` |
+| Current streak        | `0` + hint  | Consecutive local study days ending today (or yesterday when today has no attempt yet), from raw `study_attempts` timestamps grouped in Dart | `test/data/repositories/progress_repository_overview_test.dart` |
+| Longest streak        | `0` + hint  | Longest consecutive local-day run across whole history                                                            | Same |
+| Suspended count       | `0`         | `flashcard_progress WHERE is_suspended = TRUE`                                                                     | Same |
+| Buried today count    | `0`         | `flashcard_progress WHERE buried_until > now`                                                                      | Same |
+
+Local-day grouping happens in Dart (`toLocal()`), not SQL: the sqlite3 build used by Flutter
+tests on Windows returns NULL for the `'localtime'` modifier
+(see `lib/data/datasources/local/drift/progress_queries.drift`).
 
 ## Layout
 
+Canonical visual reference: `docs/system-design/MemoX Design System/ui_kits/mobile/shots/19-progress--*.png`
+(week, month, empty, insufficient, partial, loading, error × light/dark) and
+`docs/system-design/MemoX Design System/ui_kits/mobile/specs/19-progress.md` (DOM spec).
+
 ```
 ┌───────────────────────────────────────┐
-│ Progress                              │  ← App bar, no actions
+│ Progress                              │  ← App bar (help icon: Future)
 ├───────────────────────────────────────┤
-│                                       │
-│ ┌─[ Week ]─[ Month ]─[ All ]─────────┐│  ← Time range chips
-│ └───────────────────────────────────┘│
-│                                       │
+│ [ Week ][ Month ][ All time ]         │  ← Segmented range tabs
 │ ┌───────────────────────────────────┐ │
-│ │  Cards studied                    │ │
-│ │  ┌──────────────────────────────┐ │ │
-│ │  │   ▁▂▄▇▇▆▃        bar chart   │ │ │  ← daily totals
-│ │  └──────────────────────────────┘ │ │
-│ │  124 this week  (avg 17/day)      │ │
+│ │ CARDS STUDIED                     │ │
+│ │ 92                                │ │
+│ │ over the past 7 days              │ │
+│ │  ▂▄_▇▅▃█   (bar chart)            │ │
+│ │  M T W T F S S                    │ │
 │ └───────────────────────────────────┘ │
-│                                       │
 │ ┌───────────────────────────────────┐ │
-│ │  Accuracy                         │ │
-│ │  ┌──────────────────────────────┐ │ │
-│ │  │   ── line ──                 │ │ │
-│ │  └──────────────────────────────┘ │ │
-│ │  88% this week  ↑ 3% vs prev      │ │
+│ │ ACCURACY                          │ │
+│ │ 73%                               │ │
+│ │ ↗ +4% vs previous week            │ │
+│ │  ── sparkline ──●                 │ │
 │ └───────────────────────────────────┘ │
-│                                       │
 │ ┌───────────────────────────────────┐ │
-│ │  Box distribution                 │ │
-│ │  Box 1  ████░░░░░  120            │ │  ← Per-box card count
-│ │  Box 2  ███░░░░░░   95            │ │
-│ │  Box 3  █████░░░░  140            │ │
-│ │  Box 4  ██░░░░░░░   55            │ │
-│ │  Box 5  ███░░░░░░   80            │ │
-│ │  Box 6  ████░░░░░  110            │ │
-│ │  Box 7  █████░░░░  150            │ │
-│ │  Box 8  ███░░░░░░   88            │ │
+│ │ BOX DISTRIBUTION                  │ │
+│ │ 414  total cards across boxes     │ │
+│ │ B1 ████░░░░░░░░░░░░░░         24  │ │
+│ │ …   (B1–B5 primary, B6–B8 green)  │ │
+│ │ least known          best known   │ │
 │ └───────────────────────────────────┘ │
-│                                       │
 │ ┌───────────────────────────────────┐ │
-│ │  Streak                           │ │
-│ │  🔥 7 days current                │ │
-│ │  ⭐ 14 days longest                │ │
+│ │ STREAK                            │ │
+│ │ [🔥 Current 6 days][🏆 Longest 14]│ │
 │ └───────────────────────────────────┘ │
-│                                       │
+│ CARD STATES                           │
 │ ┌───────────────────────────────────┐ │
-│ │  Suspended cards            42 ▸  │ │  ← Tap → /library/.../?filter=suspended
-│ │  Buried cards (today)        8 ▸  │ │
+│ │ ⏸ Suspended …            12       │ │  ← counts only; chevron link Future
+│ │ 🌙 Buried (today) …       3       │ │
 │ └───────────────────────────────────┘ │
-│                                       │
+│ Read-only summary · last 7 days       │  ← footer, range-specific
 ├───────────────────────────────────────┤
-│ 🏠 Home  📚 Library  📈 Progress  ⚙️  │
+│ 🏠 Home  📚 Library  📈 Stats  ⚙️     │
 └───────────────────────────────────────┘
 ```
 
 ## Inputs
 
-| Param                          | Source           | Notes                                    |
-|--------------------------------|------------------|------------------------------------------|
-| `range` (optional query param) | URL or in-memory | `week` / `month` / `all`; default `week` |
+| Param  | Source    | Notes                                                       |
+|--------|-----------|--------------------------------------------------------------|
+| range  | in-memory | `ProgressRangeController` (Riverpod); default `week`. No URL query param in V1. |
 
-## Target analytics data to load (Future)
+## Data loading
 
-The following table describes the analytics target, not the current V1 data path. V1 currently loads
-`LibraryOverviewReadModel` for due/new/mastery/card counts and `StudySessionSnapshot` rows for
-active session recovery.
+One `LoadProgressOverviewUseCase.call(now, range)` per range selection composes everything the
+screen renders (`ProgressOverview`): activity (day buckets + previous-range totals), box
+distribution, streak, and card-state counts. The repository runs the DAO queries in parallel.
+Data reloads on screen entry, range switch, and Retry; V1 does not live-refresh on new attempts.
 
-| Data                                | Source                                                        | Refresh trigger                         |
-|-------------------------------------|---------------------------------------------------------------|-----------------------------------------|
-| Daily attempt counts in range       | `study_attempts` GROUP BY local-day, filtered by attempted_at | range chip change + new attempt         |
-| Daily accuracy in range             | `study_attempts` aggregated (perfect+initial_passed) / total  | same                                    |
-| Previous-range accuracy (for delta) | same query offset by range length                             | range change                            |
-| Box distribution (1-8 counts)       | `flashcard_progress` GROUP BY current_box                     | invalidate on flashcard_progress change |
-| Current streak                      | `engagement_preferences`                                      | watch                                   |
-| Longest streak                      | `engagement_preferences`                                      | watch                                   |
-| Suspended count                     | `flashcard_progress WHERE is_suspended = 1`                   | watch                                   |
-| Buried today count                  | `flashcard_progress WHERE buried_until > now`                 | watch                                   |
-
-All queries are independent providers; UI fills in progressively.
+| Data                                | Source                                                                  |
+|-------------------------------------|--------------------------------------------------------------------------|
+| Daily attempt counts + accuracy     | `progressAttemptsBetween` over `study_attempts`, bucketed per local day in Dart |
+| Previous-range totals (for delta)   | Same single query window (previous range start → range end), split in Dart |
+| Box distribution (1-8 counts)       | `progressBoxDistribution` over `flashcard_progress`                      |
+| Streak (current + longest)          | `progressAttemptTimestamps` (raw), local-day grouping + runs in Dart     |
+| Suspended count                     | `progressSuspendedCount`                                                 |
+| Buried today count                  | `progressBuriedTodayCount` (`buried_until > now`)                        |
 
 ## Forbidden
 
 - ❌ Add edit actions. Progress is strictly read-only.
-- ❌ Compute charts from scratch on every paint. Cache aggregates 60s.
-- ❌ Use one shared empty state for all charts; each chart handles empty independently.
+- ❌ Use one shared empty state for all sections; each section handles empty independently.
 - ❌ Bury count copy says "this week" — buried is daily by definition.
 - ❌ Sort box distribution by count; sort by box number (1→8) for predictable scan.
+- ❌ Render the streak as the engagement daily-goal streak; Progress shows the study-day streak.
 
 ## Components
 
-| Component              | Spec                                                                                                                                                                                 |
-|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Time range chips       | Three chips: Week (last 7 local-days), Month (last 30), All. Default: Week.                                                                                                          |
-| Cards studied chart    | Bar chart, one bar per day in range. Y-axis = attempts count.                                                                                                                        |
-| Accuracy chart         | Line chart, daily accuracy %. Sub-label compares to previous range.                                                                                                                  |
-| Box distribution       | Static horizontal bars, one per box (1-8). Shows current card count per box. Doesn't filter by range.                                                                                |
-| Streak card            | Current and longest. Mirror of Dashboard but in cumulative context.                                                                                                                  |
-| Suspended/buried links | Tap → flashcard list with appropriate filter (note: "suspended" is global across all decks; this link opens a global suspended view if implementable, else falls back to deck list). |
+| Component              | Spec                                                                                                   |
+|------------------------|----------------------------------------------------------------------------------------------------------|
+| Range tabs             | Segmented control: Week (last 7 local days), Month (last 28), All time. Default Week.                  |
+| Cards studied chart    | Bar chart, one bar per day in range; hidden for All time. Needs ≥ 3 distinct study days, else hint + trend banner. |
+| Accuracy section       | Accuracy %, delta vs previous range (green up / error down), sparkline (≥ 2 distinct study days).      |
+| Box distribution       | Horizontal bars per box (1-8); snapshot, not range-filtered; legend least/best known.                  |
+| Streak card            | Two tiles: current and longest study-day streaks.                                                       |
+| Card states card       | Suspended + buried-today counts, read-only. Chevron navigation Future.                                  |
+| Hint box               | Dashed-border rounded box, centered muted copy; one per empty section slice.                            |
 
 ## States
 
-| State             | Trigger                | Behavior                                                                    |
-|-------------------|------------------------|-----------------------------------------------------------------------------|
-| Loading           | Initial fetch          | Skeletons per card.                                                         |
-| Empty             | Zero attempts in range | Show empty state per chart: "No data yet. Start studying to see trends."    |
-| Populated         | Normal                 | Charts visible.                                                             |
-| Insufficient data | < 2 days of data       | Charts show single point/bar with hint "Track for more days to see trends". |
+| State             | Trigger                                  | Behavior                                                                              |
+|-------------------|------------------------------------------|----------------------------------------------------------------------------------------|
+| Loading           | Initial fetch / range switch first load  | Range tabs stay visible above three skeleton section cards.                            |
+| Empty             | A section's data slice is empty          | That section shows its own hint box (`progress*EmptyHint` keys); other sections render. |
+| Populated         | Normal                                   | All sections visible; footer states the range.                                         |
+| Insufficient data | < 3 distinct study days in range         | Chart swaps for `progressChartInsufficientHint` + `progressTrendBanner`; accuracy still renders from existing attempts. |
+| Error             | Overview load fails                      | `MxErrorState` with `progressErrorTitle` / `progressErrorMessage` + Retry; retry reloads. |
+
+The kit's Empty / Insufficient / Partial screen variants are data-driven combinations of the
+per-section states above, not separate screen modes.
+
+> **Mock conflict (documented, not implemented):** the kit "partial" mock shows a populated
+> cards-studied chart next to an accuracy hint reading "Not enough answered cards yet to show
+> accuracy." With real data that combination is unreachable — any charted attempt makes accuracy
+> computable — so V1 keeps one accuracy empty hint (`progressAccuracyEmptyHint`) shown only when
+> the range has zero attempts. Likewise the "insufficient" mock renders a sparkline with one day
+> of data; V1 requires ≥ 2 distinct study days for the sparkline.
 
 ## Actions
 
-| Action                           | Trigger | Result                                                                                                                                        |
-|----------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| Tap time range chip              | Tap     | Future analytics target. Not rendered in V1.                                                                                                  |
-| Tap suspended link               | Tap     | Future target. Not rendered in V1 because Global Search / global filtered list is Future.                                                     |
-| Tap buried link                  | Tap     | Future target. Not rendered in V1 because Global Search / global filtered list is Future.                                                     |
-| Tap any chart bar/point          | Tap     | Future/optional target. Not rendered in V1.                                                                                                   |
-| Tap View library empty-state CTA | Tap     | Current V1: navigate to Library via `AppNavigation.goLibrary()`.                                                                              |
-| Tap Continue on active session   | Tap     | Current V1: push study session route for the selected session.                                                                                |
-| Tap Finalize / Retry / Cancel    | Tap     | Current V1: call study use case through `ProgressSessionActionController`, then refresh study-session revision. Cancel requires confirmation. |
+| Action                  | Trigger | Result                                                              |
+|-------------------------|---------|----------------------------------------------------------------------|
+| Tap range tab           | Tap     | Current: reload overview for the selected range.                    |
+| Tap Retry on error      | Tap     | Current: invalidate the overview query and reload.                  |
+| Tap suspended/buried row| Tap     | Future: navigate to filtered flashcard list (WBS 2.17.x). V1 rows are not tappable. |
+| Tap chart bar/point     | Tap     | Future/optional. Not rendered in V1.                                |
 
 ## Dialogs and bottom-sheets used
 
-Current V1 uses `MxConfirmationDialog` for cancelling an active/ready/failed study session from a
-Progress session card. No bottom sheet is native to this screen. Future analytics chart interactions
-do not add dialogs unless promoted by a later scope decision.
+None in V1.
 
 ## Navigation in
 
-- Bottom nav tap "Progress".
+- Bottom nav tap "Stats" (Progress branch).
 
 ## Navigation out
 
-- Tabs → other top-level destinations.
-- Suspended/buried row → flashcard list (filtered).
+- Tabs → other top-level destinations. No other exits in V1.
 
 ## Responsive
 
-- ≥600dp: charts arranged in 2 columns. Box distribution stays full-width below.
-
-## Performance
-
-- Each chart: separate stream query. Don't block on slowest.
-- Cache aggregates per range for 60s; invalidate on new attempt.
-- Box distribution uses `flashcard_progress` aggregate, very cheap.
+- ≥600dp: charts arranged in 2 columns. Box distribution stays full-width below. (Target; V1 is single-column.)
 
 ## Accessibility
 
-- Charts have textual summary above (e.g., "124 this week, average 17 per day").
-- Time range chips selectable via keyboard.
-- Box distribution announces each box: "Box 1, 120 cards".
+- Each section leads with a textual total above the chart (e.g., "92 / over the past 7 days").
+- Range tabs are tappable Material surfaces via `MxTappable`.
+- Box distribution rows render box label + count as text.
 
 ## Rules
 
-- Range chips default Week.
+- Range tabs default Week.
 - Box distribution does NOT filter by range (it's a snapshot).
-- Charts MUST handle empty data gracefully (no NaN, no crash).
+- Charts MUST handle empty data gracefully (no NaN, no crash) — zero-attempt days render stubs.
 - Suspended/buried counts include all decks (account-scoped global).
+- Streak = study-day streak from `study_attempts`; the engagement daily-goal streak is a different metric.
 
 ## Agent rule
 
 - Do NOT add edit actions here. Progress is read-only.
-- Do NOT compute charts from scratch on every paint; cache.
-- Empty state per chart, not one shared empty state across all charts (each chart fails
-  independently).
+- Empty state per section, not one shared empty state across all sections.
 - Buried count uses `buried_until > now` filter; "today" copy is correct only because bury duration
   is fixed to next-midnight.
+- Do NOT group attempts by local day in SQL; the test-environment sqlite returns NULL for
+  `'localtime'`. Group in Dart via `toLocal()`.
 
 ## Implementation refs
 
 **Business specs:**
 
-- `docs/business/engagement/dashboard-engagement.md` (streak, goal)
+- `docs/business/engagement/dashboard-engagement.md` (engagement streak — distinct metric)
 - `docs/business/srs/srs-review.md` (box distribution semantics)
 
-**Decision rows:**
-
-- Progress Overview section, Resume sessions section, shared UI loading/error rows, Engagement
-  section for Future streak/daily-goal, SRS section for Future box distribution.
+**Decision rows:** P1–P18 in `docs/decision-tables/memox-core-decision-table.md`.
 
 **Schema / storage:**
 
-- Target: summary counts via library overview queries; session info via persisted
-  `study_sessions` / `study_session_items`; analytics via `study_attempts` (range aggregates) and
-  `flashcard_progress` (box distribution snapshot, `is_suspended`, `buried_until`).
+- `study_attempts` (range aggregates, streak), `flashcard_progress` (box distribution snapshot,
+  `is_suspended`, `buried_until`). Queries: `lib/data/datasources/local/drift/progress_queries.drift`.
 
-**Contracts:** `docs/contracts/usecase-contracts/srs.md`,
-`docs/contracts/usecase-contracts/engagement.md`. A dedicated progress repository/use-case
-contract does not exist yet; define it with WBS 7.4.1.
+**Code paths:**
 
-**Code paths (target — only the router entry exists today):**
+- `lib/presentation/features/progress/routes/progress_routes.dart` → `/progress`
+- `lib/presentation/features/progress/screens/progress_screen.dart`
+- `lib/presentation/features/progress/viewmodels/progress_viewmodel.dart`
+- `lib/presentation/features/progress/widgets/progress_range_tabs.dart`
+- `lib/presentation/features/progress/widgets/progress_activity_sections.dart`
+- `lib/presentation/features/progress/widgets/progress_summary_sections.dart`
+- `lib/domain/usecases/progress/load_progress_overview_usecase.dart`
+- `lib/data/repositories/progress_repository_impl.dart`
+- `lib/data/datasources/local/daos/progress_dao.dart`
 
-- `lib/app/router/app_router.dart` → `/progress` currently renders `RoutePlaceholder` (Current)
-- `lib/presentation/features/progress/**` — target feature folder (does NOT exist yet; WBS 7.5.x)
-- `lib/domain/usecases/folder/watch_library_overview_usecase.dart` (existing overview read model)
-- `lib/domain/study/usecases/study_usecases.dart` (existing session use cases)
-- `lib/app/router/route_names.dart` → `RouteNames.progress`
+**Tests:**
+
+- `test/data/repositories/progress_repository_overview_test.dart` (BE: buckets, streak, card states)
+- `test/presentation/features/progress/progress_screen_test.dart` (all screen states + routing)
+- `test/presentation/features/progress/progress_screen_golden_test.dart` (visual parity goldens, light/dark × 7 states)
 
 **Related wireframes:**
 
-- `docs/wireframes/01-dashboard.md` — Dashboard streak chip uses same source of truth
-- `docs/wireframes/06-flashcard-list.md` — suspended/buried links navigate here (filtered)
+- `docs/wireframes/01-dashboard.md` — Dashboard engagement streak is a separate metric
+- `docs/wireframes/06-flashcard-list.md` — Future suspended/buried links navigate there (filtered)

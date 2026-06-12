@@ -16,7 +16,9 @@ Widget _wrap({ThemeData? theme}) => MaterialApp(
           onPressed: () => showMxFolderDeleteDialog(
             context,
             folderName: 'TOPIK II',
-            summaryText: '5 decks',
+            removalMessage: AppLocalizations.of(
+              context,
+            ).folderDeleteDialogRemovalMessage('5 decks'),
             title: AppLocalizations.of(context).folderDeleteDialogTitle,
             reassuranceText: AppLocalizations.of(
               context,

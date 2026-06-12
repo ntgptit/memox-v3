@@ -147,10 +147,11 @@ class TagRepositoryImpl implements TagRepository {
 
       final List<String> sourceList = normalizedSources.toList(growable: false);
       final flashcardIdExpr = _dao.flashcardTags.flashcardId;
-      final List<TypedResult> rows = await (_dao.selectOnly(
-        _dao.flashcardTags,
-      )..addColumns(<Expression<Object>>[flashcardIdExpr])
-        ..where(_dao.flashcardTags.tag.isIn(sourceList))).get();
+      final List<TypedResult> rows =
+          await (_dao.selectOnly(_dao.flashcardTags)
+                ..addColumns(<Expression<Object>>[flashcardIdExpr])
+                ..where(_dao.flashcardTags.tag.isIn(sourceList)))
+              .get();
       final List<String> cardIds = <String>{
         for (final TypedResult row in rows) row.read(flashcardIdExpr)!,
       }.toList(growable: false);

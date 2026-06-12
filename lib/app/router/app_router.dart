@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/app_shell.dart';
 import 'package:memox/app/router/redirect.dart';
-import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
 import 'package:memox/presentation/features/flashcards/routes/flashcard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
+import 'package:memox/presentation/features/progress/routes/progress_routes.dart';
 import 'package:memox/presentation/features/settings/routes/settings_routes.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -64,14 +64,7 @@ StatefulShellRoute _shellRoute() => StatefulShellRoute.indexedStack(
     ),
     StatefulShellBranch(
       navigatorKey: _progressNavigatorKey,
-      routes: <RouteBase>[
-        GoRoute(
-          path: RoutePaths.progress,
-          name: RouteNames.progress,
-          builder: (context, state) =>
-              const RoutePlaceholder(routeName: RouteNames.progress),
-        ),
-      ],
+      routes: progressRoutes(),
     ),
     StatefulShellBranch(
       navigatorKey: _settingsNavigatorKey,

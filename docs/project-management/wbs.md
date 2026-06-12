@@ -212,8 +212,9 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 7.2.1 | Progress | Box distribution query BE V1 | BE | Card counts per Leitner box from current progress table + tests | Implemented | 7.1.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | `4d1eba04` | No action |
 | 7.3.1 | Progress | Study statistics BE V1 | BE | Session/attempt-based stats (sessions finished, answers recorded) + tests | Implemented | 4.6.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | `4d1eba04` | No action |
 | 7.4.1 | Progress | Progress read model BE V1 | BE | Combined progress read model + provider wiring | Implemented | 7.1.1, 7.2.1, 7.3.1 | `lib/domain/models/progress_read_model.dart`, `lib/domain/repositories/progress_repository.dart`, `lib/domain/usecases/progress/load_progress_read_model_usecase.dart`, `lib/app/di/progress_providers.dart`, `test/domain/usecases/progress/load_progress_read_model_usecase_test.dart` | `4d1eba04` | No action |
-| 7.5.1 | Progress | Progress screen FE V1 | FE | Replace `/progress` placeholder with real screen (due, box distribution, stats) | Specified | 7.4.1 | `lib/app/router/app_router.dart:72` (placeholder) | TBD | Wire screen to read model; widget tests |
-| 7.5.2 | Progress | Progress states FE | FE | Empty/loading/error states for progress screen | Specified | 7.5.1 | shared `Mx*` state widgets | TBD | Cover states in widget tests |
+| 7.4.2 | Progress | Progress overview read model BE | BE | Range activity (per-local-day buckets + previous-range delta), study-day streak, suspended/buried counts composed into `ProgressOverview` + tests | Implemented | 7.4.1 | `lib/domain/models/progress_read_model.dart`, `lib/domain/types/progress_range.dart`, `lib/domain/usecases/progress/load_progress_overview_usecase.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_overview_test.dart` | TBD | No action |
+| 7.5.1 | Progress | Progress screen FE V1 | FE | `/progress` renders the kit-mock screen: range tabs, cards-studied chart, accuracy + delta + sparkline, box distribution, streak, card states | Implemented | 7.4.2 | `lib/presentation/features/progress/**`, `test/presentation/features/progress/progress_screen_test.dart`, `test/presentation/features/progress/progress_screen_golden_test.dart` | TBD | No action |
+| 7.5.2 | Progress | Progress states FE | FE | Loading/empty/error/insufficient/partial states per kit mock, data-driven per section | Implemented | 7.5.1 | `test/presentation/features/progress/progress_screen_test.dart` (states), goldens for 7 states × light/dark | TBD | No action |
 | 7.6.1 | Progress | Review history query BE | BE | Per-card history (box_before/box_after/last_reset_at) | Blocked | 7.3.1 | `docs/business/history/card-history.md` (requires schema fields not in v4) | TBD | Requires schema migration decision before work |
 | 7.7.1 | Progress | Dashboard/progress consistency | Integration | Same due/progress numbers on dashboard and progress screen | Specified | 7.5.1, 5.2.1 | TBD | TBD | Shared read model or consistency test |
 
@@ -265,7 +266,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 10.1 | Release | MVP smoke path | Integration | Create folder → deck → cards → study → finish → see progress, verified end-to-end | Partial | 2.x, 4.x, 7.5.1 | study/content flows implemented; progress screen missing | TBD | Complete Group 7; then script/checklist the smoke path |
+| 10.1 | Release | MVP smoke path | Integration | Create folder → deck → cards → study → finish → see progress, verified end-to-end | Partial | 2.x, 4.x, 7.5.1 | study/content flows and progress screen implemented; end-to-end script missing | TBD | Script/checklist the smoke path |
 | 10.2 | Release | Android readiness | Integration | DB path, lifecycle, back behavior verified on Android | Specified | 10.1 | `lib/data/datasources/local/connection/database_connection_native.dart` | TBD | Manual verification pass + fixes |
 | 10.3 | Release | Web readiness | Integration | Wasm/worker DB connection verified on web | Partial | 10.1 | `lib/data/datasources/local/connection/database_connection_web.dart` | `68c67656` | Verify persistence + study flow on web |
 | 10.4 | Release | Windows readiness | Integration | Desktop DB + layout verified on Windows | Specified | 10.1 | `lib/data/datasources/local/connection/database_connection_native.dart` | TBD | Manual verification pass + fixes |
@@ -284,7 +285,7 @@ Reprioritized per BA review 2026-06-10: fix the study entry path and protect use
 3. **4.1.4 Folder study CTA FE V1** — same wiring on Folder Detail.
 4. **2.21.1 Folder delete blast-radius confirm FE V1** — delete dialog shows subtree counts;
    pairs with export as the data-safety duo.
-5. **7.5.1 + 7.5.2 Progress screen FE V1** — replace `/progress` placeholder; states; widget tests.
+5. ~~**7.5.1 + 7.5.2 Progress screen FE V1**~~ — done 2026-06-12 (with 7.4.2 overview BE); see §10.
 6. **2.17.1 + 2.17.2 Flashcard status filters** — BE queries then chips/badges.
 7. **8.7.2 Deck export FE V1** — share/save action (needs `share_plus` approval — stop and ask).
 8. **6.6.2 Import duplicate preview FE V1** — surface backend-detected duplicates in preview.

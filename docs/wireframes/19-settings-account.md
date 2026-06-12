@@ -295,7 +295,7 @@ any reason, the entire restore aborts; original data untouched.
 
 **Business specs:**
 
-- `docs/business/account-sync/account-sync.md`
+- docs/business/account-sync/account-sync.md
 
 **Decision rows:**
 
@@ -311,25 +311,25 @@ any reason, the entire restore aborts; original data untouched.
   `schema_version`
 - SharedPreferences: `account.deviceLabel`, `account.lastSyncAt`, `account.lastSyncFingerprint`
 
-**Contracts:** `docs/contracts/usecase-contracts/account-sync.md`,
-`docs/contracts/repository-contracts/sync-repository.md`
+**Contracts:** docs/contracts/usecase-contracts/account-sync.md,
+docs/contracts/repository-contracts/sync-repository.md
 
 **Code paths:**
 
-- `lib/presentation/features/settings/screens/account_settings_screen.dart`
-- `lib/presentation/features/settings/widgets/account_settings_group.dart`
-- `lib/presentation/features/settings/widgets/drive_sync_settings_group.dart`
-- `lib/presentation/features/settings/viewmodels/account_settings_viewmodel.dart`
-- `lib/presentation/features/settings/viewmodels/drive_sync_settings_viewmodel.dart`
-- `lib/domain/usecases/cloud_account_usecases.dart`
-- `lib/domain/usecases/drive_sync_usecases.dart`
-- `lib/data/repositories/google_drive_sync_repository.dart`
-- `lib/data/sync/local_database_snapshot_gateway_contract.dart`
-- `lib/app/router/route_names.dart` → `RouteNames.settingsAccount`
+- account settings screen
+- account settings group
+- drive sync settings group
+- account settings viewmodel
+- drive sync settings viewmodel
+- cloud-account use-case bundle
+- drive-sync use-case bundle
+- Google Drive sync repository
+- local database snapshot gateway contract
+- route constant RouteNames.settingsAccount
 
 **Related wireframes:**
 
-- `docs/wireframes/04-settings-hub.md` (entry), `docs/wireframes/23-onboarding.md` (Future full
+- docs/wireframes/04-settings-hub.md (entry), docs/wireframes/23-onboarding.md (Future full
   onboarding / V1 zero-content guidance delegates restore to Account Settings)
-- `docs/wireframes/24-shared-dialogs.md` §restore-warning, §rename (device label), §delete-confirm (
+- docs/wireframes/24-shared-dialogs.md §restore-warning, §rename (device label), §delete-confirm (
   strong variant)

@@ -62,7 +62,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Zero-content guidance / thin onboarding | V1 guideline — owner-split across current empty states and Account Settings restore | `docs/wireframes/23-onboarding.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/02-library.md`, `docs/wireframes/19-settings-account.md` |
 | Full onboarding flow | Future Proposal — no standalone route/feature/first-launch wizard in V1 | `docs/wireframes/23-onboarding.md` |
 | Daily goal + streak + reminders | Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets. | `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md` |
-| Progress tracking | Partially specified | `docs/business/srs/srs-review.md` (data only) |
+| Progress tracking | Implemented (read-only V1: range activity, accuracy, box distribution, study-day streak, card-state counts) | `docs/wireframes/03-progress.md`, `docs/business/srs/srs-review.md` |
 | TTS / audio settings | Specified | `docs/business/tts/tts-settings.md` |
 | Account linking (Google) | Specified | `docs/business/account-sync/account-sync.md` |
 | Drive sync (backup/restore with safety) | Specified | `docs/business/account-sync/account-sync.md` |

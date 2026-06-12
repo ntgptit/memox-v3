@@ -44,10 +44,13 @@ class _FolderMovePicker extends HookWidget {
     final ColorScheme scheme = context.colorScheme;
     final MxSearchControllerState search = useMxSearchController();
     final ValueNotifier<FolderMoveTarget?> selectedTarget =
-        useState<FolderMoveTarget?>(
-          targets.where((FolderMoveTarget t) => t.isCurrentParent).firstOrNull,
-        );
-    final List<FolderMoveTarget> visible = _visible(search.text);
+        useState<FolderMoveTarget?>(_currentParentTarget());
+    final ValueNotifier<List<FolderMoveTarget>> visible =
+        useState<List<FolderMoveTarget>>(targets);
+    useEffect(() {
+      visible.value = _visible(search.text);
+      return null;
+    }, <Object?>[search.text, targets]);
     final bool canMove =
         selectedTarget.value != null &&
         selectedTarget.value!.isSelectable &&
@@ -83,9 +86,9 @@ class _FolderMovePicker extends HookWidget {
           Flexible(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xs),
-              itemCount: visible.length,
+              itemCount: visible.value.length,
               itemBuilder: (BuildContext context, int index) {
-                final FolderMoveTarget target = visible[index];
+                final FolderMoveTarget target = visible.value[index];
                 return _TargetRow(
                   title: _titleOf(l10n, target),
                   subtitle: _subtitleOf(l10n, target),
@@ -140,15 +143,20 @@ class _FolderMovePicker extends HookWidget {
     if (normalized.isEmpty) {
       return targets;
     }
-    return targets
-        .where(
-          (FolderMoveTarget t) =>
-              t.id == null ||
-              StringUtils.normalize(
-                t.breadcrumb.join(' / '),
-              ).contains(normalized),
-        )
-        .toList(growable: false);
+    final List<FolderMoveTarget> visibleTargets = <FolderMoveTarget>[];
+    for (final FolderMoveTarget target in targets) {
+      if (target.id == null) {
+        visibleTargets.add(target);
+        continue;
+      }
+      final String breadcrumb = StringUtils.normalize(
+        target.breadcrumb.join(' / '),
+      );
+      if (breadcrumb.contains(normalized)) {
+        visibleTargets.add(target);
+      }
+    }
+    return visibleTargets;
   }
 
   String? _subtitleOf(AppLocalizations l10n, FolderMoveTarget t) =>
@@ -157,6 +165,15 @@ class _FolderMovePicker extends HookWidget {
         FolderMoveBlock.lockedToDecks => l10n.folderMovePickerLockedReason,
         null => t.id == null ? l10n.foldersMoveRootSubtitle : null,
       };
+
+  FolderMoveTarget? _currentParentTarget() {
+    for (final FolderMoveTarget target in targets) {
+      if (target.isCurrentParent) {
+        return target;
+      }
+    }
+    return null;
+  }
 }
 
 /// A single radio destination row — greyed and inert when [enabled] is false.

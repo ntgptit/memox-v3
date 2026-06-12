@@ -1,4 +1,4 @@
-// ignore_for_file: flutter.max_build_lines
+// ignore_for_file: flutter.max_build_lines -- reason: this one-off merge overlay stays within the shared settings sheet and is intentionally verbose.
 
 part of 'tag_management_settings_content.dart';
 

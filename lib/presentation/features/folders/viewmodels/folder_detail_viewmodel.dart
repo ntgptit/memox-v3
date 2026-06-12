@@ -62,7 +62,7 @@ Stream<FolderDetail> folderDetailQuery(Ref ref, String folderId) {
       .call(folderId, searchTerm: toolbar.searchTerm, sort: toolbar.sort)
       .map(
         (Result<FolderDetail> result) => result.fold(
-          // ignore: only_throw_errors
+          // ignore: only_throw_errors -- reason: Riverpod stream query surfaces repository Failure as AsyncError.
           (Failure failure) => throw failure,
           (FolderDetail detail) => detail,
         ),

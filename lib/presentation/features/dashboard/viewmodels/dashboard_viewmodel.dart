@@ -12,10 +12,11 @@ part 'dashboard_viewmodel.g.dart';
 Future<DashboardResumeSessionSummary?> dashboardResumeSessionQuery(Ref ref) {
   final useCase = ref.watch(loadDashboardResumeSessionSummaryUseCaseProvider);
   return useCase.call().then(
-    (Result<DashboardResumeSessionSummary?> result) =>
-        result.fold((Failure failure) {
-          // ignore: only_throw_errors
-          throw failure;
-        }, (DashboardResumeSessionSummary? summary) => summary),
+    (Result<DashboardResumeSessionSummary?> result) => result.fold((
+      Failure failure,
+    ) {
+      // ignore: only_throw_errors -- reason: Riverpod query must surface repository Failure as AsyncError.
+      throw failure;
+    }, (DashboardResumeSessionSummary? summary) => summary),
   );
 }

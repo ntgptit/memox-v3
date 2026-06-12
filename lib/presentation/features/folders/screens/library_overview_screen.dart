@@ -303,7 +303,7 @@ Future<void> _deleteFolder(
   final bool confirmed = await showMxFolderDeleteDialog(
     context,
     folderName: item.folder.name,
-    summaryText: summaryText,
+    removalMessage: l10n.folderDeleteDialogRemovalMessage(summaryText),
     title: l10n.folderDeleteDialogTitle,
     reassuranceText: l10n.folderDeleteDialogReassurance,
     confirmLabel: l10n.folderDeleteDialogConfirmLabel,

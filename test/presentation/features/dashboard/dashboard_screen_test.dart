@@ -518,7 +518,6 @@ void main() {
 
     expect(find.text(l10n.dashboardNewStudyTitle), findsOneWidget);
     expect(find.text(l10n.dashboardOpenLibraryAction), findsOneWidget);
-    expect(find.text(l10n.dashboardStartNewLearningAction), findsNothing);
     expect(find.byType(MxMasteryRing), findsNothing);
     expect(find.byIcon(Icons.search_rounded), findsNothing);
   });
@@ -597,7 +596,6 @@ void main() {
       find.textContaining(l10n.studySessionProgressLabel(2, 5)),
       findsOneWidget,
     );
-    expect(find.text(l10n.dashboardDiscardAction), findsNothing);
     expect(repository.startCalls, 0);
     expect(repository.cancelCalls, 0);
   });
@@ -786,14 +784,6 @@ void main() {
     harness.router.go(RoutePaths.home);
     await tester.pumpAndSettle();
 
-    expect(
-      find.text(
-        AppLocalizations.of(
-          tester.element(find.byType(DashboardScreen)),
-        ).dashboardStartNewLearningAction,
-      ),
-      findsNothing,
-    );
     expect(find.byIcon(Icons.search_rounded), findsNothing);
     expect(find.byIcon(Icons.notifications_outlined), findsNothing);
     expect(find.byType(MxMasteryRing), findsNothing);

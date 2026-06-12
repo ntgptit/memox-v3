@@ -19,4 +19,17 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
 
   Future<ProgressStudyStatisticsResult> loadStudyStatistics() =>
       progressStudyStatistics().getSingle();
+
+  Future<List<ProgressAttemptsBetweenResult>> loadAttemptsBetween({
+    required int startMs,
+    required int endMs,
+  }) => progressAttemptsBetween(startMs, endMs).get();
+
+  Future<List<int>> loadAttemptTimestamps() =>
+      progressAttemptTimestamps().get();
+
+  Future<int> loadSuspendedCount() => progressSuspendedCount().getSingle();
+
+  Future<int> loadBuriedTodayCount({required int nowMs}) =>
+      progressBuriedTodayCount(nowMs).getSingle();
 }

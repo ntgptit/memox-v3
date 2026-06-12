@@ -26,20 +26,20 @@ extension MxFailureMessage on AppLocalizations {
     ValidationFailure(code: ValidationCode.cycleDetected) =>
       folderMovePickerCycleReason,
     ValidationFailure(code: ValidationCode.parentModeLocked) =>
-      folderModeLockedError,
+      folderModeLockHint,
     // Remaining validation codes have no dedicated snackbar copy yet; the
     // action-specific fallback is more useful than a bare generic line.
     ValidationFailure() => fallback ?? errorUnexpected,
     // The only producers are folder content-mode violations.
-    UnsupportedActionFailure() => folderModeLockedError,
-    NotFoundFailure() => fallback ?? errorNotFound,
-    StorageFailure() => fallback ?? errorStorage,
+    UnsupportedActionFailure() => folderModeLockHint,
+    NotFoundFailure() => fallback ?? errorUnexpected,
+    StorageFailure() => fallback ?? errorUnexpected,
     NetworkFailure(:final NetworkErrorKind kind) => switch (kind) {
-      NetworkErrorKind.timeout => errorRequestTimedOut,
-      NetworkErrorKind.parse => errorInvalidData,
-      NetworkErrorKind.offline || NetworkErrorKind.http => errorNetwork,
+      NetworkErrorKind.timeout => errorUnexpected,
+      NetworkErrorKind.parse => errorUnexpected,
+      NetworkErrorKind.offline || NetworkErrorKind.http => errorUnexpected,
     },
-    AuthFailure() => errorConfiguration,
+    AuthFailure() => errorUnexpected,
     ConflictFailure() ||
     IntegrityFailure() ||
     CancelledFailure() ||
