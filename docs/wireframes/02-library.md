@@ -46,11 +46,11 @@ presentation-only:
   targets folders only; deck/card/tag search is Future.
 - The static `All` filter chip is **removed** from the loaded header.
 - Loaded state renders a `{n} FOLDERS` section header with the mock sort pill on the right
-  (`librarySortRecentLabel` / "Recent"). The pill is visual parity for the mock; the sort sheet
-  remains Future.
+  (`librarySortRecentLabel` / "Recent"). The pill is visual parity only; it is non-interactive
+  and the sort sheet remains Future.
 - A **due summary card** (`{n} cards due today`) is rendered when `dueToday > 0` and hidden
   otherwise. It includes a subtitle derived from the aggregate model (`Across {n} folders · ~{m}
-  min`) and remains non-interactive; there is no study-launch navigation.
+  min`) and a chevron; the card itself is non-interactive and there is no study-launch navigation.
 - The FAB is now a labelled **`New folder` pill** wired to the existing create-folder flow. **New
   deck / Import are not exposed** from Library root.
 
@@ -116,10 +116,10 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
   Global Search; does not mutate persisted `sort_order`. The supported hint is `Search folders`.
 - Loaded section header: `{n} FOLDERS` overline with the mock sort pill (`librarySortRecentLabel`)
   on the right. Its horizontal inset is intentionally tight so it does not feel double-padded
-  inside the shared screen shell.
+  inside the shared screen shell; the pill is visual parity only and non-interactive.
 - Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle` plus
   `libraryDueSummarySubtitle`), hidden otherwise. Non-interactive — the subtitle is derived from
-  the aggregate model and there is no study-launch.
+  the aggregate model, the card shows a chevron, and there is no study-launch.
 - Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended,
   `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill
   both open `showMxFolderCreateDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
