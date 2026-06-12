@@ -380,8 +380,8 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
-| `7358df54` | 2026-06-12 | 4.5.1 | Align Fill strategy factory wording with implemented backend support |
 | `a4e61c67` | 2026-06-12 | 4.5.4 | Add pure Match board builder slice without enabling Match persistence or strategy support |
+| `7358df54` | 2026-06-12 | 4.5.1 | Align Fill strategy factory wording with implemented backend support |
 | `129d049f` | 2026-06-12 | 4.5.8 | Implement Fill mode BE V1 with strict trim-only evaluation and one terminal persisted attempt |
 | `452a1536` | 2026-06-12 | 4.4.3, 4.5.8 | Settle fill retry persistence as a single terminal-attempt contract and defer append-attempt re-grade from Fill V1 |
 | `eb91cbc2` | 2026-06-12 | 4.5.6 | Enforce Guess mode availability so the builder only emits the full 5-option set |
