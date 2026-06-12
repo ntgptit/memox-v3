@@ -9,6 +9,7 @@ import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_sections.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_tags_section.dart';
+// ignore: unnecessary_import -- reason: preserve the direct import alongside the shared barrel export
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
 

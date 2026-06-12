@@ -2,7 +2,9 @@
 ///
 /// Built from the "0 · Foundations · Shared widgets" handoff in
 /// `docs/system-design/MemoX Design System/ui_kits/mobile/index.html`. Import
-/// this single file from feature code instead of reaching into the tree.
+/// this single file from feature code for any `Mx*` widget instead of
+/// reaching into the tree. Dialogs (`dialogs/`), hooks (`hooks/`), component
+/// contracts (`contracts/`), and async adapters keep direct imports by design.
 library;
 
 // Async-state adapters (app-wiring-adjacent).
@@ -10,7 +12,9 @@ export 'async/app_async_builder.dart';
 export 'async/mx_retained_async_state.dart';
 // Feedback & overlays.
 export 'feedback/mx_callout.dart';
+export 'feedback/mx_failure_message.dart';
 export 'feedback/mx_offline_banner.dart';
+export 'feedback/mx_snackbar.dart';
 // Layouts & shells.
 export 'layouts/mx_adaptive_scaffold.dart';
 export 'layouts/mx_content_shell.dart';
@@ -37,6 +41,7 @@ export 'widgets/mx_tappable.dart';
 export 'widgets/mx_text.dart';
 // Navigation chrome.
 export 'widgets/navigation/mx_app_bar.dart';
+export 'widgets/navigation/mx_bottom_navigation_bar.dart';
 export 'widgets/navigation/mx_breadcrumb.dart';
 export 'widgets/navigation/mx_study_top_bar.dart';
 // State placeholders.
