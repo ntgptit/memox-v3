@@ -380,6 +380,8 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `c183a52b` | 2026-06-12 | 8.2.1 | Add test-only SharedPreferences async harness so learning-settings persistence tests can run against the in-memory platform |
+| `e5cb99ea` | 2026-06-12 | 8.2.1 | Implement SharedPreferences-backed learning settings persistence, repository, use cases, DI, and study-cap integration |
 | `dbb96759` | 2026-06-12 | 9.15 | Enforce single-entry verification after piecemeal relapse: `--quick` inner loop qua cùng entry, pass-marker gắn content-state, hook `--check-marker` chặn commit chưa verify; CLAUDE.md hard rule cấm lệnh verify rời |
 | `0dacbc83` | 2026-06-11 | 9.17, 9.15, 9.11, 1.1.7 | Agent-friendliness pass: `.gitattributes` (hết CRLF noise), pre-commit hook chạy doc_guard, CLAUDE.md 393→263 dòng (gỡ khối bash/verify lỗi thời), implementation-checklist trỏ verify entry, decision-table section index, tool/README thêm trigger matrix + portability guide; checkArb sửa đếm key top-level |
 | `a9d79468` | 2026-06-11 | 9.16 | Where-is feature index (42 features, live-resolved, doc_guard-linted) + AGENTS.md fast-lookup table + repo-map/where-is into required reading |

@@ -53,7 +53,7 @@ Implementation now lives at `lib/data/datasources/local/preferences/learning_set
 - Max: 200
 - Step: 5
 
-Outside range is rejected at validation; values are clamped on read for safety.
+Outside range is rejected at validation. Corrupt or invalid persisted values recover to the default `20` on read for safety.
 
 ### Configuration
 
