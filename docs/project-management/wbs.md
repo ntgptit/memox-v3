@@ -381,7 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
-| `893a407c` | 2026-06-12 | 4.5.1 | Seal `StudyModeStrategy` into three interaction families (BinaryGrade/TypedAnswer/Board), remove UnsupportedError grading stubs from Fill/Match, full pattern dartdoc, decision rows S48/S49/S58, study-flow hierarchy doc |
+| `8389ab44` | 2026-06-12 | 4.5.1 | Seal `StudyModeStrategy` into three interaction families (BinaryGrade/TypedAnswer/Board), remove UnsupportedError grading stubs from Fill/Match, full pattern dartdoc, decision rows S48/S49/S58, study-flow hierarchy doc |
 | `1359edb4` | 2026-06-12 | 5.4.1, 7.7.1 | Dashboard progress summary backend V1: progress summary read model, provider wiring, local-day attempt aggregation, and consistency coverage |
 | `b1b925ea` | 2026-06-12 | 4.5.1, 4.5.2, 4.5.6, 4.5.8, 8.2.1 | Restore study mode strategy wiring and WBS parity for previously implemented Review/Guess/Fill and learning-settings rows |
 | `8fe3ce3a` | 2026-06-12 | 4.5.4 | Match persistence backend wave: append-only Match evaluation schema/migration, repository API, transactional finalization derivation, factory wiring, tests, and contract/docs updates |
