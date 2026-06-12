@@ -58,7 +58,7 @@ study mode.
 | Mode     | Direction                | Interaction                                                                                                                                                                         |
 |----------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `review` | both sides shown         | Front and back rendered together on one card; user swipes (right = perfect, left = forgot). No reveal step.                                                                         |
-| `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. Per-pair persistence; one board per 5 cards.                               |
+| `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. The current backend slice only builds this board deterministically; per-pair persistence and supported strategy wiring remain blocked until the wider Match contract is approved.                               |
 | `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit.                                                             |
 | `recall` | front → back             | Show front, tap "Show answer" to reveal back, self-grade with Forgot / Got it. **No text input in v1**; typed-answer recall is a Future Proposal.                                   |
 | `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict trim-only match; optional Hint button taints the single terminal result to max `recovered`. "Mark correct" commits that terminal result without append-attempt correction. |
@@ -70,6 +70,9 @@ Direction notes:
 - `guess` and `recall` cover front→back recognition at increasing effort (multiple-choice vs free
   recall).
 - `fill` is the only production-direction mode in v1 (user produces the front).
+- Match board composition may be implemented as a pure domain helper, but that does not make
+  `StudyMode.match` supported; the factory remains controlled-unsupported until the per-evaluation
+  persistence contract is approved.
 - See wireframes `docs/wireframes/13-study-session-review.md` through
   `docs/wireframes/17-study-session-fill.md` for full UI details.
 - Recall mode in v1 is **flip-card self-grade**, not typed recall. The typed variant is a Future

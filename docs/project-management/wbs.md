@@ -153,7 +153,7 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 | 4.5.1 | Study/SRS | Study mode strategy V1 BE | BE | `StudyModeStrategyFactory`: resolves implemented strategies; recall/review/guess/fill supported; match controlled-unsupported | Implemented | 4.3.1 | `lib/domain/study/modes/study_mode_strategy_factory.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart` | `c77b5989` | Base strategy factory now covers the implemented V1 modes |
 | 4.5.2 | Study/SRS | Review mode BE V1 | BE | Both-sides item strategy + attempt semantics + tests | Implemented | 4.5.1 | `docs/business/study/study-flow.md`, `lib/domain/study/modes/review_study_mode_strategy.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart`, `test/data/repositories/study_repository_test.dart` | `c77b5989` | Implemented BE strategy + tests |
 | 4.5.3 | Study/SRS | Review mode FE V1 | FE | Review mode UI per wireframe 13 | Specified | 4.5.2 | `docs/wireframes/13-study-session-review.md` | TBD | Wire UI to strategy; widget tests |
-| 4.5.4 | Study/SRS | Match mode BE V1 | BE | 5-pair board strategy, per-pair persistence + tests | Specified | 4.5.1 | `docs/business/study/study-flow.md` | TBD | Implement BE strategy + tests |
+| 4.5.4 | Study/SRS | Match mode BE V1 | BE | Pure 5-pair board builder only; Match strategy stays controlled-unsupported; persistence blocked + tests | Partial | 4.5.1 | `lib/domain/study/match/match_board.dart`, `lib/domain/study/match/match_board_builder.dart`, `test/domain/study/match/match_board_builder_test.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart` | TBD | Keep Match out of the factory until the per-evaluation persistence contract is approved |
 | 4.5.5 | Study/SRS | Match mode FE V1 | FE | Match board UI | Specified | 4.5.4 | `docs/wireframes/14-study-session-match.md` | TBD | Wire UI; widget tests |
 | 4.5.6 | Study/SRS | Guess mode BE V1 | BE | 5-option selection strategy + tests | Implemented | 4.5.1 | `docs/business/study/study-flow.md`, `lib/domain/study/guess/guess_option_builder.dart`, `lib/domain/study/modes/guess_study_mode_strategy.dart`, `test/domain/study/modes/study_mode_strategy_factory_test.dart`, `test/domain/study/guess/guess_option_builder_test.dart`, `test/data/repositories/study_repository_test.dart` | `c77b5989` | Implemented BE strategy + tests |
 | 4.5.7 | Study/SRS | Guess mode FE V1 | FE | Guess UI with auto-advance countdown | Specified | 4.5.6 | `docs/wireframes/15-study-session-guess.md` | TBD | Wire UI; widget tests |
@@ -381,6 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
 | `7358df54` | 2026-06-12 | 4.5.1 | Align Fill strategy factory wording with implemented backend support |
+| `TBD` | 2026-06-12 | 4.5.4 | Add pure Match board builder slice without enabling Match persistence or strategy support |
 | `129d049f` | 2026-06-12 | 4.5.8 | Implement Fill mode BE V1 with strict trim-only evaluation and one terminal persisted attempt |
 | `452a1536` | 2026-06-12 | 4.4.3, 4.5.8 | Settle fill retry persistence as a single terminal-attempt contract and defer append-attempt re-grade from Fill V1 |
 | `eb91cbc2` | 2026-06-12 | 4.5.6 | Enforce Guess mode availability so the builder only emits the full 5-option set |
