@@ -96,7 +96,7 @@ class FolderDetailBody extends StatelessWidget {
       ContentSortMode.manual => l10n.folderDetailSortManualLabel,
       ContentSortMode.name => l10n.folderDetailSortNameLabel,
       ContentSortMode.newest => l10n.folderDetailSortNewestLabel,
-      ContentSortMode.lastStudied => l10n.folderDetailSortLastStudiedLabel,
+      ContentSortMode.lastStudied => l10n.folderDetailSortManualLabel,
     };
     final List<Widget> children = hasChildren
         ? _buildChildren(

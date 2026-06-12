@@ -370,10 +370,6 @@ class _FolderDetailSortSheet extends StatelessWidget {
       (mode: ContentSortMode.manual, label: l10n.folderDetailSortManualLabel),
       (mode: ContentSortMode.name, label: l10n.folderDetailSortNameLabel),
       (mode: ContentSortMode.newest, label: l10n.folderDetailSortNewestLabel),
-      (
-        mode: ContentSortMode.lastStudied,
-        label: l10n.folderDetailSortLastStudiedLabel,
-      ),
     ];
 
     return SafeArea(

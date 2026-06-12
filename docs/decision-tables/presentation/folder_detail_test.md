@@ -14,7 +14,7 @@ Test file: `test/presentation/features/folders/folder_detail_test.dart`
 | DT6 | subfolders summary strip is shown | folder read model includes subfolder aggregates | Folder Detail renders the subfolders summary strip | Summary shows the subfolder / cards / due stat strip and the search/sort header that follows it | C0+C1 |
 | DT7 | unlocked empty state is shown | folder read model has `contentMode == unlocked` | Folder Detail renders the unlocked empty body | Empty chip, info card, dual creation buttons, and info banner are visible | C0+C1 |
 | DT8 | search sheet updates the toolbar state | user taps the Folder Detail search icon | Folder Detail opens the controlled search sheet | Search sheet shows a working `MxSearchField`; typing updates `folderDetailToolbar.searchTerm` and clear resets it | C0+C1 |
-| DT9 | sort sheet updates the toolbar state | user taps the Folder Detail sort pill | Folder Detail opens the controlled sort sheet | Sort sheet shows selectable `ContentSortMode` options; choosing one updates `folderDetailToolbar.sort` | C0+C1 |
+| DT9 | sort sheet updates the toolbar state | user taps the Folder Detail sort pill | Folder Detail opens the controlled sort sheet | Sort sheet shows only supported `ContentSortMode` options (`manual`, `name`, `newest`); choosing one updates `folderDetailToolbar.sort` | C0+C1 |
 | DT10 | search yields no matches | toolbar search term hides all children | Folder Detail renders the search-empty branch | Search empty state shows the query-aware title and clear action | C0+C1 |
 
 ## Decision table: row actions

@@ -136,7 +136,7 @@ existing widget/token covers an element.
 | Deck last studied | Show recency metadata | within `FolderDeckTile` | `RelativeTime` formatter + l10n suffix | decks mode, when `lastStudiedAt` is present | **Current** | Rendered as `last {relative time}` in English and localized equivalent in Vietnamese; null collapses to cards-only meta. |
 | Deck compact progress bar | Show deck progress hint | within `FolderDeckTile` | `MxLinearProgress` height `4px`; meta→bar gap `6px` | decks mode | **Current** | Derived from loaded deck aggregates; visual-only summary bar, not the folder mastery ring. |
 | Row chevron | Affordance into child | row trailing | `iconSm`/`iconMd`; `onSurfaceVariant` | rows present | **Current** | Folder Detail rows DO use a chevron (unlike Library Overview cards, which use a kebab). |
-| Long-press row → item context sheet | Rename/Move/Delete child | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `MxConfirmationDialog` | shared sheet/dialog themes; scrim 32% | rows present | **Current** (verify wiring on Folder Detail) | Item-context sheet (`wireframes/25 §item-context`). Confirm long-press is wired here as it is on Library rows. |
+| Long-press row → item context sheet | Rename/Move/Delete child | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `showMxConfirmDialog` | shared sheet/dialog themes; scrim 32% | rows present | **Current** (verify wiring on Folder Detail) | Item-context sheet (`wireframes/25 §item-context`). Confirm long-press is wired here as it is on Library rows. |
 | Mode-choice empty | Pick subfolders or decks | `FolderUnlockedEmpty` | `iconXl`; `sectionGap`; secondary buttons | unlocked empty | **Current** | "New subfolder" / "New deck" + lock explanation copy (l10n). |
 | Search-no-results empty | Tell user nothing matched | `MxEmptyState` (via `FolderDetailBody`) | `iconXl`; empty-state theme | search active, 0 matches | **Current** | "Clear search" CTA → `onClearSearch`. |
 | Loading skeleton | First-load placeholder | `LibrarySkeleton` (`MxSkeleton` in `MxCard`) | `MxSkeleton`; `brLg` | loading | **Current** | Per-row skeleton, not a full-screen spinner. |
@@ -145,9 +145,9 @@ existing widget/token covers an element.
 | New folder / deck dialog | Name the new child | `showMxFolderCreateDialog` / `showMxFolderRenameDialog` for folder cases; `showMxNameDialog` remains for deck naming | dialog theme `brLg`; level2–3; scrim 32% | on FAB / choice tap | **Current** | Folder dialog is mock-aligned with preview tile + color/icon pickers on create and helper text on rename; duplicate/mode-lock errors → `showMxSnackbar`. |
 | Hero mastery card | Folder mastery ring + counts | `MxMasteryRing` exists in kit | `MxCard` + `MxIconTile` | decks mode | **Visual-only** | Rendered as a shell without a numeric mastery value or ring; no fake percentage is shown. |
 | Study folder / Today CTAs | Launch folder-scoped study | `MxActionButton` / `MxCardActions` | card-action tokens | decks mode | **Visual-only** | Study layer not built; the visible button remains disabled and never carries fake due-count copy. |
-| Resume banner (+ Discard) | Continue/cancel paused session | `MxCallout` + `MxConfirmationDialog` | callout/dialog themes | (mock) | **Future** | No session layer on this ref. |
+| Resume banner (+ Discard) | Continue/cancel paused session | `MxCallout` + `showMxConfirmDialog` | callout/dialog themes | (mock) | **Future** | No session layer on this ref. |
 | "{n} new" subtitle | New-card count | — | — | decks mode | **Future** | No folder-scope new-card read model exists; do not render a placeholder count. |
-| Sort control | Reorder rows | local pill | — | loaded | **Current** | Controlled sort sheet uses `ContentSortMode`; selection updates the query state. |
+| Sort control | Reorder rows | local pill | — | loaded | **Current** | Controlled sort sheet uses `ContentSortMode`; only `manual`, `name`, and `newest` are exposed here. `lastStudied` stays hidden because the Folder Detail query path does not support truthful last-studied ordering on this ref. |
 
 ## 6. Typography contract
 
@@ -213,7 +213,7 @@ Behavior must be backed by docs/code. Mock-only behavior is marked `Future`/`Vis
 | Tap breadcrumb segment | tap | Go/push to that folder; `Library` → library root | nav | `context.goLibrary()` / `context.pushFolderDetail(id)` | **Current** | — |
 | Tap subfolder row | tap | Push child folder detail | nav | `context.pushFolderDetail(childId)` | **Current** | — |
 | Tap deck row | tap | Push deck flashcard list | nav | `RoutePaths.flashcardList(deckId)` | **Current** intent; **target screen Future** | Flashcard list not implemented; nav resolves to placeholder/none on this ref. |
-| Long-press row | long-press | Open item context sheet (Rename/Move/Delete) | sheet | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `MxConfirmationDialog` | **Current** (verify on Folder Detail) | Confirm wiring; same sheets used by Library rows. |
+| Long-press row | long-press | Open item context sheet (Rename/Move/Delete) | sheet | `library_folder_actions_sheet.dart`, `folder_move_picker_sheet.dart`, `showMxConfirmDialog` | **Current** (verify on Folder Detail) | Confirm wiring; same sheets used by Library rows. |
 | Tap search icon | tap | Open the controlled search sheet | query state | `MxIconButton(Icons.search)` | **Current** | Search term lives on `FolderDetailToolbar`; the sheet edits that state. |
 | Tap sort pill | tap | Open the controlled sort sheet | query state | local sort pill | **Current** | Updates `ContentSortMode` on `FolderDetailToolbar`. |
 | Tap FAB (decks) | tap | Open New deck name dialog | create deck | `createDeckDialog` → `folderActionController.createDeck` | **Current** | Success → stream refresh; failure → snackbar. |
@@ -287,8 +287,10 @@ levels keeping first + last.
 - **Date/time:** deck rows display relative last-studied metadata when the
   read model exposes `lastStudiedAt`; the current implementation formats it as
   a localized relative time string.
-- **Sorting/grouping:** `ContentSortMode` exists in toolbar state; **no sort UI
-  rendered** (Future). Default order = `sort_order` (manual).
+- **Sorting/grouping:** `ContentSortMode` exists in toolbar state; Folder Detail
+  exposes a controlled sort sheet with `manual`, `name`, and `newest` only.
+  `lastStudied` is intentionally hidden here because the current query path
+  does not support truthful last-studied ordering.
 - **Localization:** Korean + Vietnamese must fit; titles ellipsize, copy wraps.
 
 ## 14. Flutter implementation guidance
@@ -309,7 +311,7 @@ levels keeping first + last.
 **Reuse these shared widgets** (do not hand-roll): `MxScaffold`, `MxAppBar`,
 `MxBreadcrumb`, `MxSearchField`, `MxRetainedAsyncState`, `MxErrorState`,
 `MxEmptyState`, `MxSkeleton`, `MxCard`, `MxIconTile`, `MxIconButton`,
-`MxFab.extended`, `showMxFolderCreateDialog`, `showMxFolderRenameDialog`, `showMxNameDialog`, `showMxSnackbar`, `MxConfirmationDialog`.
+`MxFab.extended`, `showMxFolderCreateDialog`, `showMxFolderRenameDialog`, `showMxNameDialog`, `showMxSnackbar`, `showMxConfirmDialog`.
 
 **Theme/token files:** `lib/core/theme/tokens/**`,
 `lib/core/theme/extensions/theme_context.dart`,
@@ -363,7 +365,7 @@ support exists (Study Entry Gate, session layer, folder mastery read model).
 | --- | --- | --- | --- | --- |
 | Wireframe says hero mastery card + Study/Today CTAs + Resume banner are Current (Prompt 45/47/50); code comment + render path say Future ("study layer is not built") | Business conflict / State conflict | Hero card, study/resume CTAs | Wireframe ahead of code on this ref | Reconciled 2026-06-10: `05-folder-detail.md` + related business docs corrected to Future; never fake mastery/new/due-from-session data |
 | Overflow ⋮ opens folder action sheet | Mock-only element | App-bar overflow | Folder action sheet now wired on Folder Detail | Keep the same Rename/Move/Delete flow and avoid adding unrelated actions |
-| `ContentSortMode` exists in toolbar state and a controlled sort sheet is wired | Resolved | Sort control | Code now promotes the local pill into a working bottom sheet | Keep sort state local to `FolderDetailToolbar` and mirror the same options in docs/tests |
+| `ContentSortMode` exists in toolbar state and a controlled sort sheet is wired | Resolved | Sort control | Code now promotes the local pill into a working bottom sheet | Keep sort state local to `FolderDetailToolbar`, expose only supported modes here, and mirror the same options in docs/tests |
 | Deck row tap targets `/library/deck/:deckId/flashcards`, but Flashcard list is not implemented | Future scope | Deck row navigation | Flashcard feature absent on this ref | Acceptable as nav intent; flashcard list must land (P2) for the tap to resolve |
 | Per-deck due badge depends on whether `FolderDeckItem` exposes a due count | Missing source | Deck due badge | Model field unconfirmed in this read | Verify `domain/models/folder_detail.dart`; if absent, mark badge Future |
 | Long-press item-context sheet wiring on Folder Detail (vs Library Overview) unconfirmed | Unknown source | Row long-press | Not visible in `folder_detail_screen.dart` (handled in body/tiles) | Verify in `folder_deck_tile.dart` / `library_folder_tile.dart`; document actual behavior |

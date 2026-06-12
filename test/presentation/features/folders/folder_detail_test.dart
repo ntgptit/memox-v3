@@ -171,6 +171,7 @@ void main() {
       // Folder-scope total (4 + 4) is distinct from each deck's "4 due" badge.
       expect(find.text('8 due'), findsOneWidget);
       expect(find.textContaining('new'), findsNothing);
+      expect(find.textContaining('%'), findsNothing);
       expect(find.text('4 due'), findsNWidgets(2));
       expect(find.text('Start study'), findsOneWidget);
       expect(find.byType(FolderDeckTile), findsNWidgets(2));
@@ -387,6 +388,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Name'), findsOneWidget);
+      expect(find.text('Last studied'), findsNothing);
       await tester.tap(find.text('Name').last);
       await tester.pumpAndSettle();
 
@@ -394,6 +396,31 @@ void main() {
         container.read(folderDetailToolbarProvider('f1')).sort,
         ContentSortMode.name,
       );
+    });
+
+    testWidgets('unsupported last studied sort normalizes back to manual', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      final BuildContext scaffoldContext = tester.element(
+        find.byType(Scaffold),
+      );
+      final ProviderContainer container = ProviderScope.containerOf(
+        scaffoldContext,
+      );
+
+      container
+          .read(folderDetailToolbarProvider('f1').notifier)
+          .setSort(ContentSortMode.lastStudied);
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(folderDetailToolbarProvider('f1')).sort,
+        ContentSortMode.manual,
+      );
+      expect(find.text('Manual order'), findsOneWidget);
+      expect(find.text('Last studied'), findsNothing);
     });
   });
 

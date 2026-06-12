@@ -45,7 +45,9 @@ class FolderDetailToolbar extends _$FolderDetailToolbar {
 
   void clearSearch() => state = state.copyWith(searchTerm: '');
 
-  void setSort(ContentSortMode sort) => state = state.copyWith(sort: sort);
+  void setSort(ContentSortMode sort) => state = state.copyWith(
+    sort: sort == ContentSortMode.lastStudied ? ContentSortMode.manual : sort,
+  );
 }
 
 /// Streams a folder's detail, reacting to its toolbar. `keepAlive` (deliberate

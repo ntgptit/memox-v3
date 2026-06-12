@@ -49,10 +49,13 @@ study UI.
 - Section-header overline (`{n} subfolders` / `{n} decks`) via `MxSectionHeader`
   above the children list.
 - Search affordance and sort pill are visible in the header and open controlled
-  sheets. True-empty vs search no-results is Current (true empty = no
-  unfiltered direct children; no-results = active search hides existing
-  children).
-- Per-folder sort state exists on the toolbar (`ContentSortMode`).
+  sheets. The Folder Detail sort sheet only exposes `manual`, `name`, and
+  `newest`; `lastStudied` is hidden here because the current query path does
+  not support truthful last-studied ordering. True-empty vs search no-results
+  is Current (true empty = no unfiltered direct children; no-results = active
+  search hides existing children).
+- Per-folder sort state exists on the toolbar (`ContentSortMode`) but this
+  screen normalizes unsupported values back to `manual`.
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
   Current.
 - **App-bar overflow ⋮ is Current**: opens the folder action sheet
@@ -220,7 +223,7 @@ overflow actions (rename / move / delete). Folder-level study routing and the Re
 | Deck row (decks mode)           | Icon + name + optional "{m} due" badge + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
 | FAB                             | **Current.** Plus button. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                                                           |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
-| Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Search opens a controlled sheet; sort opens a controlled picker. Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`). |
+| Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Search opens a controlled sheet; sort opens a controlled picker with only `manual`, `name`, and `newest`. Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`), and unsupported values normalize back to `manual`. |
 
 ## States
 
