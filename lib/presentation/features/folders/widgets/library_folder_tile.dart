@@ -50,7 +50,7 @@ class LibraryFolderTile extends StatelessWidget {
       tooltip: l10n.libraryOverflowTooltip,
       subtitle: item.subtitle,
       newCount: item.newCount,
-      mastery: (item.mastery ?? _fallbackMastery(item)).clamp(0, 1).toDouble(),
+      mastery: item.mastery?.clamp(0, 1).toDouble(),
     );
   }
 }
@@ -76,7 +76,7 @@ class _LibraryFolderTileCard extends StatelessWidget {
   final String tooltip;
   final String? subtitle;
   final int? newCount;
-  final double mastery;
+  final double? mastery;
 
   @override
   Widget build(BuildContext context) => MxCard(
@@ -127,7 +127,7 @@ class _FolderTileBody extends StatelessWidget {
   final Color tone;
   final String? subtitle;
   final int? newCount;
-  final double mastery;
+  final double? mastery;
   final bool isSubfolderMode;
 
   @override
@@ -199,8 +199,14 @@ class _FolderTileBody extends StatelessWidget {
             ],
           ],
         ),
-        const SizedBox(height: SpacingTokens.xs),
-        MxLinearProgress(value: mastery, color: tone, height: SpacingTokens.xs),
+        if (mastery != null) ...<Widget>[
+          const SizedBox(height: SpacingTokens.xs),
+          MxLinearProgress(
+            value: mastery!,
+            color: tone,
+            height: SpacingTokens.xs,
+          ),
+        ],
       ],
     );
   }
@@ -305,12 +311,4 @@ class _NewMetaItem extends StatelessWidget {
       ],
     );
   }
-}
-
-double _fallbackMastery(FolderWithCount item) {
-  final int total = item.cardCount;
-  if (total <= 0) {
-    return 0;
-  }
-  return ((total - item.dueCount) / total).clamp(0, 1).toDouble();
 }

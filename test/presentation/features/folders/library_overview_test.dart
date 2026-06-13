@@ -210,11 +210,26 @@ void main() {
       expect(find.text('40 cards'), findsOneWidget);
       expect(find.text('Recent'), findsOneWidget);
       expect(find.byIcon(Icons.swap_vert_rounded), findsOneWidget);
-      // Progress bar is present on the mock-aligned root row.
-      expect(find.byType(MxLinearProgress), findsOneWidget);
+      // No fake mastery is rendered when the read model does not carry it.
+      expect(find.byType(MxLinearProgress), findsNothing);
       // Kebab present; chevron absent (rows open via tap, not a chevron).
       expect(find.byIcon(Icons.more_vert), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsNothing);
+    });
+
+    testWidgets('folder row renders mastery progress only when present', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapBody(
+          _model(
+            folders: <FolderWithCount>[_item('Korean', mastery: 0.62)],
+            totalFolderCount: 1,
+          ),
+        ),
+      );
+
+      expect(find.byType(MxLinearProgress), findsOneWidget);
     });
 
     testWidgets(
