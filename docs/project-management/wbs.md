@@ -381,7 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
-| `TBD` | 2026-06-13 | 3.1.2 | Library overview UI refresh: mock-aligned loading, empty, search-no-results, and error states with localized copy and tighter shell spacing |
+| `47d78350` | 2026-06-13 | 3.1.2 | Library overview UI refresh: mock-aligned loading, empty, search-no-results, and error states with localized copy and tighter shell spacing |
 | `8389ab44` | 2026-06-12 | 4.5.1 | Seal `StudyModeStrategy` into three interaction families (BinaryGrade/TypedAnswer/Board), remove UnsupportedError grading stubs from Fill/Match, full pattern dartdoc, decision rows S48/S49/S58, study-flow hierarchy doc |
 | `1359edb4` | 2026-06-12 | 5.4.1, 7.7.1 | Dashboard progress summary backend V1: progress summary read model, provider wiring, local-day attempt aggregation, and consistency coverage |
 | `b1b925ea` | 2026-06-12 | 4.5.1, 4.5.2, 4.5.6, 4.5.8, 8.2.1 | Restore study mode strategy wiring and WBS parity for previously implemented Review/Guess/Fill and learning-settings rows |
