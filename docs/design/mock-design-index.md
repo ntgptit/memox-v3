@@ -9,7 +9,9 @@ applies_to: UI mock-to-code implementation
 This file maps approved mock designs to MemoX routes, wireframes, and visual
 contracts. It complements `docs/system-design/mock-design-doc-mapping.md`: that
 file maps mock groups to product docs, while this file points implementation
-agents to the exact per-screen visual contract when one exists.
+agents to the exact per-screen visual contract when one exists. To actually
+*build* a screen from these mocks step by step, follow
+`docs/design/mock-to-ui-playbook.md`.
 
 ## Rules
 

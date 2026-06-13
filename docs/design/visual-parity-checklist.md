@@ -8,7 +8,9 @@ applies_to: UI mock-to-code implementation
 
 Use this checklist before marking a UI implementation task complete. It does
 not replace `docs/checklist/implementation-checklist.md`; it adds visual parity
-checks for mock-driven screen work.
+checks for mock-driven screen work. For the full step-by-step procedure (resolve
+states → map → schema/BE → shell → guard → tests → docs), follow
+`docs/design/mock-to-ui-playbook.md`.
 
 ## Structure
 

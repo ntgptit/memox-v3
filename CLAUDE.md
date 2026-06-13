@@ -120,7 +120,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
 | Bất kỳ task nào | `docs/_generated/repo-map.md` (cold-start snapshot) + row liên quan trong `docs/_generated/where-is.md` (feature → docs/source/tests/mock/WBS — đọc TRƯỚC khi tự grep; nếu stale thì `node tool/doc_guard/run.mjs generate`), `docs/business/index.md`, `docs/business/glossary.md`, **3 universal contracts above** |
 | Thêm/sửa use case | `docs/contracts/usecase-contracts/{entity}.md` + business spec + decision rows |
 | Thêm/sửa repository | `docs/contracts/repository-contracts/{entity}-repository.md` + use case contract |
-| Thêm/sửa screen | Wireframe của screen đó + related `docs/business/**` + `docs/design/design-language.md` (taste contract — judgment rules ngoài mock; paste vào prompt khi giao UI task cho agent ngoài) + `docs/ui-ux/ui-ux-contract.md` + `docs/system-design/MemoX Design System/README.md` + Implementation refs trong wireframe (→ tự link đến contracts) |
+| Thêm/sửa screen | `docs/design/mock-to-ui-playbook.md` (operating procedure) + Wireframe của screen đó + related `docs/business/**` + `docs/design/design-language.md` (taste contract — judgment rules ngoài mock; paste vào prompt khi giao UI task cho agent ngoài) + `docs/ui-ux/ui-ux-contract.md` + `docs/system-design/MemoX Design System/README.md` + Implementation refs trong wireframe (→ tự link đến contracts) |
 | Thêm/sửa route | `docs/business/navigation/navigation-flow.md` |
 | Schema change | `docs/database/schema-contract.md`, `docs/database/migration-contract.md` |
 | State/provider | `docs/state/state-management-contract.md` (đặc biệt §Per-notifier contracts) |
@@ -205,6 +205,12 @@ This convention applies to **backtick references** in markdown body text and tab
 ## UI Mock Design Parity
 
 When implementing or modifying UI screens, the mock design is a contract, not a loose inspiration.
+
+**Operating procedure (đọc trước khi code UI từ mock):** `docs/design/mock-to-ui-playbook.md` — the
+step-by-step runbook (resolve all states → map → bucket by data availability → schema/BE → shared
+shell → guard → l10n → tests → docs/WBS → verify) with the concrete layout/guard/test traps that
+must not be repeated. Pair it with `docs/design/visual-parity-checklist.md` (final gate) and
+`docs/design/mock-design-index.md` (where the mock lives).
 
 **Mock reference resolution (bắt buộc):** the canonical visual mock for every screen is the PNG
 set under `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` (one light + one dark
