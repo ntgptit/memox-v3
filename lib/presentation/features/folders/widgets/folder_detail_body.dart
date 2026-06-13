@@ -4,6 +4,7 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/types/content_mode.dart';
@@ -14,9 +15,12 @@ import 'package:memox/presentation/features/folders/widgets/folder_detail_summar
 import 'package:memox/presentation/features/folders/widgets/folder_subfolder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_unlocked_empty.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_skeleton.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
 /// Renders a loaded [FolderDetail] — the subfolders or decks list, the
@@ -108,7 +112,7 @@ class FolderDetailBody extends StatelessWidget {
             onShowDeckActions: onShowDeckActions,
           )
         : <Widget>[
-            _FolderSearchNoResults(
+            _FolderDetailSearchEmpty(
               query: searchTerm,
               onClearSearch: onClearSearch,
             ),
@@ -242,8 +246,8 @@ class _SortPill extends StatelessWidget {
   );
 }
 
-class _FolderSearchNoResults extends StatelessWidget {
-  const _FolderSearchNoResults({
+class _FolderDetailSearchEmpty extends StatelessWidget {
+  const _FolderDetailSearchEmpty({
     required this.query,
     required this.onClearSearch,
   });
@@ -254,20 +258,124 @@ class _FolderSearchNoResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        MxSectionHeader(label: l10n.librarySearchNoResultsTitle),
-        const SizedBox(height: SpacingTokens.sm),
-        MxEmptyState(
-          key: const ValueKey<String>('folder_search_no_results'),
-          icon: Icons.search_outlined,
-          title: l10n.folderDetailNoResultsTitle(query),
-          message: l10n.folderDetailNoResultsMessage,
-          actionLabel: l10n.commonClear,
-          onAction: onClearSearch,
-        ),
-      ],
+    return MxCard(
+      key: const ValueKey<String>('folder_detail_search_empty_card'),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.xl,
+        vertical: SpacingTokens.xl,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: SizeTokens.buttonLg,
+            height: SizeTokens.buttonLg,
+            decoration: BoxDecoration(
+              color: context.colorScheme.primary.withValues(alpha: 0.08),
+              borderRadius: RadiusTokens.brLg,
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.search_rounded,
+              size: SizeTokens.surfaceBadge,
+              color: context.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: SpacingTokens.md),
+          MxText(
+            l10n.folderDetailNoResultsTitle(query),
+            role: MxTextRole.titleMedium,
+            fontWeight: TypographyTokens.bold,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: SpacingTokens.xs),
+          MxText(
+            l10n.folderDetailNoResultsMessage,
+            role: MxTextRole.bodyMedium,
+            color: context.colorScheme.onSurfaceVariant,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: SpacingTokens.lg),
+          MxSecondaryButton(
+            label: l10n.commonClear,
+            onPressed: onClearSearch,
+            fullWidth: true,
+          ),
+        ],
+      ),
     );
   }
+}
+
+class FolderDetailSkeleton extends StatelessWidget {
+  const FolderDetailSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) => ListView(
+    key: const ValueKey<String>('folder_detail_skeleton'),
+    padding: const EdgeInsets.fromLTRB(
+      0,
+      SpacingTokens.inline,
+      0,
+      SpacingTokens.md,
+    ),
+    children: <Widget>[
+      for (int index = 0; index < 4; index++) ...<Widget>[
+        const _FolderDetailSkeletonRow(),
+        if (index != 3) const SizedBox(height: SpacingTokens.inline),
+      ],
+    ],
+  );
+}
+
+class _FolderDetailSkeletonRow extends StatelessWidget {
+  const _FolderDetailSkeletonRow();
+
+  @override
+  Widget build(BuildContext context) => const MxCard(
+    padding: EdgeInsets.symmetric(
+      horizontal: SpacingTokens.lg,
+      vertical: SpacingTokens.md,
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        MxSkeleton(
+          width: SizeTokens.avatar,
+          height: SizeTokens.avatar,
+          borderRadius: RadiusTokens.brMd,
+        ),
+        SizedBox(width: SpacingTokens.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              FractionallySizedBox(
+                widthFactor: 0.42,
+                alignment: Alignment.centerLeft,
+                child: MxSkeleton(height: 13),
+              ),
+              SizedBox(height: SpacingTokens.xs),
+              FractionallySizedBox(
+                widthFactor: 0.54,
+                alignment: Alignment.centerLeft,
+                child: MxSkeleton(height: 11),
+              ),
+              SizedBox(height: SpacingTokens.sm),
+              Row(
+                children: <Widget>[
+                  Expanded(child: MxSkeleton(height: 4)),
+                  SizedBox(width: SpacingTokens.sm),
+                  MxSkeleton(
+                    width: SizeTokens.iconMinor,
+                    height: SizeTokens.iconMinor,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }

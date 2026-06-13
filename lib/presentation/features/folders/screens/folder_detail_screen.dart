@@ -15,7 +15,6 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_actions.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
-import 'package:memox/presentation/features/folders/widgets/library_skeleton.dart';
 import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_bottom_sheet.dart';
 import 'package:memox/presentation/shared/dialogs/mx_folder_form_dialog.dart';
@@ -126,7 +125,7 @@ class _FolderDetailView extends ConsumerWidget {
         Expanded(
           child: MxRetainedAsyncState<FolderDetail>(
             value: query,
-            skeletonBuilder: (_) => const LibrarySkeleton(),
+            skeletonBuilder: (_) => const FolderDetailSkeleton(),
             errorBuilder: (Object error, StackTrace? stack) => MxErrorState(
               icon: Icons.folder_off_outlined,
               title: AppLocalizations.of(context).folderNotFoundTitle,

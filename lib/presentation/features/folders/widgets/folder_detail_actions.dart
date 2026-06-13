@@ -69,12 +69,11 @@ Future<void> showFolderDetailSubfolderActions(
   FolderWithCount item,
 ) async {
   final AppLocalizations l10n = AppLocalizations.of(context);
-  final bool showImport = item.folder.contentMode != ContentMode.subfolders;
   final LibraryFolderAction? action = await showLibraryFolderActions(
     context,
     name: item.folder.name,
     subtitle: _folderActionSubtitle(l10n, item),
-    showImport: showImport,
+    showImport: false,
   );
   if (action == null) {
     return;

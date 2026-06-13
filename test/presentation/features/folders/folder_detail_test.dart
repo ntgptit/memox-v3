@@ -426,10 +426,11 @@ void main() {
       );
 
       expect(
-        find.byKey(const ValueKey<String>('folder_search_no_results')),
+        find.byKey(const ValueKey<String>('folder_detail_search_empty_card')),
         findsOneWidget,
       );
       expect(find.textContaining('No items match'), findsOneWidget);
+      expect(find.widgetWithText(MxSecondaryButton, 'Clear'), findsOneWidget);
       // The mock keeps the summary shell visible even while search returns no hits.
       expect(find.byType(FolderDecksSummary), findsOneWidget);
     });
@@ -441,7 +442,7 @@ void main() {
       );
 
       expect(
-        find.byKey(const ValueKey<String>('folder_search_no_results')),
+        find.byKey(const ValueKey<String>('folder_detail_search_empty_card')),
         findsNothing,
       );
       expect(find.byType(FolderDecksSummary), findsNothing);
@@ -480,6 +481,7 @@ void main() {
       expect(find.text('Rename'), findsOneWidget);
       expect(find.text('Move to folder'), findsOneWidget);
       expect(find.text('Delete folder'), findsOneWidget);
+      expect(find.text('Import flashcards'), findsNothing);
     });
 
     testWidgets('deck long-press opens the shared deck action sheet', (
@@ -653,7 +655,7 @@ void main() {
       await tester.pump();
 
       expect(
-        find.byKey(const ValueKey<String>('library_skeleton')),
+        find.byKey(const ValueKey<String>('folder_detail_skeleton')),
         findsOneWidget,
       );
       expect(find.byType(FolderDeckTile), findsNothing);
@@ -685,12 +687,13 @@ void main() {
             _wrapScreen(
               Stream<FolderDetail>.value(
                 _detail(
-                  decks: <DeckWithCount>[
-                    _deck(
-                      'Vocab 1',
-                      cardCount: 62,
+                  mode: ContentMode.subfolders,
+                  subfolders: <FolderWithCount>[
+                    _subfolder(
+                      'TOPIK I',
+                      deckCount: 3,
+                      cardCount: 124,
                       dueCount: 8,
-                      lastStudiedAt: DateTime.utc(2026, 6, 6, 10),
                     ),
                   ],
                 ),
@@ -701,6 +704,7 @@ void main() {
           await tester.pumpAndSettle();
 
           expect(find.byType(FolderDetailScreen), findsOneWidget);
+          expect(find.byType(FolderSubfolderTile), findsOneWidget);
           expect(find.text('62%'), findsNothing);
           expect(find.text('6 new'), findsNothing);
           expect(find.text('Most due'), findsNothing);
