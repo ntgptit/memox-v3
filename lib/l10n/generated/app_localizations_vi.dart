@@ -1685,9 +1685,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get flashcardListAddCardAction => 'Thêm thẻ';
 
   @override
-  String get flashcardListImportAction => 'Nhập từ CSV / Excel';
-
-  @override
   String get flashcardListErrorTitle => 'Không mở được bộ thẻ';
 
   @override
@@ -1720,11 +1717,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get flashcardDeckReorderAction => 'Sắp xếp lại thẻ';
 
   @override
-  String get flashcardDeleteOneTitle => 'Xóa thẻ';
+  String get flashcardDeleteOneTitle => 'Xóa thẻ này?';
 
   @override
   String get flashcardDeleteOneMessage =>
-      'Thao tác này sẽ xóa vĩnh viễn thẻ này.';
+      'Lịch sử ôn tập của thẻ này sẽ bị xóa. Các thẻ khác trong bộ thẻ không bị ảnh hưởng.';
 
   @override
   String get flashcardDeletedOneMessage => 'Đã xóa thẻ.';
@@ -1867,4 +1864,56 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get progressErrorMessage =>
       'Lịch sử học vẫn an toàn trên thiết bị này. Hãy thử lại sau giây lát.';
+
+  @override
+  String flashcardListCountHeader(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count THẺ',
+      one: '1 THẺ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String flashcardListReorderHeader(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count THẺ · KÉO ĐỂ SẮP XẾP',
+      one: '1 THẺ · KÉO ĐỂ SẮP XẾP',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get flashcardsEmptyAddFirstAction => 'Thêm thẻ đầu tiên';
+
+  @override
+  String get flashcardsEmptyImportAction => 'Nhập thẻ (CSV, TSV, Anki)';
+
+  @override
+  String get flashcardEditorSavingLabel => 'Đang lưu…';
+
+  @override
+  String get flashcardEditorSavingHelperText => 'Đang lưu vào thiết bị này…';
+
+  @override
+  String get flashcardEditorRetrySaveLabel => 'Lưu lại';
+
+  @override
+  String get flashcardEditorOptionalDetailsHeading => 'Chi tiết tùy chọn';
+
+  @override
+  String flashcardsEditMeta(int reviewCount, String relativeTime) {
+    String _temp0 = intl.Intl.pluralLogic(
+      reviewCount,
+      locale: localeName,
+      other: 'Chỉnh sửa lần cuối $relativeTime · $reviewCount lượt ôn',
+      one: 'Chỉnh sửa lần cuối $relativeTime · 1 lượt ôn',
+      zero: 'Chỉnh sửa lần cuối $relativeTime',
+    );
+    return '$_temp0';
+  }
 }

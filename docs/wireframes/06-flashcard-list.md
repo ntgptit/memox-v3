@@ -52,9 +52,25 @@ verified by tests (`test/presentation/features/flashcards/flashcard_list_test.da
 - FAB + empty-state CTAs: **Add flashcard** → `flashcardCreate` route; **Import** →
   `deckImport` route.
 - Breadcrumb: `Library / {folder chain}` + subtitle `{n} cards · {target language}`.
+- **Count header (mock 06 loaded/reorder):** the list opens with a localized
+  `{n} CARDS` header (`flashcard_list_count_header`); reorder mode shows
+  `{n} CARDS · DRAG TO REORDER`. The mock's `Due first` sort control is **Future**
+  (no due/SRS ordering in the read model) and is not rendered.
+- **Reorder handles (mock 06 reorder):** drag handles render **leading**
+  (`Icons.drag_indicator`); per-row badges/tags/due/flag in the mock are Future.
+- **Empty state (mock 06 empty):** framed `MxCard` (glyph + headline + hint) above
+  full-width `Add first flashcard` (primary) and `Import cards (CSV, TSV, Anki)`
+  (tonal) CTAs. The mock's "Start study is available once you have at least one
+  card" note is **Future** (study not wired here) and is omitted, not faked.
+- **Delete-card dialog (mock 06 delete-card):** the shared confirm dialog renders a
+  front/back preview surface (`flashcard_delete_preview`) above the warning
+  "Review history for this card will be removed. Other cards in this deck are
+  unaffected." Confirm label `Delete card`.
 
-> `flashcardCreate`, `flashcardEdit`, and `deckImport` resolve to `RoutePlaceholder`
-> (screens 07 / 08 / 10 not built). The Flashcard List owns the navigation only.
+> `flashcardCreate` / `flashcardEdit` resolve to the shared Flashcard Editor
+> (`flashcard_editor_screen.dart`, screens 07 / 08) and `deckImport` to
+> `deck_import_screen.dart` (screen 10). The Flashcard List owns the navigation via
+> the `pushFlashcardCreate` / `pushFlashcardEdit` / `pushDeckImport` route helpers.
 
 **Future (not exposed in V1):**
 

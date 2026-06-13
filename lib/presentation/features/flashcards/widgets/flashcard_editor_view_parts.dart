@@ -6,6 +6,7 @@ import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_body.dart';
+import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_sections.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_view_states.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
 
@@ -270,7 +271,6 @@ Widget _buildFlashcardEditorView({
     onRemoveTag: onRemoveTag,
     onDraftChanged: onDraftChanged,
     saveFailure: saveFailure,
-    onRetrySave: onRetrySave,
     onClose: onClose,
     onSave: onSave,
     onDelete: onDelete,
@@ -292,8 +292,8 @@ Widget _buildFlashcardEditorLoadingScaffold({
 }) => MxScaffold(
   appBar: MxAppBar(
     leading: MxIconButton(
-      icon: Icons.close,
-      tooltip: l10n.commonClose,
+      icon: isEditMode ? Icons.arrow_back : Icons.close,
+      tooltip: isEditMode ? l10n.commonBack : l10n.commonClose,
       onPressed: onClose,
     ),
     titleText: isEditMode
@@ -312,8 +312,8 @@ Widget _buildFlashcardEditorLoadErrorScaffold({
 }) => MxScaffold(
   appBar: MxAppBar(
     leading: MxIconButton(
-      icon: Icons.close,
-      tooltip: l10n.commonClose,
+      icon: isEditMode ? Icons.arrow_back : Icons.close,
+      tooltip: isEditMode ? l10n.commonBack : l10n.commonClose,
       onPressed: onBack,
     ),
     titleText: isEditMode
@@ -361,7 +361,6 @@ Widget _buildFlashcardEditorScaffold({
   required ValueChanged<String> onRemoveTag,
   required VoidCallback onDraftChanged,
   required Failure? saveFailure,
-  required VoidCallback onRetrySave,
   required VoidCallback onClose,
   required VoidCallback onSave,
   required VoidCallback onDelete,
@@ -383,8 +382,8 @@ Widget _buildFlashcardEditorScaffold({
   child: MxFormScaffold(
     appBar: MxAppBar(
       leading: MxIconButton(
-        icon: Icons.close,
-        tooltip: l10n.commonClose,
+        icon: isEditMode ? Icons.arrow_back : Icons.close,
+        tooltip: isEditMode ? l10n.commonBack : l10n.commonClose,
         onPressed: isSaving ? null : onClose,
       ),
       titleText: isEditMode
@@ -392,10 +391,8 @@ Widget _buildFlashcardEditorScaffold({
           : l10n.flashcardEditorTitle,
       actions: <Widget>[
         FlashcardEditorSaveButton(
-          label: l10n.commonSave,
-          busy: isSaving,
+          label: isSaving ? l10n.flashcardEditorSavingLabel : l10n.commonSave,
           enabled: canSave,
-          showIcon: false,
           size: MxButtonSize.xsmall,
           onPressed: isSaving ? null : onSave,
         ),
@@ -403,16 +400,33 @@ Widget _buildFlashcardEditorScaffold({
     ),
     bottomAction: FlashcardEditorBottomBar(
       cancelLabel: l10n.commonCancel,
-      saveLabel: isEditMode
-          ? l10n.flashcardsSaveChanges
-          : l10n.flashcardEditorSaveCardLabel,
-      helperLabel: isEditMode
-          ? l10n.flashcardsEditSaveHelperText
-          : l10n.flashcardEditorSaveHelperText,
+      saveLabel: _editorSaveLabel(
+        l10n,
+        isEditMode: isEditMode,
+        isSaving: isSaving,
+        hasFailure: saveFailure != null,
+      ),
+      saveIcon: _editorSaveIcon(
+        isSaving: isSaving,
+        hasFailure: saveFailure != null,
+      ),
+      helperLabel: isSaving
+          ? l10n.flashcardEditorSavingHelperText
+          : (isEditMode
+                ? l10n.flashcardsEditSaveHelperText
+                : l10n.flashcardEditorSaveHelperText),
       isSaving: isSaving,
       saveEnabled: canSave,
       onCancel: isSaving ? null : onClose,
       onSave: isSaving ? null : onSave,
+      banner: saveFailure == null
+          ? null
+          : FlashcardEditorSaveFailedBanner(
+              message: l10n.failureMessage(
+                saveFailure,
+                fallback: saveFailureFallbackMessage,
+              ),
+            ),
     ),
     body: Form(
       key: formKey,
@@ -437,8 +451,6 @@ Widget _buildFlashcardEditorScaffold({
         onAddTag: onAddTag,
         onRemoveTag: onRemoveTag,
         onDraftChanged: onDraftChanged,
-        saveFailure: saveFailure,
-        onRetrySave: onRetrySave,
         isSaving: isSaving,
         showSaveAndAddAnother: !isEditMode,
         saveAndAddAnother: saveAndAddAnother,
@@ -447,7 +459,9 @@ Widget _buildFlashcardEditorScaffold({
         onDelete: onDelete,
         deleteReviewCount:
             flashcardDetail?.progress?.reviewCount ?? deleteReviewCount,
-        saveFailureFallbackMessage: saveFailureFallbackMessage,
+        metaLastEditedAt: isEditMode
+            ? flashcardDetail?.flashcard.updatedAt
+            : null,
         tagsLabel: tagsLabel,
         tagsOptionalLabel: tagsOptionalLabel,
         addTagLabel: addTagLabel,
@@ -456,3 +470,30 @@ Widget _buildFlashcardEditorScaffold({
     ),
   ),
 );
+
+String _editorSaveLabel(
+  AppLocalizations l10n, {
+  required bool isEditMode,
+  required bool isSaving,
+  required bool hasFailure,
+}) {
+  if (isSaving) {
+    return l10n.flashcardEditorSavingLabel;
+  }
+  if (hasFailure) {
+    return l10n.flashcardEditorRetrySaveLabel;
+  }
+  return isEditMode
+      ? l10n.flashcardsSaveChanges
+      : l10n.flashcardEditorSaveCardLabel;
+}
+
+IconData _editorSaveIcon({required bool isSaving, required bool hasFailure}) {
+  if (isSaving) {
+    return Icons.hourglass_top;
+  }
+  if (hasFailure) {
+    return Icons.refresh;
+  }
+  return Icons.check;
+}

@@ -14,6 +14,7 @@ import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/viewmodels/flashcard_list_viewmodel.dart';
 import 'package:memox/presentation/features/flashcards/widgets/deck_actions_sheet.dart';
+import 'package:memox/presentation/features/flashcards/widgets/flashcard_delete_preview.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_list_body.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_list_skeleton.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_row_actions_sheet.dart';
@@ -269,8 +270,9 @@ class _FlashcardListView extends ConsumerWidget {
     final bool confirmed = await showMxConfirmDialog(
       context,
       title: l10n.flashcardDeleteOneTitle,
+      content: FlashcardDeletePreview(front: card.front, back: card.back),
       message: l10n.flashcardDeleteOneMessage,
-      confirmLabel: l10n.commonDelete,
+      confirmLabel: l10n.flashcardsDeleteCardAction,
       cancelLabel: l10n.commonCancel,
       destructive: true,
     );

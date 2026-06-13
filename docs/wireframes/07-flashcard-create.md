@@ -15,6 +15,16 @@ source_specs:
 > optional example, pronunciation, hint, and tags fields. Edit mode is documented
 > separately in `docs/wireframes/08-flashcard-edit.md`.
 
+> **Mock-first refinement (2026-06-13).** Create mode keeps the collapsible
+> "Add details" toggle (optional example/hint/pronunciation). **Saving:** both the
+> app-bar and bottom CTAs read `Saving…` (disabled) and the bottom helper switches
+> to `Saving to this device…`. **Save failed:** a text-only failure banner
+> (`flashcard_editor_save_failed_banner`) is anchored just above the bottom bar and
+> the bottom primary CTA becomes `Retry save` (re-invokes the create use case);
+> typed input is preserved. The mock's mic / pronunciation-speaker glyphs are
+> decorative (no capture/TTS behavior wired) and the deck-selector dropdown does
+> not change the owning deck in V1 — both are visual-only, not faked behavior.
+
 ## Purpose
 
 Create a single flashcard in the current deck. The current V1 flow is tuned for

@@ -9,6 +9,7 @@ import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/hooks/flashcard_editor_draft_hook.dart';
 import 'package:memox/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart';
+import 'package:memox/presentation/features/flashcards/widgets/flashcard_delete_preview.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_view_parts.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/dialogs/mx_name_dialog.dart';
@@ -311,10 +312,13 @@ Future<void> _confirmDelete({
   final bool confirmed = await showMxConfirmDialog(
     context,
     title: l10n.flashcardsDeleteCardTitle,
-    message:
-        '${draft.loadedDetail?.flashcard.front ?? ''}\n'
-        '${draft.loadedDetail?.flashcard.back ?? ''}\n\n'
-        '${l10n.flashcardsDeleteCardMessage(draft.loadedDetail?.progress?.reviewCount ?? 0)}',
+    content: FlashcardDeletePreview(
+      front: draft.loadedDetail?.flashcard.front ?? '',
+      back: draft.loadedDetail?.flashcard.back ?? '',
+    ),
+    message: l10n.flashcardsDeleteCardMessage(
+      draft.loadedDetail?.progress?.reviewCount ?? 0,
+    ),
     cancelLabel: l10n.commonCancel,
     confirmLabel: l10n.flashcardsDeleteCardAction,
     destructive: true,

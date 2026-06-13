@@ -2858,12 +2858,6 @@ abstract class AppLocalizations {
   /// **'Add flashcard'**
   String get flashcardListAddCardAction;
 
-  /// No description provided for @flashcardListImportAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Import from CSV / Excel'**
-  String get flashcardListImportAction;
-
   /// No description provided for @flashcardListErrorTitle.
   ///
   /// In en, this message translates to:
@@ -2915,13 +2909,13 @@ abstract class AppLocalizations {
   /// No description provided for @flashcardDeleteOneTitle.
   ///
   /// In en, this message translates to:
-  /// **'Delete flashcard'**
+  /// **'Delete this flashcard?'**
   String get flashcardDeleteOneTitle;
 
   /// No description provided for @flashcardDeleteOneMessage.
   ///
   /// In en, this message translates to:
-  /// **'This will permanently delete this flashcard.'**
+  /// **'Review history for this card will be removed. Other cards in this deck are unaffected.'**
   String get flashcardDeleteOneMessage;
 
   /// No description provided for @flashcardDeletedOneMessage.
@@ -3157,6 +3151,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your study history is safe on this device. Try again in a moment.'**
   String get progressErrorMessage;
+
+  /// No description provided for @flashcardListCountHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 CARD} other{{count} CARDS}}'**
+  String flashcardListCountHeader(int count);
+
+  /// No description provided for @flashcardListReorderHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 CARD · DRAG TO REORDER} other{{count} CARDS · DRAG TO REORDER}}'**
+  String flashcardListReorderHeader(int count);
+
+  /// No description provided for @flashcardsEmptyAddFirstAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add first flashcard'**
+  String get flashcardsEmptyAddFirstAction;
+
+  /// No description provided for @flashcardsEmptyImportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import cards (CSV, TSV, Anki)'**
+  String get flashcardsEmptyImportAction;
+
+  /// No description provided for @flashcardEditorSavingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get flashcardEditorSavingLabel;
+
+  /// No description provided for @flashcardEditorSavingHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving to this device…'**
+  String get flashcardEditorSavingHelperText;
+
+  /// No description provided for @flashcardEditorRetrySaveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry save'**
+  String get flashcardEditorRetrySaveLabel;
+
+  /// No description provided for @flashcardEditorOptionalDetailsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional details'**
+  String get flashcardEditorOptionalDetailsHeading;
+
+  /// No description provided for @flashcardsEditMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{reviewCount, plural, =0{Last edited {relativeTime}} =1{Last edited {relativeTime} · 1 review} other{Last edited {relativeTime} · {reviewCount} reviews}}'**
+  String flashcardsEditMeta(int reviewCount, String relativeTime);
 }
 
 class _AppLocalizationsDelegate

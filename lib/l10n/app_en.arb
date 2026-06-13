@@ -860,7 +860,6 @@
   },
   "commonDone": "Done",
   "flashcardListAddCardAction": "Add flashcard",
-  "flashcardListImportAction": "Import from CSV / Excel",
   "flashcardListErrorTitle": "Deck unavailable",
   "flashcardListErrorMessage": "We couldn't open this deck. Please try again.",
   "flashcardListActionError": "Something went wrong. Please try again.",
@@ -879,8 +878,8 @@
   "flashcardListLanguageEnglish": "English",
   "flashcardListLanguageOther": "Other language",
   "flashcardDeckReorderAction": "Reorder cards",
-  "flashcardDeleteOneTitle": "Delete flashcard",
-  "flashcardDeleteOneMessage": "This will permanently delete this flashcard.",
+  "flashcardDeleteOneTitle": "Delete this flashcard?",
+  "flashcardDeleteOneMessage": "Review history for this card will be removed. Other cards in this deck are unaffected.",
   "flashcardDeletedOneMessage": "Flashcard deleted.",
   "flashcardReorderError": "Couldn't save the new order.",
   "progressRangeWeek": "Week",
@@ -947,5 +946,38 @@
   "progressBoxEmptyHint": "Cards spread across boxes as you study them.",
   "progressStreakEmptyHint": "A streak starts after one study session.",
   "progressErrorTitle": "Couldn't summarise your progress",
-  "progressErrorMessage": "Your study history is safe on this device. Try again in a moment."
+  "progressErrorMessage": "Your study history is safe on this device. Try again in a moment.",
+  "flashcardListCountHeader": "{count, plural, =1{1 CARD} other{{count} CARDS}}",
+  "@flashcardListCountHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardListReorderHeader": "{count, plural, =1{1 CARD · DRAG TO REORDER} other{{count} CARDS · DRAG TO REORDER}}",
+  "@flashcardListReorderHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsEmptyAddFirstAction": "Add first flashcard",
+  "flashcardsEmptyImportAction": "Import cards (CSV, TSV, Anki)",
+  "flashcardEditorSavingLabel": "Saving…",
+  "flashcardEditorSavingHelperText": "Saving to this device…",
+  "flashcardEditorRetrySaveLabel": "Retry save",
+  "flashcardEditorOptionalDetailsHeading": "Optional details",
+  "flashcardsEditMeta": "{reviewCount, plural, =0{Last edited {relativeTime}} =1{Last edited {relativeTime} · 1 review} other{Last edited {relativeTime} · {reviewCount} reviews}}",
+  "@flashcardsEditMeta": {
+    "placeholders": {
+      "reviewCount": {
+        "type": "int"
+      },
+      "relativeTime": {
+        "type": "String"
+      }
+    }
+  }
 }

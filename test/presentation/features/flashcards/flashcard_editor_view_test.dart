@@ -348,9 +348,22 @@ void main() {
         expect(repository.createCallCount, 1);
         expect(_iconButton(tester, 'Close').onPressed, isNull);
         expect(_secondaryButton(tester, 'Cancel').onPressed, isNull);
-        expect(_primaryButton(tester, 'Save').onPressed, isNull);
-        expect(_primaryButton(tester, 'Save card').onPressed, isNull);
-        expect(_primaryButton(tester, 'Save card').icon, Icons.hourglass_top);
+        // Mock 07 saving: app-bar + bottom CTAs both read "Saving…", disabled,
+        // and the bottom CTA shows the busy glyph.
+        final Iterable<MxPrimaryButton> savingButtons = tester
+            .widgetList<MxPrimaryButton>(find.byType(MxPrimaryButton))
+            .where((MxPrimaryButton button) => button.label == 'Saving…');
+        expect(savingButtons.length, 2);
+        expect(
+          savingButtons.every((MxPrimaryButton b) => b.onPressed == null),
+          isTrue,
+        );
+        expect(
+          savingButtons.any(
+            (MxPrimaryButton b) => b.icon == Icons.hourglass_top,
+          ),
+          isTrue,
+        );
 
         createCompleter.complete(
           Result<Flashcard>.ok(_flashcard(front: 'abc', back: 'hello')),
@@ -379,8 +392,10 @@ void main() {
       expect(find.text('Hello'), findsOneWidget);
       expect(find.text('noun'), findsOneWidget);
       expect(find.text('greeting'), findsOneWidget);
+      // Mock 08 edit uses a back arrow (not the create "X").
+      expect(find.byIcon(Icons.close), findsNothing);
 
-      await tester.tap(find.byIcon(Icons.close));
+      await tester.tap(find.byIcon(Icons.arrow_back));
       await tester.pumpAndSettle();
 
       expect(find.text('Library home'), findsOneWidget);

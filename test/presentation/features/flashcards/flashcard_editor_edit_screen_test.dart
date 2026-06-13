@@ -350,7 +350,17 @@ void main() {
       expect(find.text('Hello'), findsOneWidget);
       expect(find.text('noun'), findsOneWidget);
       expect(find.text('greeting'), findsOneWidget);
-      expect(find.text('Save changes'), findsOneWidget);
+      // Mock 08 edit: always-open "Optional details" section (no create toggle).
+      expect(find.text('Optional details'), findsOneWidget);
+      expect(find.text('Add details'), findsNothing);
+      // Mock 08 edit: real "Last edited … · N reviews" meta strip (no recall %,
+      // no History link).
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_edit_meta_strip')),
+        findsOneWidget,
+      );
+      expect(find.textContaining('Last edited'), findsOneWidget);
+      expect(find.textContaining('· 8 reviews'), findsOneWidget);
     });
 
     testWidgets('DT6 onNavigate: clean close pops immediately', (
@@ -361,7 +371,9 @@ void main() {
       );
       await _openEditor(tester);
 
-      await tester.tap(find.byIcon(Icons.close));
+      // Mock 08 edit uses a back arrow (not the create "X").
+      expect(find.byIcon(Icons.close), findsNothing);
+      await tester.tap(find.byIcon(Icons.arrow_back));
       await tester.pumpAndSettle();
 
       expect(find.text('Library home'), findsOneWidget);
@@ -399,7 +411,7 @@ void main() {
         await tester.enterText(find.byType(TextFormField).at(0), '안녕');
         await tester.pump();
 
-        await tester.tap(find.byIcon(Icons.close));
+        await tester.tap(find.byIcon(Icons.arrow_back));
         await tester.pumpAndSettle();
 
         expect(find.text('Discard changes?'), findsOneWidget);
@@ -501,6 +513,10 @@ void main() {
         ),
         findsOneWidget,
       );
+      // Mock 07/08 save-failed: the bottom CTA becomes "Retry save" and the
+      // typed edit is preserved.
+      expect(find.text('Retry save'), findsOneWidget);
+      expect(find.text('안녕'), findsOneWidget);
       expect(find.text('Danger zone'), findsOneWidget);
     });
   });

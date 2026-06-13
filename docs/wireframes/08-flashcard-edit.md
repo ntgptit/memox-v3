@@ -17,6 +17,18 @@ source_specs:
 > move/export remain on the flashcard list row/bulk surfaces and bury/suspend
 > stay on the study-session card-actions sheet.
 
+> **Mock-first refinement (2026-06-13).** Edit mode diverges from create where the
+> mock 08 does: the app-bar leading is a **back arrow** (create uses `✕`); optional
+> example/hint/pronunciation render as an **always-open `Optional details`
+> section** (no "Add details" toggle); and a real **meta strip
+> (`flashcard_edit_meta_strip`)** shows `Last edited {relativeTime} · {n} reviews`
+> from `updated_at` + `flashcard_progress.review_count`. The mock's **recall %** and
+> **History ›** link are **Future/unavailable** (no recall read model; card history
+> screen 09 is a Future Proposal) and are omitted, not faked. **Save failed** uses
+> the same bottom-anchored banner + `Retry save` CTA as create (preserving edits);
+> **delete** uses the shared confirm dialog with a front/back preview
+> (`flashcard_delete_preview`) and the real `… N reviews of history …` warning.
+
 ## Purpose
 
 Edit an existing flashcard. Same shared form structure as create, with

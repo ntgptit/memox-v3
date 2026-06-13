@@ -1,16 +1,14 @@
 part of 'flashcard_editor_sections.dart';
 
+/// Save-failure banner anchored just above the editor bottom bar
+/// (`docs/wireframes/07-flashcard-create.md` save-failed,
+/// `docs/wireframes/08-flashcard-edit.md` save-failed). Text-only: the retry
+/// affordance is the bottom bar's "Retry save" CTA, so the banner carries no
+/// button of its own.
 class FlashcardEditorSaveFailedBanner extends StatelessWidget {
-  const FlashcardEditorSaveFailedBanner({
-    required this.message,
-    required this.retryLabel,
-    required this.onRetry,
-    super.key,
-  });
+  const FlashcardEditorSaveFailedBanner({required this.message, super.key});
 
   final String message;
-  final String retryLabel;
-  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +31,6 @@ class FlashcardEditorSaveFailedBanner extends StatelessWidget {
               role: MxTextRole.bodyMedium,
               color: scheme.onErrorContainer,
             ),
-          ),
-          const SizedBox(width: SpacingTokens.sm),
-          MxSecondaryButton(
-            label: retryLabel,
-            onPressed: onRetry,
-            variant: MxSecondaryVariant.text,
-            size: MxButtonSize.small,
           ),
         ],
       ),

@@ -11,13 +11,16 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 ///
 /// Returns `true` only when the user taps confirm; cancel / dismissal returns
 /// `false`. All copy is caller-supplied (localized). [destructive] tints the
-/// confirm button with the error role for delete-style actions.
+/// confirm button with the error role for delete-style actions. An optional
+/// [content] widget renders between the title and the [message] — used by the
+/// flashcard delete flows to surface a front/back preview of the card.
 Future<bool> showMxConfirmDialog(
   BuildContext context, {
   required String title,
   required String confirmLabel,
   required String cancelLabel,
   String? message,
+  Widget? content,
   bool destructive = false,
 }) async {
   final bool? confirmed = await showDialog<bool>(
@@ -58,6 +61,10 @@ Future<bool> showMxConfirmDialog(
                         fontWeight: TypographyTokens.bold,
                       ),
                     ),
+                    if (content != null) ...<Widget>[
+                      const SizedBox(height: SpacingTokens.md),
+                      content,
+                    ],
                     if (message != null) ...<Widget>[
                       const SizedBox(height: SpacingTokens.md),
                       Text(

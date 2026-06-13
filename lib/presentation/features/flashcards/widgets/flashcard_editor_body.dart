@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:memox/app/router/app_navigation.dart';
-import 'package:memox/core/error/failure.dart';
+import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
+import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/utils/relative_time.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_sections.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_editor_tags_section.dart';
-// ignore: unnecessary_import -- reason: preserve the direct import alongside the shared barrel export
-import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
 
 class FlashcardEditorBody extends StatelessWidget {
@@ -35,8 +36,6 @@ class FlashcardEditorBody extends StatelessWidget {
     required this.onAddTag,
     required this.onRemoveTag,
     required this.onDraftChanged,
-    required this.saveFailure,
-    required this.onRetrySave,
     required this.isSaving,
     required this.showSaveAndAddAnother,
     required this.saveAndAddAnother,
@@ -44,11 +43,11 @@ class FlashcardEditorBody extends StatelessWidget {
     required this.showDangerZone,
     required this.onDelete,
     required this.deleteReviewCount,
-    required this.saveFailureFallbackMessage,
     required this.tagsLabel,
     required this.tagsOptionalLabel,
     required this.addTagLabel,
     required this.currentBreadcrumbLabel,
+    this.metaLastEditedAt,
     super.key,
   });
 
@@ -72,8 +71,6 @@ class FlashcardEditorBody extends StatelessWidget {
   final VoidCallback onAddTag;
   final ValueChanged<String> onRemoveTag;
   final VoidCallback onDraftChanged;
-  final Failure? saveFailure;
-  final VoidCallback onRetrySave;
   final bool isSaving;
   final bool showSaveAndAddAnother;
   final bool saveAndAddAnother;
@@ -81,11 +78,16 @@ class FlashcardEditorBody extends StatelessWidget {
   final bool showDangerZone;
   final VoidCallback onDelete;
   final int deleteReviewCount;
-  final String saveFailureFallbackMessage;
   final String tagsLabel;
   final String tagsOptionalLabel;
   final String addTagLabel;
   final String currentBreadcrumbLabel;
+
+  /// Edit-mode only: the card's `updated_at`, rendered as a real
+  /// "Last edited … · N reviews" meta strip (mock 08). Null in create mode and
+  /// when no card is loaded; recall-rate and the History link in the mock are
+  /// Future/unavailable and intentionally omitted.
+  final DateTime? metaLastEditedAt;
 
   List<MxBreadcrumbSegment> _buildBreadcrumbSegments(
     BuildContext context,
@@ -155,6 +157,8 @@ class FlashcardEditorBody extends StatelessWidget {
           FlashcardEditorDetailsSection(
             title: l10n.flashcardEditorMoreFieldsLabel,
             subtitle: l10n.flashcardEditorMoreFieldsSummary,
+            collapsible: !isEditMode,
+            staticHeading: l10n.flashcardEditorOptionalDetailsHeading,
             expanded: detailsOpen,
             exampleLabel: l10n.flashcardEditorExampleLabel,
             examplePlaceholder: l10n.flashcardEditorSampleExample,
@@ -199,7 +203,6 @@ class FlashcardEditorBody extends StatelessWidget {
               onAction: onDelete,
             ),
           ],
-          ..._buildSaveFailureWidgets(context),
         ],
       ),
     );
@@ -221,6 +224,13 @@ class FlashcardEditorBody extends StatelessWidget {
           MxBreadcrumbSegment(label: currentBreadcrumbLabel),
         ],
       ),
+      if (isEditMode && metaLastEditedAt != null) ...<Widget>[
+        const SizedBox(height: SpacingTokens.sm),
+        _FlashcardEditMetaStrip(
+          lastEditedAt: metaLastEditedAt!,
+          reviewCount: deleteReviewCount,
+        ),
+      ],
       const SizedBox(height: SpacingTokens.sm),
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -238,24 +248,64 @@ class FlashcardEditorBody extends StatelessWidget {
       ),
     ],
   );
+}
 
-  List<Widget> _buildSaveFailureWidgets(BuildContext context) {
-    final Failure? failure = saveFailure;
-    if (failure == null) {
-      return const <Widget>[];
-    }
+/// Edit-mode meta strip (mock 08): a real "Last edited … · N reviews" summary
+/// from `updated_at` + the progress review count. Recall-rate and the History
+/// link in the mock are Future/unavailable and are not rendered.
+class _FlashcardEditMetaStrip extends StatelessWidget {
+  const _FlashcardEditMetaStrip({
+    required this.lastEditedAt,
+    required this.reviewCount,
+  });
+
+  final DateTime lastEditedAt;
+  final int reviewCount;
+
+  @override
+  Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    return <Widget>[
-      const SizedBox(height: SpacingTokens.lg),
-      FlashcardEditorSaveFailedBanner(
-        message: l10n.failureMessage(
-          failure,
-          fallback: saveFailureFallbackMessage,
-        ),
-        retryLabel: l10n.commonRetry,
-        onRetry: onRetrySave,
+    final ColorScheme scheme = context.colorScheme;
+    final RelativeTime relativeTime = RelativeTime.between(
+      lastEditedAt,
+      DateTime.now(),
+    );
+    final String relativeLabel = l10n.relativeTimeAgo(
+      relativeTime.unit.name,
+      relativeTime.count,
+    );
+    return Container(
+      key: const ValueKey<String>('flashcard_edit_meta_strip'),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.md,
+        vertical: SpacingTokens.sm,
       ),
-    ];
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLow,
+        borderRadius: RadiusTokens.brFull,
+        border: Border.all(color: scheme.outlineVariant),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(
+            Icons.schedule_outlined,
+            size: SizeTokens.iconXs,
+            color: scheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: SpacingTokens.xs),
+          Flexible(
+            child: MxText(
+              l10n.flashcardsEditMeta(reviewCount, relativeLabel),
+              role: MxTextRole.labelMedium,
+              color: scheme.onSurfaceVariant,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -263,26 +313,37 @@ class FlashcardEditorBottomBar extends StatelessWidget {
   const FlashcardEditorBottomBar({
     required this.cancelLabel,
     required this.saveLabel,
+    required this.saveIcon,
     required this.helperLabel,
     required this.isSaving,
     required this.saveEnabled,
     required this.onCancel,
     required this.onSave,
+    this.banner,
     super.key,
   });
 
   final String cancelLabel;
   final String saveLabel;
+  final IconData saveIcon;
   final String helperLabel;
   final bool isSaving;
   final bool saveEnabled;
   final VoidCallback? onCancel;
   final VoidCallback? onSave;
 
+  /// Optional save-failure banner rendered just above the action row (mock
+  /// 07/08 save-failed).
+  final Widget? banner;
+
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
+      if (banner != null) ...<Widget>[
+        banner!,
+        const SizedBox(height: SpacingTokens.sm),
+      ],
       Row(
         children: <Widget>[
           MxSecondaryButton(
@@ -294,9 +355,8 @@ class FlashcardEditorBottomBar extends StatelessWidget {
           const Spacer(),
           FlashcardEditorSaveButton(
             label: saveLabel,
-            busy: isSaving,
+            icon: saveIcon,
             enabled: saveEnabled,
-            showIcon: true,
             size: MxButtonSize.medium,
             onPressed: onSave,
           ),
@@ -311,25 +371,23 @@ class FlashcardEditorBottomBar extends StatelessWidget {
 class FlashcardEditorSaveButton extends StatelessWidget {
   const FlashcardEditorSaveButton({
     required this.label,
-    required this.busy,
     required this.enabled,
-    required this.showIcon,
     required this.size,
     required this.onPressed,
+    this.icon,
     super.key,
   });
 
   final String label;
-  final bool busy;
   final bool enabled;
-  final bool showIcon;
   final MxButtonSize size;
   final VoidCallback? onPressed;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) => MxPrimaryButton(
     label: label,
-    icon: showIcon ? (busy ? Icons.hourglass_top : Icons.check) : null,
+    icon: icon,
     onPressed: enabled ? onPressed : null,
     size: size,
   );

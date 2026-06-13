@@ -215,6 +215,8 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
     required this.hintFocusNode,
     required this.onToggle,
     required this.onChanged,
+    this.collapsible = true,
+    this.staticHeading,
     this.pronunciationTrailingIcon,
     super.key,
   });
@@ -222,6 +224,12 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool expanded;
+
+  /// When `false` (edit mode), the optional fields are always visible under a
+  /// plain [staticHeading] — there is no "Add details" toggle. When `true`
+  /// (create mode), the fields sit behind the collapsible toggle.
+  final bool collapsible;
+  final String? staticHeading;
   final String exampleLabel;
   final String examplePlaceholder;
   final String pronunciationLabel;
@@ -240,6 +248,53 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool showFields = !collapsible || expanded;
+    final List<Widget> fields = <Widget>[
+      if (showFields) ...<Widget>[
+        const SizedBox(height: SpacingTokens.md),
+        _OptionalField(
+          label: exampleLabel,
+          placeholder: examplePlaceholder,
+          controller: exampleController,
+          focusNode: exampleFocusNode,
+          onChanged: onChanged,
+          minLines: 2,
+          maxLines: 4,
+        ),
+        const SizedBox(height: SpacingTokens.md),
+        _OptionalField(
+          label: hintLabel,
+          placeholder: hintPlaceholder,
+          controller: hintController,
+          focusNode: hintFocusNode,
+          onChanged: onChanged,
+          minLines: 2,
+          maxLines: 3,
+        ),
+        const SizedBox(height: SpacingTokens.md),
+        _OptionalField(
+          label: pronunciationLabel,
+          placeholder: pronunciationPlaceholder,
+          controller: pronunciationController,
+          focusNode: pronunciationFocusNode,
+          onChanged: onChanged,
+          minLines: 1,
+          maxLines: 2,
+          trailingIcon: pronunciationTrailingIcon,
+        ),
+      ],
+    ];
+
+    if (!collapsible) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          _OptionalDetailsHeading(label: staticHeading ?? title),
+          ...fields,
+        ],
+      );
+    }
+
     final ColorScheme scheme = context.colorScheme;
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -258,44 +313,28 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
               expanded: expanded,
               onTap: onToggle,
             ),
-            if (expanded) ...<Widget>[
-              const SizedBox(height: SpacingTokens.md),
-              _OptionalField(
-                label: exampleLabel,
-                placeholder: examplePlaceholder,
-                controller: exampleController,
-                focusNode: exampleFocusNode,
-                onChanged: onChanged,
-                minLines: 2,
-                maxLines: 4,
-              ),
-              const SizedBox(height: SpacingTokens.md),
-              _OptionalField(
-                label: hintLabel,
-                placeholder: hintPlaceholder,
-                controller: hintController,
-                focusNode: hintFocusNode,
-                onChanged: onChanged,
-                minLines: 2,
-                maxLines: 3,
-              ),
-              const SizedBox(height: SpacingTokens.md),
-              _OptionalField(
-                label: pronunciationLabel,
-                placeholder: pronunciationPlaceholder,
-                controller: pronunciationController,
-                focusNode: pronunciationFocusNode,
-                onChanged: onChanged,
-                minLines: 1,
-                maxLines: 2,
-                trailingIcon: pronunciationTrailingIcon,
-              ),
-            ],
+            ...fields,
           ],
         ),
       ),
     );
   }
+}
+
+/// Plain section heading for the always-open optional-details block in edit
+/// mode (mock 08 "OPTIONAL DETAILS").
+class _OptionalDetailsHeading extends StatelessWidget {
+  const _OptionalDetailsHeading({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => MxText(
+    label,
+    role: MxTextRole.labelLarge,
+    color: context.colorScheme.onSurfaceVariant,
+    fontWeight: TypographyTokens.semiBold,
+  );
 }
 
 class _DetailsToggleRow extends StatelessWidget {

@@ -1710,9 +1710,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flashcardListAddCardAction => 'Add flashcard';
 
   @override
-  String get flashcardListImportAction => 'Import from CSV / Excel';
-
-  @override
   String get flashcardListErrorTitle => 'Deck unavailable';
 
   @override
@@ -1747,11 +1744,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flashcardDeckReorderAction => 'Reorder cards';
 
   @override
-  String get flashcardDeleteOneTitle => 'Delete flashcard';
+  String get flashcardDeleteOneTitle => 'Delete this flashcard?';
 
   @override
   String get flashcardDeleteOneMessage =>
-      'This will permanently delete this flashcard.';
+      'Review history for this card will be removed. Other cards in this deck are unaffected.';
 
   @override
   String get flashcardDeletedOneMessage => 'Flashcard deleted.';
@@ -1895,4 +1892,56 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get progressErrorMessage =>
       'Your study history is safe on this device. Try again in a moment.';
+
+  @override
+  String flashcardListCountHeader(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count CARDS',
+      one: '1 CARD',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String flashcardListReorderHeader(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count CARDS · DRAG TO REORDER',
+      one: '1 CARD · DRAG TO REORDER',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get flashcardsEmptyAddFirstAction => 'Add first flashcard';
+
+  @override
+  String get flashcardsEmptyImportAction => 'Import cards (CSV, TSV, Anki)';
+
+  @override
+  String get flashcardEditorSavingLabel => 'Saving…';
+
+  @override
+  String get flashcardEditorSavingHelperText => 'Saving to this device…';
+
+  @override
+  String get flashcardEditorRetrySaveLabel => 'Retry save';
+
+  @override
+  String get flashcardEditorOptionalDetailsHeading => 'Optional details';
+
+  @override
+  String flashcardsEditMeta(int reviewCount, String relativeTime) {
+    String _temp0 = intl.Intl.pluralLogic(
+      reviewCount,
+      locale: localeName,
+      other: 'Last edited $relativeTime · $reviewCount reviews',
+      one: 'Last edited $relativeTime · 1 review',
+      zero: 'Last edited $relativeTime',
+    );
+    return '$_temp0';
+  }
 }

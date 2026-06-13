@@ -860,7 +860,6 @@
   },
   "commonDone": "Xong",
   "flashcardListAddCardAction": "Thêm thẻ",
-  "flashcardListImportAction": "Nhập từ CSV / Excel",
   "flashcardListErrorTitle": "Không mở được bộ thẻ",
   "flashcardListErrorMessage": "Không thể mở bộ thẻ này. Vui lòng thử lại.",
   "flashcardListActionError": "Đã xảy ra lỗi. Vui lòng thử lại.",
@@ -879,8 +878,8 @@
   "flashcardListLanguageEnglish": "Tiếng Anh",
   "flashcardListLanguageOther": "Ngôn ngữ khác",
   "flashcardDeckReorderAction": "Sắp xếp lại thẻ",
-  "flashcardDeleteOneTitle": "Xóa thẻ",
-  "flashcardDeleteOneMessage": "Thao tác này sẽ xóa vĩnh viễn thẻ này.",
+  "flashcardDeleteOneTitle": "Xóa thẻ này?",
+  "flashcardDeleteOneMessage": "Lịch sử ôn tập của thẻ này sẽ bị xóa. Các thẻ khác trong bộ thẻ không bị ảnh hưởng.",
   "flashcardDeletedOneMessage": "Đã xóa thẻ.",
   "flashcardReorderError": "Không thể lưu thứ tự mới.",
   "progressRangeWeek": "Tuần",
@@ -947,5 +946,38 @@
   "progressBoxEmptyHint": "Thẻ sẽ phân bố vào các hộp khi bạn học.",
   "progressStreakEmptyHint": "Chuỗi ngày học bắt đầu sau một phiên học.",
   "progressErrorTitle": "Không thể tổng hợp tiến độ của bạn",
-  "progressErrorMessage": "Lịch sử học vẫn an toàn trên thiết bị này. Hãy thử lại sau giây lát."
+  "progressErrorMessage": "Lịch sử học vẫn an toàn trên thiết bị này. Hãy thử lại sau giây lát.",
+  "flashcardListCountHeader": "{count, plural, =1{1 THẺ} other{{count} THẺ}}",
+  "@flashcardListCountHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardListReorderHeader": "{count, plural, =1{1 THẺ · KÉO ĐỂ SẮP XẾP} other{{count} THẺ · KÉO ĐỂ SẮP XẾP}}",
+  "@flashcardListReorderHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardsEmptyAddFirstAction": "Thêm thẻ đầu tiên",
+  "flashcardsEmptyImportAction": "Nhập thẻ (CSV, TSV, Anki)",
+  "flashcardEditorSavingLabel": "Đang lưu…",
+  "flashcardEditorSavingHelperText": "Đang lưu vào thiết bị này…",
+  "flashcardEditorRetrySaveLabel": "Lưu lại",
+  "flashcardEditorOptionalDetailsHeading": "Chi tiết tùy chọn",
+  "flashcardsEditMeta": "{reviewCount, plural, =0{Chỉnh sửa lần cuối {relativeTime}} =1{Chỉnh sửa lần cuối {relativeTime} · 1 lượt ôn} other{Chỉnh sửa lần cuối {relativeTime} · {reviewCount} lượt ôn}}",
+  "@flashcardsEditMeta": {
+    "placeholders": {
+      "reviewCount": {
+        "type": "int"
+      },
+      "relativeTime": {
+        "type": "String"
+      }
+    }
+  }
 }

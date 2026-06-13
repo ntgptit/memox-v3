@@ -98,6 +98,8 @@ void main() {
       expect(find.byType(FlashcardDetailCardRow), findsNWidgets(2));
       expect(find.text('안녕하세요'), findsOneWidget);
       expect(find.text('Hello'), findsOneWidget);
+      // Mock 06 loaded count header (real card count, no Future sort control).
+      expect(find.text('2 CARDS'), findsOneWidget);
     });
   });
 
@@ -108,8 +110,8 @@ void main() {
       await tester.pumpWidget(_wrapBody(_detail()));
 
       expect(find.byType(FlashcardEmptyState), findsOneWidget);
-      expect(find.text('Add flashcard'), findsOneWidget);
-      expect(find.text('Import from CSV / Excel'), findsOneWidget);
+      expect(find.text('Add first flashcard'), findsOneWidget);
+      expect(find.text('Import cards (CSV, TSV, Anki)'), findsOneWidget);
     });
 
     testWidgets('empty wins over an active search term', (
@@ -164,7 +166,9 @@ void main() {
         find.byKey(const ValueKey<String>('flashcard_reorder_list')),
         findsOneWidget,
       );
-      expect(find.byIcon(Icons.drag_handle), findsNWidgets(2));
+      // Mock 06 reorder: leading drag handles + "{n} CARDS · DRAG TO REORDER".
+      expect(find.byIcon(Icons.drag_indicator), findsNWidgets(2));
+      expect(find.text('2 CARDS · DRAG TO REORDER'), findsOneWidget);
     });
   });
 
@@ -220,9 +224,17 @@ void main() {
       await tester.tap(find.text('Delete'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Delete flashcard'), findsOneWidget);
+      // Mock 06 delete-card: title + front/back preview surface + warning copy.
+      expect(find.text('Delete this flashcard?'), findsOneWidget);
       expect(
-        find.text('This will permanently delete this flashcard.'),
+        find.byKey(const ValueKey<String>('flashcard_delete_preview')),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Review history for this card will be removed. Other cards in '
+          'this deck are unaffected.',
+        ),
         findsOneWidget,
       );
     });
