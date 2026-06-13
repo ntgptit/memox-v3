@@ -16,7 +16,6 @@ import 'package:memox/presentation/features/history/widgets/card_history_header_
 import 'package:memox/presentation/features/history/widgets/card_history_lifecycle_row.dart';
 import 'package:memox/presentation/features/history/widgets/card_history_progress_card.dart';
 import 'package:memox/presentation/features/history/widgets/card_history_timeline_row.dart';
-import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
@@ -66,11 +65,13 @@ class CardHistoryBody extends ConsumerWidget {
     );
   }
 
+  // Horizontal page gutter comes from MxScaffold's MxContentShell; only add
+  // vertical spacing here (avoid double-gutter).
   Widget _adapter({required Widget child, double top = SpacingTokens.sm}) =>
       SliverToBoxAdapter(
         child: Padding(
           padding: EdgeInsets.only(top: top),
-          child: MxContentShell(child: child),
+          child: child,
         ),
       );
 
@@ -112,21 +113,19 @@ class CardHistoryBody extends ConsumerWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.only(top: SpacingTokens.lg),
-            child: MxContentShell(
-              child: MxCard(
-                padding: const EdgeInsets.symmetric(
-                  vertical: SpacingTokens.xl,
-                  horizontal: SpacingTokens.lg,
-                ),
-                child: MxEmptyState(
-                  icon: Icons.insights_outlined,
-                  title: l10n.cardHistoryEmptyTitle,
-                  message: l10n.cardHistoryEmptyMessage,
-                  actionLabel: l10n.cardHistoryEmptyAction,
-                  onAction: () => context.goStudyEntry(
-                    entryType: EntryType.deck,
-                    entryRefId: deckId,
-                  ),
+            child: MxCard(
+              padding: const EdgeInsets.symmetric(
+                vertical: SpacingTokens.xl,
+                horizontal: SpacingTokens.lg,
+              ),
+              child: MxEmptyState(
+                icon: Icons.insights_outlined,
+                title: l10n.cardHistoryEmptyTitle,
+                message: l10n.cardHistoryEmptyMessage,
+                actionLabel: l10n.cardHistoryEmptyAction,
+                onAction: () => context.goStudyEntry(
+                  entryType: EntryType.deck,
+                  entryRefId: deckId,
                 ),
               ),
             ),
@@ -144,18 +143,13 @@ class CardHistoryBody extends ConsumerWidget {
 
     return <Widget>[
       SliverToBoxAdapter(
-        child: MxContentShell(
-          child: _TimelineHeader(
-            count: events.length,
-            flashcardId: flashcardId,
-          ),
-        ),
+        child: _TimelineHeader(count: events.length, flashcardId: flashcardId),
       ),
       SliverList.list(
         children: <Widget>[
           for (final CardHistoryEvent event in events)
-            MxContentShell(child: _row(event, events.first == event, now)),
-          const MxContentShell(child: CardHistoryBeginningRow()),
+            _row(event, events.first == event, now),
+          const CardHistoryBeginningRow(),
         ],
       ),
     ];
