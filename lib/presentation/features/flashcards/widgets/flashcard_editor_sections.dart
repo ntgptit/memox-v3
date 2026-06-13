@@ -295,28 +295,20 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
       );
     }
 
-    final ColorScheme scheme = context.colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        borderRadius: RadiusTokens.brLg,
-        border: Border.all(color: scheme.outlineVariant),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(SpacingTokens.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _DetailsToggleRow(
-              title: title,
-              subtitle: subtitle,
-              expanded: expanded,
-              onTap: onToggle,
-            ),
-            ...fields,
-          ],
+    // Collapsible (create): the toggle is a standalone pill; expanded fields
+    // flow directly below on the page surface — no nested card wrapper
+    // (mock 07 details-open).
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _DetailsToggleRow(
+          title: title,
+          subtitle: subtitle,
+          expanded: expanded,
+          onTap: onToggle,
         ),
-      ),
+        ...fields,
+      ],
     );
   }
 }
