@@ -173,7 +173,6 @@ class FlashcardEditorBody extends StatelessWidget {
             exampleFocusNode: exampleFocusNode,
             pronunciationFocusNode: pronunciationFocusNode,
             hintFocusNode: hintFocusNode,
-            pronunciationTrailingIcon: Icons.volume_up_outlined,
             onToggle: onToggleDetails,
             onChanged: (_) => onDraftChanged(),
           ),

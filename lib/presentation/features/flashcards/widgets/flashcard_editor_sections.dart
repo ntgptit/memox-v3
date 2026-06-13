@@ -219,7 +219,6 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
     required this.onChanged,
     this.collapsible = true,
     this.staticHeading,
-    this.pronunciationTrailingIcon,
     super.key,
   });
 
@@ -247,7 +246,6 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
   final FocusNode hintFocusNode;
   final VoidCallback onToggle;
   final ValueChanged<String>? onChanged;
-  final IconData? pronunciationTrailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +287,6 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
           onChanged: onChanged,
           minLines: 1,
           maxLines: 2,
-          trailingIcon: pronunciationTrailingIcon,
         ),
       ],
     ];
@@ -413,7 +410,6 @@ class _OptionalField extends StatelessWidget {
     required this.onChanged,
     required this.minLines,
     required this.maxLines,
-    this.trailingIcon,
   });
 
   final IconData icon;
@@ -425,7 +421,6 @@ class _OptionalField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int minLines;
   final int maxLines;
-  final IconData? trailingIcon;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -441,7 +436,6 @@ class _OptionalField extends StatelessWidget {
         textInputAction: TextInputAction.newline,
         onChanged: onChanged,
         hintText: placeholder,
-        trailingIcon: trailingIcon,
         prominent: false,
       ),
     ],

@@ -375,7 +375,7 @@
   "flashcardEditorHintLabel": "Hint",
   "flashcardEditorTagsLabel": "TAGS",
   "flashcardEditorTagsOptionalLabel": "optional",
-  "flashcardEditorAddTagLabel": "+ Add tag",
+  "flashcardEditorAddTagLabel": "Add tag",
   "flashcardEditorSaveCardLabel": "Save card",
   "flashcardEditorSaveHelperText": "Front and back are required to save.",
   "flashcardEditorSampleExample": "안녕하세요, 저는 민수입니다.",

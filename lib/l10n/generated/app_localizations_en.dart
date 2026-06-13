@@ -805,7 +805,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flashcardEditorTagsOptionalLabel => 'optional';
 
   @override
-  String get flashcardEditorAddTagLabel => '+ Add tag';
+  String get flashcardEditorAddTagLabel => 'Add tag';
 
   @override
   String get flashcardEditorSaveCardLabel => 'Save card';

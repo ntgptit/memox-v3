@@ -793,7 +793,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get flashcardEditorTagsOptionalLabel => 'không bắt buộc';
 
   @override
-  String get flashcardEditorAddTagLabel => '+ Thêm thẻ';
+  String get flashcardEditorAddTagLabel => 'Thêm thẻ';
 
   @override
   String get flashcardEditorSaveCardLabel => 'Lưu thẻ';

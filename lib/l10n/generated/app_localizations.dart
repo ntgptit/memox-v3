@@ -1457,7 +1457,7 @@ abstract class AppLocalizations {
   /// No description provided for @flashcardEditorAddTagLabel.
   ///
   /// In en, this message translates to:
-  /// **'+ Add tag'**
+  /// **'Add tag'**
   String get flashcardEditorAddTagLabel;
 
   /// No description provided for @flashcardEditorSaveCardLabel.

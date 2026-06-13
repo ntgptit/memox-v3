@@ -229,8 +229,8 @@ Future<void> _openEditor(WidgetTester tester) async {
 }
 
 Future<void> _addTag(WidgetTester tester, String tag) async {
-  await tester.ensureVisible(find.text('+ Add tag').first);
-  await tester.tap(find.text('+ Add tag').first);
+  await tester.ensureVisible(find.text('Add tag').first);
+  await tester.tap(find.text('Add tag').first);
   await tester.pumpAndSettle();
   await tester.enterText(find.byType(TextField).last, tag);
   await tester.pump();
@@ -259,7 +259,7 @@ void main() {
         expect(find.byType(TextFormField), findsNWidgets(2));
         expect(find.text('Add details'), findsOneWidget);
         expect(find.text('TAGS'), findsOneWidget);
-        expect(find.text('+ Add tag'), findsOneWidget);
+        expect(find.text('Add tag'), findsOneWidget);
         expect(find.text('Save and add another'), findsOneWidget);
         expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isFalse);
         expect(_primaryButton(tester, 'Save').onPressed, isNull);
@@ -282,7 +282,7 @@ void main() {
       expect(find.text('Add details'), findsOneWidget);
       expect(find.byType(TextFormField), findsNWidgets(5));
       expect(find.text('TAGS'), findsOneWidget);
-      expect(find.text('+ Add tag'), findsOneWidget);
+      expect(find.text('Add tag'), findsOneWidget);
     });
 
     testWidgets(
