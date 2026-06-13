@@ -128,6 +128,41 @@ lib/l10n/
 | Shared widget             | `Mx` prefix                           | `MxPrimaryButton`, `MxScaffold`     |
 | Feature-private widget    | no `Mx` prefix                        | `ResumeCard`, `GoalRing`            |
 
+### Per-folder naming control (guard-enforced)
+
+File names and the primary public class name are not free choices — each layer folder
+owns a suffix, and `code-verification-guard` (ruleset `memox`) rejects a misnamed file
+or class at the gate. The file name must always match the primary public class
+(`class CreateDeckUseCase` → `create_deck_usecase.dart`), so enforcing the file suffix
+also pins the class name.
+
+| Folder | File name (enforced) | Public class | Guard rule id(s) |
+|--------|----------------------|--------------|------------------|
+| `lib/domain/usecases/**` | `*_usecase.dart` (`*_usecases.dart` when grouping) | `*UseCase` | `memox.layer_naming.usecase_file_suffix`, `memox.layer_naming.usecase_class_suffix` |
+| `lib/domain/repositories/**` | `*_repository.dart` | `abstract interface class *Repository` | `memox.layer_naming.repository_interface_file_suffix`, `memox.layer_naming.repository_interface_class_suffix` |
+| `lib/data/datasources/local/daos/**` | `*_dao.dart` | name contains `Dao` (`FlashcardDao`, `FlashcardDaoManager`) | `memox.layer_naming.dao_file_suffix`, `memox.layer_naming.dao_class_suffix` |
+| `lib/data/mappers/**` | `*_mapper.dart` | `abstract final class *Mapper` | `memox.layer_naming.mapper_file_suffix`, `memox.layer_naming.mapper_class_suffix` |
+| `lib/data/datasources/local/migrations/**` | `v<N>_<desc>.dart` | — | `memox.layer_naming.migration_file_prefix` |
+| `lib/data/repositories/**` | contains `repo` (canonical `*_repository_impl.dart`) — **warning** | `*RepositoryImpl` | `memox.layer_naming.repository_impl_file_token` |
+| `lib/presentation/features/*/routes/**` | `*_routes.dart` | — | `memox.layer_naming.route_file_suffix` |
+| `lib/presentation/features/*/screens/**` | `*_screen.dart` / `*_page.dart` | `*Screen` | `memox.coding.screen_file_naming`, `memox.coding.crud_screen_class_naming` |
+| `lib/presentation/features/*/viewmodels/**`, `*/providers/**`, `lib/app/di/**` | `*_viewmodel.dart` / `*_notifier.dart` / `*_provider(s).dart` | `*Controller` / `*Notifier` | `memox.coding.provider_file_naming`, `memox.coding.crud_controller_class_naming` |
+| `lib/presentation/shared/{widgets,layouts,dialogs,feedback,bottom_sheets}/**` | `mx_*.dart` | `Mx*` (classes, enums, typedefs) | `memox.shared_widget.file_naming_mx_prefix`, `memox.shared_widget.public_type_mx_prefix` |
+| all of `lib/**` | `snake_case.dart` | — | `memox.dart_convention.file_name_snake_case` |
+
+Notes:
+
+- Layers with **no suffix** by design — `domain/entities`, `domain/types`, `domain/models` —
+  are intentionally absent from the table. They carry no public-suffix rule (only the global
+  `snake_case` file rule); their type names follow the [Classes](#classes) table above.
+- `data/repositories` is a **warning** only because legacy impl names are mixed
+  (`*_repository_impl`, `*_repo_impl`, split helpers). Promote
+  `memox.layer_naming.repository_impl_file_token` to `error` once every impl is renamed to
+  `<entity>_repository_impl.dart`.
+- The `memox.layer_naming.*` rules live in
+  `code-verification-guard/registries/projects/memox/rules/memox-layer-naming-rules.yaml`.
+  To add or change a layer rule, edit that file and keep this table in the same commit.
+
 ### Functions and variables
 
 - lowerCamelCase always.
