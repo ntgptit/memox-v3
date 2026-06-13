@@ -14,6 +14,7 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 
 /// A Library Overview folder row (`docs/wireframes/02-library.md`).
 ///
@@ -82,14 +83,14 @@ class _LibraryFolderTileCard extends StatelessWidget {
     onTap: onTap,
     onLongPress: onShowActions,
     padding: const EdgeInsets.symmetric(
-      horizontal: SpacingTokens.lg,
-      vertical: SpacingTokens.lg,
+      horizontal: SpacingTokens.form,
+      vertical: SpacingTokens.form,
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         _LeadingTile(color: tone),
-        const SizedBox(width: SpacingTokens.lg),
+        const SizedBox(width: SpacingTokens.form),
         Expanded(
           child: _FolderTileBody(
             item: item,
@@ -100,7 +101,7 @@ class _LibraryFolderTileCard extends StatelessWidget {
             isSubfolderMode: isSubfolderMode,
           ),
         ),
-        const SizedBox(width: SpacingTokens.md),
+        const SizedBox(width: SpacingTokens.sm),
         MxIconButton(
           icon: Icons.more_vert,
           tooltip: tooltip,
@@ -133,7 +134,6 @@ class _FolderTileBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final String? effectiveSubtitle = subtitle;
-    final int? effectiveNewCount = newCount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -166,7 +166,7 @@ class _FolderTileBody extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ],
-        const SizedBox(height: SpacingTokens.sm),
+        const SizedBox(height: SpacingTokens.xs),
         Row(
           children: <Widget>[
             Flexible(
@@ -188,18 +188,18 @@ class _FolderTileBody extends StatelessWidget {
                 label: l10n.libraryFolderCardsCount(item.cardCount),
               ),
             ),
-            if ((effectiveNewCount ?? 0) > 0) ...<Widget>[
-              const SizedBox(width: SpacingTokens.md),
+            if ((newCount ?? 0) > 0) ...<Widget>[
+              const SizedBox(width: SpacingTokens.sm),
               Flexible(
                 fit: FlexFit.loose,
                 child: _NewMetaItem(
-                  label: l10n.libraryFolderNewCount(effectiveNewCount!),
+                  label: l10n.libraryFolderNewCount(newCount!),
                 ),
               ),
             ],
           ],
         ),
-        const SizedBox(height: SpacingTokens.sm),
+        const SizedBox(height: SpacingTokens.xs),
         MxLinearProgress(value: mastery, color: tone, height: SpacingTokens.xs),
       ],
     );
@@ -241,16 +241,10 @@ class _LeadingTile extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => MxIconTile(
     key: const ValueKey<String>('library_folder_leading_tile'),
-    width: SizeTokens.avatar,
-    height: SizeTokens.avatar,
-    decoration: BoxDecoration(
-      color: color.withValues(alpha: OpacityTokens.hover),
-      borderRadius: RadiusTokens.brMd,
-    ),
-    alignment: Alignment.center,
-    child: Icon(Icons.folder_rounded, size: SizeTokens.iconSm, color: color),
+    icon: Icons.folder_rounded,
+    color: color,
   );
 }
 

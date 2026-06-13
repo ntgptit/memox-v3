@@ -42,7 +42,12 @@ class LibraryOverviewBody extends StatelessWidget {
         .length;
     final bool showOverviewSummary = !isSearching;
     return ListView(
-      padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
+      padding: const EdgeInsets.fromLTRB(
+        0,
+        SpacingTokens.inline,
+        0,
+        SpacingTokens.md,
+      ),
       children: <Widget>[
         if (showOverviewSummary && model.dueToday > 0) ...<Widget>[
           LibraryDueSummary(
@@ -53,7 +58,7 @@ class LibraryOverviewBody extends StatelessWidget {
         ],
         if (showOverviewSummary) ...<Widget>[
           LibraryFolderHeader(count: model.folders.length),
-          const SizedBox(height: SpacingTokens.inline),
+          const SizedBox(height: SpacingTokens.md),
         ],
         for (final FolderWithCount item in model.folders) ...<Widget>[
           LibraryFolderTile(

@@ -151,9 +151,9 @@ is not exposed and the archive confirm dialog is not reachable.
 - **Root-level decks are Rejected / Out of Scope.** `LibraryOverviewReadModel` carries `folders`
   only. The §Layout "Top-level deck" rows and the "Tap deck row → /library/deck/:deckId/flashcards"
   action are visual history only, not target scope.
-- FAB action sheet (New folder / New deck / Import) — V1 FAB is a `New folder` pill that creates a
-  folder directly; there is no New deck or Import entry on Library Overview. Deck creation/import
-  remain owned by Folder Detail / Flashcard List / Deck Import.
+- FAB create flow — V1 FAB is a `New folder` pill that creates a folder directly; there is no New
+  deck or Import entry on Library Overview. Deck creation/import remain owned by Folder Detail /
+  Flashcard List / Deck Import.
 - Filter chips (All / Folders / Decks) — removed in Prompt 49B (the previous static,
   non-functional "All" chip is gone). A dedicated filter sheet behind the header sliders icon
   remains Future.
@@ -213,18 +213,15 @@ point for study.
 │                                       │
 │              📁                        │
 │                                       │
-│      Nothing here yet                 │
+│      Start your library              │
 │                                       │
-│   Create a folder to organize, or a   │
-│   deck to start adding cards.         │
+│   Folders keep related decks         │
+│   together. Add one to organize      │
+│   your decks.                        │
 │                                       │
-│   ┌──────────────┐  ┌──────────────┐  │
-│   │ + New folder │  │ + New deck   │  │
-│   └──────────────┘  └──────────────┘  │
-│                                       │
-│            or                          │
-│                                       │
-│   [Import from file]                  │
+│          ┌────────────────┐          │
+│          │ + Create folder │          │
+│          └────────────────┘          │
 │                                       │
 └───────────────────────────────────────┘
 ```
@@ -253,8 +250,7 @@ point for study.
   manual sort.
 - ❌ Recompute aggregate counts on every render. Cache 60s.
 - ❌ Lose drag-reorder on app restart. Persist to `sort_order` column.
-- ❌ Show FAB action sheet's "New deck" when current root would require choosing a folder first — not
-  applicable at root (root acts as unlocked), but if extended, follow folder-detail rules.
+- ❌ Show a root "New deck" action on Library Overview. Deck creation stays owned by folder/detail flows.
 
 ## Components
 
@@ -266,7 +262,7 @@ point for study.
 | Folder subtitle | Direct child names joined with ` · ` when available; fallback is the count row. |
 | Folder new      | `{n} new` from `flashcard_progress` rows where `due_at IS NULL`.                |
 | Deck subtitle   | "{n} cards" (total) and optional "{m} due" badge in theme color.                |
-| FAB             | Plus button (bottom-right). Tap → action sheet: New folder / New deck / Import. |
+| FAB             | Plus button (bottom-right). Tap → create-folder dialog. |
 
 ### Count semantics
 
@@ -307,17 +303,14 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 | Tap folder row                | Tap                      | Navigate to `/library/folder/:id`.                                                                                                                                                        |
 | Tap deck row                  | Tap                      | Navigate to `/library/deck/:deckId/flashcards`.                                                                                                                                           |
 | Long-press folder/deck        | Long-press               | Enter selection mode (multi-select) OR open context bottom-sheet (Rename / Move / Delete). Decide via UI/UX contract; recommend context sheet here since multi-select on folders is rare. |
-| Tap overflow ⋮                | Tap                      | Menu: Sort by ▸ / New folder / New deck / Import.                                                                                                                                         |
-| Tap FAB                       | Tap                      | Action sheet (`docs/wireframes/25-shared-bottom-sheets.md` §library-fab).                                                                                                                 |
+| Tap header sliders icon       | Tap                      | Visual-only disabled affordance; no sheet.                                                                                                                                                 |
+| Tap FAB                       | Tap                      | Create-folder dialog (`docs/wireframes/24-shared-dialogs.md` §folder-form).                                                                                                               |
 | Pull to refresh               | Pull                     | Re-run queries.                                                                                                                                                                           |
 | Reorder (drag) in Manual sort | Long-press handle + drag | Update `sort_order` of dragged item; persist on drop.                                                                                                                                     |
 
 ## Dialogs and bottom-sheets used
 
-- Library FAB action sheet — see `docs/wireframes/25-shared-bottom-sheets.md` §library-fab.
-- New folder dialog — see `docs/wireframes/24-shared-dialogs.md` §folder-form.
-- New deck bottom-sheet (with target_language field) — see
-  `docs/wireframes/25-shared-bottom-sheets.md` §deck-create.
+- Library create-folder dialog — see `docs/wireframes/24-shared-dialogs.md` §folder-form.
 - Item context sheet (Rename / Move / Delete) — see `docs/wireframes/25-shared-bottom-sheets.md`
   §item-context.
 - Delete confirm dialog — see `docs/wireframes/24-shared-dialogs.md` §delete-confirm.
@@ -358,8 +351,7 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 - Top-level items are folders + decks whose `folder_id` is null.
 - Decks at root are allowed (Library is treated as an implicit unlocked root container; "decks can
   be in folders that are unlocked or `decks` mode" — root is conceptually unlocked).
-- FAB action sheet MUST include Import even though Import is technically per-deck (it routes via "
-  pick a deck" flow when invoked from Library FAB).
+- Library Overview FAB must stay create-folder only; Import remains owned by folder/detail flows.
 - Sort default is Manual (user-controlled order via `sort_order`).
 
 ## Agent rule

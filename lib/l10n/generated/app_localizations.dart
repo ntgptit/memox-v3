@@ -2342,16 +2342,22 @@ abstract class AppLocalizations {
   /// **'Something went wrong while loading your folders.'**
   String get libraryLoadFailedMessage;
 
+  /// No description provided for @libraryLoadingFoldersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading folders'**
+  String get libraryLoadingFoldersLabel;
+
   /// No description provided for @libraryEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Nothing here yet'**
+  /// **'Start your library'**
   String get libraryEmptyTitle;
 
   /// No description provided for @libraryEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Create a folder to organize your decks.'**
+  /// **'Folders keep related decks together. Add one to organize your decks.'**
   String get libraryEmptyMessage;
 
   /// No description provided for @librarySearchNoResultsTitle.

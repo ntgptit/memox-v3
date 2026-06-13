@@ -1372,10 +1372,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong while loading your folders.';
 
   @override
-  String get libraryEmptyTitle => 'Nothing here yet';
+  String get libraryLoadingFoldersLabel => 'Loading folders';
 
   @override
-  String get libraryEmptyMessage => 'Create a folder to organize your decks.';
+  String get libraryEmptyTitle => 'Start your library';
+
+  @override
+  String get libraryEmptyMessage =>
+      'Folders keep related decks together. Add one to organize your decks.';
 
   @override
   String get librarySearchNoResultsTitle => 'No folders found';

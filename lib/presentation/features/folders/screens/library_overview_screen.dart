@@ -81,10 +81,7 @@ class _LibraryOverviewView extends ConsumerWidget {
     return Column(
       children: <Widget>[
         const Padding(
-          padding: EdgeInsets.only(
-            top: SpacingTokens.sm,
-            bottom: SpacingTokens.sm,
-          ),
+          padding: EdgeInsets.only(top: SpacingTokens.sm),
           child: LibrarySearchField(),
         ),
         Expanded(

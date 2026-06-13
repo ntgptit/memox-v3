@@ -1358,11 +1358,14 @@ class AppLocalizationsVi extends AppLocalizations {
       'Đã xảy ra lỗi khi tải các thư mục của bạn.';
 
   @override
-  String get libraryEmptyTitle => 'Chưa có gì ở đây';
+  String get libraryLoadingFoldersLabel => 'Đang tải thư mục';
+
+  @override
+  String get libraryEmptyTitle => 'Bắt đầu thư viện của bạn';
 
   @override
   String get libraryEmptyMessage =>
-      'Tạo một thư mục để sắp xếp các bộ thẻ của bạn.';
+      'Thư mục giúp nhóm các bộ thẻ liên quan lại với nhau. Hãy tạo một thư mục để sắp xếp chúng.';
 
   @override
   String get librarySearchNoResultsTitle => 'Không tìm thấy thư mục';

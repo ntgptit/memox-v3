@@ -182,7 +182,13 @@ void main() {
       );
 
       final MxCard card = tester.widget<MxCard>(find.byType(MxCard));
-      expect(card.padding, const EdgeInsets.all(SpacingTokens.lg));
+      expect(
+        card.padding,
+        const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.form,
+          vertical: SpacingTokens.form,
+        ),
+      );
     });
 
     testWidgets('folder row renders title, metadata, kebab, and no chevron', (
@@ -387,11 +393,15 @@ void main() {
       'true-empty library shows the create-folder CTA, not no-results',
       (WidgetTester tester) async {
         await tester.pumpWidget(_wrapBody(_model()));
+        final AppLocalizations l10n = AppLocalizations.of(
+          tester.element(find.byType(Scaffold)),
+        );
 
         expect(
           find.byKey(const ValueKey<String>('library_search_no_results')),
           findsNothing,
         );
+        expect(find.text(l10n.libraryEmptyTitle), findsOneWidget);
         expect(find.text('New folder'), findsOneWidget);
         // Root creation is folders-only: no New deck / Import CTA (Rejected).
         expect(find.text('New deck'), findsNothing);
@@ -502,10 +512,14 @@ void main() {
       );
       await tester.pump();
 
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(Scaffold)),
+      );
       expect(
         find.byKey(const ValueKey<String>('library_skeleton')),
         findsOneWidget,
       );
+      expect(find.text(l10n.libraryLoadingFoldersLabel), findsOneWidget);
       // No folder rows are rendered while data is absent.
       expect(find.byType(LibraryFolderTile), findsNothing);
       expect(find.byIcon(Icons.more_vert), findsNothing);
