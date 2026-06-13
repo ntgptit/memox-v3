@@ -5,6 +5,7 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
+import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/presentation/shared/mx_widgets.dart';
 
 part 'flashcard_editor_sections_tail.dart';
@@ -156,8 +157,8 @@ class FlashcardEditorFieldSection extends StatelessWidget {
                 runSpacing: SpacingTokens.xxs,
                 children: <Widget>[
                   MxText(
-                    title,
-                    role: MxTextRole.labelLarge,
+                    StringUtils.uppercased(title),
+                    role: MxTextRole.labelMedium,
                     color: scheme.onSurfaceVariant,
                     fontWeight: TypographyTokens.semiBold,
                   ),
@@ -207,6 +208,7 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
     required this.pronunciationPlaceholder,
     required this.hintLabel,
     required this.hintPlaceholder,
+    required this.optionalLabel,
     required this.exampleController,
     required this.pronunciationController,
     required this.hintController,
@@ -236,6 +238,7 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
   final String pronunciationPlaceholder;
   final String hintLabel;
   final String hintPlaceholder;
+  final String optionalLabel;
   final TextEditingController exampleController;
   final TextEditingController pronunciationController;
   final TextEditingController hintController;
@@ -253,7 +256,9 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
       if (showFields) ...<Widget>[
         const SizedBox(height: SpacingTokens.md),
         _OptionalField(
+          icon: Icons.chat_bubble_outline,
           label: exampleLabel,
+          optionalLabel: optionalLabel,
           placeholder: examplePlaceholder,
           controller: exampleController,
           focusNode: exampleFocusNode,
@@ -263,7 +268,9 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
         ),
         const SizedBox(height: SpacingTokens.md),
         _OptionalField(
+          icon: Icons.lightbulb_outline,
           label: hintLabel,
+          optionalLabel: optionalLabel,
           placeholder: hintPlaceholder,
           controller: hintController,
           focusNode: hintFocusNode,
@@ -273,7 +280,9 @@ class FlashcardEditorDetailsSection extends StatelessWidget {
         ),
         const SizedBox(height: SpacingTokens.md),
         _OptionalField(
+          icon: Icons.record_voice_over_outlined,
           label: pronunciationLabel,
+          optionalLabel: optionalLabel,
           placeholder: pronunciationPlaceholder,
           controller: pronunciationController,
           focusNode: pronunciationFocusNode,
@@ -322,8 +331,8 @@ class _OptionalDetailsHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MxText(
-    label,
-    role: MxTextRole.labelLarge,
+    StringUtils.uppercased(label),
+    role: MxTextRole.labelMedium,
     color: context.colorScheme.onSurfaceVariant,
     fontWeight: TypographyTokens.semiBold,
   );
@@ -395,7 +404,9 @@ class _DetailsToggleRow extends StatelessWidget {
 
 class _OptionalField extends StatelessWidget {
   const _OptionalField({
+    required this.icon,
     required this.label,
+    required this.optionalLabel,
     required this.placeholder,
     required this.controller,
     required this.focusNode,
@@ -405,7 +416,9 @@ class _OptionalField extends StatelessWidget {
     this.trailingIcon,
   });
 
+  final IconData icon;
   final String label;
+  final String optionalLabel;
   final String placeholder;
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -415,28 +428,61 @@ class _OptionalField extends StatelessWidget {
   final IconData? trailingIcon;
 
   @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      _FieldLabel(icon: icon, label: label, optionalLabel: optionalLabel),
+      const SizedBox(height: SpacingTokens.sm),
+      MxTextField(
+        controller: controller,
+        focusNode: focusNode,
+        minLines: minLines,
+        maxLines: maxLines,
+        textInputAction: TextInputAction.newline,
+        onChanged: onChanged,
+        hintText: placeholder,
+        trailingIcon: trailingIcon,
+        prominent: false,
+      ),
+    ],
+  );
+}
+
+/// Uppercase, icon-led section label with a muted "optional" suffix — the mock
+/// 07/08 treatment for the optional Example / Hint / Pronunciation fields.
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel({
+    required this.icon,
+    required this.label,
+    required this.optionalLabel,
+  });
+
+  final IconData icon;
+  final String label;
+  final String optionalLabel;
+
+  @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Row(
       children: <Widget>[
-        MxText(
-          label,
-          role: MxTextRole.labelLarge,
-          color: scheme.onSurfaceVariant,
-          fontWeight: TypographyTokens.semiBold,
+        Icon(icon, size: SizeTokens.iconXs, color: scheme.onSurfaceVariant),
+        const SizedBox(width: SpacingTokens.xs),
+        Flexible(
+          child: MxText(
+            StringUtils.uppercased(label),
+            role: MxTextRole.labelMedium,
+            color: scheme.onSurfaceVariant,
+            fontWeight: TypographyTokens.semiBold,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        const SizedBox(height: SpacingTokens.sm),
-        MxTextField(
-          controller: controller,
-          focusNode: focusNode,
-          minLines: minLines,
-          maxLines: maxLines,
-          textInputAction: TextInputAction.newline,
-          onChanged: onChanged,
-          hintText: placeholder,
-          trailingIcon: trailingIcon,
-          prominent: false,
+        const SizedBox(width: SpacingTokens.xs),
+        MxText(
+          optionalLabel,
+          role: MxTextRole.labelSmall,
+          color: scheme.onSurfaceVariant.withValues(alpha: 0.72),
         ),
       ],
     );

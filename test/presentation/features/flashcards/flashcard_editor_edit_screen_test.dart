@@ -350,8 +350,8 @@ void main() {
       expect(find.text('Hello'), findsOneWidget);
       expect(find.text('noun'), findsOneWidget);
       expect(find.text('greeting'), findsOneWidget);
-      // Mock 08 edit: always-open "Optional details" section (no create toggle).
-      expect(find.text('Optional details'), findsOneWidget);
+      // Mock 08 edit: always-open "OPTIONAL DETAILS" section (no create toggle).
+      expect(find.text('OPTIONAL DETAILS'), findsOneWidget);
       expect(find.text('Add details'), findsNothing);
       // Mock 08 edit: real "Last edited … · N reviews" meta strip (no recall %,
       // no History link).

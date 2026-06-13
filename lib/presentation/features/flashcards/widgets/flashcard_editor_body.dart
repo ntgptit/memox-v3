@@ -166,6 +166,7 @@ class FlashcardEditorBody extends StatelessWidget {
             pronunciationPlaceholder: l10n.flashcardEditorSamplePronunciation,
             hintLabel: l10n.flashcardEditorHintLabel,
             hintPlaceholder: l10n.flashcardEditorSampleHint,
+            optionalLabel: l10n.flashcardEditorTagsOptionalLabel,
             exampleController: exampleController,
             pronunciationController: pronunciationController,
             hintController: hintController,
