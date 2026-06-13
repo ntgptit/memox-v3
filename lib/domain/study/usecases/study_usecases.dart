@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/learning_settings.dart';
@@ -79,6 +80,19 @@ class LoadStudySessionReviewUseCase {
 
   Future<Result<StudySessionReview>> call({required SessionId sessionId}) =>
       _repository.loadStudySessionReview(sessionId: sessionId);
+}
+
+/// Loads the append-only Match evaluations for a persisted study session.
+///
+/// Failure types: `NotFoundFailure`, `StorageFailure`.
+class LoadMatchEvaluationsUseCase {
+  const LoadMatchEvaluationsUseCase(this._repository);
+
+  final StudyRepository _repository;
+
+  Future<Result<List<StudyMatchEvaluation>>> call({
+    required SessionId sessionId,
+  }) => _repository.loadMatchEvaluations(sessionId: sessionId);
 }
 
 /// Loads the persisted study-session result summary for the result screen.

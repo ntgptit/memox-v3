@@ -960,6 +960,35 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionTitle => 'Phiên học';
 
   @override
+  String get studySessionMatchModeLabel => 'GHÉP';
+
+  @override
+  String studySessionMatchBoardIndicator(
+    int board,
+    int totalBoards,
+    int pairsLeft,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      pairsLeft,
+      locale: localeName,
+      other: '$pairsLeft CẶP',
+      one: '1 CẶP',
+    );
+    return 'BẢNG $board / $totalBoards · CÒN $_temp0';
+  }
+
+  @override
+  String studySessionMatchMistakesLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lỗi',
+      one: '1 lỗi',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String studySessionProgressLabel(int current, int total) {
     return '$current / $total';
   }

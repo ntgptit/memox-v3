@@ -1754,6 +1754,28 @@ abstract class AppLocalizations {
   /// **'Study session'**
   String get studySessionTitle;
 
+  /// No description provided for @studySessionMatchModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'MATCH'**
+  String get studySessionMatchModeLabel;
+
+  /// No description provided for @studySessionMatchBoardIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'BOARD {board} OF {totalBoards} · {pairsLeft, plural, =1{1 PAIR LEFT} other{{pairsLeft} PAIRS LEFT}}'**
+  String studySessionMatchBoardIndicator(
+    int board,
+    int totalBoards,
+    int pairsLeft,
+  );
+
+  /// No description provided for @studySessionMatchMistakesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 mistake} other{{count} mistakes}}'**
+  String studySessionMatchMistakesLabel(int count);
+
   /// No description provided for @studySessionProgressLabel.
   ///
   /// In en, this message translates to:

@@ -438,6 +438,29 @@
   "studyEntryInvalidTitle": "Không thể mở phần học",
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",
   "studySessionTitle": "Phiên học",
+  "studySessionMatchModeLabel": "GHÉP",
+  "studySessionMatchBoardIndicator": "BẢNG {board} / {totalBoards} · CÒN {pairsLeft, plural, =1{1 CẶP} other{{pairsLeft} CẶP}}",
+  "@studySessionMatchBoardIndicator": {
+    "placeholders": {
+      "board": {
+        "type": "int"
+      },
+      "totalBoards": {
+        "type": "int"
+      },
+      "pairsLeft": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionMatchMistakesLabel": "{count, plural, =1{1 lỗi} other{{count} lỗi}}",
+  "@studySessionMatchMistakesLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "studySessionProgressLabel": "{current} / {total}",
   "@studySessionProgressLabel": {
     "placeholders": {

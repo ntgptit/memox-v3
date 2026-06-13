@@ -9,14 +9,12 @@ source_specs:
 
 # 14 — Study Session: Match Mode
 
-> **Drift correction (2026-06-12):** the Match backend slice now includes the dedicated
-> append-only evaluation path plus transactional finalization derivation; the visual UI is still
-> Specified and not built. The shared shell at
-> `lib/presentation/features/study/screens/study_session_screen.dart` still owns the current
-> runtime route, and any `lib/presentation/features/study/widgets/study_session/**` paths below are
-> the target structure from the previous UI iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Implementation note (2026-06-14):** the Match backend slice already includes the dedicated
+> append-only evaluation path plus transactional finalization derivation, and the visual Match
+> shell now lives in `lib/presentation/features/study/widgets/study_session_match_mode_view.dart`
+> with its controller in `lib/presentation/features/study/viewmodels/`. The shared
+> `lib/presentation/features/study/screens/study_session_screen.dart` route branch selects that
+> shell when `mode=match`. Work is tracked as WBS 4.5.x in `docs/project-management/wbs.md`.
 
 ## Purpose
 

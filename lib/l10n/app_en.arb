@@ -438,6 +438,29 @@
   "studyEntryInvalidTitle": "Can't open study",
   "studyEntryInvalidMessage": "The study route parameters are invalid.",
   "studySessionTitle": "Study session",
+  "studySessionMatchModeLabel": "MATCH",
+  "studySessionMatchBoardIndicator": "BOARD {board} OF {totalBoards} · {pairsLeft, plural, =1{1 PAIR LEFT} other{{pairsLeft} PAIRS LEFT}}",
+  "@studySessionMatchBoardIndicator": {
+    "placeholders": {
+      "board": {
+        "type": "int"
+      },
+      "totalBoards": {
+        "type": "int"
+      },
+      "pairsLeft": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionMatchMistakesLabel": "{count, plural, =1{1 mistake} other{{count} mistakes}}",
+  "@studySessionMatchMistakesLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "studySessionProgressLabel": "{current} / {total}",
   "@studySessionProgressLabel": {
     "placeholders": {

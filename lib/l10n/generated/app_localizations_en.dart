@@ -972,6 +972,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionTitle => 'Study session';
 
   @override
+  String get studySessionMatchModeLabel => 'MATCH';
+
+  @override
+  String studySessionMatchBoardIndicator(
+    int board,
+    int totalBoards,
+    int pairsLeft,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      pairsLeft,
+      locale: localeName,
+      other: '$pairsLeft PAIRS LEFT',
+      one: '1 PAIR LEFT',
+    );
+    return 'BOARD $board OF $totalBoards · $_temp0';
+  }
+
+  @override
+  String studySessionMatchMistakesLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mistakes',
+      one: '1 mistake',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String studySessionProgressLabel(int current, int total) {
     return '$current / $total';
   }

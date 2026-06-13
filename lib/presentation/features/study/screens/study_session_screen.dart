@@ -11,6 +11,7 @@ import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
+import 'package:memox/presentation/features/study/widgets/study_session_match_mode_view.dart';
 import 'package:memox/presentation/features/study/widgets/study_session_review_mode_view.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_callout.dart';
@@ -50,27 +51,35 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
         }
         unawaited(_handleExit(context));
       },
-      child: widget.mode == StudyMode.review
-          ? StudySessionReviewModeView(
-              sessionId: widget.sessionId,
-              mode: widget.mode,
-              onBack: () => _handleExit(context),
-            )
-          : MxScaffold(
-              appBar: MxAppBar(
-                titleText: l10n.studySessionTitle,
-                leading: MxIconButton.toolbar(
-                  icon: Icons.close,
-                  tooltip: l10n.commonClose,
-                  onPressed: () => _handleExit(context),
-                ),
-              ),
-              body: _StudySessionReviewSection(
-                sessionId: widget.sessionId,
-                mode: widget.mode,
-                onBack: () => _handleExit(context),
-              ),
+      child: switch (widget.mode) {
+        StudyMode.review => StudySessionReviewModeView(
+          sessionId: widget.sessionId,
+          mode: widget.mode,
+          onBack: () => _handleExit(context),
+        ),
+        StudyMode.match => StudySessionMatchModeView(
+          sessionId: widget.sessionId,
+          mode: widget.mode,
+          onBack: () => _handleExit(context),
+          onFinalized: () =>
+              context.pushReplacementStudyResult(widget.sessionId),
+        ),
+        _ => MxScaffold(
+          appBar: MxAppBar(
+            titleText: l10n.studySessionTitle,
+            leading: MxIconButton.toolbar(
+              icon: Icons.close,
+              tooltip: l10n.commonClose,
+              onPressed: () => _handleExit(context),
             ),
+          ),
+          body: _StudySessionReviewSection(
+            sessionId: widget.sessionId,
+            mode: widget.mode,
+            onBack: () => _handleExit(context),
+          ),
+        ),
+      },
     );
   }
 

@@ -48,6 +48,14 @@ LoadStudySessionReviewUseCase loadStudySessionReviewUseCase(Ref ref) =>
     LoadStudySessionReviewUseCase(ref.watch(studyRepositoryProvider));
 
 @Riverpod(keepAlive: true)
+LoadMatchEvaluationsUseCase loadMatchEvaluationsUseCase(Ref ref) =>
+    LoadMatchEvaluationsUseCase(ref.watch(studyRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+RecordMatchEvaluationUseCase recordMatchEvaluationUseCase(Ref ref) =>
+    RecordMatchEvaluationUseCase(ref.watch(studyRepositoryProvider));
+
+@Riverpod(keepAlive: true)
 LoadStudySessionResultUseCase loadStudySessionResultUseCase(Ref ref) =>
     LoadStudySessionResultUseCase(ref.watch(studyRepositoryProvider));
 

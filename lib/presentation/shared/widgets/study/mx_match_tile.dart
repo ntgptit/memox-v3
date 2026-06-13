@@ -10,9 +10,9 @@ import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 
 /// Visual state of an [MxMatchTile] (Match mode).
-enum MxMatchState { idle, selected, matched }
+enum MxMatchState { idle, selected, matched, wrong }
 
-/// Match-pairs grid tile — idle / selected (filled primary) / matched (green).
+/// Match-pairs grid tile — idle / selected (filled primary) / matched (green) / wrong (red flash).
 ///
 /// Section F of the handoff. Matched tiles are non-interactive.
 ///
@@ -73,6 +73,12 @@ class MxMatchTile extends StatelessWidget {
         Border.all(color: mastery, width: BorderTokens.width),
         true,
       ),
+      MxMatchState.wrong => (
+        scheme.errorContainer,
+        scheme.onErrorContainer,
+        null,
+        false,
+      ),
     };
 
     return AnimatedContainer(
@@ -85,7 +91,9 @@ class MxMatchTile extends StatelessWidget {
           borderRadius: RadiusTokens.brMd,
         ),
         child: MxTappable(
-          onTap: state == MxMatchState.matched ? null : onTap,
+          onTap: state == MxMatchState.matched || state == MxMatchState.wrong
+              ? null
+              : onTap,
           borderRadius: RadiusTokens.brMd,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
