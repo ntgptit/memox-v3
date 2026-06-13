@@ -19,9 +19,13 @@ related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Reject
 
 ## V1 decision
 
-Card History is **Implemented** for V1. The overflow exposes Edit / Reset progress / Delete;
-Suspend/unsuspend is deferred to the Bury/Suspend feature. Timeline row tap → session result is
-deferred (rows are read-only display in V1).
+Card History is **Implemented** for V1. The screen renders (top → bottom): a breadcrumb, a header
+card (front/back + `Box n/8` chip + reset sub-label), a **CURRENT PROGRESS** card (Leitner box
+stepper + a 6-stat grid: Due, Reviews, Recall rate, Lapses, Correct streak, Since added), and the
+attempt **timeline** on a left rail. The app bar exposes an **Edit** pill; the overflow exposes
+Reset progress / Delete. Suspend/unsuspend is deferred to the Bury/Suspend feature. Timeline
+row tap → session result is deferred (rows are read-only display in V1). Per-attempt **duration** is
+not shown — `study_attempts` has no duration column (gap; would require a migration).
 
 ## Purpose
 

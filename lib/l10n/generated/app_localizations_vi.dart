@@ -1921,20 +1921,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cardHistoryTitle => 'Lịch sử thẻ';
 
   @override
-  String cardHistoryBoxState(int box) {
-    return 'Hộp $box / 8';
-  }
-
-  @override
   String get cardHistoryStateSuspended => 'Đã tạm dừng';
-
-  @override
-  String get cardHistoryDueNow => 'Đến hạn bây giờ';
-
-  @override
-  String cardHistoryDueLabel(String relativeTime) {
-    return 'Đến hạn $relativeTime';
-  }
 
   @override
   String relativeTimeUntil(String unit, int count) {
@@ -1982,30 +1969,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String cardHistoryReviewForgotStat(int reviewCount, int lapseCount) {
-    String _temp0 = intl.Intl.pluralLogic(
-      reviewCount,
-      locale: localeName,
-      other: 'Đã ôn $reviewCount lần · Quên $lapseCount',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get cardHistoryNoReviews => 'Chưa có lượt ôn nào';
-
-  @override
-  String cardHistoryAccuracyStat(int percent) {
-    return 'Độ chính xác $percent%';
-  }
-
-  @override
   String cardHistoryResetSubLabel(String date) {
     return 'Bao gồm các lượt ôn trước lần đặt lại gần nhất vào $date.';
   }
-
-  @override
-  String get cardHistoryTimelineTitle => 'Dòng thời gian';
 
   @override
   String get cardHistoryResultPerfect => 'Hoàn hảo';
@@ -2018,11 +1984,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardHistoryResultForgot => 'Quên';
-
-  @override
-  String cardHistoryBoxTransition(int before, int after) {
-    return 'Hộp $before → $after';
-  }
 
   @override
   String get cardHistoryBoxUnknown => '—';
@@ -2092,4 +2053,92 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardHistoryViewAction => 'Xem lịch sử';
+
+  @override
+  String get cardHistoryBreadcrumbCurrent => 'Lịch sử';
+
+  @override
+  String cardHistoryBoxChip(int box, int total) {
+    return 'Hộp $box / $total';
+  }
+
+  @override
+  String get cardHistoryProgressTitle => 'Tiến độ hiện tại';
+
+  @override
+  String cardHistoryBoxStepLabel(int box) {
+    return 'Hộp $box';
+  }
+
+  @override
+  String get cardHistoryStatDue => 'Đến hạn';
+
+  @override
+  String get cardHistoryStatReviews => 'Lượt ôn';
+
+  @override
+  String get cardHistoryStatRecall => 'Tỷ lệ nhớ';
+
+  @override
+  String get cardHistoryStatLapses => 'Lần quên';
+
+  @override
+  String get cardHistoryStatStreak => 'Chuỗi đúng';
+
+  @override
+  String get cardHistoryStatSinceAdded => 'Đã thêm';
+
+  @override
+  String cardHistoryPercentValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String cardHistoryStreakValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lần liên tiếp',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardHistorySinceAddedValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ngày',
+      zero: 'hôm nay',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardHistoryTimelineHeader(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dòng thời gian · $count sự kiện',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHistoryChipCorrect => 'Đúng';
+
+  @override
+  String get cardHistoryChipRecovered => 'Gỡ lại';
+
+  @override
+  String get cardHistoryChipForgot => 'Quên';
+
+  @override
+  String get cardHistoryDescCorrect => 'Trả lời đúng';
+
+  @override
+  String get cardHistoryDescRecovered => 'Nhớ lại sau khi nhầm';
+
+  @override
+  String get cardHistoryDescForgot => 'Đã quên';
 }

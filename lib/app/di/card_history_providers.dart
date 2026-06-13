@@ -1,4 +1,5 @@
 import 'package:memox/app/di/database_providers.dart';
+import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/data/datasources/local/daos/card_history_dao.dart';
 import 'package:memox/data/repositories/card_history_repository_impl.dart';
 import 'package:memox/domain/repositories/card_history_repository.dart';
@@ -18,7 +19,10 @@ CardHistoryDao cardHistoryDao(Ref ref) =>
 
 @Riverpod(keepAlive: true)
 CardHistoryRepository cardHistoryRepository(Ref ref) =>
-    CardHistoryRepositoryImpl(ref.watch(cardHistoryDaoProvider));
+    CardHistoryRepositoryImpl(
+      ref.watch(cardHistoryDaoProvider),
+      ref.watch(folderDaoProvider),
+    );
 
 @Riverpod(keepAlive: true)
 GetCardHistoryHeaderUseCase getCardHistoryHeaderUseCase(Ref ref) =>

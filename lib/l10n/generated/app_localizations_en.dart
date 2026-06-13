@@ -1949,20 +1949,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardHistoryTitle => 'Card history';
 
   @override
-  String cardHistoryBoxState(int box) {
-    return 'Box $box of 8';
-  }
-
-  @override
   String get cardHistoryStateSuspended => 'Suspended';
-
-  @override
-  String get cardHistoryDueNow => 'Due now';
-
-  @override
-  String cardHistoryDueLabel(String relativeTime) {
-    return 'Due $relativeTime';
-  }
 
   @override
   String relativeTimeUntil(String unit, int count) {
@@ -2016,31 +2003,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String cardHistoryReviewForgotStat(int reviewCount, int lapseCount) {
-    String _temp0 = intl.Intl.pluralLogic(
-      reviewCount,
-      locale: localeName,
-      other: 'Reviewed $reviewCount times · Forgot $lapseCount',
-      one: 'Reviewed 1 time · Forgot $lapseCount',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get cardHistoryNoReviews => 'No reviews yet';
-
-  @override
-  String cardHistoryAccuracyStat(int percent) {
-    return 'Accuracy $percent%';
-  }
-
-  @override
   String cardHistoryResetSubLabel(String date) {
     return 'Includes attempts before last reset on $date.';
   }
-
-  @override
-  String get cardHistoryTimelineTitle => 'Timeline';
 
   @override
   String get cardHistoryResultPerfect => 'Perfect';
@@ -2053,11 +2018,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardHistoryResultForgot => 'Forgot';
-
-  @override
-  String cardHistoryBoxTransition(int before, int after) {
-    return 'Box $before → $after';
-  }
 
   @override
   String get cardHistoryBoxUnknown => '—';
@@ -2127,4 +2087,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardHistoryViewAction => 'View history';
+
+  @override
+  String get cardHistoryBreadcrumbCurrent => 'History';
+
+  @override
+  String cardHistoryBoxChip(int box, int total) {
+    return 'Box $box / $total';
+  }
+
+  @override
+  String get cardHistoryProgressTitle => 'Current progress';
+
+  @override
+  String cardHistoryBoxStepLabel(int box) {
+    return 'Box $box';
+  }
+
+  @override
+  String get cardHistoryStatDue => 'Due';
+
+  @override
+  String get cardHistoryStatReviews => 'Reviews';
+
+  @override
+  String get cardHistoryStatRecall => 'Recall rate';
+
+  @override
+  String get cardHistoryStatLapses => 'Lapses';
+
+  @override
+  String get cardHistoryStatStreak => 'Correct streak';
+
+  @override
+  String get cardHistoryStatSinceAdded => 'Since added';
+
+  @override
+  String cardHistoryPercentValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String cardHistoryStreakValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count in a row',
+      one: '1 in a row',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardHistorySinceAddedValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+      zero: 'today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardHistoryTimelineHeader(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Timeline · $count events',
+      one: 'Timeline · 1 event',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHistoryChipCorrect => 'Correct';
+
+  @override
+  String get cardHistoryChipRecovered => 'Recovered';
+
+  @override
+  String get cardHistoryChipForgot => 'Forgot';
+
+  @override
+  String get cardHistoryDescCorrect => 'Answered correctly';
+
+  @override
+  String get cardHistoryDescRecovered => 'Got it back after a slip';
+
+  @override
+  String get cardHistoryDescForgot => 'Forgot it';
 }

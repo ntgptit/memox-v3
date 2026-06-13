@@ -11,9 +11,9 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 
 /// Card History overflow actions (`docs/wireframes/09-flashcard-history.md`
-/// §App bar overflow). V1 exposes Edit / Reset progress / Delete. Suspend is
-/// deferred with the Bury/Suspend feature (WBS 4.11.x).
-enum CardHistoryAction { edit, resetProgress, delete }
+/// §App bar overflow). Edit is the app-bar pill; the overflow carries Reset
+/// progress / Delete. Suspend is deferred with Bury/Suspend (WBS 4.11.x).
+enum CardHistoryAction { resetProgress, delete }
 
 Future<CardHistoryAction?> showCardHistoryActions(
   BuildContext context, {
@@ -51,11 +51,6 @@ class _CardHistoryActionsSheet extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-          ),
-          _ActionRow(
-            icon: Icons.edit_outlined,
-            label: l10n.commonEdit,
-            onTap: () => Navigator.of(context).pop(CardHistoryAction.edit),
           ),
           _ActionRow(
             icon: Icons.restart_alt,

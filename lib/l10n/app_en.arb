@@ -981,24 +981,7 @@
     }
   },
   "cardHistoryTitle": "Card history",
-  "cardHistoryBoxState": "Box {box} of 8",
-  "@cardHistoryBoxState": {
-    "placeholders": {
-      "box": {
-        "type": "int"
-      }
-    }
-  },
   "cardHistoryStateSuspended": "Suspended",
-  "cardHistoryDueNow": "Due now",
-  "cardHistoryDueLabel": "Due {relativeTime}",
-  "@cardHistoryDueLabel": {
-    "placeholders": {
-      "relativeTime": {
-        "type": "String"
-      }
-    }
-  },
   "relativeTimeUntil": "{unit, select, justNow{now} minutes{{count, plural, =1{in 1 minute} other{in {count} minutes}}} hours{{count, plural, =1{in 1 hour} other{in {count} hours}}} days{{count, plural, =1{in 1 day} other{in {count} days}}} weeks{{count, plural, =1{in 1 week} other{in {count} weeks}}} months{{count, plural, =1{in 1 month} other{in {count} months}}} years{{count, plural, =1{in 1 year} other{in {count} years}}} other{now}}",
   "@relativeTimeUntil": {
     "placeholders": {
@@ -1006,26 +989,6 @@
         "type": "String"
       },
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "cardHistoryReviewForgotStat": "{reviewCount, plural, =1{Reviewed 1 time · Forgot {lapseCount}} other{Reviewed {reviewCount} times · Forgot {lapseCount}}}",
-  "@cardHistoryReviewForgotStat": {
-    "placeholders": {
-      "reviewCount": {
-        "type": "int"
-      },
-      "lapseCount": {
-        "type": "int"
-      }
-    }
-  },
-  "cardHistoryNoReviews": "No reviews yet",
-  "cardHistoryAccuracyStat": "Accuracy {percent}%",
-  "@cardHistoryAccuracyStat": {
-    "placeholders": {
-      "percent": {
         "type": "int"
       }
     }
@@ -1038,22 +1001,10 @@
       }
     }
   },
-  "cardHistoryTimelineTitle": "Timeline",
   "cardHistoryResultPerfect": "Perfect",
   "cardHistoryResultPassed": "Passed",
   "cardHistoryResultRecovered": "Recovered",
   "cardHistoryResultForgot": "Forgot",
-  "cardHistoryBoxTransition": "Box {before} → {after}",
-  "@cardHistoryBoxTransition": {
-    "placeholders": {
-      "before": {
-        "type": "int"
-      },
-      "after": {
-        "type": "int"
-      }
-    }
-  },
   "cardHistoryBoxUnknown": "—",
   "cardHistoryModeLabel": "Mode: {mode, select, review{Review} match{Match} guess{Guess} recall{Recall} fill{Fill} other{Study}}",
   "@cardHistoryModeLabel": {
@@ -1085,5 +1036,70 @@
   "cardHistoryResetConfirmMessage": "Attempts history is kept; only SRS state is reset.",
   "cardHistoryResetDoneMessage": "Progress reset",
   "cardHistoryActionError": "Something went wrong. Try again.",
-  "cardHistoryViewAction": "View history"
+  "cardHistoryViewAction": "View history",
+  "cardHistoryBreadcrumbCurrent": "History",
+  "cardHistoryBoxChip": "Box {box} / {total}",
+  "@cardHistoryBoxChip": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryProgressTitle": "Current progress",
+  "cardHistoryBoxStepLabel": "Box {box}",
+  "@cardHistoryBoxStepLabel": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryStatDue": "Due",
+  "cardHistoryStatReviews": "Reviews",
+  "cardHistoryStatRecall": "Recall rate",
+  "cardHistoryStatLapses": "Lapses",
+  "cardHistoryStatStreak": "Correct streak",
+  "cardHistoryStatSinceAdded": "Since added",
+  "cardHistoryPercentValue": "{percent}%",
+  "@cardHistoryPercentValue": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryStreakValue": "{count, plural, =1{1 in a row} other{{count} in a row}}",
+  "@cardHistoryStreakValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistorySinceAddedValue": "{count, plural, =0{today} =1{1 day} other{{count} days}}",
+  "@cardHistorySinceAddedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryTimelineHeader": "{count, plural, =1{Timeline · 1 event} other{Timeline · {count} events}}",
+  "@cardHistoryTimelineHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryChipCorrect": "Correct",
+  "cardHistoryChipRecovered": "Recovered",
+  "cardHistoryChipForgot": "Forgot",
+  "cardHistoryDescCorrect": "Answered correctly",
+  "cardHistoryDescRecovered": "Got it back after a slip",
+  "cardHistoryDescForgot": "Forgot it"
 }

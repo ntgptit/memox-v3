@@ -981,24 +981,7 @@
     }
   },
   "cardHistoryTitle": "Lịch sử thẻ",
-  "cardHistoryBoxState": "Hộp {box} / 8",
-  "@cardHistoryBoxState": {
-    "placeholders": {
-      "box": {
-        "type": "int"
-      }
-    }
-  },
   "cardHistoryStateSuspended": "Đã tạm dừng",
-  "cardHistoryDueNow": "Đến hạn bây giờ",
-  "cardHistoryDueLabel": "Đến hạn {relativeTime}",
-  "@cardHistoryDueLabel": {
-    "placeholders": {
-      "relativeTime": {
-        "type": "String"
-      }
-    }
-  },
   "relativeTimeUntil": "{unit, select, justNow{bây giờ} minutes{{count, plural, other{sau {count} phút}}} hours{{count, plural, other{sau {count} giờ}}} days{{count, plural, other{sau {count} ngày}}} weeks{{count, plural, other{sau {count} tuần}}} months{{count, plural, other{sau {count} tháng}}} years{{count, plural, other{sau {count} năm}}} other{bây giờ}}",
   "@relativeTimeUntil": {
     "placeholders": {
@@ -1006,26 +989,6 @@
         "type": "String"
       },
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "cardHistoryReviewForgotStat": "{reviewCount, plural, other{Đã ôn {reviewCount} lần · Quên {lapseCount}}}",
-  "@cardHistoryReviewForgotStat": {
-    "placeholders": {
-      "reviewCount": {
-        "type": "int"
-      },
-      "lapseCount": {
-        "type": "int"
-      }
-    }
-  },
-  "cardHistoryNoReviews": "Chưa có lượt ôn nào",
-  "cardHistoryAccuracyStat": "Độ chính xác {percent}%",
-  "@cardHistoryAccuracyStat": {
-    "placeholders": {
-      "percent": {
         "type": "int"
       }
     }
@@ -1038,22 +1001,10 @@
       }
     }
   },
-  "cardHistoryTimelineTitle": "Dòng thời gian",
   "cardHistoryResultPerfect": "Hoàn hảo",
   "cardHistoryResultPassed": "Đạt",
   "cardHistoryResultRecovered": "Gỡ lại",
   "cardHistoryResultForgot": "Quên",
-  "cardHistoryBoxTransition": "Hộp {before} → {after}",
-  "@cardHistoryBoxTransition": {
-    "placeholders": {
-      "before": {
-        "type": "int"
-      },
-      "after": {
-        "type": "int"
-      }
-    }
-  },
   "cardHistoryBoxUnknown": "—",
   "cardHistoryModeLabel": "Chế độ: {mode, select, review{Ôn tập} match{Ghép} guess{Đoán} recall{Nhớ lại} fill{Điền} other{Học}}",
   "@cardHistoryModeLabel": {
@@ -1085,5 +1036,70 @@
   "cardHistoryResetConfirmMessage": "Lịch sử lượt ôn được giữ lại; chỉ trạng thái SRS bị đặt lại.",
   "cardHistoryResetDoneMessage": "Đã đặt lại tiến độ",
   "cardHistoryActionError": "Đã xảy ra lỗi. Vui lòng thử lại.",
-  "cardHistoryViewAction": "Xem lịch sử"
+  "cardHistoryViewAction": "Xem lịch sử",
+  "cardHistoryBreadcrumbCurrent": "Lịch sử",
+  "cardHistoryBoxChip": "Hộp {box} / {total}",
+  "@cardHistoryBoxChip": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryProgressTitle": "Tiến độ hiện tại",
+  "cardHistoryBoxStepLabel": "Hộp {box}",
+  "@cardHistoryBoxStepLabel": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryStatDue": "Đến hạn",
+  "cardHistoryStatReviews": "Lượt ôn",
+  "cardHistoryStatRecall": "Tỷ lệ nhớ",
+  "cardHistoryStatLapses": "Lần quên",
+  "cardHistoryStatStreak": "Chuỗi đúng",
+  "cardHistoryStatSinceAdded": "Đã thêm",
+  "cardHistoryPercentValue": "{percent}%",
+  "@cardHistoryPercentValue": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryStreakValue": "{count, plural, other{{count} lần liên tiếp}}",
+  "@cardHistoryStreakValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistorySinceAddedValue": "{count, plural, =0{hôm nay} other{{count} ngày}}",
+  "@cardHistorySinceAddedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryTimelineHeader": "{count, plural, other{Dòng thời gian · {count} sự kiện}}",
+  "@cardHistoryTimelineHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryChipCorrect": "Đúng",
+  "cardHistoryChipRecovered": "Gỡ lại",
+  "cardHistoryChipForgot": "Quên",
+  "cardHistoryDescCorrect": "Trả lời đúng",
+  "cardHistoryDescRecovered": "Nhớ lại sau khi nhầm",
+  "cardHistoryDescForgot": "Đã quên"
 }

@@ -8,8 +8,8 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 
 /// Non-interactive "Progress reset on {date}" separator placed between the
 /// post-reset and pre-reset attempts
-/// (`docs/wireframes/09-flashcard-history.md` §Divider row). Wider stroke than
-/// the row hairlines so the reset point reads as a section break.
+/// (`docs/wireframes/09-flashcard-history.md` §Divider row). The label sits over
+/// a full-width rule (a Stack, so a long date never overflows a Row).
 class CardHistoryResetDivider extends StatelessWidget {
   const CardHistoryResetDivider({required this.resetAt, super.key});
 
@@ -18,7 +18,7 @@ class CardHistoryResetDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final Color color = context.colorScheme.outline;
+    final ColorScheme scheme = context.colorScheme;
     final String label = l10n.cardHistoryResetDivider(
       CardHistoryLabels.isoDate(resetAt),
     );
@@ -28,26 +28,32 @@ class CardHistoryResetDivider extends StatelessWidget {
       container: true,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: SpacingTokens.md),
-        child: Row(
+        child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
-            Expanded(child: _Rule(color: color)),
-            const SizedBox(width: SpacingTokens.sm),
-            MxText(label, role: MxTextRole.labelMedium, color: color),
-            const SizedBox(width: SpacingTokens.sm),
-            Expanded(child: _Rule(color: color)),
+            Container(
+              height: BorderTokens.focusWidth,
+              width: double.infinity,
+              color: scheme.outline,
+            ),
+            ColoredBox(
+              color: scheme.surface,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpacingTokens.sm,
+                ),
+                child: MxText(
+                  label,
+                  role: MxTextRole.labelMedium,
+                  color: scheme.onSurfaceVariant,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-class _Rule extends StatelessWidget {
-  const _Rule({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) =>
-      Container(height: BorderTokens.focusWidth, color: color);
 }

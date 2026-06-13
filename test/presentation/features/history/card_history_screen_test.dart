@@ -8,6 +8,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/domain/models/card_history.dart';
+import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/repositories/card_history_repository.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -64,6 +65,11 @@ CardHistoryHeader _header({
   DateTime? lastResetAt,
 }) => CardHistoryHeader(
   flashcardId: 'c1',
+  deckId: 'd1',
+  deckName: 'TOPIK II — Vocab',
+  breadcrumb: const <FolderBreadcrumbSegment>[
+    FolderBreadcrumbSegment(id: 'f1', name: 'Korean'),
+  ],
   front: '안녕하세요',
   back: 'Hello',
   boxNumber: 3,
@@ -72,6 +78,9 @@ CardHistoryHeader _header({
   isSuspended: false,
   reviewCount: reviewCount,
   lapseCount: lapseCount,
+  correctStreak: 4,
+  totalEvents: reviewCount,
+  createdAt: DateTime.utc(2026, 5, 21),
   lastResetAt: lastResetAt,
 );
 
@@ -102,10 +111,20 @@ Widget _wrap(_FakeCardHistoryRepository repo) => ProviderScope(
   ),
 );
 
+/// Card History is a tall screen (header + progress + timeline). Use a
+/// device-sized surface so SliverFillRemaining empty/error states aren't
+/// squeezed by the default 800×600 test window.
+void _useTallSurface(WidgetTester tester) {
+  tester.view.physicalSize = const Size(1200, 3200);
+  tester.view.devicePixelRatio = 3.0;
+  addTearDown(tester.view.reset);
+}
+
 void main() {
   testWidgets('Loading — shows skeleton while header pending', (
     WidgetTester tester,
   ) async {
+    _useTallSurface(tester);
     await tester.pumpWidget(
       _wrap(_FakeCardHistoryRepository(headerPending: true)),
     );
@@ -128,6 +147,7 @@ void main() {
         ),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
@@ -146,6 +166,7 @@ void main() {
         CardHistoryPage(attempts: <CardHistoryAttempt>[], nextCursor: null),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
@@ -173,6 +194,7 @@ void main() {
         ),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
@@ -198,6 +220,7 @@ void main() {
         ),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
@@ -212,6 +235,7 @@ void main() {
         _header(lastResetAt: DateTime.utc(2026, 4, 12)),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
@@ -226,6 +250,7 @@ void main() {
         Failure.storage(operation: StorageOp.read, cause: 'boom'),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
@@ -244,6 +269,7 @@ void main() {
         Failure.notFound(entity: 'flashcard', id: 'c1'),
       ),
     );
+    _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 

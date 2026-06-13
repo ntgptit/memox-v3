@@ -28,6 +28,13 @@ class CardHistoryDao extends DatabaseAccessor<AppDatabase>
   Future<CardHistoryHeaderResult?> loadHeader(String flashcardId) =>
       cardHistoryHeader(flashcardId).getSingleOrNull();
 
+  Future<int> loadEventCount(String flashcardId) =>
+      cardHistoryEventCount(flashcardId).getSingle();
+
+  /// Attempt results newest-first, used to compute the correct streak.
+  Future<List<String>> loadResultsDesc(String flashcardId) =>
+      cardHistoryResultsDesc(flashcardId).get();
+
   /// First [limit] timeline rows, newest first.
   Future<List<CardHistoryAttemptRow>> loadFirstPage({
     required String flashcardId,

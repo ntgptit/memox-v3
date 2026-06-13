@@ -3212,29 +3212,11 @@ abstract class AppLocalizations {
   /// **'Card history'**
   String get cardHistoryTitle;
 
-  /// No description provided for @cardHistoryBoxState.
-  ///
-  /// In en, this message translates to:
-  /// **'Box {box} of 8'**
-  String cardHistoryBoxState(int box);
-
   /// No description provided for @cardHistoryStateSuspended.
   ///
   /// In en, this message translates to:
   /// **'Suspended'**
   String get cardHistoryStateSuspended;
-
-  /// No description provided for @cardHistoryDueNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Due now'**
-  String get cardHistoryDueNow;
-
-  /// No description provided for @cardHistoryDueLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Due {relativeTime}'**
-  String cardHistoryDueLabel(String relativeTime);
 
   /// No description provided for @relativeTimeUntil.
   ///
@@ -3242,35 +3224,11 @@ abstract class AppLocalizations {
   /// **'{unit, select, justNow{now} minutes{{count, plural, =1{in 1 minute} other{in {count} minutes}}} hours{{count, plural, =1{in 1 hour} other{in {count} hours}}} days{{count, plural, =1{in 1 day} other{in {count} days}}} weeks{{count, plural, =1{in 1 week} other{in {count} weeks}}} months{{count, plural, =1{in 1 month} other{in {count} months}}} years{{count, plural, =1{in 1 year} other{in {count} years}}} other{now}}'**
   String relativeTimeUntil(String unit, int count);
 
-  /// No description provided for @cardHistoryReviewForgotStat.
-  ///
-  /// In en, this message translates to:
-  /// **'{reviewCount, plural, =1{Reviewed 1 time · Forgot {lapseCount}} other{Reviewed {reviewCount} times · Forgot {lapseCount}}}'**
-  String cardHistoryReviewForgotStat(int reviewCount, int lapseCount);
-
-  /// No description provided for @cardHistoryNoReviews.
-  ///
-  /// In en, this message translates to:
-  /// **'No reviews yet'**
-  String get cardHistoryNoReviews;
-
-  /// No description provided for @cardHistoryAccuracyStat.
-  ///
-  /// In en, this message translates to:
-  /// **'Accuracy {percent}%'**
-  String cardHistoryAccuracyStat(int percent);
-
   /// No description provided for @cardHistoryResetSubLabel.
   ///
   /// In en, this message translates to:
   /// **'Includes attempts before last reset on {date}.'**
   String cardHistoryResetSubLabel(String date);
-
-  /// No description provided for @cardHistoryTimelineTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Timeline'**
-  String get cardHistoryTimelineTitle;
 
   /// No description provided for @cardHistoryResultPerfect.
   ///
@@ -3295,12 +3253,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forgot'**
   String get cardHistoryResultForgot;
-
-  /// No description provided for @cardHistoryBoxTransition.
-  ///
-  /// In en, this message translates to:
-  /// **'Box {before} → {after}'**
-  String cardHistoryBoxTransition(int before, int after);
 
   /// No description provided for @cardHistoryBoxUnknown.
   ///
@@ -3409,6 +3361,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View history'**
   String get cardHistoryViewAction;
+
+  /// No description provided for @cardHistoryBreadcrumbCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get cardHistoryBreadcrumbCurrent;
+
+  /// No description provided for @cardHistoryBoxChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box} / {total}'**
+  String cardHistoryBoxChip(int box, int total);
+
+  /// No description provided for @cardHistoryProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Current progress'**
+  String get cardHistoryProgressTitle;
+
+  /// No description provided for @cardHistoryBoxStepLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box}'**
+  String cardHistoryBoxStepLabel(int box);
+
+  /// No description provided for @cardHistoryStatDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get cardHistoryStatDue;
+
+  /// No description provided for @cardHistoryStatReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get cardHistoryStatReviews;
+
+  /// No description provided for @cardHistoryStatRecall.
+  ///
+  /// In en, this message translates to:
+  /// **'Recall rate'**
+  String get cardHistoryStatRecall;
+
+  /// No description provided for @cardHistoryStatLapses.
+  ///
+  /// In en, this message translates to:
+  /// **'Lapses'**
+  String get cardHistoryStatLapses;
+
+  /// No description provided for @cardHistoryStatStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct streak'**
+  String get cardHistoryStatStreak;
+
+  /// No description provided for @cardHistoryStatSinceAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Since added'**
+  String get cardHistoryStatSinceAdded;
+
+  /// No description provided for @cardHistoryPercentValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String cardHistoryPercentValue(int percent);
+
+  /// No description provided for @cardHistoryStreakValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 in a row} other{{count} in a row}}'**
+  String cardHistoryStreakValue(int count);
+
+  /// No description provided for @cardHistorySinceAddedValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{today} =1{1 day} other{{count} days}}'**
+  String cardHistorySinceAddedValue(int count);
+
+  /// No description provided for @cardHistoryTimelineHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Timeline · 1 event} other{Timeline · {count} events}}'**
+  String cardHistoryTimelineHeader(int count);
+
+  /// No description provided for @cardHistoryChipCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get cardHistoryChipCorrect;
+
+  /// No description provided for @cardHistoryChipRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered'**
+  String get cardHistoryChipRecovered;
+
+  /// No description provided for @cardHistoryChipForgot.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot'**
+  String get cardHistoryChipForgot;
+
+  /// No description provided for @cardHistoryDescCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered correctly'**
+  String get cardHistoryDescCorrect;
+
+  /// No description provided for @cardHistoryDescRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it back after a slip'**
+  String get cardHistoryDescRecovered;
+
+  /// No description provided for @cardHistoryDescForgot.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot it'**
+  String get cardHistoryDescForgot;
 }
 
 class _AppLocalizationsDelegate

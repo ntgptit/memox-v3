@@ -5,8 +5,10 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/card_history_dao.dart';
+import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/card_history_repository_impl.dart';
 import 'package:memox/domain/models/card_history.dart';
+import 'package:memox/domain/models/folder_detail.dart';
 
 class _Fixture {
   _Fixture(this.db);
@@ -132,7 +134,11 @@ void main() {
 
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
-    repo = CardHistoryRepositoryImpl(CardHistoryDao(db), now: () => fixedNow);
+    repo = CardHistoryRepositoryImpl(
+      CardHistoryDao(db),
+      FolderDao(db),
+      now: () => fixedNow,
+    );
     fx = _Fixture(db);
   });
 
@@ -164,6 +170,25 @@ void main() {
       expect(header.boxNumber, 1);
       expect(header.hasReviews, isFalse);
       expect(header.accuracy, isNull);
+    });
+
+    test('correct streak counts leading non-forgot run; events = total; '
+        'breadcrumb + deck resolved', () async {
+      await fx.seedCard();
+      await fx.seedAttempt(id: 'a1', attemptedAtMs: 1000, result: 'forgot');
+      await fx.seedAttempt(id: 'a2', attemptedAtMs: 2000, result: 'perfect');
+      await fx.seedAttempt(id: 'a3', attemptedAtMs: 3000, result: 'recovered');
+
+      final CardHistoryHeader header = (await repo.loadHeader(
+        flashcardId: 'c1',
+      )).valueOrNull!;
+      expect(header.correctStreak, 2);
+      expect(header.totalEvents, 3);
+      expect(header.deckName, 'N5');
+      expect(
+        header.breadcrumb.map((FolderBreadcrumbSegment s) => s.name).toList(),
+        <String>['Korean'],
+      );
     });
   });
 

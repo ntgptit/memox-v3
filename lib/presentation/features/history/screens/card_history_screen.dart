@@ -6,6 +6,7 @@ import 'package:memox/app/di/flashcard_providers.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/card_history.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/flashcards/widgets/flashcard_delete_preview.dart';
@@ -16,6 +17,8 @@ import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
@@ -48,6 +51,15 @@ class CardHistoryScreen extends ConsumerWidget {
       appBar: MxAppBar(
         titleText: l10n.cardHistoryTitle,
         actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: SpacingTokens.sm),
+            child: MxActionButton(
+              intent: MxActionIntent.toolbar,
+              icon: Icons.edit_outlined,
+              label: l10n.commonEdit,
+              onPressed: () => context.pushFlashcardEdit(deckId, flashcardId),
+            ),
+          ),
           MxIconButton(
             icon: Icons.more_vert,
             tooltip: l10n.libraryOverflowTooltip,
@@ -89,8 +101,6 @@ class CardHistoryScreen extends ConsumerWidget {
       return;
     }
     switch (action) {
-      case CardHistoryAction.edit:
-        context.pushFlashcardEdit(deckId, flashcardId);
       case CardHistoryAction.resetProgress:
         await _resetProgress(context, ref);
       case CardHistoryAction.delete:

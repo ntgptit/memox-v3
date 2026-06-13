@@ -131,14 +131,22 @@ this card") and decide on actions (suspend, reset).
 
 ## Components
 
-| Component   | Spec                                                                                                                   |
-|-------------|------------------------------------------------------------------------------------------------------------------------|
-| App bar     | Back, title "Card history", overflow ⋮ (Edit card / Reset progress / Delete; Suspend deferred to Bury/Suspend).        |
-| Header card | Front preview, back subtitle, current state line, lifetime stats. Sub-label visible only when `last_reset_at != null`. |
-| Timeline    | Vertical list, newest first. 50 per page. Tap → opens session result (if completed).                                   |
-| Divider row | Visual separator inserted at `last_reset_at` position. Non-tappable. Wider stroke.                                     |
-| Load more   | Button at bottom when more pages available.                                                                            |
-| Empty state | When zero attempts, replaces timeline section. CTA opens deck study.                                                   |
+| Component        | Spec                                                                                                                            |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| App bar          | Back, title "Card history", **Edit** pill (→ flashcard editor), overflow ⋮ (Reset progress / Delete; Suspend deferred).        |
+| Breadcrumb       | `Library › {folders…} › {deck} › History`. Library/folder/deck segments tappable; History is the current (non-tap) segment.   |
+| Header card      | Front preview, back subtitle, current-box chip (`Box {n} / 8`). Reset sub-label visible only when `last_reset_at != null`.     |
+| Progress card    | "CURRENT PROGRESS": Leitner box stepper (8 segments, current highlighted) + 2×3 stat grid — Due, Reviews, Recall rate, Lapses, Correct streak, Since added. |
+| Timeline header  | "TIMELINE · {N} EVENTS" (N = total attempts). Filter dropdown is Future (single event type in V1).                            |
+| Timeline         | Vertical list on a left rail with a node per event, newest first. 50 per page. Rows are read-only (row→result nav deferred).   |
+| Timeline row     | Status chip (CORRECT/RECOVERED/FORGOT) + relative/absolute time + description + `B{before} → B{after}` · mode. Duration not shown (no `study_attempts` duration column — gap). |
+| Divider row      | Visual separator (label over a full-width rule) inserted at `last_reset_at` position. Non-tappable.                            |
+| Load more        | Button at bottom when more pages available.                                                                                    |
+| Empty state      | When zero attempts, fills the timeline area. CTA opens deck study.                                                             |
+
+**Stat sourcing (Progress card):** Due ← `flashcard_progress.due_at`/`is_suspended`; Reviews ← `review_count`;
+Recall rate ← `(review_count − lapse_count) / review_count`; Lapses ← `lapse_count`; Correct streak ←
+leading non-`forgot` run over `study_attempts` (newest first); Since added ← `flashcards.created_at`.
 
 ## Timeline row shape
 
