@@ -33,7 +33,10 @@ class StudyResultScreen extends StatelessWidget {
     return MxScaffold(
       appBar: MxAppBar(titleText: l10n.studyResultTitle),
       useShell: false,
-      body: MxContentShell(child: _StudyResultBody(sessionId: sessionId)),
+      body: MxContentShell(
+        // guard:allow-content-shell -- reason: useShell:false; screen owns its gutter.
+        child: _StudyResultBody(sessionId: sessionId),
+      ),
     );
   }
 }
