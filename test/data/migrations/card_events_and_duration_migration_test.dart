@@ -115,7 +115,7 @@ void main() {
       await legacy.close();
 
       final AppDatabase migrated = AppDatabase(NativeDatabase(dbFile));
-      expect(migrated.schemaVersion, 7);
+      expect(migrated.schemaVersion, 8);
 
       final StudyAttemptRow attempt = await migrated
           .select(migrated.studyAttempts)

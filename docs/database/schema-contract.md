@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-13
 applies_to: Drift schema, all tables, migrations
-schema_version: 7 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 8 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract
@@ -13,14 +13,14 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **7**. Tables shipped
+**Current schema** (`AppDatabase.currentSchemaVersion`): **8**. Tables shipped
 so far (added for the Library + Study features):
 
 | Table                | Columns (current)                                                                                                                                                                                     |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `folders`            | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`                                                                                               |
 | `decks`              | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language`, `sort_order`, `created_at`, `updated_at`                                                                                          |
-| `flashcards`         | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, `created_at`, `updated_at`                                                    |
+| `flashcards`         | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `part_of_speech?`, `is_flagged`, `sort_order`, `created_at`, `updated_at`                                                    |
 | `flashcard_tags`     | `flashcard_id` (FK→flashcards, cascade), `tag` + index `idx_flashcard_tags_tag`                                                                                                                     |
 | `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number`, `due_at?`, `buried_until?`, `is_suspended`, `review_count`, `lapse_count`, `last_studied_at?`, `last_reset_at?` + index `idx_flashcard_progress_eligibility` |
 | `study_sessions`     | `id` (PK), `entry_type`, `entry_ref_id?`, `study_type`, `status`, `started_at`, `updated_at` + index `idx_study_sessions_resumable`                                                                |
@@ -150,6 +150,8 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 | ✅ DONE (v5) `study_match_evaluations` append-only Match evaluation table                 | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. |
 | ✅ DONE (v7) `study_attempts.duration_ms INTEGER NULL`                                    | `docs/business/history/card-history.md`                                       | Time-on-card in ms, measured by the study review viewmodel. NULL = not measured → Card History shows "duration not logged".                                                                                                                                                                                            |
 | ✅ DONE (v7) `card_events` lifecycle table + `idx_card_events_flashcard`                  | `docs/business/history/card-history.md`                                       | Per-card created/edited/audio/reset events for the Card History activity feed (merged with `study_attempts` in the timeline). `created`/`edited` logged on flashcard create/update; `reset` on progress reset; `audio_added` reserved (no audio feature yet).                                                            |
+| ✅ DONE (v8) `flashcards.part_of_speech TEXT NULL`                                        | `docs/business/flashcard/flashcard-management.md`, `docs/wireframes/06-flashcard-list.md` | Optional grammatical POS chip on the list + editor. Free text, lowercase.                                                                                                                                                                                                                                            |
+| ✅ DONE (v8) `flashcards.is_flagged BOOLEAN NOT NULL DEFAULT FALSE`                       | `docs/wireframes/06-flashcard-list.md`                                        | User flag for the Flagged filter pill + per-row flag icon.                                                                                                                                                                                                                                                           |
 | ✅ DONE (current) compound index `flashcard_progress(is_suspended, buried_until, due_at)` | `docs/business/study-actions/bury-suspend.md`                                 | Added as `idx_flashcard_progress_eligibility`.                                                                                                                                                                                                                                                                        |
 | ✅ DONE (v3) index `flashcard_tags(tag)`                                                 | `docs/business/tags/tag-system.md`                                            | Added as `idx_flashcard_tags_tag` with the v3 tags migration. Tags are stored lowercased, so a plain index on `tag` supports lowercased-input lookups.                                                                                                                                                                |
 | ✅ DONE (v3) lowercase `flashcard_tags.tag` storage                                      | `docs/business/tags/tag-system.md`                                            | Tags are stored lowercased (case-insensitive identity); the validator + DAO normalize on insert. (The "schema v11 backfill" in earlier revisions belongs to a previous project iteration — this repo's tags shipped lowercased from v3.)                                                                              |

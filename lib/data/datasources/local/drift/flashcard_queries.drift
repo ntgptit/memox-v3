@@ -19,6 +19,8 @@ SELECT
   flashcards.example_sentence,
   flashcards.pronunciation,
   flashcards.hint,
+  flashcards.part_of_speech,
+  flashcards.is_flagged,
   flashcards.sort_order,
   flashcards.created_at,
   flashcards.updated_at

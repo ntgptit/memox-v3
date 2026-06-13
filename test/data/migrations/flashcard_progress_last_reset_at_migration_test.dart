@@ -138,7 +138,7 @@ void main() {
           .select(migratedDb.flashcardProgress)
           .getSingle();
 
-      expect(migratedDb.schemaVersion, 7);
+      expect(migratedDb.schemaVersion, 8);
       expect(row.flashcardId, 'c1');
       expect(row.boxNumber, 3);
       expect(row.reviewCount, 5);

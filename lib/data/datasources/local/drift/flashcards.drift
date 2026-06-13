@@ -16,6 +16,11 @@ CREATE TABLE flashcards (
   pronunciation TEXT,
   -- Optional mnemonic hint.
   hint TEXT,
+  -- Optional grammatical part of speech (e.g. 'noun', 'verb'); shown as a chip on
+  -- the list + editor. Free text, normalized lowercase. NULL = none.
+  part_of_speech TEXT,
+  -- User flag for quick filtering (Flagged pill on the list). Default false.
+  is_flagged BOOLEAN NOT NULL DEFAULT FALSE,
   sort_order INTEGER NOT NULL DEFAULT 0,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL

@@ -20,6 +20,8 @@ abstract class Flashcard with _$Flashcard {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
+    String? partOfSpeech,
+    @Default(false) bool isFlagged,
     required int sortOrder,
     required DateTime createdAt,
     required DateTime updatedAt,

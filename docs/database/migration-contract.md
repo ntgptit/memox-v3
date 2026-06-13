@@ -118,3 +118,4 @@ If any step is skipped, report it explicitly.
 - `lib/data/datasources/local/migrations/v4_add_study_tables.dart`
 - `lib/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart`
 - `lib/data/datasources/local/migrations/v7_add_card_events_and_attempt_duration.dart`
+- `lib/data/datasources/local/migrations/v8_add_flashcard_pos_and_flag.dart`
