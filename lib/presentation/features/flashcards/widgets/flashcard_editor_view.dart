@@ -341,7 +341,7 @@ Future<void> _confirmDelete({
       context,
       message: l10n.failureMessage(
         failure,
-        fallback: l10n.flashcardDeletedOneMessage,
+        fallback: l10n.flashcardListActionError,
       ),
     ),
     (void _) {

@@ -482,6 +482,42 @@ void main() {
       expect(find.text('Edit card'), findsNothing);
     });
 
+    testWidgets('DT4 onEdit: delete failure keeps the editor open', (
+      WidgetTester tester,
+    ) async {
+      final _RecordingFlashcardRepository repository =
+          _RecordingFlashcardRepository(
+            deleteResult: const Result<void>.err(
+              Failure.storage(
+                operation: StorageOp.write,
+                cause: 'offline',
+                table: 'flashcards',
+              ),
+            ),
+          );
+
+      await tester.pumpWidget(_wrapApp(repository: repository));
+      await _openEditor(tester);
+
+      await tester.ensureVisible(find.text('Delete card').first);
+      await tester.tap(find.text('Delete card').first);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Dialog), findsOneWidget);
+
+      await tester.tap(find.text('Delete card').last);
+      await tester.pumpAndSettle();
+
+      expect(repository.lastDeleteFlashcardId, 'c1');
+      expect(find.text('Flashcard deleted.'), findsNothing);
+      expect(
+        find.text('Something went wrong. Please try again.'),
+        findsOneWidget,
+      );
+      expect(find.text('Library home'), findsNothing);
+      expect(find.byType(FlashcardEditorScreen), findsOneWidget);
+    });
+
     testWidgets('DT5 onEdit: save failure leaves the draft open', (
       WidgetTester tester,
     ) async {
