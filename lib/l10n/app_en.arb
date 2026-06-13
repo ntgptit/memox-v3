@@ -438,6 +438,40 @@
   "studyEntryInvalidTitle": "Can't open study",
   "studyEntryInvalidMessage": "The study route parameters are invalid.",
   "studySessionTitle": "Study session",
+  "studySessionGuessModeLabel": "GUESS",
+  "studySessionGuessPromptLabel": "What is this?",
+  "studySessionGuessNextCardInLabel": "Next card in {seconds}s",
+  "@studySessionGuessNextCardInLabel": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "studySessionGuessSkipAction": "Skip to next card",
+  "studySessionGuessCorrectAnnouncement": "Correct",
+  "studySessionGuessWrongAnnouncement": "Wrong. The answer was {answer}.",
+  "@studySessionGuessWrongAnnouncement": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "studySessionGuessOptionSemanticsLabel": "Option {letter}: {title}. {description}",
+  "@studySessionGuessOptionSemanticsLabel": {
+    "placeholders": {
+      "letter": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
   "studySessionProgressLabel": "{current} / {total}",
   "@studySessionProgressLabel": {
     "placeholders": {

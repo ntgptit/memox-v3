@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-05-28
+last_updated: 2026-06-14
 route: /library/study/session/:sessionId
 study_mode: guess
 source_specs:
@@ -10,14 +10,12 @@ source_specs:
 
 # 15 — Study Session: Guess Mode
 
-> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.6/4.5.7) in the current codebase. V1 implements
-> only the recall self-grade flow through the shared shell
-> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
-> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
-> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
-> **target structure** from a previous iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Implementation note (2026-06-14):** Guess mode is now implemented in the current codebase.
+> The active presentation files are
+> `lib/presentation/features/study/widgets/study_session_guess_mode_view.dart` and
+> `lib/presentation/features/study/viewmodels/study_session_guess_viewmodel.dart`, wired from
+> `lib/presentation/features/study/screens/study_session_screen.dart`. This wireframe remains the
+> behavioral reference for the implemented screen.
 
 ## Purpose
 

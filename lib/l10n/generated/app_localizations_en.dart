@@ -972,6 +972,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionTitle => 'Study session';
 
   @override
+  String get studySessionGuessModeLabel => 'GUESS';
+
+  @override
+  String get studySessionGuessPromptLabel => 'What is this?';
+
+  @override
+  String studySessionGuessNextCardInLabel(String seconds) {
+    return 'Next card in ${seconds}s';
+  }
+
+  @override
+  String get studySessionGuessSkipAction => 'Skip to next card';
+
+  @override
+  String get studySessionGuessCorrectAnnouncement => 'Correct';
+
+  @override
+  String studySessionGuessWrongAnnouncement(String answer) {
+    return 'Wrong. The answer was $answer.';
+  }
+
+  @override
+  String studySessionGuessOptionSemanticsLabel(
+    String letter,
+    String title,
+    String description,
+  ) {
+    return 'Option $letter: $title. $description';
+  }
+
+  @override
   String studySessionProgressLabel(int current, int total) {
     return '$current / $total';
   }

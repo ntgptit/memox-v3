@@ -1754,6 +1754,52 @@ abstract class AppLocalizations {
   /// **'Study session'**
   String get studySessionTitle;
 
+  /// No description provided for @studySessionGuessModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'GUESS'**
+  String get studySessionGuessModeLabel;
+
+  /// No description provided for @studySessionGuessPromptLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What is this?'**
+  String get studySessionGuessPromptLabel;
+
+  /// No description provided for @studySessionGuessNextCardInLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next card in {seconds}s'**
+  String studySessionGuessNextCardInLabel(String seconds);
+
+  /// No description provided for @studySessionGuessSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip to next card'**
+  String get studySessionGuessSkipAction;
+
+  /// No description provided for @studySessionGuessCorrectAnnouncement.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get studySessionGuessCorrectAnnouncement;
+
+  /// No description provided for @studySessionGuessWrongAnnouncement.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong. The answer was {answer}.'**
+  String studySessionGuessWrongAnnouncement(String answer);
+
+  /// No description provided for @studySessionGuessOptionSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Option {letter}: {title}. {description}'**
+  String studySessionGuessOptionSemanticsLabel(
+    String letter,
+    String title,
+    String description,
+  );
+
   /// No description provided for @studySessionProgressLabel.
   ///
   /// In en, this message translates to:

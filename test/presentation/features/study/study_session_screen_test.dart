@@ -11,6 +11,8 @@ import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
+import 'package:memox/core/theme/tokens/duration_tokens.dart';
+import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
@@ -1435,4 +1437,222 @@ void main() {
 
     expect(find.text('Library destination'), findsOneWidget);
   });
+
+  testWidgets('DT3 onOpen: guess mode renders the prompt and 5 rich options', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      Result<StudySessionReview>.ok(
+        _review(
+          sessionId: 'session-guess-open',
+          cards: <({String front, String back})>[
+            (front: '도서관', back: 'library'),
+            (front: '주방', back: 'kitchen'),
+            (front: '학교', back: 'school'),
+            (front: '사무실', back: 'office'),
+            (front: '병원', back: 'hospital'),
+          ],
+        ),
+      ),
+    );
+    final GoRouter router = _studyRouter(
+      _studySessionLocationWithMode(
+        'session-guess-open',
+        mode: StudyMode.guess,
+      ),
+    );
+
+    await tester.pumpWidget(
+      _routerShell(
+        router,
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudySessionScreen)),
+    );
+
+    expect(find.text(l10n.studySessionGuessModeLabel), findsOneWidget);
+    expect(
+      find.text(StringUtils.uppercased(l10n.studySessionGuessPromptLabel)),
+      findsOneWidget,
+    );
+    expect(find.text('도서관'), findsOneWidget);
+    expect(
+      find.byKey(
+        const ValueKey<String>('guess-option-card-session-guess-open-0'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(
+        const ValueKey<String>('guess-option-card-session-guess-open-1'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(
+        const ValueKey<String>('guess-option-card-session-guess-open-2'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(
+        const ValueKey<String>('guess-option-card-session-guess-open-3'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(
+        const ValueKey<String>('guess-option-card-session-guess-open-4'),
+      ),
+      findsOneWidget,
+    );
+
+    final Finder openOptionFinder = find.byKey(
+      const ValueKey<String>('guess-option-card-session-guess-open-1'),
+    );
+    await tester.ensureVisible(openOptionFinder);
+    await tester.longPress(openOptionFinder);
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.commonEdit), findsOneWidget);
+    expect(find.text(l10n.studySessionBuryUntilTomorrowAction), findsOneWidget);
+    expect(find.text(l10n.studySessionSuspendAction), findsOneWidget);
+  });
+
+  testWidgets(
+    'DT3a onTap: guess mode records the answer immediately and the footer skips',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-guess-wrong',
+            cards: <({String front, String back})>[
+              (front: '도서관', back: 'library'),
+              (front: '주방', back: 'kitchen'),
+              (front: '학교', back: 'school'),
+              (front: '사무실', back: 'office'),
+              (front: '병원', back: 'hospital'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocationWithMode(
+          'session-guess-wrong',
+          mode: StudyMode.guess,
+        ),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      final Finder wrongOptionFinder = find.byKey(
+        const ValueKey<String>('guess-option-card-session-guess-wrong-1'),
+      );
+      await tester.ensureVisible(wrongOptionFinder);
+      await tester.tap(wrongOptionFinder);
+      await tester.pump();
+
+      expect(repository.recordCalls, 1);
+      expect(repository.recordedAnswers.single.result, AttemptResult.forgot);
+      expect(find.byIcon(Icons.close_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+      expect(find.textContaining('NEXT CARD IN'), findsOneWidget);
+
+      await tester.tap(find.textContaining('NEXT CARD IN'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('주방'), findsOneWidget);
+      expect(find.textContaining('NEXT CARD IN'), findsNothing);
+      expect(find.text(l10n.studySessionGuessSkipAction), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'DT3b onComplete: guess mode auto-finalizes after the last answer',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-guess-complete',
+            cards: <({String front, String back})>[
+              (front: '도서관', back: 'library'),
+              (front: '주방', back: 'kitchen'),
+              (front: '학교', back: 'school'),
+              (front: '사무실', back: 'office'),
+              (front: '병원', back: 'hospital'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocationWithMode(
+          'session-guess-complete',
+          mode: StudyMode.guess,
+        ),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final List<String> correctAnswers = <String>[
+        'library',
+        'kitchen',
+        'school',
+        'office',
+        'hospital',
+      ];
+
+      for (int index = 0; index < correctAnswers.length; index++) {
+        final Finder correctOptionFinder = find.byKey(
+          ValueKey<String>('guess-option-card-session-guess-complete-$index'),
+        );
+        await tester.ensureVisible(correctOptionFinder);
+        await tester.tap(correctOptionFinder);
+        await tester.pump();
+        expect(repository.recordCalls, index + 1);
+        expect(repository.recordedAnswers[index].result, AttemptResult.perfect);
+
+        if (index < correctAnswers.length - 1) {
+          await tester.pump(
+            DurationTokens.guessCorrectCountdown +
+                const Duration(milliseconds: 20),
+          );
+          await tester.pumpAndSettle();
+        }
+      }
+
+      await tester.pump(
+        DurationTokens.guessCorrectCountdown + const Duration(milliseconds: 20),
+      );
+      await tester.pumpAndSettle();
+
+      expect(repository.finalizeCalls, 1);
+      expect(find.byType(StudyResultScreen), findsOneWidget);
+    },
+  );
 }

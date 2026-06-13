@@ -960,6 +960,37 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionTitle => 'Phiên học';
 
   @override
+  String get studySessionGuessModeLabel => 'ĐOÁN';
+
+  @override
+  String get studySessionGuessPromptLabel => 'Đây là gì?';
+
+  @override
+  String studySessionGuessNextCardInLabel(String seconds) {
+    return 'Thẻ tiếp theo sau ${seconds}s';
+  }
+
+  @override
+  String get studySessionGuessSkipAction => 'Bỏ qua sang thẻ tiếp theo';
+
+  @override
+  String get studySessionGuessCorrectAnnouncement => 'Chính xác';
+
+  @override
+  String studySessionGuessWrongAnnouncement(String answer) {
+    return 'Sai. Đáp án là $answer.';
+  }
+
+  @override
+  String studySessionGuessOptionSemanticsLabel(
+    String letter,
+    String title,
+    String description,
+  ) {
+    return 'Lựa chọn $letter: $title. $description';
+  }
+
+  @override
   String studySessionProgressLabel(int current, int total) {
     return '$current / $total';
   }

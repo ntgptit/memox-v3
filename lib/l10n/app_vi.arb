@@ -438,6 +438,40 @@
   "studyEntryInvalidTitle": "Không thể mở phần học",
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",
   "studySessionTitle": "Phiên học",
+  "studySessionGuessModeLabel": "ĐOÁN",
+  "studySessionGuessPromptLabel": "Đây là gì?",
+  "studySessionGuessNextCardInLabel": "Thẻ tiếp theo sau {seconds}s",
+  "@studySessionGuessNextCardInLabel": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "studySessionGuessSkipAction": "Bỏ qua sang thẻ tiếp theo",
+  "studySessionGuessCorrectAnnouncement": "Chính xác",
+  "studySessionGuessWrongAnnouncement": "Sai. Đáp án là {answer}.",
+  "@studySessionGuessWrongAnnouncement": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "studySessionGuessOptionSemanticsLabel": "Lựa chọn {letter}: {title}. {description}",
+  "@studySessionGuessOptionSemanticsLabel": {
+    "placeholders": {
+      "letter": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
   "studySessionProgressLabel": "{current} / {total}",
   "@studySessionProgressLabel": {
     "placeholders": {
