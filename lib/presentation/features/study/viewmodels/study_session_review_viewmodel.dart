@@ -6,6 +6,7 @@ import 'package:memox/domain/study/modes/study_mode_strategy.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy_factory.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_session_review_viewmodel.g.dart';
@@ -21,15 +22,24 @@ class StudySessionReviewController extends _$StudySessionReviewController {
   void _markCurrentShown() => _currentShownAt = DateTime.now();
 
   @override
-  Future<StudySessionReviewState> build(SessionId sessionId) async {
+  Future<StudySessionReviewState> build(
+    ({SessionId sessionId, StudyMode? studyMode}) request,
+  ) async {
     final Result<StudySessionReview> result = await ref
         .read(loadStudySessionReviewUseCaseProvider)
-        .call(sessionId: sessionId);
+        .call(sessionId: request.sessionId);
 
     if (result case Ok<StudySessionReview>(:final value)) {
-      _studyModeStrategy = StudyModeStrategyFactory.resolve();
+      _studyModeStrategy = StudyModeStrategyFactory.resolve(
+        studyMode: request.studyMode,
+      );
       _markCurrentShown();
-      return StudySessionReviewState.fromReview(value);
+      final StudySessionReviewState initialState =
+          StudySessionReviewState.fromReview(value);
+      if (request.studyMode == StudyMode.review) {
+        return initialState.copyWith(isAnswerVisible: true);
+      }
+      return initialState;
     }
     final Err<StudySessionReview> err = result as Err<StudySessionReview>;
     throw StudySessionFailureException(err.failure);
@@ -53,9 +63,11 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     (BinaryGradeStudyModeStrategy strategy) => strategy.mapForgotAction(),
   );
 
-  Future<void> gradeGotIt() => _recordAnswer(
+  Future<void> gradePerfect() => _recordAnswer(
     (BinaryGradeStudyModeStrategy strategy) => strategy.mapGotItAction(),
   );
+
+  Future<void> gradeGotIt() => gradePerfect();
 
   Future<bool> finishSession() async {
     final StudySessionReviewState? current = switch (state) {
@@ -113,13 +125,8 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     }
 
     final StudySessionReviewItem item = current.currentItem;
-    // This screen only handles the V1 reveal/self-grade flow. The type check
-    // is what allows calling the binary-grade mapping at all (Fill/Match
-    // strategies no longer expose it), and the flag keeps review/guess on
-    // their own future flows even though they are binary-grade too.
     final StudyModeStrategy strategy = _studyModeStrategy;
-    if (strategy is! BinaryGradeStudyModeStrategy ||
-        !strategy.usesRevealSelfGradeFlow) {
+    if (strategy is! BinaryGradeStudyModeStrategy) {
       return;
     }
     final AttemptResult result = mapResult(strategy);

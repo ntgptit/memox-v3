@@ -971,6 +971,28 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionBackLabel => 'Mặt sau';
 
   @override
+  String get studySessionMeaningLabel => 'Nghĩa';
+
+  @override
+  String get studySessionSwipeHint => 'Vuốt sang trái để sang thẻ tiếp theo';
+
+  @override
+  String get studySessionBuryUntilTomorrowAction => 'Ẩn đến ngày mai';
+
+  @override
+  String get studySessionSuspendAction => 'Tạm dừng thẻ';
+
+  @override
+  String get studySessionBurySuccessMessage => 'Đã ẩn thẻ đến ngày mai.';
+
+  @override
+  String get studySessionSuspendSuccessMessage => 'Đã tạm dừng thẻ.';
+
+  @override
+  String get studySessionCardActionFailedMessage =>
+      'Không thể cập nhật thẻ này. Vui lòng thử lại.';
+
+  @override
   String get studyPreviousAction => 'Trước';
 
   @override

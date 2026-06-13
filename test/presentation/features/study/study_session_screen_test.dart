@@ -27,14 +27,17 @@ import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
+import 'package:memox/presentation/features/study/widgets/study_session_review_mode_view.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/study/mx_flashcard.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 import 'package:riverpod/misc.dart';
 
 class _FakeStudyRepository implements StudyRepository {
@@ -61,6 +64,8 @@ class _FakeStudyRepository implements StudyRepository {
   int cancelCalls = 0;
   int restartCalls = 0;
   int createCalls = 0;
+  int buryCalls = 0;
+  int suspendCalls = 0;
   final List<
     ({
       String sessionId,
@@ -186,7 +191,8 @@ class _FakeStudyRepository implements StudyRepository {
     required SessionId sessionId,
     required FlashcardId flashcardId,
   }) async {
-    throw UnimplementedError();
+    buryCalls++;
+    return const Result<void>.ok(null);
   }
 
   @override
@@ -194,7 +200,8 @@ class _FakeStudyRepository implements StudyRepository {
     required SessionId sessionId,
     required FlashcardId flashcardId,
   }) async {
-    throw UnimplementedError();
+    suspendCalls++;
+    return const Result<void>.ok(null);
   }
 
   @override
@@ -280,10 +287,22 @@ GoRouter _studyResultRouter(String initialLocation) {
 String _studySessionLocation(String sessionId) =>
     RoutePaths.studySession(sessionId);
 
+String _studySessionLocationWithMode(String sessionId, {StudyMode? mode}) {
+  final Map<String, String> queryParameters = <String, String>{};
+  if (mode != null) {
+    queryParameters[RoutePaths.modeQueryParam] = mode.name;
+  }
+  return Uri(
+    path: RoutePaths.studySession(sessionId),
+    queryParameters: queryParameters.isEmpty ? null : queryParameters,
+  ).toString();
+}
+
 StudySessionReview _review({
   required String sessionId,
   required List<({String front, String back})> cards,
   Set<int> answeredIndices = const <int>{},
+  TargetLanguage targetLanguage = TargetLanguage.korean,
 }) {
   final DateTime now = DateTime.utc(2026, 1, 1);
   final StudySession session = StudySession(
@@ -318,6 +337,7 @@ StudySessionReview _review({
             createdAt: now,
             updatedAt: now,
           ),
+          targetLanguage: targetLanguage,
         ),
     ],
   );
@@ -350,6 +370,157 @@ StudySessionResult _result({
 }
 
 void main() {
+  testWidgets('DT1 onOpen: review mode renders the swipe-grade surface', (
+    tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      Result<StudySessionReview>.ok(
+        _review(
+          sessionId: 'session-review-mode',
+          cards: <({String front, String back})>[
+            (front: 'Front 1', back: 'Back 1'),
+            (front: 'Front 2', back: 'Back 2'),
+          ],
+        ),
+      ),
+    );
+    final GoRouter router = _studyRouter(
+      _studySessionLocationWithMode(
+        'session-review-mode',
+        mode: StudyMode.review,
+      ),
+    );
+
+    await tester.pumpWidget(
+      _routerShell(
+        router,
+        overrides: <Override>[
+          studyRepositoryProvider.overrideWithValue(repository),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(StudySessionScreen)),
+    );
+
+    expect(find.byType(StudySessionReviewModeView), findsOneWidget);
+    expect(find.text(l10n.studySessionTitle), findsNothing);
+    expect(find.text(l10n.studySessionShowAction), findsNothing);
+    expect(
+      find.text(l10n.studySessionMeaningLabel.toUpperCase()),
+      findsOneWidget,
+    );
+    expect(find.text(l10n.studySessionSwipeHint), findsOneWidget);
+    expect(find.text('Front 1'), findsOneWidget);
+    expect(find.text('Back 1'), findsOneWidget);
+    expect(find.text('0 / 2'), findsOneWidget);
+    expect(repository.reviewCalls, 1);
+    expect(repository.recordCalls, 0);
+  });
+
+  testWidgets(
+    'DT1a onSwipe: review mode swipe left records forgot and advances',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-review-swipe',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocationWithMode(
+          'session-review-swipe',
+          mode: StudyMode.review,
+        ),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final Offset cardCenter = tester.getCenter(find.byType(MxCard));
+      final TestGesture gesture = await tester.startGesture(cardCenter);
+      await gesture.moveBy(const Offset(-600, 0));
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(repository.recordCalls, 1);
+      expect(repository.recordedAnswers.single.result, AttemptResult.forgot);
+      expect(repository.recordedAnswers.single.studyMode, StudyMode.review);
+      expect(find.text('Front 1'), findsNothing);
+      expect(find.text('Front 2'), findsOneWidget);
+      expect(find.text('1 / 2'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'DT2 onLongPress: review mode opens the card-actions sheet and bury persists',
+    (tester) async {
+      final _FakeStudyRepository repository = _FakeStudyRepository(
+        Result<StudySessionReview>.ok(
+          _review(
+            sessionId: 'session-review-actions',
+            cards: <({String front, String back})>[
+              (front: 'Front 1', back: 'Back 1'),
+              (front: 'Front 2', back: 'Back 2'),
+            ],
+          ),
+        ),
+      );
+      final GoRouter router = _studyRouter(
+        _studySessionLocationWithMode(
+          'session-review-actions',
+          mode: StudyMode.review,
+        ),
+      );
+
+      await tester.pumpWidget(
+        _routerShell(
+          router,
+          overrides: <Override>[
+            studyRepositoryProvider.overrideWithValue(repository),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final AppLocalizations l10n = AppLocalizations.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
+
+      await tester.longPress(find.text('Front 1'));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.commonEdit), findsOneWidget);
+      expect(
+        find.text(l10n.studySessionBuryUntilTomorrowAction),
+        findsOneWidget,
+      );
+      expect(find.text(l10n.studySessionSuspendAction), findsOneWidget);
+
+      await tester.tap(find.text(l10n.studySessionBuryUntilTomorrowAction));
+      await tester.pumpAndSettle();
+
+      expect(repository.buryCalls, 1);
+      expect(repository.suspendCalls, 0);
+      expect(repository.reviewCalls, greaterThan(1));
+      expect(find.text(l10n.studySessionBurySuccessMessage), findsOneWidget);
+    },
+  );
+
   testWidgets(
     'tapping close shows the confirmation dialog and cancel keeps the user on StudySessionScreen',
     (tester) async {

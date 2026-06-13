@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-05-28
+last_updated: 2026-06-14
 route: /library/study/session/:sessionId
 study_mode: review
 source_specs:
@@ -11,10 +11,9 @@ source_specs:
 
 # 13 — Study Session: Review Mode
 
-> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.2/4.5.3) in the current codebase. V1 implements
-> only the recall self-grade flow through the shared shell
-> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
-> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
+> **Drift correction (2026-06-14):** `?mode=review` now renders the swipe-grade review surface in
+> `lib/presentation/features/study/screens/study_session_screen.dart`; the no-mode fallback still
+> keeps the shared recall shell. Any
 > `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
 > **target structure** from a previous iteration and do NOT exist — verify against
 > `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
@@ -28,13 +27,13 @@ establishes the visual grammar reused by modes 14-17 (top app bar, progress bar,
 convention).
 
 > **Current V1 implementation note.** The shipped screen at
-> `/library/study/session/:sessionId` is a minimal persisted self-grade shell:
-> it loads the session header + ordered session items, shows the current card
-> with a reveal toggle, exposes Forgot / Got it grading after reveal, marks the
-> answered session item in-session, resets reveal state when moving between
-> cards, offers a safe exit action, and shows a Finish Session CTA only after
-> every card has been answered. The result route stays a placeholder and
-> `flashcard_progress` is not updated until Finish Session succeeds.
+> `/library/study/session/:sessionId?mode=review` is the swipe-grade review
+> surface: it loads the persisted session and ordered session items, renders
+> both sides on one card, grades by swipe, shows the current-card progress bar
+> and exit confirmation, and exposes the long-press card-actions sheet for Edit
+> / Bury until tomorrow / Suspend card. The no-mode path still renders the
+> recall reveal/self-grade shell, and `flashcard_progress` is not updated until
+> Finish Session succeeds.
 
 > **Mode pill / progress-bar color convention (applies to wireframes 13-17).** Modes split into two
 > visual families:
@@ -112,7 +111,7 @@ swiping (gesture is the primary input).
 - ❌ Allow exit without confirmation when answered > 0.
 - ❌ Make swipe optional. In this mode swipe is the **primary** input; tap fallback exists but is
   secondary.
-- ❌ Add a TTS icon inline on the card. TTS surfaces via card-actions sheet only (long-press).
+- ❌ Add a TTS icon inline on the card.
 - ❌ Update SRS box outside `GradeAttemptUseCase`.
 
 ## Components
@@ -137,7 +136,7 @@ swiping (gesture is the primary input).
 | Card visible               | Card opened                                | Front + back both rendered. Swipe hint shown for first 3 cards of the session, then hidden. |
 | Swiping                    | Drag begins                                | Card follows finger; releasing past the threshold commits a grade.                          |
 | Grading                    | Swipe committed (or tap on grade fallback) | Persist attempt + SRS update; advance to next card with horizontal slide.                   |
-| Buried via long-press menu | Long-press the card                        | Bottom-sheet with Bury / Suspend / History / Audio settings. Bury → toast 5s undo; advance. |
+| Buried via long-press menu | Long-press the card                        | Bottom-sheet with Edit / Bury until tomorrow / Suspend card. Bury or suspend refreshes the queue after persistence. |
 | Last card answered         | Final answer committed                     | Show Finish Session CTA; do not auto-finalize.                                               |
 | Finish Session             | CTA tapped after all cards are answered    | Commit progress transactionally and transition to the placeholder study result via `pushReplacement`. |
 | Exit confirm               | ✕ tapped mid-session                       | Show a confirmation dialog that says progress is saved and can be resumed later.                                                                |
@@ -148,19 +147,16 @@ swiping (gesture is the primary input).
 |-----------------|---------------------------|-----------------------------------------------------------------------------|
 | Swipe right     | Drag right past threshold | `result = perfect`; persist; next card.                                     |
 | Swipe left      | Drag left past threshold  | `result = forgot`; persist; next card.                                      |
-| Tap card        | Tap (fallback)            | Open inline Forgot / Perfect prompt (accessibility / motor fallback).       |
-| Long-press card | Long-press                | Open card actions bottom-sheet (Bury / Suspend / History / Audio settings). |
+| Tap card        | Tap (fallback)            | Future Proposal. Swipe is the current review-mode input.                    |
+| Long-press card | Long-press                | Open card actions bottom-sheet (Edit / Bury until tomorrow / Suspend card). |
 | Tap ✕           | Tap                       | Show exit confirm dialog.                                                   |
 
 ## Current V1 controls
 
-- Previous button is disabled on the first card.
-- Next button is disabled on the last card.
-- Moving Previous/Next resets the answer to hidden before the next card is shown.
-- Reveal shows Forgot / Got it actions for the current unanswered card.
-- Grading marks the current session item answered and advances to the next unanswered item when available.
-- When all cards in the session are answered, show the ready-to-finish message, keep browsing available, and show the Finish Session CTA.
-- The swipe-based grading table below is the future review-mode target and does not describe the shipped V1 interaction.
+- Swipe is the current review-mode interaction.
+- Long-press opens the card-actions sheet.
+- Review state refreshes after a buried or suspended card is removed from the queue.
+- The swipe-based grading table below remains the shipped interaction contract for the review surface.
 
 ## Dialogs and bottom-sheets used
 
@@ -182,13 +178,9 @@ Insert `study_attempts` row with `box_before`, `box_after`, `result`, `study_mod
 
 ## TTS behavior (per `docs/business/tts/tts-settings.md`)
 
-Review mode has **no inline TTS button** in the design. TTS is reachable via the card-actions
-bottom-sheet (long-press → "Speak front"). Rationale: review mode is a fast-flowing self-grade; a
-TTS button on the card would compete with the swipe gesture target. Modes 14-17 surface a TTS icon
-inside the card because their gestures are taps, not swipes.
-
-When `autoPlay = true` AND `deck.target_language` is supported, the engine still auto-plays `front`
-on card open (silent UI).
+Review mode has **no inline TTS button** in the current V1 shell. The long-press card-actions
+sheet currently exposes Edit / Bury until tomorrow / Suspend card only; TTS remains a separate
+settings surface and is not surfaced from this review screen yet.
 
 ## Navigation in
 
@@ -220,7 +212,7 @@ on card open (silent UI).
 ## Accessibility
 
 - Card announces front and back in sequence on focus.
-- Swipe gestures have a tap fallback (tap → inline Forgot/Perfect buttons).
+- Swipe gestures are the primary review interaction.
 - Reduced-motion users see a cross-fade instead of the horizontal slide on card advance.
 - Swipe hint footer carries `Semantics(hint: 'Swipe right for Perfect, swipe left for Forgot')`.
 
@@ -228,7 +220,7 @@ on card open (silent UI).
 
 - Card MUST render both sides at once. No reveal step.
 - Swipe MUST be the primary input. Tap fallback is for accessibility only.
-- TTS button is NOT inline in review mode. Surfaces via card-actions sheet.
+- TTS button is NOT inline in review mode. The current card-actions sheet does not surface TTS.
 - Exit confirmation MUST appear before pop.
 - `box_before` and `box_after` MUST be recorded on every attempt.
 - `example` field MUST render as a pill below the back when non-empty. `note`, `pronunciation`,
@@ -238,7 +230,7 @@ on card open (silent UI).
 
 - Do NOT introduce a "Show answer" CTA in this mode. Both sides are visible from the start.
 - Do NOT add a TTS icon to the card body. TTS lives in the actions sheet.
-- Swipe gestures are MANDATORY (not optional). Tap is fallback only.
+- Swipe gestures are MANDATORY (not optional).
 - Render `example` as a pill below the back. Do not render `note` / `pronunciation` / `hint` here —
   those surface in card detail, not study session.
 - Use blue progress-bar color token. Mismatching family color = bug.

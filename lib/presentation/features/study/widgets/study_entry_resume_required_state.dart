@@ -110,7 +110,10 @@ class _StudyEntryResumeRequiredStateState
   }
 
   void _handleResume() {
-    context.pushReplacementStudySession(widget.sessionId);
+    context.pushReplacementStudySession(
+      widget.sessionId,
+      mode: resolveStudyMode(widget.request.modeQuery),
+    );
   }
 
   void _handleBack() {
@@ -166,7 +169,7 @@ class _StudyEntryResumeRequiredStateState
     }
 
     final StudySession newSession = (result as Ok<StudySession>).value;
-    context.pushReplacementStudySession(newSession.id);
+    context.pushReplacementStudySession(newSession.id, mode: mode);
   }
 }
 

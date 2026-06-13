@@ -1772,6 +1772,48 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get studySessionBackLabel;
 
+  /// No description provided for @studySessionMeaningLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Meaning'**
+  String get studySessionMeaningLabel;
+
+  /// No description provided for @studySessionSwipeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe left for the next card'**
+  String get studySessionSwipeHint;
+
+  /// No description provided for @studySessionBuryUntilTomorrowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Bury until tomorrow'**
+  String get studySessionBuryUntilTomorrowAction;
+
+  /// No description provided for @studySessionSuspendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspend card'**
+  String get studySessionSuspendAction;
+
+  /// No description provided for @studySessionBurySuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Card buried until tomorrow.'**
+  String get studySessionBurySuccessMessage;
+
+  /// No description provided for @studySessionSuspendSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Card suspended.'**
+  String get studySessionSuspendSuccessMessage;
+
+  /// No description provided for @studySessionCardActionFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the card. Please try again.'**
+  String get studySessionCardActionFailedMessage;
+
   /// No description provided for @studyPreviousAction.
   ///
   /// In en, this message translates to:

@@ -8,8 +8,10 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/models/study_session_review.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
+import 'package:memox/presentation/features/study/widgets/study_session_review_mode_view.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_callout.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
@@ -24,9 +26,10 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 import 'package:memox/presentation/shared/widgets/study/mx_flashcard.dart';
 
 class StudySessionScreen extends ConsumerStatefulWidget {
-  const StudySessionScreen({required this.sessionId, super.key});
+  const StudySessionScreen({required this.sessionId, this.mode, super.key});
 
   final String sessionId;
+  final StudyMode? mode;
 
   @override
   ConsumerState<StudySessionScreen> createState() => _StudySessionScreenState();
@@ -47,20 +50,27 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
         }
         unawaited(_handleExit(context));
       },
-      child: MxScaffold(
-        appBar: MxAppBar(
-          titleText: l10n.studySessionTitle,
-          leading: MxIconButton.toolbar(
-            icon: Icons.close,
-            tooltip: l10n.commonClose,
-            onPressed: () => _handleExit(context),
-          ),
-        ),
-        body: _StudySessionReviewSection(
-          sessionId: widget.sessionId,
-          onBack: () => _handleExit(context),
-        ),
-      ),
+      child: widget.mode == StudyMode.review
+          ? StudySessionReviewModeView(
+              sessionId: widget.sessionId,
+              mode: widget.mode,
+              onBack: () => _handleExit(context),
+            )
+          : MxScaffold(
+              appBar: MxAppBar(
+                titleText: l10n.studySessionTitle,
+                leading: MxIconButton.toolbar(
+                  icon: Icons.close,
+                  tooltip: l10n.commonClose,
+                  onPressed: () => _handleExit(context),
+                ),
+              ),
+              body: _StudySessionReviewSection(
+                sessionId: widget.sessionId,
+                mode: widget.mode,
+                onBack: () => _handleExit(context),
+              ),
+            ),
     );
   }
 
@@ -103,16 +113,21 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
 class _StudySessionReviewSection extends ConsumerWidget {
   const _StudySessionReviewSection({
     required this.sessionId,
+    required this.mode,
     required this.onBack,
   });
 
   final String sessionId;
+  final StudyMode? mode;
   final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<StudySessionReviewState> value = ref.watch(
-      studySessionReviewControllerProvider(sessionId),
+      studySessionReviewControllerProvider((
+        sessionId: sessionId,
+        studyMode: mode,
+      )),
     );
 
     return switch (value) {
@@ -122,22 +137,52 @@ class _StudySessionReviewSection extends ConsumerWidget {
       AsyncData<StudySessionReviewState>(:final value) => _StudySessionBody(
         state: value,
         onToggleAnswer: () => ref
-            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .read(
+              studySessionReviewControllerProvider((
+                sessionId: sessionId,
+                studyMode: mode,
+              )).notifier,
+            )
             .toggleAnswer(),
         onForgot: () => ref
-            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .read(
+              studySessionReviewControllerProvider((
+                sessionId: sessionId,
+                studyMode: mode,
+              )).notifier,
+            )
             .gradeForgot(),
         onGotIt: () => ref
-            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .read(
+              studySessionReviewControllerProvider((
+                sessionId: sessionId,
+                studyMode: mode,
+              )).notifier,
+            )
             .gradeGotIt(),
         onPrevious: () => ref
-            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .read(
+              studySessionReviewControllerProvider((
+                sessionId: sessionId,
+                studyMode: mode,
+              )).notifier,
+            )
             .previous(),
         onNext: () => ref
-            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .read(
+              studySessionReviewControllerProvider((
+                sessionId: sessionId,
+                studyMode: mode,
+              )).notifier,
+            )
             .next(),
         onFinish: () => ref
-            .read(studySessionReviewControllerProvider(sessionId).notifier)
+            .read(
+              studySessionReviewControllerProvider((
+                sessionId: sessionId,
+                studyMode: mode,
+              )).notifier,
+            )
             .finishSession(),
         onFinalized: () => context.pushReplacementStudyResult(sessionId),
       ),

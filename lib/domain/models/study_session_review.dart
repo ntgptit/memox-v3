@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
+import 'package:memox/domain/types/target_language.dart';
 
 part 'study_session_review.freezed.dart';
 
@@ -23,5 +24,6 @@ abstract class StudySessionReviewItem with _$StudySessionReviewItem {
   const factory StudySessionReviewItem({
     required StudySessionItem sessionItem,
     required Flashcard flashcard,
+    required TargetLanguage targetLanguage,
   }) = _StudySessionReviewItem;
 }

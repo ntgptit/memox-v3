@@ -6,6 +6,7 @@ import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
 
 StudySessionReview _review({
@@ -45,6 +46,7 @@ StudySessionReview _review({
             createdAt: now,
             updatedAt: now,
           ),
+          targetLanguage: TargetLanguage.korean,
         ),
     ],
   );

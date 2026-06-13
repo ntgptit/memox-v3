@@ -61,6 +61,7 @@ StudySessionReviewItem _fromSessionReviewRow(
     createdAt: row.cardCreatedAt,
     updatedAt: row.cardUpdatedAt,
   ),
+  targetLanguage: DeckMapper.targetLanguageFromStorage(row.targetLanguage),
 );
 
 Future<Result<StudySessionResult>> _loadStudySessionResult(

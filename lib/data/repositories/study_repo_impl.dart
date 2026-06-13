@@ -5,6 +5,7 @@ import 'package:memox/core/utils/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart'
     as study_dao;
+import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/data/mappers/study_mapper.dart';
 import 'package:memox/data/repositories/study_repo_record_answer.dart';
@@ -25,8 +26,8 @@ import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 
-part 'study_repo_impl_study_actions.dart';
 part 'study_repo_impl_match.dart';
+part 'study_repo_impl_study_actions.dart';
 part 'study_repo_impl_study_session.dart';
 
 class StudyRepositoryImpl implements StudyRepository {

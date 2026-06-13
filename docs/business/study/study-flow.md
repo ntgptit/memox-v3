@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-14
 applies_to: study session lifecycle, all study modes
 ---
 
@@ -155,11 +155,10 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - Attempts must be persisted.
 - Active session must be resumable (see `docs/business/resume/resume-session.md`).
 - The Study Session route (`/library/study/session/:sessionId`) is a real
-  persisted review screen in V1: it loads the session header and ordered
-  session items, shows the current card with a reveal toggle, supports
-  Previous/Next navigation with reveal reset on move, shows a Finish Session
-  CTA only after every item is answered, and navigates to the real result
-  screen after explicit finish.
+  persisted review screen in V1: `?mode=review` renders the swipe-grade
+  review surface with both sides visible, the shared shell without `mode`
+  keeps the recall reveal/self-grade flow, both flows persist before
+  advancing, and explicit Finish Session still pushes the real result screen.
 - When a persisted session reloads, answered items remain answered, the review
   controller starts at the first unanswered item, and a fully answered session
   opens in a finish-ready state instead of creating a new session.
@@ -172,6 +171,9 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - The Study Session self-grade V1 path reveals the current card, lets the user
   tap Forgot / Got it, persists the attempt plus `study_session_items.answered_at`,
   and keeps `flashcard_progress` unchanged until finalization.
+- Review mode V1 shows both sides on one card, grades by swipe (or the shared
+  card-actions sheet's edit/bury/suspend controls), and refreshes the current
+  session view after a buried or suspended card is removed from the queue.
 - In-session bury/suspend is a separate active-session action, not an answer:
   it removes the matching `study_session_items` row from the current queue,
   does not create a `study_attempts` row, preserves `current_box` / `due_at`

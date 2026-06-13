@@ -983,6 +983,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionBackLabel => 'Back';
 
   @override
+  String get studySessionMeaningLabel => 'Meaning';
+
+  @override
+  String get studySessionSwipeHint => 'Swipe left for the next card';
+
+  @override
+  String get studySessionBuryUntilTomorrowAction => 'Bury until tomorrow';
+
+  @override
+  String get studySessionSuspendAction => 'Suspend card';
+
+  @override
+  String get studySessionBurySuccessMessage => 'Card buried until tomorrow.';
+
+  @override
+  String get studySessionSuspendSuccessMessage => 'Card suspended.';
+
+  @override
+  String get studySessionCardActionFailedMessage =>
+      'Couldn\'t update the card. Please try again.';
+
+  @override
   String get studyPreviousAction => 'Previous';
 
   @override

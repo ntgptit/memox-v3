@@ -87,16 +87,23 @@ extension AppNavigation on BuildContext {
   void pushSettingsAudioSpeech() => pushNamed(RouteNames.settingsAudioSpeech);
 
   /// Replace the current location with a study session route.
-  void pushReplacementStudySession(String sessionId) => pushReplacementNamed(
-    RouteNames.studySession,
-    pathParameters: <String, String>{RoutePaths.sessionIdParam: sessionId},
-    extra: RouteExtras.studyNavigationToken,
-  );
+  void pushReplacementStudySession(String sessionId, {StudyMode? mode}) =>
+      pushReplacementNamed(
+        RouteNames.studySession,
+        pathParameters: <String, String>{RoutePaths.sessionIdParam: sessionId},
+        queryParameters: mode == null
+            ? const <String, String>{}
+            : <String, String>{RoutePaths.modeQueryParam: mode.name},
+        extra: RouteExtras.studyNavigationToken,
+      );
 
   /// Open a persisted study session: `/library/study/session/:sessionId`.
-  void pushStudySession(String sessionId) => goNamed(
+  void pushStudySession(String sessionId, {StudyMode? mode}) => goNamed(
     RouteNames.studySession,
     pathParameters: <String, String>{RoutePaths.sessionIdParam: sessionId},
+    queryParameters: mode == null
+        ? const <String, String>{}
+        : <String, String>{RoutePaths.modeQueryParam: mode.name},
     extra: RouteExtras.studyNavigationToken,
   );
 

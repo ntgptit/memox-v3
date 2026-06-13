@@ -1,5 +1,6 @@
 import 'study_sessions.drift';
 import 'flashcards.drift';
+import 'decks.drift';
 
 CREATE TABLE study_session_items (
   id TEXT NOT NULL PRIMARY KEY,
@@ -25,6 +26,7 @@ SELECT
   study_session_items.updated_at,
   flashcards.id AS card_id,
   flashcards.deck_id,
+  decks.target_language,
   flashcards.front,
   flashcards.back,
   flashcards.example_sentence,
@@ -36,6 +38,8 @@ SELECT
 FROM study_session_items
 INNER JOIN flashcards
   ON flashcards.id = study_session_items.flashcard_id
+INNER JOIN decks
+  ON decks.id = flashcards.deck_id
 WHERE study_session_items.session_id = :sessionId
 ORDER BY study_session_items.sort_order,
   study_session_items.created_at,

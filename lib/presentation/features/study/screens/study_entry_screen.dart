@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/app_navigation.dart';
+import 'package:memox/domain/study/study_entry_parser.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/widgets/study_entry_body.dart';
@@ -57,7 +58,10 @@ class StudyEntryScreen extends ConsumerWidget {
           if (!context.mounted) {
             return;
           }
-          context.pushReplacementStudySession(sessionId);
+          context.pushReplacementStudySession(
+            sessionId,
+            mode: resolveStudyMode(modeQuery),
+          );
         });
       }
     });

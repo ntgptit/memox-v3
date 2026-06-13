@@ -30,6 +30,7 @@ import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/dashboard/screens/dashboard_screen.dart';
 import 'package:memox/presentation/features/dashboard/viewmodels/dashboard_viewmodel.dart';
@@ -230,6 +231,7 @@ StudySessionReview _review({
   String flashcardId = 'card-1',
   Set<int> answeredIndices = const <int>{},
   int totalCount = 1,
+  TargetLanguage targetLanguage = TargetLanguage.korean,
 }) => StudySessionReview(
   session: StudySession(
     id: sessionId,
@@ -261,6 +263,7 @@ StudySessionReview _review({
           createdAt: _utc,
           updatedAt: _utc,
         ),
+        targetLanguage: targetLanguage,
       ),
   ],
 );

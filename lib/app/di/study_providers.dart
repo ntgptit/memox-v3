@@ -70,6 +70,14 @@ FinalizeStudySessionUseCase finalizeStudySessionUseCase(Ref ref) =>
 CancelStudySessionUseCase cancelStudySessionUseCase(Ref ref) =>
     CancelStudySessionUseCase(ref.watch(studyRepositoryProvider));
 
+@Riverpod(keepAlive: true)
+BuryStudySessionCardUseCase buryStudySessionCardUseCase(Ref ref) =>
+    BuryStudySessionCardUseCase(ref.watch(studyRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+SuspendStudySessionCardUseCase suspendStudySessionCardUseCase(Ref ref) =>
+    SuspendStudySessionCardUseCase(ref.watch(studyRepositoryProvider));
+
 @riverpod
 Future<StudyEntryStartResult> studyEntry(
   Ref ref,
