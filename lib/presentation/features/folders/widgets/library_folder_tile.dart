@@ -169,23 +169,32 @@ class _FolderTileBody extends StatelessWidget {
         const SizedBox(height: SpacingTokens.sm),
         Row(
           children: <Widget>[
-            _FolderMetaItem(
-              icon: isSubfolderMode
-                  ? Icons.folder_copy_outlined
-                  : Icons.layers_outlined,
-              label: isSubfolderMode
-                  ? l10n.libraryFolderSubfoldersCount(item.subfolderCount)
-                  : l10n.libraryFolderDecksCount(item.deckCount),
+            Flexible(
+              fit: FlexFit.loose,
+              child: _FolderMetaItem(
+                icon: isSubfolderMode
+                    ? Icons.folder_copy_outlined
+                    : Icons.layers_outlined,
+                label: isSubfolderMode
+                    ? l10n.libraryFolderSubfoldersCount(item.subfolderCount)
+                    : l10n.libraryFolderDecksCount(item.deckCount),
+              ),
             ),
             const SizedBox(width: SpacingTokens.md),
-            _FolderMetaItem(
-              icon: Icons.copy_outlined,
-              label: l10n.libraryFolderCardsCount(item.cardCount),
+            Flexible(
+              fit: FlexFit.loose,
+              child: _FolderMetaItem(
+                icon: Icons.copy_outlined,
+                label: l10n.libraryFolderCardsCount(item.cardCount),
+              ),
             ),
             if ((effectiveNewCount ?? 0) > 0) ...<Widget>[
               const SizedBox(width: SpacingTokens.md),
-              _NewMetaItem(
-                label: l10n.libraryFolderNewCount(effectiveNewCount!),
+              Flexible(
+                fit: FlexFit.loose,
+                child: _NewMetaItem(
+                  label: l10n.libraryFolderNewCount(effectiveNewCount!),
+                ),
               ),
             ],
           ],
@@ -212,7 +221,15 @@ class _FolderMetaItem extends StatelessWidget {
       children: <Widget>[
         Icon(icon, size: SizeTokens.iconXs, color: tone),
         const SizedBox(width: SpacingTokens.xxs),
-        MxText(label, role: MxTextRole.labelMedium, color: tone),
+        Flexible(
+          child: MxText(
+            label,
+            role: MxTextRole.labelMedium,
+            color: tone,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }
@@ -282,7 +299,15 @@ class _NewMetaItem extends StatelessWidget {
           decoration: BoxDecoration(color: tone, shape: BoxShape.circle),
         ),
         const SizedBox(width: SpacingTokens.xxs),
-        MxText(label, role: MxTextRole.labelMedium, color: tone),
+        Flexible(
+          child: MxText(
+            label,
+            role: MxTextRole.labelMedium,
+            color: tone,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

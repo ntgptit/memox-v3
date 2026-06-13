@@ -12,10 +12,13 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
+import 'package:memox/domain/usecases/folder/get_folder_move_targets_usecase.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
@@ -25,6 +28,7 @@ import 'package:memox/presentation/features/folders/widgets/library_sections.dar
 import 'package:memox/presentation/features/progress/screens/progress_screen.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
+import 'package:riverpod/misc.dart';
 
 Folder _folder(String name, {ContentMode mode = ContentMode.decks}) => Folder(
   id: name,
@@ -81,6 +85,19 @@ final class _PendingCreateRootFolderUseCase extends CreateRootFolderUseCase {
   Future<Result<Folder>> call({required String name}) => completer.future;
 }
 
+/// Returns a single selectable root destination so the Move flow can open its
+/// picker without touching a real repository.
+final class _StubFolderMoveTargetsUseCase extends FolderMoveTargetsUseCase {
+  _StubFolderMoveTargetsUseCase() : super(_UnusedFolderRepository());
+
+  @override
+  Future<Result<List<FolderMoveTarget>>> call({
+    required FolderId folderId,
+  }) async => const Result<List<FolderMoveTarget>>.ok(<FolderMoveTarget>[
+    FolderMoveTarget(id: null, breadcrumb: <String>[], isCurrentParent: true),
+  ]);
+}
+
 final class _RecordingNavigatorObserver extends NavigatorObserver {
   int pushCount = 0;
 
@@ -117,8 +134,12 @@ Widget _wrapScreen(
   Stream<LibraryOverviewReadModel> stream, {
   ThemeData? theme,
   NavigatorObserver? observer,
+  List<Override> extraOverrides = const <Override>[],
 }) => ProviderScope(
-  overrides: [libraryOverviewQueryProvider.overrideWith((Ref ref) => stream)],
+  overrides: [
+    libraryOverviewQueryProvider.overrideWith((Ref ref) => stream),
+    ...extraOverrides,
+  ],
   child: MaterialApp(
     theme: theme ?? AppTheme.light(),
     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -372,6 +393,9 @@ void main() {
           findsNothing,
         );
         expect(find.text('New folder'), findsOneWidget);
+        // Root creation is folders-only: no New deck / Import CTA (Rejected).
+        expect(find.text('New deck'), findsNothing);
+        expect(find.textContaining('Import'), findsNothing);
       },
     );
 
@@ -567,6 +591,34 @@ void main() {
       expect(find.text('Library'), findsWidgets);
     });
 
+    testWidgets(
+      'search keycap shows while empty and yields to clear once typing',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _wrapScreen(
+            Stream<LibraryOverviewReadModel>.value(
+              _model(
+                folders: <FolderWithCount>[_item('Korean')],
+                totalFolderCount: 1,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Empty field: keycap present, no clear button.
+        expect(find.text('K'), findsOneWidget);
+        expect(find.byIcon(Icons.close), findsNothing);
+
+        await tester.enterText(find.byType(TextField), 'kor');
+        await tester.pumpAndSettle();
+
+        // Typing hides the keycap and exposes the clear affordance.
+        expect(find.text('K'), findsNothing);
+        expect(find.byIcon(Icons.close), findsOneWidget);
+      },
+    );
+
     testWidgets('builds in both light and dark themes', (
       WidgetTester tester,
     ) async {
@@ -735,6 +787,64 @@ void main() {
         find.widgetWithText(FloatingActionButton, 'New folder'),
         findsOneWidget,
       );
+    });
+
+    testWidgets('New folder FAB opens the create-folder dialog', (
+      WidgetTester tester,
+    ) async {
+      await pumpLoaded(tester);
+
+      await tester.tap(find.widgetWithText(FloatingActionButton, 'New folder'));
+      await tester.pumpAndSettle();
+
+      // The dialog's unique description distinguishes it from the FAB label.
+      expect(find.text('Group related decks together.'), findsOneWidget);
+    });
+
+    testWidgets('Rename opens the rename dialog', (WidgetTester tester) async {
+      await pumpLoaded(tester);
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Rename'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'Only the folder name changes — every deck and card inside stays put.',
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Move to folder opens the move destination picker', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapScreen(
+          Stream<LibraryOverviewReadModel>.value(
+            _model(
+              folders: <FolderWithCount>[_item('Korean')],
+              totalFolderCount: 1,
+            ),
+          ),
+          extraOverrides: <Override>[
+            getFolderMoveTargetsUseCaseProvider.overrideWithValue(
+              _StubFolderMoveTargetsUseCase(),
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Move to folder'));
+      await tester.pumpAndSettle();
+
+      // Picker title (distinct from the sheet row "Move to folder").
+      expect(find.text('Move folder'), findsOneWidget);
+      expect(find.text('Library root'), findsOneWidget);
     });
   });
 

@@ -59,6 +59,16 @@ action sheet is **implemented and Current**. The earlier "Future / deferred" dec
 **superseded**. All six mock states (loaded · loading · empty · error · search · overflow sheet) are
 **Current target scope**.
 
+**11-state mapping completed (2026-06-13):** the canonical kit ships **11** Library Overview states
+(`shots/INDEX.md` §`03 — Library overview`): loaded · loading · empty · error · search · overflow
+sheet · create folder · rename folder · move folder · archive folder · delete folder. The full
+mock-to-code matrix (with per-state status) is mapped in
+`docs/design/screens/library-overview.visual-contract.md` §State Matrix — the authority for the
+state list. Create / Rename / Move / Delete are the modal states of the actions already documented
+below and are **Current** (real dialogs + use cases). **Archive folder** is **Future / visual-only**:
+no archive use case / repository method / DAO / schema column exists, so the overflow Archive action
+is not exposed and the archive confirm dialog is not reachable.
+
 - Both the kebab (`onPressed`) and the row long-press (`onLongPress`) open the folder action sheet
   via `onShowActions` (no longer `null`, never disabled).
 - Sheet actions (mock-approved set): **Rename**, **Move to folder**, **Import flashcards**

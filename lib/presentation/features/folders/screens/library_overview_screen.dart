@@ -28,11 +28,15 @@ import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 
 /// Library Overview — root content browser (top-level folders only).
 ///
-/// `docs/wireframes/02-library.md`. The shell keeps no provider watching;
-/// `_LibraryOverviewView` owns that and renders all six states via
-/// `MxRetainedAsyncState` (loaded / skeleton / error) plus the body
-/// (true-empty / search-no-results). The header's filter affordance is a
-/// visual-only disabled `tune` control (no approved filter sheet yet).
+/// `docs/wireframes/02-library.md`,
+/// `docs/design/screens/library-overview.visual-contract.md` (11-state matrix).
+/// The shell keeps no provider watching; `_LibraryOverviewView` owns that and
+/// renders the async states via `MxRetainedAsyncState` (loaded / skeleton /
+/// error) plus the body (true-empty / search-no-results) and the folder-action
+/// flows (overflow sheet → create / rename / move / delete dialogs). The mock's
+/// "Study due cards" and "Archive folder" actions are Future / visual-only and
+/// are not exposed. The header's filter affordance is a visual-only disabled
+/// `tune` control (no approved filter sheet yet).
 class LibraryOverviewScreen extends ConsumerWidget {
   const LibraryOverviewScreen({super.key});
 
