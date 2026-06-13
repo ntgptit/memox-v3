@@ -381,6 +381,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `650a4dfd` | 2026-06-13 | 2.11.2, 2.12.2 | Polish editor field labels to mock 07/08: optional fields get leading icon + uppercase tracked label + muted "optional" suffix; Front/Back + edit "OPTIONAL DETAILS" uppercased via `StringUtils.uppercased` (ARB stays title-case) |
 | `ff76eeaa` | 2026-06-13 | 2.11.2 | Flatten create Add-details section: drop the nested bordered card so the toggle pill + expanded example/hint/pronunciation fields match mock 07 details-open (edit mode unchanged) |
 | `d090cc2c` | 2026-06-13 | 2.11.2, 2.12.2, 3.4.2 | Flashcard List/Create/Edit FE mock-first refinement: 06 count/reorder headers + leading handles + reframed empty + delete-card preview; 07 Saving…/Retry-save bottom framing; 08 back-arrow + always-open Optional details + real last-edited·reviews meta strip (recall/History Future); shared confirm-dialog content slot + FlashcardDeletePreview; real data only, no schema change |
 | `99cf2942` | 2026-06-13 | 3.2.2 | Folder detail FE rebuild: subfolders detail body reworked to mock — search-empty rendered as `MxCard` state, skeleton/secondary-button affordances, typography token wiring; folder_detail_test updated |
