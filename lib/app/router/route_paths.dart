@@ -40,6 +40,7 @@ abstract final class RoutePaths {
   static const String newSegment = 'new';
   static const String editSegment = 'edit';
   static const String importSegment = 'import';
+  static const String historySegment = 'history';
 
   static const String studySegment = 'study';
   static const String todaySegment = 'today';
@@ -64,6 +65,8 @@ abstract final class RoutePaths {
       '$flashcardListTemplate/$newSegment';
   static const String flashcardEditTemplate =
       '$flashcardListTemplate/:$flashcardIdParam/$editSegment';
+  static const String flashcardHistoryTemplate =
+      '$flashcardListTemplate/:$flashcardIdParam/$historySegment';
   static const String deckImportTemplate =
       '$library/$deckSegment/:$deckIdParam/$importSegment';
 
@@ -91,6 +94,9 @@ abstract final class RoutePaths {
 
   static String flashcardEdit(String deckId, String flashcardId) =>
       '${flashcardList(deckId)}/$flashcardId/$editSegment';
+
+  static String flashcardHistory(String deckId, String flashcardId) =>
+      '${flashcardList(deckId)}/$flashcardId/$historySegment';
 
   static String deckImport(String deckId) =>
       '$library/$deckSegment/$deckId/$importSegment';

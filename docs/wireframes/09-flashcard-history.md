@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-05-29
-status: Future Proposal — not V1 scope
-route: future /library/deck/:deckId/flashcards/:flashcardId/history
+last_updated: 2026-06-13
+status: Implemented (V1, promoted 2026-06-13)
+route: /library/deck/:deckId/flashcards/:flashcardId/history
 source_specs:
   - docs/business/history/card-history.md
   - docs/business/study-actions/bury-suspend.md
@@ -12,15 +12,13 @@ related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Reject
 
 ## V1 decision
 
-This screen is a **Future Proposal** for V1. Do not implement the route, screen, use cases,
-repository queries, or entry links during V1.
+This screen is **Implemented** in V1 at `/library/deck/:deckId/flashcards/:flashcardId/history`,
+entered from the flashcard row-action sheet ("View history"). Schema fields
+`flashcard_progress.last_reset_at` (v6), `study_attempts.box_before` / `box_after` (v4) back it.
 
-If a UI surface still contains `View history`, hide it or keep it disabled until this feature is
-promoted.
-
-Promotion requires schema migration for `flashcard_progress.last_reset_at`,
-`study_attempts.box_before`, and `study_attempts.box_after`, plus route/use case/repository/test
-work.
+V1 overflow exposes **Edit / Reset progress / Delete**. Suspend/unsuspend is deferred to the
+Bury/Suspend feature (WBS 4.11.x). Timeline row tap → session result is deferred (rows are
+read-only display in V1).
 
 ## Purpose
 
@@ -135,7 +133,7 @@ this card") and decide on actions (suspend, reset).
 
 | Component   | Spec                                                                                                                   |
 |-------------|------------------------------------------------------------------------------------------------------------------------|
-| App bar     | Back, title "Card history", overflow ⋮ (Edit card / Suspend / Reset progress / Delete).                                |
+| App bar     | Back, title "Card history", overflow ⋮ (Edit card / Reset progress / Delete; Suspend deferred to Bury/Suspend).        |
 | Header card | Front preview, back subtitle, current state line, lifetime stats. Sub-label visible only when `last_reset_at != null`. |
 | Timeline    | Vertical list, newest first. 50 per page. Tap → opens session result (if completed).                                   |
 | Divider row | Visual separator inserted at `last_reset_at` position. Non-tappable. Wider stroke.                                     |
@@ -178,7 +176,7 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 | Action                    | Trigger | Result                                                                 |
 |---------------------------|---------|------------------------------------------------------------------------|
 | Tap back                  | Back    | Pop.                                                                   |
-| Tap overflow ⋮            | Tap     | Menu: Edit card / Suspend (or Unsuspend) / Reset progress / Delete.    |
+| Tap overflow ⋮            | Tap     | Menu: Edit card / Reset progress / Delete (Suspend deferred).          |
 | Tap "Start study" (empty) | Tap     | Navigate to deck study entry gate.                                     |
 | Tap timeline row          | Tap     | Open session result screen if session is `completed`. No-op otherwise. |
 | Tap Load more             | Tap     | Fetch next page.                                                       |
@@ -228,10 +226,9 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 
 ## Agent rule
 
-- V1: Do NOT implement this screen.
-- V1: Do NOT wire a live `View history` action.
-- Future: implement only after the schema migration and scope promotion are approved.
-
+- V1: Implemented. Keep this wireframe in sync with `lib/presentation/features/history/**`.
+- V1 overflow = Edit / Reset progress / Delete. Suspend/unsuspend stays deferred to Bury/Suspend.
+- Timeline row tap is a no-op in V1 (session-result navigation deferred).
 - Do NOT recalculate accuracy on every render; use stored counters.
 - Do NOT add inline edit of attempts. Read-only.
 - Reset progress from this screen MUST update `last_reset_at = now` AND refresh the timeline so
@@ -261,11 +258,16 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 **Code paths:**
 
 - `lib/presentation/features/history/screens/card_history_screen.dart`
-- `lib/presentation/features/history/notifiers/card_history_notifier.dart`
-- `lib/presentation/features/history/widgets/timeline_row.dart`
-- `lib/presentation/features/history/widgets/reset_divider.dart`
-- `lib/domain/usecases/history/get_card_history_usecase.dart`
-- `lib/domain/usecases/history/get_lifetime_stats_usecase.dart`
+- `lib/presentation/features/history/viewmodels/card_history_viewmodel.dart`
+- `lib/presentation/features/history/widgets/card_history_body.dart`
+- `lib/presentation/features/history/widgets/card_history_header_card.dart`
+- `lib/presentation/features/history/widgets/card_history_timeline.dart`
+- `lib/presentation/features/history/widgets/card_history_timeline_row.dart`
+- `lib/presentation/features/history/widgets/card_history_reset_divider.dart`
+- `lib/presentation/features/history/widgets/card_history_overflow_sheet.dart`
+- `lib/domain/usecases/history/get_card_history_header_usecase.dart`
+- `lib/domain/usecases/history/get_card_history_page_usecase.dart`
+- `lib/domain/usecases/history/reset_flashcard_progress_usecase.dart`
 - `lib/app/router/route_names.dart` → `RouteNames.flashcardHistory`
 
 **Related wireframes:**

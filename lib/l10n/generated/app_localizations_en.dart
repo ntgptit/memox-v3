@@ -1944,4 +1944,187 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get cardHistoryTitle => 'Card history';
+
+  @override
+  String cardHistoryBoxState(int box) {
+    return 'Box $box of 8';
+  }
+
+  @override
+  String get cardHistoryStateSuspended => 'Suspended';
+
+  @override
+  String get cardHistoryDueNow => 'Due now';
+
+  @override
+  String cardHistoryDueLabel(String relativeTime) {
+    return 'Due $relativeTime';
+  }
+
+  @override
+  String relativeTimeUntil(String unit, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count minutes',
+      one: 'in 1 minute',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count hours',
+      one: 'in 1 hour',
+    );
+    String _temp2 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count days',
+      one: 'in 1 day',
+    );
+    String _temp3 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count weeks',
+      one: 'in 1 week',
+    );
+    String _temp4 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count months',
+      one: 'in 1 month',
+    );
+    String _temp5 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count years',
+      one: 'in 1 year',
+    );
+    String _temp6 = intl.Intl.selectLogic(unit, {
+      'justNow': 'now',
+      'minutes': '$_temp0',
+      'hours': '$_temp1',
+      'days': '$_temp2',
+      'weeks': '$_temp3',
+      'months': '$_temp4',
+      'years': '$_temp5',
+      'other': 'now',
+    });
+    return '$_temp6';
+  }
+
+  @override
+  String cardHistoryReviewForgotStat(int reviewCount, int lapseCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      reviewCount,
+      locale: localeName,
+      other: 'Reviewed $reviewCount times · Forgot $lapseCount',
+      one: 'Reviewed 1 time · Forgot $lapseCount',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHistoryNoReviews => 'No reviews yet';
+
+  @override
+  String cardHistoryAccuracyStat(int percent) {
+    return 'Accuracy $percent%';
+  }
+
+  @override
+  String cardHistoryResetSubLabel(String date) {
+    return 'Includes attempts before last reset on $date.';
+  }
+
+  @override
+  String get cardHistoryTimelineTitle => 'Timeline';
+
+  @override
+  String get cardHistoryResultPerfect => 'Perfect';
+
+  @override
+  String get cardHistoryResultPassed => 'Passed';
+
+  @override
+  String get cardHistoryResultRecovered => 'Recovered';
+
+  @override
+  String get cardHistoryResultForgot => 'Forgot';
+
+  @override
+  String cardHistoryBoxTransition(int before, int after) {
+    return 'Box $before → $after';
+  }
+
+  @override
+  String get cardHistoryBoxUnknown => '—';
+
+  @override
+  String cardHistoryModeLabel(String mode) {
+    String _temp0 = intl.Intl.selectLogic(mode, {
+      'review': 'Review',
+      'match': 'Match',
+      'guess': 'Guess',
+      'recall': 'Recall',
+      'fill': 'Fill',
+      'other': 'Study',
+    });
+    return 'Mode: $_temp0';
+  }
+
+  @override
+  String get cardHistoryLoadMore => 'Load more';
+
+  @override
+  String get cardHistoryLoadMoreError => 'Couldn\'t load more · Retry';
+
+  @override
+  String cardHistoryResetDivider(String date) {
+    return 'Progress reset on $date';
+  }
+
+  @override
+  String get cardHistoryEmptyTitle => 'No study history yet.';
+
+  @override
+  String get cardHistoryEmptyMessage =>
+      'Start a study session on this deck to see this card\'s progress here.';
+
+  @override
+  String get cardHistoryEmptyAction => 'Start study';
+
+  @override
+  String get cardHistoryErrorTitle => 'Couldn\'t load history';
+
+  @override
+  String get cardHistoryErrorMessage =>
+      'Your study history is safe on this device. Try again in a moment.';
+
+  @override
+  String get cardHistoryNotFoundTitle => 'Card no longer exists';
+
+  @override
+  String get cardHistoryNotFoundMessage => 'This flashcard has been deleted.';
+
+  @override
+  String get cardHistoryResetAction => 'Reset progress';
+
+  @override
+  String get cardHistoryResetConfirmTitle => 'Reset progress?';
+
+  @override
+  String get cardHistoryResetConfirmMessage =>
+      'Attempts history is kept; only SRS state is reset.';
+
+  @override
+  String get cardHistoryResetDoneMessage => 'Progress reset';
+
+  @override
+  String get cardHistoryActionError => 'Something went wrong. Try again.';
+
+  @override
+  String get cardHistoryViewAction => 'View history';
 }

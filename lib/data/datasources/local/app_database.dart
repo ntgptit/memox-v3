@@ -5,6 +5,7 @@ import 'package:memox/data/datasources/local/migrations/v2_add_flashcard_optiona
 import 'package:memox/data/datasources/local/migrations/v3_add_flashcard_tags.dart';
 import 'package:memox/data/datasources/local/migrations/v4_add_study_tables.dart';
 import 'package:memox/data/datasources/local/migrations/v5_add_study_match_evaluations.dart';
+import 'package:memox/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart';
 
 part 'app_database.g.dart';
 
@@ -36,7 +37,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Bump and add an `onUpgrade` step for every schema change
   /// (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 5;
+  static const int currentSchemaVersion = 6;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -59,6 +60,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 5) {
         await addStudyMatchEvaluations(m, this);
+      }
+      if (from < 6) {
+        await addFlashcardProgressLastResetAt(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

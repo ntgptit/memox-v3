@@ -1,0 +1,81 @@
+import 'flashcards.drift';
+import 'flashcard_progress.drift';
+import 'study_attempts.drift';
+import 'study_session_items.drift';
+import 'study_sessions.drift';
+
+-- Card History header: card preview + current SRS state + lifetime counters +
+-- last reset marker. `flashcard_progress` is LEFT JOIN'd so a never-studied card
+-- still returns its preview (progress columns come back NULL).
+-- See `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`.
+cardHistoryHeader(:flashcard_id AS TEXT):
+SELECT
+  flashcards.id AS flashcard_id,
+  flashcards.front,
+  flashcards.back,
+  flashcard_progress.box_number,
+  flashcard_progress.due_at,
+  flashcard_progress.buried_until,
+  flashcard_progress.is_suspended,
+  flashcard_progress.review_count,
+  flashcard_progress.lapse_count,
+  flashcard_progress.last_reset_at
+FROM flashcards
+LEFT JOIN flashcard_progress
+  ON flashcard_progress.flashcard_id = flashcards.id
+WHERE flashcards.id = :flashcard_id;
+
+-- First page of a card's attempt timeline, newest first. Cursor pagination
+-- (NOT offset): callers fetch the next page with `cardHistoryNextPage` using the
+-- last row's (attempted_at, id) as the cursor. Ordering tiebreaks on id so a
+-- cursor never skips or repeats rows that share an `attempted_at`.
+cardHistoryFirstPage(:flashcard_id AS TEXT, :page_limit AS INT):
+SELECT
+  study_attempts.id,
+  study_attempts.result,
+  study_attempts.study_mode,
+  study_attempts.box_before,
+  study_attempts.box_after,
+  study_attempts.attempted_at,
+  study_session_items.session_id,
+  study_sessions.status AS session_status
+FROM study_attempts
+INNER JOIN study_session_items
+  ON study_session_items.id = study_attempts.session_item_id
+INNER JOIN study_sessions
+  ON study_sessions.id = study_session_items.session_id
+WHERE study_session_items.flashcard_id = :flashcard_id
+ORDER BY study_attempts.attempted_at DESC, study_attempts.id DESC
+LIMIT :page_limit;
+
+-- Next page after the (`before_attempted_at`, `before_id`) cursor.
+cardHistoryNextPage(
+  :flashcard_id AS TEXT,
+  :before_attempted_at AS INT,
+  :before_id AS TEXT,
+  :page_limit AS INT
+):
+SELECT
+  study_attempts.id,
+  study_attempts.result,
+  study_attempts.study_mode,
+  study_attempts.box_before,
+  study_attempts.box_after,
+  study_attempts.attempted_at,
+  study_session_items.session_id,
+  study_sessions.status AS session_status
+FROM study_attempts
+INNER JOIN study_session_items
+  ON study_session_items.id = study_attempts.session_item_id
+INNER JOIN study_sessions
+  ON study_sessions.id = study_session_items.session_id
+WHERE study_session_items.flashcard_id = :flashcard_id
+  AND (
+    study_attempts.attempted_at < :before_attempted_at
+    OR (
+      study_attempts.attempted_at = :before_attempted_at
+      AND study_attempts.id < :before_id
+    )
+  )
+ORDER BY study_attempts.attempted_at DESC, study_attempts.id DESC
+LIMIT :page_limit;

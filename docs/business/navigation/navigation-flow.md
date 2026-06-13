@@ -58,7 +58,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard list (filtered) | `/library/deck/:deckId/flashcards?filter={active\|suspended\|buried\|due}&tag={t1,t2}`                                                                                                                                                                                                  | Yes           |
 | Flashcard create          | `/library/deck/:deckId/flashcards/new`                                                                                                                                                                                                                                                  | No            |
 | Flashcard edit            | `/library/deck/:deckId/flashcards/:flashcardId/edit`                                                                                                                                                                                                                                    | No            |
-| Flashcard history         | Future Proposal; no live V1 route                                                                                                                                                                                                                                                       | No            |
+| Flashcard history         | `/library/deck/:deckId/flashcards/:flashcardId/history` (Current V1 — opens `CardHistoryScreen` from a card's row action; read-only attempt timeline + reset progress)                                                                                                                    | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
 | Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Exposed as a separate route, not from the Library Overview app bar                                                                                                  | Yes           |
 | Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped or folder-scoped due review (Current — parsed by the gate; the deck/folder screen CTAs that would link here are Future); optional `?mode=` selects a single study mode | No            |
@@ -71,8 +71,11 @@ Notes:
 - Query-string filters on the flashcard list are application conventions; verify GoRouter
   declarations in `lib/presentation/features/**/routes/*.dart`.
 - The `tag` entry type is Blocked/Future until `StudyEntryType.tag` and tag-scope queries are
-  promoted. Flashcard history route is Future Proposal — add its route constants in `RouteNames` /
-  `RoutePaths` and wire it only when its scope guard promotes it.
+  promoted.
+- Flashcard history is Current: `RouteNames.flashcardHistory` /
+  `RoutePaths.flashcardHistoryTemplate`
+  (`/library/deck/:deckId/flashcards/:flashcardId/history`), pushed over the shell from the
+  root navigator (shell hidden), entered via the flashcard row-action sheet ("View history").
 - Library search is Current: `RouteNames.librarySearch` / `RoutePaths.librarySearchTemplate`
   (`/library/search`), registered as a child of the Library branch (shell visible). The promoted V1
   scope covers folders/decks/flashcards only; the Library Overview screen no longer exposes a search

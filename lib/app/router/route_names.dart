@@ -25,7 +25,7 @@ abstract final class RouteNames {
   static const String flashcardEdit = 'flashcard-edit';
   static const String deckImport = 'deck-import';
 
-  /// Future Proposal — no live V1 route. Add wiring when scope guard promotes.
+  /// Per-card review history: `/library/deck/:deckId/flashcards/:flashcardId/history`.
   static const String flashcardHistory = 'flashcard-history';
 
   // ── Study tree (shell hidden) ────────────────────────────────

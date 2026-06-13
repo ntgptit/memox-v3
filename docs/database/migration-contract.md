@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-08
+last_updated: 2026-06-13
 applies_to: Drift schema migrations
 ---
 
@@ -97,8 +97,8 @@ If any step is skipped, report it explicitly.
 - `docs/business/flashcard/flashcard-management.md` → `flashcards.pronunciation`, `flashcards.hint`
 - `docs/business/deck/deck-management.md` → `decks.target_language`
 - `docs/business/study-actions/bury-suspend.md` → `flashcard_progress.buried_until`, `is_suspended`
-- `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at`,
-  `study_attempts.box_before`, `box_after`
+- `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at` (shipped v6,
+  `v6_add_flashcard_progress_last_reset_at.dart`), `study_attempts.box_before`, `box_after`
 - `docs/business/study/study-flow.md` + `docs/business/srs/srs-review.md` →
   `study_match_evaluations`
 - `docs/wireframes/17-study-session-fill.md` + `docs/business/srs/srs-review.md` → enum/constraint
@@ -114,3 +114,4 @@ If any step is skipped, report it explicitly.
 - `lib/data/datasources/local/migrations/**`
 - `lib/data/datasources/local/app_database.dart` (schemaVersion)
 - `lib/data/datasources/local/migrations/v4_add_study_tables.dart`
+- `lib/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart`

@@ -1,71 +1,72 @@
 ﻿---
-last_updated: 2026-05-29
-status: Future Proposal — Migration Required
+last_updated: 2026-06-13
+status: Implemented (V1, promoted 2026-06-13)
 ---
 
 # History Use Cases Contract
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
-> error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
-> ordinary feature implementation. First run an approved dependency/API migration task, or use the
-> existing repository error/result pattern until that migration is approved.
+> error/result contract style. The project has not yet adopted `fpdart`, so these use cases use the
+> existing `Result<T>` (`Ok`/`Err`) contract (`docs/contracts/error-contract.md`).
 
-Read-only timeline of per-card attempts + lifetime stats. This contract is **Future Proposal** for
-V1 and also requires schema migration before implementation.
+Read-only per-card attempt timeline + lifetime stats + progress reset. **Implemented** in V1;
+`flashcard_progress.last_reset_at` shipped with schema v6.
 
-## V1 rule
-
-Do not implement these use cases in V1 unless Card History is promoted (update
-`docs/business/system/overview.md` + the WBS §6 register in `docs/project-management/wbs.md`)
-and the migration for `last_reset_at` is included. (`box_before` / `box_after` already exist in
-the current schema.)
-
-## Future Proposal: GetCardHistoryUseCase
+## GetCardHistoryHeaderUseCase
 
 ```dart
-Future<Either<Failure, CardHistoryPage>> call({
-  required FlashcardId id,
-  DateTime? before,  // cursor
+Future<Result<CardHistoryHeader>> call({required FlashcardId flashcardId});
+```
+
+**Rules:**
+
+- READ card preview (`flashcards.front` / `back`) + current SRS state + lifetime counters +
+  `last_reset_at` from `flashcards` LEFT JOIN `flashcard_progress` in one query.
+- `CardHistoryHeader.accuracy` is derived from the stored counters
+  (`(reviewCount - lapseCount) / reviewCount`). Do NOT scan attempts.
+
+**Returns:** `CardHistoryHeader`.
+
+**Errors:** `NotFoundFailure` (card), `StorageFailure`.
+
+**Test refs:** H4, H7.
+
+## GetCardHistoryPageUseCase
+
+```dart
+Future<Result<CardHistoryPage>> call({
+  required FlashcardId flashcardId,
+  CardHistoryCursor? before,  // cursor
   int limit = 50,
 });
 ```
 
 **Rules:**
 
-- READ `study_attempts WHERE flashcard_id = :id` ORDER BY `attempted_at DESC` LIMIT :limit (with
-  cursor on `attempted_at < :before` if provided).
+- READ `study_attempts` joined to `study_session_items` / `study_sessions` WHERE
+  `flashcard_id = :id` ORDER BY `(attempted_at, id) DESC` LIMIT :limit (cursor compares on the
+  composite `(attempted_at, id)` when [before] is provided).
 - Cursor pagination (NOT offset).
 
-**Returns:** `CardHistoryPage { attempts: List<StudyAttempt>, nextCursor: DateTime? }`.
+**Returns:** `CardHistoryPage { attempts: List<CardHistoryAttempt>, nextCursor: CardHistoryCursor? }`.
 
-**Errors:** `NotFoundFailure` (card), `StorageFailure`.
+**Errors:** `StorageFailure`.
 
 **Test refs:** H1.
 
-## Future Proposal: GetCardLifetimeStatsUseCase
+## ResetFlashcardProgressUseCase
 
 ```dart
-Future<Either<Failure, LifetimeStats>> call({required FlashcardId id});
+Future<Result<void>> call({required FlashcardId flashcardId});
 ```
 
-**Rules:**
+Resets SRS scheduling (box=1, due=now, unburied) and sets `flashcard_progress.last_reset_at = now`.
+Lifetime counters and `study_attempts` rows are retained (cumulative), so the timeline keeps prior
+attempts and renders the reset divider.
 
-- READ counters from `flashcard_progress` directly. Do NOT scan attempts.
-- Return `LifetimeStats` value object (see types-catalog.md).
+**Errors:** `StorageFailure`.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
-
-**Test refs:** H4.
-
-## Future Proposal: GetCardResetMarkerUseCase
-
-```dart
-Future<Either<Failure, DateTime?>> call({required FlashcardId id});
-```
-
-Returns `flashcard_progress.last_reset_at`. Used by timeline to position the reset divider row.
-
-**Test refs:** H5, H7.
+**Test refs:** H3, H5.
 
 ## Forbidden patterns
 

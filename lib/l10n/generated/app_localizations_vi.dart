@@ -1916,4 +1916,180 @@ class AppLocalizationsVi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get cardHistoryTitle => 'Lịch sử thẻ';
+
+  @override
+  String cardHistoryBoxState(int box) {
+    return 'Hộp $box / 8';
+  }
+
+  @override
+  String get cardHistoryStateSuspended => 'Đã tạm dừng';
+
+  @override
+  String get cardHistoryDueNow => 'Đến hạn bây giờ';
+
+  @override
+  String cardHistoryDueLabel(String relativeTime) {
+    return 'Đến hạn $relativeTime';
+  }
+
+  @override
+  String relativeTimeUntil(String unit, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sau $count phút',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sau $count giờ',
+    );
+    String _temp2 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sau $count ngày',
+    );
+    String _temp3 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sau $count tuần',
+    );
+    String _temp4 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sau $count tháng',
+    );
+    String _temp5 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'sau $count năm',
+    );
+    String _temp6 = intl.Intl.selectLogic(unit, {
+      'justNow': 'bây giờ',
+      'minutes': '$_temp0',
+      'hours': '$_temp1',
+      'days': '$_temp2',
+      'weeks': '$_temp3',
+      'months': '$_temp4',
+      'years': '$_temp5',
+      'other': 'bây giờ',
+    });
+    return '$_temp6';
+  }
+
+  @override
+  String cardHistoryReviewForgotStat(int reviewCount, int lapseCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      reviewCount,
+      locale: localeName,
+      other: 'Đã ôn $reviewCount lần · Quên $lapseCount',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardHistoryNoReviews => 'Chưa có lượt ôn nào';
+
+  @override
+  String cardHistoryAccuracyStat(int percent) {
+    return 'Độ chính xác $percent%';
+  }
+
+  @override
+  String cardHistoryResetSubLabel(String date) {
+    return 'Bao gồm các lượt ôn trước lần đặt lại gần nhất vào $date.';
+  }
+
+  @override
+  String get cardHistoryTimelineTitle => 'Dòng thời gian';
+
+  @override
+  String get cardHistoryResultPerfect => 'Hoàn hảo';
+
+  @override
+  String get cardHistoryResultPassed => 'Đạt';
+
+  @override
+  String get cardHistoryResultRecovered => 'Gỡ lại';
+
+  @override
+  String get cardHistoryResultForgot => 'Quên';
+
+  @override
+  String cardHistoryBoxTransition(int before, int after) {
+    return 'Hộp $before → $after';
+  }
+
+  @override
+  String get cardHistoryBoxUnknown => '—';
+
+  @override
+  String cardHistoryModeLabel(String mode) {
+    String _temp0 = intl.Intl.selectLogic(mode, {
+      'review': 'Ôn tập',
+      'match': 'Ghép',
+      'guess': 'Đoán',
+      'recall': 'Nhớ lại',
+      'fill': 'Điền',
+      'other': 'Học',
+    });
+    return 'Chế độ: $_temp0';
+  }
+
+  @override
+  String get cardHistoryLoadMore => 'Tải thêm';
+
+  @override
+  String get cardHistoryLoadMoreError => 'Không tải thêm được · Thử lại';
+
+  @override
+  String cardHistoryResetDivider(String date) {
+    return 'Đặt lại tiến độ vào $date';
+  }
+
+  @override
+  String get cardHistoryEmptyTitle => 'Chưa có lịch sử học.';
+
+  @override
+  String get cardHistoryEmptyMessage =>
+      'Bắt đầu một phiên học trên bộ thẻ này để xem tiến độ của thẻ tại đây.';
+
+  @override
+  String get cardHistoryEmptyAction => 'Bắt đầu học';
+
+  @override
+  String get cardHistoryErrorTitle => 'Không tải được lịch sử';
+
+  @override
+  String get cardHistoryErrorMessage =>
+      'Lịch sử học của bạn vẫn an toàn trên thiết bị này. Vui lòng thử lại sau giây lát.';
+
+  @override
+  String get cardHistoryNotFoundTitle => 'Thẻ không còn tồn tại';
+
+  @override
+  String get cardHistoryNotFoundMessage => 'Thẻ này đã bị xóa.';
+
+  @override
+  String get cardHistoryResetAction => 'Đặt lại tiến độ';
+
+  @override
+  String get cardHistoryResetConfirmTitle => 'Đặt lại tiến độ?';
+
+  @override
+  String get cardHistoryResetConfirmMessage =>
+      'Lịch sử lượt ôn được giữ lại; chỉ trạng thái SRS bị đặt lại.';
+
+  @override
+  String get cardHistoryResetDoneMessage => 'Đã đặt lại tiến độ';
+
+  @override
+  String get cardHistoryActionError => 'Đã xảy ra lỗi. Vui lòng thử lại.';
+
+  @override
+  String get cardHistoryViewAction => 'Xem lịch sử';
 }

@@ -256,6 +256,8 @@ class _FlashcardListView extends ConsumerWidget {
     switch (action) {
       case FlashcardRowAction.edit:
         context.pushFlashcardEdit(deckId, card.id);
+      case FlashcardRowAction.viewHistory:
+        context.pushFlashcardHistory(deckId, card.id);
       case FlashcardRowAction.delete:
         await _deleteCard(context, ref, card);
     }

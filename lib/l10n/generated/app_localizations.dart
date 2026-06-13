@@ -3205,6 +3205,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{reviewCount, plural, =0{Last edited {relativeTime}} =1{Last edited {relativeTime} · 1 review} other{Last edited {relativeTime} · {reviewCount} reviews}}'**
   String flashcardsEditMeta(int reviewCount, String relativeTime);
+
+  /// No description provided for @cardHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card history'**
+  String get cardHistoryTitle;
+
+  /// No description provided for @cardHistoryBoxState.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box} of 8'**
+  String cardHistoryBoxState(int box);
+
+  /// No description provided for @cardHistoryStateSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspended'**
+  String get cardHistoryStateSuspended;
+
+  /// No description provided for @cardHistoryDueNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Due now'**
+  String get cardHistoryDueNow;
+
+  /// No description provided for @cardHistoryDueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {relativeTime}'**
+  String cardHistoryDueLabel(String relativeTime);
+
+  /// No description provided for @relativeTimeUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'{unit, select, justNow{now} minutes{{count, plural, =1{in 1 minute} other{in {count} minutes}}} hours{{count, plural, =1{in 1 hour} other{in {count} hours}}} days{{count, plural, =1{in 1 day} other{in {count} days}}} weeks{{count, plural, =1{in 1 week} other{in {count} weeks}}} months{{count, plural, =1{in 1 month} other{in {count} months}}} years{{count, plural, =1{in 1 year} other{in {count} years}}} other{now}}'**
+  String relativeTimeUntil(String unit, int count);
+
+  /// No description provided for @cardHistoryReviewForgotStat.
+  ///
+  /// In en, this message translates to:
+  /// **'{reviewCount, plural, =1{Reviewed 1 time · Forgot {lapseCount}} other{Reviewed {reviewCount} times · Forgot {lapseCount}}}'**
+  String cardHistoryReviewForgotStat(int reviewCount, int lapseCount);
+
+  /// No description provided for @cardHistoryNoReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get cardHistoryNoReviews;
+
+  /// No description provided for @cardHistoryAccuracyStat.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy {percent}%'**
+  String cardHistoryAccuracyStat(int percent);
+
+  /// No description provided for @cardHistoryResetSubLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Includes attempts before last reset on {date}.'**
+  String cardHistoryResetSubLabel(String date);
+
+  /// No description provided for @cardHistoryTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get cardHistoryTimelineTitle;
+
+  /// No description provided for @cardHistoryResultPerfect.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect'**
+  String get cardHistoryResultPerfect;
+
+  /// No description provided for @cardHistoryResultPassed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passed'**
+  String get cardHistoryResultPassed;
+
+  /// No description provided for @cardHistoryResultRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered'**
+  String get cardHistoryResultRecovered;
+
+  /// No description provided for @cardHistoryResultForgot.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot'**
+  String get cardHistoryResultForgot;
+
+  /// No description provided for @cardHistoryBoxTransition.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {before} → {after}'**
+  String cardHistoryBoxTransition(int before, int after);
+
+  /// No description provided for @cardHistoryBoxUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get cardHistoryBoxUnknown;
+
+  /// No description provided for @cardHistoryModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode: {mode, select, review{Review} match{Match} guess{Guess} recall{Recall} fill{Fill} other{Study}}'**
+  String cardHistoryModeLabel(String mode);
+
+  /// No description provided for @cardHistoryLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get cardHistoryLoadMore;
+
+  /// No description provided for @cardHistoryLoadMoreError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load more · Retry'**
+  String get cardHistoryLoadMoreError;
+
+  /// No description provided for @cardHistoryResetDivider.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress reset on {date}'**
+  String cardHistoryResetDivider(String date);
+
+  /// No description provided for @cardHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No study history yet.'**
+  String get cardHistoryEmptyTitle;
+
+  /// No description provided for @cardHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a study session on this deck to see this card\'s progress here.'**
+  String get cardHistoryEmptyMessage;
+
+  /// No description provided for @cardHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start study'**
+  String get cardHistoryEmptyAction;
+
+  /// No description provided for @cardHistoryErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load history'**
+  String get cardHistoryErrorTitle;
+
+  /// No description provided for @cardHistoryErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your study history is safe on this device. Try again in a moment.'**
+  String get cardHistoryErrorMessage;
+
+  /// No description provided for @cardHistoryNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card no longer exists'**
+  String get cardHistoryNotFoundTitle;
+
+  /// No description provided for @cardHistoryNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This flashcard has been deleted.'**
+  String get cardHistoryNotFoundMessage;
+
+  /// No description provided for @cardHistoryResetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset progress'**
+  String get cardHistoryResetAction;
+
+  /// No description provided for @cardHistoryResetConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset progress?'**
+  String get cardHistoryResetConfirmTitle;
+
+  /// No description provided for @cardHistoryResetConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempts history is kept; only SRS state is reset.'**
+  String get cardHistoryResetConfirmMessage;
+
+  /// No description provided for @cardHistoryResetDoneMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress reset'**
+  String get cardHistoryResetDoneMessage;
+
+  /// No description provided for @cardHistoryActionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get cardHistoryActionError;
+
+  /// No description provided for @cardHistoryViewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'View history'**
+  String get cardHistoryViewAction;
 }
 
 class _AppLocalizationsDelegate

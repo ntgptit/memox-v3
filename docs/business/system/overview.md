@@ -22,7 +22,7 @@ It helps users:
 - Resume paused sessions from Dashboard.
 - See a simple Dashboard streak stat placeholder in V1; full daily goal/streak/reminder engagement remains Future/Target.
 - Search the whole Library (folders, decks, flashcards) from a dedicated `/library/search` screen, plus filter inside the current screen scope. Tags-in-search, recent searches, and popular tags remain Future Proposal.
-- View per-card history is Future Proposal, not V1 scope.
+- View per-card review history (timeline of attempts, lifetime stats, reset progress with divider) from a card's row action → `/library/deck/:deckId/flashcards/:flashcardId/history`.
 - Configure audio/speech (TTS) preferences for Korean and English.
 - Optionally link a Google account for Drive AppData backup and restore with conflict protection.
 
@@ -55,7 +55,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Answer re-grade before finalize | Specified (ships with first retry mode) | `docs/business/study/study-flow.md` |
 | Manual-create duplicate soft-warning | Specified | `docs/business/flashcard/flashcard-management.md` |
 | Due-time local-midnight normalization | Specified | `docs/business/srs/srs-review.md` |
-| Card history view | Future Proposal — Migration Required | `docs/business/history/card-history.md` |
+| Card history view | Implemented | `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md` |
 | Inline/scope-local search | V1 guideline | `docs/business/search/global-search.md` |
 | Global search screen (folders/decks/flashcards) | Implemented | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |
 | Global search: tags section + recent + popular | Future Proposal — needs tag subsystem + `shared_preferences` | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |

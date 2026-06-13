@@ -58,6 +58,16 @@ extension AppNavigation on BuildContext {
     },
   );
 
+  /// Open a card's review history:
+  /// `/library/deck/:deckId/flashcards/:flashcardId/history`.
+  void pushFlashcardHistory(String deckId, String flashcardId) => pushNamed(
+    RouteNames.flashcardHistory,
+    pathParameters: <String, String>{
+      RoutePaths.deckIdParam: deckId,
+      RoutePaths.flashcardIdParam: flashcardId,
+    },
+  );
+
   /// Open the deck import flow: `/library/deck/:deckId/import`.
   void pushDeckImport(String deckId) => pushNamed(
     RouteNames.deckImport,

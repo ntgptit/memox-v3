@@ -979,5 +979,111 @@
         "type": "String"
       }
     }
-  }
+  },
+  "cardHistoryTitle": "Lịch sử thẻ",
+  "cardHistoryBoxState": "Hộp {box} / 8",
+  "@cardHistoryBoxState": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryStateSuspended": "Đã tạm dừng",
+  "cardHistoryDueNow": "Đến hạn bây giờ",
+  "cardHistoryDueLabel": "Đến hạn {relativeTime}",
+  "@cardHistoryDueLabel": {
+    "placeholders": {
+      "relativeTime": {
+        "type": "String"
+      }
+    }
+  },
+  "relativeTimeUntil": "{unit, select, justNow{bây giờ} minutes{{count, plural, other{sau {count} phút}}} hours{{count, plural, other{sau {count} giờ}}} days{{count, plural, other{sau {count} ngày}}} weeks{{count, plural, other{sau {count} tuần}}} months{{count, plural, other{sau {count} tháng}}} years{{count, plural, other{sau {count} năm}}} other{bây giờ}}",
+  "@relativeTimeUntil": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryReviewForgotStat": "{reviewCount, plural, other{Đã ôn {reviewCount} lần · Quên {lapseCount}}}",
+  "@cardHistoryReviewForgotStat": {
+    "placeholders": {
+      "reviewCount": {
+        "type": "int"
+      },
+      "lapseCount": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryNoReviews": "Chưa có lượt ôn nào",
+  "cardHistoryAccuracyStat": "Độ chính xác {percent}%",
+  "@cardHistoryAccuracyStat": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryResetSubLabel": "Bao gồm các lượt ôn trước lần đặt lại gần nhất vào {date}.",
+  "@cardHistoryResetSubLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryTimelineTitle": "Dòng thời gian",
+  "cardHistoryResultPerfect": "Hoàn hảo",
+  "cardHistoryResultPassed": "Đạt",
+  "cardHistoryResultRecovered": "Gỡ lại",
+  "cardHistoryResultForgot": "Quên",
+  "cardHistoryBoxTransition": "Hộp {before} → {after}",
+  "@cardHistoryBoxTransition": {
+    "placeholders": {
+      "before": {
+        "type": "int"
+      },
+      "after": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryBoxUnknown": "—",
+  "cardHistoryModeLabel": "Chế độ: {mode, select, review{Ôn tập} match{Ghép} guess{Đoán} recall{Nhớ lại} fill{Điền} other{Học}}",
+  "@cardHistoryModeLabel": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryLoadMore": "Tải thêm",
+  "cardHistoryLoadMoreError": "Không tải thêm được · Thử lại",
+  "cardHistoryResetDivider": "Đặt lại tiến độ vào {date}",
+  "@cardHistoryResetDivider": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryEmptyTitle": "Chưa có lịch sử học.",
+  "cardHistoryEmptyMessage": "Bắt đầu một phiên học trên bộ thẻ này để xem tiến độ của thẻ tại đây.",
+  "cardHistoryEmptyAction": "Bắt đầu học",
+  "cardHistoryErrorTitle": "Không tải được lịch sử",
+  "cardHistoryErrorMessage": "Lịch sử học của bạn vẫn an toàn trên thiết bị này. Vui lòng thử lại sau giây lát.",
+  "cardHistoryNotFoundTitle": "Thẻ không còn tồn tại",
+  "cardHistoryNotFoundMessage": "Thẻ này đã bị xóa.",
+  "cardHistoryResetAction": "Đặt lại tiến độ",
+  "cardHistoryResetConfirmTitle": "Đặt lại tiến độ?",
+  "cardHistoryResetConfirmMessage": "Lịch sử lượt ôn được giữ lại; chỉ trạng thái SRS bị đặt lại.",
+  "cardHistoryResetDoneMessage": "Đã đặt lại tiến độ",
+  "cardHistoryActionError": "Đã xảy ra lỗi. Vui lòng thử lại.",
+  "cardHistoryViewAction": "Xem lịch sử"
 }

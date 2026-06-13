@@ -979,5 +979,111 @@
         "type": "String"
       }
     }
-  }
+  },
+  "cardHistoryTitle": "Card history",
+  "cardHistoryBoxState": "Box {box} of 8",
+  "@cardHistoryBoxState": {
+    "placeholders": {
+      "box": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryStateSuspended": "Suspended",
+  "cardHistoryDueNow": "Due now",
+  "cardHistoryDueLabel": "Due {relativeTime}",
+  "@cardHistoryDueLabel": {
+    "placeholders": {
+      "relativeTime": {
+        "type": "String"
+      }
+    }
+  },
+  "relativeTimeUntil": "{unit, select, justNow{now} minutes{{count, plural, =1{in 1 minute} other{in {count} minutes}}} hours{{count, plural, =1{in 1 hour} other{in {count} hours}}} days{{count, plural, =1{in 1 day} other{in {count} days}}} weeks{{count, plural, =1{in 1 week} other{in {count} weeks}}} months{{count, plural, =1{in 1 month} other{in {count} months}}} years{{count, plural, =1{in 1 year} other{in {count} years}}} other{now}}",
+  "@relativeTimeUntil": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryReviewForgotStat": "{reviewCount, plural, =1{Reviewed 1 time · Forgot {lapseCount}} other{Reviewed {reviewCount} times · Forgot {lapseCount}}}",
+  "@cardHistoryReviewForgotStat": {
+    "placeholders": {
+      "reviewCount": {
+        "type": "int"
+      },
+      "lapseCount": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryNoReviews": "No reviews yet",
+  "cardHistoryAccuracyStat": "Accuracy {percent}%",
+  "@cardHistoryAccuracyStat": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryResetSubLabel": "Includes attempts before last reset on {date}.",
+  "@cardHistoryResetSubLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryTimelineTitle": "Timeline",
+  "cardHistoryResultPerfect": "Perfect",
+  "cardHistoryResultPassed": "Passed",
+  "cardHistoryResultRecovered": "Recovered",
+  "cardHistoryResultForgot": "Forgot",
+  "cardHistoryBoxTransition": "Box {before} → {after}",
+  "@cardHistoryBoxTransition": {
+    "placeholders": {
+      "before": {
+        "type": "int"
+      },
+      "after": {
+        "type": "int"
+      }
+    }
+  },
+  "cardHistoryBoxUnknown": "—",
+  "cardHistoryModeLabel": "Mode: {mode, select, review{Review} match{Match} guess{Guess} recall{Recall} fill{Fill} other{Study}}",
+  "@cardHistoryModeLabel": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryLoadMore": "Load more",
+  "cardHistoryLoadMoreError": "Couldn't load more · Retry",
+  "cardHistoryResetDivider": "Progress reset on {date}",
+  "@cardHistoryResetDivider": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryEmptyTitle": "No study history yet.",
+  "cardHistoryEmptyMessage": "Start a study session on this deck to see this card's progress here.",
+  "cardHistoryEmptyAction": "Start study",
+  "cardHistoryErrorTitle": "Couldn't load history",
+  "cardHistoryErrorMessage": "Your study history is safe on this device. Try again in a moment.",
+  "cardHistoryNotFoundTitle": "Card no longer exists",
+  "cardHistoryNotFoundMessage": "This flashcard has been deleted.",
+  "cardHistoryResetAction": "Reset progress",
+  "cardHistoryResetConfirmTitle": "Reset progress?",
+  "cardHistoryResetConfirmMessage": "Attempts history is kept; only SRS state is reset.",
+  "cardHistoryResetDoneMessage": "Progress reset",
+  "cardHistoryActionError": "Something went wrong. Try again.",
+  "cardHistoryViewAction": "View history"
 }

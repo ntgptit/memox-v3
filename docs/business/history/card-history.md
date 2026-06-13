@@ -1,27 +1,27 @@
 ---
-last_updated: 2026-06-10
-applies_to: future per-card study history view, attempt timeline
-status: Future Proposal — partial migration required (last_reset_at only)
+last_updated: 2026-06-13
+applies_to: per-card study history view, attempt timeline
+status: Implemented (promoted 2026-06-13; `last_reset_at` shipped v6)
 related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # Card History
 
-> **Status: Future Proposal.** This is not V1 implementation scope. Do not build the screen,
-> route, use cases, repository queries, or entry links until the feature is promoted (update
-> `docs/business/system/overview.md` + the WBS §6 register in the same commit).
+> **Status: Implemented (V1, promoted 2026-06-13).** Per-card history is live: route
+> `/library/deck/:deckId/flashcards/:flashcardId/history`, entered from the flashcard row-action
+> sheet ("View history"). `flashcard_progress.last_reset_at` shipped with schema v6; the timeline,
+> lifetime stats, reset progress + reset divider are all implemented.
 >
-> **Data dependencies (verified 2026-06-10):** `study_attempts.box_before` / `box_after` already
-> exist in the current schema (shipped with the v4 study tables) and are populated on every
-> attempt insert — they no longer block anything. The ONLY pending column is
-> `flashcard_progress.last_reset_at INTEGER NULL`, which blocks: progress reset (single + bulk)
-> and the reset divider in the timeline. The history timeline itself is blocked by feature
-> promotion, not by schema.
+> **Data dependencies:** `study_attempts.box_before` / `box_after` (v4) and
+> `flashcard_progress.last_reset_at` (v6) all exist and are populated. Suspend/unsuspend from the
+> overflow remains deferred with the Bury/Suspend feature (WBS 4.11.x); the V1 overflow exposes
+> Edit / Reset progress / Delete only.
 
 ## V1 decision
 
-Card History is downgraded to Future Proposal for V1. The data model is still documented so the
-future implementation remains clear, but V1 must not expose a live `View history` action.
+Card History is **Implemented** for V1. The overflow exposes Edit / Reset progress / Delete;
+Suspend/unsuspend is deferred to the Bury/Suspend feature. Timeline row tap → session result is
+deferred (rows are read-only display in V1).
 
 ## Purpose
 
@@ -105,7 +105,7 @@ the minimum value.
 |---------------------|---------------------------------------------------------------------------------|
 | Edit card           | Opens flashcard edit screen                                                     |
 | Suspend / unsuspend | Toggles `is_suspended` (see `docs/business/study-actions/bury-suspend.md`)      |
-| Reset progress      | Confirmation → reset SRS state (box=1, counters=0, due=now). Attempts retained. |
+| Reset progress      | Confirmation → reset SRS scheduling (box=1, due=now, unburied) + `last_reset_at=now`. Lifetime counters and attempts are retained (cumulative). |
 | Delete card         | Confirmation → delete cascade                                                   |
 
 "Reset progress" is potentially useful when a card was placed in a wrong box (e.g., user
@@ -199,6 +199,9 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
 
 ## Agent rule
 
+- Card History is Implemented (V1). Keep this doc in sync with
+  `lib/presentation/features/history/**`, `lib/domain/usecases/history/**`,
+  `lib/data/repositories/card_history_repository_impl.dart`, and the wireframe on any change.
 - Do NOT delete from `study_attempts` for any reason except cascade from session/item deletion.
 - "Reset progress" only touches `flashcard_progress`, not `study_attempts`. It MUST also update
   `last_reset_at` so the timeline can render the divider.
@@ -243,7 +246,13 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
 
 **Source files to inspect:**
 
-- `lib/domain/usecases/history/get_card_history_usecase.dart`
-- `lib/domain/usecases/history/reset_progress_usecase.dart`
-- `lib/data/repositories/study_attempt_repository.dart`
+- `lib/domain/models/card_history.dart`
+- `lib/domain/repositories/card_history_repository.dart`
+- `lib/domain/usecases/history/get_card_history_header_usecase.dart`
+- `lib/domain/usecases/history/get_card_history_page_usecase.dart`
+- `lib/domain/usecases/history/reset_flashcard_progress_usecase.dart`
+- `lib/data/datasources/local/drift/history_queries.drift`
+- `lib/data/datasources/local/daos/card_history_dao.dart`
+- `lib/data/repositories/card_history_repository_impl.dart`
+- `lib/app/di/card_history_providers.dart`
 - `lib/presentation/features/history/**`

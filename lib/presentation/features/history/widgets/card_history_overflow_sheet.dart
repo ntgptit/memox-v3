@@ -10,23 +10,21 @@ import 'package:memox/presentation/shared/dialogs/mx_bottom_sheet.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 
-/// A single-card row action (`docs/wireframes/06-flashcard-list.md` §row
-/// actions). V1 exposes Edit (route), View history (route) + Delete (confirm).
-/// Move / Export / Select are Future and intentionally not surfaced.
-enum FlashcardRowAction { edit, viewHistory, delete }
+/// Card History overflow actions (`docs/wireframes/09-flashcard-history.md`
+/// §App bar overflow). V1 exposes Edit / Reset progress / Delete. Suspend is
+/// deferred with the Bury/Suspend feature (WBS 4.11.x).
+enum CardHistoryAction { edit, resetProgress, delete }
 
-/// Opens the card-row action sheet and resolves to the chosen
-/// [FlashcardRowAction], or `null` when dismissed.
-Future<FlashcardRowAction?> showFlashcardRowActions(
+Future<CardHistoryAction?> showCardHistoryActions(
   BuildContext context, {
   required String front,
-}) => showMxBottomSheet<FlashcardRowAction>(
+}) => showMxBottomSheet<CardHistoryAction>(
   context,
-  builder: (BuildContext context) => _FlashcardRowActionsSheet(front: front),
+  builder: (BuildContext context) => _CardHistoryActionsSheet(front: front),
 );
 
-class _FlashcardRowActionsSheet extends StatelessWidget {
-  const _FlashcardRowActionsSheet({required this.front});
+class _CardHistoryActionsSheet extends StatelessWidget {
+  const _CardHistoryActionsSheet({required this.front});
 
   final String front;
 
@@ -57,19 +55,19 @@ class _FlashcardRowActionsSheet extends StatelessWidget {
           _ActionRow(
             icon: Icons.edit_outlined,
             label: l10n.commonEdit,
-            onTap: () => Navigator.of(context).pop(FlashcardRowAction.edit),
+            onTap: () => Navigator.of(context).pop(CardHistoryAction.edit),
           ),
           _ActionRow(
-            icon: Icons.history,
-            label: l10n.cardHistoryViewAction,
+            icon: Icons.restart_alt,
+            label: l10n.cardHistoryResetAction,
             onTap: () =>
-                Navigator.of(context).pop(FlashcardRowAction.viewHistory),
+                Navigator.of(context).pop(CardHistoryAction.resetProgress),
           ),
           _ActionRow(
             icon: Icons.delete_outline,
             label: l10n.commonDelete,
             destructive: true,
-            onTap: () => Navigator.of(context).pop(FlashcardRowAction.delete),
+            onTap: () => Navigator.of(context).pop(CardHistoryAction.delete),
           ),
           const SizedBox(height: SpacingTokens.sm),
         ],
