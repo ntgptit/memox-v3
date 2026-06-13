@@ -2036,32 +2036,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get cardHistoryLoadMore => 'Load more';
-
-  @override
-  String get cardHistoryLoadMoreError => 'Couldn\'t load more · Retry';
-
-  @override
-  String cardHistoryResetDivider(String date) {
-    return 'Progress reset on $date';
-  }
-
-  @override
-  String get cardHistoryEmptyTitle => 'No study history yet.';
+  String get cardHistoryEmptyTitle => 'No reviews yet';
 
   @override
   String get cardHistoryEmptyMessage =>
-      'Start a study session on this deck to see this card\'s progress here.';
+      'History appears here after you study this card.';
 
   @override
-  String get cardHistoryEmptyAction => 'Start study';
+  String get cardHistoryEmptyAction => 'Study this card now';
 
   @override
   String get cardHistoryErrorTitle => 'Couldn\'t load history';
 
   @override
   String get cardHistoryErrorMessage =>
-      'Your study history is safe on this device. Try again in a moment.';
+      'Your data is safe on this device. Try again in a moment.';
 
   @override
   String get cardHistoryNotFoundTitle => 'Card no longer exists';
@@ -2177,5 +2166,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardHistoryDescRecovered => 'Got it back after a slip';
 
   @override
-  String get cardHistoryDescForgot => 'Forgot it';
+  String get cardHistoryDescForgot => 'Couldn’t recall — reset to box 1';
+
+  @override
+  String get cardHistoryPartialDescription => 'Logged with missing details';
+
+  @override
+  String cardHistoryDurationValue(String seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get cardHistoryDurationMissing => 'duration not logged';
+
+  @override
+  String get cardHistoryEventCreatedChip => 'Created';
+
+  @override
+  String get cardHistoryEventEditedChip => 'Edited';
+
+  @override
+  String get cardHistoryEventAudioChip => 'Audio added';
+
+  @override
+  String cardHistoryEventCreatedDescription(String deck) {
+    return 'Card added to $deck';
+  }
+
+  @override
+  String get cardHistoryEventEditedDescription => 'Card edited';
+
+  @override
+  String get cardHistoryEventAudioDescription => 'Pronunciation recorded';
+
+  @override
+  String get cardHistoryEventResetChip => 'Reset';
+
+  @override
+  String get cardHistoryEventResetDescription => 'Progress reset to box 1';
+
+  @override
+  String get cardHistoryBeginning => 'Beginning of history';
+
+  @override
+  String get cardHistoryFilterSheetTitle => 'Filter timeline';
+
+  @override
+  String get cardHistoryFilterAll => 'All events';
+
+  @override
+  String get cardHistoryFilterReviews => 'Reviews only';
+
+  @override
+  String get cardHistoryFilterLifecycle => 'Card changes';
 }

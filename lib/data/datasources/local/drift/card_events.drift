@@ -1,0 +1,19 @@
+import 'flashcards.drift';
+
+-- Per-card lifecycle events for the Card History activity feed (created, edited,
+-- audio added). Study attempts live in `study_attempts`; this table only holds
+-- non-attempt events. See `docs/business/history/card-history.md`.
+-- Generated row class: `CardEventRow`.
+CREATE TABLE card_events (
+  id TEXT NOT NULL PRIMARY KEY,
+  flashcard_id TEXT NOT NULL
+    REFERENCES flashcards (id) ON DELETE CASCADE,
+  -- snake_case event kind: 'created' | 'edited' | 'audio_added'.
+  type TEXT NOT NULL,
+  occurred_at INTEGER NOT NULL,
+  -- Optional human-readable detail key (e.g. 'meaning_updated'); NULL = none.
+  detail TEXT
+) AS CardEventRow;
+
+CREATE INDEX idx_card_events_flashcard
+  ON card_events (flashcard_id, occurred_at DESC);

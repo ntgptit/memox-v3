@@ -4,7 +4,7 @@ import 'package:memox/data/datasources/local/daos/card_history_dao.dart';
 import 'package:memox/data/repositories/card_history_repository_impl.dart';
 import 'package:memox/domain/repositories/card_history_repository.dart';
 import 'package:memox/domain/usecases/history/get_card_history_header_usecase.dart';
-import 'package:memox/domain/usecases/history/get_card_history_page_usecase.dart';
+import 'package:memox/domain/usecases/history/get_card_timeline_usecase.dart';
 import 'package:memox/domain/usecases/history/reset_flashcard_progress_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -29,8 +29,8 @@ GetCardHistoryHeaderUseCase getCardHistoryHeaderUseCase(Ref ref) =>
     GetCardHistoryHeaderUseCase(ref.watch(cardHistoryRepositoryProvider));
 
 @Riverpod(keepAlive: true)
-GetCardHistoryPageUseCase getCardHistoryPageUseCase(Ref ref) =>
-    GetCardHistoryPageUseCase(ref.watch(cardHistoryRepositoryProvider));
+GetCardTimelineUseCase getCardTimelineUseCase(Ref ref) =>
+    GetCardTimelineUseCase(ref.watch(cardHistoryRepositoryProvider));
 
 @Riverpod(keepAlive: true)
 ResetFlashcardProgressUseCase resetFlashcardProgressUseCase(Ref ref) =>

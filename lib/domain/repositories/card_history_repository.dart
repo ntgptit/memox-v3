@@ -2,10 +2,6 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/card_history.dart';
 import 'package:memox/domain/types/ids.dart';
 
-/// Default timeline page size (`docs/wireframes/09-flashcard-history.md`:
-/// 50 attempts per page).
-const int kCardHistoryPageSize = 50;
-
 /// Read access to a flashcard's review history plus the per-card progress reset.
 ///
 /// Contract: `docs/contracts/usecase-contracts/history.md`,
@@ -17,12 +13,10 @@ abstract interface class CardHistoryRepository {
     required FlashcardId flashcardId,
   });
 
-  /// One page of attempts, newest first. Pass [before] to fetch the page after a
-  /// cursor; cursor pagination only (never offset).
-  Future<Result<CardHistoryPage>> loadAttempts({
+  /// The full per-card activity feed (attempts + lifecycle events), newest
+  /// first. Per-card scale is small, so the feed loads fully (no pagination).
+  Future<Result<CardHistoryTimeline>> loadTimeline({
     required FlashcardId flashcardId,
-    CardHistoryCursor? before,
-    int limit = kCardHistoryPageSize,
   });
 
   /// Resets the card's SRS scheduling (box 1, due now, unburied) and stamps

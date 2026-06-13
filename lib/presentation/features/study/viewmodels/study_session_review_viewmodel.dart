@@ -14,6 +14,12 @@ part 'study_session_review_viewmodel.g.dart';
 class StudySessionReviewController extends _$StudySessionReviewController {
   late final StudyModeStrategy _studyModeStrategy;
 
+  /// When the current card was last shown, used to measure time-on-card for the
+  /// attempt's `duration_ms` (Card History timeline). Reset on every card change.
+  DateTime _currentShownAt = DateTime.now();
+
+  void _markCurrentShown() => _currentShownAt = DateTime.now();
+
   @override
   Future<StudySessionReviewState> build(SessionId sessionId) async {
     final Result<StudySessionReview> result = await ref
@@ -22,6 +28,7 @@ class StudySessionReviewController extends _$StudySessionReviewController {
 
     if (result case Ok<StudySessionReview>(:final value)) {
       _studyModeStrategy = StudyModeStrategyFactory.resolve();
+      _markCurrentShown();
       return StudySessionReviewState.fromReview(value);
     }
     final Err<StudySessionReview> err = result as Err<StudySessionReview>;
@@ -32,11 +39,15 @@ class StudySessionReviewController extends _$StudySessionReviewController {
     (StudySessionReviewState state) => state.toggleAnswer(),
   );
 
-  void previous() =>
-      _updateCurrentState((StudySessionReviewState state) => state.previous());
+  void previous() {
+    _updateCurrentState((StudySessionReviewState state) => state.previous());
+    _markCurrentShown();
+  }
 
-  void next() =>
-      _updateCurrentState((StudySessionReviewState state) => state.next());
+  void next() {
+    _updateCurrentState((StudySessionReviewState state) => state.next());
+    _markCurrentShown();
+  }
 
   Future<void> gradeForgot() => _recordAnswer(
     (BinaryGradeStudyModeStrategy strategy) => strategy.mapForgotAction(),
@@ -120,6 +131,9 @@ class StudySessionReviewController extends _$StudySessionReviewController {
       ),
     );
 
+    final int elapsedMs = DateTime.now()
+        .difference(_currentShownAt)
+        .inMilliseconds;
     final Result<void> recordResult = await ref
         .read(recordStudySessionAnswerUseCaseProvider)
         .call(
@@ -127,11 +141,13 @@ class StudySessionReviewController extends _$StudySessionReviewController {
           sessionItemId: item.sessionItem.id,
           result: result,
           studyMode: _studyModeStrategy.mode,
+          durationMs: elapsedMs >= 0 ? elapsedMs : null,
         );
 
     switch (recordResult) {
       case Ok<void>():
         final DateTime answeredAt = DateTime.now().toUtc();
+        _markCurrentShown();
         state = AsyncData(
           current.markAnswered(
             sessionItemId: item.sessionItem.id,

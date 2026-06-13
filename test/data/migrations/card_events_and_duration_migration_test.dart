@@ -6,69 +6,40 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
-/// Legacy database pinned to schema v5 (before `flashcard_progress.last_reset_at`).
-/// Only the tables in the reset column's FK chain are created — enough to insert
-/// a progress row and exercise the v6 `addColumn` migration.
-class _LegacyV5Database extends AppDatabase {
-  _LegacyV5Database(super.executor);
+/// Legacy database pinned to schema v6 (before `card_events` /
+/// `study_attempts.duration_ms`). Only the tables in the attempt FK chain are
+/// created — enough to insert an attempt and exercise the v7 migration.
+class _LegacyV6Database extends AppDatabase {
+  _LegacyV6Database(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) async {
       await customStatement('''
         CREATE TABLE folders (
-          id TEXT NOT NULL PRIMARY KEY,
-          parent_id TEXT,
-          name TEXT NOT NULL,
-          content_mode TEXT NOT NULL,
-          sort_order INTEGER NOT NULL,
-          created_at INTEGER NOT NULL,
-          updated_at INTEGER NOT NULL
-        );
+          id TEXT NOT NULL PRIMARY KEY, parent_id TEXT, name TEXT NOT NULL,
+          content_mode TEXT NOT NULL, sort_order INTEGER NOT NULL,
+          created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL);
       ''');
       await customStatement('''
         CREATE TABLE decks (
           id TEXT NOT NULL PRIMARY KEY,
           folder_id TEXT NOT NULL REFERENCES folders (id) ON DELETE CASCADE,
-          name TEXT NOT NULL,
-          target_language TEXT NOT NULL,
-          sort_order INTEGER NOT NULL,
-          created_at INTEGER NOT NULL,
-          updated_at INTEGER NOT NULL
-        );
+          name TEXT NOT NULL, target_language TEXT NOT NULL,
+          sort_order INTEGER NOT NULL, created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL);
       ''');
       await customStatement('''
         CREATE TABLE flashcards (
           id TEXT NOT NULL PRIMARY KEY,
           deck_id TEXT NOT NULL REFERENCES decks (id) ON DELETE CASCADE,
-          front TEXT NOT NULL,
-          back TEXT NOT NULL,
-          example_sentence TEXT,
-          pronunciation TEXT,
-          hint TEXT,
-          sort_order INTEGER NOT NULL DEFAULT 0,
-          created_at INTEGER NOT NULL,
-          updated_at INTEGER NOT NULL
-        );
+          front TEXT NOT NULL, back TEXT NOT NULL, example_sentence TEXT,
+          pronunciation TEXT, hint TEXT, sort_order INTEGER NOT NULL DEFAULT 0,
+          created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL);
       ''');
-      await customStatement('''
-        CREATE TABLE flashcard_progress (
-          flashcard_id TEXT NOT NULL PRIMARY KEY
-            REFERENCES flashcards (id) ON DELETE CASCADE,
-          box_number INTEGER NOT NULL DEFAULT 1,
-          due_at INTEGER,
-          buried_until INTEGER,
-          is_suspended INTEGER NOT NULL DEFAULT 0,
-          review_count INTEGER NOT NULL DEFAULT 0,
-          lapse_count INTEGER NOT NULL DEFAULT 0,
-          last_studied_at INTEGER
-        );
-      ''');
-      // Study tables exist since v4; needed so the v7 migration (run on reopen)
-      // can ALTER study_attempts.
       await customStatement('''
         CREATE TABLE study_sessions (
           id TEXT NOT NULL PRIMARY KEY, entry_type TEXT NOT NULL,
@@ -102,50 +73,73 @@ class _LegacyV5Database extends AppDatabase {
 
 void main() {
   test(
-    'migrates flashcard_progress.last_reset_at as NULL without losing data',
+    'migrates duration_ms (NULL) + creates card_events, data preserved',
     () async {
       final Directory tempDir = await Directory.systemTemp.createTemp(
-        'memox_last_reset_at_',
+        'memox_card_events_',
       );
       final File dbFile = File(
         '${tempDir.path}${Platform.pathSeparator}memox.sqlite',
       );
 
-      final _LegacyV5Database legacyDb = _LegacyV5Database(
+      final _LegacyV6Database legacy = _LegacyV6Database(
         NativeDatabase(dbFile),
       );
-      await legacyDb.customStatement('PRAGMA foreign_keys = ON');
-      await legacyDb.customStatement(
+      await legacy.customStatement('PRAGMA foreign_keys = ON');
+      await legacy.customStatement(
         "INSERT INTO folders (id, name, content_mode, sort_order, created_at, "
         "updated_at) VALUES ('f1', 'Korean', 'decks', 0, 1, 1)",
       );
-      await legacyDb.customStatement(
+      await legacy.customStatement(
         "INSERT INTO decks (id, folder_id, name, target_language, sort_order, "
         "created_at, updated_at) VALUES ('d1', 'f1', 'N5', 'korean', 0, 1, 1)",
       );
-      await legacyDb.customStatement(
+      await legacy.customStatement(
         "INSERT INTO flashcards (id, deck_id, front, back, sort_order, "
         "created_at, updated_at) VALUES ('c1', 'd1', '안녕', 'Hi', 0, 1, 1)",
       );
-      await legacyDb.customStatement(
-        "INSERT INTO flashcard_progress (flashcard_id, box_number, review_count, "
-        "lapse_count) VALUES ('c1', 3, 5, 1)",
+      await legacy.customStatement(
+        "INSERT INTO study_sessions (id, entry_type, study_type, status, "
+        "started_at, updated_at) VALUES ('s1', 'deck', 'srs_review', "
+        "'completed', 1, 1)",
       );
-      await legacyDb.close();
+      await legacy.customStatement(
+        "INSERT INTO study_session_items (id, session_id, flashcard_id, "
+        "sort_order, created_at, updated_at) VALUES ('i1', 's1', 'c1', 0, 1, 1)",
+      );
+      await legacy.customStatement(
+        "INSERT INTO study_attempts (id, session_item_id, result, study_mode, "
+        "box_before, box_after, attempted_at) VALUES "
+        "('a1', 'i1', 'perfect', 'review', 1, 2, 1000)",
+      );
+      await legacy.close();
 
-      final AppDatabase migratedDb = AppDatabase(NativeDatabase(dbFile));
-      final FlashcardProgressRow row = await migratedDb
-          .select(migratedDb.flashcardProgress)
+      final AppDatabase migrated = AppDatabase(NativeDatabase(dbFile));
+      expect(migrated.schemaVersion, 7);
+
+      final StudyAttemptRow attempt = await migrated
+          .select(migrated.studyAttempts)
           .getSingle();
+      expect(attempt.id, 'a1');
+      expect(attempt.durationMs, isNull);
 
-      expect(migratedDb.schemaVersion, 7);
-      expect(row.flashcardId, 'c1');
-      expect(row.boxNumber, 3);
-      expect(row.reviewCount, 5);
-      expect(row.lapseCount, 1);
-      expect(row.lastResetAt, isNull);
+      // card_events table exists and accepts inserts post-migration.
+      await migrated
+          .into(migrated.cardEvents)
+          .insert(
+            CardEventsCompanion.insert(
+              id: 'e1',
+              flashcardId: 'c1',
+              type: 'created',
+              occurredAt: 1,
+            ),
+          );
+      final CardEventRow event = await migrated
+          .select(migrated.cardEvents)
+          .getSingle();
+      expect(event.type, 'created');
 
-      await migratedDb.close();
+      await migrated.close();
       await tempDir.delete(recursive: true);
     },
   );

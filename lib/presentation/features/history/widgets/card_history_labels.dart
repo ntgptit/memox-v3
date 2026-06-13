@@ -12,11 +12,10 @@ abstract final class CardHistoryLabels {
   static final DateFormat _isoDate = DateFormat('yyyy-MM-dd');
   static final DateFormat _absolute = DateFormat('MMM d, HH:mm');
 
-  /// "Box {n} / 8" chip text.
+  // ── Header / progress card ──────────────────────────────────────────────
   static String boxChip(AppLocalizations l10n, int boxNumber) =>
       l10n.cardHistoryBoxChip(boxNumber, kMaxBox);
 
-  /// Current-progress "Due" value: "Suspended" / "now" / "in 6 days".
   static String dueValue(
     AppLocalizations l10n,
     CardHistoryHeader header,
@@ -33,7 +32,6 @@ abstract final class CardHistoryLabels {
     return l10n.relativeTimeUntil(relative.unit.name, relative.count);
   }
 
-  /// Recall rate: "78%" or "—" when there are no reviews.
   static String recallValue(AppLocalizations l10n, CardHistoryHeader header) =>
       header.accuracy == null
       ? l10n.cardHistoryBoxUnknown
@@ -51,7 +49,8 @@ abstract final class CardHistoryLabels {
     return l10n.cardHistorySinceAddedValue(days < 0 ? 0 : days);
   }
 
-  static String chipLabel(
+  // ── Attempt rows ────────────────────────────────────────────────────────
+  static String attemptChipLabel(
     AppLocalizations l10n,
     CardHistoryResultCategory category,
   ) => switch (category) {
@@ -60,36 +59,63 @@ abstract final class CardHistoryLabels {
     CardHistoryResultCategory.forgot => l10n.cardHistoryChipForgot,
   };
 
-  static String description(
+  /// Row description; "Logged with missing details" for partial rows.
+  static String attemptDescription(
     AppLocalizations l10n,
-    CardHistoryResultCategory category,
-  ) => switch (category) {
-    CardHistoryResultCategory.correct => l10n.cardHistoryDescCorrect,
-    CardHistoryResultCategory.recovered => l10n.cardHistoryDescRecovered,
-    CardHistoryResultCategory.forgot => l10n.cardHistoryDescForgot,
+    CardHistoryAttemptEvent a,
+  ) {
+    if (!a.hasBoxTransition) {
+      return l10n.cardHistoryPartialDescription;
+    }
+    return switch (a.category) {
+      CardHistoryResultCategory.correct => l10n.cardHistoryDescCorrect,
+      CardHistoryResultCategory.recovered => l10n.cardHistoryDescRecovered,
+      CardHistoryResultCategory.forgot => l10n.cardHistoryDescForgot,
+    };
+  }
+
+  /// "B2" / "B3" box label.
+  static String boxLabel(AppLocalizations l10n, int box) =>
+      l10n.progressBoxLabel(box);
+
+  /// "1.4s", or "duration not logged" when not measured.
+  static String durationValue(AppLocalizations l10n, int? durationMs) =>
+      durationMs == null
+      ? l10n.cardHistoryDurationMissing
+      : l10n.cardHistoryDurationValue((durationMs / 1000).toStringAsFixed(1));
+
+  // ── Lifecycle rows ──────────────────────────────────────────────────────
+  static String lifecycleChipLabel(AppLocalizations l10n, CardEventKind kind) =>
+      switch (kind) {
+        CardEventKind.created => l10n.cardHistoryEventCreatedChip,
+        CardEventKind.edited => l10n.cardHistoryEventEditedChip,
+        CardEventKind.audioAdded => l10n.cardHistoryEventAudioChip,
+        CardEventKind.reset => l10n.cardHistoryEventResetChip,
+      };
+
+  static String lifecycleDescription(
+    AppLocalizations l10n,
+    CardEventKind kind,
+    String deckName,
+  ) => switch (kind) {
+    CardEventKind.created => l10n.cardHistoryEventCreatedDescription(deckName),
+    CardEventKind.edited => l10n.cardHistoryEventEditedDescription,
+    CardEventKind.audioAdded => l10n.cardHistoryEventAudioDescription,
+    CardEventKind.reset => l10n.cardHistoryEventResetDescription,
   };
 
-  /// "B2 → B3", or "—" for pre-migration rows (0 on either side).
-  static String boxTransition(AppLocalizations l10n, CardHistoryAttempt a) =>
-      a.boxBefore == 0 || a.boxAfter == 0
-      ? l10n.cardHistoryBoxUnknown
-      : '${l10n.progressBoxLabel(a.boxBefore)} → '
-            '${l10n.progressBoxLabel(a.boxAfter)}';
-
-  /// Relative attempt time, e.g. "2 hours ago".
-  static String attemptRelative(
+  // ── Shared ──────────────────────────────────────────────────────────────
+  static String relativeTime(
     AppLocalizations l10n,
-    DateTime attemptedAt,
+    DateTime instant,
     DateTime now,
   ) {
-    final RelativeTime relative = RelativeTime.between(attemptedAt, now);
+    final RelativeTime relative = RelativeTime.between(instant, now);
     return l10n.relativeTimeAgo(relative.unit.name, relative.count);
   }
 
-  /// Absolute attempt time, e.g. "May 26, 14:32".
-  static String attemptAbsolute(DateTime instant) =>
+  static String absoluteTime(DateTime instant) =>
       _absolute.format(instant.toLocal());
 
-  /// Absolute local date (ISO `yyyy-MM-dd`) used for reset divider + sub-label.
   static String isoDate(DateTime instant) => _isoDate.format(instant.toLocal());
 }

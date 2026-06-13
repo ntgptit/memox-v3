@@ -487,12 +487,14 @@ class StudyRepositoryImpl implements StudyRepository {
     required String sessionItemId,
     required AttemptResult result,
     required StudyMode studyMode,
+    int? durationMs,
   }) async => recordStudySessionAnswerTransaction(
     dao: _dao,
     sessionId: sessionId,
     sessionItemId: sessionItemId,
     result: result,
     studyMode: studyMode,
+    durationMs: durationMs,
     nowMs: _nowMs,
   );
 

@@ -1014,21 +1014,11 @@
       }
     }
   },
-  "cardHistoryLoadMore": "Load more",
-  "cardHistoryLoadMoreError": "Couldn't load more · Retry",
-  "cardHistoryResetDivider": "Progress reset on {date}",
-  "@cardHistoryResetDivider": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "cardHistoryEmptyTitle": "No study history yet.",
-  "cardHistoryEmptyMessage": "Start a study session on this deck to see this card's progress here.",
-  "cardHistoryEmptyAction": "Start study",
+  "cardHistoryEmptyTitle": "No reviews yet",
+  "cardHistoryEmptyMessage": "History appears here after you study this card.",
+  "cardHistoryEmptyAction": "Study this card now",
   "cardHistoryErrorTitle": "Couldn't load history",
-  "cardHistoryErrorMessage": "Your study history is safe on this device. Try again in a moment.",
+  "cardHistoryErrorMessage": "Your data is safe on this device. Try again in a moment.",
   "cardHistoryNotFoundTitle": "Card no longer exists",
   "cardHistoryNotFoundMessage": "This flashcard has been deleted.",
   "cardHistoryResetAction": "Reset progress",
@@ -1101,5 +1091,35 @@
   "cardHistoryChipForgot": "Forgot",
   "cardHistoryDescCorrect": "Answered correctly",
   "cardHistoryDescRecovered": "Got it back after a slip",
-  "cardHistoryDescForgot": "Forgot it"
+  "cardHistoryDescForgot": "Couldn’t recall — reset to box 1",
+  "cardHistoryPartialDescription": "Logged with missing details",
+  "cardHistoryDurationValue": "{seconds}s",
+  "@cardHistoryDurationValue": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryDurationMissing": "duration not logged",
+  "cardHistoryEventCreatedChip": "Created",
+  "cardHistoryEventEditedChip": "Edited",
+  "cardHistoryEventAudioChip": "Audio added",
+  "cardHistoryEventCreatedDescription": "Card added to {deck}",
+  "@cardHistoryEventCreatedDescription": {
+    "placeholders": {
+      "deck": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryEventEditedDescription": "Card edited",
+  "cardHistoryEventAudioDescription": "Pronunciation recorded",
+  "cardHistoryEventResetChip": "Reset",
+  "cardHistoryEventResetDescription": "Progress reset to box 1",
+  "cardHistoryBeginning": "Beginning of history",
+  "cardHistoryFilterSheetTitle": "Filter timeline",
+  "cardHistoryFilterAll": "All events",
+  "cardHistoryFilterReviews": "Reviews only",
+  "cardHistoryFilterLifecycle": "Card changes"
 }

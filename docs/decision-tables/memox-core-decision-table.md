@@ -326,14 +326,15 @@ Future until the tag subsystem and `shared_preferences` are approved (`docs/wire
 
 | ID | Event              | Condition                          | Expected                                              | Coverage | Test                                                      |
 |----|--------------------|------------------------------------|-------------------------------------------------------|----------|-----------------------------------------------------------|
-| H1 | Open history       | Card with attempts                 | Show timeline newest-first                            | C0+C1    | `test/presentation/features/history/card_history_screen_test.dart::H1`        |
-| H2 | Open history       | Card with zero attempts            | Show empty state with "Start study" CTA               | C1       | `test/presentation/features/history/card_history_screen_test.dart::H2`        |
-| H3 | Reset progress     | From history screen overflow       | Reset SRS (box=1, due=now), set `last_reset_at=now`, retain attempts + cumulative counters | C0+C1 | `test/data/repositories/card_history_repository_impl_test.dart::H3` |
-| H4 | Lifetime stats     | Accuracy calculation               | (reviewCount - lapseCount) / reviewCount from stored counters | C0       | `test/data/repositories/card_history_repository_impl_test.dart::H4`       |
-| H5 | Timeline           | Card with `last_reset_at` set      | Show divider row at the correct timestamp position    | C0+C1    | `test/presentation/features/history/card_history_screen_test.dart::H5`        |
-| H6 | Timeline           | `box_before=0` (pre-migration row) | Render "—" for box transition, not "Box 0"            | C1       | `test/presentation/features/history/card_history_screen_test.dart::H6`        |
+| H1 | Open history       | Card with events                   | Show activity feed (attempts + lifecycle) newest-first | C0+C1    | `test/presentation/features/history/card_history_screen_test.dart::H1`        |
+| H2 | Open history       | Card with zero events              | Show empty state with "Study this card now" CTA       | C1       | `test/presentation/features/history/card_history_screen_test.dart::H2`        |
+| H3 | Reset progress     | From history screen overflow       | Reset SRS (box=1, due=now), set `last_reset_at=now`, append a `card_events` reset row, retain attempts + cumulative counters | C0+C1 | `test/data/repositories/card_history_repository_impl_test.dart::H3` |
+| H4 | Lifetime stats     | Recall-rate calculation            | (reviewCount - lapseCount) / reviewCount from stored counters | C0       | `test/data/repositories/card_history_repository_impl_test.dart::H4`       |
+| H5 | Timeline           | Card progress reset                | Reset appears as a lifecycle event in the feed        | C0+C1    | `test/presentation/features/history/card_history_screen_test.dart::H5`        |
+| H6 | Timeline           | `box_before=0` (pre-migration row) | Omit the box transition; show "Logged with missing details" + "duration not logged" | C1       | `test/presentation/features/history/card_history_screen_test.dart::H6`        |
 | H7 | Header sub-label   | `last_reset_at != null`            | Show "Includes attempts before last reset on {date}." | C1       | `test/presentation/features/history/card_history_screen_test.dart::H7`        |
-| H8 | New attempt insert | Any                                | `box_before` and `box_after` MUST be populated        | C0+C1    | `test/data/repositories/attempt_repository_test.dart::H8` |
+| H8 | New attempt insert | Any                                | `box_before`, `box_after`, `duration_ms` recorded     | C0+C1    | `test/data/repositories/attempt_repository_test.dart::H8` |
+| H9 | Timeline           | Lifecycle event (created/edited/reset) | Render a lifecycle row with its chip + description | C1       | `test/presentation/features/history/card_history_screen_test.dart::Lifecycle` |
 
 ## Daily engagement
 

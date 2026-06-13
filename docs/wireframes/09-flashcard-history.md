@@ -112,22 +112,18 @@ this card") and decide on actions (suspend, reset).
 
 | Data                                                                | Source                                          | Refresh trigger    |
 |---------------------------------------------------------------------|-------------------------------------------------|--------------------|
-| Card preview (front, back truncated)                                | `flashcards` lookup                             | once               |
-| Current SRS state (current_box, due_at, is_suspended)               | `flashcard_progress` lookup                     | once               |
-| Lifetime stats (review_count, lapse_count, accuracy, last_reset_at) | `flashcard_progress` counters                   | once               |
-| First page of attempts (LIMIT 50 ORDER BY attempted_at DESC)        | `study_attempts WHERE flashcard_id = :id`       | cursor pagination  |
-| Divider position                                                    | computed from `last_reset_at` vs row timestamps | derived from above |
+| Card preview (front, back) + breadcrumb (deck + folders)            | `flashcards` + `decks`/`folders`                | once               |
+| Current SRS state (box, due_at, is_suspended)                       | `flashcard_progress` lookup                     | once               |
+| Lifetime stats (review_count, lapse_count, recall rate, last_reset_at, correct streak, created_at) | `flashcard_progress` counters + `study_attempts` (streak) + `flashcards.created_at` | once |
+| Activity feed (attempts + lifecycle events, full load DESC)         | `study_attempts` + `card_events` WHERE flashcard_id = :id | once (invalidated on reset) |
 
 ## Forbidden
 
-- ❌ Compute lifetime accuracy by scanning all attempts. Use stored counters.
-- ❌ Allow inline edit of attempts. Read-only.
-- ❌ Use OFFSET pagination. Use cursor on `attempted_at DESC`.
-- ❌ Show "Box 0" — render `—` for box_before=0 or box_after=0 (pre-migration rows).
-- ❌ Show divider when `last_reset_at` is null OR there are no attempts.
-- ❌ Reset progress without updating `last_reset_at = now`.
-- ❌ Auto-refresh timeline on every attempt insert; refresh only on screen visibility change OR
-  explicit pull-to-refresh.
+- ❌ Compute lifetime accuracy/recall by scanning all attempts. Use stored counters.
+- ❌ Allow inline edit of attempts/events. Read-only.
+- ❌ Render the box transition or "Box 0" for pre-migration rows (box=0); show "Logged with missing
+  details" instead.
+- ❌ Reset progress without appending a `card_events` `reset` row and updating `last_reset_at = now`.
 
 ## Components
 
@@ -137,12 +133,12 @@ this card") and decide on actions (suspend, reset).
 | Breadcrumb       | `Library › {folders…} › {deck} › History`. Library/folder/deck segments tappable; History is the current (non-tap) segment.   |
 | Header card      | Front preview, back subtitle, current-box chip (`Box {n} / 8`). Reset sub-label visible only when `last_reset_at != null`.     |
 | Progress card    | "CURRENT PROGRESS": Leitner box stepper (8 segments, current highlighted) + 2×3 stat grid — Due, Reviews, Recall rate, Lapses, Correct streak, Since added. |
-| Timeline header  | "TIMELINE · {N} EVENTS" (N = total attempts). Filter dropdown is Future (single event type in V1).                            |
-| Timeline         | Vertical list on a left rail with a node per event, newest first. 50 per page. Rows are read-only (row→result nav deferred).   |
-| Timeline row     | Status chip (CORRECT/RECOVERED/FORGOT) + relative/absolute time + description + `B{before} → B{after}` · mode. Duration not shown (no `study_attempts` duration column — gap). |
-| Divider row      | Visual separator (label over a full-width rule) inserted at `last_reset_at` position. Non-tappable.                            |
-| Load more        | Button at bottom when more pages available.                                                                                    |
-| Empty state      | When zero attempts, fills the timeline area. CTA opens deck study.                                                             |
+| Timeline header  | "TIMELINE · {N} EVENTS" (N = visible events) + an "All events" filter pill (All / Reviews only / Card changes).               |
+| Timeline         | Unified activity feed on a left rail with a node per event, newest first; loads fully and ends with a "Beginning of history" marker. Rows are read-only (row→result nav deferred). |
+| Attempt row      | Status chip (CORRECT/RECOVERED/FORGOT) + relative/absolute time + description + `B{before} → B{after}` (arrow flips when box drops) · mode · duration ("1.4s" or "duration not logged"). |
+| Lifecycle row    | `card_events` row: Created (mastery) / Edited / Reset / Audio added (reserved). Chip + description, no meta.                   |
+| Beginning marker | Terminal "Beginning of history" row closing the feed.                                                                          |
+| Empty state      | When the card has zero events, a framed card with "No reviews yet" + "Study this card now" CTA.                               |
 
 **Stat sourcing (Progress card):** Due ← `flashcard_progress.due_at`/`is_suspended`; Reviews ← `review_count`;
 Recall rate ← `(review_count − lapse_count) / review_count`; Lapses ← `lapse_count`; Correct streak ←
@@ -165,19 +161,21 @@ Result label mapping:
 | `recovered`      | ⚠ yellow | Recovered |
 | `forgot`         | ✗ red    | Forgot    |
 
-When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` instead of `Box 0`.
+When `box_before = 0` or `box_after = 0` (pre-migration data), the transition is omitted and the
+description reads "Logged with missing details" (the kit's **Partial** state).
 
 ## States
 
-| State          | Trigger              | Behavior                                            |
-|----------------|----------------------|-----------------------------------------------------|
-| Loading        | Initial fetch        | Skeleton header + timeline rows.                    |
-| Populated      | Has attempts         | Header + timeline visible.                          |
-| Empty          | Zero attempts        | Empty layout.                                       |
-| Loading more   | Tap Load more        | Inline spinner; append on success.                  |
-| Card not found | Card deleted         | "Card no longer exists" error + back.               |
-| Reset done     | After reset progress | Header updates; divider appears at top of timeline. |
-| Error          | Query failure        | Inline error card with retry.                       |
+Maps the five kit states (`shots/INDEX.md`: Loaded, Empty, Loading, Error, Partial), light + dark:
+
+| Kit state | Trigger              | Behavior                                                                       |
+|-----------|----------------------|-------------------------------------------------------------------------------|
+| Loaded    | Card has events      | Breadcrumb + header + progress card + activity feed + "Beginning of history". |
+| Empty     | Card has zero events | Framed "No reviews yet" card + "Study this card now" CTA.                      |
+| Loading   | Initial fetch        | Header skeleton + timeline skeleton rows (`MxLoadingState`).                   |
+| Error     | Query failure        | Cloud-off error card + Retry (header stays when its query succeeded).          |
+| Partial   | Attempt missing data | Row with no box transition + "Logged with missing details" + "duration not logged". |
+| Card not found | Card deleted    | "Card no longer exists" error state, no retry.                                 |
 
 ## Actions
 
@@ -269,12 +267,16 @@ When `box_before = 0` or `box_after = 0` (pre-migration data), render `—` inst
 - `lib/presentation/features/history/viewmodels/card_history_viewmodel.dart`
 - `lib/presentation/features/history/widgets/card_history_body.dart`
 - `lib/presentation/features/history/widgets/card_history_header_card.dart`
-- `lib/presentation/features/history/widgets/card_history_timeline.dart`
+- `lib/presentation/features/history/widgets/card_history_progress_card.dart`
+- `lib/presentation/features/history/widgets/card_history_event_card.dart`
 - `lib/presentation/features/history/widgets/card_history_timeline_row.dart`
-- `lib/presentation/features/history/widgets/card_history_reset_divider.dart`
+- `lib/presentation/features/history/widgets/card_history_lifecycle_row.dart`
+- `lib/presentation/features/history/widgets/card_history_beginning_row.dart`
+- `lib/presentation/features/history/widgets/card_history_filter_pill.dart`
 - `lib/presentation/features/history/widgets/card_history_overflow_sheet.dart`
+- `lib/data/datasources/local/drift/card_events.drift`
 - `lib/domain/usecases/history/get_card_history_header_usecase.dart`
-- `lib/domain/usecases/history/get_card_history_page_usecase.dart`
+- `lib/domain/usecases/history/get_card_timeline_usecase.dart`
 - `lib/domain/usecases/history/reset_flashcard_progress_usecase.dart`
 - `lib/app/router/route_names.dart` → `RouteNames.flashcardHistory`
 

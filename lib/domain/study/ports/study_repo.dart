@@ -64,6 +64,7 @@ abstract interface class StudyRepository {
     required String sessionItemId,
     required AttemptResult result,
     required StudyMode studyMode,
+    int? durationMs,
   });
 
   Future<Result<void>> recordMatchEvaluation({

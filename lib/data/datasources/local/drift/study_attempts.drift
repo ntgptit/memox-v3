@@ -9,6 +9,9 @@ CREATE TABLE study_attempts (
   box_before INTEGER NOT NULL DEFAULT 0,
   box_after INTEGER NOT NULL DEFAULT 0,
   user_input TEXT,
+  -- Time spent on the card before grading, ms. NULL = not measured (older rows /
+  -- non-timed flows); the Card History timeline shows "duration not logged".
+  duration_ms INTEGER,
   attempted_at INTEGER NOT NULL
 ) AS StudyAttemptRow;
 

@@ -98,7 +98,9 @@ If any step is skipped, report it explicitly.
 - `docs/business/deck/deck-management.md` → `decks.target_language`
 - `docs/business/study-actions/bury-suspend.md` → `flashcard_progress.buried_until`, `is_suspended`
 - `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at` (shipped v6,
-  `v6_add_flashcard_progress_last_reset_at.dart`), `study_attempts.box_before`, `box_after`
+  `v6_add_flashcard_progress_last_reset_at.dart`), `study_attempts.box_before`, `box_after`,
+  `study_attempts.duration_ms` + `card_events` table (shipped v7,
+  `v7_add_card_events_and_attempt_duration.dart`)
 - `docs/business/study/study-flow.md` + `docs/business/srs/srs-review.md` →
   `study_match_evaluations`
 - `docs/wireframes/17-study-session-fill.md` + `docs/business/srs/srs-review.md` → enum/constraint
@@ -115,3 +117,4 @@ If any step is skipped, report it explicitly.
 - `lib/data/datasources/local/app_database.dart` (schemaVersion)
 - `lib/data/datasources/local/migrations/v4_add_study_tables.dart`
 - `lib/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart`
+- `lib/data/datasources/local/migrations/v7_add_card_events_and_attempt_duration.dart`

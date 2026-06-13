@@ -96,6 +96,7 @@ class _FakeStudyRepository implements StudyRepository {
     required String sessionItemId,
     required AttemptResult result,
     required StudyMode studyMode,
+    int? durationMs,
   }) async {
     throw UnimplementedError();
   }

@@ -15,7 +15,7 @@ import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/history/screens/card_history_screen.dart';
-import 'package:memox/presentation/features/history/widgets/card_history_reset_divider.dart';
+import 'package:memox/presentation/features/history/widgets/card_history_lifecycle_row.dart';
 import 'package:memox/presentation/features/history/widgets/card_history_timeline_row.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
@@ -24,12 +24,12 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 class _FakeCardHistoryRepository implements CardHistoryRepository {
   _FakeCardHistoryRepository({
     this.headerResult,
-    this.pageResult,
+    this.timelineResult,
     this.headerPending = false,
   });
 
   Result<CardHistoryHeader>? headerResult;
-  Result<CardHistoryPage>? pageResult;
+  Result<CardHistoryTimeline>? timelineResult;
   final bool headerPending;
 
   @override
@@ -37,21 +37,18 @@ class _FakeCardHistoryRepository implements CardHistoryRepository {
     required String flashcardId,
   }) async {
     if (headerPending) {
-      // Never completes — drives the loading state.
       return Completer<Result<CardHistoryHeader>>().future;
     }
     return headerResult!;
   }
 
   @override
-  Future<Result<CardHistoryPage>> loadAttempts({
+  Future<Result<CardHistoryTimeline>> loadTimeline({
     required String flashcardId,
-    CardHistoryCursor? before,
-    int limit = kCardHistoryPageSize,
   }) async =>
-      pageResult ??
-      const Result<CardHistoryPage>.ok(
-        CardHistoryPage(attempts: <CardHistoryAttempt>[], nextCursor: null),
+      timelineResult ??
+      const Result<CardHistoryTimeline>.ok(
+        CardHistoryTimeline(events: <CardHistoryEvent>[]),
       );
 
   @override
@@ -79,27 +76,37 @@ CardHistoryHeader _header({
   reviewCount: reviewCount,
   lapseCount: lapseCount,
   correctStreak: 4,
-  totalEvents: reviewCount,
   createdAt: DateTime.utc(2026, 5, 21),
   lastResetAt: lastResetAt,
 );
 
-CardHistoryAttempt _attempt(
+CardHistoryAttemptEvent _attempt(
   String id,
   DateTime at, {
   int boxBefore = 1,
   int boxAfter = 2,
+  int? durationMs = 1400,
   AttemptResult result = AttemptResult.perfect,
-}) => CardHistoryAttempt(
+}) => CardHistoryAttemptEvent(
   id: id,
+  occurredAt: at,
   result: result,
   studyMode: StudyMode.review,
   boxBefore: boxBefore,
   boxAfter: boxAfter,
-  attemptedAt: at,
+  durationMs: durationMs,
   sessionId: 's_$id',
   sessionStatus: SessionStatus.completed,
 );
+
+CardHistoryLifecycleEvent _lifecycle(
+  String id,
+  DateTime at,
+  CardEventKind kind,
+) => CardHistoryLifecycleEvent(id: id, occurredAt: at, kind: kind);
+
+Result<CardHistoryTimeline> _timeline(List<CardHistoryEvent> events) =>
+    Result<CardHistoryTimeline>.ok(CardHistoryTimeline(events: events));
 
 Widget _wrap(_FakeCardHistoryRepository repo) => ProviderScope(
   overrides: [cardHistoryRepositoryProvider.overrideWith((ref) => repo)],
@@ -111,9 +118,8 @@ Widget _wrap(_FakeCardHistoryRepository repo) => ProviderScope(
   ),
 );
 
-/// Card History is a tall screen (header + progress + timeline). Use a
-/// device-sized surface so SliverFillRemaining empty/error states aren't
-/// squeezed by the default 800×600 test window.
+/// Card History is a tall screen; use a device-sized surface so
+/// SliverFillRemaining states aren't squeezed by the default 800×600 window.
 void _useTallSurface(WidgetTester tester) {
   tester.view.physicalSize = const Size(1200, 3200);
   tester.view.devicePixelRatio = 3.0;
@@ -132,20 +138,15 @@ void main() {
     expect(find.byType(MxLoadingState), findsWidgets);
   });
 
-  testWidgets('H1 — data renders header and timeline rows newest-first', (
+  testWidgets('H1 — data renders header and attempt rows newest-first', (
     WidgetTester tester,
   ) async {
     final repo = _FakeCardHistoryRepository(
       headerResult: Result<CardHistoryHeader>.ok(_header()),
-      pageResult: Result<CardHistoryPage>.ok(
-        CardHistoryPage(
-          attempts: <CardHistoryAttempt>[
-            _attempt('a2', DateTime.utc(2026, 6, 12)),
-            _attempt('a1', DateTime.utc(2026, 6, 10)),
-          ],
-          nextCursor: null,
-        ),
-      ),
+      timelineResult: _timeline(<CardHistoryEvent>[
+        _attempt('a2', DateTime.utc(2026, 6, 12)),
+        _attempt('a1', DateTime.utc(2026, 6, 10)),
+      ]),
     );
     _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
@@ -155,16 +156,31 @@ void main() {
     expect(find.byType(CardHistoryTimelineRow), findsNWidgets(2));
   });
 
-  testWidgets('H2 — empty state with Start study CTA when no attempts', (
+  testWidgets('Lifecycle — created/edit events render lifecycle rows', (
+    WidgetTester tester,
+  ) async {
+    final repo = _FakeCardHistoryRepository(
+      headerResult: Result<CardHistoryHeader>.ok(_header()),
+      timelineResult: _timeline(<CardHistoryEvent>[
+        _attempt('a1', DateTime.utc(2026, 6, 12)),
+        _lifecycle('e1', DateTime.utc(2026, 6, 1), CardEventKind.created),
+      ]),
+    );
+    _useTallSurface(tester);
+    await tester.pumpWidget(_wrap(repo));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CardHistoryLifecycleRow), findsOneWidget);
+  });
+
+  testWidgets('H2 — empty state with Study CTA when no events', (
     WidgetTester tester,
   ) async {
     final repo = _FakeCardHistoryRepository(
       headerResult: Result<CardHistoryHeader>.ok(
         _header(reviewCount: 0, lapseCount: 0),
       ),
-      pageResult: const Result<CardHistoryPage>.ok(
-        CardHistoryPage(attempts: <CardHistoryAttempt>[], nextCursor: null),
-      ),
+      timelineResult: _timeline(const <CardHistoryEvent>[]),
     );
     _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
@@ -177,54 +193,49 @@ void main() {
     expect(find.text(l10n.cardHistoryEmptyAction), findsOneWidget);
   });
 
-  testWidgets('H5 — reset divider sits between newer and older attempts', (
+  testWidgets('H5 — reset shows as a lifecycle event', (
     WidgetTester tester,
   ) async {
     final repo = _FakeCardHistoryRepository(
       headerResult: Result<CardHistoryHeader>.ok(
         _header(lastResetAt: DateTime.utc(2026, 6, 11)),
       ),
-      pageResult: Result<CardHistoryPage>.ok(
-        CardHistoryPage(
-          attempts: <CardHistoryAttempt>[
-            _attempt('a2', DateTime.utc(2026, 6, 12)),
-            _attempt('a1', DateTime.utc(2026, 6, 10)),
-          ],
-          nextCursor: null,
-        ),
-      ),
+      timelineResult: _timeline(<CardHistoryEvent>[
+        _attempt('a1', DateTime.utc(2026, 6, 12)),
+        _lifecycle('r1', DateTime.utc(2026, 6, 11), CardEventKind.reset),
+      ]),
     );
     _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
-    expect(find.byType(CardHistoryResetDivider), findsOneWidget);
+    expect(find.byType(CardHistoryLifecycleRow), findsOneWidget);
   });
 
-  testWidgets('H6 — pre-migration box (0) renders as dash', (
+  testWidgets('H6 — pre-migration attempt shows "missing details"', (
     WidgetTester tester,
   ) async {
     final repo = _FakeCardHistoryRepository(
       headerResult: Result<CardHistoryHeader>.ok(_header()),
-      pageResult: Result<CardHistoryPage>.ok(
-        CardHistoryPage(
-          attempts: <CardHistoryAttempt>[
-            _attempt(
-              'a1',
-              DateTime.utc(2026, 6, 10),
-              boxBefore: 0,
-              boxAfter: 0,
-            ),
-          ],
-          nextCursor: null,
+      timelineResult: _timeline(<CardHistoryEvent>[
+        _attempt(
+          'a1',
+          DateTime.utc(2026, 6, 10),
+          boxBefore: 0,
+          boxAfter: 0,
+          durationMs: null,
         ),
-      ),
+      ]),
     );
     _useTallSurface(tester);
     await tester.pumpWidget(_wrap(repo));
     await tester.pumpAndSettle();
 
-    expect(find.text('—'), findsWidgets);
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(CardHistoryTimelineRow)),
+    );
+    expect(find.text(l10n.cardHistoryPartialDescription), findsOneWidget);
+    expect(find.text(l10n.cardHistoryDurationMissing), findsOneWidget);
   });
 
   testWidgets('H7 — header sub-label shown when last_reset_at set', (

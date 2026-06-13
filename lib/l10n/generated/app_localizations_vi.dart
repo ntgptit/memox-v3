@@ -2002,32 +2002,21 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get cardHistoryLoadMore => 'Tải thêm';
-
-  @override
-  String get cardHistoryLoadMoreError => 'Không tải thêm được · Thử lại';
-
-  @override
-  String cardHistoryResetDivider(String date) {
-    return 'Đặt lại tiến độ vào $date';
-  }
-
-  @override
-  String get cardHistoryEmptyTitle => 'Chưa có lịch sử học.';
+  String get cardHistoryEmptyTitle => 'Chưa có lượt ôn nào';
 
   @override
   String get cardHistoryEmptyMessage =>
-      'Bắt đầu một phiên học trên bộ thẻ này để xem tiến độ của thẻ tại đây.';
+      'Lịch sử sẽ xuất hiện ở đây sau khi bạn học thẻ này.';
 
   @override
-  String get cardHistoryEmptyAction => 'Bắt đầu học';
+  String get cardHistoryEmptyAction => 'Học thẻ này ngay';
 
   @override
   String get cardHistoryErrorTitle => 'Không tải được lịch sử';
 
   @override
   String get cardHistoryErrorMessage =>
-      'Lịch sử học của bạn vẫn an toàn trên thiết bị này. Vui lòng thử lại sau giây lát.';
+      'Dữ liệu của bạn vẫn an toàn trên thiết bị này. Vui lòng thử lại sau giây lát.';
 
   @override
   String get cardHistoryNotFoundTitle => 'Thẻ không còn tồn tại';
@@ -2140,5 +2129,57 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cardHistoryDescRecovered => 'Nhớ lại sau khi nhầm';
 
   @override
-  String get cardHistoryDescForgot => 'Đã quên';
+  String get cardHistoryDescForgot => 'Không nhớ ra — đặt lại về hộp 1';
+
+  @override
+  String get cardHistoryPartialDescription => 'Ghi nhận nhưng thiếu chi tiết';
+
+  @override
+  String cardHistoryDurationValue(String seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get cardHistoryDurationMissing => 'không ghi thời lượng';
+
+  @override
+  String get cardHistoryEventCreatedChip => 'Đã tạo';
+
+  @override
+  String get cardHistoryEventEditedChip => 'Đã sửa';
+
+  @override
+  String get cardHistoryEventAudioChip => 'Thêm âm thanh';
+
+  @override
+  String cardHistoryEventCreatedDescription(String deck) {
+    return 'Đã thêm thẻ vào $deck';
+  }
+
+  @override
+  String get cardHistoryEventEditedDescription => 'Đã sửa thẻ';
+
+  @override
+  String get cardHistoryEventAudioDescription => 'Đã ghi phát âm';
+
+  @override
+  String get cardHistoryEventResetChip => 'Đặt lại';
+
+  @override
+  String get cardHistoryEventResetDescription => 'Đã đặt lại tiến độ về hộp 1';
+
+  @override
+  String get cardHistoryBeginning => 'Bắt đầu lịch sử';
+
+  @override
+  String get cardHistoryFilterSheetTitle => 'Lọc dòng thời gian';
+
+  @override
+  String get cardHistoryFilterAll => 'Tất cả sự kiện';
+
+  @override
+  String get cardHistoryFilterReviews => 'Chỉ lượt ôn';
+
+  @override
+  String get cardHistoryFilterLifecycle => 'Thay đổi thẻ';
 }

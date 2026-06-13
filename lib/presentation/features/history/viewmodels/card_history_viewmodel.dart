@@ -8,6 +8,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'card_history_viewmodel.g.dart';
 
+/// Timeline filter (the "All events" pill). `all` shows attempts + lifecycle;
+/// `reviews` shows graded attempts only; `lifecycle` shows create/edit/audio.
+enum CardHistoryFilter { all, reviews, lifecycle }
+
+extension CardHistoryFilterX on CardHistoryFilter {
+  bool matches(CardHistoryEvent event) => switch (this) {
+    CardHistoryFilter.all => true,
+    CardHistoryFilter.reviews => event is CardHistoryAttemptEvent,
+    CardHistoryFilter.lifecycle => event is CardHistoryLifecycleEvent,
+  };
+}
+
 /// Card History header (preview + SRS state + lifetime counters). Unwraps the
 /// repository [Result]: a [Failure] surfaces as `AsyncError` for the screen's
 /// error / card-not-found state.
@@ -23,86 +35,29 @@ Future<CardHistoryHeader> cardHistoryHeader(Ref ref, String flashcardId) async {
   );
 }
 
-/// Paginated timeline state: loaded attempts (newest first), the next-page
-/// cursor, and inline load-more status.
-class CardHistoryTimelineState {
-  const CardHistoryTimelineState({
-    required this.attempts,
-    required this.nextCursor,
-    this.isLoadingMore = false,
-    this.loadMoreFailed = false,
-  });
-
-  final List<CardHistoryAttempt> attempts;
-  final CardHistoryCursor? nextCursor;
-  final bool isLoadingMore;
-  final bool loadMoreFailed;
-
-  bool get hasMore => nextCursor != null;
-  bool get isEmpty => attempts.isEmpty;
-
-  CardHistoryTimelineState copyWith({
-    List<CardHistoryAttempt>? attempts,
-    CardHistoryCursor? nextCursor,
-    bool clearCursor = false,
-    bool? isLoadingMore,
-    bool? loadMoreFailed,
-  }) => CardHistoryTimelineState(
-    attempts: attempts ?? this.attempts,
-    nextCursor: clearCursor ? null : (nextCursor ?? this.nextCursor),
-    isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-    loadMoreFailed: loadMoreFailed ?? this.loadMoreFailed,
+/// The full per-card activity feed (attempts + lifecycle events, newest first).
+@riverpod
+Future<CardHistoryTimeline> cardHistoryTimeline(
+  Ref ref,
+  String flashcardId,
+) async {
+  final Result<CardHistoryTimeline> result = await ref
+      .watch(getCardTimelineUseCaseProvider)
+      .call(flashcardId: flashcardId);
+  return result.fold(
+    // ignore: only_throw_errors -- reason: Riverpod surfaces repository Failure as AsyncError.
+    (Failure failure) => throw failure,
+    (CardHistoryTimeline timeline) => timeline,
   );
 }
 
-/// Loads the first attempt page on build and appends further pages on demand.
-/// First-page failures surface as `AsyncError`; load-more failures are kept
-/// inline so the already-loaded timeline stays visible.
+/// Selected timeline filter, scoped per flashcard.
 @riverpod
-class CardHistoryTimeline extends _$CardHistoryTimeline {
+class CardHistoryFilterController extends _$CardHistoryFilterController {
   @override
-  Future<CardHistoryTimelineState> build(String flashcardId) async {
-    final Result<CardHistoryPage> result = await ref
-        .watch(getCardHistoryPageUseCaseProvider)
-        .call(flashcardId: flashcardId);
-    return result.fold(
-      // ignore: only_throw_errors -- reason: Riverpod surfaces repository Failure as AsyncError.
-      (Failure failure) => throw failure,
-      (CardHistoryPage page) => CardHistoryTimelineState(
-        attempts: page.attempts,
-        nextCursor: page.nextCursor,
-      ),
-    );
-  }
+  CardHistoryFilter build(String flashcardId) => CardHistoryFilter.all;
 
-  Future<void> loadMore() async {
-    final CardHistoryTimelineState? current = state.asData?.value;
-    if (current == null || current.isLoadingMore || !current.hasMore) {
-      return;
-    }
-    state = AsyncData<CardHistoryTimelineState>(
-      current.copyWith(isLoadingMore: true, loadMoreFailed: false),
-    );
-    final Result<CardHistoryPage> result = await ref
-        .read(getCardHistoryPageUseCaseProvider)
-        .call(flashcardId: flashcardId, before: current.nextCursor);
-    if (!ref.mounted) {
-      return;
-    }
-    state = AsyncData<CardHistoryTimelineState>(
-      result.fold(
-        (Failure _) =>
-            current.copyWith(isLoadingMore: false, loadMoreFailed: true),
-        (CardHistoryPage page) => current.copyWith(
-          attempts: <CardHistoryAttempt>[...current.attempts, ...page.attempts],
-          nextCursor: page.nextCursor,
-          clearCursor: page.nextCursor == null,
-          isLoadingMore: false,
-          loadMoreFailed: false,
-        ),
-      ),
-    );
-  }
+  void select(CardHistoryFilter filter) => state = filter;
 }
 
 /// Executes Card History mutations (reset progress, delete card). The screen

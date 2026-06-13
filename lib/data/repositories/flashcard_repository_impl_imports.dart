@@ -223,6 +223,16 @@ Future<FlashcardRow> _insertFlashcard(
           dueAt: Value<int?>(nowMs),
         ),
       );
+  await repo._dao
+      .into(repo._dao.attachedDatabase.cardEvents)
+      .insert(
+        CardEventsCompanion.insert(
+          id: IdGenerator.newId(),
+          flashcardId: id,
+          type: 'created',
+          occurredAt: nowMs,
+        ),
+      );
   for (final String tag in tags) {
     await repo._dao
         .into(repo._dao.attachedDatabase.flashcardTags)

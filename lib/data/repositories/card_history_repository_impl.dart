@@ -1,5 +1,6 @@
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/core/utils/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/card_history_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
@@ -44,10 +45,7 @@ class CardHistoryRepositoryImpl implements CardHistoryRepository {
                 )
                 .toList(growable: false);
 
-      final (int eventCount, List<String> results) = await (
-        _dao.loadEventCount(flashcardId),
-        _dao.loadResultsDesc(flashcardId),
-      ).wait;
+      final List<String> results = await _dao.loadResultsDesc(flashcardId);
 
       return Result<CardHistoryHeader>.ok(
         CardHistoryHeader(
@@ -64,7 +62,6 @@ class CardHistoryRepositoryImpl implements CardHistoryRepository {
           reviewCount: row.reviewCount ?? 0,
           lapseCount: row.lapseCount ?? 0,
           correctStreak: _correctStreak(results),
-          totalEvents: eventCount,
           createdAt: DateTime.fromMillisecondsSinceEpoch(
             row.createdAt,
             isUtc: true,
@@ -76,6 +73,70 @@ class CardHistoryRepositoryImpl implements CardHistoryRepository {
       return Result<CardHistoryHeader>.err(
         Failure.storage(
           operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'flashcard_progress',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<CardHistoryTimeline>> loadTimeline({
+    required FlashcardId flashcardId,
+  }) async {
+    try {
+      final (
+        List<CardHistoryAttemptsResult> attempts,
+        List<CardHistoryCardEventsResult> events,
+      ) = await (
+        _dao.loadAttempts(flashcardId),
+        _dao.loadCardEvents(flashcardId),
+      ).wait;
+
+      final List<CardHistoryEvent> merged =
+          <CardHistoryEvent>[
+            ...attempts.map(_mapAttempt),
+            ...events.map(_mapEvent),
+          ]..sort((CardHistoryEvent a, CardHistoryEvent b) {
+            final int byTime = b.occurredAt.compareTo(a.occurredAt);
+            return byTime != 0 ? byTime : b.id.compareTo(a.id);
+          });
+
+      return Result<CardHistoryTimeline>.ok(
+        CardHistoryTimeline(events: merged),
+      );
+    } catch (error) {
+      return Result<CardHistoryTimeline>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'study_attempts',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void>> resetProgress({required FlashcardId flashcardId}) async {
+    try {
+      final int nowMs = _now().toUtc().millisecondsSinceEpoch;
+      final int updated = await _dao.resetProgress(
+        flashcardId: flashcardId,
+        nowMs: nowMs,
+      );
+      if (updated > 0) {
+        await _dao.insertCardEvent(
+          id: IdGenerator.newId(),
+          flashcardId: flashcardId,
+          type: 'reset',
+          occurredAt: nowMs,
+        );
+      }
+      return const Result<void>.ok(null);
+    } catch (error) {
+      return Result<void>.err(
+        Failure.storage(
+          operation: StorageOp.write,
           cause: error.toString(),
           table: 'flashcard_progress',
         ),
@@ -96,90 +157,36 @@ class CardHistoryRepositoryImpl implements CardHistoryRepository {
     return streak;
   }
 
-  @override
-  Future<Result<CardHistoryPage>> loadAttempts({
-    required FlashcardId flashcardId,
-    CardHistoryCursor? before,
-    int limit = kCardHistoryPageSize,
-  }) async {
-    try {
-      // Fetch one extra row to learn whether a further page exists without a
-      // second count query.
-      final int fetchLimit = limit + 1;
-      final List<CardHistoryAttemptRow> rows = before == null
-          ? await _dao.loadFirstPage(
-              flashcardId: flashcardId,
-              limit: fetchLimit,
-            )
-          : await _dao.loadNextPage(
-              flashcardId: flashcardId,
-              beforeAttemptedAt: before.attemptedAt.millisecondsSinceEpoch,
-              beforeId: before.id,
-              limit: fetchLimit,
-            );
-
-      final bool hasMore = rows.length > limit;
-      final List<CardHistoryAttemptRow> pageRows = hasMore
-          ? rows.sublist(0, limit)
-          : rows;
-
-      final List<CardHistoryAttempt> attempts = pageRows
-          .map(_mapAttempt)
-          .toList(growable: false);
-
-      final CardHistoryAttempt? last = attempts.isEmpty ? null : attempts.last;
-      return Result<CardHistoryPage>.ok(
-        CardHistoryPage(
-          attempts: attempts,
-          nextCursor: hasMore && last != null
-              ? CardHistoryCursor(attemptedAt: last.attemptedAt, id: last.id)
-              : null,
-        ),
-      );
-    } catch (error) {
-      return Result<CardHistoryPage>.err(
-        Failure.storage(
-          operation: StorageOp.read,
-          cause: error.toString(),
-          table: 'study_attempts',
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Result<void>> resetProgress({required FlashcardId flashcardId}) async {
-    try {
-      await _dao.resetProgress(
-        flashcardId: flashcardId,
-        nowMs: _now().toUtc().millisecondsSinceEpoch,
-      );
-      return const Result<void>.ok(null);
-    } catch (error) {
-      return Result<void>.err(
-        Failure.storage(
-          operation: StorageOp.write,
-          cause: error.toString(),
-          table: 'flashcard_progress',
-        ),
-      );
-    }
-  }
-
-  CardHistoryAttempt _mapAttempt(CardHistoryAttemptRow row) =>
-      CardHistoryAttempt(
+  CardHistoryAttemptEvent _mapAttempt(CardHistoryAttemptsResult row) =>
+      CardHistoryAttemptEvent(
         id: row.id,
+        occurredAt: _date(row.attemptedAt),
         result: StudyMapper.attemptResultFromStorage(row.result),
         studyMode: StudyMapper.studyModeFromStorage(row.studyMode),
         boxBefore: row.boxBefore,
         boxAfter: row.boxAfter,
-        attemptedAt: DateTime.fromMillisecondsSinceEpoch(
-          row.attemptedAt,
-          isUtc: true,
-        ),
+        durationMs: row.durationMs,
         sessionId: row.sessionId,
         sessionStatus: StudyMapper.sessionStatusFromStorage(row.sessionStatus),
       );
+
+  CardHistoryLifecycleEvent _mapEvent(CardHistoryCardEventsResult row) =>
+      CardHistoryLifecycleEvent(
+        id: row.id,
+        occurredAt: _date(row.occurredAt),
+        kind: _eventKind(row.type),
+        detail: row.detail,
+      );
+
+  static CardEventKind _eventKind(String stored) => switch (stored) {
+    'edited' => CardEventKind.edited,
+    'audio_added' => CardEventKind.audioAdded,
+    'reset' => CardEventKind.reset,
+    _ => CardEventKind.created,
+  };
+
+  static DateTime _date(int ms) =>
+      DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);
 
   static DateTime? _dateOrNull(int? ms) =>
       ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true);

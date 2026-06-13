@@ -327,6 +327,16 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
           flashcardId: flashcardId,
           tags: normalizedTags,
         );
+        await _dao
+            .into(_dao.attachedDatabase.cardEvents)
+            .insert(
+              CardEventsCompanion.insert(
+                id: IdGenerator.newId(),
+                flashcardId: flashcardId,
+                type: 'edited',
+                occurredAt: nowMs,
+              ),
+            );
         return (await _dao.findFlashcard(flashcardId))!;
       });
 

@@ -81,6 +81,7 @@ class _Fixture {
     String mode = 'review',
     int boxBefore = 1,
     int boxAfter = 2,
+    int? durationMs,
     String sessionStatus = 'completed',
   }) async {
     final String sessionId = 's_$id';
@@ -119,6 +120,7 @@ class _Fixture {
             studyMode: mode,
             boxBefore: Value<int>(boxBefore),
             boxAfter: Value<int>(boxAfter),
+            durationMs: Value<int?>(durationMs),
             attemptedAt: attemptedAtMs,
           ),
         );
@@ -172,8 +174,8 @@ void main() {
       expect(header.accuracy, isNull);
     });
 
-    test('correct streak counts leading non-forgot run; events = total; '
-        'breadcrumb + deck resolved', () async {
+    test('correct streak counts leading non-forgot run; breadcrumb + deck '
+        'resolved', () async {
       await fx.seedCard();
       await fx.seedAttempt(id: 'a1', attemptedAtMs: 1000, result: 'forgot');
       await fx.seedAttempt(id: 'a2', attemptedAtMs: 2000, result: 'perfect');
@@ -183,7 +185,6 @@ void main() {
         flashcardId: 'c1',
       )).valueOrNull!;
       expect(header.correctStreak, 2);
-      expect(header.totalEvents, 3);
       expect(header.deckName, 'N5');
       expect(
         header.breadcrumb.map((FolderBreadcrumbSegment s) => s.name).toList(),
@@ -192,67 +193,51 @@ void main() {
     });
   });
 
-  group('loadAttempts (H1)', () {
-    test('returns attempts newest-first', () async {
+  group('loadTimeline (H1)', () {
+    test('returns attempt events newest-first', () async {
       await fx.seedCard();
       await fx.seedAttempt(id: 'a1', attemptedAtMs: 1000);
       await fx.seedAttempt(id: 'a2', attemptedAtMs: 3000);
       await fx.seedAttempt(id: 'a3', attemptedAtMs: 2000);
 
-      final CardHistoryPage page = (await repo.loadAttempts(
+      final CardHistoryTimeline timeline = (await repo.loadTimeline(
         flashcardId: 'c1',
       )).valueOrNull!;
       expect(
-        page.attempts.map((CardHistoryAttempt a) => a.id).toList(),
+        timeline.events.map((CardHistoryEvent e) => e.id).toList(),
         <String>['a2', 'a3', 'a1'],
       );
-      expect(page.hasMore, isFalse);
+      expect(timeline.reachedBeginning, isTrue);
     });
 
-    test(
-      'cursor pagination yields deterministic, non-overlapping pages',
-      () async {
-        await fx.seedCard();
-        await fx.seedAttempt(id: 'a1', attemptedAtMs: 1000);
-        await fx.seedAttempt(id: 'a2', attemptedAtMs: 2000);
-        await fx.seedAttempt(id: 'a3', attemptedAtMs: 3000);
-
-        final CardHistoryPage first = (await repo.loadAttempts(
-          flashcardId: 'c1',
-          limit: 2,
-        )).valueOrNull!;
-        expect(
-          first.attempts.map((CardHistoryAttempt a) => a.id).toList(),
-          <String>['a3', 'a2'],
-        );
-        expect(first.hasMore, isTrue);
-
-        final CardHistoryPage second = (await repo.loadAttempts(
-          flashcardId: 'c1',
-          before: first.nextCursor,
-          limit: 2,
-        )).valueOrNull!;
-        expect(
-          second.attempts.map((CardHistoryAttempt a) => a.id).toList(),
-          <String>['a1'],
-        );
-        expect(second.hasMore, isFalse);
-      },
-    );
-
-    test('empty when the card has no attempts', () async {
+    test('attempt duration is mapped (incl. null)', () async {
       await fx.seedCard();
-      final CardHistoryPage page = (await repo.loadAttempts(
+      await fx.seedAttempt(id: 'a1', attemptedAtMs: 1000, durationMs: 1400);
+      await fx.seedAttempt(id: 'a2', attemptedAtMs: 2000);
+
+      final CardHistoryTimeline timeline = (await repo.loadTimeline(
         flashcardId: 'c1',
       )).valueOrNull!;
-      expect(page.attempts, isEmpty);
-      expect(page.hasMore, isFalse);
+      final List<CardHistoryAttemptEvent> attempts = timeline.events
+          .whereType<CardHistoryAttemptEvent>()
+          .toList();
+      expect(attempts.firstWhere((a) => a.id == 'a1').durationMs, 1400);
+      expect(attempts.firstWhere((a) => a.id == 'a2').durationMs, isNull);
+    });
+
+    test('empty when the card has no events', () async {
+      await fx.seedCard();
+      final CardHistoryTimeline timeline = (await repo.loadTimeline(
+        flashcardId: 'c1',
+      )).valueOrNull!;
+      expect(timeline.isEmpty, isTrue);
+      expect(timeline.reachedBeginning, isFalse);
     });
   });
 
   group('resetProgress (H3)', () {
-    test('resets box/due/last_reset_at but keeps cumulative counters and '
-        'attempts', () async {
+    test('resets box/due/last_reset_at, keeps counters/attempts, logs a reset '
+        'event', () async {
       await fx.seedCard(boxNumber: 6, reviewCount: 50, lapseCount: 5);
       await fx.seedAttempt(id: 'a1', attemptedAtMs: 1000);
 
@@ -268,10 +253,18 @@ void main() {
       expect(header.dueAt, fixedNow);
       expect(header.lastResetAt, fixedNow);
 
-      final CardHistoryPage page = (await repo.loadAttempts(
+      final CardHistoryTimeline timeline = (await repo.loadTimeline(
         flashcardId: 'c1',
       )).valueOrNull!;
-      expect(page.attempts, hasLength(1));
+      expect(
+        timeline.events.whereType<CardHistoryAttemptEvent>(),
+        hasLength(1),
+      );
+      final List<CardHistoryLifecycleEvent> lifecycle = timeline.events
+          .whereType<CardHistoryLifecycleEvent>()
+          .toList();
+      expect(lifecycle, hasLength(1));
+      expect(lifecycle.single.kind, CardEventKind.reset);
     });
   });
 }

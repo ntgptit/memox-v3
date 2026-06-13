@@ -1014,21 +1014,11 @@
       }
     }
   },
-  "cardHistoryLoadMore": "Tải thêm",
-  "cardHistoryLoadMoreError": "Không tải thêm được · Thử lại",
-  "cardHistoryResetDivider": "Đặt lại tiến độ vào {date}",
-  "@cardHistoryResetDivider": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "cardHistoryEmptyTitle": "Chưa có lịch sử học.",
-  "cardHistoryEmptyMessage": "Bắt đầu một phiên học trên bộ thẻ này để xem tiến độ của thẻ tại đây.",
-  "cardHistoryEmptyAction": "Bắt đầu học",
+  "cardHistoryEmptyTitle": "Chưa có lượt ôn nào",
+  "cardHistoryEmptyMessage": "Lịch sử sẽ xuất hiện ở đây sau khi bạn học thẻ này.",
+  "cardHistoryEmptyAction": "Học thẻ này ngay",
   "cardHistoryErrorTitle": "Không tải được lịch sử",
-  "cardHistoryErrorMessage": "Lịch sử học của bạn vẫn an toàn trên thiết bị này. Vui lòng thử lại sau giây lát.",
+  "cardHistoryErrorMessage": "Dữ liệu của bạn vẫn an toàn trên thiết bị này. Vui lòng thử lại sau giây lát.",
   "cardHistoryNotFoundTitle": "Thẻ không còn tồn tại",
   "cardHistoryNotFoundMessage": "Thẻ này đã bị xóa.",
   "cardHistoryResetAction": "Đặt lại tiến độ",
@@ -1101,5 +1091,35 @@
   "cardHistoryChipForgot": "Quên",
   "cardHistoryDescCorrect": "Trả lời đúng",
   "cardHistoryDescRecovered": "Nhớ lại sau khi nhầm",
-  "cardHistoryDescForgot": "Đã quên"
+  "cardHistoryDescForgot": "Không nhớ ra — đặt lại về hộp 1",
+  "cardHistoryPartialDescription": "Ghi nhận nhưng thiếu chi tiết",
+  "cardHistoryDurationValue": "{seconds}s",
+  "@cardHistoryDurationValue": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryDurationMissing": "không ghi thời lượng",
+  "cardHistoryEventCreatedChip": "Đã tạo",
+  "cardHistoryEventEditedChip": "Đã sửa",
+  "cardHistoryEventAudioChip": "Thêm âm thanh",
+  "cardHistoryEventCreatedDescription": "Đã thêm thẻ vào {deck}",
+  "@cardHistoryEventCreatedDescription": {
+    "placeholders": {
+      "deck": {
+        "type": "String"
+      }
+    }
+  },
+  "cardHistoryEventEditedDescription": "Đã sửa thẻ",
+  "cardHistoryEventAudioDescription": "Đã ghi phát âm",
+  "cardHistoryEventResetChip": "Đặt lại",
+  "cardHistoryEventResetDescription": "Đã đặt lại tiến độ về hộp 1",
+  "cardHistoryBeginning": "Bắt đầu lịch sử",
+  "cardHistoryFilterSheetTitle": "Lọc dòng thời gian",
+  "cardHistoryFilterAll": "Tất cả sự kiện",
+  "cardHistoryFilterReviews": "Chỉ lượt ôn",
+  "cardHistoryFilterLifecycle": "Thay đổi thẻ"
 }

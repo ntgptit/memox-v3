@@ -26,7 +26,6 @@ class CardHistoryHeader {
     required this.reviewCount,
     required this.lapseCount,
     required this.correctStreak,
-    required this.totalEvents,
     required this.createdAt,
     required this.lastResetAt,
   });
@@ -50,9 +49,6 @@ class CardHistoryHeader {
 
   /// Consecutive non-forgot attempts counting back from the most recent.
   final int correctStreak;
-
-  /// Total attempts recorded for the card (timeline event count).
-  final int totalEvents;
   final DateTime createdAt;
   final DateTime? lastResetAt;
 
@@ -64,64 +60,87 @@ class CardHistoryHeader {
       reviewCount > 0 ? (reviewCount - lapseCount) / reviewCount : null;
 }
 
-/// Coarse result category used for timeline chips/descriptions
+/// Coarse result category used for attempt chips/descriptions
 /// (perfect + initial_passed collapse to [correct]).
 enum CardHistoryResultCategory { correct, recovered, forgot }
 
-extension CardHistoryAttemptCategory on CardHistoryAttempt {
+/// Non-attempt lifecycle event kinds shown in the timeline.
+enum CardEventKind { created, edited, audioAdded, reset }
+
+/// One entry in the Card History activity feed — an attempt or a lifecycle
+/// event. Sorted by [occurredAt] (newest first).
+sealed class CardHistoryEvent {
+  const CardHistoryEvent({required this.id, required this.occurredAt});
+
+  final String id;
+  final DateTime occurredAt;
+}
+
+/// A graded study attempt.
+class CardHistoryAttemptEvent extends CardHistoryEvent {
+  const CardHistoryAttemptEvent({
+    required super.id,
+    required super.occurredAt,
+    required this.result,
+    required this.studyMode,
+    required this.boxBefore,
+    required this.boxAfter,
+    required this.durationMs,
+    required this.sessionId,
+    required this.sessionStatus,
+  });
+
+  final AttemptResult result;
+  final StudyMode studyMode;
+
+  /// Leitner box before/after. `0` marks a pre-migration row → the UI omits the
+  /// transition and shows "Logged with missing details".
+  final int boxBefore;
+  final int boxAfter;
+
+  /// Time-on-card in ms, or `null` when not measured → "duration not logged".
+  final int? durationMs;
+  final String sessionId;
+  final SessionStatus sessionStatus;
+
   CardHistoryResultCategory get category => switch (result) {
     AttemptResult.perfect ||
     AttemptResult.initialPassed => CardHistoryResultCategory.correct,
     AttemptResult.recovered => CardHistoryResultCategory.recovered,
     AttemptResult.forgot => CardHistoryResultCategory.forgot,
   };
+
+  /// Whether the box transition is renderable (both sides known).
+  bool get hasBoxTransition => boxBefore != 0 && boxAfter != 0;
+
+  /// True when the row lacks details the timeline normally shows.
+  bool get isPartial => !hasBoxTransition || durationMs == null;
 }
 
-/// One attempt row in the timeline.
-class CardHistoryAttempt {
-  const CardHistoryAttempt({
-    required this.id,
-    required this.result,
-    required this.studyMode,
-    required this.boxBefore,
-    required this.boxAfter,
-    required this.attemptedAt,
-    required this.sessionId,
-    required this.sessionStatus,
+/// A non-attempt lifecycle event (card created / edited / audio added).
+class CardHistoryLifecycleEvent extends CardHistoryEvent {
+  const CardHistoryLifecycleEvent({
+    required super.id,
+    required super.occurredAt,
+    required this.kind,
+    this.detail,
   });
 
-  final String id;
-  final AttemptResult result;
-  final StudyMode studyMode;
-
-  /// Leitner box before/after this attempt. `0` marks a pre-migration row; the
-  /// UI renders `—` instead of "Box 0".
-  final int boxBefore;
-  final int boxAfter;
-  final DateTime attemptedAt;
-  final String sessionId;
-  final SessionStatus sessionStatus;
-
-  /// Whether tapping this row may open its session result screen.
-  bool get isSessionCompleted => sessionStatus == SessionStatus.completed;
+  final CardEventKind kind;
+  final String? detail;
 }
 
-/// Opaque cursor for the next timeline page — the last loaded row's
-/// `(attemptedAt, id)`. Cursor pagination only; never offset.
-class CardHistoryCursor {
-  const CardHistoryCursor({required this.attemptedAt, required this.id});
+/// The full per-card activity feed (attempts + lifecycle), newest first, plus a
+/// flag for the "Beginning of history" terminal marker.
+class CardHistoryTimeline {
+  const CardHistoryTimeline({required this.events});
 
-  final DateTime attemptedAt;
-  final String id;
-}
+  final List<CardHistoryEvent> events;
 
-/// One page of timeline attempts plus the cursor for the next page
-/// (`null` when this is the last page).
-class CardHistoryPage {
-  const CardHistoryPage({required this.attempts, required this.nextCursor});
+  bool get isEmpty => events.isEmpty;
+  int get eventCount => events.length;
 
-  final List<CardHistoryAttempt> attempts;
-  final CardHistoryCursor? nextCursor;
-
-  bool get hasMore => nextCursor != null;
+  /// The feed is always fully loaded, so a non-empty feed always shows the
+  /// "Beginning of history" terminal marker.
+  bool get reachedBeginning => events.isNotEmpty;
 }

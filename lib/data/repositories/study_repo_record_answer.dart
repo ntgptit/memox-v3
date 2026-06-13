@@ -18,6 +18,7 @@ Future<Result<void>> recordStudySessionAnswerTransaction({
   required AttemptResult result,
   required StudyMode studyMode,
   required int nowMs,
+  int? durationMs,
 }) async {
   try {
     await dao.transaction(() async {
@@ -71,6 +72,7 @@ Future<Result<void>> recordStudySessionAnswerTransaction({
           studyMode: StudyMapper.studyModeToStorage(studyMode),
           boxBefore: Value<int>(boxBefore),
           boxAfter: Value<int>(boxAfter),
+          durationMs: Value<int?>(durationMs),
           attemptedAt: nowMs,
         ),
       );

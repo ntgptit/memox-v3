@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-13
 applies_to: Drift schema, all tables, migrations
-schema_version: 6 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 7 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract
@@ -13,7 +13,7 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **6**. Tables shipped
+**Current schema** (`AppDatabase.currentSchemaVersion`): **7**. Tables shipped
 so far (added for the Library + Study features):
 
 | Table                | Columns (current)                                                                                                                                                                                     |
@@ -25,7 +25,8 @@ so far (added for the Library + Study features):
 | `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number`, `due_at?`, `buried_until?`, `is_suspended`, `review_count`, `lapse_count`, `last_studied_at?`, `last_reset_at?` + index `idx_flashcard_progress_eligibility` |
 | `study_sessions`     | `id` (PK), `entry_type`, `entry_ref_id?`, `study_type`, `status`, `started_at`, `updated_at` + index `idx_study_sessions_resumable`                                                                |
 | `study_session_items` | `id` (PK), `session_id` (FK→study_sessions, cascade), `flashcard_id` (FK→flashcards, cascade), `sort_order`, `answered_at?`, `created_at`, `updated_at` + index `idx_study_session_items_session_sort` |
-| `study_attempts`     | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before`, `box_after`, `user_input?`, `attempted_at` + index `idx_study_attempts_session_item`           |
+| `study_attempts`     | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before`, `box_after`, `user_input?`, `duration_ms?`, `attempted_at` + index `idx_study_attempts_session_item`           |
+| `card_events`        | `id` (PK), `flashcard_id` (FK→flashcards, cascade), `type` (`created`/`edited`/`audio_added`/`reset`), `occurred_at`, `detail?` + index `idx_card_events_flashcard` (Card History activity feed)           |
 | `study_match_evaluations` | `id` (PK), `session_id` (FK→study_sessions, cascade), `session_item_id` (FK→study_session_items, cascade), `flashcard_id` (FK→flashcards, cascade), `board_index`, `pair_id`, `selected_front_cell_id`, `selected_back_cell_id`, `expected_front_flashcard_id`, `expected_back_flashcard_id`, `is_correct`, `attempt_order`, `evaluated_at`, `created_at` + indexes `idx_study_match_evaluations_session`, `idx_study_match_evaluations_session_item` |
 
 Remaining target tables (`tts_settings`) land with their
@@ -147,6 +148,8 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 | ✅ DONE (v4) `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`                      | `docs/business/history/card-history.md`                                       | Shipped with the v4 study tables; populated on every attempt insert. Default 0 = "unknown"; history view displays "—" for 0.                                                                                                                                                                                          |
 | ✅ DONE (v4) `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`                       | `docs/business/history/card-history.md`                                       | Same semantics as `box_before`.                                                                                                                                                                                                                                                                                       |
 | ✅ DONE (v5) `study_match_evaluations` append-only Match evaluation table                 | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. |
+| ✅ DONE (v7) `study_attempts.duration_ms INTEGER NULL`                                    | `docs/business/history/card-history.md`                                       | Time-on-card in ms, measured by the study review viewmodel. NULL = not measured → Card History shows "duration not logged".                                                                                                                                                                                            |
+| ✅ DONE (v7) `card_events` lifecycle table + `idx_card_events_flashcard`                  | `docs/business/history/card-history.md`                                       | Per-card created/edited/audio/reset events for the Card History activity feed (merged with `study_attempts` in the timeline). `created`/`edited` logged on flashcard create/update; `reset` on progress reset; `audio_added` reserved (no audio feature yet).                                                            |
 | ✅ DONE (current) compound index `flashcard_progress(is_suspended, buried_until, due_at)` | `docs/business/study-actions/bury-suspend.md`                                 | Added as `idx_flashcard_progress_eligibility`.                                                                                                                                                                                                                                                                        |
 | ✅ DONE (v3) index `flashcard_tags(tag)`                                                 | `docs/business/tags/tag-system.md`                                            | Added as `idx_flashcard_tags_tag` with the v3 tags migration. Tags are stored lowercased, so a plain index on `tag` supports lowercased-input lookups.                                                                                                                                                                |
 | ✅ DONE (v3) lowercase `flashcard_tags.tag` storage                                      | `docs/business/tags/tag-system.md`                                            | Tags are stored lowercased (case-insensitive identity); the validator + DAO normalize on insert. (The "schema v11 backfill" in earlier revisions belongs to a previous project iteration — this repo's tags shipped lowercased from v3.)                                                                              |

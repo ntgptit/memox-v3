@@ -3,6 +3,7 @@ import 'flashcard_progress.drift';
 import 'study_attempts.drift';
 import 'study_session_items.drift';
 import 'study_sessions.drift';
+import 'card_events.drift';
 
 -- Card History header: card preview + current SRS state + lifetime counters +
 -- last reset marker. `flashcard_progress` is LEFT JOIN'd so a never-studied card
@@ -27,15 +28,40 @@ LEFT JOIN flashcard_progress
   ON flashcard_progress.flashcard_id = flashcards.id
 WHERE flashcards.id = :flashcard_id;
 
--- Total attempts recorded for a card (timeline "N EVENTS" count).
-cardHistoryEventCount(:flashcard_id AS TEXT):
-SELECT COUNT(*) AS event_count
+-- All attempts for a card, newest first, for the unified activity feed (merged
+-- with `card_events` in Dart). Per-card scale is small, so the feed loads fully
+-- and terminates with a "Beginning of history" marker — no offset pagination.
+cardHistoryAttempts(:flashcard_id AS TEXT):
+SELECT
+  study_attempts.id,
+  study_attempts.result,
+  study_attempts.study_mode,
+  study_attempts.box_before,
+  study_attempts.box_after,
+  study_attempts.duration_ms,
+  study_attempts.attempted_at,
+  study_session_items.session_id,
+  study_sessions.status AS session_status
 FROM study_attempts
 INNER JOIN study_session_items
   ON study_session_items.id = study_attempts.session_item_id
-WHERE study_session_items.flashcard_id = :flashcard_id;
+INNER JOIN study_sessions
+  ON study_sessions.id = study_session_items.session_id
+WHERE study_session_items.flashcard_id = :flashcard_id
+ORDER BY study_attempts.attempted_at DESC, study_attempts.id DESC;
 
--- All attempt results newest-first, for the "correct streak" computation
+-- All lifecycle events for a card (created / edited / audio added), newest first.
+cardHistoryCardEvents(:flashcard_id AS TEXT):
+SELECT
+  card_events.id,
+  card_events.type,
+  card_events.occurred_at,
+  card_events.detail
+FROM card_events
+WHERE card_events.flashcard_id = :flashcard_id
+ORDER BY card_events.occurred_at DESC, card_events.id DESC;
+
+-- Attempt results newest-first, for the "correct streak" computation
 -- (leading run of non-`forgot` results). Read-only; counters are not scanned.
 cardHistoryResultsDesc(:flashcard_id AS TEXT):
 SELECT study_attempts.result
@@ -44,58 +70,3 @@ INNER JOIN study_session_items
   ON study_session_items.id = study_attempts.session_item_id
 WHERE study_session_items.flashcard_id = :flashcard_id
 ORDER BY study_attempts.attempted_at DESC, study_attempts.id DESC;
-
--- First page of a card's attempt timeline, newest first. Cursor pagination
--- (NOT offset): callers fetch the next page with `cardHistoryNextPage` using the
--- last row's (attempted_at, id) as the cursor. Ordering tiebreaks on id so a
--- cursor never skips or repeats rows that share an `attempted_at`.
-cardHistoryFirstPage(:flashcard_id AS TEXT, :page_limit AS INT):
-SELECT
-  study_attempts.id,
-  study_attempts.result,
-  study_attempts.study_mode,
-  study_attempts.box_before,
-  study_attempts.box_after,
-  study_attempts.attempted_at,
-  study_session_items.session_id,
-  study_sessions.status AS session_status
-FROM study_attempts
-INNER JOIN study_session_items
-  ON study_session_items.id = study_attempts.session_item_id
-INNER JOIN study_sessions
-  ON study_sessions.id = study_session_items.session_id
-WHERE study_session_items.flashcard_id = :flashcard_id
-ORDER BY study_attempts.attempted_at DESC, study_attempts.id DESC
-LIMIT :page_limit;
-
--- Next page after the (`before_attempted_at`, `before_id`) cursor.
-cardHistoryNextPage(
-  :flashcard_id AS TEXT,
-  :before_attempted_at AS INT,
-  :before_id AS TEXT,
-  :page_limit AS INT
-):
-SELECT
-  study_attempts.id,
-  study_attempts.result,
-  study_attempts.study_mode,
-  study_attempts.box_before,
-  study_attempts.box_after,
-  study_attempts.attempted_at,
-  study_session_items.session_id,
-  study_sessions.status AS session_status
-FROM study_attempts
-INNER JOIN study_session_items
-  ON study_session_items.id = study_attempts.session_item_id
-INNER JOIN study_sessions
-  ON study_sessions.id = study_session_items.session_id
-WHERE study_session_items.flashcard_id = :flashcard_id
-  AND (
-    study_attempts.attempted_at < :before_attempted_at
-    OR (
-      study_attempts.attempted_at = :before_attempted_at
-      AND study_attempts.id < :before_id
-    )
-  )
-ORDER BY study_attempts.attempted_at DESC, study_attempts.id DESC
-LIMIT :page_limit;

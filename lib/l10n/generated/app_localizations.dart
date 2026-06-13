@@ -3266,40 +3266,22 @@ abstract class AppLocalizations {
   /// **'Mode: {mode, select, review{Review} match{Match} guess{Guess} recall{Recall} fill{Fill} other{Study}}'**
   String cardHistoryModeLabel(String mode);
 
-  /// No description provided for @cardHistoryLoadMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Load more'**
-  String get cardHistoryLoadMore;
-
-  /// No description provided for @cardHistoryLoadMoreError.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t load more · Retry'**
-  String get cardHistoryLoadMoreError;
-
-  /// No description provided for @cardHistoryResetDivider.
-  ///
-  /// In en, this message translates to:
-  /// **'Progress reset on {date}'**
-  String cardHistoryResetDivider(String date);
-
   /// No description provided for @cardHistoryEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'No study history yet.'**
+  /// **'No reviews yet'**
   String get cardHistoryEmptyTitle;
 
   /// No description provided for @cardHistoryEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Start a study session on this deck to see this card\'s progress here.'**
+  /// **'History appears here after you study this card.'**
   String get cardHistoryEmptyMessage;
 
   /// No description provided for @cardHistoryEmptyAction.
   ///
   /// In en, this message translates to:
-  /// **'Start study'**
+  /// **'Study this card now'**
   String get cardHistoryEmptyAction;
 
   /// No description provided for @cardHistoryErrorTitle.
@@ -3311,7 +3293,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardHistoryErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your study history is safe on this device. Try again in a moment.'**
+  /// **'Your data is safe on this device. Try again in a moment.'**
   String get cardHistoryErrorMessage;
 
   /// No description provided for @cardHistoryNotFoundTitle.
@@ -3479,8 +3461,104 @@ abstract class AppLocalizations {
   /// No description provided for @cardHistoryDescForgot.
   ///
   /// In en, this message translates to:
-  /// **'Forgot it'**
+  /// **'Couldn’t recall — reset to box 1'**
   String get cardHistoryDescForgot;
+
+  /// No description provided for @cardHistoryPartialDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged with missing details'**
+  String get cardHistoryPartialDescription;
+
+  /// No description provided for @cardHistoryDurationValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String cardHistoryDurationValue(String seconds);
+
+  /// No description provided for @cardHistoryDurationMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'duration not logged'**
+  String get cardHistoryDurationMissing;
+
+  /// No description provided for @cardHistoryEventCreatedChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get cardHistoryEventCreatedChip;
+
+  /// No description provided for @cardHistoryEventEditedChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Edited'**
+  String get cardHistoryEventEditedChip;
+
+  /// No description provided for @cardHistoryEventAudioChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio added'**
+  String get cardHistoryEventAudioChip;
+
+  /// No description provided for @cardHistoryEventCreatedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Card added to {deck}'**
+  String cardHistoryEventCreatedDescription(String deck);
+
+  /// No description provided for @cardHistoryEventEditedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Card edited'**
+  String get cardHistoryEventEditedDescription;
+
+  /// No description provided for @cardHistoryEventAudioDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronunciation recorded'**
+  String get cardHistoryEventAudioDescription;
+
+  /// No description provided for @cardHistoryEventResetChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get cardHistoryEventResetChip;
+
+  /// No description provided for @cardHistoryEventResetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress reset to box 1'**
+  String get cardHistoryEventResetDescription;
+
+  /// No description provided for @cardHistoryBeginning.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginning of history'**
+  String get cardHistoryBeginning;
+
+  /// No description provided for @cardHistoryFilterSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter timeline'**
+  String get cardHistoryFilterSheetTitle;
+
+  /// No description provided for @cardHistoryFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All events'**
+  String get cardHistoryFilterAll;
+
+  /// No description provided for @cardHistoryFilterReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews only'**
+  String get cardHistoryFilterReviews;
+
+  /// No description provided for @cardHistoryFilterLifecycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card changes'**
+  String get cardHistoryFilterLifecycle;
 }
 
 class _AppLocalizationsDelegate

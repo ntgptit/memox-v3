@@ -107,11 +107,13 @@ class RecordStudySessionAnswerUseCase {
     required String sessionItemId,
     required AttemptResult result,
     required StudyMode studyMode,
+    int? durationMs,
   }) => _repository.recordStudySessionAnswer(
     sessionId: sessionId,
     sessionItemId: sessionItemId,
     result: result,
     studyMode: studyMode,
+    durationMs: durationMs,
   );
 }
 

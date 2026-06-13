@@ -10,7 +10,7 @@ related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Reject
 > **Status: Implemented (V1, promoted 2026-06-13).** Per-card history is live: route
 > `/library/deck/:deckId/flashcards/:flashcardId/history`, entered from the flashcard row-action
 > sheet ("View history"). `flashcard_progress.last_reset_at` shipped with schema v6; the timeline,
-> lifetime stats, reset progress + reset divider are all implemented.
+> lifetime stats, and the activity feed (attempts + created/edited/reset events) are all implemented.
 >
 > **Data dependencies:** `study_attempts.box_before` / `box_after` (v4) and
 > `flashcard_progress.last_reset_at` (v6) all exist and are populated. Suspend/unsuspend from the
@@ -21,11 +21,20 @@ related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Reject
 
 Card History is **Implemented** for V1. The screen renders (top → bottom): a breadcrumb, a header
 card (front/back + `Box n/8` chip + reset sub-label), a **CURRENT PROGRESS** card (Leitner box
-stepper + a 6-stat grid: Due, Reviews, Recall rate, Lapses, Correct streak, Since added), and the
-attempt **timeline** on a left rail. The app bar exposes an **Edit** pill; the overflow exposes
-Reset progress / Delete. Suspend/unsuspend is deferred to the Bury/Suspend feature. Timeline
-row tap → session result is deferred (rows are read-only display in V1). Per-attempt **duration** is
-not shown — `study_attempts` has no duration column (gap; would require a migration).
+stepper + a 6-stat grid: Due, Reviews, Recall rate, Lapses, Correct streak, Since added), and a
+unified **activity feed** on a left rail terminating in a "Beginning of history" marker. The feed
+merges study attempts with card lifecycle events (created / edited / reset), newest first, with an
+"All events" filter (All / Reviews only / Card changes). The app bar exposes an **Edit** pill; the
+overflow exposes Reset progress / Delete.
+
+- Per-attempt **duration** (`study_attempts.duration_ms`, v7) is measured by the study review
+  viewmodel and shown per row; rows without a measured duration show "duration not logged".
+- **Reset** appears as a lifecycle event in the feed (not a divider); the header keeps the
+  "Includes attempts before last reset" sub-label.
+- **Suspend/unsuspend** is deferred to the Bury/Suspend feature; timeline row tap → session result
+  is deferred (rows are read-only).
+- **Audio added** is a defined lifecycle kind but not emitted yet — there is no audio-capture
+  feature; it will appear once audio recording ships.
 
 ## Purpose
 
@@ -35,18 +44,30 @@ no UI surface to inspect it. This doc specs the per-card history view.
 
 ## Data source
 
-`study_attempts` (existing table, see `docs/database/schema-contract.md`).
+The activity feed merges two sources (see `docs/database/schema-contract.md`):
 
-Per-card query:
+- `study_attempts` — graded attempts (incl. `box_before`/`box_after`, `duration_ms`).
+- `card_events` (v7) — lifecycle events (`created` / `edited` / `reset` / `audio_added`).
+
+Both are loaded fully per card (per-card scale is small — no offset pagination), mapped to a
+`CardHistoryEvent` union, and merged by `occurred_at` DESC (tiebreak id DESC) in Dart:
 
 ```sql
-SELECT a.* FROM study_attempts a
+-- attempts
+SELECT a.id, a.result, a.study_mode, a.box_before, a.box_after, a.duration_ms,
+       a.attempted_at, i.session_id, s.status
+FROM study_attempts a
 INNER JOIN study_session_items i ON a.session_item_id = i.id
+INNER JOIN study_sessions s ON s.id = i.session_id
 WHERE i.flashcard_id = :flashcardId
-ORDER BY a.attempted_at DESC;
-```
+ORDER BY a.attempted_at DESC, a.id DESC;
 
-No new table required.
+-- lifecycle events
+SELECT e.id, e.type, e.occurred_at, e.detail
+FROM card_events e
+WHERE e.flashcard_id = :flashcardId
+ORDER BY e.occurred_at DESC, e.id DESC;
+```
 
 ## Future surfaces
 
@@ -75,23 +96,26 @@ Route: suggested `/library/deck/:deckId/flashcards/:flashcardId/history` (verify
 
 Accuracy = `(reviewCount - lapseCount) / reviewCount` when `reviewCount > 0`, else "—".
 
-### Timeline section
+### Timeline section (activity feed)
 
-Chronological list (newest first) of attempts:
+Chronological list (newest first), terminating in a "Beginning of history" marker. Two row types:
+
+**Attempt row:**
 
 | Column         | Source                                                                                    |
 |----------------|-------------------------------------------------------------------------------------------|
-| Date/time      | `attempted_at` (formatted as relative or absolute toggle)                                 |
-| Result         | `result` value with visual indicator (✓ perfect, ✓ initial_passed, ⚠ recovered, ✗ forgot) |
-| Mode           | `study_mode` used at the time (review/match/guess/recall/fill)                            |
-| Box transition | "Box {box_before} → {box_after}" from `study_attempts.box_before` / `box_after` columns   |
-| Session link   | Tap → opens session result screen (if session is `completed`)                             |
+| Date/time      | `attempted_at` — relative ("2h ago") + absolute ("May 26, 14:32")                         |
+| Status chip    | category from `result`: CORRECT (perfect/initial_passed), RECOVERED, FORGOT               |
+| Description    | "Answered correctly" / "Got it back after a slip" / "Couldn’t recall — reset to box 1"; "Logged with missing details" for pre-migration rows |
+| Box transition | `B{box_before} → B{box_after}` (arrow flips left when the box decreased); omitted when either is 0 |
+| Mode           | `study_mode` (review/match/guess/recall/fill)                                              |
+| Duration       | `duration_ms` as "1.4s"; "duration not logged" when null                                  |
 
-Pagination: 50 attempts per page; infinite scroll. Cards rarely have more than 50 attempts but heavy
-users may.
+**Lifecycle row** (`card_events`): chip + description — Created ("Card added to {deck}", mastery
+accent), Edited ("Card edited"), Reset ("Progress reset to box 1"), Audio added (reserved).
 
-Divider rows are inserted at positions matching `last_reset_at` timestamp (see "Progress reset
-divider" below).
+No pagination: the feed loads fully (per-card scale) and ends with "Beginning of history".
+The "All events" filter narrows the feed to All / Reviews only / Card changes.
 
 ### Visualizations (optional, lightweight)
 
@@ -108,7 +132,7 @@ the minimum value.
 | Action              | Behavior                                                                        |
 |---------------------|---------------------------------------------------------------------------------|
 | Edit card           | Opens flashcard edit screen                                                     |
-| Suspend / unsuspend | Toggles `is_suspended` (see `docs/business/study-actions/bury-suspend.md`)      |
+| Suspend / unsuspend | Deferred to Bury/Suspend (`docs/business/study-actions/bury-suspend.md`); not in the V1 overflow |
 | Reset progress      | Confirmation → reset SRS scheduling (box=1, due=now, unburied) + `last_reset_at=now`. Lifetime counters and attempts are retained (cumulative). |
 | Delete card         | Confirmation → delete cascade                                                   |
 
@@ -125,44 +149,18 @@ clarify "Attempts history is kept; only SRS state is reset."
 - Lifetime stats come from `flashcard_progress` (current view) plus `study_attempts` (historical),
   not recomputed across all attempts every load.
 - Reset progress MUST NOT delete attempts.
-- Reset progress MUST insert a synthetic divider row OR be reconstructible from `flashcard_progress`
-  history; see "Progress reset divider" below.
+- Reset progress inserts a `card_events` row of type `reset` (it appears as a lifecycle event in the
+  feed) and stamps `flashcard_progress.last_reset_at = now`.
 - History view is account-scoped (current active account database only).
-- A card with zero attempts shows "No study history yet" empty state and links to "Start study" on
-  the deck.
+- A card with zero events shows the "No reviews yet" empty state and links to "Study this card now".
 
-## Progress reset divider
+## Progress reset event
 
-When the user (or a bulk operation) resets a card's SRS progress, the history timeline MUST show a
-visual divider so the user can distinguish post-reset attempts from prior history.
-
-### Implementation
-
-Store reset events on `flashcard_progress` history or on a dedicated table — either approach works.
-Recommended: add a lightweight log table `flashcard_progress_resets` with `(flashcard_id, reset_at)`
-rows. Each row produces one divider.
-
-Alternative (lower complexity): persist a single `last_reset_at INTEGER NULL` field on
-`flashcard_progress`. Drawback: only the most recent reset is shown. Acceptable for personal-use
-scale.
-
-This doc recommends the `last_reset_at` field; revisit if multiple resets per card become common.
-
-### Timeline rendering
-
-Timeline (newest first) intersperses divider rows where applicable:
-
-```
-[Today 14:30] result=perfect    Box 4 → 5
-[Today 14:20] result=forgot     Box 5 → 1
-[Today 14:18] result=forgot     Box 5 → 1
-—— Progress reset on 2026-04-12 ——
-[2026-03-21 09:10] result=perfect Box 5 → 5 (max)
-[2026-03-15 09:05] result=perfect Box 4 → 5
-...
-```
-
-Divider is non-interactive. Tap is a no-op.
+When the user resets a card's SRS progress, a `card_events` row of type `reset` is appended to the
+timeline (rendered as a lifecycle event, "Progress reset to box 1") and `last_reset_at` is stamped.
+Earlier designs used a synthetic divider row; the activity feed supersedes that — reset is a
+first-class event. `last_reset_at` still drives the header sub-label ("Includes attempts before last
+reset on {date}").
 
 ### Lifetime stats clarification
 
@@ -177,13 +175,13 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
 
 | Case                                                            | Behavior                                                                                                              |
 |-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| Card has thousands of attempts                                  | Paginate; do not load all into memory                                                                                 |
+| Card has many events                                            | Per-card scale is small; the feed loads fully (no pagination) and ends with "Beginning of history" |
 | Card was deleted then recreated                                 | Different `flashcard.id`; history is per-id, so this is a fresh card                                                  |
 | Card moved via deck change                                      | Attempts retained; history persists across deck changes (per-card not per-deck)                                       |
-| Session was `cancelled` mid-card                                | Attempts within that session still appear with cancelled-session label                                                |
-| Card reset multiple times (with `last_reset_at` field approach) | Only the most recent reset divider is shown. Acceptable trade-off; revisit if needed.                                 |
-| Reset progress then immediately study                           | Header shows `box=1, due=now`; lifetime stats still cumulative; divider sits at top of history below the new attempts |
-| Reset on a card with zero attempts                              | `last_reset_at` set but timeline still empty state. Divider not rendered when no attempts above it.                   |
+| Session was `cancelled` mid-card                                | Attempts within that session still appear                                                                             |
+| Card reset multiple times                                       | Each reset is its own `card_events` row in the feed; `last_reset_at` keeps the most recent for the header sub-label   |
+| Reset progress then immediately study                           | Header shows `box=1, due=now`; lifetime stats stay cumulative; the reset event sits below the new attempts            |
+| Reset on a card with zero attempts                              | A `reset` event still appears in the feed; the header sub-label shows once `last_reset_at` is set                     |
 | Stats lookup when `last_reset_at != null`                       | Header sub-label visible: "Includes attempts before last reset on {date}."                                            |
 
 ## Performance
@@ -207,19 +205,21 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
   `lib/presentation/features/history/**`, `lib/domain/usecases/history/**`,
   `lib/data/repositories/card_history_repository_impl.dart`, and the wireframe on any change.
 - Do NOT delete from `study_attempts` for any reason except cascade from session/item deletion.
-- "Reset progress" only touches `flashcard_progress`, not `study_attempts`. It MUST also update
-  `last_reset_at` so the timeline can render the divider.
-- `study_attempts.box_before` and `box_after` are required for every new attempt insert. Backfill on
-  migration: see `docs/database/schema-contract.md`.
-- History is per-card. Do not create a parallel "session history" surface in this doc.
-- Divider row is purely a UI affordance. Do not persist divider rows in `study_attempts`.
+- "Reset progress" updates `flashcard_progress` (box=1/due=now/`last_reset_at`) and appends a
+  `card_events` `reset` row. It does not touch `study_attempts`.
+- `study_attempts.box_before` and `box_after` are populated on every new attempt insert; pre-migration
+  rows (0) render "Logged with missing details".
+- `study_attempts.duration_ms` is populated when measured; null rows render "duration not logged".
+- `card_events` is append-only. `created`/`edited` are logged in the flashcard create/update
+  transactions; `reset` on progress reset; `audio_added` is reserved (no emitter yet).
+- History is per-card. The feed merges attempts + lifecycle events; do not add a separate
+  "session history" surface.
 
 ## Related
 
 **Wireframes:**
 
-- `docs/wireframes/09-flashcard-history.md` — full timeline screen with divider row and lifetime
-  stats
+- `docs/wireframes/09-flashcard-history.md` — full activity-feed screen + lifetime stats
 - `docs/wireframes/08-flashcard-edit.md` — V1 editor explicitly does not expose a live "View
   history" action
 - `docs/wireframes/24-shared-dialogs.md` §reset-progress (single + bulk variants)
@@ -233,7 +233,7 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows H1-H8 (history rendering, divider rules,
+- `docs/decision-tables/memox-core-decision-table.md` rows H1-H8 (feed rendering, reset event,
   pre-migration row handling)
 
 **Glossary terms:**
