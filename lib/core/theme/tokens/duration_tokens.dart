@@ -30,6 +30,10 @@ abstract final class DurationTokens {
   /// Guess-mode answer reveal before auto-advance on a wrong tap.
   static const Duration guessWrongCountdown = Duration(milliseconds: 1500);
 
+  /// Recall-mode answer reveal timeout before auto-reveal.
+  static const int recallAnswerTimeoutSeconds = 20;
+  static const Duration recallAnswerTimeout = Duration(seconds: 20);
+
   /// Stat count-up.
   static const Duration countUp = Duration(milliseconds: 400);
 

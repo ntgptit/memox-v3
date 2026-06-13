@@ -1008,6 +1008,23 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionSwipeHint => 'Vuốt sang trái để sang thẻ tiếp theo';
 
   @override
+  String get studySessionRecallModeLabel => 'RECALL';
+
+  @override
+  String studySessionRecallShowAnswerAction(int seconds) {
+    return 'Hiện đáp án · ${seconds}s';
+  }
+
+  @override
+  String get studySessionRecallTimeoutCaption => 'Hết giờ - tự chấm điểm';
+
+  @override
+  String get studySessionEditCardAction => 'Chỉnh sửa thẻ này';
+
+  @override
+  String get studySessionSpeakFrontAction => 'Nghe mặt trước';
+
+  @override
   String get studySessionBuryUntilTomorrowAction => 'Ẩn đến ngày mai';
 
   @override

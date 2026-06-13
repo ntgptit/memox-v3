@@ -23,6 +23,17 @@ void showMxSnackbar(
   );
 }
 
+/// Variant for callers that already captured a messenger and color scheme
+/// before an async gap.
+void showMxSnackbarWithScheme(
+  ScaffoldMessengerState messenger,
+  ColorScheme scheme, {
+  required String message,
+  bool isError = false,
+}) {
+  _presentWithScheme(messenger, scheme, message: message, isError: isError);
+}
+
 /// Variant for app-wide callers that already hold the [ScaffoldMessengerState]
 /// (e.g. the global provider observer via `appMessengerKey`). Avoids the
 /// ancestor lookup `ScaffoldMessenger.of` does, which fails when invoked from
@@ -43,6 +54,40 @@ void _present(
   required bool isError,
 }) {
   final ColorScheme scheme = context.colorScheme;
+  final TextStyle messageStyle = TextStyle(color: scheme.onSurface);
+  final Widget content = isError
+      ? Row(
+          children: <Widget>[
+            ExcludeSemantics(
+              child: Icon(
+                Icons.error_outline,
+                size: SizeTokens.iconXs,
+                color: scheme.error,
+              ),
+            ),
+            const SizedBox(width: SpacingTokens.sm),
+            Expanded(child: Text(message, style: messageStyle)),
+          ],
+        )
+      : Text(message, style: messageStyle);
+
+  messenger
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: content,
+        backgroundColor: scheme.surfaceContainerHighest,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+}
+
+void _presentWithScheme(
+  ScaffoldMessengerState messenger,
+  ColorScheme scheme, {
+  required String message,
+  required bool isError,
+}) {
   final TextStyle messageStyle = TextStyle(color: scheme.onSurface);
   final Widget content = isError
       ? Row(

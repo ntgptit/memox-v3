@@ -10,14 +10,12 @@ source_specs:
 
 # 16 — Study Session: Recall Mode
 
-> **Drift correction (2026-06-10):** this mode is **Implemented as the V1 flip-card self-grade shell** (reveal + Forgot/Got it) in the current codebase. V1 implements
-> only the recall self-grade flow through the shared shell
-> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
-> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
-> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
-> **target structure** from a previous iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Implementation note (2026-06-14):** recall V1 is now implemented as a dedicated timed
+> reveal/self-grade shell in
+> `lib/presentation/features/study/widgets/study_session_recall_mode_view.dart` with state in
+> `lib/presentation/features/study/viewmodels/study_session_recall_viewmodel.dart`, wired from
+> `lib/presentation/features/study/screens/study_session_screen.dart` for `StudyMode.recall` and
+> the null-mode fallback. The layout below remains the contract for the screen.
 
 ## Purpose
 

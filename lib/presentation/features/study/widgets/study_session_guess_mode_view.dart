@@ -641,7 +641,9 @@ Future<void> _openCardActions(
 
   switch (action) {
     case MxStudySessionCardAction.edit:
-      context.pushFlashcardEdit(option.flashcard.deckId, option.flashcard.id);
+      unawaited(
+        context.pushFlashcardEdit(option.flashcard.deckId, option.flashcard.id),
+      );
       return;
     case MxStudySessionCardAction.buryUntilTomorrow:
       await _applyCardAction(

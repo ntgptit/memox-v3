@@ -1830,6 +1830,36 @@ abstract class AppLocalizations {
   /// **'Swipe left for the next card'**
   String get studySessionSwipeHint;
 
+  /// No description provided for @studySessionRecallModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'RECALL'**
+  String get studySessionRecallModeLabel;
+
+  /// No description provided for @studySessionRecallShowAnswerAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Show answer · {seconds}s'**
+  String studySessionRecallShowAnswerAction(int seconds);
+
+  /// No description provided for @studySessionRecallTimeoutCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s up — grade yourself'**
+  String get studySessionRecallTimeoutCaption;
+
+  /// No description provided for @studySessionEditCardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit this card'**
+  String get studySessionEditCardAction;
+
+  /// No description provided for @studySessionSpeakFrontAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak front'**
+  String get studySessionSpeakFrontAction;
+
   /// No description provided for @studySessionBuryUntilTomorrowAction.
   ///
   /// In en, this message translates to:

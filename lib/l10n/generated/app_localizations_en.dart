@@ -1020,6 +1020,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionSwipeHint => 'Swipe left for the next card';
 
   @override
+  String get studySessionRecallModeLabel => 'RECALL';
+
+  @override
+  String studySessionRecallShowAnswerAction(int seconds) {
+    return 'Show answer · ${seconds}s';
+  }
+
+  @override
+  String get studySessionRecallTimeoutCaption => 'Time\'s up — grade yourself';
+
+  @override
+  String get studySessionEditCardAction => 'Edit this card';
+
+  @override
+  String get studySessionSpeakFrontAction => 'Speak front';
+
+  @override
   String get studySessionBuryUntilTomorrowAction => 'Bury until tomorrow';
 
   @override

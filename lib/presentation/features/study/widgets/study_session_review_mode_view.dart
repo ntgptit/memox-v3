@@ -80,9 +80,11 @@ class StudySessionReviewModeView extends ConsumerWidget {
 
             switch (action) {
               case MxStudySessionCardAction.edit:
-                context.pushFlashcardEdit(
-                  item.flashcard.deckId,
-                  item.flashcard.id,
+                unawaited(
+                  context.pushFlashcardEdit(
+                    item.flashcard.deckId,
+                    item.flashcard.id,
+                  ),
                 );
                 return;
               case MxStudySessionCardAction.buryUntilTomorrow:

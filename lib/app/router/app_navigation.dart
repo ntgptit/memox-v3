@@ -50,13 +50,14 @@ extension AppNavigation on BuildContext {
 
   /// Open the flashcard editor:
   /// `/library/deck/:deckId/flashcards/:flashcardId/edit`.
-  void pushFlashcardEdit(String deckId, String flashcardId) => pushNamed(
-    RouteNames.flashcardEdit,
-    pathParameters: <String, String>{
-      RoutePaths.deckIdParam: deckId,
-      RoutePaths.flashcardIdParam: flashcardId,
-    },
-  );
+  Future<Object?> pushFlashcardEdit(String deckId, String flashcardId) =>
+      pushNamed(
+        RouteNames.flashcardEdit,
+        pathParameters: <String, String>{
+          RoutePaths.deckIdParam: deckId,
+          RoutePaths.flashcardIdParam: flashcardId,
+        },
+      );
 
   /// Open a card's review history:
   /// `/library/deck/:deckId/flashcards/:flashcardId/history`.

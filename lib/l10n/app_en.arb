@@ -487,6 +487,18 @@
   "studySessionBackLabel": "Back",
   "studySessionMeaningLabel": "Meaning",
   "studySessionSwipeHint": "Swipe left for the next card",
+  "studySessionRecallModeLabel": "RECALL",
+  "studySessionRecallShowAnswerAction": "Show answer · {seconds}s",
+  "@studySessionRecallShowAnswerAction": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionRecallTimeoutCaption": "Time's up — grade yourself",
+  "studySessionEditCardAction": "Edit this card",
+  "studySessionSpeakFrontAction": "Speak front",
   "studySessionBuryUntilTomorrowAction": "Bury until tomorrow",
   "studySessionSuspendAction": "Suspend card",
   "studySessionBurySuccessMessage": "Card buried until tomorrow.",

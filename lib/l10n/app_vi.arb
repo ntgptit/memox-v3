@@ -487,6 +487,18 @@
   "studySessionBackLabel": "Mặt sau",
   "studySessionMeaningLabel": "Nghĩa",
   "studySessionSwipeHint": "Vuốt sang trái để sang thẻ tiếp theo",
+  "studySessionRecallModeLabel": "RECALL",
+  "studySessionRecallShowAnswerAction": "Hiện đáp án · {seconds}s",
+  "@studySessionRecallShowAnswerAction": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "studySessionRecallTimeoutCaption": "Hết giờ - tự chấm điểm",
+  "studySessionEditCardAction": "Chỉnh sửa thẻ này",
+  "studySessionSpeakFrontAction": "Nghe mặt trước",
   "studySessionBuryUntilTomorrowAction": "Ẩn đến ngày mai",
   "studySessionSuspendAction": "Tạm dừng thẻ",
   "studySessionBurySuccessMessage": "Đã ẩn thẻ đến ngày mai.",
