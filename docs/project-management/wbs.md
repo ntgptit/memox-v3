@@ -383,6 +383,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `8c8039d1` | 2026-06-13 | 7.6.1, 7.6.2, 7.6.3, 1.1.5 | Card History promoted to V1: schema v6 `flashcard_progress.last_reset_at` (+migration/test); BE history query/DAO/repo + header/page/reset use cases + DI; `CardHistoryScreen` (header + cursor-paginated timeline + reset divider, 5 states) on route `/library/deck/:deckId/flashcards/:flashcardId/history` via row-action "View history"; reset keeps cumulative counters; ARB en/vi; widget/repo/migration tests; docs + decision table (H1-H7, N8/N9) + WBS parity |
 | `619a4e75` | 2026-06-13 | 2.11.2, 2.12.2 | Editor input consistency: drop non-functional TTS speaker from Pronunciation field (all optional inputs share one box style); fix doubled "+" on Add-tag chip (ARB label drops literal "+", Icons.add provides it) |
 | `650a4dfd` | 2026-06-13 | 2.11.2, 2.12.2 | Polish editor field labels to mock 07/08: optional fields get leading icon + uppercase tracked label + muted "optional" suffix; Front/Back + edit "OPTIONAL DETAILS" uppercased via `StringUtils.uppercased` (ARB stays title-case) |
 | `ff76eeaa` | 2026-06-13 | 2.11.2 | Flatten create Add-details section: drop the nested bordered card so the toggle pill + expanded example/hint/pronunciation fields match mock 07 details-open (edit mode unchanged) |
