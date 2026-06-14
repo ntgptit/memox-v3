@@ -54,7 +54,10 @@ class _SearchShortcutKeycap extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
-        margin: const EdgeInsets.only(right: SpacingTokens.xs),
+        // Mirror the leading search-icon inset (MxSearchField uses 14px start)
+        // so the keycap sits 14px from the right edge as the mock specifies,
+        // instead of hugging the border.
+        margin: const EdgeInsets.only(right: SpacingTokens.form),
         padding: const EdgeInsets.symmetric(
           horizontal: SpacingTokens.xs,
           vertical: SpacingTokens.xxs,
