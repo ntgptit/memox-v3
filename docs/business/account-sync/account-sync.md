@@ -252,6 +252,20 @@ Used to:
 - Tag manifests with origin device.
 - Detect cross-device backups (`DriveSyncStatus.remoteIsFromOtherDevice`).
 
+### Encryption at rest (V1 decision)
+
+**V1 does NOT add client-side encryption to the snapshot.** The database bytes and settings JSON are
+uploaded as-is. Confidentiality relies on the Drive **AppData** boundary: files live in a hidden
+per-app folder scoped to the signed-in Google account, not visible to other apps or browsable in the
+Drive UI. The local pre-restore snapshot is written to the OS temporary directory under the app's
+own sandbox.
+
+Rationale: MemoX content is flashcard study data, not credentials/PII; AppData isolation plus
+least-privilege scope is the chosen protection. This is a deliberate decision, not an oversight —
+adding an app-managed encryption key would require key storage/recovery design (lost key = lost
+backup) and a security review. Revisit (and update this section + the sync contract) before storing
+any sensitive field that would change this risk assessment.
+
 ## Sync status
 
 `DriveSyncStatus.kind` (`DriveSyncStatusKind`):
@@ -457,6 +471,11 @@ flowchart TD
 - Manifest schema version must match (`manifestVersion`, `snapshotFormatVersion`) on restore.
 - Remote schema version > local app schema version → `unsupportedSchema`. Block restore, prompt app
   update.
+- Remote schema version ≤ local app schema version → restore proceeds. After the atomic DB file
+  swap, Drift opens the restored file and runs its **forward migrations** up to
+  `AppDatabase.schemaVersion` (per `docs/database/migration-contract.md`) before any read model is
+  served. The app MUST NOT serve queries against a restored older-schema database before migrations
+  run. Only a *higher* remote schema is rejected; equal or lower is migrated normally.
 - Metadata is per-account. Switching accounts does not carry metadata.
 - All errors are caught and returned via the DriveSyncRunResult failed path. Do not surface raw
   exceptions to UI.
@@ -560,8 +579,10 @@ button.
 
 **Schema:**
 
-- `docs/database/storage-boundaries.md` → account-scoped database file path; Drive manifest schema (
-  `device_label`, `fingerprint`, `uploaded_at`, `size_bytes`, `schema_version`)
+- `docs/database/storage-boundaries.md` → account-scoped database file path; SharedPreferences keys
+  for the account link (`sharedPrefsCloudAccountLinkKey`) and per-account sync metadata
+  (`sharedPrefsDriveSyncMetadataKey`). The remote Drive manifest fields are the `DriveSyncManifest`
+  table in this document (§Drive sync model → Manifest), not a separate schema.
 
 **Decision table:**
 

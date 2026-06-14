@@ -474,6 +474,7 @@ Future until the tag subsystem and `shared_preferences` are approved (`docs/wire
 | SY19 | Full restore protection target | Pre-restore snapshot save fails                       | Abort restore; do not proceed                                                        | C1       | Future                                                                                                        |
 | SY20 | Full restore protection target | Pre-restore snapshot saved                            | Surface path notice after restore                                                    | C0+C1    | Future                                                                                                        |
 | SY21 | Full restore protection target | "Restore anyway" path after fingerprint mismatch      | Requires second confirmation tap                                                     | C1       | Future                                                                                                        |
+| SY22 | Restore older snapshot         | Remote schema version ≤ current app schema version    | Restore proceeds; Drift runs forward migrations up to current schema before any read | C1       | Future                                                                                                        |
 
 ## Update rule
 

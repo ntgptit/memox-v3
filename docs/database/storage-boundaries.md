@@ -124,7 +124,10 @@ When in doubt about whether to use Stream or Future: use Stream.
 - `docs/business/engagement/dashboard-engagement.md` → learning settings, streak, reminder time in SharedPreferences
 - `docs/business/tts/tts-settings.md` → per-language TTS settings in SharedPreferences
 - `docs/business/search/global-search.md` → recent searches in SharedPreferences
-- `docs/business/account-sync/account-sync.md` → Drive manifest (remote), account-scoped DB file path
+- `docs/business/account-sync/account-sync.md` → account link (`sharedPrefsCloudAccountLinkKey`) and
+  per-account Drive sync metadata (`sharedPrefsDriveSyncMetadataKey`) in SharedPreferences;
+  account-scoped DB file path; `DriveSyncManifest` is the remote (Drive AppData) record, not a local
+  store
 - `docs/business/flashcard/flashcard-management.md` → "Save and add another" toggle (session memory, NOT persisted)
 
 **Settings stored outside Drift**

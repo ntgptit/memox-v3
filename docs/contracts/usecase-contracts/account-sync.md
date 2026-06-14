@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-14
 status: contract
 ---
 
@@ -9,152 +9,145 @@ status: contract
 > error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
 > ordinary feature implementation. First run an approved dependency/API migration task, or use the
 > existing repository error/result pattern until that migration is approved.
+>
+> **Sync surface convention:** Drive `loadStatus` / `upload` / `restore` use cases return
+> `DriveSyncStatus` / `DriveSyncRunResult` (result objects), not `Either` — every sync error funnels
+> through `DriveSyncRunResult.failed`. Account use cases may follow the repository's standard
+> error/result pattern; signatures below are intent, not a literal `Either` mandate before the
+> migration is approved.
 
-Google sign-in, account-scoped DB, Drive App Folder backup/restore with mandatory pre-restore
-snapshot.
+Optional Google sign-in, per-account database isolation, and manual Google Drive **AppData**
+backup/restore with a mandatory pre-restore snapshot. Canonical model:
+`docs/business/account-sync/account-sync.md`. Keep this contract in sync with it in the same commit.
 
-## SignInWithGoogleUseCase
+> **Status: Specified — nothing implemented (verified 2026-06-11).** Only
+> `lib/core/auth/google_auth.dart` (`GoogleAuthGateway`) and
+> `lib/core/config/google_oauth_config.dart` exist. Use-case names below are the planned target for
+> WBS 8.6.1 / 8.6.2.
 
-```dart
-Future<Either<Failure, Account>> call();
-```
+## Account entity & store
 
-**Rules:**
+Account state is `CloudAccountLink`, persisted in **SharedPreferences ONLY** (never Drift — that
+would create a chicken-and-egg with the per-account DB) via `CloudAccountStore`, key
+`AppConstants.sharedPrefsCloudAccountLinkKey`. `subjectId` (Google `sub`) is the stable identity;
+`email` may change for the same account. Malformed payload loads as `null` (treated as not linked).
+`AccountLinkStatus` values: `signedOut`, `signedIn`, `needsDriveAuthorization`, `unconfigured`,
+`unsupported`, `error`.
 
-- Launch OAuth flow via `google_auth.dart`.
-- Persist account tokens to `flutter_secure_storage` (NEVER SharedPreferences).
-- Switch active DB file to account-scoped path (e.g., `memox-{accountId}.db`).
-- If switching account, the active DB changes; trigger Riverpod invalidation of all data providers.
+## Account use cases
 
-**Errors:** `AuthFailure`, `NetworkFailure`, `CancelledFailure`, `StorageFailure`.
+### LoadCloudAccountLinkUseCase
 
-## SignOutUseCase
+Read the current link from `CloudAccountStore`. Returns `null` when not linked or on schema-version
+mismatch / corruption.
 
-```dart
-Future<Either<Failure, Unit>> call();
-```
+### RestoreGoogleAccountUseCase
 
-**Rules:**
+Silent re-auth on app start (lightweight, no UI). Refreshes `lastSignedInAt` on success; never
+prompts. Failure leaves the stored link untouched.
 
-- Clear tokens.
-- DO NOT delete account-scoped DB. User can sign in again and resume.
-
-**Errors:** `StorageFailure`.
-
-## SwitchOrRemoveAccountUseCase
-
-```dart
-Future<Either<Failure, Unit>> call({required AccountId id});
-```
-
-**Rules:**
-
-- Strong destructive (user typed ERASE confirmation upstream).
-- DELETE account-scoped DB file.
-- Clear tokens.
-- Reset Riverpod state.
-
-**Caution:** Destructive.
-
-**Errors:** `StorageFailure`.
-
-## ComputeLocalFingerprintUseCase
-
-```dart
-Future<Either<Failure, Fingerprint>> call();
-```
+### SignInWithGoogleUseCase
 
 **Rules:**
 
-- Compute SHA-256 over canonical content of DB (deterministic ordering).
-- Cached for 30s; recompute on data change.
+- Launch the interactive OAuth flow via `GoogleAuthGateway.signIn()`, requesting the Drive AppData
+  scope only.
+- On success persist `CloudAccountLink`; preserve `linkedAt` across re-sign-in of the same
+  `subjectId` (new `subjectId` ⇒ new `linkedAt`). Update `lastSignedInAt`.
+- Drive scope granted ⇒ status `signedIn`, `driveAuthorizationState = authorized`. Drive scope
+  denied ⇒ status `needsDriveAuthorization` (link still saved). No OAuth config for the platform ⇒
+  `unconfigured`, no link saved.
+- Switch the active DB file to the account-scoped path via `AccountDatabaseContextResolver`; on a
+  guest→signed-in transition apply the `GuestDatabaseSignInChoice` (`attachGuestData` vs
+  `createFreshAccountDatabase`). Switching the active DB triggers Riverpod invalidation of all data
+  providers.
 
-**Errors:** `StorageFailure`.
+**Decision rows:** `AC4`, `AC5`, `AC6`, `AC10`, `AC11`, `AC12`.
 
-## FetchDriveManifestUseCase
+### AuthorizeGoogleDriveUseCase
 
-```dart
-Future<Either<Failure, DriveManifest?>> call();
-```
+Add the Drive AppData scope to an already-linked account via `GoogleAuthGateway.authorizeDrive()`.
+Updates `grantedScopes` + `driveAuthorizationState`.
 
-Returns latest manifest from Drive App Folder, or null if none exists.
-
-**Errors:** `NetworkFailure`, `AuthFailure`, `StorageFailure` (parse error).
-
-## UploadToDriveUseCase
-
-```dart
-Future<Either<Failure, DriveManifest>> call();
-```
-
-**Rules:**
-
-- Compute fingerprint.
-- Build manifest: `{ device_label, fingerprint, uploaded_at, size_bytes, schema_version }`.
-- Upload DB file + manifest to Drive App Folder. Replace previous.
-- Persist `account.lastSyncAt`, `account.lastSyncFingerprint` to SharedPreferences.
-
-**Errors:** `NetworkFailure`, `AuthFailure`, `StorageFailure`.
-
-## CreatePreRestoreSnapshotUseCase
-
-```dart
-Future<Either<Failure, SnapshotInfo>> call();
-```
+### SignOutGoogleAccountUseCase
 
 **Rules:**
 
-- Copy current DB file to safe local snapshot path.
-- VERIFY snapshot integrity (file size, can re-open).
-- If verification fails → `StorageFailure`. Caller MUST abort restore.
+- Local sign-out only (`GoogleAuthGateway.signOut()`); clears the active session and drops back to
+  the **guest** DB context.
+- **DO NOT delete** the account-scoped DB file. Re-sign-in resumes the same DB. (Decision row `AC7`.)
 
-**Errors:** `StorageFailure`.
-
-## RestoreFromDriveUseCase
-
-```dart
-Future<Either<Failure, RestoreResult>> call({
-  required DriveManifest manifest,
-  required bool skipSnapshot,  // Future empty-DB restore handoff only
-});
-```
+### DisconnectGoogleAccountUseCase
 
 **Rules:**
 
-- `skipSnapshot` is not exposed by current V1 Account Settings restore. It is reserved for a future
-  full onboarding / empty-DB restore prompt and is valid only when the local DB is verifiably empty.
-- If `!skipSnapshot`:
-    - Call `CreatePreRestoreSnapshotUseCase`. If fails → return `StorageFailure`, abort, original DB
-      UNCHANGED.
-- Download DB from Drive.
-- Validate downloaded manifest matches schema version.
-- Replace local DB atomically (write to temp file, then rename).
-- Trigger Riverpod invalidation across all providers.
+- Revoke server-side consent (`GoogleAuthGateway.disconnect()`) and clear the local
+  `CloudAccountLink`. Next sign-in re-prompts for the Drive scope. (Decision row `AC8`.)
+- Disconnect does **not** delete the account-scoped DB file in V1.
 
-**Errors:** `NetworkFailure`, `StorageFailure`, schema mismatch → `IntegrityFailure`.
+> **Target / Future — destructive "erase account data":** a stronger account-removal path (typed
+> `ERASE` confirmation per `docs/wireframes/24-shared-dialogs.md` §delete-confirm) that also deletes
+> the account-scoped DB file is **not Current V1**. Do not implement DB deletion under sign-out or
+> disconnect. If/when promoted, add it as a separate destructive use case and document it in the
+> business spec first.
 
-## UpdateDeviceLabelUseCase
+### PersistGoogleAuthResultUseCase
 
-```dart
-Future<Either<Failure, Unit>> call({required String label});
-```
+Persist an auth result produced by an external trigger (e.g. web button) into `CloudAccountStore`,
+applying the same status/`linkedAt` rules as `SignInWithGoogleUseCase`.
+
+### GetDriveAppDataAccessTokenUseCase
+
+Obtain a short-lived Drive access token for a single API call via
+`GoogleAuthGateway.driveAccessToken()`. `null` ⇒ `needsDriveAuthorization`. The app does NOT persist
+OAuth tokens itself; `google_sign_in` 7.x owns the token lifecycle (no `flutter_secure_storage`).
+
+## Drive sync use cases
+
+All three delegate to `DriveSyncRepository`
+(`docs/contracts/repository-contracts/sync-repository.md`).
+
+### LoadDriveSyncStatusUseCase
+
+Read-only. Refresh `DriveSyncStatus` from Drive AppData + per-account metadata. (Decision rows
+`SY1`–`SY4`.)
+
+### UploadLocalDriveSnapshotUseCase
+
+Build the local snapshot (DB bytes + settings JSON + manifest), upload to Drive AppData, update
+metadata. Same fingerprint as remote ⇒ `noChanges`; otherwise `uploadedLocal`. (Decision rows `SY5`,
+`SY6`.)
+
+### RestoreDriveSnapshotUseCase
 
 **Rules:**
 
-- Trim. Reject empty. Reject > 50 chars.
-- Persist to SharedPreferences `account.deviceLabel`.
+- Replacement-only (no merge). Replaces BOTH database and settings from the remote snapshot.
+- Pre-restore safety: build a snapshot to the temp dir as `memox-pre-restore-{timestamp}.zip`; if it
+  fails → **abort** (original DB UNCHANGED). Surface the path notice after success.
+- Schema gate: remote `appDatabaseSchemaVersion` **>** current app ⇒ `unsupportedSchema` (block,
+  prompt update). Equal or **lower** proceeds — after the atomic file swap Drift runs forward
+  migrations up to `AppDatabase.schemaVersion` before any read model is served
+  (`docs/database/migration-contract.md`).
+- On success set `restoreEffect = refreshDatabaseProvider`; the presentation layer MUST process it
+  via the runtime effects helper. (Decision rows `SY7`, `SY8`, `SY9`, `SY22`.)
 
-**Errors:** `ValidationFailure`, `StorageFailure`.
+> **Target / Partial — full restore protection** (decision rows `SY18`–`SY21`): compare local
+> fingerprint vs `DriveSyncMetadata.localFingerprint`; on mismatch show the strong warning dialog
+> with "Upload local first" as the visually emphasized primary action and "Restore anyway" gated by
+> a second confirmation tap. Current V1 shows the destructive-restore warning before a single
+> replacement restore.
 
 ## Forbidden patterns
 
-- ❌ Auto-restore on sign-in. Manual only.
-- ❌ Skip pre-restore snapshot when local DB has data.
-- ❌ Continue restore if snapshot fails.
-- ❌ Store OAuth tokens in SharedPreferences. Use `flutter_secure_storage`.
-- ❌ Log tokens, fingerprints, or DB content to logs.
-- ❌ Wipe DB on sign-out. Only `SwitchOrRemoveAccountUseCase` wipes.
-- ❌ Backup outside Drive App Folder (other apps must not see data).
+- ❌ Auto-restore on sign-in / auto-upload on data change. Manual only in V1.
+- ❌ Skip the pre-restore snapshot when local DB has data; continue restore if the snapshot fails.
+- ❌ Store the account link in Drift, or store OAuth tokens in SharedPreferences / Drift /
+  `flutter_secure_storage`.
+- ❌ Log tokens, fingerprints, settings JSON, or DB content.
+- ❌ Delete the account-scoped DB on sign-out or disconnect (no V1 erase path).
+- ❌ Backup outside the Drive AppData folder; request scopes beyond AppData without security review.
+- ❌ Serve queries against a restored older-schema DB before Drift migrations run.
 
 ## Related
 
@@ -163,7 +156,12 @@ Future<Either<Failure, Unit>> call({required String label});
 
 **Business spec:** `docs/business/account-sync/account-sync.md`
 **Repository:** `docs/contracts/repository-contracts/sync-repository.md`
+**Migration:** `docs/database/migration-contract.md`
 **Wireframes:** `docs/wireframes/19-settings-account.md`, `docs/wireframes/24-shared-dialogs.md`
 §restore-warning
-**Decision table:** rows under "Account / Sync"
-**Code paths:** `lib/domain/usecases/account_sync/**`, `lib/data/sync/**`, `lib/core/auth/**`
+**Decision table:** `docs/decision-tables/memox-core-decision-table.md` rows under "Account / Drive
+sync" (`AC1`–`SY22`)
+**Code paths (planned target — WBS 8.6.1 / 8.6.2):** cloud-account use-case bundle, drive-sync
+use-case bundle, `lib/core/auth/google_auth.dart` (exists),
+`lib/core/config/google_oauth_config.dart` (exists)
+</content>
