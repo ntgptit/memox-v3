@@ -1025,6 +1025,38 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studySessionSpeakFrontAction => 'Nghe mặt trước';
 
   @override
+  String get studySessionFillModeLabel => 'FILL';
+
+  @override
+  String get studySessionFillHintAction => 'Gợi ý';
+
+  @override
+  String get studySessionFillCheckAction => 'Kiểm tra';
+
+  @override
+  String get studySessionFillMarkCorrectAction => 'Đánh dấu đúng';
+
+  @override
+  String get studySessionFillTryAgainAction => 'Thử lại';
+
+  @override
+  String get studySessionFillSpeakCorrectAnswerAction => 'Nghe đáp án đúng';
+
+  @override
+  String get studySessionFillReadyToFinishMessage =>
+      'Tất cả thẻ đã được trả lời. Hãy hoàn tất phiên để lưu tiến độ.';
+
+  @override
+  String studySessionFillCorrectAnnouncement(String front) {
+    return 'Đúng. $front.';
+  }
+
+  @override
+  String studySessionFillWrongAnnouncement(String input, String front) {
+    return 'Sai rồi. Bạn đã nhập $input. Đáp án là $front.';
+  }
+
+  @override
   String get studySessionBuryUntilTomorrowAction => 'Ẩn đến ngày mai';
 
   @override

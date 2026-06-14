@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-05-28
+last_updated: 2026-06-14
 route: /library/study/session/:sessionId
 study_mode: fill
 source_specs:
@@ -10,14 +10,12 @@ source_specs:
 
 # 17 — Study Session: Fill Mode
 
-> **Drift correction (2026-06-10):** this mode is **Specified — NOT built** (WBS 4.5.8/4.5.9) in the current codebase. V1 implements
-> only the recall self-grade flow through the shared shell
-> `lib/presentation/features/study/screens/study_session_screen.dart`; other modes resolve to a
-> controlled-unsupported strategy (`study_mode_strategy_factory.dart`). Any
-> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
-> **target structure** from a previous iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Status update (2026-06-14):** Fill mode FE is now implemented in
+> `lib/presentation/features/study/screens/study_session_screen.dart` +
+> `lib/presentation/features/study/widgets/study_session_fill_mode_view.dart` +
+> `lib/presentation/features/study/viewmodels/study_session_fill_viewmodel.dart`. This spec now
+> documents the live implementation, not a target-only mock. Work remains tracked in
+> `docs/project-management/wbs.md`.
 
 ## Purpose
 
@@ -149,7 +147,7 @@ card). The Korean / target-language IME is invoked normally.
 | Input card (correct state)           | Same surface; shows user input above a `✓` glyph; TTS icon top-right.                                                                                                                      |
 | Input card (wrong state)             | Shows user input in red ABOVE the correct front in default text color. `↺` retry-typing icon bottom-left; TTS icon top-right.                                                              |
 | TTS icon `🔊`                        | Top-right of input card. Visible **only after feedback** (correct or wrong). Speaks `front`. Hidden when `deck.target_language = unsupported`.                                             |
-| Retry icon `↺`                       | Bottom-left of input card in wrong state. Tap clears feedback and returns to typing state with the previous input pre-filled (one retry per card).                                         |
+| Retry icon `↺`                       | Bottom-left of input card in wrong state. Tap clears feedback and returns to typing state with cleared input (one retry per card).                                                      |
 | Hint button                          | Bottom row, left. Outlined. Reveals 1 character at a time (max half the front length). Each reveal disables `perfect` upgrade for this card.                                               |
 | Check button                         | Bottom row, right. Filled primary. Enabled iff input is non-empty. Evaluates the answer locally.                                                                                            |
 | Mark correct button (wrong feedback) | Outlined. Tap maps wrong → `recovered`.                                                                                                                                                    |
@@ -320,23 +318,14 @@ Same as Recall mode:
 **Code paths (verified 2026-05-28):**
 
 - Mode view:
-  `lib/presentation/features/study/widgets/study_session/fill/fill_mode_session_view.dart` +
-  `fill_mode_panel.dart`.
-- Input + actions:
-  `lib/presentation/features/study/widgets/study_session/fill/fill_prompt_card.dart` +
-  `fill_answer_cards.dart` + `fill_actions.dart`.
-- Motion: `lib/presentation/features/study/widgets/study_session/fill/fill_motion.dart`.
-- Strict matcher: **no standalone `strict_matcher.dart` in `lib/domain/study/`**. When fill mode
-  is built, put match logic in the domain strategy (not the presentation layer) — a previous
-  iteration kept it in presentation and that was flagged as a Clean-Architecture violation.
-- Hint revealer: not extracted to a domain file; hint behavior is implemented inside the fill panel.
-- Flow validator (skip rule for trivial fronts): currently lives within
-  `lib/domain/study/modes/` (see `study_mode_strategy.dart`, `study_mode_strategy_factory.dart`);
-  no
-  dedicated `flow_validator.dart`.
+  `lib/presentation/features/study/widgets/study_session_fill_mode_view.dart`
+- Viewmodel:
+  `lib/presentation/features/study/viewmodels/study_session_fill_viewmodel.dart`
+- Strict matcher and availability rule:
+  `lib/domain/study/fill/fill_answer_evaluator.dart` + `lib/domain/study/modes/fill_study_mode_strategy.dart`
 - Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
-  (the `AnswerFlashcardUseCase` name from a previous iteration does NOT exist). No standalone
-  `grade_attempt_usecase.dart`.
+- Shared shell / route entry:
+  `lib/presentation/features/study/screens/study_session_screen.dart`
 
 **Related wireframes:**
 

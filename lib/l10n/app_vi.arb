@@ -499,6 +499,32 @@
   "studySessionRecallTimeoutCaption": "Hết giờ - tự chấm điểm",
   "studySessionEditCardAction": "Chỉnh sửa thẻ này",
   "studySessionSpeakFrontAction": "Nghe mặt trước",
+  "studySessionFillModeLabel": "FILL",
+  "studySessionFillHintAction": "Gợi ý",
+  "studySessionFillCheckAction": "Kiểm tra",
+  "studySessionFillMarkCorrectAction": "Đánh dấu đúng",
+  "studySessionFillTryAgainAction": "Thử lại",
+  "studySessionFillSpeakCorrectAnswerAction": "Nghe đáp án đúng",
+  "studySessionFillReadyToFinishMessage": "Tất cả thẻ đã được trả lời. Hãy hoàn tất phiên để lưu tiến độ.",
+  "studySessionFillCorrectAnnouncement": "Đúng. {front}.",
+  "@studySessionFillCorrectAnnouncement": {
+    "placeholders": {
+      "front": {
+        "type": "String"
+      }
+    }
+  },
+  "studySessionFillWrongAnnouncement": "Sai rồi. Bạn đã nhập {input}. Đáp án là {front}.",
+  "@studySessionFillWrongAnnouncement": {
+    "placeholders": {
+      "input": {
+        "type": "String"
+      },
+      "front": {
+        "type": "String"
+      }
+    }
+  },
   "studySessionBuryUntilTomorrowAction": "Ẩn đến ngày mai",
   "studySessionSuspendAction": "Tạm dừng thẻ",
   "studySessionBurySuccessMessage": "Đã ẩn thẻ đến ngày mai.",

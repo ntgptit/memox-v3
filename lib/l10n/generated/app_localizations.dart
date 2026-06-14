@@ -1860,6 +1860,60 @@ abstract class AppLocalizations {
   /// **'Speak front'**
   String get studySessionSpeakFrontAction;
 
+  /// No description provided for @studySessionFillModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'FILL'**
+  String get studySessionFillModeLabel;
+
+  /// No description provided for @studySessionFillHintAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get studySessionFillHintAction;
+
+  /// No description provided for @studySessionFillCheckAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get studySessionFillCheckAction;
+
+  /// No description provided for @studySessionFillMarkCorrectAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark correct'**
+  String get studySessionFillMarkCorrectAction;
+
+  /// No description provided for @studySessionFillTryAgainAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get studySessionFillTryAgainAction;
+
+  /// No description provided for @studySessionFillSpeakCorrectAnswerAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak correct answer'**
+  String get studySessionFillSpeakCorrectAnswerAction;
+
+  /// No description provided for @studySessionFillReadyToFinishMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards are answered. Finish the session to save your progress.'**
+  String get studySessionFillReadyToFinishMessage;
+
+  /// No description provided for @studySessionFillCorrectAnnouncement.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct. {front}.'**
+  String studySessionFillCorrectAnnouncement(String front);
+
+  /// No description provided for @studySessionFillWrongAnnouncement.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong. You typed {input}. The answer is {front}.'**
+  String studySessionFillWrongAnnouncement(String input, String front);
+
   /// No description provided for @studySessionBuryUntilTomorrowAction.
   ///
   /// In en, this message translates to:

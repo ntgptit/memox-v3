@@ -499,6 +499,32 @@
   "studySessionRecallTimeoutCaption": "Time's up — grade yourself",
   "studySessionEditCardAction": "Edit this card",
   "studySessionSpeakFrontAction": "Speak front",
+  "studySessionFillModeLabel": "FILL",
+  "studySessionFillHintAction": "Hint",
+  "studySessionFillCheckAction": "Check",
+  "studySessionFillMarkCorrectAction": "Mark correct",
+  "studySessionFillTryAgainAction": "Try again",
+  "studySessionFillSpeakCorrectAnswerAction": "Speak correct answer",
+  "studySessionFillReadyToFinishMessage": "All cards are answered. Finish the session to save your progress.",
+  "studySessionFillCorrectAnnouncement": "Correct. {front}.",
+  "@studySessionFillCorrectAnnouncement": {
+    "placeholders": {
+      "front": {
+        "type": "String"
+      }
+    }
+  },
+  "studySessionFillWrongAnnouncement": "Wrong. You typed {input}. The answer is {front}.",
+  "@studySessionFillWrongAnnouncement": {
+    "placeholders": {
+      "input": {
+        "type": "String"
+      },
+      "front": {
+        "type": "String"
+      }
+    }
+  },
   "studySessionBuryUntilTomorrowAction": "Bury until tomorrow",
   "studySessionSuspendAction": "Suspend card",
   "studySessionBurySuccessMessage": "Card buried until tomorrow.",

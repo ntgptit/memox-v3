@@ -11,6 +11,7 @@ import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
+import 'package:memox/presentation/features/study/widgets/study_session_fill_mode_view.dart';
 import 'package:memox/presentation/features/study/widgets/study_session_guess_mode_view.dart';
 import 'package:memox/presentation/features/study/widgets/study_session_recall_mode_view.dart';
 import 'package:memox/presentation/features/study/widgets/study_session_review_mode_view.dart';
@@ -59,6 +60,13 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
           onBack: () => _handleExit(context),
         ),
         StudyMode.guess => StudySessionGuessModeView(
+          sessionId: widget.sessionId,
+          mode: widget.mode,
+          onBack: () => _handleExit(context),
+          onFinalized: () =>
+              context.pushReplacementStudyResult(widget.sessionId),
+        ),
+        StudyMode.fill => StudySessionFillModeView(
           sessionId: widget.sessionId,
           mode: widget.mode,
           onBack: () => _handleExit(context),

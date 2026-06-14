@@ -45,13 +45,14 @@ study mode.
 | `new_recall_only` | recall                                 | Targeted practice        |
 | `new_fill_only`   | fill                                   | Targeted practice        |
 | `srs_recall_review` | recall                               | **All SRS review (default, adopted 2026-06-10)** — V1 runtime already resolves recall |
-| `srs_fill_review` | fill                                   | SRS review, opt-in per session (Target) |
+| `srs_fill_review` | fill                                   | SRS review, opt-in per session (Implemented) |
 
 > **Adopted decision (2026-06-10):** SRS review defaults to **recall**, not fill. Forcing every
 > due review through strict typed input (fill) — especially for Korean front text — is the
 > heaviest possible interaction and would push users to skip reviews. Fill stays available as an
 > opt-in flow for users who want production practice. The V1 runtime fallback
-> (`StudyModeStrategyFactory` → recall) already matches this default.
+> (`StudyModeStrategyFactory` → recall) already matches this default. The fill screen itself is
+> implemented and wired for explicit opt-in sessions.
 
 ## Study modes
 

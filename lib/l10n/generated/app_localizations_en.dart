@@ -1037,6 +1037,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studySessionSpeakFrontAction => 'Speak front';
 
   @override
+  String get studySessionFillModeLabel => 'FILL';
+
+  @override
+  String get studySessionFillHintAction => 'Hint';
+
+  @override
+  String get studySessionFillCheckAction => 'Check';
+
+  @override
+  String get studySessionFillMarkCorrectAction => 'Mark correct';
+
+  @override
+  String get studySessionFillTryAgainAction => 'Try again';
+
+  @override
+  String get studySessionFillSpeakCorrectAnswerAction => 'Speak correct answer';
+
+  @override
+  String get studySessionFillReadyToFinishMessage =>
+      'All cards are answered. Finish the session to save your progress.';
+
+  @override
+  String studySessionFillCorrectAnnouncement(String front) {
+    return 'Correct. $front.';
+  }
+
+  @override
+  String studySessionFillWrongAnnouncement(String input, String front) {
+    return 'Wrong. You typed $input. The answer is $front.';
+  }
+
+  @override
   String get studySessionBuryUntilTomorrowAction => 'Bury until tomorrow';
 
   @override
