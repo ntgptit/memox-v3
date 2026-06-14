@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Empty
 
 ```text
@@ -53,7 +58,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[26,102 139x13] rel:[4,2 139x13] flex:row gap:6 align:center
         - span abs:[26,103 11x11] rel:[0,1 11x11] flex:row
           - icon:clock abs:[26,103 11x11] rel:[0,0 11x11] clip
-        - ov "Recent searches" abs:[43,102 122x13] rel:[17,0 122x13] font:11/700 color:on-surface-variant
+        - ov "Recent searches" abs:[43,102 122x13] rel:[17,0 122x13] font:11/700 color:on-surface-variant tracking:1.2
       - button "Clear" abs:[352,102 28x13] rel:[330,2 28x13] font:11/600 color:on-surface-variant text:center
     - card abs:[22,123 362x211] rel:[14,23 362x211] repeat:x4(unit=1) margin:0/0/18/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - item[1] div abs:[23,124 360x54] rel:[1,1 360x54] grid cols:3 gap:12 align:center pad:10/14
@@ -92,7 +97,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[345,295 24x24] rel:[322,15 24x24] flex:row justify:center align:center pos:relative r:999
           - span abs:[347,297 20x20] rel:[2,2 20x20] flex:row
             - icon:x abs:[347,297 20x20] rel:[0,0 20x20] clip
-    - ov "Try searching" abs:[26,359 120x13] rel:[18,259 120x13] flex:row gap:6 align:center font:11/700 color:on-surface-variant
+    - ov "Try searching" abs:[26,359 120x13] rel:[18,259 120x13] flex:row gap:6 align:center font:11/700 color:on-surface-variant tracking:1.2
       - span abs:[26,360 11x11] rel:[0,1 11x11] flex:row
         - icon:sparkles abs:[26,360 11x11] rel:[0,0 11x11] clip
     - card abs:[22,383 362x216] rel:[14,283 362x216] repeat:x4(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
@@ -101,7 +106,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[44,404 13x13] rel:[7,7 13x13] flex:row
             - icon:folder abs:[44,404 13x13] rel:[0,0 13x13] clip
         - div abs:[79,395 264x30] rel:[56,11 264x30]
-          - div "a folder name" abs:[79,395 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "a folder name" abs:[79,395 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
           - div "Korean, Japanese" abs:[79,412 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
         - div abs:[355,403 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
           - span abs:[355,403 14x14] rel:[0,0 14x14] flex:row
@@ -111,7 +116,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[44,457 13x13] rel:[7,7 13x13] flex:row
             - icon:layers abs:[44,457 13x13] rel:[0,0 13x13] clip
         - div abs:[79,448 264x30] rel:[56,11 264x30]
-          - div "a deck" abs:[79,448 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "a deck" abs:[79,448 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
           - div "TOPIK II — Vocab" abs:[79,465 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
         - div abs:[355,456 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
           - span abs:[355,456 14x14] rel:[0,0 14x14] flex:row
@@ -121,7 +126,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[44,511 13x13] rel:[7,7 13x13] flex:row
             - icon:copy abs:[44,511 13x13] rel:[0,0 13x13] clip
         - div abs:[79,501 264x33] rel:[56,11 264x33]
-          - div "a card term or meaning" abs:[79,501 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "a card term or meaning" abs:[79,501 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
           - div "연구자, library" abs:[79,518 264x16] rel:[0,17 264x16] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
         - div abs:[355,511 14x14] rel:[332,21 14x14] flex:row gap:6 align:center
           - span abs:[355,511 14x14] rel:[0,0 14x14] flex:row
@@ -131,7 +136,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[44,566 13x13] rel:[7,7 13x13] flex:row
             - icon:tag abs:[44,566 13x13] rel:[0,0 13x13] clip
         - div abs:[79,557 264x30] rel:[56,11 264x30]
-          - div "a tag" abs:[79,557 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "a tag" abs:[79,557 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
           - div "noun, verb, food" abs:[79,574 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
         - div abs:[355,565 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
           - span abs:[355,565 14x14] rel:[0,0 14x14] flex:row
@@ -184,7 +189,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:tag abs:[391,109 11x11] rel:[0,0 11x11] clip
       - span "3" abs:[436,108 6x12] rel:[56,8 6x12] font:10/700 color:font-headline text:center op:0.6
   - scroll abs:[8,138 390x650] rel:[0,130 390x650] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - ov "Searching for "연구"…" abs:[26,148 155x13] rel:[18,10 155x13] font:11/700 color:on-surface-variant
+    - ov "Searching for "연구"…" abs:[26,148 155x13] rel:[18,10 155x13] font:11/700 color:on-surface-variant tracking:1.2
     - div abs:[22,171 362x173] rel:[14,33 362x173] margin:0/0/14/0
       - div abs:[22,171 362x19] rel:[0,0 362x19] flex:row gap:6 pad:2/4/8/4
         - span abs:[26,173 70x9] rel:[4,2 70x9] bg:surface-container-high r:6 op:0.4
@@ -266,14 +271,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[391,109 11x11] rel:[11,9 11x11] flex:row
         - icon:tag abs:[391,109 11x11] rel:[0,0 11x11] clip
       - span "3" abs:[436,108 6x12] rel:[56,8 6x12] font:10/700 color:font-headline text:center op:0.6
-  - scroll abs:[8,138 390x650] rel:[0,130 390x650] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll
-    - ov "18 results for "연구"" abs:[26,146 144x13] rel:[18,8 144x13] font:11/700 color:on-surface-variant
+  - scroll abs:[8,138 390x650] rel:[0,130 390x650] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:723
+    - ov "18 results for "연구"" abs:[26,146 144x13] rel:[18,8 144x13] font:11/700 color:on-surface-variant tracking:1.2
     - item[2] div abs:[22,171 362x78] rel:[14,33 362x78] margin:0/0/16/0
       - div abs:[22,171 362x21] rel:[0,0 362x21] flex:row justify:between align:center pad:0/4/8/4
         - div abs:[26,171 95x13] rel:[4,0 95x13] flex:row gap:6 align:center
           - span abs:[26,172 11x11] rel:[0,1 11x11] flex:row
             - icon:folder abs:[26,172 11x11] rel:[0,0 11x11] clip
-          - span "Folders" abs:[43,171 54x13] rel:[17,0 54x13] font:11/700 color:seed-indigo
+          - span "Folders" abs:[43,171 54x13] rel:[17,0 54x13] font:11/700 color:seed-indigo tracking:0.4
           - span "1" abs:[103,172 18x12] rel:[77,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
       - card abs:[22,192 362x57] rel:[0,21 362x57] clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,193 360x55] rel:[1,1 360x55] grid cols:3 gap:12 align:center pad:11/14
@@ -281,8 +286,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,214 13x13] rel:[7,7 13x13] flex:row
               - icon:folder abs:[44,214 13x13] rel:[0,0 13x13] clip
           - div abs:[79,204 263x33] rel:[56,11 263x33]
-            - div "Korean — TOPIK roots" abs:[79,204 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
-              - mark "연구" abs:[125,206 28x16] rel:[46,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "Korean — TOPIK roots" abs:[79,204 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline tracking:-0.1
+              - mark "연구" abs:[125,206 28x16] rel:[46,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo tracking:-0.1 r:3
             - div "4 subfolders · 286 cards" abs:[79,224 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[354,213 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
             - span abs:[354,213 15x15] rel:[0,0 15x15] flex:row
@@ -292,7 +297,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[26,265 81x13] rel:[4,0 81x13] flex:row gap:6 align:center
           - span abs:[26,266 11x11] rel:[0,1 11x11] flex:row
             - icon:layers abs:[26,266 11x11] rel:[0,0 11x11] clip
-          - span "Decks" abs:[43,265 40x13] rel:[17,0 40x13] font:11/700 color:accent
+          - span "Decks" abs:[43,265 40x13] rel:[17,0 40x13] font:11/700 color:accent tracking:0.4
           - span "2" abs:[89,266 18x12] rel:[63,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
       - card abs:[22,286 362x113] rel:[0,21 362x113] clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,287 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14
@@ -300,8 +305,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,308 13x13] rel:[7,7 13x13] flex:row
               - icon:layers abs:[44,308 13x13] rel:[0,0 13x13] clip
           - div abs:[79,298 237x33] rel:[56,11 237x33]
-            - div "vocabulary" abs:[79,298 237x19] rel:[0,0 237x19] clip font:13/600 color:font-headline
-              - mark "연구" abs:[79,300 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "vocabulary" abs:[79,298 237x19] rel:[0,0 237x19] clip font:13/600 color:font-headline tracking:-0.1
+              - mark "연구" abs:[79,300 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo tracking:-0.1 r:3
             - div "62 cards · Korean / TOPIK II" abs:[79,318 237x13] rel:[0,20 237x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[328,306 41x18] rel:[305,19 41x18] flex:row gap:6 align:center
             - span "8 due" abs:[328,306 41x18] rel:[0,0 41x18] flex:row align:center pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
@@ -310,8 +315,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,364 13x13] rel:[7,7 13x13] flex:row
               - icon:layers abs:[44,364 13x13] rel:[0,0 13x13] clip
           - div abs:[79,354 263x33] rel:[56,11 263x33]
-            - div "Academic terms" abs:[79,354 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
-              - mark "연구" abs:[144,356 28x16] rel:[65,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "Academic terms" abs:[79,354 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline tracking:-0.1
+              - mark "연구" abs:[144,356 28x16] rel:[65,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo tracking:-0.1 r:3
             - div "34 cards · Korean / Advanced" abs:[79,374 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[354,363 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
             - span abs:[354,363 15x15] rel:[0,0 15x15] flex:row
@@ -321,7 +326,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[26,415 125x13] rel:[4,0 125x13] flex:row gap:6 align:center
           - span abs:[26,416 11x11] rel:[0,1 11x11] flex:row
             - icon:copy abs:[26,416 11x11] rel:[0,0 11x11] clip
-          - span "Flashcards" abs:[43,415 78x13] rel:[17,0 78x13] font:11/700 color:mastery
+          - span "Flashcards" abs:[43,415 78x13] rel:[17,0 78x13] font:11/700 color:mastery tracking:0.4
           - span "12" abs:[127,416 24x12] rel:[101,1 24x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
         - button "See all" abs:[332,415 48x13] rel:[310,0 48x13] flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
           - span abs:[369,416 11x11] rel:[37,1 11x11] flex:row
@@ -332,8 +337,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,458 13x13] rel:[7,7 13x13] flex:row
               - icon:copy abs:[44,458 13x13] rel:[0,0 13x13] clip
           - div abs:[79,448 263x33] rel:[56,11 263x33]
-            - div "자" abs:[79,448 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
-              - mark "연구" abs:[79,450 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "자" abs:[79,448 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline tracking:-0.1
+              - mark "연구" abs:[79,450 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo tracking:-0.1 r:3
             - div "researcher / nhà nghiên cứu" abs:[79,468 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[354,457 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
             - span abs:[354,457 15x15] rel:[0,0 15x15] flex:row
@@ -343,8 +348,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,514 13x13] rel:[7,7 13x13] flex:row
               - icon:copy abs:[44,514 13x13] rel:[0,0 13x13] clip
           - div abs:[79,504 263x33] rel:[56,11 263x33]
-            - div "하다" abs:[79,504 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
-              - mark "연구" abs:[79,506 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "하다" abs:[79,504 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline tracking:-0.1
+              - mark "연구" abs:[79,506 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo tracking:-0.1 r:3
             - div "to research, to study" abs:[79,524 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[354,513 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
             - span abs:[354,513 15x15] rel:[0,0 15x15] flex:row
@@ -354,8 +359,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,570 13x13] rel:[7,7 13x13] flex:row
               - icon:copy abs:[44,570 13x13] rel:[0,0 13x13] clip
           - div abs:[79,560 263x33] rel:[56,11 263x33]
-            - div "실" abs:[79,560 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
-              - mark "연구" abs:[79,562 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "실" abs:[79,560 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline tracking:-0.1
+              - mark "연구" abs:[79,562 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo tracking:-0.1 r:3
             - div "lab, research room" abs:[79,580 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[354,569 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
             - span abs:[354,569 15x15] rel:[0,0 15x15] flex:row
@@ -365,7 +370,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[26,621 72x13] rel:[4,0 72x13] flex:row gap:6 align:center
           - span abs:[26,622 11x11] rel:[0,1 11x11] flex:row
             - icon:tag abs:[26,622 11x11] rel:[0,0 11x11] clip
-          - span "Tags" abs:[43,621 31x13] rel:[17,0 31x13] font:11/700 color:streak
+          - span "Tags" abs:[43,621 31x13] rel:[17,0 31x13] font:11/700 color:streak tracking:0.4
           - span "3" abs:[80,622 18x12] rel:[54,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
       - card abs:[22,642 362x160] rel:[0,21 362x160] clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,643 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14
@@ -373,7 +378,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,663 13x13] rel:[7,7 13x13] flex:row
               - icon:tag abs:[44,663 13x13] rel:[0,0 13x13] clip
           - div abs:[79,654 264x30] rel:[56,11 264x30]
-            - div "research" abs:[79,654 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+            - div "research" abs:[79,654 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
             - div "24 cards across all decks" abs:[79,671 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[355,662 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
             - span abs:[355,662 14x14] rel:[0,0 14x14] flex:row
@@ -383,7 +388,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,716 13x13] rel:[7,7 13x13] flex:row
               - icon:tag abs:[44,716 13x13] rel:[0,0 13x13] clip
           - div abs:[79,707 264x30] rel:[56,11 264x30]
-            - div "researcher" abs:[79,707 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+            - div "researcher" abs:[79,707 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
             - div "8 cards across all decks" abs:[79,724 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[355,715 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
             - span abs:[355,715 14x14] rel:[0,0 14x14] flex:row
@@ -393,7 +398,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[44,769 13x13] rel:[7,7 13x13] flex:row
               - icon:tag abs:[44,769 13x13] rel:[0,0 13x13] clip
           - div abs:[79,760 264x30] rel:[56,11 264x30]
-            - div "research-lab" abs:[79,760 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+            - div "research-lab" abs:[79,760 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline tracking:-0.1
             - div "5 cards across all decks" abs:[79,777 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
           - div abs:[355,768 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
             - span abs:[355,768 14x14] rel:[0,0 14x14] flex:row
@@ -488,7 +493,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:cloud-off abs:[192,164 22x22] rel:[0,0 22x22] clip
     - div "Search didn't run" abs:[45,215 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
     - div "Your library is safe on this device. Try again in a moment." abs:[45,242 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Retry" abs:[158,298 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+    - pill-btn "Retry" abs:[158,298 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
       - span abs:[176,311 14x14] rel:[18,13 14x14] flex:row
         - icon:refresh-cw abs:[176,311 14x14] rel:[0,0 14x14] clip
 ```

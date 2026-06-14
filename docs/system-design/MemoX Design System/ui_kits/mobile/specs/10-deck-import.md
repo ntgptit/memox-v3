@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Empty
 
 ```text
@@ -43,21 +48,21 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Import cards" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - title "Import cards" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
     - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:help-circle abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
       - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "Import" abs:[247,102 37x13] rel:[239,2 37x13] font:11/700 color:font-headline
+    - span "Import" abs:[247,102 37x13] rel:[239,2 37x13] font:11/700 color:font-headline tracking:0.1
   - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
       - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
@@ -73,19 +78,19 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[36,171 13x13] rel:[5,5 13x13] flex:row
           - icon:layers abs:[36,171 13x13] rel:[0,0 13x13] clip
       - span "TOPIK II — Vocab · 142 cards" abs:[61,170 160x15] rel:[39,11 160x15] font:12/600 color:font-headline
-    - ov "1 · Choose a source" abs:[22,209 362x21] rel:[14,86 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+    - ov "1 · Choose a source" abs:[22,209 362x21] rel:[14,86 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
     - div abs:[22,230 362x101] rel:[14,107 362x101] grid cols:2 gap:8 margin:0/0/14/0
       - button abs:[22,230 177x101] rel:[0,0 177x101] flex:col gap:6 align:start pad:14/12 bg:seed-indigo@6 r:13 border:1px seed-indigo
         - div abs:[35,245 30x30] rel:[13,15 30x30] flex:row justify:center align:center bg:seed-indigo@14 r:9
           - span abs:[43,253 15x15] rel:[8,8 15x15] flex:row
             - icon:file-up abs:[43,253 15x15] rel:[0,0 15x15] clip
-        - div "Upload file" abs:[35,281 67x16] rel:[13,51 67x16] font:13/700 color:font-headline
+        - div "Upload file" abs:[35,281 67x16] rel:[13,51 67x16] font:13/700 color:font-headline tracking:-0.1
         - div "CSV, TSV, Anki" abs:[35,303 73x13] rel:[13,73 73x13] font:11/400 color:on-surface-variant
       - button abs:[207,230 177x101] rel:[185,0 177x101] flex:col gap:6 align:start pad:14/12 bg:on-primary r:13 border:1px seed-indigo@14
         - div abs:[220,245 30x30] rel:[13,15 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
           - span abs:[228,253 15x15] rel:[8,8 15x15] flex:row
             - icon:clipboard abs:[228,253 15x15] rel:[0,0 15x15] clip
-        - div "Paste text" abs:[220,281 63x16] rel:[13,51 63x16] font:13/700 color:font-headline
+        - div "Paste text" abs:[220,281 63x16] rel:[13,51 63x16] font:13/700 color:font-headline tracking:-0.1
         - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
     - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
       - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
@@ -93,7 +98,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
       - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
       - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-      - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[157,495 14x14] rel:[16,12 14x14] flex:row
           - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
     - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
@@ -104,8 +109,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
-      - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-      - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+      - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
         - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
           - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
     - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -134,10 +139,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
-+ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · ready to preview" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
@@ -145,9 +150,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
   - div abs:[22,417 362x76] rel:[14,294 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
-+ - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
   - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -157,6 +162,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Parsing (ordered diff vs Empty)
 
 ```diff
+  - span "Import" abs:[247,102 37x13] rel:[239,2 37x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
++ - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:583
   - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
 - - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
@@ -181,10 +189,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
-+ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · parsing…" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
@@ -194,19 +202,19 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,448 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
 + - div abs:[22,507 362x29] rel:[14,384 362x29] flex:row justify:between align:baseline pad:8/4
-+ - ov "2 · Preview" abs:[26,515 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant
++ - ov "2 · Preview" abs:[26,515 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,536 362x142] rel:[14,413 362x142] pad:28/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - span abs:[188,565 30x30] rel:[166,29 30x30] r:999 border:2px #000000@0
 + - div "Reading your file…" abs:[41,609 324x18] rel:[19,73 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
 + - div "No cards will be added until you tap Import." abs:[41,631 324x18] rel:[19,95 324x18] font:12/400/18 color:on-surface-variant text:center
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 - - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
-+ - pill-btn "Parsing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
++ - pill-btn "Parsing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 + - span abs:[206,723 18x18] rel:[91,11 18x18] r:999 border:2px #000000@0
 + - div "Reading file — no changes yet." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
@@ -214,6 +222,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Preview all (ordered diff vs Empty)
 
 ```diff
+  - span "Import" abs:[247,102 37x13] rel:[239,2 37x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
++ - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:805
   - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
 - - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
@@ -242,10 +253,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
-+ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · 5 rows detected" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
@@ -258,7 +269,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
 + - div abs:[22,417 362x29] rel:[14,294 362x29] flex:row justify:between align:baseline pad:8/4
-+ - ov "2 · Preview" abs:[26,425 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant
++ - ov "2 · Preview" abs:[26,425 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant tracking:1.2
 + - span "5 of 5 ready" abs:[320,425 60x13] rel:[298,8 60x13] font:11/400 color:on-surface-variant
 + - div abs:[22,446 362x26] rel:[14,323 362x26] flex:row wrap gap:6 margin:0/0/12/0
 + - span "Valid · 5" abs:[22,446 76x26] rel:[0,0 76x26] flex:row gap:6 align:center pad:0/10/0/8 bg:mastery@10 font:11/700 color:mastery r:999
@@ -267,42 +278,42 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - card abs:[22,484 362x201] rel:[14,361 362x201] repeat:x5(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "researcher" abs:[210,497 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,498 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,498 13x13] rel:[0,0 13x13] clip
 + - item[2] div abs:[23,525 360x40] rel:[1,41 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "2" abs:[35,539 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "공부하다" abs:[69,535 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "공부하다" abs:[69,535 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "to study" abs:[210,537 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,538 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,538 13x13] rel:[0,0 13x13] clip
 + - item[3] div abs:[23,565 360x40] rel:[1,81 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "3" abs:[35,579 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "도서관" abs:[69,575 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "도서관" abs:[69,575 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "library, reading room" abs:[210,577 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,578 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,578 13x13] rel:[0,0 13x13] clip
 + - item[4] div abs:[23,605 360x40] rel:[1,121 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "4" abs:[35,619 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "친구" abs:[69,615 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "친구" abs:[69,615 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "friend, close companion" abs:[210,617 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,618 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,618 13x13] rel:[0,0 13x13] clip
 + - item[5] div abs:[23,645 360x39] rel:[1,161 360x39] grid cols:4 gap:10 align:center pad:10/12
 + - span "5" abs:[35,659 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "바다" abs:[69,655 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "바다" abs:[69,655 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "sea, ocean" abs:[210,657 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,658 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,658 13x13] rel:[0,0 13x13] clip
-+ - ov "Import options" abs:[22,699 362x25] rel:[14,576 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant
++ - ov "Import options" abs:[22,699 362x25] rel:[14,576 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,724 362x176] rel:[14,601 362x176] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[23,725 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
 + - div abs:[37,739 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,747 14x14] rel:[8,8 14x14] flex:row
 + - icon:tag abs:[45,747 14x14] rel:[0,0 14x14] clip
 + - div abs:[81,737 232x33] rel:[58,12 232x33]
-+ - div "Apply tags from column 3" abs:[81,737 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Apply tags from column 3" abs:[81,737 232x16] rel:[0,0 232x16] font:13/600 color:font-headline tracking:-0.1
 + - div "Detected: TOPIK II, noun, verb" abs:[81,755 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,741 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
 + - span abs:[346,744 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
@@ -311,7 +322,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[45,805 14x14] rel:[8,8 14x14] flex:row
 + - icon:copy abs:[45,805 14x14] rel:[0,0 14x14] clip
 + - div abs:[81,795 232x33] rel:[58,12 232x33]
-+ - div "Skip duplicates" abs:[81,795 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Skip duplicates" abs:[81,795 232x16] rel:[0,0 232x16] font:13/600 color:font-headline tracking:-0.1
 + - div "Cards matching front + back stay untouched" abs:[81,813 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,799 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
 + - span abs:[346,802 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
@@ -320,15 +331,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[45,863 14x14] rel:[8,8 14x14] flex:row
 + - icon:flag abs:[45,863 14x14] rel:[0,0 14x14] clip
 + - div abs:[81,854 232x33] rel:[58,12 232x33]
-+ - div "Mark imported as new" abs:[81,854 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Mark imported as new" abs:[81,854 232x16] rel:[0,0 232x16] font:13/600 color:font-headline tracking:-0.1
 + - div "Reset progress for matching cards" abs:[81,872 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,857 44x26] rel:[302,16 44x26] pos:relative bg:surface-container-high r:999
 + - span abs:[328,860 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
-+ - pill-btn "Import 5 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Import 5 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[171,725 15x15] rel:[56,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -339,6 +350,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Preview mixed (ordered diff vs Empty)
 
 ```diff
+  - span "Import" abs:[247,102 37x13] rel:[239,2 37x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
++ - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1043
   - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
 - - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
@@ -367,10 +381,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
-+ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · 7 rows detected" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
@@ -378,7 +392,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
 + - div abs:[22,417 362x29] rel:[14,294 362x29] flex:row justify:between align:baseline pad:8/4
-+ - ov "2 · Preview" abs:[26,425 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant
++ - ov "2 · Preview" abs:[26,425 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant tracking:1.2
 + - span "4 of 7 ready" abs:[320,425 60x13] rel:[298,8 60x13] font:11/400 color:on-surface-variant
 + - div abs:[22,446 362x26] rel:[14,323 362x26] flex:row wrap gap:6 margin:0/0/12/0
 + - span "Valid · 4" abs:[22,446 76x26] rel:[0,0 76x26] flex:row gap:6 align:center pad:0/10/0/8 bg:mastery@10 font:11/700 color:mastery r:999
@@ -393,14 +407,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - card abs:[22,484 362x341] rel:[14,361 362x341] repeat:x7(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "researcher" abs:[210,497 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,498 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,498 13x13] rel:[0,0 13x13] clip
 + - item[2] div abs:[23,525 360x61] rel:[1,41 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 op:0.85
 + - span "2" abs:[35,549 24x12] rel:[12,24 24x12] font:10/700 color:on-surface-variant
 + - div abs:[69,535 131x40] rel:[46,10 131x40]
-+ - div "공부하다" abs:[69,535 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline
++ - div "공부하다" abs:[69,535 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "Missing meaning" abs:[69,561 92x12] rel:[0,26 92x12] flex:row gap:3 align:center margin:2/0/0/0 font:10/600 color:error
 + - span abs:[69,562 9x9] rel:[0,2 9x9] flex:row
 + - icon:alert-circle abs:[69,562 9x9] rel:[0,0 9x9] clip
@@ -409,14 +423,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:x abs:[351,549 13x13] rel:[0,0 13x13] clip
 + - item[3] div abs:[23,586 360x40] rel:[1,102 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "3" abs:[35,600 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "도서관" abs:[69,596 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "도서관" abs:[69,596 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "library, reading room" abs:[210,598 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,599 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,599 13x13] rel:[0,0 13x13] clip
 + - item[4] div abs:[23,626 360x58] rel:[1,142 360x58] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 op:0.85
 + - span "4" abs:[35,649 24x12] rel:[12,23 24x12] font:10/700 color:on-surface-variant
 + - div abs:[69,636 131x37] rel:[46,10 131x37]
-+ - div "(empty)" abs:[69,636 131x16] rel:[0,0 131x16] clip font:13/600 color:error
++ - div "(empty)" abs:[69,636 131x16] rel:[0,0 131x16] clip font:13/600 color:error tracking:-0.1
 + - div "Missing term" abs:[69,659 73x12] rel:[0,23 73x12] flex:row gap:3 align:center margin:2/0/0/0 font:10/600 color:error
 + - span abs:[69,660 9x9] rel:[0,2 9x9] flex:row
 + - icon:alert-circle abs:[69,660 9x9] rel:[0,0 9x9] clip
@@ -426,7 +440,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - item[5] div abs:[23,684 360x61] rel:[1,200 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#d9891e@4
 + - span "5" abs:[35,708 24x12] rel:[12,24 24x12] font:10/700 color:on-surface-variant
 + - div abs:[69,694 131x40] rel:[46,10 131x40]
-+ - div "친구" abs:[69,694 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline
++ - div "친구" abs:[69,694 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "Already in this deck" abs:[69,720 105x12] rel:[0,26 105x12] flex:row gap:3 align:center margin:2/0/0/0 font:10/600 color:streak
 + - span abs:[69,721 9x9] rel:[0,2 9x9] flex:row
 + - icon:copy abs:[69,721 9x9] rel:[0,0 9x9] clip
@@ -435,13 +449,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:copy abs:[351,708 13x13] rel:[0,0 13x13] clip
 + - item[6] div abs:[23,745 360x40] rel:[1,261 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "6" abs:[35,759 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "바다" abs:[69,755 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "바다" abs:[69,755 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "sea, ocean" abs:[210,757 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,758 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,758 13x13] rel:[0,0 13x13] clip
 + - item[7] div abs:[23,785 360x39] rel:[1,301 360x39] grid cols:4 gap:10 align:center pad:10/12
 + - span "7" abs:[35,799 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
-+ - div "영화" abs:[69,795 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "영화" abs:[69,795 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "movie / film" abs:[210,797 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,798 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,798 13x13] rel:[0,0 13x13] clip
@@ -454,14 +468,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
 + - div "3 rows will be skipped" abs:[62,852 307x19] rel:[0,0 307x19] margin:0/0/2/0 font:12/700/19 color:font-headline
 + - div "2 have missing fields · 1 match an existing card. Fix them in your file and import again to include them." abs:[62,873 307x37] rel:[0,21 307x37] font:12/400/19 color:on-surface-variant
-+ - ov "Import options" abs:[22,937 362x25] rel:[14,814 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant
++ - ov "Import options" abs:[22,937 362x25] rel:[14,814 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,962 362x176] rel:[14,839 362x176] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[23,963 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
 + - div abs:[37,976 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,984 14x14] rel:[8,8 14x14] flex:row
 + - icon:tag abs:[45,984 14x14] rel:[0,0 14x14] clip
 + - div abs:[81,975 232x33] rel:[58,12 232x33]
-+ - div "Apply tags from column 3" abs:[81,975 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Apply tags from column 3" abs:[81,975 232x16] rel:[0,0 232x16] font:13/600 color:font-headline tracking:-0.1
 + - div "Detected: TOPIK II, noun, verb" abs:[81,993 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,978 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
 + - span abs:[346,981 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
@@ -470,7 +484,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[45,1043 14x14] rel:[8,8 14x14] flex:row
 + - icon:copy abs:[45,1043 14x14] rel:[0,0 14x14] clip
 + - div abs:[81,1033 232x33] rel:[58,12 232x33]
-+ - div "Skip duplicates" abs:[81,1033 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Skip duplicates" abs:[81,1033 232x16] rel:[0,0 232x16] font:13/600 color:font-headline tracking:-0.1
 + - div "Cards matching front + back stay untouched" abs:[81,1051 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,1037 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
 + - span abs:[346,1040 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
@@ -479,15 +493,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[45,1101 14x14] rel:[8,8 14x14] flex:row
 + - icon:flag abs:[45,1101 14x14] rel:[0,0 14x14] clip
 + - div abs:[81,1092 232x33] rel:[58,12 232x33]
-+ - div "Mark imported as new" abs:[81,1092 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Mark imported as new" abs:[81,1092 232x16] rel:[0,0 232x16] font:13/600 color:font-headline tracking:-0.1
 + - div "Reset progress for matching cards" abs:[81,1110 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,1095 44x26] rel:[302,16 44x26] pos:relative bg:surface-container-high r:999
 + - span abs:[328,1098 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
-+ - pill-btn "Import 4 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Import 4 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[171,725 15x15] rel:[56,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -530,10 +544,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
-+ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · ready to preview" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
@@ -554,12 +568,12 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "29 of 47" abs:[41,563 324x13] rel:[19,146 324x13] margin:8/0/0/0 font:11/400 color:on-surface-variant text:center
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 - - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
-+ - pill-btn "Importing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.6
++ - pill-btn "Importing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.6
 + - span abs:[197,723 18x18] rel:[82,11 18x18] r:999 border:2px #000000@0
 + - div "Next you’ll preview every row before anything is imported." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
@@ -578,13 +592,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x621] rel:[0,92 390x621] grow:1 basis:0 layout_hint:expanded pad:18/14/14/14 layout_hint:scroll
     - card abs:[22,118 362x199] rel:[14,18 362x199] pad:24/22 margin:0/0/14/0 bg:mastery@10 r:12 border:1px mastery@22
       - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
         - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
           - icon:check-circle-2 abs:[188,160 30x30] rel:[0,0 30x30] clip
-      - div "Import complete" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
+      - div "Import complete" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
       - div "Added 47 cards to TOPIK II — Vocab. They are ready to study." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
     - card abs:[22,331 362x50] rel:[14,231 362x50] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,332 360x48] rel:[1,1 360x48] grid cols:3 gap:12 align:center pad:12/14
@@ -594,8 +608,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div "Added" abs:[77,348 263x16] rel:[54,16 263x16] font:13/600 color:font-headline
         - div "47" abs:[352,347 17x18] rel:[329,15 17x18] font:14/700 color:mastery
   - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
-    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
         - icon:layers abs:[214,745 15x15] rel:[0,0 15x15] clip
 ```
@@ -614,13 +628,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x621] rel:[0,92 390x621] grow:1 basis:0 layout_hint:expanded pad:18/14/14/14 layout_hint:scroll
     - card abs:[22,118 362x199] rel:[14,18 362x199] pad:24/22 margin:0/0/14/0 bg:#d9891e@10 r:12 border:1px #d9891e@22
       - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
         - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
           - icon:alert-triangle abs:[188,160 30x30] rel:[0,0 30x30] clip
-      - div "Imported with skips" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
+      - div "Imported with skips" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
       - div "Added 42 cards. 5 rows were skipped because of validation issues." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
     - card abs:[22,331 362x148] rel:[14,231 362x148] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,332 360x49] rel:[1,1 360x49] grid cols:3 gap:12 align:center pad:12/14
@@ -646,8 +660,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:info abs:[35,504 13x13] rel:[0,0 13x13] clip
       - span "Fix the skipped rows in your source file and import again to add them." abs:[56,504 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
   - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
-    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
         - icon:layers abs:[214,745 15x15] rel:[0,0 15x15] clip
 ```
@@ -666,16 +680,16 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - card abs:[22,118 362x199] rel:[14,110 362x199] pad:24/22 margin:0/0/14/0 bg:#dc4848@8 r:12 border:1px #dc4848@22
     - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
       - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
         - icon:alert-circle abs:[188,160 30x30] rel:[0,0 30x30] clip
-    - div "Import didn’t finish" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
+    - div "Import didn’t finish" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
     - div "No cards were added. Your file is unchanged and your deck is untouched." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
   - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
-    - pill-btn "Close" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
-    - pill-btn "Try again" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+    - pill-btn "Close" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+    - pill-btn "Try again" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[251,745 15x15] rel:[54,13 15x15] flex:row
         - icon:refresh-cw abs:[251,745 15x15] rel:[0,0 15x15] clip
 ```

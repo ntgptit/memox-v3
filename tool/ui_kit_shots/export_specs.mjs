@@ -253,6 +253,29 @@ window.__mx = (() => {
     return out.join(' ');
   }
 
+  // Decode a non-identity transform into a readable hint (translate/scale/rotate).
+  // Handles both matrix() and matrix3d(); sub-pixel/3d GPU hints (translateZ(0),
+  // translate3d(0,0,0)) resolve to identity and are skipped (not layout-relevant).
+  function transformBit(cs) {
+    const t = cs.transform;
+    if (!t || t === 'none') return '';
+    const nums = (t.match(/-?\\d+(?:\\.\\d+)?(?:e-?\\d+)?/g) || []).map((x) => parseFloat(x));
+    let a, b, c, d, e, f;
+    if (t.startsWith('matrix3d') && nums.length >= 16) {
+      a = nums[0]; b = nums[1]; c = nums[4]; d = nums[5]; e = nums[12]; f = nums[13];
+    } else if (nums.length >= 6) {
+      [a, b, c, d, e, f] = nums;
+    } else {
+      return 'transform';
+    }
+    if (a === 1 && b === 0 && c === 0 && d === 1 && Math.round(e) === 0 && Math.round(f) === 0) return '';
+    if (b === 0 && c === 0) {
+      if (a === 1 && d === 1) return 'transform:translate(' + Math.round(e) + ',' + Math.round(f) + ')';
+      return 'transform:scale(' + (Math.round(a * 100) / 100) + ',' + (Math.round(d * 100) / 100) + ')';
+    }
+    return 'transform:rotate(' + Math.round((Math.atan2(b, a) * 180) / Math.PI) + ')';
+  }
+
   function styleBits(el, cs) {
     const bits = [];
     if (cs.backgroundColor !== TRANSPARENT) bits.push('bg:' + tokenOr(cs.backgroundColor));
@@ -267,6 +290,8 @@ window.__mx = (() => {
       bits.push('color:' + tokenOr(cs.color));
       const ta = cs.textAlign;
       if (ta === 'center' || ta === 'right' || ta === 'end' || ta === 'justify') bits.push('text:' + ta);
+      const ls = parseFloat(cs.letterSpacing);
+      if (!Number.isNaN(ls) && Math.abs(ls) >= 0.1) bits.push('tracking:' + (Math.round(ls * 10) / 10));
     }
     const r = parseFloat(cs.borderTopLeftRadius);
     if (r > 0) bits.push('r:' + Math.round(r));
@@ -369,9 +394,14 @@ window.__mx = (() => {
         const box = boxBits(cs);
         const size = sizeBits(cs);
         const posn = positionBits(cs);
+        // content height of a scroll viewport (so viewport h vs scrollable content
+        // height are distinguishable, not conflated with the element's own bbox).
+        const scrolls = cs.overflowX === 'auto' || cs.overflowX === 'scroll' || cs.overflowY === 'auto' || cs.overflowY === 'scroll';
+        const scrollh = scrolls && el.scrollHeight > el.clientHeight + 1 ? 'scrollh:' + el.scrollHeight : '';
+        const tform = transformBit(cs);
         const sty = styleBits(el, cs);
         const core = (itemLabel ? itemLabel + ' ' : '') + name + (text ? ' "' + text + '"' : '');
-        const tail = [lay, flex, rep, box, size, posn, sty].filter(Boolean).join(' ');
+        const tail = [lay, flex, rep, box, size, posn, scrollh, tform, sty].filter(Boolean).join(' ');
         lines.push(ind + '- ' + core + ' ' + abs + ' ' + rel + (tail ? ' ' + tail : ''));
         signatures.push(ind + '- ' + core + (tail ? ' ' + tail : ''));
         depth += 1;
@@ -542,7 +572,7 @@ async function main() {
       'in `tool/verify/run.mjs` fails when this is stale).',
       '',
       'Reading guide: each line is one visible element —',
-      '`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.',
+      '`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.',
       'Indentation = DOM containment (layout/grouping containers are kept, not flattened).',
       '`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size',
       'INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.',
@@ -556,6 +586,8 @@ async function main() {
       'overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.',
       '`repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit',
       'start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).',
+      '`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,',
+      '`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.',
       '`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the',
       '390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A',
       '`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity',
@@ -565,7 +597,10 @@ async function main() {
       'in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is',
       'MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from',
       'ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system',
-      'contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
+      'contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw',
+      'kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`',
+      'is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.',
+      'Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
       '',
     ];
     writeFileSync(join(outDir, file), headerLines.join('\n') + sections.join('\n\n') + '\n');

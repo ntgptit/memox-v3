@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
@@ -44,30 +49,30 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - div abs:[62,67 294x18] rel:[54,15 294x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Match" abs:[62,67 58x18] rel:[0,0 58x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+      - span "Match" abs:[62,67 58x18] rel:[0,0 58x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:1.2 r:999
       - div abs:[128,74 228x4] rel:[66,7 228x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
         - div abs:[128,74 114x4] rel:[0,0 114x4] bg:seed-indigo
     - div "2 / 4" abs:[366,69 24x15] rel:[358,17 24x15] font:12/600 color:on-surface-variant
-  - ov "Board 1 of 3 · 3 pairs left" abs:[22,104 362x27] rel:[14,96 362x27] pad:4/0/10/0 font:11/700 color:on-surface-variant text:center
+  - ov "Board 1 of 3 · 3 pairs left" abs:[22,104 362x27] rel:[14,96 362x27] pad:4/0/10/0 font:11/700 color:on-surface-variant text:center tracking:1.2
   - scroll abs:[8,131 390x627] rel:[0,123 390x627] grid cols:2 gap:8 grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/14/14 layout_hint:scroll
     - item[1] div abs:[22,131 177x108] rel:[14,0 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:mastery@12 r:12 border:1px mastery@30 op:0.7
       - span abs:[68,178 14x14] rel:[46,47 14x14] flex:row
         - icon:check abs:[68,178 14x14] rel:[0,0 14x14] clip
-      - span "공부하다" abs:[88,172 65x26] rel:[66,41 65x26] margin:0/0/0/6 font:18/700 color:mastery text:center
+      - span "공부하다" abs:[88,172 65x26] rel:[66,41 65x26] margin:0/0/0/6 font:18/700 color:mastery text:center tracking:-0.4
     - item[2] div abs:[207,131 177x108] rel:[199,0 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:mastery@12 r:12 border:1px mastery@30 op:0.7
       - span abs:[258,178 14x14] rel:[51,47 14x14] flex:row
         - icon:check abs:[258,178 14x14] rel:[0,0 14x14] clip
       - span "to study" abs:[278,176 56x18] rel:[71,45 56x18] margin:0/0/0/6 font:14/600 color:mastery text:center
     - item[3] div abs:[22,247 177x108] rel:[14,116 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "먹다" abs:[94,288 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center
+      - span "먹다" abs:[94,288 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center tracking:-0.4
     - item[4] div abs:[207,247 177x108] rel:[199,116 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:seed-indigo r:12 border:1px seed-indigo
       - span "to eat" abs:[276,292 39x18] rel:[69,45 39x18] font:14/600 color:on-primary text:center
     - item[5] div abs:[22,363 177x108] rel:[14,232 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "하늘" abs:[94,404 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center
+      - span "하늘" abs:[94,404 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center tracking:-0.4
     - item[6] div abs:[207,363 177x108] rel:[199,232 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
       - span "sky" abs:[284,408 23x18] rel:[77,45 23x18] font:14/600 color:font-headline text:center
     - item[7] div abs:[22,479 177x108] rel:[14,348 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "도서관" abs:[86,520 48x26] rel:[64,41 48x26] font:18/700 color:font-headline text:center
+      - span "도서관" abs:[86,520 48x26] rel:[64,41 48x26] font:18/700 color:font-headline text:center tracking:-0.4
     - item[8] div abs:[207,479 177x108] rel:[199,348 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
       - span "library" abs:[274,524 42x18] rel:[67,45 42x18] font:14/600 color:font-headline text:center
   - div abs:[8,758 390x30] rel:[0,750 390x30] flex:row justify:between align:center pad:0/14/16/14

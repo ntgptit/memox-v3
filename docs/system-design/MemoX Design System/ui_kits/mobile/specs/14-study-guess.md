@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
@@ -44,44 +49,44 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - div abs:[62,67 286x18] rel:[54,15 286x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Guess" abs:[62,67 56x18] rel:[0,0 56x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+      - span "Guess" abs:[62,67 56x18] rel:[0,0 56x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:1.2 r:999
       - div abs:[126,74 222x4] rel:[64,7 222x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
         - div abs:[126,74 56x4] rel:[0,0 56x4] bg:seed-indigo
     - div "5 / 20" abs:[358,69 32x15] rel:[350,17 32x15] font:12/600 color:on-surface-variant
-  - hide-scroll abs:[8,100 390x643] rel:[0,92 390x643] flex:col grow:1 basis:0 layout_hint:expanded layout_hint:scroll clip
+  - hide-scroll abs:[8,100 390x643] rel:[0,92 390x643] flex:col grow:1 basis:0 layout_hint:expanded layout_hint:scroll clip scrollh:732
     - div abs:[8,100 390x732] rel:[0,0 390x732] flex:col gap:14 pad:8/14/0/14
       - card abs:[22,108 362x248] rel:[14,8 362x248] flex:col gap:10 justify:center shrink:0 pad:34/14/32/14 minh:180 bg:on-primary r:12 border:1px seed-indigo@14
-        - ov "What is this?" abs:[37,203 332x13] rel:[15,95 332x13] font:11/700 color:on-surface-variant text:center
-        - div "도서관" abs:[37,226 332x37] rel:[15,118 332x37] font:32/700/37 color:font-headline text:center
+        - ov "What is this?" abs:[37,203 332x13] rel:[15,95 332x13] font:11/700 color:on-surface-variant text:center tracking:1.2
+        - div "도서관" abs:[37,226 332x37] rel:[15,118 332x37] font:32/700/37 color:font-headline text:center tracking:-0.5
       - div abs:[22,370 362x462] rel:[14,270 362x462] flex:col gap:8 shrink:0 repeat:x5(unit=1)
         - item[1] div abs:[22,370 362x86] rel:[0,0 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
           - span "A" abs:[37,398 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
           - div abs:[79,404 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "kitchen" abs:[79,404 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant
+            - div "kitchen" abs:[79,404 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant tracking:-0.1
         - item[2] div abs:[22,464 362x86] rel:[0,94 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:mastery@14 r:12 border:1px mastery@40
           - span "B" abs:[37,492 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:mastery r:999 border:1px mastery op:0.85
           - div abs:[79,480 260x54] rel:[57,16 260x54] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "library" abs:[79,480 260x19] rel:[0,0 260x19] font:15/700/19 color:mastery
+            - div "library" abs:[79,480 260x19] rel:[0,0 260x19] font:15/700/19 color:mastery tracking:-0.1
             - div "public building or room with a collection of books for reading or borrowing" abs:[79,501 260x34] rel:[0,21 260x34] font:12/400/17 color:mastery op:0.72
           - span abs:[351,498 18x18] rel:[329,34 18x18] flex:row
             - icon:check abs:[351,498 18x18] rel:[0,0 18x18] clip
         - item[3] div abs:[22,558 362x86] rel:[0,188 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:error@10 r:12 border:1px error@35
           - span "C" abs:[37,586 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:error r:999 border:1px error op:0.85
           - div abs:[79,582 260x38] rel:[57,24 260x38] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "school" abs:[79,582 260x19] rel:[0,0 260x19] font:15/700/19 color:error
+            - div "school" abs:[79,582 260x19] rel:[0,0 260x19] font:15/700/19 color:error tracking:-0.1
             - div "institution for educating children" abs:[79,603 260x17] rel:[0,21 260x17] font:12/400/17 color:error op:0.72
           - span abs:[351,592 18x18] rel:[329,34 18x18] flex:row
             - icon:x abs:[351,592 18x18] rel:[0,0 18x18] clip
         - item[4] div abs:[22,652 362x86] rel:[0,282 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
           - span "D" abs:[37,680 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
           - div abs:[79,686 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "office" abs:[79,686 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant
+            - div "office" abs:[79,686 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant tracking:-0.1
         - item[5] div abs:[22,746 362x86] rel:[0,376 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
           - span "E" abs:[37,774 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
           - div abs:[79,780 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "classroom" abs:[79,780 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant
+            - div "classroom" abs:[79,780 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant tracking:-0.1
   - div abs:[8,743 390x45] rel:[0,735 390x45] flex:col gap:6 shrink:0 pad:10/14/14/14
-    - div "Next card in 0.8s" abs:[22,753 362x12] rel:[14,10 362x12] font:10/600 color:on-surface-variant text:center
+    - div "Next card in 0.8s" abs:[22,753 362x12] rel:[14,10 362x12] font:10/600 color:on-surface-variant text:center tracking:1.2
     - div abs:[22,771 362x3] rel:[14,28 362x3] clip bg:surface-container r:999
       - div abs:[22,771 167x3] rel:[0,0 167x3] bg:mastery
 ```

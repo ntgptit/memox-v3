@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
@@ -43,31 +48,31 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Card history" abs:[60,66 262x21] rel:[52,14 262x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
-    - pill-btn "Edit" abs:[326,60 64x32] rel:[318,8 64x32] flex:row gap:5 justify:center align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center r:9
+    - title "Card history" abs:[60,66 262x21] rel:[52,14 262x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
+    - pill-btn "Edit" abs:[326,60 64x32] rel:[318,8 64x32] flex:row gap:5 justify:center align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center tracking:0.1 r:9
       - span abs:[338,70 12x12] rel:[12,10 12x12] flex:row
         - icon:pencil abs:[338,70 12x12] rel:[0,0 12x12] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
       - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
+  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1233
     - card abs:[22,123 362x72] rel:[14,0 362x72] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[39,138 237x42] rel:[17,15 237x42]
-        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline
+        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline tracking:-0.3
         - div "Researcher / Nhà nghiên cứu" abs:[39,165 237x15] rel:[0,27 237x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
       - span "Box 3 / 5" abs:[288,147 79x24] rel:[266,24 79x24] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:11/700 color:seed-indigo r:999
         - span abs:[297,154 11x11] rel:[9,7 11x11] flex:row
           - icon:zap abs:[297,154 11x11] rel:[0,0 11x11] clip
     - card abs:[22,209 362x219] rel:[14,86 362x219] pad:14 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - ov "Current progress" abs:[37,224 332x13] rel:[15,15 332x13] margin:0/0/10/0 font:11/700 color:on-surface-variant
+      - ov "Current progress" abs:[37,224 332x13] rel:[15,15 332x13] margin:0/0/10/0 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[37,247 332x10] rel:[15,38 332x10] flex:row gap:8 align:center margin:0/0/12/0
         - div abs:[37,249 60x6] rel:[0,2 60x6] grow:1 basis:0 layout_hint:expanded bg:seed-indigo@40 r:999
         - div abs:[105,249 60x6] rel:[68,2 60x6] grow:1 basis:0 layout_hint:expanded bg:seed-indigo@40 r:999
@@ -84,46 +89,46 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span abs:[45,304 13x13] rel:[8,8 13x13] flex:row
               - icon:clock abs:[45,304 13x13] rel:[0,0 13x13] clip
           - div abs:[75,295 53x30] rel:[38,0 53x30]
-            - div "Due" abs:[75,295 53x13] rel:[0,0 53x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
-            - div "in 6 days" abs:[75,309 53x16] rel:[0,14 53x16] clip font:13/700 color:font-headline
+            - div "Due" abs:[75,295 53x13] rel:[0,0 53x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
+            - div "in 6 days" abs:[75,309 53x16] rel:[0,14 53x16] clip font:13/700 color:font-headline tracking:-0.1
         - item[2] div abs:[210,295 159x30] rel:[173,0 159x30] flex:row gap:10 align:center
           - div abs:[210,296 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
             - span abs:[218,304 13x13] rel:[8,8 13x13] flex:row
               - icon:repeat abs:[218,304 13x13] rel:[0,0 13x13] clip
           - div abs:[248,295 44x30] rel:[38,0 44x30]
-            - div "Reviews" abs:[248,295 44x13] rel:[0,0 44x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
-            - div "14" abs:[248,309 44x16] rel:[0,14 44x16] clip font:13/700 color:font-headline
+            - div "Reviews" abs:[248,295 44x13] rel:[0,0 44x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
+            - div "14" abs:[248,309 44x16] rel:[0,14 44x16] clip font:13/700 color:font-headline tracking:-0.1
         - item[3] div abs:[37,339 159x30] rel:[0,44 159x30] flex:row gap:10 align:center
           - div abs:[37,340 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
             - span abs:[45,348 13x13] rel:[8,8 13x13] flex:row
               - icon:target abs:[45,348 13x13] rel:[0,0 13x13] clip
           - div abs:[75,339 56x30] rel:[38,0 56x30]
-            - div "Recall rate" abs:[75,339 56x13] rel:[0,0 56x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
-            - div "78%" abs:[75,353 56x16] rel:[0,14 56x16] clip font:13/700 color:font-headline
+            - div "Recall rate" abs:[75,339 56x13] rel:[0,0 56x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
+            - div "78%" abs:[75,353 56x16] rel:[0,14 56x16] clip font:13/700 color:font-headline tracking:-0.1
         - item[4] div abs:[210,339 159x30] rel:[173,44 159x30] flex:row gap:10 align:center
           - div abs:[210,340 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
             - span abs:[218,348 13x13] rel:[8,8 13x13] flex:row
               - icon:rotate-ccw abs:[218,348 13x13] rel:[0,0 13x13] clip
           - div abs:[248,339 39x30] rel:[38,0 39x30]
-            - div "Lapses" abs:[248,339 39x13] rel:[0,0 39x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
-            - div "2" abs:[248,353 39x16] rel:[0,14 39x16] clip font:13/700 color:font-headline
+            - div "Lapses" abs:[248,339 39x13] rel:[0,0 39x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
+            - div "2" abs:[248,353 39x16] rel:[0,14 39x16] clip font:13/700 color:font-headline tracking:-0.1
         - item[5] div abs:[37,383 159x30] rel:[0,88 159x30] flex:row gap:10 align:center
           - div abs:[37,384 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
             - span abs:[45,392 13x13] rel:[8,8 13x13] flex:row
               - icon:flame abs:[45,392 13x13] rel:[0,0 13x13] clip
           - div abs:[75,383 78x30] rel:[38,0 78x30]
-            - div "Correct streak" abs:[75,383 78x13] rel:[0,0 78x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
-            - div "4 in a row" abs:[75,397 78x16] rel:[0,14 78x16] clip font:13/700 color:font-headline
+            - div "Correct streak" abs:[75,383 78x13] rel:[0,0 78x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
+            - div "4 in a row" abs:[75,397 78x16] rel:[0,14 78x16] clip font:13/700 color:font-headline tracking:-0.1
         - item[6] div abs:[210,383 159x30] rel:[173,88 159x30] flex:row gap:10 align:center
           - div abs:[210,384 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
             - span abs:[218,392 13x13] rel:[8,8 13x13] flex:row
               - icon:calendar abs:[218,392 13x13] rel:[0,0 13x13] clip
           - div abs:[248,383 68x30] rel:[38,0 68x30]
-            - div "Since added" abs:[248,383 68x13] rel:[0,0 68x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
-            - div "23 days" abs:[248,397 68x16] rel:[0,14 68x16] clip font:13/700 color:font-headline
+            - div "Since added" abs:[248,383 68x13] rel:[0,0 68x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
+            - div "23 days" abs:[248,397 68x16] rel:[0,14 68x16] clip font:13/700 color:font-headline tracking:-0.1
     - div abs:[22,444 362x38] rel:[14,321 362x38] flex:row justify:between align:center pad:2/4/10/4
-      - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant
-      - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+      - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant tracking:1.2
+      - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
         - span abs:[286,454 11x11] rel:[10,8 11x11] flex:row
           - icon:filter abs:[286,454 11x11] rel:[0,0 11x11] clip
         - span abs:[359,454 11x11] rel:[83,8 11x11] flex:row
@@ -134,7 +139,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,490 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
         - div abs:[46,482 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,495 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+            - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
               - span abs:[70,503 11x11] rel:[9,6 11x11] flex:row
                 - icon:check abs:[70,503 11x11] rel:[0,0 11x11] clip
             - div abs:[310,495 59x26] rel:[249,0 59x26]
@@ -158,7 +163,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
         - div abs:[46,594 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,607 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak r:999
+            - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak tracking:0.3 r:999
               - span abs:[70,614 11x11] rel:[9,6 11x11] flex:row
                 - icon:corner-up-right abs:[70,614 11x11] rel:[0,0 11x11] clip
             - div abs:[305,607 64x26] rel:[244,0 64x26]
@@ -182,7 +187,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
         - div abs:[46,706 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,719 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error r:999
+            - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error tracking:0.3 r:999
               - span abs:[70,726 11x11] rel:[9,6 11x11] flex:row
                 - icon:rotate-ccw abs:[70,726 11x11] rel:[0,0 11x11] clip
             - div abs:[305,719 64x26] rel:[244,0 64x26]
@@ -206,7 +211,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
         - div abs:[46,818 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,831 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+            - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
               - span abs:[70,838 11x11] rel:[9,6 11x11] flex:row
                 - icon:pencil abs:[70,838 11x11] rel:[0,0 11x11] clip
             - div abs:[305,831 64x26] rel:[244,0 64x26]
@@ -217,7 +222,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,916 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
         - div abs:[46,908 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,921 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+            - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
               - span abs:[70,929 11x11] rel:[9,6 11x11] flex:row
                 - icon:check abs:[70,929 11x11] rel:[0,0 11x11] clip
             - div abs:[305,921 64x26] rel:[244,0 64x26]
@@ -241,7 +246,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
         - div abs:[46,1020 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,1033 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+            - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
               - span abs:[70,1041 11x11] rel:[9,6 11x11] flex:row
                 - icon:check abs:[70,1041 11x11] rel:[0,0 11x11] clip
             - div abs:[305,1033 64x26] rel:[244,0 64x26]
@@ -265,7 +270,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,1140 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
         - div abs:[46,1132 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,1145 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+            - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
               - span abs:[70,1153 11x11] rel:[9,6 11x11] flex:row
                 - icon:mic abs:[70,1153 11x11] rel:[0,0 11x11] clip
             - div abs:[305,1145 64x26] rel:[244,0 64x26]
@@ -276,7 +281,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
         - div abs:[46,1223 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
           - div abs:[61,1236 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery r:999
+            - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery tracking:0.3 r:999
               - span abs:[70,1243 11x11] rel:[9,6 11x11] flex:row
                 - icon:sparkles abs:[70,1243 11x11] rel:[0,0 11x11] clip
             - div abs:[306,1236 63x26] rel:[245,0 63x26]
@@ -291,18 +296,23 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Empty (ordered diff vs Loaded)
 
 ```diff
+  - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1233
++ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+  - card abs:[22,123 362x72] rel:[14,0 362x72] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+  ...
   - div abs:[22,444 362x25] rel:[14,321 362x25] flex:row justify:between align:center pad:2/4/10/4
-- - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant
-- - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
-+ - ov "Timeline" abs:[26,446 59x13] rel:[4,2 59x13] font:11/700 color:on-surface-variant
+- - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant tracking:1.2
+- - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
++ - ov "Timeline" abs:[26,446 59x13] rel:[4,2 59x13] font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,469 362x296] rel:[14,346 362x296] pad:40/22/32/22 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[173,510 60x60] rel:[151,41 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
   - span abs:[190,527 26x26] rel:[17,17 26x26] flex:row
 - - icon:filter abs:[286,454 11x11] rel:[0,0 11x11] clip
 + - icon:clock abs:[190,527 26x26] rel:[0,0 26x26] clip
-+ - div "No reviews yet" abs:[45,584 316x22] rel:[23,115 316x22] margin:0/0/8/0 font:17/700 color:font-headline text:center
++ - div "No reviews yet" abs:[45,584 316x22] rel:[23,115 316x22] margin:0/0/8/0 font:17/700 color:font-headline text:center tracking:-0.2
 + - div "History appears here after you study this card. Open it in a session and your attempts will start showing up." abs:[45,614 316x60] rel:[23,145 316x60] margin:0/0/18/0 font:13/400/20 color:on-surface-variant text:center
-+ - pill-btn "Study this card now" abs:[113,692 181x40] rel:[91,223 181x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - pill-btn "Study this card now" abs:[113,692 181x40] rel:[91,223 181x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
   - span abs:[131,705 14x14] rel:[18,13 14x14] flex:row
 - - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
 - - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
@@ -311,7 +321,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,490 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
 - - div abs:[46,482 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,495 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+- - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
 - - span abs:[70,503 11x11] rel:[9,6 11x11] flex:row
 - - icon:check abs:[70,503 11x11] rel:[0,0 11x11] clip
 - - div abs:[310,495 59x26] rel:[249,0 59x26]
@@ -335,7 +345,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
 - - div abs:[46,594 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,607 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak r:999
+- - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak tracking:0.3 r:999
 - - span abs:[70,614 11x11] rel:[9,6 11x11] flex:row
 - - icon:corner-up-right abs:[70,614 11x11] rel:[0,0 11x11] clip
 - - div abs:[305,607 64x26] rel:[244,0 64x26]
@@ -359,7 +369,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
 - - div abs:[46,706 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,719 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error r:999
+- - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error tracking:0.3 r:999
 - - span abs:[70,726 11x11] rel:[9,6 11x11] flex:row
 - - icon:rotate-ccw abs:[70,726 11x11] rel:[0,0 11x11] clip
 - - div abs:[305,719 64x26] rel:[244,0 64x26]
@@ -383,7 +393,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
 - - div abs:[46,818 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,831 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+- - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
 - - span abs:[70,838 11x11] rel:[9,6 11x11] flex:row
 - - icon:pencil abs:[70,838 11x11] rel:[0,0 11x11] clip
 - - div abs:[305,831 64x26] rel:[244,0 64x26]
@@ -394,7 +404,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,916 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
 - - div abs:[46,908 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,921 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+- - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
 - - span abs:[70,929 11x11] rel:[9,6 11x11] flex:row
 - - icon:check abs:[70,929 11x11] rel:[0,0 11x11] clip
 - - div abs:[305,921 64x26] rel:[244,0 64x26]
@@ -418,7 +428,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
 - - div abs:[46,1020 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,1033 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+- - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
 - - span abs:[70,1041 11x11] rel:[9,6 11x11] flex:row
 - - icon:check abs:[70,1041 11x11] rel:[0,0 11x11] clip
 - - div abs:[305,1033 64x26] rel:[244,0 64x26]
@@ -442,7 +452,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,1140 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
 - - div abs:[46,1132 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,1145 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+- - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
 - - span abs:[70,1153 11x11] rel:[9,6 11x11] flex:row
 - - icon:mic abs:[70,1153 11x11] rel:[0,0 11x11] clip
 - - div abs:[305,1145 64x26] rel:[244,0 64x26]
@@ -453,7 +463,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
 - - div abs:[46,1223 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[61,1236 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery r:999
+- - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery tracking:0.3 r:999
 - - span abs:[70,1243 11x11] rel:[9,6 11x11] flex:row
 - - icon:sparkles abs:[70,1243 11x11] rel:[0,0 11x11] clip
 - - div abs:[306,1236 63x26] rel:[245,0 63x26]
@@ -480,25 +490,25 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
       - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline
+    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
   - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
     - card abs:[22,123 362x65] rel:[14,0 362x65] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[39,138 316x35] rel:[17,15 316x35]
         - span abs:[39,138 140x18] rel:[0,0 140x18] bg:surface-container-high r:6 op:0.5
         - span abs:[39,162 180x11] rel:[0,24 180x11] bg:surface-container-high r:6 op:0.4
     - div abs:[22,202 362x25] rel:[14,79 362x25] flex:row justify:between align:center pad:2/4/10/4
-      - ov "Loading timeline" abs:[26,204 121x13] rel:[4,2 121x13] font:11/700 color:on-surface-variant
+      - ov "Loading timeline" abs:[26,204 121x13] rel:[4,2 121x13] font:11/700 color:on-surface-variant tracking:1.2
     - div abs:[22,227 362x338] rel:[14,104 362x338] pad:0/0/0/24 pos:relative
       - div abs:[33,235 2x322] rel:[11,8 2x322] pos:absolute bg:surface-container r:999
       - div abs:[46,227 338x74] rel:[24,0 338x74] margin:0/0/14/0 pos:relative
@@ -541,22 +551,22 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
       - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline
+    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
   - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
     - card abs:[22,123 362x72] rel:[14,0 362x72] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[39,138 237x42] rel:[17,15 237x42]
-        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline
+        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline tracking:-0.3
         - div "Researcher / Nhà nghiên cứu" abs:[39,165 237x15] rel:[0,27 237x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
       - span "Box 3 / 5" abs:[288,147 79x24] rel:[266,24 79x24] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:11/700 color:seed-indigo r:999
         - span abs:[297,154 11x11] rel:[9,7 11x11] flex:row
@@ -567,7 +577,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:cloud-off abs:[192,265 22x22] rel:[0,0 22x22] clip
       - div "Couldn't load history" abs:[45,316 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
       - div "Your data is safe on this device. Try again in a moment." abs:[45,343 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Retry" abs:[158,399 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - pill-btn "Retry" abs:[158,399 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[176,412 14x14] rel:[18,13 14x14] flex:row
           - icon:refresh-cw abs:[176,412 14x14] rel:[0,0 14x14] clip
 ```
@@ -575,6 +585,11 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Partial (ordered diff vs Loaded)
 
 ```diff
+  - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1233
++ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1215
+  - card abs:[22,123 362x72] rel:[14,0 362x72] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+  ...
   - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
 - - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
 + - div abs:[22,482 362x820] rel:[14,359 362x820] repeat:x3(unit=3) pad:0/0/0/24 pos:relative

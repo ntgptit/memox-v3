@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
@@ -40,7 +45,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 justify:between align:center pad:0/14
-    - div "Library" abs:[22,65 78x30] rel:[14,13 78x30] font:24/700 color:font-headline
+    - div "Library" abs:[22,65 78x30] rel:[14,13 78x30] font:24/700 color:font-headline tracking:-0.5
     - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
         - icon:sliders-horizontal abs:[356,70 20x20] rel:[0,0 20x20] clip
@@ -48,31 +53,31 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - span abs:[37,123 16x16] rel:[15,15 16x16] flex:row
       - icon:search abs:[37,123 16x16] rel:[0,0 16x16] clip
     - span "Search decks, cards, tags" abs:[63,122 275x18] rel:[41,14 275x18] flex:row gap:3 align:center grow:1 basis:0 layout_hint:expanded font:14/400 color:on-surface-variant op:0.75
-    - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant r:6 border:1px seed-indigo@14
+    - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant tracking:0.3 r:6 border:1px seed-indigo@14
   - div abs:[22,164 362x62] rel:[14,156 362x62] flex:row gap:12 align:center pad:12/14 r:14 border:1px seed-indigo@18
     - div abs:[37,177 36x36] rel:[15,13 36x36] flex:row justify:center align:center shrink:0 bg:seed-indigo r:10
       - span abs:[46,186 18x18] rel:[9,9 18x18] flex:row
         - icon:zap abs:[46,186 18x18] rel:[0,0 18x18] clip
     - div abs:[85,180 254x30] rel:[63,16 254x30] grow:1 basis:0 layout_hint:expanded
-      - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline
+      - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline tracking:-0.1
       - div "Across 3 folders · ~14 min" abs:[85,197 254x13] rel:[0,17 254x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
     - span abs:[351,186 18x18] rel:[329,22 18x18] flex:row
       - icon:chevron-right abs:[351,186 18x18] rel:[0,0 18x18] clip
   - div abs:[8,238 390x36] rel:[0,230 390x36] flex:row justify:between align:center pad:0/18/8/18
-    - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant
-    - pill-btn "Recent" abs:[289,238 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+    - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant tracking:1.2
+    - pill-btn "Recent" abs:[289,238 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
       - span abs:[299,247 11x11] rel:[10,9 11x11] flex:row
         - icon:arrow-down-up abs:[299,247 11x11] rel:[0,0 11x11] clip
       - span abs:[359,247 11x11] rel:[70,9 11x11] flex:row
         - icon:chevron-down abs:[359,247 11x11] rel:[0,0 11x11] clip
-  - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll
+  - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll scrollh:541
     - item[1] card abs:[22,274 362x101] rel:[14,0 362x101] grid cols:3 gap:14 align:center pad:14 margin:0/0/10/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,303 44x44] rel:[15,29 44x44] flex:row justify:center align:center bg:seed-indigo@12 r:12
         - span abs:[49,315 20x20] rel:[12,12 20x20] flex:row
           - icon:flag abs:[49,315 20x20] rel:[0,0 20x20] clip
       - div abs:[99,289 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
         - item[1] div abs:[99,289 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-          - div "Korean" abs:[99,289 51x19] rel:[0,0 51x19] clip font:15/700 color:font-headline
+          - div "Korean" abs:[99,289 51x19] rel:[0,0 51x19] clip font:15/700 color:font-headline tracking:-0.2
           - span "23 due" abs:[284,291 47x20] rel:[185,2 47x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
         - div "TOPIK · Hangul · grammar" abs:[99,313 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
         - item[2] div abs:[99,334 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -95,7 +100,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:flag abs:[49,424 20x20] rel:[0,0 20x20] clip
       - div abs:[99,400 232x68] rel:[77,15 232x68] repeat:x2(unit=2)
         - item[1] div abs:[99,400 232x19] rel:[0,0 232x19] flex:row gap:8 justify:between align:baseline
-          - div "Japanese" abs:[99,400 67x19] rel:[0,0 67x19] clip font:15/700 color:font-headline
+          - div "Japanese" abs:[99,400 67x19] rel:[0,0 67x19] clip font:15/700 color:font-headline tracking:-0.2
         - div "Genki · kana · kanji" abs:[99,421 232x13] rel:[0,21 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
         - item[2] div abs:[99,442 232x13] rel:[0,42 232x13] flex:row gap:10 align:center margin:8/0/0/0
           - span "5 decks" abs:[99,442 56x13] rel:[0,0 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
@@ -115,7 +120,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:flag abs:[49,534 20x20] rel:[0,0 20x20] clip
       - div abs:[99,508 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
         - item[1] div abs:[99,508 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-          - div "Mandarin" abs:[99,508 66x19] rel:[0,0 66x19] clip font:15/700 color:font-headline
+          - div "Mandarin" abs:[99,508 66x19] rel:[0,0 66x19] clip font:15/700 color:font-headline tracking:-0.2
           - span "48 due" abs:[284,510 47x20] rel:[185,2 47x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
         - div "HSK 1–3" abs:[99,532 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
         - item[2] div abs:[99,553 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -138,7 +143,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:book-open abs:[49,645 20x20] rel:[0,0 20x20] clip
       - div abs:[99,619 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
         - item[1] div abs:[99,619 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-          - div "Hanja & roots" abs:[99,619 95x19] rel:[0,0 95x19] clip font:15/700 color:font-headline
+          - div "Hanja & roots" abs:[99,619 95x19] rel:[0,0 95x19] clip font:15/700 color:font-headline tracking:-0.2
           - span "6 due" abs:[290,621 41x20] rel:[191,2 41x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
         - div "Sino-Korean character roots" abs:[99,643 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
         - item[2] div abs:[99,664 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -179,30 +184,30 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Loading (ordered diff vs Loaded)
 
 ```diff
-  - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant r:6 border:1px seed-indigo@14
+  - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant tracking:0.3 r:6 border:1px seed-indigo@14
 - - div abs:[22,164 362x62] rel:[14,156 362x62] flex:row gap:12 align:center pad:12/14 r:14 border:1px seed-indigo@18
 - - div abs:[37,177 36x36] rel:[15,13 36x36] flex:row justify:center align:center shrink:0 bg:seed-indigo r:10
 - - span abs:[46,186 18x18] rel:[9,9 18x18] flex:row
 - - icon:zap abs:[46,186 18x18] rel:[0,0 18x18] clip
 - - div abs:[85,180 254x30] rel:[63,16 254x30] grow:1 basis:0 layout_hint:expanded
-- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline
+- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline tracking:-0.1
 - - div "Across 3 folders · ~14 min" abs:[85,197 254x13] rel:[0,17 254x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 - - span abs:[351,186 18x18] rel:[329,22 18x18] flex:row
 - - icon:chevron-right abs:[351,186 18x18] rel:[0,0 18x18] clip
   - div abs:[8,164 390x36] rel:[0,156 390x36] flex:row justify:between align:center pad:0/18/8/18
-- - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant
-+ - ov "Loading folders" abs:[26,172 122x13] rel:[18,8 122x13] font:11/700 color:on-surface-variant
-  - pill-btn "Recent" abs:[289,164 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant tracking:1.2
++ - ov "Loading folders" abs:[26,172 122x13] rel:[18,8 122x13] font:11/700 color:on-surface-variant tracking:1.2
+  - pill-btn "Recent" abs:[289,164 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
   - icon:chevron-down abs:[359,173 11x11] rel:[0,0 11x11] clip
-- - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll
+- - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll scrollh:541
 - - item[1] card abs:[22,274 362x101] rel:[14,0 362x101] grid cols:3 gap:14 align:center pad:14 margin:0/0/10/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[37,303 44x44] rel:[15,29 44x44] flex:row justify:center align:center bg:seed-indigo@12 r:12
 - - span abs:[49,315 20x20] rel:[12,12 20x20] flex:row
 - - icon:flag abs:[49,315 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,289 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
 - - item[1] div abs:[99,289 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-- - div "Korean" abs:[99,289 51x19] rel:[0,0 51x19] clip font:15/700 color:font-headline
+- - div "Korean" abs:[99,289 51x19] rel:[0,0 51x19] clip font:15/700 color:font-headline tracking:-0.2
 - - span "23 due" abs:[284,291 47x20] rel:[185,2 47x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
 - - div "TOPIK · Hangul · grammar" abs:[99,313 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,334 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -225,7 +230,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:flag abs:[49,424 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,400 232x68] rel:[77,15 232x68] repeat:x2(unit=2)
 - - item[1] div abs:[99,400 232x19] rel:[0,0 232x19] flex:row gap:8 justify:between align:baseline
-- - div "Japanese" abs:[99,400 67x19] rel:[0,0 67x19] clip font:15/700 color:font-headline
+- - div "Japanese" abs:[99,400 67x19] rel:[0,0 67x19] clip font:15/700 color:font-headline tracking:-0.2
 - - div "Genki · kana · kanji" abs:[99,421 232x13] rel:[0,21 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,442 232x13] rel:[0,42 232x13] flex:row gap:10 align:center margin:8/0/0/0
 - - span "5 decks" abs:[99,442 56x13] rel:[0,0 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
@@ -245,7 +250,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:flag abs:[49,534 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,508 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
 - - item[1] div abs:[99,508 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-- - div "Mandarin" abs:[99,508 66x19] rel:[0,0 66x19] clip font:15/700 color:font-headline
+- - div "Mandarin" abs:[99,508 66x19] rel:[0,0 66x19] clip font:15/700 color:font-headline tracking:-0.2
 - - span "48 due" abs:[284,510 47x20] rel:[185,2 47x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
 - - div "HSK 1–3" abs:[99,532 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,553 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -268,7 +273,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:book-open abs:[49,645 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,619 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
 - - item[1] div abs:[99,619 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-- - div "Hanja & roots" abs:[99,619 95x19] rel:[0,0 95x19] clip font:15/700 color:font-headline
+- - div "Hanja & roots" abs:[99,619 95x19] rel:[0,0 95x19] clip font:15/700 color:font-headline tracking:-0.2
 - - span "6 due" abs:[290,621 41x20] rel:[191,2 41x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
 - - div "Sino-Korean character roots" abs:[99,643 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,664 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -315,7 +320,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Empty (ordered diff vs Loaded)
 
 ```diff
-  - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant r:6 border:1px seed-indigo@14
+  - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant tracking:0.3 r:6 border:1px seed-indigo@14
 - - div abs:[22,164 362x62] rel:[14,156 362x62] flex:row gap:12 align:center pad:12/14 r:14 border:1px seed-indigo@18
 - - div abs:[37,177 36x36] rel:[15,13 36x36] flex:row justify:center align:center shrink:0 bg:seed-indigo r:10
 + - card abs:[22,172 362x378] rel:[14,164 362x378] pad:44/22/32/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -323,31 +328,31 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - span abs:[189,235 28x28] rel:[18,18 28x28] flex:row
 - - icon:zap abs:[46,186 18x18] rel:[0,0 18x18] clip
 - - div abs:[85,180 254x30] rel:[63,16 254x30] grow:1 basis:0 layout_hint:expanded
-- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline
+- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline tracking:-0.1
 - - div "Across 3 folders · ~14 min" abs:[85,197 254x13] rel:[0,17 254x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 - - span abs:[351,186 18x18] rel:[329,22 18x18] flex:row
 - - icon:chevron-right abs:[351,186 18x18] rel:[0,0 18x18] clip
 - - div abs:[8,238 390x36] rel:[0,230 390x36] flex:row justify:between align:center pad:0/18/8/18
-- - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant
-- - pill-btn "Recent" abs:[289,238 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant tracking:1.2
+- - pill-btn "Recent" abs:[289,238 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
 + - icon:folder-plus abs:[189,235 28x28] rel:[0,0 28x28] clip
-+ - div "Start your library" abs:[45,297 316x23] rel:[23,125 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
++ - div "Start your library" abs:[45,297 316x23] rel:[23,125 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.3
 + - div "Folders keep related decks together — by language, course, or topic. Create your first folder to begin." abs:[45,328 316x60] rel:[23,156 316x60] pad:0/4 margin:0/0/18/0 font:13/400/20 color:on-surface-variant text:center
-+ - pill-btn "Create folder" abs:[129,406 148x40] rel:[107,234 148x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
++ - pill-btn "Create folder" abs:[129,406 148x40] rel:[107,234 148x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[147,419 15x15] rel:[18,13 15x15] flex:row
 - - icon:arrow-down-up abs:[299,247 11x11] rel:[0,0 11x11] clip
 + - icon:folder-plus abs:[147,419 15x15] rel:[0,0 15x15] clip
 + - div abs:[45,464 316x53] rel:[23,292 316x53] flex:row gap:8 align:start pad:10/12 margin:18/0/0/0 bg:on-primary r:10
   - span abs:[57,474 13x13] rel:[12,10 13x13] flex:row
 - - icon:chevron-down abs:[359,247 11x11] rel:[0,0 11x11] clip
-- - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll
+- - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll scrollh:541
 - - item[1] card abs:[22,274 362x101] rel:[14,0 362x101] grid cols:3 gap:14 align:center pad:14 margin:0/0/10/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[37,303 44x44] rel:[15,29 44x44] flex:row justify:center align:center bg:seed-indigo@12 r:12
 - - span abs:[49,315 20x20] rel:[12,12 20x20] flex:row
 - - icon:flag abs:[49,315 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,289 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
 - - item[1] div abs:[99,289 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-- - div "Korean" abs:[99,289 51x19] rel:[0,0 51x19] clip font:15/700 color:font-headline
+- - div "Korean" abs:[99,289 51x19] rel:[0,0 51x19] clip font:15/700 color:font-headline tracking:-0.2
 - - span "23 due" abs:[284,291 47x20] rel:[185,2 47x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
 - - div "TOPIK · Hangul · grammar" abs:[99,313 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,334 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -370,7 +375,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:flag abs:[49,424 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,400 232x68] rel:[77,15 232x68] repeat:x2(unit=2)
 - - item[1] div abs:[99,400 232x19] rel:[0,0 232x19] flex:row gap:8 justify:between align:baseline
-- - div "Japanese" abs:[99,400 67x19] rel:[0,0 67x19] clip font:15/700 color:font-headline
+- - div "Japanese" abs:[99,400 67x19] rel:[0,0 67x19] clip font:15/700 color:font-headline tracking:-0.2
 - - div "Genki · kana · kanji" abs:[99,421 232x13] rel:[0,21 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,442 232x13] rel:[0,42 232x13] flex:row gap:10 align:center margin:8/0/0/0
 - - span "5 decks" abs:[99,442 56x13] rel:[0,0 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
@@ -390,7 +395,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:flag abs:[49,534 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,508 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
 - - item[1] div abs:[99,508 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-- - div "Mandarin" abs:[99,508 66x19] rel:[0,0 66x19] clip font:15/700 color:font-headline
+- - div "Mandarin" abs:[99,508 66x19] rel:[0,0 66x19] clip font:15/700 color:font-headline tracking:-0.2
 - - span "48 due" abs:[284,510 47x20] rel:[185,2 47x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
 - - div "HSK 1–3" abs:[99,532 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,553 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -413,7 +418,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:book-open abs:[49,645 20x20] rel:[0,0 20x20] clip
 - - div abs:[99,619 232x71] rel:[77,15 232x71] repeat:x2(unit=2)
 - - item[1] div abs:[99,619 232x22] rel:[0,0 232x22] flex:row gap:8 justify:between align:baseline
-- - div "Hanja & roots" abs:[99,619 95x19] rel:[0,0 95x19] clip font:15/700 color:font-headline
+- - div "Hanja & roots" abs:[99,619 95x19] rel:[0,0 95x19] clip font:15/700 color:font-headline tracking:-0.2
 - - span "6 due" abs:[290,621 41x20] rel:[191,2 41x20] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
 - - div "Sino-Korean character roots" abs:[99,643 232x13] rel:[0,24 232x13] margin:2/0/0/0 clip font:11/400 color:on-surface-variant
 - - item[2] div abs:[99,664 232x13] rel:[0,45 232x13] flex:row gap:10 align:center margin:8/0/0/0
@@ -448,7 +453,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 justify:between align:center pad:0/14
-    - div "Library" abs:[22,65 78x30] rel:[14,13 78x30] font:24/700 color:font-headline
+    - div "Library" abs:[22,65 78x30] rel:[14,13 78x30] font:24/700 color:font-headline tracking:-0.5
     - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
         - icon:sliders-horizontal abs:[356,70 20x20] rel:[0,0 20x20] clip
@@ -456,14 +461,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - span abs:[37,123 16x16] rel:[15,15 16x16] flex:row
       - icon:search abs:[37,123 16x16] rel:[0,0 16x16] clip
     - span "Search decks, cards, tags" abs:[63,122 275x18] rel:[41,14 275x18] flex:row gap:3 align:center grow:1 basis:0 layout_hint:expanded font:14/400 color:on-surface-variant op:0.75
-    - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant r:6 border:1px seed-indigo@14
+    - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant tracking:0.3 r:6 border:1px seed-indigo@14
   - card abs:[22,172 362x271] rel:[14,164 362x271] pad:40/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
     - div abs:[177,213 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
       - span abs:[192,228 22x22] rel:[15,15 22x22] flex:row
         - icon:cloud-off abs:[192,228 22x22] rel:[0,0 22x22] clip
-    - div "Couldn't load your library" abs:[45,279 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+    - div "Couldn't load your library" abs:[45,279 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
     - div "Your data is safe on this device. Try again in a moment." abs:[45,306 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Retry" abs:[158,362 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+    - pill-btn "Retry" abs:[158,362 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
       - span abs:[176,375 14x14] rel:[18,13 14x14] flex:row
         - icon:refresh-cw abs:[176,375 14x14] rel:[0,0 14x14] clip
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
@@ -495,38 +500,40 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - span abs:[37,123 16x16] rel:[15,15 16x16] flex:row
   ...
   - span "Search decks, cards, tags" abs:[63,122 306x18] rel:[41,14 306x18] flex:row gap:3 align:center grow:1 basis:0 layout_hint:expanded font:14/400 color:on-surface-variant op:0.75
-- - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant r:6 border:1px seed-indigo@14
+- - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant tracking:0.3 r:6 border:1px seed-indigo@14
 - - div abs:[22,164 362x62] rel:[14,156 362x62] flex:row gap:12 align:center pad:12/14 r:14 border:1px seed-indigo@18
 - - div abs:[37,177 36x36] rel:[15,13 36x36] flex:row justify:center align:center shrink:0 bg:seed-indigo r:10
 - - span abs:[46,186 18x18] rel:[9,9 18x18] flex:row
 - - icon:zap abs:[46,186 18x18] rel:[0,0 18x18] clip
 - - div abs:[85,180 254x30] rel:[63,16 254x30] grow:1 basis:0 layout_hint:expanded
-- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline
+- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline tracking:-0.1
 - - div "Across 3 folders · ~14 min" abs:[85,197 254x13] rel:[0,17 254x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 - - span abs:[351,186 18x18] rel:[329,22 18x18] flex:row
 - - icon:chevron-right abs:[351,186 18x18] rel:[0,0 18x18] clip
 - - div abs:[8,238 390x36] rel:[0,230 390x36] flex:row justify:between align:center pad:0/18/8/18
-- - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant
-- - pill-btn "Recent" abs:[289,238 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "4 folders" abs:[26,246 71x13] rel:[18,8 71x13] font:11/700 color:on-surface-variant tracking:1.2
+- - pill-btn "Recent" abs:[289,238 91x28] rel:[281,0 91x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
 - - span abs:[299,247 11x11] rel:[10,9 11x11] flex:row
 - - icon:arrow-down-up abs:[299,247 11x11] rel:[0,0 11x11] clip
 - - span abs:[359,247 11x11] rel:[70,9 11x11] flex:row
 - - icon:chevron-down abs:[359,247 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,274 390x432] rel:[0,266 390x432] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll scrollh:541
 + - span abs:[238,123 2x16] rel:[175,1 2x16] margin:0/0/0/2 bg:seed-indigo
-  - scroll abs:[8,164 390x542] rel:[0,156 390x542] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll
++ - scroll abs:[8,164 390x542] rel:[0,156 390x542] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/100/14 layout_hint:scroll
+  - item[1] card abs:[22,164 362x101] rel:[14,0 362x101] grid cols:3 gap:14 align:center pad:14 margin:0/0/10/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
 ```
 
 ## State: Overflow sheet (ordered diff vs Loaded)
 
 ```diff
-  - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant r:6 border:1px seed-indigo@14
+  - kbd "K" abs:[348,122 21x18] rel:[326,14 21x18] pad:2/6 font:10/600 color:on-surface-variant tracking:0.3 r:6 border:1px seed-indigo@14
 - - div abs:[22,164 362x62] rel:[14,156 362x62] flex:row gap:12 align:center pad:12/14 r:14 border:1px seed-indigo@18
 - - div abs:[37,177 36x36] rel:[15,13 36x36] flex:row justify:center align:center shrink:0 bg:seed-indigo r:10
 - - span abs:[46,186 18x18] rel:[9,9 18x18] flex:row
 - - icon:zap abs:[46,186 18x18] rel:[0,0 18x18] clip
 - - div abs:[85,180 254x30] rel:[63,16 254x30] grow:1 basis:0 layout_hint:expanded
-- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline
+- - div "77 cards due today" abs:[85,180 254x16] rel:[0,0 254x16] font:13/700 color:font-headline tracking:-0.1
 - - div "Across 3 folders · ~14 min" abs:[85,197 254x13] rel:[0,17 254x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 - - span abs:[351,186 18x18] rel:[329,22 18x18] flex:row
 - - icon:chevron-right abs:[351,186 18x18] rel:[0,0 18x18] clip
@@ -552,7 +559,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[26,442 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,450 14x14] rel:[8,8 14x14] flex:row
 + - icon:folder-open abs:[34,450 14x14] rel:[0,0 14x14] clip
-+ - div "Open folder" abs:[70,448 282x18] rel:[54,18 282x18] font:14/600 color:font-headline
++ - div "Open folder" abs:[70,448 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
 + - span abs:[364,449 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,449 16x16] rel:[0,0 16x16] clip
 + - button abs:[16,484 374x57] rel:[8,60 374x57] grid cols:3 gap:12 align:center pad:12/10 r:10
@@ -560,7 +567,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,506 14x14] rel:[8,8 14x14] flex:row
 + - icon:play abs:[34,506 14x14] rel:[0,0 14x14] clip
 + - div abs:[70,496 282x33] rel:[54,12 282x33]
-+ - div "Study due cards" abs:[70,496 282x18] rel:[0,0 282x18] font:14/600 color:font-headline
++ - div "Study due cards" abs:[70,496 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
 + - div "23 cards waiting" abs:[70,516 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[364,505 16x16] rel:[348,21 16x16] flex:row
 + - icon:chevron-right abs:[364,505 16x16] rel:[0,0 16x16] clip
@@ -568,14 +575,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[26,553 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,561 14x14] rel:[8,8 14x14] flex:row
 + - icon:pencil abs:[34,561 14x14] rel:[0,0 14x14] clip
-+ - div "Rename folder" abs:[70,559 282x18] rel:[54,18 282x18] font:14/600 color:font-headline
++ - div "Rename folder" abs:[70,559 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
 + - span abs:[364,560 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,560 16x16] rel:[0,0 16x16] clip
 + - button abs:[16,595 374x54] rel:[8,171 374x54] grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,607 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,615 14x14] rel:[8,8 14x14] flex:row
 + - icon:folder-tree abs:[34,615 14x14] rel:[0,0 14x14] clip
-+ - div "Move folder" abs:[70,613 282x18] rel:[54,18 282x18] font:14/600 color:font-headline
++ - div "Move folder" abs:[70,613 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
 + - span abs:[364,614 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,614 16x16] rel:[0,0 16x16] clip
 + - button abs:[16,649 374x57] rel:[8,225 374x57] grid cols:3 gap:12 align:center pad:12/10 r:10
@@ -583,7 +590,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,671 14x14] rel:[8,8 14x14] flex:row
 + - icon:archive abs:[34,671 14x14] rel:[0,0 14x14] clip
 + - div abs:[70,661 282x33] rel:[54,12 282x33]
-+ - div "Archive folder" abs:[70,661 282x18] rel:[0,0 282x18] font:14/600 color:font-headline
++ - div "Archive folder" abs:[70,661 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
 + - div "Hides from Library, keeps cards" abs:[70,681 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[364,670 16x16] rel:[348,21 16x16] flex:row
 + - icon:chevron-right abs:[364,670 16x16] rel:[0,0 16x16] clip
@@ -593,7 +600,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,745 14x14] rel:[8,8 14x14] flex:row
 + - icon:trash-2 abs:[34,745 14x14] rel:[0,0 14x14] clip
 + - div abs:[70,735 310x33] rel:[54,12 310x33]
-+ - div "Delete folder" abs:[70,735 310x18] rel:[0,0 310x18] font:14/600 color:error
++ - div "Delete folder" abs:[70,735 310x18] rel:[0,0 310x18] font:14/600 color:error tracking:-0.1
 + - div "Keeps all 412 cards" abs:[70,755 310x13] rel:[0,20 310x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
   ...
@@ -614,15 +621,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[63,248 20x20] rel:[12,12 20x20] flex:row
 + - icon:flag abs:[63,248 20x20] rel:[0,0 20x20] clip
 + - div abs:[107,239 172x37] rel:[74,22 172x37]
-+ - div "New folder" abs:[107,239 172x21] rel:[0,0 172x21] font:16/700 color:font-headline
++ - div "New folder" abs:[107,239 172x21] rel:[0,0 172x21] font:16/700 color:font-headline tracking:-0.2
 + - div "Group related decks together." abs:[107,261 172x15] rel:[0,22 172x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
 + - item[2] div abs:[33,286 340x81] rel:[0,68 340x81] pad:12/18/4/18
-+ - ov "Folder name" abs:[51,298 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
++ - ov "Folder name" abs:[51,298 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,317 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px seed-indigo
 + - span "Vietnamese" abs:[64,331 81x18] rel:[13,14 81x18] font:14/600 color:font-headline
 + - span abs:[153,331 2x18] rel:[102,14 2x18] bg:seed-indigo
 + - item[3] div abs:[33,367 340x65] rel:[0,149 340x65] pad:12/18/4/18
-+ - ov "Color" abs:[51,379 304x13] rel:[18,12 304x13] margin:0/0/8/0 font:11/700 color:on-surface-variant
++ - ov "Color" abs:[51,379 304x13] rel:[18,12 304x13] margin:0/0/8/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,400 304x28] rel:[18,33 304x28] flex:row gap:10 repeat:x3(unit=2)
 + - item[1] span abs:[51,400 28x28] rel:[0,0 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo r:999 shadow:0/0
 + - span abs:[58,407 14x14] rel:[7,7 14x14] flex:row
@@ -633,7 +640,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - item[3] span abs:[203,400 28x28] rel:[152,0 28x28] flex:row justify:center align:center shrink:0 bg:seed-amber r:999
 + - span abs:[241,400 28x28] rel:[190,0 28x28] flex:row justify:center align:center shrink:0 bg:seed-sage r:999
 + - item[4] div abs:[33,432 340x79] rel:[0,214 340x79] pad:12/18/6/18
-+ - ov "Icon" abs:[51,444 304x13] rel:[18,12 304x13] margin:0/0/8/0 font:11/700 color:on-surface-variant
++ - ov "Icon" abs:[51,444 304x13] rel:[18,12 304x13] margin:0/0/8/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,465 304x40] rel:[18,33 304x40] flex:row gap:8 repeat:x5(unit=1)
 + - item[1] span abs:[51,465 40x40] rel:[0,0 40x40] flex:row justify:center align:center shrink:0 bg:seed-indigo@12 r:11 border:1px seed-indigo
 + - span abs:[63,476 17x17] rel:[12,12 17x17] flex:row
@@ -651,8 +658,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[255,476 17x17] rel:[12,12 17x17] flex:row
 + - icon:copy abs:[255,476 17x17] rel:[0,0 17x17] clip
 + - item[5] div abs:[33,511 340x68] rel:[0,293 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,525 138x40] rel:[14,14 138x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Create folder" abs:[193,525 166x40] rel:[160,14 166x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,525 138x40] rel:[14,14 138x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Create folder" abs:[193,525 166x40] rel:[160,14 166x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[224,538 14x14] rel:[31,13 14x14] flex:row
 + - icon:folder-plus abs:[224,538 14x14] rel:[0,0 14x14] clip
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
@@ -670,17 +677,17 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
 + - div abs:[33,265 340x266] rel:[25,257 340x266] maxw:340 clip bg:surface-container-high r:18 shadow:16/40
 + - div abs:[33,265 340x85] rel:[0,0 340x85] pad:18/18/6/18
-+ - div "Rename folder" abs:[51,283 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline
++ - div "Rename folder" abs:[51,283 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
 + - div "Only the folder name changes \u2014 every deck and card inside stays put." abs:[51,308 304x36] rel:[18,43 304x36] font:12/400/18 color:on-surface-variant
 + - div abs:[33,350 340x113] rel:[0,85 340x113] pad:12/18/4/18
-+ - ov "New name" abs:[51,362 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
++ - ov "New name" abs:[51,362 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,381 304x46] rel:[18,31 304x46] flex:row align:center pad:0/12 bg:on-primary r:11 border:1px seed-indigo
 + - span "Korean" abs:[64,394 50x20] rel:[13,13 50x20] pad:1 bg:seed-indigo@22 font:14/600 color:font-headline r:3
 + - span abs:[115,395 2x18] rel:[64,14 2x18] margin:0/0/0/1 bg:seed-indigo
 + - div "8 decks \u00b7 412 cards will keep this folder as their home." abs:[51,433 304x26] rel:[18,83 304x26] pad:0/2 margin:6/0/0/0 font:11/400 color:on-surface-variant
 + - div abs:[33,463 340x68] rel:[0,198 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,477 138x40] rel:[14,14 138x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Rename" abs:[193,477 166x40] rel:[160,14 166x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,477 138x40] rel:[14,14 138x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Rename" abs:[193,477 166x40] rel:[160,14 166x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
   ...
 ```
@@ -697,7 +704,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[8,356 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
 + - span abs:[185,364 36x4] rel:[177,8 36x4] bg:outline-variant r:999
 + - div abs:[8,372 390x59] rel:[0,16 390x59] pad:4/18/12/18
-+ - div "Move "Korean" to…" abs:[26,376 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline
++ - div "Move "Korean" to…" abs:[26,376 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
 + - div "Nest it under another folder, or keep it at the top of your library." abs:[26,401 354x18] rel:[18,29 354x18] font:12/400/18 color:on-surface-variant
 + - hide-scroll abs:[8,431 390x290] rel:[0,75 390x290] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/8/10/8 layout_hint:scroll clip
 + - item[1] button abs:[16,431 374x56] rel:[8,0 374x56] grid cols:3 gap:12 align:center pad:12/10 r:10 op:0.45
@@ -705,15 +712,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,453 13x13] rel:[8,8 13x13] flex:row
 + - icon:home abs:[34,453 13x13] rel:[0,0 13x13] clip
 + - div abs:[68,443 251x32] rel:[52,12 251x32]
-+ - div "Library (root)" abs:[68,443 251x18] rel:[0,0 251x18] font:14/600 color:font-headline
++ - div "Library (root)" abs:[68,443 251x18] rel:[0,0 251x18] font:14/600 color:font-headline tracking:-0.1
 + - div "4 folders" abs:[68,462 251x13] rel:[0,19 251x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span "Current" abs:[331,453 49x12] rel:[315,22 49x12] font:10/700 color:on-surface-variant
++ - span "Current" abs:[331,453 49x12] rel:[315,22 49x12] font:10/700 color:on-surface-variant tracking:0.3
 + - item[2] button abs:[16,487 374x56] rel:[8,56 374x56] grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,501 28x28] rel:[10,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
 + - span abs:[34,509 13x13] rel:[8,8 13x13] flex:row
 + - icon:flag abs:[34,509 13x13] rel:[0,0 13x13] clip
 + - div abs:[68,499 286x32] rel:[52,12 286x32]
-+ - div "Japanese" abs:[68,499 286x18] rel:[0,0 286x18] font:14/600 color:font-headline
++ - div "Japanese" abs:[68,499 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
 + - div "5 decks · 248 cards" abs:[68,518 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,508 14x14] rel:[350,21 14x14] flex:row
 + - icon:chevron-right abs:[366,508 14x14] rel:[0,0 14x14] clip
@@ -722,7 +729,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,565 13x13] rel:[8,8 13x13] flex:row
 + - icon:flag abs:[34,565 13x13] rel:[0,0 13x13] clip
 + - div abs:[68,555 286x32] rel:[52,12 286x32]
-+ - div "Mandarin" abs:[68,555 286x18] rel:[0,0 286x18] font:14/600 color:font-headline
++ - div "Mandarin" abs:[68,555 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
 + - div "3 decks · 180 cards" abs:[68,574 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,564 14x14] rel:[350,21 14x14] flex:row
 + - icon:chevron-right abs:[366,564 14x14] rel:[0,0 14x14] clip
@@ -731,7 +738,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,621 13x13] rel:[8,8 13x13] flex:row
 + - icon:book-open abs:[34,621 13x13] rel:[0,0 13x13] clip
 + - div abs:[68,611 286x32] rel:[52,12 286x32]
-+ - div "Hanja & roots" abs:[68,611 286x18] rel:[0,0 286x18] font:14/600 color:font-headline
++ - div "Hanja & roots" abs:[68,611 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
 + - div "2 decks · 64 cards" abs:[68,630 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,620 14x14] rel:[350,21 14x14] flex:row
 + - icon:chevron-right abs:[366,620 14x14] rel:[0,0 14x14] clip
@@ -740,13 +747,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,677 13x13] rel:[8,8 13x13] flex:row
 + - icon:archive abs:[34,677 13x13] rel:[0,0 13x13] clip
 + - div abs:[68,667 286x32] rel:[52,12 286x32]
-+ - div "Archive" abs:[68,667 286x18] rel:[0,0 286x18] font:14/600 color:font-headline
++ - div "Archive" abs:[68,667 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
 + - div "Hidden from Library" abs:[68,686 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,676 14x14] rel:[350,21 14x14] flex:row
 + - icon:chevron-right abs:[366,676 14x14] rel:[0,0 14x14] clip
 + - div abs:[8,721 390x67] rel:[0,365 390x67] flex:row gap:8 pad:10/14/16/14 border:1px seed-indigo@14
-+ - pill-btn "Cancel" abs:[22,732 160x40] rel:[14,11 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Move here" abs:[190,732 194x40] rel:[182,11 194x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[22,732 160x40] rel:[14,11 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Move here" abs:[190,732 194x40] rel:[182,11 194x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[244,745 14x14] rel:[54,13 14x14] flex:row
 + - icon:folder-tree abs:[244,745 14x14] rel:[0,0 14x14] clip
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
@@ -767,7 +774,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[179,270 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#d9891e@12 r:14
 + - span abs:[192,283 22x22] rel:[13,13 22x22] flex:row
 + - icon:archive abs:[192,283 22x22] rel:[0,0 22x22] clip
-+ - div "Archive this folder?" abs:[51,330 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
++ - div "Archive this folder?" abs:[51,330 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
 + - div "leaves your Library list but keeps all 8 decks and 412 cards." abs:[51,358 304x40] rel:[18,106 304x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
 + - strong "Korean" abs:[68,360 45x16] rel:[17,2 45x16] font:13/700/20 color:font-headline text:center
 + - div abs:[51,416 304x56] rel:[18,164 304x56] flex:row gap:8 align:center pad:10/12 bg:on-primary r:11
@@ -776,8 +783,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Find it any time under and restore in one tap." abs:[86,426 257x36] rel:[35,10 257x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
 + - strong "Archive" abs:[207,427 44x15] rel:[121,1 44x15] font:12/700/18 color:font-headline
 + - div abs:[33,476 340x68] rel:[0,224 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,490 138x40] rel:[14,14 138x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Archive" abs:[193,490 166x40] rel:[160,14 166x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,490 138x40] rel:[14,14 138x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Archive" abs:[193,490 166x40] rel:[160,14 166x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[242,503 14x14] rel:[49,13 14x14] flex:row
 + - icon:archive abs:[242,503 14x14] rel:[0,0 14x14] clip
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
@@ -798,7 +805,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[179,228 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@12 r:14
 + - span abs:[192,241 22x22] rel:[13,13 22x22] flex:row
 + - icon:folder-x abs:[192,241 22x22] rel:[0,0 22x22] clip
-+ - div "Delete this folder?" abs:[51,288 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
++ - div "Delete this folder?" abs:[51,288 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
 + - div "and its 8 decks will be removed from your library." abs:[51,316 304x40] rel:[18,106 304x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
 + - strong "Korean" abs:[69,318 45x16] rel:[18,2 45x16] font:13/700/20 color:font-headline text:center
 + - div abs:[51,375 304x58] rel:[18,164 304x58] flex:row gap:8 align:center pad:10/12 bg:mastery@8 r:11 border:1px mastery@20
@@ -807,13 +814,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Cards in those decks \u2014 nothing is permanently lost." abs:[87,386 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
 + - strong "move to "Unsorted"" abs:[207,387 116x15] rel:[120,1 116x15] font:12/700/18 color:font-headline
 + - item[3] div abs:[33,437 340x81] rel:[0,226 340x81] pad:14/18/4/18
-+ - ov "Type to confirm" abs:[51,451 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
++ - ov "Type to confirm" abs:[51,451 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,470 304x44] rel:[18,33 304x44] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px error
 + - span "Korean" abs:[64,483 48x18] rel:[13,13 48x18] font:14/600 color:font-headline
 + - span abs:[120,483 2x18] rel:[69,13 2x18] bg:error
 + - item[4] div abs:[33,518 340x68] rel:[0,307 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,532 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Delete folder" abs:[198,532 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,532 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Delete folder" abs:[198,532 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[227,545 14x14] rel:[29,13 14x14] flex:row
 + - icon:trash-2 abs:[227,545 14x14] rel:[0,0 14x14] clip
   - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14

@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Input
 
 ```text
@@ -44,7 +49,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - div abs:[62,67 279x18] rel:[54,15 279x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Fill" abs:[62,67 40x18] rel:[0,0 40x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery r:999
+      - span "Fill" abs:[62,67 40x18] rel:[0,0 40x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery tracking:1.2 r:999
       - div abs:[110,74 231x4] rel:[48,7 231x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
         - div abs:[110,74 185x4] rel:[0,0 185x4] bg:mastery
     - div "12 / 15" abs:[351,69 39x15] rel:[343,17 39x15] font:12/600 color:on-surface-variant
@@ -56,11 +61,11 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div "Make someone laugh / Làm cho cười, gây cười, buồn cười (Động từ, là dạng sai khiến của động từ "웃다 – cười", mang nghĩa khiến người khác bật cười hoặc thấy buồn cười)." abs:[39,217 328x87] rel:[17,109 328x87] font:14/400/22 color:font-headline text:center
     - card abs:[22,422 362x296] rel:[14,322 362x296] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:12 border:1px seed-indigo@14
       - div abs:[171,547 64x46] rel:[149,125 64x46] flex:row gap:4 align:center
-        - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline
+        - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline tracking:-0.4
         - span abs:[233,555 2x30] rel:[62,8 2x30] bg:mastery
   - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
-    - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center r:999 border:1px seed-indigo
-    - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
+    - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
+    - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
 ```
 
 ## State: Wrong (ordered diff vs Input)
@@ -68,7 +73,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - card abs:[22,422 362x296] rel:[14,322 362x296] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:12 border:1px seed-indigo@14
 - - div abs:[171,547 64x46] rel:[149,125 64x46] flex:row gap:4 align:center
-- - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline
+- - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline tracking:-0.4
 - - span abs:[233,555 2x30] rel:[62,8 2x30] bg:mastery
 + - icon-btn abs:[343,431 32x32] rel:[321,9 32x32] flex:row justify:center align:center pos:absolute r:999
 + - span abs:[349,437 20x20] rel:[6,6 20x20] flex:row
@@ -77,11 +82,11 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[37,683 20x20] rel:[6,6 20x20] flex:row
 + - icon:rotate-ccw abs:[37,683 20x20] rel:[0,0 20x20] clip
 + - div abs:[170,532 65x76] rel:[148,110 65x76] flex:col gap:6 align:center
-+ - div "우겨다" abs:[170,532 65x35] rel:[0,0 65x35] font:24/700 color:seed-rose
-+ - div "웃기다" abs:[170,573 65x35] rel:[0,41 65x35] font:24/700 color:font-headline
++ - div "우겨다" abs:[170,532 65x35] rel:[0,0 65x35] font:24/700 color:seed-rose tracking:-0.3
++ - div "웃기다" abs:[170,573 65x35] rel:[0,41 65x35] font:24/700 color:font-headline tracking:-0.3
   - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
-- - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center r:999 border:1px seed-indigo
-- - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
-+ - pill-btn "Mark correct" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center r:999 border:1px seed-indigo
-+ - pill-btn "Try again" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
+- - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
+- - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
++ - pill-btn "Mark correct" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
++ - pill-btn "Try again" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
 ```

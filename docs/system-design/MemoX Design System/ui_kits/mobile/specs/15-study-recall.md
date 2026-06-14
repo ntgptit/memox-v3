@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Hidden
 
 ```text
@@ -44,7 +49,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - div abs:[62,67 286x18] rel:[54,15 286x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Recall" abs:[62,67 61x18] rel:[0,0 61x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery r:999
+      - span "Recall" abs:[62,67 61x18] rel:[0,0 61x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery tracking:1.2 r:999
       - div abs:[131,74 217x4] rel:[69,7 217x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
         - div abs:[131,74 145x4] rel:[0,0 145x4] bg:mastery
     - div "8 / 12" abs:[358,69 32x15] rel:[350,17 32x15] font:12/600 color:on-surface-variant
@@ -53,14 +58,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - icon-btn abs:[343,117 32x32] rel:[321,9 32x32] flex:row justify:center align:center pos:absolute r:999
         - span abs:[349,123 20x20] rel:[6,6 20x20] flex:row
           - icon:pencil abs:[349,123 20x20] rel:[0,0 20x20] clip
-      - div "연구자" abs:[160,239 87x37] rel:[138,131 87x37] font:32/700/37 color:font-headline text:center
+      - div "연구자" abs:[160,239 87x37] rel:[138,131 87x37] font:32/700/37 color:font-headline text:center tracking:-0.5
       - icon-btn abs:[343,365 32x32] rel:[321,257 32x32] flex:row justify:center align:center pos:absolute r:999
         - span abs:[349,371 20x20] rel:[6,6 20x20] flex:row
           - icon:volume-2 abs:[349,371 20x20] rel:[0,0 20x20] clip
     - card abs:[22,416 362x302] rel:[14,316 362x302] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:16 minh:160 bg:surface-container-low r:12 border:1px seed-indigo@14
       - div abs:[133,560 140x14] rel:[111,144 140x14] bg:surface-container-high r:999 op:0.7
   - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
-    - pill-btn "Show answer" abs:[125,732 156x40] rel:[117,14 156x40] flex:row gap:6 justify:center align:center pad:0/36 bg:seed-indigo font:13/600 color:on-primary text:center r:999
+    - pill-btn "Show answer" abs:[125,732 156x40] rel:[117,14 156x40] flex:row gap:6 justify:center align:center pad:0/36 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
 ```
 
 ## State: Revealed (ordered diff vs Hidden)
@@ -70,7 +75,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div abs:[133,560 140x14] rel:[111,144 140x14] bg:surface-container-high r:999 op:0.7
 + - div "Researcher / Nhà nghiên cứu — person who conducts research. Hán-Việt: Nghiên cứu giả (硏究者). 연구 = research, 자 = person." abs:[39,534 328x65] rel:[17,118 328x65] font:14/400/22 color:font-headline text:center
   - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
-- - pill-btn "Show answer" abs:[125,732 156x40] rel:[117,14 156x40] flex:row gap:6 justify:center align:center pad:0/36 bg:seed-indigo font:13/600 color:on-primary text:center r:999
-+ - pill-btn "Forgot" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
-+ - pill-btn "Got it" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
+- - pill-btn "Show answer" abs:[125,732 156x40] rel:[117,14 156x40] flex:row gap:6 justify:center align:center pad:0/36 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
++ - pill-btn "Forgot" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
++ - pill-btn "Got it" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
 ```

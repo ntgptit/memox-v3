@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
@@ -43,7 +48,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
     - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
         - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
@@ -51,22 +56,22 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
       - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
+    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
+  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1074
     - card abs:[22,123 362x180] rel:[14,0 362x180] pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
       - div abs:[37,138 332x57] rel:[15,15 332x57] flex:row gap:14 align:center margin:0/0/12/0
         - svg abs:[37,138 56x56] rel:[0,0 56x56] clip
         - div abs:[107,138 262x57] rel:[70,0 262x57] grow:1 basis:0 layout_hint:expanded
-          - ov "Deck progress" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant
+          - ov "Deck progress" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant tracking:1.2
           - div "106 of 142 cards mastered" abs:[107,155 262x18] rel:[0,17 262x18] margin:4/0/0/0 font:14/400 color:font-headline
           - div "23 due · 6 new" abs:[107,180 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
             - span abs:[107,184 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
@@ -88,25 +93,25 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - item[4] span "Mastered" abs:[263,223 86x13] rel:[226,0 86x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
           - status-dot abs:[263,226 6x6] rel:[0,4 6x6] bg:mastery r:999
           - span "106" abs:[329,223 20x13] rel:[66,0 20x13] font:11/700 color:font-headline
-      - pill-btn "Start study · 23 due" abs:[37,248 332x40] rel:[15,125 332x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+      - pill-btn "Start study · 23 due" abs:[37,248 332x40] rel:[15,125 332x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
         - span abs:[126,260 16x16] rel:[89,12 16x16] flex:row
           - icon:play abs:[126,260 16x16] rel:[0,0 16x16] clip
     - scroll-x abs:[22,315 362x28] rel:[14,192 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
-      - item[1] pill-btn "All" abs:[22,315 57x28] rel:[0,0 57x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center r:999
-        - span "142" abs:[50,323 18x12] rel:[28,8 18x12] font:10/700 color:on-primary text:center op:0.75
-      - item[2] pill-btn "Due now" abs:[85,315 86x28] rel:[63,0 86x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-        - span "23" abs:[148,323 12x12] rel:[63,8 12x12] font:10/700 color:font-headline text:center op:0.6
-      - item[3] pill-btn "New" abs:[177,315 58x28] rel:[155,0 58x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-        - span "4" abs:[217,323 6x12] rel:[41,8 6x12] font:10/700 color:font-headline text:center op:0.6
-      - item[4] pill-btn "Flagged" abs:[240,315 94x28] rel:[218,0 94x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - item[1] pill-btn "All" abs:[22,315 57x28] rel:[0,0 57x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center tracking:0.1 r:999
+        - span "142" abs:[50,323 18x12] rel:[28,8 18x12] font:10/700 color:on-primary text:center tracking:0.1 op:0.75
+      - item[2] pill-btn "Due now" abs:[85,315 86x28] rel:[63,0 86x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span "23" abs:[148,323 12x12] rel:[63,8 12x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
+      - item[3] pill-btn "New" abs:[177,315 58x28] rel:[155,0 58x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span "4" abs:[217,323 6x12] rel:[41,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
+      - item[4] pill-btn "Flagged" abs:[240,315 94x28] rel:[218,0 94x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[251,323 11x11] rel:[11,9 11x11] flex:row
           - icon:flag abs:[251,323 11x11] rel:[0,0 11x11] clip
-        - span "2" abs:[317,323 6x12] rel:[77,8 6x12] font:10/700 color:font-headline text:center op:0.6
-      - item[5] pill-btn "Mastered" abs:[340,315 97x28] rel:[318,0 97x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-        - span "106" abs:[408,323 18x12] rel:[68,8 18x12] font:10/700 color:font-headline text:center op:0.6
+        - span "2" abs:[317,323 6x12] rel:[77,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
+      - item[5] pill-btn "Mastered" abs:[340,315 97x28] rel:[318,0 97x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span "106" abs:[408,323 18x12] rel:[68,8 18x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
     - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-      - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant
-      - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+      - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
+      - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
         - span abs:[293,361 11x11] rel:[10,9 11x11] flex:row
           - icon:arrow-down-up abs:[293,361 11x11] rel:[0,0 11x11] clip
         - span abs:[359,361 11x11] rel:[76,9 11x11] flex:row
@@ -114,10 +119,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - div abs:[22,389 362x92] rel:[14,266 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,417 8x8] rel:[13,28 8x8] bg:status-new r:999
       - div abs:[55,402 271x66] rel:[33,13 271x66]
-        - div "연구자" abs:[55,402 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+        - div "연구자" abs:[55,402 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "researcher / nhà nghiên cứu" abs:[55,425 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,449 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "New" abs:[55,452 24x12] rel:[0,3 24x12] font:10/700 color:status-new
+          - span "New" abs:[55,452 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
           - span "noun" abs:[85,449 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
           - span "people" abs:[130,449 49x18] rel:[75,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[338,402 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
@@ -125,20 +130,20 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - div abs:[22,488 362x92] rel:[14,365 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,516 8x8] rel:[13,28 8x8] bg:mastery r:999
       - div abs:[55,501 269x66] rel:[33,13 269x66]
-        - div "공부하다" abs:[55,501 269x20] rel:[0,0 269x20] clip font:16/700/20 color:font-headline
+        - div "공부하다" abs:[55,501 269x20] rel:[0,0 269x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "to study" abs:[55,524 269x17] rel:[0,23 269x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,549 269x18] rel:[0,48 269x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Mastered" abs:[55,552 56x12] rel:[0,3 56x12] font:10/700 color:mastery
+          - span "Mastered" abs:[55,552 56x12] rel:[0,3 56x12] font:10/700 color:mastery tracking:0.3
           - span "verb" abs:[117,549 36x18] rel:[62,0 36x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[336,501 35x20] rel:[314,13 35x20] flex:col gap:6 align:end pad:4/0/0/0
         - span "in 4d" abs:[336,505 35x16] rel:[0,4 35x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
     - div abs:[22,588 362x92] rel:[14,465 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,616 8x8] rel:[13,28 8x8] bg:warning r:999
       - div abs:[55,601 271x66] rel:[33,13 271x66]
-        - div "도서관" abs:[55,601 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+        - div "도서관" abs:[55,601 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "library, reading room" abs:[55,624 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,649 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Learning" abs:[55,652 53x12] rel:[0,3 53x12] font:10/700 color:warning
+          - span "Learning" abs:[55,652 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
           - span "noun" abs:[114,649 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
           - span "places" abs:[158,649 46x18] rel:[103,0 46x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[338,601 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
@@ -148,10 +153,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - div abs:[22,688 362x92] rel:[14,565 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,716 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
       - div abs:[55,701 280x66] rel:[33,13 280x66]
-        - div "친구" abs:[55,701 280x20] rel:[0,0 280x20] clip font:16/700/20 color:font-headline
+        - div "친구" abs:[55,701 280x20] rel:[0,0 280x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "friend, close companion" abs:[55,724 280x17] rel:[0,23 280x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,749 280x18] rel:[0,48 280x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Reviewing" abs:[55,752 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo
+          - span "Reviewing" abs:[55,752 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
           - span "noun" abs:[120,749 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
           - span "people" abs:[165,749 49x18] rel:[110,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[347,701 24x20] rel:[325,13 24x20] flex:col gap:6 align:end pad:4/0/0/0
@@ -159,10 +164,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - div abs:[22,788 362x92] rel:[14,665 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,816 8x8] rel:[13,28 8x8] bg:warning r:999
       - div abs:[55,801 271x66] rel:[33,13 271x66]
-        - div "바다" abs:[55,801 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+        - div "바다" abs:[55,801 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "sea, ocean" abs:[55,824 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,848 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Learning" abs:[55,851 53x12] rel:[0,3 53x12] font:10/700 color:warning
+          - span "Learning" abs:[55,851 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
           - span "noun" abs:[114,848 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
           - span "nature" abs:[158,848 45x18] rel:[103,0 45x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[338,801 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
@@ -172,20 +177,20 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - div abs:[22,887 362x92] rel:[14,764 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,915 8x8] rel:[13,28 8x8] bg:status-new r:999
       - div abs:[55,900 271x66] rel:[33,13 271x66]
-        - div "영화" abs:[55,900 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+        - div "영화" abs:[55,900 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "movie / film" abs:[55,923 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,948 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "New" abs:[55,951 24x12] rel:[0,3 24x12] font:10/700 color:status-new
+          - span "New" abs:[55,951 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
           - span "noun" abs:[85,948 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[338,900 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
         - span "now" abs:[338,904 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
     - div abs:[22,987 362x92] rel:[14,864 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - status-dot abs:[35,1015 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
       - div abs:[55,1000 279x66] rel:[33,13 279x66]
-        - div "시간" abs:[55,1000 279x20] rel:[0,0 279x20] clip font:16/700/20 color:font-headline
+        - div "시간" abs:[55,1000 279x20] rel:[0,0 279x20] clip font:16/700/20 color:font-headline tracking:-0.2
         - div "time, hour" abs:[55,1023 279x17] rel:[0,23 279x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
         - div abs:[55,1048 279x18] rel:[0,48 279x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Reviewing" abs:[55,1051 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo
+          - span "Reviewing" abs:[55,1051 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
           - span "noun" abs:[120,1048 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
       - div abs:[346,1000 25x20] rel:[324,13 25x20] flex:col gap:6 align:end pad:4/0/0/0
         - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
@@ -208,7 +213,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
     - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
         - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
@@ -216,27 +221,27 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
       - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
   - div abs:[22,131 362x372] rel:[14,123 362x372] margin:8/0/0/0
     - card abs:[22,131 362x213] rel:[0,0 362x213] pad:32/22 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[171,164 64x64] rel:[149,33 64x64] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:18
         - span abs:[189,182 28x28] rel:[18,18 28x28] flex:row
           - icon:layers abs:[189,182 28x28] rel:[0,0 28x28] clip
-      - div "No cards in this deck yet" abs:[45,242 316x23] rel:[23,111 316x23] margin:0/0/6/0 font:18/700 color:font-headline text:center
+      - div "No cards in this deck yet" abs:[45,242 316x23] rel:[23,111 316x23] margin:0/0/6/0 font:18/700 color:font-headline text:center tracking:-0.2
       - div "Add your first flashcard to start studying. You can also paste a list of terms or import a file." abs:[45,271 316x40] rel:[23,140 316x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Add first flashcard" abs:[22,358 362x44] rel:[0,227 362x44] flex:row gap:6 justify:center align:center pad:0/18 margin:0/0/8/0 bg:seed-indigo font:14/600 color:on-primary text:center r:13
+    - pill-btn "Add first flashcard" abs:[22,358 362x44] rel:[0,227 362x44] flex:row gap:6 justify:center align:center pad:0/18 margin:0/0/8/0 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:13
       - span abs:[129,372 17x17] rel:[107,14 17x17] flex:row
         - icon:plus abs:[129,372 17x17] rel:[0,0 17x17] clip
-    - pill-btn "Import cards (CSV, TSV, Anki)" abs:[22,410 362x40] rel:[0,279 362x40] flex:row gap:7 justify:center align:center pad:0/18 bg:seed-indigo@8 font:13/600 color:seed-indigo text:center r:12
+    - pill-btn "Import cards (CSV, TSV, Anki)" abs:[22,410 362x40] rel:[0,279 362x40] flex:row gap:7 justify:center align:center pad:0/18 bg:seed-indigo@8 font:13/600 color:seed-indigo text:center tracking:0.1 r:12
       - span abs:[99,423 15x15] rel:[77,13 15x15] flex:row
         - icon:upload abs:[99,423 15x15] rel:[0,0 15x15] clip
     - div abs:[22,464 362x39] rel:[0,333 362x39] flex:row gap:8 align:start pad:10/12 margin:14/0/0/0 bg:on-primary r:10 border:1px seed-indigo@14
@@ -248,19 +253,24 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Search empty (ordered diff vs Loaded)
 
 ```diff
+  - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1074
++ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
+  - card abs:[22,123 362x180] rel:[14,0 362x180] pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
+  ...
   - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant
-+ - ov "No matches" abs:[26,360 85x13] rel:[4,10 85x13] font:11/700 color:on-surface-variant
-  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
++ - ov "No matches" abs:[26,360 85x13] rel:[4,10 85x13] font:11/700 color:on-surface-variant tracking:1.2
+  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
   - icon:chevron-down abs:[359,361 11x11] rel:[0,0 11x11] clip
 - - div abs:[22,389 362x92] rel:[14,266 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,417 8x8] rel:[13,28 8x8] bg:status-new r:999
 - - div abs:[55,402 271x66] rel:[33,13 271x66]
-- - div "연구자" abs:[55,402 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+- - div "연구자" abs:[55,402 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "researcher / nhà nghiên cứu" abs:[55,425 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,449 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "New" abs:[55,452 24x12] rel:[0,3 24x12] font:10/700 color:status-new
+- - span "New" abs:[55,452 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
 - - span "noun" abs:[85,449 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - span "people" abs:[130,449 49x18] rel:[75,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[338,402 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
@@ -268,20 +278,20 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div abs:[22,488 362x92] rel:[14,365 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,516 8x8] rel:[13,28 8x8] bg:mastery r:999
 - - div abs:[55,501 269x66] rel:[33,13 269x66]
-- - div "공부하다" abs:[55,501 269x20] rel:[0,0 269x20] clip font:16/700/20 color:font-headline
+- - div "공부하다" abs:[55,501 269x20] rel:[0,0 269x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "to study" abs:[55,524 269x17] rel:[0,23 269x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,549 269x18] rel:[0,48 269x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Mastered" abs:[55,552 56x12] rel:[0,3 56x12] font:10/700 color:mastery
+- - span "Mastered" abs:[55,552 56x12] rel:[0,3 56x12] font:10/700 color:mastery tracking:0.3
 - - span "verb" abs:[117,549 36x18] rel:[62,0 36x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[336,501 35x20] rel:[314,13 35x20] flex:col gap:6 align:end pad:4/0/0/0
 - - span "in 4d" abs:[336,505 35x16] rel:[0,4 35x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,588 362x92] rel:[14,465 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,616 8x8] rel:[13,28 8x8] bg:warning r:999
 - - div abs:[55,601 271x66] rel:[33,13 271x66]
-- - div "도서관" abs:[55,601 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+- - div "도서관" abs:[55,601 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "library, reading room" abs:[55,624 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,649 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Learning" abs:[55,652 53x12] rel:[0,3 53x12] font:10/700 color:warning
+- - span "Learning" abs:[55,652 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
 - - span "noun" abs:[114,649 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - span "places" abs:[158,649 46x18] rel:[103,0 46x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[338,601 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
@@ -291,10 +301,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div abs:[22,688 362x92] rel:[14,565 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,716 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
 - - div abs:[55,701 280x66] rel:[33,13 280x66]
-- - div "친구" abs:[55,701 280x20] rel:[0,0 280x20] clip font:16/700/20 color:font-headline
+- - div "친구" abs:[55,701 280x20] rel:[0,0 280x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "friend, close companion" abs:[55,724 280x17] rel:[0,23 280x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,749 280x18] rel:[0,48 280x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Reviewing" abs:[55,752 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo
+- - span "Reviewing" abs:[55,752 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
 - - span "noun" abs:[120,749 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - span "people" abs:[165,749 49x18] rel:[110,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[347,701 24x20] rel:[325,13 24x20] flex:col gap:6 align:end pad:4/0/0/0
@@ -302,10 +312,10 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div abs:[22,788 362x92] rel:[14,665 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,816 8x8] rel:[13,28 8x8] bg:warning r:999
 - - div abs:[55,801 271x66] rel:[33,13 271x66]
-- - div "바다" abs:[55,801 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+- - div "바다" abs:[55,801 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "sea, ocean" abs:[55,824 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,848 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Learning" abs:[55,851 53x12] rel:[0,3 53x12] font:10/700 color:warning
+- - span "Learning" abs:[55,851 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
 - - span "noun" abs:[114,848 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - span "nature" abs:[158,848 45x18] rel:[103,0 45x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[338,801 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
@@ -317,20 +327,20 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div abs:[22,887 362x92] rel:[14,764 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,915 8x8] rel:[13,28 8x8] bg:status-new r:999
 - - div abs:[55,900 271x66] rel:[33,13 271x66]
-- - div "영화" abs:[55,900 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline
+- - div "영화" abs:[55,900 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "movie / film" abs:[55,923 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,948 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "New" abs:[55,951 24x12] rel:[0,3 24x12] font:10/700 color:status-new
+- - span "New" abs:[55,951 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
 - - span "noun" abs:[85,948 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[338,900 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
 - - span "now" abs:[338,904 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,987 362x92] rel:[14,864 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - status-dot abs:[35,1015 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
 - - div abs:[55,1000 279x66] rel:[33,13 279x66]
-- - div "시간" abs:[55,1000 279x20] rel:[0,0 279x20] clip font:16/700/20 color:font-headline
+- - div "시간" abs:[55,1000 279x20] rel:[0,0 279x20] clip font:16/700/20 color:font-headline tracking:-0.2
 - - div "time, hour" abs:[55,1023 279x17] rel:[0,23 279x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
 - - div abs:[55,1048 279x18] rel:[0,48 279x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Reviewing" abs:[55,1051 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo
+- - span "Reviewing" abs:[55,1051 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
 - - span "noun" abs:[120,1048 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
 - - div abs:[346,1000 25x20] rel:[324,13 25x20] flex:col gap:6 align:end pad:4/0/0/0
 - - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
@@ -356,7 +366,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
     - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
         - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
@@ -364,16 +374,16 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
       - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
   - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
     - div abs:[22,123 362x79] rel:[14,0 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,142 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
@@ -421,7 +431,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
     - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
         - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
@@ -429,23 +439,23 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
       - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
       - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant
+    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
       - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
   - card abs:[22,131 362x271] rel:[14,123 362x271] pad:40/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
     - div abs:[177,172 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
       - span abs:[192,187 22x22] rel:[15,15 22x22] flex:row
         - icon:cloud-off abs:[192,187 22x22] rel:[0,0 22x22] clip
     - div "Couldn't open this deck" abs:[45,238 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
     - div "Your data is safe on this device. Try again in a moment." abs:[45,265 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Retry" abs:[158,321 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+    - pill-btn "Retry" abs:[158,321 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
       - span abs:[176,334 14x14] rel:[18,13 14x14] flex:row
         - icon:refresh-cw abs:[176,334 14x14] rel:[0,0 14x14] clip
 ```
@@ -454,9 +464,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant
-+ - ov "0 cards" abs:[26,360 57x13] rel:[4,10 57x13] font:11/700 color:on-surface-variant
-  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
++ - ov "0 cards" abs:[26,360 57x13] rel:[4,10 57x13] font:11/700 color:on-surface-variant tracking:1.2
+  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
   - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
@@ -470,14 +480,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[51,294 34x34] rel:[0,0 34x34] flex:row justify:center align:center shrink:0 bg:#dc4848@12 r:10
 + - span abs:[60,303 16x16] rel:[9,9 16x16] flex:row
 + - icon:trash-2 abs:[60,303 16x16] rel:[0,0 16x16] clip
-+ - div "Delete this flashcard?" abs:[95,300 164x21] rel:[44,7 164x21] font:16/700 color:font-headline
++ - div "Delete this flashcard?" abs:[95,300 164x21] rel:[44,7 164x21] font:16/700 color:font-headline tracking:-0.2
 + - div abs:[51,336 304x65] rel:[18,60 304x65] pad:12/14 margin:4/0/0/0 bg:on-primary r:11 border:1px seed-indigo@14
-+ - div "도서관" abs:[66,349 274x21] rel:[15,13 274x21] margin:0/0/3/0 font:15/700 color:font-headline
++ - div "도서관" abs:[66,349 274x21] rel:[15,13 274x21] margin:0/0/3/0 font:15/700 color:font-headline tracking:-0.2
 + - div "library, reading room" abs:[66,373 274x15] rel:[15,37 274x15] font:12/400 color:on-surface-variant
 + - div "Review history for this card will be removed. Other cards in this deck are unaffected." abs:[51,413 304x36] rel:[18,137 304x36] margin:12/0/0/0 font:12/400/18 color:on-surface-variant
 + - div abs:[33,453 340x68] rel:[0,177 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,467 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Delete card" abs:[198,467 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,467 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Delete card" abs:[198,467 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[231,480 14x14] rel:[34,13 14x14] flex:row
 + - icon:trash-2 abs:[231,480 14x14] rel:[0,0 14x14] clip
 ```
@@ -486,9 +496,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant
-+ - ov "0 cards" abs:[26,360 57x13] rel:[4,10 57x13] font:11/700 color:on-surface-variant
-  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
++ - ov "0 cards" abs:[26,360 57x13] rel:[4,10 57x13] font:11/700 color:on-surface-variant tracking:1.2
+  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
   - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
@@ -501,17 +511,17 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[179,266 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@12 r:14
 + - span abs:[192,279 22x22] rel:[13,13 22x22] flex:row
 + - icon:layers abs:[192,279 22x22] rel:[0,0 22x22] clip
-+ - div "Delete this deck?" abs:[51,326 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
++ - div "Delete this deck?" abs:[51,326 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
 + - div "and its 142 cards will be removed from this folder." abs:[51,354 304x40] rel:[18,106 304x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
 + - strong "TOPIK II — Vocab" abs:[78,356 107x16] rel:[27,2 107x16] font:13/700/20 color:font-headline text:center
 + - div abs:[33,399 340x81] rel:[0,150 340x81] pad:14/18/4/18
-+ - ov "Type the deck name to confirm" abs:[51,413 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
++ - ov "Type the deck name to confirm" abs:[51,413 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,432 304x44] rel:[18,33 304x44] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px error
 + - span "TOPIK II — Vo" abs:[64,445 88x18] rel:[13,13 88x18] font:14/600 color:font-headline
 + - span abs:[160,445 2x18] rel:[109,13 2x18] bg:error
 + - div abs:[33,480 340x68] rel:[0,231 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,494 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Delete deck" abs:[198,494 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center r:11 op:0.5
++ - pill-btn "Cancel" abs:[47,494 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Delete deck" abs:[198,494 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11 op:0.5
 + - span abs:[230,507 14x14] rel:[32,13 14x14] flex:row
 + - icon:trash-2 abs:[230,507 14x14] rel:[0,0 14x14] clip
 ```
@@ -521,7 +531,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
 - - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-- - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+- - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
 - - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] flex:row justify:center align:center pos:relative r:999
 - - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
 - - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
@@ -529,22 +539,22 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
 - - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
 - - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-- - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+- - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
 - - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
 - - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-- - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+- - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
 - - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
 - - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-- - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant
+- - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
 - - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
 - - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-- - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
+- - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
+- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1074
 - - card abs:[22,123 362x180] rel:[14,0 362x180] pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
 - - div abs:[37,138 332x57] rel:[15,15 332x57] flex:row gap:14 align:center margin:0/0/12/0
 - - svg abs:[37,138 56x56] rel:[0,0 56x56] clip
 - - div abs:[107,138 262x57] rel:[70,0 262x57] grow:1 basis:0 layout_hint:expanded
-- - ov "Deck progress" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant
+- - ov "Deck progress" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant tracking:1.2
 - - div "106 of 142 cards mastered" abs:[107,155 262x18] rel:[0,17 262x18] margin:4/0/0/0 font:14/400 color:font-headline
 - - div "23 due · 6 new" abs:[107,180 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
 - - span abs:[107,184 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
@@ -566,33 +576,33 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - item[4] span "Mastered" abs:[263,223 86x13] rel:[226,0 86x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
 - - status-dot abs:[263,226 6x6] rel:[0,4 6x6] bg:mastery r:999
 - - span "106" abs:[329,223 20x13] rel:[66,0 20x13] font:11/700 color:font-headline
-- - pill-btn "Start study · 23 due" abs:[37,248 332x40] rel:[15,125 332x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+- - pill-btn "Start study · 23 due" abs:[37,248 332x40] rel:[15,125 332x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
 - - span abs:[126,260 16x16] rel:[89,12 16x16] flex:row
 - - icon:play abs:[126,260 16x16] rel:[0,0 16x16] clip
 - - scroll-x abs:[22,315 362x28] rel:[14,192 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
-- - item[1] pill-btn "All" abs:[22,315 57x28] rel:[0,0 57x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center r:999
-- - span "142" abs:[50,323 18x12] rel:[28,8 18x12] font:10/700 color:on-primary text:center op:0.75
-- - item[2] pill-btn "Due now" abs:[85,315 86x28] rel:[63,0 86x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-- - span "23" abs:[148,323 12x12] rel:[63,8 12x12] font:10/700 color:font-headline text:center op:0.6
-- - item[3] pill-btn "New" abs:[177,315 58x28] rel:[155,0 58x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-- - span "4" abs:[217,323 6x12] rel:[41,8 6x12] font:10/700 color:font-headline text:center op:0.6
-- - item[4] pill-btn "Flagged" abs:[240,315 94x28] rel:[218,0 94x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+- - item[1] pill-btn "All" abs:[22,315 57x28] rel:[0,0 57x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center tracking:0.1 r:999
+- - span "142" abs:[50,323 18x12] rel:[28,8 18x12] font:10/700 color:on-primary text:center tracking:0.1 op:0.75
+- - item[2] pill-btn "Due now" abs:[85,315 86x28] rel:[63,0 86x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span "23" abs:[148,323 12x12] rel:[63,8 12x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
+- - item[3] pill-btn "New" abs:[177,315 58x28] rel:[155,0 58x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span "4" abs:[217,323 6x12] rel:[41,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
+- - item[4] pill-btn "Flagged" abs:[240,315 94x28] rel:[218,0 94x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
 - - span abs:[251,323 11x11] rel:[11,9 11x11] flex:row
 - - icon:flag abs:[251,323 11x11] rel:[0,0 11x11] clip
-- - span "2" abs:[317,323 6x12] rel:[77,8 6x12] font:10/700 color:font-headline text:center op:0.6
-- - item[5] pill-btn "Mastered" abs:[340,315 97x28] rel:[318,0 97x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-- - span "106" abs:[408,323 18x12] rel:[68,8 18x12] font:10/700 color:font-headline text:center op:0.6
+- - span "2" abs:[317,323 6x12] rel:[77,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
+- - item[5] pill-btn "Mastered" abs:[340,315 97x28] rel:[318,0 97x28] flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span "106" abs:[408,323 18x12] rel:[68,8 18x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
 - - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant
-- - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
+- - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
 - - span abs:[293,361 11x11] rel:[10,9 11x11] flex:row
 - - icon:arrow-down-up abs:[293,361 11x11] rel:[0,0 11x11] clip
 + - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-+ - title "Reorder cards" abs:[60,66 266x21] rel:[52,14 266x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
-+ - pill-btn "Done" abs:[330,60 60x32] rel:[322,8 60x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9
-+ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/110/14 layout_hint:scroll
++ - title "Reorder cards" abs:[60,66 266x21] rel:[52,14 266x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
++ - pill-btn "Done" abs:[330,60 60x32] rel:[322,8 60x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/110/14 layout_hint:scroll scrollh:832
 + - item[1] div abs:[22,100 362x23] rel:[14,0 362x23] flex:row justify:between align:center pad:2/4/8/4
-+ - ov "7 cards · drag to reorder" abs:[26,102 189x13] rel:[4,2 189x13] font:11/700 color:on-surface-variant
++ - ov "7 cards · drag to reorder" abs:[26,102 189x13] rel:[4,2 189x13] font:11/700 color:on-surface-variant tracking:1.2
 + - item[2] div abs:[22,123 362x92] rel:[14,23 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - item[1] div abs:[35,136 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
   - span abs:[37,165 16x16] rel:[2,29 16x16] flex:row
@@ -602,7 +612,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,151 8x8] rel:[45,28 8x8] bg:status-new r:999
 - - div abs:[55,402 271x66] rel:[33,13 271x66]
 + - item[2] div abs:[87,136 239x66] rel:[65,13 239x66]
-  - div "연구자" abs:[87,136 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline
+  - div "연구자" abs:[87,136 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "now" abs:[338,140 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,488 362x92] rel:[14,365 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -613,7 +623,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,251 8x8] rel:[45,28 8x8] bg:mastery r:999
 - - div abs:[55,501 269x66] rel:[33,13 269x66]
 + - item[2] div abs:[87,236 237x66] rel:[65,13 237x66]
-  - div "공부하다" abs:[87,236 237x20] rel:[0,0 237x20] clip font:16/700/20 color:font-headline
+  - div "공부하다" abs:[87,236 237x20] rel:[0,0 237x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "in 4d" abs:[336,240 35x16] rel:[0,4 35x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,588 362x92] rel:[14,465 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -624,7 +634,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,351 8x8] rel:[45,28 8x8] bg:warning r:999
 - - div abs:[55,601 271x66] rel:[33,13 271x66]
 + - item[2] div abs:[87,336 239x66] rel:[65,13 239x66]
-  - div "도서관" abs:[87,336 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline
+  - div "도서관" abs:[87,336 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "10m" abs:[338,359 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,688 362x92] rel:[14,565 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -635,7 +645,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,450 8x8] rel:[45,28 8x8] bg:seed-indigo r:999
 - - div abs:[55,701 280x66] rel:[33,13 280x66]
 + - item[2] div abs:[87,435 248x66] rel:[65,13 248x66]
-  - div "친구" abs:[87,435 248x20] rel:[0,0 248x20] clip font:16/700/20 color:font-headline
+  - div "친구" abs:[87,435 248x20] rel:[0,0 248x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "6h" abs:[347,439 24x16] rel:[0,4 24x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,788 362x92] rel:[14,665 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -646,7 +656,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,550 8x8] rel:[45,28 8x8] bg:warning r:999
 - - div abs:[55,801 271x66] rel:[33,13 271x66]
 + - item[2] div abs:[87,535 239x66] rel:[65,13 239x66]
-  - div "바다" abs:[87,535 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline
+  - div "바다" abs:[87,535 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "15m" abs:[338,558 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,887 362x92] rel:[14,764 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -657,7 +667,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,650 8x8] rel:[45,28 8x8] bg:status-new r:999
 - - div abs:[55,900 271x66] rel:[33,13 271x66]
 + - item[2] div abs:[87,635 239x66] rel:[65,13 239x66]
-  - div "영화" abs:[87,635 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline
+  - div "영화" abs:[87,635 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "now" abs:[338,639 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - div abs:[22,987 362x92] rel:[14,864 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -668,7 +678,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - status-dot abs:[67,750 8x8] rel:[45,28 8x8] bg:seed-indigo r:999
 - - div abs:[55,1000 279x66] rel:[33,13 279x66]
 + - item[2] div abs:[87,735 247x66] rel:[65,13 247x66]
-  - div "시간" abs:[87,735 247x20] rel:[0,0 247x20] clip font:16/700/20 color:font-headline
+  - div "시간" abs:[87,735 247x20] rel:[0,0 247x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
   - span "2d" abs:[346,739 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
 - - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22

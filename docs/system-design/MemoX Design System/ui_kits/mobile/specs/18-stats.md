@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
@@ -40,20 +45,20 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 align:center pad:0/14
-    - div "Stats" abs:[22,65 59x30] rel:[14,13 59x30] font:24/700 color:font-headline
+    - div "Stats" abs:[22,65 59x30] rel:[14,13 59x30] font:24/700 color:font-headline tracking:-0.5
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,108 362x89] rel:[14,0 362x89] grid cols:2 gap:12 margin:0/0/16/0
       - card abs:[22,108 175x89] rel:[0,0 175x89] pad:12 bg:on-primary r:12 border:1px seed-indigo@14
-        - ov "Reviews today" abs:[35,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant
-        - div "47" abs:[35,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline
+        - ov "Reviews today" abs:[35,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant tracking:1.2
+        - div "47" abs:[35,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline tracking:-0.6
         - div "+12 vs yesterday" abs:[35,169 149x15] rel:[13,61 149x15] font:12/600 color:mastery
       - card abs:[209,108 175x89] rel:[187,0 175x89] pad:12 bg:on-primary r:12 border:1px seed-indigo@14
-        - ov "Retention" abs:[222,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant
-        - div "88" abs:[222,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline
-          - span "%" abs:[254,146 16x21] rel:[32,12 16x21] font:16/700 color:on-surface-variant
+        - ov "Retention" abs:[222,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant tracking:1.2
+        - div "88" abs:[222,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline tracking:-0.6
+          - span "%" abs:[254,146 16x21] rel:[32,12 16x21] font:16/700 color:on-surface-variant tracking:-0.6
         - div "7-day rolling" abs:[222,169 149x15] rel:[13,61 149x15] font:12/400 color:on-surface-variant
     - card abs:[22,213 362x179] rel:[14,105 362x179] pad:12 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - ov "This week" abs:[35,226 336x13] rel:[13,13 336x13] margin:0/0/12/0 font:11/700 color:on-surface-variant
+      - ov "This week" abs:[35,226 336x13] rel:[13,13 336x13] margin:0/0/12/0 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[35,251 336x128] rel:[13,38 336x128] flex:row gap:10 align:end repeat:x7(unit=1) pad:4/0
         - item[1] div abs:[35,255 39x120] rel:[0,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
           - div abs:[35,326 39x30] rel:[0,71 39x30] bg:seed-indigo r:6
@@ -76,7 +81,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - item[7] div abs:[332,255 39x120] rel:[297,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
           - div abs:[332,255 39x101] rel:[0,0 39x101] bg:seed-indigo r:6
           - div "S" abs:[348,362 7x13] rel:[16,107 7x13] font:11/600 color:on-surface-variant
-    - ov "Mastery by deck" abs:[22,408 362x13] rel:[14,300 362x13] margin:0/0/8/0 font:11/700 color:on-surface-variant
+    - ov "Mastery by deck" abs:[22,408 362x13] rel:[14,300 362x13] margin:0/0/8/0 font:11/700 color:on-surface-variant tracking:1.2
     - card abs:[22,429 362x237] rel:[14,321 362x237] repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
       - item[1] div abs:[23,430 360x59] rel:[1,1 360x59] pad:14/16
         - div abs:[39,444 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0

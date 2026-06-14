@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
@@ -43,15 +48,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:762
     - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
         - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
       - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant tracking:1.2
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
@@ -62,7 +67,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,223 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,223 13x13] rel:[0,0 13x13] clip
         - div abs:[81,213 156x32] rel:[58,12 156x32]
-          - div "TOPIK II" abs:[81,213 156x18] rel:[0,0 156x18] clip font:14/600 color:font-headline
+          - div "TOPIK II" abs:[81,213 156x18] rel:[0,0 156x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "142 cards" abs:[81,232 156x13] rel:[0,19 156x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - span "Most used" abs:[249,219 78x20] rel:[226,18 78x20] flex:row gap:4 align:center pad:0/7 bg:#d9891e@12 font:10/700 color:streak r:999
           - span abs:[256,224 10x10] rel:[7,5 10x10] flex:row
@@ -75,7 +80,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,280 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,280 13x13] rel:[0,0 13x13] clip
         - div abs:[81,270 234x32] rel:[58,12 234x32]
-          - div "noun" abs:[81,270 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "noun" abs:[81,270 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "88 cards" abs:[81,289 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,271 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,276 20x20] rel:[5,5 20x20] flex:row
@@ -85,7 +90,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,337 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,337 13x13] rel:[0,0 13x13] clip
         - div abs:[81,327 234x32] rel:[58,12 234x32]
-          - div "verb" abs:[81,327 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "verb" abs:[81,327 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "71 cards" abs:[81,346 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,328 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,333 20x20] rel:[5,5 20x20] flex:row
@@ -95,7 +100,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,394 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,394 13x13] rel:[0,0 13x13] clip
         - div abs:[81,384 234x32] rel:[58,12 234x32]
-          - div "people" abs:[81,384 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "people" abs:[81,384 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "46 cards" abs:[81,403 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,385 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,390 20x20] rel:[5,5 20x20] flex:row
@@ -105,7 +110,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,451 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,451 13x13] rel:[0,0 13x13] clip
         - div abs:[81,441 234x32] rel:[58,12 234x32]
-          - div "food" abs:[81,441 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "food" abs:[81,441 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "34 cards" abs:[81,460 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,442 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,447 20x20] rel:[5,5 20x20] flex:row
@@ -115,7 +120,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,508 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,508 13x13] rel:[0,0 13x13] clip
         - div abs:[81,498 234x32] rel:[58,12 234x32]
-          - div "adjective" abs:[81,498 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "adjective" abs:[81,498 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "28 cards" abs:[81,517 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,499 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,504 20x20] rel:[5,5 20x20] flex:row
@@ -125,7 +130,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,565 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,565 13x13] rel:[0,0 13x13] clip
         - div abs:[81,555 234x32] rel:[58,12 234x32]
-          - div "business" abs:[81,555 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "business" abs:[81,555 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "22 cards" abs:[81,574 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
@@ -135,7 +140,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,622 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,622 13x13] rel:[0,0 13x13] clip
         - div abs:[81,612 234x32] rel:[58,12 234x32]
-          - div "travel" abs:[81,612 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "travel" abs:[81,612 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "18 cards" abs:[81,631 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,613 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,618 20x20] rel:[5,5 20x20] flex:row
@@ -145,7 +150,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,679 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,679 13x13] rel:[0,0 13x13] clip
         - div abs:[81,669 234x32] rel:[58,12 234x32]
-          - div "idioms" abs:[81,669 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "idioms" abs:[81,669 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "11 cards" abs:[81,688 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,670 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,675 20x20] rel:[5,5 20x20] flex:row
@@ -155,7 +160,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,736 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,736 13x13] rel:[0,0 13x13] clip
         - div abs:[81,726 234x32] rel:[58,12 234x32]
-          - div "numbers" abs:[81,726 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "numbers" abs:[81,726 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "6 cards" abs:[81,745 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,727 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,732 20x20] rel:[5,5 20x20] flex:row
@@ -165,7 +170,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[45,793 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,793 13x13] rel:[0,0 13x13] clip
         - div abs:[81,783 234x32] rel:[58,12 234x32]
-          - div "archive 2023" abs:[81,783 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline
+          - div "archive 2023" abs:[81,783 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "3 cards" abs:[81,802 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - icon-btn abs:[339,784 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
           - span abs:[344,789 20x20] rel:[5,5 20x20] flex:row
@@ -186,15 +191,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
         - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
       - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant tracking:1.2
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
@@ -241,15 +246,15 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
         - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
       - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "No tags" abs:[26,169 57x13] rel:[4,9 57x13] font:11/700 color:on-surface-variant
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - ov "No tags" abs:[26,169 57x13] rel:[4,9 57x13] font:11/700 color:on-surface-variant tracking:1.2
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
@@ -258,9 +263,9 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[175,241 56x56] rel:[153,41 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
         - span abs:[190,256 26x26] rel:[15,15 26x26] flex:row
           - icon:tag abs:[190,256 26x26] rel:[0,0 26x26] clip
-      - div "No tags yet" abs:[45,311 316x21] rel:[23,111 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - div "No tags yet" abs:[45,311 316x21] rel:[23,111 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
       - div "Tags appear here as you add them when creating or editing flashcards." abs:[45,338 316x40] rel:[23,138 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Go to library" abs:[138,394 130x38] rel:[116,194 130x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - pill-btn "Go to library" abs:[138,394 130x38] rel:[116,194 130x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[154,406 14x14] rel:[16,12 14x14] flex:row
           - icon:layers abs:[154,406 14x14] rel:[0,0 14x14] clip
 ```
@@ -279,7 +284,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
@@ -289,8 +294,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[346,113 20x20] rel:[3,3 20x20] flex:row
           - icon:x abs:[346,113 20x20] rel:[0,0 20x20] clip
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "No matches" abs:[26,169 85x13] rel:[4,9 85x13] font:11/700 color:on-surface-variant
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - ov "No matches" abs:[26,169 85x13] rel:[4,9 85x13] font:11/700 color:on-surface-variant tracking:1.2
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
@@ -324,7 +329,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,500 14x14] rel:[8,8 14x14] flex:row
 + - icon:play abs:[34,500 14x14] rel:[0,0 14x14] clip
 + - div abs:[70,490 282x33] rel:[54,12 282x33]
-+ - div "Study cards with this tag" abs:[70,490 282x18] rel:[0,0 282x18] font:14/600 color:font-headline
++ - div "Study cards with this tag" abs:[70,490 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
 + - div "Start a session with the 46 cards" abs:[70,510 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[364,499 16x16] rel:[348,21 16x16] flex:row
 + - icon:chevron-right abs:[364,499 16x16] rel:[0,0 16x16] clip
@@ -333,7 +338,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,557 14x14] rel:[8,8 14x14] flex:row
 + - icon:list abs:[34,557 14x14] rel:[0,0 14x14] clip
 + - div abs:[70,547 282x33] rel:[54,12 282x33]
-+ - div "View cards with this tag" abs:[70,547 282x18] rel:[0,0 282x18] font:14/600 color:font-headline
++ - div "View cards with this tag" abs:[70,547 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
 + - div "Open the global tag-filtered list" abs:[70,567 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[364,556 16x16] rel:[348,21 16x16] flex:row
 + - icon:chevron-right abs:[364,556 16x16] rel:[0,0 16x16] clip
@@ -341,14 +346,14 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[26,604 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,612 14x14] rel:[8,8 14x14] flex:row
 + - icon:pencil abs:[34,612 14x14] rel:[0,0 14x14] clip
-+ - div "Rename tag" abs:[70,610 282x18] rel:[54,18 282x18] font:14/600 color:font-headline
++ - div "Rename tag" abs:[70,610 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
 + - span abs:[364,611 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,611 16x16] rel:[0,0 16x16] clip
 + - button abs:[16,646 374x54] rel:[8,174 374x54] grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,658 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,666 14x14] rel:[8,8 14x14] flex:row
 + - icon:git-merge abs:[34,666 14x14] rel:[0,0 14x14] clip
-+ - div "Merge into another tag" abs:[70,664 282x18] rel:[54,18 282x18] font:14/600 color:font-headline
++ - div "Merge into another tag" abs:[70,664 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
 + - span abs:[364,665 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,665 16x16] rel:[0,0 16x16] clip
 + - div abs:[26,708 354x1] rel:[18,236 354x1] margin:8/10 bg:outline-variant
@@ -357,7 +362,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[34,739 14x14] rel:[8,8 14x14] flex:row
 + - icon:trash-2 abs:[34,739 14x14] rel:[0,0 14x14] clip
 + - div abs:[70,729 310x33] rel:[54,12 310x33]
-+ - div "Delete tag" abs:[70,729 310x18] rel:[0,0 310x18] font:14/600 color:error
++ - div "Delete tag" abs:[70,729 310x18] rel:[0,0 310x18] font:14/600 color:error tracking:-0.1
 + - div "Keeps all 46 cards" abs:[70,749 310x13] rel:[0,20 310x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 ```
 
@@ -369,18 +374,18 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
 + - div abs:[33,281 340x235] rel:[25,273 340x235] maxw:340 clip bg:surface r:18 shadow:16/40
 + - div abs:[33,281 340x67] rel:[0,0 340x67] pad:18/18/6/18
-+ - div "Rename tag" abs:[51,299 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline
++ - div "Rename tag" abs:[51,299 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
 + - div "Renaming updates every card that uses ." abs:[51,324 304x18] rel:[18,43 304x18] font:12/400/18 color:on-surface-variant
 + - strong "people" abs:[274,325 42x15] rel:[223,1 42x15] font:12/700/18 color:font-headline
 + - div abs:[33,348 340x100] rel:[0,67 340x100] pad:12/18/4/18
-+ - ov "New name" abs:[51,360 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
++ - ov "New name" abs:[51,360 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,379 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px seed-indigo
 + - span "humans" abs:[64,393 53x18] rel:[13,14 53x18] font:14/600 color:font-headline
 + - span abs:[125,393 2x18] rel:[74,14 2x18] bg:seed-indigo
 + - div "Tag names are case-insensitive." abs:[51,431 304x13] rel:[18,83 304x13] pad:0/2 margin:6/0/0/0 font:11/400 color:on-surface-variant
 + - div abs:[33,448 340x68] rel:[0,167 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,462 134x40] rel:[14,14 134x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Rename" abs:[189,462 170x40] rel:[156,14 170x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,462 134x40] rel:[14,14 134x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Rename" abs:[189,462 170x40] rel:[156,14 170x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 ```
 
 ## State: Rename to merge (ordered diff vs Loaded)
@@ -391,11 +396,11 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
 + - div abs:[33,199 340x398] rel:[25,191 340x398] repeat:x4(unit=1) maxw:340 clip bg:surface r:18 shadow:16/40
 + - item[1] div abs:[33,199 340x67] rel:[0,0 340x67] pad:18/18/6/18
-+ - div "Rename tag" abs:[51,217 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline
++ - div "Rename tag" abs:[51,217 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
 + - div "Renaming updates every card that uses ." abs:[51,242 304x18] rel:[18,43 304x18] font:12/400/18 color:on-surface-variant
 + - strong "people" abs:[274,243 42x15] rel:[223,1 42x15] font:12/700/18 color:font-headline
 + - item[2] div abs:[33,266 340x100] rel:[0,67 340x100] pad:12/18/4/18
-+ - ov "New name" abs:[51,278 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
++ - ov "New name" abs:[51,278 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
 + - div abs:[51,297 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px streak
 + - span "noun" abs:[64,311 34x18] rel:[13,14 34x18] font:14/600 color:font-headline
 + - span abs:[106,311 2x18] rel:[55,14 2x18] bg:seed-indigo
@@ -420,8 +425,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span "· 134" abs:[268,448 24x12] rel:[62,7 24x12] font:10/700 color:seed-indigo op:0.7
 + - div "No cards are deleted. The combined tag will hold all 134 cards." abs:[64,483 278x33] rel:[13,109 278x33] margin:8/0/0/0 font:11/400/17 color:on-surface-variant
 + - item[4] div abs:[33,529 340x68] rel:[0,330 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,543 134x40] rel:[14,14 134x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Merge tags" abs:[189,543 170x40] rel:[156,14 170x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,543 134x40] rel:[14,14 134x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Merge tags" abs:[189,543 170x40] rel:[156,14 170x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[228,556 14x14] rel:[39,13 14x14] flex:row
 + - icon:git-merge abs:[228,556 14x14] rel:[0,0 14x14] clip
 ```
@@ -435,7 +440,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[8,289 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
 + - span abs:[185,297 36x4] rel:[177,8 36x4] bg:outline-variant r:999
 + - div abs:[8,305 390x77] rel:[0,16 390x77] pad:4/18/12/18
-+ - div "Merge "people" into…" abs:[26,309 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline
++ - div "Merge "people" into…" abs:[26,309 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
 + - div "Cards under will move to the tag you pick. No cards are deleted." abs:[26,334 354x36] rel:[18,29 354x36] font:12/400/18 color:on-surface-variant
 + - strong "people" abs:[98,335 42x15] rel:[72,1 42x15] font:12/700/18 color:font-headline
 + - div abs:[26,382 354x42] rel:[18,93 354x42] flex:row gap:10 align:center pad:0/12 bg:on-primary r:10 border:1px seed-indigo@14
@@ -483,8 +488,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:tag abs:[181,691 11x11] rel:[0,0 11x11] clip
 + - span "· 134" abs:[233,690 24x12] rel:[62,7 24x12] font:10/700 color:seed-indigo op:0.7
 + - div abs:[8,732 390x56] rel:[0,443 390x56] flex:row gap:8 pad:0/14/16/14
-+ - pill-btn "Cancel" abs:[22,732 155x40] rel:[14,0 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Merge 46 cards" abs:[185,732 199x40] rel:[177,0 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[22,732 155x40] rel:[14,0 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Merge 46 cards" abs:[185,732 199x40] rel:[177,0 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[225,745 14x14] rel:[41,13 14x14] flex:row
 + - icon:git-merge abs:[225,745 14x14] rel:[0,0 14x14] clip
 ```
@@ -500,7 +505,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[179,279 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@10 r:14
 + - span abs:[192,292 22x22] rel:[13,13 22x22] flex:row
 + - icon:tag abs:[192,292 22x22] rel:[0,0 22x22] clip
-+ - div "Delete this tag?" abs:[51,339 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
++ - div "Delete this tag?" abs:[51,339 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
 + - div "The tag will be removed from 46 cards." abs:[51,367 304x20] rel:[18,106 304x20] pad:0/6 font:13/400/20 color:on-surface-variant text:center
 + - strong "people" abs:[110,369 45x16] rel:[59,2 45x16] font:13/700/20 color:font-headline text:center
 + - div abs:[51,405 304x58] rel:[18,144 304x58] flex:row gap:8 align:center pad:10/12 bg:mastery@8 r:11 border:1px mastery@20
@@ -509,8 +514,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Your . Only the tag label is removed." abs:[87,416 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
 + - strong "46 cards are kept" abs:[114,417 100x15] rel:[27,1 100x15] font:12/700/18 color:font-headline
 + - div abs:[33,467 340x68] rel:[0,206 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,481 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-+ - pill-btn "Delete tag" abs:[198,481 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center r:11
++ - pill-btn "Cancel" abs:[47,481 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Delete tag" abs:[198,481 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[235,494 14x14] rel:[38,13 14x14] flex:row
 + - icon:trash-2 abs:[235,494 14x14] rel:[0,0 14x14] clip
 ```

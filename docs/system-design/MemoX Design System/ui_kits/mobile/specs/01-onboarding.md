@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -19,6 +19,8 @@ scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs
 overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
 start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,
+`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.
 `shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
 390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
 `<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
@@ -28,7 +30,10 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
+kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
+is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
+Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Welcome
 
 ```text
@@ -46,7 +51,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[163,182 80x80] rel:[133,0 80x80] flex:row justify:center align:center margin:0/0/18/0 bg:seed-indigo r:22 shadow:12/32
         - span abs:[185,204 36x36] rel:[22,22 36x36] flex:row
           - icon:sparkles abs:[185,204 36x36] rel:[0,0 36x36] clip
-      - div "Remember more,at your own pace." abs:[30,280 346x60] rel:[0,98 346x60] margin:0/0/8/0 font:26/700/30 color:font-headline text:center
+      - div "Remember more,at your own pace." abs:[30,280 346x60] rel:[0,98 346x60] margin:0/0/8/0 font:26/700/30 color:font-headline text:center tracking:-0.6
       - div "Calm flashcards that surface what you need each day. Local-first — your cards live on this device." abs:[30,347 346x43] rel:[0,166 346x43] pad:0/4 font:14/400/22 color:on-surface-variant text:center
     - div abs:[30,415 346x197] rel:[22,315 346x197] flex:col gap:10 margin:0/0/20/0
       - card abs:[30,415 346x59] rel:[0,0 346x59] grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
@@ -54,24 +59,24 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[53,437 14x14] rel:[8,8 14x14] flex:row
             - icon:cloud abs:[53,437 14x14] rel:[0,0 14x14] clip
         - div abs:[91,428 270x33] rel:[61,13 270x33]
-          - div "Local-first" abs:[91,428 270x16] rel:[0,0 270x16] font:13/700 color:font-headline
+          - div "Local-first" abs:[91,428 270x16] rel:[0,0 270x16] font:13/700 color:font-headline tracking:-0.1
           - div "No sign-in needed. Sync is optional, anytime." abs:[91,445 270x16] rel:[0,17 270x16] margin:1/0/0/0 font:11/400/16 color:on-surface-variant
       - card abs:[30,484 346x59] rel:[0,69 346x59] grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[45,498 30x30] rel:[15,14 30x30] flex:row justify:center align:center bg:seed-indigo@10 r:9
           - span abs:[53,506 14x14] rel:[8,8 14x14] flex:row
             - icon:sun abs:[53,506 14x14] rel:[0,0 14x14] clip
         - div abs:[91,497 270x33] rel:[61,13 270x33]
-          - div "A daily rhythm" abs:[91,497 270x16] rel:[0,0 270x16] font:13/700 color:font-headline
+          - div "A daily rhythm" abs:[91,497 270x16] rel:[0,0 270x16] font:13/700 color:font-headline tracking:-0.1
           - div "Short sessions, surfaced by what’s due." abs:[91,514 270x16] rel:[0,17 270x16] margin:1/0/0/0 font:11/400/16 color:on-surface-variant
       - card abs:[30,553 346x59] rel:[0,138 346x59] grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[45,567 30x30] rel:[15,14 30x30] flex:row justify:center align:center bg:seed-indigo@10 r:9
           - span abs:[53,575 14x14] rel:[8,8 14x14] flex:row
             - icon:shield-check abs:[53,575 14x14] rel:[0,0 14x14] clip
         - div abs:[91,566 270x33] rel:[61,13 270x33]
-          - div "No streak pressure" abs:[91,566 270x16] rel:[0,0 270x16] font:13/700 color:font-headline
+          - div "No streak pressure" abs:[91,566 270x16] rel:[0,0 270x16] font:13/700 color:font-headline tracking:-0.1
           - div "Skip a day. Your progress is safe." abs:[91,583 270x16] rel:[0,17 270x16] margin:1/0/0/0 font:11/400/16 color:on-surface-variant
   - div abs:[8,693 390x95] rel:[0,685 390x95] pad:10/18/18/18
-    - pill-btn "Let’s start" abs:[26,703 354x44] rel:[18,10 354x44] flex:row gap:8 justify:center align:center pad:0/18 bg:seed-indigo font:15/600 color:on-primary text:center r:14
+    - pill-btn "Let’s start" abs:[26,703 354x44] rel:[18,10 354x44] flex:row gap:8 justify:center align:center pad:0/18 bg:seed-indigo font:15/600 color:on-primary text:center tracking:0.1 r:14
       - span abs:[236,717 16x16] rel:[210,14 16x16] flex:row
         - icon:arrow-right abs:[236,717 16x16] rel:[0,0 16x16] clip
     - div "You’re always in control. Sign-in is optional." abs:[26,757 354x13] rel:[18,64 354x13] margin:10/0/0/0 font:11/400 color:on-surface-variant text:center
@@ -88,7 +93,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -99,7 +104,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -107,7 +112,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -116,7 +121,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -125,7 +130,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -146,7 +151,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -157,7 +162,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -165,7 +170,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -174,7 +179,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -183,7 +188,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -196,25 +201,25 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[1] div abs:[8,479 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
       - span abs:[185,487 36x4] rel:[177,8 36x4] bg:outline-variant r:999
     - div abs:[8,495 390x61] rel:[0,16 390x61] pad:4/18/14/18
-      - div "Name your first deck" abs:[26,499 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline
+      - div "Name your first deck" abs:[26,499 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
       - div "You can rename it or move it into folders anytime." abs:[26,524 354x18] rel:[18,29 354x18] font:12/400/18 color:on-surface-variant
     - item[2] div abs:[8,556 390x174] rel:[0,77 390x174] pad:0/18/14/18
-      - ov "Deck name" abs:[26,556 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
+      - ov "Deck name" abs:[26,556 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[26,575 354x46] rel:[18,19 354x46] flex:row gap:8 align:center pad:0/14 bg:on-primary r:11 border:1px seed-indigo
         - span "Korean — TOPIK starter" abs:[41,589 156x18] rel:[15,14 156x18] font:14/600 color:font-headline
         - span abs:[205,589 2x18] rel:[179,14 2x18] bg:seed-indigo
       - div abs:[26,635 354x13] rel:[18,79 354x13] flex:row gap:6 align:center margin:14/0/6/0
         - span abs:[26,636 11x11] rel:[0,1 11x11] flex:row
           - icon:sparkles abs:[26,636 11x11] rel:[0,0 11x11] clip
-        - ov "Or try a starter" abs:[43,635 117x13] rel:[17,0 117x13] font:11/700 color:on-surface-variant
+        - ov "Or try a starter" abs:[43,635 117x13] rel:[17,0 117x13] font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[26,654 354x62] rel:[18,98 354x62] flex:row wrap gap:6 repeat:x4(unit=1)
         - item[1] button "Korean basics" abs:[26,654 107x28] rel:[0,0 107x28] pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
         - item[2] button "Japanese kana" abs:[139,654 110x28] rel:[113,0 110x28] pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
         - item[3] button "Vocabulary" abs:[255,654 92x28] rel:[229,0 92x28] pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
         - item[4] button "GRE words" abs:[26,688 89x28] rel:[0,34 89x28] pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
     - div abs:[8,730 390x44] rel:[0,251 390x44] flex:row gap:8 pad:4/14/0/14
-      - pill-btn "Cancel" abs:[22,734 160x40] rel:[14,4 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-      - pill-btn "Create deck" abs:[190,734 194x40] rel:[182,4 194x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - pill-btn "Cancel" abs:[22,734 160x40] rel:[14,4 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
+      - pill-btn "Create deck" abs:[190,734 194x40] rel:[182,4 194x40] flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[238,747 14x14] rel:[48,13 14x14] flex:row
           - icon:check abs:[238,747 14x14] rel:[0,0 14x14] clip
 ```
@@ -230,7 +235,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -241,7 +246,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -249,7 +254,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -258,7 +263,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -267,7 +272,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -280,13 +285,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[1] div abs:[8,459 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
       - span abs:[185,467 36x4] rel:[177,8 36x4] bg:outline-variant r:999
     - div abs:[8,475 390x109] rel:[0,16 390x109] pad:4/18/12/18
-      - div "Step 1 of 2" abs:[26,480 100x21] rel:[18,5 100x21] flex:row gap:6 align:center pad:4/10 margin:0/0/10/0 bg:success@10 font:11/700 color:mastery r:999
+      - div "Step 1 of 2" abs:[26,480 100x21] rel:[18,5 100x21] flex:row gap:6 align:center pad:4/10 margin:0/0/10/0 bg:success@10 font:11/700 color:mastery tracking:0.3 r:999
         - span abs:[36,485 11x11] rel:[10,5 11x11] flex:row
           - icon:upload abs:[36,485 11x11] rel:[0,0 11x11] clip
-      - div "Where should the imported cards go?" abs:[26,511 354x21] rel:[18,36 354x21] margin:0/0/4/0 font:16/700 color:font-headline
+      - div "Where should the imported cards go?" abs:[26,511 354x21] rel:[18,36 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
       - div "We need a destination deck first. We won’t create it until you pick the file." abs:[26,536 354x36] rel:[18,61 354x36] font:12/400/18 color:on-surface-variant
     - item[2] div abs:[8,584 390x146] rel:[0,125 390x146] pad:0/18/14/18
-      - ov "Deck name" abs:[26,584 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:11/700 color:on-surface-variant
+      - ov "Deck name" abs:[26,584 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[26,603 354x46] rel:[18,19 354x46] flex:row gap:8 align:center pad:0/14 bg:on-primary r:11 border:1px seed-indigo
         - span "Imported vocabulary" abs:[41,617 142x18] rel:[15,14 142x18] font:14/600 color:font-headline
         - span abs:[191,617 2x18] rel:[165,14 2x18] bg:seed-indigo
@@ -295,8 +300,8 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:info abs:[39,672 13x13] rel:[0,0 13x13] clip
         - span "If you cancel after this step, the empty deck is discarded — nothing left behind." abs:[60,672 307x33] rel:[34,11 307x33] font:11/400/17 color:font-headline
     - div abs:[8,730 390x44] rel:[0,271 390x44] flex:row gap:8 pad:4/14/0/14
-      - pill-btn "Cancel" abs:[22,734 155x40] rel:[14,4 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-      - pill-btn "Continue to import" abs:[185,734 199x40] rel:[177,4 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - pill-btn "Cancel" abs:[22,734 155x40] rel:[14,4 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
+      - pill-btn "Continue to import" abs:[185,734 199x40] rel:[177,4 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[340,747 14x14] rel:[156,13 14x14] flex:row
           - icon:arrow-right abs:[340,747 14x14] rel:[0,0 14x14] clip
 ```
@@ -312,7 +317,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -323,7 +328,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -331,7 +336,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -340,7 +345,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -349,7 +354,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -364,7 +369,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[188,330 30x30] rel:[11,11 30x30] r:999 border:2px #000000@0
       - div "Signing in to Google" abs:[53,385 300x19] rel:[22,90 300x19] margin:0/0/6/0 font:15/700 color:font-headline text:center
       - div "Continue in the Google sign-in window." abs:[53,410 300x18] rel:[22,115 300x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
-      - pill-btn "Cancel" abs:[167,442 71x36] rel:[136,147 71x36] flex:row gap:6 justify:center align:center pad:0/14 font:12/600 color:seed-indigo text:center r:10 border:1px outline-variant
+      - pill-btn "Cancel" abs:[167,442 71x36] rel:[136,147 71x36] flex:row gap:6 justify:center align:center pad:0/14 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
 ```
 
 ## State: Restore prompt (full — differs too much from base)
@@ -378,7 +383,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -389,7 +394,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -397,7 +402,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -406,7 +411,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -415,7 +420,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -433,12 +438,12 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[36,621 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[36,621 16x16] rel:[0,0 16x16] clip
         - div abs:[72,612 249x33] rel:[46,2 249x33]
-          - div "We found a backup" abs:[72,612 249x19] rel:[0,0 249x19] font:15/700 color:font-headline
+          - div "We found a backup" abs:[72,612 249x19] rel:[0,0 249x19] font:15/700 color:font-headline tracking:-0.2
           - div "alex@memox.app · 326 cards · saved 4 days ago" abs:[72,632 249x13] rel:[0,20 249x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
       - div "Restoring will pull all decks, cards, and history from Drive onto this device." abs:[26,657 354x40] rel:[18,50 354x40] font:13/400/20 color:font-headline
     - item[2] div abs:[8,711 390x40] rel:[0,120 390x40] flex:row gap:8 pad:0/14
-      - pill-btn "Not now" abs:[22,711 155x40] rel:[14,0 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
-      - pill-btn "Restore now" abs:[185,711 199x40] rel:[177,0 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - pill-btn "Not now" abs:[22,711 155x40] rel:[14,0 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
+      - pill-btn "Restore now" abs:[185,711 199x40] rel:[177,0 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[235,724 14x14] rel:[50,13 14x14] flex:row
           - icon:cloud-download abs:[235,724 14x14] rel:[0,0 14x14] clip
     - div "You can do this later from Settings." abs:[8,761 390x13] rel:[0,170 390x13] margin:10/0/0/0 font:11/400 color:on-surface-variant text:center
@@ -455,7 +460,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -466,7 +471,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -474,7 +479,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -483,7 +488,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -492,7 +497,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -523,7 +528,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -534,7 +539,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -542,7 +547,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -551,7 +556,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -560,7 +565,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
@@ -575,13 +580,13 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[177,283 52x52] rel:[134,22 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@10 r:14
           - span abs:[192,298 22x22] rel:[15,15 22x22] flex:row
             - icon:cloud-off abs:[192,298 22x22] rel:[0,0 22x22] clip
-        - div "Restore didn’t finish" abs:[65,347 276x21] rel:[22,86 276x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+        - div "Restore didn’t finish" abs:[65,347 276x21] rel:[22,86 276x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
         - div "Nothing was added to your device. You can try again, or start with a fresh deck." abs:[65,374 276x40] rel:[22,113 276x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
       - div abs:[43,419 320x116] rel:[0,157 320x116] flex:col gap:8 pad:14
-        - pill-btn "Try restore again" abs:[57,433 292x40] rel:[14,14 292x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+        - pill-btn "Try restore again" abs:[57,433 292x40] rel:[14,14 292x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
           - span abs:[141,446 14x14] rel:[84,13 14x14] flex:row
             - icon:refresh-cw abs:[141,446 14x14] rel:[0,0 14x14] clip
-        - pill-btn "Continue without restoring" abs:[57,481 292x40] rel:[14,62 292x40] flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
+        - pill-btn "Continue without restoring" abs:[57,481 292x40] rel:[14,62 292x40] flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
 ```
 
 ## State: Import handoff (full — differs too much from base)
@@ -595,7 +600,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x88] rel:[0,44 390x88] flex:col gap:2 align:start pad:18/14/14/14 pos:relative
-    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline
+    - div "Welcome to MemoX" abs:[22,70 208x28] rel:[14,18 208x28] font:22/700 color:font-headline tracking:-0.5
     - div "Let’s set up your first cards" abs:[22,100 150x15] rel:[14,48 150x15] font:12/400 color:on-surface-variant
     - div abs:[348,70 36x36] rel:[340,18 36x36] flex:row gap:4 pos:absolute
       - icon-btn abs:[348,70 36x36] rel:[0,0 36x36] flex:row justify:center align:center pos:relative r:999
@@ -606,7 +611,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
         - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
           - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center
+      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
       - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
     - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
       - button abs:[22,319 362x72] rel:[0,0 362x72] grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
@@ -614,7 +619,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
             - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
         - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary
+          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
           - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
         - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
           - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
@@ -623,7 +628,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
             - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
         - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
@@ -632,7 +637,7 @@ contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
             - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
         - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline
+          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
           - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
         - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
           - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
