@@ -29,6 +29,8 @@ import 'package:memox/domain/types/study_type.dart';
 part 'study_repo_impl_match.dart';
 part 'study_repo_impl_study_actions.dart';
 part 'study_repo_impl_study_session.dart';
+part 'study_repo_impl_study_session_helpers.dart';
+part 'study_repo_impl_summary.dart';
 
 class StudyRepositoryImpl implements StudyRepository {
   StudyRepositoryImpl(this._dao, {DateTime Function()? now})
@@ -233,100 +235,17 @@ class StudyRepositoryImpl implements StudyRepository {
 
   @override
   Future<Result<DashboardResumeSessionSummary?>>
-  findLatestResumableSessionSummary() async {
-    try {
-      final StudySessionRow? sessionRow = await _dao.findLatestResumableSession(
-        nowMs: _nowMs,
-      );
-      if (sessionRow == null) {
-        return const Result<DashboardResumeSessionSummary?>.ok(null);
-      }
-
-      final Result<StudySessionReview> reviewResult =
-          await loadStudySessionReview(sessionId: sessionRow.id);
-      if (reviewResult is Err<StudySessionReview>) {
-        return Result<DashboardResumeSessionSummary?>.err(reviewResult.failure);
-      }
-
-      final StudySessionReview review =
-          (reviewResult as Ok<StudySessionReview>).value;
-      final String? scopeLabel = await _resolveResumableScopeLabel(
-        sessionRow,
-        _dao,
-      );
-
-      return Result<DashboardResumeSessionSummary?>.ok(
-        DashboardResumeSessionSummary(
-          session: review.session,
-          answeredCount: review.items
-              .where(
-                (StudySessionReviewItem item) =>
-                    item.sessionItem.answeredAt != null,
-              )
-              .length,
-          totalCount: review.items.length,
-          scopeLabel: scopeLabel,
-        ),
-      );
-    } catch (error) {
-      return Result<DashboardResumeSessionSummary?>.err(
-        Failure.storage(
-          operation: StorageOp.read,
-          cause: error.toString(),
-          table: 'study_sessions',
-        ),
-      );
-    }
-  }
+  findLatestResumableSessionSummary() =>
+      _findLatestResumableSessionSummary(_dao, _nowMs);
 
   @override
   Future<Result<StudySession?>> findResumableSession({
     required StudyScope scope,
-  }) async {
-    try {
-      final StudySessionRow? row = await _dao.findResumableSession(
-        scope: scope,
-        nowMs: _nowMs,
-      );
-      return Result<StudySession?>.ok(
-        row == null ? null : StudyMapper.fromSessionRow(row),
-      );
-    } catch (error) {
-      return Result<StudySession?>.err(
-        Failure.storage(
-          operation: StorageOp.read,
-          cause: error.toString(),
-          table: 'study_sessions',
-        ),
-      );
-    }
-  }
+  }) => _findResumableSession(_dao, _nowMs, scope);
 
   @override
-  Future<Result<void>> cancelStudySession({
-    required SessionId sessionId,
-  }) async {
-    try {
-      final int updatedRows = await _dao.cancelStudySession(
-        sessionId: sessionId,
-        updatedAtMs: _nowMs,
-      );
-      if (updatedRows == 0) {
-        return Result<void>.err(
-          Failure.notFound(entity: 'study_session', id: sessionId),
-        );
-      }
-      return const Result<void>.ok(null);
-    } catch (error) {
-      return Result<void>.err(
-        Failure.storage(
-          operation: StorageOp.write,
-          cause: error.toString(),
-          table: 'study_sessions',
-        ),
-      );
-    }
-  }
+  Future<Result<void>> cancelStudySession({required SessionId sessionId}) =>
+      _cancelStudySession(_dao, _nowMs, sessionId);
 
   @override
   Future<Result<void>> buryStudySessionCard({
