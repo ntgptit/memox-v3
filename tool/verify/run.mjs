@@ -156,6 +156,7 @@ if (mode === 'quick') {
   step('guard', 'python code-verification-guard/guard/run.py check --project . --ruleset memox', {
     skip: guardPresent ? undefined : 'tool not present',
   });
+  step('ui-kit specs fresh', 'node tool/ui_kit_shots/check_specs_fresh.mjs');
   step('git diff --check', 'git diff --check');
 } else {
   step('gen-l10n', 'flutter gen-l10n', { skip: arbTouched ? undefined : 'no ARB change' });
@@ -170,6 +171,7 @@ if (mode === 'quick') {
   if (has('--full')) step('flutter test (ALL)', 'flutter test');
   else if (testTargets.length) step('flutter test (targeted)', `flutter test${goldenFlag} ${testTargets.join(' ')}`);
   else results.push({ name: 'flutter test', status: 'skipped', note: 'no targets — pass --test <paths> or --full' });
+  step('ui-kit specs fresh', 'node tool/ui_kit_shots/check_specs_fresh.mjs');
   step('git diff --check', 'git diff --check');
 }
 
