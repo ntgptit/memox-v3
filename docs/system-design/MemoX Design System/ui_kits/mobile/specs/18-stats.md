@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -85,19 +85,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "S" abs:[348,362 7x13] rel:[16,107 7x13] font:11/600 color:on-surface-variant
     - ov "Mastery by deck" abs:[22,408 362x13] rel:[14,300 362x13] margin:0/0/8/0 font:11/700 color:on-surface-variant tracking:1.2
     - card abs:[22,429 362x237] rel:[14,321 362x237] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div abs:[23,430 360x59] rel:[1,1 360x59] pad:14/16
+      - item[1] div abs:[23,430 360x59] rel:[1,1 360x59] pad:14/16 border-b:1px seed-indigo@14
         - div abs:[39,444 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
           - span "TOPIK II Vocab" abs:[39,444 97x18] rel:[0,0 97x18] font:14/500 color:font-headline
           - span "75%" abs:[336,444 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
         - div abs:[39,468 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
           - div abs:[39,468 246x6] rel:[0,0 246x6] bg:mastery
-      - item[2] div abs:[23,489 360x59] rel:[1,60 360x59] pad:14/16
+      - item[2] div abs:[23,489 360x59] rel:[1,60 360x59] pad:14/16 border-b:1px seed-indigo@14
         - div abs:[39,503 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
           - span "Genki Ch. 1–5" abs:[39,503 90x18] rel:[0,0 90x18] font:14/500 color:font-headline
           - span "52%" abs:[336,503 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
         - div abs:[39,527 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
           - div abs:[39,527 171x6] rel:[0,0 171x6] bg:seed-indigo
-      - item[3] div abs:[23,548 360x59] rel:[1,119 360x59] pad:14/16
+      - item[3] div abs:[23,548 360x59] rel:[1,119 360x59] pad:14/16 border-b:1px seed-indigo@14
         - div abs:[39,562 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
           - span "HSK 1" abs:[39,562 36x18] rel:[0,0 36x18] font:14/500 color:font-headline
           - span "18%" abs:[336,562 31x18] rel:[297,0 31x18] font:14/700 color:font-headline

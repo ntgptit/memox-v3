@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -63,14 +63,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - svg abs:[124,315 18x18] rel:[83,13 18x18] clip
     - ov "What stays local" abs:[22,381 362x21] rel:[14,281 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
     - card abs:[22,402 362x182] rel:[14,302 362x182] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,403 360x60] rel:[1,1 360x60] flex:row gap:12 align:start pad:12/14
+      - div abs:[23,403 360x60] rel:[1,1 360x60] flex:row gap:12 align:start pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,415 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:9
           - span abs:[45,423 15x15] rel:[8,8 15x15] flex:row
             - icon:smartphone abs:[45,423 15x15] rel:[0,0 15x15] clip
         - div abs:[79,415 290x35] rel:[56,12 290x35] grow:1 basis:0 layout_hint:expanded
           - div "All your decks live on this device" abs:[79,415 290x16] rel:[0,0 290x16] font:13/600 color:font-headline tracking:-0.1
           - div "Study, edit, and review work offline." abs:[79,433 290x17] rel:[0,18 290x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-      - div abs:[23,464 360x60] rel:[1,61 360x60] flex:row gap:12 align:start pad:12/14
+      - div abs:[23,464 360x60] rel:[1,61 360x60] flex:row gap:12 align:start pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,476 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:9
           - span abs:[45,483 15x15] rel:[8,8 15x15] flex:row
             - icon:shield-check abs:[45,483 15x15] rel:[0,0 15x15] clip
@@ -93,7 +93,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - pill-btn "Sign in with Google" abs:[41,302 324x44] rel:[19,202 324x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/18 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
 - - svg abs:[124,315 18x18] rel:[83,13 18x18] clip
 + - pill-btn "Signing in…" abs:[41,302 324x44] rel:[19,202 324x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/18 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2 op:0.85
-+ - span abs:[151,315 18x18] rel:[110,13 18x18] r:999 border:2px #000000@0
++ - span abs:[151,315 18x18] rel:[110,13 18x18] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
   - ov "What stays local" abs:[22,381 362x21] rel:[14,281 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
   ...
 ```
@@ -152,7 +152,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
               - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
                 - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border:1px seed-indigo@14
+          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
             - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
               - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
                 - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
@@ -164,7 +164,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
         - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
               - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
                 - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
@@ -188,7 +188,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,481 362x218] rel:[0,21 362x218] flex:col gap:10
         - card abs:[22,481 362x218] rel:[0,0 362x218] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:surface-container r:10
               - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
                 - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
@@ -244,7 +244,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
               - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
                 - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border:1px seed-indigo@14
+          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
             - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
               - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
                 - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
@@ -256,7 +256,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
         - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
               - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
                 - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
@@ -280,7 +280,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,481 362x202] rel:[0,21 362x202] flex:col gap:10
         - card abs:[22,481 362x202] rel:[0,0 362x202] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
               - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
                 - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
@@ -339,7 +339,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
               - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
                 - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border:1px seed-indigo@14
+          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
             - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
               - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
                 - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
@@ -351,7 +351,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
         - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
               - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
                 - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
@@ -375,7 +375,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,481 362x279] rel:[0,21 362x279] flex:col gap:10
         - card abs:[22,481 362x279] rel:[0,0 362x279] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14
+          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
               - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
                 - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
@@ -385,7 +385,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span "Matches" abs:[307,504 62x13] rel:[284,23 62x13] flex:row gap:4 align:center font:11/600 color:mastery
               - span abs:[307,505 12x12] rel:[0,1 12x12] flex:row
                 - icon:check abs:[307,505 12x12] rel:[0,0 12x12] clip
-          - item[2] div abs:[23,541 360x77] rel:[1,60 360x77] pad:14
+          - item[2] div abs:[23,541 360x77] rel:[1,60 360x77] pad:14 border-b:1px seed-indigo@14
             - div abs:[37,555 332x15] rel:[14,14 332x15] flex:row justify:between align:center margin:0/0/8/0
               - div "Uploading to Drive…" abs:[37,555 116x15] rel:[0,0 116x15] font:12/600 color:seed-indigo
               - div "64%" abs:[344,556 25x13] rel:[307,1 25x13] font:11/700 color:on-surface-variant
@@ -394,7 +394,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - div "91 / 142 cards · keep this screen open" abs:[37,590 332x13] rel:[14,49 332x13] margin:6/0/0/0 font:11/400 color:on-surface-variant
           - item[3] div abs:[23,618 360x112] rel:[1,137 360x112] flex:col gap:8 pad:12/14
             - pill-btn "Uploading… 64%" abs:[37,630 332x40] rel:[14,12 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11 op:0.5
-              - span abs:[137,641 17x17] rel:[100,12 17x17] r:999 border:2px #000000@0
+              - span abs:[137,641 17x17] rel:[100,12 17x17] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
             - pill-btn "Restore from Drive" abs:[37,678 332x40] rel:[14,60 332x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant op:0.45
               - span abs:[133,690 15x15] rel:[96,13 15x15] flex:row
                 - icon:download abs:[133,690 15x15] rel:[0,0 15x15] clip
@@ -440,7 +440,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
               - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
                 - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border:1px seed-indigo@14
+          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
             - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
               - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
                 - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
@@ -452,7 +452,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
         - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
               - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
                 - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
@@ -476,7 +476,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,481 362x341] rel:[0,21 362x341] flex:col gap:10
         - card abs:[22,481 362x341] rel:[0,0 362x341] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14
+          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:#d9891e@12 r:10
               - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
                 - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
@@ -538,7 +538,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
               - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
                 - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border:1px seed-indigo@14
+          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
             - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
               - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
                 - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
@@ -550,7 +550,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
         - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
               - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
                 - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
@@ -574,7 +574,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,481 362x269] rel:[0,21 362x269] flex:col gap:10
         - card abs:[22,481 362x269] rel:[0,0 362x269] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14
+          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
               - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
                 - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
@@ -584,7 +584,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span "Matches" abs:[307,504 62x13] rel:[284,23 62x13] flex:row gap:4 align:center font:11/600 color:mastery
               - span abs:[307,505 12x12] rel:[0,1 12x12] flex:row
                 - icon:check abs:[307,505 12x12] rel:[0,0 12x12] clip
-          - item[2] div abs:[23,541 360x115] rel:[1,60 360x115] repeat:x2(unit=2) pad:14
+          - item[2] div abs:[23,541 360x115] rel:[1,60 360x115] repeat:x2(unit=2) pad:14 border-b:1px seed-indigo@14
             - item[1] div abs:[37,555 332x13] rel:[14,14 332x13] flex:row justify:between align:center margin:0/0/4/0
               - div "Step 1 of 2" abs:[37,555 63x13] rel:[0,0 63x13] font:11/700 color:on-surface-variant tracking:0.3
               - div "38%" abs:[344,555 25x13] rel:[307,0 25x13] font:11/700 color:on-surface-variant
@@ -643,7 +643,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               - div "Drive access expired" abs:[78,205 276x16] rel:[0,0 276x16] font:13/700 color:font-headline tracking:-0.1
               - div "Sign in again to upload or restore. Your local data is untouched." abs:[78,223 276x36] rel:[0,18 276x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
               - pill-btn "Sign in again" abs:[78,267 101x34] rel:[0,62 101x34] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:10
-          - div abs:[23,328 360x57] rel:[1,207 360x57] flex:row gap:8 pad:10/14 border:1px seed-indigo@14
+          - div abs:[23,328 360x57] rel:[1,207 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
             - pill-btn "Sign out" abs:[37,339 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
               - span abs:[84,350 14x14] rel:[47,11 14x14] flex:row
                 - icon:log-out abs:[84,350 14x14] rel:[0,0 14x14] clip
@@ -655,7 +655,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "This device" abs:[22,437 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,458 362x122] rel:[0,21 362x122] flex:col gap:10
         - card abs:[22,458 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,459 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,459 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - icon-tile abs:[37,472 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
               - span abs:[46,481 16x16] rel:[9,9 16x16] flex:row
                 - icon:smartphone abs:[46,481 16x16] rel:[0,0 16x16] clip
@@ -679,7 +679,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - ov "Drive backup" abs:[22,596 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[22,617 362x202] rel:[0,21 362x202] flex:col gap:10
         - card abs:[22,617 362x202] rel:[0,0 362x202] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,618 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14
+          - div abs:[23,618 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
             - div abs:[37,630 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
               - span abs:[46,639 16x16] rel:[9,9 16x16] flex:row
                 - icon:cloud abs:[46,639 16x16] rel:[0,0 16x16] clip

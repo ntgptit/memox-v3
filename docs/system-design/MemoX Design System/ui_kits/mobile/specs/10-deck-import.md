@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -109,7 +109,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[56,571 315x54] rel:[34,11 315x54] grow:1 basis:0 layout_hint:expanded
         - div "Each row makes one card" abs:[56,571 315x17] rel:[0,0 315x17] margin:0/0/3/0 font:11/700/17 color:font-headline
         - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
       - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
       - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
@@ -206,10 +206,10 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[22,507 362x29] rel:[14,384 362x29] flex:row justify:between align:baseline pad:8/4
 + - ov "2 · Preview" abs:[26,515 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,536 362x142] rel:[14,413 362x142] mx:MxCard pad:28/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - span abs:[188,565 30x30] rel:[166,29 30x30] r:999 border:2px #000000@0
++ - span abs:[188,565 30x30] rel:[166,29 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
 + - div "Reading your file…" abs:[41,609 324x18] rel:[19,73 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
 + - div "No cards will be added until you tap Import." abs:[41,631 324x18] rel:[19,95 324x18] font:12/400/18 color:on-surface-variant text:center
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
   ...
   - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
 - - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
@@ -217,7 +217,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 + - pill-btn "Parsing…" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
-+ - span abs:[206,723 18x18] rel:[91,11 18x18] r:999 border:2px #000000@0
++ - span abs:[206,723 18x18] rel:[91,11 18x18] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
 + - div "Reading file — no changes yet." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
@@ -278,25 +278,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[30,454 11x11] rel:[8,8 11x11] flex:row
 + - icon:check abs:[30,454 11x11] rel:[0,0 11x11] clip
 + - card abs:[22,484 362x201] rel:[14,361 362x201] mx:MxCard repeat:x5(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "researcher" abs:[210,497 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,498 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,498 13x13] rel:[0,0 13x13] clip
-+ - item[2] div abs:[23,525 360x40] rel:[1,41 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[2] div abs:[23,525 360x40] rel:[1,41 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "2" abs:[35,539 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "공부하다" abs:[69,535 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "to study" abs:[210,537 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,538 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,538 13x13] rel:[0,0 13x13] clip
-+ - item[3] div abs:[23,565 360x40] rel:[1,81 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[3] div abs:[23,565 360x40] rel:[1,81 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "3" abs:[35,579 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "도서관" abs:[69,575 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "library, reading room" abs:[210,577 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,578 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,578 13x13] rel:[0,0 13x13] clip
-+ - item[4] div abs:[23,605 360x40] rel:[1,121 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[4] div abs:[23,605 360x40] rel:[1,121 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "4" abs:[35,619 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "친구" abs:[69,615 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "friend, close companion" abs:[210,617 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
@@ -310,7 +310,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:check abs:[351,658 13x13] rel:[0,0 13x13] clip
 + - ov "Import options" abs:[22,699 362x25] rel:[14,576 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,724 362x176] rel:[14,601 362x176] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-+ - div abs:[23,725 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[23,725 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 + - div abs:[37,739 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,747 14x14] rel:[8,8 14x14] flex:row
 + - icon:tag abs:[45,747 14x14] rel:[0,0 14x14] clip
@@ -319,7 +319,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Detected: TOPIK II, noun, verb" abs:[81,755 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,741 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
 + - span abs:[346,744 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-+ - div abs:[23,783 360x58] rel:[1,59 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[23,783 360x58] rel:[1,59 360x58] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 + - div abs:[37,797 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,805 14x14] rel:[8,8 14x14] flex:row
 + - icon:copy abs:[45,805 14x14] rel:[0,0 14x14] clip
@@ -337,7 +337,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Reset progress for matching cards" abs:[81,872 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,857 44x26] rel:[302,16 44x26] pos:relative bg:surface-container-high r:999
 + - span abs:[328,860 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
   ...
   - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
 - - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
@@ -407,13 +407,13 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[203,454 11x11] rel:[8,8 11x11] flex:row
 + - icon:copy abs:[203,454 11x11] rel:[0,0 11x11] clip
 + - card abs:[22,484 362x341] rel:[14,361 362x341] mx:MxCard repeat:x7(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "researcher" abs:[210,497 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,498 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,498 13x13] rel:[0,0 13x13] clip
-+ - item[2] div abs:[23,525 360x61] rel:[1,41 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 op:0.85
++ - item[2] div abs:[23,525 360x61] rel:[1,41 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 border-b:1px seed-indigo@14 op:0.85
 + - span "2" abs:[35,549 24x12] rel:[12,24 24x12] font:10/700 color:on-surface-variant
 + - div abs:[69,535 131x40] rel:[46,10 131x40]
 + - div "공부하다" abs:[69,535 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline tracking:-0.1
@@ -423,13 +423,13 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "(empty)" abs:[210,548 131x15] rel:[187,23 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,549 20x13] rel:[328,24 20x13] flex:row
 + - icon:x abs:[351,549 13x13] rel:[0,0 13x13] clip
-+ - item[3] div abs:[23,586 360x40] rel:[1,102 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[3] div abs:[23,586 360x40] rel:[1,102 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "3" abs:[35,600 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "도서관" abs:[69,596 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "library, reading room" abs:[210,598 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,599 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,599 13x13] rel:[0,0 13x13] clip
-+ - item[4] div abs:[23,626 360x58] rel:[1,142 360x58] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 op:0.85
++ - item[4] div abs:[23,626 360x58] rel:[1,142 360x58] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 border-b:1px seed-indigo@14 op:0.85
 + - span "4" abs:[35,649 24x12] rel:[12,23 24x12] font:10/700 color:on-surface-variant
 + - div abs:[69,636 131x37] rel:[46,10 131x37]
 + - div "(empty)" abs:[69,636 131x16] rel:[0,0 131x16] clip font:13/600 color:error tracking:-0.1
@@ -439,7 +439,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "sky" abs:[210,647 131x15] rel:[187,21 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,648 20x13] rel:[328,22 20x13] flex:row
 + - icon:x abs:[351,648 13x13] rel:[0,0 13x13] clip
-+ - item[5] div abs:[23,684 360x61] rel:[1,200 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#d9891e@4
++ - item[5] div abs:[23,684 360x61] rel:[1,200 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#d9891e@4 border-b:1px seed-indigo@14
 + - span "5" abs:[35,708 24x12] rel:[12,24 24x12] font:10/700 color:on-surface-variant
 + - div abs:[69,694 131x40] rel:[46,10 131x40]
 + - div "친구" abs:[69,694 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline tracking:-0.1
@@ -449,7 +449,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "friend, close companion" abs:[210,707 131x15] rel:[187,23 131x15] clip font:12/400 color:on-surface-variant
 + - span abs:[351,708 20x13] rel:[328,24 20x13] flex:row
 + - icon:copy abs:[351,708 13x13] rel:[0,0 13x13] clip
-+ - item[6] div abs:[23,745 360x40] rel:[1,261 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - item[6] div abs:[23,745 360x40] rel:[1,261 360x40] grid cols:4 gap:10 align:center pad:10/12 border-b:1px seed-indigo@14
 + - span "6" abs:[35,759 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "바다" abs:[69,755 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
 + - div "sea, ocean" abs:[210,757 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
@@ -472,7 +472,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "2 have missing fields · 1 match an existing card. Fix them in your file and import again to include them." abs:[62,873 307x37] rel:[0,21 307x37] font:12/400/19 color:on-surface-variant
 + - ov "Import options" abs:[22,937 362x25] rel:[14,814 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,962 362x176] rel:[14,839 362x176] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-+ - div abs:[23,963 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[23,963 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 + - div abs:[37,976 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,984 14x14] rel:[8,8 14x14] flex:row
 + - icon:tag abs:[45,984 14x14] rel:[0,0 14x14] clip
@@ -481,7 +481,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Detected: TOPIK II, noun, verb" abs:[81,993 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,978 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
 + - span abs:[346,981 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-+ - div abs:[23,1021 360x58] rel:[1,59 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[23,1021 360x58] rel:[1,59 360x58] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 + - div abs:[37,1035 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,1043 14x14] rel:[8,8 14x14] flex:row
 + - icon:copy abs:[45,1043 14x14] rel:[0,0 14x14] clip
@@ -499,7 +499,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Reset progress for matching cards" abs:[81,1110 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
 + - span abs:[325,1095 44x26] rel:[302,16 44x26] pos:relative bg:surface-container-high r:999
 + - span abs:[328,1098 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
   ...
   - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
 - - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
@@ -562,13 +562,13 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
 + - card abs:[22,417 362x188] rel:[14,294 362x188] mx:MxCard pad:28/18 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - span abs:[187,446 32x32] rel:[165,29 32x32] r:999 border:2px #000000@0
++ - span abs:[187,446 32x32] rel:[165,29 32x32] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
 + - div "Adding 4 cards…" abs:[41,492 324x18] rel:[19,75 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
 + - div "Saving to this device. Don't close the app yet." abs:[41,514 324x18] rel:[19,97 324x18] font:12/400/18 color:on-surface-variant text:center
 + - div abs:[41,550 324x5] rel:[19,133 324x5] margin:18/0/0/0 clip bg:surface-container r:999
 + - div abs:[41,550 201x5] rel:[0,0 201x5] bg:seed-indigo r:999
 + - div "29 of 47" abs:[41,563 324x13] rel:[19,146 324x13] margin:8/0/0/0 font:11/400 color:on-surface-variant text:center
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
   ...
   - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
 - - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
@@ -576,7 +576,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 + - pill-btn "Importing…" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.6
-+ - span abs:[197,723 18x18] rel:[82,11 18x18] r:999 border:2px #000000@0
++ - span abs:[197,723 18x18] rel:[82,11 18x18] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
 + - div "Next you’ll preview every row before anything is imported." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
@@ -609,7 +609,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - icon:check abs:[43,350 12x12] rel:[0,0 12x12] clip
         - div "Added" abs:[77,348 263x16] rel:[54,16 263x16] font:13/600 color:font-headline
         - div "47" abs:[352,347 17x18] rel:[329,15 17x18] font:14/700 color:mastery
-  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
+  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border-t:1px seed-indigo@14
     - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
     - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
@@ -639,13 +639,13 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div "Imported with skips" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
       - div "Added 42 cards. 5 rows were skipped because of validation issues." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
     - card abs:[22,331 362x148] rel:[14,231 362x148] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,332 360x49] rel:[1,1 360x49] grid cols:3 gap:12 align:center pad:12/14
+      - div abs:[23,332 360x49] rel:[1,1 360x49] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,344 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
           - span abs:[43,350 12x12] rel:[6,6 12x12] flex:row
             - icon:check abs:[43,350 12x12] rel:[0,0 12x12] clip
         - div "Added" abs:[77,348 263x16] rel:[54,16 263x16] font:13/600 color:font-headline
         - div "42" abs:[352,347 17x18] rel:[329,15 17x18] font:14/700 color:mastery
-      - div abs:[23,381 360x49] rel:[1,50 360x49] grid cols:3 gap:12 align:center pad:12/14
+      - div abs:[23,381 360x49] rel:[1,50 360x49] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,393 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
           - span abs:[43,399 12x12] rel:[6,6 12x12] flex:row
             - icon:alert-circle abs:[43,399 12x12] rel:[0,0 12x12] clip
@@ -661,7 +661,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[35,504 13x13] rel:[13,11 13x13] flex:row
         - icon:info abs:[35,504 13x13] rel:[0,0 13x13] clip
       - span "Fix the skipped rows in your source file and import again to add them." abs:[56,504 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
-  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
+  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border-t:1px seed-indigo@14
     - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
     - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
@@ -689,7 +689,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:alert-circle abs:[188,160 30x30] rel:[0,0 30x30] clip
     - div "Import didn’t finish" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
     - div "No cards were added. Your file is unchanged and your deck is untouched." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
-  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
+  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border-t:1px seed-indigo@14
     - pill-btn "Close" abs:[22,732 164x40] rel:[14,11 164x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
     - pill-btn "Try again" abs:[196,732 188x40] rel:[188,11 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[251,745 15x15] rel:[54,13 15x15] flex:row

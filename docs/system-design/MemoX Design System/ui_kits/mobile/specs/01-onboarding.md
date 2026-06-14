@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -368,7 +368,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
     - div abs:[31,295 344x207] rel:[23,287 344x207] pad:24/22 maxw:300 bg:surface-container-high r:18 shadow:16/40
       - div abs:[177,319 52x52] rel:[146,24 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:14
-        - span abs:[188,330 30x30] rel:[11,11 30x30] r:999 border:2px #000000@0
+        - span abs:[188,330 30x30] rel:[11,11 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
       - div "Signing in to Google" abs:[53,385 300x19] rel:[22,90 300x19] margin:0/0/6/0 font:15/700 color:font-headline text:center
       - div "Continue in the Google sign-in window." abs:[53,410 300x18] rel:[22,115 300x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
       - pill-btn "Cancel" abs:[167,442 71x36] rel:[136,147 71x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/14 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
@@ -511,7 +511,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
     - div abs:[26,301 354x195] rel:[18,293 354x195] repeat:x2+(unit=2) pad:24/22 maxw:320 bg:surface-container-high r:18 shadow:16/40
       - item[1] div abs:[177,325 52x52] rel:[151,24 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:14
-        - span abs:[188,336 30x30] rel:[11,11 30x30] r:999 border:2px #000000@0
+        - span abs:[188,336 30x30] rel:[11,11 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
       - div "Restoring your library" abs:[48,391 310x19] rel:[22,90 310x19] margin:0/0/4/0 font:15/700 color:font-headline text:center
       - item[2] div "Pulling 326 cards from Drive. Don’t close the app yet." abs:[48,414 310x18] rel:[22,113 310x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
       - div abs:[48,446 310x5] rel:[22,145 310x5] clip bg:surface-container r:999
@@ -655,5 +655,5 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:check abs:[193,334 20x20] rel:[0,0 20x20] clip
       - div "Deck ready" abs:[53,378 300x19] rel:[22,78 300x19] margin:0/0/4/0 font:15/700 color:font-headline text:center
       - div ""Imported vocabulary" was created. Opening the import screen…" abs:[53,401 300x36] rel:[22,101 300x36] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
-      - span abs:[193,454 20x20] rel:[162,154 20x20] r:999 border:2px #000000@0
+      - span abs:[193,454 20x20] rel:[162,154 20x20] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
 ```

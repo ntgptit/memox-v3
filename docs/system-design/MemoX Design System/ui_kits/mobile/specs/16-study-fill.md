@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.

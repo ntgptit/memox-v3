@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -58,14 +58,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[1] div abs:[22,100 362x311] rel:[14,0 362x311] margin:0/0/18/0
       - ov "Daily goal" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,121 362x290] rel:[0,21 362x290] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,122 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14
+        - div abs:[23,122 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
           - div abs:[37,135 276x37] rel:[14,13 276x37]
             - div "Set a daily goal" abs:[37,135 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
             - div "Track how many cards you complete each day." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
           - div abs:[325,141 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
             - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
               - span abs:[346,144 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-        - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border:1px seed-indigo@14
+        - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14
           - item[1] div abs:[37,201 332x30] rel:[14,15 332x30] flex:row justify:between align:baseline margin:0/0/14/0
             - ov "Cards per day" abs:[37,215 101x13] rel:[0,14 101x13] font:11/700 color:on-surface-variant tracking:1.2
             - div abs:[305,201 64x30] rel:[268,0 64x30] flex:row gap:4 align:baseline
@@ -103,7 +103,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[2] div abs:[22,429 362x168] rel:[14,329 362x168] margin:0/0/18/0
       - ov "Reminder" abs:[22,429 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,450 362x122] rel:[0,21 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,451 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14
+        - div abs:[23,451 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
           - div abs:[37,464 276x37] rel:[14,13 276x37]
             - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
             - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
@@ -136,7 +136,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[4] div abs:[22,719 362x240] rel:[14,619 362x240] margin:0/0/18/0
       - ov "Study defaults" abs:[22,719 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,740 362x194] rel:[0,21 362x194] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,741 360x64] rel:[1,1 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+        - div abs:[23,741 360x64] rel:[1,1 360x64] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14 op:0.45
           - div abs:[37,758 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
             - span abs:[45,766 15x15] rel:[8,8 15x15] flex:row
               - icon:shuffle abs:[45,766 15x15] rel:[0,0 15x15] clip
@@ -145,7 +145,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - div "Randomize card order in every session" abs:[83,774 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
           - div abs:[320,762 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
             - span "Soon" abs:[320,762 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
-        - div abs:[23,806 360x64] rel:[1,65 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+        - div abs:[23,806 360x64] rel:[1,65 360x64] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14 op:0.45
           - div abs:[37,823 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
             - span abs:[45,830 15x15] rel:[8,8 15x15] flex:row
               - icon:layers abs:[45,830 15x15] rel:[0,0 15x15] clip
@@ -182,8 +182,8 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
 + - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
   - span abs:[328,144 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-- - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border:1px seed-indigo@14
-+ - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border:1px seed-indigo@14 op:0.4
+- - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14
++ - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14 op:0.4
   - item[1] div abs:[37,201 332x30] rel:[14,15 332x30] flex:row justify:between align:baseline margin:0/0/14/0
   ...
   - span "Drag to adjust in steps of 5" abs:[53,300 137x13] rel:[16,0 137x13] font:11/400 color:on-surface-variant
@@ -247,7 +247,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
 - - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-+ - div abs:[23,572 360x123] rel:[1,121 360x123] flex:row gap:10 align:start pad:12/14 bg:#d9891e@6 border:1px seed-indigo@14
++ - div abs:[23,572 360x123] rel:[1,121 360x123] flex:row gap:10 align:start pad:12/14 bg:#d9891e@6 border-t:1px seed-indigo@14
 + - span abs:[37,585 16x16] rel:[14,13 16x16] flex:row
 + - icon:bell-off abs:[37,585 16x16] rel:[0,0 16x16] clip
 + - div abs:[63,585 306x98] rel:[40,13 306x98] grow:1 basis:0 layout_hint:expanded

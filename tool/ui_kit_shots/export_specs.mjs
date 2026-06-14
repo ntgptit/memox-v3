@@ -104,6 +104,7 @@ window.__mx = (() => {
     const m = rgb.match(/rgba?\\(([^)]+)\\)/);
     if (!m) return rgb;
     const p = m[1].split(',').map((x) => parseFloat(x));
+    if (p.length > 3 && p[3] === 0) return 'transparent'; // a placeholder border that only reserves space
     const h = (n) => Math.round(n).toString(16).padStart(2, '0');
     const base = '#' + h(p[0]) + h(p[1]) + h(p[2]);
     if (p.length > 3 && p[3] < 1) return base + '@' + Math.round(p[3] * 100);
@@ -314,8 +315,20 @@ window.__mx = (() => {
     }
     const r = parseFloat(cs.borderTopLeftRadius);
     if (r > 0) bits.push('r:' + Math.round(r));
-    if (cs.borderTopStyle !== 'none' && parseFloat(cs.borderTopWidth) > 0)
-      bits.push('border:' + Math.round(parseFloat(cs.borderTopWidth)) + 'px ' + tokenOr(cs.borderTopColor));
+    // Borders per side: a uniform 4-side border collapses to border:, but a
+    // single-side hairline (a bottom/top divider) keeps its side — otherwise
+    // border-bottom dividers were silently dropped.
+    const sides = [['t', 'Top'], ['r', 'Right'], ['b', 'Bottom'], ['l', 'Left']];
+    const present = sides
+      .map(([k, S]) => (cs['border' + S + 'Style'] !== 'none' && parseFloat(cs['border' + S + 'Width']) > 0
+        ? { k, w: Math.round(parseFloat(cs['border' + S + 'Width'])), c: tokenOr(cs['border' + S + 'Color']) }
+        : null))
+      .filter(Boolean);
+    if (present.length === 4 && present.every((p) => p.w === present[0].w && p.c === present[0].c)) {
+      bits.push('border:' + present[0].w + 'px ' + present[0].c);
+    } else {
+      for (const p of present) bits.push('border-' + p.k + ':' + p.w + 'px ' + p.c);
+    }
     // Elevation: emit the first box-shadow as offsetY/blur (the kit uses shadows
     // on raised surfaces; without this an agent cannot tell a card's elevation).
     // Strip the color first so a bare "0" offset (no px unit) still parses.
@@ -599,7 +612,7 @@ async function main() {
       'in `tool/verify/run.mjs` fails when this is stale).',
       '',
       'Reading guide: each line is one visible element —',
-      '`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.',
+      '`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.',
       'Indentation = DOM containment (layout/grouping containers are kept, not flattened).',
       '`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size',
       'INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.',

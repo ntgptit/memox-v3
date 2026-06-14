@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -166,7 +166,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - div "42 days" abs:[263,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
     - ov "Card states" abs:[22,985 362x23] rel:[14,877 362x23] pad:2/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
     - card abs:[22,1008 362x131] rel:[14,900 362x131] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,1009 360x73] rel:[1,1 360x73] grid cols:4 gap:12 align:center pad:12/14
+      - div abs:[23,1009 360x73] rel:[1,1 360x73] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,1030 30x30] rel:[14,21 30x30] flex:row justify:center align:center bg:surface-container r:9
           - span abs:[45,1038 14x14] rel:[8,8 14x14] flex:row
             - icon:pause-circle abs:[45,1038 14x14] rel:[0,0 14x14] clip

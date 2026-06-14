@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -71,7 +71,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "Accuracy" abs:[260,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center tracking:0.3
     - ov "Result breakdown" abs:[22,341 362x21] rel:[14,241 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
     - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,363 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14
+      - div abs:[23,363 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,376 30x30] rel:[14,13 30x30] flex:row justify:center align:center r:9
           - span abs:[45,384 14x14] rel:[8,8 14x14] flex:row
             - icon:check abs:[45,384 14x14] rel:[0,0 14x14] clip
@@ -79,7 +79,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "Correct" abs:[81,375 257x16] rel:[0,0 257x16] font:13/600 color:font-headline tracking:-0.1
           - div "Answered confidently" abs:[81,393 257x13] rel:[0,18 257x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
         - div "14" abs:[350,380 19x21] rel:[327,17 19x21] font:16/700 color:mastery
-      - div abs:[23,419 360x56] rel:[1,57 360x56] grid cols:3 gap:12 align:center pad:12/14
+      - div abs:[23,419 360x56] rel:[1,57 360x56] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,432 30x30] rel:[14,13 30x30] flex:row justify:center align:center r:9
           - span abs:[45,440 14x14] rel:[8,8 14x14] flex:row
             - icon:corner-up-right abs:[45,440 14x14] rel:[0,0 14x14] clip
@@ -149,7 +149,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "Forgot or struggled with these. A quick re-pass tomorrow helps." abs:[85,918 256x31] rel:[0,18 256x31] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
         - span abs:[353,917 16x16] rel:[316,16 16x16] flex:row
           - icon:chevron-right abs:[353,917 16x16] rel:[0,0 16x16] clip
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
       - pill-btn "Study more" abs:[22,712 164x40] rel:[0,0 164x40] mx:MxSecondaryButton flex:row gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
         - span abs:[57,725 14x14] rel:[35,13 14x14] flex:row
@@ -201,7 +201,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[77,470 80x11] rel:[0,0 80x11] bg:surface-container-high r:6 op:0.5
           - span abs:[77,486 120x9] rel:[0,16 120x9] bg:surface-container-high r:6 op:0.4
         - span abs:[339,475 30x15] rel:[302,7 30x15] bg:surface-container-high r:6 op:0.5
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
       - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
         - span abs:[173,724 16x16] rel:[151,12 16x16] flex:row
@@ -266,7 +266,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - ov "Result breakdown" abs:[22,439 362x21] rel:[14,339 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 - - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - card abs:[22,460 362x169] rel:[14,360 362x169] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-  - div abs:[23,461 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14
+  - div abs:[23,461 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
   ...
   - ov "Box changes" abs:[22,643 362x21] rel:[14,543 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 - - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
@@ -309,7 +309,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[35,312 13x13] rel:[13,11 13x13] flex:row
         - icon:info abs:[35,312 13x13] rel:[0,0 13x13] clip
       - span "No reviews counted. Your streak and goal are unchanged." abs:[56,312 296x17] rel:[34,11 296x17] font:11/400/17 color:on-surface-variant
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
       - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
         - span abs:[173,724 16x16] rel:[151,12 16x16] flex:row
@@ -341,6 +341,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:chevron-right abs:[353,917 16x16] rel:[0,0 16x16] clip
 + - div "No tough cards from this session" abs:[85,902 284x16] rel:[0,0 284x16] font:13/700 color:font-headline tracking:-0.1
 + - div "You handled everything cleanly." abs:[85,920 284x15] rel:[0,18 284x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
-  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
   ...
 ```

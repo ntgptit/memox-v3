@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -753,7 +753,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Hidden from Library" abs:[68,686 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,676 14x14] rel:[350,21 14x14] flex:row
 + - icon:chevron-right abs:[366,676 14x14] rel:[0,0 14x14] clip
-+ - div abs:[8,721 390x67] rel:[0,365 390x67] flex:row gap:8 pad:10/14/16/14 border:1px seed-indigo@14
++ - div abs:[8,721 390x67] rel:[0,365 390x67] flex:row gap:8 pad:10/14/16/14 border-t:1px seed-indigo@14
 + - pill-btn "Cancel" abs:[22,732 160x40] rel:[14,11 160x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
 + - pill-btn "Move here" abs:[190,732 194x40] rel:[182,11 194x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[244,745 14x14] rel:[54,13 14x14] flex:row

@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -108,7 +108,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - button "Add tag" abs:[22,520 88x28] rel:[0,0 88x28] mx:? flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
         - span abs:[35,528 12x12] rel:[13,8 12x12] flex:row
           - icon:plus abs:[35,528 12x12] rel:[0,0 12x12] clip
-  - div abs:[8,699 390x89] rel:[0,691 390x89] flex:col gap:10 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,699 390x89] rel:[0,691 390x89] flex:col gap:10 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
     - div abs:[22,710 362x40] rel:[14,11 362x40] flex:row gap:10
       - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
       - pill-btn "Save card" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
@@ -290,7 +290,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - title "New flashcard" abs:[60,66 228x21] rel:[52,14 228x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
 - - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
 + - pill-btn "Saving…" abs:[292,60 98x32] rel:[284,8 98x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
-+ - span abs:[306,69 15x15] rel:[14,9 15x15] r:999 border:2px #000000@0
++ - span abs:[306,69 15x15] rel:[14,9 15x15] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
   - span "Required" abs:[140,176 47x12] rel:[114,1 47x12] font:10/700 color:seed-indigo tracking:0.3
@@ -331,7 +331,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:check abs:[204,722 16x16] rel:[0,0 16x16] clip
 - - div "Front and back are required to save." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 + - pill-btn "Saving…" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
-+ - span abs:[208,721 18x18] rel:[93,11 18x18] r:999 border:2px #000000@0
++ - span abs:[208,721 18x18] rel:[93,11 18x18] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
 + - div "Saving to this device…" abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
@@ -375,7 +375,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:x abs:[241,529 11x11] rel:[0,0 11x11] clip
   - button "Add tag" abs:[266,520 88x28] rel:[244,0 88x28] mx:? flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
   ...
-  - div abs:[8,632 390x156] rel:[0,624 390x156] flex:col gap:10 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+  - div abs:[8,632 390x156] rel:[0,624 390x156] flex:col gap:10 pad:10/14/16/14 bg:surface border-t:1px seed-indigo@14
 + - div abs:[22,643 362x57] rel:[14,11 362x57] flex:row gap:8 align:start pad:10/12 bg:#dc4848@8 r:11 border:1px #dc4848@22
 + - span abs:[35,654 14x14] rel:[13,11 14x14] flex:row
 + - icon:alert-circle abs:[35,654 14x14] rel:[0,0 14x14] clip

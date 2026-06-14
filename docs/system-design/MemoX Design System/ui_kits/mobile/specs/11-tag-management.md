@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -64,7 +64,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
           - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
     - card abs:[22,200 362x628] rel:[14,100 362x628] mx:MxCard repeat:x11(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div abs:[23,201 360x57] rel:[1,1 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[1] div abs:[23,201 360x57] rel:[1,1 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,215 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,223 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,223 13x13] rel:[0,0 13x13] clip
@@ -77,7 +77,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,214 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,219 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,219 20x20] rel:[0,0 20x20] clip
-      - item[2] div abs:[23,258 360x57] rel:[1,58 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[2] div abs:[23,258 360x57] rel:[1,58 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,272 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,280 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,280 13x13] rel:[0,0 13x13] clip
@@ -87,7 +87,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,271 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,276 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,276 20x20] rel:[0,0 20x20] clip
-      - item[3] div abs:[23,315 360x57] rel:[1,115 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[3] div abs:[23,315 360x57] rel:[1,115 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,329 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,337 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,337 13x13] rel:[0,0 13x13] clip
@@ -97,7 +97,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,328 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,333 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,333 20x20] rel:[0,0 20x20] clip
-      - item[4] div abs:[23,372 360x57] rel:[1,172 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[4] div abs:[23,372 360x57] rel:[1,172 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,386 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,394 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,394 13x13] rel:[0,0 13x13] clip
@@ -107,7 +107,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,385 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,390 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,390 20x20] rel:[0,0 20x20] clip
-      - item[5] div abs:[23,429 360x57] rel:[1,229 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[5] div abs:[23,429 360x57] rel:[1,229 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,443 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,451 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,451 13x13] rel:[0,0 13x13] clip
@@ -117,7 +117,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,442 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,447 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,447 20x20] rel:[0,0 20x20] clip
-      - item[6] div abs:[23,486 360x57] rel:[1,286 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[6] div abs:[23,486 360x57] rel:[1,286 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,500 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,508 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,508 13x13] rel:[0,0 13x13] clip
@@ -127,7 +127,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,499 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,504 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,504 20x20] rel:[0,0 20x20] clip
-      - item[7] div abs:[23,543 360x57] rel:[1,343 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[7] div abs:[23,543 360x57] rel:[1,343 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,557 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,565 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,565 13x13] rel:[0,0 13x13] clip
@@ -137,7 +137,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,561 20x20] rel:[0,0 20x20] clip
-      - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,614 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,622 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,622 13x13] rel:[0,0 13x13] clip
@@ -147,7 +147,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,613 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,618 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,618 20x20] rel:[0,0 20x20] clip
-      - item[9] div abs:[23,657 360x57] rel:[1,457 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[9] div abs:[23,657 360x57] rel:[1,457 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,671 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,679 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,679 13x13] rel:[0,0 13x13] clip
@@ -157,7 +157,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[339,670 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,675 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,675 20x20] rel:[0,0 20x20] clip
-      - item[10] div abs:[23,714 360x57] rel:[1,514 360x57] grid cols:4 gap:12 align:center pad:12/14
+      - item[10] div abs:[23,714 360x57] rel:[1,514 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,728 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,736 13x13] rel:[8,8 13x13] flex:row
             - icon:tag abs:[45,736 13x13] rel:[0,0 13x13] clip
@@ -207,22 +207,22 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
           - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
     - card abs:[22,200 362x316] rel:[14,100 362x316] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,201 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14
+      - div abs:[23,201 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
         - span abs:[37,218 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
         - div abs:[81,214 246x36] rel:[58,13 246x36]
           - span abs:[81,220 80x11] rel:[0,6 80x11] bg:surface-container-high r:6 op:0.5
           - span abs:[81,241 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,264 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:13/14
+      - div abs:[23,264 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
         - span abs:[37,281 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
         - div abs:[81,277 246x36] rel:[58,13 246x36]
           - span abs:[81,283 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.5
           - span abs:[81,304 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,327 360x63] rel:[1,127 360x63] grid cols:3 gap:12 align:center pad:13/14
+      - div abs:[23,327 360x63] rel:[1,127 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
         - span abs:[37,344 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
         - div abs:[81,340 246x36] rel:[58,13 246x36]
           - span abs:[81,346 120x11] rel:[0,6 120x11] bg:surface-container-high r:6 op:0.5
           - span abs:[81,367 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,390 360x63] rel:[1,190 360x63] grid cols:3 gap:12 align:center pad:13/14
+      - div abs:[23,390 360x63] rel:[1,190 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
         - span abs:[37,407 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
         - div abs:[81,403 246x36] rel:[58,13 246x36]
           - span abs:[81,409 140x11] rel:[0,6 140x11] bg:surface-container-high r:6 op:0.5
@@ -529,8 +529,8 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
 - - icon:more-vertical abs:[344,561 20x20] rel:[0,0 20x20] clip
-+ - span abs:[351,562 18x18] rel:[328,19 18x18] r:999 border:2px #000000@0
-  - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14
++ - span abs:[351,562 18x18] rel:[328,19 18x18] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+  - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
   ...
 ```
 

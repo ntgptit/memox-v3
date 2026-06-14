@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -112,7 +112,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[369,639 11x11] rel:[40,1 11x11] flex:row
           - icon:chevron-right abs:[369,639 11x11] rel:[0,0 11x11] clip
     - card abs:[22,659 362x166] rel:[14,519 362x166] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,660 360x55] rel:[1,1 360x55] grid cols:3 gap:12 align:center pad:12/14
+      - div abs:[23,660 360x55] rel:[1,1 360x55] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,672 30x30] rel:[14,12 30x30] flex:row justify:center align:center bg:seed-indigo@12 r:9
           - span abs:[45,680 14x14] rel:[8,8 14x14] flex:row
             - icon:layers abs:[45,680 14x14] rel:[0,0 14x14] clip
@@ -120,7 +120,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "TOPIK II — Vocab" abs:[83,672 227x16] rel:[0,0 227x16] clip font:13/600 color:font-headline tracking:-0.1
           - div "142 cards · last 2h ago" abs:[83,689 227x13] rel:[0,17 227x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
         - span "23 due" abs:[322,677 47x20] rel:[299,17 47x20] flex:row align:center pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-      - div abs:[23,715 360x55] rel:[1,56 360x55] grid cols:3 gap:12 align:center pad:12/14
+      - div abs:[23,715 360x55] rel:[1,56 360x55] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
         - div abs:[37,727 30x30] rel:[14,12 30x30] flex:row justify:center align:center bg:accent@12 r:9
           - span abs:[45,735 14x14] rel:[8,8 14x14] flex:row
             - icon:layers abs:[45,735 14x14] rel:[0,0 14x14] clip
@@ -296,7 +296,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - span abs:[148,430 14x14] rel:[103,13 14x14] flex:row
 - - icon:chevron-right abs:[369,639 11x11] rel:[0,0 11x11] clip
 - - card abs:[22,659 362x166] rel:[14,519 362x166] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[23,660 360x55] rel:[1,1 360x55] grid cols:3 gap:12 align:center pad:12/14
+- - div abs:[23,660 360x55] rel:[1,1 360x55] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 - - div abs:[37,672 30x30] rel:[14,12 30x30] flex:row justify:center align:center bg:seed-indigo@12 r:9
 + - icon:upload abs:[148,430 14x14] rel:[0,0 14x14] clip
 + - div abs:[22,500 362x191] rel:[0,352 362x191] flex:col gap:8
@@ -309,7 +309,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div "TOPIK II — Vocab" abs:[83,672 227x16] rel:[0,0 227x16] clip font:13/600 color:font-headline tracking:-0.1
 - - div "142 cards · last 2h ago" abs:[83,689 227x13] rel:[0,17 227x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 - - span "23 due" abs:[322,677 47x20] rel:[299,17 47x20] flex:row align:center pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[23,715 360x55] rel:[1,56 360x55] grid cols:3 gap:12 align:center pad:12/14
+- - div abs:[23,715 360x55] rel:[1,56 360x55] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 - - div abs:[37,727 30x30] rel:[14,12 30x30] flex:row justify:center align:center bg:accent@12 r:9
 + - div "Local first" abs:[81,513 288x16] rel:[0,0 288x16] font:13/700 color:font-headline tracking:-0.1
 + - div "Your cards live on this device. Sync is optional." abs:[81,530 288x15] rel:[0,17 288x15] margin:1/0/0/0 font:11/400/15 color:on-surface-variant

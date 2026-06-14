@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -64,7 +64,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[2] div abs:[22,213 362x217] rel:[14,105 362x217] margin:0/0/18/0
       - ov "Study" abs:[22,213 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,234 362x196] rel:[0,21 362x196] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,235 360x65] rel:[1,1 360x65] grid cols:3 gap:14 align:center pad:14
+        - div abs:[23,235 360x65] rel:[1,1 360x65] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
           - div abs:[37,249 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
             - span abs:[46,258 18x18] rel:[9,9 18x18] flex:row
               - icon:target abs:[46,258 18x18] rel:[0,0 18x18] clip
@@ -73,7 +73,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - div "20 cards / day · 5 study modes" abs:[91,270 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
           - span abs:[351,258 18x18] rel:[328,23 18x18] flex:row
             - icon:chevron-right abs:[351,258 18x18] rel:[0,0 18x18] clip
-        - div abs:[23,300 360x65] rel:[1,66 360x65] grid cols:3 gap:14 align:center pad:14
+        - div abs:[23,300 360x65] rel:[1,66 360x65] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
           - div abs:[37,314 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
             - span abs:[46,323 18x18] rel:[9,9 18x18] flex:row
               - icon:volume-2 abs:[46,323 18x18] rel:[0,0 18x18] clip
@@ -94,7 +94,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[3] div abs:[22,448 362x152] rel:[14,340 362x152] margin:0/0/18/0
       - ov "App" abs:[22,448 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,469 362x131] rel:[0,21 362x131] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,470 360x65] rel:[1,1 360x65] grid cols:3 gap:14 align:center pad:14 op:0.55
+        - div abs:[23,470 360x65] rel:[1,1 360x65] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14 op:0.55
           - div abs:[37,484 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
             - span abs:[46,493 18x18] rel:[9,9 18x18] flex:row
               - icon:sun abs:[46,493 18x18] rel:[0,0 18x18] clip
@@ -202,7 +202,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div "Account & sync" abs:[91,144 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
 - - div "alex@memox.app · synced 2 min ago" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
 + - div "Signing in…" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - span abs:[91,166 14x14] rel:[0,1 14x14] r:999 border:2px #000000@0
++ - span abs:[91,166 14x14] rel:[0,1 14x14] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
   - span abs:[351,153 18x18] rel:[328,23 18x18] flex:row
   ...
 ```

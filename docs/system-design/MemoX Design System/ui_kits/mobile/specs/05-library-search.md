@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -63,7 +63,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - ov "Recent searches" abs:[43,102 122x13] rel:[17,0 122x13] font:11/700 color:on-surface-variant tracking:1.2
       - button "Clear" abs:[352,102 28x13] rel:[330,2 28x13] mx:? font:11/600 color:on-surface-variant text:center
     - card abs:[22,123 362x211] rel:[14,23 362x211] mx:MxCard repeat:x4(unit=1) margin:0/0/18/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div abs:[23,124 360x54] rel:[1,1 360x54] grid cols:3 gap:12 align:center pad:10/14
+      - item[1] div abs:[23,124 360x54] rel:[1,1 360x54] grid cols:3 gap:12 align:center pad:10/14 border-b:1px seed-indigo@14
         - span abs:[37,144 24x13] rel:[14,20 24x13] flex:row
           - icon:rotate-ccw abs:[37,144 13x13] rel:[0,0 13x13] clip
         - div abs:[73,134 260x33] rel:[50,10 260x33]
@@ -72,7 +72,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[345,139 24x24] rel:[322,15 24x24] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[347,141 20x20] rel:[2,2 20x20] flex:row
             - icon:x abs:[347,141 20x20] rel:[0,0 20x20] clip
-      - item[2] div abs:[23,178 360x51] rel:[1,55 360x51] grid cols:3 gap:12 align:center pad:10/14
+      - item[2] div abs:[23,178 360x51] rel:[1,55 360x51] grid cols:3 gap:12 align:center pad:10/14 border-b:1px seed-indigo@14
         - span abs:[37,197 24x13] rel:[14,19 24x13] flex:row
           - icon:rotate-ccw abs:[37,197 13x13] rel:[0,0 13x13] clip
         - div abs:[73,188 260x30] rel:[50,10 260x30]
@@ -81,7 +81,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon-btn abs:[345,191 24x24] rel:[322,13 24x24] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[347,193 20x20] rel:[2,2 20x20] flex:row
             - icon:x abs:[347,193 20x20] rel:[0,0 20x20] clip
-      - item[3] div abs:[23,229 360x51] rel:[1,106 360x51] grid cols:3 gap:12 align:center pad:10/14
+      - item[3] div abs:[23,229 360x51] rel:[1,106 360x51] grid cols:3 gap:12 align:center pad:10/14 border-b:1px seed-indigo@14
         - span abs:[37,248 24x13] rel:[14,19 24x13] flex:row
           - icon:rotate-ccw abs:[37,248 13x13] rel:[0,0 13x13] clip
         - div abs:[73,239 260x30] rel:[50,10 260x30]
@@ -103,7 +103,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[26,360 11x11] rel:[0,1 11x11] flex:row
         - icon:sparkles abs:[26,360 11x11] rel:[0,0 11x11] clip
     - card abs:[22,383 362x216] rel:[14,283 362x216] mx:MxCard repeat:x4(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div abs:[23,384 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14
+      - item[1] div abs:[23,384 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
         - div abs:[37,397 26x26] rel:[14,13 26x26] flex:row justify:center align:center bg:seed-indigo@12 r:8
           - span abs:[44,404 13x13] rel:[7,7 13x13] flex:row
             - icon:folder abs:[44,404 13x13] rel:[0,0 13x13] clip
@@ -113,7 +113,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[355,403 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
           - span abs:[355,403 14x14] rel:[0,0 14x14] flex:row
             - icon:arrow-up-left abs:[355,403 14x14] rel:[0,0 14x14] clip
-      - item[2] div abs:[23,437 360x53] rel:[1,54 360x53] grid cols:3 gap:12 align:center pad:11/14
+      - item[2] div abs:[23,437 360x53] rel:[1,54 360x53] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
         - div abs:[37,450 26x26] rel:[14,13 26x26] flex:row justify:center align:center bg:accent@12 r:8
           - span abs:[44,457 13x13] rel:[7,7 13x13] flex:row
             - icon:layers abs:[44,457 13x13] rel:[0,0 13x13] clip
@@ -123,7 +123,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[355,456 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
           - span abs:[355,456 14x14] rel:[0,0 14x14] flex:row
             - icon:arrow-up-left abs:[355,456 14x14] rel:[0,0 14x14] clip
-      - item[3] div abs:[23,490 360x56] rel:[1,107 360x56] grid cols:3 gap:12 align:center pad:11/14
+      - item[3] div abs:[23,490 360x56] rel:[1,107 360x56] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
         - div abs:[37,505 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
           - span abs:[44,511 13x13] rel:[7,7 13x13] flex:row
             - icon:copy abs:[44,511 13x13] rel:[0,0 13x13] clip
@@ -196,12 +196,12 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[22,171 362x19] rel:[0,0 362x19] flex:row gap:6 pad:2/4/8/4
         - span abs:[26,173 70x9] rel:[4,2 70x9] bg:surface-container-high r:6 op:0.4
       - card abs:[22,190 362x154] rel:[0,19 362x154] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,191 360x51] rel:[1,1 360x51] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[23,191 360x51] rel:[1,1 360x51] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
           - span abs:[37,203 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
           - div abs:[79,203 258x26] rel:[56,12 258x26]
             - span abs:[79,203 90x11] rel:[0,0 90x11] bg:surface-container-high r:6 op:0.5
             - span abs:[79,220 60x9] rel:[0,17 60x9] bg:surface-container-high r:6 op:0.4
-        - div abs:[23,242 360x51] rel:[1,52 360x51] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[23,242 360x51] rel:[1,52 360x51] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
           - span abs:[37,254 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
           - div abs:[79,254 258x26] rel:[56,12 258x26]
             - span abs:[79,254 120x11] rel:[0,0 120x11] bg:surface-container-high r:6 op:0.5
@@ -215,12 +215,12 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[22,358 362x19] rel:[0,0 362x19] flex:row gap:6 pad:2/4/8/4
         - span abs:[26,360 70x9] rel:[4,2 70x9] bg:surface-container-high r:6 op:0.4
       - card abs:[22,377 362x154] rel:[0,19 362x154] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,378 360x51] rel:[1,1 360x51] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[23,378 360x51] rel:[1,1 360x51] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
           - span abs:[37,390 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
           - div abs:[79,390 258x26] rel:[56,12 258x26]
             - span abs:[79,390 90x11] rel:[0,0 90x11] bg:surface-container-high r:6 op:0.5
             - span abs:[79,407 60x9] rel:[0,17 60x9] bg:surface-container-high r:6 op:0.4
-        - div abs:[23,429 360x51] rel:[1,52 360x51] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[23,429 360x51] rel:[1,52 360x51] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
           - span abs:[37,441 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
           - div abs:[79,441 258x26] rel:[56,12 258x26]
             - span abs:[79,441 120x11] rel:[0,0 120x11] bg:surface-container-high r:6 op:0.5
@@ -302,7 +302,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span "Decks" abs:[43,265 40x13] rel:[17,0 40x13] font:11/700 color:accent tracking:0.4
           - span "2" abs:[89,266 18x12] rel:[63,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
       - card abs:[22,286 362x113] rel:[0,21 362x113] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,287 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[23,287 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
           - div abs:[37,302 26x26] rel:[14,15 26x26] flex:row justify:center align:center bg:accent@12 r:8
             - span abs:[44,308 13x13] rel:[7,7 13x13] flex:row
               - icon:layers abs:[44,308 13x13] rel:[0,0 13x13] clip
@@ -334,7 +334,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span abs:[369,416 11x11] rel:[37,1 11x11] flex:row
             - icon:chevron-right abs:[369,416 11x11] rel:[0,0 11x11] clip
       - card abs:[22,436 362x169] rel:[0,21 362x169] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,437 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[23,437 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
           - div abs:[37,452 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
             - span abs:[44,458 13x13] rel:[7,7 13x13] flex:row
               - icon:copy abs:[44,458 13x13] rel:[0,0 13x13] clip
@@ -345,7 +345,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div abs:[354,457 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
             - span abs:[354,457 15x15] rel:[0,0 15x15] flex:row
               - icon:chevron-right abs:[354,457 15x15] rel:[0,0 15x15] clip
-        - div abs:[23,493 360x56] rel:[1,57 360x56] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[23,493 360x56] rel:[1,57 360x56] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
           - div abs:[37,508 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
             - span abs:[44,514 13x13] rel:[7,7 13x13] flex:row
               - icon:copy abs:[44,514 13x13] rel:[0,0 13x13] clip
@@ -375,7 +375,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span "Tags" abs:[43,621 31x13] rel:[17,0 31x13] font:11/700 color:streak tracking:0.4
           - span "3" abs:[80,622 18x12] rel:[54,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
       - card abs:[22,642 362x160] rel:[0,21 362x160] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,643 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[23,643 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
           - div abs:[37,656 26x26] rel:[14,13 26x26] flex:row justify:center align:center r:8
             - span abs:[44,663 13x13] rel:[7,7 13x13] flex:row
               - icon:tag abs:[44,663 13x13] rel:[0,0 13x13] clip
@@ -385,7 +385,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div abs:[355,662 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
             - span abs:[355,662 14x14] rel:[0,0 14x14] flex:row
               - icon:arrow-up-right abs:[355,662 14x14] rel:[0,0 14x14] clip
-        - div abs:[23,696 360x53] rel:[1,54 360x53] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[23,696 360x53] rel:[1,54 360x53] grid cols:3 gap:12 align:center pad:11/14 border-b:1px seed-indigo@14
           - div abs:[37,709 26x26] rel:[14,13 26x26] flex:row justify:center align:center r:8
             - span abs:[44,716 13x13] rel:[7,7 13x13] flex:row
               - icon:tag abs:[44,716 13x13] rel:[0,0 13x13] clip

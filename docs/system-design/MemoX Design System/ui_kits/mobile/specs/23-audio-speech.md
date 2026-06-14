@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -58,7 +58,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[1] div abs:[22,100 362x168] rel:[14,0 362x168] margin:0/0/18/0
       - ov "General" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,121 362x147] rel:[0,21 362x147] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,122 360x82] rel:[1,1 360x82] grid cols:3 gap:12 align:center pad:13/14
+        - div abs:[23,122 360x82] rel:[1,1 360x82] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
           - div abs:[37,147 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
             - span abs:[45,155 14x14] rel:[8,8 14x14] flex:row
               - icon:play abs:[45,155 14x14] rel:[0,0 14x14] clip
@@ -85,7 +85,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - item[3] div abs:[22,365 362x623] rel:[14,265 362x623] margin:0/0/18/0
       - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
       - card abs:[22,386 362x602] rel:[0,21 362x602] mx:MxCard repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-        - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+        - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
           - span abs:[37,409 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
           - div abs:[71,399 254x38] rel:[48,12 254x38]
             - div "System default" abs:[71,401 161x18] rel:[0,2 161x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -94,7 +94,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
             - span abs:[342,408 20x20] rel:[5,5 20x20] flex:row
               - icon:volume-2 abs:[342,408 20x20] rel:[0,0 20x20] clip
-        - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4
+        - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4 border-b:1px seed-indigo@14
           - span abs:[37,473 18x18] rel:[14,22 18x18] bg:on-primary r:999 border:5px seed-indigo
           - div abs:[71,463 254x38] rel:[48,12 254x38]
             - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline tracking:-0.1
@@ -102,7 +102,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon-btn abs:[337,467 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
             - span abs:[342,472 20x20] rel:[5,5 20x20] flex:row
               - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
-        - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14
+        - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
           - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
           - div abs:[71,526 254x38] rel:[48,12 254x38]
             - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -118,7 +118,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
             - span abs:[342,599 20x20] rel:[5,5 20x20] flex:row
               - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
-        - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
+        - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14 border-b:1px seed-indigo@14
           - div abs:[37,654 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
             - div "Speech rate" abs:[37,656 75x16] rel:[0,2 75x16] font:13/600 color:font-headline tracking:-0.1
             - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
@@ -130,7 +130,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span "0.3×" abs:[39,710 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
             - span "Default" abs:[186,710 35x12] rel:[149,0 35x12] font:10/400 color:on-surface-variant
             - span "0.7×" abs:[346,710 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-        - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
+        - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14 border-b:1px seed-indigo@14
           - div abs:[37,751 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
             - div "Pitch" abs:[37,753 32x16] rel:[0,2 32x16] font:13/600 color:font-headline tracking:-0.1
             - div "1.00" abs:[339,751 31x18] rel:[302,0 31x18] font:14/700 color:seed-indigo
@@ -142,7 +142,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span "0.70" abs:[39,807 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
             - span "1.00" abs:[193,807 21x12] rel:[156,0 21x12] font:10/400 color:on-surface-variant
             - span "1.50" abs:[346,807 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-        - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
+        - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14 border-b:1px seed-indigo@14
           - div abs:[37,848 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
             - div "Volume" abs:[37,850 47x16] rel:[0,2 47x16] font:13/600 color:font-headline tracking:-0.1
             - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
@@ -201,7 +201,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - card abs:[22,386 362x602] rel:[0,21 362x602] mx:MxCard repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
 + - ov "Voice · English" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 + - card abs:[22,386 362x538] rel:[0,21 362x538] mx:MxCard repeat:x7(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-  - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+  - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
   ...
   - span "Default" abs:[178,401 54x18] rel:[107,0 54x18] flex:row align:center pad:0/6 bg:seed-indigo@10 font:9/700 color:seed-indigo tracking:0.4 r:999
 - - div "Uses your phone’s default Korean voice" abs:[71,422 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
@@ -213,6 +213,10 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Emma" abs:[71,465 42x18] rel:[0,2 42x18] flex:row gap:6 align:center font:14/700 color:font-headline tracking:-0.1
   - div "Female · neural · offline" abs:[71,486 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
   ...
+  - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
+- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
++ - item[3] div abs:[23,514 360x62] rel:[1,128 360x62] grid cols:3 gap:12 align:center pad:12/14
+  - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
   - div abs:[71,526 254x38] rel:[48,12 254x38]
 - - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
 + - div "Ryan" abs:[71,528 33x18] rel:[0,2 33x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -227,8 +231,8 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[342,599 20x20] rel:[5,5 20x20] flex:row
 - - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
-- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
-+ - item[4] div abs:[23,576 360x97] rel:[1,190 360x97] pad:14
+- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14 border-b:1px seed-indigo@14
++ - item[4] div abs:[23,576 360x97] rel:[1,190 360x97] pad:14 border-b:1px seed-indigo@14
   - div abs:[37,590 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
   - div "Speech rate" abs:[37,592 75x16] rel:[0,2 75x16] font:13/600 color:font-headline tracking:-0.1
 - - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
@@ -236,13 +240,13 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div abs:[37,618 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
   ...
   - span "0.7×" abs:[346,646 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
-+ - item[5] div abs:[23,673 360x97] rel:[1,287 360x97] pad:14
+- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14 border-b:1px seed-indigo@14
++ - item[5] div abs:[23,673 360x97] rel:[1,287 360x97] pad:14 border-b:1px seed-indigo@14
   - div abs:[37,687 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
   ...
   - span "1.50" abs:[346,743 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
-+ - item[6] div abs:[23,770 360x97] rel:[1,384 360x97] pad:14
+- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14 border-b:1px seed-indigo@14
++ - item[6] div abs:[23,770 360x97] rel:[1,384 360x97] pad:14 border-b:1px seed-indigo@14
   - div abs:[37,784 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
   - div "Volume" abs:[37,786 47x16] rel:[0,2 47x16] font:13/600 color:font-headline tracking:-0.1
 - - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
@@ -274,7 +278,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 - - card abs:[22,386 362x602] rel:[0,21 362x602] mx:MxCard repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-- - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 - - span abs:[37,409 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
 - - div abs:[71,399 254x38] rel:[48,12 254x38]
 - - div "System default" abs:[71,401 161x18] rel:[0,2 161x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -283,7 +287,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[342,408 20x20] rel:[5,5 20x20] flex:row
 - - icon:volume-2 abs:[342,408 20x20] rel:[0,0 20x20] clip
-- - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4
+- - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4 border-b:1px seed-indigo@14
 - - span abs:[37,473 18x18] rel:[14,22 18x18] bg:on-primary r:999 border:5px seed-indigo
 - - div abs:[71,463 254x38] rel:[48,12 254x38]
 - - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline tracking:-0.1
@@ -291,7 +295,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[337,467 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[342,472 20x20] rel:[5,5 20x20] flex:row
 - - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
-- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 - - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
 - - div abs:[71,526 254x38] rel:[48,12 254x38]
 - - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -307,7 +311,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[342,599 20x20] rel:[5,5 20x20] flex:row
 - - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
-- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
+- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14 border-b:1px seed-indigo@14
 - - div abs:[37,654 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
 - - div "Speech rate" abs:[37,656 75x16] rel:[0,2 75x16] font:13/600 color:font-headline tracking:-0.1
 - - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
@@ -319,7 +323,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "0.3×" abs:[39,710 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
 - - span "Default" abs:[186,710 35x12] rel:[149,0 35x12] font:10/400 color:on-surface-variant
 - - span "0.7×" abs:[346,710 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
+- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14 border-b:1px seed-indigo@14
 - - div abs:[37,751 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
 - - div "Pitch" abs:[37,753 32x16] rel:[0,2 32x16] font:13/600 color:font-headline tracking:-0.1
 - - div "1.00" abs:[339,751 31x18] rel:[302,0 31x18] font:14/700 color:seed-indigo
@@ -331,7 +335,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "0.70" abs:[39,807 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
 - - span "1.00" abs:[193,807 21x12] rel:[156,0 21x12] font:10/400 color:on-surface-variant
 - - span "1.50" abs:[346,807 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
+- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14 border-b:1px seed-indigo@14
 - - div abs:[37,848 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
 - - div "Volume" abs:[37,850 47x16] rel:[0,2 47x16] font:13/600 color:font-headline tracking:-0.1
 - - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
@@ -350,17 +354,17 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon:rotate-ccw abs:[303,952 13x13] rel:[0,0 13x13] clip
 + - card abs:[22,386 362x269] rel:[0,21 362x269] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[23,387 360x267] rel:[1,1 360x267] pad:8/0
-+ - div abs:[23,395 360x63] rel:[0,8 360x63] grid cols:3 gap:12 align:center pad:13/14
++ - div abs:[23,395 360x63] rel:[0,8 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
 + - span abs:[37,417 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
 + - div abs:[71,408 256x36] rel:[48,13 256x36]
 + - span abs:[71,414 120x11] rel:[0,6 120x11] bg:surface-container-high r:6 op:0.6
 + - span abs:[71,435 60x9] rel:[0,27 60x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-+ - div abs:[23,458 360x63] rel:[0,71 360x63] grid cols:3 gap:12 align:center pad:13/14
++ - div abs:[23,458 360x63] rel:[0,71 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
 + - span abs:[37,480 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
 + - div abs:[71,471 256x36] rel:[48,13 256x36]
 + - span abs:[71,477 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.6
 + - span abs:[71,498 80x9] rel:[0,27 80x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-+ - div abs:[23,521 360x63] rel:[0,134 360x63] grid cols:3 gap:12 align:center pad:13/14
++ - div abs:[23,521 360x63] rel:[0,134 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
 + - span abs:[37,543 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
 + - div abs:[71,534 256x36] rel:[48,13 256x36]
 + - span abs:[71,540 110x11] rel:[0,6 110x11] bg:surface-container-high r:6 op:0.6
@@ -397,7 +401,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 - - card abs:[22,386 362x602] rel:[0,21 362x602] mx:MxCard repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-- - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 - - span abs:[37,409 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
 - - div abs:[71,399 254x38] rel:[48,12 254x38]
 - - div "System default" abs:[71,401 161x18] rel:[0,2 161x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -406,7 +410,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[342,408 20x20] rel:[5,5 20x20] flex:row
 - - icon:volume-2 abs:[342,408 20x20] rel:[0,0 20x20] clip
-- - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4
+- - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4 border-b:1px seed-indigo@14
 - - span abs:[37,473 18x18] rel:[14,22 18x18] bg:on-primary r:999 border:5px seed-indigo
 - - div abs:[71,463 254x38] rel:[48,12 254x38]
 - - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline tracking:-0.1
@@ -414,7 +418,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - icon-btn abs:[337,467 30x30] rel:[314,16 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[342,472 20x20] rel:[5,5 20x20] flex:row
 - - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
-- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
 - - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
 - - div abs:[71,526 254x38] rel:[48,12 254x38]
 - - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline tracking:-0.1
@@ -433,7 +437,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[181,415 44x44] rel:[158,28 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
   - span abs:[193,427 20x20] rel:[12,12 20x20] flex:row
 - - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
-- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
+- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14 border-b:1px seed-indigo@14
 - - div abs:[37,654 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
 - - div "Speech rate" abs:[37,656 75x16] rel:[0,2 75x16] font:13/600 color:font-headline tracking:-0.1
 - - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
@@ -445,7 +449,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "0.3×" abs:[39,710 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
 - - span "Default" abs:[186,710 35x12] rel:[149,0 35x12] font:10/400 color:on-surface-variant
 - - span "0.7×" abs:[346,710 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
+- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14 border-b:1px seed-indigo@14
 - - div abs:[37,751 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
 - - div "Pitch" abs:[37,753 32x16] rel:[0,2 32x16] font:13/600 color:font-headline tracking:-0.1
 - - div "1.00" abs:[339,751 31x18] rel:[302,0 31x18] font:14/700 color:seed-indigo
@@ -457,7 +461,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "0.70" abs:[39,807 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
 - - span "1.00" abs:[193,807 21x12] rel:[156,0 21x12] font:10/400 color:on-surface-variant
 - - span "1.50" abs:[346,807 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
-- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
+- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14 border-b:1px seed-indigo@14
 - - div abs:[37,848 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
 - - div "Volume" abs:[37,850 47x16] rel:[0,2 47x16] font:13/600 color:font-headline tracking:-0.1
 - - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
@@ -516,7 +520,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - ov "General" abs:[22,240 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 - - card abs:[22,121 362x147] rel:[0,21 362x147] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
 + - card abs:[22,261 362x147] rel:[0,21 362x147] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14 op:0.5
-  - div abs:[23,262 360x82] rel:[1,1 360x82] grid cols:3 gap:12 align:center pad:13/14
+  - div abs:[23,262 360x82] rel:[1,1 360x82] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
   ...
   - span "Soon" abs:[320,364 49x22] rel:[297,21 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
 - - item[2] div abs:[22,286 362x61] rel:[14,186 362x61] margin:0/0/18/0
@@ -529,7 +533,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - ov "Voice · Korean" abs:[22,505 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
 - - card abs:[22,386 362x602] rel:[0,21 362x602] mx:MxCard repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
 + - card abs:[22,526 362x602] rel:[0,21 362x602] mx:MxCard repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14 op:0.4
-  - item[1] div abs:[23,527 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+  - item[1] div abs:[23,527 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
   ...
   - icon:rotate-ccw abs:[303,1092 13x13] rel:[0,0 13x13] clip
 - - item[4] div abs:[22,1006 362x180] rel:[14,906 362x180] margin:0/0/18/0
