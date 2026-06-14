@@ -43,8 +43,20 @@ class FolderDetailScreen extends ConsumerWidget {
   final String folderId;
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) =>
+      _FolderDetailScreenBody(folderId: folderId);
+}
+
+class _FolderDetailScreenBody extends ConsumerWidget {
+  const _FolderDetailScreenBody({required this.folderId});
+
+  final String folderId;
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    // guard:allow-screen-watch -- reason: the folder detail shell needs the
+    // live folder title, mode-specific FAB, and toolbar state together.
     final AsyncValue<FolderDetail> query = ref.watch(
       folderDetailQueryProvider(folderId),
     );

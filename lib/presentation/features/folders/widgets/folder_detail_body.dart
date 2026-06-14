@@ -102,69 +102,125 @@ class FolderDetailBody extends StatelessWidget {
       ContentSortMode.newest => l10n.folderDetailSortNewestLabel,
       ContentSortMode.lastStudied => l10n.folderDetailSortManualLabel,
     };
-    final List<Widget> children = hasChildren
-        ? _buildChildren(
-            context: context,
-            mode: mode,
-            subfolders: subfolders,
-            decks: decks,
-            onShowSubfolderActions: onShowSubfolderActions,
-            onShowDeckActions: onShowDeckActions,
-          )
-        : <Widget>[
-            _FolderDetailSearchEmpty(
-              query: searchTerm,
-              onClearSearch: onClearSearch,
-            ),
-          ];
+    if (!hasChildren) {
+      return ListView(
+        padding: const EdgeInsets.symmetric(vertical: SpacingTokens.sm),
+        children: <Widget>[
+          summary,
+          const SizedBox(height: SpacingTokens.md),
+          _FolderDetailHeader(
+            countLabel: countLabel,
+            sortLabel: sortLabel,
+            onSearchTap: onSearchTap,
+            onSortTap: onSortTap,
+          ),
+          const SizedBox(height: SpacingTokens.sm),
+          _FolderDetailSearchEmpty(
+            query: searchTerm,
+            onClearSearch: onClearSearch,
+          ),
+        ],
+      );
+    }
 
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: SpacingTokens.sm),
-      children: <Widget>[
-        summary,
-        const SizedBox(height: SpacingTokens.md),
-        _FolderDetailHeader(
+      itemCount: _itemCount(mode: mode, subfolders: subfolders, decks: decks),
+      itemBuilder: (BuildContext context, int index) => switch (index) {
+        0 => summary,
+        1 => const SizedBox(height: SpacingTokens.md),
+        2 => _FolderDetailHeader(
           countLabel: countLabel,
           sortLabel: sortLabel,
           onSearchTap: onSearchTap,
           onSortTap: onSortTap,
         ),
-        const SizedBox(height: SpacingTokens.sm),
-        ...children,
-      ],
+        3 => const SizedBox(height: SpacingTokens.sm),
+        _ => _buildChild(
+          context: context,
+          mode: mode,
+          subfolders: subfolders,
+          decks: decks,
+          onShowSubfolderActions: onShowSubfolderActions,
+          onShowDeckActions: onShowDeckActions,
+          index: index - 4,
+        ),
+      },
     );
   }
 
-  List<Widget> _buildChildren({
+  int _itemCount({
+    required ContentMode mode,
+    required List<FolderWithCount> subfolders,
+    required List<DeckWithCount> decks,
+  }) {
+    final int childCount = switch (mode) {
+      ContentMode.subfolders => subfolders.length,
+      ContentMode.decks => decks.length,
+      ContentMode.unlocked => 0,
+    };
+    return 4 + childCount;
+  }
+
+  Widget _buildChild({
     required BuildContext context,
     required ContentMode mode,
     required List<FolderWithCount> subfolders,
     required List<DeckWithCount> decks,
     required void Function(FolderWithCount item) onShowSubfolderActions,
     required void Function(DeckWithCount item) onShowDeckActions,
+    required int index,
   }) => switch (mode) {
-    ContentMode.subfolders => <Widget>[
-      for (final FolderWithCount item in subfolders) ...<Widget>[
-        FolderSubfolderTile(
-          item: item,
-          onTap: () => context.pushFolderDetail(item.folder.id),
-          onShowActions: () => onShowSubfolderActions(item),
-        ),
-        const SizedBox(height: SpacingTokens.sm),
-      ],
-    ],
-    ContentMode.decks => <Widget>[
-      for (final DeckWithCount item in decks) ...<Widget>[
-        FolderDeckTile(
-          item: item,
-          onTap: () => context.pushFlashcardList(item.deck.id),
-          onShowActions: () => onShowDeckActions(item),
-        ),
-        const SizedBox(height: SpacingTokens.sm),
-      ],
-    ],
-    ContentMode.unlocked => const <Widget>[],
+    ContentMode.subfolders => _buildFolderChild(
+      context: context,
+      item: subfolders[index],
+      isFolder: true,
+      onShowSubfolderActions: onShowSubfolderActions,
+      onShowDeckActions: onShowDeckActions,
+    ),
+    ContentMode.decks => _buildFolderChild(
+      context: context,
+      item: decks[index],
+      isFolder: false,
+      onShowSubfolderActions: onShowSubfolderActions,
+      onShowDeckActions: onShowDeckActions,
+    ),
+    ContentMode.unlocked => const SizedBox.shrink(),
   };
+
+  Widget _buildFolderChild({
+    required BuildContext context,
+    required Object item,
+    required bool isFolder,
+    required void Function(FolderWithCount item) onShowSubfolderActions,
+    required void Function(DeckWithCount item) onShowDeckActions,
+  }) {
+    if (isFolder) {
+      final FolderWithCount folder = item as FolderWithCount;
+      return Column(
+        children: <Widget>[
+          FolderSubfolderTile(
+            item: folder,
+            onTap: () => context.pushFolderDetail(folder.folder.id),
+            onShowActions: () => onShowSubfolderActions(folder),
+          ),
+          const SizedBox(height: SpacingTokens.sm),
+        ],
+      );
+    }
+
+    final DeckWithCount deck = item as DeckWithCount;
+    return Column(
+      children: <Widget>[
+        FolderDeckTile(
+          item: deck,
+          onTap: () => context.pushFlashcardList(deck.deck.id),
+          onShowActions: () => onShowDeckActions(deck),
+        ),
+        const SizedBox(height: SpacingTokens.sm),
+      ],
+    );
+  }
 }
 
 class _FolderDetailHeader extends StatelessWidget {
@@ -311,7 +367,7 @@ class FolderDetailSkeleton extends StatelessWidget {
   const FolderDetailSkeleton({super.key});
 
   @override
-  Widget build(BuildContext context) => ListView(
+  Widget build(BuildContext context) => ListView.separated(
     key: const ValueKey<String>('folder_detail_skeleton'),
     padding: const EdgeInsets.fromLTRB(
       0,
@@ -319,12 +375,11 @@ class FolderDetailSkeleton extends StatelessWidget {
       0,
       SpacingTokens.md,
     ),
-    children: <Widget>[
-      for (int index = 0; index < 4; index++) ...<Widget>[
+    itemCount: 4,
+    itemBuilder: (BuildContext context, int index) =>
         const _FolderDetailSkeletonRow(),
-        if (index != 3) const SizedBox(height: SpacingTokens.inline),
-      ],
-    ],
+    separatorBuilder: (BuildContext context, int index) =>
+        const SizedBox(height: SpacingTokens.inline),
   );
 }
 
