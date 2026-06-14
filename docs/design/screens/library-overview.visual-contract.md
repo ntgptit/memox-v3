@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-13
+last_updated: 2026-06-15
 status: contract
 route: /library
 screen: Library Overview
@@ -61,9 +61,10 @@ is regenerated.
 | Search decks/cards/tags hint | Approved mock/spec variance      | Canonical PNG/spec text still shows `Search decks, cards, tags`, but V1 search is folder-only and uses `Search folders`. The variance is documented until source design regeneration. |
 | Due summary card             | Current partial                  | Renders `{n} cards due today`, the subtitle `Across {n} folders · ~{m} min`, and a non-launch chevron inside a flat `MxCard`; the card itself is non-interactive. |
 | Folder cards                 | Current                          | Root renders top-level folders only.                                                                               |
-| Folder progress/mastery bar  | Future                           | No approved progress/mastery field in current Library read model.                                                  |
+| Folder subtitle (deck digest)| Current                          | `subtitle` = `GROUP_CONCAT` of up to 3 deck names from the `libraryOverview` query → `FolderWithCount.subtitle`; shown only when present (decks-mode). |
+| Folder progress/mastery bar  | Current                          | `mastery` = `AVG(COALESCE(box_number,1))/8` over the folder subtree (`libraryOverview` query) → `FolderWithCount.mastery`; rendered via `MxLinearProgress` when non-null. |
 | Folder due badge             | Current                          | Show only when `dueCount > 0`.                                                                                     |
-| Folder new badge             | Future                           | No approved new-card field in current Library row contract.                                                        |
+| Folder new badge             | Current                          | `newCount` = unstudied flashcards (no progress / no `due_at`) in the subtree (`new_count` column) → `FolderWithCount.newCount`; shown only when `> 0`. |
 | Folder kebab affordance      | Current                          | Visible trailing `Icons.more_vert`; tap (and row long-press) open the folder action sheet.                         |
 | Folder action sheet          | Current                          | Rename / Move to folder / Import flashcards (decks-mode only) / Delete. Backed by real use cases + tests.          |
 | Overflow "Study due cards"   | Future / visual-only             | No approved Library study-launch route; the action is not exposed in the implemented sheet.                        |
@@ -93,7 +94,9 @@ is regenerated.
 | Due summary       | Card with bolt icon and due count                          | `LibraryDueSummaryCard`                | `MxCard`, `MxIconTile`, `MxText`                 | Non-interactive; show subtitle `Across {n} folders · ~{m} min` and chevron when due summary is present. |
 | Section header    | `{n} folders` overline/count                               | `LibraryFolderCountHeader`             | `MxSectionHeader`                                | Render the mock-aligned `Recent` pill as current visual parity, but keep it non-interactive. |
 | Folder card       | Card surface, icon tile, title, metadata, due badge, kebab | `LibraryFolderTile`                    | `MxCard`, `MxIconTile`, `MxIconButton`, `MxText` | No chevron.                                     |
-| Metadata row      | Deck/subfolder count plus card count                       | `LibraryFolderTile`                    | Theme text/icon roles                            | Use recursive counts from read model.           |
+| Subtitle          | Deck-name digest line under the title                      | `LibraryFolderTile`                    | `MxText` label role, `onSurfaceVariant`          | From `FolderWithCount.subtitle`; omit when null. |
+| Metadata row      | Deck/subfolder count, card count, and new-card count       | `LibraryFolderTile`                    | Theme text/icon roles                            | Recursive counts from read model; new count uses `mastery` accent when `newCount > 0`. |
+| Mastery bar       | Thin subtree mastery progress bar                          | `LibraryFolderTile` + `MxLinearProgress` | Tokenized height/radius, folder accent         | From `FolderWithCount.mastery` (`AVG(box)/8`); omit when null. |
 | Due badge         | Compact primary-tint pill                                  | `LibraryFolderTile`                    | Tokenized opacity/radius/text                    | Show only when `dueCount > 0`.                  |
 | Loading           | Loading overline + skeleton folder rows                    | `LibrarySkeleton`                      | `MxSkeleton` in `MxCard`                         | No tappable folder while data absent; label uses `libraryLoadingFoldersLabel`. |
 | True empty        | Large empty card with create-folder CTA                    | `LibraryEmptyStateSection`             | Custom `MxCard` composition                     | No root deck/import CTA.                        |
@@ -147,11 +150,16 @@ Required structure:
 
 3. Main content.
     - Folder name, one line with ellipsis.
+    - Optional subtitle (deck-name digest) when `subtitle` is present.
     - Metadata row from available counts:
         - subfolder or deck count, based on `ContentMode`
         - card count
+        - new-card count when `newCount > 0`
         - due badge when `dueCount > 0`
-    - Do not show progress/mastery/new-card data unless the read model provides it.
+    - Mastery bar (`MxLinearProgress`) when `mastery` is non-null.
+    - `subtitle`, `newCount`, and `mastery` come from the `libraryOverview`
+      query (`FolderWithCount` fields); render each only when its field is set.
+      Never synthesize these client-side.
 
 4. Trailing action.
     - Use `Icons.more_vert`.
@@ -169,9 +177,11 @@ Forbidden:
 - Do not keep the overview summary card or folder-count header visible while
   a search term is active and matching rows are shown.
 - Do not claim deck/card/tag search in Library Overview V1; that scope is Future.
-- Do not fake progress, mastery, new-card data, or unsupported study-launch
-  data. The due summary subtitle/duration may be shown only when derived from
-  the approved aggregate read model.
+- Do not fake or synthesize subtitle, progress/mastery, or new-card data
+  client-side; render them only from the `FolderWithCount.subtitle/mastery/newCount`
+  fields supplied by the `libraryOverview` query, and omit each when null/zero.
+- Do not expose unsupported study-launch data. The due summary subtitle/duration
+  may be shown only when derived from the approved aggregate read model.
 - Do not expose the mock's "Study due cards" / "Archive folder" overflow actions (out of scope).
 
 ## Acceptance Criteria For Future UI Work
