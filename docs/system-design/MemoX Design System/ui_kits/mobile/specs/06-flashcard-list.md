@@ -41,17 +41,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
-    - item[6] span [182,103 12x12] flex:row
+    - item[3] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
+    - span [182,103 12x12] flex:row
       - icon:chevron-right [182,103 12x12]
-    - item[7] span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - card [22,123 362x180] r:12 pad:14/14 border:1px seed-indigo@18
       - div [37,138 332x57] flex:row gap:14 align:center
@@ -206,17 +206,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
-    - item[6] span [182,103 12x12] flex:row
+    - item[3] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
+    - span [182,103 12x12] flex:row
       - icon:chevron-right [182,103 12x12]
-    - item[7] span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
   - div [22,131 362x372]
     - card [22,131 362x213] bg:on-primary r:12 pad:32/22 border:1px seed-indigo@14
       - div [171,164 64x64] flex:row justify:center align:center bg:seed-indigo@10 r:18
@@ -354,17 +354,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
-    - item[6] span [182,103 12x12] flex:row
+    - item[3] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
+    - span [182,103 12x12] flex:row
       - icon:chevron-right [182,103 12x12]
-    - item[7] span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - div [22,123 362x79] grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
       - span [37,142 8x8] bg:surface-container-high r:999 op:0.5
@@ -419,17 +419,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
-    - item[6] span [182,103 12x12] flex:row
+    - item[3] span "TOPIK II" [137,102 41x13] font:11/500 color:on-surface-variant
+    - span [182,103 12x12] flex:row
       - icon:chevron-right [182,103 12x12]
-    - item[7] span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
+    - span "TOPIK II — Vocab" [198,102 92x13] font:11/700 color:font-headline
   - card [22,131 362x271] bg:on-primary r:12 pad:40/22 border:1px seed-indigo@14
     - div [177,172 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
       - span [192,187 22x22] flex:row
@@ -519,17 +519,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
 - - icon:more-vertical
-- - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+- - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
 - - item[1] span "Library" font:11/500 color:on-surface-variant
-- - item[2] span flex:row
+- - span flex:row
 - - icon:chevron-right
-- - item[3] span "Korean" font:11/500 color:on-surface-variant
-- - item[4] span flex:row
+- - item[2] span "Korean" font:11/500 color:on-surface-variant
+- - span flex:row
 - - icon:chevron-right
-- - item[5] span "TOPIK II" font:11/500 color:on-surface-variant
-- - item[6] span flex:row
+- - item[3] span "TOPIK II" font:11/500 color:on-surface-variant
+- - span flex:row
 - - icon:chevron-right
-- - item[7] span "TOPIK II — Vocab" font:11/700 color:font-headline
+- - span "TOPIK II — Vocab" font:11/700 color:font-headline
 - - scroll pad:0/14
 - - card r:12 pad:14/14 border:1px seed-indigo@18
 - - div flex:row gap:14 align:center
@@ -584,7 +584,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - scroll repeat:x8(unit=1) pad:0/14
 + - item[1] div flex:row justify:between align:center pad:2/4
 + - ov "7 cards · drag to reorder" font:11/700 color:on-surface-variant
-+ - item[2] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[2] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
   - span flex:row
 - - icon:chevron-down
@@ -592,100 +592,75 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - icon:grip-vertical
   - status-dot bg:status-new r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "연구자" font:16/700/20 color:font-headline
   ...
-  - span "people" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
   - span "now" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - div grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-+ - item[3] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[3] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
 + - span flex:row
 + - icon:grip-vertical
   - status-dot bg:mastery r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "공부하다" font:16/700/20 color:font-headline
   ...
-  - span "verb" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
   - span "in 4d" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - div grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-+ - item[4] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[4] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
 + - span flex:row
 + - icon:grip-vertical
   - status-dot bg:warning r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "도서관" font:16/700/20 color:font-headline
-  ...
-  - span "places" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
-  - span flex:row
   ...
   - span "10m" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - div grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-+ - item[5] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[5] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
 + - span flex:row
 + - icon:grip-vertical
   - status-dot bg:seed-indigo r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "친구" font:16/700/20 color:font-headline
   ...
-  - span "people" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
   - span "6h" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - div grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-+ - item[6] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[6] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
 + - span flex:row
 + - icon:grip-vertical
   - status-dot bg:warning r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "바다" font:16/700/20 color:font-headline
-  ...
-  - span "nature" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
-  - span flex:row
   ...
   - span "15m" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - div grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-+ - item[7] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[7] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
 + - span flex:row
 + - icon:grip-vertical
   - status-dot bg:status-new r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "영화" font:16/700/20 color:font-headline
   ...
-  - span "noun" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
   - span "now" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - div grid cols:3 gap:12 align:start bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-+ - item[8] div grid cols:4 gap:12 align:start repeat:x4(unit=1) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
++ - item[8] div grid cols:4 gap:12 align:start repeat:x2(unit=2) bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center pad:4/0
 + - span flex:row
 + - icon:grip-vertical
   - status-dot bg:seed-indigo r:999
 - - div
-+ - item[3] div
++ - item[2] div
   - div "시간" font:16/700/20 color:font-headline
   ...
-  - span "noun" flex:row align:center bg:surface-container font:10/600 color:on-surface-variant r:999 pad:0/7
-- - div flex:col gap:6 align:end pad:4/0
-+ - item[4] div flex:col gap:6 align:end pad:4/0
   - span "2d" bg:surface-container font:10/700 color:on-surface-variant r:6 pad:2/6
 - - button "New card" flex:row gap:8 align:center bg:seed-indigo font:14/600 color:on-primary r:16 pad:0/16 shadow:8/22
 - - span flex:row

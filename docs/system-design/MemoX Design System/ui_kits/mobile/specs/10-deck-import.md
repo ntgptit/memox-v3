@@ -38,26 +38,26 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:help-circle [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - item[6] span [231,103 12x12] flex:row
+    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
+    - span [231,103 12x12] flex:row
       - icon:chevron-right [231,103 12x12]
-    - item[7] span "Import" [247,102 37x13] font:11/700 color:font-headline
+    - span "Import" [247,102 37x13] font:11/700 color:font-headline
   - scroll [8,123 390x578] pad:0/14
-    - div [22,123 362x20] flex:row gap:8 align:center repeat:x5(unit=1)
+    - div [22,123 362x20] flex:row gap:8 align:center repeat:x2+(unit=2)
       - item[1] div "Source" [22,123 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
         - span "1" [22,123 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-      - item[2] div [94,132 68x2] bg:surface-container r:999
-      - item[3] div "Preview" [170,123 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+      - div [94,132 68x2] bg:surface-container r:999
+      - item[2] div "Preview" [170,123 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
         - span "2" [170,123 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-      - item[4] div [246,132 68x2] bg:surface-container r:999
-      - item[5] div "Import" [322,123 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+      - div [246,132 68x2] bg:surface-container r:999
+      - div "Import" [322,123 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
         - span "3" [322,123 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
     - div [22,159 212x36] flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
       - span [31,166 22x22] flex:row justify:center align:center bg:seed-indigo@10 r:7
@@ -105,16 +105,16 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ## State: File selected (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x5(unit=1)
+  - div flex:row gap:8 align:center repeat:x2+(unit=2)
 - - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[2] div bg:surface-container r:999
+- - div bg:surface-container r:999
 + - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[2] div bg:mastery r:999
-  - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
++ - div bg:mastery r:999
+  - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
   - div "TSV or CSV rows" font:11/400 color:on-surface-variant
 - - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
@@ -148,20 +148,20 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ## State: Parsing (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x5(unit=1)
+  - div flex:row gap:8 align:center repeat:x2+(unit=2)
 - - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[2] div bg:surface-container r:999
-- - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - div bg:surface-container r:999
+- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
 + - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[2] div bg:mastery r:999
-+ - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
++ - div bg:mastery r:999
++ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span "2" flex:row justify:center align:center bg:seed-indigo font:10/700 color:on-primary r:999
-  - item[4] div bg:surface-container r:999
+  - div bg:surface-container r:999
   ...
   - div "TSV or CSV rows" font:11/400 color:on-surface-variant
 - - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
@@ -205,24 +205,24 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ## State: Preview all (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x5(unit=1)
+  - div flex:row gap:8 align:center repeat:x2+(unit=2)
 - - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[2] div bg:surface-container r:999
-- - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - div bg:surface-container r:999
+- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 + - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[2] div bg:mastery r:999
-+ - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
++ - div bg:mastery r:999
++ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[4] div bg:mastery r:999
-  - item[5] div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
++ - div bg:mastery r:999
+  - div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
   - div "TSV or CSV rows" font:11/400 color:on-surface-variant
 - - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
@@ -330,24 +330,24 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ## State: Preview mixed (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x5(unit=1)
+  - div flex:row gap:8 align:center repeat:x2+(unit=2)
 - - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[2] div bg:surface-container r:999
-- - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - div bg:surface-container r:999
+- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 + - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[2] div bg:mastery r:999
-+ - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
++ - div bg:mastery r:999
++ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[4] div bg:mastery r:999
-  - item[5] div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
++ - div bg:mastery r:999
+  - div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
   - div "TSV or CSV rows" font:11/400 color:on-surface-variant
 - - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
@@ -489,26 +489,26 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ## State: Importing (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x5(unit=1)
+  - div flex:row gap:8 align:center repeat:x2+(unit=2)
 - - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[2] div bg:surface-container r:999
-- - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - div bg:surface-container r:999
+- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - item[4] div bg:surface-container r:999
-- - item[5] div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - div bg:surface-container r:999
+- - div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
 - - span "3" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
 + - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[2] div bg:mastery r:999
-+ - item[3] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
++ - div bg:mastery r:999
++ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span flex:row justify:center align:center bg:mastery r:999
 + - span flex:row
 + - icon:check
-+ - item[4] div bg:mastery r:999
-+ - item[5] div "Import" flex:row gap:6 align:center font:11/600 color:font-headline
++ - div bg:mastery r:999
++ - div "Import" flex:row gap:6 align:center font:11/600 color:font-headline
 + - span "3" flex:row justify:center align:center bg:seed-indigo font:10/700 color:on-primary r:999
   - div flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
   ...

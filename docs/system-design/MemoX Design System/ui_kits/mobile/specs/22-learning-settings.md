@@ -49,13 +49,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
           - div [325,141 44x26] flex:row gap:6 align:center
             - span [325,141 44x26] bg:seed-indigo r:999
               - span [346,144 20x20] bg:on-primary r:999 shadow:1/3
-        - div [23,186 360x143] repeat:x4(unit=1) pad:14/14 border:1px seed-indigo@14
+        - div [23,186 360x143] repeat:x2(unit=2) pad:14/14 border:1px seed-indigo@14
           - item[1] div [37,201 332x30] flex:row justify:between align:baseline
             - ov "Cards per day" [37,215 101x13] font:11/700 color:on-surface-variant
             - div [305,201 64x30] flex:row gap:4 align:baseline
               - span "20" [305,201 28x30] font:24/700 color:seed-indigo
               - span "cards" [337,214 32x15] font:12/400 color:on-surface-variant
-          - item[2] div [37,245 332x24]
+          - div [37,245 332x24]
             - div [37,254 332x6] bg:surface-container-high r:999
             - div [37,254 26x6] bg:seed-indigo r:999
             - div [50,244 26x26] bg:on-primary r:999 border:2px seed-indigo shadow:2/6
@@ -64,13 +64,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
             - div [202,256 2x2] bg:outline-variant r:999
             - div [285,256 2x2] bg:outline-variant r:999
             - div [368,256 2x2] bg:outline-variant r:999
-          - item[3] div [37,277 332x13] flex:row justify:between repeat:x5(unit=1) pad:0/2
+          - item[2] div [37,277 332x13] flex:row justify:between repeat:x5(unit=1) pad:0/2
             - item[1] span "5" [39,277 7x13] font:11/400 color:on-surface-variant
             - item[2] span "50" [108,277 13x13] font:11/400 color:on-surface-variant op:0.7
             - item[3] span "100" [183,277 20x13] font:11/400 color:on-surface-variant op:0.7
             - item[4] span "150" [265,277 20x13] font:11/400 color:on-surface-variant op:0.7
             - item[5] span "200" [347,277 20x13] font:11/400 color:on-surface-variant
-          - item[4] div [37,300 332x13] flex:row gap:5 align:center
+          - div [37,300 332x13] flex:row gap:5 align:center
             - span [37,301 11x11] flex:row
               - icon:info [37,301 11x11]
             - span "Drag to adjust in steps of 5" [53,300 137x13] font:11/400 color:on-surface-variant
@@ -161,8 +161,8 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - span bg:seed-indigo r:999
 + - span bg:surface-container-high r:999
   - span bg:on-primary r:999 shadow:1/3
-- - div repeat:x4(unit=1) pad:14/14 border:1px seed-indigo@14
-+ - div repeat:x4(unit=1) pad:14/14 border:1px seed-indigo@14 op:0.4
+- - div repeat:x2(unit=2) pad:14/14 border:1px seed-indigo@14
++ - div repeat:x2(unit=2) pad:14/14 border:1px seed-indigo@14 op:0.4
   - item[1] div flex:row justify:between align:baseline
   ...
   - span "Drag to adjust in steps of 5" font:11/400 color:on-surface-variant

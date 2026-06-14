@@ -88,14 +88,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - scroll pad:0/14
 - - card bg:on-primary r:12 pad:24/18 border:1px seed-indigo@14
 - - div flex:row justify:center align:center bg:seed-indigo@10 r:16
-+ - card repeat:x4+(unit=1) bg:on-primary r:12 pad:24/18 border:1px seed-indigo@14
++ - card repeat:x2+(unit=2) bg:on-primary r:12 pad:24/18 border:1px seed-indigo@14
 + - item[1] div flex:row justify:center align:center bg:seed-indigo@10 r:16
   - span flex:row
-  - icon:cloud
-- - div "Back up to your Google Drive" font:18/700 color:font-headline
+  ...
+  - div "Back up to your Google Drive" font:18/700 color:font-headline
 - - div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." font:13/400/20 color:on-surface-variant pad:0/4
-+ - item[2] div "Back up to your Google Drive" font:18/700 color:font-headline
-+ - item[3] div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." font:13/400/20 color:on-surface-variant pad:0/4
++ - item[2] div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." font:13/400/20 color:on-surface-variant pad:0/4
   - em "when you choose" font:13/600/20 color:font-headline
 + - div flex:row gap:10 align:start bg:#dc4848@8 r:12 pad:12/14 border:1px #dc4848@22
 + - span flex:row
@@ -569,14 +568,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
             - span "Matches" [307,504 62x13] flex:row gap:4 align:center font:11/600 color:mastery
               - span [307,505 12x12] flex:row
                 - icon:check [307,505 12x12]
-          - item[2] div [23,541 360x115] repeat:x4(unit=1) pad:14/14
+          - item[2] div [23,541 360x115] repeat:x2(unit=2) pad:14/14
             - item[1] div [37,555 332x13] flex:row justify:between align:center
               - div "Step 1 of 2" [37,555 63x13] font:11/700 color:on-surface-variant
               - div "38%" [344,555 25x13] font:11/700 color:on-surface-variant
-            - item[2] div "Snapshotting local data first…" [37,572 332x16] font:13/600 color:font-headline
-            - item[3] div [37,596 332x6] bg:surface-container r:999
+            - div "Snapshotting local data first…" [37,572 332x16] font:13/600 color:font-headline
+            - item[2] div [37,596 332x6] bg:surface-container r:999
               - div [37,596 126x6] bg:seed-indigo r:999
-            - item[4] div "You can cancel until step 2 starts. Local data stays safe either way." [37,608 332x33] font:11/400/17 color:on-surface-variant
+            - div "You can cancel until step 2 starts. Local data stays safe either way." [37,608 332x33] font:11/400/17 color:on-surface-variant
           - item[3] div [23,656 360x64] flex:col gap:8 pad:12/14
             - pill-btn "Cancel restore" [37,668 332x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:11 pad:0/18 border:1px outline-variant
           - item[4] div "Backups are manual — MemoX never uploads automatically." [23,720 360x29] font:11/400/17 color:on-surface-variant pad:0/14

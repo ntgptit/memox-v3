@@ -183,13 +183,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
         - icon:lock [35,572 13x13]
       - span "Your cards stay on this device. Sign-in is optional and never required." [56,572 315x33] font:11/400/17 color:on-surface-variant
   - div [8,8 390x780] bg:#191c1e@45
-  - div [8,479 390x309] bg:surface-container-high r:20 shadow:-10/30
-    - div [8,479 390x16] flex:row justify:center pad:8/0
+  - div [8,479 390x309] repeat:x2(unit=2) bg:surface-container-high r:20 shadow:-10/30
+    - item[1] div [8,479 390x16] flex:row justify:center pad:8/0
       - span [185,487 36x4] bg:outline-variant r:999
     - div [8,495 390x61] pad:4/18
       - div "Name your first deck" [26,499 354x21] font:16/700 color:font-headline
       - div "You can rename it or move it into folders anytime." [26,524 354x18] font:12/400/18 color:on-surface-variant
-    - div [8,556 390x174] pad:0/18
+    - item[2] div [8,556 390x174] pad:0/18
       - ov "Deck name" [26,556 354x13] font:11/700 color:on-surface-variant
       - div [26,575 354x46] flex:row gap:8 align:center bg:on-primary r:11 pad:0/14 border:1px seed-indigo
         - span "Korean — TOPIK starter" [41,589 156x18] font:14/600 color:font-headline
@@ -267,8 +267,8 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
         - icon:lock [35,572 13x13]
       - span "Your cards stay on this device. Sign-in is optional and never required." [56,572 315x33] font:11/400/17 color:on-surface-variant
   - div [8,8 390x780] bg:#191c1e@45
-  - div [8,459 390x329] bg:surface-container-high r:20 shadow:-10/30
-    - div [8,459 390x16] flex:row justify:center pad:8/0
+  - div [8,459 390x329] repeat:x2(unit=2) bg:surface-container-high r:20 shadow:-10/30
+    - item[1] div [8,459 390x16] flex:row justify:center pad:8/0
       - span [185,467 36x4] bg:outline-variant r:999
     - div [8,475 390x109] pad:4/18
       - div "Step 1 of 2" [26,480 100x21] flex:row gap:6 align:center bg:success@10 font:11/700 color:mastery r:999 pad:4/10
@@ -276,7 +276,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
           - icon:upload [36,485 11x11]
       - div "Where should the imported cards go?" [26,511 354x21] font:16/700 color:font-headline
       - div "We need a destination deck first. We won’t create it until you pick the file." [26,536 354x36] font:12/400/18 color:on-surface-variant
-    - div [8,584 390x146] pad:0/18
+    - item[2] div [8,584 390x146] pad:0/18
       - ov "Deck name" [26,584 354x13] font:11/700 color:on-surface-variant
       - div [26,603 354x46] flex:row gap:8 align:center bg:on-primary r:11 pad:0/14 border:1px seed-indigo
         - span "Imported vocabulary" [41,617 142x18] font:14/600 color:font-headline
@@ -415,8 +415,8 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
         - icon:lock [35,572 13x13]
       - span "Your cards stay on this device. Sign-in is optional and never required." [56,572 315x33] font:11/400/17 color:on-surface-variant
   - div [8,8 390x780] bg:#191c1e@45
-  - div [8,591 390x197] bg:surface-container-high r:20 shadow:-10/30
-    - div [8,591 390x16] flex:row justify:center pad:8/0
+  - div [8,591 390x197] repeat:x2(unit=2) bg:surface-container-high r:20 shadow:-10/30
+    - item[1] div [8,591 390x16] flex:row justify:center pad:8/0
       - span [185,599 36x4] bg:outline-variant r:999
     - div [8,607 390x104] pad:4/18
       - div [26,611 354x36] flex:row gap:10 align:center
@@ -427,7 +427,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
           - div "We found a backup" [72,612 249x19] font:15/700 color:font-headline
           - div "alex@memox.app · 326 cards · saved 4 days ago" [72,632 249x13] font:11/400 color:on-surface-variant
       - div "Restoring will pull all decks, cards, and history from Drive onto this device." [26,657 354x40] font:13/400/20 color:font-headline
-    - div [8,711 390x40] flex:row gap:8 pad:0/14
+    - item[2] div [8,711 390x40] flex:row gap:8 pad:0/14
       - pill-btn "Not now" [22,711 155x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:11 pad:0/18 border:1px outline-variant
       - pill-btn "Restore now" [185,711 199x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
         - span [235,724 14x14] flex:row
@@ -493,11 +493,11 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - span "Your cards stay on this device. Sign-in is optional and never required." [56,572 315x33] font:11/400/17 color:on-surface-variant
   - div [8,8 390x780] bg:#191c1e@45
   - div [8,8 390x780] flex:row justify:center align:center pad:24/18
-    - div [26,301 354x195] bg:surface-container-high r:18 pad:24/22 shadow:16/40
-      - div [177,325 52x52] flex:row justify:center align:center bg:seed-indigo@10 r:14
+    - div [26,301 354x195] repeat:x2+(unit=2) bg:surface-container-high r:18 pad:24/22 shadow:16/40
+      - item[1] div [177,325 52x52] flex:row justify:center align:center bg:seed-indigo@10 r:14
         - span [188,336 30x30] r:999 border:2px #000000@0
       - div "Restoring your library" [48,391 310x19] font:15/700 color:font-headline
-      - div "Pulling 326 cards from Drive. Don’t close the app yet." [48,414 310x18] font:12/400/18 color:on-surface-variant
+      - item[2] div "Pulling 326 cards from Drive. Don’t close the app yet." [48,414 310x18] font:12/400/18 color:on-surface-variant
       - div [48,446 310x5] bg:surface-container r:999
         - div [48,446 130x5] bg:seed-indigo r:999
       - div "136 of 326" [48,459 310x13] font:11/400 color:on-surface-variant

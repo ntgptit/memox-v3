@@ -433,13 +433,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - span [379,109 11x11] flex:row
         - icon:tag [379,109 11x11]
       - span "0" [424,108 6x12] font:10/700 color:font-headline op:0.6
-  - card [22,146 362x271] repeat:x4(unit=1) bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
+  - card [22,146 362x271] repeat:x2(unit=2) bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
     - item[1] div [177,183 52x52] flex:row justify:center align:center bg:surface-container r:14
       - span [192,198 22x22] flex:row
         - icon:search-x [192,198 22x22]
-    - item[2] div "No matches for "phras"" [45,249 316x21] font:16/700 color:font-headline
-    - item[3] div "Check the spelling, or try a shorter keyword. Search runs across folders, decks, cards, and tags." [45,276 316x60] font:13/400/20 color:on-surface-variant pad:0/8
-    - item[4] div [45,352 316x28] flex:row wrap gap:6 justify:center
+    - div "No matches for "phras"" [45,249 316x21] font:16/700 color:font-headline
+    - item[2] div "Check the spelling, or try a shorter keyword. Search runs across folders, decks, cards, and tags." [45,276 316x60] font:13/400/20 color:on-surface-variant pad:0/8
+    - div [45,352 316x28] flex:row wrap gap:6 justify:center
       - button "phrase" [71,352 80x28] flex:row gap:5 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
         - span [83,361 11x11] flex:row
           - icon:search [83,361 11x11]

@@ -36,17 +36,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
         - icon:arrow-left [24,66 20x20]
     - title "Edit flashcard" [60,66 269x21] font:16/700 color:font-headline
     - pill-btn "Save" [333,60 57x32] flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - item[6] span [231,103 12x12] flex:row
+    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
+    - span [231,103 12x12] flex:row
       - icon:chevron-right [231,103 12x12]
-    - item[7] span "Edit" [247,102 22x13] font:11/700 color:font-headline
+    - span "Edit" [247,102 22x13] font:11/700 color:font-headline
   - scroll [8,123 390x576] pad:0/14
     - div [22,123 362x31] flex:row gap:10 align:center bg:on-primary r:11 pad:8/12 border:1px seed-indigo@14
       - span [35,133 12x12] flex:row
@@ -157,7 +157,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - title "Edit flashcard" font:16/700 color:font-headline
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
 + - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - scroll pad:0/14
 - - div flex:row gap:10 align:center bg:on-primary r:11 pad:8/12 border:1px seed-indigo@14
@@ -279,13 +279,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
         - icon:x [24,66 20x20]
     - title "Edit flashcard" [60,66 330x21] font:16/700 color:font-headline
   - scroll [8,100 390x688] flex:row justify:center align:center pad:24/22
-    - card [30,312 346x263] repeat:x4(unit=1) bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
+    - card [30,312 346x263] repeat:x2(unit=2) bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
       - item[1] div [177,349 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
         - span [192,364 22x22] flex:row
           - icon:cloud-off [192,364 22x22]
-      - item[2] div "Couldn't load this card" [53,415 300x21] font:16/700 color:font-headline
-      - item[3] div "Your data is safe on this device. Try again in a moment." [53,442 300x40] font:13/400/20 color:on-surface-variant
-      - item[4] div [53,499 300x40] flex:row gap:8 justify:center
+      - div "Couldn't load this card" [53,415 300x21] font:16/700 color:font-headline
+      - item[2] div "Your data is safe on this device. Try again in a moment." [53,442 300x40] font:13/400/20 color:on-surface-variant
+      - div [53,499 300x40] flex:row gap:8 justify:center
         - pill-btn "Back to deck" [93,499 121x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:11 pad:0/18 border:1px outline-variant
         - pill-btn "Retry" [223,499 90x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
           - span [241,512 14x14] flex:row
@@ -298,7 +298,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - title "Edit flashcard" font:16/700 color:font-headline
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
 + - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - span "Required" font:10/700 color:seed-indigo
 - - span "27 / 240" font:10/600 color:on-surface-variant
@@ -329,7 +329,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
 + - pill-btn "Saving…" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
 + - span r:999 border:2px #000000@0
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
 - - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18

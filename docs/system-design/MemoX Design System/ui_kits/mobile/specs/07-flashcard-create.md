@@ -36,17 +36,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
         - icon:x [24,66 20x20]
     - title "New flashcard" [60,66 269x21] font:16/700 color:font-headline
     - pill-btn "Save" [333,60 57x32] flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - item[6] span [231,103 12x12] flex:row
+    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
+    - span [231,103 12x12] flex:row
       - icon:chevron-right [231,103 12x12]
-    - item[7] span "New card" [247,102 52x13] font:11/700 color:font-headline
+    - span "New card" [247,102 52x13] font:11/700 color:font-headline
   - scroll [8,123 390x576] pad:0/14
     - div [22,123 171x36] flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
       - span [31,130 22x22] flex:row justify:center align:center bg:seed-indigo@10 r:7
@@ -107,7 +107,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - title "New flashcard" font:16/700 color:font-headline
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
 + - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - span "Required" font:10/700 color:seed-indigo
 - - span "0 / 60" font:10/600 color:on-surface-variant
@@ -156,7 +156,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - title "New flashcard" font:16/700 color:font-headline
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
 + - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - span "Required" font:10/700 color:seed-indigo
 - - span "0 / 60" font:10/600 color:on-surface-variant
@@ -270,7 +270,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
 + - pill-btn "Saving…" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
 + - span r:999 border:2px #000000@0
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - span "Required" font:10/700 color:seed-indigo
 - - span "0 / 60" font:10/600 color:on-surface-variant
@@ -320,7 +320,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - title "New flashcard" font:16/700 color:font-headline
 - - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
 + - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-  - scroll-x flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
   ...
   - span "Required" font:10/700 color:seed-indigo
 - - span "0 / 60" font:10/600 color:on-surface-variant

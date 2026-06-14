@@ -269,13 +269,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - item[5] span "F" font:10/400 color:on-surface-variant
 - - item[6] span "S" font:10/400 color:on-surface-variant
 - - item[7] span "S" font:10/400 color:on-surface-variant
-+ - div flex:row gap:3 repeat:x28(unit=1) pad:0/2
++ - div flex:row gap:3 repeat:x14(unit=2) pad:0/2
 + - item[1] span "1" font:10/400 color:on-surface-variant
-+ - item[5] span "5" font:10/400 color:on-surface-variant
-+ - item[10] span "10" font:10/400 color:on-surface-variant
-+ - item[15] span "15" font:10/400 color:on-surface-variant
-+ - item[20] span "20" font:10/400 color:on-surface-variant
-+ - item[25] span "25" font:10/400 color:on-surface-variant
++ - item[3] span "5" font:10/400 color:on-surface-variant
++ - span "10" font:10/400 color:on-surface-variant
++ - item[8] span "15" font:10/400 color:on-surface-variant
++ - span "20" font:10/400 color:on-surface-variant
++ - item[13] span "25" font:10/400 color:on-surface-variant
   - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
   ...
   - ov "Accuracy" font:11/700 color:on-surface-variant

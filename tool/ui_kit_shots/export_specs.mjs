@@ -233,14 +233,29 @@ window.__mx = (() => {
     return false;
   }
 
+  // Coarse "kind" of an element: text-bearing / icon-only / other. Used to reject
+  // a period-1 run whose children alternate kinds (e.g. a breadcrumb of
+  // label,chevron,label,chevron) which is NOT a uniform N-item list.
+  function kindOf(el) {
+    if (el.textContent && el.textContent.trim()) return 't';
+    if (el.dataset && el.dataset.lucide) return 'i';
+    if (el.querySelector && el.querySelector('[data-lucide], svg')) return 'i';
+    return 'o';
+  }
+
   // Detect a repeating unit among a parent's children: smallest period p (1..6)
   // whose signature pattern repeats >=2 full times. Trailing partial units (e.g. a
   // last row with a chevron instead of a badge) are allowed. Returns the run that
   // covers the most children, or null. Used only to ANNOTATE (never to drop lines).
   function detectUnits(children) {
     const sigs = [...children].map(sigOf);
+    const kinds = [...children].map(kindOf);
+    const uniformKind = kinds.every((k) => k === kinds[0]);
     let best = null;
     for (let p = 1; p <= 6; p++) {
+      // A single-element period only counts as a list when every child is the
+      // same kind — otherwise an alternating run (breadcrumb) gets mislabeled.
+      if (p === 1 && !uniformKind) continue;
       if (sigs.length < p * 2) break;
       let reps = 1;
       while ((reps + 1) * p <= sigs.length) {

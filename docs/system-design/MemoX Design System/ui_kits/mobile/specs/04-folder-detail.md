@@ -38,14 +38,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x5(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
+    - span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - card [22,123 362x139] r:12 pad:14/14 border:1px seed-indigo@18
       - div [37,138 332x57] flex:row gap:14 align:center
@@ -162,17 +162,16 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - icon-btn flex:row justify:center align:center r:999
   ...
   - icon:more-vertical
-- - scroll-x flex:row gap:4 align:center repeat:x5(unit=1) pad:2/14
+- - scroll-x flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14
 - - item[1] span "Library" font:11/500 color:on-surface-variant
-- - item[2] span flex:row
+- - span flex:row
 - - icon:chevron-right
-- - item[3] span "Korean" font:11/500 color:on-surface-variant
-- - item[4] span flex:row
+- - item[2] span "Korean" font:11/500 color:on-surface-variant
 + - scroll-x flex:row gap:4 align:center pad:2/14
 + - span "Library" font:11/500 color:on-surface-variant
-+ - span flex:row
+  - span flex:row
   - icon:chevron-right
-- - item[5] span "TOPIK II" font:11/700 color:font-headline
+- - span "TOPIK II" font:11/700 color:font-headline
 + - span "Korean" font:11/700 color:font-headline
   - scroll pad:0/14
 - - card r:12 pad:14/14 border:1px seed-indigo@18
@@ -312,14 +311,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x5(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
+    - span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
   - div [22,129 362x371]
     - div "Empty folder" [22,129 130x25] flex:row gap:8 align:center bg:seed-indigo@8 font:11/700 color:seed-indigo r:999 pad:6/10
       - span [32,136 12x12] flex:row
@@ -460,14 +459,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x5(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
+    - span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - card [22,123 362x62] grid cols:3 gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
       - span [37,136 36x36] bg:surface-container-high r:10 op:0.55
@@ -509,14 +508,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
       - span [362,66 20x20] flex:row
         - icon:more-vertical [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x5(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
+    - span "TOPIK II" [137,102 42x13] font:11/700 color:font-headline
   - card [22,131 362x271] bg:on-primary r:12 pad:40/22 border:1px seed-indigo@14
     - div [177,172 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
       - span [192,187 22x22] flex:row
@@ -576,13 +575,13 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - div pad:4/18
 + - div "Move "TOPIK II" to…" font:16/700 color:font-headline
 + - div "Pick a parent folder. All decks and cards inside come along." font:12/400/18 color:on-surface-variant
-+ - div flex:row wrap gap:6 align:center repeat:x4(unit=1) bg:on-primary r:10 pad:10/12
++ - div flex:row wrap gap:6 align:center repeat:x2(unit=2) bg:on-primary r:10 pad:10/12
 + - item[1] span flex:row
 + - icon:folder
-+ - item[2] span "Library" font:12/400 color:on-surface-variant
-+ - item[3] span flex:row
++ - span "Library" font:12/400 color:on-surface-variant
++ - item[2] span flex:row
 + - icon:chevron-right
-+ - item[4] span "Korean" font:12/700 color:font-headline
++ - span "Korean" font:12/700 color:font-headline
 + - hide-scroll repeat:x5(unit=1) pad:0/8
 + - item[1] button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:8

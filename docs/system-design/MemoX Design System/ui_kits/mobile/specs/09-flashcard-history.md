@@ -38,17 +38,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
     - pill-btn "Edit" [326,60 64x32] flex:row gap:5 justify:center align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:9 pad:0/12
       - span [338,70 12x12] flex:row
         - icon:pencil [338,70 12x12]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - item[6] span [231,103 12x12] flex:row
+    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
+    - span [231,103 12x12] flex:row
       - icon:chevron-right [231,103 12x12]
-    - item[7] span "History" [247,102 39x13] font:11/700 color:font-headline
+    - span "History" [247,102 39x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - card [22,123 362x72] grid cols:2 gap:12 align:center bg:on-primary r:12 pad:14/16 border:1px seed-indigo@14
       - div [39,138 237x42]
@@ -119,8 +119,8 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
           - icon:filter [286,454 11x11]
         - span [359,454 11x11] flex:row
           - icon:chevron-down [359,454 11x11]
-    - div [22,482 362x850] pad:0/24
-      - div [33,490 2x834] bg:surface-container r:999
+    - div [22,482 362x850] repeat:x5(unit=2) pad:0/24
+      - item[1] div [33,490 2x834] bg:surface-container r:999
       - div [46,482 338x100]
         - span [27,490 14x14] bg:surface r:999 border:3px seed-indigo
         - div [46,482 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
@@ -145,7 +145,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
             - span "1.4s" [172,556 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
               - span [172,557 10x10] flex:row
                 - icon:timer [172,557 10x10]
-      - div [46,594 338x100]
+      - item[2] div [46,594 338x100]
         - span [27,602 14x14] bg:surface r:999 border:3px streak
         - div [46,594 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
           - div [61,607 308x26] flex:row gap:8 justify:between align:center
@@ -193,7 +193,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
             - span "6.8s" [172,780 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
               - span [172,781 10x10] flex:row
                 - icon:timer [172,781 10x10]
-      - div [46,818 338x79]
+      - item[3] div [46,818 338x79]
         - span [27,826 14x14] bg:surface r:999 border:3px on-surface-variant
         - div [46,818 338x79] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
           - div [61,831 308x26] flex:row gap:8 justify:between align:center
@@ -228,7 +228,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
             - span "0.9s" [173,982 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
               - span [173,984 10x10] flex:row
                 - icon:timer [173,984 10x10]
-      - div [46,1020 338x100]
+      - item[4] div [46,1020 338x100]
         - span [27,1028 14x14] bg:surface r:999 border:3px seed-indigo
         - div [46,1020 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
           - div [61,1033 308x26] flex:row gap:8 justify:between align:center
@@ -263,7 +263,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
               - div "13 days ago" [305,1145 64x13] font:11/600 color:font-headline
               - div "May 14, 22:08" [305,1159 64x12] font:10/400 color:on-surface-variant op:0.7
           - div "Pronunciation recorded" [61,1179 308x19] font:13/400/19 color:font-headline
-      - div [46,1223 338x79]
+      - item[5] div [46,1223 338x79]
         - span [27,1231 14x14] bg:surface r:999 border:3px mastery
         - div [46,1223 338x79] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
           - div [61,1236 308x26] flex:row gap:8 justify:between align:center
@@ -296,8 +296,8 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - pill-btn "Study this card now" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
   - span flex:row
 - - icon:chevron-down
-- - div pad:0/24
-- - div bg:surface-container r:999
+- - div repeat:x5(unit=2) pad:0/24
+- - item[1] div bg:surface-container r:999
 - - div
 - - span bg:surface r:999 border:3px seed-indigo
 - - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
@@ -322,7 +322,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - span "1.4s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:timer
-- - div
+- - item[2] div
 - - span bg:surface r:999 border:3px streak
 - - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
 - - div flex:row gap:8 justify:between align:center
@@ -370,7 +370,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - span "6.8s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:timer
-- - div
+- - item[3] div
 - - span bg:surface r:999 border:3px on-surface-variant
 - - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
 - - div flex:row gap:8 justify:between align:center
@@ -405,7 +405,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - span "0.9s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:timer
-- - div
+- - item[4] div
 - - span bg:surface r:999 border:3px seed-indigo
 - - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
 - - div flex:row gap:8 justify:between align:center
@@ -440,7 +440,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div "13 days ago" font:11/600 color:font-headline
 - - div "May 14, 22:08" font:10/400 color:on-surface-variant op:0.7
 - - div "Pronunciation recorded" font:13/400/19 color:font-headline
-- - div
+- - item[5] div
 - - span bg:surface r:999 border:3px mastery
 - - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
 - - div flex:row gap:8 justify:between align:center
@@ -472,17 +472,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - span [24,66 20x20] flex:row
         - icon:arrow-left [24,66 20x20]
     - title "Card history" [60,66 330x21] font:16/700 color:font-headline
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - item[6] span [231,103 12x12] flex:row
+    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
+    - span [231,103 12x12] flex:row
       - icon:chevron-right [231,103 12x12]
-    - item[7] span "History" [247,102 39x13] font:11/700 color:font-headline
+    - span "History" [247,102 39x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - card [22,123 362x65] grid cols:2 gap:12 align:center bg:on-primary r:12 pad:14/16 border:1px seed-indigo@14
       - div [39,138 316x35]
@@ -533,17 +533,17 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - span [24,66 20x20] flex:row
         - icon:arrow-left [24,66 20x20]
     - title "Card history" [60,66 330x21] font:16/700 color:font-headline
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x7(unit=1) pad:2/14
+  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
     - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - item[2] span [63,103 12x12] flex:row
+    - span [63,103 12x12] flex:row
       - icon:chevron-right [63,103 12x12]
-    - item[3] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - item[4] span [121,103 12x12] flex:row
+    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
+    - span [121,103 12x12] flex:row
       - icon:chevron-right [121,103 12x12]
-    - item[5] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - item[6] span [231,103 12x12] flex:row
+    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
+    - span [231,103 12x12] flex:row
       - icon:chevron-right [231,103 12x12]
-    - item[7] span "History" [247,102 39x13] font:11/700 color:font-headline
+    - span "History" [247,102 39x13] font:11/700 color:font-headline
   - scroll [8,123 390x665] pad:0/14
     - card [22,123 362x72] grid cols:2 gap:12 align:center bg:on-primary r:12 pad:14/16 border:1px seed-indigo@14
       - div [39,138 237x42]
@@ -566,12 +566,24 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ## State: Partial (ordered diff vs Loaded)
 
 ```diff
+  - icon:chevron-down
+- - div repeat:x5(unit=2) pad:0/24
++ - div repeat:x3(unit=3) pad:0/24
+  - item[1] div bg:surface-container r:999
+  ...
+  - icon:timer
+- - item[2] div
++ - div
+  - span bg:surface r:999 border:3px streak
+  ...
   - icon:layers
 - - span "4.2s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:timer
+- - div
 + - span "duration not logged" font:11/400 color:on-surface-variant op:0.7
-  - div
++ - item[2] div
+  - span bg:surface r:999 border:3px error
   ...
   - div "May 25, 21:48" font:10/400 color:on-surface-variant op:0.7
 - - div "Couldn’t recall — reset to box 1" font:13/400/19 color:font-headline
@@ -584,6 +596,21 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - icon:arrow-left
 - - span "B1" font:11/700 color:error
   - span "Recall" flex:row gap:4 align:center font:11/400 color:on-surface-variant
+  ...
+  - icon:timer
+- - item[3] div
++ - div
+  - span bg:surface r:999 border:3px on-surface-variant
+  ...
+  - icon:timer
+- - item[4] div
++ - item[3] div
+  - span bg:surface r:999 border:3px seed-indigo
+  ...
+  - div "Pronunciation recorded" font:13/400/19 color:font-headline
+- - item[5] div
++ - div
+  - span bg:surface r:999 border:3px mastery
   ...
   - div "Card added to TOPIK II — Vocab" font:13/400/19 color:font-headline
 - - div

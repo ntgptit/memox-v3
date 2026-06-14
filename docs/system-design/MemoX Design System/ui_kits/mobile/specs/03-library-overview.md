@@ -61,12 +61,12 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - div [37,303 44x44] flex:row justify:center align:center bg:seed-indigo@12 r:12
         - span [49,315 20x20] flex:row
           - icon:flag [49,315 20x20]
-      - div [99,289 232x71] repeat:x4(unit=1)
+      - div [99,289 232x71] repeat:x2(unit=2)
         - item[1] div [99,289 232x22] flex:row gap:8 justify:between align:baseline
           - div "Korean" [99,289 51x19] font:15/700 color:font-headline
           - span "23 due" [284,291 47x20] flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-        - item[2] div "TOPIK · Hangul · grammar" [99,313 232x13] font:11/400 color:on-surface-variant
-        - item[3] div [99,334 232x13] flex:row gap:10 align:center
+        - div "TOPIK · Hangul · grammar" [99,313 232x13] font:11/400 color:on-surface-variant
+        - item[2] div [99,334 232x13] flex:row gap:10 align:center
           - span "8 decks" [99,334 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
             - span [99,335 11x11] flex:row
               - icon:layers [99,335 11x11]
@@ -75,7 +75,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
               - icon:copy [165,335 11x11]
           - span "6 new" [241,334 40x13] flex:row gap:4 align:center font:11/400 color:mastery
             - status-dot [241,338 6x6] bg:mastery r:999
-        - item[4] div [99,355 232x5] bg:surface-container r:999
+        - div [99,355 232x5] bg:surface-container r:999
           - div [99,355 144x5] bg:seed-indigo r:999
       - icon-btn [345,311 28x28] flex:row justify:center align:center r:999
         - span [349,315 20x20] flex:row
@@ -84,18 +84,18 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - div [37,412 44x44] flex:row justify:center align:center bg:success@12 r:12
         - span [49,424 20x20] flex:row
           - icon:flag [49,424 20x20]
-      - div [99,400 232x68] repeat:x4(unit=1)
+      - div [99,400 232x68] repeat:x2(unit=2)
         - item[1] div [99,400 232x19] flex:row gap:8 justify:between align:baseline
           - div "Japanese" [99,400 67x19] font:15/700 color:font-headline
-        - item[2] div "Genki · kana · kanji" [99,421 232x13] font:11/400 color:on-surface-variant
-        - item[3] div [99,442 232x13] flex:row gap:10 align:center
+        - div "Genki · kana · kanji" [99,421 232x13] font:11/400 color:on-surface-variant
+        - item[2] div [99,442 232x13] flex:row gap:10 align:center
           - span "5 decks" [99,442 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
             - span [99,443 11x11] flex:row
               - icon:layers [99,443 11x11]
           - span "248 cards" [165,442 66x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
             - span [165,443 11x11] flex:row
               - icon:copy [165,443 11x11]
-        - item[4] div [99,463 232x5] bg:surface-container r:999
+        - div [99,463 232x5] bg:surface-container r:999
           - div [99,463 95x5] bg:seed-indigo r:999
       - icon-btn [345,420 28x28] flex:row justify:center align:center r:999
         - span [349,424 20x20] flex:row
@@ -104,12 +104,12 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - div [37,522 44x44] flex:row justify:center align:center bg:warning@12 r:12
         - span [49,534 20x20] flex:row
           - icon:flag [49,534 20x20]
-      - div [99,508 232x71] repeat:x4(unit=1)
+      - div [99,508 232x71] repeat:x2(unit=2)
         - item[1] div [99,508 232x22] flex:row gap:8 justify:between align:baseline
           - div "Mandarin" [99,508 66x19] font:15/700 color:font-headline
           - span "48 due" [284,510 47x20] flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-        - item[2] div "HSK 1–3" [99,532 232x13] font:11/400 color:on-surface-variant
-        - item[3] div [99,553 232x13] flex:row gap:10 align:center
+        - div "HSK 1–3" [99,532 232x13] font:11/400 color:on-surface-variant
+        - item[2] div [99,553 232x13] flex:row gap:10 align:center
           - span "3 decks" [99,553 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
             - span [99,554 11x11] flex:row
               - icon:layers [99,554 11x11]
@@ -118,7 +118,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
               - icon:copy [165,554 11x11]
           - span "12 new" [241,553 47x13] flex:row gap:4 align:center font:11/400 color:mastery
             - status-dot [241,557 6x6] bg:mastery r:999
-        - item[4] div [99,574 232x5] bg:surface-container r:999
+        - div [99,574 232x5] bg:surface-container r:999
           - div [99,574 42x5] bg:warning r:999
       - icon-btn [345,530 28x28] flex:row justify:center align:center r:999
         - span [349,534 20x20] flex:row
@@ -127,19 +127,19 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - div [37,633 44x44] flex:row justify:center align:center bg:accent@12 r:12
         - span [49,645 20x20] flex:row
           - icon:book-open [49,645 20x20]
-      - div [99,619 232x71] repeat:x4(unit=1)
+      - div [99,619 232x71] repeat:x2(unit=2)
         - item[1] div [99,619 232x22] flex:row gap:8 justify:between align:baseline
           - div "Hanja & roots" [99,619 95x19] font:15/700 color:font-headline
           - span "6 due" [290,621 41x20] flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-        - item[2] div "Sino-Korean character roots" [99,643 232x13] font:11/400 color:on-surface-variant
-        - item[3] div [99,664 232x13] flex:row gap:10 align:center
+        - div "Sino-Korean character roots" [99,643 232x13] font:11/400 color:on-surface-variant
+        - item[2] div [99,664 232x13] flex:row gap:10 align:center
           - span "2 decks" [99,664 56x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
             - span [99,665 11x11] flex:row
               - icon:layers [99,665 11x11]
           - span "64 cards" [165,664 60x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
             - span [165,665 11x11] flex:row
               - icon:copy [165,665 11x11]
-        - item[4] div [99,685 232x5] bg:surface-container r:999
+        - div [99,685 232x5] bg:surface-container r:999
           - div [99,685 204x5] bg:mastery r:999
       - icon-btn [345,641 28x28] flex:row justify:center align:center r:999
         - span [349,645 20x20] flex:row
@@ -191,12 +191,12 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:seed-indigo@12 r:12
 - - span flex:row
 - - icon:flag
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Korean" font:15/700 color:font-headline
 - - span "23 due" flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-- - item[2] div "TOPIK · Hangul · grammar" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "TOPIK · Hangul · grammar" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "8 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
@@ -205,7 +205,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - icon:copy
 - - span "6 new" flex:row gap:4 align:center font:11/400 color:mastery
 - - status-dot bg:mastery r:999
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:seed-indigo r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -214,18 +214,18 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:success@12 r:12
 - - span flex:row
 - - icon:flag
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Japanese" font:15/700 color:font-headline
-- - item[2] div "Genki · kana · kanji" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "Genki · kana · kanji" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "5 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
 - - span "248 cards" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:copy
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:seed-indigo r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -234,12 +234,12 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:warning@12 r:12
 - - span flex:row
 - - icon:flag
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Mandarin" font:15/700 color:font-headline
 - - span "48 due" flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-- - item[2] div "HSK 1–3" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "HSK 1–3" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "3 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
@@ -248,7 +248,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - icon:copy
 - - span "12 new" flex:row gap:4 align:center font:11/400 color:mastery
 - - status-dot bg:mastery r:999
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:warning r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -257,19 +257,19 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:accent@12 r:12
 - - span flex:row
 - - icon:book-open
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Hanja & roots" font:15/700 color:font-headline
 - - span "6 due" flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-- - item[2] div "Sino-Korean character roots" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "Sino-Korean character roots" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "2 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
 - - span "64 cards" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:copy
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:mastery r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -336,12 +336,12 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:seed-indigo@12 r:12
 - - span flex:row
 - - icon:flag
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Korean" font:15/700 color:font-headline
 - - span "23 due" flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-- - item[2] div "TOPIK · Hangul · grammar" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "TOPIK · Hangul · grammar" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "8 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
@@ -350,7 +350,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - icon:copy
 - - span "6 new" flex:row gap:4 align:center font:11/400 color:mastery
 - - status-dot bg:mastery r:999
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:seed-indigo r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -359,18 +359,18 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:success@12 r:12
 - - span flex:row
 - - icon:flag
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Japanese" font:15/700 color:font-headline
-- - item[2] div "Genki · kana · kanji" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "Genki · kana · kanji" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "5 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
 - - span "248 cards" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:copy
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:seed-indigo r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -379,12 +379,12 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:warning@12 r:12
 - - span flex:row
 - - icon:flag
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Mandarin" font:15/700 color:font-headline
 - - span "48 due" flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-- - item[2] div "HSK 1–3" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "HSK 1–3" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "3 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
@@ -393,7 +393,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - icon:copy
 - - span "12 new" flex:row gap:4 align:center font:11/400 color:mastery
 - - status-dot bg:mastery r:999
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:warning r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -402,19 +402,19 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - div flex:row justify:center align:center bg:accent@12 r:12
 - - span flex:row
 - - icon:book-open
-- - div repeat:x4(unit=1)
+- - div repeat:x2(unit=2)
 - - item[1] div flex:row gap:8 justify:between align:baseline
 - - div "Hanja & roots" font:15/700 color:font-headline
 - - span "6 due" flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-- - item[2] div "Sino-Korean character roots" font:11/400 color:on-surface-variant
-- - item[3] div flex:row gap:10 align:center
+- - div "Sino-Korean character roots" font:11/400 color:on-surface-variant
+- - item[2] div flex:row gap:10 align:center
 - - span "2 decks" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:layers
 - - span "64 cards" flex:row gap:4 align:center font:11/400 color:on-surface-variant
 - - span flex:row
 - - icon:copy
-- - item[4] div bg:surface-container r:999
+- - div bg:surface-container r:999
 - - div bg:mastery r:999
 - - icon-btn flex:row justify:center align:center r:999
 - - span flex:row
@@ -528,8 +528,8 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 - - span flex:row
 - - icon:folder-plus
 + - div bg:#191c1e@45
-+ - div bg:surface-container-high r:20 shadow:-10/30
-+ - div flex:row justify:center pad:8/0
++ - div repeat:x2(unit=2) bg:surface-container-high r:20 shadow:-10/30
++ - item[1] div flex:row justify:center pad:8/0
 + - span bg:outline-variant r:999
 + - div flex:row gap:12 align:center pad:6/16
 + - div flex:row justify:center align:center bg:seed-indigo@12 r:10
@@ -538,7 +538,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - div
 + - div "Korean" font:14/700 color:font-headline
 + - div "8 decks · 412 cards" font:11/400 color:on-surface-variant
-+ - div repeat:x5+(unit=1) pad:6/8
++ - item[2] div repeat:x2+(unit=2) pad:6/8
 + - item[1] button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
@@ -546,7 +546,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - div "Open folder" font:14/600 color:font-headline
 + - span flex:row
 + - icon:chevron-right
-+ - item[2] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:play
@@ -555,21 +555,21 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - div "23 cards waiting" font:11/400 color:on-surface-variant
 + - span flex:row
 + - icon:chevron-right
-+ - item[3] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - item[2] button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:pencil
 + - div "Rename folder" font:14/600 color:font-headline
 + - span flex:row
 + - icon:chevron-right
-+ - item[4] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:folder-tree
 + - div "Move folder" font:14/600 color:font-headline
 + - span flex:row
 + - icon:chevron-right
-+ - item[5] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:archive
@@ -614,15 +614,15 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - span bg:seed-indigo
 + - item[3] div pad:12/18
 + - ov "Color" font:11/700 color:on-surface-variant
-+ - div flex:row gap:10 repeat:x6(unit=1)
++ - div flex:row gap:10 repeat:x3(unit=2)
 + - item[1] span flex:row justify:center align:center bg:seed-indigo r:999 shadow:0/0
 + - span flex:row
 + - icon:check
-+ - item[2] span flex:row justify:center align:center bg:seed-violet r:999
-+ - item[3] span flex:row justify:center align:center bg:seed-teal r:999
-+ - item[4] span flex:row justify:center align:center bg:seed-rose r:999
-+ - item[5] span flex:row justify:center align:center bg:seed-amber r:999
-+ - item[6] span flex:row justify:center align:center bg:seed-sage r:999
++ - span flex:row justify:center align:center bg:seed-violet r:999
++ - item[2] span flex:row justify:center align:center bg:seed-teal r:999
++ - span flex:row justify:center align:center bg:seed-rose r:999
++ - item[3] span flex:row justify:center align:center bg:seed-amber r:999
++ - span flex:row justify:center align:center bg:seed-sage r:999
 + - item[4] div pad:12/18
 + - ov "Icon" font:11/700 color:on-surface-variant
 + - div flex:row gap:8 repeat:x5(unit=1)

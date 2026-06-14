@@ -309,7 +309,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - icon:tag
 + - span "· 46" font:10/700 color:seed-indigo op:0.7
 + - div "Tag actions" font:11/400 color:on-surface-variant pad:0/2
-+ - div repeat:x4+(unit=1) pad:6/8
++ - div repeat:x2+(unit=2) pad:6/8
 + - item[1] button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
@@ -319,7 +319,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - div "Start a session with the 46 cards" font:11/400 color:on-surface-variant
 + - span flex:row
 + - icon:chevron-right
-+ - item[2] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:list
@@ -328,14 +328,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 + - div "Open the global tag-filtered list" font:11/400 color:on-surface-variant
 + - span flex:row
 + - icon:chevron-right
-+ - item[3] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - item[2] button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:pencil
 + - div "Rename tag" font:14/600 color:font-headline
 + - span flex:row
 + - icon:chevron-right
-+ - item[4] button grid cols:3 gap:12 align:center r:10 pad:12/10
++ - button grid cols:3 gap:12 align:center r:10 pad:12/10
 + - div flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span flex:row
 + - icon:git-merge

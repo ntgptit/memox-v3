@@ -36,14 +36,14 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
       - span [362,66 20x20] flex:row
         - icon:share-2 [362,66 20x20]
   - scroll [8,100 390x601] repeat:x4+(unit=2) pad:0/14
-    - item[1] card [22,100 362x227] repeat:x4(unit=1) r:12 pad:24/22 border:1px mastery@22
+    - item[1] card [22,100 362x227] repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
       - item[1] div [173,125 60x60] flex:row justify:center align:center bg:mastery@16 r:18
         - span [189,141 28x28] flex:row
           - icon:check-circle-2 [189,141 28x28]
-      - item[2] div "Nice session." [45,199 316x25] font:22/700/25 color:font-headline
-      - item[3] div "You worked through in TOPIK II — Vocab." [45,230 316x20] font:13/400/20 color:on-surface-variant
+      - div "Nice session." [45,199 316x25] font:22/700/25 color:font-headline
+      - item[2] div "You worked through in TOPIK II — Vocab." [45,230 316x20] font:13/400/20 color:on-surface-variant
         - strong "20 cards" [177,232 55x16] font:13/700/20 color:font-headline
-      - item[4] div [45,266 316x40] flex:row gap:10 pad:0/6
+      - div [45,266 316x40] flex:row gap:10 pad:0/6
         - div [51,266 95x40]
           - div "20" [51,266 95x28] font:22/700 color:font-headline
           - div "Reviewed" [51,294 95x12] font:10/700 color:on-surface-variant
@@ -199,7 +199,7 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
   - icon:share-2
 - - scroll repeat:x4+(unit=2) pad:0/14
 + - scroll repeat:x3+(unit=2) pad:0/14
-  - item[1] card repeat:x4(unit=1) r:12 pad:24/22 border:1px mastery@22
+  - item[1] card repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
   ...
   - div "3" font:16/700 color:font-headline
 - - ov "Streak and goal" font:11/700 color:on-surface-variant pad:0/4
@@ -232,9 +232,9 @@ illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `
 ```diff
   - icon:share-2
 - - scroll repeat:x4+(unit=2) pad:0/14
-- - item[1] card repeat:x4(unit=1) r:12 pad:24/22 border:1px mastery@22
+- - item[1] card repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
 + - scroll pad:0/14
-+ - card repeat:x4(unit=1) r:12 pad:24/22 border:1px mastery@22
++ - card repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
   - item[1] div flex:row justify:center align:center bg:mastery@16 r:18
   ...
   - div "Accuracy" font:10/700 color:on-surface-variant
