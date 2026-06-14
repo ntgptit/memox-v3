@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Floating action button wrapper — regular or extended (labelled pill).
+/// Floating action button wrapper — minimal icon-only FAB.
 ///
 /// Feature code must not use raw `FloatingActionButton`
 /// (`memox.design_system.no_raw_fab`); compose this instead. Styling
@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 ///
 /// Public API:
 /// - icon: public content.
-/// - label: public content.
+/// - label: accessibility hint / tooltip text.
 /// - onPressed: callback.
 /// - tooltip: public property.
 /// - heroTag: public property.
@@ -51,20 +51,12 @@ class MxFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (label == null) {
-      return FloatingActionButton(
-        onPressed: onPressed,
-        tooltip: tooltip,
-        heroTag: heroTag,
-        child: Icon(icon),
-      );
-    }
-    return FloatingActionButton.extended(
+    final String? resolvedTooltip = tooltip ?? label;
+    return FloatingActionButton(
       onPressed: onPressed,
-      tooltip: tooltip,
+      tooltip: resolvedTooltip,
       heroTag: heroTag,
-      icon: Icon(icon),
-      label: Text(label!),
+      child: Icon(icon),
     );
   }
 }

@@ -84,9 +84,9 @@ study UI.
 - Per-folder / per-deck mastery ring & "{n} new" / fresh counts (no mastery read model).
 - Folder-level Today CTA and the Resume banner (study layer not built).
 - Global Search route, Flashcard History, tag-scoped study, root-level decks.
-- The decks-mode FAB stays `New deck` (not the mock's `New card`): creating a
-  card needs a specific `deckId` and decks mode has many decks, so auto-picking
-  is unsafe and not an approved flow.
+- The decks-mode FAB stays a minimal icon button with `New deck` tooltip (not the mock's `New card`):
+  creating a card needs a specific `deckId` and decks mode has many decks, so auto-picking is unsafe
+  and not an approved flow.
 
 ## Purpose
 
@@ -226,7 +226,7 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 | Today CTA                       | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Subfolder row (subfolders mode) | Folder icon + name + optional `{m} due` badge + `{n} decks · {c} cards` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                                |
 | Deck row (decks mode)           | Icon + name + optional "{m} due" badge + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
-| FAB                             | **Current.** Plus button. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                                                           |
+| FAB                             | **Current.** Plus icon button with mode-specific tooltip. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                 |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
 | Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Search opens a controlled sheet; sort opens a controlled picker with only `manual`, `name`, and `newest`. Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`), and unsupported values normalize back to `manual`. |
 
@@ -253,7 +253,7 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 | Tap "Study folder"        | Tap        | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                       |
 | Tap "Today (n)"           | Tap        | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                       |
 | Tap resume banner         | Tap        | **Future.** Study layer not built.                                                                                                                                                                                                          |
-| Tap FAB                   | Tap        | **Current.** Action depends on `content_mode`: New subfolder dialog (subfolders) OR New deck dialog (decks) OR the dual-CTA picker in the unlocked body.                                                                                      |
+| Tap FAB                   | Tap        | **Current.** Action depends on `content_mode`: New subfolder dialog (subfolders) OR New deck dialog (decks) OR the dual-CTA picker in the unlocked body. The FAB itself is icon-only; the tooltip/semantics carry the mode label.                                                                                  |
 | Tap overflow ⋮            | Tap        | **Current.** Opens the folder action sheet for the current folder: Rename / Move / Delete (reuses the Library folder action flow). Import hidden; Sort by is Future.                                                                          |
 
 ## Dialogs and bottom-sheets used
@@ -298,7 +298,7 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 ## Rules
 
 - Folder shows EITHER subfolders OR decks based on `content_mode`. Never mixed.
-- FAB action constrained by `content_mode`.
+- FAB action constrained by `content_mode`; the visible FAB remains icon-only.
 - Creating the first child in `unlocked` mode locks the folder to the corresponding mode.
 - If a stale UI path or concurrent update attempts the incompatible action, the operation is
   rejected and the screen shows a localized snackbar, not a generic error:
@@ -313,7 +313,7 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 
 ## Agent rule
 
-- Do NOT show both "New subfolder" and "New deck" in a locked folder's FAB.
+- Do NOT show both "New subfolder" and "New deck" as visible FAB text in a locked folder.
 - Do NOT navigate user past mode-lock without explicit choice in unlocked mode.
 - Breadcrumb MUST not become so long it overlaps title; truncate middle segments with ellipsis
   past ~3 levels.

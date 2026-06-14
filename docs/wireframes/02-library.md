@@ -51,7 +51,7 @@ presentation-only:
 - A **due summary card** (`{n} cards due today`) is rendered when `dueToday > 0` and hidden
   otherwise. It includes a subtitle derived from the aggregate model (`Across {n} folders · ~{m}
   min`) and a chevron; the card itself is non-interactive and there is no study-launch navigation.
-- The FAB is now a labelled **`New folder` pill** wired to the existing create-folder flow. **New
+- The FAB is now a minimal **icon button** with a `New folder` tooltip wired to the existing create-folder flow. **New
   deck / Import are not exposed** from Library root.
 
 **Overflow sheet — now Current (2026-06-06, Prompt 49D — 6-state parity completion):** the folder
@@ -132,8 +132,8 @@ is not exposed and the archive confirm dialog is not reachable.
 - Due summary card (Prompt 49B): rendered when `dueToday > 0` (`libraryDueSummaryTitle` plus
   `libraryDueSummarySubtitle`), hidden otherwise. Non-interactive — the subtitle is derived from
   the aggregate model, the card shows a chevron, and there is no study-launch.
-- Create folder: FAB is a labelled **`New folder` pill** (`MxFab` extended,
-  `Icons.create_new_folder_outlined`, `libraryNewFolderLabel`); the empty-state CTA and the pill
+- Create folder: FAB is a minimal **icon button** (`MxFab`,
+  `Icons.create_new_folder_outlined`, `libraryNewFolderLabel` as tooltip); the empty-state CTA and the icon
   both open `showMxFolderCreateDialog` → `createFolderUseCase.createRoot`. Blank name rejected by dialog;
   direct mutation failures map to a localized error snackbar. If the create mutation commits but the
   retained library query refresh fails, the previous list remains visible and a localized error
@@ -343,7 +343,7 @@ Sort preference persists per user via SharedPreferences (key `library.sort`).
 ## Accessibility
 
 - Item rows: announce "{Folder|Deck} {name}, {subtitle}".
-- FAB labeled "Add content".
+- FAB icon button with `Add content` tooltip.
 - Filter chips selectable via keyboard nav on tablet.
 
 ## Rules

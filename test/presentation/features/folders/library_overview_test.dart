@@ -812,10 +812,8 @@ void main() {
     ) async {
       await pumpLoaded(tester);
 
-      expect(
-        find.widgetWithText(FloatingActionButton, 'New folder'),
-        findsOneWidget,
-      );
+      expect(find.byTooltip('New folder'), findsOneWidget);
+      expect(find.text('New folder'), findsNothing);
     });
 
     testWidgets('New folder FAB opens the create-folder dialog', (
@@ -823,7 +821,7 @@ void main() {
     ) async {
       await pumpLoaded(tester);
 
-      await tester.tap(find.widgetWithText(FloatingActionButton, 'New folder'));
+      await tester.tap(find.byTooltip('New folder'));
       await tester.pumpAndSettle();
 
       // The dialog's unique description distinguishes it from the FAB label.

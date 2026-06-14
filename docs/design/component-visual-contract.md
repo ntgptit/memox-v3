@@ -22,7 +22,7 @@ theme tokens, l10n, and route contracts.
 | Row/card tap target | `MxTappable` through shared surfaces | Raw `InkWell` / `GestureDetector` |
 | Icon tile | `MxIconTile` | Custom repeated icon box |
 | Section header | `MxSectionHeader` | Hand-rolled all-caps text |
-| FAB | `MxFab` / `MxFab.extended` | Raw `FloatingActionButton` |
+| FAB | `MxFab` (icon-only; label becomes tooltip) | Raw `FloatingActionButton` |
 | Text with role | `MxText` | Raw `Text` where role, token, or contrast matters |
 | Empty state | `MxEmptyState` | Custom empty-state layout |
 | Error state | `MxErrorState` | Raw exception text or one-off error card |
