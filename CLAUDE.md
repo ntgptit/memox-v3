@@ -2,7 +2,6 @@
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
-
 Local-first Flutter flashcard app.
 
 `docs/` là **source of truth** cho behavior, schema, routes, UI contract. Khi `docs/` và code mâu thuẫn, KHÔNG tự chọn. Report mismatch hoặc update cả hai trong cùng commit.
@@ -95,6 +94,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
 
 1. **Dừng lại.** Không continue task.
 2. Report drift cho user với format:
+
    ```
    DRIFT DETECTED:
    - File code: lib/...
@@ -102,6 +102,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
    - Mismatch: {mô tả cụ thể}
    - Suggested fix: {update doc / update code / cần user quyết định}
    ```
+
 3. Chờ user xác nhận hướng xử lý trước khi continue.
 
 Đây là cách duy nhất để drift không tích lũy.
@@ -109,6 +110,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
 ## Required reading by task
 
 **Universal additions (apply to every task):**
+
 - `docs/contracts/error-contract.md` (Failure taxonomy)
 - `docs/contracts/types-catalog.md` (enums, value objects)
 - `docs/contracts/code-style.md` (naming, structure)
@@ -229,10 +231,10 @@ Before coding any UI screen:
 2. Identify the exact target screen/route/component.
 3. Create a short mapping table before implementation:
 
-   * Mock element
-   * Existing code/component
-   * Implementation plan
-   * Scope status: Current / Future / Rejected / Unknown
+   - Mock element
+   - Existing code/component
+   - Implementation plan
+   - Scope status: Current / Future / Rejected / Unknown
 4. Map every state variant from `shots/INDEX.md` for the screen to a row in the screen's state
    handling (or explicitly mark it Future/Rejected/out-of-scope). A state that exists in the kit
    but is silently missing from the implementation plan is a parity failure.
@@ -240,61 +242,74 @@ Before coding any UI screen:
 
 Implementation rules:
 
-* Match layout, spacing, hierarchy, density, typography, colors, icons, states, and component behavior as closely as the current design system allows.
-* Use existing design tokens and shared components first.
-* Do not hardcode raw colors, spacing, radius, or typography inside feature widgets unless the design system explicitly allows it.
-* Do not invent unsupported behavior just to visually match the mock.
-* Do not silently skip visible mock elements.
-* Do not replace a visible mock element with a different UI pattern unless there is a documented reason.
-* Do not expose Future/Rejected features from docs just because they appear in an old mock.
-* If the mock and documentation conflict, stop and document the conflict instead of guessing.
+- Match layout, spacing, hierarchy, density, typography, colors, icons, states, and component behavior as closely as the current design system allows.
+- Use existing design tokens and shared components first.
+- Do not hardcode raw colors, spacing, radius, or typography inside feature widgets unless the design system explicitly allows it.
+- Do not invent unsupported behavior just to visually match the mock.
+- Do not silently skip visible mock elements.
+- Do not replace a visible mock element with a different UI pattern unless there is a documented reason.
+- Do not expose Future/Rejected features from docs just because they appear in an old mock.
+- If the mock and documentation conflict, stop and document the conflict instead of guessing.
 
 Required UI parity checklist:
 Before finishing a UI task, verify (compare against the `shots/` PNGs for the screen, both
 light and dark, across ALL states in scope):
 
-* Header/app bar matches the mock.
-* Search/filter/sort controls match approved scope.
-* Cards/rows match mock structure, spacing, icon placement, badges, and trailing actions.
-* Empty/loading/error/search-no-results states remain valid.
-* Bottom navigation matches mock density and selected state.
-* FAB/button style, position, label, and prominence match the mock.
-* Light and dark mode remain readable and visually consistent.
-* No unsupported actions were introduced.
-* No existing behavior/regression was broken.
+- Header/app bar matches the mock.
+- Search/filter/sort controls match approved scope.
+- Cards/rows match mock structure, spacing, icon placement, badges, and trailing actions.
+- Empty/loading/error/search-no-results states remain valid.
+- Bottom navigation matches mock density and selected state.
+- FAB/button style, position, label, and prominence match the mock.
+- Light and dark mode remain readable and visually consistent.
+- No unsupported actions were introduced.
+- No existing behavior/regression was broken.
 
 Visual drift policy:
 
-* A screen is not complete when it only "works".
-* A screen is complete only when it passes both behavior and visual parity checks.
-* Any remaining visual gap must be listed explicitly with one of these reasons:
+- A screen is not complete when it only "works".
+- A screen is complete only when it passes both behavior and visual parity checks.
+- Any remaining visual gap must be listed explicitly with one of these reasons:
 
-  * Missing data in current read model
-  * Feature marked Future
-  * Feature marked Rejected
-  * Design token/component not available yet
-  * Mock/documentation conflict
+  - Missing data in current read model
+  - Feature marked Future
+  - Feature marked Rejected
+  - Design token/component not available yet
+  - Mock/documentation conflict
 
 Testing requirements:
 For UI changes, add or update widget tests for:
 
-* Main loaded state
-* Important row/card actions
-* Empty state
-* Loading state
-* Error state
-* Search/no-results state when applicable
-* Navigation behavior when applicable
+- Main loaded state
+- Important row/card actions
+- Empty state
+- Loading state
+- Error state
+- Search/no-results state when applicable
+- Navigation behavior when applicable
+- **A golden test per state** (`matchesGoldenFile`, light + dark, 390×780 surface).
+  `flutter analyze`, unit tests, and the guard are BLIND to spacing, padding, and
+  alignment — a golden is the only gate that catches the "keycap hugs the border /
+  card padding off by 8px" class of drift without a human eyeballing the mock.
+  Pattern: `test/presentation/features/folders/library_search_field_golden_test.dart`
+  and `.../progress/progress_screen_golden_test.dart`. Regenerate intentionally with
+  `node tool/verify/run.mjs --update-goldens --test <paths>`; NEVER `--update` just to
+  silence a diff you have not explained.
+- **Prefer killing the bug class, not the instance.** When a small visual bug comes
+  from how a shared `Mx*` widget places content (e.g. a trailing inset), push the
+  invariant INTO the shared widget + add a geometry contract test, so every consumer
+  is fixed at once and the mistake becomes unrepresentable. See
+  `docs/design/mock-to-ui-playbook.md` Phase 7.
 
 Expected final response after implementing a UI task:
 
-* Files changed
-* Mock elements mapped
-* Visual gaps fixed
-* Remaining visual gaps and reasons
-* Behavior intentionally unchanged
-* `flutter analyze` result
-* `flutter test` result
+- Files changed
+- Mock elements mapped
+- Visual gaps fixed
+- Remaining visual gaps and reasons
+- Behavior intentionally unchanged
+- `flutter analyze` result
+- `flutter test` result
 
 ## Stack reference
 

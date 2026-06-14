@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-30
+last_updated: 2026-06-15
 status: contract
 ---
 
@@ -73,15 +73,20 @@ Template for giving a coding task to an AI agent (Claude Code, Cursor, etc.). Co
 
 ## Verification
 
-Run these commands and ensure they pass:
+Run verification through the SINGLE entry (standalone `flutter analyze`/`test`,
+`dart fix`/`format`, `build_runner`, guard do NOT write the commit marker, so the
+pre-commit hook rejects the commit):
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
-dart fix --apply
-dart format .
-flutter analyze
-flutter test {targeted_test_paths}
-python code-verification-guard/guard/run.py check --project . --ruleset memox   # if guard present in repo; else skip and note in report
+node tool/verify/run.mjs --test {targeted_test_paths}
+```
+
+For UI-from-mock tasks, regenerate goldens intentionally, then prove the gate is
+real by re-running WITHOUT `--update`:
+
+```bash
+node tool/verify/run.mjs --update-goldens --test {golden_test_paths}
+node tool/verify/run.mjs --test {targeted_test_paths}   # must pass without --update
 ```
 
 For UI-touching tasks, also run a profile-mode build on Pixel 6 emulator and verify the perf budget from `docs/quality/performance-contract.md`.
@@ -101,6 +106,35 @@ report against `docs/ui-ux/action-hierarchy-contract.md`:
 - [ ] **Semantic preference** — used `MxActionButton` / `MxCardActions` rather than raw `MxPrimaryButton` / `MxSecondaryButton` where applicable.
 
 If any box cannot be ticked, stop and explain why instead of shipping.
+
+---
+
+## Visual Parity Gate (required for UI-from-mock tasks)
+
+`flutter analyze`, unit tests, and the guard are BLIND to spacing, padding, and
+alignment — they will pass while the keycap hugs the border or a card's padding is
+off by 8px. Before finishing a task that builds/changes a screen or shared widget
+from a mock, tick:
+
+- [ ] **Spec read** — read the `shots/` PNGs (light + dark, ALL states) and the
+      measured DOM spec `.../specs/NN-*.md`; map from `rel`/`flex`/`gap`/`pad`/`mx:`,
+      not absolute x/y.
+- [ ] **Golden per state** — added/updated a `matchesGoldenFile` golden for each
+      in-scope state (light + dark, 390×780); regenerated via
+      `node tool/verify/run.mjs --update-goldens --test <paths>` and confirmed it
+      passes WITHOUT `--update`. Never `--update` to silence an unexplained diff.
+- [ ] **Tokens, not kit px** — used `Mx*` components + spacing/radius/typography
+      tokens; did NOT chase sub-token kit px (e.g. an 11px icon when the smallest
+      token is 16) — that is noise, not a bug.
+- [ ] **Invariant in the shared widget** — if a layout detail belongs to a shared
+      `Mx*` widget (trailing inset, alignment), fixed it THERE + added a geometry
+      contract test, so every consumer is fixed at once.
+- [ ] **Visual gaps listed** — each unmatched mock element marked Current / Future /
+      Rejected / Missing-data / Token-missing / Mock-doc-conflict (do not silently
+      drop, and do not fake Future data such as progress/mastery/new-card).
+
+If any box cannot be ticked, stop and explain why instead of shipping.
+See `docs/design/mock-to-ui-playbook.md` (Phase 7) for the full runbook.
 
 ---
 
