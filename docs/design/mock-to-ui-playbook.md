@@ -167,6 +167,17 @@ Card History, with the fix:
 Cover every kit state from Phase 0: loading, loaded (+ ordering), empty, error,
 not-found, and any partial/variant. Plus navigation + entry route + invalid id.
 
+**Add a golden test per state** (`matchesGoldenFile`, light + dark, on a
+390×780 surface — see `test/presentation/features/progress/progress_screen_golden_test.dart`
+and the pilot `test/presentation/features/folders/library_search_field_golden_test.dart`).
+`flutter analyze` / unit tests / the guard are blind to spacing, padding, and
+alignment; a golden is the only gate that catches "the keycap hugs the border"
+class of drift without a human eyeballing the mock. Regenerate intentionally with
+`node tool/verify/run.mjs --update-goldens --test <paths>`; never `--update` to
+silence an unexplained diff. Prefer pushing layout invariants into the shared
+component (e.g. `MxSearchField` owns its trailing inset) + a geometry contract
+test, so the whole class is unrepresentable rather than re-checked per screen.
+
 > **Trap — tall screens need a real surface.** `SliverFillRemaining` empty/error
 > states get squeezed in the default 800×600 test window. Set
 > `tester.view.physicalSize`/`devicePixelRatio` to a device size and

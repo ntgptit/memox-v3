@@ -51,30 +51,24 @@ class _SearchShortcutKeycap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        // Mirror the leading search-icon inset (MxSearchField uses 14px start)
-        // so the keycap sits 14px from the right edge as the mock specifies,
-        // instead of hugging the border.
-        margin: const EdgeInsets.only(right: SpacingTokens.form),
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.xs,
-          vertical: SpacingTokens.xxs,
+    // Bare keycap: MxSearchField right-aligns and insets the trailing widget.
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.xs,
+        vertical: SpacingTokens.xxs,
+      ),
+      decoration: BoxDecoration(
+        color: scheme.onSurface.withValues(alpha: OpacityTokens.focus),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: OpacityTokens.focus),
         ),
-        decoration: BoxDecoration(
-          color: scheme.onSurface.withValues(alpha: OpacityTokens.focus),
-          border: Border.all(
-            color: scheme.outlineVariant.withValues(alpha: OpacityTokens.focus),
-          ),
-          borderRadius: RadiusTokens.brSm,
-        ),
-        child: MxText(
-          label,
-          role: MxTextRole.labelSmall,
-          color: scheme.onSurfaceVariant,
-          fontWeight: TypographyTokens.semiBold,
-        ),
+        borderRadius: RadiusTokens.brSm,
+      ),
+      child: MxText(
+        label,
+        role: MxTextRole.labelSmall,
+        color: scheme.onSurfaceVariant,
+        fontWeight: TypographyTokens.semiBold,
       ),
     );
   }

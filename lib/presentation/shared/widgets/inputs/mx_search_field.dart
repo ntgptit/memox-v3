@@ -50,6 +50,10 @@ class MxSearchField extends StatelessWidget {
 
   final TextEditingController controller;
   final String hintText;
+
+  /// Trailing widget shown only while the field is empty (e.g. a keyboard-shortcut
+  /// keycap). Pass it bare: the field right-aligns it and insets it 14px from the
+  /// edge (symmetric with the leading icon) — do not add your own `Align`/margin.
   final Widget? emptyTrailing;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onClear;
@@ -124,7 +128,21 @@ class MxSearchField extends StatelessWidget {
                         onClear?.call();
                       },
                     )
-                  : emptyTrailing,
+                  // The field owns the trailing inset: any emptyTrailing sits
+                  // 14px from the right edge, mirroring the leading icon's start
+                  // inset — so consumers pass a bare widget and cannot misalign
+                  // it against the border.
+                  : (emptyTrailing == null
+                        ? null
+                        : Padding(
+                            padding: const EdgeInsetsDirectional.only(
+                              end: _fieldHorizontalPadding,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: emptyTrailing,
+                            ),
+                          )),
               border: const OutlineInputBorder(
                 borderRadius: RadiusTokens.brMd,
                 borderSide: BorderSide.none,

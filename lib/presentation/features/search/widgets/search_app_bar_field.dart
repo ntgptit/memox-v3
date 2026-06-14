@@ -47,25 +47,23 @@ class _SearchShortcutKeycap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        width: SizeTokens.surfaceBadgeSm,
-        height: SizeTokens.surfaceBadgeSm,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: scheme.surfaceContainerHighest.withValues(alpha: 0.16),
-          borderRadius: RadiusTokens.brSm,
-          border: Border.all(
-            color: scheme.outlineVariant.withValues(alpha: 0.38),
-          ),
+    // Bare keycap: MxSearchField right-aligns and insets the trailing widget.
+    return Container(
+      width: SizeTokens.surfaceBadgeSm,
+      height: SizeTokens.surfaceBadgeSm,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.16),
+        borderRadius: RadiusTokens.brSm,
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: 0.38),
         ),
-        child: MxText(
-          String.fromCharCode(0x4B),
-          role: MxTextRole.labelSmall,
-          color: scheme.onSurfaceVariant,
-          fontWeight: TypographyTokens.bold,
-        ),
+      ),
+      child: MxText(
+        String.fromCharCode(0x4B),
+        role: MxTextRole.labelSmall,
+        color: scheme.onSurfaceVariant,
+        fontWeight: TypographyTokens.bold,
       ),
     );
   }
