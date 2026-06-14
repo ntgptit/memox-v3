@@ -389,6 +389,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `44cb1486` | 2026-06-14 | 8.6.1, 8.6.2 | Reconcile Drive sync repository/use-case contracts with the business spec (model A): DriveSyncRepository + DriveSyncRunResult, composite-string fingerprint, .zip snapshot, drop obsolete flutter_secure_storage token store (google_sign_in 7.x owns tokens), add restore-of-older-schema migration rule (SY22) + V1 no-encryption decision; fix stale 5-field manifest cross-refs. Rows stay Specified |
 | `9173a54f` | 2026-06-14 | 4.5.9 | Fill mode FE V1: typed-input study shell, strict trim-only evaluator, hint/retry/feedback affordances, and fill-mode tests/docs parity |
 | `c46900e1` | 2026-06-14 | 4.5.11 | Recall mode FE V1: dedicated timed reveal/self-grade shell, countdown token, edit-pause resume, and result navigation wiring |
 | `62752e9e` | 2026-06-14 | 7.6.1, 7.6.2, 7.6.3 | Card History activity feed (all 5 kit states): schema v7 (`study_attempts.duration_ms` + `card_events`); created/edited/reset event logging + duration capture in study viewmodel; unified attempt+lifecycle feed (full load, "Beginning of history") replacing cursor pagination; "All events" filter; partial-row + duration-not-logged affordances; resolved attempts-only→feed doc conflict; ARB/tests/docs parity |
