@@ -5,481 +5,490 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Empty
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:8 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - div [60,56 330x40] flex:row gap:8 align:center bg:on-primary r:11 pad:0/12 border:1px seed-indigo
-      - span [73,69 15x15] flex:row
-        - icon:search [73,69 15x15]
-      - span "Search library" [96,67 281x18] flex:row align:center font:14/500 color:on-surface-variant
-        - span [191,68 2x16] bg:seed-indigo
-  - scroll [8,100 390x688] repeat:x2+(unit=2) pad:0/14
-    - item[1] div [22,100 362x23] flex:row justify:between align:center pad:2/4
-      - div [26,102 139x13] flex:row gap:6 align:center
-        - span [26,103 11x11] flex:row
-          - icon:clock [26,103 11x11]
-        - ov "Recent searches" [43,102 122x13] font:11/700 color:on-surface-variant
-      - button "Clear" [352,102 28x13] font:11/600 color:on-surface-variant
-    - card [22,123 362x211] repeat:x4(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div [23,124 360x54] grid cols:3 gap:12 align:center pad:10/14
-        - span [37,144 24x13] flex:row
-          - icon:rotate-ccw [37,144 13x13]
-        - div [73,134 260x33]
-          - div "연구자" [73,134 260x19] font:13/600 color:font-headline
-          - div "12 results" [73,154 260x13] font:11/400 color:on-surface-variant
-        - icon-btn [345,139 24x24] flex:row justify:center align:center r:999
-          - span [347,141 20x20] flex:row
-            - icon:x [347,141 20x20]
-      - item[2] div [23,178 360x51] grid cols:3 gap:12 align:center pad:10/14
-        - span [37,197 24x13] flex:row
-          - icon:rotate-ccw [37,197 13x13]
-        - div [73,188 260x30]
-          - div "TOPIK II" [73,188 260x16] font:13/600 color:font-headline
-          - div "7 results · folder" [73,205 260x13] font:11/400 color:on-surface-variant
-        - icon-btn [345,191 24x24] flex:row justify:center align:center r:999
-          - span [347,193 20x20] flex:row
-            - icon:x [347,193 20x20]
-      - item[3] div [23,229 360x51] grid cols:3 gap:12 align:center pad:10/14
-        - span [37,248 24x13] flex:row
-          - icon:rotate-ccw [37,248 13x13]
-        - div [73,239 260x30]
-          - div "verb" [73,239 260x16] font:13/600 color:font-headline
-          - div "1 tag · 71 cards" [73,256 260x13] font:11/400 color:on-surface-variant
-        - icon-btn [345,242 24x24] flex:row justify:center align:center r:999
-          - span [347,244 20x20] flex:row
-            - icon:x [347,244 20x20]
-      - item[4] div [23,280 360x53] grid cols:3 gap:12 align:center pad:10/14
-        - span [37,300 24x13] flex:row
-          - icon:rotate-ccw [37,300 13x13]
-        - div [73,290 260x33]
-          - div "도서관" [73,290 260x19] font:13/600 color:font-headline
-          - div "1 card" [73,310 260x13] font:11/400 color:on-surface-variant
-        - icon-btn [345,295 24x24] flex:row justify:center align:center r:999
-          - span [347,297 20x20] flex:row
-            - icon:x [347,297 20x20]
-    - ov "Try searching" [26,359 120x13] flex:row gap:6 align:center font:11/700 color:on-surface-variant
-      - span [26,360 11x11] flex:row
-        - icon:sparkles [26,360 11x11]
-    - card [22,383 362x216] repeat:x4(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div [23,384 360x53] grid cols:3 gap:12 align:center pad:11/14
-        - div [37,397 26x26] flex:row justify:center align:center bg:seed-indigo@12 r:8
-          - span [44,404 13x13] flex:row
-            - icon:folder [44,404 13x13]
-        - div [79,395 264x30]
-          - div "a folder name" [79,395 264x16] font:13/600 color:font-headline
-          - div "Korean, Japanese" [79,412 264x13] font:11/400 color:on-surface-variant
-        - div [355,403 14x14] flex:row gap:6 align:center
-          - span [355,403 14x14] flex:row
-            - icon:arrow-up-left [355,403 14x14]
-      - item[2] div [23,437 360x53] grid cols:3 gap:12 align:center pad:11/14
-        - div [37,450 26x26] flex:row justify:center align:center bg:accent@12 r:8
-          - span [44,457 13x13] flex:row
-            - icon:layers [44,457 13x13]
-        - div [79,448 264x30]
-          - div "a deck" [79,448 264x16] font:13/600 color:font-headline
-          - div "TOPIK II — Vocab" [79,465 264x13] font:11/400 color:on-surface-variant
-        - div [355,456 14x14] flex:row gap:6 align:center
-          - span [355,456 14x14] flex:row
-            - icon:arrow-up-left [355,456 14x14]
-      - item[3] div [23,490 360x56] grid cols:3 gap:12 align:center pad:11/14
-        - div [37,505 26x26] flex:row justify:center align:center r:8
-          - span [44,511 13x13] flex:row
-            - icon:copy [44,511 13x13]
-        - div [79,501 264x33]
-          - div "a card term or meaning" [79,501 264x16] font:13/600 color:font-headline
-          - div "연구자, library" [79,518 264x16] font:11/400 color:on-surface-variant
-        - div [355,511 14x14] flex:row gap:6 align:center
-          - span [355,511 14x14] flex:row
-            - icon:arrow-up-left [355,511 14x14]
-      - item[4] div [23,546 360x52] grid cols:3 gap:12 align:center pad:11/14
-        - div [37,559 26x26] flex:row justify:center align:center r:8
-          - span [44,566 13x13] flex:row
-            - icon:tag [44,566 13x13]
-        - div [79,557 264x30]
-          - div "a tag" [79,557 264x16] font:13/600 color:font-headline
-          - div "noun, verb, food" [79,574 264x13] font:11/400 color:on-surface-variant
-        - div [355,565 14x14] flex:row gap:6 align:center
-          - span [355,565 14x14] flex:row
-            - icon:arrow-up-left [355,565 14x14]
-    - div [22,613 362x55] flex:row gap:8 align:start bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-      - span [35,624 13x13] flex:row
-        - icon:info [35,624 13x13]
-      - span "Search is case-insensitive. Korean, English, and Vietnamese all work." [56,624 315x33] font:11/400/17 color:on-surface-variant
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:8 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[60,56 330x40] rel:[52,4 330x40] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary r:11 border:1px seed-indigo
+      - span abs:[73,69 15x15] rel:[13,13 15x15] flex:row
+        - icon:search abs:[73,69 15x15] rel:[0,0 15x15] clip
+      - span "Search library" abs:[96,67 281x18] rel:[36,11 281x18] flex:row align:center grow:1 basis:0 layout_hint:expanded clip font:14/500 color:on-surface-variant
+        - span abs:[191,68 2x16] rel:[95,1 2x16] margin:0/0/0/4 bg:seed-indigo
+  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x2+(unit=2) pad:0/14/14/14 layout_hint:scroll
+    - item[1] div abs:[22,100 362x23] rel:[14,0 362x23] flex:row justify:between align:center pad:2/4/8/4
+      - div abs:[26,102 139x13] rel:[4,2 139x13] flex:row gap:6 align:center
+        - span abs:[26,103 11x11] rel:[0,1 11x11] flex:row
+          - icon:clock abs:[26,103 11x11] rel:[0,0 11x11] clip
+        - ov "Recent searches" abs:[43,102 122x13] rel:[17,0 122x13] font:11/700 color:on-surface-variant
+      - button "Clear" abs:[352,102 28x13] rel:[330,2 28x13] font:11/600 color:on-surface-variant text:center
+    - card abs:[22,123 362x211] rel:[14,23 362x211] repeat:x4(unit=1) margin:0/0/18/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+      - item[1] div abs:[23,124 360x54] rel:[1,1 360x54] grid cols:3 gap:12 align:center pad:10/14
+        - span abs:[37,144 24x13] rel:[14,20 24x13] flex:row
+          - icon:rotate-ccw abs:[37,144 13x13] rel:[0,0 13x13] clip
+        - div abs:[73,134 260x33] rel:[50,10 260x33]
+          - div "연구자" abs:[73,134 260x19] rel:[0,0 260x19] clip font:13/600 color:font-headline
+          - div "12 results" abs:[73,154 260x13] rel:[0,20 260x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
+        - icon-btn abs:[345,139 24x24] rel:[322,15 24x24] flex:row justify:center align:center pos:relative r:999
+          - span abs:[347,141 20x20] rel:[2,2 20x20] flex:row
+            - icon:x abs:[347,141 20x20] rel:[0,0 20x20] clip
+      - item[2] div abs:[23,178 360x51] rel:[1,55 360x51] grid cols:3 gap:12 align:center pad:10/14
+        - span abs:[37,197 24x13] rel:[14,19 24x13] flex:row
+          - icon:rotate-ccw abs:[37,197 13x13] rel:[0,0 13x13] clip
+        - div abs:[73,188 260x30] rel:[50,10 260x30]
+          - div "TOPIK II" abs:[73,188 260x16] rel:[0,0 260x16] clip font:13/600 color:font-headline
+          - div "7 results · folder" abs:[73,205 260x13] rel:[0,17 260x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
+        - icon-btn abs:[345,191 24x24] rel:[322,13 24x24] flex:row justify:center align:center pos:relative r:999
+          - span abs:[347,193 20x20] rel:[2,2 20x20] flex:row
+            - icon:x abs:[347,193 20x20] rel:[0,0 20x20] clip
+      - item[3] div abs:[23,229 360x51] rel:[1,106 360x51] grid cols:3 gap:12 align:center pad:10/14
+        - span abs:[37,248 24x13] rel:[14,19 24x13] flex:row
+          - icon:rotate-ccw abs:[37,248 13x13] rel:[0,0 13x13] clip
+        - div abs:[73,239 260x30] rel:[50,10 260x30]
+          - div "verb" abs:[73,239 260x16] rel:[0,0 260x16] clip font:13/600 color:font-headline
+          - div "1 tag · 71 cards" abs:[73,256 260x13] rel:[0,17 260x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
+        - icon-btn abs:[345,242 24x24] rel:[322,13 24x24] flex:row justify:center align:center pos:relative r:999
+          - span abs:[347,244 20x20] rel:[2,2 20x20] flex:row
+            - icon:x abs:[347,244 20x20] rel:[0,0 20x20] clip
+      - item[4] div abs:[23,280 360x53] rel:[1,157 360x53] grid cols:3 gap:12 align:center pad:10/14
+        - span abs:[37,300 24x13] rel:[14,20 24x13] flex:row
+          - icon:rotate-ccw abs:[37,300 13x13] rel:[0,0 13x13] clip
+        - div abs:[73,290 260x33] rel:[50,10 260x33]
+          - div "도서관" abs:[73,290 260x19] rel:[0,0 260x19] clip font:13/600 color:font-headline
+          - div "1 card" abs:[73,310 260x13] rel:[0,20 260x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
+        - icon-btn abs:[345,295 24x24] rel:[322,15 24x24] flex:row justify:center align:center pos:relative r:999
+          - span abs:[347,297 20x20] rel:[2,2 20x20] flex:row
+            - icon:x abs:[347,297 20x20] rel:[0,0 20x20] clip
+    - ov "Try searching" abs:[26,359 120x13] rel:[18,259 120x13] flex:row gap:6 align:center font:11/700 color:on-surface-variant
+      - span abs:[26,360 11x11] rel:[0,1 11x11] flex:row
+        - icon:sparkles abs:[26,360 11x11] rel:[0,0 11x11] clip
+    - card abs:[22,383 362x216] rel:[14,283 362x216] repeat:x4(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+      - item[1] div abs:[23,384 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[37,397 26x26] rel:[14,13 26x26] flex:row justify:center align:center bg:seed-indigo@12 r:8
+          - span abs:[44,404 13x13] rel:[7,7 13x13] flex:row
+            - icon:folder abs:[44,404 13x13] rel:[0,0 13x13] clip
+        - div abs:[79,395 264x30] rel:[56,11 264x30]
+          - div "a folder name" abs:[79,395 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "Korean, Japanese" abs:[79,412 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+        - div abs:[355,403 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
+          - span abs:[355,403 14x14] rel:[0,0 14x14] flex:row
+            - icon:arrow-up-left abs:[355,403 14x14] rel:[0,0 14x14] clip
+      - item[2] div abs:[23,437 360x53] rel:[1,54 360x53] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[37,450 26x26] rel:[14,13 26x26] flex:row justify:center align:center bg:accent@12 r:8
+          - span abs:[44,457 13x13] rel:[7,7 13x13] flex:row
+            - icon:layers abs:[44,457 13x13] rel:[0,0 13x13] clip
+        - div abs:[79,448 264x30] rel:[56,11 264x30]
+          - div "a deck" abs:[79,448 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "TOPIK II — Vocab" abs:[79,465 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+        - div abs:[355,456 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
+          - span abs:[355,456 14x14] rel:[0,0 14x14] flex:row
+            - icon:arrow-up-left abs:[355,456 14x14] rel:[0,0 14x14] clip
+      - item[3] div abs:[23,490 360x56] rel:[1,107 360x56] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[37,505 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
+          - span abs:[44,511 13x13] rel:[7,7 13x13] flex:row
+            - icon:copy abs:[44,511 13x13] rel:[0,0 13x13] clip
+        - div abs:[79,501 264x33] rel:[56,11 264x33]
+          - div "a card term or meaning" abs:[79,501 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "연구자, library" abs:[79,518 264x16] rel:[0,17 264x16] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+        - div abs:[355,511 14x14] rel:[332,21 14x14] flex:row gap:6 align:center
+          - span abs:[355,511 14x14] rel:[0,0 14x14] flex:row
+            - icon:arrow-up-left abs:[355,511 14x14] rel:[0,0 14x14] clip
+      - item[4] div abs:[23,546 360x52] rel:[1,163 360x52] grid cols:3 gap:12 align:center pad:11/14
+        - div abs:[37,559 26x26] rel:[14,13 26x26] flex:row justify:center align:center r:8
+          - span abs:[44,566 13x13] rel:[7,7 13x13] flex:row
+            - icon:tag abs:[44,566 13x13] rel:[0,0 13x13] clip
+        - div abs:[79,557 264x30] rel:[56,11 264x30]
+          - div "a tag" abs:[79,557 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+          - div "noun, verb, food" abs:[79,574 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+        - div abs:[355,565 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
+          - span abs:[355,565 14x14] rel:[0,0 14x14] flex:row
+            - icon:arrow-up-left abs:[355,565 14x14] rel:[0,0 14x14] clip
+    - div abs:[22,613 362x55] rel:[14,513 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
+      - span abs:[35,624 13x13] rel:[13,11 13x13] flex:row
+        - icon:info abs:[35,624 13x13] rel:[0,0 13x13] clip
+      - span "Search is case-insensitive. Korean, English, and Vietnamese all work." abs:[56,624 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
 ```
 
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:8 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - div [60,56 330x40] flex:row gap:8 align:center bg:on-primary r:11 pad:0/12 border:1px seed-indigo
-      - span [73,69 15x15] flex:row
-        - icon:search [73,69 15x15]
-      - span "연구" [96,66 249x20] flex:row align:center font:14/600 color:font-headline
-        - span [124,68 2x16] bg:seed-indigo
-      - icon-btn [353,64 24x24] flex:row justify:center align:center r:999
-        - span [355,66 20x20] flex:row
-          - icon:x-circle [355,66 20x20]
-  - scroll-x [22,100 362x28] flex:row gap:6 repeat:x5(unit=1)
-    - item[1] button "All" [22,100 50x28] flex:row gap:5 align:center bg:seed-indigo font:11/600 color:on-primary r:999 pad:0/10
-      - span "18" [50,108 12x12] font:10/700 color:on-primary op:0.75
-    - item[2] button "Folders" [78,100 89x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [89,109 11x11] flex:row
-        - icon:folder [89,109 11x11]
-      - span "1" [150,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[3] button "Decks" [173,100 82x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [184,109 11x11] flex:row
-        - icon:layers [184,109 11x11]
-      - span "2" [238,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[4] button "Flashcards" [261,100 113x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [272,109 11x11] flex:row
-        - icon:copy [272,109 11x11]
-      - span "12" [351,108 12x12] font:10/700 color:font-headline op:0.6
-    - item[5] button "Tags" [380,100 73x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [391,109 11x11] flex:row
-        - icon:tag [391,109 11x11]
-      - span "3" [436,108 6x12] font:10/700 color:font-headline op:0.6
-  - scroll [8,138 390x650] pad:0/14
-    - ov "Searching for "연구"…" [26,148 155x13] font:11/700 color:on-surface-variant
-    - div [22,171 362x173]
-      - div [22,171 362x19] flex:row gap:6 pad:2/4
-        - span [26,173 70x9] bg:surface-container-high r:6 op:0.4
-      - card [22,190 362x154] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,191 360x51] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,203 26x26] bg:surface-container-high r:8 op:0.5
-          - div [79,203 258x26]
-            - span [79,203 90x11] bg:surface-container-high r:6 op:0.5
-            - span [79,220 60x9] bg:surface-container-high r:6 op:0.4
-        - div [23,242 360x51] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,254 26x26] bg:surface-container-high r:8 op:0.5
-          - div [79,254 258x26]
-            - span [79,254 120x11] bg:surface-container-high r:6 op:0.5
-            - span [79,271 80x9] bg:surface-container-high r:6 op:0.4
-        - div [23,293 360x50] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,305 26x26] bg:surface-container-high r:8 op:0.5
-          - div [79,305 258x26]
-            - span [79,305 150x11] bg:surface-container-high r:6 op:0.5
-            - span [79,322 100x9] bg:surface-container-high r:6 op:0.4
-    - div [22,358 362x173]
-      - div [22,358 362x19] flex:row gap:6 pad:2/4
-        - span [26,360 70x9] bg:surface-container-high r:6 op:0.4
-      - card [22,377 362x154] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,378 360x51] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,390 26x26] bg:surface-container-high r:8 op:0.5
-          - div [79,390 258x26]
-            - span [79,390 90x11] bg:surface-container-high r:6 op:0.5
-            - span [79,407 60x9] bg:surface-container-high r:6 op:0.4
-        - div [23,429 360x51] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,441 26x26] bg:surface-container-high r:8 op:0.5
-          - div [79,441 258x26]
-            - span [79,441 120x11] bg:surface-container-high r:6 op:0.5
-            - span [79,458 80x9] bg:surface-container-high r:6 op:0.4
-        - div [23,480 360x50] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,492 26x26] bg:surface-container-high r:8 op:0.5
-          - div [79,492 258x26]
-            - span [79,492 150x11] bg:surface-container-high r:6 op:0.5
-            - span [79,509 100x9] bg:surface-container-high r:6 op:0.4
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:8 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[60,56 330x40] rel:[52,4 330x40] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary r:11 border:1px seed-indigo
+      - span abs:[73,69 15x15] rel:[13,13 15x15] flex:row
+        - icon:search abs:[73,69 15x15] rel:[0,0 15x15] clip
+      - span "연구" abs:[96,66 249x20] rel:[36,10 249x20] flex:row align:center grow:1 basis:0 layout_hint:expanded clip font:14/600 color:font-headline
+        - span abs:[124,68 2x16] rel:[28,2 2x16] margin:0/0/0/2 bg:seed-indigo
+      - icon-btn abs:[353,64 24x24] rel:[293,8 24x24] flex:row justify:center align:center pos:relative r:999
+        - span abs:[355,66 20x20] rel:[2,2 20x20] flex:row
+          - icon:x-circle abs:[355,66 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[22,100 362x28] rel:[14,92 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
+    - item[1] button "All" abs:[22,100 50x28] rel:[0,0 50x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center r:999
+      - span "18" abs:[50,108 12x12] rel:[28,8 12x12] font:10/700 color:on-primary text:center op:0.75
+    - item[2] button "Folders" abs:[78,100 89x28] rel:[56,0 89x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[89,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:folder abs:[89,109 11x11] rel:[0,0 11x11] clip
+      - span "1" abs:[150,108 6x12] rel:[72,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[3] button "Decks" abs:[173,100 82x28] rel:[151,0 82x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[184,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:layers abs:[184,109 11x11] rel:[0,0 11x11] clip
+      - span "2" abs:[238,108 6x12] rel:[65,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[4] button "Flashcards" abs:[261,100 113x28] rel:[239,0 113x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[272,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:copy abs:[272,109 11x11] rel:[0,0 11x11] clip
+      - span "12" abs:[351,108 12x12] rel:[90,8 12x12] font:10/700 color:font-headline text:center op:0.6
+    - item[5] button "Tags" abs:[380,100 73x28] rel:[358,0 73x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[391,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:tag abs:[391,109 11x11] rel:[0,0 11x11] clip
+      - span "3" abs:[436,108 6x12] rel:[56,8 6x12] font:10/700 color:font-headline text:center op:0.6
+  - scroll abs:[8,138 390x650] rel:[0,130 390x650] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - ov "Searching for "연구"…" abs:[26,148 155x13] rel:[18,10 155x13] font:11/700 color:on-surface-variant
+    - div abs:[22,171 362x173] rel:[14,33 362x173] margin:0/0/14/0
+      - div abs:[22,171 362x19] rel:[0,0 362x19] flex:row gap:6 pad:2/4/8/4
+        - span abs:[26,173 70x9] rel:[4,2 70x9] bg:surface-container-high r:6 op:0.4
+      - card abs:[22,190 362x154] rel:[0,19 362x154] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,191 360x51] rel:[1,1 360x51] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,203 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
+          - div abs:[79,203 258x26] rel:[56,12 258x26]
+            - span abs:[79,203 90x11] rel:[0,0 90x11] bg:surface-container-high r:6 op:0.5
+            - span abs:[79,220 60x9] rel:[0,17 60x9] bg:surface-container-high r:6 op:0.4
+        - div abs:[23,242 360x51] rel:[1,52 360x51] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,254 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
+          - div abs:[79,254 258x26] rel:[56,12 258x26]
+            - span abs:[79,254 120x11] rel:[0,0 120x11] bg:surface-container-high r:6 op:0.5
+            - span abs:[79,271 80x9] rel:[0,17 80x9] bg:surface-container-high r:6 op:0.4
+        - div abs:[23,293 360x50] rel:[1,103 360x50] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,305 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
+          - div abs:[79,305 258x26] rel:[56,12 258x26]
+            - span abs:[79,305 150x11] rel:[0,0 150x11] bg:surface-container-high r:6 op:0.5
+            - span abs:[79,322 100x9] rel:[0,17 100x9] bg:surface-container-high r:6 op:0.4
+    - div abs:[22,358 362x173] rel:[14,220 362x173] margin:0/0/14/0
+      - div abs:[22,358 362x19] rel:[0,0 362x19] flex:row gap:6 pad:2/4/8/4
+        - span abs:[26,360 70x9] rel:[4,2 70x9] bg:surface-container-high r:6 op:0.4
+      - card abs:[22,377 362x154] rel:[0,19 362x154] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,378 360x51] rel:[1,1 360x51] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,390 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
+          - div abs:[79,390 258x26] rel:[56,12 258x26]
+            - span abs:[79,390 90x11] rel:[0,0 90x11] bg:surface-container-high r:6 op:0.5
+            - span abs:[79,407 60x9] rel:[0,17 60x9] bg:surface-container-high r:6 op:0.4
+        - div abs:[23,429 360x51] rel:[1,52 360x51] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,441 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
+          - div abs:[79,441 258x26] rel:[56,12 258x26]
+            - span abs:[79,441 120x11] rel:[0,0 120x11] bg:surface-container-high r:6 op:0.5
+            - span abs:[79,458 80x9] rel:[0,17 80x9] bg:surface-container-high r:6 op:0.4
+        - div abs:[23,480 360x50] rel:[1,103 360x50] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,492 26x26] rel:[14,12 26x26] bg:surface-container-high r:8 op:0.5
+          - div abs:[79,492 258x26] rel:[56,12 258x26]
+            - span abs:[79,492 150x11] rel:[0,0 150x11] bg:surface-container-high r:6 op:0.5
+            - span abs:[79,509 100x9] rel:[0,17 100x9] bg:surface-container-high r:6 op:0.4
 ```
 
 ## State: Results (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:8 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - div [60,56 330x40] flex:row gap:8 align:center bg:on-primary r:11 pad:0/12 border:1px seed-indigo
-      - span [73,69 15x15] flex:row
-        - icon:search [73,69 15x15]
-      - span "연구" [96,66 249x20] flex:row align:center font:14/600 color:font-headline
-        - span [124,68 2x16] bg:seed-indigo
-      - icon-btn [353,64 24x24] flex:row justify:center align:center r:999
-        - span [355,66 20x20] flex:row
-          - icon:x-circle [355,66 20x20]
-  - scroll-x [22,100 362x28] flex:row gap:6 repeat:x5(unit=1)
-    - item[1] button "All" [22,100 50x28] flex:row gap:5 align:center bg:seed-indigo font:11/600 color:on-primary r:999 pad:0/10
-      - span "18" [50,108 12x12] font:10/700 color:on-primary op:0.75
-    - item[2] button "Folders" [78,100 89x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [89,109 11x11] flex:row
-        - icon:folder [89,109 11x11]
-      - span "1" [150,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[3] button "Decks" [173,100 82x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [184,109 11x11] flex:row
-        - icon:layers [184,109 11x11]
-      - span "2" [238,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[4] button "Flashcards" [261,100 113x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [272,109 11x11] flex:row
-        - icon:copy [272,109 11x11]
-      - span "12" [351,108 12x12] font:10/700 color:font-headline op:0.6
-    - item[5] button "Tags" [380,100 73x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [391,109 11x11] flex:row
-        - icon:tag [391,109 11x11]
-      - span "3" [436,108 6x12] font:10/700 color:font-headline op:0.6
-  - scroll [8,138 390x650] repeat:x6(unit=1) pad:0/14
-    - ov "18 results for "연구"" [26,146 144x13] font:11/700 color:on-surface-variant
-    - item[2] div [22,171 362x78]
-      - div [22,171 362x21] flex:row justify:between align:center pad:0/4
-        - div [26,171 95x13] flex:row gap:6 align:center
-          - span [26,172 11x11] flex:row
-            - icon:folder [26,172 11x11]
-          - span "Folders" [43,171 54x13] font:11/700 color:seed-indigo
-          - span "1" [103,172 18x12] bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/6
-      - card [22,192 362x57] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,193 360x55] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,208 26x26] flex:row justify:center align:center bg:seed-indigo@12 r:8
-            - span [44,214 13x13] flex:row
-              - icon:folder [44,214 13x13]
-          - div [79,204 263x33]
-            - div "Korean — TOPIK roots" [79,204 263x19] font:13/600 color:font-headline
-              - mark "연구" [125,206 28x16] bg:seed-indigo@18 font:13/700 color:seed-indigo r:3 pad:0/2
-            - div "4 subfolders · 286 cards" [79,224 263x13] font:11/400 color:on-surface-variant
-          - div [354,213 15x15] flex:row gap:6 align:center
-            - span [354,213 15x15] flex:row
-              - icon:chevron-right [354,213 15x15]
-    - item[3] div [22,265 362x134]
-      - div [22,265 362x21] flex:row justify:between align:center pad:0/4
-        - div [26,265 81x13] flex:row gap:6 align:center
-          - span [26,266 11x11] flex:row
-            - icon:layers [26,266 11x11]
-          - span "Decks" [43,265 40x13] font:11/700 color:accent
-          - span "2" [89,266 18x12] bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/6
-      - card [22,286 362x113] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,287 360x56] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,302 26x26] flex:row justify:center align:center bg:accent@12 r:8
-            - span [44,308 13x13] flex:row
-              - icon:layers [44,308 13x13]
-          - div [79,298 237x33]
-            - div "vocabulary" [79,298 237x19] font:13/600 color:font-headline
-              - mark "연구" [79,300 28x16] bg:seed-indigo@18 font:13/700 color:seed-indigo r:3 pad:0/2
-            - div "62 cards · Korean / TOPIK II" [79,318 237x13] font:11/400 color:on-surface-variant
-          - div [328,306 41x18] flex:row gap:6 align:center
-            - span "8 due" [328,306 41x18] flex:row align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/7
-        - div [23,343 360x55] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,358 26x26] flex:row justify:center align:center bg:accent@12 r:8
-            - span [44,364 13x13] flex:row
-              - icon:layers [44,364 13x13]
-          - div [79,354 263x33]
-            - div "Academic terms" [79,354 263x19] font:13/600 color:font-headline
-              - mark "연구" [144,356 28x16] bg:seed-indigo@18 font:13/700 color:seed-indigo r:3 pad:0/2
-            - div "34 cards · Korean / Advanced" [79,374 263x13] font:11/400 color:on-surface-variant
-          - div [354,363 15x15] flex:row gap:6 align:center
-            - span [354,363 15x15] flex:row
-              - icon:chevron-right [354,363 15x15]
-    - item[4] div [22,415 362x190]
-      - div [22,415 362x21] flex:row justify:between align:center pad:0/4
-        - div [26,415 125x13] flex:row gap:6 align:center
-          - span [26,416 11x11] flex:row
-            - icon:copy [26,416 11x11]
-          - span "Flashcards" [43,415 78x13] font:11/700 color:mastery
-          - span "12" [127,416 24x12] bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/6
-        - button "See all" [332,415 48x13] flex:row gap:3 align:center font:11/600 color:seed-indigo
-          - span [369,416 11x11] flex:row
-            - icon:chevron-right [369,416 11x11]
-      - card [22,436 362x169] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,437 360x56] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,452 26x26] flex:row justify:center align:center r:8
-            - span [44,458 13x13] flex:row
-              - icon:copy [44,458 13x13]
-          - div [79,448 263x33]
-            - div "자" [79,448 263x19] font:13/600 color:font-headline
-              - mark "연구" [79,450 28x16] bg:seed-indigo@18 font:13/700 color:seed-indigo r:3 pad:0/2
-            - div "researcher / nhà nghiên cứu" [79,468 263x13] font:11/400 color:on-surface-variant
-          - div [354,457 15x15] flex:row gap:6 align:center
-            - span [354,457 15x15] flex:row
-              - icon:chevron-right [354,457 15x15]
-        - div [23,493 360x56] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,508 26x26] flex:row justify:center align:center r:8
-            - span [44,514 13x13] flex:row
-              - icon:copy [44,514 13x13]
-          - div [79,504 263x33]
-            - div "하다" [79,504 263x19] font:13/600 color:font-headline
-              - mark "연구" [79,506 28x16] bg:seed-indigo@18 font:13/700 color:seed-indigo r:3 pad:0/2
-            - div "to research, to study" [79,524 263x13] font:11/400 color:on-surface-variant
-          - div [354,513 15x15] flex:row gap:6 align:center
-            - span [354,513 15x15] flex:row
-              - icon:chevron-right [354,513 15x15]
-        - div [23,549 360x55] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,564 26x26] flex:row justify:center align:center r:8
-            - span [44,570 13x13] flex:row
-              - icon:copy [44,570 13x13]
-          - div [79,560 263x33]
-            - div "실" [79,560 263x19] font:13/600 color:font-headline
-              - mark "연구" [79,562 28x16] bg:seed-indigo@18 font:13/700 color:seed-indigo r:3 pad:0/2
-            - div "lab, research room" [79,580 263x13] font:11/400 color:on-surface-variant
-          - div [354,569 15x15] flex:row gap:6 align:center
-            - span [354,569 15x15] flex:row
-              - icon:chevron-right [354,569 15x15]
-    - item[5] div [22,621 362x181]
-      - div [22,621 362x21] flex:row justify:between align:center pad:0/4
-        - div [26,621 72x13] flex:row gap:6 align:center
-          - span [26,622 11x11] flex:row
-            - icon:tag [26,622 11x11]
-          - span "Tags" [43,621 31x13] font:11/700 color:streak
-          - span "3" [80,622 18x12] bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/6
-      - card [22,642 362x160] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,643 360x53] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,656 26x26] flex:row justify:center align:center r:8
-            - span [44,663 13x13] flex:row
-              - icon:tag [44,663 13x13]
-          - div [79,654 264x30]
-            - div "research" [79,654 264x16] font:13/600 color:font-headline
-            - div "24 cards across all decks" [79,671 264x13] font:11/400 color:on-surface-variant
-          - div [355,662 14x14] flex:row gap:6 align:center
-            - span [355,662 14x14] flex:row
-              - icon:arrow-up-right [355,662 14x14]
-        - div [23,696 360x53] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,709 26x26] flex:row justify:center align:center r:8
-            - span [44,716 13x13] flex:row
-              - icon:tag [44,716 13x13]
-          - div [79,707 264x30]
-            - div "researcher" [79,707 264x16] font:13/600 color:font-headline
-            - div "8 cards across all decks" [79,724 264x13] font:11/400 color:on-surface-variant
-          - div [355,715 14x14] flex:row gap:6 align:center
-            - span [355,715 14x14] flex:row
-              - icon:arrow-up-right [355,715 14x14]
-        - div [23,749 360x52] grid cols:3 gap:12 align:center pad:11/14
-          - div [37,762 26x26] flex:row justify:center align:center r:8
-            - span [44,769 13x13] flex:row
-              - icon:tag [44,769 13x13]
-          - div [79,760 264x30]
-            - div "research-lab" [79,760 264x16] font:13/600 color:font-headline
-            - div "5 cards across all decks" [79,777 264x13] font:11/400 color:on-surface-variant
-          - div [355,768 14x14] flex:row gap:6 align:center
-            - span [355,768 14x14] flex:row
-              - icon:arrow-up-right [355,768 14x14]
-    - item[6] div "Showing top results · matches are case-insensitive" [22,818 362x29] font:11/400 color:on-surface-variant pad:4/0
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:8 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[60,56 330x40] rel:[52,4 330x40] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary r:11 border:1px seed-indigo
+      - span abs:[73,69 15x15] rel:[13,13 15x15] flex:row
+        - icon:search abs:[73,69 15x15] rel:[0,0 15x15] clip
+      - span "연구" abs:[96,66 249x20] rel:[36,10 249x20] flex:row align:center grow:1 basis:0 layout_hint:expanded clip font:14/600 color:font-headline
+        - span abs:[124,68 2x16] rel:[28,2 2x16] margin:0/0/0/2 bg:seed-indigo
+      - icon-btn abs:[353,64 24x24] rel:[293,8 24x24] flex:row justify:center align:center pos:relative r:999
+        - span abs:[355,66 20x20] rel:[2,2 20x20] flex:row
+          - icon:x-circle abs:[355,66 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[22,100 362x28] rel:[14,92 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
+    - item[1] button "All" abs:[22,100 50x28] rel:[0,0 50x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center r:999
+      - span "18" abs:[50,108 12x12] rel:[28,8 12x12] font:10/700 color:on-primary text:center op:0.75
+    - item[2] button "Folders" abs:[78,100 89x28] rel:[56,0 89x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[89,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:folder abs:[89,109 11x11] rel:[0,0 11x11] clip
+      - span "1" abs:[150,108 6x12] rel:[72,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[3] button "Decks" abs:[173,100 82x28] rel:[151,0 82x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[184,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:layers abs:[184,109 11x11] rel:[0,0 11x11] clip
+      - span "2" abs:[238,108 6x12] rel:[65,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[4] button "Flashcards" abs:[261,100 113x28] rel:[239,0 113x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[272,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:copy abs:[272,109 11x11] rel:[0,0 11x11] clip
+      - span "12" abs:[351,108 12x12] rel:[90,8 12x12] font:10/700 color:font-headline text:center op:0.6
+    - item[5] button "Tags" abs:[380,100 73x28] rel:[358,0 73x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[391,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:tag abs:[391,109 11x11] rel:[0,0 11x11] clip
+      - span "3" abs:[436,108 6x12] rel:[56,8 6x12] font:10/700 color:font-headline text:center op:0.6
+  - scroll abs:[8,138 390x650] rel:[0,130 390x650] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll
+    - ov "18 results for "연구"" abs:[26,146 144x13] rel:[18,8 144x13] font:11/700 color:on-surface-variant
+    - item[2] div abs:[22,171 362x78] rel:[14,33 362x78] margin:0/0/16/0
+      - div abs:[22,171 362x21] rel:[0,0 362x21] flex:row justify:between align:center pad:0/4/8/4
+        - div abs:[26,171 95x13] rel:[4,0 95x13] flex:row gap:6 align:center
+          - span abs:[26,172 11x11] rel:[0,1 11x11] flex:row
+            - icon:folder abs:[26,172 11x11] rel:[0,0 11x11] clip
+          - span "Folders" abs:[43,171 54x13] rel:[17,0 54x13] font:11/700 color:seed-indigo
+          - span "1" abs:[103,172 18x12] rel:[77,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
+      - card abs:[22,192 362x57] rel:[0,21 362x57] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,193 360x55] rel:[1,1 360x55] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,208 26x26] rel:[14,15 26x26] flex:row justify:center align:center bg:seed-indigo@12 r:8
+            - span abs:[44,214 13x13] rel:[7,7 13x13] flex:row
+              - icon:folder abs:[44,214 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,204 263x33] rel:[56,11 263x33]
+            - div "Korean — TOPIK roots" abs:[79,204 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
+              - mark "연구" abs:[125,206 28x16] rel:[46,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "4 subfolders · 286 cards" abs:[79,224 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[354,213 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
+            - span abs:[354,213 15x15] rel:[0,0 15x15] flex:row
+              - icon:chevron-right abs:[354,213 15x15] rel:[0,0 15x15] clip
+    - item[3] div abs:[22,265 362x134] rel:[14,127 362x134] margin:0/0/16/0
+      - div abs:[22,265 362x21] rel:[0,0 362x21] flex:row justify:between align:center pad:0/4/8/4
+        - div abs:[26,265 81x13] rel:[4,0 81x13] flex:row gap:6 align:center
+          - span abs:[26,266 11x11] rel:[0,1 11x11] flex:row
+            - icon:layers abs:[26,266 11x11] rel:[0,0 11x11] clip
+          - span "Decks" abs:[43,265 40x13] rel:[17,0 40x13] font:11/700 color:accent
+          - span "2" abs:[89,266 18x12] rel:[63,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
+      - card abs:[22,286 362x113] rel:[0,21 362x113] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,287 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,302 26x26] rel:[14,15 26x26] flex:row justify:center align:center bg:accent@12 r:8
+            - span abs:[44,308 13x13] rel:[7,7 13x13] flex:row
+              - icon:layers abs:[44,308 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,298 237x33] rel:[56,11 237x33]
+            - div "vocabulary" abs:[79,298 237x19] rel:[0,0 237x19] clip font:13/600 color:font-headline
+              - mark "연구" abs:[79,300 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "62 cards · Korean / TOPIK II" abs:[79,318 237x13] rel:[0,20 237x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[328,306 41x18] rel:[305,19 41x18] flex:row gap:6 align:center
+            - span "8 due" abs:[328,306 41x18] rel:[0,0 41x18] flex:row align:center pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+        - div abs:[23,343 360x55] rel:[1,57 360x55] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,358 26x26] rel:[14,15 26x26] flex:row justify:center align:center bg:accent@12 r:8
+            - span abs:[44,364 13x13] rel:[7,7 13x13] flex:row
+              - icon:layers abs:[44,364 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,354 263x33] rel:[56,11 263x33]
+            - div "Academic terms" abs:[79,354 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
+              - mark "연구" abs:[144,356 28x16] rel:[65,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "34 cards · Korean / Advanced" abs:[79,374 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[354,363 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
+            - span abs:[354,363 15x15] rel:[0,0 15x15] flex:row
+              - icon:chevron-right abs:[354,363 15x15] rel:[0,0 15x15] clip
+    - item[4] div abs:[22,415 362x190] rel:[14,277 362x190] margin:0/0/16/0
+      - div abs:[22,415 362x21] rel:[0,0 362x21] flex:row justify:between align:center pad:0/4/8/4
+        - div abs:[26,415 125x13] rel:[4,0 125x13] flex:row gap:6 align:center
+          - span abs:[26,416 11x11] rel:[0,1 11x11] flex:row
+            - icon:copy abs:[26,416 11x11] rel:[0,0 11x11] clip
+          - span "Flashcards" abs:[43,415 78x13] rel:[17,0 78x13] font:11/700 color:mastery
+          - span "12" abs:[127,416 24x12] rel:[101,1 24x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
+        - button "See all" abs:[332,415 48x13] rel:[310,0 48x13] flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
+          - span abs:[369,416 11x11] rel:[37,1 11x11] flex:row
+            - icon:chevron-right abs:[369,416 11x11] rel:[0,0 11x11] clip
+      - card abs:[22,436 362x169] rel:[0,21 362x169] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,437 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,452 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
+            - span abs:[44,458 13x13] rel:[7,7 13x13] flex:row
+              - icon:copy abs:[44,458 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,448 263x33] rel:[56,11 263x33]
+            - div "자" abs:[79,448 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
+              - mark "연구" abs:[79,450 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "researcher / nhà nghiên cứu" abs:[79,468 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[354,457 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
+            - span abs:[354,457 15x15] rel:[0,0 15x15] flex:row
+              - icon:chevron-right abs:[354,457 15x15] rel:[0,0 15x15] clip
+        - div abs:[23,493 360x56] rel:[1,57 360x56] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,508 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
+            - span abs:[44,514 13x13] rel:[7,7 13x13] flex:row
+              - icon:copy abs:[44,514 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,504 263x33] rel:[56,11 263x33]
+            - div "하다" abs:[79,504 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
+              - mark "연구" abs:[79,506 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "to research, to study" abs:[79,524 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[354,513 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
+            - span abs:[354,513 15x15] rel:[0,0 15x15] flex:row
+              - icon:chevron-right abs:[354,513 15x15] rel:[0,0 15x15] clip
+        - div abs:[23,549 360x55] rel:[1,113 360x55] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,564 26x26] rel:[14,15 26x26] flex:row justify:center align:center r:8
+            - span abs:[44,570 13x13] rel:[7,7 13x13] flex:row
+              - icon:copy abs:[44,570 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,560 263x33] rel:[56,11 263x33]
+            - div "실" abs:[79,560 263x19] rel:[0,0 263x19] clip font:13/600 color:font-headline
+              - mark "연구" abs:[79,562 28x16] rel:[0,2 28x16] pad:0/2 bg:seed-indigo@18 font:13/700 color:seed-indigo r:3
+            - div "lab, research room" abs:[79,580 263x13] rel:[0,20 263x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[354,569 15x15] rel:[331,20 15x15] flex:row gap:6 align:center
+            - span abs:[354,569 15x15] rel:[0,0 15x15] flex:row
+              - icon:chevron-right abs:[354,569 15x15] rel:[0,0 15x15] clip
+    - item[5] div abs:[22,621 362x181] rel:[14,483 362x181] margin:0/0/16/0
+      - div abs:[22,621 362x21] rel:[0,0 362x21] flex:row justify:between align:center pad:0/4/8/4
+        - div abs:[26,621 72x13] rel:[4,0 72x13] flex:row gap:6 align:center
+          - span abs:[26,622 11x11] rel:[0,1 11x11] flex:row
+            - icon:tag abs:[26,622 11x11] rel:[0,0 11x11] clip
+          - span "Tags" abs:[43,621 31x13] rel:[17,0 31x13] font:11/700 color:streak
+          - span "3" abs:[80,622 18x12] rel:[54,1 18x12] pad:0/6 bg:surface-container font:10/700 color:on-surface-variant r:999
+      - card abs:[22,642 362x160] rel:[0,21 362x160] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,643 360x53] rel:[1,1 360x53] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,656 26x26] rel:[14,13 26x26] flex:row justify:center align:center r:8
+            - span abs:[44,663 13x13] rel:[7,7 13x13] flex:row
+              - icon:tag abs:[44,663 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,654 264x30] rel:[56,11 264x30]
+            - div "research" abs:[79,654 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+            - div "24 cards across all decks" abs:[79,671 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[355,662 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
+            - span abs:[355,662 14x14] rel:[0,0 14x14] flex:row
+              - icon:arrow-up-right abs:[355,662 14x14] rel:[0,0 14x14] clip
+        - div abs:[23,696 360x53] rel:[1,54 360x53] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,709 26x26] rel:[14,13 26x26] flex:row justify:center align:center r:8
+            - span abs:[44,716 13x13] rel:[7,7 13x13] flex:row
+              - icon:tag abs:[44,716 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,707 264x30] rel:[56,11 264x30]
+            - div "researcher" abs:[79,707 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+            - div "8 cards across all decks" abs:[79,724 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[355,715 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
+            - span abs:[355,715 14x14] rel:[0,0 14x14] flex:row
+              - icon:arrow-up-right abs:[355,715 14x14] rel:[0,0 14x14] clip
+        - div abs:[23,749 360x52] rel:[1,107 360x52] grid cols:3 gap:12 align:center pad:11/14
+          - div abs:[37,762 26x26] rel:[14,13 26x26] flex:row justify:center align:center r:8
+            - span abs:[44,769 13x13] rel:[7,7 13x13] flex:row
+              - icon:tag abs:[44,769 13x13] rel:[0,0 13x13] clip
+          - div abs:[79,760 264x30] rel:[56,11 264x30]
+            - div "research-lab" abs:[79,760 264x16] rel:[0,0 264x16] clip font:13/600 color:font-headline
+            - div "5 cards across all decks" abs:[79,777 264x13] rel:[0,17 264x13] margin:1/0/0/0 clip font:11/400 color:on-surface-variant
+          - div abs:[355,768 14x14] rel:[332,19 14x14] flex:row gap:6 align:center
+            - span abs:[355,768 14x14] rel:[0,0 14x14] flex:row
+              - icon:arrow-up-right abs:[355,768 14x14] rel:[0,0 14x14] clip
+    - item[6] div "Showing top results · matches are case-insensitive" abs:[22,818 362x29] rel:[14,680 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
 ```
 
 ## State: No results (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:8 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - div [60,56 330x40] flex:row gap:8 align:center bg:on-primary r:11 pad:0/12 border:1px seed-indigo
-      - span [73,69 15x15] flex:row
-        - icon:search [73,69 15x15]
-      - span "phras" [96,67 249x18] flex:row align:center font:14/600 color:font-headline
-        - span [136,68 2x16] bg:seed-indigo
-      - icon-btn [353,64 24x24] flex:row justify:center align:center r:999
-        - span [355,66 20x20] flex:row
-          - icon:x-circle [355,66 20x20]
-  - scroll-x [22,100 362x28] flex:row gap:6 repeat:x5(unit=1)
-    - item[1] button "All" [22,100 44x28] flex:row gap:5 align:center bg:seed-indigo font:11/600 color:on-primary r:999 pad:0/10
-      - span "0" [50,108 6x12] font:10/700 color:on-primary op:0.75
-    - item[2] button "Folders" [72,100 89x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [83,109 11x11] flex:row
-        - icon:folder [83,109 11x11]
-      - span "0" [144,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[3] button "Decks" [167,100 82x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [178,109 11x11] flex:row
-        - icon:layers [178,109 11x11]
-      - span "0" [232,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[4] button "Flashcards" [255,100 107x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [266,109 11x11] flex:row
-        - icon:copy [266,109 11x11]
-      - span "0" [345,108 6x12] font:10/700 color:font-headline op:0.6
-    - item[5] button "Tags" [368,100 73x28] flex:row gap:5 align:center bg:on-primary font:11/600 color:font-headline r:999 pad:0/10 border:1px seed-indigo@14
-      - span [379,109 11x11] flex:row
-        - icon:tag [379,109 11x11]
-      - span "0" [424,108 6x12] font:10/700 color:font-headline op:0.6
-  - card [22,146 362x271] repeat:x2(unit=2) bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
-    - item[1] div [177,183 52x52] flex:row justify:center align:center bg:surface-container r:14
-      - span [192,198 22x22] flex:row
-        - icon:search-x [192,198 22x22]
-    - div "No matches for "phras"" [45,249 316x21] font:16/700 color:font-headline
-    - item[2] div "Check the spelling, or try a shorter keyword. Search runs across folders, decks, cards, and tags." [45,276 316x60] font:13/400/20 color:on-surface-variant pad:0/8
-    - div [45,352 316x28] flex:row wrap gap:6 justify:center
-      - button "phrase" [71,352 80x28] flex:row gap:5 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-        - span [83,361 11x11] flex:row
-          - icon:search [83,361 11x11]
-      - button "phrasal" [157,352 82x28] flex:row gap:5 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-        - span [169,361 11x11] flex:row
-          - icon:search [169,361 11x11]
-      - button "phrasing" [245,352 90x28] flex:row gap:5 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-        - span [257,361 11x11] flex:row
-          - icon:search [257,361 11x11]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:8 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[60,56 330x40] rel:[52,4 330x40] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary r:11 border:1px seed-indigo
+      - span abs:[73,69 15x15] rel:[13,13 15x15] flex:row
+        - icon:search abs:[73,69 15x15] rel:[0,0 15x15] clip
+      - span "phras" abs:[96,67 249x18] rel:[36,11 249x18] flex:row align:center grow:1 basis:0 layout_hint:expanded clip font:14/600 color:font-headline
+        - span abs:[136,68 2x16] rel:[40,1 2x16] margin:0/0/0/2 bg:seed-indigo
+      - icon-btn abs:[353,64 24x24] rel:[293,8 24x24] flex:row justify:center align:center pos:relative r:999
+        - span abs:[355,66 20x20] rel:[2,2 20x20] flex:row
+          - icon:x-circle abs:[355,66 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[22,100 362x28] rel:[14,92 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
+    - item[1] button "All" abs:[22,100 44x28] rel:[0,0 44x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center r:999
+      - span "0" abs:[50,108 6x12] rel:[28,8 6x12] font:10/700 color:on-primary text:center op:0.75
+    - item[2] button "Folders" abs:[72,100 89x28] rel:[50,0 89x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[83,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:folder abs:[83,109 11x11] rel:[0,0 11x11] clip
+      - span "0" abs:[144,108 6x12] rel:[72,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[3] button "Decks" abs:[167,100 82x28] rel:[145,0 82x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[178,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:layers abs:[178,109 11x11] rel:[0,0 11x11] clip
+      - span "0" abs:[232,108 6x12] rel:[65,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[4] button "Flashcards" abs:[255,100 107x28] rel:[233,0 107x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[266,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:copy abs:[266,109 11x11] rel:[0,0 11x11] clip
+      - span "0" abs:[345,108 6x12] rel:[90,8 6x12] font:10/700 color:font-headline text:center op:0.6
+    - item[5] button "Tags" abs:[368,100 73x28] rel:[346,0 73x28] flex:row gap:5 align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      - span abs:[379,109 11x11] rel:[11,9 11x11] flex:row
+        - icon:tag abs:[379,109 11x11] rel:[0,0 11x11] clip
+      - span "0" abs:[424,108 6x12] rel:[56,8 6x12] font:10/700 color:font-headline text:center op:0.6
+  - card abs:[22,146 362x271] rel:[14,138 362x271] repeat:x2(unit=2) pad:36/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - item[1] div abs:[177,183 52x52] rel:[155,37 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:surface-container r:14
+      - span abs:[192,198 22x22] rel:[15,15 22x22] flex:row
+        - icon:search-x abs:[192,198 22x22] rel:[0,0 22x22] clip
+    - div "No matches for "phras"" abs:[45,249 316x21] rel:[23,103 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+    - item[2] div "Check the spelling, or try a shorter keyword. Search runs across folders, decks, cards, and tags." abs:[45,276 316x60] rel:[23,130 316x60] pad:0/8 margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
+    - div abs:[45,352 316x28] rel:[23,206 316x28] flex:row wrap gap:6 justify:center
+      - button "phrase" abs:[71,352 80x28] rel:[26,0 80x28] flex:row gap:5 align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center r:999
+        - span abs:[83,361 11x11] rel:[12,9 11x11] flex:row
+          - icon:search abs:[83,361 11x11] rel:[0,0 11x11] clip
+      - button "phrasal" abs:[157,352 82x28] rel:[112,0 82x28] flex:row gap:5 align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center r:999
+        - span abs:[169,361 11x11] rel:[12,9 11x11] flex:row
+          - icon:search abs:[169,361 11x11] rel:[0,0 11x11] clip
+      - button "phrasing" abs:[245,352 90x28] rel:[200,0 90x28] flex:row gap:5 align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center r:999
+        - span abs:[257,361 11x11] rel:[12,9 11x11] flex:row
+          - icon:search abs:[257,361 11x11] rel:[0,0 11x11] clip
 ```
 
 ## State: Error (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:8 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - div [60,56 330x40] flex:row gap:8 align:center bg:on-primary r:11 pad:0/12 border:1px seed-indigo
-      - span [73,69 15x15] flex:row
-        - icon:search [73,69 15x15]
-      - span "연구" [96,66 249x20] flex:row align:center font:14/600 color:font-headline
-        - span [124,68 2x16] bg:seed-indigo
-      - icon-btn [353,64 24x24] flex:row justify:center align:center r:999
-        - span [355,66 20x20] flex:row
-          - icon:x-circle [355,66 20x20]
-  - card [22,108 362x271] bg:on-primary r:12 pad:40/22 border:1px seed-indigo@14
-    - div [177,149 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
-      - span [192,164 22x22] flex:row
-        - icon:cloud-off [192,164 22x22]
-    - div "Search didn't run" [45,215 316x21] font:16/700 color:font-headline
-    - div "Your library is safe on this device. Try again in a moment." [45,242 316x40] font:13/400/20 color:on-surface-variant
-    - pill-btn "Retry" [158,298 90x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-      - span [176,311 14x14] flex:row
-        - icon:refresh-cw [176,311 14x14]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:8 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[60,56 330x40] rel:[52,4 330x40] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary r:11 border:1px seed-indigo
+      - span abs:[73,69 15x15] rel:[13,13 15x15] flex:row
+        - icon:search abs:[73,69 15x15] rel:[0,0 15x15] clip
+      - span "연구" abs:[96,66 249x20] rel:[36,10 249x20] flex:row align:center grow:1 basis:0 layout_hint:expanded clip font:14/600 color:font-headline
+        - span abs:[124,68 2x16] rel:[28,2 2x16] margin:0/0/0/2 bg:seed-indigo
+      - icon-btn abs:[353,64 24x24] rel:[293,8 24x24] flex:row justify:center align:center pos:relative r:999
+        - span abs:[355,66 20x20] rel:[2,2 20x20] flex:row
+          - icon:x-circle abs:[355,66 20x20] rel:[0,0 20x20] clip
+  - card abs:[22,108 362x271] rel:[14,100 362x271] pad:40/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - div abs:[177,149 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+      - span abs:[192,164 22x22] rel:[15,15 22x22] flex:row
+        - icon:cloud-off abs:[192,164 22x22] rel:[0,0 22x22] clip
+    - div "Search didn't run" abs:[45,215 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+    - div "Your library is safe on this device. Try again in a moment." abs:[45,242 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
+    - pill-btn "Retry" abs:[158,298 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+      - span abs:[176,311 14x14] rel:[18,13 14x14] flex:row
+        - icon:refresh-cw abs:[176,311 14x14] rel:[0,0 14x14] clip
 ```

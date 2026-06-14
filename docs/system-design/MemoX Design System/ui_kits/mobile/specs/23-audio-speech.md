@@ -5,552 +5,561 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Korean
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - title "Audio & speech" [56,66 263x21] font:16/700 color:font-headline
-    - div "Saved" [323,66 67x21] flex:row gap:5 align:center bg:mastery@10 font:11/600 color:mastery r:999 pad:4/9 op:0
-      - span [332,71 11x11] flex:row
-        - icon:check [332,71 11x11]
-  - scroll [8,100 390x688] repeat:x6(unit=1) pad:0/14
-    - item[1] div [22,100 362x168]
-      - ov "General" [22,100 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,121 362x147] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,122 360x82] grid cols:3 gap:12 align:center pad:13/14
-          - div [37,147 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,155 14x14] flex:row
-              - icon:play [45,155 14x14]
-          - div [83,135 230x55]
-            - div "Auto-play on reveal" [83,135 230x18] font:14/600 color:font-headline
-            - div "Speak the front when a new card appears." [83,155 230x35] font:12/400/17 color:on-surface-variant
-          - span [325,149 44x26] bg:surface-container-high r:999
-            - span [328,152 20x20] bg:on-primary r:999 shadow:1/3
-        - div [23,204 360x63] grid cols:3 gap:12 align:center pad:13/14 op:0.5
-          - div [37,220 30x30] flex:row justify:center align:center bg:surface-container r:9
-            - span [45,228 14x14] flex:row
-              - icon:award [45,228 14x14]
-          - div [83,217 225x37]
-            - div "Play after grading" [83,217 225x18] font:14/600 color:font-headline
-            - div "Replay the term after you rate the card." [83,237 225x17] font:12/400/17 color:on-surface-variant
-          - span "Soon" [320,224 49x22] flex:row align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/8
-    - item[2] div [22,286 362x61]
-      - ov "Language" [22,286 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - div [22,307 362x40] flex:row gap:6
-        - pill-btn "Korean" [22,307 177x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:12 pad:0/12
-          - span "한" [72,315 24x24] flex:row justify:center align:center bg:on-primary@18 font:11/700 color:on-primary r:7
-        - pill-btn "English" [205,307 179x40] flex:row gap:8 justify:center align:center bg:on-primary font:13/600 color:font-headline r:12 pad:0/12 border:1px seed-indigo@14
-          - span "EN" [256,315 24x24] flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo r:7
-    - item[3] div [22,365 362x623]
-      - ov "Voice · Korean" [22,365 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,386 362x602] repeat:x8(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-        - item[1] div [23,387 360x63] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,409 18x18] r:999 border:2px outline-variant
-          - div [71,399 254x38]
-            - div "System default" [71,401 161x18] flex:row gap:6 align:center font:14/600 color:font-headline
-              - span "Default" [178,401 54x18] flex:row align:center bg:seed-indigo@10 font:9/700 color:seed-indigo r:999 pad:0/6
-            - div "Uses your phone’s default Korean voice" [71,422 254x15] font:11/400/15 color:on-surface-variant
-          - icon-btn [337,403 30x30] flex:row justify:center align:center r:999
-            - span [342,408 20x20] flex:row
-              - icon:volume-2 [342,408 20x20]
-        - item[2] div [23,451 360x63] grid cols:3 gap:12 align:center bg:seed-indigo@4 pad:12/14
-          - span [37,473 18x18] bg:on-primary r:999 border:5px seed-indigo
-          - div [71,463 254x38]
-            - div "Suji" [71,465 24x18] flex:row gap:6 align:center font:14/700 color:font-headline
-            - div "Female · neural · offline" [71,486 254x15] font:11/400/15 color:on-surface-variant
-          - icon-btn [337,467 30x30] flex:row justify:center align:center r:999
-            - span [342,472 20x20] flex:row
-              - icon:volume-2 [342,472 20x20]
-        - item[3] div [23,514 360x63] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,536 18x18] r:999 border:2px outline-variant
-          - div [71,526 254x38]
-            - div "Minho" [71,528 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
-            - div "Male · neural · offline" [71,549 254x15] font:11/400/15 color:on-surface-variant
-          - icon-btn [337,530 30x30] flex:row justify:center align:center r:999
-            - span [342,535 20x20] flex:row
-              - icon:volume-2 [342,535 20x20]
-        - item[4] div [23,577 360x62] grid cols:3 gap:12 align:center pad:12/14
-          - span [37,600 18x18] r:999 border:2px outline-variant
-          - div [71,589 254x38]
-            - div "Eunha" [71,591 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
-            - div "Female · standard" [71,612 254x15] font:11/400/15 color:on-surface-variant
-          - icon-btn [337,594 30x30] flex:row justify:center align:center r:999
-            - span [342,599 20x20] flex:row
-              - icon:volume-2 [342,599 20x20]
-        - item[5] div [23,640 360x97] pad:14/14
-          - div [37,654 332x18] flex:row justify:between align:baseline
-            - div "Speech rate" [37,656 75x16] font:13/600 color:font-headline
-            - div "0.50×" [329,654 40x18] font:14/700 color:seed-indigo
-          - div [37,682 332x22]
-            - div [37,690 332x5] bg:surface-container-high r:999
-            - div [37,690 166x5] bg:seed-indigo r:999
-            - div [191,681 24x24] bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-          - div [37,710 332x12] flex:row justify:between pad:0/2
-            - span "0.3×" [39,710 21x12] font:10/400 color:on-surface-variant
-            - span "Default" [186,710 35x12] font:10/400 color:on-surface-variant
-            - span "0.7×" [346,710 21x12] font:10/400 color:on-surface-variant
-        - item[6] div [23,737 360x97] pad:14/14
-          - div [37,751 332x18] flex:row justify:between align:baseline
-            - div "Pitch" [37,753 32x16] font:13/600 color:font-headline
-            - div "1.00" [339,751 31x18] font:14/700 color:seed-indigo
-          - div [37,779 332x22]
-            - div [37,787 332x5] bg:surface-container-high r:999
-            - div [37,787 125x5] bg:seed-indigo r:999
-            - div [150,778 24x24] bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-          - div [37,807 332x12] flex:row justify:between pad:0/2
-            - span "0.70" [39,807 21x12] font:10/400 color:on-surface-variant
-            - span "1.00" [193,807 21x12] font:10/400 color:on-surface-variant
-            - span "1.50" [346,807 21x12] font:10/400 color:on-surface-variant
-        - item[7] div [23,834 360x97] pad:14/14
-          - div [37,848 332x18] flex:row justify:between align:baseline
-            - div "Volume" [37,850 47x16] font:13/600 color:font-headline
-            - div "85%" [338,848 31x18] font:14/700 color:seed-indigo
-          - div [37,876 332x22]
-            - div [37,884 332x5] bg:surface-container-high r:999
-            - div [37,884 282x5] bg:seed-indigo r:999
-            - div [307,875 24x24] bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-          - div [37,904 332x12] flex:row justify:between pad:0/2
-            - span "0%" [39,904 16x12] font:10/400 color:on-surface-variant
-            - span "50%" [186,904 22x12] font:10/400 color:on-surface-variant
-            - span "100%" [339,904 28x12] font:10/400 color:on-surface-variant
-        - item[8] div [23,931 360x56] flex:row justify:between align:center pad:12/14
-          - div "Reset Korean voice settings" [37,951 157x15] font:12/400 color:on-surface-variant
-          - pill-btn "Reset" [290,943 79x32] flex:row gap:6 justify:center align:center font:12/600 color:seed-indigo r:9 pad:0/12 border:1px outline-variant
-            - span [303,952 13x13] flex:row
-              - icon:rotate-ccw [303,952 13x13]
-    - item[4] div [22,1006 362x180]
-      - ov "Preview" [22,1006 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,1027 362x135] bg:on-primary r:12 pad:16/16 border:1px seed-indigo@14
-        - div "오늘도 한 단어 더 외워봐요." [39,1044 328x24] font:17/600/24 color:font-headline
-        - div "Today, let’s remember one more word." [39,1074 328x17] font:12/400/17 color:on-surface-variant
-        - pill-btn "Preview voice" [39,1104 328x40] flex:row gap:10 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-          - span [146,1117 15x15] flex:row
-            - icon:play [146,1117 15x15]
-      - div "A short safe phrase. Only the front of cards is spoken." [22,1161 362x25] font:11/400/17 color:on-surface-variant pad:8/6
-    - item[5] div [22,1204 362x84]
-      - ov "About supported languages" [22,1204 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - div [22,1225 362x63] flex:row gap:10 align:start bg:seed-indigo@5 r:12 pad:12/14 border:1px seed-indigo@16
-        - span [37,1238 16x16] flex:row
-          - icon:info [37,1238 16x16]
-        - div "MemoX currently speaks and . Other-language cards stay silent and never read the back." [63,1238 306x37] font:12/400/19 color:font-headline
-          - strong "Korean" [204,1239 42x15] font:12/700/19 color:font-headline
-          - strong "English" [271,1239 41x15] font:12/700/19 color:font-headline
-    - item[6] div "Changes save automatically." [22,1306 362x33] font:11/400 color:on-surface-variant pad:4/0
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Audio & speech" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+    - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999 op:0
+      - span abs:[332,71 11x11] rel:[9,5 11x11] flex:row
+        - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
+  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll
+    - item[1] div abs:[22,100 362x168] rel:[14,0 362x168] margin:0/0/18/0
+      - ov "General" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,121 362x147] rel:[0,21 362x147] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,122 360x82] rel:[1,1 360x82] grid cols:3 gap:12 align:center pad:13/14
+          - div abs:[37,147 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,155 14x14] rel:[8,8 14x14] flex:row
+              - icon:play abs:[45,155 14x14] rel:[0,0 14x14] clip
+          - div abs:[83,135 230x55] rel:[60,13 230x55]
+            - div "Auto-play on reveal" abs:[83,135 230x18] rel:[0,0 230x18] font:14/600 color:font-headline
+            - div "Speak the front when a new card appears." abs:[83,155 230x35] rel:[0,20 230x35] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - span abs:[325,149 44x26] rel:[302,27 44x26] pos:relative bg:surface-container-high r:999
+            - span abs:[328,152 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+        - div abs:[23,204 360x63] rel:[1,83 360x63] grid cols:3 gap:12 align:center pad:13/14 op:0.5
+          - div abs:[37,220 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:surface-container r:9
+            - span abs:[45,228 14x14] rel:[8,8 14x14] flex:row
+              - icon:award abs:[45,228 14x14] rel:[0,0 14x14] clip
+          - div abs:[83,217 225x37] rel:[60,13 225x37]
+            - div "Play after grading" abs:[83,217 225x18] rel:[0,0 225x18] font:14/600 color:font-headline
+            - div "Replay the term after you rate the card." abs:[83,237 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - span "Soon" abs:[320,224 49x22] rel:[297,21 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant r:999
+    - item[2] div abs:[22,286 362x61] rel:[14,186 362x61] margin:0/0/18/0
+      - ov "Language" abs:[22,286 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - div abs:[22,307 362x40] rel:[0,21 362x40] flex:row gap:6
+        - pill-btn "Korean" abs:[22,307 177x40] rel:[0,0 177x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+          - span "한" abs:[72,315 24x24] rel:[50,8 24x24] flex:row justify:center align:center bg:on-primary@18 font:11/700 color:on-primary text:center r:7
+        - pill-btn "English" abs:[205,307 179x40] rel:[183,0 179x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary font:13/600 color:font-headline text:center r:12 border:1px seed-indigo@14
+          - span "EN" abs:[256,315 24x24] rel:[51,8 24x24] flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo text:center r:7
+    - item[3] div abs:[22,365 362x623] rel:[14,265 362x623] margin:0/0/18/0
+      - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,386 362x602] rel:[0,21 362x602] repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+        - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,409 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+          - div abs:[71,399 254x38] rel:[48,12 254x38]
+            - div "System default" abs:[71,401 161x18] rel:[0,2 161x18] flex:row gap:6 align:center font:14/600 color:font-headline
+              - span "Default" abs:[178,401 54x18] rel:[107,0 54x18] flex:row align:center pad:0/6 bg:seed-indigo@10 font:9/700 color:seed-indigo r:999
+            - div "Uses your phone’s default Korean voice" abs:[71,422 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+          - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+            - span abs:[342,408 20x20] rel:[5,5 20x20] flex:row
+              - icon:volume-2 abs:[342,408 20x20] rel:[0,0 20x20] clip
+        - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4
+          - span abs:[37,473 18x18] rel:[14,22 18x18] bg:on-primary r:999 border:5px seed-indigo
+          - div abs:[71,463 254x38] rel:[48,12 254x38]
+            - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline
+            - div "Female · neural · offline" abs:[71,486 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+          - icon-btn abs:[337,467 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+            - span abs:[342,472 20x20] rel:[5,5 20x20] flex:row
+              - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
+        - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+          - div abs:[71,526 254x38] rel:[48,12 254x38]
+            - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+            - div "Male · neural · offline" abs:[71,549 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+          - icon-btn abs:[337,530 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+            - span abs:[342,535 20x20] rel:[5,5 20x20] flex:row
+              - icon:volume-2 abs:[342,535 20x20] rel:[0,0 20x20] clip
+        - item[4] div abs:[23,577 360x62] rel:[1,191 360x62] grid cols:3 gap:12 align:center pad:12/14
+          - span abs:[37,600 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+          - div abs:[71,589 254x38] rel:[48,12 254x38]
+            - div "Eunha" abs:[71,591 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+            - div "Female · standard" abs:[71,612 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+          - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+            - span abs:[342,599 20x20] rel:[5,5 20x20] flex:row
+              - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
+        - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
+          - div abs:[37,654 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+            - div "Speech rate" abs:[37,656 75x16] rel:[0,2 75x16] font:13/600 color:font-headline
+            - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
+          - div abs:[37,682 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+            - div abs:[37,690 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+            - div abs:[37,690 166x5] rel:[0,9 166x5] pos:absolute bg:seed-indigo r:999
+            - div abs:[191,681 24x24] rel:[154,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+          - div abs:[37,710 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+            - span "0.3×" abs:[39,710 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
+            - span "Default" abs:[186,710 35x12] rel:[149,0 35x12] font:10/400 color:on-surface-variant
+            - span "0.7×" abs:[346,710 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+        - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
+          - div abs:[37,751 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+            - div "Pitch" abs:[37,753 32x16] rel:[0,2 32x16] font:13/600 color:font-headline
+            - div "1.00" abs:[339,751 31x18] rel:[302,0 31x18] font:14/700 color:seed-indigo
+          - div abs:[37,779 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+            - div abs:[37,787 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+            - div abs:[37,787 125x5] rel:[0,9 125x5] pos:absolute bg:seed-indigo r:999
+            - div abs:[150,778 24x24] rel:[113,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+          - div abs:[37,807 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+            - span "0.70" abs:[39,807 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
+            - span "1.00" abs:[193,807 21x12] rel:[156,0 21x12] font:10/400 color:on-surface-variant
+            - span "1.50" abs:[346,807 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+        - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
+          - div abs:[37,848 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+            - div "Volume" abs:[37,850 47x16] rel:[0,2 47x16] font:13/600 color:font-headline
+            - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
+          - div abs:[37,876 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+            - div abs:[37,884 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+            - div abs:[37,884 282x5] rel:[0,9 282x5] pos:absolute bg:seed-indigo r:999
+            - div abs:[307,875 24x24] rel:[270,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+          - div abs:[37,904 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+            - span "0%" abs:[39,904 16x12] rel:[2,0 16x12] font:10/400 color:on-surface-variant
+            - span "50%" abs:[186,904 22x12] rel:[149,0 22x12] font:10/400 color:on-surface-variant
+            - span "100%" abs:[339,904 28x12] rel:[302,0 28x12] font:10/400 color:on-surface-variant
+        - item[8] div abs:[23,931 360x56] rel:[1,545 360x56] flex:row justify:between align:center pad:12/14
+          - div "Reset Korean voice settings" abs:[37,951 157x15] rel:[14,21 157x15] font:12/400 color:on-surface-variant
+          - pill-btn "Reset" abs:[290,943 79x32] rel:[267,12 79x32] flex:row gap:6 justify:center align:center pad:0/12 font:12/600 color:seed-indigo text:center r:9 border:1px outline-variant
+            - span abs:[303,952 13x13] rel:[13,10 13x13] flex:row
+              - icon:rotate-ccw abs:[303,952 13x13] rel:[0,0 13x13] clip
+    - item[4] div abs:[22,1006 362x180] rel:[14,906 362x180] margin:0/0/18/0
+      - ov "Preview" abs:[22,1006 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,1027 362x135] rel:[0,21 362x135] pad:16 bg:on-primary r:12 border:1px seed-indigo@14
+        - div "오늘도 한 단어 더 외워봐요." abs:[39,1044 328x24] rel:[17,17 328x24] margin:0/0/6/0 font:17/600/24 color:font-headline
+        - div "Today, let’s remember one more word." abs:[39,1074 328x17] rel:[17,47 328x17] margin:0/0/14/0 font:12/400/17 color:on-surface-variant
+        - pill-btn "Preview voice" abs:[39,1104 328x40] rel:[17,78 328x40] flex:row gap:10 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+          - span abs:[146,1117 15x15] rel:[107,13 15x15] flex:row
+            - icon:play abs:[146,1117 15x15] rel:[0,0 15x15] clip
+      - div "A short safe phrase. Only the front of cards is spoken." abs:[22,1161 362x25] rel:[0,156 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+    - item[5] div abs:[22,1204 362x84] rel:[14,1104 362x84] margin:0/0/18/0
+      - ov "About supported languages" abs:[22,1204 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - div abs:[22,1225 362x63] rel:[0,21 362x63] flex:row gap:10 align:start pad:12/14 bg:seed-indigo@5 r:12 border:1px seed-indigo@16
+        - span abs:[37,1238 16x16] rel:[15,13 16x16] flex:row
+          - icon:info abs:[37,1238 16x16] rel:[0,0 16x16] clip
+        - div "MemoX currently speaks and . Other-language cards stay silent and never read the back." abs:[63,1238 306x37] rel:[41,13 306x37] grow:1 basis:0 layout_hint:expanded font:12/400/19 color:font-headline
+          - strong "Korean" abs:[204,1239 42x15] rel:[141,1 42x15] font:12/700/19 color:font-headline
+          - strong "English" abs:[271,1239 41x15] rel:[208,1 41x15] font:12/700/19 color:font-headline
+    - item[6] div "Changes save automatically." abs:[22,1306 362x33] rel:[14,1206 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
 ```
 
 ## State: English (ordered diff vs Korean)
 
 ```diff
-  - div flex:row gap:6
-- - pill-btn "Korean" flex:row gap:8 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:12 pad:0/12
-- - span "한" flex:row justify:center align:center bg:on-primary@18 font:11/700 color:on-primary r:7
-- - pill-btn "English" flex:row gap:8 justify:center align:center bg:on-primary font:13/600 color:font-headline r:12 pad:0/12 border:1px seed-indigo@14
-- - span "EN" flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo r:7
-+ - pill-btn "Korean" flex:row gap:8 justify:center align:center bg:on-primary font:13/600 color:font-headline r:12 pad:0/12 border:1px seed-indigo@14
-+ - span "한" flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo r:7
-+ - pill-btn "English" flex:row gap:8 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:12 pad:0/12
-+ - span "EN" flex:row justify:center align:center bg:on-primary@18 font:11/700 color:on-primary r:7
-  - item[3] div
-- - ov "Voice · Korean" font:11/700 color:on-surface-variant pad:0/4
-- - card repeat:x8(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-+ - ov "Voice · English" font:11/700 color:on-surface-variant pad:0/4
-+ - card repeat:x7(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-  - item[1] div grid cols:3 gap:12 align:center pad:12/14
+  - div abs:[22,307 362x40] rel:[0,21 362x40] flex:row gap:6
+- - pill-btn "Korean" abs:[22,307 177x40] rel:[0,0 177x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+- - span "한" abs:[72,315 24x24] rel:[50,8 24x24] flex:row justify:center align:center bg:on-primary@18 font:11/700 color:on-primary text:center r:7
+- - pill-btn "English" abs:[205,307 179x40] rel:[183,0 179x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary font:13/600 color:font-headline text:center r:12 border:1px seed-indigo@14
+- - span "EN" abs:[256,315 24x24] rel:[51,8 24x24] flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo text:center r:7
++ - pill-btn "Korean" abs:[22,307 179x40] rel:[0,0 179x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:on-primary font:13/600 color:font-headline text:center r:12 border:1px seed-indigo@14
++ - span "한" abs:[73,315 24x24] rel:[51,8 24x24] flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo text:center r:7
++ - pill-btn "English" abs:[207,307 177x40] rel:[185,0 177x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/12 bg:seed-indigo font:13/600 color:on-primary text:center r:12
++ - span "EN" abs:[257,315 24x24] rel:[50,8 24x24] flex:row justify:center align:center bg:on-primary@18 font:11/700 color:on-primary text:center r:7
+  - item[3] div abs:[22,365 362x559] rel:[14,265 362x559] margin:0/0/18/0
+- - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,386 362x602] rel:[0,21 362x602] repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
++ - ov "Voice · English" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
++ - card abs:[22,386 362x538] rel:[0,21 362x538] repeat:x7(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+  - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
   ...
-  - span "Default" flex:row align:center bg:seed-indigo@10 font:9/700 color:seed-indigo r:999 pad:0/6
-- - div "Uses your phone’s default Korean voice" font:11/400/15 color:on-surface-variant
-+ - div "Uses your phone’s default English voice" font:11/400/15 color:on-surface-variant
-  - icon-btn flex:row justify:center align:center r:999
+  - span "Default" abs:[178,401 54x18] rel:[107,0 54x18] flex:row align:center pad:0/6 bg:seed-indigo@10 font:9/700 color:seed-indigo r:999
+- - div "Uses your phone’s default Korean voice" abs:[71,422 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - div "Uses your phone’s default English voice" abs:[71,422 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+  - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
   ...
-  - div
-- - div "Suji" flex:row gap:6 align:center font:14/700 color:font-headline
-+ - div "Emma" flex:row gap:6 align:center font:14/700 color:font-headline
-  - div "Female · neural · offline" font:11/400/15 color:on-surface-variant
+  - div abs:[71,463 254x38] rel:[48,12 254x38]
+- - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline
++ - div "Emma" abs:[71,465 42x18] rel:[0,2 42x18] flex:row gap:6 align:center font:14/700 color:font-headline
+  - div "Female · neural · offline" abs:[71,486 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
   ...
-  - div
-- - div "Minho" flex:row gap:6 align:center font:14/600 color:font-headline
-+ - div "Ryan" flex:row gap:6 align:center font:14/600 color:font-headline
-  - div "Male · neural · offline" font:11/400/15 color:on-surface-variant
+  - div abs:[71,526 254x38] rel:[48,12 254x38]
+- - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
++ - div "Ryan" abs:[71,528 33x18] rel:[0,2 33x18] flex:row gap:6 align:center font:14/600 color:font-headline
+  - div "Male · neural · offline" abs:[71,549 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
   ...
-  - icon:volume-2
-- - item[4] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "Eunha" flex:row gap:6 align:center font:14/600 color:font-headline
-- - div "Female · standard" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[5] div pad:14/14
-+ - item[4] div pad:14/14
-  - div flex:row justify:between align:baseline
-  - div "Speech rate" font:13/600 color:font-headline
-- - div "0.50×" font:14/700 color:seed-indigo
-+ - div "0.55×" font:14/700 color:seed-indigo
-  - div
+  - icon:volume-2 abs:[342,535 20x20] rel:[0,0 20x20] clip
+- - item[4] div abs:[23,577 360x62] rel:[1,191 360x62] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,600 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,589 254x38] rel:[48,12 254x38]
+- - div "Eunha" abs:[71,591 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - div "Female · standard" abs:[71,612 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,599 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
+- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
++ - item[4] div abs:[23,576 360x97] rel:[1,190 360x97] pad:14
+  - div abs:[37,590 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+  - div "Speech rate" abs:[37,592 75x16] rel:[0,2 75x16] font:13/600 color:font-headline
+- - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
++ - div "0.55×" abs:[329,590 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
+  - div abs:[37,618 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
   ...
-  - span "0.7×" font:10/400 color:on-surface-variant
-- - item[6] div pad:14/14
-+ - item[5] div pad:14/14
-  - div flex:row justify:between align:baseline
+  - span "0.7×" abs:[346,646 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
++ - item[5] div abs:[23,673 360x97] rel:[1,287 360x97] pad:14
+  - div abs:[37,687 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
   ...
-  - span "1.50" font:10/400 color:on-surface-variant
-- - item[7] div pad:14/14
-+ - item[6] div pad:14/14
-  - div flex:row justify:between align:baseline
-  - div "Volume" font:13/600 color:font-headline
-- - div "85%" font:14/700 color:seed-indigo
-+ - div "90%" font:14/700 color:seed-indigo
-  - div
+  - span "1.50" abs:[346,743 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
++ - item[6] div abs:[23,770 360x97] rel:[1,384 360x97] pad:14
+  - div abs:[37,784 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+  - div "Volume" abs:[37,786 47x16] rel:[0,2 47x16] font:13/600 color:font-headline
+- - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
++ - div "90%" abs:[338,784 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
+  - div abs:[37,812 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
   ...
-  - span "100%" font:10/400 color:on-surface-variant
-- - item[8] div flex:row justify:between align:center pad:12/14
-- - div "Reset Korean voice settings" font:12/400 color:on-surface-variant
-+ - item[7] div flex:row justify:between align:center pad:12/14
-+ - div "Reset English voice settings" font:12/400 color:on-surface-variant
-  - pill-btn "Reset" flex:row gap:6 justify:center align:center font:12/600 color:seed-indigo r:9 pad:0/12 border:1px outline-variant
+  - span "100%" abs:[339,840 28x12] rel:[302,0 28x12] font:10/400 color:on-surface-variant
+- - item[8] div abs:[23,931 360x56] rel:[1,545 360x56] flex:row justify:between align:center pad:12/14
+- - div "Reset Korean voice settings" abs:[37,951 157x15] rel:[14,21 157x15] font:12/400 color:on-surface-variant
++ - item[7] div abs:[23,867 360x56] rel:[1,481 360x56] flex:row justify:between align:center pad:12/14
++ - div "Reset English voice settings" abs:[37,888 157x15] rel:[14,21 157x15] font:12/400 color:on-surface-variant
+  - pill-btn "Reset" abs:[290,879 79x32] rel:[267,12 79x32] flex:row gap:6 justify:center align:center pad:0/12 font:12/600 color:seed-indigo text:center r:9 border:1px outline-variant
   ...
-  - card bg:on-primary r:12 pad:16/16 border:1px seed-indigo@14
-- - div "오늘도 한 단어 더 외워봐요." font:17/600/24 color:font-headline
-- - div "Today, let’s remember one more word." font:12/400/17 color:on-surface-variant
-+ - div "One word a day keeps forgetting away." font:17/600/24 color:font-headline
-  - pill-btn "Preview voice" flex:row gap:10 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
+  - card abs:[22,963 362x112] rel:[0,21 362x112] pad:16 bg:on-primary r:12 border:1px seed-indigo@14
+- - div "오늘도 한 단어 더 외워봐요." abs:[39,1044 328x24] rel:[17,17 328x24] margin:0/0/6/0 font:17/600/24 color:font-headline
+- - div "Today, let’s remember one more word." abs:[39,1074 328x17] rel:[17,47 328x17] margin:0/0/14/0 font:12/400/17 color:on-surface-variant
++ - div "One word a day keeps forgetting away." abs:[39,980 328x24] rel:[17,17 328x24] margin:0/0/14/0 font:17/600/24 color:font-headline
+  - pill-btn "Preview voice" abs:[39,1018 328x40] rel:[17,55 328x40] flex:row gap:10 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
   ...
 ```
 
 ## State: Loading (ordered diff vs Korean)
 
 ```diff
-  - icon:check
-- - scroll repeat:x6(unit=1) pad:0/14
-+ - scroll repeat:x5(unit=1) pad:0/14
-  - item[1] div
+  - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll
++ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll
+  - item[1] div abs:[22,100 362x168] rel:[14,0 362x168] margin:0/0/18/0
   ...
-  - ov "Voice · Korean" font:11/700 color:on-surface-variant pad:0/4
-- - card repeat:x8(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-- - item[1] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "System default" flex:row gap:6 align:center font:14/600 color:font-headline
-- - span "Default" flex:row align:center bg:seed-indigo@10 font:9/700 color:seed-indigo r:999 pad:0/6
-- - div "Uses your phone’s default Korean voice" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[2] div grid cols:3 gap:12 align:center bg:seed-indigo@4 pad:12/14
-- - span bg:on-primary r:999 border:5px seed-indigo
-- - div
-- - div "Suji" flex:row gap:6 align:center font:14/700 color:font-headline
-- - div "Female · neural · offline" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[3] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "Minho" flex:row gap:6 align:center font:14/600 color:font-headline
-- - div "Male · neural · offline" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[4] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "Eunha" flex:row gap:6 align:center font:14/600 color:font-headline
-- - div "Female · standard" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[5] div pad:14/14
-- - div flex:row justify:between align:baseline
-- - div "Speech rate" font:13/600 color:font-headline
-- - div "0.50×" font:14/700 color:seed-indigo
-- - div
-- - div bg:surface-container-high r:999
-- - div bg:seed-indigo r:999
-- - div bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-- - div flex:row justify:between pad:0/2
-- - span "0.3×" font:10/400 color:on-surface-variant
-- - span "Default" font:10/400 color:on-surface-variant
-- - span "0.7×" font:10/400 color:on-surface-variant
-- - item[6] div pad:14/14
-- - div flex:row justify:between align:baseline
-- - div "Pitch" font:13/600 color:font-headline
-- - div "1.00" font:14/700 color:seed-indigo
-- - div
-- - div bg:surface-container-high r:999
-- - div bg:seed-indigo r:999
-- - div bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-- - div flex:row justify:between pad:0/2
-- - span "0.70" font:10/400 color:on-surface-variant
-- - span "1.00" font:10/400 color:on-surface-variant
-- - span "1.50" font:10/400 color:on-surface-variant
-- - item[7] div pad:14/14
-- - div flex:row justify:between align:baseline
-- - div "Volume" font:13/600 color:font-headline
-- - div "85%" font:14/700 color:seed-indigo
-- - div
-- - div bg:surface-container-high r:999
-- - div bg:seed-indigo r:999
-- - div bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-- - div flex:row justify:between pad:0/2
-- - span "0%" font:10/400 color:on-surface-variant
-- - span "50%" font:10/400 color:on-surface-variant
-- - span "100%" font:10/400 color:on-surface-variant
-- - item[8] div flex:row justify:between align:center pad:12/14
-- - div "Reset Korean voice settings" font:12/400 color:on-surface-variant
-- - pill-btn "Reset" flex:row gap:6 justify:center align:center font:12/600 color:seed-indigo r:9 pad:0/12 border:1px outline-variant
-- - span flex:row
-- - icon:rotate-ccw
-+ - card bg:on-primary r:12 border:1px seed-indigo@14
-+ - div pad:8/0
-+ - div grid cols:3 gap:12 align:center pad:13/14
-+ - span bg:surface-container-high r:999 op:0.6
-+ - div
-+ - span bg:surface-container-high r:6 op:0.6
-+ - span bg:surface-container-high r:6 op:0.4
-+ - div grid cols:3 gap:12 align:center pad:13/14
-+ - span bg:surface-container-high r:999 op:0.6
-+ - div
-+ - span bg:surface-container-high r:6 op:0.6
-+ - span bg:surface-container-high r:6 op:0.4
-+ - div grid cols:3 gap:12 align:center pad:13/14
-+ - span bg:surface-container-high r:999 op:0.6
-+ - div
-+ - span bg:surface-container-high r:6 op:0.6
-+ - span bg:surface-container-high r:6 op:0.4
-+ - div grid cols:3 gap:12 align:center pad:13/14
-+ - span bg:surface-container-high r:999 op:0.6
-+ - div
-+ - span bg:surface-container-high r:6 op:0.6
-+ - span bg:surface-container-high r:6 op:0.4
-  - item[4] div
-- - ov "Preview" font:11/700 color:on-surface-variant pad:0/4
-- - card bg:on-primary r:12 pad:16/16 border:1px seed-indigo@14
-- - div "오늘도 한 단어 더 외워봐요." font:17/600/24 color:font-headline
-- - div "Today, let’s remember one more word." font:12/400/17 color:on-surface-variant
-- - pill-btn "Preview voice" flex:row gap:10 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-- - span flex:row
-- - icon:play
-- - div "A short safe phrase. Only the front of cards is spoken." font:11/400/17 color:on-surface-variant pad:8/6
-- - item[5] div
-  - ov "About supported languages" font:11/700 color:on-surface-variant pad:0/4
+  - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,386 362x602] rel:[0,21 362x602] repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+- - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,409 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,399 254x38] rel:[48,12 254x38]
+- - div "System default" abs:[71,401 161x18] rel:[0,2 161x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - span "Default" abs:[178,401 54x18] rel:[107,0 54x18] flex:row align:center pad:0/6 bg:seed-indigo@10 font:9/700 color:seed-indigo r:999
+- - div "Uses your phone’s default Korean voice" abs:[71,422 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,408 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,408 20x20] rel:[0,0 20x20] clip
+- - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4
+- - span abs:[37,473 18x18] rel:[14,22 18x18] bg:on-primary r:999 border:5px seed-indigo
+- - div abs:[71,463 254x38] rel:[48,12 254x38]
+- - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline
+- - div "Female · neural · offline" abs:[71,486 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,467 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,472 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
+- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,526 254x38] rel:[48,12 254x38]
+- - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - div "Male · neural · offline" abs:[71,549 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,530 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,535 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,535 20x20] rel:[0,0 20x20] clip
+- - item[4] div abs:[23,577 360x62] rel:[1,191 360x62] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,600 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,589 254x38] rel:[48,12 254x38]
+- - div "Eunha" abs:[71,591 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - div "Female · standard" abs:[71,612 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,599 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
+- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
+- - div abs:[37,654 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+- - div "Speech rate" abs:[37,656 75x16] rel:[0,2 75x16] font:13/600 color:font-headline
+- - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
+- - div abs:[37,682 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+- - div abs:[37,690 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+- - div abs:[37,690 166x5] rel:[0,9 166x5] pos:absolute bg:seed-indigo r:999
+- - div abs:[191,681 24x24] rel:[154,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+- - div abs:[37,710 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+- - span "0.3×" abs:[39,710 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
+- - span "Default" abs:[186,710 35x12] rel:[149,0 35x12] font:10/400 color:on-surface-variant
+- - span "0.7×" abs:[346,710 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
+- - div abs:[37,751 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+- - div "Pitch" abs:[37,753 32x16] rel:[0,2 32x16] font:13/600 color:font-headline
+- - div "1.00" abs:[339,751 31x18] rel:[302,0 31x18] font:14/700 color:seed-indigo
+- - div abs:[37,779 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+- - div abs:[37,787 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+- - div abs:[37,787 125x5] rel:[0,9 125x5] pos:absolute bg:seed-indigo r:999
+- - div abs:[150,778 24x24] rel:[113,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+- - div abs:[37,807 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+- - span "0.70" abs:[39,807 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
+- - span "1.00" abs:[193,807 21x12] rel:[156,0 21x12] font:10/400 color:on-surface-variant
+- - span "1.50" abs:[346,807 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
+- - div abs:[37,848 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+- - div "Volume" abs:[37,850 47x16] rel:[0,2 47x16] font:13/600 color:font-headline
+- - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
+- - div abs:[37,876 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+- - div abs:[37,884 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+- - div abs:[37,884 282x5] rel:[0,9 282x5] pos:absolute bg:seed-indigo r:999
+- - div abs:[307,875 24x24] rel:[270,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+- - div abs:[37,904 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+- - span "0%" abs:[39,904 16x12] rel:[2,0 16x12] font:10/400 color:on-surface-variant
+- - span "50%" abs:[186,904 22x12] rel:[149,0 22x12] font:10/400 color:on-surface-variant
+- - span "100%" abs:[339,904 28x12] rel:[302,0 28x12] font:10/400 color:on-surface-variant
+- - item[8] div abs:[23,931 360x56] rel:[1,545 360x56] flex:row justify:between align:center pad:12/14
+- - div "Reset Korean voice settings" abs:[37,951 157x15] rel:[14,21 157x15] font:12/400 color:on-surface-variant
+- - pill-btn "Reset" abs:[290,943 79x32] rel:[267,12 79x32] flex:row gap:6 justify:center align:center pad:0/12 font:12/600 color:seed-indigo text:center r:9 border:1px outline-variant
+- - span abs:[303,952 13x13] rel:[13,10 13x13] flex:row
+- - icon:rotate-ccw abs:[303,952 13x13] rel:[0,0 13x13] clip
++ - card abs:[22,386 362x269] rel:[0,21 362x269] clip bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[23,387 360x267] rel:[1,1 360x267] pad:8/0
++ - div abs:[23,395 360x63] rel:[0,8 360x63] grid cols:3 gap:12 align:center pad:13/14
++ - span abs:[37,417 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
++ - div abs:[71,408 256x36] rel:[48,13 256x36]
++ - span abs:[71,414 120x11] rel:[0,6 120x11] bg:surface-container-high r:6 op:0.6
++ - span abs:[71,435 60x9] rel:[0,27 60x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
++ - div abs:[23,458 360x63] rel:[0,71 360x63] grid cols:3 gap:12 align:center pad:13/14
++ - span abs:[37,480 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
++ - div abs:[71,471 256x36] rel:[48,13 256x36]
++ - span abs:[71,477 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.6
++ - span abs:[71,498 80x9] rel:[0,27 80x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
++ - div abs:[23,521 360x63] rel:[0,134 360x63] grid cols:3 gap:12 align:center pad:13/14
++ - span abs:[37,543 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
++ - div abs:[71,534 256x36] rel:[48,13 256x36]
++ - span abs:[71,540 110x11] rel:[0,6 110x11] bg:surface-container-high r:6 op:0.6
++ - span abs:[71,561 100x9] rel:[0,27 100x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
++ - div abs:[23,584 360x62] rel:[0,197 360x62] grid cols:3 gap:12 align:center pad:13/14
++ - span abs:[37,606 18x18] rel:[14,22 18x18] bg:surface-container-high r:999 op:0.6
++ - div abs:[71,597 256x36] rel:[48,13 256x36]
++ - span abs:[71,603 120x11] rel:[0,6 120x11] bg:surface-container-high r:6 op:0.6
++ - span abs:[71,624 120x9] rel:[0,27 120x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
+  - item[4] div abs:[22,673 362x84] rel:[14,573 362x84] margin:0/0/18/0
+- - ov "Preview" abs:[22,1006 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,1027 362x135] rel:[0,21 362x135] pad:16 bg:on-primary r:12 border:1px seed-indigo@14
+- - div "오늘도 한 단어 더 외워봐요." abs:[39,1044 328x24] rel:[17,17 328x24] margin:0/0/6/0 font:17/600/24 color:font-headline
+- - div "Today, let’s remember one more word." abs:[39,1074 328x17] rel:[17,47 328x17] margin:0/0/14/0 font:12/400/17 color:on-surface-variant
+- - pill-btn "Preview voice" abs:[39,1104 328x40] rel:[17,78 328x40] flex:row gap:10 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - span abs:[146,1117 15x15] rel:[107,13 15x15] flex:row
+- - icon:play abs:[146,1117 15x15] rel:[0,0 15x15] clip
+- - div "A short safe phrase. Only the front of cards is spoken." abs:[22,1161 362x25] rel:[0,156 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+- - item[5] div abs:[22,1204 362x84] rel:[14,1104 362x84] margin:0/0/18/0
+  - ov "About supported languages" abs:[22,673 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
   ...
-  - strong "English" font:12/700/19 color:font-headline
-- - item[6] div "Changes save automatically." font:11/400 color:on-surface-variant pad:4/0
-+ - item[5] div "Changes save automatically." font:11/400 color:on-surface-variant pad:4/0
+  - strong "English" abs:[271,708 41x15] rel:[208,1 41x15] font:12/700/19 color:font-headline
+- - item[6] div "Changes save automatically." abs:[22,1306 362x33] rel:[14,1206 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
++ - item[5] div "Changes save automatically." abs:[22,775 362x33] rel:[14,675 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
 ```
 
 ## State: No voices (ordered diff vs Korean)
 
 ```diff
-  - icon:check
-- - scroll repeat:x6(unit=1) pad:0/14
-+ - scroll repeat:x5(unit=1) pad:0/14
-  - item[1] div
+  - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll
++ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll
+  - item[1] div abs:[22,100 362x168] rel:[14,0 362x168] margin:0/0/18/0
   ...
-  - ov "Voice · Korean" font:11/700 color:on-surface-variant pad:0/4
-- - card repeat:x8(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-- - item[1] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "System default" flex:row gap:6 align:center font:14/600 color:font-headline
-- - span "Default" flex:row align:center bg:seed-indigo@10 font:9/700 color:seed-indigo r:999 pad:0/6
-- - div "Uses your phone’s default Korean voice" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[2] div grid cols:3 gap:12 align:center bg:seed-indigo@4 pad:12/14
-- - span bg:on-primary r:999 border:5px seed-indigo
-- - div
-- - div "Suji" flex:row gap:6 align:center font:14/700 color:font-headline
-- - div "Female · neural · offline" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[3] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "Minho" flex:row gap:6 align:center font:14/600 color:font-headline
-- - div "Male · neural · offline" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-- - item[4] div grid cols:3 gap:12 align:center pad:12/14
-- - span r:999 border:2px outline-variant
-- - div
-- - div "Eunha" flex:row gap:6 align:center font:14/600 color:font-headline
-- - div "Female · standard" font:11/400/15 color:on-surface-variant
-- - icon-btn flex:row justify:center align:center r:999
-+ - card bg:on-primary r:12 border:1px seed-indigo@14
-+ - div pad:28/18
-+ - div flex:row justify:center align:center bg:surface-container r:12
-  - span flex:row
-- - icon:volume-2
-- - item[5] div pad:14/14
-- - div flex:row justify:between align:baseline
-- - div "Speech rate" font:13/600 color:font-headline
-- - div "0.50×" font:14/700 color:seed-indigo
-- - div
-- - div bg:surface-container-high r:999
-- - div bg:seed-indigo r:999
-- - div bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-- - div flex:row justify:between pad:0/2
-- - span "0.3×" font:10/400 color:on-surface-variant
-- - span "Default" font:10/400 color:on-surface-variant
-- - span "0.7×" font:10/400 color:on-surface-variant
-- - item[6] div pad:14/14
-- - div flex:row justify:between align:baseline
-- - div "Pitch" font:13/600 color:font-headline
-- - div "1.00" font:14/700 color:seed-indigo
-- - div
-- - div bg:surface-container-high r:999
-- - div bg:seed-indigo r:999
-- - div bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-- - div flex:row justify:between pad:0/2
-- - span "0.70" font:10/400 color:on-surface-variant
-- - span "1.00" font:10/400 color:on-surface-variant
-- - span "1.50" font:10/400 color:on-surface-variant
-- - item[7] div pad:14/14
-- - div flex:row justify:between align:baseline
-- - div "Volume" font:13/600 color:font-headline
-- - div "85%" font:14/700 color:seed-indigo
-- - div
-- - div bg:surface-container-high r:999
-- - div bg:seed-indigo r:999
-- - div bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-- - div flex:row justify:between pad:0/2
-- - span "0%" font:10/400 color:on-surface-variant
-- - span "50%" font:10/400 color:on-surface-variant
-- - span "100%" font:10/400 color:on-surface-variant
-- - item[8] div flex:row justify:between align:center pad:12/14
-- - div "Reset Korean voice settings" font:12/400 color:on-surface-variant
-- - pill-btn "Reset" flex:row gap:6 justify:center align:center font:12/600 color:seed-indigo r:9 pad:0/12 border:1px outline-variant
-+ - icon:mic-off
-+ - div "No Korean voices installed" font:14/700 color:font-headline
-+ - div "Download a Korean voice from your phone’s speech settings to enable playback." font:12/400/18 color:on-surface-variant pad:0/12
-+ - pill-btn "Open system speech" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:10 pad:0/16
-  - span flex:row
-- - icon:rotate-ccw
-+ - icon:external-link
-  - item[4] div
-- - ov "Preview" font:11/700 color:on-surface-variant pad:0/4
-- - card bg:on-primary r:12 pad:16/16 border:1px seed-indigo@14
-- - div "오늘도 한 단어 더 외워봐요." font:17/600/24 color:font-headline
-- - div "Today, let’s remember one more word." font:12/400/17 color:on-surface-variant
-- - pill-btn "Preview voice" flex:row gap:10 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-- - span flex:row
-- - icon:play
-- - div "A short safe phrase. Only the front of cards is spoken." font:11/400/17 color:on-surface-variant pad:8/6
-- - item[5] div
-  - ov "About supported languages" font:11/700 color:on-surface-variant pad:0/4
+  - ov "Voice · Korean" abs:[22,365 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,386 362x602] rel:[0,21 362x602] repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+- - item[1] div abs:[23,387 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,409 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,399 254x38] rel:[48,12 254x38]
+- - div "System default" abs:[71,401 161x18] rel:[0,2 161x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - span "Default" abs:[178,401 54x18] rel:[107,0 54x18] flex:row align:center pad:0/6 bg:seed-indigo@10 font:9/700 color:seed-indigo r:999
+- - div "Uses your phone’s default Korean voice" abs:[71,422 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,403 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,408 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,408 20x20] rel:[0,0 20x20] clip
+- - item[2] div abs:[23,451 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:12/14 bg:seed-indigo@4
+- - span abs:[37,473 18x18] rel:[14,22 18x18] bg:on-primary r:999 border:5px seed-indigo
+- - div abs:[71,463 254x38] rel:[48,12 254x38]
+- - div "Suji" abs:[71,465 24x18] rel:[0,2 24x18] flex:row gap:6 align:center font:14/700 color:font-headline
+- - div "Female · neural · offline" abs:[71,486 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,467 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,472 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,472 20x20] rel:[0,0 20x20] clip
+- - item[3] div abs:[23,514 360x63] rel:[1,128 360x63] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,536 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,526 254x38] rel:[48,12 254x38]
+- - div "Minho" abs:[71,528 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - div "Male · neural · offline" abs:[71,549 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,530 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
+- - span abs:[342,535 20x20] rel:[5,5 20x20] flex:row
+- - icon:volume-2 abs:[342,535 20x20] rel:[0,0 20x20] clip
+- - item[4] div abs:[23,577 360x62] rel:[1,191 360x62] grid cols:3 gap:12 align:center pad:12/14
+- - span abs:[37,600 18x18] rel:[14,22 18x18] r:999 border:2px outline-variant
+- - div abs:[71,589 254x38] rel:[48,12 254x38]
+- - div "Eunha" abs:[71,591 41x18] rel:[0,2 41x18] flex:row gap:6 align:center font:14/600 color:font-headline
+- - div "Female · standard" abs:[71,612 254x15] rel:[0,23 254x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - icon-btn abs:[337,594 30x30] rel:[314,16 30x30] flex:row justify:center align:center pos:relative r:999
++ - card abs:[22,386 362x222] rel:[0,21 362x222] clip bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[23,387 360x220] rel:[1,1 360x220] pad:28/18
++ - div abs:[181,415 44x44] rel:[158,28 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
+  - span abs:[193,427 20x20] rel:[12,12 20x20] flex:row
+- - icon:volume-2 abs:[342,599 20x20] rel:[0,0 20x20] clip
+- - item[5] div abs:[23,640 360x97] rel:[1,254 360x97] pad:14
+- - div abs:[37,654 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+- - div "Speech rate" abs:[37,656 75x16] rel:[0,2 75x16] font:13/600 color:font-headline
+- - div "0.50×" abs:[329,654 40x18] rel:[292,0 40x18] font:14/700 color:seed-indigo
+- - div abs:[37,682 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+- - div abs:[37,690 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+- - div abs:[37,690 166x5] rel:[0,9 166x5] pos:absolute bg:seed-indigo r:999
+- - div abs:[191,681 24x24] rel:[154,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+- - div abs:[37,710 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+- - span "0.3×" abs:[39,710 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
+- - span "Default" abs:[186,710 35x12] rel:[149,0 35x12] font:10/400 color:on-surface-variant
+- - span "0.7×" abs:[346,710 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+- - item[6] div abs:[23,737 360x97] rel:[1,351 360x97] pad:14
+- - div abs:[37,751 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+- - div "Pitch" abs:[37,753 32x16] rel:[0,2 32x16] font:13/600 color:font-headline
+- - div "1.00" abs:[339,751 31x18] rel:[302,0 31x18] font:14/700 color:seed-indigo
+- - div abs:[37,779 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+- - div abs:[37,787 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+- - div abs:[37,787 125x5] rel:[0,9 125x5] pos:absolute bg:seed-indigo r:999
+- - div abs:[150,778 24x24] rel:[113,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+- - div abs:[37,807 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+- - span "0.70" abs:[39,807 21x12] rel:[2,0 21x12] font:10/400 color:on-surface-variant
+- - span "1.00" abs:[193,807 21x12] rel:[156,0 21x12] font:10/400 color:on-surface-variant
+- - span "1.50" abs:[346,807 21x12] rel:[309,0 21x12] font:10/400 color:on-surface-variant
+- - item[7] div abs:[23,834 360x97] rel:[1,448 360x97] pad:14
+- - div abs:[37,848 332x18] rel:[14,14 332x18] flex:row justify:between align:baseline margin:0/0/10/0
+- - div "Volume" abs:[37,850 47x16] rel:[0,2 47x16] font:13/600 color:font-headline
+- - div "85%" abs:[338,848 31x18] rel:[301,0 31x18] font:14/700 color:seed-indigo
+- - div abs:[37,876 332x22] rel:[14,42 332x22] margin:0/0/6/0 pos:relative
+- - div abs:[37,884 332x5] rel:[0,9 332x5] pos:absolute bg:surface-container-high r:999
+- - div abs:[37,884 282x5] rel:[0,9 282x5] pos:absolute bg:seed-indigo r:999
+- - div abs:[307,875 24x24] rel:[270,-1 24x24] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+- - div abs:[37,904 332x12] rel:[14,70 332x12] flex:row justify:between pad:0/2
+- - span "0%" abs:[39,904 16x12] rel:[2,0 16x12] font:10/400 color:on-surface-variant
+- - span "50%" abs:[186,904 22x12] rel:[149,0 22x12] font:10/400 color:on-surface-variant
+- - span "100%" abs:[339,904 28x12] rel:[302,0 28x12] font:10/400 color:on-surface-variant
+- - item[8] div abs:[23,931 360x56] rel:[1,545 360x56] flex:row justify:between align:center pad:12/14
+- - div "Reset Korean voice settings" abs:[37,951 157x15] rel:[14,21 157x15] font:12/400 color:on-surface-variant
+- - pill-btn "Reset" abs:[290,943 79x32] rel:[267,12 79x32] flex:row gap:6 justify:center align:center pad:0/12 font:12/600 color:seed-indigo text:center r:9 border:1px outline-variant
++ - icon:mic-off abs:[193,427 20x20] rel:[0,0 20x20] clip
++ - div "No Korean voices installed" abs:[41,471 324x18] rel:[18,84 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
++ - div "Download a Korean voice from your phone’s speech settings to enable playback." abs:[41,493 324x36] rel:[18,106 324x36] pad:0/12 margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
++ - pill-btn "Open system speech" abs:[115,543 175x36] rel:[92,156 175x36] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:12/600 color:on-primary text:center r:10
+  - span abs:[131,555 13x13] rel:[16,12 13x13] flex:row
+- - icon:rotate-ccw abs:[303,952 13x13] rel:[0,0 13x13] clip
++ - icon:external-link abs:[131,555 13x13] rel:[0,0 13x13] clip
+  - item[4] div abs:[22,626 362x84] rel:[14,526 362x84] margin:0/0/18/0
+- - ov "Preview" abs:[22,1006 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,1027 362x135] rel:[0,21 362x135] pad:16 bg:on-primary r:12 border:1px seed-indigo@14
+- - div "오늘도 한 단어 더 외워봐요." abs:[39,1044 328x24] rel:[17,17 328x24] margin:0/0/6/0 font:17/600/24 color:font-headline
+- - div "Today, let’s remember one more word." abs:[39,1074 328x17] rel:[17,47 328x17] margin:0/0/14/0 font:12/400/17 color:on-surface-variant
+- - pill-btn "Preview voice" abs:[39,1104 328x40] rel:[17,78 328x40] flex:row gap:10 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - span abs:[146,1117 15x15] rel:[107,13 15x15] flex:row
+- - icon:play abs:[146,1117 15x15] rel:[0,0 15x15] clip
+- - div "A short safe phrase. Only the front of cards is spoken." abs:[22,1161 362x25] rel:[0,156 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+- - item[5] div abs:[22,1204 362x84] rel:[14,1104 362x84] margin:0/0/18/0
+  - ov "About supported languages" abs:[22,626 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
   ...
-  - strong "English" font:12/700/19 color:font-headline
-- - item[6] div "Changes save automatically." font:11/400 color:on-surface-variant pad:4/0
-+ - item[5] div "Changes save automatically." font:11/400 color:on-surface-variant pad:4/0
+  - strong "English" abs:[271,661 41x15] rel:[208,1 41x15] font:12/700/19 color:font-headline
+- - item[6] div "Changes save automatically." abs:[22,1306 362x33] rel:[14,1206 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
++ - item[5] div "Changes save automatically." abs:[22,728 362x33] rel:[14,628 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
 ```
 
 ## State: Engine error (ordered diff vs Korean)
 
 ```diff
-  - icon:check
-- - scroll repeat:x6(unit=1) pad:0/14
-- - item[1] div
-+ - scroll repeat:x7(unit=1) pad:0/14
-+ - item[1] div flex:row gap:10 align:start bg:#dc4848@6 r:12 pad:12/14 border:1px #dc4848@22
-+ - span flex:row
-+ - icon:alert-circle
-+ - div
-+ - div "Text-to-speech is unavailable" font:13/700 color:font-headline
-+ - div "Install a TTS engine in your phone’s settings to enable voice playback." font:12/400/18 color:on-surface-variant
-+ - pill-btn "Open system settings" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-+ - span flex:row
-+ - icon:external-link
-+ - item[2] div
-  - ov "General" font:11/700 color:on-surface-variant pad:0/4
-- - card bg:on-primary r:12 border:1px seed-indigo@14
-+ - card bg:on-primary r:12 border:1px seed-indigo@14 op:0.5
-  - div grid cols:3 gap:12 align:center pad:13/14
+  - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x6(unit=1) pad:0/14/14/14 layout_hint:scroll
+- - item[1] div abs:[22,100 362x168] rel:[14,0 362x168] margin:0/0/18/0
++ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x7(unit=1) pad:0/14/14/14 layout_hint:scroll
++ - item[1] div abs:[22,100 362x124] rel:[14,0 362x124] flex:row gap:10 align:start pad:12/14 margin:0/0/16/0 bg:#dc4848@6 r:12 border:1px #dc4848@22
++ - span abs:[37,113 16x16] rel:[15,13 16x16] flex:row
++ - icon:alert-circle abs:[37,113 16x16] rel:[0,0 16x16] clip
++ - div abs:[63,113 306x98] rel:[41,13 306x98] grow:1 basis:0 layout_hint:expanded
++ - div "Text-to-speech is unavailable" abs:[63,113 306x16] rel:[0,0 306x16] font:13/700 color:font-headline
++ - div "Install a TTS engine in your phone’s settings to enable voice playback." abs:[63,131 306x36] rel:[0,18 306x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
++ - pill-btn "Open system settings" abs:[63,177 175x34] rel:[0,64 175x34] flex:row gap:6 justify:center align:center pad:0/14 margin:10/0/0/0 bg:seed-indigo font:12/600 color:on-primary text:center r:9
++ - span abs:[77,188 13x13] rel:[14,11 13x13] flex:row
++ - icon:external-link abs:[77,188 13x13] rel:[0,0 13x13] clip
++ - item[2] div abs:[22,240 362x168] rel:[14,140 362x168] margin:0/0/18/0
+  - ov "General" abs:[22,240 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,121 362x147] rel:[0,21 362x147] clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,261 362x147] rel:[0,21 362x147] clip bg:on-primary r:12 border:1px seed-indigo@14 op:0.5
+  - div abs:[23,262 360x82] rel:[1,1 360x82] grid cols:3 gap:12 align:center pad:13/14
   ...
-  - span "Soon" flex:row align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/8
-- - item[2] div
-+ - item[3] div
-  - ov "Language" font:11/700 color:on-surface-variant pad:0/4
+  - span "Soon" abs:[320,364 49x22] rel:[297,21 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant r:999
+- - item[2] div abs:[22,286 362x61] rel:[14,186 362x61] margin:0/0/18/0
++ - item[3] div abs:[22,426 362x61] rel:[14,326 362x61] margin:0/0/18/0
+  - ov "Language" abs:[22,426 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
   ...
-  - span "EN" flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo r:7
-- - item[3] div
-+ - item[4] div
-  - ov "Voice · Korean" font:11/700 color:on-surface-variant pad:0/4
-- - card repeat:x8(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-+ - card repeat:x8(unit=1) bg:on-primary r:12 border:1px seed-indigo@14 op:0.4
-  - item[1] div grid cols:3 gap:12 align:center pad:12/14
+  - span "EN" abs:[256,455 24x24] rel:[51,8 24x24] flex:row justify:center align:center bg:seed-indigo@10 font:11/700 color:seed-indigo text:center r:7
+- - item[3] div abs:[22,365 362x623] rel:[14,265 362x623] margin:0/0/18/0
++ - item[4] div abs:[22,505 362x623] rel:[14,405 362x623] margin:0/0/18/0
+  - ov "Voice · Korean" abs:[22,505 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,386 362x602] rel:[0,21 362x602] repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,526 362x602] rel:[0,21 362x602] repeat:x8(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14 op:0.4
+  - item[1] div abs:[23,527 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:12/14
   ...
-  - icon:rotate-ccw
-- - item[4] div
-+ - item[5] div
-  - ov "Preview" font:11/700 color:on-surface-variant pad:0/4
-- - card bg:on-primary r:12 pad:16/16 border:1px seed-indigo@14
-+ - card bg:on-primary r:12 pad:16/16 border:1px seed-indigo@14 op:0.4
-  - div "오늘도 한 단어 더 외워봐요." font:17/600/24 color:font-headline
+  - icon:rotate-ccw abs:[303,1092 13x13] rel:[0,0 13x13] clip
+- - item[4] div abs:[22,1006 362x180] rel:[14,906 362x180] margin:0/0/18/0
++ - item[5] div abs:[22,1146 362x180] rel:[14,1046 362x180] margin:0/0/18/0
+  - ov "Preview" abs:[22,1146 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,1027 362x135] rel:[0,21 362x135] pad:16 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,1167 362x135] rel:[0,21 362x135] pad:16 bg:on-primary r:12 border:1px seed-indigo@14 op:0.4
+  - div "오늘도 한 단어 더 외워봐요." abs:[39,1184 328x24] rel:[17,17 328x24] margin:0/0/6/0 font:17/600/24 color:font-headline
   ...
-  - div "A short safe phrase. Only the front of cards is spoken." font:11/400/17 color:on-surface-variant pad:8/6
-- - item[5] div
-+ - item[6] div
-  - ov "About supported languages" font:11/700 color:on-surface-variant pad:0/4
+  - div "A short safe phrase. Only the front of cards is spoken." abs:[22,1301 362x25] rel:[0,156 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+- - item[5] div abs:[22,1204 362x84] rel:[14,1104 362x84] margin:0/0/18/0
++ - item[6] div abs:[22,1344 362x84] rel:[14,1244 362x84] margin:0/0/18/0
+  - ov "About supported languages" abs:[22,1344 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
   ...
-  - strong "English" font:12/700/19 color:font-headline
-- - item[6] div "Changes save automatically." font:11/400 color:on-surface-variant pad:4/0
-+ - item[7] div "Changes save automatically." font:11/400 color:on-surface-variant pad:4/0
+  - strong "English" abs:[271,1379 41x15] rel:[208,1 41x15] font:12/700/19 color:font-headline
+- - item[6] div "Changes save automatically." abs:[22,1306 362x33] rel:[14,1206 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
++ - item[7] div "Changes save automatically." abs:[22,1446 362x33] rel:[14,1346 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
 ```
 
 ## State: Playing (ordered diff vs Korean)
 
 ```diff
-  - div "Today, let’s remember one more word." font:12/400/17 color:on-surface-variant
-- - pill-btn "Preview voice" flex:row gap:10 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-- - span flex:row
-- - icon:play
-+ - pill-btn "Playing… tap to stop" flex:row gap:10 justify:center align:center bg:mastery font:13/600 color:on-primary r:11 pad:0/18
-+ - div flex:row gap:3 align:end
-+ - span bg:on-primary r:2
-+ - span bg:on-primary r:2
-+ - span bg:on-primary r:2
-+ - span bg:on-primary r:2
-  - div "A short safe phrase. Only the front of cards is spoken." font:11/400/17 color:on-surface-variant pad:8/6
+  - div "Today, let’s remember one more word." abs:[39,1074 328x17] rel:[17,47 328x17] margin:0/0/14/0 font:12/400/17 color:on-surface-variant
+- - pill-btn "Preview voice" abs:[39,1104 328x40] rel:[17,78 328x40] flex:row gap:10 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+- - span abs:[146,1117 15x15] rel:[107,13 15x15] flex:row
+- - icon:play abs:[146,1117 15x15] rel:[0,0 15x15] clip
++ - pill-btn "Playing… tap to stop" abs:[39,1104 328x40] rel:[17,78 328x40] flex:row gap:10 justify:center align:center pad:0/18 bg:mastery font:13/600 color:on-primary text:center r:11
++ - div abs:[123,1117 21x14] rel:[84,13 21x14] flex:row gap:3 align:end
++ - span abs:[123,1127 3x4] rel:[0,10 3x4] bg:on-primary r:2
++ - span abs:[129,1123 3x8] rel:[6,6 3x8] bg:on-primary r:2
++ - span abs:[135,1119 3x12] rel:[12,2 3x12] bg:on-primary r:2
++ - span abs:[141,1127 3x4] rel:[18,10 3x4] bg:on-primary r:2
+  - div "A short safe phrase. Only the front of cards is spoken." abs:[22,1161 362x25] rel:[0,156 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
   ...
 ```
 
 ## State: Saving (ordered diff vs Korean)
 
 ```diff
-  - title "Audio & speech" font:16/700 color:font-headline
-- - div "Saved" flex:row gap:5 align:center bg:mastery@10 font:11/600 color:mastery r:999 pad:4/9 op:0
-+ - div "Saved" flex:row gap:5 align:center bg:mastery@10 font:11/600 color:mastery r:999 pad:4/9
-  - span flex:row
+  - title "Audio & speech" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+- - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999 op:0
++ - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999
+  - span abs:[332,71 11x11] rel:[9,5 11x11] flex:row
   ...
 ```

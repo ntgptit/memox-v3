@@ -190,6 +190,69 @@ window.__mx = (() => {
     return b.join(' ');
   }
 
+  // Full 4-edge box model, collapsed compactly: N (all equal) | V/H (t==b, l==r) | t/r/b/l.
+  function edges(t, r, b, l) {
+    if (t === r && r === b && b === l) return '' + t;
+    if (t === b && l === r) return t + '/' + l;
+    return t + '/' + r + '/' + b + '/' + l;
+  }
+  function boxBits(cs) {
+    const out = [];
+    const pt = Math.round(parseFloat(cs.paddingTop) || 0), pr = Math.round(parseFloat(cs.paddingRight) || 0),
+      pb = Math.round(parseFloat(cs.paddingBottom) || 0), pl = Math.round(parseFloat(cs.paddingLeft) || 0);
+    if (pt || pr || pb || pl) out.push('pad:' + edges(pt, pr, pb, pl));
+    const mt = Math.round(parseFloat(cs.marginTop) || 0), mr = Math.round(parseFloat(cs.marginRight) || 0),
+      mb = Math.round(parseFloat(cs.marginBottom) || 0), ml = Math.round(parseFloat(cs.marginLeft) || 0);
+    if (mt || mr || mb || ml) out.push('margin:' + edges(mt, mr, mb, ml));
+    return out.join(' ');
+  }
+
+  // Constraint intent for a flex item, mapped toward Flutter Expanded/Flexible.
+  // Only emitted when the DOM parent is actually a flex container.
+  function flexChildBits(el, cs) {
+    const p = el.parentElement;
+    if (!p) return '';
+    const pcs = getComputedStyle(p);
+    if (!isLayout(pcs) || pcs.display.includes('grid')) return '';
+    const out = [];
+    const grow = parseFloat(cs.flexGrow) || 0;
+    const shrink = parseFloat(cs.flexShrink);
+    const basis = cs.flexBasis;
+    if (grow > 0) out.push('grow:' + grow);
+    if (!Number.isNaN(shrink) && shrink !== 1) out.push('shrink:' + shrink);
+    if (basis && basis !== 'auto') out.push('basis:' + Math.round(parseFloat(basis) || 0));
+    const self = cs.alignSelf;
+    if (self && self !== 'auto' && self !== 'normal' && self !== 'stretch') out.push('self:' + self.replace('flex-', ''));
+    if (grow > 0) out.push('layout_hint:expanded');
+    else if (!Number.isNaN(shrink) && shrink > 0 && basis !== 'auto') out.push('layout_hint:flexible');
+    return out.join(' ');
+  }
+
+  // Explicit min/max sizing — computed width/height are always resolved to px and
+  // cannot signal fixed-vs-flexible intent, but min/max constraints do.
+  function sizeBits(cs) {
+    const out = [];
+    const minw = parseFloat(cs.minWidth) || 0, minh = parseFloat(cs.minHeight) || 0;
+    if (minw > 0) out.push('minw:' + Math.round(minw));
+    if (minh > 0) out.push('minh:' + Math.round(minh));
+    if (cs.maxWidth && cs.maxWidth !== 'none') out.push('maxw:' + Math.round(parseFloat(cs.maxWidth) || 0));
+    if (cs.maxHeight && cs.maxHeight !== 'none') out.push('maxh:' + Math.round(parseFloat(cs.maxHeight) || 0));
+    return out.join(' ');
+  }
+
+  // Positioning / scrolling / stacking — needed for pinned bottom bars, overlays,
+  // sheets, FABs, and clipped scroll lists.
+  function positionBits(cs) {
+    const out = [];
+    if (cs.position && cs.position !== 'static') out.push('pos:' + cs.position);
+    const scrolls = (v) => v === 'auto' || v === 'scroll';
+    if (scrolls(cs.overflowX) || scrolls(cs.overflowY)) out.push('layout_hint:scroll');
+    if (cs.position === 'sticky' || cs.position === 'fixed') out.push('layout_hint:pinned');
+    if (cs.overflowX === 'hidden' || cs.overflowY === 'hidden') out.push('clip');
+    if (cs.zIndex && cs.zIndex !== 'auto') out.push('z:' + cs.zIndex);
+    return out.join(' ');
+  }
+
   function styleBits(el, cs) {
     const bits = [];
     if (cs.backgroundColor !== TRANSPARENT) bits.push('bg:' + tokenOr(cs.backgroundColor));
@@ -202,11 +265,11 @@ window.__mx = (() => {
       if (!Number.isNaN(lh) && Math.abs(lh - fs) > 1) font += '/' + Math.round(lh);
       bits.push(font);
       bits.push('color:' + tokenOr(cs.color));
+      const ta = cs.textAlign;
+      if (ta === 'center' || ta === 'right' || ta === 'end' || ta === 'justify') bits.push('text:' + ta);
     }
     const r = parseFloat(cs.borderTopLeftRadius);
     if (r > 0) bits.push('r:' + Math.round(r));
-    const pt = parseFloat(cs.paddingTop), pl = parseFloat(cs.paddingLeft);
-    if (pt > 0 || pl > 0) bits.push('pad:' + Math.round(pt) + '/' + Math.round(pl));
     if (cs.borderTopStyle !== 'none' && parseFloat(cs.borderTopWidth) > 0)
       bits.push('border:' + Math.round(parseFloat(cs.borderTopWidth)) + 'px ' + tokenOr(cs.borderTopColor));
     // Elevation: emit the first box-shadow as offsetY/blur (the kit uses shadows
@@ -280,7 +343,7 @@ window.__mx = (() => {
     const lines = [];      // full lines (with bbox) for the base-state spec
     const signatures = []; // bbox-free structural lines for ordered state diffing
 
-    function walk(el, depth, itemLabel) {
+    function walk(el, depth, itemLabel, parentRect) {
       if (depth > 16) return;
       const cs = getComputedStyle(el);
       if (cs.display === 'none' || cs.visibility === 'hidden') return;
@@ -289,21 +352,30 @@ window.__mx = (() => {
 
       const isIcon = el.tagName === 'svg' || (el.dataset && el.dataset.lucide);
       const units = !isIcon && el.childElementCount >= 4 ? detectUnits(el.children) : null;
+      let childParentRect = parentRect; // nearest EMITTED ancestor for child rel-geometry
 
       if (emitWorthy(el, cs)) {
         const name = nodeName(el);
         const text = ownText(el);
         const ind = '  '.repeat(depth);
-        const bbox = '[' + Math.round(rect.x - origin.x) + ',' + Math.round(rect.y - origin.y) +
-          ' ' + Math.round(rect.width) + 'x' + Math.round(rect.height) + ']';
+        const w = Math.round(rect.width), h = Math.round(rect.height);
+        // abs = frame-relative (visual cross-check); rel = offset within the parent
+        // box (so an agent reads spacing from the parent, not the whole screen).
+        const abs = 'abs:[' + Math.round(rect.x - origin.x) + ',' + Math.round(rect.y - origin.y) + ' ' + w + 'x' + h + ']';
+        const rel = 'rel:[' + Math.round(rect.x - parentRect.x) + ',' + Math.round(rect.y - parentRect.y) + ' ' + w + 'x' + h + ']';
         const lay = layoutBits(cs);
+        const flex = flexChildBits(el, cs);
         const rep = units ? 'repeat:x' + (units.reps + (units.covered < el.childElementCount ? '+' : '')) + '(unit=' + units.period + ')' : '';
+        const box = boxBits(cs);
+        const size = sizeBits(cs);
+        const posn = positionBits(cs);
         const sty = styleBits(el, cs);
         const core = (itemLabel ? itemLabel + ' ' : '') + name + (text ? ' "' + text + '"' : '');
-        const tail = [lay, rep, sty].filter(Boolean).join(' ');
-        lines.push(ind + '- ' + core + ' ' + bbox + (tail ? ' ' + tail : ''));
+        const tail = [lay, flex, rep, box, size, posn, sty].filter(Boolean).join(' ');
+        lines.push(ind + '- ' + core + ' ' + abs + ' ' + rel + (tail ? ' ' + tail : ''));
         signatures.push(ind + '- ' + core + (tail ? ' ' + tail : ''));
         depth += 1;
+        childParentRect = rect;
       }
       if (isIcon) return;
 
@@ -315,12 +387,12 @@ window.__mx = (() => {
       }
       let idx = 0;
       for (const child of el.children) {
-        walk(child, depth, unitMap ? unitMap[idx] : undefined);
+        walk(child, depth, unitMap ? unitMap[idx] : undefined, childParentRect);
         idx += 1;
       }
     }
 
-    for (const child of phone.children) walk(child, 0, undefined);
+    for (const child of phone.children) walk(child, 0, undefined, origin);
     return { lines, signatures };
   }
 
@@ -328,26 +400,28 @@ window.__mx = (() => {
 })();
 `;
 
-// Ordered diff (LCS) over signature lists, so added/removed lines keep their
-// position. Returns a compact unified view: changes plus one context line at each
-// hunk edge; long unchanged runs collapse to a single ellipsis.
-function diffSeq(base, cur) {
-  const n = base.length, m = cur.length;
+// Ordered diff: LCS is computed over the bbox-free SIGNATURE lists (so 1px jitter
+// is not a change), but the emitted op carries the geometry-bearing LINE (abs+rel
+// bbox), so every added/removed/context line keeps enough geometry to be placed.
+// Returns a compact unified view: changes plus one context line at each hunk edge;
+// long unchanged runs collapse to a single ellipsis.
+function diffSeq(baseSig, curSig, baseLines, curLines) {
+  const n = baseSig.length, m = curSig.length;
   const dp = Array.from({ length: n + 1 }, () => new Int32Array(m + 1));
   for (let i = n - 1; i >= 0; i--) {
     for (let j = m - 1; j >= 0; j--) {
-      dp[i][j] = base[i] === cur[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      dp[i][j] = baseSig[i] === curSig[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
     }
   }
   const ops = [];
   let i = 0, j = 0;
   while (i < n && j < m) {
-    if (base[i] === cur[j]) { ops.push({ op: ' ', line: cur[j] }); i++; j++; }
-    else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push({ op: '-', line: base[i] }); i++; }
-    else { ops.push({ op: '+', line: cur[j] }); j++; }
+    if (baseSig[i] === curSig[j]) { ops.push({ op: ' ', line: curLines[j] }); i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push({ op: '-', line: baseLines[i] }); i++; }
+    else { ops.push({ op: '+', line: curLines[j] }); j++; }
   }
-  while (i < n) ops.push({ op: '-', line: base[i++] });
-  while (j < m) ops.push({ op: '+', line: cur[j++] });
+  while (i < n) ops.push({ op: '-', line: baseLines[i++] });
+  while (j < m) ops.push({ op: '+', line: curLines[j++] });
   return ops;
 }
 
@@ -412,6 +486,7 @@ async function main() {
 
     let baseLabel = '';
     let baseSignatures = [];
+    let baseLines = [];
     const sections = [];
 
     for (let s = 0; s < total; s++) {
@@ -428,9 +503,10 @@ async function main() {
       if (s === 0) {
         baseLabel = stateLabel;
         baseSignatures = signatures;
+        baseLines = lines;
         sections.push(`## Base state: ${stateLabel}\n\n\`\`\`text\n${lines.join('\n')}\n\`\`\``);
       } else {
-        const ops = diffSeq(baseSignatures, signatures);
+        const ops = diffSeq(baseSignatures, signatures, baseLines, lines);
         const changed = ops.filter((o) => o.op !== ' ').length;
         if (changed > (baseSignatures.length + signatures.length) * 0.6) {
           // Mostly different screen — a diff would be noise; emit it in full.
@@ -466,21 +542,30 @@ async function main() {
       'in `tool/verify/run.mjs` fails when this is stale).',
       '',
       'Reading guide: each line is one visible element —',
-      '`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.',
+      '`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.',
       'Indentation = DOM containment (layout/grouping containers are kept, not flattened).',
+      '`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size',
+      'INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.',
       '`<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`',
-      'or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.',
+      'or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.',
+      '`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus',
+      '`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).',
+      '`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`',
+      'are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =',
+      'scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =',
+      'overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.',
       '`repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit',
-      'start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow',
-      '→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme',
-      'measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,',
-      '`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).',
-      'Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`',
-      'means no token matched — treat as a gap, not a license to hardcode. Non-base states are an',
-      'ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).',
-      'Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the',
-      'app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are',
-      'illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
+      'start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).',
+      '`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the',
+      '390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A',
+      '`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity',
+      '(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via',
+      '`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a',
+      'gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed',
+      'in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is',
+      'MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from',
+      'ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system',
+      'contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
       '',
     ];
     writeFileSync(join(outDir, file), headerLines.join('\n') + sections.join('\n\n') + '\n');

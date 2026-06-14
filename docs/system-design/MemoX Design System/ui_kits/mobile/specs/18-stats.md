@@ -5,110 +5,119 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x56] flex:row gap:4 align:center pad:0/14
-    - div "Stats" [22,65 59x30] font:24/700 color:font-headline
-  - scroll [8,108 390x598] pad:0/14
-    - div [22,108 362x89] grid cols:2 gap:12
-      - card [22,108 175x89] bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-        - ov "Reviews today" [35,121 149x13] font:11/700 color:on-surface-variant
-        - div "47" [35,134 149x35] font:28/700 color:font-headline
-        - div "+12 vs yesterday" [35,169 149x15] font:12/600 color:mastery
-      - card [209,108 175x89] bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-        - ov "Retention" [222,121 149x13] font:11/700 color:on-surface-variant
-        - div "88" [222,134 149x35] font:28/700 color:font-headline
-          - span "%" [254,146 16x21] font:16/700 color:on-surface-variant
-        - div "7-day rolling" [222,169 149x15] font:12/400 color:on-surface-variant
-    - card [22,213 362x179] bg:on-primary r:12 pad:12/12 border:1px seed-indigo@14
-      - ov "This week" [35,226 336x13] font:11/700 color:on-surface-variant
-      - div [35,251 336x128] flex:row gap:10 align:end repeat:x7(unit=1) pad:4/0
-        - item[1] div [35,255 39x120] flex:col gap:6 justify:end align:center
-          - div [35,326 39x30] bg:seed-indigo r:6
-          - div "M" [50,362 10x13] font:11/600 color:on-surface-variant
-        - item[2] div [84,255 39x120] flex:col gap:6 justify:end align:center
-          - div [84,306 39x50] bg:seed-indigo r:6
-          - div "T" [101,362 6x13] font:11/600 color:on-surface-variant
-        - item[3] div [134,255 39x120] flex:col gap:6 justify:end align:center
-          - div [134,276 39x80] bg:seed-indigo r:6
-          - div "W" [148,362 11x13] font:11/600 color:on-surface-variant
-        - item[4] div [183,255 39x120] flex:col gap:6 justify:end align:center
-          - div [183,316 39x40] bg:seed-indigo r:6
-          - div "T" [200,362 6x13] font:11/600 color:on-surface-variant
-        - item[5] div [233,255 39x120] flex:col gap:6 justify:end align:center
-          - div [233,266 39x90] bg:seed-indigo r:6
-          - div "F" [249,362 6x13] font:11/600 color:on-surface-variant
-        - item[6] div [282,255 39x120] flex:col gap:6 justify:end align:center
-          - div [282,296 39x60] bg:seed-indigo r:6
-          - div "S" [298,362 7x13] font:11/600 color:on-surface-variant
-        - item[7] div [332,255 39x120] flex:col gap:6 justify:end align:center
-          - div [332,255 39x101] bg:seed-indigo r:6
-          - div "S" [348,362 7x13] font:11/600 color:on-surface-variant
-    - ov "Mastery by deck" [22,408 362x13] font:11/700 color:on-surface-variant
-    - card [22,429 362x237] repeat:x4(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div [23,430 360x59] pad:14/16
-        - div [39,444 328x18] flex:row justify:between
-          - span "TOPIK II Vocab" [39,444 97x18] font:14/500 color:font-headline
-          - span "75%" [336,444 31x18] font:14/700 color:font-headline
-        - div [39,468 328x6] bg:surface-container r:999
-          - div [39,468 246x6] bg:mastery
-      - item[2] div [23,489 360x59] pad:14/16
-        - div [39,503 328x18] flex:row justify:between
-          - span "Genki Ch. 1–5" [39,503 90x18] font:14/500 color:font-headline
-          - span "52%" [336,503 31x18] font:14/700 color:font-headline
-        - div [39,527 328x6] bg:surface-container r:999
-          - div [39,527 171x6] bg:seed-indigo
-      - item[3] div [23,548 360x59] pad:14/16
-        - div [39,562 328x18] flex:row justify:between
-          - span "HSK 1" [39,562 36x18] font:14/500 color:font-headline
-          - span "18%" [336,562 31x18] font:14/700 color:font-headline
-        - div [39,586 328x6] bg:surface-container r:999
-          - div [39,586 59x6] bg:warning
-      - item[4] div [23,607 360x58] pad:14/16
-        - div [39,621 328x18] flex:row justify:between
-          - span "Hanja Roots" [39,621 80x18] font:14/500 color:font-headline
-          - span "88%" [336,621 31x18] font:14/700 color:font-headline
-        - div [39,645 328x6] bg:surface-container r:999
-          - div [39,645 289x6] bg:mastery
-  - bottom-nav [18,710 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item [19,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [55,725 20x20] flex:row
-        - icon:home [55,725 20x20]
-      - span "Home" [50,750 29x12] font:10/600 color:on-surface-variant
-    - item[2] bn-item [111,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [147,725 20x20] flex:row
-        - icon:layers [147,725 20x20]
-      - span "Library" [140,750 33x12] font:10/600 color:on-surface-variant
-    - item[3] bn-item [203,713 92x61] flex:col gap:3 align:center pad:8/0
-      - bn-pill [225,721 48x30] bg:seed-indigo@14 r:999 pad:4/14
-        - span [239,725 20x20] flex:row
-          - icon:bar-chart-3 [239,725 20x20]
-      - span "Stats" [236,754 25x12] font:10/600 color:seed-indigo
-    - item[4] bn-item [295,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [331,725 20x20] flex:row
-        - icon:settings [331,725 20x20]
-      - span "Settings" [321,750 41x12] font:10/600 color:on-surface-variant
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 align:center pad:0/14
+    - div "Stats" abs:[22,65 59x30] rel:[14,13 59x30] font:24/700 color:font-headline
+  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - div abs:[22,108 362x89] rel:[14,0 362x89] grid cols:2 gap:12 margin:0/0/16/0
+      - card abs:[22,108 175x89] rel:[0,0 175x89] pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+        - ov "Reviews today" abs:[35,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant
+        - div "47" abs:[35,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline
+        - div "+12 vs yesterday" abs:[35,169 149x15] rel:[13,61 149x15] font:12/600 color:mastery
+      - card abs:[209,108 175x89] rel:[187,0 175x89] pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+        - ov "Retention" abs:[222,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant
+        - div "88" abs:[222,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline
+          - span "%" abs:[254,146 16x21] rel:[32,12 16x21] font:16/700 color:on-surface-variant
+        - div "7-day rolling" abs:[222,169 149x15] rel:[13,61 149x15] font:12/400 color:on-surface-variant
+    - card abs:[22,213 362x179] rel:[14,105 362x179] pad:12 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - ov "This week" abs:[35,226 336x13] rel:[13,13 336x13] margin:0/0/12/0 font:11/700 color:on-surface-variant
+      - div abs:[35,251 336x128] rel:[13,38 336x128] flex:row gap:10 align:end repeat:x7(unit=1) pad:4/0
+        - item[1] div abs:[35,255 39x120] rel:[0,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[35,326 39x30] rel:[0,71 39x30] bg:seed-indigo r:6
+          - div "M" abs:[50,362 10x13] rel:[15,107 10x13] font:11/600 color:on-surface-variant
+        - item[2] div abs:[84,255 39x120] rel:[49,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[84,306 39x50] rel:[0,51 39x50] bg:seed-indigo r:6
+          - div "T" abs:[101,362 6x13] rel:[17,107 6x13] font:11/600 color:on-surface-variant
+        - item[3] div abs:[134,255 39x120] rel:[99,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[134,276 39x80] rel:[0,21 39x80] bg:seed-indigo r:6
+          - div "W" abs:[148,362 11x13] rel:[14,107 11x13] font:11/600 color:on-surface-variant
+        - item[4] div abs:[183,255 39x120] rel:[148,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[183,316 39x40] rel:[0,61 39x40] bg:seed-indigo r:6
+          - div "T" abs:[200,362 6x13] rel:[17,107 6x13] font:11/600 color:on-surface-variant
+        - item[5] div abs:[233,255 39x120] rel:[198,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[233,266 39x90] rel:[0,11 39x90] bg:seed-indigo r:6
+          - div "F" abs:[249,362 6x13] rel:[16,107 6x13] font:11/600 color:on-surface-variant
+        - item[6] div abs:[282,255 39x120] rel:[247,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[282,296 39x60] rel:[0,41 39x60] bg:seed-indigo r:6
+          - div "S" abs:[298,362 7x13] rel:[16,107 7x13] font:11/600 color:on-surface-variant
+        - item[7] div abs:[332,255 39x120] rel:[297,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[332,255 39x101] rel:[0,0 39x101] bg:seed-indigo r:6
+          - div "S" abs:[348,362 7x13] rel:[16,107 7x13] font:11/600 color:on-surface-variant
+    - ov "Mastery by deck" abs:[22,408 362x13] rel:[14,300 362x13] margin:0/0/8/0 font:11/700 color:on-surface-variant
+    - card abs:[22,429 362x237] rel:[14,321 362x237] repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+      - item[1] div abs:[23,430 360x59] rel:[1,1 360x59] pad:14/16
+        - div abs:[39,444 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
+          - span "TOPIK II Vocab" abs:[39,444 97x18] rel:[0,0 97x18] font:14/500 color:font-headline
+          - span "75%" abs:[336,444 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
+        - div abs:[39,468 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
+          - div abs:[39,468 246x6] rel:[0,0 246x6] bg:mastery
+      - item[2] div abs:[23,489 360x59] rel:[1,60 360x59] pad:14/16
+        - div abs:[39,503 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
+          - span "Genki Ch. 1–5" abs:[39,503 90x18] rel:[0,0 90x18] font:14/500 color:font-headline
+          - span "52%" abs:[336,503 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
+        - div abs:[39,527 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
+          - div abs:[39,527 171x6] rel:[0,0 171x6] bg:seed-indigo
+      - item[3] div abs:[23,548 360x59] rel:[1,119 360x59] pad:14/16
+        - div abs:[39,562 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
+          - span "HSK 1" abs:[39,562 36x18] rel:[0,0 36x18] font:14/500 color:font-headline
+          - span "18%" abs:[336,562 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
+        - div abs:[39,586 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
+          - div abs:[39,586 59x6] rel:[0,0 59x6] bg:warning
+      - item[4] div abs:[23,607 360x58] rel:[1,178 360x58] pad:14/16
+        - div abs:[39,621 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
+          - span "Hanja Roots" abs:[39,621 80x18] rel:[0,0 80x18] font:14/500 color:font-headline
+          - span "88%" abs:[336,621 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
+        - div abs:[39,645 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
+          - div abs:[39,645 289x6] rel:[0,0 289x6] bg:mastery
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
+      - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
+      - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+        - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
+          - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
+      - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
+      - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
 ```

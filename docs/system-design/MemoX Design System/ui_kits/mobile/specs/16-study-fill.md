@@ -5,74 +5,83 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Input
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - div [62,67 279x18] flex:row gap:8 align:center
-      - span "Fill" [62,67 40x18] bg:mastery@12 font:10/700 color:mastery r:999 pad:3/8
-      - div [110,74 231x4] bg:surface-container r:999
-        - div [110,74 185x4] bg:mastery
-    - div "12 / 15" [351,69 39x15] font:12/600 color:on-surface-variant
-  - div [8,100 390x618] flex:col gap:10 pad:8/14
-    - card [22,108 362x304] flex:row justify:center align:center bg:on-primary r:12 pad:18/16 border:1px seed-indigo@14
-      - icon-btn [343,117 32x32] flex:row justify:center align:center r:999
-        - span [349,123 20x20] flex:row
-          - icon:pencil [349,123 20x20]
-      - div "Make someone laugh / Làm cho cười, gây cười, buồn cười (Động từ, là dạng sai khiến của động từ "웃다 – cười", mang nghĩa khiến người khác bật cười hoặc thấy buồn cười)." [39,217 328x87] font:14/400/22 color:font-headline
-    - card [22,422 362x296] flex:row justify:center align:center bg:surface-container-low r:12 pad:14/14 border:1px seed-indigo@14
-      - div [171,547 64x46] flex:row gap:4 align:center
-        - span "웃기" [171,547 58x46] font:32/700 color:font-headline
-        - span [233,555 2x30] bg:mastery
-  - div [8,718 390x70] flex:row gap:10 justify:center pad:14/14
-    - pill-btn "Hint" [38,732 160x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:999 pad:0/18 border:1px seed-indigo
-    - pill-btn "Check" [208,732 160x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/18
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[62,67 279x18] rel:[54,15 279x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
+      - span "Fill" abs:[62,67 40x18] rel:[0,0 40x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery r:999
+      - div abs:[110,74 231x4] rel:[48,7 231x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
+        - div abs:[110,74 185x4] rel:[0,0 185x4] bg:mastery
+    - div "12 / 15" abs:[351,69 39x15] rel:[343,17 39x15] font:12/600 color:on-surface-variant
+  - div abs:[8,100 390x618] rel:[0,92 390x618] flex:col gap:10 grow:1 basis:0 layout_hint:expanded pad:8/14/0/14
+    - card abs:[22,108 362x304] rel:[14,8 362x304] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:18/16 minh:160 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
+      - icon-btn abs:[343,117 32x32] rel:[321,9 32x32] flex:row justify:center align:center pos:absolute r:999
+        - span abs:[349,123 20x20] rel:[6,6 20x20] flex:row
+          - icon:pencil abs:[349,123 20x20] rel:[0,0 20x20] clip
+      - div "Make someone laugh / Làm cho cười, gây cười, buồn cười (Động từ, là dạng sai khiến của động từ "웃다 – cười", mang nghĩa khiến người khác bật cười hoặc thấy buồn cười)." abs:[39,217 328x87] rel:[17,109 328x87] font:14/400/22 color:font-headline text:center
+    - card abs:[22,422 362x296] rel:[14,322 362x296] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:12 border:1px seed-indigo@14
+      - div abs:[171,547 64x46] rel:[149,125 64x46] flex:row gap:4 align:center
+        - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline
+        - span abs:[233,555 2x30] rel:[62,8 2x30] bg:mastery
+  - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
+    - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center r:999 border:1px seed-indigo
+    - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
 ```
 
 ## State: Wrong (ordered diff vs Input)
 
 ```diff
-  - card flex:row justify:center align:center bg:surface-container-low r:12 pad:14/14 border:1px seed-indigo@14
-- - div flex:row gap:4 align:center
-- - span "웃기" font:32/700 color:font-headline
-- - span bg:mastery
-+ - icon-btn flex:row justify:center align:center r:999
-+ - span flex:row
-+ - icon:volume-2
-+ - icon-btn flex:row justify:center align:center r:999
-+ - span flex:row
-+ - icon:rotate-ccw
-+ - div flex:col gap:6 align:center
-+ - div "우겨다" font:24/700 color:seed-rose
-+ - div "웃기다" font:24/700 color:font-headline
-  - div flex:row gap:10 justify:center pad:14/14
-- - pill-btn "Hint" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:999 pad:0/18 border:1px seed-indigo
-- - pill-btn "Check" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/18
-+ - pill-btn "Mark correct" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:999 pad:0/18 border:1px seed-indigo
-+ - pill-btn "Try again" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/18
+  - card abs:[22,422 362x296] rel:[14,322 362x296] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:12 border:1px seed-indigo@14
+- - div abs:[171,547 64x46] rel:[149,125 64x46] flex:row gap:4 align:center
+- - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline
+- - span abs:[233,555 2x30] rel:[62,8 2x30] bg:mastery
++ - icon-btn abs:[343,431 32x32] rel:[321,9 32x32] flex:row justify:center align:center pos:absolute r:999
++ - span abs:[349,437 20x20] rel:[6,6 20x20] flex:row
++ - icon:volume-2 abs:[349,437 20x20] rel:[0,0 20x20] clip
++ - icon-btn abs:[31,677 32x32] rel:[9,255 32x32] flex:row justify:center align:center pos:absolute r:999
++ - span abs:[37,683 20x20] rel:[6,6 20x20] flex:row
++ - icon:rotate-ccw abs:[37,683 20x20] rel:[0,0 20x20] clip
++ - div abs:[170,532 65x76] rel:[148,110 65x76] flex:col gap:6 align:center
++ - div "우겨다" abs:[170,532 65x35] rel:[0,0 65x35] font:24/700 color:seed-rose
++ - div "웃기다" abs:[170,573 65x35] rel:[0,41 65x35] font:24/700 color:font-headline
+  - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
+- - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center r:999 border:1px seed-indigo
+- - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
++ - pill-btn "Mark correct" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center r:999 border:1px seed-indigo
++ - pill-btn "Try again" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
 ```

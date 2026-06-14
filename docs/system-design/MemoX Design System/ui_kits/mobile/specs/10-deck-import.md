@@ -5,668 +5,677 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Empty
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - title "Import cards" [60,66 290x21] font:16/700 color:font-headline
-    - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
-      - span [362,66 20x20] flex:row
-        - icon:help-circle [362,66 20x20]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
-    - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - span [63,103 12x12] flex:row
-      - icon:chevron-right [63,103 12x12]
-    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - span [121,103 12x12] flex:row
-      - icon:chevron-right [121,103 12x12]
-    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - span [231,103 12x12] flex:row
-      - icon:chevron-right [231,103 12x12]
-    - span "Import" [247,102 37x13] font:11/700 color:font-headline
-  - scroll [8,123 390x578] pad:0/14
-    - div [22,123 362x20] flex:row gap:8 align:center repeat:x2+(unit=2)
-      - item[1] div "Source" [22,123 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-        - span "1" [22,123 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-      - div [94,132 68x2] bg:surface-container r:999
-      - item[2] div "Preview" [170,123 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-        - span "2" [170,123 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-      - div [246,132 68x2] bg:surface-container r:999
-      - div "Import" [322,123 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-        - span "3" [322,123 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-    - div [22,159 212x36] flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
-      - span [31,166 22x22] flex:row justify:center align:center bg:seed-indigo@10 r:7
-        - span [36,171 13x13] flex:row
-          - icon:layers [36,171 13x13]
-      - span "TOPIK II — Vocab · 142 cards" [61,170 160x15] font:12/600 color:font-headline
-    - ov "1 · Choose a source" [22,209 362x21] font:11/700 color:on-surface-variant pad:0/4
-    - div [22,230 362x101] grid cols:2 gap:8
-      - button [22,230 177x101] flex:col gap:6 align:start bg:seed-indigo@6 r:13 pad:14/12 border:1px seed-indigo
-        - div [35,245 30x30] flex:row justify:center align:center bg:seed-indigo@14 r:9
-          - span [43,253 15x15] flex:row
-            - icon:file-up [43,253 15x15]
-        - div "Upload file" [35,281 67x16] font:13/700 color:font-headline
-        - div "CSV, TSV, Anki" [35,303 73x13] font:11/400 color:on-surface-variant
-      - button [207,230 177x101] flex:col gap:6 align:start bg:on-primary r:13 pad:14/12 border:1px seed-indigo@14
-        - div [220,245 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-          - span [228,253 15x15] flex:row
-            - icon:clipboard [228,253 15x15]
-        - div "Paste text" [220,281 63x16] font:13/700 color:font-headline
-        - div "TSV or CSV rows" [220,303 85x13] font:11/400 color:on-surface-variant
-    - card [22,345 362x201] bg:on-primary r:12 pad:24/18 border:1px outline-variant
-      - div [179,370 48x48] flex:row justify:center align:center bg:seed-indigo@10 r:14
-        - span [192,383 22x22] flex:row
-          - icon:file-up [192,383 22x22]
-      - div "Drop a file or tap to browse" [41,430 324x18] font:14/700 color:font-headline
-      - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" [41,452 324x17] font:11/400/17 color:on-surface-variant
-      - pill-btn "Choose file" [141,483 124x38] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/16
-        - span [157,495 14x14] flex:row
-          - icon:folder-open [157,495 14x14]
-    - div [22,560 362x76] flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
-      - span [35,571 13x13] flex:row
-        - icon:info [35,571 13x13]
-      - div [56,571 315x54]
-        - div "Each row makes one card" [56,571 315x17] font:11/700/17 color:font-headline
-        - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." [56,591 315x34] font:11/400/17 color:on-surface-variant
-  - div [8,701 390x87] flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
-    - div [22,712 362x40] flex:row gap:10
-      - pill-btn "Cancel" [22,712 83x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-      - pill-btn "Preview import" [115,712 269x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-        - span [186,725 15x15] flex:row
-          - icon:eye [186,725 15x15]
-    - div "Pick a file or paste text to continue." [22,760 362x12] font:10/400 color:on-surface-variant op:0.7
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Import cards" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:help-circle abs:[362,66 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
+      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
+      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
+      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
+    - span "Import" abs:[247,102 37x13] rel:[239,2 37x13] font:11/700 color:font-headline
+  - scroll abs:[8,123 390x578] rel:[0,115 390x578] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
+      - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+        - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+      - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+      - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+        - span "2" abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+      - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+      - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+        - span "3" abs:[322,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+    - div abs:[22,159 212x36] rel:[14,36 212x36] flex:row gap:8 align:center pad:6/12/6/8 margin:0/0/14/0 bg:on-primary r:999 border:1px seed-indigo@14
+      - span abs:[31,166 22x22] rel:[9,7 22x22] flex:row justify:center align:center bg:seed-indigo@10 r:7
+        - span abs:[36,171 13x13] rel:[5,5 13x13] flex:row
+          - icon:layers abs:[36,171 13x13] rel:[0,0 13x13] clip
+      - span "TOPIK II — Vocab · 142 cards" abs:[61,170 160x15] rel:[39,11 160x15] font:12/600 color:font-headline
+    - ov "1 · Choose a source" abs:[22,209 362x21] rel:[14,86 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+    - div abs:[22,230 362x101] rel:[14,107 362x101] grid cols:2 gap:8 margin:0/0/14/0
+      - button abs:[22,230 177x101] rel:[0,0 177x101] flex:col gap:6 align:start pad:14/12 bg:seed-indigo@6 r:13 border:1px seed-indigo
+        - div abs:[35,245 30x30] rel:[13,15 30x30] flex:row justify:center align:center bg:seed-indigo@14 r:9
+          - span abs:[43,253 15x15] rel:[8,8 15x15] flex:row
+            - icon:file-up abs:[43,253 15x15] rel:[0,0 15x15] clip
+        - div "Upload file" abs:[35,281 67x16] rel:[13,51 67x16] font:13/700 color:font-headline
+        - div "CSV, TSV, Anki" abs:[35,303 73x13] rel:[13,73 73x13] font:11/400 color:on-surface-variant
+      - button abs:[207,230 177x101] rel:[185,0 177x101] flex:col gap:6 align:start pad:14/12 bg:on-primary r:13 border:1px seed-indigo@14
+        - div abs:[220,245 30x30] rel:[13,15 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+          - span abs:[228,253 15x15] rel:[8,8 15x15] flex:row
+            - icon:clipboard abs:[228,253 15x15] rel:[0,0 15x15] clip
+        - div "Paste text" abs:[220,281 63x16] rel:[13,51 63x16] font:13/700 color:font-headline
+        - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
+    - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+      - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
+        - span abs:[192,383 22x22] rel:[13,13 22x22] flex:row
+          - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
+      - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+      - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
+      - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+        - span abs:[157,495 14x14] rel:[16,12 14x14] flex:row
+          - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
+    - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
+      - span abs:[35,571 13x13] rel:[13,11 13x13] flex:row
+        - icon:info abs:[35,571 13x13] rel:[0,0 13x13] clip
+      - div abs:[56,571 315x54] rel:[34,11 315x54] grow:1 basis:0 layout_hint:expanded
+        - div "Each row makes one card" abs:[56,571 315x17] rel:[0,0 315x17] margin:0/0/3/0 font:11/700/17 color:font-headline
+        - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+    - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
+      - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+      - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+        - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
+          - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
+    - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: File selected (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x2+(unit=2)
-- - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-+ - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-  - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+  - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
+- - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
++ - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[27,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[27,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
+  - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
-  - div "TSV or CSV rows" font:11/400 color:on-surface-variant
-- - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
-- - div flex:row justify:center align:center bg:seed-indigo@10 r:14
-+ - card grid cols:3 gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-+ - div flex:row justify:center align:center bg:seed-indigo@10 r:9
-  - span flex:row
-- - icon:file-up
-- - div "Drop a file or tap to browse" font:14/700 color:font-headline
-- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" font:11/400/17 color:on-surface-variant
-- - pill-btn "Choose file" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/16
-+ - icon:file-text
-+ - div
-+ - div "topik-ii-vocab.tsv" font:13/700 color:font-headline
-+ - div "TSV · 4.2 KB · ready to preview" font:11/400 color:on-surface-variant
-+ - icon-btn flex:row justify:center align:center r:999
-  - span flex:row
-- - icon:folder-open
-+ - icon:x
-  - div flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
+  - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
+  - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
+- - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
+- - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
++ - div abs:[85,359 242x31] rel:[63,14 242x31]
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "TSV · 4.2 KB · ready to preview" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
+  - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
+- - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
++ - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
+  - div abs:[22,417 362x76] rel:[14,294 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Preview import" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-+ - pill-btn "Preview import" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-  - span flex:row
-  - icon:eye
-- - div "Pick a file or paste text to continue." font:10/400 color:on-surface-variant op:0.7
-+ - div "Next you’ll preview every row before anything is imported." font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
++ - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
+  - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
+- - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - div "Next you’ll preview every row before anything is imported." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Parsing (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x2+(unit=2)
-- - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-+ - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-+ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span "2" flex:row justify:center align:center bg:seed-indigo font:10/700 color:on-primary r:999
-  - div bg:surface-container r:999
+  - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
+- - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+- - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "2" abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
++ - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[27,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[27,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
++ - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span "2" abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:seed-indigo font:10/700 color:on-primary r:999
+  - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
   ...
-  - div "TSV or CSV rows" font:11/400 color:on-surface-variant
-- - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
-- - div flex:row justify:center align:center bg:seed-indigo@10 r:14
-+ - card grid cols:3 gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-+ - div flex:row justify:center align:center bg:seed-indigo@10 r:9
-  - span flex:row
-- - icon:file-up
-- - div "Drop a file or tap to browse" font:14/700 color:font-headline
-- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" font:11/400/17 color:on-surface-variant
-- - pill-btn "Choose file" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/16
-+ - icon:file-text
-+ - div
-+ - div "topik-ii-vocab.tsv" font:13/700 color:font-headline
-+ - div "TSV · 4.2 KB · parsing…" font:11/400 color:on-surface-variant
-+ - icon-btn flex:row justify:center align:center r:999
-  - span flex:row
-- - icon:folder-open
-+ - icon:x
-  - div flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
+  - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
+  - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
+- - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
+- - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
++ - div abs:[85,359 242x31] rel:[63,14 242x31]
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "TSV · 4.2 KB · parsing…" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
+  - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
+- - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
++ - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
+  - div abs:[22,417 362x76] rel:[14,294 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
   ...
-  - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." font:11/400/17 color:on-surface-variant
-+ - div flex:row justify:between align:baseline pad:8/4
-+ - ov "2 · Preview" font:11/700 color:on-surface-variant
-+ - card bg:on-primary r:12 pad:28/18 border:1px seed-indigo@14
-+ - span r:999 border:2px #000000@0
-+ - div "Reading your file…" font:14/700 color:font-headline
-+ - div "No cards will be added until you tap Import." font:12/400/18 color:on-surface-variant
-  - div flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
+  - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,448 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
++ - div abs:[22,507 362x29] rel:[14,384 362x29] flex:row justify:between align:baseline pad:8/4
++ - ov "2 · Preview" abs:[26,515 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant
++ - card abs:[22,536 362x142] rel:[14,413 362x142] pad:28/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - span abs:[188,565 30x30] rel:[166,29 30x30] r:999 border:2px #000000@0
++ - div "Reading your file…" abs:[41,609 324x18] rel:[19,73 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
++ - div "No cards will be added until you tap Import." abs:[41,631 324x18] rel:[19,95 324x18] font:12/400/18 color:on-surface-variant text:center
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Preview import" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-- - span flex:row
-- - icon:eye
-- - div "Pick a file or paste text to continue." font:10/400 color:on-surface-variant op:0.7
-+ - pill-btn "Parsing…" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-+ - span r:999 border:2px #000000@0
-+ - div "Reading file — no changes yet." font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+- - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
+- - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
+- - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - pill-btn "Parsing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
++ - span abs:[206,723 18x18] rel:[91,11 18x18] r:999 border:2px #000000@0
++ - div "Reading file — no changes yet." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Preview all (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x2+(unit=2)
-- - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-+ - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-+ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-  - div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+  - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
+- - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+- - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "2" abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
++ - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[27,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[27,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
++ - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[174,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[174,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
+  - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
-  - div "TSV or CSV rows" font:11/400 color:on-surface-variant
-- - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
-- - div flex:row justify:center align:center bg:seed-indigo@10 r:14
-- - span flex:row
-- - icon:file-up
-- - div "Drop a file or tap to browse" font:14/700 color:font-headline
-- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" font:11/400/17 color:on-surface-variant
-- - pill-btn "Choose file" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/16
-+ - card grid cols:3 gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-+ - div flex:row justify:center align:center bg:seed-indigo@10 r:9
-  - span flex:row
-- - icon:folder-open
-- - div flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
-- - span flex:row
-- - icon:info
-+ - icon:file-text
-  - div
-- - div "Each row makes one card" font:11/700/17 color:font-headline
-- - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." font:11/400/17 color:on-surface-variant
-+ - div "topik-ii-vocab.tsv" font:13/700 color:font-headline
-+ - div "TSV · 4.2 KB · 5 rows detected" font:11/400 color:on-surface-variant
-+ - icon-btn flex:row justify:center align:center r:999
-+ - span flex:row
-+ - icon:x
-+ - div flex:row justify:between align:baseline pad:8/4
-+ - ov "2 · Preview" font:11/700 color:on-surface-variant
-+ - span "5 of 5 ready" font:11/400 color:on-surface-variant
-+ - div flex:row wrap gap:6
-+ - span "Valid · 5" flex:row gap:6 align:center bg:mastery@10 font:11/700 color:mastery r:999 pad:0/8
-+ - span flex:row
-+ - icon:check
-+ - card repeat:x5(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "1" font:10/700 color:on-surface-variant
-+ - div "연구자" font:13/600 color:font-headline
-+ - div "researcher" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[2] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "2" font:10/700 color:on-surface-variant
-+ - div "공부하다" font:13/600 color:font-headline
-+ - div "to study" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[3] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "3" font:10/700 color:on-surface-variant
-+ - div "도서관" font:13/600 color:font-headline
-+ - div "library, reading room" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[4] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "4" font:10/700 color:on-surface-variant
-+ - div "친구" font:13/600 color:font-headline
-+ - div "friend, close companion" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[5] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "5" font:10/700 color:on-surface-variant
-+ - div "바다" font:13/600 color:font-headline
-+ - div "sea, ocean" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - ov "Import options" font:11/700 color:on-surface-variant pad:4/4
-+ - card bg:on-primary r:12 border:1px seed-indigo@14
-+ - div grid cols:3 gap:12 align:center pad:12/14
-+ - div flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span flex:row
-+ - icon:tag
-+ - div
-+ - div "Apply tags from column 3" font:13/600 color:font-headline
-+ - div "Detected: TOPIK II, noun, verb" font:11/400/15 color:on-surface-variant
-+ - span bg:seed-indigo r:999
-+ - span bg:on-primary r:999 shadow:1/3
-+ - div grid cols:3 gap:12 align:center pad:12/14
-+ - div flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span flex:row
-+ - icon:copy
-+ - div
-+ - div "Skip duplicates" font:13/600 color:font-headline
-+ - div "Cards matching front + back stay untouched" font:11/400/15 color:on-surface-variant
-+ - span bg:seed-indigo r:999
-+ - span bg:on-primary r:999 shadow:1/3
-+ - div grid cols:3 gap:12 align:center pad:12/14
-+ - div flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span flex:row
-+ - icon:flag
-+ - div
-+ - div "Mark imported as new" font:13/600 color:font-headline
-+ - div "Reset progress for matching cards" font:11/400/15 color:on-surface-variant
-+ - span bg:surface-container-high r:999
-+ - span bg:on-primary r:999 shadow:1/3
-  - div flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
+  - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
+  - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
+- - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
+- - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
++ - div abs:[85,359 242x31] rel:[63,14 242x31]
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "TSV · 4.2 KB · 5 rows detected" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
+  - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
+- - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
+- - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
+- - span abs:[35,571 13x13] rel:[13,11 13x13] flex:row
+- - icon:info abs:[35,571 13x13] rel:[0,0 13x13] clip
+- - div abs:[56,571 315x54] rel:[34,11 315x54] grow:1 basis:0 layout_hint:expanded
+- - div "Each row makes one card" abs:[56,571 315x17] rel:[0,0 315x17] margin:0/0/3/0 font:11/700/17 color:font-headline
+- - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
++ - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
++ - div abs:[22,417 362x29] rel:[14,294 362x29] flex:row justify:between align:baseline pad:8/4
++ - ov "2 · Preview" abs:[26,425 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant
++ - span "5 of 5 ready" abs:[320,425 60x13] rel:[298,8 60x13] font:11/400 color:on-surface-variant
++ - div abs:[22,446 362x26] rel:[14,323 362x26] flex:row wrap gap:6 margin:0/0/12/0
++ - span "Valid · 5" abs:[22,446 76x26] rel:[0,0 76x26] flex:row gap:6 align:center pad:0/10/0/8 bg:mastery@10 font:11/700 color:mastery r:999
++ - span abs:[30,454 11x11] rel:[8,8 11x11] flex:row
++ - icon:check abs:[30,454 11x11] rel:[0,0 11x11] clip
++ - card abs:[22,484 362x201] rel:[14,361 362x201] repeat:x5(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "researcher" abs:[210,497 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,498 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,498 13x13] rel:[0,0 13x13] clip
++ - item[2] div abs:[23,525 360x40] rel:[1,41 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "2" abs:[35,539 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "공부하다" abs:[69,535 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "to study" abs:[210,537 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,538 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,538 13x13] rel:[0,0 13x13] clip
++ - item[3] div abs:[23,565 360x40] rel:[1,81 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "3" abs:[35,579 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "도서관" abs:[69,575 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "library, reading room" abs:[210,577 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,578 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,578 13x13] rel:[0,0 13x13] clip
++ - item[4] div abs:[23,605 360x40] rel:[1,121 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "4" abs:[35,619 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "친구" abs:[69,615 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "friend, close companion" abs:[210,617 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,618 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,618 13x13] rel:[0,0 13x13] clip
++ - item[5] div abs:[23,645 360x39] rel:[1,161 360x39] grid cols:4 gap:10 align:center pad:10/12
++ - span "5" abs:[35,659 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "바다" abs:[69,655 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "sea, ocean" abs:[210,657 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,658 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,658 13x13] rel:[0,0 13x13] clip
++ - ov "Import options" abs:[22,699 362x25] rel:[14,576 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant
++ - card abs:[22,724 362x176] rel:[14,601 362x176] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[23,725 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[37,739 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
++ - span abs:[45,747 14x14] rel:[8,8 14x14] flex:row
++ - icon:tag abs:[45,747 14x14] rel:[0,0 14x14] clip
++ - div abs:[81,737 232x33] rel:[58,12 232x33]
++ - div "Apply tags from column 3" abs:[81,737 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Detected: TOPIK II, noun, verb" abs:[81,755 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - span abs:[325,741 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
++ - span abs:[346,744 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
++ - div abs:[23,783 360x58] rel:[1,59 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[37,797 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
++ - span abs:[45,805 14x14] rel:[8,8 14x14] flex:row
++ - icon:copy abs:[45,805 14x14] rel:[0,0 14x14] clip
++ - div abs:[81,795 232x33] rel:[58,12 232x33]
++ - div "Skip duplicates" abs:[81,795 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Cards matching front + back stay untouched" abs:[81,813 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - span abs:[325,799 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
++ - span abs:[346,802 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
++ - div abs:[23,842 360x57] rel:[1,118 360x57] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[37,855 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
++ - span abs:[45,863 14x14] rel:[8,8 14x14] flex:row
++ - icon:flag abs:[45,863 14x14] rel:[0,0 14x14] clip
++ - div abs:[81,854 232x33] rel:[58,12 232x33]
++ - div "Mark imported as new" abs:[81,854 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Reset progress for matching cards" abs:[81,872 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - span abs:[325,857 44x26] rel:[302,16 44x26] pos:relative bg:surface-container-high r:999
++ - span abs:[328,860 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Preview import" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-+ - pill-btn "Import 5 valid cards" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-  - span flex:row
-- - icon:eye
-- - div "Pick a file or paste text to continue." font:10/400 color:on-surface-variant op:0.7
-+ - icon:download
-+ - div "No cards are added until you tap Import." font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
++ - pill-btn "Import 5 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - span abs:[171,725 15x15] rel:[56,13 15x15] flex:row
+- - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
+- - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - icon:download abs:[171,725 15x15] rel:[0,0 15x15] clip
++ - div "No cards are added until you tap Import." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Preview mixed (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x2+(unit=2)
-- - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-+ - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-+ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-  - div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+  - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
+- - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+- - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "2" abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
++ - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[27,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[27,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
++ - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[174,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[174,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
+  - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
-  - div "TSV or CSV rows" font:11/400 color:on-surface-variant
-- - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
-- - div flex:row justify:center align:center bg:seed-indigo@10 r:14
-+ - card grid cols:3 gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-+ - div flex:row justify:center align:center bg:seed-indigo@10 r:9
-  - span flex:row
-- - icon:file-up
-- - div "Drop a file or tap to browse" font:14/700 color:font-headline
-- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" font:11/400/17 color:on-surface-variant
-- - pill-btn "Choose file" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/16
-+ - icon:file-text
-+ - div
-+ - div "topik-ii-vocab.tsv" font:13/700 color:font-headline
-+ - div "TSV · 4.2 KB · 7 rows detected" font:11/400 color:on-surface-variant
-+ - icon-btn flex:row justify:center align:center r:999
-  - span flex:row
-- - icon:folder-open
-- - div flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
-+ - icon:x
-+ - div flex:row justify:between align:baseline pad:8/4
-+ - ov "2 · Preview" font:11/700 color:on-surface-variant
-+ - span "4 of 7 ready" font:11/400 color:on-surface-variant
-+ - div flex:row wrap gap:6
-+ - span "Valid · 4" flex:row gap:6 align:center bg:mastery@10 font:11/700 color:mastery r:999 pad:0/8
-+ - span flex:row
-+ - icon:check
-+ - span "Invalid · 2" flex:row gap:6 align:center bg:#dc4848@10 font:11/700 color:error r:999 pad:0/8
-+ - span flex:row
-+ - icon:alert-circle
-+ - span "Duplicate · 1" flex:row gap:6 align:center bg:#d9891e@12 font:11/700 color:streak r:999 pad:0/8
-+ - span flex:row
-+ - icon:copy
-+ - card repeat:x7(unit=1) bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "1" font:10/700 color:on-surface-variant
-+ - div "연구자" font:13/600 color:font-headline
-+ - div "researcher" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[2] div grid cols:4 gap:10 align:center bg:#dc4848@4 pad:10/12 op:0.85
-+ - span "2" font:10/700 color:on-surface-variant
-+ - div
-+ - div "공부하다" font:13/600 color:font-headline
-+ - div "Missing meaning" flex:row gap:3 align:center font:10/600 color:error
-+ - span flex:row
-+ - icon:alert-circle
-+ - div "(empty)" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:x
-+ - item[3] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "3" font:10/700 color:on-surface-variant
-+ - div "도서관" font:13/600 color:font-headline
-+ - div "library, reading room" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[4] div grid cols:4 gap:10 align:center bg:#dc4848@4 pad:10/12 op:0.85
-+ - span "4" font:10/700 color:on-surface-variant
-+ - div
-+ - div "(empty)" font:13/600 color:error
-+ - div "Missing term" flex:row gap:3 align:center font:10/600 color:error
-+ - span flex:row
-+ - icon:alert-circle
-+ - div "sky" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:x
-+ - item[5] div grid cols:4 gap:10 align:center bg:#d9891e@4 pad:10/12
-+ - span "5" font:10/700 color:on-surface-variant
-+ - div
-+ - div "친구" font:13/600 color:font-headline
-+ - div "Already in this deck" flex:row gap:3 align:center font:10/600 color:streak
-+ - span flex:row
-+ - icon:copy
-+ - div "friend, close companion" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:copy
-+ - item[6] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "6" font:10/700 color:on-surface-variant
-+ - div "바다" font:13/600 color:font-headline
-+ - div "sea, ocean" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - item[7] div grid cols:4 gap:10 align:center pad:10/12
-+ - span "7" font:10/700 color:on-surface-variant
-+ - div "영화" font:13/600 color:font-headline
-+ - div "movie / film" font:12/400 color:on-surface-variant
-+ - span flex:row
-+ - icon:check
-+ - div flex:row gap:10 align:start bg:#dc4848@6 r:12 pad:12/14 border:1px #dc4848@20
-  - span flex:row
-- - icon:info
-+ - icon:alert-circle
-  - div
-- - div "Each row makes one card" font:11/700/17 color:font-headline
-- - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." font:11/400/17 color:on-surface-variant
-+ - div "3 rows will be skipped" font:12/700/19 color:font-headline
-+ - div "2 have missing fields · 1 match an existing card. Fix them in your file and import again to include them." font:12/400/19 color:on-surface-variant
-+ - ov "Import options" font:11/700 color:on-surface-variant pad:4/4
-+ - card bg:on-primary r:12 border:1px seed-indigo@14
-+ - div grid cols:3 gap:12 align:center pad:12/14
-+ - div flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span flex:row
-+ - icon:tag
-+ - div
-+ - div "Apply tags from column 3" font:13/600 color:font-headline
-+ - div "Detected: TOPIK II, noun, verb" font:11/400/15 color:on-surface-variant
-+ - span bg:seed-indigo r:999
-+ - span bg:on-primary r:999 shadow:1/3
-+ - div grid cols:3 gap:12 align:center pad:12/14
-+ - div flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span flex:row
-+ - icon:copy
-+ - div
-+ - div "Skip duplicates" font:13/600 color:font-headline
-+ - div "Cards matching front + back stay untouched" font:11/400/15 color:on-surface-variant
-+ - span bg:seed-indigo r:999
-+ - span bg:on-primary r:999 shadow:1/3
-+ - div grid cols:3 gap:12 align:center pad:12/14
-+ - div flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span flex:row
-+ - icon:flag
-+ - div
-+ - div "Mark imported as new" font:13/600 color:font-headline
-+ - div "Reset progress for matching cards" font:11/400/15 color:on-surface-variant
-+ - span bg:surface-container-high r:999
-+ - span bg:on-primary r:999 shadow:1/3
-  - div flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
+  - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
+  - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
+- - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
+- - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
++ - div abs:[85,359 242x31] rel:[63,14 242x31]
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "TSV · 4.2 KB · 7 rows detected" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
+  - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
+- - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
+- - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
++ - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
++ - div abs:[22,417 362x29] rel:[14,294 362x29] flex:row justify:between align:baseline pad:8/4
++ - ov "2 · Preview" abs:[26,425 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant
++ - span "4 of 7 ready" abs:[320,425 60x13] rel:[298,8 60x13] font:11/400 color:on-surface-variant
++ - div abs:[22,446 362x26] rel:[14,323 362x26] flex:row wrap gap:6 margin:0/0/12/0
++ - span "Valid · 4" abs:[22,446 76x26] rel:[0,0 76x26] flex:row gap:6 align:center pad:0/10/0/8 bg:mastery@10 font:11/700 color:mastery r:999
++ - span abs:[30,454 11x11] rel:[8,8 11x11] flex:row
++ - icon:check abs:[30,454 11x11] rel:[0,0 11x11] clip
++ - span "Invalid · 2" abs:[104,446 85x26] rel:[82,0 85x26] flex:row gap:6 align:center pad:0/10/0/8 bg:#dc4848@10 font:11/700 color:error r:999
++ - span abs:[112,454 11x11] rel:[8,8 11x11] flex:row
++ - icon:alert-circle abs:[112,454 11x11] rel:[0,0 11x11] clip
++ - span "Duplicate · 1" abs:[195,446 101x26] rel:[173,0 101x26] flex:row gap:6 align:center pad:0/10/0/8 bg:#d9891e@12 font:11/700 color:streak r:999
++ - span abs:[203,454 11x11] rel:[8,8 11x11] flex:row
++ - icon:copy abs:[203,454 11x11] rel:[0,0 11x11] clip
++ - card abs:[22,484 362x341] rel:[14,361 362x341] repeat:x7(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "researcher" abs:[210,497 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,498 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,498 13x13] rel:[0,0 13x13] clip
++ - item[2] div abs:[23,525 360x61] rel:[1,41 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 op:0.85
++ - span "2" abs:[35,549 24x12] rel:[12,24 24x12] font:10/700 color:on-surface-variant
++ - div abs:[69,535 131x40] rel:[46,10 131x40]
++ - div "공부하다" abs:[69,535 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline
++ - div "Missing meaning" abs:[69,561 92x12] rel:[0,26 92x12] flex:row gap:3 align:center margin:2/0/0/0 font:10/600 color:error
++ - span abs:[69,562 9x9] rel:[0,2 9x9] flex:row
++ - icon:alert-circle abs:[69,562 9x9] rel:[0,0 9x9] clip
++ - div "(empty)" abs:[210,548 131x15] rel:[187,23 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,549 20x13] rel:[328,24 20x13] flex:row
++ - icon:x abs:[351,549 13x13] rel:[0,0 13x13] clip
++ - item[3] div abs:[23,586 360x40] rel:[1,102 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "3" abs:[35,600 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "도서관" abs:[69,596 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "library, reading room" abs:[210,598 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,599 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,599 13x13] rel:[0,0 13x13] clip
++ - item[4] div abs:[23,626 360x58] rel:[1,142 360x58] grid cols:4 gap:10 align:center pad:10/12 bg:#dc4848@4 op:0.85
++ - span "4" abs:[35,649 24x12] rel:[12,23 24x12] font:10/700 color:on-surface-variant
++ - div abs:[69,636 131x37] rel:[46,10 131x37]
++ - div "(empty)" abs:[69,636 131x16] rel:[0,0 131x16] clip font:13/600 color:error
++ - div "Missing term" abs:[69,659 73x12] rel:[0,23 73x12] flex:row gap:3 align:center margin:2/0/0/0 font:10/600 color:error
++ - span abs:[69,660 9x9] rel:[0,2 9x9] flex:row
++ - icon:alert-circle abs:[69,660 9x9] rel:[0,0 9x9] clip
++ - div "sky" abs:[210,647 131x15] rel:[187,21 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,648 20x13] rel:[328,22 20x13] flex:row
++ - icon:x abs:[351,648 13x13] rel:[0,0 13x13] clip
++ - item[5] div abs:[23,684 360x61] rel:[1,200 360x61] grid cols:4 gap:10 align:center pad:10/12 bg:#d9891e@4
++ - span "5" abs:[35,708 24x12] rel:[12,24 24x12] font:10/700 color:on-surface-variant
++ - div abs:[69,694 131x40] rel:[46,10 131x40]
++ - div "친구" abs:[69,694 131x19] rel:[0,0 131x19] clip font:13/600 color:font-headline
++ - div "Already in this deck" abs:[69,720 105x12] rel:[0,26 105x12] flex:row gap:3 align:center margin:2/0/0/0 font:10/600 color:streak
++ - span abs:[69,721 9x9] rel:[0,2 9x9] flex:row
++ - icon:copy abs:[69,721 9x9] rel:[0,0 9x9] clip
++ - div "friend, close companion" abs:[210,707 131x15] rel:[187,23 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,708 20x13] rel:[328,24 20x13] flex:row
++ - icon:copy abs:[351,708 13x13] rel:[0,0 13x13] clip
++ - item[6] div abs:[23,745 360x40] rel:[1,261 360x40] grid cols:4 gap:10 align:center pad:10/12
++ - span "6" abs:[35,759 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "바다" abs:[69,755 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "sea, ocean" abs:[210,757 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,758 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,758 13x13] rel:[0,0 13x13] clip
++ - item[7] div abs:[23,785 360x39] rel:[1,301 360x39] grid cols:4 gap:10 align:center pad:10/12
++ - span "7" abs:[35,799 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
++ - div "영화" abs:[69,795 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline
++ - div "movie / film" abs:[210,797 131x15] rel:[187,12 131x15] clip font:12/400 color:on-surface-variant
++ - span abs:[351,798 20x13] rel:[328,13 20x13] flex:row
++ - icon:check abs:[351,798 13x13] rel:[0,0 13x13] clip
++ - div abs:[22,839 362x84] rel:[14,716 362x84] flex:row gap:10 align:start pad:12/14 margin:0/0/14/0 bg:#dc4848@6 r:12 border:1px #dc4848@20
+  - span abs:[37,852 15x15] rel:[15,13 15x15] flex:row
+- - icon:info abs:[35,571 13x13] rel:[0,0 13x13] clip
++ - icon:alert-circle abs:[37,852 15x15] rel:[0,0 15x15] clip
+  - div abs:[62,852 307x58] rel:[40,13 307x58] grow:1 basis:0 layout_hint:expanded
+- - div "Each row makes one card" abs:[56,571 315x17] rel:[0,0 315x17] margin:0/0/3/0 font:11/700/17 color:font-headline
+- - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
++ - div "3 rows will be skipped" abs:[62,852 307x19] rel:[0,0 307x19] margin:0/0/2/0 font:12/700/19 color:font-headline
++ - div "2 have missing fields · 1 match an existing card. Fix them in your file and import again to include them." abs:[62,873 307x37] rel:[0,21 307x37] font:12/400/19 color:on-surface-variant
++ - ov "Import options" abs:[22,937 362x25] rel:[14,814 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant
++ - card abs:[22,962 362x176] rel:[14,839 362x176] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[23,963 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[37,976 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
++ - span abs:[45,984 14x14] rel:[8,8 14x14] flex:row
++ - icon:tag abs:[45,984 14x14] rel:[0,0 14x14] clip
++ - div abs:[81,975 232x33] rel:[58,12 232x33]
++ - div "Apply tags from column 3" abs:[81,975 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Detected: TOPIK II, noun, verb" abs:[81,993 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - span abs:[325,978 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
++ - span abs:[346,981 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
++ - div abs:[23,1021 360x58] rel:[1,59 360x58] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[37,1035 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
++ - span abs:[45,1043 14x14] rel:[8,8 14x14] flex:row
++ - icon:copy abs:[45,1043 14x14] rel:[0,0 14x14] clip
++ - div abs:[81,1033 232x33] rel:[58,12 232x33]
++ - div "Skip duplicates" abs:[81,1033 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Cards matching front + back stay untouched" abs:[81,1051 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - span abs:[325,1037 44x26] rel:[302,16 44x26] pos:relative bg:seed-indigo r:999
++ - span abs:[346,1040 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
++ - div abs:[23,1080 360x57] rel:[1,118 360x57] grid cols:3 gap:12 align:center pad:12/14
++ - div abs:[37,1093 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
++ - span abs:[45,1101 14x14] rel:[8,8 14x14] flex:row
++ - icon:flag abs:[45,1101 14x14] rel:[0,0 14x14] clip
++ - div abs:[81,1092 232x33] rel:[58,12 232x33]
++ - div "Mark imported as new" abs:[81,1092 232x16] rel:[0,0 232x16] font:13/600 color:font-headline
++ - div "Reset progress for matching cards" abs:[81,1110 232x15] rel:[0,18 232x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
++ - span abs:[325,1095 44x26] rel:[302,16 44x26] pos:relative bg:surface-container-high r:999
++ - span abs:[328,1098 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Preview import" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-+ - pill-btn "Import 4 valid cards" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-  - span flex:row
-- - icon:eye
-- - div "Pick a file or paste text to continue." font:10/400 color:on-surface-variant op:0.7
-+ - icon:download
-+ - div "Only the 4 valid rows will be imported." font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
++ - pill-btn "Import 4 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - span abs:[171,725 15x15] rel:[56,13 15x15] flex:row
+- - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
+- - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - icon:download abs:[171,725 15x15] rel:[0,0 15x15] clip
++ - div "Only the 4 valid rows will be imported." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Importing (ordered diff vs Empty)
 
 ```diff
-  - div flex:row gap:8 align:center repeat:x2+(unit=2)
-- - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "1" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-- - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "2" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-- - div bg:surface-container r:999
-- - div "Import" flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
-- - span "3" flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
-+ - item[1] div "Source" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-+ - item[2] div "Preview" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span flex:row justify:center align:center bg:mastery r:999
-+ - span flex:row
-+ - icon:check
-+ - div bg:mastery r:999
-+ - div "Import" flex:row gap:6 align:center font:11/600 color:font-headline
-+ - span "3" flex:row justify:center align:center bg:seed-indigo font:10/700 color:on-primary r:999
-  - div flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
+  - div abs:[22,123 362x20] rel:[14,0 362x20] flex:row gap:8 align:center repeat:x2+(unit=2) margin:0/0/16/0
+- - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "1" abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+- - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "2" abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
+- - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
+- - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
+- - span "3" abs:[322,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:surface-container font:10/700 color:on-surface-variant r:999
++ - item[1] div "Source" abs:[22,123 64x20] rel:[0,0 64x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[22,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[27,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[27,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[94,132 68x2] rel:[72,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
++ - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span abs:[170,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:mastery r:999
++ - span abs:[174,128 11x11] rel:[5,5 11x11] flex:row
++ - icon:check abs:[174,128 11x11] rel:[0,0 11x11] clip
++ - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:mastery r:999
++ - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:font-headline
++ - span "3" abs:[322,123 20x20] rel:[0,0 20x20] flex:row justify:center align:center bg:seed-indigo font:10/700 color:on-primary r:999
+  - div abs:[22,159 212x36] rel:[14,36 212x36] flex:row gap:8 align:center pad:6/12/6/8 margin:0/0/14/0 bg:on-primary r:999 border:1px seed-indigo@14
   ...
-  - div "TSV or CSV rows" font:11/400 color:on-surface-variant
-- - card bg:on-primary r:12 pad:24/18 border:1px outline-variant
-- - div flex:row justify:center align:center bg:seed-indigo@10 r:14
-- - span flex:row
-- - icon:file-up
-- - div "Drop a file or tap to browse" font:14/700 color:font-headline
-- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" font:11/400/17 color:on-surface-variant
-- - pill-btn "Choose file" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/16
-+ - card grid cols:3 gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-+ - div flex:row justify:center align:center bg:seed-indigo@10 r:9
-  - span flex:row
-- - icon:folder-open
-- - div flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
-- - span flex:row
-- - icon:info
-+ - icon:file-text
-  - div
-- - div "Each row makes one card" font:11/700/17 color:font-headline
-- - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." font:11/400/17 color:on-surface-variant
-+ - div "topik-ii-vocab.tsv" font:13/700 color:font-headline
-+ - div "TSV · 4.2 KB · ready to preview" font:11/400 color:on-surface-variant
-+ - icon-btn flex:row justify:center align:center r:999
-+ - span flex:row
-+ - icon:x
-+ - card bg:on-primary r:12 pad:28/18 border:1px seed-indigo@14
-+ - span r:999 border:2px #000000@0
-+ - div "Adding 4 cards…" font:14/700 color:font-headline
-+ - div "Saving to this device. Don't close the app yet." font:12/400/18 color:on-surface-variant
-+ - div bg:surface-container r:999
-+ - div bg:seed-indigo r:999
-+ - div "29 of 47" font:11/400 color:on-surface-variant
-  - div flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
+  - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
+  - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
+- - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
+- - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+- - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center r:11
++ - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
++ - div abs:[85,359 242x31] rel:[63,14 242x31]
++ - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline
++ - div "TSV · 4.2 KB · ready to preview" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
+  - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
+- - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
+- - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
+- - span abs:[35,571 13x13] rel:[13,11 13x13] flex:row
+- - icon:info abs:[35,571 13x13] rel:[0,0 13x13] clip
+- - div abs:[56,571 315x54] rel:[34,11 315x54] grow:1 basis:0 layout_hint:expanded
+- - div "Each row makes one card" abs:[56,571 315x17] rel:[0,0 315x17] margin:0/0/3/0 font:11/700/17 color:font-headline
+- - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
++ - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
++ - card abs:[22,417 362x188] rel:[14,294 362x188] pad:28/18 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - span abs:[187,446 32x32] rel:[165,29 32x32] r:999 border:2px #000000@0
++ - div "Adding 4 cards…" abs:[41,492 324x18] rel:[19,75 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
++ - div "Saving to this device. Don't close the app yet." abs:[41,514 324x18] rel:[19,97 324x18] font:12/400/18 color:on-surface-variant text:center
++ - div abs:[41,550 324x5] rel:[19,133 324x5] margin:18/0/0/0 clip bg:surface-container r:999
++ - div abs:[41,550 201x5] rel:[0,0 201x5] bg:seed-indigo r:999
++ - div "29 of 47" abs:[41,563 324x13] rel:[19,146 324x13] margin:8/0/0/0 font:11/400 color:on-surface-variant text:center
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Preview import" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-- - span flex:row
-- - icon:eye
-- - div "Pick a file or paste text to continue." font:10/400 color:on-surface-variant op:0.7
-+ - pill-btn "Importing…" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.6
-+ - span r:999 border:2px #000000@0
-+ - div "Next you’ll preview every row before anything is imported." font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+- - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
+- - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
+- - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - pill-btn "Importing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.6
++ - span abs:[197,723 18x18] rel:[82,11 18x18] r:999 border:2px #000000@0
++ - div "Next you’ll preview every row before anything is imported." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Success (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - title "Import results" [60,66 330x21] font:16/700 color:font-headline
-  - scroll [8,100 390x621] pad:18/14
-    - card [22,118 362x199] bg:mastery@10 r:12 pad:24/22 border:1px mastery@22
-      - div [171,143 64x64] flex:row justify:center align:center r:18
-        - span [188,160 30x30] flex:row
-          - icon:check-circle-2 [188,160 30x30]
-      - div "Import complete" [45,221 316x23] font:18/700 color:font-headline
-      - div "Added 47 cards to TOPIK II — Vocab. They are ready to study." [45,252 316x40] font:13/400/20 color:on-surface-variant
-    - card [22,331 362x50] bg:on-primary r:12 border:1px seed-indigo@14
-      - div [23,332 360x48] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,344 24x24] flex:row justify:center align:center r:7
-          - span [43,350 12x12] flex:row
-            - icon:check [43,350 12x12]
-        - div "Added" [77,348 263x16] font:13/600 color:font-headline
-        - div "47" [352,347 17x18] font:14/700 color:mastery
-  - div [8,721 390x67] flex:row gap:10 pad:10/14 border:1px seed-indigo@14
-    - pill-btn "Back to deck" [22,732 164x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-    - pill-btn "View imported cards" [196,732 188x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:12 pad:0/18
-      - span [214,745 15x15] flex:row
-        - icon:layers [214,745 15x15]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+  - scroll abs:[8,100 390x621] rel:[0,92 390x621] grow:1 basis:0 layout_hint:expanded pad:18/14/14/14 layout_hint:scroll
+    - card abs:[22,118 362x199] rel:[14,18 362x199] pad:24/22 margin:0/0/14/0 bg:mastery@10 r:12 border:1px mastery@22
+      - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
+        - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
+          - icon:check-circle-2 abs:[188,160 30x30] rel:[0,0 30x30] clip
+      - div "Import complete" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
+      - div "Added 47 cards to TOPIK II — Vocab. They are ready to study." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
+    - card abs:[22,331 362x50] rel:[14,231 362x50] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[23,332 360x48] rel:[1,1 360x48] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,344 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
+          - span abs:[43,350 12x12] rel:[6,6 12x12] flex:row
+            - icon:check abs:[43,350 12x12] rel:[0,0 12x12] clip
+        - div "Added" abs:[77,348 263x16] rel:[54,16 263x16] font:13/600 color:font-headline
+        - div "47" abs:[352,347 17x18] rel:[329,15 17x18] font:14/700 color:mastery
+  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
+    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+      - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
+        - icon:layers abs:[214,745 15x15] rel:[0,0 15x15] clip
 ```
 
 ## State: Partial (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - title "Import results" [60,66 330x21] font:16/700 color:font-headline
-  - scroll [8,100 390x621] pad:18/14
-    - card [22,118 362x199] bg:#d9891e@10 r:12 pad:24/22 border:1px #d9891e@22
-      - div [171,143 64x64] flex:row justify:center align:center r:18
-        - span [188,160 30x30] flex:row
-          - icon:alert-triangle [188,160 30x30]
-      - div "Imported with skips" [45,221 316x23] font:18/700 color:font-headline
-      - div "Added 42 cards. 5 rows were skipped because of validation issues." [45,252 316x40] font:13/400/20 color:on-surface-variant
-    - card [22,331 362x148] bg:on-primary r:12 border:1px seed-indigo@14
-      - div [23,332 360x49] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,344 24x24] flex:row justify:center align:center r:7
-          - span [43,350 12x12] flex:row
-            - icon:check [43,350 12x12]
-        - div "Added" [77,348 263x16] font:13/600 color:font-headline
-        - div "42" [352,347 17x18] font:14/700 color:mastery
-      - div [23,381 360x49] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,393 24x24] flex:row justify:center align:center r:7
-          - span [43,399 12x12] flex:row
-            - icon:alert-circle [43,399 12x12]
-        - div "Skipped — missing fields" [77,397 272x16] font:13/600 color:font-headline
-        - div "3" [361,396 8x18] font:14/700 color:error
-      - div [23,430 360x48] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,442 24x24] flex:row justify:center align:center r:7
-          - span [43,448 12x12] flex:row
-            - icon:copy [43,448 12x12]
-        - div "Skipped — duplicates" [77,446 272x16] font:13/600 color:font-headline
-        - div "2" [361,445 8x18] font:14/700 color:streak
-    - div [22,493 362x55] flex:row gap:8 align:start bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-      - span [35,504 13x13] flex:row
-        - icon:info [35,504 13x13]
-      - span "Fix the skipped rows in your source file and import again to add them." [56,504 315x33] font:11/400/17 color:on-surface-variant
-  - div [8,721 390x67] flex:row gap:10 pad:10/14 border:1px seed-indigo@14
-    - pill-btn "Back to deck" [22,732 164x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-    - pill-btn "View imported cards" [196,732 188x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:12 pad:0/18
-      - span [214,745 15x15] flex:row
-        - icon:layers [214,745 15x15]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+  - scroll abs:[8,100 390x621] rel:[0,92 390x621] grow:1 basis:0 layout_hint:expanded pad:18/14/14/14 layout_hint:scroll
+    - card abs:[22,118 362x199] rel:[14,18 362x199] pad:24/22 margin:0/0/14/0 bg:#d9891e@10 r:12 border:1px #d9891e@22
+      - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
+        - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
+          - icon:alert-triangle abs:[188,160 30x30] rel:[0,0 30x30] clip
+      - div "Imported with skips" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
+      - div "Added 42 cards. 5 rows were skipped because of validation issues." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
+    - card abs:[22,331 362x148] rel:[14,231 362x148] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[23,332 360x49] rel:[1,1 360x49] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,344 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
+          - span abs:[43,350 12x12] rel:[6,6 12x12] flex:row
+            - icon:check abs:[43,350 12x12] rel:[0,0 12x12] clip
+        - div "Added" abs:[77,348 263x16] rel:[54,16 263x16] font:13/600 color:font-headline
+        - div "42" abs:[352,347 17x18] rel:[329,15 17x18] font:14/700 color:mastery
+      - div abs:[23,381 360x49] rel:[1,50 360x49] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,393 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
+          - span abs:[43,399 12x12] rel:[6,6 12x12] flex:row
+            - icon:alert-circle abs:[43,399 12x12] rel:[0,0 12x12] clip
+        - div "Skipped — missing fields" abs:[77,397 272x16] rel:[54,16 272x16] font:13/600 color:font-headline
+        - div "3" abs:[361,396 8x18] rel:[338,15 8x18] font:14/700 color:error
+      - div abs:[23,430 360x48] rel:[1,99 360x48] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,442 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
+          - span abs:[43,448 12x12] rel:[6,6 12x12] flex:row
+            - icon:copy abs:[43,448 12x12] rel:[0,0 12x12] clip
+        - div "Skipped — duplicates" abs:[77,446 272x16] rel:[54,16 272x16] font:13/600 color:font-headline
+        - div "2" abs:[361,445 8x18] rel:[338,15 8x18] font:14/700 color:streak
+    - div abs:[22,493 362x55] rel:[14,393 362x55] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:on-primary r:11 border:1px seed-indigo@14
+      - span abs:[35,504 13x13] rel:[13,11 13x13] flex:row
+        - icon:info abs:[35,504 13x13] rel:[0,0 13x13] clip
+      - span "Fix the skipped rows in your source file and import again to add them." abs:[56,504 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
+    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+      - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
+        - icon:layers abs:[214,745 15x15] rel:[0,0 15x15] clip
 ```
 
 ## State: Failed (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - title "Import results" [60,66 330x21] font:16/700 color:font-headline
-  - card [22,118 362x199] bg:#dc4848@8 r:12 pad:24/22 border:1px #dc4848@22
-    - div [171,143 64x64] flex:row justify:center align:center r:18
-      - span [188,160 30x30] flex:row
-        - icon:alert-circle [188,160 30x30]
-    - div "Import didn’t finish" [45,221 316x23] font:18/700 color:font-headline
-    - div "No cards were added. Your file is unchanged and your deck is untouched." [45,252 316x40] font:13/400/20 color:on-surface-variant
-  - div [8,721 390x67] flex:row gap:10 pad:10/14 border:1px seed-indigo@14
-    - pill-btn "Close" [22,732 164x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-    - pill-btn "Try again" [196,732 188x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:12 pad:0/18
-      - span [251,745 15x15] flex:row
-        - icon:refresh-cw [251,745 15x15]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+  - card abs:[22,118 362x199] rel:[14,110 362x199] pad:24/22 margin:0/0/14/0 bg:#dc4848@8 r:12 border:1px #dc4848@22
+    - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
+      - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
+        - icon:alert-circle abs:[188,160 30x30] rel:[0,0 30x30] clip
+    - div "Import didn’t finish" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center
+    - div "No cards were added. Your file is unchanged and your deck is untouched." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
+  - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
+    - pill-btn "Close" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+    - pill-btn "Try again" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:12
+      - span abs:[251,745 15x15] rel:[54,13 15x15] flex:row
+        - icon:refresh-cw abs:[251,745 15x15] rel:[0,0 15x15] clip
 ```

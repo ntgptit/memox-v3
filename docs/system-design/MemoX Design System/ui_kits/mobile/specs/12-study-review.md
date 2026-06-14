@@ -5,50 +5,59 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - div [72,74 264x4] bg:surface-container r:999
-      - div [72,74 92x4] bg:seed-indigo
-    - div "8 / 23" [356,68 34x16] font:13/600 color:on-surface-variant
-  - div [8,100 390x688] flex:col gap:14 pad:6/14
-    - card [22,106 362x620] flex:col bg:on-primary r:12 border:1px seed-indigo@14
-      - div [23,107 360x309] flex:col justify:center align:center pad:20/16
-        - ov "Korean" [43,123 54x13] font:11/700 color:on-surface-variant
-        - div "먹다" [174,249 58x37] font:32/700/37 color:font-headline
-      - div [43,416 320x1] bg:outline-variant op:0.5
-      - div [23,417 360x309] flex:col gap:14 justify:center align:center pad:8/16
-        - ov "Meaning" [43,433 61x13] font:11/700 color:on-surface-variant
-        - div "to eat" [170,522 66x30] font:24/600 color:font-headline
-        - div "아침을 먹었어요." [141,566 125x41] bg:surface-container-low font:14/400/21 color:on-surface-variant r:10 pad:10/14
-    - div [22,740 362x36] flex:row gap:8 justify:center align:center pad:10/14
-      - span [111,750 16x16] flex:row
-        - icon:chevrons-right [111,750 16x16]
-      - span "Swipe left for the next card" [135,751 159x15] font:12/400 color:on-surface-variant
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[72,74 264x4] rel:[64,22 264x4] grow:1 basis:0 layout_hint:expanded margin:0/16 clip bg:surface-container r:999
+      - div abs:[72,74 92x4] rel:[0,0 92x4] bg:seed-indigo
+    - div "8 / 23" abs:[356,68 34x16] rel:[348,16 34x16] font:13/600 color:on-surface-variant
+  - div abs:[8,100 390x688] rel:[0,92 390x688] flex:col gap:14 grow:1 basis:0 layout_hint:expanded pad:6/14/12/14
+    - card abs:[22,106 362x620] rel:[14,6 362x620] flex:col grow:1 basis:0 layout_hint:expanded bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[23,107 360x309] rel:[1,1 360x309] flex:col justify:center align:center grow:1 basis:0 layout_hint:expanded pad:20/16/8/16 pos:relative
+        - ov "Korean" abs:[43,123 54x13] rel:[20,16 54x13] pos:absolute font:11/700 color:on-surface-variant
+        - div "먹다" abs:[174,249 58x37] rel:[151,142 58x37] font:32/700/37 color:font-headline text:center
+      - div abs:[43,416 320x1] rel:[21,310 320x1] margin:0/20 bg:outline-variant op:0.5
+      - div abs:[23,417 360x309] rel:[1,311 360x309] flex:col gap:14 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/16/20/16 pos:relative
+        - ov "Meaning" abs:[43,433 61x13] rel:[20,16 61x13] pos:absolute font:11/700 color:on-surface-variant
+        - div "to eat" abs:[170,522 66x30] rel:[147,106 66x30] font:24/600 color:font-headline text:center
+        - div "아침을 먹었어요." abs:[141,566 125x41] rel:[118,150 125x41] pad:10/14 maxw:280 bg:surface-container-low font:14/400/21 color:on-surface-variant text:center r:10
+    - div abs:[22,740 362x36] rel:[14,640 362x36] flex:row gap:8 justify:center align:center pad:10/14
+      - span abs:[111,750 16x16] rel:[89,10 16x16] flex:row
+        - icon:chevrons-right abs:[111,750 16x16] rel:[0,0 16x16] clip
+      - span "Swipe left for the next card" abs:[135,751 159x15] rel:[113,11 159x15] font:12/400 color:on-surface-variant
 ```

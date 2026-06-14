@@ -5,578 +5,587 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Week
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x56] flex:row gap:4 justify:between align:center pad:0/14
-    - div "Progress" [22,65 100x30] font:24/700 color:font-headline
-    - icon-btn [348,62 36x36] flex:row justify:center align:center r:999
-      - span [356,70 20x20] flex:row
-        - icon:help-circle [356,70 20x20]
-  - scroll [8,108 390x598] pad:0/14
-    - div [22,108 219x38] flex:row gap:2 bg:surface-container r:11 pad:3/3
-      - button "Week" [25,111 65x32] bg:on-primary font:12/600 color:font-headline r:9 pad:0/16 shadow:1/2
-      - button "Month" [92,111 69x32] font:12/600 color:on-surface-variant r:9 pad:0/16
-      - button "All time" [163,111 74x32] font:12/600 color:on-surface-variant r:9 pad:0/16
-    - card [22,160 362x197] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,175 332x59] flex:row gap:8 justify:between align:baseline
-        - div [37,175 103x59]
-          - ov "Cards studied" [37,175 103x13] font:11/700 color:on-surface-variant
-          - div "92" [37,192 103x26] font:24/700/26 color:font-headline
-          - div "over the past 7 days" [37,221 103x13] font:11/400 color:on-surface-variant
-      - div [37,246 332x78] flex:row gap:8 align:end pad:0/2
-        - div [39,246 40x78] flex:col justify:end align:center
-          - div [39,282 40x43] bg:seed-indigo@55 r:4
-        - div [87,246 40x78] flex:col justify:end align:center
-          - div [87,261 40x64] bg:seed-indigo@55 r:4
-        - div [135,246 40x78] flex:col justify:end align:center
-          - div [135,322 40x2] bg:surface-container-high r:4
-        - div [183,246 40x78] flex:col justify:end align:center
-          - div [183,246 40x78] bg:seed-indigo@55 r:4
-        - div [231,246 40x78] flex:col justify:end align:center
-          - div [231,275 40x50] bg:seed-indigo@55 r:4
-        - div [279,246 40x78] flex:col justify:end align:center
-          - div [279,292 40x32] bg:seed-indigo@55 r:4
-        - div [327,246 40x78] flex:col justify:end align:center
-          - div [327,264 40x60] bg:seed-indigo r:4
-      - div [37,330 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2
-        - item[1] span "M" [39,330 40x12] font:10/400 color:on-surface-variant
-        - item[2] span "T" [87,330 40x12] font:10/400 color:on-surface-variant
-        - item[3] span "W" [135,330 40x12] font:10/400 color:on-surface-variant
-        - item[4] span "T" [183,330 40x12] font:10/400 color:on-surface-variant
-        - item[5] span "F" [231,330 40x12] font:10/400 color:on-surface-variant
-        - item[6] span "S" [279,330 40x12] font:10/400 color:on-surface-variant
-        - item[7] span "S" [327,330 40x12] font:10/400 color:on-surface-variant
-    - card [22,369 362x182] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,384 332x60] flex:row gap:8 justify:between align:baseline
-        - div [37,384 133x60]
-          - ov "Accuracy" [37,384 133x13] font:11/700 color:on-surface-variant
-          - div "73%" [37,401 133x26] font:24/700/26 color:font-headline
-          - span [37,431 133x13] flex:row gap:4 align:center
-            - span [37,432 11x11] flex:row
-              - icon:trending-up [37,432 11x11]
-            - span "+4%" [52,431 25x13] font:11/600 color:mastery
-            - span "vs previous week" [81,431 88x13] font:11/400 color:on-surface-variant op:0.7
-      - svg [37,457 332x80]
-    - card [22,564 362x284] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,579 332x59] flex:row gap:8 justify:between align:baseline
-        - div [37,579 126x59]
-          - ov "Box distribution" [37,579 126x13] font:11/700 color:on-surface-variant
-          - div "414" [37,596 126x26] font:24/700/26 color:font-headline
-          - div "total cards across boxes" [37,625 126x13] font:11/400 color:on-surface-variant
-      - div [37,650 332x161] flex:col gap:7 repeat:x8(unit=1)
-        - item[1] div [37,650 332x14] grid cols:3 gap:8 align:center
-          - span "B1" [37,651 18x13] font:11/700 color:on-surface-variant
-          - div [63,650 266x14] bg:surface-container r:5
-            - div [63,650 74x14] bg:seed-indigo op:0.43125
-          - span "24" [337,651 32x13] font:11/700 color:font-headline
-        - item[2] div [37,671 332x14] grid cols:3 gap:8 align:center
-          - span "B2" [37,672 18x13] font:11/700 color:on-surface-variant
-          - div [63,671 266x14] bg:surface-container r:5
-            - div [63,671 118x14] bg:seed-indigo op:0.5125
-          - span "38" [337,672 32x13] font:11/700 color:font-headline
-        - item[3] div [37,692 332x14] grid cols:3 gap:8 align:center
-          - span "B3" [37,693 18x13] font:11/700 color:on-surface-variant
-          - div [63,692 266x14] bg:surface-container r:5
-            - div [63,692 167x14] bg:seed-indigo op:0.59375
-          - span "54" [337,693 32x13] font:11/700 color:font-headline
-        - item[4] div [37,713 332x14] grid cols:3 gap:8 align:center
-          - span "B4" [37,714 18x13] font:11/700 color:on-surface-variant
-          - div [63,713 266x14] bg:surface-container r:5
-            - div [63,713 220x14] bg:seed-indigo op:0.675
-          - span "71" [337,714 32x13] font:11/700 color:font-headline
-        - item[5] div [37,734 332x14] grid cols:3 gap:8 align:center
-          - span "B5" [37,735 18x13] font:11/700 color:on-surface-variant
-          - div [63,734 266x14] bg:surface-container r:5
-            - div [63,734 266x14] bg:seed-indigo op:0.75625
-          - span "86" [337,735 32x13] font:11/700 color:font-headline
-        - item[6] div [37,755 332x14] grid cols:3 gap:8 align:center
-          - span "B6" [37,756 18x13] font:11/700 color:on-surface-variant
-          - div [63,755 266x14] bg:surface-container r:5
-            - div [63,755 192x14] bg:mastery op:0.8375
-          - span "62" [337,756 32x13] font:11/700 color:font-headline
-        - item[7] div [37,776 332x14] grid cols:3 gap:8 align:center
-          - span "B7" [37,777 18x13] font:11/700 color:on-surface-variant
-          - div [63,776 266x14] bg:surface-container r:5
-            - div [63,776 148x14] bg:mastery op:0.91875
-          - span "48" [337,777 32x13] font:11/700 color:font-headline
-        - item[8] div [37,797 332x14] grid cols:3 gap:8 align:center
-          - span "B8" [37,798 18x13] font:11/700 color:on-surface-variant
-          - div [63,797 266x14] bg:surface-container r:5
-            - div [63,797 96x14] bg:mastery
-          - span "31" [337,798 32x13] font:11/700 color:font-headline
-      - div [37,821 332x12] flex:row justify:between pad:0/22
-        - span "B1 · least known" [59,821 73x12] font:10/400 color:on-surface-variant
-        - span "B8 · best known" [273,821 74x12] font:10/400 color:on-surface-variant
-    - card [22,860 362x113] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,875 332x13] flex:row gap:8 justify:between align:baseline
-        - ov "Streak" [37,875 49x13] font:11/700 color:on-surface-variant
-      - div [37,900 332x58] flex:row gap:10
-        - div [37,900 161x58] flex:row gap:10 align:center bg:on-primary r:11 pad:12/12 border:1px seed-indigo@14
-          - div [50,913 32x32] flex:row justify:center align:center r:9
-            - span [59,922 15x15] flex:row
-              - icon:flame [59,922 15x15]
-          - div [92,914 52x31]
-            - div "Current" [92,914 52x12] font:10/700 color:on-surface-variant
-            - div "11 days" [92,927 52x18] font:14/700 color:font-headline
-        - div [208,900 161x58] flex:row gap:10 align:center bg:on-primary r:11 pad:12/12 border:1px seed-indigo@14
-          - div [221,913 32x32] flex:row justify:center align:center r:9
-            - span [230,922 15x15] flex:row
-              - icon:award [230,922 15x15]
-          - div [263,914 52x31]
-            - div "Longest" [263,914 52x12] font:10/700 color:on-surface-variant
-            - div "42 days" [263,927 52x18] font:14/700 color:font-headline
-    - ov "Card states" [22,985 362x23] font:11/700 color:on-surface-variant pad:2/4
-    - card [22,1008 362x131] bg:on-primary r:12 border:1px seed-indigo@14
-      - div [23,1009 360x73] grid cols:4 gap:12 align:center pad:12/14
-        - div [37,1030 30x30] flex:row justify:center align:center bg:surface-container r:9
-          - span [45,1038 14x14] flex:row
-            - icon:pause-circle [45,1038 14x14]
-        - div [81,1021 188x48]
-          - div "Suspended" [81,1021 188x16] font:13/600 color:font-headline
-          - div "Out of rotation until you resume them" [81,1038 188x31] font:11/400/15 color:on-surface-variant
-        - div [281,1029 61x32]
-          - div "8" [281,1029 61x19] font:15/700 color:font-headline
-          - div "in your library" [281,1049 61x12] font:10/400 color:on-surface-variant
-        - span [354,1038 15x15] flex:row
-          - icon:chevron-right [354,1038 15x15]
-      - div [23,1082 360x56] grid cols:4 gap:12 align:center pad:12/14
-        - div [37,1095 30x30] flex:row justify:center align:center bg:surface-container r:9
-          - span [45,1103 14x14] flex:row
-            - icon:moon [45,1103 14x14]
-        - div [81,1094 199x32]
-          - div "Buried today" [81,1094 199x16] font:13/600 color:font-headline
-          - div "Skipped until tomorrow" [81,1111 199x15] font:11/400/15 color:on-surface-variant
-        - div [292,1094 50x32]
-          - div "4" [292,1094 50x19] font:15/700 color:font-headline
-          - div "today only" [292,1114 50x12] font:10/400 color:on-surface-variant
-        - span [354,1103 15x15] flex:row
-          - icon:chevron-right [354,1103 15x15]
-    - div "Read-only summary · last 7 days" [22,1153 362x29] font:11/400 color:on-surface-variant pad:4/0
-  - bottom-nav [18,710 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item [19,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [55,725 20x20] flex:row
-        - icon:home [55,725 20x20]
-      - span "Home" [50,750 29x12] font:10/600 color:on-surface-variant
-    - item[2] bn-item [111,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [147,725 20x20] flex:row
-        - icon:layers [147,725 20x20]
-      - span "Library" [140,750 33x12] font:10/600 color:on-surface-variant
-    - item[3] bn-item [203,713 92x61] flex:col gap:3 align:center pad:8/0
-      - bn-pill [225,721 48x30] bg:seed-indigo@14 r:999 pad:4/14
-        - span [239,725 20x20] flex:row
-          - icon:bar-chart-3 [239,725 20x20]
-      - span "Stats" [236,754 25x12] font:10/600 color:seed-indigo
-    - item[4] bn-item [295,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [331,725 20x20] flex:row
-        - icon:settings [331,725 20x20]
-      - span "Settings" [321,750 41x12] font:10/600 color:on-surface-variant
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 justify:between align:center pad:0/14
+    - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline
+    - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
+  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+      - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+      - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+      - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+    - card abs:[22,160 362x197] rel:[14,52 362x197] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,175 332x59] rel:[15,15 332x59] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - div abs:[37,175 103x59] rel:[0,0 103x59]
+          - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant
+          - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+          - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
+      - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
+        - div abs:[39,246 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[39,282 40x43] rel:[0,35 40x43] bg:seed-indigo@55 r:4
+        - div abs:[87,246 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[87,261 40x64] rel:[0,14 40x64] bg:seed-indigo@55 r:4
+        - div abs:[135,246 40x78] rel:[98,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[135,322 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
+        - div abs:[183,246 40x78] rel:[146,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[183,246 40x78] rel:[0,0 40x78] bg:seed-indigo@55 r:4
+        - div abs:[231,246 40x78] rel:[194,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[231,275 40x50] rel:[0,28 40x50] bg:seed-indigo@55 r:4
+        - div abs:[279,246 40x78] rel:[242,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[279,292 40x32] rel:[0,46 40x32] bg:seed-indigo@55 r:4
+        - div abs:[327,246 40x78] rel:[290,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[327,264 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
+      - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+        - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+        - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+        - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+        - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+        - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+        - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+        - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+    - card abs:[22,369 362x182] rel:[14,261 362x182] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,384 332x60] rel:[15,15 332x60] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - div abs:[37,384 133x60] rel:[0,0 133x60]
+          - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant
+          - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+          - span abs:[37,431 133x13] rel:[0,46 133x13] flex:row gap:4 align:center
+            - span abs:[37,432 11x11] rel:[0,1 11x11] flex:row
+              - icon:trending-up abs:[37,432 11x11] rel:[0,0 11x11] clip
+            - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
+            - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
+      - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
+    - card abs:[22,564 362x284] rel:[14,456 362x284] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,579 332x59] rel:[15,15 332x59] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - div abs:[37,579 126x59] rel:[0,0 126x59]
+          - ov "Box distribution" abs:[37,579 126x13] rel:[0,0 126x13] font:11/700 color:on-surface-variant
+          - div "414" abs:[37,596 126x26] rel:[0,17 126x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+          - div "total cards across boxes" abs:[37,625 126x13] rel:[0,46 126x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
+      - div abs:[37,650 332x161] rel:[15,86 332x161] flex:col gap:7 repeat:x8(unit=1)
+        - item[1] div abs:[37,650 332x14] rel:[0,0 332x14] grid cols:3 gap:8 align:center
+          - span "B1" abs:[37,651 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,650 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,650 74x14] rel:[0,0 74x14] bg:seed-indigo op:0.43125
+          - span "24" abs:[337,651 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[2] div abs:[37,671 332x14] rel:[0,21 332x14] grid cols:3 gap:8 align:center
+          - span "B2" abs:[37,672 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,671 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,671 118x14] rel:[0,0 118x14] bg:seed-indigo op:0.5125
+          - span "38" abs:[337,672 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[3] div abs:[37,692 332x14] rel:[0,42 332x14] grid cols:3 gap:8 align:center
+          - span "B3" abs:[37,693 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,692 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,692 167x14] rel:[0,0 167x14] bg:seed-indigo op:0.59375
+          - span "54" abs:[337,693 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[4] div abs:[37,713 332x14] rel:[0,63 332x14] grid cols:3 gap:8 align:center
+          - span "B4" abs:[37,714 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,713 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,713 220x14] rel:[0,0 220x14] bg:seed-indigo op:0.675
+          - span "71" abs:[337,714 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[5] div abs:[37,734 332x14] rel:[0,84 332x14] grid cols:3 gap:8 align:center
+          - span "B5" abs:[37,735 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,734 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,734 266x14] rel:[0,0 266x14] bg:seed-indigo op:0.75625
+          - span "86" abs:[337,735 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[6] div abs:[37,755 332x14] rel:[0,105 332x14] grid cols:3 gap:8 align:center
+          - span "B6" abs:[37,756 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,755 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,755 192x14] rel:[0,0 192x14] bg:mastery op:0.8375
+          - span "62" abs:[337,756 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[7] div abs:[37,776 332x14] rel:[0,126 332x14] grid cols:3 gap:8 align:center
+          - span "B7" abs:[37,777 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,776 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,776 148x14] rel:[0,0 148x14] bg:mastery op:0.91875
+          - span "48" abs:[337,777 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+        - item[8] div abs:[37,797 332x14] rel:[0,147 332x14] grid cols:3 gap:8 align:center
+          - span "B8" abs:[37,798 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+          - div abs:[63,797 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+            - div abs:[63,797 96x14] rel:[0,0 96x14] bg:mastery
+          - span "31" abs:[337,798 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+      - div abs:[37,821 332x12] rel:[15,257 332x12] flex:row justify:between pad:0/22 margin:10/0/0/0
+        - span "B1 · least known" abs:[59,821 73x12] rel:[22,0 73x12] font:10/400 color:on-surface-variant
+        - span "B8 · best known" abs:[273,821 74x12] rel:[236,0 74x12] font:10/400 color:on-surface-variant
+    - card abs:[22,860 362x113] rel:[14,752 362x113] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,875 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - ov "Streak" abs:[37,875 49x13] rel:[0,0 49x13] font:11/700 color:on-surface-variant
+      - div abs:[37,900 332x58] rel:[15,40 332x58] flex:row gap:10
+        - div abs:[37,900 161x58] rel:[0,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
+          - div abs:[50,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
+            - span abs:[59,922 15x15] rel:[9,9 15x15] flex:row
+              - icon:flame abs:[59,922 15x15] rel:[0,0 15x15] clip
+          - div abs:[92,914 52x31] rel:[55,14 52x31]
+            - div "Current" abs:[92,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant
+            - div "11 days" abs:[92,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
+        - div abs:[208,900 161x58] rel:[171,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
+          - div abs:[221,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
+            - span abs:[230,922 15x15] rel:[9,9 15x15] flex:row
+              - icon:award abs:[230,922 15x15] rel:[0,0 15x15] clip
+          - div abs:[263,914 52x31] rel:[55,14 52x31]
+            - div "Longest" abs:[263,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant
+            - div "42 days" abs:[263,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
+    - ov "Card states" abs:[22,985 362x23] rel:[14,877 362x23] pad:2/4/8/4 font:11/700 color:on-surface-variant
+    - card abs:[22,1008 362x131] rel:[14,900 362x131] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[23,1009 360x73] rel:[1,1 360x73] grid cols:4 gap:12 align:center pad:12/14
+        - div abs:[37,1030 30x30] rel:[14,21 30x30] flex:row justify:center align:center bg:surface-container r:9
+          - span abs:[45,1038 14x14] rel:[8,8 14x14] flex:row
+            - icon:pause-circle abs:[45,1038 14x14] rel:[0,0 14x14] clip
+        - div abs:[81,1021 188x48] rel:[58,12 188x48]
+          - div "Suspended" abs:[81,1021 188x16] rel:[0,0 188x16] font:13/600 color:font-headline
+          - div "Out of rotation until you resume them" abs:[81,1038 188x31] rel:[0,17 188x31] margin:1/0/0/0 font:11/400/15 color:on-surface-variant
+        - div abs:[281,1029 61x32] rel:[258,20 61x32]
+          - div "8" abs:[281,1029 61x19] rel:[0,0 61x19] font:15/700 color:font-headline text:right
+          - div "in your library" abs:[281,1049 61x12] rel:[0,20 61x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
+        - span abs:[354,1038 15x15] rel:[331,28 15x15] flex:row
+          - icon:chevron-right abs:[354,1038 15x15] rel:[0,0 15x15] clip
+      - div abs:[23,1082 360x56] rel:[1,74 360x56] grid cols:4 gap:12 align:center pad:12/14
+        - div abs:[37,1095 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:surface-container r:9
+          - span abs:[45,1103 14x14] rel:[8,8 14x14] flex:row
+            - icon:moon abs:[45,1103 14x14] rel:[0,0 14x14] clip
+        - div abs:[81,1094 199x32] rel:[58,12 199x32]
+          - div "Buried today" abs:[81,1094 199x16] rel:[0,0 199x16] font:13/600 color:font-headline
+          - div "Skipped until tomorrow" abs:[81,1111 199x15] rel:[0,17 199x15] margin:1/0/0/0 font:11/400/15 color:on-surface-variant
+        - div abs:[292,1094 50x32] rel:[269,12 50x32]
+          - div "4" abs:[292,1094 50x19] rel:[0,0 50x19] font:15/700 color:font-headline text:right
+          - div "today only" abs:[292,1114 50x12] rel:[0,20 50x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
+        - span abs:[354,1103 15x15] rel:[331,21 15x15] flex:row
+          - icon:chevron-right abs:[354,1103 15x15] rel:[0,0 15x15] clip
+    - div "Read-only summary · last 7 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
+      - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
+      - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+        - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
+          - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
+      - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
+      - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
 ```
 
 ## State: Month (ordered diff vs Week)
 
 ```diff
-  - div flex:row gap:2 bg:surface-container r:11 pad:3/3
-- - button "Week" bg:on-primary font:12/600 color:font-headline r:9 pad:0/16 shadow:1/2
-- - button "Month" font:12/600 color:on-surface-variant r:9 pad:0/16
-+ - button "Week" font:12/600 color:on-surface-variant r:9 pad:0/16
-+ - button "Month" bg:on-primary font:12/600 color:font-headline r:9 pad:0/16 shadow:1/2
-  - button "All time" font:12/600 color:on-surface-variant r:9 pad:0/16
+  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+- - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+- - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
++ - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
++ - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+  - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
   ...
-  - ov "Cards studied" font:11/700 color:on-surface-variant
-- - div "92" font:24/700/26 color:font-headline
-- - div "over the past 7 days" font:11/400 color:on-surface-variant
-- - div flex:row gap:8 align:end pad:0/2
-+ - div "398" font:24/700/26 color:font-headline
-+ - div "over the past 28 days" font:11/400 color:on-surface-variant
-+ - div flex:row gap:3 align:end pad:0/2
-  - div flex:col justify:end align:center
+  - ov "Cards studied" abs:[37,175 110x13] rel:[0,0 110x13] font:11/700 color:on-surface-variant
+- - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+- - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
+- - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
++ - div "398" abs:[37,192 110x26] rel:[0,17 110x26] margin:4/0/0/0 font:24/700/26 color:font-headline
++ - div "over the past 28 days" abs:[37,221 110x13] rel:[0,46 110x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
++ - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:3 align:end pad:0/2
+  - div abs:[39,246 9x78] rel:[2,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
   ...
-  - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-  - div bg:surface-container-high r:4
+  - div abs:[63,246 9x78] rel:[26,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[63,261 9x64] rel:[0,14 9x64] bg:seed-indigo@55 r:4
++ - div abs:[74,246 9x78] rel:[37,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[74,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
++ - div abs:[86,246 9x78] rel:[49,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+  - div abs:[86,322 9x2] rel:[0,76 9x2] bg:surface-container-high r:4
   ...
-  - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:surface-container-high r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-+ - div bg:seed-indigo@55 r:4
-+ - div flex:col justify:end align:center
-  - div bg:seed-indigo r:4
-- - div flex:row gap:8 repeat:x7(unit=1) pad:0/2
-- - item[1] span "M" font:10/400 color:on-surface-variant
-- - item[2] span "T" font:10/400 color:on-surface-variant
-- - item[3] span "W" font:10/400 color:on-surface-variant
-- - item[4] span "T" font:10/400 color:on-surface-variant
-- - item[5] span "F" font:10/400 color:on-surface-variant
-- - item[6] span "S" font:10/400 color:on-surface-variant
-- - item[7] span "S" font:10/400 color:on-surface-variant
-+ - div flex:row gap:3 repeat:x14(unit=2) pad:0/2
-+ - item[1] span "1" font:10/400 color:on-surface-variant
-+ - item[3] span "5" font:10/400 color:on-surface-variant
-+ - span "10" font:10/400 color:on-surface-variant
-+ - item[8] span "15" font:10/400 color:on-surface-variant
-+ - span "20" font:10/400 color:on-surface-variant
-+ - item[13] span "25" font:10/400 color:on-surface-variant
-  - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
+  - div abs:[134,246 9x78] rel:[97,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[134,282 9x43] rel:[0,35 9x43] bg:seed-indigo@55 r:4
++ - div abs:[145,246 9x78] rel:[108,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[145,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
++ - div abs:[157,246 9x78] rel:[120,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[157,246 9x78] rel:[0,0 9x78] bg:seed-indigo@55 r:4
++ - div abs:[169,246 9x78] rel:[132,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[169,275 9x50] rel:[0,28 9x50] bg:seed-indigo@55 r:4
++ - div abs:[181,246 9x78] rel:[144,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[181,278 9x46] rel:[0,32 9x46] bg:seed-indigo@55 r:4
++ - div abs:[193,246 9x78] rel:[156,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[193,261 9x64] rel:[0,14 9x64] bg:seed-indigo@55 r:4
++ - div abs:[204,246 9x78] rel:[167,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[204,296 9x28] rel:[0,50 9x28] bg:seed-indigo@55 r:4
++ - div abs:[216,246 9x78] rel:[179,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[216,285 9x39] rel:[0,39 9x39] bg:seed-indigo@55 r:4
++ - div abs:[228,246 9x78] rel:[191,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[228,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
++ - div abs:[240,246 9x78] rel:[203,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[240,257 9x67] rel:[0,11 9x67] bg:seed-indigo@55 r:4
++ - div abs:[252,246 9x78] rel:[215,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[252,271 9x53] rel:[0,25 9x53] bg:seed-indigo@55 r:4
++ - div abs:[264,246 9x78] rel:[227,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[264,282 9x43] rel:[0,35 9x43] bg:seed-indigo@55 r:4
++ - div abs:[275,246 9x78] rel:[238,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[275,264 9x60] rel:[0,18 9x60] bg:seed-indigo@55 r:4
++ - div abs:[287,246 9x78] rel:[250,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[287,275 9x50] rel:[0,28 9x50] bg:seed-indigo@55 r:4
++ - div abs:[299,246 9x78] rel:[262,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[299,322 9x2] rel:[0,76 9x2] bg:surface-container-high r:4
++ - div abs:[311,246 9x78] rel:[274,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[311,278 9x46] rel:[0,32 9x46] bg:seed-indigo@55 r:4
++ - div abs:[323,246 9x78] rel:[286,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[323,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
++ - div abs:[335,246 9x78] rel:[298,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[335,246 9x78] rel:[0,0 9x78] bg:seed-indigo@55 r:4
++ - div abs:[346,246 9x78] rel:[309,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[346,261 9x64] rel:[0,14 9x64] bg:seed-indigo@55 r:4
++ - div abs:[358,246 9x78] rel:[321,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+  - div abs:[358,275 9x50] rel:[0,28 9x50] bg:seed-indigo r:4
+- - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+- - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:3 repeat:x14(unit=2) pad:0/2 margin:6/0/0/0
++ - item[1] span "1" abs:[39,330 8x12] rel:[2,0 8x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - item[3] span "5" abs:[84,330 8x12] rel:[47,0 8x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - span "10" abs:[141,330 12x12] rel:[104,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - item[8] span "15" abs:[201,330 12x12] rel:[164,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - span "20" abs:[261,330 12x12] rel:[224,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - item[13] span "25" abs:[321,330 12x12] rel:[284,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+  - card abs:[22,369 362x182] rel:[14,261 362x182] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
-  - ov "Accuracy" font:11/700 color:on-surface-variant
-- - div "73%" font:24/700/26 color:font-headline
-+ - div "77%" font:24/700/26 color:font-headline
-  - span flex:row gap:4 align:center
+  - ov "Accuracy" abs:[37,384 139x13] rel:[0,0 139x13] font:11/700 color:on-surface-variant
+- - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline
++ - div "77%" abs:[37,401 139x26] rel:[0,17 139x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+  - span abs:[37,431 139x13] rel:[0,46 139x13] flex:row gap:4 align:center
   ...
-  - span "+4%" font:11/600 color:mastery
-- - span "vs previous week" font:11/400 color:on-surface-variant op:0.7
-+ - span "vs previous month" font:11/400 color:on-surface-variant op:0.7
-  - svg
+  - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
+- - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
++ - span "vs previous month" abs:[81,431 94x13] rel:[44,0 94x13] font:11/400 color:on-surface-variant op:0.7
+  - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
   ...
-  - icon:chevron-right
-- - div "Read-only summary · last 7 days" font:11/400 color:on-surface-variant pad:4/0
-+ - div "Read-only summary · last 28 days" font:11/400 color:on-surface-variant pad:4/0
-  - bottom-nav grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+  - icon:chevron-right abs:[354,1103 15x15] rel:[0,0 15x15] clip
+- - div "Read-only summary · last 7 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
++ - div "Read-only summary · last 28 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
   ...
 ```
 
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x56] flex:row gap:4 justify:between align:center pad:0/14
-    - div "Progress" [22,65 100x30] font:24/700 color:font-headline
-    - icon-btn [348,62 36x36] flex:row justify:center align:center r:999
-      - span [356,70 20x20] flex:row
-        - icon:help-circle [356,70 20x20]
-  - scroll [8,108 390x598] pad:0/14
-    - div [22,108 219x38] flex:row gap:2 bg:surface-container r:11 pad:3/3
-      - button "Week" [25,111 65x32] bg:on-primary font:12/600 color:font-headline r:9 pad:0/16 shadow:1/2
-      - button "Month" [92,111 69x32] font:12/600 color:on-surface-variant r:9 pad:0/16
-      - button "All time" [163,111 74x32] font:12/600 color:on-surface-variant r:9 pad:0/16
-    - card [22,160 362x151] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - span [37,175 80x9] bg:surface-container-high r:6 op:0.4
-      - span [37,192 120x20] bg:surface-container-high r:6 op:0.5
-      - span [37,226 332x70] bg:surface-container-high r:10 op:0.5
-    - card [22,323 362x151] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - span [37,338 80x9] bg:surface-container-high r:6 op:0.4
-      - span [37,355 120x20] bg:surface-container-high r:6 op:0.5
-      - span [37,389 332x70] bg:surface-container-high r:10 op:0.5
-    - card [22,486 362x151] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - span [37,501 80x9] bg:surface-container-high r:6 op:0.4
-      - span [37,518 120x20] bg:surface-container-high r:6 op:0.5
-      - span [37,552 332x70] bg:surface-container-high r:10 op:0.5
-  - bottom-nav [18,710 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item [19,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [55,725 20x20] flex:row
-        - icon:home [55,725 20x20]
-      - span "Home" [50,750 29x12] font:10/600 color:on-surface-variant
-    - item[2] bn-item [111,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [147,725 20x20] flex:row
-        - icon:layers [147,725 20x20]
-      - span "Library" [140,750 33x12] font:10/600 color:on-surface-variant
-    - item[3] bn-item [203,713 92x61] flex:col gap:3 align:center pad:8/0
-      - bn-pill [225,721 48x30] bg:seed-indigo@14 r:999 pad:4/14
-        - span [239,725 20x20] flex:row
-          - icon:bar-chart-3 [239,725 20x20]
-      - span "Stats" [236,754 25x12] font:10/600 color:seed-indigo
-    - item[4] bn-item [295,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [331,725 20x20] flex:row
-        - icon:settings [331,725 20x20]
-      - span "Settings" [321,750 41x12] font:10/600 color:on-surface-variant
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 justify:between align:center pad:0/14
+    - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline
+    - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
+  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+      - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+      - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+      - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+    - card abs:[22,160 362x151] rel:[14,52 362x151] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,175 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
+      - span abs:[37,192 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[37,226 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
+    - card abs:[22,323 362x151] rel:[14,215 362x151] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,338 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
+      - span abs:[37,355 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[37,389 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
+    - card abs:[22,486 362x151] rel:[14,378 362x151] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,501 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
+      - span abs:[37,518 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[37,552 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
+      - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
+      - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+        - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
+          - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
+      - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
+      - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
 ```
 
 ## State: Empty (ordered diff vs Week)
 
 ```diff
-  - div flex:row gap:8 justify:between align:baseline
-- - div
-- - ov "Cards studied" font:11/700 color:on-surface-variant
-- - div "92" font:24/700/26 color:font-headline
-- - div "over the past 7 days" font:11/400 color:on-surface-variant
-- - div flex:row gap:8 align:end pad:0/2
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:surface-container-high r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo r:4
-- - div flex:row gap:8 repeat:x7(unit=1) pad:0/2
-- - item[1] span "M" font:10/400 color:on-surface-variant
-- - item[2] span "T" font:10/400 color:on-surface-variant
-- - item[3] span "W" font:10/400 color:on-surface-variant
-- - item[4] span "T" font:10/400 color:on-surface-variant
-- - item[5] span "F" font:10/400 color:on-surface-variant
-- - item[6] span "S" font:10/400 color:on-surface-variant
-- - item[7] span "S" font:10/400 color:on-surface-variant
-+ - ov "Cards studied" font:11/700 color:on-surface-variant
-+ - div "No study sessions in this range yet. Start any deck to begin tracking trends." bg:on-primary font:12/400/18 color:on-surface-variant r:11 pad:24/16 border:1px outline-variant
-  - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-  - div flex:row gap:8 justify:between align:baseline
-- - div
-- - ov "Accuracy" font:11/700 color:on-surface-variant
-- - div "73%" font:24/700/26 color:font-headline
-- - span flex:row gap:4 align:center
-- - span flex:row
-- - icon:trending-up
-- - span "+4%" font:11/600 color:mastery
-- - span "vs previous week" font:11/400 color:on-surface-variant op:0.7
-- - svg
-+ - ov "Accuracy" font:11/700 color:on-surface-variant
-+ - div "Accuracy appears once you've answered cards." bg:on-primary font:12/400/18 color:on-surface-variant r:11 pad:24/16 border:1px outline-variant
-  - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-  - div flex:row gap:8 justify:between align:baseline
-- - div
-- - ov "Box distribution" font:11/700 color:on-surface-variant
-- - div "414" font:24/700/26 color:font-headline
-- - div "total cards across boxes" font:11/400 color:on-surface-variant
-- - div flex:col gap:7 repeat:x8(unit=1)
-- - item[1] div grid cols:3 gap:8 align:center
-- - span "B1" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:seed-indigo op:0.43125
-- - span "24" font:11/700 color:font-headline
-- - item[2] div grid cols:3 gap:8 align:center
-- - span "B2" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:seed-indigo op:0.5125
-- - span "38" font:11/700 color:font-headline
-- - item[3] div grid cols:3 gap:8 align:center
-- - span "B3" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:seed-indigo op:0.59375
-- - span "54" font:11/700 color:font-headline
-- - item[4] div grid cols:3 gap:8 align:center
-- - span "B4" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:seed-indigo op:0.675
-- - span "71" font:11/700 color:font-headline
-- - item[5] div grid cols:3 gap:8 align:center
-- - span "B5" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:seed-indigo op:0.75625
-- - span "86" font:11/700 color:font-headline
-- - item[6] div grid cols:3 gap:8 align:center
-- - span "B6" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:mastery op:0.8375
-- - span "62" font:11/700 color:font-headline
-- - item[7] div grid cols:3 gap:8 align:center
-- - span "B7" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:mastery op:0.91875
-- - span "48" font:11/700 color:font-headline
-- - item[8] div grid cols:3 gap:8 align:center
-- - span "B8" font:11/700 color:on-surface-variant
-- - div bg:surface-container r:5
-- - div bg:mastery
-- - span "31" font:11/700 color:font-headline
-- - div flex:row justify:between pad:0/22
-- - span "B1 · least known" font:10/400 color:on-surface-variant
-- - span "B8 · best known" font:10/400 color:on-surface-variant
-+ - ov "Box distribution" font:11/700 color:on-surface-variant
-+ - div "Cards spread across boxes as you study them." bg:on-primary font:12/400/18 color:on-surface-variant r:11 pad:24/16 border:1px outline-variant
-  - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
+  - div abs:[37,175 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[37,175 103x59] rel:[0,0 103x59]
+- - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant
+- - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+- - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
+- - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
+- - div abs:[39,246 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[39,282 40x43] rel:[0,35 40x43] bg:seed-indigo@55 r:4
+- - div abs:[87,246 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[87,261 40x64] rel:[0,14 40x64] bg:seed-indigo@55 r:4
+- - div abs:[135,246 40x78] rel:[98,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[135,322 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
+- - div abs:[183,246 40x78] rel:[146,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[183,246 40x78] rel:[0,0 40x78] bg:seed-indigo@55 r:4
+- - div abs:[231,246 40x78] rel:[194,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[231,275 40x50] rel:[0,28 40x50] bg:seed-indigo@55 r:4
+- - div abs:[279,246 40x78] rel:[242,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[279,292 40x32] rel:[0,46 40x32] bg:seed-indigo@55 r:4
+- - div abs:[327,246 40x78] rel:[290,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[327,264 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
+- - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+- - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant
++ - div "No study sessions in this range yet. Start any deck to begin tracking trends." abs:[37,200 332x86] rel:[15,40 332x86] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
+  - card abs:[22,313 362x123] rel:[14,205 362x123] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[37,328 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[37,384 133x60] rel:[0,0 133x60]
+- - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant
+- - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+- - span abs:[37,431 133x13] rel:[0,46 133x13] flex:row gap:4 align:center
+- - span abs:[37,432 11x11] rel:[0,1 11x11] flex:row
+- - icon:trending-up abs:[37,432 11x11] rel:[0,0 11x11] clip
+- - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
+- - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
+- - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
++ - ov "Accuracy" abs:[37,328 72x13] rel:[0,0 72x13] font:11/700 color:on-surface-variant
++ - div "Accuracy appears once you've answered cards." abs:[37,353 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
+  - card abs:[22,448 362x123] rel:[14,340 362x123] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[37,463 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[37,579 126x59] rel:[0,0 126x59]
+- - ov "Box distribution" abs:[37,579 126x13] rel:[0,0 126x13] font:11/700 color:on-surface-variant
+- - div "414" abs:[37,596 126x26] rel:[0,17 126x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+- - div "total cards across boxes" abs:[37,625 126x13] rel:[0,46 126x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
+- - div abs:[37,650 332x161] rel:[15,86 332x161] flex:col gap:7 repeat:x8(unit=1)
+- - item[1] div abs:[37,650 332x14] rel:[0,0 332x14] grid cols:3 gap:8 align:center
+- - span "B1" abs:[37,651 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,650 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,650 74x14] rel:[0,0 74x14] bg:seed-indigo op:0.43125
+- - span "24" abs:[337,651 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[2] div abs:[37,671 332x14] rel:[0,21 332x14] grid cols:3 gap:8 align:center
+- - span "B2" abs:[37,672 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,671 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,671 118x14] rel:[0,0 118x14] bg:seed-indigo op:0.5125
+- - span "38" abs:[337,672 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[3] div abs:[37,692 332x14] rel:[0,42 332x14] grid cols:3 gap:8 align:center
+- - span "B3" abs:[37,693 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,692 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,692 167x14] rel:[0,0 167x14] bg:seed-indigo op:0.59375
+- - span "54" abs:[337,693 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[4] div abs:[37,713 332x14] rel:[0,63 332x14] grid cols:3 gap:8 align:center
+- - span "B4" abs:[37,714 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,713 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,713 220x14] rel:[0,0 220x14] bg:seed-indigo op:0.675
+- - span "71" abs:[337,714 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[5] div abs:[37,734 332x14] rel:[0,84 332x14] grid cols:3 gap:8 align:center
+- - span "B5" abs:[37,735 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,734 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,734 266x14] rel:[0,0 266x14] bg:seed-indigo op:0.75625
+- - span "86" abs:[337,735 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[6] div abs:[37,755 332x14] rel:[0,105 332x14] grid cols:3 gap:8 align:center
+- - span "B6" abs:[37,756 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,755 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,755 192x14] rel:[0,0 192x14] bg:mastery op:0.8375
+- - span "62" abs:[337,756 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[7] div abs:[37,776 332x14] rel:[0,126 332x14] grid cols:3 gap:8 align:center
+- - span "B7" abs:[37,777 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,776 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,776 148x14] rel:[0,0 148x14] bg:mastery op:0.91875
+- - span "48" abs:[337,777 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - item[8] div abs:[37,797 332x14] rel:[0,147 332x14] grid cols:3 gap:8 align:center
+- - span "B8" abs:[37,798 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
+- - div abs:[63,797 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
+- - div abs:[63,797 96x14] rel:[0,0 96x14] bg:mastery
+- - span "31" abs:[337,798 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
+- - div abs:[37,821 332x12] rel:[15,257 332x12] flex:row justify:between pad:0/22 margin:10/0/0/0
+- - span "B1 · least known" abs:[59,821 73x12] rel:[22,0 73x12] font:10/400 color:on-surface-variant
+- - span "B8 · best known" abs:[273,821 74x12] rel:[236,0 74x12] font:10/400 color:on-surface-variant
++ - ov "Box distribution" abs:[37,463 122x13] rel:[0,0 122x13] font:11/700 color:on-surface-variant
++ - div "Cards spread across boxes as you study them." abs:[37,488 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
+  - card abs:[22,583 362x123] rel:[14,475 362x123] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
-  - ov "Streak" font:11/700 color:on-surface-variant
-- - div flex:row gap:10
-- - div flex:row gap:10 align:center bg:on-primary r:11 pad:12/12 border:1px seed-indigo@14
-- - div flex:row justify:center align:center r:9
-- - span flex:row
-- - icon:flame
-- - div
-- - div "Current" font:10/700 color:on-surface-variant
-- - div "11 days" font:14/700 color:font-headline
-- - div flex:row gap:10 align:center bg:on-primary r:11 pad:12/12 border:1px seed-indigo@14
-- - div flex:row justify:center align:center r:9
-- - span flex:row
-- - icon:award
-- - div
-- - div "Longest" font:10/700 color:on-surface-variant
-- - div "42 days" font:14/700 color:font-headline
-+ - div "A streak starts after one study session." bg:on-primary font:12/400/18 color:on-surface-variant r:11 pad:24/16 border:1px outline-variant
-  - ov "Card states" font:11/700 color:on-surface-variant pad:2/4
+  - ov "Streak" abs:[37,598 49x13] rel:[0,0 49x13] font:11/700 color:on-surface-variant
+- - div abs:[37,900 332x58] rel:[15,40 332x58] flex:row gap:10
+- - div abs:[37,900 161x58] rel:[0,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
+- - div abs:[50,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
+- - span abs:[59,922 15x15] rel:[9,9 15x15] flex:row
+- - icon:flame abs:[59,922 15x15] rel:[0,0 15x15] clip
+- - div abs:[92,914 52x31] rel:[55,14 52x31]
+- - div "Current" abs:[92,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant
+- - div "11 days" abs:[92,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
+- - div abs:[208,900 161x58] rel:[171,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
+- - div abs:[221,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
+- - span abs:[230,922 15x15] rel:[9,9 15x15] flex:row
+- - icon:award abs:[230,922 15x15] rel:[0,0 15x15] clip
+- - div abs:[263,914 52x31] rel:[55,14 52x31]
+- - div "Longest" abs:[263,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant
+- - div "42 days" abs:[263,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
++ - div "A streak starts after one study session." abs:[37,623 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
+  - ov "Card states" abs:[22,718 362x23] rel:[14,610 362x23] pad:2/4/8/4 font:11/700 color:on-surface-variant
   ...
-  - div
-- - div "8" font:15/700 color:font-headline
-+ - div "0" font:15/700 color:font-headline
-  - div "in your library" font:10/400 color:on-surface-variant
+  - div abs:[281,762 61x32] rel:[258,20 61x32]
+- - div "8" abs:[281,1029 61x19] rel:[0,0 61x19] font:15/700 color:font-headline text:right
++ - div "0" abs:[281,762 61x19] rel:[0,0 61x19] font:15/700 color:font-headline text:right
+  - div "in your library" abs:[281,782 61x12] rel:[0,20 61x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
   ...
-  - div
-- - div "4" font:15/700 color:font-headline
-+ - div "0" font:15/700 color:font-headline
-  - div "today only" font:10/400 color:on-surface-variant
+  - div abs:[292,827 50x32] rel:[269,12 50x32]
+- - div "4" abs:[292,1094 50x19] rel:[0,0 50x19] font:15/700 color:font-headline text:right
++ - div "0" abs:[292,827 50x19] rel:[0,0 50x19] font:15/700 color:font-headline text:right
+  - div "today only" abs:[292,847 50x12] rel:[0,20 50x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
   ...
 ```
 
 ## State: Insufficient (ordered diff vs Week)
 
 ```diff
-  - div flex:row gap:8 justify:between align:baseline
-- - div
-- - ov "Cards studied" font:11/700 color:on-surface-variant
-- - div "92" font:24/700/26 color:font-headline
-- - div "over the past 7 days" font:11/400 color:on-surface-variant
-- - div flex:row gap:8 align:end pad:0/2
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:surface-container-high r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo@55 r:4
-- - div flex:col justify:end align:center
-- - div bg:seed-indigo r:4
-- - div flex:row gap:8 repeat:x7(unit=1) pad:0/2
-- - item[1] span "M" font:10/400 color:on-surface-variant
-- - item[2] span "T" font:10/400 color:on-surface-variant
-- - item[3] span "W" font:10/400 color:on-surface-variant
-- - item[4] span "T" font:10/400 color:on-surface-variant
-- - item[5] span "F" font:10/400 color:on-surface-variant
-- - item[6] span "S" font:10/400 color:on-surface-variant
-- - item[7] span "S" font:10/400 color:on-surface-variant
-+ - ov "Cards studied" font:11/700 color:on-surface-variant
-+ - div "Only 1 day of data so far." bg:on-primary font:12/400/18 color:on-surface-variant r:11 pad:24/16 border:1px outline-variant
-+ - div flex:row gap:8 align:start bg:seed-indigo@4 r:11 pad:10/12 border:1px seed-indigo@14
-+ - span flex:row
-+ - icon:info
-+ - span "Trend appears after of data." font:11/400/17 color:on-surface-variant
-+ - strong "3 days" font:11/700/17 color:font-headline
-  - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
+  - div abs:[37,175 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[37,175 103x59] rel:[0,0 103x59]
+- - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant
+- - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+- - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
+- - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
+- - div abs:[39,246 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[39,282 40x43] rel:[0,35 40x43] bg:seed-indigo@55 r:4
+- - div abs:[87,246 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[87,261 40x64] rel:[0,14 40x64] bg:seed-indigo@55 r:4
+- - div abs:[135,246 40x78] rel:[98,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[135,322 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
+- - div abs:[183,246 40x78] rel:[146,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[183,246 40x78] rel:[0,0 40x78] bg:seed-indigo@55 r:4
+- - div abs:[231,246 40x78] rel:[194,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[231,275 40x50] rel:[0,28 40x50] bg:seed-indigo@55 r:4
+- - div abs:[279,246 40x78] rel:[242,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[279,292 40x32] rel:[0,46 40x32] bg:seed-indigo@55 r:4
+- - div abs:[327,246 40x78] rel:[290,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[327,264 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
+- - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+- - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
+- - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
++ - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant
++ - div "Only 1 day of data so far." abs:[37,200 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
++ - div abs:[37,278 332x39] rel:[15,118 332x39] flex:row gap:8 align:start pad:10/12 margin:10/0/0/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
++ - span abs:[50,289 13x13] rel:[13,11 13x13] flex:row
++ - icon:info abs:[50,289 13x13] rel:[0,0 13x13] clip
++ - span "Trend appears after of data." abs:[71,289 180x17] rel:[34,11 180x17] font:11/400/17 color:on-surface-variant
++ - strong "3 days" abs:[174,290 35x13] rel:[103,1 35x13] font:11/700/17 color:font-headline
+  - card abs:[22,344 362x182] rel:[14,236 362x182] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
 ```
 
 ## State: Partial (ordered diff vs Week)
 
 ```diff
-  - div flex:row gap:8 justify:between align:baseline
-- - div
-- - ov "Accuracy" font:11/700 color:on-surface-variant
-- - div "73%" font:24/700/26 color:font-headline
-- - span flex:row gap:4 align:center
-- - span flex:row
-- - icon:trending-up
-- - span "+4%" font:11/600 color:mastery
-- - span "vs previous week" font:11/400 color:on-surface-variant op:0.7
-- - svg
-+ - ov "Accuracy" font:11/700 color:on-surface-variant
-+ - div "Not enough answered cards yet to show accuracy." bg:on-primary font:12/400/18 color:on-surface-variant r:11 pad:24/16 border:1px outline-variant
-  - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
+  - div abs:[37,384 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[37,384 133x60] rel:[0,0 133x60]
+- - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant
+- - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline
+- - span abs:[37,431 133x13] rel:[0,46 133x13] flex:row gap:4 align:center
+- - span abs:[37,432 11x11] rel:[0,1 11x11] flex:row
+- - icon:trending-up abs:[37,432 11x11] rel:[0,0 11x11] clip
+- - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
+- - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
+- - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
++ - ov "Accuracy" abs:[37,384 72x13] rel:[0,0 72x13] font:11/700 color:on-surface-variant
++ - div "Not enough answered cards yet to show accuracy." abs:[37,409 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
+  - card abs:[22,504 362x284] rel:[14,396 362x284] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
 ```
 
 ## State: Error (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x56] flex:row gap:4 align:center pad:0/14
-    - div "Progress" [22,65 100x30] font:24/700 color:font-headline
-  - scroll [8,108 390x598] flex:row justify:center align:center pad:24/22
-    - card [30,275 346x263] bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
-      - div [177,312 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
-        - span [192,327 22x22] flex:row
-          - icon:cloud-off [192,327 22x22]
-      - div "Couldn't summarise your progress" [53,378 300x21] font:16/700 color:font-headline
-      - div "Your study history is safe on this device. Try again in a moment." [53,405 300x40] font:13/400/20 color:on-surface-variant
-      - pill-btn "Retry" [158,462 90x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-        - span [176,475 14x14] flex:row
-          - icon:refresh-cw [176,475 14x14]
-  - bottom-nav [18,710 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item [19,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [55,725 20x20] flex:row
-        - icon:home [55,725 20x20]
-      - span "Home" [50,750 29x12] font:10/600 color:on-surface-variant
-    - item[2] bn-item [111,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [147,725 20x20] flex:row
-        - icon:layers [147,725 20x20]
-      - span "Library" [140,750 33x12] font:10/600 color:on-surface-variant
-    - item[3] bn-item [203,713 92x61] flex:col gap:3 align:center pad:8/0
-      - bn-pill [225,721 48x30] bg:seed-indigo@14 r:999 pad:4/14
-        - span [239,725 20x20] flex:row
-          - icon:bar-chart-3 [239,725 20x20]
-      - span "Stats" [236,754 25x12] font:10/600 color:seed-indigo
-    - item[4] bn-item [295,717 92x53] flex:col gap:3 align:center pad:8/0
-      - span [331,725 20x20] flex:row
-        - icon:settings [331,725 20x20]
-      - span "Settings" [321,750 41x12] font:10/600 color:on-surface-variant
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 align:center pad:0/14
+    - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline
+  - scroll abs:[8,108 390x598] rel:[0,100 390x598] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:24/22 layout_hint:scroll
+    - card abs:[30,275 346x263] rel:[22,167 346x263] pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[177,312 52x52] rel:[147,37 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+        - span abs:[192,327 22x22] rel:[15,15 22x22] flex:row
+          - icon:cloud-off abs:[192,327 22x22] rel:[0,0 22x22] clip
+      - div "Couldn't summarise your progress" abs:[53,378 300x21] rel:[23,103 300x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - div "Your study history is safe on this device. Try again in a moment." abs:[53,405 300x40] rel:[23,130 300x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
+      - pill-btn "Retry" abs:[158,462 90x40] rel:[128,186 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+        - span abs:[176,475 14x14] rel:[18,13 14x14] flex:row
+          - icon:refresh-cw abs:[176,475 14x14] rel:[0,0 14x14] clip
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
+      - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
+      - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+        - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
+          - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
+      - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+      - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
+        - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
+      - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
 ```

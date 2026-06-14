@@ -5,63 +5,72 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Hidden
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - div [62,67 286x18] flex:row gap:8 align:center
-      - span "Recall" [62,67 61x18] bg:mastery@12 font:10/700 color:mastery r:999 pad:3/8
-      - div [131,74 217x4] bg:surface-container r:999
-        - div [131,74 145x4] bg:mastery
-    - div "8 / 12" [358,69 32x15] font:12/600 color:on-surface-variant
-  - div [8,100 390x618] flex:col gap:10 pad:8/14
-    - card [22,108 362x298] flex:row justify:center align:center bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - icon-btn [343,117 32x32] flex:row justify:center align:center r:999
-        - span [349,123 20x20] flex:row
-          - icon:pencil [349,123 20x20]
-      - div "연구자" [160,239 87x37] font:32/700/37 color:font-headline
-      - icon-btn [343,365 32x32] flex:row justify:center align:center r:999
-        - span [349,371 20x20] flex:row
-          - icon:volume-2 [349,371 20x20]
-    - card [22,416 362x302] flex:row justify:center align:center bg:surface-container-low r:12 pad:16/16 border:1px seed-indigo@14
-      - div [133,560 140x14] bg:surface-container-high r:999 op:0.7
-  - div [8,718 390x70] flex:row gap:10 justify:center pad:14/14
-    - pill-btn "Show answer" [125,732 156x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/36
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[62,67 286x18] rel:[54,15 286x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
+      - span "Recall" abs:[62,67 61x18] rel:[0,0 61x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery r:999
+      - div abs:[131,74 217x4] rel:[69,7 217x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
+        - div abs:[131,74 145x4] rel:[0,0 145x4] bg:mastery
+    - div "8 / 12" abs:[358,69 32x15] rel:[350,17 32x15] font:12/600 color:on-surface-variant
+  - div abs:[8,100 390x618] rel:[0,92 390x618] flex:col gap:10 grow:1 basis:0 layout_hint:expanded pad:8/14/0/14
+    - card abs:[22,108 362x298] rel:[14,8 362x298] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
+      - icon-btn abs:[343,117 32x32] rel:[321,9 32x32] flex:row justify:center align:center pos:absolute r:999
+        - span abs:[349,123 20x20] rel:[6,6 20x20] flex:row
+          - icon:pencil abs:[349,123 20x20] rel:[0,0 20x20] clip
+      - div "연구자" abs:[160,239 87x37] rel:[138,131 87x37] font:32/700/37 color:font-headline text:center
+      - icon-btn abs:[343,365 32x32] rel:[321,257 32x32] flex:row justify:center align:center pos:absolute r:999
+        - span abs:[349,371 20x20] rel:[6,6 20x20] flex:row
+          - icon:volume-2 abs:[349,371 20x20] rel:[0,0 20x20] clip
+    - card abs:[22,416 362x302] rel:[14,316 362x302] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:16 minh:160 bg:surface-container-low r:12 border:1px seed-indigo@14
+      - div abs:[133,560 140x14] rel:[111,144 140x14] bg:surface-container-high r:999 op:0.7
+  - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
+    - pill-btn "Show answer" abs:[125,732 156x40] rel:[117,14 156x40] flex:row gap:6 justify:center align:center pad:0/36 bg:seed-indigo font:13/600 color:on-primary text:center r:999
 ```
 
 ## State: Revealed (ordered diff vs Hidden)
 
 ```diff
-  - card flex:row justify:center align:center bg:surface-container-low r:12 pad:16/16 border:1px seed-indigo@14
-- - div bg:surface-container-high r:999 op:0.7
-+ - div "Researcher / Nhà nghiên cứu — person who conducts research. Hán-Việt: Nghiên cứu giả (硏究者). 연구 = research, 자 = person." font:14/400/22 color:font-headline
-  - div flex:row gap:10 justify:center pad:14/14
-- - pill-btn "Show answer" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/36
-+ - pill-btn "Forgot" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/18
-+ - pill-btn "Got it" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:999 pad:0/18
+  - card abs:[22,416 362x302] rel:[14,316 362x302] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:16 minh:160 bg:surface-container-low r:12 border:1px seed-indigo@14
+- - div abs:[133,560 140x14] rel:[111,144 140x14] bg:surface-container-high r:999 op:0.7
++ - div "Researcher / Nhà nghiên cứu — person who conducts research. Hán-Việt: Nghiên cứu giả (硏究者). 연구 = research, 자 = person." abs:[39,534 328x65] rel:[17,118 328x65] font:14/400/22 color:font-headline text:center
+  - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
+- - pill-btn "Show answer" abs:[125,732 156x40] rel:[117,14 156x40] flex:row gap:6 justify:center align:center pad:0/36 bg:seed-indigo font:13/600 color:on-primary text:center r:999
++ - pill-btn "Forgot" abs:[38,732 160x40] rel:[30,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
++ - pill-btn "Got it" abs:[208,732 160x40] rel:[200,14 160x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center r:999
 ```

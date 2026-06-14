@@ -5,321 +5,330 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - title "Session complete" [16,67 334x18] font:14/600 color:on-surface-variant
-    - icon-btn [354,58 36x36] flex:row justify:center align:center r:999
-      - span [362,66 20x20] flex:row
-        - icon:share-2 [362,66 20x20]
-  - scroll [8,100 390x601] repeat:x4+(unit=2) pad:0/14
-    - item[1] card [22,100 362x227] repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
-      - item[1] div [173,125 60x60] flex:row justify:center align:center bg:mastery@16 r:18
-        - span [189,141 28x28] flex:row
-          - icon:check-circle-2 [189,141 28x28]
-      - div "Nice session." [45,199 316x25] font:22/700/25 color:font-headline
-      - item[2] div "You worked through in TOPIK II — Vocab." [45,230 316x20] font:13/400/20 color:on-surface-variant
-        - strong "20 cards" [177,232 55x16] font:13/700/20 color:font-headline
-      - div [45,266 316x40] flex:row gap:10 pad:0/6
-        - div [51,266 95x40]
-          - div "20" [51,266 95x28] font:22/700 color:font-headline
-          - div "Reviewed" [51,294 95x12] font:10/700 color:on-surface-variant
-        - div [156,266 95x40]
-          - div "14m 8s" [156,266 95x28] font:22/700 color:font-headline
-          - div "Duration" [156,294 95x12] font:10/700 color:on-surface-variant
-        - div [260,266 95x40]
-          - div "78%" [260,266 95x28] font:22/700 color:mastery
-          - div "Accuracy" [260,294 95x12] font:10/700 color:on-surface-variant
-    - ov "Result breakdown" [22,341 362x21] font:11/700 color:on-surface-variant pad:0/4
-    - item[2] card [22,362 362x169] bg:on-primary r:12 border:1px seed-indigo@14
-      - div [23,363 360x56] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,376 30x30] flex:row justify:center align:center r:9
-          - span [45,384 14x14] flex:row
-            - icon:check [45,384 14x14]
-        - div [81,375 257x31]
-          - div "Correct" [81,375 257x16] font:13/600 color:font-headline
-          - div "Answered confidently" [81,393 257x13] font:11/400 color:on-surface-variant
-        - div "14" [350,380 19x21] font:16/700 color:mastery
-      - div [23,419 360x56] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,432 30x30] flex:row justify:center align:center r:9
-          - span [45,440 14x14] flex:row
-            - icon:corner-up-right [45,440 14x14]
-        - div [81,431 266x31]
-          - div "Recovered" [81,431 266x16] font:13/600 color:font-headline
-          - div "Got it after a slip" [81,449 266x13] font:11/400 color:on-surface-variant
-        - div "4" [359,436 10x21] font:16/700 color:streak
-      - div [23,475 360x55] grid cols:3 gap:12 align:center pad:12/14
-        - div [37,488 30x30] flex:row justify:center align:center r:9
-          - span [45,496 14x14] flex:row
-            - icon:rotate-ccw [45,496 14x14]
-        - div [81,487 266x31]
-          - div "Forgot" [81,487 266x16] font:13/600 color:font-headline
-          - div "Will come back sooner" [81,505 266x13] font:11/400 color:on-surface-variant
-        - div "2" [359,492 10x21] font:16/700 color:error
-    - ov "Box changes" [22,545 362x21] font:11/700 color:on-surface-variant pad:0/4
-    - item[3] card [22,566 362x118] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,581 332x8] flex:row bg:surface-container r:999
-        - div [37,581 232x8] bg:mastery
-        - div [269,581 50x8] bg:seed-indigo
-        - div [319,581 50x8] bg:error op:0.85
-      - div [37,603 332x66] flex:row gap:6
-        - div [37,603 107x66] bg:on-primary r:10 pad:8/10 border:1px seed-indigo@14
-          - div "Moved up" [48,618 70x12] flex:row gap:4 align:center font:10/700 color:mastery
-            - span [48,619 10x10] flex:row
-              - icon:arrow-up [48,619 10x10]
-          - div "14" [48,636 85x21] font:16/700 color:font-headline
-        - div [150,603 107x66] bg:on-primary r:10 pad:8/10 border:1px seed-indigo@14
-          - div "Held" [161,618 41x12] flex:row gap:4 align:center font:10/700 color:seed-indigo
-            - span [161,619 10x10] flex:row
-              - icon:minus [161,619 10x10]
-          - div "3" [161,636 85x21] font:16/700 color:font-headline
-        - div [262,603 107x66] bg:on-primary r:10 pad:8/10 border:1px seed-indigo@14
-          - div "Moved down" [273,612 85x24] flex:row gap:4 align:center font:10/700 color:error
-            - span [273,619 10x10] flex:row
-              - icon:arrow-down [273,619 10x10]
-          - div "3" [273,639 85x21] font:16/700 color:font-headline
-    - ov "Streak and goal" [22,698 362x21] font:11/700 color:on-surface-variant pad:0/4
-    - item[4] card [22,719 362x131] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,734 332x36] flex:row gap:10
-        - div [37,734 161x36] flex:row gap:10 align:center
-          - div [37,734 36x36] flex:row justify:center align:center bg:#d9891e@12 r:11
-            - span [47,744 16x16] flex:row
-              - icon:flame [47,744 16x16]
-          - div [83,735 86x35]
-            - ov "Streak" [83,735 86x13] font:11/700 color:on-surface-variant
-            - div "12 days" [83,749 86x21] font:16/700 color:font-headline
-              - span "+1" [147,755 22x14] bg:mastery@12 font:10/700 color:mastery r:999 pad:1/5
-        - div [208,734 161x36] flex:row gap:10 align:center
-          - svg [208,734 36x36]
-          - div [254,735 97x35]
-            - ov "Today’s goal" [254,735 97x13] font:11/700 color:on-surface-variant
-            - div "23" [254,749 97x21] font:16/700 color:font-headline
-              - span "/ 20" [273,755 21x13] font:11/600 color:on-surface-variant
-      - div [37,784 332x51] flex:row gap:6 align:center bg:mastery@8 r:9 pad:8/10 border:1px mastery@20
-        - span [48,804 12x12] flex:row
-          - icon:check [48,804 12x12]
-        - span "Daily goal hit. New cards are still available if you want a head start." [66,793 292x33] font:11/400/17 color:font-headline
-    - ov "Tough cards" [22,864 362x21] font:11/700 color:on-surface-variant pad:0/4
-    - card [22,885 362x79] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div [37,900 332x49] flex:row gap:12 align:center
-        - div [37,907 36x36] flex:row justify:center align:center bg:#dc4848@10 r:11
-          - span [47,917 16x16] flex:row
-            - icon:alert-circle [47,917 16x16]
-        - div [85,900 256x49]
-          - div "3 cards to revisit" [85,900 256x16] font:13/700 color:font-headline
-          - div "Forgot or struggled with these. A quick re-pass tomorrow helps." [85,918 256x31] font:11/400/15 color:on-surface-variant
-        - span [353,917 16x16] flex:row
-          - icon:chevron-right [353,917 16x16]
-  - div [8,701 390x87] flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
-    - div [22,712 362x40] flex:row gap:10
-      - pill-btn "Study more" [22,712 164x40] flex:row gap:7 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-        - span [57,725 14x14] flex:row
-          - icon:play [57,725 14x14]
-      - pill-btn "Done" [196,712 188x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-        - span [260,724 16x16] flex:row
-          - icon:check [260,724 16x16]
-    - div "Done returns you to where you started." [22,760 362x12] font:10/400 color:on-surface-variant op:0.7
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - title "Session complete" abs:[16,67 334x18] rel:[8,15 334x18] grow:1 basis:0 layout_hint:expanded font:14/600 color:on-surface-variant
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
+  - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll
+    - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
+      - item[1] div abs:[173,125 60x60] rel:[151,25 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:mastery@16 r:18
+        - span abs:[189,141 28x28] rel:[16,16 28x28] flex:row
+          - icon:check-circle-2 abs:[189,141 28x28] rel:[0,0 28x28] clip
+      - div "Nice session." abs:[45,199 316x25] rel:[23,99 316x25] margin:0/0/6/0 font:22/700/25 color:font-headline text:center
+      - item[2] div "You worked through in TOPIK II — Vocab." abs:[45,230 316x20] rel:[23,130 316x20] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
+        - strong "20 cards" abs:[177,232 55x16] rel:[132,2 55x16] font:13/700/20 color:font-headline text:center
+      - div abs:[45,266 316x40] rel:[23,166 316x40] flex:row gap:10 pad:0/6
+        - div abs:[51,266 95x40] rel:[6,0 95x40] grow:1 basis:0 layout_hint:expanded
+          - div "20" abs:[51,266 95x28] rel:[0,0 95x28] font:22/700 color:font-headline text:center
+          - div "Reviewed" abs:[51,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center
+        - div abs:[156,266 95x40] rel:[111,0 95x40] grow:1 basis:0 layout_hint:expanded
+          - div "14m 8s" abs:[156,266 95x28] rel:[0,0 95x28] font:22/700 color:font-headline text:center
+          - div "Duration" abs:[156,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center
+        - div abs:[260,266 95x40] rel:[215,0 95x40] grow:1 basis:0 layout_hint:expanded
+          - div "78%" abs:[260,266 95x28] rel:[0,0 95x28] font:22/700 color:mastery text:center
+          - div "Accuracy" abs:[260,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center
+    - ov "Result breakdown" abs:[22,341 362x21] rel:[14,241 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+    - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[23,363 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,376 30x30] rel:[14,13 30x30] flex:row justify:center align:center r:9
+          - span abs:[45,384 14x14] rel:[8,8 14x14] flex:row
+            - icon:check abs:[45,384 14x14] rel:[0,0 14x14] clip
+        - div abs:[81,375 257x31] rel:[58,12 257x31]
+          - div "Correct" abs:[81,375 257x16] rel:[0,0 257x16] font:13/600 color:font-headline
+          - div "Answered confidently" abs:[81,393 257x13] rel:[0,18 257x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
+        - div "14" abs:[350,380 19x21] rel:[327,17 19x21] font:16/700 color:mastery
+      - div abs:[23,419 360x56] rel:[1,57 360x56] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,432 30x30] rel:[14,13 30x30] flex:row justify:center align:center r:9
+          - span abs:[45,440 14x14] rel:[8,8 14x14] flex:row
+            - icon:corner-up-right abs:[45,440 14x14] rel:[0,0 14x14] clip
+        - div abs:[81,431 266x31] rel:[58,12 266x31]
+          - div "Recovered" abs:[81,431 266x16] rel:[0,0 266x16] font:13/600 color:font-headline
+          - div "Got it after a slip" abs:[81,449 266x13] rel:[0,18 266x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
+        - div "4" abs:[359,436 10x21] rel:[336,17 10x21] font:16/700 color:streak
+      - div abs:[23,475 360x55] rel:[1,113 360x55] grid cols:3 gap:12 align:center pad:12/14
+        - div abs:[37,488 30x30] rel:[14,13 30x30] flex:row justify:center align:center r:9
+          - span abs:[45,496 14x14] rel:[8,8 14x14] flex:row
+            - icon:rotate-ccw abs:[45,496 14x14] rel:[0,0 14x14] clip
+        - div abs:[81,487 266x31] rel:[58,12 266x31]
+          - div "Forgot" abs:[81,487 266x16] rel:[0,0 266x16] font:13/600 color:font-headline
+          - div "Will come back sooner" abs:[81,505 266x13] rel:[0,18 266x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
+        - div "2" abs:[359,492 10x21] rel:[336,17 10x21] font:16/700 color:error
+    - ov "Box changes" abs:[22,545 362x21] rel:[14,445 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+    - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,581 332x8] rel:[15,15 332x8] flex:row margin:0/0/14/0 clip bg:surface-container r:999
+        - div abs:[37,581 232x8] rel:[0,0 232x8] bg:mastery
+        - div abs:[269,581 50x8] rel:[232,0 50x8] bg:seed-indigo
+        - div abs:[319,581 50x8] rel:[282,0 50x8] bg:error op:0.85
+      - div abs:[37,603 332x66] rel:[15,37 332x66] flex:row gap:6
+        - div abs:[37,603 107x66] rel:[0,0 107x66] grow:1 basis:0 layout_hint:expanded pad:8/10 bg:on-primary r:10 border:1px seed-indigo@14
+          - div "Moved up" abs:[48,618 70x12] rel:[11,15 70x12] flex:row gap:4 align:center font:10/700 color:mastery
+            - span abs:[48,619 10x10] rel:[0,1 10x10] flex:row
+              - icon:arrow-up abs:[48,619 10x10] rel:[0,0 10x10] clip
+          - div "14" abs:[48,636 85x21] rel:[11,33 85x21] margin:3/0/0/0 font:16/700 color:font-headline
+        - div abs:[150,603 107x66] rel:[113,0 107x66] grow:1 basis:0 layout_hint:expanded pad:8/10 bg:on-primary r:10 border:1px seed-indigo@14
+          - div "Held" abs:[161,618 41x12] rel:[11,15 41x12] flex:row gap:4 align:center font:10/700 color:seed-indigo
+            - span abs:[161,619 10x10] rel:[0,1 10x10] flex:row
+              - icon:minus abs:[161,619 10x10] rel:[0,0 10x10] clip
+          - div "3" abs:[161,636 85x21] rel:[11,33 85x21] margin:3/0/0/0 font:16/700 color:font-headline
+        - div abs:[262,603 107x66] rel:[225,0 107x66] grow:1 basis:0 layout_hint:expanded pad:8/10 bg:on-primary r:10 border:1px seed-indigo@14
+          - div "Moved down" abs:[273,612 85x24] rel:[11,9 85x24] flex:row gap:4 align:center font:10/700 color:error
+            - span abs:[273,619 10x10] rel:[0,7 10x10] flex:row
+              - icon:arrow-down abs:[273,619 10x10] rel:[0,0 10x10] clip
+          - div "3" abs:[273,639 85x21] rel:[11,36 85x21] margin:3/0/0/0 font:16/700 color:font-headline
+    - ov "Streak and goal" abs:[22,698 362x21] rel:[14,598 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+    - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,734 332x36] rel:[15,15 332x36] flex:row gap:10 margin:0/0/14/0
+        - div abs:[37,734 161x36] rel:[0,0 161x36] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[37,734 36x36] rel:[0,0 36x36] flex:row justify:center align:center bg:#d9891e@12 r:11
+            - span abs:[47,744 16x16] rel:[10,10 16x16] flex:row
+              - icon:flame abs:[47,744 16x16] rel:[0,0 16x16] clip
+          - div abs:[83,735 86x35] rel:[46,1 86x35]
+            - ov "Streak" abs:[83,735 86x13] rel:[0,0 86x13] font:11/700 color:on-surface-variant
+            - div "12 days" abs:[83,749 86x21] rel:[0,14 86x21] margin:1/0/0/0 font:16/700 color:font-headline
+              - span "+1" abs:[147,755 22x14] rel:[64,6 22x14] pad:1/5 margin:0/0/0/6 bg:mastery@12 font:10/700 color:mastery r:999
+        - div abs:[208,734 161x36] rel:[171,0 161x36] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded
+          - svg abs:[208,734 36x36] rel:[0,0 36x36] shrink:0 clip
+          - div abs:[254,735 97x35] rel:[46,1 97x35]
+            - ov "Today’s goal" abs:[254,735 97x13] rel:[0,0 97x13] font:11/700 color:on-surface-variant
+            - div "23" abs:[254,749 97x21] rel:[0,14 97x21] margin:1/0/0/0 font:16/700 color:font-headline
+              - span "/ 20" abs:[273,755 21x13] rel:[19,6 21x13] font:11/600 color:on-surface-variant
+      - div abs:[37,784 332x51] rel:[15,65 332x51] flex:row gap:6 align:center pad:8/10 bg:mastery@8 r:9 border:1px mastery@20
+        - span abs:[48,804 12x12] rel:[11,20 12x12] flex:row
+          - icon:check abs:[48,804 12x12] rel:[0,0 12x12] clip
+        - span "Daily goal hit. New cards are still available if you want a head start." abs:[66,793 292x33] rel:[29,9 292x33] font:11/400/17 color:font-headline
+    - ov "Tough cards" abs:[22,864 362x21] rel:[14,764 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+    - card abs:[22,885 362x79] rel:[14,785 362x79] pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[37,900 332x49] rel:[15,15 332x49] flex:row gap:12 align:center
+        - div abs:[37,907 36x36] rel:[0,6 36x36] flex:row justify:center align:center shrink:0 bg:#dc4848@10 r:11
+          - span abs:[47,917 16x16] rel:[10,10 16x16] flex:row
+            - icon:alert-circle abs:[47,917 16x16] rel:[0,0 16x16] clip
+        - div abs:[85,900 256x49] rel:[48,0 256x49] grow:1 basis:0 layout_hint:expanded
+          - div "3 cards to revisit" abs:[85,900 256x16] rel:[0,0 256x16] font:13/700 color:font-headline
+          - div "Forgot or struggled with these. A quick re-pass tomorrow helps." abs:[85,918 256x31] rel:[0,18 256x31] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+        - span abs:[353,917 16x16] rel:[316,16 16x16] flex:row
+          - icon:chevron-right abs:[353,917 16x16] rel:[0,0 16x16] clip
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+    - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
+      - pill-btn "Study more" abs:[22,712 164x40] rel:[0,0 164x40] flex:row gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+        - span abs:[57,725 14x14] rel:[35,13 14x14] flex:row
+          - icon:play abs:[57,725 14x14] rel:[0,0 14x14] clip
+      - pill-btn "Done" abs:[196,712 188x40] rel:[174,0 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+        - span abs:[260,724 16x16] rel:[63,12 16x16] flex:row
+          - icon:check abs:[260,724 16x16] rel:[0,0 16x16] clip
+    - div "Done returns you to where you started." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - title "Session complete" [16,67 334x18] font:14/600 color:on-surface-variant
-    - icon-btn [354,58 36x36] flex:row justify:center align:center r:999 op:0.4
-      - span [362,66 20x20] flex:row
-        - icon:share-2 [362,66 20x20]
-  - scroll [8,100 390x601] pad:0/14
-    - card [22,100 362x233] bg:on-primary r:12 pad:28/22 border:1px seed-indigo@14
-      - span [45,129 56x56] bg:surface-container-high r:16 op:0.5
-      - span [45,199 180x20] bg:surface-container-high r:6 op:0.5
-      - span [45,225 120x11] bg:surface-container-high r:6 op:0.4
-      - span [45,254 316x50] bg:surface-container-high r:11 op:0.5
-    - card [22,347 362x164] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - span [37,362 80x10] bg:surface-container-high r:6 op:0.5
-      - div [37,384 332x28] flex:row gap:12 align:center
-        - span [37,384 28x28] bg:surface-container-high r:8 op:0.5
-        - div [77,386 250x25]
-          - span [77,386 80x11] bg:surface-container-high r:6 op:0.5
-          - span [77,402 120x9] bg:surface-container-high r:6 op:0.4
-        - span [339,391 30x15] bg:surface-container-high r:6 op:0.5
-      - div [37,426 332x28] flex:row gap:12 align:center
-        - span [37,426 28x28] bg:surface-container-high r:8 op:0.5
-        - div [77,428 250x25]
-          - span [77,428 80x11] bg:surface-container-high r:6 op:0.5
-          - span [77,444 120x9] bg:surface-container-high r:6 op:0.4
-        - span [339,433 30x15] bg:surface-container-high r:6 op:0.5
-      - div [37,468 332x28] flex:row gap:12 align:center
-        - span [37,468 28x28] bg:surface-container-high r:8 op:0.5
-        - div [77,470 250x25]
-          - span [77,470 80x11] bg:surface-container-high r:6 op:0.5
-          - span [77,486 120x9] bg:surface-container-high r:6 op:0.4
-        - span [339,475 30x15] bg:surface-container-high r:6 op:0.5
-  - div [8,701 390x87] flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
-    - div [22,712 362x40] flex:row gap:10
-      - pill-btn "Done" [22,712 362x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-        - span [173,724 16x16] flex:row
-          - icon:check [173,724 16x16]
-    - div "Saving your session…" [22,760 362x12] font:10/400 color:on-surface-variant op:0.7
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - title "Session complete" abs:[16,67 334x18] rel:[8,15 334x18] grow:1 basis:0 layout_hint:expanded font:14/600 color:on-surface-variant
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999 op:0.4
+      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
+  - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - card abs:[22,100 362x233] rel:[14,0 362x233] pad:28/22 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[45,129 56x56] rel:[23,29 56x56] bg:surface-container-high r:16 op:0.5
+      - span abs:[45,199 180x20] rel:[23,99 180x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[45,225 120x11] rel:[23,125 120x11] bg:surface-container-high r:6 op:0.4
+      - span abs:[45,254 316x50] rel:[23,154 316x50] bg:surface-container-high r:11 op:0.5
+    - card abs:[22,347 362x164] rel:[14,247 362x164] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,362 80x10] rel:[15,15 80x10] bg:surface-container-high r:6 op:0.5
+      - div abs:[37,384 332x28] rel:[15,37 332x28] flex:row gap:12 align:center margin:0/0/14/0
+        - span abs:[37,384 28x28] rel:[0,0 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[77,386 250x25] rel:[40,2 250x25] grow:1 basis:0 layout_hint:expanded
+          - span abs:[77,386 80x11] rel:[0,0 80x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[77,402 120x9] rel:[0,16 120x9] bg:surface-container-high r:6 op:0.4
+        - span abs:[339,391 30x15] rel:[302,7 30x15] bg:surface-container-high r:6 op:0.5
+      - div abs:[37,426 332x28] rel:[15,79 332x28] flex:row gap:12 align:center margin:0/0/14/0
+        - span abs:[37,426 28x28] rel:[0,0 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[77,428 250x25] rel:[40,2 250x25] grow:1 basis:0 layout_hint:expanded
+          - span abs:[77,428 80x11] rel:[0,0 80x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[77,444 120x9] rel:[0,16 120x9] bg:surface-container-high r:6 op:0.4
+        - span abs:[339,433 30x15] rel:[302,7 30x15] bg:surface-container-high r:6 op:0.5
+      - div abs:[37,468 332x28] rel:[15,121 332x28] flex:row gap:12 align:center
+        - span abs:[37,468 28x28] rel:[0,0 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[77,470 250x25] rel:[40,2 250x25] grow:1 basis:0 layout_hint:expanded
+          - span abs:[77,470 80x11] rel:[0,0 80x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[77,486 120x9] rel:[0,16 120x9] bg:surface-container-high r:6 op:0.4
+        - span abs:[339,475 30x15] rel:[302,7 30x15] bg:surface-container-high r:6 op:0.5
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+    - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
+      - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+        - span abs:[173,724 16x16] rel:[151,12 16x16] flex:row
+          - icon:check abs:[173,724 16x16] rel:[0,0 16x16] clip
+    - div "Saving your session…" abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Goal off (ordered diff vs Loaded)
 
 ```diff
-  - icon:share-2
-- - scroll repeat:x4+(unit=2) pad:0/14
-+ - scroll repeat:x3+(unit=2) pad:0/14
-  - item[1] card repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
+  - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
+- - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll
++ - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x3+(unit=2) pad:0/14/14/14 layout_hint:scroll
+  - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
   ...
-  - div "3" font:16/700 color:font-headline
-- - ov "Streak and goal" font:11/700 color:on-surface-variant pad:0/4
-- - item[4] card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-- - div flex:row gap:10
-- - div flex:row gap:10 align:center
-- - div flex:row justify:center align:center bg:#d9891e@12 r:11
-- - span flex:row
-- - icon:flame
-- - div
-- - ov "Streak" font:11/700 color:on-surface-variant
-- - div "12 days" font:16/700 color:font-headline
-- - span "+1" bg:mastery@12 font:10/700 color:mastery r:999 pad:1/5
-- - div flex:row gap:10 align:center
-- - svg
-- - div
-- - ov "Today’s goal" font:11/700 color:on-surface-variant
-- - div "23" font:16/700 color:font-headline
-- - span "/ 20" font:11/600 color:on-surface-variant
-- - div flex:row gap:6 align:center bg:mastery@8 r:9 pad:8/10 border:1px mastery@20
-- - span flex:row
-- - icon:check
-- - span "Daily goal hit. New cards are still available if you want a head start." font:11/400/17 color:font-headline
-  - ov "Tough cards" font:11/700 color:on-surface-variant pad:0/4
+  - div "3" abs:[273,639 85x21] rel:[11,36 85x21] margin:3/0/0/0 font:16/700 color:font-headline
+- - ov "Streak and goal" abs:[22,698 362x21] rel:[14,598 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[37,734 332x36] rel:[15,15 332x36] flex:row gap:10 margin:0/0/14/0
+- - div abs:[37,734 161x36] rel:[0,0 161x36] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[37,734 36x36] rel:[0,0 36x36] flex:row justify:center align:center bg:#d9891e@12 r:11
+- - span abs:[47,744 16x16] rel:[10,10 16x16] flex:row
+- - icon:flame abs:[47,744 16x16] rel:[0,0 16x16] clip
+- - div abs:[83,735 86x35] rel:[46,1 86x35]
+- - ov "Streak" abs:[83,735 86x13] rel:[0,0 86x13] font:11/700 color:on-surface-variant
+- - div "12 days" abs:[83,749 86x21] rel:[0,14 86x21] margin:1/0/0/0 font:16/700 color:font-headline
+- - span "+1" abs:[147,755 22x14] rel:[64,6 22x14] pad:1/5 margin:0/0/0/6 bg:mastery@12 font:10/700 color:mastery r:999
+- - div abs:[208,734 161x36] rel:[171,0 161x36] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded
+- - svg abs:[208,734 36x36] rel:[0,0 36x36] shrink:0 clip
+- - div abs:[254,735 97x35] rel:[46,1 97x35]
+- - ov "Today’s goal" abs:[254,735 97x13] rel:[0,0 97x13] font:11/700 color:on-surface-variant
+- - div "23" abs:[254,749 97x21] rel:[0,14 97x21] margin:1/0/0/0 font:16/700 color:font-headline
+- - span "/ 20" abs:[273,755 21x13] rel:[19,6 21x13] font:11/600 color:on-surface-variant
+- - div abs:[37,784 332x51] rel:[15,65 332x51] flex:row gap:6 align:center pad:8/10 bg:mastery@8 r:9 border:1px mastery@20
+- - span abs:[48,804 12x12] rel:[11,20 12x12] flex:row
+- - icon:check abs:[48,804 12x12] rel:[0,0 12x12] clip
+- - span "Daily goal hit. New cards are still available if you want a head start." abs:[66,793 292x33] rel:[29,9 292x33] font:11/400/17 color:font-headline
+  - ov "Tough cards" abs:[22,698 362x21] rel:[14,598 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
   ...
 ```
 
 ## State: Save failed (ordered diff vs Loaded)
 
 ```diff
-  - icon:share-2
-- - scroll repeat:x4+(unit=2) pad:0/14
-- - item[1] card repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
-+ - scroll pad:0/14
-+ - card repeat:x2(unit=2) r:12 pad:24/22 border:1px mastery@22
-  - item[1] div flex:row justify:center align:center bg:mastery@16 r:18
+  - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
+- - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll
+- - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
++ - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
++ - card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
+  - item[1] div abs:[173,125 60x60] rel:[151,25 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:mastery@16 r:18
   ...
-  - div "Accuracy" font:10/700 color:on-surface-variant
-+ - div flex:row gap:10 align:start bg:#d9891e@8 r:12 pad:12/14 border:1px #d9891e@22
-+ - span flex:row
-+ - icon:cloud-off
-+ - div
-+ - div "Couldn't save this summary" font:12/700/19 color:font-headline
-+ - div "Your answers are saved on this device. The summary will sync next time." font:12/400/19 color:on-surface-variant
-+ - button "Retry" flex:row gap:5 align:center bg:#d9891e@14 font:11/600 color:streak r:8 pad:0/12
-+ - span flex:row
-+ - icon:refresh-cw
-  - ov "Result breakdown" font:11/700 color:on-surface-variant pad:0/4
-- - item[2] card bg:on-primary r:12 border:1px seed-indigo@14
-+ - card bg:on-primary r:12 border:1px seed-indigo@14
-  - div grid cols:3 gap:12 align:center pad:12/14
+  - div "Accuracy" abs:[260,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center
++ - div abs:[22,341 362x84] rel:[14,241 362x84] flex:row gap:10 align:start pad:12/14 margin:0/0/14/0 bg:#d9891e@8 r:12 border:1px #d9891e@22
++ - span abs:[37,354 15x15] rel:[15,13 15x15] flex:row
++ - icon:cloud-off abs:[37,354 15x15] rel:[0,0 15x15] clip
++ - div abs:[62,354 229x58] rel:[40,13 229x58] grow:1 basis:0 layout_hint:expanded
++ - div "Couldn't save this summary" abs:[62,354 229x19] rel:[0,0 229x19] margin:0/0/2/0 font:12/700/19 color:font-headline
++ - div "Your answers are saved on this device. The summary will sync next time." abs:[62,375 229x37] rel:[0,21 229x37] font:12/400/19 color:on-surface-variant
++ - button "Retry" abs:[301,354 68x30] rel:[279,13 68x30] flex:row gap:5 align:center shrink:0 pad:0/12 bg:#d9891e@14 font:11/600 color:streak text:center r:8
++ - span abs:[313,364 11x11] rel:[12,10 11x11] flex:row
++ - icon:refresh-cw abs:[313,364 11x11] rel:[0,0 11x11] clip
+  - ov "Result breakdown" abs:[22,439 362x21] rel:[14,339 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,460 362x169] rel:[14,360 362x169] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[23,461 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14
   ...
-  - ov "Box changes" font:11/700 color:on-surface-variant pad:0/4
-- - item[3] card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-+ - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-  - div flex:row bg:surface-container r:999
+  - ov "Box changes" abs:[22,643 362x21] rel:[14,543 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,664 362x118] rel:[14,564 362x118] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[37,679 332x8] rel:[15,15 332x8] flex:row margin:0/0/14/0 clip bg:surface-container r:999
   ...
-  - ov "Streak and goal" font:11/700 color:on-surface-variant pad:0/4
-- - item[4] card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-+ - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-  - div flex:row gap:10
+  - ov "Streak and goal" abs:[22,796 362x21] rel:[14,696 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,817 362x131] rel:[14,717 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[37,832 332x36] rel:[15,15 332x36] flex:row gap:10 margin:0/0/14/0
   ...
-  - icon:check
-- - div "Done returns you to where you started." font:10/400 color:on-surface-variant op:0.7
-+ - div "Done returns you home — summary syncs later." font:10/400 color:on-surface-variant op:0.7
+  - icon:check abs:[260,724 16x16] rel:[0,0 16x16] clip
+- - div "Done returns you to where you started." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - div "Done returns you home — summary syncs later." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Defensive (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - title "Session complete" [16,67 334x18] font:14/600 color:on-surface-variant
-    - icon-btn [354,58 36x36] flex:row justify:center align:center r:999 op:0.4
-      - span [362,66 20x20] flex:row
-        - icon:share-2 [362,66 20x20]
-  - scroll [8,100 390x601] pad:0/14
-    - card [22,100 362x187] bg:on-primary r:12 pad:24/22 border:1px outline-variant
-      - div [173,125 60x60] flex:row justify:center align:center bg:surface-container r:18
-        - span [189,141 28x28] flex:row
-          - icon:pause-circle [189,141 28x28]
-      - div "Session ended early" [45,199 316x21] font:18/700/21 color:font-headline
-      - div "You exited before answering any cards. Nothing has changed." [45,226 316x40] font:13/400/20 color:on-surface-variant
-    - div [22,301 362x39] flex:row gap:8 align:start bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-      - span [35,312 13x13] flex:row
-        - icon:info [35,312 13x13]
-      - span "No reviews counted. Your streak and goal are unchanged." [56,312 296x17] font:11/400/17 color:on-surface-variant
-  - div [8,701 390x87] flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
-    - div [22,712 362x40] flex:row gap:10
-      - pill-btn "Done" [22,712 362x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-        - span [173,724 16x16] flex:row
-          - icon:check [173,724 16x16]
-    - div "No progress saved. Done returns you home." [22,760 362x12] font:10/400 color:on-surface-variant op:0.7
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - title "Session complete" abs:[16,67 334x18] rel:[8,15 334x18] grow:1 basis:0 layout_hint:expanded font:14/600 color:on-surface-variant
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999 op:0.4
+      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
+  - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - card abs:[22,100 362x187] rel:[14,0 362x187] pad:24/22/20/22 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+      - div abs:[173,125 60x60] rel:[151,25 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:surface-container r:18
+        - span abs:[189,141 28x28] rel:[16,16 28x28] flex:row
+          - icon:pause-circle abs:[189,141 28x28] rel:[0,0 28x28] clip
+      - div "Session ended early" abs:[45,199 316x21] rel:[23,99 316x21] margin:0/0/6/0 font:18/700/21 color:font-headline text:center
+      - div "You exited before answering any cards. Nothing has changed." abs:[45,226 316x40] rel:[23,126 316x40] font:13/400/20 color:on-surface-variant text:center
+    - div abs:[22,301 362x39] rel:[14,201 362x39] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:on-primary r:11 border:1px seed-indigo@14
+      - span abs:[35,312 13x13] rel:[13,11 13x13] flex:row
+        - icon:info abs:[35,312 13x13] rel:[0,0 13x13] clip
+      - span "No reviews counted. Your streak and goal are unchanged." abs:[56,312 296x17] rel:[34,11 296x17] font:11/400/17 color:on-surface-variant
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+    - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
+      - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+        - span abs:[173,724 16x16] rel:[151,12 16x16] flex:row
+          - icon:check abs:[173,724 16x16] rel:[0,0 16x16] clip
+    - div "No progress saved. Done returns you home." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Tough empty (ordered diff vs Loaded)
 
 ```diff
-  - ov "Tough cards" font:11/700 color:on-surface-variant pad:0/4
-- - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-+ - card bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14 op:0.75
-  - div flex:row gap:12 align:center
-- - div flex:row justify:center align:center bg:#dc4848@10 r:11
-+ - div flex:row justify:center align:center bg:mastery@10 r:11
-  - span flex:row
-- - icon:alert-circle
-+ - icon:leaf
-  - div
-- - div "3 cards to revisit" font:13/700 color:font-headline
-- - div "Forgot or struggled with these. A quick re-pass tomorrow helps." font:11/400/15 color:on-surface-variant
-- - span flex:row
-- - icon:chevron-right
-+ - div "No tough cards from this session" font:13/700 color:font-headline
-+ - div "You handled everything cleanly." font:11/400/15 color:on-surface-variant
-  - div flex:col gap:8 bg:surface pad:10/14 border:1px seed-indigo@14
+  - ov "Tough cards" abs:[22,864 362x21] rel:[14,764 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+- - card abs:[22,885 362x79] rel:[14,785 362x79] pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,885 362x66] rel:[14,785 362x66] pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14 op:0.75
+  - div abs:[37,900 332x36] rel:[15,15 332x36] flex:row gap:12 align:center
+- - div abs:[37,907 36x36] rel:[0,6 36x36] flex:row justify:center align:center shrink:0 bg:#dc4848@10 r:11
++ - div abs:[37,900 36x36] rel:[0,0 36x36] flex:row justify:center align:center shrink:0 bg:mastery@10 r:11
+  - span abs:[47,910 16x16] rel:[10,10 16x16] flex:row
+- - icon:alert-circle abs:[47,917 16x16] rel:[0,0 16x16] clip
++ - icon:leaf abs:[47,910 16x16] rel:[0,0 16x16] clip
+  - div abs:[85,902 284x33] rel:[48,1 284x33] grow:1 basis:0 layout_hint:expanded
+- - div "3 cards to revisit" abs:[85,900 256x16] rel:[0,0 256x16] font:13/700 color:font-headline
+- - div "Forgot or struggled with these. A quick re-pass tomorrow helps." abs:[85,918 256x31] rel:[0,18 256x31] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+- - span abs:[353,917 16x16] rel:[316,16 16x16] flex:row
+- - icon:chevron-right abs:[353,917 16x16] rel:[0,0 16x16] clip
++ - div "No tough cards from this session" abs:[85,902 284x16] rel:[0,0 284x16] font:13/700 color:font-headline
++ - div "You handled everything cleanly." abs:[85,920 284x15] rel:[0,18 284x15] margin:2/0/0/0 font:11/400/15 color:on-surface-variant
+  - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
 ```

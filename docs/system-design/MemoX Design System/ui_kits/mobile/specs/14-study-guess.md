@@ -5,74 +5,83 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - div [62,67 286x18] flex:row gap:8 align:center
-      - span "Guess" [62,67 56x18] bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:3/8
-      - div [126,74 222x4] bg:surface-container r:999
-        - div [126,74 56x4] bg:seed-indigo
-    - div "5 / 20" [358,69 32x15] font:12/600 color:on-surface-variant
-  - hide-scroll [8,100 390x643] flex:col
-    - div [8,100 390x732] flex:col gap:14 pad:8/14
-      - card [22,108 362x248] flex:col gap:10 justify:center bg:on-primary r:12 pad:34/14 border:1px seed-indigo@14
-        - ov "What is this?" [37,203 332x13] font:11/700 color:on-surface-variant
-        - div "도서관" [37,226 332x37] font:32/700/37 color:font-headline
-      - div [22,370 362x462] flex:col gap:8 repeat:x5(unit=1)
-        - item[1] div [22,370 362x86] flex:row gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14 op:0.36
-          - span "A" [37,398 30x30] flex:row justify:center align:center font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
-          - div [79,404 290x19] flex:col gap:2
-            - div "kitchen" [79,404 290x19] font:15/700/19 color:on-surface-variant
-        - item[2] div [22,464 362x86] flex:row gap:12 align:center bg:mastery@14 r:12 pad:12/14 border:1px mastery@40
-          - span "B" [37,492 30x30] flex:row justify:center align:center font:11/700 color:mastery r:999 border:1px mastery op:0.85
-          - div [79,480 260x54] flex:col gap:2
-            - div "library" [79,480 260x19] font:15/700/19 color:mastery
-            - div "public building or room with a collection of books for reading or borrowing" [79,501 260x34] font:12/400/17 color:mastery op:0.72
-          - span [351,498 18x18] flex:row
-            - icon:check [351,498 18x18]
-        - item[3] div [22,558 362x86] flex:row gap:12 align:center bg:error@10 r:12 pad:12/14 border:1px error@35
-          - span "C" [37,586 30x30] flex:row justify:center align:center font:11/700 color:error r:999 border:1px error op:0.85
-          - div [79,582 260x38] flex:col gap:2
-            - div "school" [79,582 260x19] font:15/700/19 color:error
-            - div "institution for educating children" [79,603 260x17] font:12/400/17 color:error op:0.72
-          - span [351,592 18x18] flex:row
-            - icon:x [351,592 18x18]
-        - item[4] div [22,652 362x86] flex:row gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14 op:0.36
-          - span "D" [37,680 30x30] flex:row justify:center align:center font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
-          - div [79,686 290x19] flex:col gap:2
-            - div "office" [79,686 290x19] font:15/700/19 color:on-surface-variant
-        - item[5] div [22,746 362x86] flex:row gap:12 align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14 op:0.36
-          - span "E" [37,774 30x30] flex:row justify:center align:center font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
-          - div [79,780 290x19] flex:col gap:2
-            - div "classroom" [79,780 290x19] font:15/700/19 color:on-surface-variant
-  - div [8,743 390x45] flex:col gap:6 pad:10/14
-    - div "Next card in 0.8s" [22,753 362x12] font:10/600 color:on-surface-variant
-    - div [22,771 362x3] bg:surface-container r:999
-      - div [22,771 167x3] bg:mastery
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - div abs:[62,67 286x18] rel:[54,15 286x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
+      - span "Guess" abs:[62,67 56x18] rel:[0,0 56x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+      - div abs:[126,74 222x4] rel:[64,7 222x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
+        - div abs:[126,74 56x4] rel:[0,0 56x4] bg:seed-indigo
+    - div "5 / 20" abs:[358,69 32x15] rel:[350,17 32x15] font:12/600 color:on-surface-variant
+  - hide-scroll abs:[8,100 390x643] rel:[0,92 390x643] flex:col grow:1 basis:0 layout_hint:expanded layout_hint:scroll clip
+    - div abs:[8,100 390x732] rel:[0,0 390x732] flex:col gap:14 pad:8/14/0/14
+      - card abs:[22,108 362x248] rel:[14,8 362x248] flex:col gap:10 justify:center shrink:0 pad:34/14/32/14 minh:180 bg:on-primary r:12 border:1px seed-indigo@14
+        - ov "What is this?" abs:[37,203 332x13] rel:[15,95 332x13] font:11/700 color:on-surface-variant text:center
+        - div "도서관" abs:[37,226 332x37] rel:[15,118 332x37] font:32/700/37 color:font-headline text:center
+      - div abs:[22,370 362x462] rel:[14,270 362x462] flex:col gap:8 shrink:0 repeat:x5(unit=1)
+        - item[1] div abs:[22,370 362x86] rel:[0,0 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
+          - span "A" abs:[37,398 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
+          - div abs:[79,404 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "kitchen" abs:[79,404 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant
+        - item[2] div abs:[22,464 362x86] rel:[0,94 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:mastery@14 r:12 border:1px mastery@40
+          - span "B" abs:[37,492 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:mastery r:999 border:1px mastery op:0.85
+          - div abs:[79,480 260x54] rel:[57,16 260x54] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "library" abs:[79,480 260x19] rel:[0,0 260x19] font:15/700/19 color:mastery
+            - div "public building or room with a collection of books for reading or borrowing" abs:[79,501 260x34] rel:[0,21 260x34] font:12/400/17 color:mastery op:0.72
+          - span abs:[351,498 18x18] rel:[329,34 18x18] flex:row
+            - icon:check abs:[351,498 18x18] rel:[0,0 18x18] clip
+        - item[3] div abs:[22,558 362x86] rel:[0,188 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:error@10 r:12 border:1px error@35
+          - span "C" abs:[37,586 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:error r:999 border:1px error op:0.85
+          - div abs:[79,582 260x38] rel:[57,24 260x38] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "school" abs:[79,582 260x19] rel:[0,0 260x19] font:15/700/19 color:error
+            - div "institution for educating children" abs:[79,603 260x17] rel:[0,21 260x17] font:12/400/17 color:error op:0.72
+          - span abs:[351,592 18x18] rel:[329,34 18x18] flex:row
+            - icon:x abs:[351,592 18x18] rel:[0,0 18x18] clip
+        - item[4] div abs:[22,652 362x86] rel:[0,282 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
+          - span "D" abs:[37,680 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
+          - div abs:[79,686 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "office" abs:[79,686 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant
+        - item[5] div abs:[22,746 362x86] rel:[0,376 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
+          - span "E" abs:[37,774 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
+          - div abs:[79,780 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "classroom" abs:[79,780 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant
+  - div abs:[8,743 390x45] rel:[0,735 390x45] flex:col gap:6 shrink:0 pad:10/14/14/14
+    - div "Next card in 0.8s" abs:[22,753 362x12] rel:[14,10 362x12] font:10/600 color:on-surface-variant text:center
+    - div abs:[22,771 362x3] rel:[14,28 362x3] clip bg:surface-container r:999
+      - div abs:[22,771 167x3] rel:[0,0 167x3] bg:mastery
 ```

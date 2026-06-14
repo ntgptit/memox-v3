@@ -5,615 +5,624 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - title "Card history" [60,66 262x21] font:16/700 color:font-headline
-    - pill-btn "Edit" [326,60 64x32] flex:row gap:5 justify:center align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:9 pad:0/12
-      - span [338,70 12x12] flex:row
-        - icon:pencil [338,70 12x12]
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
-    - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - span [63,103 12x12] flex:row
-      - icon:chevron-right [63,103 12x12]
-    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - span [121,103 12x12] flex:row
-      - icon:chevron-right [121,103 12x12]
-    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - span [231,103 12x12] flex:row
-      - icon:chevron-right [231,103 12x12]
-    - span "History" [247,102 39x13] font:11/700 color:font-headline
-  - scroll [8,123 390x665] pad:0/14
-    - card [22,123 362x72] grid cols:2 gap:12 align:center bg:on-primary r:12 pad:14/16 border:1px seed-indigo@14
-      - div [39,138 237x42]
-        - div "연구자" [39,138 237x24] font:20/700/24 color:font-headline
-        - div "Researcher / Nhà nghiên cứu" [39,165 237x15] font:12/400 color:on-surface-variant
-      - span "Box 3 / 5" [288,147 79x24] flex:row gap:5 align:center bg:seed-indigo@10 font:11/700 color:seed-indigo r:999 pad:0/9
-        - span [297,154 11x11] flex:row
-          - icon:zap [297,154 11x11]
-    - card [22,209 362x219] bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - ov "Current progress" [37,224 332x13] font:11/700 color:on-surface-variant
-      - div [37,247 332x10] flex:row gap:8 align:center
-        - div [37,249 60x6] bg:seed-indigo@40 r:999
-        - div [105,249 60x6] bg:seed-indigo@40 r:999
-        - div [173,247 60x10] bg:seed-indigo r:999
-        - div [241,249 60x6] bg:surface-container-high r:999
-        - div [309,249 60x6] bg:surface-container-high r:999
-      - div [37,269 332x12] flex:row justify:between pad:0/2
-        - span "Box 1" [39,269 26x12] font:10/400 color:on-surface-variant
-        - span "Box 3" [190,269 26x12] font:10/400 color:on-surface-variant
-        - span "Box 5" [341,269 26x12] font:10/400 color:on-surface-variant
-      - div [37,295 332x118] grid cols:2 gap:14 repeat:x6(unit=1)
-        - item[1] div [37,295 159x30] flex:row gap:10 align:center
-          - div [37,296 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-            - span [45,304 13x13] flex:row
-              - icon:clock [45,304 13x13]
-          - div [75,295 53x30]
-            - div "Due" [75,295 53x13] font:11/400 color:on-surface-variant
-            - div "in 6 days" [75,309 53x16] font:13/700 color:font-headline
-        - item[2] div [210,295 159x30] flex:row gap:10 align:center
-          - div [210,296 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-            - span [218,304 13x13] flex:row
-              - icon:repeat [218,304 13x13]
-          - div [248,295 44x30]
-            - div "Reviews" [248,295 44x13] font:11/400 color:on-surface-variant
-            - div "14" [248,309 44x16] font:13/700 color:font-headline
-        - item[3] div [37,339 159x30] flex:row gap:10 align:center
-          - div [37,340 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-            - span [45,348 13x13] flex:row
-              - icon:target [45,348 13x13]
-          - div [75,339 56x30]
-            - div "Recall rate" [75,339 56x13] font:11/400 color:on-surface-variant
-            - div "78%" [75,353 56x16] font:13/700 color:font-headline
-        - item[4] div [210,339 159x30] flex:row gap:10 align:center
-          - div [210,340 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-            - span [218,348 13x13] flex:row
-              - icon:rotate-ccw [218,348 13x13]
-          - div [248,339 39x30]
-            - div "Lapses" [248,339 39x13] font:11/400 color:on-surface-variant
-            - div "2" [248,353 39x16] font:13/700 color:font-headline
-        - item[5] div [37,383 159x30] flex:row gap:10 align:center
-          - div [37,384 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-            - span [45,392 13x13] flex:row
-              - icon:flame [45,392 13x13]
-          - div [75,383 78x30]
-            - div "Correct streak" [75,383 78x13] font:11/400 color:on-surface-variant
-            - div "4 in a row" [75,397 78x16] font:13/700 color:font-headline
-        - item[6] div [210,383 159x30] flex:row gap:10 align:center
-          - div [210,384 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-            - span [218,392 13x13] flex:row
-              - icon:calendar [218,392 13x13]
-          - div [248,383 68x30]
-            - div "Since added" [248,383 68x13] font:11/400 color:on-surface-variant
-            - div "23 days" [248,397 68x16] font:13/700 color:font-headline
-    - div [22,444 362x38] flex:row justify:between align:center pad:2/4
-      - ov "Timeline · 8 events" [26,453 131x13] font:11/700 color:on-surface-variant
-      - pill-btn "All events" [276,446 104x26] flex:row gap:5 justify:center align:center font:11/600 color:on-surface-variant r:999 pad:0/10
-        - span [286,454 11x11] flex:row
-          - icon:filter [286,454 11x11]
-        - span [359,454 11x11] flex:row
-          - icon:chevron-down [359,454 11x11]
-    - div [22,482 362x850] repeat:x5(unit=2) pad:0/24
-      - item[1] div [33,490 2x834] bg:surface-container r:999
-      - div [46,482 338x100]
-        - span [27,490 14x14] bg:surface r:999 border:3px seed-indigo
-        - div [46,482 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,495 308x26] flex:row gap:8 justify:between align:center
-            - span "Correct" [61,497 85x22] flex:row gap:5 align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/9
-              - span [70,503 11x11] flex:row
-                - icon:check [70,503 11x11]
-            - div [310,495 59x26]
-              - div "2h ago" [310,495 59x13] font:11/600 color:font-headline
-              - div "today, 14:32" [310,509 59x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Answered correctly" [61,529 308x19] font:13/400/19 color:font-headline
-          - div [61,556 308x13] flex:row wrap gap:4 align:center
-            - div [61,556 45x13] flex:row gap:8 align:center
-              - span [61,556 45x13] flex:row gap:3 align:center
-                - span "B2" [61,556 14x13] font:11/600 color:seed-indigo op:0.6
-                - span [78,557 11x11] flex:row
-                  - icon:arrow-right [78,557 11x11]
-                - span "B3" [92,556 14x13] font:11/700 color:seed-indigo
-            - span "Recall" [116,556 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [116,557 10x10] flex:row
-                - icon:layers [116,557 10x10]
-            - span "1.4s" [172,556 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [172,557 10x10] flex:row
-                - icon:timer [172,557 10x10]
-      - item[2] div [46,594 338x100]
-        - span [27,602 14x14] bg:surface r:999 border:3px streak
-        - div [46,594 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,607 308x26] flex:row gap:8 justify:between align:center
-            - span "Recovered" [61,609 98x22] flex:row gap:5 align:center bg:#d9891e@12 font:10/700 color:streak r:999 pad:0/9
-              - span [70,614 11x11] flex:row
-                - icon:corner-up-right [70,614 11x11]
-            - div [305,607 64x26]
-              - div "yesterday" [305,607 64x13] font:11/600 color:font-headline
-              - div "May 26, 09:10" [305,621 64x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Got it back after a slip" [61,641 308x19] font:13/400/19 color:font-headline
-          - div [61,668 308x13] flex:row wrap gap:4 align:center
-            - div [61,668 45x13] flex:row gap:8 align:center
-              - span [61,668 45x13] flex:row gap:3 align:center
-                - span "B1" [61,668 14x13] font:11/600 color:streak op:0.6
-                - span [78,669 11x11] flex:row
-                  - icon:arrow-right [78,669 11x11]
-                - span "B2" [92,668 14x13] font:11/700 color:streak
-            - span "Fill" [116,668 28x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [116,669 10x10] flex:row
-                - icon:layers [116,669 10x10]
-            - span "4.2s" [154,668 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [154,669 10x10] flex:row
-                - icon:timer [154,669 10x10]
-      - div [46,706 338x100]
-        - span [27,714 14x14] bg:surface r:999 border:3px error
-        - div [46,706 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,719 308x26] flex:row gap:8 justify:between align:center
-            - span "Forgot" [61,721 79x22] flex:row gap:5 align:center bg:#dc4848@10 font:10/700 color:error r:999 pad:0/9
-              - span [70,726 11x11] flex:row
-                - icon:rotate-ccw [70,726 11x11]
-            - div [305,719 64x26]
-              - div "2 days ago" [305,719 64x13] font:11/600 color:font-headline
-              - div "May 25, 21:48" [305,733 64x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Couldn’t recall — reset to box 1" [61,753 308x19] font:13/400/19 color:font-headline
-          - div [61,780 308x13] flex:row wrap gap:4 align:center
-            - div [61,780 45x13] flex:row gap:8 align:center
-              - span [61,780 45x13] flex:row gap:3 align:center
-                - span "B3" [61,780 14x13] font:11/600 color:error op:0.6
-                - span [78,781 11x11] flex:row
-                  - icon:arrow-left [78,781 11x11]
-                - span "B1" [92,780 14x13] font:11/700 color:error
-            - span "Recall" [116,780 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [116,781 10x10] flex:row
-                - icon:layers [116,781 10x10]
-            - span "6.8s" [172,780 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [172,781 10x10] flex:row
-                - icon:timer [172,781 10x10]
-      - item[3] div [46,818 338x79]
-        - span [27,826 14x14] bg:surface r:999 border:3px on-surface-variant
-        - div [46,818 338x79] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,831 308x26] flex:row gap:8 justify:between align:center
-            - span "Edited" [61,833 71x22] flex:row gap:5 align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/9
-              - span [70,838 11x11] flex:row
-                - icon:pencil [70,838 11x11]
-            - div [305,831 64x26]
-              - div "4 days ago" [305,831 64x13] font:11/600 color:font-headline
-              - div "May 23, 08:00" [305,845 64x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Edit · meaning updated" [61,865 308x19] font:13/400/19 color:font-headline
-      - div [46,908 338x100]
-        - span [27,916 14x14] bg:surface r:999 border:3px seed-indigo
-        - div [46,908 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,921 308x26] flex:row gap:8 justify:between align:center
-            - span "Correct" [61,923 85x22] flex:row gap:5 align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/9
-              - span [70,929 11x11] flex:row
-                - icon:check [70,929 11x11]
-            - div [305,921 64x26]
-              - div "a week ago" [305,921 64x13] font:11/600 color:font-headline
-              - div "May 20, 19:14" [305,935 64x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Answered correctly" [61,955 308x19] font:13/400/19 color:font-headline
-          - div [61,982 308x13] flex:row wrap gap:4 align:center
-            - div [61,982 45x13] flex:row gap:8 align:center
-              - span [61,982 45x13] flex:row gap:3 align:center
-                - span "B2" [61,982 14x13] font:11/600 color:seed-indigo op:0.6
-                - span [78,983 11x11] flex:row
-                  - icon:arrow-right [78,983 11x11]
-                - span "B3" [92,982 14x13] font:11/700 color:seed-indigo
-            - span "Match" [116,982 46x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [116,984 10x10] flex:row
-                - icon:layers [116,984 10x10]
-            - span "0.9s" [173,982 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [173,984 10x10] flex:row
-                - icon:timer [173,984 10x10]
-      - item[4] div [46,1020 338x100]
-        - span [27,1028 14x14] bg:surface r:999 border:3px seed-indigo
-        - div [46,1020 338x100] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,1033 308x26] flex:row gap:8 justify:between align:center
-            - span "Correct" [61,1035 85x22] flex:row gap:5 align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/9
-              - span [70,1041 11x11] flex:row
-                - icon:check [70,1041 11x11]
-            - div [305,1033 64x26]
-              - div "10 days ago" [305,1033 64x13] font:11/600 color:font-headline
-              - div "May 17, 07:32" [305,1047 64x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Answered correctly" [61,1067 308x19] font:13/400/19 color:font-headline
-          - div [61,1094 308x13] flex:row wrap gap:4 align:center
-            - div [61,1094 45x13] flex:row gap:8 align:center
-              - span [61,1094 45x13] flex:row gap:3 align:center
-                - span "B1" [61,1094 14x13] font:11/600 color:seed-indigo op:0.6
-                - span [78,1095 11x11] flex:row
-                  - icon:arrow-right [78,1095 11x11]
-                - span "B2" [92,1094 14x13] font:11/700 color:seed-indigo
-            - span "Review" [116,1094 51x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [116,1096 10x10] flex:row
-                - icon:layers [116,1096 10x10]
-            - span "1.6s" [178,1094 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span [178,1096 10x10] flex:row
-                - icon:timer [178,1096 10x10]
-      - div [46,1132 338x79]
-        - span [27,1140 14x14] bg:surface r:999 border:3px on-surface-variant
-        - div [46,1132 338x79] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,1145 308x26] flex:row gap:8 justify:between align:center
-            - span "Audio added" [61,1147 107x22] flex:row gap:5 align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/9
-              - span [70,1153 11x11] flex:row
-                - icon:mic [70,1153 11x11]
-            - div [305,1145 64x26]
-              - div "13 days ago" [305,1145 64x13] font:11/600 color:font-headline
-              - div "May 14, 22:08" [305,1159 64x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Pronunciation recorded" [61,1179 308x19] font:13/400/19 color:font-headline
-      - item[5] div [46,1223 338x79]
-        - span [27,1231 14x14] bg:surface r:999 border:3px mastery
-        - div [46,1223 338x79] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - div [61,1236 308x26] flex:row gap:8 justify:between align:center
-            - span "Created" [61,1238 82x22] flex:row gap:5 align:center bg:mastery@10 font:10/700 color:mastery r:999 pad:0/9
-              - span [70,1243 11x11] flex:row
-                - icon:sparkles [70,1243 11x11]
-            - div [306,1236 63x26]
-              - div "23 days ago" [306,1236 63x13] font:11/600 color:font-headline
-              - div "May 4, 10:00" [306,1250 63x12] font:10/400 color:on-surface-variant op:0.7
-          - div "Card added to TOPIK II — Vocab" [61,1270 308x19] font:13/400/19 color:font-headline
-      - div [46,1314 338x18]
-        - span [27,1318 14x14] bg:surface-container r:999 border:2px outline-variant
-        - div "Beginning of history" [46,1314 338x18] font:11/400 color:on-surface-variant pad:5/0
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Card history" abs:[60,66 262x21] rel:[52,14 262x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+    - pill-btn "Edit" abs:[326,60 64x32] rel:[318,8 64x32] flex:row gap:5 justify:center align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center r:9
+      - span abs:[338,70 12x12] rel:[12,10 12x12] flex:row
+        - icon:pencil abs:[338,70 12x12] rel:[0,0 12x12] clip
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
+      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
+      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
+      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
+    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline
+  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+    - card abs:[22,123 362x72] rel:[14,0 362x72] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[39,138 237x42] rel:[17,15 237x42]
+        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline
+        - div "Researcher / Nhà nghiên cứu" abs:[39,165 237x15] rel:[0,27 237x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
+      - span "Box 3 / 5" abs:[288,147 79x24] rel:[266,24 79x24] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:11/700 color:seed-indigo r:999
+        - span abs:[297,154 11x11] rel:[9,7 11x11] flex:row
+          - icon:zap abs:[297,154 11x11] rel:[0,0 11x11] clip
+    - card abs:[22,209 362x219] rel:[14,86 362x219] pad:14 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - ov "Current progress" abs:[37,224 332x13] rel:[15,15 332x13] margin:0/0/10/0 font:11/700 color:on-surface-variant
+      - div abs:[37,247 332x10] rel:[15,38 332x10] flex:row gap:8 align:center margin:0/0/12/0
+        - div abs:[37,249 60x6] rel:[0,2 60x6] grow:1 basis:0 layout_hint:expanded bg:seed-indigo@40 r:999
+        - div abs:[105,249 60x6] rel:[68,2 60x6] grow:1 basis:0 layout_hint:expanded bg:seed-indigo@40 r:999
+        - div abs:[173,247 60x10] rel:[136,0 60x10] grow:1 basis:0 layout_hint:expanded bg:seed-indigo r:999
+        - div abs:[241,249 60x6] rel:[204,2 60x6] grow:1 basis:0 layout_hint:expanded bg:surface-container-high r:999
+        - div abs:[309,249 60x6] rel:[272,2 60x6] grow:1 basis:0 layout_hint:expanded bg:surface-container-high r:999
+      - div abs:[37,269 332x12] rel:[15,60 332x12] flex:row justify:between pad:0/2 margin:0/0/14/0
+        - span "Box 1" abs:[39,269 26x12] rel:[2,0 26x12] font:10/400 color:on-surface-variant
+        - span "Box 3" abs:[190,269 26x12] rel:[153,0 26x12] font:10/400 color:on-surface-variant
+        - span "Box 5" abs:[341,269 26x12] rel:[304,0 26x12] font:10/400 color:on-surface-variant
+      - div abs:[37,295 332x118] rel:[15,86 332x118] grid cols:2 gap:14 repeat:x6(unit=1)
+        - item[1] div abs:[37,295 159x30] rel:[0,0 159x30] flex:row gap:10 align:center
+          - div abs:[37,296 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
+            - span abs:[45,304 13x13] rel:[8,8 13x13] flex:row
+              - icon:clock abs:[45,304 13x13] rel:[0,0 13x13] clip
+          - div abs:[75,295 53x30] rel:[38,0 53x30]
+            - div "Due" abs:[75,295 53x13] rel:[0,0 53x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
+            - div "in 6 days" abs:[75,309 53x16] rel:[0,14 53x16] clip font:13/700 color:font-headline
+        - item[2] div abs:[210,295 159x30] rel:[173,0 159x30] flex:row gap:10 align:center
+          - div abs:[210,296 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
+            - span abs:[218,304 13x13] rel:[8,8 13x13] flex:row
+              - icon:repeat abs:[218,304 13x13] rel:[0,0 13x13] clip
+          - div abs:[248,295 44x30] rel:[38,0 44x30]
+            - div "Reviews" abs:[248,295 44x13] rel:[0,0 44x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
+            - div "14" abs:[248,309 44x16] rel:[0,14 44x16] clip font:13/700 color:font-headline
+        - item[3] div abs:[37,339 159x30] rel:[0,44 159x30] flex:row gap:10 align:center
+          - div abs:[37,340 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
+            - span abs:[45,348 13x13] rel:[8,8 13x13] flex:row
+              - icon:target abs:[45,348 13x13] rel:[0,0 13x13] clip
+          - div abs:[75,339 56x30] rel:[38,0 56x30]
+            - div "Recall rate" abs:[75,339 56x13] rel:[0,0 56x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
+            - div "78%" abs:[75,353 56x16] rel:[0,14 56x16] clip font:13/700 color:font-headline
+        - item[4] div abs:[210,339 159x30] rel:[173,44 159x30] flex:row gap:10 align:center
+          - div abs:[210,340 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
+            - span abs:[218,348 13x13] rel:[8,8 13x13] flex:row
+              - icon:rotate-ccw abs:[218,348 13x13] rel:[0,0 13x13] clip
+          - div abs:[248,339 39x30] rel:[38,0 39x30]
+            - div "Lapses" abs:[248,339 39x13] rel:[0,0 39x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
+            - div "2" abs:[248,353 39x16] rel:[0,14 39x16] clip font:13/700 color:font-headline
+        - item[5] div abs:[37,383 159x30] rel:[0,88 159x30] flex:row gap:10 align:center
+          - div abs:[37,384 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
+            - span abs:[45,392 13x13] rel:[8,8 13x13] flex:row
+              - icon:flame abs:[45,392 13x13] rel:[0,0 13x13] clip
+          - div abs:[75,383 78x30] rel:[38,0 78x30]
+            - div "Correct streak" abs:[75,383 78x13] rel:[0,0 78x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
+            - div "4 in a row" abs:[75,397 78x16] rel:[0,14 78x16] clip font:13/700 color:font-headline
+        - item[6] div abs:[210,383 159x30] rel:[173,88 159x30] flex:row gap:10 align:center
+          - div abs:[210,384 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
+            - span abs:[218,392 13x13] rel:[8,8 13x13] flex:row
+              - icon:calendar abs:[218,392 13x13] rel:[0,0 13x13] clip
+          - div abs:[248,383 68x30] rel:[38,0 68x30]
+            - div "Since added" abs:[248,383 68x13] rel:[0,0 68x13] margin:0/0/1/0 font:11/400 color:on-surface-variant
+            - div "23 days" abs:[248,397 68x16] rel:[0,14 68x16] clip font:13/700 color:font-headline
+    - div abs:[22,444 362x38] rel:[14,321 362x38] flex:row justify:between align:center pad:2/4/10/4
+      - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant
+      - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
+        - span abs:[286,454 11x11] rel:[10,8 11x11] flex:row
+          - icon:filter abs:[286,454 11x11] rel:[0,0 11x11] clip
+        - span abs:[359,454 11x11] rel:[83,8 11x11] flex:row
+          - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
+    - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
+      - item[1] div abs:[33,490 2x834] rel:[11,8 2x834] pos:absolute bg:surface-container r:999
+      - div abs:[46,482 338x100] rel:[24,0 338x100] margin:0/0/12/0 pos:relative
+        - span abs:[27,490 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+        - div abs:[46,482 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,495 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+              - span abs:[70,503 11x11] rel:[9,6 11x11] flex:row
+                - icon:check abs:[70,503 11x11] rel:[0,0 11x11] clip
+            - div abs:[310,495 59x26] rel:[249,0 59x26]
+              - div "2h ago" abs:[310,495 59x13] rel:[0,0 59x13] font:11/600 color:font-headline text:right
+              - div "today, 14:32" abs:[310,509 59x12] rel:[0,14 59x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Answered correctly" abs:[61,529 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+          - div abs:[61,556 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+            - div abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+              - span abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+                - span "B2" abs:[61,556 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
+                - span abs:[78,557 11x11] rel:[17,1 11x11] flex:row
+                  - icon:arrow-right abs:[78,557 11x11] rel:[0,0 11x11] clip
+                - span "B3" abs:[92,556 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
+            - span "Recall" abs:[116,556 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[116,557 10x10] rel:[0,2 10x10] flex:row
+                - icon:layers abs:[116,557 10x10] rel:[0,0 10x10] clip
+            - span "1.4s" abs:[172,556 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[172,557 10x10] rel:[0,2 10x10] flex:row
+                - icon:timer abs:[172,557 10x10] rel:[0,0 10x10] clip
+      - item[2] div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
+        - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
+        - div abs:[46,594 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,607 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak r:999
+              - span abs:[70,614 11x11] rel:[9,6 11x11] flex:row
+                - icon:corner-up-right abs:[70,614 11x11] rel:[0,0 11x11] clip
+            - div abs:[305,607 64x26] rel:[244,0 64x26]
+              - div "yesterday" abs:[305,607 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+              - div "May 26, 09:10" abs:[305,621 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Got it back after a slip" abs:[61,641 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+          - div abs:[61,668 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+            - div abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+              - span abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+                - span "B1" abs:[61,668 14x13] rel:[0,0 14x13] font:11/600 color:streak op:0.6
+                - span abs:[78,669 11x11] rel:[17,1 11x11] flex:row
+                  - icon:arrow-right abs:[78,669 11x11] rel:[0,0 11x11] clip
+                - span "B2" abs:[92,668 14x13] rel:[31,0 14x13] font:11/700 color:streak
+            - span "Fill" abs:[116,668 28x13] rel:[55,0 28x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[116,669 10x10] rel:[0,2 10x10] flex:row
+                - icon:layers abs:[116,669 10x10] rel:[0,0 10x10] clip
+            - span "4.2s" abs:[154,668 36x13] rel:[93,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[154,669 10x10] rel:[0,2 10x10] flex:row
+                - icon:timer abs:[154,669 10x10] rel:[0,0 10x10] clip
+      - div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
+        - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
+        - div abs:[46,706 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,719 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error r:999
+              - span abs:[70,726 11x11] rel:[9,6 11x11] flex:row
+                - icon:rotate-ccw abs:[70,726 11x11] rel:[0,0 11x11] clip
+            - div abs:[305,719 64x26] rel:[244,0 64x26]
+              - div "2 days ago" abs:[305,719 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+              - div "May 25, 21:48" abs:[305,733 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Couldn’t recall — reset to box 1" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+          - div abs:[61,780 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+            - div abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+              - span abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+                - span "B3" abs:[61,780 14x13] rel:[0,0 14x13] font:11/600 color:error op:0.6
+                - span abs:[78,781 11x11] rel:[17,1 11x11] flex:row
+                  - icon:arrow-left abs:[78,781 11x11] rel:[0,0 11x11] clip
+                - span "B1" abs:[92,780 14x13] rel:[31,0 14x13] font:11/700 color:error
+            - span "Recall" abs:[116,780 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[116,781 10x10] rel:[0,2 10x10] flex:row
+                - icon:layers abs:[116,781 10x10] rel:[0,0 10x10] clip
+            - span "6.8s" abs:[172,780 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[172,781 10x10] rel:[0,2 10x10] flex:row
+                - icon:timer abs:[172,781 10x10] rel:[0,0 10x10] clip
+      - item[3] div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
+        - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+        - div abs:[46,818 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,831 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+              - span abs:[70,838 11x11] rel:[9,6 11x11] flex:row
+                - icon:pencil abs:[70,838 11x11] rel:[0,0 11x11] clip
+            - div abs:[305,831 64x26] rel:[244,0 64x26]
+              - div "4 days ago" abs:[305,831 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+              - div "May 23, 08:00" abs:[305,845 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Edit · meaning updated" abs:[61,865 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+      - div abs:[46,908 338x100] rel:[24,426 338x100] margin:0/0/12/0 pos:relative
+        - span abs:[27,916 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+        - div abs:[46,908 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,921 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+              - span abs:[70,929 11x11] rel:[9,6 11x11] flex:row
+                - icon:check abs:[70,929 11x11] rel:[0,0 11x11] clip
+            - div abs:[305,921 64x26] rel:[244,0 64x26]
+              - div "a week ago" abs:[305,921 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+              - div "May 20, 19:14" abs:[305,935 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Answered correctly" abs:[61,955 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+          - div abs:[61,982 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+            - div abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+              - span abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+                - span "B2" abs:[61,982 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
+                - span abs:[78,983 11x11] rel:[17,1 11x11] flex:row
+                  - icon:arrow-right abs:[78,983 11x11] rel:[0,0 11x11] clip
+                - span "B3" abs:[92,982 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
+            - span "Match" abs:[116,982 46x13] rel:[55,0 46x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[116,984 10x10] rel:[0,2 10x10] flex:row
+                - icon:layers abs:[116,984 10x10] rel:[0,0 10x10] clip
+            - span "0.9s" abs:[173,982 36x13] rel:[112,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[173,984 10x10] rel:[0,2 10x10] flex:row
+                - icon:timer abs:[173,984 10x10] rel:[0,0 10x10] clip
+      - item[4] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
+        - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+        - div abs:[46,1020 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,1033 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+              - span abs:[70,1041 11x11] rel:[9,6 11x11] flex:row
+                - icon:check abs:[70,1041 11x11] rel:[0,0 11x11] clip
+            - div abs:[305,1033 64x26] rel:[244,0 64x26]
+              - div "10 days ago" abs:[305,1033 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+              - div "May 17, 07:32" abs:[305,1047 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Answered correctly" abs:[61,1067 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+          - div abs:[61,1094 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+            - div abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+              - span abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+                - span "B1" abs:[61,1094 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
+                - span abs:[78,1095 11x11] rel:[17,1 11x11] flex:row
+                  - icon:arrow-right abs:[78,1095 11x11] rel:[0,0 11x11] clip
+                - span "B2" abs:[92,1094 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
+            - span "Review" abs:[116,1094 51x13] rel:[55,0 51x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[116,1096 10x10] rel:[0,2 10x10] flex:row
+                - icon:layers abs:[116,1096 10x10] rel:[0,0 10x10] clip
+            - span "1.6s" abs:[178,1094 36x13] rel:[117,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+              - span abs:[178,1096 10x10] rel:[0,2 10x10] flex:row
+                - icon:timer abs:[178,1096 10x10] rel:[0,0 10x10] clip
+      - div abs:[46,1132 338x79] rel:[24,650 338x79] margin:0/0/12/0 pos:relative
+        - span abs:[27,1140 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+        - div abs:[46,1132 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,1145 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+              - span abs:[70,1153 11x11] rel:[9,6 11x11] flex:row
+                - icon:mic abs:[70,1153 11x11] rel:[0,0 11x11] clip
+            - div abs:[305,1145 64x26] rel:[244,0 64x26]
+              - div "13 days ago" abs:[305,1145 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+              - div "May 14, 22:08" abs:[305,1159 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Pronunciation recorded" abs:[61,1179 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+      - item[5] div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
+        - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
+        - div abs:[46,1223 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,1236 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery r:999
+              - span abs:[70,1243 11x11] rel:[9,6 11x11] flex:row
+                - icon:sparkles abs:[70,1243 11x11] rel:[0,0 11x11] clip
+            - div abs:[306,1236 63x26] rel:[245,0 63x26]
+              - div "23 days ago" abs:[306,1236 63x13] rel:[0,0 63x13] font:11/600 color:font-headline text:right
+              - div "May 4, 10:00" abs:[306,1250 63x12] rel:[0,14 63x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+          - div "Card added to TOPIK II — Vocab" abs:[61,1270 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+      - div abs:[46,1314 338x18] rel:[24,832 338x18] margin:4/0/0/0 pos:relative
+        - span abs:[27,1318 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
+        - div "Beginning of history" abs:[46,1314 338x18] rel:[0,0 338x18] pad:5/0/0/0 font:11/400 color:on-surface-variant
 ```
 
 ## State: Empty (ordered diff vs Loaded)
 
 ```diff
-  - div flex:row justify:between align:center pad:2/4
-- - ov "Timeline · 8 events" font:11/700 color:on-surface-variant
-- - pill-btn "All events" flex:row gap:5 justify:center align:center font:11/600 color:on-surface-variant r:999 pad:0/10
-+ - ov "Timeline" font:11/700 color:on-surface-variant
-+ - card bg:on-primary r:12 pad:40/22 border:1px seed-indigo@14
-+ - div flex:row justify:center align:center bg:seed-indigo@10 r:16
-  - span flex:row
-- - icon:filter
-+ - icon:clock
-+ - div "No reviews yet" font:17/700 color:font-headline
-+ - div "History appears here after you study this card. Open it in a session and your attempts will start showing up." font:13/400/20 color:on-surface-variant
-+ - pill-btn "Study this card now" flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-  - span flex:row
-- - icon:chevron-down
-- - div repeat:x5(unit=2) pad:0/24
-- - item[1] div bg:surface-container r:999
-- - div
-- - span bg:surface r:999 border:3px seed-indigo
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Correct" flex:row gap:5 align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/9
-- - span flex:row
-- - icon:check
-- - div
-- - div "2h ago" font:11/600 color:font-headline
-- - div "today, 14:32" font:10/400 color:on-surface-variant op:0.7
-- - div "Answered correctly" font:13/400/19 color:font-headline
-- - div flex:row wrap gap:4 align:center
-- - div flex:row gap:8 align:center
-- - span flex:row gap:3 align:center
-- - span "B2" font:11/600 color:seed-indigo op:0.6
-- - span flex:row
-- - icon:arrow-right
-- - span "B3" font:11/700 color:seed-indigo
-- - span "Recall" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:layers
-- - span "1.4s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:timer
-- - item[2] div
-- - span bg:surface r:999 border:3px streak
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Recovered" flex:row gap:5 align:center bg:#d9891e@12 font:10/700 color:streak r:999 pad:0/9
-- - span flex:row
-- - icon:corner-up-right
-- - div
-- - div "yesterday" font:11/600 color:font-headline
-- - div "May 26, 09:10" font:10/400 color:on-surface-variant op:0.7
-- - div "Got it back after a slip" font:13/400/19 color:font-headline
-- - div flex:row wrap gap:4 align:center
-- - div flex:row gap:8 align:center
-- - span flex:row gap:3 align:center
-- - span "B1" font:11/600 color:streak op:0.6
-- - span flex:row
-- - icon:arrow-right
-- - span "B2" font:11/700 color:streak
-- - span "Fill" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:layers
-- - span "4.2s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:timer
-- - div
-- - span bg:surface r:999 border:3px error
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Forgot" flex:row gap:5 align:center bg:#dc4848@10 font:10/700 color:error r:999 pad:0/9
-- - span flex:row
-- - icon:rotate-ccw
-- - div
-- - div "2 days ago" font:11/600 color:font-headline
-- - div "May 25, 21:48" font:10/400 color:on-surface-variant op:0.7
-- - div "Couldn’t recall — reset to box 1" font:13/400/19 color:font-headline
-- - div flex:row wrap gap:4 align:center
-- - div flex:row gap:8 align:center
-- - span flex:row gap:3 align:center
-- - span "B3" font:11/600 color:error op:0.6
-- - span flex:row
-- - icon:arrow-left
-- - span "B1" font:11/700 color:error
-- - span "Recall" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:layers
-- - span "6.8s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:timer
-- - item[3] div
-- - span bg:surface r:999 border:3px on-surface-variant
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Edited" flex:row gap:5 align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/9
-- - span flex:row
-- - icon:pencil
-- - div
-- - div "4 days ago" font:11/600 color:font-headline
-- - div "May 23, 08:00" font:10/400 color:on-surface-variant op:0.7
-- - div "Edit · meaning updated" font:13/400/19 color:font-headline
-- - div
-- - span bg:surface r:999 border:3px seed-indigo
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Correct" flex:row gap:5 align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/9
-- - span flex:row
-- - icon:check
-- - div
-- - div "a week ago" font:11/600 color:font-headline
-- - div "May 20, 19:14" font:10/400 color:on-surface-variant op:0.7
-- - div "Answered correctly" font:13/400/19 color:font-headline
-- - div flex:row wrap gap:4 align:center
-- - div flex:row gap:8 align:center
-- - span flex:row gap:3 align:center
-- - span "B2" font:11/600 color:seed-indigo op:0.6
-- - span flex:row
-- - icon:arrow-right
-- - span "B3" font:11/700 color:seed-indigo
-- - span "Match" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:layers
-- - span "0.9s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:timer
-- - item[4] div
-- - span bg:surface r:999 border:3px seed-indigo
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Correct" flex:row gap:5 align:center bg:seed-indigo@10 font:10/700 color:seed-indigo r:999 pad:0/9
-- - span flex:row
-- - icon:check
-- - div
-- - div "10 days ago" font:11/600 color:font-headline
-- - div "May 17, 07:32" font:10/400 color:on-surface-variant op:0.7
-- - div "Answered correctly" font:13/400/19 color:font-headline
-- - div flex:row wrap gap:4 align:center
-- - div flex:row gap:8 align:center
-- - span flex:row gap:3 align:center
-- - span "B1" font:11/600 color:seed-indigo op:0.6
-- - span flex:row
-- - icon:arrow-right
-- - span "B2" font:11/700 color:seed-indigo
-- - span "Review" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:layers
-- - span "1.6s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:timer
-- - div
-- - span bg:surface r:999 border:3px on-surface-variant
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Audio added" flex:row gap:5 align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/9
-- - span flex:row
-- - icon:mic
-- - div
-- - div "13 days ago" font:11/600 color:font-headline
-- - div "May 14, 22:08" font:10/400 color:on-surface-variant op:0.7
-- - div "Pronunciation recorded" font:13/400/19 color:font-headline
-- - item[5] div
-- - span bg:surface r:999 border:3px mastery
-- - div bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div flex:row gap:8 justify:between align:center
-- - span "Created" flex:row gap:5 align:center bg:mastery@10 font:10/700 color:mastery r:999 pad:0/9
-- - span flex:row
-- - icon:sparkles
-- - div
-- - div "23 days ago" font:11/600 color:font-headline
-- - div "May 4, 10:00" font:10/400 color:on-surface-variant op:0.7
-- - div "Card added to TOPIK II — Vocab" font:13/400/19 color:font-headline
-- - div
-- - span bg:surface-container r:999 border:2px outline-variant
-- - div "Beginning of history" font:11/400 color:on-surface-variant pad:5/0
-+ - icon:play
+  - div abs:[22,444 362x25] rel:[14,321 362x25] flex:row justify:between align:center pad:2/4/10/4
+- - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant
+- - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center r:999
++ - ov "Timeline" abs:[26,446 59x13] rel:[4,2 59x13] font:11/700 color:on-surface-variant
++ - card abs:[22,469 362x296] rel:[14,346 362x296] pad:40/22/32/22 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[173,510 60x60] rel:[151,41 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
+  - span abs:[190,527 26x26] rel:[17,17 26x26] flex:row
+- - icon:filter abs:[286,454 11x11] rel:[0,0 11x11] clip
++ - icon:clock abs:[190,527 26x26] rel:[0,0 26x26] clip
++ - div "No reviews yet" abs:[45,584 316x22] rel:[23,115 316x22] margin:0/0/8/0 font:17/700 color:font-headline text:center
++ - div "History appears here after you study this card. Open it in a session and your attempts will start showing up." abs:[45,614 316x60] rel:[23,145 316x60] margin:0/0/18/0 font:13/400/20 color:on-surface-variant text:center
++ - pill-btn "Study this card now" abs:[113,692 181x40] rel:[91,223 181x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+  - span abs:[131,705 14x14] rel:[18,13 14x14] flex:row
+- - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
+- - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
+- - item[1] div abs:[33,490 2x834] rel:[11,8 2x834] pos:absolute bg:surface-container r:999
+- - div abs:[46,482 338x100] rel:[24,0 338x100] margin:0/0/12/0 pos:relative
+- - span abs:[27,490 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+- - div abs:[46,482 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,495 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+- - span abs:[70,503 11x11] rel:[9,6 11x11] flex:row
+- - icon:check abs:[70,503 11x11] rel:[0,0 11x11] clip
+- - div abs:[310,495 59x26] rel:[249,0 59x26]
+- - div "2h ago" abs:[310,495 59x13] rel:[0,0 59x13] font:11/600 color:font-headline text:right
+- - div "today, 14:32" abs:[310,509 59x12] rel:[0,14 59x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Answered correctly" abs:[61,529 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+- - div abs:[61,556 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+- - div abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+- - span abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+- - span "B2" abs:[61,556 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
+- - span abs:[78,557 11x11] rel:[17,1 11x11] flex:row
+- - icon:arrow-right abs:[78,557 11x11] rel:[0,0 11x11] clip
+- - span "B3" abs:[92,556 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
+- - span "Recall" abs:[116,556 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[116,557 10x10] rel:[0,2 10x10] flex:row
+- - icon:layers abs:[116,557 10x10] rel:[0,0 10x10] clip
+- - span "1.4s" abs:[172,556 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[172,557 10x10] rel:[0,2 10x10] flex:row
+- - icon:timer abs:[172,557 10x10] rel:[0,0 10x10] clip
+- - item[2] div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
+- - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
+- - div abs:[46,594 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,607 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak r:999
+- - span abs:[70,614 11x11] rel:[9,6 11x11] flex:row
+- - icon:corner-up-right abs:[70,614 11x11] rel:[0,0 11x11] clip
+- - div abs:[305,607 64x26] rel:[244,0 64x26]
+- - div "yesterday" abs:[305,607 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+- - div "May 26, 09:10" abs:[305,621 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Got it back after a slip" abs:[61,641 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+- - div abs:[61,668 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+- - div abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+- - span abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+- - span "B1" abs:[61,668 14x13] rel:[0,0 14x13] font:11/600 color:streak op:0.6
+- - span abs:[78,669 11x11] rel:[17,1 11x11] flex:row
+- - icon:arrow-right abs:[78,669 11x11] rel:[0,0 11x11] clip
+- - span "B2" abs:[92,668 14x13] rel:[31,0 14x13] font:11/700 color:streak
+- - span "Fill" abs:[116,668 28x13] rel:[55,0 28x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[116,669 10x10] rel:[0,2 10x10] flex:row
+- - icon:layers abs:[116,669 10x10] rel:[0,0 10x10] clip
+- - span "4.2s" abs:[154,668 36x13] rel:[93,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[154,669 10x10] rel:[0,2 10x10] flex:row
+- - icon:timer abs:[154,669 10x10] rel:[0,0 10x10] clip
+- - div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
+- - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
+- - div abs:[46,706 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,719 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error r:999
+- - span abs:[70,726 11x11] rel:[9,6 11x11] flex:row
+- - icon:rotate-ccw abs:[70,726 11x11] rel:[0,0 11x11] clip
+- - div abs:[305,719 64x26] rel:[244,0 64x26]
+- - div "2 days ago" abs:[305,719 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+- - div "May 25, 21:48" abs:[305,733 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Couldn’t recall — reset to box 1" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+- - div abs:[61,780 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+- - div abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+- - span abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+- - span "B3" abs:[61,780 14x13] rel:[0,0 14x13] font:11/600 color:error op:0.6
+- - span abs:[78,781 11x11] rel:[17,1 11x11] flex:row
+- - icon:arrow-left abs:[78,781 11x11] rel:[0,0 11x11] clip
+- - span "B1" abs:[92,780 14x13] rel:[31,0 14x13] font:11/700 color:error
+- - span "Recall" abs:[116,780 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[116,781 10x10] rel:[0,2 10x10] flex:row
+- - icon:layers abs:[116,781 10x10] rel:[0,0 10x10] clip
+- - span "6.8s" abs:[172,780 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[172,781 10x10] rel:[0,2 10x10] flex:row
+- - icon:timer abs:[172,781 10x10] rel:[0,0 10x10] clip
+- - item[3] div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
+- - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+- - div abs:[46,818 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,831 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+- - span abs:[70,838 11x11] rel:[9,6 11x11] flex:row
+- - icon:pencil abs:[70,838 11x11] rel:[0,0 11x11] clip
+- - div abs:[305,831 64x26] rel:[244,0 64x26]
+- - div "4 days ago" abs:[305,831 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+- - div "May 23, 08:00" abs:[305,845 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Edit · meaning updated" abs:[61,865 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+- - div abs:[46,908 338x100] rel:[24,426 338x100] margin:0/0/12/0 pos:relative
+- - span abs:[27,916 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+- - div abs:[46,908 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,921 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+- - span abs:[70,929 11x11] rel:[9,6 11x11] flex:row
+- - icon:check abs:[70,929 11x11] rel:[0,0 11x11] clip
+- - div abs:[305,921 64x26] rel:[244,0 64x26]
+- - div "a week ago" abs:[305,921 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+- - div "May 20, 19:14" abs:[305,935 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Answered correctly" abs:[61,955 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+- - div abs:[61,982 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+- - div abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+- - span abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+- - span "B2" abs:[61,982 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
+- - span abs:[78,983 11x11] rel:[17,1 11x11] flex:row
+- - icon:arrow-right abs:[78,983 11x11] rel:[0,0 11x11] clip
+- - span "B3" abs:[92,982 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
+- - span "Match" abs:[116,982 46x13] rel:[55,0 46x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[116,984 10x10] rel:[0,2 10x10] flex:row
+- - icon:layers abs:[116,984 10x10] rel:[0,0 10x10] clip
+- - span "0.9s" abs:[173,982 36x13] rel:[112,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[173,984 10x10] rel:[0,2 10x10] flex:row
+- - icon:timer abs:[173,984 10x10] rel:[0,0 10x10] clip
+- - item[4] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
+- - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+- - div abs:[46,1020 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,1033 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
+- - span abs:[70,1041 11x11] rel:[9,6 11x11] flex:row
+- - icon:check abs:[70,1041 11x11] rel:[0,0 11x11] clip
+- - div abs:[305,1033 64x26] rel:[244,0 64x26]
+- - div "10 days ago" abs:[305,1033 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+- - div "May 17, 07:32" abs:[305,1047 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Answered correctly" abs:[61,1067 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+- - div abs:[61,1094 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+- - div abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+- - span abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+- - span "B1" abs:[61,1094 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
+- - span abs:[78,1095 11x11] rel:[17,1 11x11] flex:row
+- - icon:arrow-right abs:[78,1095 11x11] rel:[0,0 11x11] clip
+- - span "B2" abs:[92,1094 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
+- - span "Review" abs:[116,1094 51x13] rel:[55,0 51x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[116,1096 10x10] rel:[0,2 10x10] flex:row
+- - icon:layers abs:[116,1096 10x10] rel:[0,0 10x10] clip
+- - span "1.6s" abs:[178,1094 36x13] rel:[117,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[178,1096 10x10] rel:[0,2 10x10] flex:row
+- - icon:timer abs:[178,1096 10x10] rel:[0,0 10x10] clip
+- - div abs:[46,1132 338x79] rel:[24,650 338x79] margin:0/0/12/0 pos:relative
+- - span abs:[27,1140 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+- - div abs:[46,1132 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,1145 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant r:999
+- - span abs:[70,1153 11x11] rel:[9,6 11x11] flex:row
+- - icon:mic abs:[70,1153 11x11] rel:[0,0 11x11] clip
+- - div abs:[305,1145 64x26] rel:[244,0 64x26]
+- - div "13 days ago" abs:[305,1145 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
+- - div "May 14, 22:08" abs:[305,1159 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Pronunciation recorded" abs:[61,1179 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+- - item[5] div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
+- - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
+- - div abs:[46,1223 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,1236 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery r:999
+- - span abs:[70,1243 11x11] rel:[9,6 11x11] flex:row
+- - icon:sparkles abs:[70,1243 11x11] rel:[0,0 11x11] clip
+- - div abs:[306,1236 63x26] rel:[245,0 63x26]
+- - div "23 days ago" abs:[306,1236 63x13] rel:[0,0 63x13] font:11/600 color:font-headline text:right
+- - div "May 4, 10:00" abs:[306,1250 63x12] rel:[0,14 63x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Card added to TOPIK II — Vocab" abs:[61,1270 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+- - div abs:[46,1314 338x18] rel:[24,832 338x18] margin:4/0/0/0 pos:relative
+- - span abs:[27,1318 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
+- - div "Beginning of history" abs:[46,1314 338x18] rel:[0,0 338x18] pad:5/0/0/0 font:11/400 color:on-surface-variant
++ - icon:play abs:[131,705 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - title "Card history" [60,66 330x21] font:16/700 color:font-headline
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
-    - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - span [63,103 12x12] flex:row
-      - icon:chevron-right [63,103 12x12]
-    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - span [121,103 12x12] flex:row
-      - icon:chevron-right [121,103 12x12]
-    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - span [231,103 12x12] flex:row
-      - icon:chevron-right [231,103 12x12]
-    - span "History" [247,102 39x13] font:11/700 color:font-headline
-  - scroll [8,123 390x665] pad:0/14
-    - card [22,123 362x65] grid cols:2 gap:12 align:center bg:on-primary r:12 pad:14/16 border:1px seed-indigo@14
-      - div [39,138 316x35]
-        - span [39,138 140x18] bg:surface-container-high r:6 op:0.5
-        - span [39,162 180x11] bg:surface-container-high r:6 op:0.4
-    - div [22,202 362x25] flex:row justify:between align:center pad:2/4
-      - ov "Loading timeline" [26,204 121x13] font:11/700 color:on-surface-variant
-    - div [22,227 362x338] pad:0/24
-      - div [33,235 2x322] bg:surface-container r:999
-      - div [46,227 338x74]
-        - span [27,233 14x14] bg:surface-container-high r:999 op:0.55
-        - div [46,227 338x74] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - span [61,240 70x9] bg:surface-container-high r:6 op:0.4
-          - span [61,257 216x13] bg:surface-container-high r:6 op:0.5
-          - span [61,278 120x10] bg:surface-container-high r:6 op:0.35
-      - div [46,315 338x74]
-        - span [27,321 14x14] bg:surface-container-high r:999 op:0.55
-        - div [46,315 338x74] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - span [61,328 70x9] bg:surface-container-high r:6 op:0.4
-          - span [61,345 262x13] bg:surface-container-high r:6 op:0.5
-          - span [61,366 120x10] bg:surface-container-high r:6 op:0.35
-      - div [46,403 338x74]
-        - span [27,409 14x14] bg:surface-container-high r:999 op:0.55
-        - div [46,403 338x74] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - span [61,416 70x9] bg:surface-container-high r:6 op:0.4
-          - span [61,433 216x13] bg:surface-container-high r:6 op:0.5
-          - span [61,454 120x10] bg:surface-container-high r:6 op:0.35
-      - div [46,491 338x74]
-        - span [27,497 14x14] bg:surface-container-high r:999 op:0.55
-        - div [46,491 338x74] bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-          - span [61,504 70x9] bg:surface-container-high r:6 op:0.4
-          - span [61,521 216x13] bg:surface-container-high r:6 op:0.5
-          - span [61,542 120x10] bg:surface-container-high r:6 op:0.35
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
+      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
+      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
+      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
+    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline
+  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+    - card abs:[22,123 362x65] rel:[14,0 362x65] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[39,138 316x35] rel:[17,15 316x35]
+        - span abs:[39,138 140x18] rel:[0,0 140x18] bg:surface-container-high r:6 op:0.5
+        - span abs:[39,162 180x11] rel:[0,24 180x11] bg:surface-container-high r:6 op:0.4
+    - div abs:[22,202 362x25] rel:[14,79 362x25] flex:row justify:between align:center pad:2/4/10/4
+      - ov "Loading timeline" abs:[26,204 121x13] rel:[4,2 121x13] font:11/700 color:on-surface-variant
+    - div abs:[22,227 362x338] rel:[14,104 362x338] pad:0/0/0/24 pos:relative
+      - div abs:[33,235 2x322] rel:[11,8 2x322] pos:absolute bg:surface-container r:999
+      - div abs:[46,227 338x74] rel:[24,0 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,233 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,227 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,240 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,257 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,278 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+      - div abs:[46,315 338x74] rel:[24,88 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,321 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,315 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,328 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,345 262x13] rel:[15,30 262x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,366 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+      - div abs:[46,403 338x74] rel:[24,176 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,409 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,403 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,416 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,433 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,454 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+      - div abs:[46,491 338x74] rel:[24,264 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,497 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,491 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,504 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,521 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,542 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
 ```
 
 ## State: Error (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - title "Card history" [60,66 330x21] font:16/700 color:font-headline
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
-    - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - span [63,103 12x12] flex:row
-      - icon:chevron-right [63,103 12x12]
-    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - span [121,103 12x12] flex:row
-      - icon:chevron-right [121,103 12x12]
-    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - span [231,103 12x12] flex:row
-      - icon:chevron-right [231,103 12x12]
-    - span "History" [247,102 39x13] font:11/700 color:font-headline
-  - scroll [8,123 390x665] pad:0/14
-    - card [22,123 362x72] grid cols:2 gap:12 align:center bg:on-primary r:12 pad:14/16 border:1px seed-indigo@14
-      - div [39,138 237x42]
-        - div "연구자" [39,138 237x24] font:20/700/24 color:font-headline
-        - div "Researcher / Nhà nghiên cứu" [39,165 237x15] font:12/400 color:on-surface-variant
-      - span "Box 3 / 5" [288,147 79x24] flex:row gap:5 align:center bg:seed-indigo@10 font:11/700 color:seed-indigo r:999 pad:0/9
-        - span [297,154 11x11] flex:row
-          - icon:zap [297,154 11x11]
-    - card [22,209 362x271] bg:on-primary r:12 pad:40/22 border:1px seed-indigo@14
-      - div [177,250 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
-        - span [192,265 22x22] flex:row
-          - icon:cloud-off [192,265 22x22]
-      - div "Couldn't load history" [45,316 316x21] font:16/700 color:font-headline
-      - div "Your data is safe on this device. Try again in a moment." [45,343 316x40] font:13/400/20 color:on-surface-variant
-      - pill-btn "Retry" [158,399 90x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-        - span [176,412 14x14] flex:row
-          - icon:refresh-cw [176,412 14x14]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
+      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
+      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
+      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
+    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline
+  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+    - card abs:[22,123 362x72] rel:[14,0 362x72] grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[39,138 237x42] rel:[17,15 237x42]
+        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline
+        - div "Researcher / Nhà nghiên cứu" abs:[39,165 237x15] rel:[0,27 237x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
+      - span "Box 3 / 5" abs:[288,147 79x24] rel:[266,24 79x24] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:11/700 color:seed-indigo r:999
+        - span abs:[297,154 11x11] rel:[9,7 11x11] flex:row
+          - icon:zap abs:[297,154 11x11] rel:[0,0 11x11] clip
+    - card abs:[22,209 362x271] rel:[14,86 362x271] pad:40/22 bg:on-primary r:12 border:1px seed-indigo@14
+      - div abs:[177,250 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+        - span abs:[192,265 22x22] rel:[15,15 22x22] flex:row
+          - icon:cloud-off abs:[192,265 22x22] rel:[0,0 22x22] clip
+      - div "Couldn't load history" abs:[45,316 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - div "Your data is safe on this device. Try again in a moment." abs:[45,343 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
+      - pill-btn "Retry" abs:[158,399 90x40] rel:[136,190 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+        - span abs:[176,412 14x14] rel:[18,13 14x14] flex:row
+          - icon:refresh-cw abs:[176,412 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Partial (ordered diff vs Loaded)
 
 ```diff
-  - icon:chevron-down
-- - div repeat:x5(unit=2) pad:0/24
-+ - div repeat:x3(unit=3) pad:0/24
-  - item[1] div bg:surface-container r:999
+  - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
+- - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
++ - div abs:[22,482 362x820] rel:[14,359 362x820] repeat:x3(unit=3) pad:0/0/0/24 pos:relative
+  - item[1] div abs:[33,490 2x804] rel:[11,8 2x804] pos:absolute bg:surface-container r:999
   ...
-  - icon:timer
-- - item[2] div
-+ - div
-  - span bg:surface r:999 border:3px streak
+  - icon:timer abs:[172,557 10x10] rel:[0,0 10x10] clip
+- - item[2] div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
++ - div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
+  - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
   ...
-  - icon:layers
-- - span "4.2s" flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span flex:row
-- - icon:timer
-- - div
-+ - span "duration not logged" font:11/400 color:on-surface-variant op:0.7
-+ - item[2] div
-  - span bg:surface r:999 border:3px error
+  - icon:layers abs:[116,669 10x10] rel:[0,0 10x10] clip
+- - span "4.2s" abs:[154,668 36x13] rel:[93,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+- - span abs:[154,669 10x10] rel:[0,2 10x10] flex:row
+- - icon:timer abs:[154,669 10x10] rel:[0,0 10x10] clip
+- - div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
++ - span "duration not logged" abs:[154,668 104x13] rel:[93,0 104x13] font:11/400 color:on-surface-variant op:0.7
++ - item[2] div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
+  - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
   ...
-  - div "May 25, 21:48" font:10/400 color:on-surface-variant op:0.7
-- - div "Couldn’t recall — reset to box 1" font:13/400/19 color:font-headline
-+ - div "Logged with missing details" font:13/400/19 color:font-headline
-  - div flex:row wrap gap:4 align:center
-- - div flex:row gap:8 align:center
-- - span flex:row gap:3 align:center
-- - span "B3" font:11/600 color:error op:0.6
-- - span flex:row
-- - icon:arrow-left
-- - span "B1" font:11/700 color:error
-  - span "Recall" flex:row gap:4 align:center font:11/400 color:on-surface-variant
+  - div "May 25, 21:48" abs:[305,733 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
+- - div "Couldn’t recall — reset to box 1" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
++ - div "Logged with missing details" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
+  - div abs:[61,780 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
+- - div abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
+- - span abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
+- - span "B3" abs:[61,780 14x13] rel:[0,0 14x13] font:11/600 color:error op:0.6
+- - span abs:[78,781 11x11] rel:[17,1 11x11] flex:row
+- - icon:arrow-left abs:[78,781 11x11] rel:[0,0 11x11] clip
+- - span "B1" abs:[92,780 14x13] rel:[31,0 14x13] font:11/700 color:error
+  - span "Recall" abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
   ...
-  - icon:timer
-- - item[3] div
-+ - div
-  - span bg:surface r:999 border:3px on-surface-variant
+  - icon:timer abs:[116,781 10x10] rel:[0,0 10x10] clip
+- - item[3] div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
++ - div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
+  - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
   ...
-  - icon:timer
-- - item[4] div
-+ - item[3] div
-  - span bg:surface r:999 border:3px seed-indigo
+  - icon:timer abs:[173,984 10x10] rel:[0,0 10x10] clip
+- - item[4] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
++ - item[3] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
+  - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
   ...
-  - div "Pronunciation recorded" font:13/400/19 color:font-headline
-- - item[5] div
-+ - div
-  - span bg:surface r:999 border:3px mastery
+  - div "Pronunciation recorded" abs:[61,1179 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+- - item[5] div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
++ - div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
+  - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
   ...
-  - div "Card added to TOPIK II — Vocab" font:13/400/19 color:font-headline
-- - div
-- - span bg:surface-container r:999 border:2px outline-variant
-- - div "Beginning of history" font:11/400 color:on-surface-variant pad:5/0
+  - div "Card added to TOPIK II — Vocab" abs:[61,1270 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
+- - div abs:[46,1314 338x18] rel:[24,832 338x18] margin:4/0/0/0 pos:relative
+- - span abs:[27,1318 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
+- - div "Beginning of history" abs:[46,1314 338x18] rel:[0,0 338x18] pad:5/0/0/0 font:11/400 color:on-surface-variant
 ```

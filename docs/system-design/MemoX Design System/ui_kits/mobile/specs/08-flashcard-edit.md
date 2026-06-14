@@ -5,383 +5,392 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - title "Edit flashcard" [60,66 269x21] font:16/700 color:font-headline
-    - pill-btn "Save" [333,60 57x32] flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-  - scroll-x [8,100 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
-    - item[1] span "Library" [22,102 37x13] font:11/500 color:on-surface-variant
-    - span [63,103 12x12] flex:row
-      - icon:chevron-right [63,103 12x12]
-    - item[2] span "Korean" [79,102 38x13] font:11/500 color:on-surface-variant
-    - span [121,103 12x12] flex:row
-      - icon:chevron-right [121,103 12x12]
-    - item[3] span "TOPIK II — Vocab" [137,102 90x13] font:11/500 color:on-surface-variant
-    - span [231,103 12x12] flex:row
-      - icon:chevron-right [231,103 12x12]
-    - span "Edit" [247,102 22x13] font:11/700 color:font-headline
-  - scroll [8,123 390x576] pad:0/14
-    - div [22,123 362x31] flex:row gap:10 align:center bg:on-primary r:11 pad:8/12 border:1px seed-indigo@14
-      - span [35,133 12x12] flex:row
-        - icon:clock [35,133 12x12]
-      - span "Last edited ·" [57,132 252x13] font:11/400 color:on-surface-variant
-        - span "3 days ago" [118,132 57x13] font:11/600 color:font-headline
-        - span "14 reviews · 78% recall" [179,132 118x13] font:11/400 color:on-surface-variant
-      - button "History" [319,132 52x13] flex:row gap:3 align:center font:11/600 color:seed-indigo
-        - span [360,133 11x11] flex:row
-          - icon:chevron-right [360,133 11x11]
-    - div [22,168 171x36] flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
-      - span [31,175 22x22] flex:row justify:center align:center bg:seed-indigo@10 r:7
-        - span [36,180 13x13] flex:row
-          - icon:layers [36,180 13x13]
-      - span "TOPIK II — Vocab" [61,179 98x15] font:12/600 color:font-headline
-      - span [167,180 13x13] flex:row
-        - icon:chevron-down [167,180 13x13]
-    - ov "Required" [193,183 86x23] flex:row gap:6 align:center font:11/700 color:on-surface-variant pad:0/4
-      - span [197,187 6x6] bg:seed-indigo r:999
-    - div [22,220 362x19] flex:row justify:between align:baseline pad:0/4
-      - div [26,220 161x13] flex:row gap:5 align:baseline
-        - ov "Front · Korean" [26,220 109x13] font:11/700 color:on-surface-variant
-        - span "Required" [140,221 47x12] font:10/700 color:seed-indigo
-      - span "3 / 60" [352,221 28x12] font:10/600 color:on-surface-variant
-    - card [22,239 362x96] flex:row align:center bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-      - div "연구자" [37,274 60x26] font:22/700/26 color:font-headline
-      - icon-btn [347,272 30x30] flex:row justify:center align:center r:999
-        - span [352,277 20x20] flex:row
-          - icon:mic [352,277 20x20]
-    - div [22,349 362x19] flex:row justify:between align:baseline pad:0/4
-      - div [26,349 160x13] flex:row gap:5 align:baseline
-        - ov "Back · Meaning" [26,349 108x13] font:11/700 color:on-surface-variant
-        - span "Required" [139,350 47x12] font:10/700 color:seed-indigo
-      - span "27 / 240" [340,350 40x12] font:10/600 color:on-surface-variant
-    - card [22,368 362x102] flex:row align:start bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-      - div "Researcher / Nhà nghiên cứu" [37,381 203x22] font:15/500/22 color:font-headline
-    - ov "Optional details" [22,484 362x25] font:11/700 color:on-surface-variant pad:2/4
-    - div [22,509 362x267] flex:col gap:12
-      - div [22,509 362x81]
-        - div [22,509 362x19] flex:row gap:6 align:center pad:0/4
-          - span [26,510 11x11] flex:row
-            - icon:message-square [26,510 11x11]
-          - span "Example sentence" [43,509 116x13] font:11/600 color:on-surface-variant
-          - span "· optional" [165,510 45x12] font:10/500 color:on-surface-variant op:0.55
-        - div [22,528 362x62] flex:row gap:8 justify:between align:center bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-          - span "그는 유명한 언어학 연구자이다." [35,550 336x19] font:13/400/19 color:font-headline
-      - div [22,602 362x81]
-        - div [22,602 362x19] flex:row gap:6 align:center pad:0/4
-          - span [26,603 11x11] flex:row
-            - icon:lightbulb [26,603 11x11]
-          - span "Hint" [43,602 27x13] font:11/600 color:on-surface-variant
-          - span "· optional" [76,603 45x12] font:10/500 color:on-surface-variant op:0.55
-        - div [22,621 362x62] flex:row gap:8 justify:between align:center bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-          - span "연구 = research · 자 = person" [35,643 336x19] font:13/400/19 color:font-headline
-      - div [22,695 362x81]
-        - div [22,695 362x19] flex:row gap:6 align:center pad:0/4
-          - span [26,696 11x11] flex:row
-            - icon:volume-2 [26,696 11x11]
-          - span "Pronunciation · romanization" [43,695 197x13] font:11/600 color:on-surface-variant
-          - span "· optional" [246,696 45x12] font:10/500 color:on-surface-variant op:0.55
-        - div [22,714 362x62] flex:row gap:8 justify:between align:center bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-          - span "yeon-gu-ja" [35,736 302x19] font:13/400/19 color:font-headline
-          - icon-btn [345,732 26x26] flex:row justify:center align:center r:999
-            - span [348,735 20x20] flex:row
-              - icon:volume-2 [348,735 20x20]
-    - div [22,794 362x21] flex:row gap:6 align:center pad:0/4
-      - span [26,795 11x11] flex:row
-        - icon:tag [26,795 11x11]
-      - span "Tags" [43,794 30x13] font:11/600 color:on-surface-variant
-      - span "· optional" [79,795 45x12] font:10/500 color:on-surface-variant op:0.55
-    - div [22,815 362x28] flex:row wrap gap:6
-      - span "TOPIK II" [22,815 81x28] flex:row gap:6 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-        - span [84,824 11x11] flex:row
-          - icon:x [84,824 11x11]
-      - span "noun" [109,815 66x28] flex:row gap:6 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-        - span [156,824 11x11] flex:row
-          - icon:x [156,824 11x11]
-      - span "people" [181,815 79x28] flex:row gap:6 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-        - span [241,824 11x11] flex:row
-          - icon:x [241,824 11x11]
-      - button "Add tag" [266,815 88x28] flex:row gap:4 align:center font:12/600 color:on-surface-variant r:999 pad:0/12 border:1px outline-variant
-        - span [279,823 12x12] flex:row
-          - icon:plus [279,823 12x12]
-    - div [28,867 350x1] bg:outline-variant
-    - ov [22,895 117x23] flex:row gap:6 align:center pad:0/4
-      - span [26,896 11x11] flex:row
-        - icon:alert-triangle [26,896 11x11]
-      - span "Danger zone" [43,895 92x13] font:11/700 color:error
-    - card [22,918 362x140] bg:#dc4848@3 r:12 pad:14/14 border:1px #dc4848@20
-      - div "Delete this flashcard" [37,933 332x18] font:14/600 color:font-headline
-      - div "Removes the card and its review history from . Other cards in this deck stay." [37,955 332x36] font:12/400/18 color:on-surface-variant
-        - strong "TOPIK II — Vocab" [37,956 311x33] font:12/700/18 color:font-headline
-      - button "Delete flashcard" [37,1003 158x40] flex:row gap:7 align:center font:13/600 color:error r:11 pad:0/16 border:1px #dc4848@40
-        - span [54,1016 14x14] flex:row
-          - icon:trash-2 [54,1016 14x14]
-  - div [8,699 390x89] flex:col gap:10 bg:surface pad:10/14 border:1px seed-indigo@14
-    - div [22,710 362x40] flex:row gap:10
-      - pill-btn "Cancel" [22,710 83x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-      - pill-btn "Save changes" [115,710 269x40] flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-        - span [190,722 16x16] flex:row
-          - icon:check [190,722 16x16]
-    - div "Changes save to this device only." [22,760 362x12] font:10/400 color:on-surface-variant op:0.7
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Edit flashcard" abs:[60,66 269x21] rel:[52,14 269x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+    - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant
+    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
+      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant
+    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
+      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant
+    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
+      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
+    - span "Edit" abs:[247,102 22x13] rel:[239,2 22x13] font:11/700 color:font-headline
+  - scroll abs:[8,123 390x576] rel:[0,115 390x576] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+    - div abs:[22,123 362x31] rel:[14,0 362x31] flex:row gap:10 align:center pad:8/12 margin:0/0/14/0 bg:on-primary r:11 border:1px seed-indigo@14
+      - span abs:[35,133 12x12] rel:[13,10 12x12] flex:row
+        - icon:clock abs:[35,133 12x12] rel:[0,0 12x12] clip
+      - span "Last edited ·" abs:[57,132 252x13] rel:[35,9 252x13] grow:1 basis:0 layout_hint:expanded font:11/400 color:on-surface-variant
+        - span "3 days ago" abs:[118,132 57x13] rel:[61,0 57x13] font:11/600 color:font-headline
+        - span "14 reviews · 78% recall" abs:[179,132 118x13] rel:[122,0 118x13] font:11/400 color:on-surface-variant
+      - button "History" abs:[319,132 52x13] rel:[297,9 52x13] flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
+        - span abs:[360,133 11x11] rel:[41,1 11x11] flex:row
+          - icon:chevron-right abs:[360,133 11x11] rel:[0,0 11x11] clip
+    - div abs:[22,168 171x36] rel:[14,45 171x36] flex:row gap:8 align:center pad:6/12/6/8 margin:0/0/16/0 bg:on-primary r:999 border:1px seed-indigo@14
+      - span abs:[31,175 22x22] rel:[9,7 22x22] flex:row justify:center align:center bg:seed-indigo@10 r:7
+        - span abs:[36,180 13x13] rel:[5,5 13x13] flex:row
+          - icon:layers abs:[36,180 13x13] rel:[0,0 13x13] clip
+      - span "TOPIK II — Vocab" abs:[61,179 98x15] rel:[39,11 98x15] font:12/600 color:font-headline
+      - span abs:[167,180 13x13] rel:[145,12 13x13] flex:row
+        - icon:chevron-down abs:[167,180 13x13] rel:[0,0 13x13] clip
+    - ov "Required" abs:[193,183 86x23] rel:[185,60 86x23] flex:row gap:6 align:center pad:0/4/10/4 font:11/700 color:on-surface-variant
+      - span abs:[197,187 6x6] rel:[4,4 6x6] bg:seed-indigo r:999
+    - div abs:[22,220 362x19] rel:[14,97 362x19] flex:row justify:between align:baseline pad:0/4/6/4
+      - div abs:[26,220 161x13] rel:[4,0 161x13] flex:row gap:5 align:baseline
+        - ov "Front · Korean" abs:[26,220 109x13] rel:[0,0 109x13] font:11/700 color:on-surface-variant
+        - span "Required" abs:[140,221 47x12] rel:[114,1 47x12] font:10/700 color:seed-indigo
+      - span "3 / 60" abs:[352,221 28x12] rel:[330,1 28x12] font:10/600 color:on-surface-variant
+    - card abs:[22,239 362x96] rel:[14,116 362x96] flex:row align:center pad:14/42/14/14 margin:0/0/14/0 minh:66 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
+      - div "연구자" abs:[37,274 60x26] rel:[15,35 60x26] font:22/700/26 color:font-headline
+      - icon-btn abs:[347,272 30x30] rel:[325,33 30x30] flex:row justify:center align:center pos:absolute r:999
+        - span abs:[352,277 20x20] rel:[5,5 20x20] flex:row
+          - icon:mic abs:[352,277 20x20] rel:[0,0 20x20] clip
+    - div abs:[22,349 362x19] rel:[14,226 362x19] flex:row justify:between align:baseline pad:0/4/6/4
+      - div abs:[26,349 160x13] rel:[4,0 160x13] flex:row gap:5 align:baseline
+        - ov "Back · Meaning" abs:[26,349 108x13] rel:[0,0 108x13] font:11/700 color:on-surface-variant
+        - span "Required" abs:[139,350 47x12] rel:[113,1 47x12] font:10/700 color:seed-indigo
+      - span "27 / 240" abs:[340,350 40x12] rel:[318,1 40x12] font:10/600 color:on-surface-variant
+    - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
+      - div "Researcher / Nhà nghiên cứu" abs:[37,381 203x22] rel:[15,13 203x22] font:15/500/22 color:font-headline
+    - ov "Optional details" abs:[22,484 362x25] rel:[14,361 362x25] pad:2/4/10/4 font:11/700 color:on-surface-variant
+    - div abs:[22,509 362x267] rel:[14,386 362x267] flex:col gap:12 margin:0/0/18/0
+      - div abs:[22,509 362x81] rel:[0,0 362x81]
+        - div abs:[22,509 362x19] rel:[0,0 362x19] flex:row gap:6 align:center pad:0/4/6/4
+          - span abs:[26,510 11x11] rel:[4,1 11x11] flex:row
+            - icon:message-square abs:[26,510 11x11] rel:[0,0 11x11] clip
+          - span "Example sentence" abs:[43,509 116x13] rel:[21,0 116x13] font:11/600 color:on-surface-variant
+          - span "· optional" abs:[165,510 45x12] rel:[143,1 45x12] font:10/500 color:on-surface-variant op:0.55
+        - div abs:[22,528 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
+          - span "그는 유명한 언어학 연구자이다." abs:[35,550 336x19] rel:[13,22 336x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
+      - div abs:[22,602 362x81] rel:[0,93 362x81]
+        - div abs:[22,602 362x19] rel:[0,0 362x19] flex:row gap:6 align:center pad:0/4/6/4
+          - span abs:[26,603 11x11] rel:[4,1 11x11] flex:row
+            - icon:lightbulb abs:[26,603 11x11] rel:[0,0 11x11] clip
+          - span "Hint" abs:[43,602 27x13] rel:[21,0 27x13] font:11/600 color:on-surface-variant
+          - span "· optional" abs:[76,603 45x12] rel:[54,1 45x12] font:10/500 color:on-surface-variant op:0.55
+        - div abs:[22,621 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
+          - span "연구 = research · 자 = person" abs:[35,643 336x19] rel:[13,22 336x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
+      - div abs:[22,695 362x81] rel:[0,186 362x81]
+        - div abs:[22,695 362x19] rel:[0,0 362x19] flex:row gap:6 align:center pad:0/4/6/4
+          - span abs:[26,696 11x11] rel:[4,1 11x11] flex:row
+            - icon:volume-2 abs:[26,696 11x11] rel:[0,0 11x11] clip
+          - span "Pronunciation · romanization" abs:[43,695 197x13] rel:[21,0 197x13] font:11/600 color:on-surface-variant
+          - span "· optional" abs:[246,696 45x12] rel:[224,1 45x12] font:10/500 color:on-surface-variant op:0.55
+        - div abs:[22,714 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
+          - span "yeon-gu-ja" abs:[35,736 302x19] rel:[13,22 302x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
+          - icon-btn abs:[345,732 26x26] rel:[323,18 26x26] flex:row justify:center align:center pos:relative r:999
+            - span abs:[348,735 20x20] rel:[3,3 20x20] flex:row
+              - icon:volume-2 abs:[348,735 20x20] rel:[0,0 20x20] clip
+    - div abs:[22,794 362x21] rel:[14,671 362x21] flex:row gap:6 align:center pad:0/4/8/4
+      - span abs:[26,795 11x11] rel:[4,1 11x11] flex:row
+        - icon:tag abs:[26,795 11x11] rel:[0,0 11x11] clip
+      - span "Tags" abs:[43,794 30x13] rel:[21,0 30x13] font:11/600 color:on-surface-variant
+      - span "· optional" abs:[79,795 45x12] rel:[57,1 45x12] font:10/500 color:on-surface-variant op:0.55
+    - div abs:[22,815 362x28] rel:[14,692 362x28] flex:row wrap gap:6 margin:0/0/24/0
+      - span "TOPIK II" abs:[22,815 81x28] rel:[0,0 81x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
+        - span abs:[84,824 11x11] rel:[62,9 11x11] flex:row
+          - icon:x abs:[84,824 11x11] rel:[0,0 11x11] clip
+      - span "noun" abs:[109,815 66x28] rel:[87,0 66x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
+        - span abs:[156,824 11x11] rel:[47,9 11x11] flex:row
+          - icon:x abs:[156,824 11x11] rel:[0,0 11x11] clip
+      - span "people" abs:[181,815 79x28] rel:[159,0 79x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
+        - span abs:[241,824 11x11] rel:[60,9 11x11] flex:row
+          - icon:x abs:[241,824 11x11] rel:[0,0 11x11] clip
+      - button "Add tag" abs:[266,815 88x28] rel:[244,0 88x28] flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
+        - span abs:[279,823 12x12] rel:[13,8 12x12] flex:row
+          - icon:plus abs:[279,823 12x12] rel:[0,0 12x12] clip
+    - div abs:[28,867 350x1] rel:[20,744 350x1] margin:8/6/22/6 bg:outline-variant
+    - ov abs:[22,895 117x23] rel:[14,772 117x23] flex:row gap:6 align:center pad:0/4/10/4
+      - span abs:[26,896 11x11] rel:[4,1 11x11] flex:row
+        - icon:alert-triangle abs:[26,896 11x11] rel:[0,0 11x11] clip
+      - span "Danger zone" abs:[43,895 92x13] rel:[21,0 92x13] font:11/700 color:error
+    - card abs:[22,918 362x140] rel:[14,795 362x140] pad:14 margin:0/0/24/0 bg:#dc4848@3 r:12 border:1px #dc4848@20
+      - div "Delete this flashcard" abs:[37,933 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
+      - div "Removes the card and its review history from . Other cards in this deck stay." abs:[37,955 332x36] rel:[15,37 332x36] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+        - strong "TOPIK II — Vocab" abs:[37,956 311x33] rel:[0,1 311x33] font:12/700/18 color:font-headline
+      - button "Delete flashcard" abs:[37,1003 158x40] rel:[15,85 158x40] flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40
+        - span abs:[54,1016 14x14] rel:[17,13 14x14] flex:row
+          - icon:trash-2 abs:[54,1016 14x14] rel:[0,0 14x14] clip
+  - div abs:[8,699 390x89] rel:[0,691 390x89] flex:col gap:10 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
+    - div abs:[22,710 362x40] rel:[14,11 362x40] flex:row gap:10
+      - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+      - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+        - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
+          - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
+    - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Loading (ordered diff vs Loaded)
 
 ```diff
-  - title "Edit flashcard" font:16/700 color:font-headline
-- - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-+ - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
-  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
+  - title "Edit flashcard" abs:[60,66 269x21] rel:[52,14 269x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9
++ - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9 op:0.45
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
-  - scroll pad:0/14
-- - div flex:row gap:10 align:center bg:on-primary r:11 pad:8/12 border:1px seed-indigo@14
-- - span flex:row
-- - icon:clock
-- - span "Last edited ·" font:11/400 color:on-surface-variant
-- - span "3 days ago" font:11/600 color:font-headline
-- - span "14 reviews · 78% recall" font:11/400 color:on-surface-variant
-- - button "History" flex:row gap:3 align:center font:11/600 color:seed-indigo
-- - span flex:row
-- - icon:chevron-right
-  - div flex:row gap:8 align:center bg:on-primary r:999 pad:6/8 border:1px seed-indigo@14
+  - scroll abs:[8,123 390x576] rel:[0,115 390x576] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
+- - div abs:[22,123 362x31] rel:[14,0 362x31] flex:row gap:10 align:center pad:8/12 margin:0/0/14/0 bg:on-primary r:11 border:1px seed-indigo@14
+- - span abs:[35,133 12x12] rel:[13,10 12x12] flex:row
+- - icon:clock abs:[35,133 12x12] rel:[0,0 12x12] clip
+- - span "Last edited ·" abs:[57,132 252x13] rel:[35,9 252x13] grow:1 basis:0 layout_hint:expanded font:11/400 color:on-surface-variant
+- - span "3 days ago" abs:[118,132 57x13] rel:[61,0 57x13] font:11/600 color:font-headline
+- - span "14 reviews · 78% recall" abs:[179,132 118x13] rel:[122,0 118x13] font:11/400 color:on-surface-variant
+- - button "History" abs:[319,132 52x13] rel:[297,9 52x13] flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
+- - span abs:[360,133 11x11] rel:[41,1 11x11] flex:row
+- - icon:chevron-right abs:[360,133 11x11] rel:[0,0 11x11] clip
+  - div abs:[22,123 171x36] rel:[14,0 171x36] flex:row gap:8 align:center pad:6/12/6/8 margin:0/0/16/0 bg:on-primary r:999 border:1px seed-indigo@14
   ...
-  - span "Required" font:10/700 color:seed-indigo
-- - span "3 / 60" font:10/600 color:on-surface-variant
-  - card flex:row align:center bg:on-primary r:12 pad:14/14 border:1px seed-indigo@14
-- - div "연구자" font:22/700/26 color:font-headline
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:mic
-+ - span bg:surface-container-high r:6 op:0.5
-  - div flex:row justify:between align:baseline pad:0/4
+  - span "Required" abs:[140,176 47x12] rel:[114,1 47x12] font:10/700 color:seed-indigo
+- - span "3 / 60" abs:[352,221 28x12] rel:[330,1 28x12] font:10/600 color:on-surface-variant
+  - card abs:[22,194 362x96] rel:[14,71 362x96] flex:row align:center pad:14/42/14/14 margin:0/0/14/0 minh:66 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
+- - div "연구자" abs:[37,274 60x26] rel:[15,35 60x26] font:22/700/26 color:font-headline
+- - icon-btn abs:[347,272 30x30] rel:[325,33 30x30] flex:row justify:center align:center pos:absolute r:999
+- - span abs:[352,277 20x20] rel:[5,5 20x20] flex:row
+- - icon:mic abs:[352,277 20x20] rel:[0,0 20x20] clip
++ - span abs:[37,231 120x22] rel:[15,37 120x22] bg:surface-container-high r:6 op:0.5
+  - div abs:[22,304 362x19] rel:[14,181 362x19] flex:row justify:between align:baseline pad:0/4/6/4
   ...
-  - span "Required" font:10/700 color:seed-indigo
-- - span "27 / 240" font:10/600 color:on-surface-variant
-- - card flex:row align:start bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div "Researcher / Nhà nghiên cứu" font:15/500/22 color:font-headline
-+ - card flex:row align:center bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-+ - div
-+ - span bg:surface-container-high r:6 op:0.5
-+ - span bg:surface-container-high r:6 op:0.35
-  - ov "Optional details" font:11/700 color:on-surface-variant pad:2/4
-  - div flex:col gap:12
-- - div
-- - div flex:row gap:6 align:center pad:0/4
-- - span flex:row
-- - icon:message-square
-- - span "Example sentence" font:11/600 color:on-surface-variant
-- - span "· optional" font:10/500 color:on-surface-variant op:0.55
-- - div flex:row gap:8 justify:between align:center bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-- - span "그는 유명한 언어학 연구자이다." font:13/400/19 color:font-headline
-- - div
-- - div flex:row gap:6 align:center pad:0/4
-- - span flex:row
-- - icon:lightbulb
-- - span "Hint" font:11/600 color:on-surface-variant
-- - span "· optional" font:10/500 color:on-surface-variant op:0.55
-- - div flex:row gap:8 justify:between align:center bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-- - span "연구 = research · 자 = person" font:13/400/19 color:font-headline
-- - div
-- - div flex:row gap:6 align:center pad:0/4
-- - span flex:row
-- - icon:volume-2
-- - span "Pronunciation · romanization" font:11/600 color:on-surface-variant
-- - span "· optional" font:10/500 color:on-surface-variant op:0.55
-- - div flex:row gap:8 justify:between align:center bg:on-primary r:11 pad:10/12 border:1px seed-indigo@14
-- - span "yeon-gu-ja" font:13/400/19 color:font-headline
-- - icon-btn flex:row justify:center align:center r:999
-- - span flex:row
-- - icon:volume-2
-+ - div bg:on-primary r:11 pad:12/14 border:1px seed-indigo@14
-+ - span bg:surface-container-high r:6 op:0.4
-+ - span bg:surface-container-high r:6 op:0.5
-+ - div bg:on-primary r:11 pad:12/14 border:1px seed-indigo@14
-+ - span bg:surface-container-high r:6 op:0.4
-+ - span bg:surface-container-high r:6 op:0.5
-+ - div bg:on-primary r:11 pad:12/14 border:1px seed-indigo@14
-+ - span bg:surface-container-high r:6 op:0.4
-+ - span bg:surface-container-high r:6 op:0.5
-  - div flex:row gap:6 align:center pad:0/4
+  - span "Required" abs:[139,305 47x12] rel:[113,1 47x12] font:10/700 color:seed-indigo
+- - span "27 / 240" abs:[340,350 40x12] rel:[318,1 40x12] font:10/600 color:on-surface-variant
+- - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
+- - div "Researcher / Nhà nghiên cứu" abs:[37,381 203x22] rel:[15,13 203x22] font:15/500/22 color:font-headline
++ - card abs:[22,323 362x102] rel:[14,200 362x102] flex:row align:center pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
++ - div abs:[37,358 332x32] rel:[15,35 332x32]
++ - span abs:[37,358 266x13] rel:[0,0 266x13] bg:surface-container-high r:6 op:0.5
++ - span abs:[37,377 183x13] rel:[0,19 183x13] bg:surface-container-high r:6 op:0.35
+  - ov "Optional details" abs:[22,439 362x25] rel:[14,316 362x25] pad:2/4/10/4 font:11/700 color:on-surface-variant
+  - div abs:[22,464 362x189] rel:[14,341 362x189] flex:col gap:12 margin:0/0/18/0
+- - div abs:[22,509 362x81] rel:[0,0 362x81]
+- - div abs:[22,509 362x19] rel:[0,0 362x19] flex:row gap:6 align:center pad:0/4/6/4
+- - span abs:[26,510 11x11] rel:[4,1 11x11] flex:row
+- - icon:message-square abs:[26,510 11x11] rel:[0,0 11x11] clip
+- - span "Example sentence" abs:[43,509 116x13] rel:[21,0 116x13] font:11/600 color:on-surface-variant
+- - span "· optional" abs:[165,510 45x12] rel:[143,1 45x12] font:10/500 color:on-surface-variant op:0.55
+- - div abs:[22,528 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
+- - span "그는 유명한 언어학 연구자이다." abs:[35,550 336x19] rel:[13,22 336x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
+- - div abs:[22,602 362x81] rel:[0,93 362x81]
+- - div abs:[22,602 362x19] rel:[0,0 362x19] flex:row gap:6 align:center pad:0/4/6/4
+- - span abs:[26,603 11x11] rel:[4,1 11x11] flex:row
+- - icon:lightbulb abs:[26,603 11x11] rel:[0,0 11x11] clip
+- - span "Hint" abs:[43,602 27x13] rel:[21,0 27x13] font:11/600 color:on-surface-variant
+- - span "· optional" abs:[76,603 45x12] rel:[54,1 45x12] font:10/500 color:on-surface-variant op:0.55
+- - div abs:[22,621 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
+- - span "연구 = research · 자 = person" abs:[35,643 336x19] rel:[13,22 336x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
+- - div abs:[22,695 362x81] rel:[0,186 362x81]
+- - div abs:[22,695 362x19] rel:[0,0 362x19] flex:row gap:6 align:center pad:0/4/6/4
+- - span abs:[26,696 11x11] rel:[4,1 11x11] flex:row
+- - icon:volume-2 abs:[26,696 11x11] rel:[0,0 11x11] clip
+- - span "Pronunciation · romanization" abs:[43,695 197x13] rel:[21,0 197x13] font:11/600 color:on-surface-variant
+- - span "· optional" abs:[246,696 45x12] rel:[224,1 45x12] font:10/500 color:on-surface-variant op:0.55
+- - div abs:[22,714 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
+- - span "yeon-gu-ja" abs:[35,736 302x19] rel:[13,22 302x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
+- - icon-btn abs:[345,732 26x26] rel:[323,18 26x26] flex:row justify:center align:center pos:relative r:999
+- - span abs:[348,735 20x20] rel:[3,3 20x20] flex:row
+- - icon:volume-2 abs:[348,735 20x20] rel:[0,0 20x20] clip
++ - div abs:[22,464 362x55] rel:[0,0 362x55] pad:12/14 bg:on-primary r:11 border:1px seed-indigo@14
++ - span abs:[37,477 90x9] rel:[15,13 90x9] bg:surface-container-high r:6 op:0.4
++ - span abs:[37,494 199x12] rel:[15,30 199x12] bg:surface-container-high r:6 op:0.5
++ - div abs:[22,531 362x55] rel:[0,67 362x55] pad:12/14 bg:on-primary r:11 border:1px seed-indigo@14
++ - span abs:[37,544 90x9] rel:[15,13 90x9] bg:surface-container-high r:6 op:0.4
++ - span abs:[37,561 232x12] rel:[15,30 232x12] bg:surface-container-high r:6 op:0.5
++ - div abs:[22,598 362x55] rel:[0,134 362x55] pad:12/14 bg:on-primary r:11 border:1px seed-indigo@14
++ - span abs:[37,611 90x9] rel:[15,13 90x9] bg:surface-container-high r:6 op:0.4
++ - span abs:[37,628 199x12] rel:[15,30 199x12] bg:surface-container-high r:6 op:0.5
+  - div abs:[22,671 362x21] rel:[14,548 362x21] flex:row gap:6 align:center pad:0/4/8/4
   ...
-  - span "· optional" font:10/500 color:on-surface-variant op:0.55
-- - div flex:row wrap gap:6
-- - span "TOPIK II" flex:row gap:6 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-- - span flex:row
-- - icon:x
-- - span "noun" flex:row gap:6 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-- - span flex:row
-- - icon:x
-- - span "people" flex:row gap:6 align:center bg:seed-indigo@10 font:12/600 color:seed-indigo r:999 pad:0/12
-- - span flex:row
-- - icon:x
-- - button "Add tag" flex:row gap:4 align:center font:12/600 color:on-surface-variant r:999 pad:0/12 border:1px outline-variant
-- - span flex:row
-- - icon:plus
-+ - div flex:row gap:6
-+ - span bg:surface-container-high r:6 op:0.5
-+ - span bg:surface-container-high r:6 op:0.5
-+ - span bg:surface-container-high r:6 op:0.5
-  - div bg:outline-variant
+  - span "· optional" abs:[79,672 45x12] rel:[57,1 45x12] font:10/500 color:on-surface-variant op:0.55
+- - div abs:[22,815 362x28] rel:[14,692 362x28] flex:row wrap gap:6 margin:0/0/24/0
+- - span "TOPIK II" abs:[22,815 81x28] rel:[0,0 81x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
+- - span abs:[84,824 11x11] rel:[62,9 11x11] flex:row
+- - icon:x abs:[84,824 11x11] rel:[0,0 11x11] clip
+- - span "noun" abs:[109,815 66x28] rel:[87,0 66x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
+- - span abs:[156,824 11x11] rel:[47,9 11x11] flex:row
+- - icon:x abs:[156,824 11x11] rel:[0,0 11x11] clip
+- - span "people" abs:[181,815 79x28] rel:[159,0 79x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
+- - span abs:[241,824 11x11] rel:[60,9 11x11] flex:row
+- - icon:x abs:[241,824 11x11] rel:[0,0 11x11] clip
+- - button "Add tag" abs:[266,815 88x28] rel:[244,0 88x28] flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
+- - span abs:[279,823 12x12] rel:[13,8 12x12] flex:row
+- - icon:plus abs:[279,823 12x12] rel:[0,0 12x12] clip
++ - div abs:[22,692 362x26] rel:[14,569 362x26] flex:row gap:6 margin:0/0/24/0
++ - span abs:[22,692 70x26] rel:[0,0 70x26] bg:surface-container-high r:6 op:0.5
++ - span abs:[98,692 56x26] rel:[76,0 56x26] bg:surface-container-high r:6 op:0.5
++ - span abs:[160,692 64x26] rel:[138,0 64x26] bg:surface-container-high r:6 op:0.5
+  - div abs:[28,742 350x1] rel:[20,619 350x1] margin:8/6/22/6 bg:outline-variant
   ...
-  - strong "TOPIK II — Vocab" font:12/700/18 color:font-headline
-- - button "Delete flashcard" flex:row gap:7 align:center font:13/600 color:error r:11 pad:0/16 border:1px #dc4848@40
-+ - button "Delete flashcard" flex:row gap:7 align:center font:13/600 color:error r:11 pad:0/16 border:1px #dc4848@40 op:0.45
-  - span flex:row
+  - strong "TOPIK II — Vocab" abs:[37,831 311x33] rel:[0,1 311x33] font:12/700/18 color:font-headline
+- - button "Delete flashcard" abs:[37,1003 158x40] rel:[15,85 158x40] flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40
++ - button "Delete flashcard" abs:[37,878 158x40] rel:[15,85 158x40] flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40 op:0.45
+  - span abs:[54,891 14x14] rel:[17,13 14x14] flex:row
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-+ - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-  - span flex:row
-  - icon:check
-- - div "Changes save to this device only." font:10/400 color:on-surface-variant op:0.7
-+ - div "Loading card…" font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
++ - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+  - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
+  - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
+- - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - div "Loading card…" abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Load error (full — differs too much from base)
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:x [24,66 20x20]
-    - title "Edit flashcard" [60,66 330x21] font:16/700 color:font-headline
-  - scroll [8,100 390x688] flex:row justify:center align:center pad:24/22
-    - card [30,312 346x263] repeat:x2(unit=2) bg:on-primary r:12 pad:36/22 border:1px seed-indigo@14
-      - item[1] div [177,349 52x52] flex:row justify:center align:center bg:#dc4848@10 r:14
-        - span [192,364 22x22] flex:row
-          - icon:cloud-off [192,364 22x22]
-      - div "Couldn't load this card" [53,415 300x21] font:16/700 color:font-headline
-      - item[2] div "Your data is safe on this device. Try again in a moment." [53,442 300x40] font:13/400/20 color:on-surface-variant
-      - div [53,499 300x40] flex:row gap:8 justify:center
-        - pill-btn "Back to deck" [93,499 121x40] flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:11 pad:0/18 border:1px outline-variant
-        - pill-btn "Retry" [223,499 90x40] flex:row gap:6 justify:center align:center bg:seed-indigo font:13/600 color:on-primary r:11 pad:0/18
-          - span [241,512 14x14] flex:row
-            - icon:refresh-cw [241,512 14x14]
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Edit flashcard" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline
+  - scroll abs:[8,100 390x688] rel:[0,92 390x688] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:24/22 layout_hint:scroll
+    - card abs:[30,312 346x263] rel:[22,212 346x263] repeat:x2(unit=2) pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
+      - item[1] div abs:[177,349 52x52] rel:[147,37 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+        - span abs:[192,364 22x22] rel:[15,15 22x22] flex:row
+          - icon:cloud-off abs:[192,364 22x22] rel:[0,0 22x22] clip
+      - div "Couldn't load this card" abs:[53,415 300x21] rel:[23,103 300x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - item[2] div "Your data is safe on this device. Try again in a moment." abs:[53,442 300x40] rel:[23,130 300x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
+      - div abs:[53,499 300x40] rel:[23,186 300x40] flex:row gap:8 justify:center
+        - pill-btn "Back to deck" abs:[93,499 121x40] rel:[40,0 121x40] flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
+        - pill-btn "Retry" abs:[223,499 90x40] rel:[170,0 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center r:11
+          - span abs:[241,512 14x14] rel:[18,13 14x14] flex:row
+            - icon:refresh-cw abs:[241,512 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Validation (ordered diff vs Loaded)
 
 ```diff
-  - title "Edit flashcard" font:16/700 color:font-headline
-- - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-+ - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
-  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
+  - title "Edit flashcard" abs:[60,66 269x21] rel:[52,14 269x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9
++ - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9 op:0.45
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
-  - span "Required" font:10/700 color:seed-indigo
-- - span "27 / 240" font:10/600 color:on-surface-variant
-- - card flex:row align:start bg:on-primary r:12 pad:12/14 border:1px seed-indigo@14
-- - div "Researcher / Nhà nghiên cứu" font:15/500/22 color:font-headline
-+ - span "0 / 240" font:10/600 color:on-surface-variant
-+ - card flex:row align:center bg:on-primary r:12 pad:12/14 border:1px error
-+ - div "English, Vietnamese, or both — comma-separated reads cleanest." font:13/400/20 color:on-surface-variant op:0.65
-+ - div flex:row gap:6 align:center pad:0/4
-+ - span flex:row
-+ - icon:alert-circle
-+ - span "Add a meaning so this card can be answered." font:11/600 color:error
-  - ov "Optional details" font:11/700 color:on-surface-variant pad:2/4
+  - span "Required" abs:[139,350 47x12] rel:[113,1 47x12] font:10/700 color:seed-indigo
+- - span "27 / 240" abs:[340,350 40x12] rel:[318,1 40x12] font:10/600 color:on-surface-variant
+- - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
+- - div "Researcher / Nhà nghiên cứu" abs:[37,381 203x22] rel:[15,13 203x22] font:15/500/22 color:font-headline
++ - span "0 / 240" abs:[346,350 34x12] rel:[324,1 34x12] font:10/600 color:on-surface-variant
++ - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:center pad:12/14 margin:0/0/8/0 minh:76 bg:on-primary r:12 border:1px error
++ - div "English, Vietnamese, or both — comma-separated reads cleanest." abs:[37,400 332x39] rel:[15,32 332x39] font:13/400/20 color:on-surface-variant op:0.65
++ - div abs:[22,478 362x13] rel:[14,355 362x13] flex:row gap:6 align:center pad:0/4 margin:0/0/14/0
++ - span abs:[26,479 12x12] rel:[4,1 12x12] flex:row
++ - icon:alert-circle abs:[26,479 12x12] rel:[0,0 12x12] clip
++ - span "Add a meaning so this card can be answered." abs:[44,478 236x13] rel:[22,0 236x13] font:11/600 color:error
+  - ov "Optional details" abs:[22,505 362x25] rel:[14,382 362x25] pad:2/4/10/4 font:11/700 color:on-surface-variant
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-+ - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-  - span flex:row
-  - icon:check
-- - div "Changes save to this device only." font:10/400 color:on-surface-variant op:0.7
-+ - div "Add the missing field to enable save." font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
++ - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
+  - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
+  - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
+- - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - div "Add the missing field to enable save." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Saving (ordered diff vs Loaded)
 
 ```diff
-  - title "Edit flashcard" font:16/700 color:font-headline
-- - pill-btn "Save" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-+ - pill-btn "Saving…" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14 op:0.45
-+ - span r:999 border:2px #000000@0
-  - scroll-x flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14
+  - title "Edit flashcard" abs:[60,66 228x21] rel:[52,14 228x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline
+- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9
++ - pill-btn "Saving…" abs:[292,60 98x32] rel:[284,8 98x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center r:9 op:0.45
++ - span abs:[306,69 15x15] rel:[14,9 15x15] r:999 border:2px #000000@0
+  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-- - span flex:row
-- - icon:check
-- - div "Changes save to this device only." font:10/400 color:on-surface-variant op:0.7
-+ - pill-btn "Saving changes…" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18 op:0.45
-+ - span r:999 border:2px #000000@0
-+ - div "Saving to this device…" font:10/400 color:on-surface-variant op:0.7
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+- - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
+- - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
+- - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - pill-btn "Saving changes…" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12 op:0.45
++ - span abs:[178,721 18x18] rel:[63,11 18x18] r:999 border:2px #000000@0
++ - div "Saving to this device…" abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Save failed (ordered diff vs Loaded)
 
 ```diff
-  - div flex:col gap:10 bg:surface pad:10/14 border:1px seed-indigo@14
-+ - div flex:row gap:8 align:start bg:#dc4848@8 r:11 pad:10/12 border:1px #dc4848@22
-+ - span flex:row
-+ - icon:alert-circle
-+ - div
-+ - strong "Couldn't save changes." font:12/700/17 color:font-headline
-+ - span "Nothing was lost. Tap Save to try again." font:12/400/17 color:on-surface-variant
-  - div flex:row gap:10
-  - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:12 pad:0/18 border:1px outline-variant
-- - pill-btn "Save changes" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-+ - pill-btn "Retry save" flex:row gap:8 justify:center align:center bg:seed-indigo font:14/600 color:on-primary r:12 pad:0/18
-  - span flex:row
-- - icon:check
-+ - icon:refresh-cw
-  - div "Changes save to this device only." font:10/400 color:on-surface-variant op:0.7
+  - div abs:[8,632 390x156] rel:[0,624 390x156] flex:col gap:10 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
++ - div abs:[22,643 362x57] rel:[14,11 362x57] flex:row gap:8 align:start pad:10/12 bg:#dc4848@8 r:11 border:1px #dc4848@22
++ - span abs:[35,654 14x14] rel:[13,11 14x14] flex:row
++ - icon:alert-circle abs:[35,654 14x14] rel:[0,0 14x14] clip
++ - div abs:[57,654 314x35] rel:[35,11 314x35] grow:1 basis:0 layout_hint:expanded
++ - strong "Couldn't save changes." abs:[57,655 137x15] rel:[0,1 137x15] font:12/700/17 color:font-headline
++ - span "Nothing was lost. Tap Save to try again." abs:[57,655 302x32] rel:[0,1 302x32] font:12/400/17 color:on-surface-variant
+  - div abs:[22,710 362x40] rel:[14,78 362x40] flex:row gap:10
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
++ - pill-btn "Retry save" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center r:12
+  - span abs:[203,723 15x15] rel:[88,13 15x15] flex:row
+- - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
++ - icon:refresh-cw abs:[203,723 15x15] rel:[0,0 15x15] clip
+  - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,128 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
 
 ## State: Delete (ordered diff vs Loaded)
 
 ```diff
-  - div "Changes save to this device only." font:10/400 color:on-surface-variant op:0.7
-+ - div bg:#191c1e@45
-+ - div flex:row justify:center align:center pad:24/18
-+ - div bg:surface-container-high r:18 shadow:16/40
-+ - div pad:18/18
-+ - div flex:row gap:10 align:center
-+ - div flex:row justify:center align:center bg:#dc4848@12 r:10
-+ - span flex:row
-+ - icon:trash-2
-+ - div "Delete this flashcard?" font:16/700 color:font-headline
-+ - div bg:on-primary r:11 pad:12/14 border:1px seed-indigo@14
-+ - div "연구자" font:15/700 color:font-headline
-+ - div "Researcher / Nhà nghiên cứu" font:12/400 color:on-surface-variant
-+ - div "Removes the card and its of history. Other cards in this deck are unaffected." font:12/400/18 color:on-surface-variant
-+ - strong "14 reviews" font:12/700/18 color:font-headline
-+ - div flex:row gap:8 pad:14/14
-+ - pill-btn "Cancel" flex:row gap:6 justify:center align:center font:13/600 color:seed-indigo r:11 pad:0/18 border:1px outline-variant
-+ - pill-btn "Delete card" flex:row gap:6 justify:center align:center bg:error font:13/600 color:on-primary r:11 pad:0/18
-+ - span flex:row
-+ - icon:trash-2
+  - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
++ - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
++ - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
++ - div abs:[33,276 340x245] rel:[25,268 340x245] maxw:340 clip bg:surface-container-high r:18 shadow:16/40
++ - div abs:[33,276 340x177] rel:[0,0 340x177] pad:18/18/4/18
++ - div abs:[51,294 304x34] rel:[18,18 304x34] flex:row gap:10 align:center margin:0/0/8/0
++ - div abs:[51,294 34x34] rel:[0,0 34x34] flex:row justify:center align:center shrink:0 bg:#dc4848@12 r:10
++ - span abs:[60,303 16x16] rel:[9,9 16x16] flex:row
++ - icon:trash-2 abs:[60,303 16x16] rel:[0,0 16x16] clip
++ - div "Delete this flashcard?" abs:[95,300 164x21] rel:[44,7 164x21] font:16/700 color:font-headline
++ - div abs:[51,336 304x65] rel:[18,60 304x65] pad:12/14 margin:4/0/0/0 bg:on-primary r:11 border:1px seed-indigo@14
++ - div "연구자" abs:[66,349 274x21] rel:[15,13 274x21] margin:0/0/3/0 font:15/700 color:font-headline
++ - div "Researcher / Nhà nghiên cứu" abs:[66,373 274x15] rel:[15,37 274x15] font:12/400 color:on-surface-variant
++ - div "Removes the card and its of history. Other cards in this deck are unaffected." abs:[51,413 304x36] rel:[18,137 304x36] margin:12/0/0/0 font:12/400/18 color:on-surface-variant
++ - strong "14 reviews" abs:[194,414 60x15] rel:[143,1 60x15] font:12/700/18 color:font-headline
++ - div abs:[33,453 340x68] rel:[0,177 340x68] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,467 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center r:11 border:1px outline-variant
++ - pill-btn "Delete card" abs:[198,467 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center r:11
++ - span abs:[231,480 14x14] rel:[34,13 14x14] flex:row
++ - icon:trash-2 abs:[231,480 14x14] rel:[0,0 14x14] clip
 ```

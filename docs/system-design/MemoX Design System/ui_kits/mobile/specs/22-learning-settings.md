@@ -5,236 +5,245 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" [x,y WxH] <layout> repeat:xN(unit=P) bg:<color> font:<size/weight[/line-height]> color:<color> r:<radius> pad:<top/left> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
+`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
+INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
 `<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`
-or `grid cols:N` — map it to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.
+`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus
+`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).
+`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`
+are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =
+scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =
+overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.
 `repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit
-start — build it as a list/builder, not N copies. `shadow:<offY>/<blur>` is the box-shadow
-→ map to an elevation. Coordinates are px relative to the 390x780 phone frame (light theme
-measured; dark remaps the same `--memox-*` tokens). A `<color>` is a `--memox-*` token name,
-`token@NN` / `#rrggbb@NN` = that color at NN% opacity (overlay/tint, not a hardcoded color).
-Token names map to Flutter symbols via `docs/design/design-token-mapping.md`; a bare `#rrggbb`
-means no token matched — treat as a gap, not a license to hardcode. Non-base states are an
-ordered diff (`+` added / `-` removed in document order, `...` = unchanged run).
-Every quoted "…" string is MOCK COPY — the kit carries NO l10n keys; never copy it into the
-app, source real strings from ARB (`docs/design/mock-design-index.md`). Numbers/counts are
-illustrative, not the system contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).
+`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the
+390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A
+`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity
+(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via
+`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a
+gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed
+in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
+MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
+ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
+contract. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Goal on
 
 ```text
-- app [8,8 390x780] flex:col bg:surface
-  - statusbar [8,8 390x44] flex:row justify:between align:center pad:0/24
-    - span "9:41" [32,21 28x18] font:14/600 color:font-headline
-    - span [314,24 60x12] flex:row gap:4 align:center
-      - svg [314,24 16x12]
-      - svg [334,24 14x12]
-      - svg [352,24 22x12]
-  - appbar [8,52 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn [16,58 36x36] flex:row justify:center align:center r:999
-      - span [24,66 20x20] flex:row
-        - icon:arrow-left [24,66 20x20]
-    - title "Learning" [56,66 263x21] font:16/700 color:font-headline
-    - div "Saved" [323,66 67x21] flex:row gap:5 align:center bg:mastery@10 font:11/600 color:mastery r:999 pad:4/9 op:0
-      - span [332,71 11x11] flex:row
-        - icon:check [332,71 11x11]
-  - scroll [8,100 390x688] repeat:x5(unit=1) pad:0/14
-    - item[1] div [22,100 362x311]
-      - ov "Daily goal" [22,100 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,121 362x290] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,122 360x64] grid cols:2 gap:12 align:center pad:13/14
-          - div [37,135 276x37]
-            - div "Set a daily goal" [37,135 276x18] font:14/600 color:font-headline
-            - div "Track how many cards you complete each day." [37,155 276x17] font:12/400/17 color:on-surface-variant
-          - div [325,141 44x26] flex:row gap:6 align:center
-            - span [325,141 44x26] bg:seed-indigo r:999
-              - span [346,144 20x20] bg:on-primary r:999 shadow:1/3
-        - div [23,186 360x143] repeat:x2(unit=2) pad:14/14 border:1px seed-indigo@14
-          - item[1] div [37,201 332x30] flex:row justify:between align:baseline
-            - ov "Cards per day" [37,215 101x13] font:11/700 color:on-surface-variant
-            - div [305,201 64x30] flex:row gap:4 align:baseline
-              - span "20" [305,201 28x30] font:24/700 color:seed-indigo
-              - span "cards" [337,214 32x15] font:12/400 color:on-surface-variant
-          - div [37,245 332x24]
-            - div [37,254 332x6] bg:surface-container-high r:999
-            - div [37,254 26x6] bg:seed-indigo r:999
-            - div [50,244 26x26] bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-            - div [36,256 2x2] bg:on-primary@85 r:999
-            - div [119,256 2x2] bg:outline-variant r:999
-            - div [202,256 2x2] bg:outline-variant r:999
-            - div [285,256 2x2] bg:outline-variant r:999
-            - div [368,256 2x2] bg:outline-variant r:999
-          - item[2] div [37,277 332x13] flex:row justify:between repeat:x5(unit=1) pad:0/2
-            - item[1] span "5" [39,277 7x13] font:11/400 color:on-surface-variant
-            - item[2] span "50" [108,277 13x13] font:11/400 color:on-surface-variant op:0.7
-            - item[3] span "100" [183,277 20x13] font:11/400 color:on-surface-variant op:0.7
-            - item[4] span "150" [265,277 20x13] font:11/400 color:on-surface-variant op:0.7
-            - item[5] span "200" [347,277 20x13] font:11/400 color:on-surface-variant
-          - div [37,300 332x13] flex:row gap:5 align:center
-            - span [37,301 11x11] flex:row
-              - icon:info [37,301 11x11]
-            - span "Drag to adjust in steps of 5" [53,300 137x13] font:11/400 color:on-surface-variant
-        - div [23,329 360x81] grid cols:3 gap:12 align:center pad:13/14
-          - div [37,355 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,362 15x15] flex:row
-              - icon:flame [45,362 15x15]
-          - div [83,342 230x55]
-            - div "Show streak counter" [83,342 230x18] font:14/600 color:font-headline
-            - div "Display your current streak on Home and Stats." [83,362 230x35] font:12/400/17 color:on-surface-variant
-          - div [325,357 44x26] flex:row gap:6 align:center
-            - span [325,357 44x26] bg:seed-indigo r:999
-              - span [346,360 20x20] bg:on-primary r:999 shadow:1/3
-    - item[2] div [22,429 362x168]
-      - ov "Reminder" [22,429 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,450 362x122] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,451 360x64] grid cols:2 gap:12 align:center pad:13/14
-          - div [37,464 276x37]
-            - div "Daily reminder" [37,464 276x18] font:14/600 color:font-headline
-            - div "You decide when to come back." [37,484 276x17] font:12/400/17 color:on-surface-variant
-          - div [325,470 44x26] flex:row gap:6 align:center
-            - span [325,470 44x26] bg:surface-container-high r:999
-              - span [328,473 20x20] bg:on-primary r:999 shadow:1/3
-        - div [23,516 360x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-          - div [37,529 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,536 15x15] flex:row
-              - icon:clock [45,536 15x15]
-          - div "Reminder time" [83,535 214x18] font:14/600 color:font-headline
-          - div [309,535 60x18] flex:row gap:6 align:center
-            - div "20:00" [309,535 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
-              - span [353,536 16x16] flex:row
-                - icon:chevron-right [353,536 16x16]
-      - div "A gentle nudge once a day. Off by default." [22,573 362x25] font:11/400/17 color:on-surface-variant pad:8/6
-    - item[3] div [22,615 362x86]
-      - ov "Tags" [22,615 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,636 362x65] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,637 360x63] grid cols:3 gap:12 align:center pad:13/14
-          - div [37,654 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,661 15x15] flex:row
-              - icon:tag [45,661 15x15]
-          - div [83,650 256x37]
-            - div "Manage tags" [83,650 256x18] font:14/600 color:font-headline
-            - div "14 tags across all decks" [83,670 256x17] font:12/400/17 color:on-surface-variant
-          - div [351,660 18x18] flex:row gap:6 align:center
-            - span [351,660 18x18] flex:row
-              - icon:chevron-right [351,660 18x18]
-    - item[4] div [22,719 362x240]
-      - ov "Study defaults" [22,719 362x21] font:11/700 color:on-surface-variant pad:0/4
-      - card [22,740 362x194] bg:on-primary r:12 border:1px seed-indigo@14
-        - div [23,741 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-          - div [37,758 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,766 15x15] flex:row
-              - icon:shuffle [45,766 15x15]
-          - div [83,754 225x37]
-            - div "Default shuffle" [83,754 225x18] font:14/600 color:font-headline
-            - div "Randomize card order in every session" [83,774 225x17] font:12/400/17 color:on-surface-variant
-          - div [320,762 49x22] flex:row gap:6 align:center
-            - span "Soon" [320,762 49x22] flex:row align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/8
-        - div [23,806 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-          - div [37,823 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,830 15x15] flex:row
-              - icon:layers [45,830 15x15]
-          - div [83,819 225x37]
-            - div "Default study mode" [83,819 225x18] font:14/600 color:font-headline
-            - div "Review, Match, Guess, Recall, or Fill" [83,839 225x17] font:12/400/17 color:on-surface-variant
-          - div [320,827 49x22] flex:row gap:6 align:center
-            - span "Soon" [320,827 49x22] flex:row align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/8
-        - div [23,870 360x63] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-          - div [37,887 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span [45,894 15x15] flex:row
-              - icon:eye [45,894 15x15]
-          - div [83,883 225x37]
-            - div "Show example sentence" [83,883 225x18] font:14/600 color:font-headline
-            - div "Reveal the example with the meaning" [83,903 225x17] font:12/400/17 color:on-surface-variant
-          - div [320,891 49x22] flex:row gap:6 align:center
-            - span "Soon" [320,891 49x22] flex:row align:center bg:surface-container font:10/700 color:on-surface-variant r:999 pad:0/8
-      - div "Available in a future update." [22,935 362x25] font:11/400/17 color:on-surface-variant pad:8/6
-    - item[5] div "Changes save automatically." [22,977 362x33] font:11/400 color:on-surface-variant pad:4/0
+- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+  - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
+    - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
+    - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
+      - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
+      - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
+      - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
+    - title "Learning" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+    - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999 op:0
+      - span abs:[332,71 11x11] rel:[9,5 11x11] flex:row
+        - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
+  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll
+    - item[1] div abs:[22,100 362x311] rel:[14,0 362x311] margin:0/0/18/0
+      - ov "Daily goal" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,121 362x290] rel:[0,21 362x290] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,122 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14
+          - div abs:[37,135 276x37] rel:[14,13 276x37]
+            - div "Set a daily goal" abs:[37,135 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+            - div "Track how many cards you complete each day." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[325,141 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
+            - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+              - span abs:[346,144 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+        - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border:1px seed-indigo@14
+          - item[1] div abs:[37,201 332x30] rel:[14,15 332x30] flex:row justify:between align:baseline margin:0/0/14/0
+            - ov "Cards per day" abs:[37,215 101x13] rel:[0,14 101x13] font:11/700 color:on-surface-variant
+            - div abs:[305,201 64x30] rel:[268,0 64x30] flex:row gap:4 align:baseline
+              - span "20" abs:[305,201 28x30] rel:[0,0 28x30] font:24/700 color:seed-indigo
+              - span "cards" abs:[337,214 32x15] rel:[32,13 32x15] font:12/400 color:on-surface-variant
+          - div abs:[37,245 332x24] rel:[14,59 332x24] margin:0/0/8/0 pos:relative
+            - div abs:[37,254 332x6] rel:[0,9 332x6] pos:absolute bg:surface-container-high r:999
+            - div abs:[37,254 26x6] rel:[0,9 26x6] pos:absolute bg:seed-indigo r:999
+            - div abs:[50,244 26x26] rel:[13,-1 26x26] pos:absolute bg:on-primary r:999 border:2px seed-indigo shadow:2/6
+            - div abs:[36,256 2x2] rel:[-1,11 2x2] pos:absolute bg:on-primary@85 r:999
+            - div abs:[119,256 2x2] rel:[82,11 2x2] pos:absolute bg:outline-variant r:999
+            - div abs:[202,256 2x2] rel:[165,11 2x2] pos:absolute bg:outline-variant r:999
+            - div abs:[285,256 2x2] rel:[248,11 2x2] pos:absolute bg:outline-variant r:999
+            - div abs:[368,256 2x2] rel:[331,11 2x2] pos:absolute bg:outline-variant r:999
+          - item[2] div abs:[37,277 332x13] rel:[14,91 332x13] flex:row justify:between repeat:x5(unit=1) pad:0/2
+            - item[1] span "5" abs:[39,277 7x13] rel:[2,0 7x13] font:11/400 color:on-surface-variant
+            - item[2] span "50" abs:[108,277 13x13] rel:[71,0 13x13] font:11/400 color:on-surface-variant op:0.7
+            - item[3] span "100" abs:[183,277 20x13] rel:[146,0 20x13] font:11/400 color:on-surface-variant op:0.7
+            - item[4] span "150" abs:[265,277 20x13] rel:[228,0 20x13] font:11/400 color:on-surface-variant op:0.7
+            - item[5] span "200" abs:[347,277 20x13] rel:[310,0 20x13] font:11/400 color:on-surface-variant
+          - div abs:[37,300 332x13] rel:[14,114 332x13] flex:row gap:5 align:center margin:10/0/0/0
+            - span abs:[37,301 11x11] rel:[0,1 11x11] flex:row
+              - icon:info abs:[37,301 11x11] rel:[0,0 11x11] clip
+            - span "Drag to adjust in steps of 5" abs:[53,300 137x13] rel:[16,0 137x13] font:11/400 color:on-surface-variant
+        - div abs:[23,329 360x81] rel:[1,208 360x81] grid cols:3 gap:12 align:center pad:13/14
+          - div abs:[37,355 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,362 15x15] rel:[8,8 15x15] flex:row
+              - icon:flame abs:[45,362 15x15] rel:[0,0 15x15] clip
+          - div abs:[83,342 230x55] rel:[60,13 230x55]
+            - div "Show streak counter" abs:[83,342 230x18] rel:[0,0 230x18] font:14/600 color:font-headline
+            - div "Display your current streak on Home and Stats." abs:[83,362 230x35] rel:[0,20 230x35] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[325,357 44x26] rel:[302,27 44x26] flex:row gap:6 align:center
+            - span abs:[325,357 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+              - span abs:[346,360 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+    - item[2] div abs:[22,429 362x168] rel:[14,329 362x168] margin:0/0/18/0
+      - ov "Reminder" abs:[22,429 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,450 362x122] rel:[0,21 362x122] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,451 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14
+          - div abs:[37,464 276x37] rel:[14,13 276x37]
+            - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+            - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[325,470 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
+            - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
+              - span abs:[328,473 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+        - div abs:[23,516 360x56] rel:[1,65 360x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+          - div abs:[37,529 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,536 15x15] rel:[8,8 15x15] flex:row
+              - icon:clock abs:[45,536 15x15] rel:[0,0 15x15] clip
+          - div "Reminder time" abs:[83,535 214x18] rel:[60,19 214x18] font:14/600 color:font-headline
+          - div abs:[309,535 60x18] rel:[286,19 60x18] flex:row gap:6 align:center
+            - div "20:00" abs:[309,535 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
+              - span abs:[353,536 16x16] rel:[44,1 16x16] flex:row
+                - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
+      - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+    - item[3] div abs:[22,615 362x86] rel:[14,515 362x86] margin:0/0/18/0
+      - ov "Tags" abs:[22,615 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,636 362x65] rel:[0,21 362x65] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,637 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14
+          - div abs:[37,654 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,661 15x15] rel:[8,8 15x15] flex:row
+              - icon:tag abs:[45,661 15x15] rel:[0,0 15x15] clip
+          - div abs:[83,650 256x37] rel:[60,13 256x37]
+            - div "Manage tags" abs:[83,650 256x18] rel:[0,0 256x18] font:14/600 color:font-headline
+            - div "14 tags across all decks" abs:[83,670 256x17] rel:[0,20 256x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[351,660 18x18] rel:[328,23 18x18] flex:row gap:6 align:center
+            - span abs:[351,660 18x18] rel:[0,0 18x18] flex:row
+              - icon:chevron-right abs:[351,660 18x18] rel:[0,0 18x18] clip
+    - item[4] div abs:[22,719 362x240] rel:[14,619 362x240] margin:0/0/18/0
+      - ov "Study defaults" abs:[22,719 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant
+      - card abs:[22,740 362x194] rel:[0,21 362x194] clip bg:on-primary r:12 border:1px seed-indigo@14
+        - div abs:[23,741 360x64] rel:[1,1 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+          - div abs:[37,758 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,766 15x15] rel:[8,8 15x15] flex:row
+              - icon:shuffle abs:[45,766 15x15] rel:[0,0 15x15] clip
+          - div abs:[83,754 225x37] rel:[60,13 225x37]
+            - div "Default shuffle" abs:[83,754 225x18] rel:[0,0 225x18] font:14/600 color:font-headline
+            - div "Randomize card order in every session" abs:[83,774 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,762 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
+            - span "Soon" abs:[320,762 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant r:999
+        - div abs:[23,806 360x64] rel:[1,65 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+          - div abs:[37,823 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,830 15x15] rel:[8,8 15x15] flex:row
+              - icon:layers abs:[45,830 15x15] rel:[0,0 15x15] clip
+          - div abs:[83,819 225x37] rel:[60,13 225x37]
+            - div "Default study mode" abs:[83,819 225x18] rel:[0,0 225x18] font:14/600 color:font-headline
+            - div "Review, Match, Guess, Recall, or Fill" abs:[83,839 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,827 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
+            - span "Soon" abs:[320,827 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant r:999
+        - div abs:[23,870 360x63] rel:[1,130 360x63] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+          - div abs:[37,887 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+            - span abs:[45,894 15x15] rel:[8,8 15x15] flex:row
+              - icon:eye abs:[45,894 15x15] rel:[0,0 15x15] clip
+          - div abs:[83,883 225x37] rel:[60,13 225x37]
+            - div "Show example sentence" abs:[83,883 225x18] rel:[0,0 225x18] font:14/600 color:font-headline
+            - div "Reveal the example with the meaning" abs:[83,903 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,891 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
+            - span "Soon" abs:[320,891 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant r:999
+      - div "Available in a future update." abs:[22,935 362x25] rel:[0,215 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+    - item[5] div "Changes save automatically." abs:[22,977 362x33] rel:[14,877 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
 ```
 
 ## State: Goal off (ordered diff vs Goal on)
 
 ```diff
-  - div "Set a daily goal" font:14/600 color:font-headline
-- - div "Track how many cards you complete each day." font:12/400/17 color:on-surface-variant
-+ - div "Pause goal tracking without losing your streak." font:12/400/17 color:on-surface-variant
-  - div flex:row gap:6 align:center
-- - span bg:seed-indigo r:999
-+ - span bg:surface-container-high r:999
-  - span bg:on-primary r:999 shadow:1/3
-- - div repeat:x2(unit=2) pad:14/14 border:1px seed-indigo@14
-+ - div repeat:x2(unit=2) pad:14/14 border:1px seed-indigo@14 op:0.4
-  - item[1] div flex:row justify:between align:baseline
+  - div "Set a daily goal" abs:[37,135 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+- - div "Track how many cards you complete each day." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
++ - div "Pause goal tracking without losing your streak." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[325,141 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
+- - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
++ - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
+  - span abs:[328,144 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+- - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border:1px seed-indigo@14
++ - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border:1px seed-indigo@14 op:0.4
+  - item[1] div abs:[37,201 332x30] rel:[14,15 332x30] flex:row justify:between align:baseline margin:0/0/14/0
   ...
-  - span "Drag to adjust in steps of 5" font:11/400 color:on-surface-variant
-- - div grid cols:3 gap:12 align:center pad:13/14
-+ - div grid cols:3 gap:12 align:center pad:13/14 op:0.45
-  - div flex:row justify:center align:center bg:seed-indigo@8 r:9
+  - span "Drag to adjust in steps of 5" abs:[53,300 137x13] rel:[16,0 137x13] font:11/400 color:on-surface-variant
+- - div abs:[23,329 360x81] rel:[1,208 360x81] grid cols:3 gap:12 align:center pad:13/14
++ - div abs:[23,329 360x81] rel:[1,208 360x81] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+  - div abs:[37,355 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
   ...
-  - div flex:row gap:6 align:center
-- - span bg:seed-indigo r:999
-+ - span bg:seed-indigo r:999 op:0.45
-  - span bg:on-primary r:999 shadow:1/3
-+ - div "Goal is off. Your streak is frozen — it won’t reset while paused." font:11/400/17 color:on-surface-variant pad:8/6
-  - item[2] div
+  - div abs:[325,357 44x26] rel:[302,27 44x26] flex:row gap:6 align:center
+- - span abs:[325,357 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
++ - span abs:[325,357 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999 op:0.45
+  - span abs:[346,360 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
++ - div "Goal is off. Your streak is frozen — it won’t reset while paused." abs:[22,411 362x25] rel:[0,311 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+  - item[2] div abs:[22,454 362x168] rel:[14,354 362x168] margin:0/0/18/0
   ...
 ```
 
 ## State: Reminder on (ordered diff vs Goal on)
 
 ```diff
-  - div "Daily reminder" font:14/600 color:font-headline
-- - div "You decide when to come back." font:12/400/17 color:on-surface-variant
-+ - div "Nudge me to study every day." font:12/400/17 color:on-surface-variant
-  - div flex:row gap:6 align:center
-- - span bg:surface-container-high r:999
-+ - span bg:seed-indigo r:999
-  - span bg:on-primary r:999 shadow:1/3
-- - div grid cols:3 gap:12 align:center pad:13/14 op:0.45
-+ - div grid cols:3 gap:12 align:center pad:13/14
-  - div flex:row justify:center align:center bg:seed-indigo@8 r:9
+  - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+- - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
++ - div "Nudge me to study every day." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[325,470 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
+- - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
++ - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+  - span abs:[346,473 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+- - div abs:[23,516 360x56] rel:[1,65 360x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
++ - div abs:[23,516 360x56] rel:[1,65 360x56] grid cols:3 gap:12 align:center pad:13/14
+  - div abs:[37,529 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
   ...
-  - div flex:row gap:6 align:center
-- - div "20:00" flex:row gap:6 align:center font:14/600 color:on-surface-variant
-+ - div "20:00" flex:row gap:6 align:center font:14/600 color:font-headline
-  - span flex:row
-  - icon:chevron-right
-- - div "A gentle nudge once a day. Off by default." font:11/400/17 color:on-surface-variant pad:8/6
-  - item[3] div
+  - div abs:[309,535 60x18] rel:[286,19 60x18] flex:row gap:6 align:center
+- - div "20:00" abs:[309,535 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
++ - div "20:00" abs:[309,535 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:font-headline
+  - span abs:[353,536 16x16] rel:[44,1 16x16] flex:row
+  - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
+- - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
+  - item[3] div abs:[22,591 362x86] rel:[14,491 362x86] margin:0/0/18/0
   ...
 ```
 
 ## State: Perm denied (ordered diff vs Goal on)
 
 ```diff
-  - div "Daily reminder" font:14/600 color:font-headline
-- - div "You decide when to come back." font:12/400/17 color:on-surface-variant
-+ - div "Nudge me to study every day." font:12/400/17 color:on-surface-variant
-  - div flex:row gap:6 align:center
-- - span bg:surface-container-high r:999
-+ - span bg:seed-indigo r:999
-  - span bg:on-primary r:999 shadow:1/3
+  - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+- - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
++ - div "Nudge me to study every day." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[325,470 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
+- - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
++ - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+  - span abs:[346,473 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
   ...
-  - icon:chevron-right
-- - div "A gentle nudge once a day. Off by default." font:11/400/17 color:on-surface-variant pad:8/6
-+ - div flex:row gap:10 align:start bg:#d9891e@6 pad:12/14 border:1px seed-indigo@14
-+ - span flex:row
-+ - icon:bell-off
-+ - div
-+ - div "Notifications are blocked" font:13/700 color:font-headline
-+ - div "Allow MemoX in your phone’s notification settings to receive the reminder." font:12/400/18 color:on-surface-variant
-+ - pill-btn "Open system settings" flex:row gap:6 justify:center align:center bg:seed-indigo font:12/600 color:on-primary r:9 pad:0/14
-+ - span flex:row
-+ - icon:external-link
-  - item[3] div
+  - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
+- - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
++ - div abs:[23,572 360x123] rel:[1,121 360x123] flex:row gap:10 align:start pad:12/14 bg:#d9891e@6 border:1px seed-indigo@14
++ - span abs:[37,585 16x16] rel:[14,13 16x16] flex:row
++ - icon:bell-off abs:[37,585 16x16] rel:[0,0 16x16] clip
++ - div abs:[63,585 306x98] rel:[40,13 306x98] grow:1 basis:0 layout_hint:expanded
++ - div "Notifications are blocked" abs:[63,585 306x16] rel:[0,0 306x16] font:13/700 color:font-headline
++ - div "Allow MemoX in your phone’s notification settings to receive the reminder." abs:[63,603 306x36] rel:[0,18 306x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
++ - pill-btn "Open system settings" abs:[63,649 175x34] rel:[0,64 175x34] flex:row gap:6 justify:center align:center pad:0/14 margin:10/0/0/0 bg:seed-indigo font:12/600 color:on-primary text:center r:9
++ - span abs:[77,659 13x13] rel:[14,11 13x13] flex:row
++ - icon:external-link abs:[77,659 13x13] rel:[0,0 13x13] clip
+  - item[3] div abs:[22,714 362x86] rel:[14,614 362x86] margin:0/0/18/0
   ...
 ```
 
 ## State: Saving (ordered diff vs Goal on)
 
 ```diff
-  - title "Learning" font:16/700 color:font-headline
-- - div "Saved" flex:row gap:5 align:center bg:mastery@10 font:11/600 color:mastery r:999 pad:4/9 op:0
-+ - div "Saved" flex:row gap:5 align:center bg:mastery@10 font:11/600 color:mastery r:999 pad:4/9
-  - span flex:row
+  - title "Learning" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline
+- - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999 op:0
++ - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999
+  - span abs:[332,71 11x11] rel:[9,5 11x11] flex:row
   ...
 ```
