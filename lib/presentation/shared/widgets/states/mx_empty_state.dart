@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:memox/core/theme/extensions/theme_context.dart';
-import 'package:memox/core/theme/tokens/opacity_tokens.dart';
-import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
@@ -57,20 +55,7 @@ class MxEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              width: SizeTokens.buttonLg,
-              height: SizeTokens.buttonLg,
-              decoration: BoxDecoration(
-                color: scheme.primary.withValues(alpha: OpacityTokens.hover),
-                borderRadius: RadiusTokens.brLg,
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                icon,
-                size: SizeTokens.surfaceBadge,
-                color: scheme.primary,
-              ),
-            ),
+            Icon(icon, size: SizeTokens.iconXl, color: scheme.primary),
             const SizedBox(height: SpacingTokens.md),
             Text(title, style: text.titleMedium),
             if (message != null) ...<Widget>[

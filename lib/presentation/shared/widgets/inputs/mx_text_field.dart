@@ -109,26 +109,26 @@ class MxTextField extends StatelessWidget {
             : const BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: const EdgeInsets.all(SpacingTokens.md),
         border: OutlineInputBorder(
-          borderRadius: RadiusTokens.brLg,
+          borderRadius: RadiusTokens.brMd,
           borderSide: BorderSide(color: scheme.outlineVariant),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: RadiusTokens.brLg,
+          borderRadius: RadiusTokens.brMd,
           borderSide: BorderSide(color: scheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: RadiusTokens.brLg,
+          borderRadius: RadiusTokens.brMd,
           borderSide: BorderSide(
             color: scheme.primary,
             width: BorderTokens.focusWidth,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: RadiusTokens.brLg,
+          borderRadius: RadiusTokens.brMd,
           borderSide: BorderSide(color: scheme.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: RadiusTokens.brLg,
+          borderRadius: RadiusTokens.brMd,
           borderSide: BorderSide(
             color: scheme.error,
             width: BorderTokens.focusWidth,

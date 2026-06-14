@@ -27,7 +27,9 @@ class MxContentShell extends StatelessWidget {
   const MxContentShell({
     required this.child,
     this.maxWidth = Breakpoints.maxBodyWidth,
-    this.padding = const EdgeInsets.symmetric(horizontal: SpacingTokens.lg),
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: SpacingTokens.screenPadding,
+    ),
     super.key,
   });
 

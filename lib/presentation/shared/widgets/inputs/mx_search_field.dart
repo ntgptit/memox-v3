@@ -3,6 +3,7 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
+import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
 /// Rounded search field — leading search glyph + trailing clear
 /// (`docs/system-design/MemoX Design System/ui_kits/mobile/index.html`
@@ -43,9 +44,9 @@ class MxSearchField extends StatelessWidget {
     super.key,
   });
 
-  static const double _fieldHeight = 52;
-  static const double _fieldHorizontalPadding = 14;
-  static const double _leadingIconGap = 10;
+  static const double _fieldHeight = SizeTokens.input;
+  static const double _fieldHorizontalPadding = SpacingTokens.form;
+  static const double _leadingIconGap = SpacingTokens.inline;
 
   final TextEditingController controller;
   final String hintText;
@@ -94,7 +95,7 @@ class MxSearchField extends StatelessWidget {
               ),
               prefixIcon: Padding(
                 padding: const EdgeInsetsDirectional.only(
-                  start: 14,
+                  start: SpacingTokens.form,
                   end: _leadingIconGap,
                 ),
                 child: Icon(

@@ -40,7 +40,7 @@ class MxMatchTile extends StatelessWidget {
     required this.label,
     required this.state,
     this.onTap,
-    this.height = 48,
+    this.height = SizeTokens.touch,
     super.key,
   });
 

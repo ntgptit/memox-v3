@@ -6,6 +6,7 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
 import 'package:memox/core/theme/tokens/easing_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 
 /// One column of an [MxBarChart].
@@ -48,7 +49,11 @@ class MxBarDatum {
 /// Category:
 /// display
 class MxBarChart extends StatefulWidget {
-  const MxBarChart({required this.data, this.height = 80, super.key});
+  const MxBarChart({
+    required this.data,
+    this.height = SizeTokens.chart,
+    super.key,
+  });
 
   final List<MxBarDatum> data;
   final double height;

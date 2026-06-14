@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
+import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 
 void main() {
@@ -29,7 +31,7 @@ void main() {
     );
 
     final Finder textField = find.byType(TextField);
-    expect(tester.getSize(textField).height, 52);
+    expect(tester.getSize(textField).height, SizeTokens.input);
     expect(
       tester.widget<TextField>(textField).decoration!.border,
       isA<OutlineInputBorder>().having(
@@ -40,7 +42,7 @@ void main() {
     );
     expect(
       tester.getTopLeft(find.byIcon(Icons.search)).dx,
-      greaterThanOrEqualTo(14),
+      greaterThanOrEqualTo(SpacingTokens.form),
     );
     expect(find.byIcon(Icons.search), findsOneWidget);
     expect(find.byIcon(Icons.close), findsNothing);

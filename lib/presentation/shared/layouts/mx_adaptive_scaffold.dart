@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:memox/core/theme/responsive/breakpoints.dart';
 import 'package:memox/presentation/shared/layouts/mx_content_shell.dart';
+import 'package:memox/presentation/shared/widgets/navigation/mx_bottom_navigation_bar.dart';
 
 /// A top-level navigation destination for [MxAdaptiveScaffold].
 /// Category:
@@ -72,17 +73,10 @@ class MxAdaptiveScaffold extends StatelessWidget {
         appBar: appBar,
         floatingActionButton: floatingActionButton,
         body: content,
-        bottomNavigationBar: NavigationBar(
+        bottomNavigationBar: MxBottomNavigationBar(
           selectedIndex: selectedIndex,
           onDestinationSelected: onDestinationSelected,
-          destinations: <Widget>[
-            for (final MxNavDestination d in destinations)
-              NavigationDestination(
-                icon: Icon(d.icon),
-                selectedIcon: Icon(d.selectedIcon),
-                label: d.label,
-              ),
-          ],
+          destinations: destinations,
         ),
       );
     }
