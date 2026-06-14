@@ -167,7 +167,7 @@ class _DashboardAppBarTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        MxText(title, role: MxTextRole.titleMedium, color: scheme.onSurface),
+        MxText(title, role: MxTextRole.headlineMedium, color: scheme.onSurface),
         const SizedBox(height: SpacingTokens.xxs),
         MxText(
           subtitle,
@@ -190,7 +190,10 @@ class _DashboardResumeSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        MxSectionHeader(label: l10n.dashboardResumeSectionTitle),
+        _DashboardOverlineLabel(
+          label: l10n.dashboardResumeSectionTitle,
+          accent: context.customColors.streak,
+        ),
         const SizedBox(height: SpacingTokens.sm),
         _DashboardResumeCard(summary: summary),
       ],
@@ -232,7 +235,10 @@ class _DashboardResumeCard extends ConsumerWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const MxIconTile(icon: Icons.pause_rounded),
+              MxIconTile(
+                icon: Icons.pause_rounded,
+                color: context.customColors.streak,
+              ),
               const SizedBox(width: SpacingTokens.md),
               Expanded(
                 child: Column(
@@ -261,15 +267,16 @@ class _DashboardResumeCard extends ConsumerWidget {
           MxLinearProgress(value: progress, height: SpacingTokens.xs),
           const SizedBox(height: SpacingTokens.md),
           MxCardActions(
+            primary: MxActionButton(
+              intent: MxActionIntent.cardPrimary,
+              label: l10n.dashboardContinueSessionAction,
+              icon: Icons.play_arrow_rounded,
+              onPressed: () => context.pushStudySession(summary.session.id),
+            ),
             secondary: MxActionButton(
               intent: MxActionIntent.cardSecondary,
               label: l10n.dashboardDiscardAction,
               onPressed: () => _discard(context, ref),
-            ),
-            primary: MxActionButton(
-              intent: MxActionIntent.cardPrimary,
-              label: l10n.dashboardContinueSessionAction,
-              onPressed: () => context.pushStudySession(summary.session.id),
             ),
           ),
         ],
@@ -469,10 +476,20 @@ class _DashboardTodayCardBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          MxText(
-            StringUtils.uppercased(l10n.dashboardTodayReviewOverline),
-            role: MxTextRole.labelLarge,
-            color: context.colorScheme.primary,
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.bolt_rounded,
+                size: SizeTokens.iconSm,
+                color: context.customColors.accent,
+              ),
+              const SizedBox(width: SpacingTokens.xs),
+              MxText(
+                StringUtils.uppercased(l10n.dashboardTodayReviewOverline),
+                role: MxTextRole.labelLarge,
+                color: context.colorScheme.primary,
+              ),
+            ],
           ),
           const SizedBox(height: SpacingTokens.sm),
           MxText(
@@ -504,6 +521,7 @@ class _DashboardTodayCardBody extends StatelessWidget {
             primary: MxActionButton(
               intent: MxActionIntent.cardPrimary,
               label: l10n.dashboardStartReviewAction,
+              icon: Icons.play_arrow_rounded,
               onPressed: hasDueCards
                   ? () => context.goStudyEntry(entryType: EntryType.today)
                   : null,
@@ -593,9 +611,15 @@ class _DashboardRecentDecksSection extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: SpacingTokens.sm),
-            for (final DashboardRecentDeck deck
-                in highlights.recentDecks) ...<Widget>[
-              _DashboardRecentDeckRow(deck: deck),
+            for (
+              int index = 0;
+              index < highlights.recentDecks.length;
+              index++
+            ) ...<Widget>[
+              _DashboardRecentDeckRow(
+                deck: highlights.recentDecks[index],
+                index: index,
+              ),
               const SizedBox(height: SpacingTokens.sm),
             ],
           ],
@@ -606,13 +630,19 @@ class _DashboardRecentDecksSection extends ConsumerWidget {
 }
 
 class _DashboardRecentDeckRow extends StatelessWidget {
-  const _DashboardRecentDeckRow({required this.deck});
+  const _DashboardRecentDeckRow({required this.deck, required this.index});
 
   final DashboardRecentDeck deck;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final Color accent = switch (index % 3) {
+      0 => context.customColors.mastery,
+      1 => context.customColors.accent,
+      _ => context.customColors.streak,
+    };
     final String cardsLabel = l10n.dashboardDeckCardCount(deck.cardCount);
     final String metaLabel = deck.lastStudiedAt == null
         ? cardsLabel
@@ -628,7 +658,7 @@ class _DashboardRecentDeckRow extends StatelessWidget {
       onTap: () => context.pushFlashcardList(deck.deckId),
       child: Row(
         children: <Widget>[
-          const MxIconTile(icon: Icons.style_outlined),
+          MxIconTile(icon: Icons.style_outlined, color: accent),
           const SizedBox(width: SpacingTokens.md),
           Expanded(
             child: Column(
@@ -662,6 +692,30 @@ class _DashboardRecentDeckRow extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DashboardOverlineLabel extends StatelessWidget {
+  const _DashboardOverlineLabel({required this.label, required this.accent});
+
+  final String label;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: <Widget>[
+      Container(
+        width: SpacingTokens.compact,
+        height: SpacingTokens.compact,
+        decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+      ),
+      const SizedBox(width: SpacingTokens.tight),
+      MxText(
+        StringUtils.uppercased(label),
+        role: MxTextRole.labelLarge,
+        color: context.colorScheme.onSurfaceVariant,
+      ),
+    ],
+  );
 }
 
 class _DashboardOnboardingState extends StatelessWidget {
