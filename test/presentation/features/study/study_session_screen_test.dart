@@ -12,6 +12,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
+import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/study_match_evaluation.dart';
@@ -758,7 +759,7 @@ void main() {
 
       expect(find.byType(StudySessionRecallModeView), findsOneWidget);
       expect(find.text(l10n.studySessionRecallModeLabel), findsOneWidget);
-      expect(find.text('1/1'), findsOneWidget);
+      expect(find.text('1 / 1'), findsOneWidget);
       expect(find.text('Front 1'), findsOneWidget);
       expect(find.text('Back 1'), findsNothing);
       expect(find.text(l10n.studyForgotAction), findsNothing);
@@ -1717,11 +1718,26 @@ void main() {
       final AppLocalizations l10n = AppLocalizations.of(
         tester.element(find.byType(StudySessionScreen)),
       );
+      final ThemeData theme = Theme.of(
+        tester.element(find.byType(StudySessionScreen)),
+      );
 
       expect(find.byType(StudySessionFillModeView), findsOneWidget);
       expect(find.text(l10n.studySessionFillModeLabel), findsOneWidget);
       expect(find.text('Be happy (gây vui)'), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
+      expect(
+        tester.widget<Text>(find.text('Be happy (gây vui)')).style?.fontSize,
+        theme.textTheme.bodyMedium?.fontSize,
+      );
+      expect(
+        tester.widget<TextField>(find.byType(TextField)).style?.fontSize,
+        theme.textTheme.displayLarge?.fontSize,
+      );
+      expect(
+        tester.widget<TextField>(find.byType(TextField)).style?.fontWeight,
+        TypographyTokens.bold,
+      );
       expect(
         tester
             .widget<MxActionButton>(

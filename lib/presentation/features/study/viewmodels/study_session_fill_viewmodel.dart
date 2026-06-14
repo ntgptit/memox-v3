@@ -4,6 +4,7 @@ import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
+import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/fill/fill_answer_evaluator.dart';
 import 'package:memox/domain/study/modes/study_mode_strategy.dart';
@@ -60,7 +61,7 @@ class StudySessionFillController extends _$StudySessionFillController {
     return _resolveUnavailableCurrentItem(initialState);
   }
 
-  void updateInput(String value) {
+  void setFillInputText(String value) {
     final StudySessionFillState? current = _currentState;
     if (current == null || current.isBusy || current.isFeedbackVisible) {
       return;
@@ -597,7 +598,7 @@ class StudySessionFillState {
   bool get canCheckCurrentItem =>
       isTyping &&
       !isBusy &&
-      inputText.trim().isNotEmpty &&
+      StringUtils.trimmed(inputText).isNotEmpty &&
       !currentItemAnswered;
 
   bool get canRevealHint =>

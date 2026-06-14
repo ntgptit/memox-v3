@@ -5,6 +5,8 @@ import 'package:memox/core/theme/tokens/radius_tokens.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
+import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 
 /// Study-session chrome: close, mode badge, thin progress track, n/total.
 ///
@@ -51,6 +53,7 @@ class MxStudyTopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
+    final AppLocalizations l10n = AppLocalizations.of(context);
     final Color tone = accent ?? scheme.primary;
     final double progress = total <= 0 ? 0 : (current / total).clamp(0, 1);
     return SafeArea(
@@ -64,10 +67,11 @@ class MxStudyTopBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm),
               child: Row(
                 children: <Widget>[
-                  IconButton(
+                  MxIconButton(
                     onPressed: onClose,
-                    icon: const Icon(Icons.close),
-                    iconSize: SizeTokens.iconMd,
+                    icon: Icons.close,
+                    tooltip: l10n.commonClose,
+                    size: MxIconButtonSize.compact,
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -88,9 +92,10 @@ class MxStudyTopBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '$current/$total',
-                    style: context.textTheme.labelLarge?.copyWith(
+                    '$current / $total',
+                    style: context.textTheme.labelMedium?.copyWith(
                       color: scheme.onSurfaceVariant,
+                      fontWeight: TypographyTokens.semiBold,
                     ),
                   ),
                   const SizedBox(width: SpacingTokens.sm),

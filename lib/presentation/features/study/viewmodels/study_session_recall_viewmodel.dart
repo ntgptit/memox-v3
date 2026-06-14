@@ -17,6 +17,8 @@ part 'study_session_recall_viewmodel.g.dart';
 
 @riverpod
 class StudySessionRecallController extends _$StudySessionRecallController {
+  static const Duration _countdownTick = DurationTokens.oneSecond;
+
   late final StudyModeStrategy _studyModeStrategy;
 
   Timer? _countdownTimer;
@@ -52,7 +54,8 @@ class StudySessionRecallController extends _$StudySessionRecallController {
     if (review.session.status == SessionStatus.inProgress &&
         initialState.allAnswered) {
       unawaited(_finalizeCurrentSession(initialState));
-    } else if (!initialState.allAnswered) {
+    }
+    if (!initialState.allAnswered) {
       _startCountdown();
     }
 
@@ -152,7 +155,7 @@ class StudySessionRecallController extends _$StudySessionRecallController {
 
   void _startCountdown() {
     _countdownTimer?.cancel();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _countdownTimer = Timer.periodic(_countdownTick, (_) {
       final StudySessionRecallState? current = _currentState;
       if (current == null ||
           current.isBusy ||

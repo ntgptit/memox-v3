@@ -24,6 +24,9 @@ abstract final class DurationTokens {
   /// Review card flip.
   static const Duration cardFlip = Duration(milliseconds: 350);
 
+  /// Countdown tick used by timed study interactions.
+  static const Duration oneSecond = Duration(seconds: 1);
+
   /// Guess-mode answer reveal before auto-advance on a correct tap.
   static const Duration guessCorrectCountdown = Duration(milliseconds: 800);
 

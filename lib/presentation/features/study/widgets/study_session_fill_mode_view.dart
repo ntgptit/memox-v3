@@ -29,6 +29,8 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart'
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_inline_text_field.dart';
+import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_study_top_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
@@ -115,7 +117,7 @@ class StudySessionFillModeView extends HookConsumerWidget {
           input: input,
           inputFocusNode: inputFocusNode,
           onChanged: (String text) =>
-              ref.read(provider.notifier).updateInput(text),
+              ref.read(provider.notifier).setFillInputText(text),
           onHint: () => ref.read(provider.notifier).revealHint(),
           onCheck: () => ref.read(provider.notifier).checkAnswer(),
           onMarkCorrect: () => ref.read(provider.notifier).markCorrect(),
@@ -430,8 +432,6 @@ class _FillPromptCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = context.colorScheme;
     final String promptText = _promptText(item);
 
     return MxCard(
@@ -445,13 +445,11 @@ class _FillPromptCard extends StatelessWidget {
               child: Semantics(
                 label: promptText,
                 child: Center(
-                  child: Text(
+                  child: MxText(
                     promptText,
+                    role: MxTextRole.bodyMedium,
+                    color: context.colorScheme.onSurface,
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: scheme.onSurface,
-                      height: 1.4,
-                    ),
                   ),
                 ),
               ),
@@ -505,8 +503,6 @@ class _FillAnswerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = context.colorScheme;
     final Duration animationDuration = reduceMotion
         ? Duration.zero
         : DurationTokens.contentSwitch;
@@ -530,8 +526,6 @@ class _FillAnswerCard extends StatelessWidget {
                   'fill-feedback-${state.feedbackResult?.name ?? 'ready'}',
                 ),
                 state: state,
-                theme: theme,
-                scheme: scheme,
                 onTryAgain: onTryAgain,
                 onSpeakFront: onSpeakFront,
               ),
@@ -555,68 +549,36 @@ class _TypingState extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = context.colorScheme;
-    final TextStyle? textStyle = theme.textTheme.displaySmall?.copyWith(
-      color: scheme.onSurface,
-      fontWeight: TypographyTokens.semiBold,
-    );
-    final TextStyle? hintStyle = theme.textTheme.displaySmall?.copyWith(
-      color: scheme.onSurfaceVariant,
-      fontWeight: TypographyTokens.semiBold,
-    );
-
-    return Padding(
-      padding: const EdgeInsets.all(SpacingTokens.xl),
-      child: Semantics(
-        liveRegion: true,
-        label: state.hasHint
-            ? state.hintedFront
-            : StringUtils.trimmed(state.inputText),
-        child: Center(
-          child: TextField(
-            controller: input.controller,
-            focusNode: inputFocusNode,
-            autofocus: true,
-            textAlign: TextAlign.center,
-            textCapitalization: TextCapitalization.none,
-            autocorrect: false,
-            enableSuggestions: false,
-            style: textStyle,
-            cursorColor: scheme.primary,
-            cursorWidth: 2,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              isDense: true,
-              isCollapsed: true,
-              contentPadding: EdgeInsets.zero,
-              hintText: state.hasHint ? state.hintedFront : null,
-              hintStyle: hintStyle,
-            ),
-            onChanged: onChanged,
-          ),
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.all(SpacingTokens.xl),
+    child: Semantics(
+      liveRegion: true,
+      label: state.hasHint
+          ? state.hintedFront
+          : StringUtils.trimmed(state.inputText),
+      child: Center(
+        child: MxInlineTextField(
+          controller: input.controller,
+          focusNode: inputFocusNode,
+          autofocus: true,
+          textInputAction: TextInputAction.done,
+          hintText: state.hasHint ? state.hintedFront : null,
+          onChanged: onChanged,
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class _FeedbackState extends StatelessWidget {
   const _FeedbackState({
     super.key,
     required this.state,
-    required this.theme,
-    required this.scheme,
     required this.onTryAgain,
     required this.onSpeakFront,
   });
 
   final StudySessionFillState state;
-  final ThemeData theme;
-  final ColorScheme scheme;
   final VoidCallback onTryAgain;
   final VoidCallback? onSpeakFront;
 
@@ -629,35 +591,32 @@ class _FeedbackState extends StatelessWidget {
         ? Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
+              MxText(
                 StringUtils.trimmed(state.inputText),
+                role: MxTextRole.displaySmall,
+                color: context.colorScheme.error,
+                fontWeight: TypographyTokens.bold,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: scheme.error,
-                  fontWeight: TypographyTokens.semiBold,
-                ),
               ),
               const SizedBox(height: SpacingTokens.sm),
-              Text(
+              MxText(
                 state.currentItem.flashcard.front,
+                role: MxTextRole.displaySmall,
+                color: context.colorScheme.onSurface,
+                fontWeight: TypographyTokens.bold,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: scheme.onSurface,
-                  fontWeight: TypographyTokens.semiBold,
-                ),
               ),
             ],
           )
         : Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
+              MxText(
                 StringUtils.trimmed(state.inputText),
+                role: MxTextRole.displaySmall,
+                color: context.colorScheme.onSurface,
+                fontWeight: TypographyTokens.bold,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: scheme.onSurface,
-                  fontWeight: TypographyTokens.semiBold,
-                ),
               ),
               const SizedBox(height: SpacingTokens.sm),
               const Icon(Icons.check_rounded, size: SizeTokens.iconLg),
@@ -806,11 +765,14 @@ Future<void> _applyCardAction({
   required String failureMessage,
   required Future<Result<void>> Function() call,
 }) async {
-  final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+  final ScaffoldMessengerState? messenger = ScaffoldMessenger.maybeOf(context);
   final ColorScheme scheme = context.colorScheme;
   final AppLocalizations l10n = AppLocalizations.of(context);
   final Result<void> result = await call();
   if (!context.mounted) {
+    return;
+  }
+  if (messenger == null) {
     return;
   }
 

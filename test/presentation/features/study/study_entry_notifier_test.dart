@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages -- reason: test-only SharedPreferencesAsync platform helpers live in the transitive platform_interface package.
+
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +18,8 @@ import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:riverpod/misc.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 class _FakeStudyRepository implements StudyRepository {
   _FakeStudyRepository(this.result);
@@ -141,6 +145,18 @@ class _FakeStudyRepository implements StudyRepository {
 }
 
 void main() {
+  late SharedPreferencesAsyncPlatform? previousPlatform;
+
+  setUp(() {
+    previousPlatform = SharedPreferencesAsyncPlatform.instance;
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
+  });
+
+  tearDown(() {
+    SharedPreferencesAsyncPlatform.instance = previousPlatform;
+  });
+
   test('invalid entryType throws a format exception', () async {
     final ProviderContainer container = ProviderContainer();
     addTearDown(container.dispose);

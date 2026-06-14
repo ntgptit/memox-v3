@@ -5,6 +5,8 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 /// Semantic typography role — feature code selects intent, not a Material slot
 /// (`memox.design_system.no_direct_text_theme`).
 enum MxTextRole {
+  displayLarge,
+  displayMedium,
   displaySmall,
   headlineMedium,
   titleLarge,
@@ -75,6 +77,8 @@ class MxText extends StatelessWidget {
   }
 
   TextStyle? _baseStyle(TextTheme t) => switch (role) {
+    MxTextRole.displayLarge => t.displayLarge,
+    MxTextRole.displayMedium => t.displayMedium,
     MxTextRole.displaySmall => t.displaySmall,
     MxTextRole.headlineMedium => t.headlineMedium,
     MxTextRole.titleLarge => t.titleLarge,

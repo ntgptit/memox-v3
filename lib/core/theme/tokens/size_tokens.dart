@@ -49,6 +49,9 @@ abstract final class SizeTokens {
   /// Floating action button.
   static const double fab = 56;
 
+  /// Compact in-card placeholder line.
+  static const double bar = 4;
+
   /// In-card data visualization height (Progress bar chart / sparkline —
   /// kit `19-progress` measures both plot areas at 80px).
   static const double chart = 80;

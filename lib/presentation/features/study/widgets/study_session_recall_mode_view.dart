@@ -11,6 +11,7 @@ import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/duration_tokens.dart';
 import 'package:memox/core/theme/tokens/opacity_tokens.dart';
 import 'package:memox/core/theme/tokens/radius_tokens.dart';
+import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/core/theme/tokens/typography_tokens.dart';
 import 'package:memox/domain/models/study_session_review.dart';
@@ -27,6 +28,7 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart'
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_study_top_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
@@ -150,7 +152,10 @@ class _StudySessionRecallModeViewState
         label: l10n.studyFinalizeAction,
         onPressed: () async {
           final bool finished = await onRetryFinalize();
-          if (!context.mounted || !finished) {
+          if (!finished) {
+            return;
+          }
+          if (!context.mounted) {
             return;
           }
           widget.onFinalized();
@@ -164,11 +169,10 @@ class _StudySessionRecallModeViewState
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (state.revealedByTimeout) ...<Widget>[
-            Text(
+            MxText(
               l10n.studySessionRecallTimeoutCaption,
-              style: context.textTheme.labelLarge?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
+              role: MxTextRole.labelLarge,
+              color: context.colorScheme.onSurfaceVariant,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: SpacingTokens.sm),
@@ -359,8 +363,6 @@ class _RecallFrontCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = context.colorScheme;
     final bool showSpeakAction =
         item.targetLanguage != TargetLanguage.unsupported;
 
@@ -371,17 +373,16 @@ class _RecallFrontCard extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 28),
+              padding: const EdgeInsets.symmetric(vertical: SpacingTokens.xxl),
               child: Center(
-                child: Text(
+                child: MxText(
                   item.flashcard.front,
+                  role: MxTextRole.displaySmall,
+                  color: context.colorScheme.onSurface,
+                  fontWeight: TypographyTokens.semiBold,
                   textAlign: TextAlign.center,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.displaySmall?.copyWith(
-                    color: scheme.onSurface,
-                    fontWeight: TypographyTokens.semiBold,
-                  ),
                 ),
               ),
             ),
@@ -426,7 +427,6 @@ class _RecallBackCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme scheme = context.colorScheme;
     final Duration animationDuration = reduceMotion
         ? Duration.zero
         : DurationTokens.contentSwitch;
@@ -441,22 +441,21 @@ class _RecallBackCard extends StatelessWidget {
                 child: Align(
                   key: const ValueKey<String>('recall-back-visible'),
                   alignment: Alignment.centerLeft,
-                  child: Text(
+                  child: MxText(
                     back,
+                    role: MxTextRole.bodyLarge,
+                    color: context.colorScheme.onSurface,
                     textAlign: TextAlign.left,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(color: scheme.onSurface),
                   ),
                 ),
               )
             : Center(
                 key: const ValueKey<String>('recall-back-hidden'),
                 child: Container(
-                  width: 56,
-                  height: 4,
+                  width: SizeTokens.fab,
+                  height: SizeTokens.bar,
                   decoration: BoxDecoration(
-                    color: scheme.onSurfaceVariant.withValues(
+                    color: context.colorScheme.onSurfaceVariant.withValues(
                       alpha: OpacityTokens.hover,
                     ),
                     borderRadius: RadiusTokens.brFull,
@@ -480,7 +479,10 @@ Future<void> _openCardActions(
     context,
     front: item.flashcard.front,
   );
-  if (!context.mounted || action == null) {
+  if (action == null) {
+    return;
+  }
+  if (!context.mounted) {
     return;
   }
 
@@ -559,11 +561,14 @@ Future<void> _applyCardAction({
   required String failureMessage,
   required Future<Result<void>> Function() call,
 }) async {
-  final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+  final ScaffoldMessengerState? messenger = ScaffoldMessenger.maybeOf(context);
   final ColorScheme scheme = context.colorScheme;
   final AppLocalizations l10n = AppLocalizations.of(context);
   final Result<void> result = await call();
   if (!context.mounted) {
+    return;
+  }
+  if (messenger == null) {
     return;
   }
 
