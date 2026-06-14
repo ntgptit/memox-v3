@@ -28,7 +28,6 @@ class FolderUnlockedEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final ColorScheme scheme = context.colorScheme;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -42,87 +41,135 @@ class FolderUnlockedEmpty extends StatelessWidget {
         children: <Widget>[
           _EmptyChip(label: l10n.folderDetailEmptyFolderChipLabel),
           const SizedBox(height: SpacingTokens.sm),
-          MxCard(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: SizeTokens.buttonLg,
-                  height: SizeTokens.buttonLg,
-                  decoration: BoxDecoration(
-                    color: scheme.primary.withValues(
-                      alpha: OpacityTokens.hover,
-                    ),
-                    borderRadius: RadiusTokens.brLg,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.folder_open_outlined,
-                    size: SizeTokens.surfaceBadge,
-                    color: scheme.primary,
-                  ),
-                ),
-                const SizedBox(height: SpacingTokens.lg),
-                MxText(
-                  l10n.folderDetailEmptyTitle,
-                  role: MxTextRole.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: SpacingTokens.xs),
-                MxText(
-                  l10n.folderDetailEmptyMessage,
-                  role: MxTextRole.bodyMedium,
-                  color: scheme.onSurfaceVariant,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+          _IntroCard(
+            title: l10n.folderDetailEmptyTitle,
+            message: l10n.folderDetailEmptyMessage,
           ),
           const SizedBox(height: SpacingTokens.md),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: MxPrimaryButton(
-                  label: l10n.folderNewDeckLabel,
-                  icon: Icons.layers_outlined,
-                  onPressed: onNewDeck,
-                  fullWidth: true,
-                ),
-              ),
-              const SizedBox(width: SpacingTokens.sm),
-              Expanded(
-                child: MxSecondaryButton(
-                  label: l10n.folderNewSubfolderLabel,
-                  icon: Icons.create_new_folder_outlined,
-                  onPressed: onNewSubfolder,
-                  fullWidth: true,
-                ),
-              ),
-            ],
+          _ActionRow(
+            onNewDeck: onNewDeck,
+            onNewSubfolder: onNewSubfolder,
+            deckLabel: l10n.folderNewDeckLabel,
+            subfolderLabel: l10n.folderNewSubfolderLabel,
           ),
           const SizedBox(height: SpacingTokens.md),
-          MxCard(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SpacingTokens.md,
-              vertical: SpacingTokens.sm,
+          _HintCard(hint: l10n.folderDetailEmptyHint),
+        ],
+      ),
+    );
+  }
+}
+
+class _IntroCard extends StatelessWidget {
+  const _IntroCard({required this.title, required this.message});
+
+  final String title;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = context.colorScheme;
+    return MxCard(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: SizeTokens.buttonLg,
+            height: SizeTokens.buttonLg,
+            decoration: BoxDecoration(
+              color: scheme.primary.withValues(alpha: OpacityTokens.hover),
+              borderRadius: RadiusTokens.brLg,
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Icon(
-                  Icons.info_outline,
-                  size: SizeTokens.iconMinor,
-                  color: scheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: SpacingTokens.sm),
-                Expanded(
-                  child: MxText(
-                    l10n.folderDetailEmptyHint,
-                    role: MxTextRole.labelMedium,
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.folder_open_outlined,
+              size: SizeTokens.surfaceBadge,
+              color: scheme.primary,
+            ),
+          ),
+          const SizedBox(height: SpacingTokens.lg),
+          MxText(
+            title,
+            role: MxTextRole.titleMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: SpacingTokens.xs),
+          MxText(
+            message,
+            role: MxTextRole.bodyMedium,
+            color: scheme.onSurfaceVariant,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionRow extends StatelessWidget {
+  const _ActionRow({
+    required this.onNewDeck,
+    required this.onNewSubfolder,
+    required this.deckLabel,
+    required this.subfolderLabel,
+  });
+
+  final VoidCallback onNewDeck;
+  final VoidCallback onNewSubfolder;
+  final String deckLabel;
+  final String subfolderLabel;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: <Widget>[
+      Expanded(
+        child: MxPrimaryButton(
+          label: deckLabel,
+          icon: Icons.layers_outlined,
+          onPressed: onNewDeck,
+          fullWidth: true,
+        ),
+      ),
+      const SizedBox(width: SpacingTokens.sm),
+      Expanded(
+        child: MxSecondaryButton(
+          label: subfolderLabel,
+          icon: Icons.create_new_folder_outlined,
+          onPressed: onNewSubfolder,
+          fullWidth: true,
+        ),
+      ),
+    ],
+  );
+}
+
+class _HintCard extends StatelessWidget {
+  const _HintCard({required this.hint});
+
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = context.colorScheme;
+    return MxCard(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.md,
+        vertical: SpacingTokens.sm,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(
+            Icons.info_outline,
+            size: SizeTokens.iconMinor,
+            color: scheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: SpacingTokens.sm),
+          Expanded(
+            child: MxText(
+              hint,
+              role: MxTextRole.labelMedium,
+              color: scheme.onSurfaceVariant,
             ),
           ),
         ],
