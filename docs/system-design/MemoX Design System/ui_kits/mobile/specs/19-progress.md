@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,31 +30,33 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Week
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 justify:between align:center pad:0/14
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/14
     - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline tracking:-0.5
-    - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] flex:row justify:center align:center pos:relative r:999
+    - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
         - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1088
     - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
-      - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
-      - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-      - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-    - card abs:[22,160 362x197] rel:[14,52 362x197] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+      - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+      - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+    - card abs:[22,160 362x197] rel:[14,52 362x197] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,175 332x59] rel:[15,15 332x59] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
         - div abs:[37,175 103x59] rel:[0,0 103x59]
           - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
@@ -83,7 +85,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
         - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
         - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-    - card abs:[22,369 362x182] rel:[14,261 362x182] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,369 362x182] rel:[14,261 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,384 332x60] rel:[15,15 332x60] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
         - div abs:[37,384 133x60] rel:[0,0 133x60]
           - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant tracking:1.2
@@ -94,7 +96,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
             - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
       - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
-    - card abs:[22,564 362x284] rel:[14,456 362x284] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,564 362x284] rel:[14,456 362x284] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,579 332x59] rel:[15,15 332x59] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
         - div abs:[37,579 126x59] rel:[0,0 126x59]
           - ov "Box distribution" abs:[37,579 126x13] rel:[0,0 126x13] font:11/700 color:on-surface-variant tracking:1.2
@@ -144,7 +146,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div abs:[37,821 332x12] rel:[15,257 332x12] flex:row justify:between pad:0/22 margin:10/0/0/0
         - span "B1 · least known" abs:[59,821 73x12] rel:[22,0 73x12] font:10/400 color:on-surface-variant
         - span "B8 · best known" abs:[273,821 74x12] rel:[236,0 74x12] font:10/400 color:on-surface-variant
-    - card abs:[22,860 362x113] rel:[14,752 362x113] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,860 362x113] rel:[14,752 362x113] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,875 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
         - ov "Streak" abs:[37,875 49x13] rel:[0,0 49x13] font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[37,900 332x58] rel:[15,40 332x58] flex:row gap:10
@@ -163,7 +165,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             - div "Longest" abs:[263,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant tracking:0.3
             - div "42 days" abs:[263,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
     - ov "Card states" abs:[22,985 362x23] rel:[14,877 362x23] pad:2/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - card abs:[22,1008 362x131] rel:[14,900 362x131] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,1008 362x131] rel:[14,900 362x131] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,1009 360x73] rel:[1,1 360x73] grid cols:4 gap:12 align:center pad:12/14
         - div abs:[37,1030 30x30] rel:[14,21 30x30] flex:row justify:center align:center bg:surface-container r:9
           - span abs:[45,1038 14x14] rel:[8,8 14x14] flex:row
@@ -189,21 +191,21 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[354,1103 15x15] rel:[331,21 15x15] flex:row
           - icon:chevron-right abs:[354,1103 15x15] rel:[0,0 15x15] clip
     - div "Read-only summary · last 7 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
       - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
-    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
-    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
       - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
-    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
         - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
       - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
@@ -213,11 +215,11 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
-- - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
-- - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-+ - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-+ - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
-  - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+- - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+- - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
++ - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
++ - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+  - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
   ...
   - ov "Cards studied" abs:[37,175 110x13] rel:[0,0 110x13] font:11/700 color:on-surface-variant tracking:1.2
 - - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
@@ -290,7 +292,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - item[8] span "15" abs:[201,330 12x12] rel:[164,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
 + - span "20" abs:[261,330 12x12] rel:[224,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
 + - item[13] span "25" abs:[321,330 12x12] rel:[284,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-  - card abs:[22,369 362x182] rel:[14,261 362x182] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,369 362x182] rel:[14,261 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
   - ov "Accuracy" abs:[37,384 139x13] rel:[0,0 139x13] font:11/700 color:on-surface-variant tracking:1.2
 - - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
@@ -305,57 +307,57 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - icon:chevron-right abs:[354,1103 15x15] rel:[0,0 15x15] clip
 - - div "Read-only summary · last 7 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
 + - div "Read-only summary · last 28 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
   ...
 ```
 
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 justify:between align:center pad:0/14
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/14
     - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline tracking:-0.5
-    - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] flex:row justify:center align:center pos:relative r:999
+    - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
         - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
-      - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
-      - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-      - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-    - card abs:[22,160 362x151] rel:[14,52 362x151] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
+      - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+      - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
+    - card abs:[22,160 362x151] rel:[14,52 362x151] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,175 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
       - span abs:[37,192 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
       - span abs:[37,226 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
-    - card abs:[22,323 362x151] rel:[14,215 362x151] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,323 362x151] rel:[14,215 362x151] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,338 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
       - span abs:[37,355 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
       - span abs:[37,389 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
-    - card abs:[22,486 362x151] rel:[14,378 362x151] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,486 362x151] rel:[14,378 362x151] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,501 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
       - span abs:[37,518 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
       - span abs:[37,552 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
       - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
-    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
-    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
       - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
-    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
         - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
       - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
@@ -399,7 +401,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
 + - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
 + - div "No study sessions in this range yet. Start any deck to begin tracking trends." abs:[37,200 332x86] rel:[15,40 332x86] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,313 362x123] rel:[14,205 362x123] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,313 362x123] rel:[14,205 362x123] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   - div abs:[37,328 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
 - - div abs:[37,384 133x60] rel:[0,0 133x60]
 - - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant tracking:1.2
@@ -412,7 +414,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
 + - ov "Accuracy" abs:[37,328 72x13] rel:[0,0 72x13] font:11/700 color:on-surface-variant tracking:1.2
 + - div "Accuracy appears once you've answered cards." abs:[37,353 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,448 362x123] rel:[14,340 362x123] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,448 362x123] rel:[14,340 362x123] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   - div abs:[37,463 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
 - - div abs:[37,579 126x59] rel:[0,0 126x59]
 - - ov "Box distribution" abs:[37,579 126x13] rel:[0,0 126x13] font:11/700 color:on-surface-variant tracking:1.2
@@ -464,7 +466,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "B8 · best known" abs:[273,821 74x12] rel:[236,0 74x12] font:10/400 color:on-surface-variant
 + - ov "Box distribution" abs:[37,463 122x13] rel:[0,0 122x13] font:11/700 color:on-surface-variant tracking:1.2
 + - div "Cards spread across boxes as you study them." abs:[37,488 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,583 362x123] rel:[14,475 362x123] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,583 362x123] rel:[14,475 362x123] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
   - ov "Streak" abs:[37,598 49x13] rel:[0,0 49x13] font:11/700 color:on-surface-variant tracking:1.2
 - - div abs:[37,900 332x58] rel:[15,40 332x58] flex:row gap:10
@@ -540,7 +542,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:info abs:[50,289 13x13] rel:[0,0 13x13] clip
 + - span "Trend appears after of data." abs:[71,289 180x17] rel:[34,11 180x17] font:11/400/17 color:on-surface-variant
 + - strong "3 days" abs:[174,290 35x13] rel:[103,1 35x13] font:11/700/17 color:font-headline
-  - card abs:[22,344 362x182] rel:[14,236 362x182] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,344 362x182] rel:[14,236 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
 ```
 
@@ -564,47 +566,47 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
 + - ov "Accuracy" abs:[37,384 72x13] rel:[0,0 72x13] font:11/700 color:on-surface-variant tracking:1.2
 + - div "Not enough answered cards yet to show accuracy." abs:[37,409 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,504 362x284] rel:[14,396 362x284] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,504 362x284] rel:[14,396 362x284] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
   ...
 ```
 
 ## State: Error (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 align:center pad:0/14
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/14
     - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline tracking:-0.5
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:24/22 layout_hint:scroll
-    - card abs:[30,275 346x263] rel:[22,167 346x263] pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[30,275 346x263] rel:[22,167 346x263] mx:MxCard pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[177,312 52x52] rel:[147,37 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
         - span abs:[192,327 22x22] rel:[15,15 22x22] flex:row
           - icon:cloud-off abs:[192,327 22x22] rel:[0,0 22x22] clip
       - div "Couldn't summarise your progress" abs:[53,378 300x21] rel:[23,103 300x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
       - div "Your study history is safe on this device. Try again in a moment." abs:[53,405 300x40] rel:[23,130 300x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Retry" abs:[158,462 90x40] rel:[128,186 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+      - pill-btn "Retry" abs:[158,462 90x40] rel:[128,186 90x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[176,475 14x14] rel:[18,13 14x14] flex:row
           - icon:refresh-cw abs:[176,475 14x14] rel:[0,0 14x14] clip
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
       - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
-    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
-    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
       - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
-    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
         - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
       - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center

@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,26 +30,28 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Edit flashcard" abs:[60,66 269x21] rel:[52,14 269x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
+    - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
     - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
     - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
@@ -68,7 +70,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "Last edited ·" abs:[57,132 252x13] rel:[35,9 252x13] grow:1 basis:0 layout_hint:expanded font:11/400 color:on-surface-variant
         - span "3 days ago" abs:[118,132 57x13] rel:[61,0 57x13] font:11/600 color:font-headline
         - span "14 reviews · 78% recall" abs:[179,132 118x13] rel:[122,0 118x13] font:11/400 color:on-surface-variant
-      - button "History" abs:[319,132 52x13] rel:[297,9 52x13] flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
+      - button "History" abs:[319,132 52x13] rel:[297,9 52x13] mx:? flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
         - span abs:[360,133 11x11] rel:[41,1 11x11] flex:row
           - icon:chevron-right abs:[360,133 11x11] rel:[0,0 11x11] clip
     - div abs:[22,168 171x36] rel:[14,45 171x36] flex:row gap:8 align:center pad:6/12/6/8 margin:0/0/16/0 bg:on-primary r:999 border:1px seed-indigo@14
@@ -85,9 +87,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - ov "Front · Korean" abs:[26,220 109x13] rel:[0,0 109x13] font:11/700 color:on-surface-variant tracking:1.2
         - span "Required" abs:[140,221 47x12] rel:[114,1 47x12] font:10/700 color:seed-indigo tracking:0.3
       - span "3 / 60" abs:[352,221 28x12] rel:[330,1 28x12] font:10/600 color:on-surface-variant tracking:0.2
-    - card abs:[22,239 362x96] rel:[14,116 362x96] flex:row align:center pad:14/42/14/14 margin:0/0/14/0 minh:66 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,239 362x96] rel:[14,116 362x96] mx:MxCard flex:row align:center pad:14/42/14/14 margin:0/0/14/0 minh:66 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
       - div "연구자" abs:[37,274 60x26] rel:[15,35 60x26] font:22/700/26 color:font-headline tracking:-0.4
-      - icon-btn abs:[347,272 30x30] rel:[325,33 30x30] flex:row justify:center align:center pos:absolute transform:translate(0,-15) r:999
+      - icon-btn abs:[347,272 30x30] rel:[325,33 30x30] mx:MxIconButton flex:row justify:center align:center pos:absolute transform:translate(0,-15) r:999
         - span abs:[352,277 20x20] rel:[5,5 20x20] flex:row
           - icon:mic abs:[352,277 20x20] rel:[0,0 20x20] clip
     - div abs:[22,349 362x19] rel:[14,226 362x19] flex:row justify:between align:baseline pad:0/4/6/4
@@ -95,7 +97,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - ov "Back · Meaning" abs:[26,349 108x13] rel:[0,0 108x13] font:11/700 color:on-surface-variant tracking:1.2
         - span "Required" abs:[139,350 47x12] rel:[113,1 47x12] font:10/700 color:seed-indigo tracking:0.3
       - span "27 / 240" abs:[340,350 40x12] rel:[318,1 40x12] font:10/600 color:on-surface-variant tracking:0.2
-    - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,368 362x102] rel:[14,245 362x102] mx:MxCard flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
       - div "Researcher / Nhà nghiên cứu" abs:[37,381 203x22] rel:[15,13 203x22] font:15/500/22 color:font-headline
     - ov "Optional details" abs:[22,484 362x25] rel:[14,361 362x25] pad:2/4/10/4 font:11/700 color:on-surface-variant tracking:1.2
     - div abs:[22,509 362x267] rel:[14,386 362x267] flex:col gap:12 margin:0/0/18/0
@@ -123,7 +125,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span "· optional" abs:[246,696 45x12] rel:[224,1 45x12] font:10/500 color:on-surface-variant op:0.55
         - div abs:[22,714 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
           - span "yeon-gu-ja" abs:[35,736 302x19] rel:[13,22 302x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
-          - icon-btn abs:[345,732 26x26] rel:[323,18 26x26] flex:row justify:center align:center pos:relative r:999
+          - icon-btn abs:[345,732 26x26] rel:[323,18 26x26] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
             - span abs:[348,735 20x20] rel:[3,3 20x20] flex:row
               - icon:volume-2 abs:[348,735 20x20] rel:[0,0 20x20] clip
     - div abs:[22,794 362x21] rel:[14,671 362x21] flex:row gap:6 align:center pad:0/4/8/4
@@ -141,7 +143,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "people" abs:[181,815 79x28] rel:[159,0 79x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
         - span abs:[241,824 11x11] rel:[60,9 11x11] flex:row
           - icon:x abs:[241,824 11x11] rel:[0,0 11x11] clip
-      - button "Add tag" abs:[266,815 88x28] rel:[244,0 88x28] flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
+      - button "Add tag" abs:[266,815 88x28] rel:[244,0 88x28] mx:? flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
         - span abs:[279,823 12x12] rel:[13,8 12x12] flex:row
           - icon:plus abs:[279,823 12x12] rel:[0,0 12x12] clip
     - div abs:[28,867 350x1] rel:[20,744 350x1] margin:8/6/22/6 bg:outline-variant
@@ -149,17 +151,17 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[26,896 11x11] rel:[4,1 11x11] flex:row
         - icon:alert-triangle abs:[26,896 11x11] rel:[0,0 11x11] clip
       - span "Danger zone" abs:[43,895 92x13] rel:[21,0 92x13] font:11/700 color:error tracking:1.2
-    - card abs:[22,918 362x140] rel:[14,795 362x140] pad:14 margin:0/0/24/0 bg:#dc4848@3 r:12 border:1px #dc4848@20
+    - card abs:[22,918 362x140] rel:[14,795 362x140] mx:MxCard pad:14 margin:0/0/24/0 bg:#dc4848@3 r:12 border:1px #dc4848@20
       - div "Delete this flashcard" abs:[37,933 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
       - div "Removes the card and its review history from . Other cards in this deck stay." abs:[37,955 332x36] rel:[15,37 332x36] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
         - strong "TOPIK II — Vocab" abs:[37,956 311x33] rel:[0,1 311x33] font:12/700/18 color:font-headline
-      - button "Delete flashcard" abs:[37,1003 158x40] rel:[15,85 158x40] flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40
+      - button "Delete flashcard" abs:[37,1003 158x40] rel:[15,85 158x40] mx:? flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40
         - span abs:[54,1016 14x14] rel:[17,13 14x14] flex:row
           - icon:trash-2 abs:[54,1016 14x14] rel:[0,0 14x14] clip
   - div abs:[8,699 390x89] rel:[0,691 390x89] flex:col gap:10 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
     - div abs:[22,710 362x40] rel:[14,11 362x40] flex:row gap:10
-      - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-      - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+      - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
         - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
           - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
     - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -169,8 +171,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - title "Edit flashcard" abs:[60,66 269x21] rel:[52,14 269x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
-+ - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
+- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
   - span "Edit" abs:[247,102 22x13] rel:[239,2 22x13] font:11/700 color:font-headline tracking:0.1
@@ -181,7 +183,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "Last edited ·" abs:[57,132 252x13] rel:[35,9 252x13] grow:1 basis:0 layout_hint:expanded font:11/400 color:on-surface-variant
 - - span "3 days ago" abs:[118,132 57x13] rel:[61,0 57x13] font:11/600 color:font-headline
 - - span "14 reviews · 78% recall" abs:[179,132 118x13] rel:[122,0 118x13] font:11/400 color:on-surface-variant
-- - button "History" abs:[319,132 52x13] rel:[297,9 52x13] flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
+- - button "History" abs:[319,132 52x13] rel:[297,9 52x13] mx:? flex:row gap:3 align:center font:11/600 color:seed-indigo text:center
 - - span abs:[360,133 11x11] rel:[41,1 11x11] flex:row
 - - icon:chevron-right abs:[360,133 11x11] rel:[0,0 11x11] clip
 + - scroll abs:[8,123 390x576] rel:[0,115 390x576] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:848
@@ -189,9 +191,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - span "Required" abs:[140,176 47x12] rel:[114,1 47x12] font:10/700 color:seed-indigo tracking:0.3
 - - span "3 / 60" abs:[352,221 28x12] rel:[330,1 28x12] font:10/600 color:on-surface-variant tracking:0.2
-  - card abs:[22,194 362x96] rel:[14,71 362x96] flex:row align:center pad:14/42/14/14 margin:0/0/14/0 minh:66 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
+  - card abs:[22,194 362x96] rel:[14,71 362x96] mx:MxCard flex:row align:center pad:14/42/14/14 margin:0/0/14/0 minh:66 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
 - - div "연구자" abs:[37,274 60x26] rel:[15,35 60x26] font:22/700/26 color:font-headline tracking:-0.4
-- - icon-btn abs:[347,272 30x30] rel:[325,33 30x30] flex:row justify:center align:center pos:absolute transform:translate(0,-15) r:999
+- - icon-btn abs:[347,272 30x30] rel:[325,33 30x30] mx:MxIconButton flex:row justify:center align:center pos:absolute transform:translate(0,-15) r:999
 - - span abs:[352,277 20x20] rel:[5,5 20x20] flex:row
 - - icon:mic abs:[352,277 20x20] rel:[0,0 20x20] clip
 + - span abs:[37,231 120x22] rel:[15,37 120x22] bg:surface-container-high r:6 op:0.5
@@ -199,9 +201,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - span "Required" abs:[139,305 47x12] rel:[113,1 47x12] font:10/700 color:seed-indigo tracking:0.3
 - - span "27 / 240" abs:[340,350 40x12] rel:[318,1 40x12] font:10/600 color:on-surface-variant tracking:0.2
-- - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
+- - card abs:[22,368 362x102] rel:[14,245 362x102] mx:MxCard flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
 - - div "Researcher / Nhà nghiên cứu" abs:[37,381 203x22] rel:[15,13 203x22] font:15/500/22 color:font-headline
-+ - card abs:[22,323 362x102] rel:[14,200 362x102] flex:row align:center pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,323 362x102] rel:[14,200 362x102] mx:MxCard flex:row align:center pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[37,358 332x32] rel:[15,35 332x32]
 + - span abs:[37,358 266x13] rel:[0,0 266x13] bg:surface-container-high r:6 op:0.5
 + - span abs:[37,377 183x13] rel:[0,19 183x13] bg:surface-container-high r:6 op:0.35
@@ -231,7 +233,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "· optional" abs:[246,696 45x12] rel:[224,1 45x12] font:10/500 color:on-surface-variant op:0.55
 - - div abs:[22,714 362x62] rel:[0,19 362x62] flex:row gap:8 justify:between align:center pad:10/12 minh:40 bg:on-primary r:11 border:1px seed-indigo@14
 - - span "yeon-gu-ja" abs:[35,736 302x19] rel:[13,22 302x19] grow:1 basis:0 layout_hint:expanded clip font:13/400/19 color:font-headline
-- - icon-btn abs:[345,732 26x26] rel:[323,18 26x26] flex:row justify:center align:center pos:relative r:999
+- - icon-btn abs:[345,732 26x26] rel:[323,18 26x26] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[348,735 20x20] rel:[3,3 20x20] flex:row
 - - icon:volume-2 abs:[348,735 20x20] rel:[0,0 20x20] clip
 + - div abs:[22,464 362x55] rel:[0,0 362x55] pad:12/14 bg:on-primary r:11 border:1px seed-indigo@14
@@ -256,7 +258,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - span "people" abs:[181,815 79x28] rel:[159,0 79x28] flex:row gap:6 align:center pad:0/8/0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
 - - span abs:[241,824 11x11] rel:[60,9 11x11] flex:row
 - - icon:x abs:[241,824 11x11] rel:[0,0 11x11] clip
-- - button "Add tag" abs:[266,815 88x28] rel:[244,0 88x28] flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
+- - button "Add tag" abs:[266,815 88x28] rel:[244,0 88x28] mx:? flex:row gap:4 align:center pad:0/12 font:12/600 color:on-surface-variant text:center r:999 border:1px outline-variant
 - - span abs:[279,823 12x12] rel:[13,8 12x12] flex:row
 - - icon:plus abs:[279,823 12x12] rel:[0,0 12x12] clip
 + - div abs:[22,692 362x26] rel:[14,569 362x26] flex:row gap:6 margin:0/0/24/0
@@ -266,13 +268,13 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div abs:[28,742 350x1] rel:[20,619 350x1] margin:8/6/22/6 bg:outline-variant
   ...
   - strong "TOPIK II — Vocab" abs:[37,831 311x33] rel:[0,1 311x33] font:12/700/18 color:font-headline
-- - button "Delete flashcard" abs:[37,1003 158x40] rel:[15,85 158x40] flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40
-+ - button "Delete flashcard" abs:[37,878 158x40] rel:[15,85 158x40] flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40 op:0.45
+- - button "Delete flashcard" abs:[37,1003 158x40] rel:[15,85 158x40] mx:? flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40
++ - button "Delete flashcard" abs:[37,878 158x40] rel:[15,85 158x40] mx:? flex:row gap:7 align:center pad:0/16 font:13/600 color:error text:center r:11 border:1px #dc4848@40 op:0.45
   - span abs:[54,891 14x14] rel:[17,13 14x14] flex:row
   ...
-  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-+ - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
   - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
   - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
 - - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -282,28 +284,28 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Load error (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Edit flashcard" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x688] rel:[0,92 390x688] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:24/22 layout_hint:scroll
-    - card abs:[30,312 346x263] rel:[22,212 346x263] repeat:x2(unit=2) pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[30,312 346x263] rel:[22,212 346x263] mx:MxCard repeat:x2(unit=2) pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
       - item[1] div abs:[177,349 52x52] rel:[147,37 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
         - span abs:[192,364 22x22] rel:[15,15 22x22] flex:row
           - icon:cloud-off abs:[192,364 22x22] rel:[0,0 22x22] clip
       - div "Couldn't load this card" abs:[53,415 300x21] rel:[23,103 300x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
       - item[2] div "Your data is safe on this device. Try again in a moment." abs:[53,442 300x40] rel:[23,130 300x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
       - div abs:[53,499 300x40] rel:[23,186 300x40] flex:row gap:8 justify:center
-        - pill-btn "Back to deck" abs:[93,499 121x40] rel:[40,0 121x40] flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-        - pill-btn "Retry" abs:[223,499 90x40] rel:[170,0 90x40] flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+        - pill-btn "Back to deck" abs:[93,499 121x40] rel:[40,0 121x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
+        - pill-btn "Retry" abs:[223,499 90x40] rel:[170,0 90x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
           - span abs:[241,512 14x14] rel:[18,13 14x14] flex:row
             - icon:refresh-cw abs:[241,512 14x14] rel:[0,0 14x14] clip
 ```
@@ -312,8 +314,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - title "Edit flashcard" abs:[60,66 269x21] rel:[52,14 269x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
-+ - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
+- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
   - span "Edit" abs:[247,102 22x13] rel:[239,2 22x13] font:11/700 color:font-headline tracking:0.1
@@ -323,10 +325,10 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   ...
   - span "Required" abs:[139,350 47x12] rel:[113,1 47x12] font:10/700 color:seed-indigo tracking:0.3
 - - span "27 / 240" abs:[340,350 40x12] rel:[318,1 40x12] font:10/600 color:on-surface-variant tracking:0.2
-- - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
+- - card abs:[22,368 362x102] rel:[14,245 362x102] mx:MxCard flex:row align:start pad:12/14 margin:0/0/14/0 minh:76 bg:on-primary r:12 border:1px seed-indigo@14
 - - div "Researcher / Nhà nghiên cứu" abs:[37,381 203x22] rel:[15,13 203x22] font:15/500/22 color:font-headline
 + - span "0 / 240" abs:[346,350 34x12] rel:[324,1 34x12] font:10/600 color:on-surface-variant tracking:0.2
-+ - card abs:[22,368 362x102] rel:[14,245 362x102] flex:row align:center pad:12/14 margin:0/0/8/0 minh:76 bg:on-primary r:12 border:1px error
++ - card abs:[22,368 362x102] rel:[14,245 362x102] mx:MxCard flex:row align:center pad:12/14 margin:0/0/8/0 minh:76 bg:on-primary r:12 border:1px error
 + - div "English, Vietnamese, or both — comma-separated reads cleanest." abs:[37,400 332x39] rel:[15,32 332x39] font:13/400/20 color:on-surface-variant op:0.65
 + - div abs:[22,478 362x13] rel:[14,355 362x13] flex:row gap:6 align:center pad:0/4 margin:0/0/14/0
 + - span abs:[26,479 12x12] rel:[4,1 12x12] flex:row
@@ -334,9 +336,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span "Add a meaning so this card can be answered." abs:[44,478 236x13] rel:[22,0 236x13] font:11/600 color:error
   - ov "Optional details" abs:[22,505 362x25] rel:[14,382 362x25] pad:2/4/10/4 font:11/700 color:on-surface-variant tracking:1.2
   ...
-  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-+ - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
   - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
   - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
 - - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -347,17 +349,17 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - title "Edit flashcard" abs:[60,66 228x21] rel:[52,14 228x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
-+ - pill-btn "Saving…" abs:[292,60 98x32] rel:[284,8 98x32] flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
+- - pill-btn "Save" abs:[333,60 57x32] rel:[325,8 57x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - pill-btn "Saving…" abs:[292,60 98x32] rel:[284,8 98x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9 op:0.45
 + - span abs:[306,69 15x15] rel:[14,9 15x15] r:999 border:2px #000000@0
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
   ...
-  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
 - - span abs:[190,722 16x16] rel:[75,12 16x16] flex:row
 - - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
 - - div "Changes save to this device only." abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
-+ - pill-btn "Saving changes…" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Saving changes…" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 + - span abs:[178,721 18x18] rel:[63,11 18x18] r:999 border:2px #000000@0
 + - div "Saving to this device…" abs:[22,760 362x12] rel:[14,61 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
@@ -373,9 +375,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - strong "Couldn't save changes." abs:[57,655 137x15] rel:[0,1 137x15] font:12/700/17 color:font-headline
 + - span "Nothing was lost. Tap Save to try again." abs:[57,655 302x32] rel:[0,1 302x32] font:12/400/17 color:on-surface-variant
   - div abs:[22,710 362x40] rel:[14,78 362x40] flex:row gap:10
-  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-+ - pill-btn "Retry save" abs:[115,710 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+  - pill-btn "Cancel" abs:[22,710 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Save changes" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - pill-btn "Retry save" abs:[115,710 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[203,723 15x15] rel:[88,13 15x15] flex:row
 - - icon:check abs:[190,722 16x16] rel:[0,0 16x16] clip
 + - icon:refresh-cw abs:[203,723 15x15] rel:[0,0 15x15] clip
@@ -401,8 +403,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Removes the card and its of history. Other cards in this deck are unaffected." abs:[51,413 304x36] rel:[18,137 304x36] margin:12/0/0/0 font:12/400/18 color:on-surface-variant
 + - strong "14 reviews" abs:[194,414 60x15] rel:[143,1 60x15] font:12/700/18 color:font-headline
 + - div abs:[33,453 340x68] rel:[0,177 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,467 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Delete card" abs:[198,467 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
++ - pill-btn "Cancel" abs:[47,467 143x40] rel:[14,14 143x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Delete card" abs:[198,467 161x40] rel:[165,14 161x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[231,480 14x14] rel:[34,13 14x14] flex:row
 + - icon:trash-2 abs:[231,480 14x14] rel:[0,0 14x14] clip
 ```

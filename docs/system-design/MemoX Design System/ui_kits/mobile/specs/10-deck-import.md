@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,26 +30,28 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Empty
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Import cards" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:help-circle abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
@@ -80,25 +82,25 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "TOPIK II — Vocab · 142 cards" abs:[61,170 160x15] rel:[39,11 160x15] font:12/600 color:font-headline
     - ov "1 · Choose a source" abs:[22,209 362x21] rel:[14,86 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
     - div abs:[22,230 362x101] rel:[14,107 362x101] grid cols:2 gap:8 margin:0/0/14/0
-      - button abs:[22,230 177x101] rel:[0,0 177x101] flex:col gap:6 align:start pad:14/12 bg:seed-indigo@6 r:13 border:1px seed-indigo
+      - button abs:[22,230 177x101] rel:[0,0 177x101] mx:? flex:col gap:6 align:start pad:14/12 bg:seed-indigo@6 r:13 border:1px seed-indigo
         - div abs:[35,245 30x30] rel:[13,15 30x30] flex:row justify:center align:center bg:seed-indigo@14 r:9
           - span abs:[43,253 15x15] rel:[8,8 15x15] flex:row
             - icon:file-up abs:[43,253 15x15] rel:[0,0 15x15] clip
         - div "Upload file" abs:[35,281 67x16] rel:[13,51 67x16] font:13/700 color:font-headline tracking:-0.1
         - div "CSV, TSV, Anki" abs:[35,303 73x13] rel:[13,73 73x13] font:11/400 color:on-surface-variant
-      - button abs:[207,230 177x101] rel:[185,0 177x101] flex:col gap:6 align:start pad:14/12 bg:on-primary r:13 border:1px seed-indigo@14
+      - button abs:[207,230 177x101] rel:[185,0 177x101] mx:? flex:col gap:6 align:start pad:14/12 bg:on-primary r:13 border:1px seed-indigo@14
         - div abs:[220,245 30x30] rel:[13,15 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
           - span abs:[228,253 15x15] rel:[8,8 15x15] flex:row
             - icon:clipboard abs:[228,253 15x15] rel:[0,0 15x15] clip
         - div "Paste text" abs:[220,281 63x16] rel:[13,51 63x16] font:13/700 color:font-headline tracking:-0.1
         - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
-    - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+    - card abs:[22,345 362x201] rel:[14,222 362x201] mx:MxCard pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
       - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
         - span abs:[192,383 22x22] rel:[13,13 22x22] flex:row
           - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
       - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
       - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-      - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+      - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[157,495 14x14] rel:[16,12 14x14] flex:row
           - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
     - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
@@ -109,8 +111,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
-      - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-      - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
+      - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
         - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
           - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
     - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -131,28 +133,28 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - item[2] div "Preview" abs:[170,123 69x20] rel:[148,0 69x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
   - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
-- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] mx:MxCard pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
 - - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
-+ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
   - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
 + - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · ready to preview" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
 - - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
   - div abs:[22,417 362x76] rel:[14,294 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
-+ - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
   - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -181,20 +183,20 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div abs:[246,132 68x2] rel:[224,9 68x2] grow:1 basis:0 layout_hint:expanded bg:surface-container r:999
   ...
   - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
-- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] mx:MxCard pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
 - - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
-+ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
   - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
 + - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · parsing…" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
 - - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
@@ -203,18 +205,18 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,448 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
 + - div abs:[22,507 362x29] rel:[14,384 362x29] flex:row justify:between align:baseline pad:8/4
 + - ov "2 · Preview" abs:[26,515 77x13] rel:[4,8 77x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - card abs:[22,536 362x142] rel:[14,413 362x142] pad:28/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,536 362x142] rel:[14,413 362x142] mx:MxCard pad:28/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - span abs:[188,565 30x30] rel:[166,29 30x30] r:999 border:2px #000000@0
 + - div "Reading your file…" abs:[41,609 324x18] rel:[19,73 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
 + - div "No cards will be added until you tap Import." abs:[41,631 324x18] rel:[19,95 324x18] font:12/400/18 color:on-surface-variant text:center
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 - - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
-+ - pill-btn "Parsing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Parsing…" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 + - span abs:[206,723 18x18] rel:[91,11 18x18] r:999 border:2px #000000@0
 + - div "Reading file — no changes yet." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
@@ -245,20 +247,20 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
   - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
-- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] mx:MxCard pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
 - - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
-+ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
   - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
 + - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · 5 rows detected" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
 - - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
 - - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
@@ -275,7 +277,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span "Valid · 5" abs:[22,446 76x26] rel:[0,0 76x26] flex:row gap:6 align:center pad:0/10/0/8 bg:mastery@10 font:11/700 color:mastery r:999
 + - span abs:[30,454 11x11] rel:[8,8 11x11] flex:row
 + - icon:check abs:[30,454 11x11] rel:[0,0 11x11] clip
-+ - card abs:[22,484 362x201] rel:[14,361 362x201] repeat:x5(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,484 362x201] rel:[14,361 362x201] mx:MxCard repeat:x5(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
@@ -307,7 +309,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[351,658 20x13] rel:[328,13 20x13] flex:row
 + - icon:check abs:[351,658 13x13] rel:[0,0 13x13] clip
 + - ov "Import options" abs:[22,699 362x25] rel:[14,576 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-+ - card abs:[22,724 362x176] rel:[14,601 362x176] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,724 362x176] rel:[14,601 362x176] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[23,725 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
 + - div abs:[37,739 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,747 14x14] rel:[8,8 14x14] flex:row
@@ -337,9 +339,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[328,860 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
-+ - pill-btn "Import 5 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Import 5 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[171,725 15x15] rel:[56,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -373,20 +375,20 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div "Import" abs:[322,123 62x20] rel:[300,0 62x20] flex:row gap:6 align:center font:11/600 color:on-surface-variant op:0.6
   ...
   - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
-- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] mx:MxCard pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
 - - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
-+ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
   - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
 + - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · 7 rows detected" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
 - - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
 - - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
@@ -404,7 +406,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span "Duplicate · 1" abs:[195,446 101x26] rel:[173,0 101x26] flex:row gap:6 align:center pad:0/10/0/8 bg:#d9891e@12 font:11/700 color:streak r:999
 + - span abs:[203,454 11x11] rel:[8,8 11x11] flex:row
 + - icon:copy abs:[203,454 11x11] rel:[0,0 11x11] clip
-+ - card abs:[22,484 362x341] rel:[14,361 362x341] repeat:x7(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,484 362x341] rel:[14,361 362x341] mx:MxCard repeat:x7(unit=1) margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - item[1] div abs:[23,485 360x40] rel:[1,1 360x40] grid cols:4 gap:10 align:center pad:10/12
 + - span "1" abs:[35,499 24x12] rel:[12,14 24x12] font:10/700 color:on-surface-variant
 + - div "연구자" abs:[69,495 131x19] rel:[46,10 131x19] clip font:13/600 color:font-headline tracking:-0.1
@@ -469,7 +471,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "3 rows will be skipped" abs:[62,852 307x19] rel:[0,0 307x19] margin:0/0/2/0 font:12/700/19 color:font-headline
 + - div "2 have missing fields · 1 match an existing card. Fix them in your file and import again to include them." abs:[62,873 307x37] rel:[0,21 307x37] font:12/400/19 color:on-surface-variant
 + - ov "Import options" abs:[22,937 362x25] rel:[14,814 362x25] pad:4/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-+ - card abs:[22,962 362x176] rel:[14,839 362x176] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,962 362x176] rel:[14,839 362x176] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[23,963 360x58] rel:[1,1 360x58] grid cols:3 gap:12 align:center pad:12/14
 + - div abs:[37,976 30x30] rel:[14,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[45,984 14x14] rel:[8,8 14x14] flex:row
@@ -499,9 +501,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[328,1098 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
-+ - pill-btn "Import 4 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
++ - pill-btn "Import 4 valid cards" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
   - span abs:[171,725 15x15] rel:[56,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -536,20 +538,20 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - div abs:[22,159 212x36] rel:[14,36 212x36] flex:row gap:8 align:center pad:6/12/6/8 margin:0/0/14/0 bg:on-primary r:999 border:1px seed-indigo@14
   ...
   - div "TSV or CSV rows" abs:[220,303 85x13] rel:[13,73 85x13] font:11/400 color:on-surface-variant
-- - card abs:[22,345 362x201] rel:[14,222 362x201] pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+- - card abs:[22,345 362x201] rel:[14,222 362x201] mx:MxCard pad:24/18 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
 - - div abs:[179,370 48x48] rel:[157,25 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@10 r:14
-+ - card abs:[22,345 362x58] rel:[14,222 362x58] grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,345 362x58] rel:[14,222 362x58] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - div abs:[37,358 32x32] rel:[15,13 32x32] flex:row justify:center align:center bg:seed-indigo@10 r:9
   - span abs:[46,367 15x15] rel:[9,9 15x15] flex:row
 - - icon:file-up abs:[192,383 22x22] rel:[0,0 22x22] clip
 - - div "Drop a file or tap to browse" abs:[41,430 324x18] rel:[19,85 324x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
 - - div "Supports .csv, .tsv, and .apkg (Anki) · up to 5 MB" abs:[41,452 324x17] rel:[19,107 324x17] margin:0/0/14/0 font:11/400/17 color:on-surface-variant text:center
-- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+- - pill-btn "Choose file" abs:[141,483 124x38] rel:[119,138 124x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - icon:file-text abs:[46,367 15x15] rel:[0,0 15x15] clip
 + - div abs:[85,359 242x31] rel:[63,14 242x31]
 + - div "topik-ii-vocab.tsv" abs:[85,359 242x16] rel:[0,0 242x16] clip font:13/700 color:font-headline tracking:-0.1
 + - div "TSV · 4.2 KB · ready to preview" abs:[85,377 242x13] rel:[0,18 242x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] flex:row justify:center align:center pos:relative r:999
++ - icon-btn abs:[339,359 30x30] rel:[317,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
   - span abs:[344,364 20x20] rel:[5,5 20x20] flex:row
 - - icon:folder-open abs:[157,495 14x14] rel:[0,0 14x14] clip
 - - div abs:[22,560 362x76] rel:[14,437 362x76] flex:row gap:8 align:start pad:10/12 margin:0/0/14/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
@@ -559,7 +561,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - div "Each row makes one card" abs:[56,571 315x17] rel:[0,0 315x17] margin:0/0/3/0 font:11/700/17 color:font-headline
 - - div "Column 1 = front · column 2 = back · column 3 = tags (optional, comma-separated). Quoted cells with commas are fine." abs:[56,591 315x34] rel:[0,20 315x34] font:11/400/17 color:on-surface-variant
 + - icon:x abs:[344,364 20x20] rel:[0,0 20x20] clip
-+ - card abs:[22,417 362x188] rel:[14,294 362x188] pad:28/18 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,417 362x188] rel:[14,294 362x188] mx:MxCard pad:28/18 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
 + - span abs:[187,446 32x32] rel:[165,29 32x32] r:999 border:2px #000000@0
 + - div "Adding 4 cards…" abs:[41,492 324x18] rel:[19,75 324x18] margin:14/0/4/0 font:14/700 color:font-headline text:center
 + - div "Saving to this device. Don't close the app yet." abs:[41,514 324x18] rel:[19,97 324x18] font:12/400/18 color:on-surface-variant text:center
@@ -568,12 +570,12 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "29 of 47" abs:[41,563 324x13] rel:[19,146 324x13] margin:8/0/0/0 font:11/400 color:on-surface-variant text:center
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
   ...
-  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
+  - pill-btn "Cancel" abs:[22,712 83x40] rel:[0,0 83x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center shrink:0 pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+- - pill-btn "Preview import" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
 - - span abs:[186,725 15x15] rel:[71,13 15x15] flex:row
 - - icon:eye abs:[186,725 15x15] rel:[0,0 15x15] clip
 - - div "Pick a file or paste text to continue." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
-+ - pill-btn "Importing…" abs:[115,712 269x40] rel:[93,0 269x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.6
++ - pill-btn "Importing…" abs:[115,712 269x40] rel:[93,0 269x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.6
 + - span abs:[197,723 18x18] rel:[82,11 18x18] r:999 border:2px #000000@0
 + - div "Next you’ll preview every row before anything is imported." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
 ```
@@ -581,26 +583,26 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Success (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x621] rel:[0,92 390x621] grow:1 basis:0 layout_hint:expanded pad:18/14/14/14 layout_hint:scroll
-    - card abs:[22,118 362x199] rel:[14,18 362x199] pad:24/22 margin:0/0/14/0 bg:mastery@10 r:12 border:1px mastery@22
+    - card abs:[22,118 362x199] rel:[14,18 362x199] mx:MxCard pad:24/22 margin:0/0/14/0 bg:mastery@10 r:12 border:1px mastery@22
       - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
         - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
           - icon:check-circle-2 abs:[188,160 30x30] rel:[0,0 30x30] clip
       - div "Import complete" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
       - div "Added 47 cards to TOPIK II — Vocab. They are ready to study." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
-    - card abs:[22,331 362x50] rel:[14,231 362x50] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,331 362x50] rel:[14,231 362x50] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,332 360x48] rel:[1,1 360x48] grid cols:3 gap:12 align:center pad:12/14
         - div abs:[37,344 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
           - span abs:[43,350 12x12] rel:[6,6 12x12] flex:row
@@ -608,8 +610,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div "Added" abs:[77,348 263x16] rel:[54,16 263x16] font:13/600 color:font-headline
         - div "47" abs:[352,347 17x18] rel:[329,15 17x18] font:14/700 color:mastery
   - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
-    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
+    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
         - icon:layers abs:[214,745 15x15] rel:[0,0 15x15] clip
 ```
@@ -617,26 +619,26 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Partial (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
   - scroll abs:[8,100 390x621] rel:[0,92 390x621] grow:1 basis:0 layout_hint:expanded pad:18/14/14/14 layout_hint:scroll
-    - card abs:[22,118 362x199] rel:[14,18 362x199] pad:24/22 margin:0/0/14/0 bg:#d9891e@10 r:12 border:1px #d9891e@22
+    - card abs:[22,118 362x199] rel:[14,18 362x199] mx:MxCard pad:24/22 margin:0/0/14/0 bg:#d9891e@10 r:12 border:1px #d9891e@22
       - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
         - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
           - icon:alert-triangle abs:[188,160 30x30] rel:[0,0 30x30] clip
       - div "Imported with skips" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
       - div "Added 42 cards. 5 rows were skipped because of validation issues." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
-    - card abs:[22,331 362x148] rel:[14,231 362x148] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,331 362x148] rel:[14,231 362x148] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,332 360x49] rel:[1,1 360x49] grid cols:3 gap:12 align:center pad:12/14
         - div abs:[37,344 24x24] rel:[14,12 24x24] flex:row justify:center align:center r:7
           - span abs:[43,350 12x12] rel:[6,6 12x12] flex:row
@@ -660,8 +662,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:info abs:[35,504 13x13] rel:[0,0 13x13] clip
       - span "Fix the skipped rows in your source file and import again to add them." abs:[56,504 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
   - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
-    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
+    - pill-btn "Back to deck" abs:[22,732 164x40] rel:[14,11 164x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+    - pill-btn "View imported cards" abs:[196,732 188x40] rel:[188,11 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[214,745 15x15] rel:[18,13 15x15] flex:row
         - icon:layers abs:[214,745 15x15] rel:[0,0 15x15] clip
 ```
@@ -669,27 +671,27 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Failed (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Import results" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
-  - card abs:[22,118 362x199] rel:[14,110 362x199] pad:24/22 margin:0/0/14/0 bg:#dc4848@8 r:12 border:1px #dc4848@22
+  - card abs:[22,118 362x199] rel:[14,110 362x199] mx:MxCard pad:24/22 margin:0/0/14/0 bg:#dc4848@8 r:12 border:1px #dc4848@22
     - div abs:[171,143 64x64] rel:[149,25 64x64] flex:row justify:center align:center margin:0/0/14/0 r:18
       - span abs:[188,160 30x30] rel:[17,17 30x30] flex:row
         - icon:alert-circle abs:[188,160 30x30] rel:[0,0 30x30] clip
     - div "Import didn’t finish" abs:[45,221 316x23] rel:[23,103 316x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.2
     - div "No cards were added. Your file is unchanged and your deck is untouched." abs:[45,252 316x40] rel:[23,134 316x40] font:13/400/20 color:on-surface-variant text:center
   - div abs:[8,721 390x67] rel:[0,713 390x67] flex:row gap:10 pad:10/14/16/14 border:1px seed-indigo@14
-    - pill-btn "Close" abs:[22,732 164x40] rel:[14,11 164x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
-    - pill-btn "Try again" abs:[196,732 188x40] rel:[188,11 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
+    - pill-btn "Close" abs:[22,732 164x40] rel:[14,11 164x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+    - pill-btn "Try again" abs:[196,732 188x40] rel:[188,11 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:12
       - span abs:[251,745 15x15] rel:[54,13 15x15] flex:row
         - icon:refresh-cw abs:[251,745 15x15] rel:[0,0 15x15] clip
 ```

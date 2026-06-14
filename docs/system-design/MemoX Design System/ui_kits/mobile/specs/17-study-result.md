@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,27 +30,29 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
     - title "Session complete" abs:[16,67 334x18] rel:[8,15 334x18] grow:1 basis:0 layout_hint:expanded font:14/600 color:on-surface-variant tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll scrollh:896
-    - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
+    - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] mx:MxCard repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
       - item[1] div abs:[173,125 60x60] rel:[151,25 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:mastery@16 r:18
         - span abs:[189,141 28x28] rel:[16,16 28x28] flex:row
           - icon:check-circle-2 abs:[189,141 28x28] rel:[0,0 28x28] clip
@@ -68,7 +70,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "78%" abs:[260,266 95x28] rel:[0,0 95x28] font:22/700 color:mastery text:center tracking:-0.4
           - div "Accuracy" abs:[260,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center tracking:0.3
     - ov "Result breakdown" abs:[22,341 362x21] rel:[14,241 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+    - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,363 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14
         - div abs:[37,376 30x30] rel:[14,13 30x30] flex:row justify:center align:center r:9
           - span abs:[45,384 14x14] rel:[8,8 14x14] flex:row
@@ -94,7 +96,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div "Will come back sooner" abs:[81,505 266x13] rel:[0,18 266x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
         - div "2" abs:[359,492 10x21] rel:[336,17 10x21] font:16/700 color:error
     - ov "Box changes" abs:[22,545 362x21] rel:[14,445 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,581 332x8] rel:[15,15 332x8] flex:row margin:0/0/14/0 clip bg:surface-container r:999
         - div abs:[37,581 232x8] rel:[0,0 232x8] bg:mastery
         - div abs:[269,581 50x8] rel:[232,0 50x8] bg:seed-indigo
@@ -116,7 +118,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               - icon:arrow-down abs:[273,619 10x10] rel:[0,0 10x10] clip
           - div "3" abs:[273,639 85x21] rel:[11,36 85x21] margin:3/0/0/0 font:16/700 color:font-headline
     - ov "Streak and goal" abs:[22,698 362x21] rel:[14,598 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,734 332x36] rel:[15,15 332x36] flex:row gap:10 margin:0/0/14/0
         - div abs:[37,734 161x36] rel:[0,0 161x36] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded
           - div abs:[37,734 36x36] rel:[0,0 36x36] flex:row justify:center align:center bg:#d9891e@12 r:11
@@ -137,7 +139,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:check abs:[48,804 12x12] rel:[0,0 12x12] clip
         - span "Daily goal hit. New cards are still available if you want a head start." abs:[66,793 292x33] rel:[29,9 292x33] font:11/400/17 color:font-headline
     - ov "Tough cards" abs:[22,864 362x21] rel:[14,764 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - card abs:[22,885 362x79] rel:[14,785 362x79] pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,885 362x79] rel:[14,785 362x79] mx:MxCard pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[37,900 332x49] rel:[15,15 332x49] flex:row gap:12 align:center
         - div abs:[37,907 36x36] rel:[0,6 36x36] flex:row justify:center align:center shrink:0 bg:#dc4848@10 r:11
           - span abs:[47,917 16x16] rel:[10,10 16x16] flex:row
@@ -149,10 +151,10 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - icon:chevron-right abs:[353,917 16x16] rel:[0,0 16x16] clip
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
-      - pill-btn "Study more" abs:[22,712 164x40] rel:[0,0 164x40] flex:row gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Study more" abs:[22,712 164x40] rel:[0,0 164x40] mx:MxSecondaryButton flex:row gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
         - span abs:[57,725 14x14] rel:[35,13 14x14] flex:row
           - icon:play abs:[57,725 14x14] rel:[0,0 14x14] clip
-      - pill-btn "Done" abs:[196,712 188x40] rel:[174,0 188x40] flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+      - pill-btn "Done" abs:[196,712 188x40] rel:[174,0 188x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
         - span abs:[260,724 16x16] rel:[63,12 16x16] flex:row
           - icon:check abs:[260,724 16x16] rel:[0,0 16x16] clip
     - div "Done returns you to where you started." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -161,25 +163,25 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
     - title "Session complete" abs:[16,67 334x18] rel:[8,15 334x18] grow:1 basis:0 layout_hint:expanded font:14/600 color:on-surface-variant tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999 op:0.4
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999 op:0.4
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,100 362x233] rel:[14,0 362x233] pad:28/22 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,100 362x233] rel:[14,0 362x233] mx:MxCard pad:28/22 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[45,129 56x56] rel:[23,29 56x56] bg:surface-container-high r:16 op:0.5
       - span abs:[45,199 180x20] rel:[23,99 180x20] bg:surface-container-high r:6 op:0.5
       - span abs:[45,225 120x11] rel:[23,125 120x11] bg:surface-container-high r:6 op:0.4
       - span abs:[45,254 316x50] rel:[23,154 316x50] bg:surface-container-high r:11 op:0.5
-    - card abs:[22,347 362x164] rel:[14,247 362x164] pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,347 362x164] rel:[14,247 362x164] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
       - span abs:[37,362 80x10] rel:[15,15 80x10] bg:surface-container-high r:6 op:0.5
       - div abs:[37,384 332x28] rel:[15,37 332x28] flex:row gap:12 align:center margin:0/0/14/0
         - span abs:[37,384 28x28] rel:[0,0 28x28] bg:surface-container-high r:8 op:0.5
@@ -201,7 +203,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[339,475 30x15] rel:[302,7 30x15] bg:surface-container-high r:6 op:0.5
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
-      - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
+      - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.45
         - span abs:[173,724 16x16] rel:[151,12 16x16] flex:row
           - icon:check abs:[173,724 16x16] rel:[0,0 16x16] clip
     - div "Saving your session…" abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -213,11 +215,11 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
 - - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll scrollh:896
 + - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x3+(unit=2) pad:0/14/14/14 layout_hint:scroll scrollh:730
-  - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
+  - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] mx:MxCard repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
   ...
   - div "3" abs:[273,639 85x21] rel:[11,36 85x21] margin:3/0/0/0 font:16/700 color:font-headline
 - - ov "Streak and goal" abs:[22,698 362x21] rel:[14,598 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-- - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
 - - div abs:[37,734 332x36] rel:[15,15 332x36] flex:row gap:10 margin:0/0/14/0
 - - div abs:[37,734 161x36] rel:[0,0 161x36] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded
 - - div abs:[37,734 36x36] rel:[0,0 36x36] flex:row justify:center align:center bg:#d9891e@12 r:11
@@ -246,9 +248,9 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
 - - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll scrollh:896
-- - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
+- - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] mx:MxCard repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
 + - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:994
-+ - card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
++ - card abs:[22,100 362x227] rel:[14,0 362x227] mx:MxCard repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
   - item[1] div abs:[173,125 60x60] rel:[151,25 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:mastery@16 r:18
   ...
   - div "Accuracy" abs:[260,294 95x12] rel:[0,28 95x12] font:10/700 color:on-surface-variant text:center tracking:0.3
@@ -258,22 +260,22 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[62,354 229x58] rel:[40,13 229x58] grow:1 basis:0 layout_hint:expanded
 + - div "Couldn't save this summary" abs:[62,354 229x19] rel:[0,0 229x19] margin:0/0/2/0 font:12/700/19 color:font-headline
 + - div "Your answers are saved on this device. The summary will sync next time." abs:[62,375 229x37] rel:[0,21 229x37] font:12/400/19 color:on-surface-variant
-+ - button "Retry" abs:[301,354 68x30] rel:[279,13 68x30] flex:row gap:5 align:center shrink:0 pad:0/12 bg:#d9891e@14 font:11/600 color:streak text:center r:8
++ - button "Retry" abs:[301,354 68x30] rel:[279,13 68x30] mx:? flex:row gap:5 align:center shrink:0 pad:0/12 bg:#d9891e@14 font:11/600 color:streak text:center r:8
 + - span abs:[313,364 11x11] rel:[12,10 11x11] flex:row
 + - icon:refresh-cw abs:[313,364 11x11] rel:[0,0 11x11] clip
   - ov "Result breakdown" abs:[22,439 362x21] rel:[14,339 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-- - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-+ - card abs:[22,460 362x169] rel:[14,360 362x169] margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
+- - item[2] card abs:[22,362 362x169] rel:[14,262 362x169] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,460 362x169] rel:[14,360 362x169] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
   - div abs:[23,461 360x56] rel:[1,1 360x56] grid cols:3 gap:12 align:center pad:12/14
   ...
   - ov "Box changes" abs:[22,643 362x21] rel:[14,543 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-- - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - card abs:[22,664 362x118] rel:[14,564 362x118] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - item[3] card abs:[22,566 362x118] rel:[14,466 362x118] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,664 362x118] rel:[14,564 362x118] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
   - div abs:[37,679 332x8] rel:[15,15 332x8] flex:row margin:0/0/14/0 clip bg:surface-container r:999
   ...
   - ov "Streak and goal" abs:[22,796 362x21] rel:[14,696 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-- - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - card abs:[22,817 362x131] rel:[14,717 362x131] pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - item[4] card abs:[22,719 362x131] rel:[14,619 362x131] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,817 362x131] rel:[14,717 362x131] mx:MxCard pad:14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
   - div abs:[37,832 332x36] rel:[15,15 332x36] flex:row gap:10 margin:0/0/14/0
   ...
   - icon:check abs:[260,724 16x16] rel:[0,0 16x16] clip
@@ -284,20 +286,20 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Defensive (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
     - title "Session complete" abs:[16,67 334x18] rel:[8,15 334x18] grow:1 basis:0 layout_hint:expanded font:14/600 color:on-surface-variant tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] flex:row justify:center align:center pos:relative r:999 op:0.4
+    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999 op:0.4
       - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
         - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,100 362x187] rel:[14,0 362x187] pad:24/22/20/22 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
+    - card abs:[22,100 362x187] rel:[14,0 362x187] mx:MxCard pad:24/22/20/22 margin:0/0/14/0 bg:on-primary r:12 border:1px outline-variant
       - div abs:[173,125 60x60] rel:[151,25 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:surface-container r:18
         - span abs:[189,141 28x28] rel:[16,16 28x28] flex:row
           - icon:pause-circle abs:[189,141 28x28] rel:[0,0 28x28] clip
@@ -309,7 +311,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "No reviews counted. Your streak and goal are unchanged." abs:[56,312 296x17] rel:[34,11 296x17] font:11/400/17 color:on-surface-variant
   - div abs:[8,701 390x87] rel:[0,693 390x87] flex:col gap:8 pad:10/14/16/14 bg:surface border:1px seed-indigo@14
     - div abs:[22,712 362x40] rel:[14,11 362x40] flex:row gap:10
-      - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+      - pill-btn "Done" abs:[22,712 362x40] rel:[0,0 362x40] mx:MxPrimaryButton flex:row gap:8 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
         - span abs:[173,724 16x16] rel:[151,12 16x16] flex:row
           - icon:check abs:[173,724 16x16] rel:[0,0 16x16] clip
     - div "No progress saved. Done returns you home." abs:[22,760 362x12] rel:[14,59 362x12] font:10/400 color:on-surface-variant text:center op:0.7
@@ -321,11 +323,11 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - icon:share-2 abs:[362,66 20x20] rel:[0,0 20x20] clip
 - - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll scrollh:896
 + - scroll abs:[8,100 390x601] rel:[0,92 390x601] grow:1 basis:0 layout_hint:expanded repeat:x4+(unit=2) pad:0/14/14/14 layout_hint:scroll scrollh:883
-  - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
+  - item[1] card abs:[22,100 362x227] rel:[14,0 362x227] mx:MxCard repeat:x2(unit=2) pad:24/22/20/22 margin:0/0/14/0 r:12 border:1px mastery@22
   ...
   - ov "Tough cards" abs:[22,864 362x21] rel:[14,764 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-- - card abs:[22,885 362x79] rel:[14,785 362x79] pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - card abs:[22,885 362x66] rel:[14,785 362x66] pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14 op:0.75
+- - card abs:[22,885 362x79] rel:[14,785 362x79] mx:MxCard pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - card abs:[22,885 362x66] rel:[14,785 362x66] mx:MxCard pad:14 margin:0/0/18/0 bg:on-primary r:12 border:1px seed-indigo@14 op:0.75
   - div abs:[37,900 332x36] rel:[15,15 332x36] flex:row gap:12 align:center
 - - div abs:[37,907 36x36] rel:[0,6 36x36] flex:row justify:center align:center shrink:0 bg:#dc4848@10 r:11
 + - div abs:[37,900 36x36] rel:[0,0 36x36] flex:row justify:center align:center shrink:0 bg:mastery@10 r:11

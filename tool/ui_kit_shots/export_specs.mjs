@@ -136,6 +136,25 @@ window.__mx = (() => {
     return el.tagName.toLowerCase();
   }
 
+  // Suggested MemoX shared component for an element, grounded in the injected
+  // component map (docs/design/component-visual-contract.md). The pill-btn family
+  // is disambiguated by the kit's own primary/secondary/outline modifier class.
+  // Returns '' when no confident mapping exists (the raw class name + the header
+  // note then signal "component mapping unresolved" — never a silent guess).
+  function mxHint(el) {
+    const classes = (el.getAttribute('class') || '').split(/\\s+/).filter(Boolean);
+    if (classes.includes('pill-btn')) {
+      if (classes.includes('primary')) return 'MxPrimaryButton';
+      if (classes.includes('secondary') || classes.includes('outline')) return 'MxSecondaryButton';
+      return 'MxActionButton';
+    }
+    const map = window.__MX_COMPONENT_MAP || {};
+    for (const c of classes) {
+      if (map[c]) return map[c];
+    }
+    return '';
+  }
+
   // Signature used for repeated-item detection: the first non-memox class, else tag.
   function sigOf(el) {
     const cls = (el.getAttribute('class') || '').split(/\\s+/).filter((c) => c && !c.startsWith('memox'))[0];
@@ -400,8 +419,11 @@ window.__mx = (() => {
         const scrollh = scrolls && el.scrollHeight > el.clientHeight + 1 ? 'scrollh:' + el.scrollHeight : '';
         const tform = transformBit(cs);
         const sty = styleBits(el, cs);
+        // Suggested Mx component (or mx:? when an interactive control has no mapping).
+        const hint = mxHint(el);
+        const mx = hint ? 'mx:' + hint : (el.tagName === 'BUTTON' || el.tagName === 'A' ? 'mx:?' : '');
         const core = (itemLabel ? itemLabel + ' ' : '') + name + (text ? ' "' + text + '"' : '');
-        const tail = [lay, flex, rep, box, size, posn, scrollh, tform, sty].filter(Boolean).join(' ');
+        const tail = [mx, lay, flex, rep, box, size, posn, scrollh, tform, sty].filter(Boolean).join(' ');
         lines.push(ind + '- ' + core + ' ' + abs + ' ' + rel + (tail ? ' ' + tail : ''));
         signatures.push(ind + '- ' + core + (tail ? ' ' + tail : ''));
         depth += 1;
@@ -479,6 +501,10 @@ async function main() {
 
   const sourceHash = createHash('sha256').update(readFileSync(kitHtml)).digest('hex');
 
+  // classname -> Mx component map (grounded in component-visual-contract.md).
+  const compMapPath = join(here, 'component-map.json');
+  const compMap = existsSync(compMapPath) ? (JSON.parse(readFileSync(compMapPath, 'utf8')).map || {}) : {};
+
   const browser = await puppeteer.launch({
     executablePath: chromePath,
     headless: 'new',
@@ -490,6 +516,7 @@ async function main() {
   await page.goto(pathToFileURL(kitHtml).href, { waitUntil: 'networkidle2', timeout: 120000 });
   await page.waitForSelector('.row .row-num', { timeout: 120000 });
   await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
+  await page.evaluate((m) => { window.__MX_COMPONENT_MAP = m; }, compMap);
   await page.evaluate(pageHelpers);
 
   const rowCount = await page.$$eval('.row', (rows) => rows.length);
@@ -572,7 +599,7 @@ async function main() {
       'in `tool/verify/run.mjs` fails when this is stale).',
       '',
       'Reading guide: each line is one visible element —',
-      '`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.',
+      '`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.',
       'Indentation = DOM containment (layout/grouping containers are kept, not flattened).',
       '`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size',
       'INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.',
@@ -597,10 +624,12 @@ async function main() {
       'in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is',
       'MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from',
       'ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system',
-      'contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw',
-      'kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`',
-      'is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.',
-      'Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
+      'contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in',
+      '`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no',
+      'confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the',
+      'raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay',
+      'deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text',
+      'has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
       '',
     ];
     writeFileSync(join(outDir, file), headerLines.join('\n') + sections.join('\n\n') + '\n');

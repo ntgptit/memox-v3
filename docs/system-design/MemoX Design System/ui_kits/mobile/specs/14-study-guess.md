@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,22 +30,24 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
     - div abs:[62,67 286x18] rel:[54,15 286x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
@@ -55,7 +57,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - div "5 / 20" abs:[358,69 32x15] rel:[350,17 32x15] font:12/600 color:on-surface-variant
   - hide-scroll abs:[8,100 390x643] rel:[0,92 390x643] flex:col grow:1 basis:0 layout_hint:expanded layout_hint:scroll clip scrollh:732
     - div abs:[8,100 390x732] rel:[0,0 390x732] flex:col gap:14 pad:8/14/0/14
-      - card abs:[22,108 362x248] rel:[14,8 362x248] flex:col gap:10 justify:center shrink:0 pad:34/14/32/14 minh:180 bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[22,108 362x248] rel:[14,8 362x248] mx:MxCard flex:col gap:10 justify:center shrink:0 pad:34/14/32/14 minh:180 bg:on-primary r:12 border:1px seed-indigo@14
         - ov "What is this?" abs:[37,203 332x13] rel:[15,95 332x13] font:11/700 color:on-surface-variant text:center tracking:1.2
         - div "도서관" abs:[37,226 332x37] rel:[15,118 332x37] font:32/700/37 color:font-headline text:center tracking:-0.5
       - div abs:[22,370 362x462] rel:[14,270 362x462] flex:col gap:8 shrink:0 repeat:x5(unit=1)

@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,22 +30,24 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Loaded
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
@@ -56,12 +58,12 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
       - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
           - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x628] rel:[14,100 362x628] repeat:x11(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,200 362x628] rel:[14,100 362x628] mx:MxCard repeat:x11(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
       - item[1] div abs:[23,201 360x57] rel:[1,1 360x57] grid cols:4 gap:12 align:center pad:12/14
         - div abs:[37,215 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
           - span abs:[45,223 13x13] rel:[8,8 13x13] flex:row
@@ -72,7 +74,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span "Most used" abs:[249,219 78x20] rel:[226,18 78x20] flex:row gap:4 align:center pad:0/7 bg:#d9891e@12 font:10/700 color:streak r:999
           - span abs:[256,224 10x10] rel:[7,5 10x10] flex:row
             - icon:flame abs:[256,224 10x10] rel:[0,0 10x10] clip
-        - icon-btn abs:[339,214 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,214 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,219 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,219 20x20] rel:[0,0 20x20] clip
       - item[2] div abs:[23,258 360x57] rel:[1,58 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -82,7 +84,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,270 234x32] rel:[58,12 234x32]
           - div "noun" abs:[81,270 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "88 cards" abs:[81,289 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,271 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,271 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,276 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,276 20x20] rel:[0,0 20x20] clip
       - item[3] div abs:[23,315 360x57] rel:[1,115 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -92,7 +94,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,327 234x32] rel:[58,12 234x32]
           - div "verb" abs:[81,327 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "71 cards" abs:[81,346 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,328 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,328 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,333 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,333 20x20] rel:[0,0 20x20] clip
       - item[4] div abs:[23,372 360x57] rel:[1,172 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -102,7 +104,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,384 234x32] rel:[58,12 234x32]
           - div "people" abs:[81,384 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "46 cards" abs:[81,403 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,385 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,385 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,390 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,390 20x20] rel:[0,0 20x20] clip
       - item[5] div abs:[23,429 360x57] rel:[1,229 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -112,7 +114,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,441 234x32] rel:[58,12 234x32]
           - div "food" abs:[81,441 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "34 cards" abs:[81,460 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,442 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,442 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,447 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,447 20x20] rel:[0,0 20x20] clip
       - item[6] div abs:[23,486 360x57] rel:[1,286 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -122,7 +124,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,498 234x32] rel:[58,12 234x32]
           - div "adjective" abs:[81,498 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "28 cards" abs:[81,517 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,499 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,499 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,504 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,504 20x20] rel:[0,0 20x20] clip
       - item[7] div abs:[23,543 360x57] rel:[1,343 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -132,7 +134,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,555 234x32] rel:[58,12 234x32]
           - div "business" abs:[81,555 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "22 cards" abs:[81,574 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,561 20x20] rel:[0,0 20x20] clip
       - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -142,7 +144,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,612 234x32] rel:[58,12 234x32]
           - div "travel" abs:[81,612 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "18 cards" abs:[81,631 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,613 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,613 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,618 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,618 20x20] rel:[0,0 20x20] clip
       - item[9] div abs:[23,657 360x57] rel:[1,457 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -152,7 +154,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,669 234x32] rel:[58,12 234x32]
           - div "idioms" abs:[81,669 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "11 cards" abs:[81,688 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,670 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,670 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,675 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,675 20x20] rel:[0,0 20x20] clip
       - item[10] div abs:[23,714 360x57] rel:[1,514 360x57] grid cols:4 gap:12 align:center pad:12/14
@@ -162,7 +164,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,726 234x32] rel:[58,12 234x32]
           - div "numbers" abs:[81,726 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "6 cards" abs:[81,745 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,727 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,727 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,732 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,732 20x20] rel:[0,0 20x20] clip
       - item[11] div abs:[23,771 360x56] rel:[1,571 360x56] grid cols:4 gap:12 align:center pad:12/14
@@ -172,7 +174,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - div abs:[81,783 234x32] rel:[58,12 234x32]
           - div "archive 2023" abs:[81,783 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
           - div "3 cards" abs:[81,802 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,784 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+        - icon-btn abs:[339,784 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
           - span abs:[344,789 20x20] rel:[5,5 20x20] flex:row
             - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
 ```
@@ -180,15 +182,15 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Loading (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
@@ -199,12 +201,12 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
       - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
           - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x316] rel:[14,100 362x316] clip bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,200 362x316] rel:[14,100 362x316] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[23,201 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14
         - span abs:[37,218 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
         - div abs:[81,214 246x36] rel:[58,13 246x36]
@@ -235,15 +237,15 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Empty (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
@@ -254,18 +256,18 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
       - ov "No tags" abs:[26,169 57x13] rel:[4,9 57x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
           - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x273] rel:[14,100 362x273] pad:40/22 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,200 362x273] rel:[14,100 362x273] mx:MxCard pad:40/22 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[175,241 56x56] rel:[153,41 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
         - span abs:[190,256 26x26] rel:[15,15 26x26] flex:row
           - icon:tag abs:[190,256 26x26] rel:[0,0 26x26] clip
       - div "No tags yet" abs:[45,311 316x21] rel:[23,111 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
       - div "Tags appear here as you add them when creating or editing flashcards." abs:[45,338 316x40] rel:[23,138 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Go to library" abs:[138,394 130x38] rel:[116,194 130x38] flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
+      - pill-btn "Go to library" abs:[138,394 130x38] rel:[116,194 130x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
         - span abs:[154,406 14x14] rel:[16,12 14x14] flex:row
           - icon:layers abs:[154,406 14x14] rel:[0,0 14x14] clip
 ```
@@ -273,15 +275,15 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Search empty (full — differs too much from base)
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
@@ -290,17 +292,17 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
         - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
       - span "phras" abs:[63,114 270x18] rel:[41,14 270x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:font-headline
-      - icon-btn abs:[343,110 26x26] rel:[321,10 26x26] flex:row justify:center align:center pos:relative r:999
+      - icon-btn abs:[343,110 26x26] rel:[321,10 26x26] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
         - span abs:[346,113 20x20] rel:[3,3 20x20] flex:row
           - icon:x abs:[346,113 20x20] rel:[0,0 20x20] clip
     - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
       - ov "No matches" abs:[26,169 85x13] rel:[4,9 85x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
         - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
           - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
         - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
           - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x162] rel:[14,100 362x162] pad:32/22 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,200 362x162] rel:[14,100 362x162] mx:MxCard pad:32/22 bg:on-primary r:12 border:1px seed-indigo@14
       - div abs:[181,233 44x44] rel:[159,33 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
         - span abs:[194,246 18x18] rel:[13,13 18x18] flex:row
           - icon:search abs:[194,246 18x18] rel:[0,0 18x18] clip
@@ -324,7 +326,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span "· 46" abs:[101,430 18x12] rel:[75,7 18x12] font:10/700 color:seed-indigo op:0.7
 + - div "Tag actions" abs:[26,453 354x13] rel:[18,38 354x13] pad:0/2 font:11/400 color:on-surface-variant
 + - div abs:[8,472 390x316] rel:[0,73 390x316] repeat:x2+(unit=2) pad:6/8/14/8
-+ - item[1] button abs:[16,478 374x57] rel:[8,6 374x57] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - item[1] button abs:[16,478 374x57] rel:[8,6 374x57] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,492 30x30] rel:[10,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,500 14x14] rel:[8,8 14x14] flex:row
 + - icon:play abs:[34,500 14x14] rel:[0,0 14x14] clip
@@ -333,7 +335,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Start a session with the 46 cards" abs:[70,510 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[364,499 16x16] rel:[348,21 16x16] flex:row
 + - icon:chevron-right abs:[364,499 16x16] rel:[0,0 16x16] clip
-+ - button abs:[16,535 374x57] rel:[8,63 374x57] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - button abs:[16,535 374x57] rel:[8,63 374x57] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,549 30x30] rel:[10,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,557 14x14] rel:[8,8 14x14] flex:row
 + - icon:list abs:[34,557 14x14] rel:[0,0 14x14] clip
@@ -342,14 +344,14 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Open the global tag-filtered list" abs:[70,567 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[364,556 16x16] rel:[348,21 16x16] flex:row
 + - icon:chevron-right abs:[364,556 16x16] rel:[0,0 16x16] clip
-+ - item[2] button abs:[16,592 374x54] rel:[8,120 374x54] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - item[2] button abs:[16,592 374x54] rel:[8,120 374x54] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,604 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,612 14x14] rel:[8,8 14x14] flex:row
 + - icon:pencil abs:[34,612 14x14] rel:[0,0 14x14] clip
 + - div "Rename tag" abs:[70,610 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
 + - span abs:[364,611 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,611 16x16] rel:[0,0 16x16] clip
-+ - button abs:[16,646 374x54] rel:[8,174 374x54] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - button abs:[16,646 374x54] rel:[8,174 374x54] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,658 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
 + - span abs:[34,666 14x14] rel:[8,8 14x14] flex:row
 + - icon:git-merge abs:[34,666 14x14] rel:[0,0 14x14] clip
@@ -357,7 +359,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[364,665 16x16] rel:[348,19 16x16] flex:row
 + - icon:chevron-right abs:[364,665 16x16] rel:[0,0 16x16] clip
 + - div abs:[26,708 354x1] rel:[18,236 354x1] margin:8/10 bg:outline-variant
-+ - button abs:[16,717 374x57] rel:[8,245 374x57] grid cols:2 gap:12 align:center pad:12/10 r:10
++ - button abs:[16,717 374x57] rel:[8,245 374x57] mx:? grid cols:2 gap:12 align:center pad:12/10 r:10
 + - div abs:[26,731 30x30] rel:[10,14 30x30] flex:row justify:center align:center bg:#dc4848@10 r:9
 + - span abs:[34,739 14x14] rel:[8,8 14x14] flex:row
 + - icon:trash-2 abs:[34,739 14x14] rel:[0,0 14x14] clip
@@ -384,8 +386,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span abs:[125,393 2x18] rel:[74,14 2x18] bg:seed-indigo
 + - div "Tag names are case-insensitive." abs:[51,431 304x13] rel:[18,83 304x13] pad:0/2 margin:6/0/0/0 font:11/400 color:on-surface-variant
 + - div abs:[33,448 340x68] rel:[0,167 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,462 134x40] rel:[14,14 134x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Rename" abs:[189,462 170x40] rel:[156,14 170x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
++ - pill-btn "Cancel" abs:[47,462 134x40] rel:[14,14 134x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Rename" abs:[189,462 170x40] rel:[156,14 170x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 ```
 
 ## State: Rename to merge (ordered diff vs Loaded)
@@ -425,8 +427,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - span "· 134" abs:[268,448 24x12] rel:[62,7 24x12] font:10/700 color:seed-indigo op:0.7
 + - div "No cards are deleted. The combined tag will hold all 134 cards." abs:[64,483 278x33] rel:[13,109 278x33] margin:8/0/0/0 font:11/400/17 color:on-surface-variant
 + - item[4] div abs:[33,529 340x68] rel:[0,330 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,543 134x40] rel:[14,14 134x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Merge tags" abs:[189,543 170x40] rel:[156,14 170x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center tracking:0.1 r:11
++ - pill-btn "Cancel" abs:[47,543 134x40] rel:[14,14 134x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Merge tags" abs:[189,543 170x40] rel:[156,14 170x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[228,556 14x14] rel:[39,13 14x14] flex:row
 + - icon:git-merge abs:[228,556 14x14] rel:[0,0 14x14] clip
 ```
@@ -448,28 +450,28 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:search abs:[39,396 14x14] rel:[0,0 14x14] clip
 + - span "Search tags" abs:[63,395 73x16] rel:[37,13 73x16] font:13/400 color:on-surface-variant op:0.7
 + - hide-scroll abs:[8,434 390x238] rel:[0,145 390x238] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/8/14/8 layout_hint:scroll clip
-+ - item[1] button abs:[16,434 374x56] rel:[8,0 374x56] grid cols:3 gap:12 align:center pad:12/10 bg:seed-indigo@6 r:10
++ - item[1] button abs:[16,434 374x56] rel:[8,0 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 bg:seed-indigo@6 r:10
 + - span abs:[26,453 18x18] rel:[10,19 18x18] bg:on-primary r:999 border:5px seed-indigo
 + - div abs:[60,446 294x32] rel:[44,12 294x32]
 + - div "noun" abs:[60,446 294x18] rel:[0,0 294x18] font:14/700 color:font-headline
 + - div "88 cards" abs:[60,465 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,455 14x14] rel:[350,21 14x14] flex:row
 + - icon:tag abs:[366,455 14x14] rel:[0,0 14x14] clip
-+ - item[2] button abs:[16,490 374x56] rel:[8,56 374x56] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - item[2] button abs:[16,490 374x56] rel:[8,56 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - span abs:[26,509 18x18] rel:[10,19 18x18] r:999 border:2px outline-variant
 + - div abs:[60,502 294x32] rel:[44,12 294x32]
 + - div "verb" abs:[60,502 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
 + - div "71 cards" abs:[60,521 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,511 14x14] rel:[350,21 14x14] flex:row
 + - icon:tag abs:[366,511 14x14] rel:[0,0 14x14] clip
-+ - item[3] button abs:[16,546 374x56] rel:[8,112 374x56] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - item[3] button abs:[16,546 374x56] rel:[8,112 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - span abs:[26,565 18x18] rel:[10,19 18x18] r:999 border:2px outline-variant
 + - div abs:[60,558 294x32] rel:[44,12 294x32]
 + - div "food" abs:[60,558 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
 + - div "34 cards" abs:[60,577 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
 + - span abs:[366,567 14x14] rel:[350,21 14x14] flex:row
 + - icon:tag abs:[366,567 14x14] rel:[0,0 14x14] clip
-+ - item[4] button abs:[16,602 374x56] rel:[8,168 374x56] grid cols:3 gap:12 align:center pad:12/10 r:10
++ - item[4] button abs:[16,602 374x56] rel:[8,168 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
 + - span abs:[26,621 18x18] rel:[10,19 18x18] r:999 border:2px outline-variant
 + - div abs:[60,614 294x32] rel:[44,12 294x32]
 + - div "business" abs:[60,614 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
@@ -488,8 +490,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - icon:tag abs:[181,691 11x11] rel:[0,0 11x11] clip
 + - span "· 134" abs:[233,690 24x12] rel:[62,7 24x12] font:10/700 color:seed-indigo op:0.7
 + - div abs:[8,732 390x56] rel:[0,443 390x56] flex:row gap:8 pad:0/14/16/14
-+ - pill-btn "Cancel" abs:[22,732 155x40] rel:[14,0 155x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Merge 46 cards" abs:[185,732 199x40] rel:[177,0 199x40] flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
++ - pill-btn "Cancel" abs:[22,732 155x40] rel:[14,0 155x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Merge 46 cards" abs:[185,732 199x40] rel:[177,0 199x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[225,745 14x14] rel:[41,13 14x14] flex:row
 + - icon:git-merge abs:[225,745 14x14] rel:[0,0 14x14] clip
 ```
@@ -514,8 +516,8 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div "Your . Only the tag label is removed." abs:[87,416 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
 + - strong "46 cards are kept" abs:[114,417 100x15] rel:[27,1 100x15] font:12/700/18 color:font-headline
 + - div abs:[33,467 340x68] rel:[0,206 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,481 143x40] rel:[14,14 143x40] flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Delete tag" abs:[198,481 161x40] rel:[165,14 161x40] flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
++ - pill-btn "Cancel" abs:[47,481 143x40] rel:[14,14 143x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
++ - pill-btn "Delete tag" abs:[198,481 161x40] rel:[165,14 161x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
 + - span abs:[235,494 14x14] rel:[38,13 14x14] flex:row
 + - icon:trash-2 abs:[235,494 14x14] rel:[0,0 14x14] clip
 ```
@@ -524,7 +526,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - div "22 cards" abs:[81,574 246x13] rel:[0,19 246x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-- - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] flex:row justify:center align:center pos:relative r:999
+- - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
 - - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
 - - icon:more-vertical abs:[344,561 20x20] rel:[0,0 20x20] clip
 + - span abs:[351,562 18x18] rel:[328,19 18x18] r:999 border:2px #000000@0
@@ -542,5 +544,5 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[62,720 257x38] rel:[40,12 257x38] grow:1 basis:0 layout_hint:expanded
 + - div "Couldn't rename tag" abs:[62,720 257x19] rel:[0,0 257x19] margin:0/0/2/0 font:13/700/19 color:on-primary
 + - div "Nothing changed. Try again in a moment." abs:[62,741 257x17] rel:[0,21 257x17] font:12/400/17 color:on-primary op:0.8
-+ - button "Retry" abs:[329,720 41x20] rel:[307,12 41x20] pad:2/4 font:13/600 color:on-primary text:center
++ - button "Retry" abs:[329,720 41x20] rel:[307,12 41x20] mx:? pad:2/4 font:13/600 color:on-primary text:center
 ```

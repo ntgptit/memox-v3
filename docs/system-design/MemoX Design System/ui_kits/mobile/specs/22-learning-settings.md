@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,22 +30,24 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Goal on
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] flex:row justify:center align:center pos:relative r:999
+  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
         - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
     - title "Learning" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
@@ -55,7 +57,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:924
     - item[1] div abs:[22,100 362x311] rel:[14,0 362x311] margin:0/0/18/0
       - ov "Daily goal" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,121 362x290] rel:[0,21 362x290] clip bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[22,121 362x290] rel:[0,21 362x290] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,122 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14
           - div abs:[37,135 276x37] rel:[14,13 276x37]
             - div "Set a daily goal" abs:[37,135 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
@@ -100,7 +102,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               - span abs:[346,360 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
     - item[2] div abs:[22,429 362x168] rel:[14,329 362x168] margin:0/0/18/0
       - ov "Reminder" abs:[22,429 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,450 362x122] rel:[0,21 362x122] clip bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[22,450 362x122] rel:[0,21 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,451 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14
           - div abs:[37,464 276x37] rel:[14,13 276x37]
             - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
@@ -120,7 +122,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
     - item[3] div abs:[22,615 362x86] rel:[14,515 362x86] margin:0/0/18/0
       - ov "Tags" abs:[22,615 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,636 362x65] rel:[0,21 362x65] clip bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[22,636 362x65] rel:[0,21 362x65] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,637 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14
           - div abs:[37,654 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
             - span abs:[45,661 15x15] rel:[8,8 15x15] flex:row
@@ -133,7 +135,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               - icon:chevron-right abs:[351,660 18x18] rel:[0,0 18x18] clip
     - item[4] div abs:[22,719 362x240] rel:[14,619 362x240] margin:0/0/18/0
       - ov "Study defaults" abs:[22,719 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,740 362x194] rel:[0,21 362x194] clip bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[22,740 362x194] rel:[0,21 362x194] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
         - div abs:[23,741 360x64] rel:[1,1 360x64] grid cols:3 gap:12 align:center pad:13/14 op:0.45
           - div abs:[37,758 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
             - span abs:[45,766 15x15] rel:[8,8 15x15] flex:row
@@ -251,7 +253,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - div abs:[63,585 306x98] rel:[40,13 306x98] grow:1 basis:0 layout_hint:expanded
 + - div "Notifications are blocked" abs:[63,585 306x16] rel:[0,0 306x16] font:13/700 color:font-headline tracking:-0.1
 + - div "Allow MemoX in your phone’s notification settings to receive the reminder." abs:[63,603 306x36] rel:[0,18 306x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
-+ - pill-btn "Open system settings" abs:[63,649 175x34] rel:[0,64 175x34] flex:row gap:6 justify:center align:center pad:0/14 margin:10/0/0/0 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - pill-btn "Open system settings" abs:[63,649 175x34] rel:[0,64 175x34] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 margin:10/0/0/0 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
 + - span abs:[77,659 13x13] rel:[14,11 13x13] flex:row
 + - icon:external-link abs:[77,659 13x13] rel:[0,0 13x13] clip
   - item[3] div abs:[22,714 362x86] rel:[14,614 362x86] margin:0/0/18/0

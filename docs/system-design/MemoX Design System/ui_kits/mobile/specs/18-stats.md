@@ -5,7 +5,7 @@ edit by hand; re-run the exporter after any `../index.html` change (the freshnes
 in `tool/verify/run.mjs` fails when this is stale).
 
 Reading guide: each line is one visible element —
-`- [item[i]] name "own text" abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
+`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> shadow:<offY>/<blur>`.
 Indentation = DOM containment (layout/grouping containers are kept, not flattened).
 `abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size
 INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.
@@ -30,34 +30,36 @@ gap, not a license to hardcode. Non-base states are an ordered diff (`+` added /
 in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is
 MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from
 ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system
-contract. Three mappings are deliberately LEFT MISSING here, not guessed: `name` is the raw
-kit CSS class (e.g. `card`, `pill-btn`, `ov`) — NOT a resolved Mx component; a bare `#rrggbb`
-is an un-tokenized color; quoted text has no l10n key. Resolve component/token/key separately.
-Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
+contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in
+`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no
+confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the
+raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay
+deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
+has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- app abs:[8,8 390x780] rel:[8,8 390x780] flex:col pos:relative clip bg:surface
+- app abs:[8,8 390x780] rel:[8,8 390x780] mx:MxScaffold flex:col pos:relative clip bg:surface
   - statusbar abs:[8,8 390x44] rel:[0,0 390x44] flex:row justify:between align:center pad:0/24
     - span "9:41" abs:[32,21 28x18] rel:[24,13 28x18] font:14/600 color:font-headline
     - span abs:[314,24 60x12] rel:[306,16 60x12] flex:row gap:4 align:center
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x56] rel:[0,44 390x56] flex:row gap:4 align:center pad:0/14
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/14
     - div "Stats" abs:[22,65 59x30] rel:[14,13 59x30] font:24/700 color:font-headline tracking:-0.5
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
     - div abs:[22,108 362x89] rel:[14,0 362x89] grid cols:2 gap:12 margin:0/0/16/0
-      - card abs:[22,108 175x89] rel:[0,0 175x89] pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[22,108 175x89] rel:[0,0 175x89] mx:MxCard pad:12 bg:on-primary r:12 border:1px seed-indigo@14
         - ov "Reviews today" abs:[35,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant tracking:1.2
         - div "47" abs:[35,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline tracking:-0.6
         - div "+12 vs yesterday" abs:[35,169 149x15] rel:[13,61 149x15] font:12/600 color:mastery
-      - card abs:[209,108 175x89] rel:[187,0 175x89] pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+      - card abs:[209,108 175x89] rel:[187,0 175x89] mx:MxCard pad:12 bg:on-primary r:12 border:1px seed-indigo@14
         - ov "Retention" abs:[222,121 149x13] rel:[13,13 149x13] font:11/700 color:on-surface-variant tracking:1.2
         - div "88" abs:[222,134 149x35] rel:[13,26 149x35] font:28/700 color:font-headline tracking:-0.6
           - span "%" abs:[254,146 16x21] rel:[32,12 16x21] font:16/700 color:on-surface-variant tracking:-0.6
         - div "7-day rolling" abs:[222,169 149x15] rel:[13,61 149x15] font:12/400 color:on-surface-variant
-    - card abs:[22,213 362x179] rel:[14,105 362x179] pad:12 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,213 362x179] rel:[14,105 362x179] mx:MxCard pad:12 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
       - ov "This week" abs:[35,226 336x13] rel:[13,13 336x13] margin:0/0/12/0 font:11/700 color:on-surface-variant tracking:1.2
       - div abs:[35,251 336x128] rel:[13,38 336x128] flex:row gap:10 align:end repeat:x7(unit=1) pad:4/0
         - item[1] div abs:[35,255 39x120] rel:[0,4 39x120] flex:col gap:6 justify:end align:center grow:1 basis:0 layout_hint:expanded
@@ -82,7 +84,7 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - div abs:[332,255 39x101] rel:[0,0 39x101] bg:seed-indigo r:6
           - div "S" abs:[348,362 7x13] rel:[16,107 7x13] font:11/600 color:on-surface-variant
     - ov "Mastery by deck" abs:[22,408 362x13] rel:[14,300 362x13] margin:0/0/8/0 font:11/700 color:on-surface-variant tracking:1.2
-    - card abs:[22,429 362x237] rel:[14,321 362x237] repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
+    - card abs:[22,429 362x237] rel:[14,321 362x237] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
       - item[1] div abs:[23,430 360x59] rel:[1,1 360x59] pad:14/16
         - div abs:[39,444 328x18] rel:[16,14 328x18] flex:row justify:between margin:0/0/6/0
           - span "TOPIK II Vocab" abs:[39,444 97x18] rel:[0,0 97x18] font:14/500 color:font-headline
@@ -107,21 +109,21 @@ Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - span "88%" abs:[336,621 31x18] rel:[297,0 31x18] font:14/700 color:font-headline
         - div abs:[39,645 328x6] rel:[16,38 328x6] clip bg:surface-container r:999
           - div abs:[39,645 289x6] rel:[0,0 289x6] bg:mastery
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
-    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] flex:col gap:3 align:center pad:8/0
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
       - span "Home" abs:[50,750 29x12] rel:[31,33 29x12] font:10/600 color:on-surface-variant text:center
-    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[2] bn-item abs:[111,717 92x53] rel:[93,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[147,725 20x20] rel:[36,8 20x20] flex:row
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
-    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] flex:col gap:3 align:center pad:8/0
+    - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
       - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
-    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] flex:col gap:3 align:center pad:8/0
+    - item[4] bn-item abs:[295,717 92x53] rel:[277,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[331,725 20x20] rel:[36,8 20x20] flex:row
         - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
       - span "Settings" abs:[321,750 41x12] rel:[26,33 41x12] font:10/600 color:on-surface-variant text:center
