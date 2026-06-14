@@ -133,7 +133,10 @@ from a mock, tick:
       Rejected / Missing-data / Token-missing / Mock-doc-conflict (do not silently
       drop, and do not fake Future data such as progress/mastery/new-card).
 
-If any box cannot be ticked, stop and explain why instead of shipping.
+If any box cannot be ticked, stop and explain why instead of shipping. This gate
+covers the **static-visual** bug class; for overflow / large-font / behaviour /
+data / a11y bugs, pick the matching prevention + gate from the bug-class map in
+`CLAUDE.md` §UI Mock Design Parity ("Catch the bug CLASS, not the instance").
 See `docs/design/mock-to-ui-playbook.md` (Phase 7) for the full runbook.
 
 ---

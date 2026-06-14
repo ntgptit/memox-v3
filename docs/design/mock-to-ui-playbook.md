@@ -177,6 +177,9 @@ class of drift without a human eyeballing the mock. Regenerate intentionally wit
 silence an unexplained diff. Prefer pushing layout invariants into the shared
 component (e.g. `MxSearchField` owns its trailing inset) + a geometry contract
 test, so the whole class is unrepresentable rather than re-checked per screen.
+Golden covers the **static-visual** class only; for overflow / large-font /
+behaviour / data / a11y bugs, choose the prevention + gate from the bug-class map
+in `CLAUDE.md` §UI Mock Design Parity ("Catch the bug CLASS, not the instance").
 
 > **Trap — tall screens need a real surface.** `SliverFillRemaining` empty/error
 > states get squeezed in the default 800×600 test window. Set

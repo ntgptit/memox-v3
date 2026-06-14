@@ -287,19 +287,31 @@ For UI changes, add or update widget tests for:
 - Error state
 - Search/no-results state when applicable
 - Navigation behavior when applicable
-- **A golden test per state** (`matchesGoldenFile`, light + dark, 390×780 surface).
-  `flutter analyze`, unit tests, and the guard are BLIND to spacing, padding, and
-  alignment — a golden is the only gate that catches the "keycap hugs the border /
-  card padding off by 8px" class of drift without a human eyeballing the mock.
-  Pattern: `test/presentation/features/folders/library_search_field_golden_test.dart`
-  and `.../progress/progress_screen_golden_test.dart`. Regenerate intentionally with
-  `node tool/verify/run.mjs --update-goldens --test <paths>`; NEVER `--update` just to
-  silence a diff you have not explained.
-- **Prefer killing the bug class, not the instance.** When a small visual bug comes
-  from how a shared `Mx*` widget places content (e.g. a trailing inset), push the
-  invariant INTO the shared widget + add a geometry contract test, so every consumer
-  is fixed at once and the mistake becomes unrepresentable. See
-  `docs/design/mock-to-ui-playbook.md` Phase 7.
+- **A golden test per state** (`matchesGoldenFile`, light + dark, 390×780) — this is
+  the "static visual" row of the gate map below.
+
+**Catch the bug CLASS, not the instance (general — applies beyond UI):**
+
+Small bugs slip past `flutter analyze`, unit tests, and the guard because each is
+blind to a different thing (spacing, overflow, behaviour, data, a11y). Don't fix the
+single instance — identify the bug's CLASS, push prevention to the lowest layer, and
+add the cheapest automatic gate that covers the whole class:
+
+| Bug class | Prevent (lowest layer) | Detect (automatic gate) |
+|---|---|---|
+| Spacing / alignment / colour (static visual) | invariant in the `Mx*` widget + tokens | golden test per state (light + dark, 390×780) |
+| Overflow / large `textScaleFactor` / narrow width | `Flexible`/ellipsis in the shared widget | widget test at narrow width + scaled text |
+| Behaviour / navigation / state | use case + provider contract | widget/interaction test per decision row |
+| Wrong data / count / sort | repository contract | unit test on the read model |
+| a11y (labels, target size) | semantics in the shared widget | semantics test |
+| Design-system bypass (raw widget/colour) | — | a `memox.*` guard rule |
+
+Push the fix to the lowest layer so every consumer is fixed at once (example, visual
+row: `MxSearchField` owns its trailing inset + a geometry contract test → no consumer
+can misalign the keycap). Regenerate goldens intentionally with
+`node tool/verify/run.mjs --update-goldens --test <paths>`, then prove they pass
+WITHOUT `--update`; never `--update` to silence an unexplained diff. Golden pattern:
+`test/presentation/features/folders/library_search_field_golden_test.dart`.
 
 Expected final response after implementing a UI task:
 
