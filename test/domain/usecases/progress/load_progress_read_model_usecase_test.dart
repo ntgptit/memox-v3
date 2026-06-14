@@ -5,6 +5,7 @@ import 'package:memox/app/di/database_providers.dart';
 import 'package:memox/app/di/progress_providers.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
 import 'package:memox/domain/types/progress_range.dart';
@@ -34,6 +35,14 @@ class _RecordingProgressRepository implements ProgressRepository {
 
   final Result<ProgressReadModel> result;
   DateTime? lastNow;
+
+  @override
+  Future<Result<DashboardDeckHighlights>> loadDashboardDeckHighlights({
+    required DateTime now,
+    int limit = 3,
+  }) async {
+    throw UnimplementedError();
+  }
 
   @override
   Future<Result<ProgressDueSummary>> loadProgressDueSummary({

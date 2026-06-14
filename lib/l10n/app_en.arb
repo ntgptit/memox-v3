@@ -43,7 +43,92 @@
   "dashboardNoDueTitle": "No cards due now",
   "dashboardNoDueMessage": "Open your library to add cards or start a focused deck session.",
   "dashboardStudyTodayAction": "Study",
+  "dashboardStartReviewAction": "Start today's review",
   "dashboardOpenLibraryAction": "View library",
+  "dashboardSearchTooltip": "Search",
+  "dashboardTodayReviewOverline": "Today's review",
+  "dashboardDueCountTitle": "{count, plural, =1{1 card due} other{{count} cards due}}",
+  "@dashboardDueCountTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardReviewScopeMeta": "Across {deckCount, plural, =1{1 deck} other{{deckCount} decks}} · about {minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "@dashboardReviewScopeMeta": {
+    "placeholders": {
+      "deckCount": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardResumeMeta": "{answered}/{total} cards · paused {time}",
+  "@dashboardResumeMeta": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardDiscardAction": "Discard",
+  "dashboardDiscardConfirmTitle": "Discard paused session?",
+  "dashboardDiscardConfirmMessage": "Your progress in this session won't be saved.",
+  "dashboardTodayGoalLabel": "Today's goal",
+  "dashboardGoalProgress": "{done}/{target}",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardStartNewLearningAction": "Start new learning",
+  "dashboardNewCardsBadge": "{count, plural, =1{1 new} other{{count} new}}",
+  "@dashboardNewCardsBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRecentDecksTitle": "Recent decks",
+  "dashboardDeckCardCount": "{count, plural, =1{1 card} other{{count} cards}}",
+  "@dashboardDeckCardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardDeckLastStudied": "last {time}",
+  "@dashboardDeckLastStudied": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardDeckDueBadge": "{count, plural, =1{1 due} other{{count} due}}",
+  "@dashboardDeckDueBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "progressEntryDeck": "Deck",
   "progressEntryFolder": "Folder",
   "settingsAppearanceTitle": "Appearance",

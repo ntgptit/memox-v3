@@ -122,13 +122,25 @@ Future<Either<Failure, Unit>> call();
 
 Cancels any scheduled reminder.
 
-## GetRecentDecksUseCase
+## LoadDashboardDeckHighlightsUseCase (was GetRecentDecksUseCase)
 
 ```dart
-Future<Either<Failure, List<Deck>>> call({int limit = 3});
+Future<Result<DashboardDeckHighlights>> call({required DateTime now});
 ```
 
-`decks ORDER BY updated_at DESC LIMIT :limit`.
+Implemented at `lib/domain/usecases/progress/load_dashboard_deck_highlights_usecase.dart`,
+backed by `ProgressRepository.loadDashboardDeckHighlights`. Returns the Dashboard "Recent decks"
+list **and** the library-wide never-studied card count (for the "Start new learning" badge) in one
+read:
+
+- `recentDecks`: `decks ORDER BY updated_at DESC LIMIT 3`, each with `cardCount`, `dueCount`
+  (same suspended/buried exclusions as Progress/Library), and `lastStudiedAt`
+  (`MAX(flashcard_progress.last_studied_at)`, null = never studied).
+- `newCardCount`: flashcards with no recorded `last_studied_at` and not suspended.
+
+The recent-deck limit is fixed at 3 (`docs/wireframes/01-dashboard.md` §Agent rule).
+
+**Errors:** `StorageFailure`.
 
 ## MarkFirstLaunchCompletedUseCase
 

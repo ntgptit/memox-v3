@@ -15,13 +15,20 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 
 ## V1 release status
 
-- Current V1: due/new/mastery summary, recent decks, resume card, paused-sessions sheet, and Today CTA that routes to study only when due cards exist.
-- Current V1 placeholder: the stats row may show `Streak` / `0 days` as a simple visual/stat placeholder only. It has no streak computation, no engagement persistence, no settings, no reminder, and no streak-history or daily-goal sheet action.
-- **Release rule (adopted 2026-06-10, WBS 8.1.2):** this placeholder violates this screen's own
-  Forbidden rule ("hide streak chip when streak is 0") — a dead `0 days` stat reads as a broken
-  feature. Remove/hide the streak placeholder before any release until real engagement data
-  exists.
-- Target/Future: full streak chip/history, daily-goal ring/settings, reminders/notification permissions, Dashboard zero-content onboarding layout, Global Search route/action, and search icon navigation.
+- Current V1: resume card (with Discard), **computed-streak chip** (hidden at 0), **daily-goal
+  ring** (hidden when goal disabled), Today's-review card (due count + deck-count + time estimate,
+  routes to study only when due cards exist), **Start new learning** CTA with never-studied count,
+  **Recent decks** section, app-bar **Global Search** shortcut, and the zero-content onboarding body.
+- Streak and daily-goal now read the source-backed
+  `LoadDashboardProgressSummaryUseCase` (computed from `study_attempts` + persisted learning
+  settings). They are NO LONGER placeholders. The streak chip is hidden when the streak is 0; the
+  goal ring is hidden when the goal is disabled (no `0 days` dead stat).
+- Recent decks and the never-studied "new" count read the source-backed
+  `LoadDashboardDeckHighlightsUseCase` (`decks` ordered by `updated_at DESC`, with per-deck card
+  count, due count, last-studied time).
+- Target/Future: streak-history sheet, daily-goal slider/settings, reminders/notification
+  permissions, streak-broken banner, paused-sessions multi-resume sheet, and the deck/folder scope
+  picker for "Start new learning" (V1 routes new learning straight to the global new-cards entry).
 - Current app boot still redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`; changing launch default to Dashboard requires a dedicated navigation task.
 
 ## Layout — populated state
@@ -156,14 +163,29 @@ All queries fire in parallel via separate providers; UI shows skeletons per card
 | New learning CTA | Secondary outlined button. Tap → opens scope picker bottom-sheet (pick deck/folder/today). |
 | Recent decks list | Last 3 opened decks ordered by `decks.updated_at` desc among rows touched by the user. |
 
-## V1 implementation note (Prompt 04, 2026-05-30)
+## V1 implementation note (2026-06-14 full-mock build)
 
-- **Resume card, recent decks, Today CTA, and "Start new learning"** are implemented and tested (`test/presentation/dashboard_screen_test.dart`).
-- **Action density** follows `docs/ui-ux/action-hierarchy-contract.md`: the due/next-action card uses **compact, trailing-aligned, stacked** card actions (`MxActionButton` `cardPrimary`/`cardSecondary`) — not full-width hero CTAs. Exactly one dominant primary per card ("Start review" when due, otherwise "Start new learning"); the companion is a lighter secondary. The resume card uses `MxCardActions` (Continue primary / Discard secondary).
-- **"Start new learning"** opens a two-step scope picker (Today / Deck / Folder); see `docs/wireframes/25-shared-bottom-sheets.md` §scope-picker V1 note. **Tag scope is excluded in V1.**
-- **Streak chip, daily-goal ring, reminders, streak-history sheet, daily-goal sheet, and streak-broken banner remain `Target`/Future** (blocked on the engagement product decision). The stats row shows a static `0 days` streak placeholder only; no streak/goal source-of-truth use case, persistence, settings control, reminder, or engagement sheet is wired yet.
-- **Onboarding (zero-content) layout** is not a dedicated route/screen in V1; thin empty-deck guidance is surfaced by the existing deck empty state (Prompt 01). No onboarding carousel/route is created.
-- **Global Search** is not reachable from Dashboard in V1. Inline search remains scope-local on owner screens only.
+- **Resume card (with Discard), streak chip, daily-goal ring, Today's-review card, "Start new
+  learning", and Recent decks** are implemented and tested
+  (`test/presentation/features/dashboard/dashboard_screen_test.dart`).
+- **Action density** follows `docs/ui-ux/action-hierarchy-contract.md`: the due/next-action card uses **compact, trailing-aligned, stacked** card actions (`MxActionButton` `cardPrimary`/`cardSecondary`) — not full-width hero CTAs, even though the mock draws full-width buttons. Exactly one dominant primary per card; the companion is a lighter secondary. The resume card uses `MxCardActions` (Continue primary / Discard secondary); Discard confirms via `showMxConfirmDialog` then `CancelStudySessionUseCase`.
+- **Streak + daily goal** read `LoadDashboardProgressSummaryUseCase` via
+  `dashboardProgressSummaryQueryProvider`. Streak chip hidden when streak `< 1`; goal ring hidden
+  when the goal is disabled/unknown. Reminders, streak-history, daily-goal slider, and the
+  streak-broken banner remain `Target`/Future.
+- **Stats row density:** the two stat cards use a **compact tile** (`headlineMedium` value +
+  overline caption + 32dp leading glyph/ring, 12dp padding), NOT the 48dp `MxStatDisplay` hero
+  number — that hero size reads as too heavy on a phone, especially when only one stat is present
+  and the card spans full width.
+- **Today's review** reads `dashboardDueSummaryQueryProvider` (`ProgressDueSummary`): the title shows the total due count, the meta shows the number of decks with due cards and an estimated minutes figure (≈36s/card — copy only, not a scheduling input).
+- **"Start new learning"** routes straight to the global new-cards study entry
+  (`goStudyEntry(entryType: today, studyType: newCards)`) and shows the library-wide never-studied
+  count. The two-step deck/folder **scope picker remains Future**; tag scope stays excluded.
+- **Recent decks** read `LoadDashboardDeckHighlightsUseCase` via
+  `dashboardDeckHighlightsQueryProvider` (top 3 decks by `updated_at`). Each row shows card count,
+  last-studied relative time, and a due badge; tapping opens the deck flashcard list.
+- **Onboarding (zero-content) layout** replaces the whole body when zero decks AND zero flashcards exist; it is not a dedicated route.
+- **Global Search** is reachable from the Dashboard app bar (`pushLibrarySearch` → `/library/search`).
 
 ## States
 
@@ -189,7 +211,7 @@ All queries fire in parallel via separate providers; UI shows skeletons per card
 | Tap "Start today's review" | Tap | Navigate to `/library/study/today` → routes through study entry gate. |
 | Tap "Start new learning" | Tap | Open scope picker bottom-sheet. |
 | Tap recent deck row | Tap | Navigate to `/library/deck/:deckId/flashcards`. |
-| Tap search icon | Target/Future | The global search route (`/library/search`) now exists, but Dashboard still exposes **no** search action in V1 — global search is reached from the Library app bar only. A Dashboard search entry remains Future. |
+| Tap search icon | Tap | Navigate to `/library/search` via `pushLibrarySearch`. Now a Current V1 Dashboard action. |
 | Tap settings icon | Tap | Navigate to `/settings`. |
 | Pull to refresh | Pull down | Re-run all queries; replace skeletons in place. |
 

@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/types/progress_range.dart';
 
@@ -22,5 +23,12 @@ abstract interface class ProgressRepository {
 
   Future<Result<ProgressReadModel>> loadProgressReadModel({
     required DateTime now,
+  });
+
+  /// Deck-derived Dashboard highlights: the most-recently-touched decks
+  /// (capped at [limit]) plus the library-wide never-studied card count.
+  Future<Result<DashboardDeckHighlights>> loadDashboardDeckHighlights({
+    required DateTime now,
+    int limit,
   });
 }

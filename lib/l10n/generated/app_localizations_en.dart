@@ -108,7 +108,111 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardStudyTodayAction => 'Study';
 
   @override
+  String get dashboardStartReviewAction => 'Start today\'s review';
+
+  @override
   String get dashboardOpenLibraryAction => 'View library';
+
+  @override
+  String get dashboardSearchTooltip => 'Search';
+
+  @override
+  String get dashboardTodayReviewOverline => 'Today\'s review';
+
+  @override
+  String dashboardDueCountTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards due',
+      one: '1 card due',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardReviewScopeMeta(int deckCount, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      deckCount,
+      locale: localeName,
+      other: '$deckCount decks',
+      one: '1 deck',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes',
+      one: '1 minute',
+    );
+    return 'Across $_temp0 · about $_temp1';
+  }
+
+  @override
+  String dashboardResumeMeta(int answered, int total, String time) {
+    return '$answered/$total cards · paused $time';
+  }
+
+  @override
+  String get dashboardDiscardAction => 'Discard';
+
+  @override
+  String get dashboardDiscardConfirmTitle => 'Discard paused session?';
+
+  @override
+  String get dashboardDiscardConfirmMessage =>
+      'Your progress in this session won\'t be saved.';
+
+  @override
+  String get dashboardTodayGoalLabel => 'Today\'s goal';
+
+  @override
+  String dashboardGoalProgress(int done, int target) {
+    return '$done/$target';
+  }
+
+  @override
+  String get dashboardStartNewLearningAction => 'Start new learning';
+
+  @override
+  String dashboardNewCardsBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new',
+      one: '1 new',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardRecentDecksTitle => 'Recent decks';
+
+  @override
+  String dashboardDeckCardCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardDeckLastStudied(String time) {
+    return 'last $time';
+  }
+
+  @override
+  String dashboardDeckDueBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count due',
+      one: '1 due',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get progressEntryDeck => 'Deck';

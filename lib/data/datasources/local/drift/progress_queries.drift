@@ -100,3 +100,46 @@ SELECT
   study_attempts.attempted_at
 FROM study_attempts
 ORDER BY study_attempts.attempted_at;
+
+-- Dashboard "Recent decks": the most-recently-touched decks with their card
+-- count, currently-due count, and last-studied time. One progress row per card
+-- (1:1), so the LEFT JOIN does not inflate `card_count`.
+dashboardRecentDecks(:now AS INT, :limit AS INT):
+SELECT
+  decks.id AS deck_id,
+  decks.name AS deck_name,
+  decks.updated_at AS updated_at,
+  COUNT(flashcards.id) AS card_count,
+  COALESCE(SUM(
+    CASE
+      WHEN flashcard_progress.flashcard_id IS NOT NULL
+        AND flashcard_progress.is_suspended = FALSE
+        AND (
+          flashcard_progress.buried_until IS NULL
+          OR flashcard_progress.buried_until <= :now
+        )
+        AND flashcard_progress.due_at IS NOT NULL
+        AND flashcard_progress.due_at <= :now
+      THEN 1
+      ELSE 0
+    END
+  ), 0) AS due_count,
+  MAX(flashcard_progress.last_studied_at) AS last_studied_at
+FROM decks
+LEFT JOIN flashcards ON flashcards.deck_id = decks.id
+LEFT JOIN flashcard_progress ON flashcard_progress.flashcard_id = flashcards.id
+GROUP BY decks.id, decks.name, decks.updated_at
+ORDER BY decks.updated_at DESC, decks.id
+LIMIT :limit;
+
+-- Dashboard "Start new learning" badge: flashcards never studied (no recorded
+-- `last_studied_at`) and not suspended.
+dashboardNewCardCount:
+SELECT COUNT(*) AS new_count
+FROM flashcards
+LEFT JOIN flashcard_progress ON flashcard_progress.flashcard_id = flashcards.id
+WHERE flashcard_progress.last_studied_at IS NULL
+  AND (
+    flashcard_progress.is_suspended IS NULL
+    OR flashcard_progress.is_suspended = FALSE
+  );

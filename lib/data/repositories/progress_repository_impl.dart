@@ -1,6 +1,7 @@
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
 import 'package:memox/domain/types/progress_range.dart';
@@ -368,6 +369,55 @@ class ProgressRepositoryImpl implements ProgressRepository {
         studyStatistics: (studyStatistics as Ok<StudyStatistics>).value,
       ),
     );
+  }
+
+  @override
+  Future<Result<DashboardDeckHighlights>> loadDashboardDeckHighlights({
+    required DateTime now,
+    int limit = 3,
+  }) async {
+    try {
+      final int nowMs = now.toUtc().millisecondsSinceEpoch;
+      final (
+        List<DashboardRecentDecksResult> deckRows,
+        int newCardCount,
+      ) = await (
+        _dao.loadRecentDecks(nowMs: nowMs, limit: limit),
+        _dao.loadNewCardCount(),
+      ).wait;
+
+      final List<DashboardRecentDeck> recentDecks = deckRows
+          .map(
+            (DashboardRecentDecksResult row) => DashboardRecentDeck(
+              deckId: row.deckId,
+              deckName: row.deckName,
+              cardCount: row.cardCount,
+              dueCount: row.dueCount,
+              lastStudiedAt: row.lastStudiedAt == null
+                  ? null
+                  : DateTime.fromMillisecondsSinceEpoch(
+                      row.lastStudiedAt!,
+                      isUtc: true,
+                    ),
+            ),
+          )
+          .toList(growable: false);
+
+      return Result<DashboardDeckHighlights>.ok(
+        DashboardDeckHighlights(
+          recentDecks: recentDecks,
+          newCardCount: newCardCount,
+        ),
+      );
+    } catch (error) {
+      return Result<DashboardDeckHighlights>.err(
+        Failure.storage(
+          operation: StorageOp.read,
+          cause: error.toString(),
+          table: 'decks',
+        ),
+      );
+    }
   }
 
   DateTime _localDayFromEpochMs(int epochMs) {

@@ -3,6 +3,8 @@ import 'package:memox/app/di/learning_settings_providers.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/data/repositories/progress_repository_impl.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
+import 'package:memox/domain/usecases/progress/load_dashboard_deck_highlights_usecase.dart';
+import 'package:memox/domain/usecases/progress/load_dashboard_due_summary_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_dashboard_progress_summary_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_progress_overview_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_progress_read_model_usecase.dart';
@@ -32,3 +34,12 @@ LoadDashboardProgressSummaryUseCase loadDashboardProgressSummaryUseCase(
   ref.watch(progressRepositoryProvider),
   ref.watch(learningSettingsRepositoryProvider),
 );
+
+@Riverpod(keepAlive: true)
+LoadDashboardDeckHighlightsUseCase loadDashboardDeckHighlightsUseCase(
+  Ref ref,
+) => LoadDashboardDeckHighlightsUseCase(ref.watch(progressRepositoryProvider));
+
+@Riverpod(keepAlive: true)
+LoadDashboardDueSummaryUseCase loadDashboardDueSummaryUseCase(Ref ref) =>
+    LoadDashboardDueSummaryUseCase(ref.watch(progressRepositoryProvider));

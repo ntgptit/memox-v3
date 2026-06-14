@@ -35,4 +35,11 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
 
   Future<List<int>> loadAttemptCountsByDay() =>
       progressAttemptCountsByDay().get();
+
+  Future<List<DashboardRecentDecksResult>> loadRecentDecks({
+    required int nowMs,
+    required int limit,
+  }) => dashboardRecentDecks(nowMs, limit).get();
+
+  Future<int> loadNewCardCount() => dashboardNewCardCount().getSingle();
 }

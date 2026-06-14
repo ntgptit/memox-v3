@@ -23,6 +23,10 @@ Future<Either<Failure, int>> countSuspended();
 Future<Either<Failure, int>> countBuriedToday();
 Future<Either<Failure, Map<BoxNumber, int>>> getBoxDistribution();
 Future<Either<Failure, Map<DateTime, int>>> loadAttemptCountsByDay();
+// Dashboard "Recent decks" + never-studied "new" count (one read).
+// decks ORDER BY updated_at DESC LIMIT :limit, each with cardCount, dueCount,
+// lastStudiedAt; plus library-wide newCardCount (never-studied, not suspended).
+Future<Either<Failure, DashboardDeckHighlights>> loadDashboardDeckHighlights({required DateTime now, int limit});
 
 // Attempts
 Stream<List<StudyAttempt>> watchAttemptsByCard(FlashcardId id, {DateTime? before, int limit = 50});

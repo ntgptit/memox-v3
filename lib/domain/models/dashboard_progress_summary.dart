@@ -7,24 +7,24 @@ abstract class DashboardGoalSummary with _$DashboardGoalSummary {
   const factory DashboardGoalSummary.enabled({
     required int dailyGoal,
     required int todayAttemptCount,
-  }) = _DashboardGoalSummaryEnabled;
+  }) = DashboardGoalSummaryEnabled;
 
   const factory DashboardGoalSummary.disabled({
     required int dailyGoal,
     required DateTime disabledSince,
     required int todayAttemptCount,
-  }) = _DashboardGoalSummaryDisabled;
+  }) = DashboardGoalSummaryDisabled;
 
-  const factory DashboardGoalSummary.unknown() = _DashboardGoalSummaryUnknown;
+  const factory DashboardGoalSummary.unknown() = DashboardGoalSummaryUnknown;
 }
 
 @freezed
 abstract class DashboardStreakSummary with _$DashboardStreakSummary {
   const factory DashboardStreakSummary.known({required int currentStreak}) =
-      _DashboardStreakSummaryKnown;
+      DashboardStreakSummaryKnown;
 
   const factory DashboardStreakSummary.unknown() =
-      _DashboardStreakSummaryUnknown;
+      DashboardStreakSummaryUnknown;
 }
 
 @freezed

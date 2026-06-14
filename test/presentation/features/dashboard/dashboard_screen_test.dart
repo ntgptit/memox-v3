@@ -16,8 +16,11 @@ import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/entities/study_match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_item.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
+import 'package:memox/domain/models/dashboard_progress_summary.dart';
 import 'package:memox/domain/models/dashboard_resume_session_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
@@ -270,16 +273,74 @@ StudySessionReview _review({
 
 final DateTime _utc = DateTime.utc(2026, 1, 1);
 
+DashboardProgressSummary _progressSummary({
+  int dueTodayCount = 0,
+  DashboardGoalSummary goal = const DashboardGoalSummary.unknown(),
+  DashboardStreakSummary streak = const DashboardStreakSummary.unknown(),
+}) => DashboardProgressSummary(
+  dueTodayCount: dueTodayCount,
+  goal: goal,
+  streak: streak,
+);
+
+ProgressDueSummary _dueSummary({
+  int totalDueCount = 0,
+  List<DeckDueSummary> decks = const <DeckDueSummary>[],
+}) => ProgressDueSummary(totalDueCount: totalDueCount, decks: decks);
+
+DeckDueSummary _deckDue(String id, {int dueCount = 1}) => DeckDueSummary(
+  deckId: id,
+  deckName: 'Deck $id',
+  parentFolderId: 'folder-$id',
+  dueCount: dueCount,
+);
+
+DashboardDeckHighlights _deckHighlights({
+  List<DashboardRecentDeck> recentDecks = const <DashboardRecentDeck>[],
+  int newCardCount = 0,
+}) => DashboardDeckHighlights(
+  recentDecks: recentDecks,
+  newCardCount: newCardCount,
+);
+
+DashboardRecentDeck _recentDeck(
+  String id, {
+  String name = 'Recent deck',
+  int cardCount = 12,
+  int dueCount = 0,
+  DateTime? lastStudiedAt,
+}) => DashboardRecentDeck(
+  deckId: id,
+  deckName: name,
+  cardCount: cardCount,
+  dueCount: dueCount,
+  lastStudiedAt: lastStudiedAt,
+);
+
 Future<({ProviderContainer container, GoRouter router})> _pumpApp(
   WidgetTester tester, {
   required _FakeStudyRepository repository,
   required Stream<LibraryOverviewReadModel> libraryStream,
+  DashboardProgressSummary? progressSummary,
+  ProgressDueSummary? dueSummary,
+  DashboardDeckHighlights? deckHighlights,
   List<Override> extraOverrides = const <Override>[],
 }) async {
   final ProviderContainer container = ProviderContainer(
     overrides: <Override>[
       studyRepositoryProvider.overrideWithValue(repository),
       libraryOverviewQueryProvider.overrideWith((Ref ref) => libraryStream),
+      dashboardProgressSummaryQueryProvider.overrideWithValue(
+        AsyncData<DashboardProgressSummary>(
+          progressSummary ?? _progressSummary(),
+        ),
+      ),
+      dashboardDueSummaryQueryProvider.overrideWithValue(
+        AsyncData<ProgressDueSummary>(dueSummary ?? _dueSummary()),
+      ),
+      dashboardDeckHighlightsQueryProvider.overrideWithValue(
+        AsyncData<DashboardDeckHighlights>(deckHighlights ?? _deckHighlights()),
+      ),
       ...extraOverrides,
     ],
   );
@@ -549,8 +610,11 @@ void main() {
 
     expect(find.text(l10n.dashboardNewStudyTitle), findsOneWidget);
     expect(find.text(l10n.dashboardOpenLibraryAction), findsOneWidget);
+    // Engagement/recent surfaces are hidden on the zero-content onboarding body.
     expect(find.byType(MxMasteryRing), findsNothing);
-    expect(find.byIcon(Icons.search_rounded), findsNothing);
+    expect(find.text(l10n.dashboardRecentDecksTitle), findsNothing);
+    // The app bar (incl. search shortcut) still renders over onboarding.
+    expect(find.byIcon(Icons.search_rounded), findsOneWidget);
   });
 
   testWidgets('resume card stays hidden when no resumable session exists', (
@@ -621,12 +685,13 @@ void main() {
       tester.element(find.byType(DashboardScreen)),
     );
 
-    expect(find.text(l10n.dashboardResumeSectionTitle), findsOneWidget);
-    expect(find.text(l10n.dashboardContinueSessionAction), findsOneWidget);
     expect(
-      find.textContaining(l10n.studySessionProgressLabel(2, 5)),
+      find.text(l10n.dashboardResumeSectionTitle.toUpperCase()),
       findsOneWidget,
     );
+    expect(find.text(l10n.dashboardContinueSessionAction), findsOneWidget);
+    expect(find.text(l10n.dashboardDiscardAction), findsOneWidget);
+    expect(find.textContaining('2/5'), findsOneWidget);
     expect(repository.startCalls, 0);
     expect(repository.cancelCalls, 0);
   });
@@ -707,10 +772,11 @@ void main() {
           tester,
           repository: repository,
           libraryStream: Stream<LibraryOverviewReadModel>.value(
-            _libraryModel(
-              folders: <FolderWithCount>[_folderWithCount('root')],
-              dueToday: 3,
-            ),
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          dueSummary: _dueSummary(
+            totalDueCount: 3,
+            decks: <DeckDueSummary>[_deckDue('a', dueCount: 3)],
           ),
         );
     harness.router.go(RoutePaths.home);
@@ -721,7 +787,7 @@ void main() {
         MxActionButton,
         AppLocalizations.of(
           tester.element(find.byType(DashboardScreen)),
-        ).dashboardStudyTodayAction,
+        ).dashboardStartReviewAction,
       ),
     );
     todayButton.onPressed!();
@@ -754,10 +820,7 @@ void main() {
           tester,
           repository: repository,
           libraryStream: Stream<LibraryOverviewReadModel>.value(
-            _libraryModel(
-              folders: <FolderWithCount>[_folderWithCount('root')],
-              dueToday: 0,
-            ),
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
           ),
         );
     harness.router.go(RoutePaths.home);
@@ -771,12 +834,12 @@ void main() {
     expect(find.text(l10n.dashboardNoDueMessage), findsOneWidget);
 
     final MxActionButton todayButton = tester.widget<MxActionButton>(
-      find.widgetWithText(MxActionButton, l10n.dashboardStudyTodayAction),
+      find.widgetWithText(MxActionButton, l10n.dashboardStartReviewAction),
     );
     expect(todayButton.onPressed, isNull);
 
     await tester.tap(
-      find.widgetWithText(MxActionButton, l10n.dashboardStudyTodayAction),
+      find.widgetWithText(MxActionButton, l10n.dashboardStartReviewAction),
     );
     await tester.pumpAndSettle();
 
@@ -788,7 +851,143 @@ void main() {
     expect(find.byType(StudySessionScreen), findsNothing);
   });
 
-  testWidgets('future engagement controls are not exposed', (
+  testWidgets('streak chip and goal ring render when engagement data exists', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          progressSummary: _progressSummary(
+            streak: const DashboardStreakSummary.known(currentStreak: 11),
+            goal: const DashboardGoalSummary.enabled(
+              dailyGoal: 20,
+              todayAttemptCount: 12,
+            ),
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.byType(MxMasteryRing), findsOneWidget);
+    expect(find.text('11'), findsOneWidget);
+    expect(find.text(l10n.dashboardGoalProgress(12, 20)), findsOneWidget);
+    // Reminders stay future/target — no notification affordance.
+    expect(find.byIcon(Icons.notifications_outlined), findsNothing);
+  });
+
+  testWidgets('streak chip is hidden when the streak is zero', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          progressSummary: _progressSummary(
+            streak: const DashboardStreakSummary.known(currentStreak: 0),
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.byIcon(Icons.local_fire_department), findsNothing);
+    expect(find.text(l10n.sharedStreakLabel), findsNothing);
+  });
+
+  testWidgets('recent decks and new-learning badge render from highlights', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          deckHighlights: _deckHighlights(
+            newCardCount: 6,
+            recentDecks: <DashboardRecentDeck>[
+              _recentDeck(
+                'deck-1',
+                name: 'TOPIK II',
+                cardCount: 142,
+                dueCount: 23,
+              ),
+            ],
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    // MxSectionHeader renders the title in all-caps.
+    expect(
+      find.text(l10n.dashboardRecentDecksTitle.toUpperCase()),
+      findsOneWidget,
+    );
+    expect(find.text('TOPIK II'), findsOneWidget);
+    expect(find.text(l10n.dashboardDeckDueBadge(23)), findsOneWidget);
+    expect(find.text(l10n.dashboardStartNewLearningAction), findsOneWidget);
+    expect(find.text(l10n.dashboardNewCardsBadge(6)), findsOneWidget);
+  });
+
+  testWidgets('discard confirm cancels the paused session', (
     WidgetTester tester,
   ) async {
     final _FakeStudyRepository repository = _FakeStudyRepository(
@@ -815,8 +1014,28 @@ void main() {
     harness.router.go(RoutePaths.home);
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.search_rounded), findsNothing);
-    expect(find.byIcon(Icons.notifications_outlined), findsNothing);
-    expect(find.byType(MxMasteryRing), findsNothing);
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    await tester.tap(
+      find.widgetWithText(MxActionButton, l10n.dashboardDiscardAction),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.dashboardDiscardConfirmTitle), findsOneWidget);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.widgetWithText(
+          FilledButton,
+          l10n.dashboardDiscardAction,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(repository.cancelCalls, 1);
   });
 }

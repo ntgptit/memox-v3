@@ -8,6 +8,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/data/repositories/progress_repository_impl.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
 import 'package:memox/domain/models/dashboard_progress_summary.dart';
 import 'package:memox/domain/models/learning_settings.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
@@ -47,6 +48,14 @@ class _FakeProgressRepository implements ProgressRepository {
 
   final Result<ProgressDueSummary> dueSummary;
   final Result<Map<DateTime, int>> attemptCountsByDay;
+
+  @override
+  Future<Result<DashboardDeckHighlights>> loadDashboardDeckHighlights({
+    required DateTime now,
+    int limit = 3,
+  }) async {
+    throw UnimplementedError();
+  }
 
   @override
   Future<Result<ProgressDueSummary>> loadProgressDueSummary({

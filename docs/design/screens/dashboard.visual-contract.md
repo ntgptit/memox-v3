@@ -20,23 +20,25 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 - Shared component contract: `docs/design/component-visual-contract.md`
 - UI/UX contract: `docs/ui-ux/ui-ux-contract.md`
 
-## Current V1 Scope
+## Current V1 Scope (updated 2026-06-14 — full-mock build)
 
-- Resume card is a current V1 surface.
-- Today CTA is a current V1 surface.
-- A static streak placeholder may appear as a visual/stat placeholder only. It is not computed.
+- Resume card (with Discard) is a current V1 surface.
+- Today's-review card is a current V1 surface (due count + due-deck count + estimated minutes).
+- **Computed streak chip** is current V1 — reads `LoadDashboardProgressSummaryUseCase`; hidden when streak `< 1`.
+- **Daily-goal ring** is current V1 — reads the same use case; hidden when the goal is disabled/unknown.
+- **Recent decks** and the **never-studied "new" count** are current V1 — read `LoadDashboardDeckHighlightsUseCase`.
+- **Start new learning** is current V1 — routes to the global new-cards study entry (deck/folder scope picker still deferred).
+- **Dashboard global search** is current V1 — app-bar shortcut to `/library/search`.
 - Loading, error, onboarding, and resume-only states are part of the current V1 surface.
-- Start new learning and recent-decks surfaces remain deferred until a source-backed picker/query exists.
 - Multi-resume remains deferred until a source-backed paused-session list exists.
 - App launch still defaults to Library; `/home` renders Dashboard V1 but is not the boot route.
-- Dashboard search is not a current V1 action.
 
 ## Explicitly Excluded
 
-- Computed streak logic.
-- Daily goal persistence, goal ring, and goal-history UI.
 - Reminder and notification permission surfaces.
-- Dashboard global search action.
+- Streak-history sheet, daily-goal slider, and the streak-broken one-time banner.
+- The two-step deck/folder scope picker for "Start new learning" (V1 routes straight to global new cards).
+- Paused-sessions multi-resume sheet.
 - Changing app boot default to Dashboard.
 - Any Google sign-in or Drive-restore onboarding copy that appears in older mock prose.
 

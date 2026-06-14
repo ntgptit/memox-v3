@@ -6,6 +6,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/data/repositories/progress_repository_impl.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 
 int _nowMs(DateTime now) => now.toUtc().millisecondsSinceEpoch;
@@ -201,6 +202,107 @@ void main() {
 
   tearDown(() async {
     await db.close();
+  });
+
+  test(
+    'dashboard deck highlights: ordering, counts, and new-card count',
+    () async {
+      final _ProgressFixture fixture = _ProgressFixture(db, now);
+      await fixture.insertFolder(
+        id: 'folder-1',
+        name: 'Folder 1',
+        sortOrder: 0,
+      );
+      await fixture.insertDeck(
+        id: 'deck-1',
+        folderId: 'folder-1',
+        name: 'Older deck',
+        sortOrder: 0,
+      );
+      await fixture.insertDeck(
+        id: 'deck-2',
+        folderId: 'folder-1',
+        name: 'Newer deck',
+        sortOrder: 1,
+      );
+      // deck-2 was touched more recently → must sort first.
+      await (db.update(db.decks)..where((t) => t.id.equals('deck-2'))).write(
+        DecksCompanion(updatedAt: Value<int>(nowMs + 1000)),
+      );
+
+      // deck-1: one studied+due card, one never-studied card.
+      await fixture.insertCard(
+        id: 'card-a',
+        deckId: 'deck-1',
+        front: 'a',
+        back: 'a',
+        dueAtMs: nowMs - 1000,
+        lastStudiedAtMs: nowMs - 5000,
+      );
+      await fixture.insertCard(
+        id: 'card-b',
+        deckId: 'deck-1',
+        front: 'b',
+        back: 'b',
+      );
+      // deck-2: one never-studied but suspended card (excluded from "new").
+      await fixture.insertCard(
+        id: 'card-c',
+        deckId: 'deck-2',
+        front: 'c',
+        back: 'c',
+        isSuspended: true,
+      );
+
+      final Result<DashboardDeckHighlights> result = await repo
+          .loadDashboardDeckHighlights(now: now);
+
+      expect(result, isA<Ok<DashboardDeckHighlights>>());
+      final DashboardDeckHighlights highlights =
+          (result as Ok<DashboardDeckHighlights>).value;
+
+      expect(
+        highlights.recentDecks.map((DashboardRecentDeck d) => d.deckId),
+        <String>['deck-2', 'deck-1'],
+      );
+
+      final DashboardRecentDeck deckOne = highlights.recentDecks.firstWhere(
+        (DashboardRecentDeck d) => d.deckId == 'deck-1',
+      );
+      expect(deckOne.cardCount, 2);
+      expect(deckOne.dueCount, 1);
+      expect(deckOne.lastStudiedAt, isNot(isNull));
+
+      final DashboardRecentDeck deckTwo = highlights.recentDecks.firstWhere(
+        (DashboardRecentDeck d) => d.deckId == 'deck-2',
+      );
+      expect(deckTwo.cardCount, 1);
+      expect(deckTwo.dueCount, 0);
+      expect(deckTwo.lastStudiedAt, isNull);
+
+      // Only card-b is never-studied and not suspended.
+      expect(highlights.newCardCount, 1);
+    },
+  );
+
+  test('dashboard deck highlights respects the limit', () async {
+    final _ProgressFixture fixture = _ProgressFixture(db, now);
+    await fixture.insertFolder(id: 'folder-1', name: 'Folder 1', sortOrder: 0);
+    for (int i = 0; i < 5; i++) {
+      await fixture.insertDeck(
+        id: 'deck-$i',
+        folderId: 'folder-1',
+        name: 'Deck $i',
+        sortOrder: i,
+      );
+    }
+
+    final Result<DashboardDeckHighlights> result = await repo
+        .loadDashboardDeckHighlights(now: now, limit: 3);
+
+    final DashboardDeckHighlights highlights =
+        (result as Ok<DashboardDeckHighlights>).value;
+    expect(highlights.recentDecks.length, 3);
   });
 
   test('empty database returns zero due summary', () async {

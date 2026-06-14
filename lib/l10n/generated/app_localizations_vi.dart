@@ -102,7 +102,105 @@ class AppLocalizationsVi extends AppLocalizations {
   String get dashboardStudyTodayAction => 'Học';
 
   @override
+  String get dashboardStartReviewAction => 'Bắt đầu ôn hôm nay';
+
+  @override
   String get dashboardOpenLibraryAction => 'Xem thư viện';
+
+  @override
+  String get dashboardSearchTooltip => 'Tìm kiếm';
+
+  @override
+  String get dashboardTodayReviewOverline => 'Ôn hôm nay';
+
+  @override
+  String dashboardDueCountTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ đến hạn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardReviewScopeMeta(int deckCount, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      deckCount,
+      locale: localeName,
+      other: '$deckCount bộ thẻ',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes phút',
+    );
+    return 'Trong $_temp0 · khoảng $_temp1';
+  }
+
+  @override
+  String dashboardResumeMeta(int answered, int total, String time) {
+    return '$answered/$total thẻ · tạm dừng $time';
+  }
+
+  @override
+  String get dashboardDiscardAction => 'Hủy bỏ';
+
+  @override
+  String get dashboardDiscardConfirmTitle => 'Hủy phiên đang tạm dừng?';
+
+  @override
+  String get dashboardDiscardConfirmMessage =>
+      'Tiến trình trong phiên này sẽ không được lưu.';
+
+  @override
+  String get dashboardTodayGoalLabel => 'Mục tiêu hôm nay';
+
+  @override
+  String dashboardGoalProgress(int done, int target) {
+    return '$done/$target';
+  }
+
+  @override
+  String get dashboardStartNewLearningAction => 'Bắt đầu học mới';
+
+  @override
+  String dashboardNewCardsBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mới',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardRecentDecksTitle => 'Bộ thẻ gần đây';
+
+  @override
+  String dashboardDeckCardCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardDeckLastStudied(String time) {
+    return 'lần cuối $time';
+  }
+
+  @override
+  String dashboardDeckDueBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count đến hạn',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get progressEntryDeck => 'Bộ thẻ';

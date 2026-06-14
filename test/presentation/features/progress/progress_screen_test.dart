@@ -13,6 +13,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/app_theme.dart';
 import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/dashboard_deck_highlights.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
@@ -39,6 +40,14 @@ class _FakeProgressRepository implements ProgressRepository {
   }) {
     requestedRanges.add(range);
     return onLoadOverview(range);
+  }
+
+  @override
+  Future<Result<DashboardDeckHighlights>> loadDashboardDeckHighlights({
+    required DateTime now,
+    int limit = 3,
+  }) async {
+    throw UnimplementedError();
   }
 
   @override

@@ -43,7 +43,92 @@
   "dashboardNoDueTitle": "Hiện không có thẻ đến hạn",
   "dashboardNoDueMessage": "Mở thư viện để thêm thẻ hoặc bắt đầu học một bộ thẻ cụ thể.",
   "dashboardStudyTodayAction": "Học",
+  "dashboardStartReviewAction": "Bắt đầu ôn hôm nay",
   "dashboardOpenLibraryAction": "Xem thư viện",
+  "dashboardSearchTooltip": "Tìm kiếm",
+  "dashboardTodayReviewOverline": "Ôn hôm nay",
+  "dashboardDueCountTitle": "{count, plural, other{{count} thẻ đến hạn}}",
+  "@dashboardDueCountTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardReviewScopeMeta": "Trong {deckCount, plural, other{{deckCount} bộ thẻ}} · khoảng {minutes, plural, other{{minutes} phút}}",
+  "@dashboardReviewScopeMeta": {
+    "placeholders": {
+      "deckCount": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardResumeMeta": "{answered}/{total} thẻ · tạm dừng {time}",
+  "@dashboardResumeMeta": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardDiscardAction": "Hủy bỏ",
+  "dashboardDiscardConfirmTitle": "Hủy phiên đang tạm dừng?",
+  "dashboardDiscardConfirmMessage": "Tiến trình trong phiên này sẽ không được lưu.",
+  "dashboardTodayGoalLabel": "Mục tiêu hôm nay",
+  "dashboardGoalProgress": "{done}/{target}",
+  "@dashboardGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardStartNewLearningAction": "Bắt đầu học mới",
+  "dashboardNewCardsBadge": "{count, plural, other{{count} mới}}",
+  "@dashboardNewCardsBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRecentDecksTitle": "Bộ thẻ gần đây",
+  "dashboardDeckCardCount": "{count, plural, other{{count} thẻ}}",
+  "@dashboardDeckCardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardDeckLastStudied": "lần cuối {time}",
+  "@dashboardDeckLastStudied": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardDeckDueBadge": "{count, plural, other{{count} đến hạn}}",
+  "@dashboardDeckDueBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "progressEntryDeck": "Bộ thẻ",
   "progressEntryFolder": "Thư mục",
   "settingsAppearanceTitle": "Giao diện",

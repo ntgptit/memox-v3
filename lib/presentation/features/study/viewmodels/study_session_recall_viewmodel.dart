@@ -31,6 +31,7 @@ class StudySessionRecallController extends _$StudySessionRecallController {
   Future<StudySessionRecallState> build(
     ({SessionId sessionId, StudyMode? studyMode}) request,
   ) async {
+    ref.onCancel(_cancelCountdown);
     ref.onDispose(_cancelCountdown);
 
     final Result<StudySessionReview> result = await ref
@@ -42,6 +43,10 @@ class StudySessionRecallController extends _$StudySessionRecallController {
       Err<StudySessionReview>(:final failure) =>
         throw StudySessionRecallFailureException(failure),
     };
+
+    if (!ref.mounted) {
+      return StudySessionRecallState.fromReview(review);
+    }
 
     _studyModeStrategy = StudyModeStrategyFactory.resolve(
       studyMode: request.studyMode,

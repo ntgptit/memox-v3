@@ -272,11 +272,113 @@ abstract class AppLocalizations {
   /// **'Study'**
   String get dashboardStudyTodayAction;
 
+  /// No description provided for @dashboardStartReviewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start today\'s review'**
+  String get dashboardStartReviewAction;
+
   /// No description provided for @dashboardOpenLibraryAction.
   ///
   /// In en, this message translates to:
   /// **'View library'**
   String get dashboardOpenLibraryAction;
+
+  /// No description provided for @dashboardSearchTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get dashboardSearchTooltip;
+
+  /// No description provided for @dashboardTodayReviewOverline.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s review'**
+  String get dashboardTodayReviewOverline;
+
+  /// No description provided for @dashboardDueCountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card due} other{{count} cards due}}'**
+  String dashboardDueCountTitle(int count);
+
+  /// No description provided for @dashboardReviewScopeMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Across {deckCount, plural, =1{1 deck} other{{deckCount} decks}} · about {minutes, plural, =1{1 minute} other{{minutes} minutes}}'**
+  String dashboardReviewScopeMeta(int deckCount, int minutes);
+
+  /// No description provided for @dashboardResumeMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{answered}/{total} cards · paused {time}'**
+  String dashboardResumeMeta(int answered, int total, String time);
+
+  /// No description provided for @dashboardDiscardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get dashboardDiscardAction;
+
+  /// No description provided for @dashboardDiscardConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard paused session?'**
+  String get dashboardDiscardConfirmTitle;
+
+  /// No description provided for @dashboardDiscardConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress in this session won\'t be saved.'**
+  String get dashboardDiscardConfirmMessage;
+
+  /// No description provided for @dashboardTodayGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s goal'**
+  String get dashboardTodayGoalLabel;
+
+  /// No description provided for @dashboardGoalProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done}/{target}'**
+  String dashboardGoalProgress(int done, int target);
+
+  /// No description provided for @dashboardStartNewLearningAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start new learning'**
+  String get dashboardStartNewLearningAction;
+
+  /// No description provided for @dashboardNewCardsBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 new} other{{count} new}}'**
+  String dashboardNewCardsBadge(int count);
+
+  /// No description provided for @dashboardRecentDecksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent decks'**
+  String get dashboardRecentDecksTitle;
+
+  /// No description provided for @dashboardDeckCardCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
+  String dashboardDeckCardCount(int count);
+
+  /// No description provided for @dashboardDeckLastStudied.
+  ///
+  /// In en, this message translates to:
+  /// **'last {time}'**
+  String dashboardDeckLastStudied(String time);
+
+  /// No description provided for @dashboardDeckDueBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 due} other{{count} due}}'**
+  String dashboardDeckDueBadge(int count);
 
   /// No description provided for @progressEntryDeck.
   ///
