@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-13
+last_updated: 2026-06-15
 applies_to: Drift schema migrations
 ---
 
@@ -119,3 +119,17 @@ If any step is skipped, report it explicitly.
 - `lib/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart`
 - `lib/data/datasources/local/migrations/v7_add_card_events_and_attempt_duration.dart`
 - `lib/data/datasources/local/migrations/v8_add_flashcard_pos_and_flag.dart`
+- `lib/data/datasources/local/migrations/v9_add_tts_settings.dart`
+
+## Shipped migrations
+
+| Version | File | What changed |
+|---------|------|--------------|
+| v9 | `v9_add_tts_settings.dart` | Added `tts_settings` single-row table (`id`, `auto_play`, `front_language`, `rate`, `pitch`, `volume`, `front_voice_name`). Migration test: `test/data/migrations/tts_settings_migration_test.dart`. |
+| v8 | `v8_add_flashcard_pos_and_flag.dart` | Added `flashcards.part_of_speech`, `flashcards.is_flagged`. |
+| v7 | `v7_add_card_events_and_attempt_duration.dart` | Added `card_events` table; `study_attempts.box_before`, `box_after`, `duration_ms`. |
+| v6 | `v6_add_flashcard_progress_last_reset_at.dart` | Added `flashcard_progress.last_reset_at`. |
+| v5 | `v5_add_study_match_evaluations.dart` | Added `study_match_evaluations` table. |
+| v4 | `v4_add_study_tables.dart` | Added `study_sessions`, `study_session_items`, `study_attempts`. |
+| v3 | `v3_add_flashcard_tags.dart` | Added `flashcard_tags` table. |
+| v2 | `v2_add_flashcard_optional_fields.dart` | Added `flashcards.pronunciation`, `hint`, `example_sentence`. |

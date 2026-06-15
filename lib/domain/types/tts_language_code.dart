@@ -19,3 +19,11 @@ TtsLanguageCode? ttsCodeForLanguage(TargetLanguage language) =>
       TargetLanguage.english => TtsLanguageCode.enUS,
       TargetLanguage.unsupported => null,
     };
+
+extension TtsLanguageCodeX on TtsLanguageCode {
+  /// Platform TTS engine language code string.
+  String get engineCode => switch (this) {
+    TtsLanguageCode.koKR => 'ko-KR',
+    TtsLanguageCode.enUS => 'en-US',
+  };
+}

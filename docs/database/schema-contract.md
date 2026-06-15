@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-06-13
+last_updated: 2026-06-15
 applies_to: Drift schema, all tables, migrations
-schema_version: 8 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 9 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract
@@ -13,8 +13,8 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **8**. Tables shipped
-so far (added for the Library + Study features):
+**Current schema** (`AppDatabase.currentSchemaVersion`): **9**. Tables shipped
+so far (added for the Library, Study, and TTS features):
 
 | Table                | Columns (current)                                                                                                                                                                                     |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -28,11 +28,10 @@ so far (added for the Library + Study features):
 | `study_attempts`     | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before`, `box_after`, `user_input?`, `duration_ms?`, `attempted_at` + index `idx_study_attempts_session_item`           |
 | `card_events`        | `id` (PK), `flashcard_id` (FK→flashcards, cascade), `type` (`created`/`edited`/`audio_added`/`reset`), `occurred_at`, `detail?` + index `idx_card_events_flashcard` (Card History activity feed)           |
 | `study_match_evaluations` | `id` (PK), `session_id` (FK→study_sessions, cascade), `session_item_id` (FK→study_session_items, cascade), `flashcard_id` (FK→flashcards, cascade), `board_index`, `pair_id`, `selected_front_cell_id`, `selected_back_cell_id`, `expected_front_flashcard_id`, `expected_back_flashcard_id`, `is_correct`, `attempt_order`, `evaluated_at`, `created_at` + indexes `idx_study_match_evaluations_session`, `idx_study_match_evaluations_session_item` |
+| `tts_settings`       | `id` (PK, always `'default'`), `auto_play` (BOOL), `front_language` (TEXT: `'korean'`/`'english'`), `rate` (REAL), `pitch` (REAL), `volume` (REAL), `front_voice_name` (TEXT NULL) — single-row pattern; shipped v9 |
 
-Remaining target tables (`tts_settings`) land with their
-feature slice. When a new table/column ships, bump
-`AppDatabase.currentSchemaVersion`, add an `onUpgrade` step
-(`docs/database/migration-contract.md`), and update this section.
+When a new table/column ships, bump `AppDatabase.currentSchemaVersion`, add an
+`onUpgrade` step (`docs/database/migration-contract.md`), and update this section.
 
 ## Source files to inspect
 

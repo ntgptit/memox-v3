@@ -67,3 +67,6 @@ app.*.map.json
 tool/ui_kit_shots/node_modules/
 tool/ui_kit_shots/package-lock.json
 tool/verify/.last-pass.json
+
+# Claude Code agent worktrees (internal tool state — not project files)
+.claude/

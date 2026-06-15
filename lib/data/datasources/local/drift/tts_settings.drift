@@ -1,0 +1,12 @@
+-- `tts_settings` table — single-row TTS settings (id = 'default').
+-- `front_language` stores TtsLanguageCode as 'korean'/'english' lowercase.
+-- See `docs/business/tts/tts-settings.md`.
+CREATE TABLE tts_settings (
+  id TEXT NOT NULL PRIMARY KEY,
+  auto_play INTEGER NOT NULL DEFAULT 0,
+  front_language TEXT NOT NULL DEFAULT 'korean',
+  rate REAL NOT NULL DEFAULT 0.5,
+  pitch REAL NOT NULL DEFAULT 1.0,
+  volume REAL NOT NULL DEFAULT 1.0,
+  front_voice_name TEXT
+) AS TtsSettingsRow;

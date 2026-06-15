@@ -8,6 +8,7 @@ import 'package:memox/data/datasources/local/migrations/v5_add_study_match_evalu
 import 'package:memox/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart';
 import 'package:memox/data/datasources/local/migrations/v7_add_card_events_and_attempt_duration.dart';
 import 'package:memox/data/datasources/local/migrations/v8_add_flashcard_pos_and_flag.dart';
+import 'package:memox/data/datasources/local/migrations/v9_add_tts_settings.dart';
 
 part 'app_database.g.dart';
 
@@ -30,6 +31,7 @@ part 'app_database.g.dart';
     'drift/study_attempts.drift',
     'drift/study_match_evaluations.drift',
     'drift/card_events.drift',
+    'drift/tts_settings.drift',
   },
 )
 class AppDatabase extends _$AppDatabase {
@@ -40,7 +42,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Bump and add an `onUpgrade` step for every schema change
   /// (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 8;
+  static const int currentSchemaVersion = 9;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -72,6 +74,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 8) {
         await addFlashcardPosAndFlag(m, this);
+      }
+      if (from < 9) {
+        await addTtsSettings(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/app/di/study_providers.dart' as study_di;
+import 'package:memox/app/di/tts_providers.dart';
 import 'package:memox/app/router/app_navigation.dart';
+import 'package:memox/domain/models/tts_settings.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
@@ -57,6 +58,34 @@ class StudySessionRecallModeView extends ConsumerStatefulWidget {
 
 class _StudySessionRecallModeViewState
     extends ConsumerState<StudySessionRecallModeView> {
+  int _lastAutoPlayIndex = -1;
+
+  void _maybeAutoPlay(StudySessionRecallState state) {
+    if (state.currentIndex == _lastAutoPlayIndex) return;
+    _lastAutoPlayIndex = state.currentIndex;
+    final StudySessionReviewItem item = state.currentItem;
+    if (item.targetLanguage == TargetLanguage.unsupported) return;
+    // Read TTS settings synchronously from the repository via the use case;
+    // fire-and-forget — failures are suppressed inside speakFlashcardFront.
+    unawaited(_autoPlayIfEnabled(item));
+  }
+
+  Future<void> _autoPlayIfEnabled(StudySessionReviewItem item) async {
+    final Result<TtsSettings> settingsResult =
+        await ref.read(loadTtsSettingsUseCaseProvider).call();
+    final bool autoPlay = switch (settingsResult) {
+      Ok<TtsSettings>(:final TtsSettings value) => value.autoPlay,
+      Err<TtsSettings>() => false,
+    };
+    if (!autoPlay || !mounted) return;
+    unawaited(
+      ref.read(speakFlashcardUseCaseProvider).speakFlashcardFront(
+        frontText: item.flashcard.front,
+        targetLanguage: item.targetLanguage,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
@@ -78,6 +107,15 @@ class _StudySessionRecallModeViewState
           if (mounted) {
             widget.onFinalized();
           }
+        });
+      }
+
+      // Auto-play: speak front when card advances, if the setting is enabled.
+      final StudySessionRecallState? state = next.asData?.value;
+      if (state != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          _maybeAutoPlay(state);
         });
       }
     });
@@ -120,10 +158,9 @@ class _StudySessionRecallModeViewState
             item,
           ),
           onSpeakFront: (StudySessionReviewItem item) => unawaited(
-            SemanticsService.sendAnnouncement(
-              View.of(context),
-              item.flashcard.front,
-              Directionality.of(context),
+            ref.read(speakFlashcardUseCaseProvider).speakFlashcardFront(
+              frontText: item.flashcard.front,
+              targetLanguage: item.targetLanguage,
             ),
           ),
         ),
