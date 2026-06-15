@@ -64,7 +64,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Daily goal + streak + reminders | Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets. | `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md` |
 | Progress tracking | Implemented (read-only V1: range activity, accuracy, box distribution, study-day streak, card-state counts) | `docs/wireframes/03-progress.md`, `docs/business/srs/srs-review.md` |
 | TTS / audio settings | Specified | `docs/business/tts/tts-settings.md` |
-| Account linking (Google) | Specified | `docs/business/account-sync/account-sync.md` |
+| Account linking (Google) | Specified — display-only Account screen shipped (WBS 8.5.1); interactive sign-in pending (8.6.1) | `docs/business/account-sync/account-sync.md` |
 | Drive sync (backup/restore with safety) | Specified | `docs/business/account-sync/account-sync.md` |
 | Per-deck TTS override | Planned | not yet specified |
 | Export with metadata (tags, SRS, etc.) | Out of scope | use Drive sync for backup |
