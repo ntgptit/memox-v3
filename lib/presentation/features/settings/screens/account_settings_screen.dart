@@ -9,6 +9,7 @@ import 'package:memox/domain/models/account_settings_view.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/settings/viewmodels/account_settings_viewmodel.dart';
 import 'package:memox/presentation/features/settings/widgets/account_settings_group.dart';
+import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/feedback/mx_failure_message.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
@@ -40,9 +41,9 @@ class AccountSettingsScreen extends ConsumerWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: view.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (Object error, _) => _AccountError(
+      body: AppAsyncBuilder<AccountSettingsView>(
+        value: view,
+        error: (Object error, StackTrace? _) => _AccountError(
           message: error is Failure
               ? l10n.failureMessage(error, fallback: l10n.accountErrorBody)
               : l10n.accountErrorBody,

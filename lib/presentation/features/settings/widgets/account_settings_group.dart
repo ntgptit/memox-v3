@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/extensions/theme_context.dart';
 import 'package:memox/core/theme/tokens/size_tokens.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
+import 'package:memox/core/utils/string_utils.dart';
 import 'package:memox/domain/models/account_settings_view.dart';
 import 'package:memox/domain/models/cloud_account_link.dart';
 import 'package:memox/domain/types/cloud_account.dart';
@@ -56,10 +57,13 @@ class AccountSettingsGroup extends StatelessWidget {
 }
 
 String? _initials(CloudAccountLink link) {
-  final String source = (link.displayName?.trim().isNotEmpty ?? false)
-      ? link.displayName!.trim()
-      : link.email.trim();
-  return source.isEmpty ? null : source[0].toUpperCase();
+  final String displayName = link.displayName == null
+      ? ''
+      : StringUtils.trimmed(link.displayName!);
+  final String source = displayName.isNotEmpty
+      ? displayName
+      : StringUtils.trimmed(link.email);
+  return source.isEmpty ? null : StringUtils.uppercased(source.substring(0, 1));
 }
 
 class _SignedOut extends StatelessWidget {

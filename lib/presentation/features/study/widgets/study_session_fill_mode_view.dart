@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/app/di/study_providers.dart' as study_di;
+import 'package:memox/app/di/tts_providers.dart';
 import 'package:memox/app/router/app_navigation.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
@@ -132,11 +132,12 @@ class StudySessionFillModeView extends HookConsumerWidget {
           onOpenCardActions: (StudySessionReviewItem item) =>
               _openCardActions(context, ref, sessionId, mode, item),
           onSpeakFront: (StudySessionReviewItem item) => unawaited(
-            SemanticsService.sendAnnouncement(
-              View.of(context),
-              item.flashcard.front,
-              Directionality.of(context),
-            ),
+            ref
+                .read(speakFlashcardUseCaseProvider)
+                .speakFlashcardFront(
+                  frontText: item.flashcard.front,
+                  targetLanguage: item.targetLanguage,
+                ),
           ),
         ),
       ),
