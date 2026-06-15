@@ -239,24 +239,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAccountTitle => 'Account';
 
   @override
-  String get accountSettingsTitle => 'Account & Sync';
+  String get accountSettingsTitle => 'Account & Drive sync';
 
   @override
-  String get accountSignedOutHeading => 'Sign in to back up your data';
+  String get accountSignedOutHeading => 'Back up to your Google Drive';
 
   @override
   String get accountSignedOutBody =>
-      'Your decks and progress will sync to your Google Drive App Folder. Only this app can see them.';
+      'MemoX works fully offline. Linking Drive lets you upload and restore your decks when you choose — never automatically.';
 
   @override
   String get accountSignInWithGoogle => 'Sign in with Google';
 
   @override
-  String get accountGuestReassurance =>
-      'You can keep using MemoX without signing in. Your data stays on this device only.';
+  String get accountWhatStaysLocalTitle => 'What stays local';
 
   @override
-  String get accountComingSoonHint => 'Sign-in & sync are coming soon.';
+  String get accountStaysLocalDecksTitle =>
+      'All your decks live on this device';
+
+  @override
+  String get accountStaysLocalDecksBody =>
+      'Study, edit, and review work offline.';
+
+  @override
+  String get accountStaysLocalNoAccountTitle =>
+      'No account needed to use MemoX';
+
+  @override
+  String get accountStaysLocalNoAccountBody =>
+      'Sign in only when you want a backup.';
+
+  @override
+  String get accountStaysLocalManualTitle => 'You decide when to upload';
+
+  @override
+  String get accountStaysLocalManualBody => 'Drive backups are always manual.';
 
   @override
   String get accountUnconfiguredBody =>

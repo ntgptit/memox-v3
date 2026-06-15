@@ -227,25 +227,41 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsAccountTitle => 'Tài khoản';
 
   @override
-  String get accountSettingsTitle => 'Tài khoản & Đồng bộ';
+  String get accountSettingsTitle => 'Tài khoản & Đồng bộ Drive';
 
   @override
-  String get accountSignedOutHeading => 'Đăng nhập để sao lưu dữ liệu';
+  String get accountSignedOutHeading => 'Sao lưu lên Google Drive của bạn';
 
   @override
   String get accountSignedOutBody =>
-      'Bộ thẻ và tiến độ của bạn sẽ đồng bộ lên thư mục ứng dụng trên Google Drive. Chỉ ứng dụng này thấy được.';
+      'MemoX hoạt động hoàn toàn offline. Liên kết Drive để bạn tự tải lên và khôi phục bộ thẻ khi muốn — không bao giờ tự động.';
 
   @override
   String get accountSignInWithGoogle => 'Đăng nhập với Google';
 
   @override
-  String get accountGuestReassurance =>
-      'Bạn vẫn dùng MemoX được mà không cần đăng nhập. Dữ liệu chỉ nằm trên thiết bị này.';
+  String get accountWhatStaysLocalTitle => 'Những gì vẫn ở máy';
 
   @override
-  String get accountComingSoonHint =>
-      'Tính năng đăng nhập & đồng bộ sắp ra mắt.';
+  String get accountStaysLocalDecksTitle => 'Mọi bộ thẻ nằm trên thiết bị này';
+
+  @override
+  String get accountStaysLocalDecksBody =>
+      'Học, sửa và ôn tập đều chạy offline.';
+
+  @override
+  String get accountStaysLocalNoAccountTitle =>
+      'Không cần tài khoản để dùng MemoX';
+
+  @override
+  String get accountStaysLocalNoAccountBody =>
+      'Chỉ đăng nhập khi bạn muốn sao lưu.';
+
+  @override
+  String get accountStaysLocalManualTitle => 'Bạn quyết định khi nào tải lên';
+
+  @override
+  String get accountStaysLocalManualBody => 'Sao lưu Drive luôn là thủ công.';
 
   @override
   String get accountUnconfiguredBody =>

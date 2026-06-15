@@ -57,6 +57,12 @@ verification table explicitly marks a row as Current.
 └───────────────────────────────────────┘
 ```
 
+> **Implementation note (WBS 8.5.1, shipped).** The signed-out screen follows the canonical kit shot
+> `shots/21-account-sync--signed-out` (light + dark): a hero `MxCard` (cloud `MxIconTile` +
+> "Back up to your Google Drive" + the offline/manual blurb + a **disabled** "Sign in with Google"
+> button — sign-in wires up in 8.6.1) followed by a "What stays local" `MxSectionHeader` + 3-row
+> `MxListTile` card. The ASCII above is illustrative; the kit PNG is the visual contract.
+
 ## Layout — signed in
 
 ```

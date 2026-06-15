@@ -53,31 +53,32 @@ Override _viewIs(AccountSettingsView view) =>
     accountSettingsViewProvider.overrideWith((Ref ref) async => view);
 
 void main() {
-  testWidgets('signed-out shows heading, sign-in affordance, reassurance', (
-    WidgetTester tester,
-  ) async {
-    await _pump(
-      tester,
-      override: _viewIs(
-        const AccountSettingsView(status: AccountLinkStatus.signedOut),
-      ),
-    );
+  testWidgets(
+    'signed-out matches the mock: hero + what-stays-local + disabled sign-in',
+    (WidgetTester tester) async {
+      await _pump(
+        tester,
+        override: _viewIs(
+          const AccountSettingsView(status: AccountLinkStatus.signedOut),
+        ),
+      );
 
-    expect(find.text('Sign in to back up your data'), findsOneWidget);
-    expect(find.text('Sign in with Google'), findsOneWidget);
-    expect(find.text('Sign-in & sync are coming soon.'), findsOneWidget);
-    expect(
-      find.textContaining('Your data stays on this device only'),
-      findsOneWidget,
-    );
+      expect(find.text('Back up to your Google Drive'), findsOneWidget);
+      expect(find.text('Sign in with Google'), findsOneWidget);
+      // "What stays local" section (mock 21-account-sync--signed-out).
+      expect(find.text('WHAT STAYS LOCAL'), findsOneWidget);
+      expect(find.text('All your decks live on this device'), findsOneWidget);
+      expect(find.text('No account needed to use MemoX'), findsOneWidget);
+      expect(find.text('You decide when to upload'), findsOneWidget);
 
-    // Display-only V1 invariant: the sign-in affordance is shown disabled until
-    // sign-in is wired (WBS 8.6.1).
-    final MxActionButton signIn = tester.widget<MxActionButton>(
-      find.widgetWithText(MxActionButton, 'Sign in with Google'),
-    );
-    expect(signIn.onPressed, isNull);
-  });
+      // Display-only V1 invariant: the sign-in affordance is shown disabled until
+      // sign-in is wired (WBS 8.6.1).
+      final MxActionButton signIn = tester.widget<MxActionButton>(
+        find.widgetWithText(MxActionButton, 'Sign in with Google'),
+      );
+      expect(signIn.onPressed, isNull);
+    },
+  );
 
   testWidgets('unsupported shows the unsupported notice', (
     WidgetTester tester,

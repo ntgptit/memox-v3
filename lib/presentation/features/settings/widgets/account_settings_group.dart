@@ -11,13 +11,16 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart'
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_avatar.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_list_tile.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
 /// Renders the Account settings body for each [AccountLinkStatus].
 ///
 /// V1 (WBS 8.5.1) is display-only: the sign-in affordance is shown disabled and
-/// the Drive actions read as "coming soon". Sign-in / sign-out / Drive sync wire
-/// up with WBS 8.6.1 / 8.6.2.
+/// the signed-in Drive actions read as "coming soon". Sign-in / sign-out / Drive
+/// sync wire up with WBS 8.6.1 / 8.6.2. The signed-out layout matches the kit
+/// mock `21-account-sync--signed-out` (hero card + "What stays local").
 class AccountSettingsGroup extends StatelessWidget {
   const AccountSettingsGroup({required this.view, super.key});
 
@@ -28,10 +31,7 @@ class AccountSettingsGroup extends StatelessWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final CloudAccountLink? link = view.link;
     return switch (view.status) {
-      AccountLinkStatus.signedOut => _SignedOut(
-        l10n: l10n,
-        noticeText: l10n.accountComingSoonHint,
-      ),
+      AccountLinkStatus.signedOut => _SignedOut(l10n: l10n),
       AccountLinkStatus.unconfigured => _SignedOut(
         l10n: l10n,
         noticeText: l10n.accountUnconfiguredBody,
@@ -50,7 +50,7 @@ class AccountSettingsGroup extends StatelessWidget {
         link: link,
         driveNoticeText: l10n.accountAuthorizeDriveComingSoon,
       ),
-      _ => _SignedOut(l10n: l10n, noticeText: l10n.accountComingSoonHint),
+      _ => _SignedOut(l10n: l10n),
     };
   }
 }
@@ -63,10 +63,13 @@ String? _initials(CloudAccountLink link) {
 }
 
 class _SignedOut extends StatelessWidget {
-  const _SignedOut({required this.l10n, required this.noticeText});
+  const _SignedOut({required this.l10n, this.noticeText});
 
   final AppLocalizations l10n;
-  final String noticeText;
+
+  /// Extra explanation for the `unconfigured` / `unsupported` states; `null`
+  /// for a plain signed-out screen (matches the mock, which has no caption).
+  final String? noticeText;
 
   @override
   Widget build(BuildContext context) {
@@ -74,47 +77,69 @@ class _SignedOut extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(SpacingTokens.screenPadding),
       children: <Widget>[
-        const SizedBox(height: SpacingTokens.xxl),
-        Center(
-          child: Icon(
-            Icons.cloud_outlined,
-            size: SizeTokens.iconXl,
-            color: scheme.primary,
+        MxCard(
+          child: Column(
+            children: <Widget>[
+              const MxIconTile(
+                icon: Icons.cloud_outlined,
+                size: SizeTokens.button,
+              ),
+              const SizedBox(height: SpacingTokens.lg),
+              MxText(
+                l10n.accountSignedOutHeading,
+                role: MxTextRole.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: SpacingTokens.sm),
+              MxText(
+                l10n.accountSignedOutBody,
+                role: MxTextRole.bodyMedium,
+                textAlign: TextAlign.center,
+                color: scheme.onSurfaceVariant,
+              ),
+              const SizedBox(height: SpacingTokens.lg),
+              MxActionButton(
+                intent: MxActionIntent.screenPrimary,
+                label: l10n.accountSignInWithGoogle,
+                icon: Icons.login,
+                onPressed: null,
+              ),
+              if (noticeText != null) ...<Widget>[
+                const SizedBox(height: SpacingTokens.sm),
+                MxText(
+                  noticeText!,
+                  role: MxTextRole.labelMedium,
+                  textAlign: TextAlign.center,
+                  color: scheme.onSurfaceVariant,
+                ),
+              ],
+            ],
           ),
         ),
         const SizedBox(height: SpacingTokens.lg),
-        MxText(
-          l10n.accountSignedOutHeading,
-          role: MxTextRole.titleLarge,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: SpacingTokens.sm),
-        MxText(
-          l10n.accountSignedOutBody,
-          role: MxTextRole.bodyMedium,
-          textAlign: TextAlign.center,
-          color: scheme.onSurfaceVariant,
-        ),
-        const SizedBox(height: SpacingTokens.xl),
-        MxActionButton(
-          intent: MxActionIntent.screenPrimary,
-          label: l10n.accountSignInWithGoogle,
-          icon: Icons.login,
-          onPressed: null,
-        ),
-        const SizedBox(height: SpacingTokens.sm),
-        MxText(
-          noticeText,
-          role: MxTextRole.labelMedium,
-          textAlign: TextAlign.center,
-          color: scheme.onSurfaceVariant,
-        ),
-        const SizedBox(height: SpacingTokens.xl),
-        MxText(
-          l10n.accountGuestReassurance,
-          role: MxTextRole.bodySmall,
-          textAlign: TextAlign.center,
-          color: scheme.onSurfaceVariant,
+        MxSectionHeader(label: l10n.accountWhatStaysLocalTitle),
+        const SizedBox(height: SpacingTokens.xs),
+        MxCard(
+          padding: EdgeInsets.zero,
+          child: Column(
+            children: <Widget>[
+              MxListTile(
+                leading: const MxIconTile(icon: Icons.smartphone_outlined),
+                title: l10n.accountStaysLocalDecksTitle,
+                subtitle: l10n.accountStaysLocalDecksBody,
+              ),
+              MxListTile(
+                leading: const MxIconTile(icon: Icons.shield_outlined),
+                title: l10n.accountStaysLocalNoAccountTitle,
+                subtitle: l10n.accountStaysLocalNoAccountBody,
+              ),
+              MxListTile(
+                leading: const MxIconTile(icon: Icons.cloud_upload_outlined),
+                title: l10n.accountStaysLocalManualTitle,
+                subtitle: l10n.accountStaysLocalManualBody,
+              ),
+            ],
+          ),
         ),
       ],
     );

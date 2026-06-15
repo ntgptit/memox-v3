@@ -431,19 +431,19 @@ abstract class AppLocalizations {
   /// No description provided for @accountSettingsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Account & Sync'**
+  /// **'Account & Drive sync'**
   String get accountSettingsTitle;
 
   /// No description provided for @accountSignedOutHeading.
   ///
   /// In en, this message translates to:
-  /// **'Sign in to back up your data'**
+  /// **'Back up to your Google Drive'**
   String get accountSignedOutHeading;
 
   /// No description provided for @accountSignedOutBody.
   ///
   /// In en, this message translates to:
-  /// **'Your decks and progress will sync to your Google Drive App Folder. Only this app can see them.'**
+  /// **'MemoX works fully offline. Linking Drive lets you upload and restore your decks when you choose — never automatically.'**
   String get accountSignedOutBody;
 
   /// No description provided for @accountSignInWithGoogle.
@@ -452,17 +452,47 @@ abstract class AppLocalizations {
   /// **'Sign in with Google'**
   String get accountSignInWithGoogle;
 
-  /// No description provided for @accountGuestReassurance.
+  /// No description provided for @accountWhatStaysLocalTitle.
   ///
   /// In en, this message translates to:
-  /// **'You can keep using MemoX without signing in. Your data stays on this device only.'**
-  String get accountGuestReassurance;
+  /// **'What stays local'**
+  String get accountWhatStaysLocalTitle;
 
-  /// No description provided for @accountComingSoonHint.
+  /// No description provided for @accountStaysLocalDecksTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sign-in & sync are coming soon.'**
-  String get accountComingSoonHint;
+  /// **'All your decks live on this device'**
+  String get accountStaysLocalDecksTitle;
+
+  /// No description provided for @accountStaysLocalDecksBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Study, edit, and review work offline.'**
+  String get accountStaysLocalDecksBody;
+
+  /// No description provided for @accountStaysLocalNoAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No account needed to use MemoX'**
+  String get accountStaysLocalNoAccountTitle;
+
+  /// No description provided for @accountStaysLocalNoAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in only when you want a backup.'**
+  String get accountStaysLocalNoAccountBody;
+
+  /// No description provided for @accountStaysLocalManualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You decide when to upload'**
+  String get accountStaysLocalManualTitle;
+
+  /// No description provided for @accountStaysLocalManualBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive backups are always manual.'**
+  String get accountStaysLocalManualBody;
 
   /// No description provided for @accountUnconfiguredBody.
   ///
