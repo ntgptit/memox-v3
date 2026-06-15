@@ -31,9 +31,11 @@ import 'package:memox/domain/types/study_mode.dart';
 abstract final class StudyModeStrategyFactory {
   /// Resolves the active mode strategy for the current study session.
   ///
-  /// V1 fallback: the session header does not persist its mode yet, so a
-  /// `null` [studyMode] resolves to [StudyMode.recall] — the documented
-  /// default in `docs/business/study/study-flow.md` (decision row S45).
+  /// V1 fallback: the session header now persists `study_flow` / `current_mode`,
+  /// but the V1 review controller does not yet consume `current_mode`, so a
+  /// `null` [studyMode] (no route mode) resolves to [StudyMode.recall] — the
+  /// documented default in `docs/business/study/study-flow.md` (decision row
+  /// S45).
   static StudyModeStrategy resolve({StudyMode? studyMode}) {
     final StudyMode resolvedMode = studyMode ?? StudyMode.recall;
     return switch (resolvedMode) {

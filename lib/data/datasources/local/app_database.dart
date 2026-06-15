@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-
 import 'package:memox/data/datasources/local/connection/database_connection.dart';
+import 'package:memox/data/datasources/local/migrations/v10_add_study_flow_and_current_mode.dart';
 import 'package:memox/data/datasources/local/migrations/v2_add_flashcard_optional_fields.dart';
 import 'package:memox/data/datasources/local/migrations/v3_add_flashcard_tags.dart';
 import 'package:memox/data/datasources/local/migrations/v4_add_study_tables.dart';
@@ -42,7 +42,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Bump and add an `onUpgrade` step for every schema change
   /// (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 9;
+  static const int currentSchemaVersion = 10;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -77,6 +77,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 9) {
         await addTtsSettings(m, this);
+      }
+      if (from < 10) {
+        await addStudyFlowAndCurrentMode(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

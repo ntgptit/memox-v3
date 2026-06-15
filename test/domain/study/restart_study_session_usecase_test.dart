@@ -15,6 +15,7 @@ import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_flow.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -147,6 +148,7 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<StudySession>> createSession({
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,
+    StudyFlow? studyFlow,
   }) async {
     throw UnimplementedError();
   }
@@ -178,6 +180,8 @@ void main() {
             entryRefId: 'deck-1',
             studyType: StudyType.newCards,
             status: SessionStatus.inProgress,
+            studyFlow: StudyFlow.newFullCycle,
+            currentMode: StudyMode.review,
             startedAt: DateTime.utc(2026, 1, 1),
             updatedAt: DateTime.utc(2026, 1, 1),
           ),

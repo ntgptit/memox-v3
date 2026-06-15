@@ -13,6 +13,7 @@ import 'package:memox/domain/study/usecases/study_usecases.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/study_flow.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -143,6 +144,7 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<StudySession>> createSession({
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,
+    StudyFlow? studyFlow,
   }) async {
     throw UnimplementedError();
   }

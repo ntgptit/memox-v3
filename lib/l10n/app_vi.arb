@@ -569,6 +569,8 @@
   "studyEntryResumeRequiredStartOverFailed": "Không thể bắt đầu lại. Vui lòng thử lại.",
   "studyEntryInvalidTitle": "Không thể mở phần học",
   "studyEntryInvalidMessage": "Tham số của đường dẫn học không hợp lệ.",
+  "studyEntryNotFoundTitle": "Không mở được phần học",
+  "studyEntryNotFoundMessage": "Thư mục hoặc bộ thẻ này không còn tồn tại.",
   "studySessionTitle": "Phiên học",
   "studySessionGuessModeLabel": "ĐOÁN",
   "studySessionGuessPromptLabel": "Đây là gì?",

@@ -128,6 +128,42 @@ enum StudyMode {
 
 Source: `docs/business/study/study-flow.md`.
 
+### StudyFlow
+
+**Status:** Current domain type (`lib/domain/types/study_flow.dart`).
+
+The ordered phase plan of a study session. A session plays its [StudyFlow]'s
+modes **one phase at a time** (per-phase chaining: the whole batch clears one
+mode before the next mode begins). The active phase is persisted on
+`study_sessions.current_mode`; the plan on `study_sessions.study_flow`.
+
+```dart
+enum StudyFlow {
+  newFullCycle,     // review → match → guess → recall → fill
+  newReviewOnly,    // review
+  newMatchOnly,     // match
+  newGuessOnly,     // guess
+  newRecallOnly,    // recall
+  newFillOnly,      // fill
+  srsRecallReview,  // recall (SRS review default, adopted 2026-06-10)
+  srsFillReview,    // fill (SRS review opt-in)
+}
+```
+
+**Plan behavior** (`StudyFlowPlan` extension): `orderedModes` (never empty),
+`firstMode`, `isLastMode(mode)`, `nextModeAfter(mode)`. A single-mode flow is a
+chain of length one (its only phase is also its last/terminal phase). The
+mode→flow mapping lives only in this extension; callers must not hardcode a
+phase sequence.
+
+**Storage:** `study_sessions.study_flow` TEXT, snake_case (`new_full_cycle`,
+`new_review_only`, …, `srs_recall_review`, `srs_fill_review`) — see
+`StudyMapper.studyFlowToStorage`. `study_sessions.current_mode` TEXT nullable
+(snake_case `StudyMode` name); `null` marks a legacy single-mode session that
+resolves through the recall fallback.
+
+Source: `docs/business/study/study-flow.md` §Study flows.
+
 ### EntryType
 
 How a study session was started.

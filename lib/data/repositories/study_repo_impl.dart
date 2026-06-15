@@ -17,11 +17,13 @@ import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/study/ports/study_repo.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
+import 'package:memox/domain/study/study_flow_resolver.dart';
 import 'package:memox/domain/study/study_session_limits.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_flow.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -84,6 +86,10 @@ class StudyRepositoryImpl implements StudyRepository {
       final Result<StudySession> created = await createSession(
         scope: scope,
         flashcardIds: eligibleIds,
+        studyFlow: StudyFlowResolver.resolve(
+          studyType: scope.studyType,
+          mode: mode,
+        ),
       );
       return created.map(
         (StudySession session) =>
@@ -170,6 +176,10 @@ class StudyRepositoryImpl implements StudyRepository {
           dao: _dao,
           scope: scope,
           flashcardIds: eligibleIds,
+          studyFlow: StudyFlowResolver.resolve(
+            studyType: scope.studyType,
+            mode: mode,
+          ),
           nowMs: nowMs,
         );
       });
@@ -472,6 +482,7 @@ class StudyRepositoryImpl implements StudyRepository {
   Future<Result<StudySession>> createSession({
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,
+    StudyFlow? studyFlow,
   }) async {
     final List<FlashcardId> cappedFlashcardIds = _capSessionFlashcardIds(
       flashcardIds,
@@ -485,6 +496,8 @@ class StudyRepositoryImpl implements StudyRepository {
       );
     }
 
+    final StudyFlow resolvedFlow =
+        studyFlow ?? StudyFlowResolver.resolve(studyType: scope.studyType);
     try {
       final DateTime now = _now;
       final StudySession session = await _dao.transaction(
@@ -492,6 +505,7 @@ class StudyRepositoryImpl implements StudyRepository {
           dao: _dao,
           scope: scope,
           flashcardIds: cappedFlashcardIds,
+          studyFlow: resolvedFlow,
           nowMs: now.millisecondsSinceEpoch,
         ),
       );

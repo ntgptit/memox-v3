@@ -5,6 +5,8 @@ import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/models/study_session_review.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_flow.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/presentation/features/study/viewmodels/study_session_review_viewmodel.dart';
@@ -20,6 +22,8 @@ StudySessionReview _review({
     entryRefId: 'deck-1',
     studyType: StudyType.newCards,
     status: SessionStatus.inProgress,
+    studyFlow: StudyFlow.newFullCycle,
+    currentMode: StudyMode.review,
     startedAt: now,
     updatedAt: now,
   );

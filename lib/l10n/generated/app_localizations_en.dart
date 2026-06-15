@@ -1197,6 +1197,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'The study route parameters are invalid.';
 
   @override
+  String get studyEntryNotFoundTitle => 'Study not available';
+
+  @override
+  String get studyEntryNotFoundMessage =>
+      'This deck or folder no longer exists.';
+
+  @override
   String get studySessionTitle => 'Study session';
 
   @override

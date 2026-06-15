@@ -1177,6 +1177,13 @@ class AppLocalizationsVi extends AppLocalizations {
       'Tham số của đường dẫn học không hợp lệ.';
 
   @override
+  String get studyEntryNotFoundTitle => 'Không mở được phần học';
+
+  @override
+  String get studyEntryNotFoundMessage =>
+      'Thư mục hoặc bộ thẻ này không còn tồn tại.';
+
+  @override
   String get studySessionTitle => 'Phiên học';
 
   @override

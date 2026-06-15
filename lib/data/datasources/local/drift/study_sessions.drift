@@ -6,6 +6,12 @@ CREATE TABLE study_sessions (
   entry_ref_id TEXT,
   study_type TEXT NOT NULL,
   status TEXT NOT NULL,
+  -- Ordered phase plan (StudyFlow, snake_case). Legacy rows default to the
+  -- single-phase recall review flow.
+  study_flow TEXT NOT NULL DEFAULT 'srs_recall_review',
+  -- Active phase pointer (StudyMode, snake_case). NULL marks a legacy
+  -- single-mode session resolved through the recall fallback.
+  current_mode TEXT,
   started_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 ) AS StudySessionRow;

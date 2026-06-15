@@ -6,6 +6,7 @@ import 'package:memox/domain/entities/study_session_item.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_flow.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_type.dart';
 
@@ -78,12 +79,45 @@ abstract final class StudyMapper {
 
   static String studyModeToStorage(StudyMode value) => value.name;
 
+  /// Nullable variant for `study_sessions.current_mode` (the active phase
+  /// pointer). A `null` value marks a legacy/single-mode session whose phase
+  /// the runtime resolves through the recall fallback.
+  static StudyMode? currentModeFromStorage(String? value) =>
+      value == null ? null : studyModeFromStorage(value);
+
+  static String? currentModeToStorage(StudyMode? value) =>
+      value == null ? null : studyModeToStorage(value);
+
+  static StudyFlow studyFlowFromStorage(String value) => switch (value) {
+    'new_full_cycle' => StudyFlow.newFullCycle,
+    'new_review_only' => StudyFlow.newReviewOnly,
+    'new_match_only' => StudyFlow.newMatchOnly,
+    'new_guess_only' => StudyFlow.newGuessOnly,
+    'new_recall_only' => StudyFlow.newRecallOnly,
+    'new_fill_only' => StudyFlow.newFillOnly,
+    'srs_fill_review' => StudyFlow.srsFillReview,
+    _ => StudyFlow.srsRecallReview,
+  };
+
+  static String studyFlowToStorage(StudyFlow value) => switch (value) {
+    StudyFlow.newFullCycle => 'new_full_cycle',
+    StudyFlow.newReviewOnly => 'new_review_only',
+    StudyFlow.newMatchOnly => 'new_match_only',
+    StudyFlow.newGuessOnly => 'new_guess_only',
+    StudyFlow.newRecallOnly => 'new_recall_only',
+    StudyFlow.newFillOnly => 'new_fill_only',
+    StudyFlow.srsRecallReview => 'srs_recall_review',
+    StudyFlow.srsFillReview => 'srs_fill_review',
+  };
+
   static StudySession fromSessionRow(StudySessionRow row) => StudySession(
     id: row.id,
     entryType: entryTypeFromStorage(row.entryType),
     entryRefId: row.entryRefId,
     studyType: studyTypeFromStorage(row.studyType),
     status: sessionStatusFromStorage(row.status),
+    studyFlow: studyFlowFromStorage(row.studyFlow),
+    currentMode: currentModeFromStorage(row.currentMode),
     startedAt: _dateFromMs(row.startedAt),
     updatedAt: _dateFromMs(row.updatedAt),
   );

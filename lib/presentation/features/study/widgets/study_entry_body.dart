@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/app_navigation.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/theme/tokens/spacing_tokens.dart';
 import 'package:memox/domain/study/study_entry_parser.dart';
 import 'package:memox/domain/study/study_entry_route_input.dart';
@@ -32,12 +32,23 @@ class StudyEntryBody extends StatelessWidget {
         title: l10n.studyEntryPreparingTitle,
         message: l10n.studyEntryPreparingMessage,
       ),
-      error: (Object error, StackTrace? stackTrace) => MxErrorState(
-        title: l10n.studyEntryInvalidTitle,
-        message: l10n.studyEntryInvalidMessage,
-        retryLabel: l10n.commonBack,
-        onRetry: () => context.pop(),
-      ),
+      error: (Object error, StackTrace? stackTrace) {
+        final bool scopeMissing = switch (error) {
+          StudyEntryFailureException(:final failure) =>
+            failure is NotFoundFailure,
+          _ => false,
+        };
+        return MxErrorState(
+          title: scopeMissing
+              ? l10n.studyEntryNotFoundTitle
+              : l10n.studyEntryInvalidTitle,
+          message: scopeMissing
+              ? l10n.studyEntryNotFoundMessage
+              : l10n.studyEntryInvalidMessage,
+          retryLabel: l10n.commonBack,
+          onRetry: () => context.goBackOrLibrary(),
+        );
+      },
       data: (StudyEntryStartResult result) => switch (result) {
         StudyEntryStartStarted() => _StudyEntryLoadingState(
           title: l10n.studyEntryPreparingTitle,
@@ -211,7 +222,7 @@ class _StudyEntryEmptyStateView extends StatelessWidget {
           context.pushFlashcardCreate(deckId);
           return;
         }
-        context.pop();
+        context.goBackOrLibrary();
         return;
       case StudyEntryEmptyVariant.deckNoDueCards:
       case StudyEntryEmptyVariant.folderNoDueCards:

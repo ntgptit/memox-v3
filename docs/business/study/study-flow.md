@@ -180,12 +180,21 @@ Status notes (see `docs/business/glossary.md` §Status terms):
   does not create a `study_attempts` row, preserves `current_box` / `due_at`
   / `review_count` / `lapse_count`, updates only `buried_until` or
   `is_suspended`, and touches `study_sessions.updated_at`.
+- The session header now **persists** its phase plan and active phase:
+  `study_sessions.study_flow` (the `StudyFlow`, written at create from
+  `StudyFlowResolver.resolve(...)`) and `study_sessions.current_mode` (the
+  active phase, written as `study_flow.firstMode` at create). New deck/folder
+  sessions with no explicit mode resolve to `new_full_cycle`. **Backbone only
+  in this iteration:** the columns are written but the FE/review controller
+  does not yet consume `current_mode` — it still drives the active mode from
+  the route `?mode=` (or the recall fallback below). Per-phase advancement that
+  reads `current_mode` is pending (WBS 4.5.12).
 - The review controller resolves a domain `StudyModeStrategy` for the current
-  session. Because the session header does not persist mode yet, V1 uses
-  `StudyMode.recall` as the documented fallback in
-  `StudyModeStrategyFactory.resolve(...)`. Explicit resolution supports
-  `review`, `guess`, `fill`, and `match`; the active review shell still falls
-  back to recall when no mode is persisted.
+  session. Because V1 does not yet consume the persisted `current_mode`, it
+  uses `StudyMode.recall` as the documented fallback in
+  `StudyModeStrategyFactory.resolve(...)` when no route mode is supplied.
+  Explicit resolution supports `review`, `guess`, `fill`, and `match`; the
+  active review shell still falls back to recall when no mode is supplied.
 - `StudyModeStrategy` is a **sealed** base
   (`lib/domain/study/modes/study_mode_strategy.dart`) with three interaction
   families declared in the same file: `BinaryGradeStudyModeStrategy`

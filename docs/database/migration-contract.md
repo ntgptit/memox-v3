@@ -120,11 +120,13 @@ If any step is skipped, report it explicitly.
 - `lib/data/datasources/local/migrations/v7_add_card_events_and_attempt_duration.dart`
 - `lib/data/datasources/local/migrations/v8_add_flashcard_pos_and_flag.dart`
 - `lib/data/datasources/local/migrations/v9_add_tts_settings.dart`
+- `lib/data/datasources/local/migrations/v10_add_study_flow_and_current_mode.dart`
 
 ## Shipped migrations
 
 | Version | File | What changed |
 |---------|------|--------------|
+| v10 | `v10_add_study_flow_and_current_mode.dart` | Added `study_sessions.study_flow` (TEXT NOT NULL DEFAULT `'srs_recall_review'`) and `study_sessions.current_mode` (TEXT NULL). Both additive; existing rows migrate to the single-phase recall flow / NULL phase. Migration test: `test/data/migrations/study_flow_current_mode_migration_test.dart`. |
 | v9 | `v9_add_tts_settings.dart` | Added `tts_settings` single-row table (`id`, `auto_play`, `front_language`, `rate`, `pitch`, `volume`, `front_voice_name`). Migration test: `test/data/migrations/tts_settings_migration_test.dart`. |
 | v8 | `v8_add_flashcard_pos_and_flag.dart` | Added `flashcards.part_of_speech`, `flashcards.is_flagged`. |
 | v7 | `v7_add_card_events_and_attempt_duration.dart` | Added `card_events` table; `study_attempts.box_before`, `box_after`, `duration_ms`. |

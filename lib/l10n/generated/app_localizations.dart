@@ -2048,6 +2048,18 @@ abstract class AppLocalizations {
   /// **'The study route parameters are invalid.'**
   String get studyEntryInvalidMessage;
 
+  /// No description provided for @studyEntryNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study not available'**
+  String get studyEntryNotFoundTitle;
+
+  /// No description provided for @studyEntryNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This deck or folder no longer exists.'**
+  String get studyEntryNotFoundMessage;
+
   /// No description provided for @studySessionTitle.
   ///
   /// In en, this message translates to:

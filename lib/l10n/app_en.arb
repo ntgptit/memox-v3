@@ -569,6 +569,8 @@
   "studyEntryResumeRequiredStartOverFailed": "Couldn't start over. Try again.",
   "studyEntryInvalidTitle": "Can't open study",
   "studyEntryInvalidMessage": "The study route parameters are invalid.",
+  "studyEntryNotFoundTitle": "Study not available",
+  "studyEntryNotFoundMessage": "This deck or folder no longer exists.",
   "studySessionTitle": "Study session",
   "studySessionGuessModeLabel": "GUESS",
   "studySessionGuessPromptLabel": "What is this?",

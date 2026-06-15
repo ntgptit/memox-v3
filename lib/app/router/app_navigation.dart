@@ -15,6 +15,17 @@ extension AppNavigation on BuildContext {
   /// Switch to the Library tab root.
   void goLibrary() => goNamed(RouteNames.library);
 
+  /// Pop the current route, or fall back to the Library tab root when there is
+  /// nothing to pop (e.g. the screen was reached via a deep link). Avoids the
+  /// `GoError: There is nothing to pop` crash on direct navigation.
+  void goBackOrLibrary() {
+    if (canPop()) {
+      pop();
+      return;
+    }
+    goNamed(RouteNames.library);
+  }
+
   /// Switch to the Home tab root.
   void goHome() => goNamed(RouteNames.home);
 

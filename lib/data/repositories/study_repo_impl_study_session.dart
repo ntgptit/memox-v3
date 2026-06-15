@@ -4,6 +4,7 @@ Future<StudySession> _persistSession({
   required study_dao.StudySessionDao dao,
   required StudyScope scope,
   required List<FlashcardId> flashcardIds,
+  required StudyFlow studyFlow,
   required int nowMs,
 }) async {
   final String sessionId = IdGenerator.newId();
@@ -14,6 +15,10 @@ Future<StudySession> _persistSession({
       entryRefId: Value<String?>(scope.entryRefId),
       studyType: StudyMapper.studyTypeToStorage(scope.studyType),
       status: StudyMapper.sessionStatusToStorage(SessionStatus.inProgress),
+      studyFlow: Value<String>(StudyMapper.studyFlowToStorage(studyFlow)),
+      currentMode: Value<String?>(
+        StudyMapper.currentModeToStorage(studyFlow.firstMode),
+      ),
       startedAt: nowMs,
       updatedAt: nowMs,
     ),
