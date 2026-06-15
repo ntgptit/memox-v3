@@ -985,6 +985,8 @@
   "folderDetailSearchSheetTitle": "Search this folder",
   "folderDetailMasteryUnavailableLabel": "Mastery unavailable",
   "folderDetailStartStudyLabel": "Start study",
+  "folderDetailStudyNewLabel": "Study new",
+  "folderDetailReviewDueLabel": "Review due",
   "folderDetailSortSheetTitle": "Sort folder",
   "folderDetailSortManualLabel": "Manual order",
   "folderDetailSortNameLabel": "Name",

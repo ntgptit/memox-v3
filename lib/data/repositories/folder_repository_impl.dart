@@ -439,6 +439,7 @@ class FolderRepositoryImpl implements FolderRepository {
     deckCount: row.deckCount,
     cardCount: row.cardCount,
     dueCount: row.dueCount,
+    newCount: row.newCount,
   );
 
   static DeckWithCount _deckWithCountFromDeckItem(DeckItemsResult row) =>
@@ -454,6 +455,7 @@ class FolderRepositoryImpl implements FolderRepository {
         ),
         cardCount: row.cardCount,
         dueCount: row.dueCount,
+        newCount: row.newCount,
         lastStudiedAt: row.lastStudiedAt == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(row.lastStudiedAt!),

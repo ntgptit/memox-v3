@@ -723,7 +723,8 @@ void main() {
           .get();
       expect(progressRows, hasLength(1));
       expect(progressRows.single.flashcardId, created.id);
-      expect(progressRows.single.dueAt, isA<int>());
+      // Brand-new card: due_at stays NULL (never scheduled) so it counts as NEW.
+      expect(progressRows.single.dueAt, null);
     });
 
     test('unknown deck returns NotFoundFailure and inserts nothing', () async {
@@ -818,7 +819,8 @@ void main() {
           .select(db.flashcardProgress)
           .get();
       expect(progressRows, hasLength(2));
-      expect(progressRows.every((row) => row.dueAt != null), isTrue);
+      // Imported cards are also brand-new: due_at stays NULL until first study.
+      expect(progressRows.every((row) => row.dueAt == null), isTrue);
     });
 
     test(

@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-16
 applies_to: Drift schema, all tables, migrations
-schema_version: 10 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 11 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
 ---
 
 # Database Schema Contract

@@ -1808,6 +1808,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get folderDetailStartStudyLabel => 'Bắt đầu học';
 
   @override
+  String get folderDetailStudyNewLabel => 'Học thẻ mới';
+
+  @override
+  String get folderDetailReviewDueLabel => 'Ôn thẻ đến hạn';
+
+  @override
   String get folderDetailSortSheetTitle => 'Sắp xếp thư mục';
 
   @override

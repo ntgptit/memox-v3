@@ -128,7 +128,15 @@ SELECT
      WHERE s.anchor_id = folders.id
        AND p.is_suspended = FALSE
        AND (p.buried_until IS NULL OR p.buried_until <= :now)
-       AND p.due_at IS NOT NULL AND p.due_at <= :now) AS due_count
+       AND p.due_at IS NOT NULL AND p.due_at <= :now) AS due_count,
+  (SELECT COUNT(*) FROM flashcards fc
+     INNER JOIN decks d ON fc.deck_id = d.id
+     INNER JOIN subtree s ON d.folder_id = s.folder_id
+     LEFT JOIN flashcard_progress p ON p.flashcard_id = fc.id
+     WHERE s.anchor_id = folders.id
+       AND COALESCE(p.is_suspended, FALSE) = FALSE
+       AND (p.buried_until IS NULL OR p.buried_until <= :now)
+       AND (p.flashcard_id IS NULL OR p.due_at IS NULL)) AS new_count
 FROM folders
 WHERE folders.id IN (SELECT anchor_id FROM subtree)
 ORDER BY $order;
@@ -155,6 +163,13 @@ SELECT
      FROM flashcards fc
      LEFT JOIN flashcard_progress p ON p.flashcard_id = fc.id
      WHERE fc.deck_id = decks.id) AS last_studied_at
+  ,
+  (SELECT COUNT(*) FROM flashcards fc
+     LEFT JOIN flashcard_progress p ON p.flashcard_id = fc.id
+     WHERE fc.deck_id = decks.id
+       AND COALESCE(p.is_suspended, FALSE) = FALSE
+       AND (p.buried_until IS NULL OR p.buried_until <= :now)
+       AND (p.flashcard_id IS NULL OR p.due_at IS NULL)) AS new_count
 FROM decks
 WHERE decks.folder_id = :folderId
   AND (:search = '' OR LOWER(decks.name) LIKE :search ESCAPE '\')

@@ -15,9 +15,11 @@ source_specs:
 This screen is partially Current. The folder **browser** (subfolders / decks /
 unlocked modes, breadcrumb, search/sort affordances, true-empty vs
 search-no-results, mode-constrained create FAB, folder-scope summary, and the
-overflow rename/move/delete actions) is Current. The **study layer** (mastery
-source of truth, due-based study routing, resume banner) is **not built** and
-is Future here. Per-deck last-studied metadata and compact progress bars are
+overflow rename/move/delete actions) is Current. **Study routing is Current**:
+the summary's **Study new** / **Review due** CTAs route to the folder-scoped
+Study Entry gate (`EntryType.folder`, `StudyType.new`/`srs_review`). The
+remaining **study layer** (mastery source of truth, resume banner) is **not
+built** and is Future here. Per-deck last-studied metadata and compact progress bars are
 Current because they are derived from the existing deck read model, not the
 study UI.
 
@@ -39,10 +41,15 @@ study UI.
 - **Folder-scope summary is Current** (`folder_detail_summary.dart`), shown only
   when the folder has children (hidden for the empty-locked and unlocked states):
     - decks mode → `FolderDecksSummary`: a card with a non-numeric mastery
-      shell, the `{deckCount} decks · {cardCount} cards` line, the real due
-      line, and a Start study CTA that enables when `dueTotal > 0`. Totals are
-      summed from the loaded decks (`DeckWithCount.cardCount` / `dueCount`) —
-      no placeholder mastery percentage or new count.
+      shell, the `{deckCount} decks · {cardCount} cards` line, a status line
+      composed of `{newTotal} new` and/or `{dueTotal} due` (or "All caught up"
+      when both are 0), and **two study CTAs**: **Study new** (enabled when
+      `newTotal > 0`, routes `study_type=new` → New Study / `new_full_cycle`)
+      and **Review due** (enabled when `dueTotal > 0`, routes
+      `study_type=srs_review`). Totals are summed from the loaded decks
+      (`DeckWithCount.cardCount` / `dueCount` / `newCount`) — no placeholder
+      mastery percentage. A brand-new card (`due_at = NULL`) counts as **new**,
+      not due (`docs/business/srs/srs-review.md` §Rules).
     - subfolders mode → `FolderSubfoldersSummary`: a three-stat strip
       (subfolders · cards · due total) summed from the direct children
       (`FolderWithCount.cardCount` / `dueCount`).
@@ -56,9 +63,10 @@ study UI.
   search hides existing children).
 - The PNG/spec values in `docs/system-design/MemoX Design System/ui_kits/mobile/shots/04-folder-detail--*.png`
   are approved visual variance where they exceed current support: the decks shot
-  may label `newest` as `Recent`, while the `62%`, `6 new`, and `Most due`
-  artifacts remain mock-only and are not V1 source of truth. Start study is
-  Current in decks mode when real due data exists.
+  may label `newest` as `Recent`, while the `62%` mastery and `Most due`
+  artifacts remain mock-only and are not V1 source of truth. The `{n} new`
+  count is now **Current** (real `new_count` read model). Study new / Review
+  due are Current in decks mode when real new/due data exists.
 - Per-folder sort state exists on the toolbar (`ContentSortMode`) but this
   screen normalizes unsupported values back to `manual`.
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
@@ -81,7 +89,8 @@ study UI.
 
 ### Future / not built (MUST NOT be rendered with placeholder values)
 
-- Per-folder / per-deck mastery ring & "{n} new" / fresh counts (no mastery read model).
+- Per-folder / per-deck mastery ring (no mastery read model). The "{n} new"
+  count is now Current (built); only the mastery ring/percentage stays Future.
 - Folder-level Today CTA and the Resume banner (study layer not built).
 - Global Search route, Flashcard History, tag-scoped study, root-level decks.
 - The decks-mode FAB stays a minimal icon button with `New deck` tooltip (not the mock's `New card`):
@@ -220,12 +229,12 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | App bar back                    | Returns to parent folder or Library.                                                                                                                                                                                                                                                                                                                                                                             |
 | Breadcrumb                      | Full path from Library to current. Tap any segment to jump.                                                                                                                                                                                                                                                                                                                                                      |
-| Folder-scope summary            | **Current.** `FolderDecksSummary` (non-numeric mastery shell + decks · cards + due + Start study CTA enabled when due > 0) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children; no fake mastery percentage or new-count placeholder. |
+| Folder-scope summary            | **Current.** `FolderDecksSummary` (non-numeric mastery shell + decks · cards + `{n} new`/`{m} due` status + **Study new** CTA when new > 0 and **Review due** CTA when due > 0) or `FolderSubfoldersSummary` (subfolders · cards · due-total strip). Counts summed from loaded children (`newCount`/`dueCount`); no fake mastery percentage. |
 | Resume banner                   | **Future.** Study layer not built. No resumable-session read for this scope.                                                                                                                                                                                                                                                                                                                                    |
 | Study folder CTA                | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Today CTA                       | **Future.** Study entry gate / study layer not built.                                                                                                                                                                                                                                                                                                                                                           |
 | Subfolder row (subfolders mode) | Folder icon + name + optional `{m} due` badge + `{n} decks · {c} cards` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                                |
-| Deck row (decks mode)           | Icon + name + optional "{m} due" badge + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
+| Deck row (decks mode)           | Icon + name + optional "{m} due" badge (primary tone) + optional "{n} new" badge (secondary tone) + `{n} cards · last {relative time}` subtitle + compact progress bar + chevron.                                                                                                                                                                                                                                                                                    |
 | FAB                             | **Current.** Plus icon button with mode-specific tooltip. Action depends on mode: New subfolder (subfolders mode), New deck (decks mode), choice both (unlocked mode).                                                                                                                                                                                                                                 |
 | Empty state                     | When `unlocked` and zero children: show choice layout.                                                                                                                                                                                                                                                                                                                                                           |
 | Search + section header         | **Current.** Search icon + sort pill above the list plus an `MxSectionHeader` overline (`{n} subfolders` / `{n} decks`). Search opens a controlled sheet; sort opens a controlled picker with only `manual`, `name`, and `newest`. Per-folder search + sort state lives on `FolderDetailToolbar` (`ContentSortMode` at `lib/domain/types/content_sort_mode.dart`), and unsupported values normalize back to `manual`. |
@@ -292,8 +301,9 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 ## Accessibility
 
 - Breadcrumb is a single accessibility region; segments are buttons.
-- Start study is Current in decks mode when due > 0; it routes to folder-scoped
-  Study Entry (`EntryType.folder`, `StudyType.srsReview`).
+- Study new (when new > 0) and Review due (when due > 0) are Current in decks
+  mode; they route to folder-scoped Study Entry (`EntryType.folder`,
+  `StudyType.newCards` / `StudyType.srsReview`).
 
 ## Rules
 

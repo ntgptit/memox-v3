@@ -985,6 +985,8 @@
   "folderDetailSearchSheetTitle": "Tìm trong thư mục này",
   "folderDetailMasteryUnavailableLabel": "Chưa có độ thành thạo",
   "folderDetailStartStudyLabel": "Bắt đầu học",
+  "folderDetailStudyNewLabel": "Học thẻ mới",
+  "folderDetailReviewDueLabel": "Ôn thẻ đến hạn",
   "folderDetailSortSheetTitle": "Sắp xếp thư mục",
   "folderDetailSortManualLabel": "Thứ tự thủ công",
   "folderDetailSortNameLabel": "Tên",

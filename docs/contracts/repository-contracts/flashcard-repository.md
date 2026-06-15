@@ -105,7 +105,8 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 - `front` and `back` non-empty after trim.
 - Optional example sentence / pronunciation / hint text is trimmed and stored as `null` when blank.
 - Tags via `flashcard_tags` rows, lowercased, max 50 chars, deduped case-insensitively.
-- Initial progress row MUST be created with `current_box=1`, `due_at=now`.
+- Initial progress row MUST be created with `current_box=1`, `due_at=NULL` (brand-new, never
+  scheduled — the card counts as NEW until first studied; `due_at` is set on first finalization).
 
 ## Forbidden
 
@@ -143,5 +144,4 @@ When returning `FlashcardWithState`, compute priority: Suspended > Buried > Due 
 - `lib/data/repositories/flashcard_repository_impl.dart`
 - `lib/data/datasources/local/daos/flashcard_dao.dart`
 - `lib/data/datasources/local/daos/flashcard_progress_dao.dart`
-- `lib/data/datasources/local/daos/flashcard_tag_dao.dart`
 - `lib/domain/flashcard/card_state_computer.dart`

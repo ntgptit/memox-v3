@@ -46,6 +46,7 @@ DeckWithCount _deck(
   String name, {
   int cardCount = 40,
   int dueCount = 0,
+  int newCount = 0,
   DateTime? lastStudiedAt,
 }) => DeckWithCount(
   deck: Deck(
@@ -59,6 +60,7 @@ DeckWithCount _deck(
   ),
   cardCount: cardCount,
   dueCount: dueCount,
+  newCount: newCount,
   lastStudiedAt: lastStudiedAt,
 );
 
@@ -100,7 +102,8 @@ Widget _wrapBody(FolderDetail detail, {bool isSearching = false}) =>
           isSearching: isSearching,
           searchTerm: 'grammar',
           sort: ContentSortMode.manual,
-          onStartStudy: () {},
+          onStudyNew: () {},
+          onReviewDue: () {},
           onNewSubfolder: () {},
           onNewDeck: () {},
           onClearSearch: () {},
@@ -284,10 +287,10 @@ void main() {
       expect(find.textContaining('new'), findsNothing);
       expect(find.textContaining('%'), findsNothing);
       expect(find.text('4 due'), findsNWidgets(2));
-      final MxActionButton startStudyButton = tester.widget<MxActionButton>(
-        find.widgetWithText(MxActionButton, 'Start study · 8 due'),
+      final MxActionButton reviewDueButton = tester.widget<MxActionButton>(
+        find.widgetWithText(MxActionButton, 'Review due · 8 due'),
       );
-      expect(startStudyButton.onPressed, isNotNull);
+      expect(reviewDueButton.onPressed, isNotNull);
       expect(find.text('62%'), findsNothing);
       expect(find.text('6 new'), findsNothing);
       expect(find.text('Most due'), findsNothing);
@@ -787,16 +790,16 @@ void main() {
               ),
             );
 
-        final Finder startStudyFinder = find.widgetWithText(
+        final Finder reviewDueFinder = find.widgetWithText(
           MxActionButton,
-          'Start study · 8 due',
+          'Review due · 8 due',
         );
-        final MxActionButton startStudyButton = tester.widget<MxActionButton>(
-          startStudyFinder,
+        final MxActionButton reviewDueButton = tester.widget<MxActionButton>(
+          reviewDueFinder,
         );
-        expect(startStudyButton.onPressed, isNotNull);
+        expect(reviewDueButton.onPressed, isNotNull);
 
-        await tester.tap(startStudyFinder);
+        await tester.tap(reviewDueFinder);
         await tester.pumpAndSettle();
 
         expect(
@@ -839,6 +842,49 @@ void main() {
         find.widgetWithText(MxActionButton, 'Start study'),
       );
       expect(startStudyButton.onPressed, isNull);
+    });
+
+    testWidgets('Study new routes to Study Entry as a New Study session', (
+      WidgetTester tester,
+    ) async {
+      final ({ProviderContainer container, GoRouter router}) harness =
+          await _wrapScreenWithRouter(
+            tester,
+            stream: Stream<FolderDetail>.value(
+              _detail(
+                decks: <DeckWithCount>[
+                  _deck('Vocab 1', dueCount: 0, newCount: 2),
+                  _deck('Vocab 2', dueCount: 0, newCount: 1),
+                ],
+              ),
+            ),
+          );
+
+      final Finder studyNewFinder = find.widgetWithText(
+        MxActionButton,
+        'Study new · 3 new',
+      );
+      expect(
+        tester.widget<MxActionButton>(studyNewFinder).onPressed,
+        isNotNull,
+      );
+
+      await tester.tap(studyNewFinder);
+      await tester.pumpAndSettle();
+
+      expect(
+        harness.router.routeInformationProvider.value.uri.path,
+        RoutePaths.studyEntry(EntryType.folder.name, 'f1'),
+      );
+      expect(
+        harness
+            .router
+            .routeInformationProvider
+            .value
+            .uri
+            .queryParameters[RoutePaths.studyTypeQueryParam],
+        'new',
+      );
     });
   });
 

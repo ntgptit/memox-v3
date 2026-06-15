@@ -22,12 +22,18 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_icon_tile.dart';
 class FolderDecksSummary extends StatelessWidget {
   const FolderDecksSummary({
     required this.decks,
-    required this.onStartStudy,
+    required this.onStudyNew,
+    required this.onReviewDue,
     super.key,
   });
 
   final List<DeckWithCount> decks;
-  final VoidCallback? onStartStudy;
+
+  /// Starts a New Study session (new cards → `new_full_cycle`).
+  final VoidCallback? onStudyNew;
+
+  /// Starts an SRS review session over the due cards.
+  final VoidCallback? onReviewDue;
 
   int get _cardTotal =>
       decks.fold<int>(0, (int sum, DeckWithCount d) => sum + d.cardCount);
@@ -35,21 +41,26 @@ class FolderDecksSummary extends StatelessWidget {
   int get _dueTotal =>
       decks.fold<int>(0, (int sum, DeckWithCount d) => sum + d.dueCount);
 
+  int get _newTotal =>
+      decks.fold<int>(0, (int sum, DeckWithCount d) => sum + d.newCount);
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final int dueTotal = _dueTotal;
-    final bool canStartStudy = dueTotal > 0 && onStartStudy != null;
+    final int newTotal = _newTotal;
+    final bool canStudyNew = newTotal > 0 && onStudyNew != null;
+    final bool canReviewDue = dueTotal > 0 && onReviewDue != null;
     final String countsLine =
         '${l10n.libraryFolderDecksCount(decks.length)} · '
         '${l10n.libraryFolderCardsCount(_cardTotal)}';
-    final String dueLine = dueTotal > 0
-        ? l10n.libraryFolderDueCount(dueTotal)
-        : l10n.folderSummaryAllCaughtUp;
-    final String startStudyLabel = dueTotal > 0
-        ? '${l10n.folderDetailStartStudyLabel} · '
-              '${l10n.libraryFolderDueCount(dueTotal)}'
-        : l10n.folderDetailStartStudyLabel;
+    final List<String> statusParts = <String>[
+      if (newTotal > 0) l10n.libraryFolderNewCount(newTotal),
+      if (dueTotal > 0) l10n.libraryFolderDueCount(dueTotal),
+    ];
+    final String statusLine = statusParts.isEmpty
+        ? l10n.folderSummaryAllCaughtUp
+        : statusParts.join(' · ');
 
     return MxCard(
       child: Column(
@@ -81,7 +92,7 @@ class FolderDecksSummary extends StatelessWidget {
                     ),
                     const SizedBox(height: SpacingTokens.xxs),
                     MxText(
-                      dueLine,
+                      statusLine,
                       role: MxTextRole.labelMedium,
                       color: context.colorScheme.onSurfaceVariant,
                     ),
@@ -91,13 +102,36 @@ class FolderDecksSummary extends StatelessWidget {
             ],
           ),
           const SizedBox(height: SpacingTokens.md),
-          MxActionButton(
-            intent: MxActionIntent.studyPrimary,
-            label: startStudyLabel,
-            icon: Icons.play_arrow_outlined,
-            fullWidth: true,
-            onPressed: canStartStudy ? onStartStudy : null,
-          ),
+          if (canStudyNew) ...<Widget>[
+            MxActionButton(
+              intent: MxActionIntent.studyPrimary,
+              label:
+                  '${l10n.folderDetailStudyNewLabel} · '
+                  '${l10n.libraryFolderNewCount(newTotal)}',
+              icon: Icons.play_arrow_outlined,
+              fullWidth: true,
+              onPressed: onStudyNew,
+            ),
+            if (canReviewDue) const SizedBox(height: SpacingTokens.sm),
+          ],
+          if (canReviewDue)
+            MxActionButton(
+              intent: MxActionIntent.studyPrimary,
+              label:
+                  '${l10n.folderDetailReviewDueLabel} · '
+                  '${l10n.libraryFolderDueCount(dueTotal)}',
+              icon: Icons.refresh_outlined,
+              fullWidth: true,
+              onPressed: onReviewDue,
+            ),
+          if (!canStudyNew && !canReviewDue)
+            MxActionButton(
+              intent: MxActionIntent.studyPrimary,
+              label: l10n.folderDetailStartStudyLabel,
+              icon: Icons.play_arrow_outlined,
+              fullWidth: true,
+              onPressed: null,
+            ),
         ],
       ),
     );

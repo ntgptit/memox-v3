@@ -1839,6 +1839,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get folderDetailStartStudyLabel => 'Start study';
 
   @override
+  String get folderDetailStudyNewLabel => 'Study new';
+
+  @override
+  String get folderDetailReviewDueLabel => 'Review due';
+
+  @override
   String get folderDetailSortSheetTitle => 'Sort folder';
 
   @override

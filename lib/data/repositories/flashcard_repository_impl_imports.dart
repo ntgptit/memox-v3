@@ -218,10 +218,10 @@ Future<FlashcardRow> _insertFlashcard(
   await repo._dao
       .into(repo._dao.attachedDatabase.flashcardProgress)
       .insert(
-        FlashcardProgressCompanion.insert(
-          flashcardId: id,
-          dueAt: Value<int?>(nowMs),
-        ),
+        // Brand-new card: box 1, `due_at` stays NULL ("never scheduled") so the
+        // card counts as NEW, not due. The first finalization sets `due_at`
+        // (`docs/business/srs/srs-review.md` §Rules).
+        FlashcardProgressCompanion.insert(flashcardId: id),
       );
   await repo._dao
       .into(repo._dao.attachedDatabase.cardEvents)

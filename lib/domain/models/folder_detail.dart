@@ -24,6 +24,7 @@ abstract class DeckWithCount with _$DeckWithCount {
     required Deck deck,
     required int cardCount,
     required int dueCount,
+    required int newCount,
     required DateTime? lastStudiedAt,
   }) = _DeckWithCount;
 }

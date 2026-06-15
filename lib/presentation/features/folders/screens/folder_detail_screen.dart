@@ -151,7 +151,14 @@ class _FolderDetailView extends ConsumerWidget {
               isSearching: toolbar.isSearching,
               searchTerm: toolbar.searchTerm,
               sort: sort,
-              onStartStudy: detail.folder.contentMode == ContentMode.decks
+              onStudyNew: detail.folder.contentMode == ContentMode.decks
+                  ? () => context.goStudyEntry(
+                      entryType: EntryType.folder,
+                      entryRefId: folderId,
+                      studyType: StudyType.newCards,
+                    )
+                  : null,
+              onReviewDue: detail.folder.contentMode == ContentMode.decks
                   ? () => context.goStudyEntry(
                       entryType: EntryType.folder,
                       entryRefId: folderId,

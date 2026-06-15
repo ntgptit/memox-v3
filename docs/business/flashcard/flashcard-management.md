@@ -161,7 +161,8 @@ On commit:
 1. Open transaction.
 2. Compute next `sort_order` (current max + 1).
 3. Insert each valid preview row as a new flashcard in target deck.
-4. Create default SRS progress for each inserted flashcard (`box=1`, `due_at=now`).
+4. Create default SRS progress for each inserted flashcard (`box=1`, `due_at=NULL` — brand-new,
+   never scheduled, so the card counts as NEW until first studied).
 5. Set `created_at`, `updated_at` to now.
 6. Commit transaction.
 

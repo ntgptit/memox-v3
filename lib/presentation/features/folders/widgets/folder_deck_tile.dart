@@ -83,6 +83,12 @@ class FolderDeckTile extends StatelessWidget {
                         label: l10n.libraryFolderDueCount(item.dueCount),
                       ),
                     ],
+                    if (item.newCount > 0) ...<Widget>[
+                      const SizedBox(width: SpacingTokens.sm),
+                      _NewCountBadge(
+                        label: l10n.libraryFolderNewCount(item.newCount),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: SpacingTokens.xs),
@@ -165,6 +171,38 @@ class _DueCountBadge extends StatelessWidget {
             label,
             role: MxTextRole.labelMedium,
             color: scheme.primary,
+            fontWeight: TypographyTokens.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Badge for never-studied (new) cards — distinguished from the due badge by the
+/// secondary tone so "new" and "due" read as different study modes.
+class _NewCountBadge extends StatelessWidget {
+  const _NewCountBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = context.colorScheme;
+    return SizedBox(
+      height: SizeTokens.iconMinor,
+      child: Container(
+        key: const ValueKey<String>('folder_deck_new_badge'),
+        padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.compact),
+        decoration: BoxDecoration(
+          color: scheme.secondary.withValues(alpha: OpacityTokens.focus),
+          borderRadius: RadiusTokens.brFull,
+        ),
+        child: Center(
+          child: MxText(
+            label,
+            role: MxTextRole.labelMedium,
+            color: scheme.secondary,
             fontWeight: TypographyTokens.bold,
           ),
         ),

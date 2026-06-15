@@ -2982,6 +2982,18 @@ abstract class AppLocalizations {
   /// **'Start study'**
   String get folderDetailStartStudyLabel;
 
+  /// No description provided for @folderDetailStudyNewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Study new'**
+  String get folderDetailStudyNewLabel;
+
+  /// No description provided for @folderDetailReviewDueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Review due'**
+  String get folderDetailReviewDueLabel;
+
   /// No description provided for @folderDetailSortSheetTitle.
   ///
   /// In en, this message translates to:

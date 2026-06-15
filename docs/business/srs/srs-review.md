@@ -49,8 +49,14 @@ Important fields:
 ## Rules
 
 - Box range is 1 to 8 inclusive.
-- New flashcard starts at `current_box = 1` with `due_at = now`.
-- Due card: `due_at <= now`.
+- New flashcard starts at `current_box = 1` with **`due_at = NULL`** ("brand-new,
+  never scheduled"). A new card is therefore **not** a due card — it is counted
+  as NEW and is only eligible for New Study, never for SRS review. `due_at` is
+  first set at the initial finalization (`now + interval[nextBox]`,
+  local-midnight normalized). This keeps "new" and "due" cleanly separable in
+  the read model (`new_count` = no progress row OR `due_at IS NULL`; `due_at`
+  must be `NOT NULL AND <= now` to be due).
+- Due card: `due_at IS NOT NULL AND due_at <= now`.
 - **Daily new-card limit (BE V1, WBS 4.5.10):** at most `dailyNewLimit` new cards (default 20)
   enter study per local day. Daily usage is derived from persisted `study_session_items` belonging
   to new-card sessions whose `started_at` falls within the current local-day window
@@ -58,8 +64,8 @@ Important fields:
   the persisted items are the source of truth. New-card eligibility queries must respect the
   remaining quota for the day; cards beyond the quota stay queued for following days. This cap only
   trims new-card eligibility and does not hide due review cards.
-  Rationale: a new card defaults to `due_at = now`, so without a limit a 500-row import floods
-  "Today" with 500 cards at once — the primary burnout driver in SRS apps.
+  Rationale: every new card is immediately eligible for New Study, so without a limit a 500-row
+  import floods New Study with 500 cards at once — the primary burnout driver in SRS apps.
 - Deleted flashcards must not appear in due list (foreign key enforced).
 - Review result must update progress through domain/use case/repository flow.
 - UI must not update SRS box directly.

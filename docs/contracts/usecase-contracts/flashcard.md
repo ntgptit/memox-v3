@@ -30,7 +30,7 @@ Future<Either<Failure, Flashcard>> call({
 - Trim `exampleSentence`, `pronunciation`, and `hint`; store `null` when any value is blank after
   trim.
 - Validate tags: reject commas, trim, dedupe case-insensitively, and store lowercased values.
-- Atomic insert flashcard + initial `flashcard_progress` row (current_box=1, due_at=now,
+- Atomic insert flashcard + initial `flashcard_progress` row (current_box=1, due_at=NULL,
   review_count=0, lapse_count=0) plus `flashcard_tags` rows when provided. See
   `docs/contracts/repository-contracts/flashcard-repository.md`.
 - Current shipped create flow supports front, back, example sentence, pronunciation, hint, and

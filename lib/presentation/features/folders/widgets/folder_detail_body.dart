@@ -31,7 +31,8 @@ class FolderDetailBody extends StatelessWidget {
     required this.isSearching,
     required this.searchTerm,
     required this.sort,
-    required this.onStartStudy,
+    required this.onStudyNew,
+    required this.onReviewDue,
     required this.onNewSubfolder,
     required this.onNewDeck,
     required this.onClearSearch,
@@ -46,7 +47,8 @@ class FolderDetailBody extends StatelessWidget {
   final bool isSearching;
   final String searchTerm;
   final ContentSortMode sort;
-  final VoidCallback? onStartStudy;
+  final VoidCallback? onStudyNew;
+  final VoidCallback? onReviewDue;
   final VoidCallback onNewSubfolder;
   final VoidCallback onNewDeck;
   final VoidCallback onClearSearch;
@@ -85,7 +87,8 @@ class FolderDetailBody extends StatelessWidget {
       ContentMode.subfolders => FolderSubfoldersSummary(subfolders: subfolders),
       ContentMode.decks => FolderDecksSummary(
         decks: decks,
-        onStartStudy: onStartStudy,
+        onStudyNew: onStudyNew,
+        onReviewDue: onReviewDue,
       ),
       ContentMode.unlocked => const SizedBox.shrink(),
     };
