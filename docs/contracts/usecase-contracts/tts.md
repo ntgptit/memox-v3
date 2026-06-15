@@ -12,8 +12,9 @@ status: contract
 > `tts_settings` table. The Audio & Speech settings screen is a static mock. Everything in this
 > contract, including the "runtime owners" table below, is the **target** structure for WBS 8.4.x
 > (`docs/business/tts/tts-settings.md`). The first slice is global/front-language settings with
-> front-only playback; per-language independent settings and deck `target_language` gating are a
-> further Target/Future step.
+> front-only playback **and** deck `target_language` gating (the `decks.target_language` column
+> already exists in the current schema). Per-language independent settings/voices are a further
+> Target/Future step.
 
 ## Target Runtime Owners (first slice — none exist yet)
 
@@ -30,19 +31,24 @@ status: contract
 
 The sections below describe the target use-case contract. Do not mark them Current until the API exists with matching tests.
 
-## SpeakFrontUseCase (Target/Future)
+## SpeakFlashcardUseCase (Target — first slice)
 
 ```dart
-Future<Either<Failure, Unit>> call({required Flashcard card, required Deck deck});
+/// Speaks the front side of a flashcard, gated by deck language and playback policy.
+Future<Either<Failure, Unit>> speakFlashcardSide({required Flashcard card, required Deck deck});
+
+/// Speaks arbitrary trimmed text in the current global TTS language.
+Future<Either<Failure, Unit>> speakText(String text);
 ```
 
 **Rules:**
 
-- If `deck.target_language == TargetLanguage.unsupported` → silently return `Right(unit)`. No error.
-- Map `target_language` to `TtsLanguageCode`.
-- Apply per-language settings (voice, rate, pitch, volume).
-- Speak `card.front`. NEVER speak `card.back`.
-- If TTS engine fails to initialize or speak → return `StorageFailure` (general kind, no user error popup needed; just log).
+- `speakFlashcardSide`: If `deck.target_language == TargetLanguage.unsupported` → silently return `Right(unit)`. No error.
+- Map `target_language` to `TtsLanguageCode`. Delegate language selection to deck; ignore app-level `frontLanguage` for study playback.
+- Apply global settings (voice, rate, pitch, volume) — per-language settings storage is Target/Future.
+- Speak `card.front`. NEVER speak `card.back` (enforced by `TtsPlaybackPolicy`).
+- `speakText`: reject blank/whitespace-only text silently (`Right(unit)`).
+- If TTS engine fails to initialize or speak → return `StorageFailure` (general kind, no user error popup needed; just log). Note: `StorageFailure` is a pragmatic mapping because TTS engine failures are not storage errors; a dedicated `PlaybackFailure` type may replace this in a future Failure taxonomy revision — do not add it now without approval per `docs/contracts/error-contract.md` §Agent rule.
 
 **Errors:** `StorageFailure` (engine).
 
@@ -64,37 +70,54 @@ Returns available voices on device for given language. Always prepends "System d
 
 **Errors:** `StorageFailure` (engine).
 
-## GetTtsSettingsUseCase / UpdateTtsSettingsUseCase (Target/Future)
+## GetTtsSettingsUseCase / UpdateTtsSettingsUseCase (Target — first slice)
+
+First slice exposes one global setting row. All slider writes clamp via `TtsSettings.normalize*` — values outside range are clamped, not rejected, because sliders enforce range in UI and corrupt DB values must self-heal on load. `ValidationFailure(outOfRange)` is NOT raised for rate/pitch/volume.
 
 ```dart
 Future<TtsSettings> getAll();
 Future<Either<Failure, Unit>> updateAutoPlay(bool value);
-Future<Either<Failure, Unit>> updateLanguageSettings(TtsLanguageCode lang, TtsLanguageSettings settings);
+Future<Either<Failure, Unit>> updateRate(double value);   // clamps to [0.3, 0.7]
+Future<Either<Failure, Unit>> updatePitch(double value);  // clamps to [0.7, 1.5]
+Future<Either<Failure, Unit>> updateVolume(double value); // clamps to [0.0, 1.0]
+Future<Either<Failure, Unit>> updateVoice(String? voiceName);
+Future<Either<Failure, Unit>> updateLanguage(TtsLanguageCode lang); // also clears frontVoiceName
 ```
 
 **Rules:**
 
-- Validate rate ∈ [0.3, 0.7], pitch ∈ [0.7, 1.5], volume ∈ [0.0, 1.0]. Else `ValidationFailure(code: outOfRange)`.
-- Per-language settings stored independently.
-- Persist through the approved target storage after the migration/product decision.
+- Every write path for `rate`, `pitch`, `volume` MUST call `TtsSettings.normalizeRate/normalizePitch/normalizeVolume` before persisting.
+- `updateLanguage` MUST clear `frontVoiceName` (stored voice belongs to the previous language).
+- Persist immediately; no save button (decision row T1).
 
-**Errors:** `ValidationFailure`, `StorageFailure`.
+**Errors:** `StorageFailure`.
+
+## UpdateTtsSettingsUseCase — per-language variant (Target/Future)
+
+Independent Korean/English settings with separate storage require an approved schema migration first. Do not implement until that migration is approved.
+
+```dart
+// Future — requires per-language storage migration
+Future<Either<Failure, Unit>> updateLanguageSettings(TtsLanguageCode lang, TtsLanguageSettings settings);
+```
 
 ## Forbidden patterns
 
 - ❌ Speak `back` anywhere.
 - ❌ Auto-play when `deck.target_language == unsupported`. Silently skip.
-- ❌ Treat independent Korean/English settings as Current before the target API/storage migration exists.
+- ❌ Treat independent Korean/English settings as Current before the per-language storage migration exists.
 - ❌ Use different engine instance in preview vs study session.
 - ❌ Show error popup on TTS engine failure during study. Log + silently skip.
+- ❌ Return `ValidationFailure(code: outOfRange)` for slider values outside `[min, max]`. Clamp via `TtsSettings.normalize*` instead.
+- ❌ Implement `updateLanguageSettings(lang, settings)` in the first slice; that requires an approved per-language migration.
 
 ## Related
 
 **Base contracts:** `docs/contracts/error-contract.md` (Failure types), `docs/contracts/types-catalog.md` (enums and value objects), `docs/contracts/code-style.md` (naming)
 
-**Repositories used (Current V1):** `lib/domain/repositories/tts_settings_repository.dart` implemented by `lib/data/repositories/tts_settings_repository_impl.dart`, backed by Drift table `tts_settings`.
+**Repositories (target — none exist yet):** `lib/domain/repositories/tts_settings_repository.dart` implemented by `lib/data/repositories/tts_settings_repository_impl.dart`, backed by Drift table `tts_settings` (requires schema migration; see `docs/database/schema-contract.md` §Target table areas).
 
 **Business spec:** `docs/business/tts/tts-settings.md`
 **Wireframes:** `docs/wireframes/21-settings-audio-speech.md`, `docs/wireframes/13-study-session-review.md` through `docs/wireframes/17-study-session-fill.md`
 **Decision table:** rows under "TTS"
-**Code paths:** `lib/domain/usecases/tts_usecases.dart`, `lib/domain/services/tts_service.dart`, `lib/domain/services/tts_playback_policy.dart`, `lib/presentation/features/tts/providers/tts_controller_notifier.dart`, `lib/presentation/features/tts/providers/tts_settings_notifier.dart`
+**Code paths (target — none exist yet):** `lib/domain/usecases/tts_usecases.dart`, `lib/domain/services/tts_service.dart`, `lib/domain/services/tts_playback_policy.dart`, `lib/presentation/features/tts/providers/tts_controller_notifier.dart`, `lib/presentation/features/tts/providers/tts_settings_notifier.dart`

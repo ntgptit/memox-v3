@@ -69,7 +69,8 @@ When `front_language` storage value is unknown, fall back to Korean.
 ## Deck-level language gate
 
 Each deck declares a `target_language` (see `docs/business/deck/deck-management.md`). TTS behavior
-is gated by this declaration:
+is gated by this declaration. The `decks.target_language` column already exists in the current
+schema (v8), so this gate is part of the **first slice** (WBS 8.4.1) — not a future step.
 
 | Deck `target_language` | TTS speak action                          | Auto-play                      |
 |------------------------|-------------------------------------------|--------------------------------|
@@ -137,14 +138,14 @@ This restriction is enforced in `SpeakFlashcardUseCase.speakFlashcardSide` via
 
 `TtsService.state` is a `Stream<TtsState>`:
 
-| State      | Meaning                     |
-|------------|-----------------------------|
-| `idle`     | No active playback          |
-| `speaking` | Currently speaking          |
-| `paused`   | Paused (platform-supported) |
-| `error`    | Last operation failed       |
+| State      | Meaning                                                              |
+|------------|----------------------------------------------------------------------|
+| `idle`     | No active playback                                                   |
+| `speaking` | Currently speaking                                                   |
+| `paused`   | Reserved — no `PauseUseCase`/`ResumeUseCase` exists in first slice; platform may emit this internally but UI treats it as `idle` |
+| `error`    | Last operation failed                                                |
 
-UI components (e.g., `MxSpeakButton`) react to this stream for play/stop state.
+UI components (e.g., `MxSpeakButton`) react to this stream for play/stop state. Until a pause/resume use case is added, UI MUST NOT expose a pause action.
 
 ## Rules
 
@@ -158,6 +159,24 @@ UI components (e.g., `MxSpeakButton`) react to this stream for play/stop state.
 - TTS service is platform-specific (Flutter TTS plugin). Domain layer interacts only via
   `TtsService` interface.
 - Auto-play applies only to study session flashcard reveal. Other surfaces use explicit user tap.
+- Do not queue multiple speak calls. Stop in-flight playback before starting a new one.
+
+## Known limitations (first slice)
+
+- **Audio focus / interruption**: No audio focus handling in V1. Incoming calls or media playback
+  may overlap TTS output. Audio session management is Target/Future.
+- **Language data not installed (Android)**: If the device does not have a ko-KR or en-US TTS
+  engine installed, `availableVoices` returns empty. The settings screen shows the `engineErr` state
+  and links to system TTS settings. No automated download prompt in V1.
+- **Web (SpeechSynthesis)**: `flutter_tts` on web uses the browser SpeechSynthesis API. Voice
+  listing is asynchronous and may return an empty list on first call; the platform fires an
+  `onVoicesChanged` event when voices load. `FlutterTtsService` MUST handle this by re-querying on
+  first non-empty result rather than caching the initial empty list.
+- **Concurrent rendering with system accessibility (TalkBack / VoiceOver)**: No explicit handling.
+  Users should disable accessibility TTS while using in-app TTS; no UI guidance provided in V1.
+- **Single remote backup voice**: The first-slice single-row storage retains only one
+  `frontVoiceName` (not per-language). Users switching between Korean and English decks may lose
+  their voice preference for the other language until per-language storage lands.
 
 ## Screen behavior
 
