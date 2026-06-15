@@ -391,6 +391,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `6de345cf` | 2026-06-14 | 8.6.3, 8.6.4, 8.6.1, 8.6.2 | Fix wireframe-19 model-B drift (fingerprint/token-store/12-field manifest); document silent token refresh for the ~1h access-token expiry (SY23) + industry-standard opt-in auto-backup proposal (SY24) across business spec/contracts/wireframe; add Future WBS rows 8.6.3 (silent refresh + reconnect banner) and 8.6.4 (auto-backup) |
 | `44cb1486` | 2026-06-14 | 8.6.1, 8.6.2 | Reconcile Drive sync repository/use-case contracts with the business spec (model A): DriveSyncRepository + DriveSyncRunResult, composite-string fingerprint, .zip snapshot, drop obsolete flutter_secure_storage token store (google_sign_in 7.x owns tokens), add restore-of-older-schema migration rule (SY22) + V1 no-encryption decision; fix stale 5-field manifest cross-refs. Rows stay Specified |
 | `9173a54f` | 2026-06-14 | 4.5.9 | Fill mode FE V1: typed-input study shell, strict trim-only evaluator, hint/retry/feedback affordances, and fill-mode tests/docs parity |
 | `c46900e1` | 2026-06-14 | 4.5.11 | Recall mode FE V1: dedicated timed reveal/self-grade shell, countdown token, edit-pause resume, and result navigation wiring |
