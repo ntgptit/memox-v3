@@ -11,6 +11,7 @@ import 'package:memox/domain/types/cloud_account.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/settings/screens/account_settings_screen.dart';
 import 'package:memox/presentation/features/settings/viewmodels/account_settings_viewmodel.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 // ignore: depend_on_referenced_packages -- reason: `Override` lives in package:riverpod (transitive), not re-exported by flutter_riverpod.
 import 'package:riverpod/misc.dart';
 
@@ -67,6 +68,29 @@ void main() {
     expect(find.text('Sign-in & sync are coming soon.'), findsOneWidget);
     expect(
       find.textContaining('Your data stays on this device only'),
+      findsOneWidget,
+    );
+
+    // Display-only V1 invariant: the sign-in affordance is shown disabled until
+    // sign-in is wired (WBS 8.6.1).
+    final MxActionButton signIn = tester.widget<MxActionButton>(
+      find.widgetWithText(MxActionButton, 'Sign in with Google'),
+    );
+    expect(signIn.onPressed, isNull);
+  });
+
+  testWidgets('unsupported shows the unsupported notice', (
+    WidgetTester tester,
+  ) async {
+    await _pump(
+      tester,
+      override: _viewIs(
+        const AccountSettingsView(status: AccountLinkStatus.unsupported),
+      ),
+    );
+
+    expect(
+      find.text("Account sign-in isn't supported on this device."),
       findsOneWidget,
     );
   });

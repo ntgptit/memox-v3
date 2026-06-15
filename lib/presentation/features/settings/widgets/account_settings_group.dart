@@ -9,6 +9,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_avatar.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_section_header.dart';
 
@@ -52,6 +53,13 @@ class AccountSettingsGroup extends StatelessWidget {
       _ => _SignedOut(l10n: l10n, noticeText: l10n.accountComingSoonHint),
     };
   }
+}
+
+String? _initials(CloudAccountLink link) {
+  final String source = (link.displayName?.trim().isNotEmpty ?? false)
+      ? link.displayName!.trim()
+      : link.email.trim();
+  return source.isEmpty ? null : source[0].toUpperCase();
 }
 
 class _SignedOut extends StatelessWidget {
@@ -135,14 +143,7 @@ class _SignedIn extends StatelessWidget {
         MxCard(
           child: Row(
             children: <Widget>[
-              CircleAvatar(
-                radius: SizeTokens.avatar / 2,
-                backgroundColor: scheme.primaryContainer,
-                child: Icon(
-                  Icons.person_outline,
-                  color: scheme.onPrimaryContainer,
-                ),
-              ),
+              MxAvatar(initials: _initials(link), size: SizeTokens.avatar),
               const SizedBox(width: SpacingTokens.md),
               Expanded(
                 child: Column(
