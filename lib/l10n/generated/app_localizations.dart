@@ -428,6 +428,90 @@ abstract class AppLocalizations {
   /// **'Account'**
   String get settingsAccountTitle;
 
+  /// No description provided for @accountSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & Sync'**
+  String get accountSettingsTitle;
+
+  /// No description provided for @accountSignedOutHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to back up your data'**
+  String get accountSignedOutHeading;
+
+  /// No description provided for @accountSignedOutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your decks and progress will sync to your Google Drive App Folder. Only this app can see them.'**
+  String get accountSignedOutBody;
+
+  /// No description provided for @accountSignInWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get accountSignInWithGoogle;
+
+  /// No description provided for @accountGuestReassurance.
+  ///
+  /// In en, this message translates to:
+  /// **'You can keep using MemoX without signing in. Your data stays on this device only.'**
+  String get accountGuestReassurance;
+
+  /// No description provided for @accountComingSoonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in & sync are coming soon.'**
+  String get accountComingSoonHint;
+
+  /// No description provided for @accountUnconfiguredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Account sign-in isn\'t available in this build.'**
+  String get accountUnconfiguredBody;
+
+  /// No description provided for @accountUnsupportedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Account sign-in isn\'t supported on this device.'**
+  String get accountUnsupportedBody;
+
+  /// No description provided for @accountSectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountSectionLabel;
+
+  /// No description provided for @accountSignedInProviderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in · Google'**
+  String get accountSignedInProviderLabel;
+
+  /// No description provided for @accountDriveBackupSectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive backup'**
+  String get accountDriveBackupSectionLabel;
+
+  /// No description provided for @accountDriveBackupComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual upload and restore are coming soon.'**
+  String get accountDriveBackupComingSoon;
+
+  /// No description provided for @accountAuthorizeDriveComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Authorizing Google Drive is coming soon.'**
+  String get accountAuthorizeDriveComingSoon;
+
+  /// No description provided for @accountErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your account. Please try again.'**
+  String get accountErrorBody;
+
   /// No description provided for @settingsAccountLinkedOverviewTitle.
   ///
   /// In en, this message translates to:

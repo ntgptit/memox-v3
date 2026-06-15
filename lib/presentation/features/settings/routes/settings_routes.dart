@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
-import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/settings/screens/account_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/audio_speech_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/learning_settings_screen.dart';
 import 'package:memox/presentation/features/settings/screens/settings_screen.dart';
@@ -15,8 +15,7 @@ List<RouteBase> settingsRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
         parentNavigatorKey: rootNavigatorKey,
         path: RoutePaths.settingsAccount,
         name: RouteNames.settingsAccount,
-        builder: (_, _) =>
-            const RoutePlaceholder(routeName: RouteNames.settingsAccount),
+        builder: (_, _) => const AccountSettingsScreen(),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,

@@ -227,6 +227,55 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsAccountTitle => 'Tài khoản';
 
   @override
+  String get accountSettingsTitle => 'Tài khoản & Đồng bộ';
+
+  @override
+  String get accountSignedOutHeading => 'Đăng nhập để sao lưu dữ liệu';
+
+  @override
+  String get accountSignedOutBody =>
+      'Bộ thẻ và tiến độ của bạn sẽ đồng bộ lên thư mục ứng dụng trên Google Drive. Chỉ ứng dụng này thấy được.';
+
+  @override
+  String get accountSignInWithGoogle => 'Đăng nhập với Google';
+
+  @override
+  String get accountGuestReassurance =>
+      'Bạn vẫn dùng MemoX được mà không cần đăng nhập. Dữ liệu chỉ nằm trên thiết bị này.';
+
+  @override
+  String get accountComingSoonHint =>
+      'Tính năng đăng nhập & đồng bộ sắp ra mắt.';
+
+  @override
+  String get accountUnconfiguredBody =>
+      'Bản dựng này chưa hỗ trợ đăng nhập tài khoản.';
+
+  @override
+  String get accountUnsupportedBody =>
+      'Thiết bị này không hỗ trợ đăng nhập tài khoản.';
+
+  @override
+  String get accountSectionLabel => 'Tài khoản';
+
+  @override
+  String get accountSignedInProviderLabel => 'Đã đăng nhập · Google';
+
+  @override
+  String get accountDriveBackupSectionLabel => 'Sao lưu Drive';
+
+  @override
+  String get accountDriveBackupComingSoon =>
+      'Tải lên và khôi phục thủ công sắp ra mắt.';
+
+  @override
+  String get accountAuthorizeDriveComingSoon =>
+      'Cấp quyền Google Drive sắp ra mắt.';
+
+  @override
+  String get accountErrorBody => 'Không tải được tài khoản. Vui lòng thử lại.';
+
+  @override
   String get settingsAccountLinkedOverviewTitle => 'Tài khoản & đồng bộ';
 
   @override

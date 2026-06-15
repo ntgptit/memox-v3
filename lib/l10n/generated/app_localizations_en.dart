@@ -239,6 +239,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAccountTitle => 'Account';
 
   @override
+  String get accountSettingsTitle => 'Account & Sync';
+
+  @override
+  String get accountSignedOutHeading => 'Sign in to back up your data';
+
+  @override
+  String get accountSignedOutBody =>
+      'Your decks and progress will sync to your Google Drive App Folder. Only this app can see them.';
+
+  @override
+  String get accountSignInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get accountGuestReassurance =>
+      'You can keep using MemoX without signing in. Your data stays on this device only.';
+
+  @override
+  String get accountComingSoonHint => 'Sign-in & sync are coming soon.';
+
+  @override
+  String get accountUnconfiguredBody =>
+      'Account sign-in isn\'t available in this build.';
+
+  @override
+  String get accountUnsupportedBody =>
+      'Account sign-in isn\'t supported on this device.';
+
+  @override
+  String get accountSectionLabel => 'Account';
+
+  @override
+  String get accountSignedInProviderLabel => 'Signed in · Google';
+
+  @override
+  String get accountDriveBackupSectionLabel => 'Drive backup';
+
+  @override
+  String get accountDriveBackupComingSoon =>
+      'Manual upload and restore are coming soon.';
+
+  @override
+  String get accountAuthorizeDriveComingSoon =>
+      'Authorizing Google Drive is coming soon.';
+
+  @override
+  String get accountErrorBody =>
+      'Couldn\'t load your account. Please try again.';
+
+  @override
   String get settingsAccountLinkedOverviewTitle => 'Account & sync';
 
   @override
