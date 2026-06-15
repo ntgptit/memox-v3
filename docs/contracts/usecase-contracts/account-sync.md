@@ -99,8 +99,13 @@ applying the same status/`linkedAt` rules as `SignInWithGoogleUseCase`.
 ### GetDriveAppDataAccessTokenUseCase
 
 Obtain a short-lived Drive access token for a single API call via
-`GoogleAuthGateway.driveAccessToken()`. `null` ⇒ `needsDriveAuthorization`. The app does NOT persist
-OAuth tokens itself; `google_sign_in` 7.x owns the token lifecycle (no `flutter_secure_storage`).
+`GoogleAuthGateway.driveAccessToken()`, which **silently re-authorizes** the existing grant (the ~1h
+access-token expiry is refreshed without UI). The app does NOT persist OAuth tokens itself;
+`google_sign_in` 7.x owns the token lifecycle (no `flutter_secure_storage`). `null` (silent refresh
+failed — consent revoked / Google session gone) ⇒ `needsDriveAuthorization`; the presentation layer
+shows the reconnect banner and only then runs interactive re-auth. Never re-trigger interactive
+sign-in on a normal 1-hour expiry. See `docs/business/account-sync/account-sync.md` §Token lifetime &
+silent refresh. (Decision row `SY23`.)
 
 ## Drive sync use cases
 
@@ -138,9 +143,17 @@ metadata. Same fingerprint as remote ⇒ `noChanges`; otherwise `uploadedLocal`.
 > a second confirmation tap. Current V1 shows the destructive-restore warning before a single
 > replacement restore.
 
+### Auto-backup (Future)
+
+A Future opt-in auto-backup (`docs/business/account-sync/account-sync.md` §Auto-backup) reuses
+`UploadLocalDriveSnapshotUseCase` on a debounced/periodic, constraint-gated schedule. It is
+**upload-only** (never auto-restore), idempotent via fingerprint, and depends on silent token
+refresh. Not V1; requires an approved background-scheduler dependency. (Decision row `SY24`.)
+
 ## Forbidden patterns
 
-- ❌ Auto-restore on sign-in / auto-upload on data change. Manual only in V1.
+- ❌ Auto-restore on sign-in. In V1 auto-upload is also forbidden; a Future opt-in auto-backup is
+  upload-only and must never auto-restore.
 - ❌ Skip the pre-restore snapshot when local DB has data; continue restore if the snapshot fails.
 - ❌ Store the account link in Drift, or store OAuth tokens in SharedPreferences / Drift /
   `flutter_secure_storage`.

@@ -125,6 +125,29 @@ Sign-out vs disconnect:
 - **Disconnect**: calls `GoogleSignIn.disconnect()` to revoke server-side. Next sign-in re-prompts
   for Drive scope.
 
+### Token lifetime & silent refresh
+
+Google OAuth **access tokens expire after ~1 hour**. This is by design and is NOT a "session expiry
+that forces a manual re-login". The drawback users sometimes hit ("I have to sign in again every
+hour") only appears when an implementation **caches** the access token and, on expiry, falls back to
+the *interactive* sign-in. This contract forbids that pattern:
+
+- **Never cache the access token.** Acquire a fresh, short-lived token per Drive API call via
+  `GoogleAuthGateway.driveAccessToken()`.
+- **Silent refresh first.** `driveAccessToken()` performs a *silent* re-authorization against the
+  existing grant — native `google_sign_in` keeps a long-lived refresh credential internally; web GIS
+  renews the token without re-consent while the Google session is alive. No UI on the happy path.
+- **Interactive only as a last resort.** Fall back to interactive sign-in / `authorizeDrive()` ONLY
+  when silent refresh fails (consent revoked, or the Google session is gone). Surface that as the
+  "Sign in expired. Tap to reconnect." banner — do NOT trigger it on a normal 1-hour expiry.
+- **Manual sync barely feels the expiry.** Each Upload/Restore fetches a fresh token at the moment
+  of the tap, so a token that expired while the screen sat idle is transparently renewed.
+- **No backend ⇒ no offline refresh token.** MemoX has no server, so it cannot exchange a
+  `serverAuthCode` for a long-lived server-side refresh token (offline access). The robust path is
+  therefore silent *client* re-auth above. If true unattended multi-hour backup on **web** ever
+  becomes a hard requirement, that needs either a backend token exchange or accepting web's
+  best-effort renewal — call it out in the task; do not assume offline tokens exist.
+
 ## Per-account database isolation
 
 This is the most important architectural detail and easy to miss.
@@ -297,6 +320,50 @@ Three user-triggered operations, all returning `DriveSyncRunResult`:
 | Load status | `LoadDriveSyncStatusUseCase`      | Read-only. Refresh status from Drive + metadata.                        |
 | Upload      | `UploadLocalDriveSnapshotUseCase` | Build local snapshot, upload to Drive, update metadata.                 |
 | Restore     | `RestoreDriveSnapshotUseCase`     | Download remote snapshot, replace local DB + settings, update metadata. |
+
+## Auto-backup (Future / Target proposal)
+
+> **Status: Future proposal — not V1, not implemented.** Requires an approved dependency
+> (`workmanager` / a platform background scheduler) and a perf/security review before any code. V1
+> stays manual-only. Documented here so the manual flow can grow into it without redesign.
+
+V1 is manual ("user taps Upload"), which has a known UX failure mode: the user forgets and loses
+data. The mechanism below is the pattern stable consumer apps use for backend-less, local-first
+backup (messaging apps, note apps, password managers): **opportunistic + periodic, debounced,
+constraint-gated, upload-only, idempotent.**
+
+### Triggers (coalesced — never one upload per write)
+
+| Trigger                          | Behavior                                                                                              |
+|----------------------------------|-------------------------------------------------------------------------------------------------------|
+| Local write                      | Set a `pendingBackup` dirty flag; do NOT upload immediately.                                          |
+| Debounce window elapsed          | After N minutes idle since the last write (e.g. 5 min), attempt a backup.                             |
+| App goes to background           | Flush a pending backup opportunistically (best-effort, time-boxed).                                   |
+| Periodic background job          | `WorkManager` (Android) / `BGProcessingTask` (iOS) wakes on a cadence (e.g. every few hours / daily). |
+| App launch after a failed backup | Retry the last failed attempt.                                                                        |
+
+### Constraints (battery / data friendly)
+
+- Network: unmetered (Wi-Fi) by default; user-configurable "Back up on mobile data" toggle.
+- Optional "only while charging".
+- Exponential backoff on failure; capped retries; never busy-loop.
+
+### Safety invariants (carried from the manual flow)
+
+- **Upload-only. Never auto-restore.** Restore stays manual + destructive-confirmed.
+- **Idempotent via fingerprint**: skip when local fingerprint == remote fingerprint (no redundant
+  upload).
+- **Silent token refresh** (see §Token lifetime & silent refresh) is what makes unattended uploads
+  work. On **web**, background refresh is best-effort (the Google session must be alive), so web
+  auto-backup is a weaker guarantee than mobile/desktop.
+- **Visible status, never silent failure**: "Backed up 2h ago" / "Backup pending" / "Backup failed —
+  will retry". A user-facing setting controls frequency and can disable auto-backup entirely (back
+  to manual).
+
+### Optional (Future+)
+
+- Rolling history: keep the last N snapshots in Drive AppData for point-in-time recovery instead of
+  single-file overwrite (bounded by a size budget). Not required for the first auto-backup cut.
 
 ## Restore safety (conflict prevention)
 

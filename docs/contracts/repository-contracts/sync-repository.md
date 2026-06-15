@@ -156,6 +156,11 @@ queries against an un-migrated older file. Only a **higher** remote schema is re
 - The app does NOT persist OAuth access/refresh tokens itself. `google_sign_in` 7.x owns the token
   lifecycle (authentication vs. authorization are separate; the plugin manages refresh). There is no
   app-managed token store and no `flutter_secure_storage` dependency for sync.
+- **~1h expiry → silent refresh, not manual login.** Access tokens live ~1 hour; `driveAccessToken()`
+  performs a *silent* re-authorization on each call (no UI on the happy path). Never cache a token
+  across operations. On a `401`/expired mid-operation, refresh once silently and retry the call;
+  only surface `needsDriveAuthorization` (reconnect banner) when the silent refresh itself fails.
+  See `docs/business/account-sync/account-sync.md` §Token lifetime & silent refresh.
 - Never log tokens, manifest content, settings JSON, or database content
   (`docs/quality/observability-contract.md`).
 
@@ -169,7 +174,10 @@ queries against an un-migrated older file. Only a **higher** remote schema is re
 - Manifest is the canonical record of remote state; absent manifest ⇒ no backup exists.
 - Metadata is per-account; switching accounts does not carry it.
 - Restore is **replacement-only** (no merge) in V1.
-- Sync is **manual** in V1 — no background/auto sync.
+- Sync is **manual** in V1 — no background/auto sync. A Future opt-in auto-backup
+  (`docs/business/account-sync/account-sync.md` §Auto-backup) would call `uploadLocalSnapshot`
+  on a debounced/periodic, constraint-gated schedule; it is **upload-only** and never auto-restores.
+  It requires an approved background-scheduler dependency before implementation.
 
 ## Forbidden
 

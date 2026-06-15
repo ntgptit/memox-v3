@@ -475,6 +475,8 @@ Future until the tag subsystem and `shared_preferences` are approved (`docs/wire
 | SY20 | Full restore protection target | Pre-restore snapshot saved                            | Surface path notice after restore                                                    | C0+C1    | Future                                                                                                        |
 | SY21 | Full restore protection target | "Restore anyway" path after fingerprint mismatch      | Requires second confirmation tap                                                     | C1       | Future                                                                                                        |
 | SY22 | Restore older snapshot         | Remote schema version ≤ current app schema version    | Restore proceeds; Drift runs forward migrations up to current schema before any read | C1       | Future                                                                                                        |
+| SY23 | Drive token expired (~1h)      | Silent re-authorization succeeds                      | Fetch a fresh token silently; no UI, no reconnect banner; operation continues        | C1       | Future                                                                                                        |
+| SY24 | Auto-backup (Future opt-in)    | DB dirty, debounce elapsed, fingerprint differs       | Upload-only backup on unmetered network; skip when fingerprint unchanged; no restore | C1       | Future                                                                                                        |
 
 ## Update rule
 

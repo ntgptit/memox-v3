@@ -167,7 +167,7 @@ any reason, the entire restore aborts; original data untouched.
 |------------------------------------------------------------------|-----------------------------------------|----------------------------------------------------|
 | Auth state (signed in/out, email, provider)                      | `AuthService`                           | watch                                              |
 | Device label                                                     | SharedPreferences `account.deviceLabel` | watch                                              |
-| Local fingerprint + timestamp                                    | computed from canonical DB content      | on screen open + after any data change (debounced) |
+| Local fingerprint + timestamp                                    | composite fingerprint: SHA-256 of raw DB bytes + settings JSON (`DriveSyncManifest`) | on screen open + after any data change (debounced) |
 | Drive manifest (uploaded_at, size, device_label, fingerprint)    | Drive App Folder fetch                  | once on open, refresh on demand                    |
 | In-flight operation state (uploading / restoring / snapshotting) | `AccountNotifier`                       | watch                                              |
 | Last sync result + error                                         | SharedPreferences + notifier            | watch                                              |
@@ -182,8 +182,12 @@ any reason, the entire restore aborts; original data untouched.
 - ❌ Target/Partial restore protection: trigger restore on a single "Restore anyway" tap when
   fingerprint differs. Require second tap with 5s timeout.
 - ❌ Wipe local data on sign-out. Only "Switch / remove account" does that.
-- ❌ Store OAuth tokens in SharedPreferences. Use `flutter_secure_storage`.
-- ❌ Log access tokens, refresh tokens, or fingerprints to console/file logs.
+- ❌ App-managed OAuth token store (SharedPreferences, Drift, or `flutter_secure_storage`).
+  `google_sign_in` 7.x owns the token lifecycle; take a short-lived Drive access token per call via
+  `GoogleAuthGateway.driveAccessToken()`.
+- ❌ Log access tokens or fingerprints to console/file logs (the app holds no refresh token).
+- ❌ Re-trigger interactive sign-in on a normal ~1h access-token expiry. Refresh silently; prompt
+  only when silent re-auth fails (see Token expired state).
 
 ## Components
 
@@ -214,7 +218,8 @@ any reason, the entire restore aborts; original data untouched.
 | Target/Partial: Restoring (download/replace phase) | After snapshot succeeded              | Show progress; app effectively offline until done.                            |
 | Target/Partial: Restore aborted                    | Snapshot failed                       | Show error toast "Snapshot failed — restore cancelled." Local data untouched. |
 | Sign in failed                                     | OAuth error                           | Show inline error; keep signed-out layout.                                    |
-| Token expired                                      | Background refresh failed             | Show banner top: "Sign in expired. Tap to reconnect."                         |
+| Token refreshed silently                           | ~1h access-token expiry               | Transparent. `driveAccessToken()` re-authorizes silently; no UI, no banner.   |
+| Reconnect required                                 | Silent re-auth failed (consent revoked / Google session gone) | Show banner top: "Sign in expired. Tap to reconnect." Only after silent refresh fails. |
 
 ## Actions
 
@@ -287,9 +292,11 @@ any reason, the entire restore aborts; original data untouched.
   setting; for now manual only).
 - Target/Partial restore protection: pre-restore snapshot creation MUST be atomic. If app dies
   mid-snapshot, no destructive op has happened.
-- Drive manifest schema MUST include `device_label`, `fingerprint`, `uploaded_at`, `size_bytes`,
-  `schema_version`.
-- Token refresh failures MUST surface as a banner, not silently expire.
+- Drive manifest is the 12-field `DriveSyncManifest` (see
+  `docs/business/account-sync/account-sync.md` §Manifest), NOT a separate 5-field schema.
+- The ~1h access-token expiry MUST be handled by silent refresh (no UI). Only a failed silent
+  re-auth surfaces the reconnect banner — never silently expire, never force a manual login on the
+  happy path.
 
 ## Implementation refs
 
@@ -307,9 +314,10 @@ any reason, the entire restore aborts; original data untouched.
 **Schema / storage:**
 
 - Account-scoped DB file path switch on account change
-- Drive manifest (remote): `device_label`, `fingerprint`, `uploaded_at`, `size_bytes`,
-  `schema_version`
-- SharedPreferences: `account.deviceLabel`, `account.lastSyncAt`, `account.lastSyncFingerprint`
+- Drive manifest (remote): 12-field `DriveSyncManifest` (`docs/business/account-sync/account-sync.md`
+  §Manifest)
+- SharedPreferences: account link (`sharedPrefsCloudAccountLinkKey`) + per-account Drive sync
+  metadata (`sharedPrefsDriveSyncMetadataKey`); device label in the metadata store
 
 **Contracts:** docs/contracts/usecase-contracts/account-sync.md,
 docs/contracts/repository-contracts/sync-repository.md
