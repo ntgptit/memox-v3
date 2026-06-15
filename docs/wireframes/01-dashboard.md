@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-15
 route: /home
 source_specs:
   - docs/business/engagement/dashboard-engagement.md
@@ -15,20 +15,22 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 
 ## V1 release status
 
-- Current V1: resume card (with Discard), **computed-streak chip** (hidden at 0), **daily-goal
+- Current V1: resume card (with Discard), **computed streak chip** (hidden at 0), **daily-goal
   ring** (hidden when goal disabled), Today's-review card (due count + deck-count + time estimate,
   routes to study only when due cards exist), **Start new learning** CTA with never-studied count,
-  **Recent decks** section, app-bar **Global Search** shortcut, and the zero-content onboarding body.
-- Streak and daily-goal now read the source-backed
-  `LoadDashboardProgressSummaryUseCase` (computed from `study_attempts` + persisted learning
-  settings). They are NO LONGER placeholders. The streak chip is hidden when the streak is 0; the
-  goal ring is hidden when the goal is disabled (no `0 days` dead stat).
+  **Recent decks** section, app-bar **Global Search** shortcut, and the richer zero-content onboarding body.
+- Streak and daily-goal read the source-backed `LoadDashboardProgressSummaryUseCase` (computed from
+  `study_attempts` + persisted learning settings). They are no longer placeholders. The streak chip
+  is hidden when the streak is 0; the goal ring is hidden when the goal is disabled, but the goal
+  tile still stays visible in the disabled state.
 - Recent decks and the never-studied "new" count read the source-backed
   `LoadDashboardDeckHighlightsUseCase` (`decks` ordered by `updated_at DESC`, with per-deck card
   count, due count, last-studied time).
+- Offline, streak-broken, and paused-session count chrome are shown as current fidelity surfaces;
+  the source-backed paused-session list sheet remains deferred.
 - Target/Future: streak-history sheet, daily-goal slider/settings, reminders/notification
-  permissions, streak-broken banner, paused-sessions multi-resume sheet, and the deck/folder scope
-  picker for "Start new learning" (V1 routes new learning straight to the global new-cards entry).
+  permissions, and the deck/folder scope picker for "Start new learning" (V1 routes new learning
+  straight to the global new-cards entry).
 - Current app boot still redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`; changing launch default to Dashboard requires a dedicated navigation task.
 
 ## Layout — populated state
@@ -37,7 +39,7 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 ┌───────────────────────────────────────┐
 │ STATUS BAR                            │
 ├───────────────────────────────────────┤
-│  Good evening, Giap          🔍  ⚙️    │  ← Target app bar; Global Search is not live in V1
+│  Good evening, Giap          🔍  ⚙️    │  ← Target app bar; Global Search routes to /library/search
 ├───────────────────────────────────────┤
 │                                       │
 │ ┌───────────────────────────────────┐ │
@@ -98,16 +100,16 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 │   spaced repetition.                  │
 │                                       │
 │   ┌──────────────────────────────┐   │
-│   │ Create your first deck    ▸  │   │
+│   │ Create first deck          ▸ │   │
 │   └──────────────────────────────┘   │
 │                                       │
 │   ┌──────────────────────────────┐   │
-│   │ Import from CSV or Excel  ▸  │   │
+│   │ Import a deck              ▸ │   │
 │   └──────────────────────────────┘   │
 │                                       │
-│   Already have a backup? Sign in to   │
-│   restore from Google Drive.          │
-│   [Sign in to Google]                 │
+│   Local first                         │
+│   A daily rhythm                      │
+│   No streak pressure                  │
 │                                       │
 ├───────────────────────────────────────┤
 │ 🏠 Home  📚 Library  📈 Progress  ⚙️  │
@@ -116,7 +118,7 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 
 Onboarding state replaces the entire body when `decks = 0 AND flashcards = 0`. Resume/streak/goal sections are hidden.
 
-The Today CTA is disabled and shows caught-up copy when `dueToday == 0`; it must not enter the study flow in that state.
+The Today card shows caught-up copy when `dueToday == 0`; it must not enter the study flow in that state.
 
 ## Inputs
 

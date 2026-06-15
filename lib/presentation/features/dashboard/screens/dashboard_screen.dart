@@ -19,12 +19,25 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final MaterialLocalizations material = MaterialLocalizations.of(context);
+    final AsyncValue<LibraryOverviewReadModel> libraryOverview = ref.watch(
+      libraryOverviewQueryProvider,
+    );
+    final bool isOnboarding = libraryOverview.maybeWhen(
+      data: isZeroContent,
+      orElse: () => false,
+    );
+    final String appBarTitle = isOnboarding
+        ? l10n.dashboardWelcomeTitle
+        : l10n.dashboardGreetingTitle;
+    final String appBarSubtitle = isOnboarding
+        ? l10n.dashboardWelcomeSubtitle
+        : material.formatFullDate(DateTime.now());
 
     return MxScaffold(
       appBar: MxAppBar(
         title: DashboardAppBarTitle(
-          title: l10n.dashboardGreetingTitle,
-          subtitle: material.formatFullDate(DateTime.now()),
+          title: appBarTitle,
+          subtitle: appBarSubtitle,
         ),
         actions: <Widget>[
           MxIconButton(
@@ -40,7 +53,7 @@ class DashboardScreen extends ConsumerWidget {
         ],
       ),
       body: MxRetainedAsyncState<LibraryOverviewReadModel>(
-        value: ref.watch(libraryOverviewQueryProvider),
+        value: libraryOverview,
         skeletonBuilder: (_) => const DashboardLoadingState(),
         errorBuilder: (Object error, StackTrace? stackTrace) => MxErrorState(
           title: l10n.sharedErrorTitle,

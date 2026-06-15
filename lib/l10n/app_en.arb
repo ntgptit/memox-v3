@@ -19,8 +19,37 @@
   "dashboardGreetingTitle": "Good evening, learner",
   "dashboardGreetingSubtitle": "Ready to study today?",
   "dashboardTodayReviewTitle": "Today Review",
-  "dashboardNewStudyTitle": "New Study",
-  "dashboardNewStudyEmptyMessage": "Add or import cards before starting a new study session.",
+  "dashboardWelcomeTitle": "Welcome to MemoX",
+  "dashboardWelcomeSubtitle": "Let’s build your first deck",
+  "dashboardOnboardingHeroTitle": "Ready to remember more?",
+  "dashboardOnboardingHeroMessage": "Create your first deck and add a handful of cards. MemoX will surface the right ones to review each day - calmly, on your schedule.",
+  "dashboardCreateFirstDeckAction": "Create first deck",
+  "dashboardImportDeckAction": "Import a deck",
+  "dashboardOnboardingLocalFirstTitle": "Local first",
+  "dashboardOnboardingLocalFirstMessage": "Your cards live on this device. Sync is optional.",
+  "dashboardOnboardingRhythmTitle": "A daily rhythm",
+  "dashboardOnboardingRhythmMessage": "Short sessions; we pick what’s due each day.",
+  "dashboardOnboardingPressureTitle": "No streak pressure",
+  "dashboardOnboardingPressureMessage": "Skip a day and your progress is safe.",
+  "dashboardOfflineTitle": "You’re offline.",
+  "dashboardOfflineMessage": "Your cards are saved on this device. Drive sync resumes when you reconnect.",
+  "dashboardStreakBrokenTitle": "Streak paused at {count} days.",
+  "@dashboardStreakBrokenTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardStreakBrokenMessage": "That’s fine - pick up whenever you’re ready. Your cards waited for you.",
+  "dashboardMorePausedSessions": "{count, plural, =1{1 other paused session} other{{count} other paused sessions}}",
+  "@dashboardMorePausedSessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardContinueSessionAction": "Continue",
   "dashboardResumeSectionTitle": "Continue studying",
   "dashboardStreakDays": "{count, plural, =1{1 day} other{{count} days}}",
@@ -40,11 +69,10 @@
       }
     }
   },
-  "dashboardNoDueTitle": "No cards due now",
-  "dashboardNoDueMessage": "Open your library to add cards or start a focused deck session.",
+  "dashboardNoDueTitle": "All caught up for today",
+  "dashboardNoDueMessage": "Nothing is due. New cards are still available if you want a head start.",
   "dashboardStudyTodayAction": "Study",
   "dashboardStartReviewAction": "Start today's review",
-  "dashboardOpenLibraryAction": "View library",
   "dashboardSearchTooltip": "Search",
   "dashboardTodayReviewOverline": "Today's review",
   "dashboardDueCountTitle": "{count, plural, =1{1 card due} other{{count} cards due}}",

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-12
+last_updated: 2026-06-15
 applies_to: daily goal, streak, study reminders, landing screen, Dashboard motivation surfaces
 ---
 
@@ -10,13 +10,13 @@ applies_to: daily goal, streak, study reminders, landing screen, Dashboard motiv
 This document is a target engagement spec. For the current V1 release cutline,
 daily goal, computed streaks, reminders, engagement settings, streak history,
 daily-goal sheets, notification permissions, and engagement persistence remain
-Future/Target.
+Future/Target unless explicitly called out below.
 
-Current V1 Dashboard code may render a simple static streak-like stat such as
-`0 days` as a visual summary placeholder. That placeholder is not a Current
-engagement feature: it has no streak computation, no `study_attempts` aggregate,
-no SharedPreferences engagement keys, no settings controls, no reminders, and
-no streak/daily-goal bottom sheet.
+Current V1 Dashboard now renders the computed streak chip and daily-goal ring
+from the Dashboard progress summary. Goal-disabled state hides the streak chip
+and keeps the goal tile visible in the disabled state; the underlying
+engagement settings, reminder rules, and streak-history sheet still remain
+Target/Future.
 
 ## Purpose
 
@@ -197,19 +197,21 @@ default requires a dedicated navigation task with route tests and docs updates.
 
 Order of Dashboard content (top to bottom):
 
-1. Resume card (if resumable session exists) — see `docs/business/resume/resume-session.md`.
-2. Streak chip (`🔥 {n}` if streak > 0, hidden otherwise).
-3. Daily goal progress (ring/bar with `progress / goal`).
-4. "Start today's review" primary CTA — disabled state when no due cards (see `docs/business/study/study-flow.md` empty scope matrix).
-5. "Start new learning" secondary CTA → opens deck/folder picker.
-6. Quick links: recent decks (last 3 opened).
-7. Settings shortcut.
+1. Inline chrome banners, when present, such as offline or streak-broken notice.
+2. Resume card (if resumable session exists) — see `docs/business/resume/resume-session.md`.
+3. Streak chip (`🔥 {n}` if streak > 0, hidden otherwise).
+4. Daily goal progress (ring/bar with `progress / goal`).
+5. "Start today's review" primary CTA — caught-up state when no cards are due (see `docs/business/study/study-flow.md` empty scope matrix).
+6. "Start new learning" secondary CTA → opens deck/folder picker.
+7. Quick links: recent decks (last 3 opened).
+8. Settings shortcut.
 
 If user has zero content (no decks, no flashcards), Dashboard shows onboarding state instead:
 
-- Title: "Welcome to MemoX"
-- CTA: "Create your first deck"
-- Subtitle: "Or import an existing deck (CSV/Excel)"
+- Title: "Ready to remember more?"
+- CTA: "Create first deck"
+- Secondary CTA: "Import a deck"
+- Support cards: "Local first", "A daily rhythm", "No streak pressure"
 
 ### Why Dashboard, not Library, as landing
 

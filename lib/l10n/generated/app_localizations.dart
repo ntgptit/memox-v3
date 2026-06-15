@@ -212,17 +212,107 @@ abstract class AppLocalizations {
   /// **'Today Review'**
   String get dashboardTodayReviewTitle;
 
-  /// No description provided for @dashboardNewStudyTitle.
+  /// No description provided for @dashboardWelcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'New Study'**
-  String get dashboardNewStudyTitle;
+  /// **'Welcome to MemoX'**
+  String get dashboardWelcomeTitle;
 
-  /// No description provided for @dashboardNewStudyEmptyMessage.
+  /// No description provided for @dashboardWelcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Add or import cards before starting a new study session.'**
-  String get dashboardNewStudyEmptyMessage;
+  /// **'Let’s build your first deck'**
+  String get dashboardWelcomeSubtitle;
+
+  /// No description provided for @dashboardOnboardingHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to remember more?'**
+  String get dashboardOnboardingHeroTitle;
+
+  /// No description provided for @dashboardOnboardingHeroMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first deck and add a handful of cards. MemoX will surface the right ones to review each day - calmly, on your schedule.'**
+  String get dashboardOnboardingHeroMessage;
+
+  /// No description provided for @dashboardCreateFirstDeckAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create first deck'**
+  String get dashboardCreateFirstDeckAction;
+
+  /// No description provided for @dashboardImportDeckAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a deck'**
+  String get dashboardImportDeckAction;
+
+  /// No description provided for @dashboardOnboardingLocalFirstTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local first'**
+  String get dashboardOnboardingLocalFirstTitle;
+
+  /// No description provided for @dashboardOnboardingLocalFirstMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cards live on this device. Sync is optional.'**
+  String get dashboardOnboardingLocalFirstMessage;
+
+  /// No description provided for @dashboardOnboardingRhythmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A daily rhythm'**
+  String get dashboardOnboardingRhythmTitle;
+
+  /// No description provided for @dashboardOnboardingRhythmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Short sessions; we pick what’s due each day.'**
+  String get dashboardOnboardingRhythmMessage;
+
+  /// No description provided for @dashboardOnboardingPressureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No streak pressure'**
+  String get dashboardOnboardingPressureTitle;
+
+  /// No description provided for @dashboardOnboardingPressureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip a day and your progress is safe.'**
+  String get dashboardOnboardingPressureMessage;
+
+  /// No description provided for @dashboardOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re offline.'**
+  String get dashboardOfflineTitle;
+
+  /// No description provided for @dashboardOfflineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cards are saved on this device. Drive sync resumes when you reconnect.'**
+  String get dashboardOfflineMessage;
+
+  /// No description provided for @dashboardStreakBrokenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak paused at {count} days.'**
+  String dashboardStreakBrokenTitle(int count);
+
+  /// No description provided for @dashboardStreakBrokenMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s fine - pick up whenever you’re ready. Your cards waited for you.'**
+  String get dashboardStreakBrokenMessage;
+
+  /// No description provided for @dashboardMorePausedSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 other paused session} other{{count} other paused sessions}}'**
+  String dashboardMorePausedSessions(int count);
 
   /// No description provided for @dashboardContinueSessionAction.
   ///
@@ -257,13 +347,13 @@ abstract class AppLocalizations {
   /// No description provided for @dashboardNoDueTitle.
   ///
   /// In en, this message translates to:
-  /// **'No cards due now'**
+  /// **'All caught up for today'**
   String get dashboardNoDueTitle;
 
   /// No description provided for @dashboardNoDueMessage.
   ///
   /// In en, this message translates to:
-  /// **'Open your library to add cards or start a focused deck session.'**
+  /// **'Nothing is due. New cards are still available if you want a head start.'**
   String get dashboardNoDueMessage;
 
   /// No description provided for @dashboardStudyTodayAction.
@@ -277,12 +367,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start today\'s review'**
   String get dashboardStartReviewAction;
-
-  /// No description provided for @dashboardOpenLibraryAction.
-  ///
-  /// In en, this message translates to:
-  /// **'View library'**
-  String get dashboardOpenLibraryAction;
 
   /// No description provided for @dashboardSearchTooltip.
   ///

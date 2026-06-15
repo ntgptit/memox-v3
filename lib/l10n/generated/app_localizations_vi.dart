@@ -66,11 +66,71 @@ class AppLocalizationsVi extends AppLocalizations {
   String get dashboardTodayReviewTitle => 'Ôn hôm nay';
 
   @override
-  String get dashboardNewStudyTitle => 'Học mới';
+  String get dashboardWelcomeTitle => 'Chào mừng đến với MemoX';
 
   @override
-  String get dashboardNewStudyEmptyMessage =>
-      'Hãy thêm hoặc import thẻ trước khi bắt đầu phiên học mới.';
+  String get dashboardWelcomeSubtitle => 'Cùng tạo bộ thẻ đầu tiên nhé';
+
+  @override
+  String get dashboardOnboardingHeroTitle => 'Sẵn sàng ghi nhớ nhiều hơn?';
+
+  @override
+  String get dashboardOnboardingHeroMessage =>
+      'Tạo bộ thẻ đầu tiên và thêm vài thẻ. MemoX sẽ tự đưa ra những thẻ phù hợp để ôn mỗi ngày - nhẹ nhàng, theo nhịp của bạn.';
+
+  @override
+  String get dashboardCreateFirstDeckAction => 'Tạo bộ thẻ đầu tiên';
+
+  @override
+  String get dashboardImportDeckAction => 'Import bộ thẻ';
+
+  @override
+  String get dashboardOnboardingLocalFirstTitle => 'Ưu tiên lưu cục bộ';
+
+  @override
+  String get dashboardOnboardingLocalFirstMessage =>
+      'Thẻ của bạn nằm trên thiết bị này. Đồng bộ là tùy chọn.';
+
+  @override
+  String get dashboardOnboardingRhythmTitle => 'Nhịp học hằng ngày';
+
+  @override
+  String get dashboardOnboardingRhythmMessage =>
+      'Phiên học ngắn; MemoX chọn những thẻ đến hạn mỗi ngày.';
+
+  @override
+  String get dashboardOnboardingPressureTitle => 'Không áp lực streak';
+
+  @override
+  String get dashboardOnboardingPressureMessage =>
+      'Bỏ một ngày thì tiến độ của bạn vẫn an toàn.';
+
+  @override
+  String get dashboardOfflineTitle => 'Bạn đang ngoại tuyến.';
+
+  @override
+  String get dashboardOfflineMessage =>
+      'Thẻ của bạn đã được lưu trên thiết bị này. Đồng bộ Drive sẽ tiếp tục khi bạn kết nối lại.';
+
+  @override
+  String dashboardStreakBrokenTitle(int count) {
+    return 'Streak tạm dừng ở $count ngày.';
+  }
+
+  @override
+  String get dashboardStreakBrokenMessage =>
+      'Không sao cả - cứ tiếp tục khi bạn sẵn sàng. Thẻ của bạn vẫn ở đây chờ bạn.';
+
+  @override
+  String dashboardMorePausedSessions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count phiên tạm dừng khác',
+      one: '1 phiên tạm dừng khác',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get dashboardContinueSessionAction => 'Tiếp tục';
@@ -92,20 +152,17 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get dashboardNoDueTitle => 'Hiện không có thẻ đến hạn';
+  String get dashboardNoDueTitle => 'Đã xong cho hôm nay';
 
   @override
   String get dashboardNoDueMessage =>
-      'Mở thư viện để thêm thẻ hoặc bắt đầu học một bộ thẻ cụ thể.';
+      'Hiện chưa có thẻ nào đến hạn. Bạn vẫn có thể học trước một chút nếu muốn.';
 
   @override
   String get dashboardStudyTodayAction => 'Học';
 
   @override
   String get dashboardStartReviewAction => 'Bắt đầu ôn hôm nay';
-
-  @override
-  String get dashboardOpenLibraryAction => 'Xem thư viện';
 
   @override
   String get dashboardSearchTooltip => 'Tìm kiếm';

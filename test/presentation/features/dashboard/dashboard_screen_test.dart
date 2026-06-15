@@ -324,6 +324,7 @@ Future<({ProviderContainer container, GoRouter router})> _pumpApp(
   DashboardProgressSummary? progressSummary,
   ProgressDueSummary? dueSummary,
   DashboardDeckHighlights? deckHighlights,
+  DashboardVisualChrome visualChrome = const DashboardVisualChrome(),
   List<Override> extraOverrides = const <Override>[],
 }) async {
   final ProviderContainer container = ProviderContainer(
@@ -341,6 +342,7 @@ Future<({ProviderContainer container, GoRouter router})> _pumpApp(
       dashboardDeckHighlightsQueryProvider.overrideWithValue(
         AsyncData<DashboardDeckHighlights>(deckHighlights ?? _deckHighlights()),
       ),
+      dashboardVisualChromeProvider.overrideWithValue(visualChrome),
       ...extraOverrides,
     ],
   );
@@ -608,8 +610,11 @@ void main() {
       tester.element(find.byType(DashboardScreen)),
     );
 
-    expect(find.text(l10n.dashboardNewStudyTitle), findsOneWidget);
-    expect(find.text(l10n.dashboardOpenLibraryAction), findsOneWidget);
+    expect(find.text(l10n.dashboardWelcomeTitle), findsOneWidget);
+    expect(find.text(l10n.dashboardOnboardingHeroTitle), findsOneWidget);
+    expect(find.text(l10n.dashboardCreateFirstDeckAction), findsOneWidget);
+    expect(find.text(l10n.dashboardImportDeckAction), findsOneWidget);
+    expect(find.text(l10n.dashboardOnboardingLocalFirstTitle), findsOneWidget);
     // Engagement/recent surfaces are hidden on the zero-content onboarding body.
     expect(find.byType(MxMasteryRing), findsNothing);
     expect(find.text(l10n.dashboardRecentDecksTitle), findsNothing);
@@ -832,20 +837,9 @@ void main() {
 
     expect(find.text(l10n.dashboardNoDueTitle), findsOneWidget);
     expect(find.text(l10n.dashboardNoDueMessage), findsOneWidget);
-
-    final MxActionButton todayButton = tester.widget<MxActionButton>(
-      find.widgetWithText(MxActionButton, l10n.dashboardStartReviewAction),
-    );
-    expect(todayButton.onPressed, isNull);
-
-    await tester.tap(
-      find.widgetWithText(MxActionButton, l10n.dashboardStartReviewAction),
-    );
-    await tester.pumpAndSettle();
-
     expect(
-      harness.router.routeInformationProvider.value.uri.path,
-      RoutePaths.home,
+      find.widgetWithText(MxActionButton, l10n.dashboardStartReviewAction),
+      findsNothing,
     );
     expect(repository.startCalls, 0);
     expect(find.byType(StudySessionScreen), findsNothing);
@@ -885,15 +879,59 @@ void main() {
     harness.router.go(RoutePaths.home);
     await tester.pumpAndSettle();
 
+    expect(find.byType(MxMasteryRing), findsOneWidget);
+    expect(find.text('11'), findsOneWidget);
+    expect(find.text('/20'), findsOneWidget);
+    // Reminders stay future/target — no notification affordance.
+    expect(find.byIcon(Icons.notifications_outlined), findsNothing);
+  });
+
+  testWidgets('goal off hides streak and keeps the goal card visible', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: const Result<DashboardResumeSessionSummary?>.ok(
+        null,
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          progressSummary: _progressSummary(
+            streak: const DashboardStreakSummary.known(currentStreak: 0),
+            goal: DashboardGoalSummary.disabled(
+              dailyGoal: 20,
+              disabledSince: _utc,
+              todayAttemptCount: 0,
+            ),
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
     final AppLocalizations l10n = AppLocalizations.of(
       tester.element(find.byType(DashboardScreen)),
     );
 
-    expect(find.byType(MxMasteryRing), findsOneWidget);
-    expect(find.text('11'), findsOneWidget);
-    expect(find.text(l10n.dashboardGoalProgress(12, 20)), findsOneWidget);
-    // Reminders stay future/target — no notification affordance.
-    expect(find.byIcon(Icons.notifications_outlined), findsNothing);
+    expect(find.byIcon(Icons.local_fire_department), findsNothing);
+    expect(
+      find.text(l10n.dashboardTodayGoalLabel.toUpperCase()),
+      findsOneWidget,
+    );
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('/20'), findsOneWidget);
   });
 
   testWidgets('streak chip is hidden when the streak is zero', (
@@ -932,6 +970,116 @@ void main() {
 
     expect(find.byIcon(Icons.local_fire_department), findsNothing);
     expect(find.text(l10n.sharedStreakLabel), findsNothing);
+  });
+
+  testWidgets('offline chrome renders above the dashboard content', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(
+        _resumeSummary(),
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          visualChrome: const DashboardVisualChrome(showOfflineBanner: true),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.text(l10n.dashboardOfflineTitle), findsOneWidget);
+    expect(find.text(l10n.dashboardOfflineMessage), findsOneWidget);
+  });
+
+  testWidgets('streak-broken chrome renders above the dashboard content', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(
+        _resumeSummary(),
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          visualChrome: const DashboardVisualChrome(
+            showStreakBrokenBanner: true,
+            streakBrokenDays: 11,
+          ),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.text(l10n.dashboardStreakBrokenTitle(11)), findsOneWidget);
+    expect(find.text(l10n.dashboardStreakBrokenMessage), findsOneWidget);
+  });
+
+  testWidgets('multi-resume chrome renders the paused-session chip', (
+    WidgetTester tester,
+  ) async {
+    final _FakeStudyRepository repository = _FakeStudyRepository(
+      resumeSummaryResult: Result<DashboardResumeSessionSummary?>.ok(
+        _resumeSummary(),
+      ),
+      reviewResult: Result<StudySessionReview>.ok(_review()),
+      startResult: const Result<StudyEntryStartResult>.ok(
+        StudyEntryStartResult.empty(
+          emptyState: StudyEntryEmptyState(
+            variant: StudyEntryEmptyVariant.todayAllDone,
+          ),
+        ),
+      ),
+    );
+    final ({ProviderContainer container, GoRouter router}) harness =
+        await _pumpApp(
+          tester,
+          repository: repository,
+          libraryStream: Stream<LibraryOverviewReadModel>.value(
+            _libraryModel(folders: <FolderWithCount>[_folderWithCount('root')]),
+          ),
+          visualChrome: const DashboardVisualChrome(pausedSessionCount: 4),
+        );
+    harness.router.go(RoutePaths.home);
+    await tester.pumpAndSettle();
+
+    final AppLocalizations l10n = AppLocalizations.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+
+    expect(find.text(l10n.dashboardMorePausedSessions(3)), findsOneWidget);
   });
 
   testWidgets('recent decks and new-learning badge render from highlights', (

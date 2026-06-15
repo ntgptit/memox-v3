@@ -12,6 +12,24 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dashboard_viewmodel.g.dart';
 
+class DashboardVisualChrome {
+  const DashboardVisualChrome({
+    this.showOfflineBanner = false,
+    this.showStreakBrokenBanner = false,
+    this.streakBrokenDays = 0,
+    this.pausedSessionCount = 0,
+  });
+
+  final bool showOfflineBanner;
+  final bool showStreakBrokenBanner;
+  final int streakBrokenDays;
+  final int pausedSessionCount;
+}
+
+@riverpod
+DashboardVisualChrome dashboardVisualChrome(Ref ref) =>
+    const DashboardVisualChrome();
+
 @riverpod
 Future<DashboardResumeSessionSummary?> dashboardResumeSessionQuery(Ref ref) {
   final useCase = ref.watch(loadDashboardResumeSessionSummaryUseCaseProvider);

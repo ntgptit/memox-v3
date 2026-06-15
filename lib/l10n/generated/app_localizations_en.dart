@@ -66,11 +66,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardTodayReviewTitle => 'Today Review';
 
   @override
-  String get dashboardNewStudyTitle => 'New Study';
+  String get dashboardWelcomeTitle => 'Welcome to MemoX';
 
   @override
-  String get dashboardNewStudyEmptyMessage =>
-      'Add or import cards before starting a new study session.';
+  String get dashboardWelcomeSubtitle => 'Let’s build your first deck';
+
+  @override
+  String get dashboardOnboardingHeroTitle => 'Ready to remember more?';
+
+  @override
+  String get dashboardOnboardingHeroMessage =>
+      'Create your first deck and add a handful of cards. MemoX will surface the right ones to review each day - calmly, on your schedule.';
+
+  @override
+  String get dashboardCreateFirstDeckAction => 'Create first deck';
+
+  @override
+  String get dashboardImportDeckAction => 'Import a deck';
+
+  @override
+  String get dashboardOnboardingLocalFirstTitle => 'Local first';
+
+  @override
+  String get dashboardOnboardingLocalFirstMessage =>
+      'Your cards live on this device. Sync is optional.';
+
+  @override
+  String get dashboardOnboardingRhythmTitle => 'A daily rhythm';
+
+  @override
+  String get dashboardOnboardingRhythmMessage =>
+      'Short sessions; we pick what’s due each day.';
+
+  @override
+  String get dashboardOnboardingPressureTitle => 'No streak pressure';
+
+  @override
+  String get dashboardOnboardingPressureMessage =>
+      'Skip a day and your progress is safe.';
+
+  @override
+  String get dashboardOfflineTitle => 'You’re offline.';
+
+  @override
+  String get dashboardOfflineMessage =>
+      'Your cards are saved on this device. Drive sync resumes when you reconnect.';
+
+  @override
+  String dashboardStreakBrokenTitle(int count) {
+    return 'Streak paused at $count days.';
+  }
+
+  @override
+  String get dashboardStreakBrokenMessage =>
+      'That’s fine - pick up whenever you’re ready. Your cards waited for you.';
+
+  @override
+  String dashboardMorePausedSessions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count other paused sessions',
+      one: '1 other paused session',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get dashboardContinueSessionAction => 'Continue';
@@ -98,20 +158,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dashboardNoDueTitle => 'No cards due now';
+  String get dashboardNoDueTitle => 'All caught up for today';
 
   @override
   String get dashboardNoDueMessage =>
-      'Open your library to add cards or start a focused deck session.';
+      'Nothing is due. New cards are still available if you want a head start.';
 
   @override
   String get dashboardStudyTodayAction => 'Study';
 
   @override
   String get dashboardStartReviewAction => 'Start today\'s review';
-
-  @override
-  String get dashboardOpenLibraryAction => 'View library';
 
   @override
   String get dashboardSearchTooltip => 'Search';

@@ -18,7 +18,6 @@ import 'package:memox/presentation/shared/async/mx_retained_async_state.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_action_intent.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_card_actions.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/status/mx_linear_progress.dart';
@@ -69,6 +68,9 @@ class DashboardResumeCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final DashboardVisualChrome chrome = ref.watch(
+      dashboardVisualChromeProvider,
+    );
     final DateTime now = DateTime.now();
     final double progress = summary.totalCount == 0
         ? 0
@@ -89,6 +91,7 @@ class DashboardResumeCard extends ConsumerWidget {
     );
 
     return MxCard(
+      padding: const EdgeInsets.all(SpacingTokens.form),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -126,19 +129,33 @@ class DashboardResumeCard extends ConsumerWidget {
           const SizedBox(height: SpacingTokens.md),
           MxLinearProgress(value: progress, height: SpacingTokens.xs),
           const SizedBox(height: SpacingTokens.md),
-          MxCardActions(
-            primary: MxActionButton(
-              intent: MxActionIntent.cardPrimary,
-              label: l10n.dashboardContinueSessionAction,
-              icon: Icons.play_arrow_rounded,
-              onPressed: () => context.pushStudySession(summary.session.id),
-            ),
-            secondary: MxActionButton(
-              intent: MxActionIntent.cardSecondary,
-              label: l10n.dashboardDiscardAction,
-              onPressed: () => discard(context, ref),
-            ),
+          Row(
+            children: <Widget>[
+              Flexible(
+                fit: FlexFit.loose,
+                child: MxActionButton(
+                  intent: MxActionIntent.cardPrimary,
+                  label: l10n.dashboardContinueSessionAction,
+                  onPressed: () => context.pushStudySession(summary.session.id),
+                  icon: Icons.play_arrow_rounded,
+                ),
+              ),
+              const SizedBox(width: SpacingTokens.sm),
+              Flexible(
+                fit: FlexFit.loose,
+                child: MxActionButton(
+                  intent: MxActionIntent.cardSecondary,
+                  label: l10n.dashboardDiscardAction,
+                  onPressed: () => discard(context, ref),
+                  icon: Icons.delete_outline_rounded,
+                ),
+              ),
+            ],
           ),
+          if (chrome.pausedSessionCount > 1) ...<Widget>[
+            const SizedBox(height: SpacingTokens.sm),
+            DashboardPausedSessionsChip(count: chrome.pausedSessionCount),
+          ],
         ],
       ),
     );
@@ -185,25 +202,16 @@ class DashboardStatsRow extends ConsumerWidget {
         if (streak == null && goal == null) {
           return const SizedBox.shrink();
         }
-        return Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.fill,
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(),
-            1: FixedColumnWidth(SpacingTokens.md),
-            2: FlexColumnWidth(),
-          },
-          children: <TableRow>[
-            TableRow(
-              children: <Widget>[
-                streak ?? const SizedBox.shrink(),
-                streak != null && goal != null
-                    ? const SizedBox(width: SpacingTokens.md)
-                    : const SizedBox.shrink(),
-                goal ?? const SizedBox.shrink(),
-              ],
-            ),
-          ],
-        );
+        if (streak != null && goal != null) {
+          return Row(
+            children: <Widget>[
+              Expanded(child: streak),
+              const SizedBox(width: SpacingTokens.md),
+              Expanded(child: goal),
+            ],
+          );
+        }
+        return streak ?? goal ?? const SizedBox.shrink();
       },
     );
   }
@@ -217,9 +225,10 @@ class DashboardStatsRow extends ConsumerWidget {
           leading: MxIconTile(
             icon: Icons.local_fire_department,
             color: context.customColors.streak,
-            size: SizeTokens.iconLg,
+            size: SizeTokens.surfaceTileSm,
           ),
           value: '$currentStreak',
+          suffix: _suffixAfterNumber(l10n.dashboardStreakDays(currentStreak)),
           caption: l10n.sharedStreakLabel,
         ),
       _ => null,
@@ -233,10 +242,25 @@ class DashboardStatsRow extends ConsumerWidget {
         DashboardStatTile(
           leading: MxMasteryRing(
             pct: dailyGoal == 0 ? 0 : todayAttemptCount / dailyGoal,
-            size: SizeTokens.iconLg,
+            size: SizeTokens.surfaceTileSm,
             showLabel: false,
           ),
-          value: l10n.dashboardGoalProgress(todayAttemptCount, dailyGoal),
+          value: '$todayAttemptCount',
+          suffix: '/$dailyGoal',
+          caption: l10n.dashboardTodayGoalLabel,
+        ),
+      DashboardGoalSummaryDisabled(
+        :final dailyGoal,
+        :final todayAttemptCount,
+      ) =>
+        DashboardStatTile(
+          leading: MxMasteryRing(
+            pct: dailyGoal == 0 ? 0 : todayAttemptCount / dailyGoal,
+            size: SizeTokens.surfaceTileSm,
+            showLabel: false,
+          ),
+          value: '$todayAttemptCount',
+          suffix: '/$dailyGoal',
           caption: l10n.dashboardTodayGoalLabel,
         ),
       _ => null,
@@ -248,19 +272,24 @@ class DashboardStatTile extends StatelessWidget {
   const DashboardStatTile({
     required this.leading,
     required this.value,
+    this.suffix,
     required this.caption,
     super.key,
   });
 
   final Widget leading;
   final String value;
+  final String? suffix;
   final String caption;
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = context.colorScheme;
     return MxCard(
-      padding: const EdgeInsets.all(SpacingTokens.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.form,
+        vertical: SpacingTokens.md,
+      ),
       child: Row(
         children: <Widget>[
           leading,
@@ -270,11 +299,31 @@ class DashboardStatTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                MxText(
-                  value,
-                  role: MxTextRole.headlineMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    MxText(
+                      value,
+                      role: MxTextRole.headlineMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (suffix != null && suffix!.isNotEmpty) ...<Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: SpacingTokens.xxs,
+                        ),
+                        child: MxText(
+                          suffix!,
+                          role: MxTextRole.labelSmall,
+                          color: scheme.onSurfaceVariant,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
                 MxText(
                   StringUtils.uppercased(caption),
@@ -330,62 +379,81 @@ class DashboardTodayCardBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(
-                Icons.bolt_rounded,
-                size: SizeTokens.iconSm,
-                color: context.customColors.accent,
-              ),
-              const SizedBox(width: SpacingTokens.xs),
-              MxText(
-                StringUtils.uppercased(l10n.dashboardTodayReviewOverline),
-                role: MxTextRole.labelLarge,
-                color: context.colorScheme.primary,
-              ),
-            ],
-          ),
-          const SizedBox(height: SpacingTokens.sm),
-          MxText(
-            hasDueCards
-                ? l10n.dashboardDueCountTitle(dueToday)
-                : l10n.dashboardNoDueTitle,
-            role: MxTextRole.titleLarge,
-          ),
-          const SizedBox(height: SpacingTokens.xxs),
-          MxText(
-            hasDueCards
-                ? l10n.dashboardReviewScopeMeta(
-                    dueDeckCount(summary),
-                    estimatedReviewMinutes(dueToday),
-                  )
-                : l10n.dashboardNoDueMessage,
-            role: MxTextRole.bodySmall,
-            color: context.colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(height: SpacingTokens.md),
-          MxCardActions(
-            secondary: hasDueCards
-                ? null
-                : MxActionButton(
-                    intent: MxActionIntent.cardSecondary,
-                    label: l10n.dashboardOpenLibraryAction,
-                    onPressed: () => context.goLibrary(),
-                  ),
-            primary: MxActionButton(
-              intent: MxActionIntent.cardPrimary,
-              label: l10n.dashboardStartReviewAction,
-              icon: Icons.play_arrow_rounded,
-              onPressed: hasDueCards
-                  ? () => context.goStudyEntry(entryType: EntryType.today)
-                  : null,
+          if (hasDueCards) ...<Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  Icons.bolt_rounded,
+                  size: SizeTokens.iconSm,
+                  color: context.customColors.accent,
+                ),
+                const SizedBox(width: SpacingTokens.xs),
+                MxText(
+                  StringUtils.uppercased(l10n.dashboardTodayReviewOverline),
+                  role: MxTextRole.labelLarge,
+                  color: context.colorScheme.primary,
+                ),
+              ],
             ),
-          ),
+            const SizedBox(height: SpacingTokens.sm),
+            MxText(
+              l10n.dashboardDueCountTitle(dueToday),
+              role: MxTextRole.titleLarge,
+            ),
+            const SizedBox(height: SpacingTokens.xxs),
+            MxText(
+              l10n.dashboardReviewScopeMeta(
+                dueDeckCount(summary),
+                estimatedReviewMinutes(dueToday),
+              ),
+              role: MxTextRole.bodySmall,
+              color: context.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: SpacingTokens.md),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: MxActionButton(
+                    intent: MxActionIntent.cardPrimary,
+                    label: l10n.dashboardStartReviewAction,
+                    onPressed: () =>
+                        context.goStudyEntry(entryType: EntryType.today),
+                    icon: Icons.play_arrow_rounded,
+                  ),
+                ),
+              ],
+            ),
+          ] else ...<Widget>[
+            Align(
+              alignment: Alignment.center,
+              child: MxIconTile(
+                icon: Icons.check_circle_outline_rounded,
+                color: context.customColors.mastery,
+                size: SizeTokens.avatar,
+              ),
+            ),
+            const SizedBox(height: SpacingTokens.md),
+            MxText(
+              l10n.dashboardNoDueTitle,
+              role: MxTextRole.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: SpacingTokens.xxs),
+            MxText(
+              l10n.dashboardNoDueMessage,
+              role: MxTextRole.bodySmall,
+              color: context.colorScheme.onSurfaceVariant,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ],
       ),
     );
   }
 }
+
+String _suffixAfterNumber(String value) =>
+    value.replaceFirst(RegExp(r'^\d+\s*'), '');
 
 String scopeLabelFor(AppLocalizations l10n, DashboardResumeSessionSummary s) {
   if (s.scopeLabel != null && StringUtils.trimmed(s.scopeLabel!).isNotEmpty) {

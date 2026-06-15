@@ -60,9 +60,10 @@ class MxActionButton extends StatelessWidget {
         : false;
 
     if (MxActionSpec.isSecondary(intent)) {
-      final MxSecondaryVariant variant = intent == MxActionIntent.cardSecondary
-          ? MxSecondaryVariant.tonal
-          : MxSecondaryVariant.text;
+      final MxSecondaryVariant variant = switch (intent) {
+        MxActionIntent.cardSecondary => MxSecondaryVariant.outlined,
+        _ => MxSecondaryVariant.text,
+      };
       return MxSecondaryButton(
         label: label,
         onPressed: onPressed,

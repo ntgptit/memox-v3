@@ -15,7 +15,11 @@ class DashboardLoadingState extends StatelessWidget {
       SizedBox(height: SpacingTokens.md),
       DashboardStatsSkeleton(),
       SizedBox(height: SpacingTokens.md),
-      DashboardSectionSkeleton(),
+      DashboardTodayCardSkeleton(),
+      SizedBox(height: SpacingTokens.md),
+      DashboardActionSkeleton(),
+      SizedBox(height: SpacingTokens.md),
+      DashboardRecentDecksSkeleton(),
       SizedBox(height: SpacingTokens.xl),
     ],
   );
@@ -48,6 +52,43 @@ class DashboardSectionSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       const MxCard(child: DashboardSkeletonBlock(lines: 2, hasActions: true));
+}
+
+class DashboardTodayCardSkeleton extends StatelessWidget {
+  const DashboardTodayCardSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) =>
+      const MxCard(child: DashboardSkeletonBlock(lines: 3, hasActions: true));
+}
+
+class DashboardActionSkeleton extends StatelessWidget {
+  const DashboardActionSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) => const MxCard(
+    padding: EdgeInsets.symmetric(
+      horizontal: SpacingTokens.form,
+      vertical: SpacingTokens.sm,
+    ),
+    child: DashboardSkeletonBlock(lines: 1),
+  );
+}
+
+class DashboardRecentDecksSkeleton extends StatelessWidget {
+  const DashboardRecentDecksSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      MxCard(child: DashboardSkeletonBlock(lines: 2)),
+      SizedBox(height: SpacingTokens.sm),
+      MxCard(child: DashboardSkeletonBlock(lines: 2)),
+      SizedBox(height: SpacingTokens.sm),
+      MxCard(child: DashboardSkeletonBlock(lines: 2)),
+    ],
+  );
 }
 
 class DashboardSkeletonBlock extends StatelessWidget {

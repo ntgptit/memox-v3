@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-09
+last_updated: 2026-06-15
 status: contract
 route: /home
 screen: Dashboard
@@ -20,23 +20,23 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 - Shared component contract: `docs/design/component-visual-contract.md`
 - UI/UX contract: `docs/ui-ux/ui-ux-contract.md`
 
-## Current V1 Scope (updated 2026-06-14 — full-mock build)
+## Current V1 Scope (updated 2026-06-15 — fidelity pass)
 
 - Resume card (with Discard) is a current V1 surface.
-- Today's-review card is a current V1 surface (due count + due-deck count + estimated minutes).
+- Today's-review card is a current V1 surface (due count + due-deck count + estimated minutes, with a caught-up state when `dueToday == 0`).
 - **Computed streak chip** is current V1 — reads `LoadDashboardProgressSummaryUseCase`; hidden when streak `< 1`.
-- **Daily-goal ring** is current V1 — reads the same use case; hidden when the goal is disabled/unknown.
+- **Daily-goal ring** is current V1 — reads the same use case; hidden when the goal is disabled/unknown, but the goal tile still stays visible in the disabled state.
 - **Recent decks** and the **never-studied "new" count** are current V1 — read `LoadDashboardDeckHighlightsUseCase`.
 - **Start new learning** is current V1 — routes to the global new-cards study entry (deck/folder scope picker still deferred).
 - **Dashboard global search** is current V1 — app-bar shortcut to `/library/search`.
-- Loading, error, onboarding, and resume-only states are part of the current V1 surface.
-- Multi-resume remains deferred until a source-backed paused-session list exists.
+- Loading, error, onboarding, resume-only, offline, streak-broken, and multi-resume visual chrome states are part of the current fidelity pass.
+- The paused-session chip is currently visual chrome only; the source-backed paused-session list sheet remains deferred.
 - App launch still defaults to Library; `/home` renders Dashboard V1 but is not the boot route.
 
 ## Explicitly Excluded
 
 - Reminder and notification permission surfaces.
-- Streak-history sheet, daily-goal slider, and the streak-broken one-time banner.
+- Streak-history sheet and daily-goal slider.
 - The two-step deck/folder scope picker for "Start new learning" (V1 routes straight to global new cards).
 - Paused-sessions multi-resume sheet.
 - Changing app boot default to Dashboard.
@@ -61,46 +61,46 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | Mock element | Mock state(s) | Product status | Flutter mapping | Data source | Action | Notes |
 | ------------ | ------------- | -------------- | --------------- | ----------- | ------ | ----- |
 | App bar greeting + subtitle | loaded, loading, onboarding | Current V1 | `MxAppBar` + `MxText` | Local time and localized dashboard copy | None | Use localized greeting copy; the sample name/date in the HTML are visual-only. |
-| Search icon | loaded, offline, error | Future/Target | `MxIconButton` hidden or disabled in V1 | None yet | None in V1 | Global search stays on Library; do not wire a Dashboard search action. |
+| Search icon | loaded, offline, error | Current V1 | `MxIconButton` | None yet | `pushLibrarySearch` | Dashboard routes to global search from the app bar. |
 | Settings icon | loaded, offline, error | Current V1 | `MxIconButton` | Route shell | `go` to `RoutePaths.settings` | Shell-visible settings shortcut is allowed. |
-| Offline banner | offline | Visual-only | `MxOfflineBanner` | Connectivity state if a shared app-level signal exists later | None | Shared feedback pattern only; Dashboard docs do not define a blocking offline mode. |
+| Offline banner | offline | Current V1 | `MxCard` + inline warning surface | Connectivity state if a shared app-level signal exists later | None | Non-blocking feedback; the Dashboard stays visible behind the banner. |
 | Error card + retry | error | Current V1 | `MxErrorState` or `MxCard` + `MxActionButton` | Dashboard query failure | Retry | Keep the error localized. The mock’s `Open Library` secondary action is excluded because the business docs only require retry. |
 | Resume card shell | loaded, resumeOnly, multiResume | Current V1 | `MxCard` + `MxCardActions` + `MxText` | Resumable-session lookup | Continue, Discard | Top placement is required when a resumable session exists. |
 | Resume progress block | loaded, resumeOnly | Current V1 | `MxText` + `MxLinearProgress` / `MxStatDisplay` | Session header + items | None | Show scope name, answered count, and relative last-active time. |
-| More paused sessions chip | multiResume | Missing data | `MxActionButton` or `MxTextButton` | No list-active-sessions hook yet | Open paused-sessions sheet | The chip is visible in the mock, but the query owner for the list does not exist yet. |
-| Static streak placeholder | loaded, goalOff | Current V1 | `MxStatDisplay` or `MxCard` | None; static placeholder only | None | Render as a non-computed placeholder only. Do not show a live streak count. |
-| Goal ring / daily-goal card | loaded, goalOff | Future/Target | `MxMasteryRing` / `MxCard` | Engagement prefs + study_attempts aggregate | None | Excluded from current V1 until engagement is promoted. |
-| Streak-broken banner | streakBroken | Future/Target | `MxCallout` or `MxCard` | Computed broken-streak signal | Dismiss | Requires computed streak state, so it remains out of current V1. |
+| More paused sessions chip | multiResume | Visual chrome | `MxSecondaryButton` / `MxTextButton` | No list-active-sessions hook yet | Open paused-sessions sheet | The chip is visible in the parity pass, but the list/sheet remains deferred. |
+| Static streak placeholder | loaded, goalOff | Current V1 | `MxStatDisplay` or `MxCard` | None; goal-disabled placeholder only | None | Render the disabled goal state without a streak count. |
+| Goal ring / daily-goal card | loaded, goalOff | Current V1 | `MxMasteryRing` / `MxCard` | Engagement prefs + study_attempts aggregate | None | The disabled goal state stays visible, but the streak chip stays hidden when streak is 0. |
+| Streak-broken banner | streakBroken | Visual chrome | `MxCard` | Computed broken-streak signal | None | The fidelity pass shows the banner inline; dismiss behavior remains future. |
 | Today CTA / caught-up card | loaded, resumeOnly | Current V1 | `MxCard` + `MxActionButton` | Today due-count provider | `go` to `RoutePaths.studyToday` only when `dueToday > 0`; otherwise render the caught-up/disabled state and keep the user out of study flow | The caught-up variant replaces the primary due card when no cards are due, and the primary action must be disabled or replaced with a non-study action. |
-| Start new learning CTA | loaded, onboarding, resumeOnly | Missing data | `MxActionButton` / `MxCardActions` | No scope picker source yet | None in V1 | Deferred until a source-backed scope picker exists. |
+| Start new learning CTA | loaded, onboarding, resumeOnly | Current V1 | `MxPrimaryButton` / `MxSecondaryButton` | No scope picker source yet | `goStudyEntry(entryType: today, studyType: newCards)` | The prompt routes straight to the global new-cards entry; the scope picker remains deferred. |
 | Recent decks section header | loaded, resumeOnly | Current V1 | `MxSectionHeader` | None | None | The section title is part of the screen chrome. |
 | Recent decks header shortcut | loaded, resumeOnly | Visual-only | `MxTextButton` or `MxIconButton` | None | Optional library navigation | Bottom nav already covers `/library`; this shortcut is not a product requirement. |
 | Recent deck rows | loaded, resumeOnly | Missing data | `MxCard` + `MxTappable` + `MxIconTile` | Deck list ordered by `updated_at DESC` | Open deck flashcard list | There is no Dashboard-specific recent-decks query yet. |
 | Loading skeletons | loading | Current V1 | `MxRetainedAsyncState` + `MxSkeleton` | Async dashboard providers | None | Keep skeletons per section instead of a full-screen spinner. |
-| Onboarding hero card | onboarding | Current V1 | `MxEmptyState` | Zero decks + zero flashcards | Open library | Keep the hero minimal until a source-backed onboarding action exists. |
-| Onboarding reassurance cards | onboarding | Visual-only | `MxCard` + `MxIconTile` + `MxText` | None | None | Calm copy only; no business behavior is attached to these cards. |
+| Onboarding hero card | onboarding | Current V1 | `MxCard` + `MxPrimaryButton` + `MxSecondaryButton` | Zero decks + zero flashcards | Open library | Keep the hero minimal until a source-backed onboarding action exists. |
+| Onboarding reassurance cards | onboarding | Current V1 | `MxCard` + `MxIconTile` + `MxText` | None | None | Calm copy only; no business behavior is attached to these cards. |
 | Bottom navigation | all | Current V1 | `MxBottomNavigationBar` | Shell route state | Home, Library, Progress, Settings | Home is shell-visible, but the app still boots into Library. |
 
 ## State Mapping
 
 | Mock state | Current V1 behavior | Implement now? | Notes |
 | ---------- | ------------------- | -------------- | ----- |
-| loaded | Resume card first, then static streak placeholder, Today CTA, onboarding if zero-content | Yes | Keep the overall density compact and card-driven. |
+| loaded | Resume card, streak chip, goal card, Today CTA, start-new-learning CTA, and recent decks | Yes | Keep the overall density compact and card-driven. |
 | loading | Section-level skeletons for resume and today cards | Yes | Do not block the whole screen on one slow provider. |
-| onboarding | Zero-content body with an Open Library CTA | Yes | Exclude the legacy Google sign-in/restore copy from V1. |
-| goal off | Hide live goal/streak surfaces; treat as future engagement state | No | Goal persistence and streak computation are not current V1 features. |
+| onboarding | Zero-content body with the richer hero, primary CTA, secondary CTA, and reassurance cards | Yes | Exclude the legacy Google sign-in/restore copy from V1. |
+| goal off | Hide the streak chip and keep the goal card visible in disabled state | Yes | Goal persistence and streak computation are current V1 features. |
 | resume only | Resume card remains visible; Today CTA becomes caught-up and disabled | Yes | This is the main no-due / resumable-session combination. The Today action must not enter study flow when no cards are due. |
-| streak broken | One-time broken-streak banner above the resume card | No | Requires computed streak history, which is still future/target. |
+| streak broken | One-time broken-streak banner above the resume card | Yes | The fidelity pass shows the banner inline; dismiss behavior remains future. |
 | error | Inline Dashboard error state with retry | Yes | Keep the message localized and do not surface raw failures. |
-| offline | Non-blocking offline banner | No | Visual reference only until the Dashboard has a defined connectivity contract. |
-| multi resume | Resume card plus paused-sessions chip entry | No | Missing the list-active-sessions hook and sheet data source. |
+| offline | Non-blocking offline banner | Yes | Visual chrome only; the Dashboard stays visible behind the banner. |
+| multi resume | Resume card plus paused-sessions chip entry | Yes | The chip is visible in the parity pass, but the list/sheet remains deferred. |
 
 ## Layout Hierarchy
 
 1. App bar with greeting on the left and shell actions on the right.
 2. Inline feedback surfaces, in this order when present: offline banner, error card, streak-broken banner.
 3. Resume card at the top of the body when a resumable session exists.
-4. Streak placeholder and goal area only when the current V1 placeholder is shown or when future engagement is promoted.
+4. Streak chip and goal card only when the current engagement summary is available.
 5. Today CTA or caught-up card.
 6. Onboarding hero when zero content exists.
 7. Bottom navigation.
@@ -114,10 +114,10 @@ For onboarding, render the zero-content hero only.
 | Screen shell | `MxScaffold` | Use the design-system shell, not a raw `Scaffold`. |
 | App bar | `MxAppBar` | Keep the header compact and localizable. |
 | Card surfaces | `MxCard` | Use tokenized surfaces and ghost borders. |
-| Resume / today actions | `MxCardActions` + `MxActionButton` | Keep the primary action visually dominant and the secondary lighter. |
-| Empty state | `MxEmptyState` | Use for onboarding and empty caught-up states. |
+| Resume / today actions | `MxPrimaryButton` + `MxSecondaryButton` | Keep the primary action visually dominant and the secondary lighter. |
+| Empty state | `MxCard` / `MxIconTile` / `MxText` | Use for onboarding and empty caught-up states. |
 | Error state | `MxErrorState` | Use for query failure. |
-| Offline state | `MxOfflineBanner` | Non-blocking shared feedback. |
+| Offline state | `MxCard` + warning surface | Non-blocking shared feedback. |
 | Loading | `MxRetainedAsyncState` + `MxSkeleton` | Keep skeletons per section. |
 | Section header | `MxSectionHeader` | Use for the Recent decks title. |
 | Icon tile | `MxIconTile` | Use for resume, deck, and onboarding cards. |
@@ -133,6 +133,8 @@ For onboarding, render the zero-content hero only.
 | Resume card Continue | `RoutePaths.studySession(sessionId)` / `RouteNames.studySession` via `go` | Resume opens the persisted session directly. |
 | Resume card Discard | `showMxConfirmDialog` then `CancelStudySessionUseCase` | Discard is destructive and must confirm. |
 | More paused sessions | `showMxBottomSheet` | Opens the paused-sessions list when the list query exists. |
+| Offline banner | visual chrome | Non-blocking warning surface on top of the dashboard body. |
+| Streak-broken banner | visual chrome | One-time inline banner above the resume card when the chrome bridge marks it broken. |
 | Today CTA | `RoutePaths.studyToday` / `RouteNames.studyToday` via `go` | The study entry gate then `pushReplacement`s into the session route. |
 | Start new learning | Deferred | No source-backed scope picker exists yet. |
 | Settings icon | `RoutePaths.settings` / `RouteNames.settings` via `go` | Shell-visible and current V1. |
@@ -145,10 +147,10 @@ For onboarding, render the zero-content hero only.
 
 - Use the existing `dashboard*` ARB namespace in `lib/l10n/app_en.arb` and `lib/l10n/app_vi.arb`.
 - Do not hardcode the mock’s sample name/date strings.
-- Use `dashboardResumeSectionTitle`, `dashboardContinueSessionAction`, `dashboardDiscardAction`, `dashboardMorePausedSessions`, and `dashboardPausedSessionsSheetTitle` for resume copy.
+- Use `dashboardResumeSectionTitle`, `dashboardContinueSessionAction`, `dashboardDiscardAction`, and `dashboardMorePausedSessions` for resume copy.
 - `dashboardStartNewLearningAction`, `dashboardScopePickerTitle`, and the scope-picker subtitle keys remain reserved for a future source-backed picker.
 - Use the existing `dashboardRecentDecksTitle`, `dashboardDeckDueSummary`, and `dashboardDeckCaughtUpSummary` keys for recent deck rows.
-- Use `sharedOfflineTitle`, `sharedOfflineMessage`, and `commonRetry` for offline/error feedback.
+- Use `dashboardOfflineTitle`, `dashboardOfflineMessage`, `sharedErrorTitle`, and `commonRetry` for offline/error feedback.
 - Use `studyEntryResumeRequiredTitle`, `studyEntryResumeRequiredMessage`, and `studyEntryResumeRequiredCta` for the controlled resume-required fallback.
 - Keep the legacy Google sign-in / restore copy out of Dashboard V1.
 
@@ -166,13 +168,13 @@ For onboarding, render the zero-content hero only.
 
 - The mock is rendered in both Tokyo Pure Light and Tokyo Nebula; the contract applies to both themes.
 - Use `surface`, `surfaceContainerLowest`, `surfaceContainerLow`, and `outlineVariant` ghost borders for cards.
-- Use `MxOfflineBanner` and error surfaces for semantic warning/error feedback; do not copy raw HTML colors into feature widgets.
+- Use `MxCard` warning surfaces and error surfaces for semantic warning/error feedback; do not copy raw HTML colors into feature widgets.
 - The mock’s gradient-heavy resume/today cards are visual inspiration only. Production should use tokenized tonal surfaces and border accents instead of raw CSS gradients.
-- `sharedOfflineTitle` / `sharedOfflineMessage` use warning semantics in both themes.
+- `dashboardOfflineTitle` / `dashboardOfflineMessage` use warning semantics in both themes.
 
 ## Open Questions
 
-- None blocking. The remaining gaps are implementation-only: start new learning needs a source-backed scope picker, recent decks need a Dashboard query owner, and multi-resume needs the paused-sessions list hook.
+- None blocking. The remaining gap is implementation-only: the paused-session list sheet still needs a source-backed owner.
 
 ## Next implementation task
 

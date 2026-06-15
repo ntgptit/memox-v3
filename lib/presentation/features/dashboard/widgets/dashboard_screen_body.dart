@@ -21,6 +21,9 @@ class DashboardBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final DashboardVisualChrome chrome = ref.watch(
+      dashboardVisualChromeProvider,
+    );
     if (isZeroContent(model)) {
       return ListView(
         children: const <Widget>[
@@ -38,6 +41,17 @@ class DashboardBody extends ConsumerWidget {
     return ListView(
       children: <Widget>[
         const SizedBox(height: SpacingTokens.md),
+        if (chrome.showOfflineBanner) ...<Widget>[
+          DashboardOfflineBanner(
+            title: l10n.dashboardOfflineTitle,
+            message: l10n.dashboardOfflineMessage,
+          ),
+          const SizedBox(height: SpacingTokens.md),
+        ],
+        if (chrome.showStreakBrokenBanner) ...<Widget>[
+          DashboardStreakBrokenBanner(days: chrome.streakBrokenDays),
+          const SizedBox(height: SpacingTokens.md),
+        ],
         MxRetainedAsyncState<DashboardResumeSessionSummary?>(
           value: resumeQuery,
           skeletonBuilder: (_) => const DashboardResumeCardSkeleton(),
