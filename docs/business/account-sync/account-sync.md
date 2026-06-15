@@ -18,6 +18,27 @@ This document covers two tightly coupled features:
 Drive sync is unavailable without a linked Google account with Drive AppData authorization. Both are
 optional; the app works fully offline as a guest.
 
+## Design phasing & non-goals (V1 decision, 2026-06-15)
+
+V1 ships **replace-only blob backup/restore** (whole Drift file ↔ Drive AppData), NOT multi-device
+sync. This is a deliberate phasing decision:
+
+- **Now:** replace-DB backup/restore (WBS 8.6.1/8.6.2). Restore overwrites the local DB; the
+  pre-restore snapshot is the safety net.
+- **Later (when needed):** a **server-side API with its own database** that enables conflict-free
+  multi-device sync (record/operation-level merge) and server-mediated token exchange. The
+  **backend** path — explicitly NOT client-side CRDT/oplog — is the chosen future direction
+  (WBS 8.6.5, deferred). Do not start a CRDT/oplog or sync-engine migration under the blob-backup
+  work; it is out of scope until the backend decision is taken.
+
+**Accepted V1 non-goal — concurrent multi-device divergence:** when two devices both edit since the
+last common sync, blob backup cannot merge; restoring on either device discards the other's
+un-uploaded changes (see §Restore safety → Pre-restore checks for the fingerprint-vs-last-synced
+cases). V1 mitigates with fingerprint detection, the "upload local first" warning, and the
+pre-restore snapshot, but does NOT resolve it. "Cloud is newer → download" is safe ONLY when local
+has no unsynced changes (`localFingerprint == last-synced`); it is unsafe when both sides diverged.
+True conflict-free sync is deferred to the future server-API model above.
+
 ## Source files to inspect
 
 > **Target structure — only the auth gateway and OAuth config exist today (verified 2026-06-11).**
