@@ -1,7 +1,7 @@
 # MemoX — Mobile UI Kit
 
 An interactive click-through gallery of MemoX mobile screens, built in HTML/JSX as a
-visual reference for the Flutter implementation in `lib/features/**`.
+visual reference for the Flutter implementation in `lib/presentation/features/**`.
 
 `index.html` renders every screen as a static phone frame on one scrollable stage, with a
 **Light / Dark** toggle in the header (dark mode is the scoped *Tokyo Nebula* theme). Screens

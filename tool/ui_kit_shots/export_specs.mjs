@@ -57,6 +57,25 @@ const slug = (s) =>
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+const specFileTemplate = readFileSync(join(here, 'spec-file.template.md'), 'utf8');
+const specNodeTemplate = readFileSync(join(here, 'spec-node.template.md'), 'utf8');
+
+function renderTemplate(template, values) {
+  return template
+    .replace(/{{#(\w+)}}([\s\S]*?){{\/\1}}/g, (match, key, body) => {
+      const value = values[key];
+      return value ? renderTemplate(body, values) : '';
+    })
+    .replace(/{{(\w+)}}/g, (match, key) => {
+      const value = values[key];
+      return value === undefined || value === null ? '' : String(value);
+    });
+}
+
+function normalizeFinalNewline(text) {
+  return text.replace(/\r?\n+$/, '\n');
+}
+
 // Runs INSIDE the page. Builds the light-theme token map (computed color -> token
 // name) once, then extracts a structured element tree for a given .phone element:
 // containment hierarchy, layout intent, repeated-item runs, full text, and
@@ -64,6 +83,19 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const pageHelpers = `
 window.__mx = (() => {
   let colorToToken = null;
+  const specNodeTemplate = ${JSON.stringify(specNodeTemplate)};
+
+  function renderTemplate(template, values) {
+    return template
+      .replace(/{{#(\\w+)}}([\\s\\S]*?){{\\/\\1}}/g, (match, key, body) => {
+        const value = values[key];
+        return value ? renderTemplate(body, values) : '';
+      })
+      .replace(/{{(\\w+)}}/g, (match, key) => {
+        const value = values[key];
+        return value === undefined || value === null ? '' : String(value);
+      });
+  }
 
   function buildTokenMap() {
     if (colorToToken) return colorToToken;
@@ -342,6 +374,49 @@ window.__mx = (() => {
     return bits.join(' ');
   }
 
+  function formatNodeBlock(meta) {
+    const indent = '  '.repeat(meta.depth);
+    const fieldIndent = indent + '  ';
+    const rendered = renderTemplate(specNodeTemplate, {
+      indent,
+      fieldIndent,
+      name: meta.name,
+      itemLabel: meta.itemLabel || '',
+      text: meta.text || '',
+      mx: meta.mx || '',
+      box: Boolean(meta.abs || meta.rel),
+      abs: meta.abs || '',
+      rel: meta.rel || '',
+      layout: meta.layout || '',
+      flex: meta.flex || '',
+      repeat: meta.repeat || '',
+      spacing: meta.spacing || '',
+      size: meta.size || '',
+      position: meta.position || '',
+      scroll: meta.scroll || '',
+      transform: meta.transform || '',
+      style: meta.style || '',
+    });
+    const lines = rendered.split('\\n').filter((line) => line.length > 0);
+    const signature = [
+      meta.depth,
+      meta.itemLabel || '',
+      meta.name,
+      meta.text || '',
+      meta.mx || '',
+      meta.layout || '',
+      meta.flex || '',
+      meta.repeat || '',
+      meta.spacing || '',
+      meta.size || '',
+      meta.position || '',
+      meta.scroll || '',
+      meta.transform || '',
+      meta.style || '',
+    ].join('\u001f');
+    return { lines, signature };
+  }
+
   // True when the first <period> children carry real content (text or an icon),
   // so we never label a run of empty skeleton/spacer placeholders as a list.
   function unitHasContent(children, period) {
@@ -397,7 +472,7 @@ window.__mx = (() => {
 
   function extract(phone) {
     const origin = phone.getBoundingClientRect();
-    const lines = [];      // full lines (with bbox) for the base-state spec
+    const blocks = [];      // full blocks (with bbox) for the base-state spec
     const signatures = []; // bbox-free structural lines for ordered state diffing
 
     function walk(el, depth, itemLabel, parentRect) {
@@ -414,7 +489,6 @@ window.__mx = (() => {
       if (emitWorthy(el, cs)) {
         const name = nodeName(el);
         const text = ownText(el);
-        const ind = '  '.repeat(depth);
         const w = Math.round(rect.width), h = Math.round(rect.height);
         // abs = frame-relative (visual cross-check); rel = offset within the parent
         // box (so an agent reads spacing from the parent, not the whole screen).
@@ -435,10 +509,26 @@ window.__mx = (() => {
         // Suggested Mx component (or mx:? when an interactive control has no mapping).
         const hint = mxHint(el);
         const mx = hint ? 'mx:' + hint : (el.tagName === 'BUTTON' || el.tagName === 'A' ? 'mx:?' : '');
-        const core = (itemLabel ? itemLabel + ' ' : '') + name + (text ? ' "' + text + '"' : '');
-        const tail = [mx, lay, flex, rep, box, size, posn, scrollh, tform, sty].filter(Boolean).join(' ');
-        lines.push(ind + '- ' + core + ' ' + abs + ' ' + rel + (tail ? ' ' + tail : ''));
-        signatures.push(ind + '- ' + core + (tail ? ' ' + tail : ''));
+        const block = formatNodeBlock({
+          depth,
+          itemLabel,
+          name,
+          text,
+          mx: mx ? mx.replace(/^mx:/, '') : '',
+          abs: abs.replace(/^abs:/, ''),
+          rel: rel.replace(/^rel:/, ''),
+          layout: lay,
+          flex,
+          repeat: rep ? rep.replace(/^repeat:/, '') : '',
+          spacing: box,
+          size,
+          position: posn,
+          scroll: scrollh,
+          transform: tform,
+          style: sty,
+        });
+        blocks.push(block.lines);
+        signatures.push(block.signature);
         depth += 1;
         childParentRect = rect;
       }
@@ -458,7 +548,7 @@ window.__mx = (() => {
     }
 
     for (const child of phone.children) walk(child, 0, undefined, origin);
-    return { lines, signatures };
+    return { blocks, signatures };
   }
 
   return { extract };
@@ -470,7 +560,7 @@ window.__mx = (() => {
 // bbox), so every added/removed/context line keeps enough geometry to be placed.
 // Returns a compact unified view: changes plus one context line at each hunk edge;
 // long unchanged runs collapse to a single ellipsis.
-function diffSeq(baseSig, curSig, baseLines, curLines) {
+function diffSeq(baseSig, curSig, baseBlocks, curBlocks) {
   const n = baseSig.length, m = curSig.length;
   const dp = Array.from({ length: n + 1 }, () => new Int32Array(m + 1));
   for (let i = n - 1; i >= 0; i--) {
@@ -481,12 +571,12 @@ function diffSeq(baseSig, curSig, baseLines, curLines) {
   const ops = [];
   let i = 0, j = 0;
   while (i < n && j < m) {
-    if (baseSig[i] === curSig[j]) { ops.push({ op: ' ', line: curLines[j] }); i++; j++; }
-    else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push({ op: '-', line: baseLines[i] }); i++; }
-    else { ops.push({ op: '+', line: curLines[j] }); j++; }
+    if (baseSig[i] === curSig[j]) { ops.push({ op: ' ', block: curBlocks[j] }); i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push({ op: '-', block: baseBlocks[i] }); i++; }
+    else { ops.push({ op: '+', block: curBlocks[j] }); j++; }
   }
-  while (i < n) ops.push({ op: '-', line: baseLines[i++] });
-  while (j < m) ops.push({ op: '+', line: curLines[j++] });
+  while (i < n) ops.push({ op: '-', block: baseBlocks[i++] });
+  while (j < m) ops.push({ op: '+', block: curBlocks[j++] });
   return ops;
 }
 
@@ -495,11 +585,13 @@ function formatDiff(ops) {
   for (let k = 0; k < ops.length; k++) {
     const o = ops[k];
     if (o.op !== ' ') {
-      out.push(o.op + ' ' + o.line.trimStart());
+      for (const line of o.block) out.push(o.op + ' ' + line.trimStart());
       continue;
     }
     const nearChange = (k > 0 && ops[k - 1].op !== ' ') || (k < ops.length - 1 && ops[k + 1].op !== ' ');
-    if (nearChange) out.push('  ' + o.line.trimStart());
+    if (nearChange) {
+      for (const line of o.block) out.push('  ' + line.trimStart());
+    }
     else if (out.length && out[out.length - 1] !== '  ...') out.push('  ...');
   }
   return out.length ? out.join('\n') : '(identical)';
@@ -556,7 +648,7 @@ async function main() {
 
     let baseLabel = '';
     let baseSignatures = [];
-    let baseLines = [];
+    let baseBlocks = [];
     const sections = [];
 
     for (let s = 0; s < total; s++) {
@@ -568,19 +660,19 @@ async function main() {
       // Always measure the LIGHT frame (first frame in "both" view): values are
       // emitted as token names, which the dark theme remaps identically.
       const phone = (await row.$$('.frame-wrap:not(.memox-dark) .phone'))[0];
-      const { lines, signatures } = await phone.evaluate((el) => window.__mx.extract(el));
+      const { blocks, signatures } = await phone.evaluate((el) => window.__mx.extract(el));
 
       if (s === 0) {
         baseLabel = stateLabel;
         baseSignatures = signatures;
-        baseLines = lines;
-        sections.push(`## Base state: ${stateLabel}\n\n\`\`\`text\n${lines.join('\n')}\n\`\`\``);
+        baseBlocks = blocks;
+        sections.push(`## Base state: ${stateLabel}\n\n\`\`\`text\n${blocks.map((b) => b.join('\n')).join('\n')}\n\`\`\``);
       } else {
-        const ops = diffSeq(baseSignatures, signatures, baseLines, lines);
+        const ops = diffSeq(baseSignatures, signatures, baseBlocks, blocks);
         const changed = ops.filter((o) => o.op !== ' ').length;
         if (changed > (baseSignatures.length + signatures.length) * 0.6) {
           // Mostly different screen — a diff would be noise; emit it in full.
-          sections.push(`## State: ${stateLabel} (full — differs too much from base)\n\n\`\`\`text\n${lines.join('\n')}\n\`\`\``);
+          sections.push(`## State: ${stateLabel} (full — differs too much from base)\n\n\`\`\`text\n${blocks.map((b) => b.join('\n')).join('\n')}\n\`\`\``);
         } else {
           sections.push(
             `## State: ${stateLabel} (ordered diff vs ${baseLabel})\n\n` +
@@ -604,48 +696,12 @@ async function main() {
 
     const screenSlug = slug(head.title);
     const file = `${head.num}-${screenSlug}.md`;
-    const headerLines = [
-      `# ${head.num} — ${head.title} — DOM spec`,
-      '',
-      'Auto-generated by `tool/ui_kit_shots/export_specs.mjs` from the rendered UI kit. Do not',
-      'edit by hand; re-run the exporter after any `../index.html` change (the freshness check',
-      'in `tool/verify/run.mjs` fails when this is stale).',
-      '',
-      'Reading guide: each line is one visible element —',
-      '`- [item[i]] name "own text" mx:<Mx> abs:[x,y WxH] rel:[x,y WxH] <layout> <flex-child> repeat:xN(unit=P) pad:t/r/b/l margin:t/r/b/l minw/maxw/minh/maxh pos:… layout_hint:… z:N scrollh:N transform:… bg:<color> font:<size/weight[/line-height]> color:<color> text:<align> tracking:N r:<radius> border:<w>px <color> (or border-t/r/b/l for a single-side divider) shadow:<offY>/<blur>`.',
-      'Indentation = DOM containment (layout/grouping containers are kept, not flattened).',
-      '`abs:[…]` is frame-relative (cross-check with the PNG); `rel:[…]` is the box offset+size',
-      'INSIDE its parent — read spacing from rel, not abs, so the layout stays relative.',
-      '`<layout>` on a container is its child arrangement: `flex:row|col gap:N justify:… align:…`',
-      'or `grid cols:N` — map to a Flutter Row/Column/Wrap/GridView, not absolute coords.',
-      '`<flex-child>` is a flex item constraint: `grow:N shrink:N basis:N self:…` plus',
-      '`layout_hint:expanded` (→ Expanded) / `layout_hint:flexible` (→ Flexible).',
-      '`pad`/`margin` are 4-edge (collapsed: `N` all-equal, `V/H`, or `t/r/b/l`); `minw/maxw/minh/maxh`',
-      'are explicit size constraints. `pos:` is non-static positioning; `layout_hint:scroll` =',
-      'scroll container, `layout_hint:pinned` = sticky/fixed (bottom bars, sheets, FABs), `clip` =',
-      'overflow hidden, `z:N` = stacking — use these to decide Stack/Positioned/bottomSheet vs flow.',
-      '`repeat:xN(unit=P)` marks a list of N items of P elements each; `item[i]` tags each unit',
-      'start — build it as a list/builder, not N copies (a +N suffix means a trailing partial unit).',
-      '`scrollh:N` is the scroll content height (vs the viewport `WxH`); `transform:…`,',
-      '`tracking:N` (letter-spacing px), `text:<align>` are emitted only when set.',
-      '`shadow:<offY>/<blur>` is the box-shadow → map to an elevation. Coordinates are px on the',
-      '390x780 phone frame (light theme measured; dark remaps the same `--memox-*` tokens). A',
-      '`<color>` is a `--memox-*` token name; `token@NN` / `#rrggbb@NN` = that color at NN% opacity',
-      '(overlay/tint, not a hardcoded color). Token names map to Flutter symbols via',
-      '`docs/design/design-token-mapping.md`; a bare `#rrggbb` means no token matched — treat as a',
-      'gap, not a license to hardcode. Non-base states are an ordered diff (`+` added / `-` removed',
-      'in document order with abs+rel bbox kept, `...` = unchanged run). Every quoted "…" string is',
-      'MOCK COPY — the kit carries NO l10n keys; never copy it into the app, source real strings from',
-      'ARB (`docs/design/mock-design-index.md`). Numbers/counts are illustrative, not the system',
-      'contract. `mx:<Mx>` is the suggested MemoX shared component (grounded in',
-      '`docs/design/component-visual-contract.md`); `mx:?` is an interactive control with no',
-      'confident mapping (resolve via that contract). When no `mx:` is present, `name` is just the',
-      'raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mappings stay',
-      'deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text',
-      'has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).',
-      '',
-    ];
-    writeFileSync(join(outDir, file), headerLines.join('\n') + sections.join('\n\n') + '\n');
+    const fileContent = renderTemplate(specFileTemplate, {
+      screen_num: head.num,
+      screen_title: head.title,
+      sections: sections.join('\n\n'),
+    });
+    writeFileSync(join(outDir, file), normalizeFinalNewline(fileContent));
     manifest.push({ num: head.num, title: head.title, file, states: total });
   }
 
@@ -667,7 +723,7 @@ async function main() {
     `Total: ${manifest.length} screens · ${manifest.reduce((n, m) => n + m.states, 0)} states.`,
     '',
   ];
-  writeFileSync(join(outDir, 'INDEX.md'), idx.join('\n'));
+  writeFileSync(join(outDir, 'INDEX.md'), normalizeFinalNewline(idx.join('\n')));
   writeFileSync(join(outDir, '.source-hash'), sourceHash + '\n');
   console.log(`done: ${manifest.length} spec files -> ${outDir}`);
   console.log(`source hash: ${sourceHash}`);

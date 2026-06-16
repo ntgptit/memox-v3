@@ -57,15 +57,20 @@ thắng truy hồi xác suất về cả độ tươi lẫn độ chính xác.
 | | |
 | --- | --- |
 | **Mục đích** | Biến UI kit (1 file HTML/JSX ~10.5k dòng, agent không tiêu thụ nổi) thành 2 artifact tiêu thụ được: ảnh PNG cho agent có vision, DOM spec text cho agent không có vision. |
-| **Cách hoạt động** | Mở `index.html` bằng Chrome headless (puppeteer-core). Kit render mỗi màn 1 state sau một *stepper* và lazy-render theo viewport → script scroll tới từng row, bấm stepper qua **từng state**, mỗi state chụp riêng frame light + dark (`export_shots`), đồng thời walk DOM đã render để đo bounding box + computed style và resolve màu ngược về tên token `--memox-*` (`export_specs`). State sau state đầu xuất dạng **delta** (added/removed so với base) cho gọn. |
+| **Cách hoạt động** | Mở `index.html` bằng Chrome headless (puppeteer-core). Kit render mỗi màn 1 state sau một *stepper* và lazy-render theo viewport → script scroll tới từng row, bấm stepper qua **từng state**, mỗi state chụp riêng frame light + dark (`export_shots`), đồng thời walk DOM đã render để đo bounding box + computed style và resolve màu ngược về tên token `--memox-*` (`export_specs`). Spec được ghép từ template file riêng: `spec-file.template.md` cho khung file và `spec-node.template.md` cho từng node block. State sau state đầu xuất dạng **delta** (added/removed so với base) cho gọn. |
 | **Cách chạy** | `cd tool/ui_kit_shots` → `npm install` (lần đầu) → `npm run export:all` (hoặc `export` = chỉ ảnh, `export:specs` = chỉ spec). Cần Chrome + mạng (kit load React/Babel từ CDN). |
 | **Khi nào chạy lại** | Sau BẤT KỲ thay đổi nào của `index.html`. |
 | **Output** | `docs/system-design/MemoX Design System/ui_kits/mobile/shots/` — 270 PNG + `INDEX.md` (manifest screen→state→file). Cùng cấp: `specs/` — 23 file MD + `INDEX.md`. |
 
-Ví dụ một dòng trong spec (chính xác đến từng px, màu theo tên token):
+Ví dụ một block trong spec (chính xác đến từng px, màu theo tên token):
 
 ```text
-- pill-btn "Start study · 23 due" [37,248 332x40] bg:seed-indigo font:14/600 color:on-primary r:12
+- node: pill-btn
+  text: Start study · 23 due
+  box:
+    abs: [37,248 332x40]
+    rel: [37,248 332x40]
+  style: bg:seed-indigo font:14/600 color:on-primary r:12
 ```
 
 ### 3.2 `tool/doc_guard/` — Lint docs/process + sinh wiki
