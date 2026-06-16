@@ -51,7 +51,7 @@ class FolderDetailToolbar extends _$FolderDetailToolbar {
 }
 
 /// Streams a folder's detail, reacting to its toolbar. `keepAlive` (deliberate
-/// lifecycle, per `memox.state_management.query_provider_keep_alive`) so popping back to
+/// lifecycle, per `memox.state_management.query_provider_keep_alive_review`) so popping back to
 /// a parent folder does not refetch-flicker. Unwraps the [Result]: a [Failure]
 /// (e.g. NotFound) surfaces as `AsyncError` for the screen's error state.
 @Riverpod(keepAlive: true)

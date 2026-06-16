@@ -52,7 +52,7 @@ class LibraryToolbar extends _$LibraryToolbar {
 /// (rendered by the screen's error section); success emits the model.
 ///
 /// `keepAlive` (deliberate lifecycle) so re-entering the Library tab does not
-/// refetch-flicker (`memox.state_management.query_provider_keep_alive`).
+/// refetch-flicker (`memox.state_management.query_provider_keep_alive_review`).
 @Riverpod(keepAlive: true)
 Stream<LibraryOverviewReadModel> libraryOverviewQuery(Ref ref) {
   final LibraryToolbarState toolbar = ref.watch(libraryToolbarProvider);
