@@ -46,49 +46,49 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - div abs:[62,67 286x18] rel:[54,15 286x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Guess" abs:[62,67 56x18] rel:[0,0 56x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:1.2 r:999
-      - div abs:[126,74 222x4] rel:[64,7 222x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
-        - div abs:[126,74 56x4] rel:[0,0 56x4] bg:seed-indigo
-    - div "5 / 20" abs:[358,69 32x15] rel:[350,17 32x15] font:12/600 color:on-surface-variant
-  - hide-scroll abs:[8,100 390x643] rel:[0,92 390x643] flex:col grow:1 basis:0 layout_hint:expanded layout_hint:scroll clip scrollh:732
-    - div abs:[8,100 390x732] rel:[0,0 390x732] flex:col gap:14 pad:8/14/0/14
-      - card abs:[22,108 362x248] rel:[14,8 362x248] mx:MxCard flex:col gap:10 justify:center shrink:0 pad:34/14/32/14 minh:180 bg:on-primary r:12 border:1px seed-indigo@14
-        - ov "What is this?" abs:[37,203 332x13] rel:[15,95 332x13] font:11/700 color:on-surface-variant text:center tracking:1.2
-        - div "도서관" abs:[37,226 332x37] rel:[15,118 332x37] font:32/700/37 color:font-headline text:center tracking:-0.5
-      - div abs:[22,370 362x462] rel:[14,270 362x462] flex:col gap:8 shrink:0 repeat:x5(unit=1)
-        - item[1] div abs:[22,370 362x86] rel:[0,0 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
-          - span "A" abs:[37,398 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
-          - div abs:[79,404 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "kitchen" abs:[79,404 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant tracking:-0.1
-        - item[2] div abs:[22,464 362x86] rel:[0,94 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:mastery@14 r:12 border:1px mastery@40
-          - span "B" abs:[37,492 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:mastery r:999 border:1px mastery op:0.85
-          - div abs:[79,480 260x54] rel:[57,16 260x54] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "library" abs:[79,480 260x19] rel:[0,0 260x19] font:15/700/19 color:mastery tracking:-0.1
-            - div "public building or room with a collection of books for reading or borrowing" abs:[79,501 260x34] rel:[0,21 260x34] font:12/400/17 color:mastery op:0.72
-          - span abs:[351,498 18x18] rel:[329,34 18x18] flex:row
-            - icon:check abs:[351,498 18x18] rel:[0,0 18x18] clip
-        - item[3] div abs:[22,558 362x86] rel:[0,188 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:error@10 r:12 border:1px error@35
-          - span "C" abs:[37,586 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:error r:999 border:1px error op:0.85
-          - div abs:[79,582 260x38] rel:[57,24 260x38] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "school" abs:[79,582 260x19] rel:[0,0 260x19] font:15/700/19 color:error tracking:-0.1
-            - div "institution for educating children" abs:[79,603 260x17] rel:[0,21 260x17] font:12/400/17 color:error op:0.72
-          - span abs:[351,592 18x18] rel:[329,34 18x18] flex:row
-            - icon:x abs:[351,592 18x18] rel:[0,0 18x18] clip
-        - item[4] div abs:[22,652 362x86] rel:[0,282 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
-          - span "D" abs:[37,680 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
-          - div abs:[79,686 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "office" abs:[79,686 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant tracking:-0.1
-        - item[5] div abs:[22,746 362x86] rel:[0,376 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
-          - span "E" abs:[37,774 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:11/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
-          - div abs:[79,780 290x19] rel:[57,34 290x19] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
-            - div "classroom" abs:[79,780 290x19] rel:[0,0 290x19] font:15/700/19 color:on-surface-variant tracking:-0.1
-  - div abs:[8,743 390x45] rel:[0,735 390x45] flex:col gap:6 shrink:0 pad:10/14/14/14
-    - div "Next card in 0.8s" abs:[22,753 362x12] rel:[14,10 362x12] font:10/600 color:on-surface-variant text:center tracking:1.2
-    - div abs:[22,771 362x3] rel:[14,28 362x3] clip bg:surface-container r:999
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - div abs:[62,70 286x21] rel:[54,18 286x21] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
+      - span "Guess" abs:[62,70 63x21] rel:[0,0 63x21] pad:3/8 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:1.2 r:999
+      - div abs:[133,78 215x4] rel:[71,9 215x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
+        - div abs:[133,78 54x4] rel:[0,0 54x4] bg:seed-indigo
+    - div "5 / 20" abs:[358,73 32x15] rel:[350,21 32x15] font:12/600 color:on-surface-variant
+  - hide-scroll abs:[8,108 390x632] rel:[0,100 390x632] flex:col grow:1 basis:0 layout_hint:expanded layout_hint:scroll clip scrollh:730
+    - div abs:[8,108 390x730] rel:[0,0 390x730] flex:col gap:14 pad:8/14/0/14
+      - card abs:[22,116 362x246] rel:[14,8 362x246] mx:MxCard flex:col gap:10 justify:center shrink:0 pad:34/14/32/14 minh:180 bg:on-primary r:20 shadow:1/2
+        - ov "What is this?" abs:[36,210 334x13] rel:[14,94 334x13] font:10.5/600 color:on-surface-variant text:center tracking:0.6 op:0.85
+        - div "도서관" abs:[36,233 334x37] rel:[14,117 334x37] font:32/700/37 color:font-headline text:center tracking:-0.5
+      - div abs:[22,376 362x462] rel:[14,268 362x462] flex:col gap:8 shrink:0 repeat:x5(unit=1)
+        - item[1] div abs:[22,376 362x86] rel:[0,0 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
+          - span "A" abs:[37,404 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:12/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
+          - div abs:[79,409 290x20] rel:[57,33 290x20] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "kitchen" abs:[79,409 290x20] rel:[0,0 290x20] font:16/700/20 color:on-surface-variant tracking:-0.1
+        - item[2] div abs:[22,470 362x86] rel:[0,94 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:mastery@14 r:12 border:1px mastery@40
+          - span "B" abs:[37,498 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:12/700 color:mastery r:999 border:1px mastery op:0.85
+          - div abs:[79,485 260x56] rel:[57,15 260x56] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "library" abs:[79,485 260x20] rel:[0,0 260x20] font:16/700/20 color:mastery tracking:-0.1
+            - div "public building or room with a collection of books for reading or borrowing" abs:[79,507 260x34] rel:[0,22 260x34] font:12/400/17 color:mastery op:0.72
+          - span abs:[351,504 18x18] rel:[329,34 18x18] flex:row
+            - icon:check abs:[351,504 18x18] rel:[0,0 18x18] clip
+        - item[3] div abs:[22,564 362x86] rel:[0,188 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:error@10 r:12 border:1px error@35
+          - span "C" abs:[37,592 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:12/700 color:error r:999 border:1px error op:0.85
+          - div abs:[79,588 260x39] rel:[57,24 260x39] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "school" abs:[79,588 260x20] rel:[0,0 260x20] font:16/700/20 color:error tracking:-0.1
+            - div "institution for educating children" abs:[79,610 260x17] rel:[0,22 260x17] font:12/400/17 color:error op:0.72
+          - span abs:[351,598 18x18] rel:[329,34 18x18] flex:row
+            - icon:x abs:[351,598 18x18] rel:[0,0 18x18] clip
+        - item[4] div abs:[22,658 362x86] rel:[0,282 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
+          - span "D" abs:[37,686 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:12/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
+          - div abs:[79,691 290x20] rel:[57,33 290x20] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "office" abs:[79,691 290x20] rel:[0,0 290x20] font:16/700/20 color:on-surface-variant tracking:-0.1
+        - item[5] div abs:[22,752 362x86] rel:[0,376 362x86] flex:row gap:12 align:center pad:12/14 minh:60 bg:on-primary r:12 border:1px seed-indigo@14 op:0.36
+          - span "E" abs:[37,780 30x30] rel:[15,28 30x30] flex:row justify:center align:center shrink:0 font:12/700 color:on-surface-variant r:999 border:1px on-surface-variant op:0.85
+          - div abs:[79,785 290x20] rel:[57,33 290x20] flex:col gap:2 grow:1 basis:0 layout_hint:expanded
+            - div "classroom" abs:[79,785 290x20] rel:[0,0 290x20] font:16/700/20 color:on-surface-variant tracking:-0.1
+  - div abs:[8,740 390x48] rel:[0,732 390x48] flex:col gap:6 shrink:0 pad:10/14/14/14
+    - div "Next card in 0.8s" abs:[22,750 362x15] rel:[14,10 362x15] font:12/600 color:on-surface-variant text:center tracking:1.2
+    - div abs:[22,771 362x3] rel:[14,31 362x3] clip bg:surface-container r:999
       - div abs:[22,771 167x3] rel:[0,0 167x3] bg:mastery
 ```

@@ -46,125 +46,125 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II" abs:[137,102 42x13] rel:[129,2 42x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll scrollh:714
-    - card abs:[22,123 362x139] rel:[14,0 362x139] mx:MxCard pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
-      - div abs:[37,138 332x57] rel:[15,15 332x57] flex:row gap:14 align:center margin:0/0/12/0
-        - svg abs:[37,138 56x56] rel:[0,0 56x56] clip
-        - div abs:[107,138 262x57] rel:[70,0 262x57] grow:1 basis:0 layout_hint:expanded
-          - ov "Folder mastery" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant tracking:1.2
-          - div "5 decks · 412 cards" abs:[107,155 262x18] rel:[0,17 262x18] margin:4/0/0/0 font:14/400 color:font-headline
-          - div "23 due · 6 new" abs:[107,180 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
-            - span abs:[107,184 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
-      - pill-btn "Start study · 23 due" abs:[37,207 332x40] rel:[15,84 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-        - span abs:[126,219 16x16] rel:[89,12 16x16] flex:row
-          - icon:play abs:[126,219 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,274 362x42] rel:[14,151 362x42] flex:row justify:between align:center pad:2/4/10/4
-      - div abs:[26,284 55x13] rel:[4,11 55x13] flex:row gap:8 align:center
-        - ov "5 decks" abs:[26,284 55x13] rel:[0,0 55x13] font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[255,276 125x30] rel:[233,2 125x30] flex:row gap:4 align:center
-        - icon-btn abs:[255,276 30x30] rel:[0,0 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[260,281 20x20] rel:[5,5 20x20] flex:row
-            - icon:search abs:[260,281 20x20] rel:[0,0 20x20] clip
-        - pill-btn "Recent" abs:[289,277 91x28] rel:[34,1 91x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-          - span abs:[299,285 11x11] rel:[10,9 11x11] flex:row
-            - icon:arrow-down-up abs:[299,285 11x11] rel:[0,0 11x11] clip
-          - span abs:[359,285 11x11] rel:[70,9 11x11] flex:row
-            - icon:chevron-down abs:[359,285 11x11] rel:[0,0 11x11] clip
-    - card abs:[22,316 362x77] rel:[14,193 362x77] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,336 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-        - span abs:[47,346 17x17] rel:[10,10 17x17] flex:row
-          - icon:layers abs:[47,346 17x17] rel:[0,0 17x17] clip
-      - div abs:[89,329 250x51] rel:[67,13 250x51]
-        - div abs:[89,329 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-          - div "Vocab — chapter 1" abs:[89,329 123x18] rel:[0,0 123x18] clip font:14/700 color:font-headline tracking:-0.1
-          - span "8 due" abs:[298,331 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-        - div abs:[89,355 116x13] rel:[0,26 116x13] flex:row gap:6 align:center margin:2/0/0/0
-          - span "62 cards" abs:[89,355 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-          - span "·" abs:[140,355 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-          - span "last 2h ago" abs:[149,355 56x13] rel:[60,0 56x13] font:11/400 color:on-surface-variant
-        - div abs:[89,376 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-          - div abs:[89,376 210x4] rel:[0,0 210x4] bg:mastery
-      - span abs:[351,345 18x18] rel:[329,30 18x18] flex:row
-        - icon:chevron-right abs:[351,345 18x18] rel:[0,0 18x18] clip
-    - card abs:[22,401 362x77] rel:[14,278 362x77] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,421 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-        - span abs:[47,431 17x17] rel:[10,10 17x17] flex:row
-          - icon:layers abs:[47,431 17x17] rel:[0,0 17x17] clip
-      - div abs:[89,414 250x51] rel:[67,13 250x51]
-        - div abs:[89,414 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-          - div "Vocab — chapter 2" abs:[89,414 126x18] rel:[0,0 126x18] clip font:14/700 color:font-headline tracking:-0.1
-          - span "12 due" abs:[292,416 47x18] rel:[203,2 47x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-        - div abs:[89,440 132x13] rel:[0,26 132x13] flex:row gap:6 align:center margin:2/0/0/0
-          - span "58 cards" abs:[89,440 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-          - span "·" abs:[140,440 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-          - span "last yesterday" abs:[149,440 73x13] rel:[60,0 73x13] font:11/400 color:on-surface-variant
-        - div abs:[89,461 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-          - div abs:[89,461 130x4] rel:[0,0 130x4] bg:seed-indigo
-      - span abs:[351,430 18x18] rel:[329,30 18x18] flex:row
-        - icon:chevron-right abs:[351,430 18x18] rel:[0,0 18x18] clip
-    - card abs:[22,486 362x77] rel:[14,363 362x77] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,506 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:accent@10 r:10
-        - span abs:[47,516 17x17] rel:[10,10 17x17] flex:row
-          - icon:layers abs:[47,516 17x17] rel:[0,0 17x17] clip
-      - div abs:[89,499 250x51] rel:[67,13 250x51]
-        - div abs:[89,499 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-          - div "Idioms" abs:[89,499 46x18] rel:[0,0 46x18] clip font:14/700 color:font-headline tracking:-0.1
-          - span "3 due" abs:[298,501 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-        - div abs:[89,525 136x13] rel:[0,26 136x13] flex:row gap:6 align:center margin:2/0/0/0
-          - span "34 cards" abs:[89,525 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-          - span "·" abs:[140,525 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-          - span "last 3 days ago" abs:[149,525 77x13] rel:[60,0 77x13] font:11/400 color:on-surface-variant
-        - div abs:[89,546 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-          - div abs:[89,546 195x4] rel:[0,0 195x4] bg:mastery
-      - span abs:[351,515 18x18] rel:[329,30 18x18] flex:row
-        - icon:chevron-right abs:[351,515 18x18] rel:[0,0 18x18] clip
-    - card abs:[22,571 362x75] rel:[14,448 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,590 36x36] rel:[15,20 36x36] flex:row justify:center align:center bg:success@10 r:10
-        - span abs:[47,600 17x17] rel:[10,10 17x17] flex:row
-          - icon:layers abs:[47,600 17x17] rel:[0,0 17x17] clip
-      - div abs:[89,584 250x49] rel:[67,13 250x49]
-        - div abs:[89,584 250x18] rel:[0,0 250x18] flex:row gap:8 justify:between align:baseline
-          - div "Verb conjugation" abs:[89,584 115x18] rel:[0,0 115x18] clip font:14/700 color:font-headline tracking:-0.1
-        - div abs:[89,608 146x13] rel:[0,24 146x13] flex:row gap:6 align:center margin:2/0/0/0
-          - span "148 cards" abs:[89,608 51x13] rel:[0,0 51x13] font:11/400 color:on-surface-variant
-          - span "·" abs:[146,608 3x13] rel:[57,0 3x13] font:11/400 color:on-surface-variant op:0.5
-          - span "last a week ago" abs:[155,608 80x13] rel:[66,0 80x13] font:11/400 color:on-surface-variant
-        - div abs:[89,629 250x4] rel:[0,45 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-          - div abs:[89,629 235x4] rel:[0,0 235x4] bg:mastery
-      - span abs:[351,599 18x18] rel:[329,29 18x18] flex:row
-        - icon:chevron-right abs:[351,599 18x18] rel:[0,0 18x18] clip
-    - card abs:[22,654 362x75] rel:[14,531 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,673 36x36] rel:[15,20 36x36] flex:row justify:center align:center bg:warning@10 r:10
-        - span abs:[47,683 17x17] rel:[10,10 17x17] flex:row
-          - icon:layers abs:[47,683 17x17] rel:[0,0 17x17] clip
-      - div abs:[89,667 250x49] rel:[67,13 250x49]
-        - div abs:[89,667 250x18] rel:[0,0 250x18] flex:row gap:8 justify:between align:baseline
-          - div "Particles" abs:[89,667 58x18] rel:[0,0 58x18] clip font:14/700 color:font-headline tracking:-0.1
-        - div abs:[89,691 109x13] rel:[0,24 109x13] flex:row gap:6 align:center margin:2/0/0/0
-          - span "30 cards" abs:[89,691 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-          - span "·" abs:[140,691 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-          - span "last never" abs:[149,691 50x13] rel:[60,0 50x13] font:11/400 color:on-surface-variant
-        - div abs:[89,712 250x4] rel:[0,45 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-          - div abs:[89,712 103x4] rel:[0,0 103x4] bg:seed-indigo
-      - span abs:[351,682 18x18] rel:[329,29 18x18] flex:row
-        - icon:chevron-right abs:[351,682 18x18] rel:[0,0 18x18] clip
-  - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II" abs:[60,70 290x21] rel:[52,18 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II" abs:[143,110 46x15] rel:[135,2 46x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll scrollh:708
+    - card abs:[22,133 362x145] rel:[14,0 362x145] mx:MxCard pad:14 margin:0/0/12/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[36,147 334x57] rel:[14,14 334x57] flex:row gap:14 align:center margin:0/0/12/0
+        - svg abs:[36,147 56x56] rel:[0,0 56x56] clip
+        - div abs:[106,147 264x57] rel:[70,0 264x57] grow:1 basis:0 layout_hint:expanded
+          - ov "Folder mastery" abs:[106,147 264x13] rel:[0,0 264x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          - div "5 decks · 412 cards" abs:[106,164 264x18] rel:[0,17 264x18] margin:4/0/0/0 font:14/400 color:font-headline
+          - div "23 due · 6 new" abs:[106,189 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
+            - span abs:[106,193 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
+      - pill-btn "Start study · 23 due" abs:[36,216 334x48] rel:[14,83 334x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[126,232 16x16] rel:[90,16 16x16] flex:row
+          - icon:play abs:[126,232 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,290 362x42] rel:[14,157 362x42] flex:row justify:between align:center pad:2/4/10/4
+      - div abs:[26,300 48x13] rel:[4,11 48x13] flex:row gap:8 align:center
+        - ov "5 decks" abs:[26,300 48x13] rel:[0,0 48x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[252,292 128x30] rel:[230,2 128x30] flex:row gap:4 align:center
+        - icon-btn abs:[252,292 30x30] rel:[0,0 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[257,297 20x20] rel:[5,5 20x20] flex:row
+            - icon:search abs:[257,297 20x20] rel:[0,0 20x20] clip
+        - pill-btn "Recent" abs:[286,293 94x28] rel:[34,1 94x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
+          - span abs:[296,301 11x11] rel:[10,9 11x11] flex:row
+            - icon:arrow-down-up abs:[296,301 11x11] rel:[0,0 11x11] clip
+          - span abs:[359,301 11x11] rel:[73,9 11x11] flex:row
+            - icon:chevron-down abs:[359,301 11x11] rel:[0,0 11x11] clip
+    - card abs:[22,332 362x75] rel:[14,199 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,351 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:12
+        - span abs:[46,360 17x17] rel:[10,10 17x17] flex:row
+          - icon:layers abs:[46,360 17x17] rel:[0,0 17x17] clip
+      - div abs:[88,344 252x51] rel:[66,12 252x51]
+        - div abs:[88,344 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+          - div "Vocab — chapter 1" abs:[88,344 123x18] rel:[0,0 123x18] clip font:14/700 color:font-headline tracking:-0.1
+          - span "8 due" abs:[294,345 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+        - div abs:[88,368 125x15] rel:[0,25 125x15] flex:row gap:6 align:center margin:2/0/0/0
+          - span "62 cards" abs:[88,368 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+          - span "·" abs:[143,368 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+          - span "last 2h ago" abs:[152,368 61x15] rel:[64,0 61x15] font:12/400 color:on-surface-variant
+        - div abs:[88,390 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+          - div abs:[88,390 212x4] rel:[0,0 212x4] bg:mastery
+      - span abs:[352,360 18x18] rel:[330,28 18x18] flex:row
+        - icon:chevron-right abs:[352,360 18x18] rel:[0,0 18x18] clip
+    - card abs:[22,414 362x75] rel:[14,281 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,433 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:12
+        - span abs:[46,443 17x17] rel:[10,10 17x17] flex:row
+          - icon:layers abs:[46,443 17x17] rel:[0,0 17x17] clip
+      - div abs:[88,426 252x51] rel:[66,12 252x51]
+        - div abs:[88,426 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+          - div "Vocab — chapter 2" abs:[88,426 126x18] rel:[0,0 126x18] clip font:14/700 color:font-headline tracking:-0.1
+          - span "12 due" abs:[287,428 53x18] rel:[199,2 53x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+        - div abs:[88,451 143x15] rel:[0,25 143x15] flex:row gap:6 align:center margin:2/0/0/0
+          - span "58 cards" abs:[88,451 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+          - span "·" abs:[143,451 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+          - span "last yesterday" abs:[152,451 79x15] rel:[64,0 79x15] font:12/400 color:on-surface-variant
+        - div abs:[88,473 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+          - div abs:[88,473 131x4] rel:[0,0 131x4] bg:seed-indigo
+      - span abs:[352,442 18x18] rel:[330,28 18x18] flex:row
+        - icon:chevron-right abs:[352,442 18x18] rel:[0,0 18x18] clip
+    - card abs:[22,497 362x75] rel:[14,364 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,516 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:accent@10 r:12
+        - span abs:[46,525 17x17] rel:[10,10 17x17] flex:row
+          - icon:layers abs:[46,525 17x17] rel:[0,0 17x17] clip
+      - div abs:[88,509 252x51] rel:[66,12 252x51]
+        - div abs:[88,509 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+          - div "Idioms" abs:[88,509 46x18] rel:[0,0 46x18] clip font:14/700 color:font-headline tracking:-0.1
+          - span "3 due" abs:[294,510 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+        - div abs:[88,533 148x15] rel:[0,25 148x15] flex:row gap:6 align:center margin:2/0/0/0
+          - span "34 cards" abs:[88,533 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+          - span "·" abs:[143,533 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+          - span "last 3 days ago" abs:[152,533 84x15] rel:[64,0 84x15] font:12/400 color:on-surface-variant
+        - div abs:[88,555 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+          - div abs:[88,555 197x4] rel:[0,0 197x4] bg:mastery
+      - span abs:[352,525 18x18] rel:[330,28 18x18] flex:row
+        - icon:chevron-right abs:[352,525 18x18] rel:[0,0 18x18] clip
+    - card abs:[22,579 362x73] rel:[14,446 362x73] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,598 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:success@10 r:12
+        - span abs:[46,607 17x17] rel:[10,10 17x17] flex:row
+          - icon:layers abs:[46,607 17x17] rel:[0,0 17x17] clip
+      - div abs:[88,591 252x49] rel:[66,12 252x49]
+        - div abs:[88,591 252x18] rel:[0,0 252x18] flex:row gap:8 justify:between align:baseline
+          - div "Verb conjugation" abs:[88,591 115x18] rel:[0,0 115x18] clip font:14/700 color:font-headline tracking:-0.1
+        - div abs:[88,614 158x15] rel:[0,23 158x15] flex:row gap:6 align:center margin:2/0/0/0
+          - span "148 cards" abs:[88,614 56x15] rel:[0,0 56x15] font:12/400 color:on-surface-variant
+          - span "·" abs:[150,614 3x15] rel:[62,0 3x15] font:12/400 color:on-surface-variant op:0.5
+          - span "last a week ago" abs:[159,614 87x15] rel:[71,0 87x15] font:12/400 color:on-surface-variant
+        - div abs:[88,636 252x4] rel:[0,45 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+          - div abs:[88,636 237x4] rel:[0,0 237x4] bg:mastery
+      - span abs:[352,607 18x18] rel:[330,28 18x18] flex:row
+        - icon:chevron-right abs:[352,607 18x18] rel:[0,0 18x18] clip
+    - card abs:[22,660 362x73] rel:[14,527 362x73] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,679 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:warning@10 r:12
+        - span abs:[46,688 17x17] rel:[10,10 17x17] flex:row
+          - icon:layers abs:[46,688 17x17] rel:[0,0 17x17] clip
+      - div abs:[88,672 252x49] rel:[66,12 252x49]
+        - div abs:[88,672 252x18] rel:[0,0 252x18] flex:row gap:8 justify:between align:baseline
+          - div "Particles" abs:[88,672 58x18] rel:[0,0 58x18] clip font:14/700 color:font-headline tracking:-0.1
+        - div abs:[88,695 118x15] rel:[0,23 118x15] flex:row gap:6 align:center margin:2/0/0/0
+          - span "30 cards" abs:[88,695 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+          - span "·" abs:[143,695 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+          - span "last never" abs:[152,695 54x15] rel:[64,0 54x15] font:12/400 color:on-surface-variant
+        - div abs:[88,717 252x4] rel:[0,45 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+          - div abs:[88,717 103x4] rel:[0,0 103x4] bg:seed-indigo
+      - span abs:[352,688 18x18] rel:[330,28 18x18] flex:row
+        - icon:chevron-right abs:[352,688 18x18] rel:[0,0 18x18] clip
+  - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
     - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
       - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 ```
@@ -172,139 +172,139 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Subfolders (ordered diff vs Decks)
 
 ```diff
-  - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-- - title "TOPIK II" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-+ - title "Korean" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-  - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+  - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+- - title "TOPIK II" abs:[60,70 290x21] rel:[52,18 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
++ - title "Korean" abs:[60,70 290x21] rel:[52,18 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+  - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
   ...
-  - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-- - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
-- - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-- - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-- - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-- - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-+ - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center pad:2/14/8/14 layout_hint:scroll
-+ - span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-  - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-  - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-- - span "TOPIK II" abs:[137,102 42x13] rel:[129,2 42x13] font:11/700 color:font-headline tracking:0.1
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll scrollh:714
-- - card abs:[22,123 362x139] rel:[14,0 362x139] mx:MxCard pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
-- - div abs:[37,138 332x57] rel:[15,15 332x57] flex:row gap:14 align:center margin:0/0/12/0
-- - svg abs:[37,138 56x56] rel:[0,0 56x56] clip
-- - div abs:[107,138 262x57] rel:[70,0 262x57] grow:1 basis:0 layout_hint:expanded
-- - ov "Folder mastery" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "5 decks · 412 cards" abs:[107,155 262x18] rel:[0,17 262x18] margin:4/0/0/0 font:14/400 color:font-headline
-- - div "23 due · 6 new" abs:[107,180 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
-- - span abs:[107,184 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
-- - pill-btn "Start study · 23 due" abs:[37,207 332x40] rel:[15,84 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-- - span abs:[126,219 16x16] rel:[89,12 16x16] flex:row
-- - icon:play abs:[126,219 16x16] rel:[0,0 16x16] clip
-+ - span "Korean" abs:[79,102 39x13] rel:[71,2 39x13] font:11/700 color:font-headline tracking:0.1
-+ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll
-+ - card abs:[22,123 362x63] rel:[14,0 362x63] mx:MxCard grid cols:3 gap:4 align:baseline pad:12/14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - div abs:[37,136 111x37] rel:[15,13 111x37]
-+ - div "4" abs:[37,136 111x23] rel:[0,0 111x23] font:18/700 color:font-headline tracking:-0.4
-+ - div "subfolders" abs:[37,160 111x13] rel:[0,24 111x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - div abs:[148,136 111x37] rel:[126,13 111x37] pad:0/0/0/12 border-l:1px outline-variant
-+ - div "286" abs:[161,136 98x23] rel:[13,0 98x23] font:18/700 color:font-headline tracking:-0.4
-+ - div "cards" abs:[161,160 98x13] rel:[13,24 98x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - div abs:[258,136 111x37] rel:[236,13 111x37] pad:0/0/0/12 border-l:1px outline-variant
-+ - div "41" abs:[271,136 98x23] rel:[13,0 98x23] font:18/700 color:seed-indigo tracking:-0.4
-+ - div "due total" abs:[271,160 98x13] rel:[13,24 98x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-  - div abs:[22,198 362x42] rel:[14,75 362x42] flex:row justify:between align:center pad:2/4/10/4
-  - div abs:[26,209 97x13] rel:[4,11 97x13] flex:row gap:8 align:center
-- - ov "5 decks" abs:[26,284 55x13] rel:[0,0 55x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - ov "4 subfolders" abs:[26,209 97x13] rel:[0,0 97x13] font:11/700 color:on-surface-variant tracking:1.2
-  - div abs:[244,200 136x30] rel:[222,2 136x30] flex:row gap:4 align:center
+  - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+- - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
+- - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+- - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+- - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+- - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
++ - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center pad:2/14/8/14 layout_hint:scroll
++ - span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+  - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+  - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+- - span "TOPIK II" abs:[143,110 46x15] rel:[135,2 46x15] font:12/700 color:font-headline tracking:0.1
+- - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll scrollh:708
+- - card abs:[22,133 362x145] rel:[14,0 362x145] mx:MxCard pad:14 margin:0/0/12/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+- - div abs:[36,147 334x57] rel:[14,14 334x57] flex:row gap:14 align:center margin:0/0/12/0
+- - svg abs:[36,147 56x56] rel:[0,0 56x56] clip
+- - div abs:[106,147 264x57] rel:[70,0 264x57] grow:1 basis:0 layout_hint:expanded
+- - ov "Folder mastery" abs:[106,147 264x13] rel:[0,0 264x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "5 decks · 412 cards" abs:[106,164 264x18] rel:[0,17 264x18] margin:4/0/0/0 font:14/400 color:font-headline
+- - div "23 due · 6 new" abs:[106,189 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
+- - span abs:[106,193 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
+- - pill-btn "Start study · 23 due" abs:[36,216 334x48] rel:[14,83 334x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+- - span abs:[126,232 16x16] rel:[90,16 16x16] flex:row
+- - icon:play abs:[126,232 16x16] rel:[0,0 16x16] clip
++ - span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/700 color:font-headline tracking:0.1
++ - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll
++ - card abs:[22,133 362x63] rel:[14,0 362x63] mx:MxCard grid cols:3 gap:4 align:baseline pad:12/14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
++ - div abs:[36,145 111x39] rel:[14,12 111x39]
++ - div "4" abs:[36,145 111x23] rel:[0,0 111x23] font:18/700 color:font-headline tracking:-0.4
++ - div "subfolders" abs:[36,169 111x15] rel:[0,24 111x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - div abs:[147,145 111x39] rel:[125,12 111x39] pad:0/0/0/12 border-l:1px outline-variant
++ - div "286" abs:[160,145 98x23] rel:[13,0 98x23] font:18/700 color:font-headline tracking:-0.4
++ - div "cards" abs:[160,169 98x15] rel:[13,24 98x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - div abs:[259,145 111x39] rel:[237,12 111x39] pad:0/0/0/12 border-l:1px outline-variant
++ - div "41" abs:[272,145 98x23] rel:[13,0 98x23] font:18/700 color:seed-indigo tracking:-0.4
++ - div "due total" abs:[272,169 98x15] rel:[13,24 98x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+  - div abs:[22,208 362x42] rel:[14,75 362x42] flex:row justify:between align:center pad:2/4/10/4
+  - div abs:[26,219 86x13] rel:[4,11 86x13] flex:row gap:8 align:center
+- - ov "5 decks" abs:[26,300 48x13] rel:[0,0 48x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - ov "4 subfolders" abs:[26,219 86x13] rel:[0,0 86x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+  - div abs:[239,210 141x30] rel:[217,2 141x30] flex:row gap:4 align:center
   ...
-  - icon:search abs:[249,205 20x20] rel:[0,0 20x20] clip
-- - pill-btn "Recent" abs:[289,277 91x28] rel:[34,1 91x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-+ - pill-btn "Most due" abs:[278,201 102x28] rel:[34,1 102x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-  - span abs:[288,210 11x11] rel:[10,9 11x11] flex:row
+  - icon:search abs:[244,215 20x20] rel:[0,0 20x20] clip
+- - pill-btn "Recent" abs:[286,293 94x28] rel:[34,1 94x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
++ - pill-btn "Most due" abs:[273,211 107x28] rel:[34,1 107x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
+  - span abs:[283,220 11x11] rel:[10,9 11x11] flex:row
   ...
-  - span abs:[47,267 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,346 17x17] rel:[0,0 17x17] clip
-+ - icon:folder abs:[47,267 17x17] rel:[0,0 17x17] clip
-  - div abs:[89,253 250x45] rel:[67,13 250x45]
-  - div abs:[89,253 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Vocab — chapter 1" abs:[89,329 123x18] rel:[0,0 123x18] clip font:14/700 color:font-headline tracking:-0.1
-+ - div "TOPIK I" abs:[89,253 48x18] rel:[0,0 48x18] clip font:14/700 color:font-headline tracking:-0.1
-  - span "8 due" abs:[298,255 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[89,355 116x13] rel:[0,26 116x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "62 cards" abs:[89,355 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,355 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last 2h ago" abs:[149,355 56x13] rel:[60,0 56x13] font:11/400 color:on-surface-variant
-+ - div "3 decks · 124 cards" abs:[89,275 250x13] rel:[0,22 250x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-  - div abs:[89,294 250x4] rel:[0,41 250x4] margin:6/0/0/0 clip bg:surface-container r:999
+  - span abs:[46,277 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,360 17x17] rel:[0,0 17x17] clip
++ - icon:folder abs:[46,277 17x17] rel:[0,0 17x17] clip
+  - div abs:[88,262 252x47] rel:[66,12 252x47]
+  - div abs:[88,262 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Vocab — chapter 1" abs:[88,344 123x18] rel:[0,0 123x18] clip font:14/700 color:font-headline tracking:-0.1
++ - div "TOPIK I" abs:[88,262 48x18] rel:[0,0 48x18] clip font:14/700 color:font-headline tracking:-0.1
+  - span "8 due" abs:[294,264 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+- - div abs:[88,368 125x15] rel:[0,25 125x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "62 cards" abs:[88,368 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,368 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last 2h ago" abs:[152,368 61x15] rel:[64,0 61x15] font:12/400 color:on-surface-variant
++ - div "3 decks · 124 cards" abs:[88,284 252x15] rel:[0,22 252x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
+  - div abs:[88,305 252x4] rel:[0,43 252x4] margin:6/0/0/0 clip bg:surface-container r:999
   ...
-  - span abs:[47,346 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,431 17x17] rel:[0,0 17x17] clip
-+ - icon:folder abs:[47,346 17x17] rel:[0,0 17x17] clip
-  - div abs:[89,332 250x45] rel:[67,13 250x45]
-  - div abs:[89,332 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Vocab — chapter 2" abs:[89,414 126x18] rel:[0,0 126x18] clip font:14/700 color:font-headline tracking:-0.1
-- - span "12 due" abs:[292,416 47x18] rel:[203,2 47x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[89,440 132x13] rel:[0,26 132x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "58 cards" abs:[89,440 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,440 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last yesterday" abs:[149,440 73x13] rel:[60,0 73x13] font:11/400 color:on-surface-variant
-+ - div "TOPIK II" abs:[89,332 51x18] rel:[0,0 51x18] clip font:14/700 color:font-headline tracking:-0.1
-+ - span "23 due" abs:[292,334 47x18] rel:[203,2 47x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-+ - div "5 decks · 412 cards" abs:[89,354 250x13] rel:[0,22 250x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-  - div abs:[89,373 250x4] rel:[0,41 250x4] margin:6/0/0/0 clip bg:surface-container r:999
+  - span abs:[46,355 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,443 17x17] rel:[0,0 17x17] clip
++ - icon:folder abs:[46,355 17x17] rel:[0,0 17x17] clip
+  - div abs:[88,341 252x47] rel:[66,12 252x47]
+  - div abs:[88,341 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Vocab — chapter 2" abs:[88,426 126x18] rel:[0,0 126x18] clip font:14/700 color:font-headline tracking:-0.1
+- - span "12 due" abs:[287,428 53x18] rel:[199,2 53x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+- - div abs:[88,451 143x15] rel:[0,25 143x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "58 cards" abs:[88,451 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,451 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last yesterday" abs:[152,451 79x15] rel:[64,0 79x15] font:12/400 color:on-surface-variant
++ - div "TOPIK II" abs:[88,341 51x18] rel:[0,0 51x18] clip font:14/700 color:font-headline tracking:-0.1
++ - span "23 due" abs:[287,342 53x18] rel:[199,2 53x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
++ - div "5 decks · 412 cards" abs:[88,362 252x15] rel:[0,22 252x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
+  - div abs:[88,383 252x4] rel:[0,43 252x4] margin:6/0/0/0 clip bg:surface-container r:999
   ...
-  - card abs:[22,398 362x71] rel:[14,275 362x71] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[37,506 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:accent@10 r:10
-- - span abs:[47,516 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,516 17x17] rel:[0,0 17x17] clip
-- - div abs:[89,499 250x51] rel:[67,13 250x51]
-- - div abs:[89,499 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Idioms" abs:[89,499 46x18] rel:[0,0 46x18] clip font:14/700 color:font-headline tracking:-0.1
-- - span "3 due" abs:[298,501 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[89,525 136x13] rel:[0,26 136x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "34 cards" abs:[89,525 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,525 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last 3 days ago" abs:[149,525 77x13] rel:[60,0 77x13] font:11/400 color:on-surface-variant
-- - div abs:[89,546 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-- - div abs:[89,546 195x4] rel:[0,0 195x4] bg:mastery
-- - span abs:[351,515 18x18] rel:[329,30 18x18] flex:row
-- - icon:chevron-right abs:[351,515 18x18] rel:[0,0 18x18] clip
-- - card abs:[22,571 362x75] rel:[14,448 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-  - div abs:[37,416 36x36] rel:[15,18 36x36] flex:row justify:center align:center bg:success@10 r:10
-  - span abs:[47,425 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,600 17x17] rel:[0,0 17x17] clip
-+ - icon:folder abs:[47,425 17x17] rel:[0,0 17x17] clip
-  - div abs:[89,411 250x45] rel:[67,13 250x45]
-  - div abs:[89,411 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Verb conjugation" abs:[89,584 115x18] rel:[0,0 115x18] clip font:14/700 color:font-headline tracking:-0.1
-- - div abs:[89,608 146x13] rel:[0,24 146x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "148 cards" abs:[89,608 51x13] rel:[0,0 51x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[146,608 3x13] rel:[57,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last a week ago" abs:[155,608 80x13] rel:[66,0 80x13] font:11/400 color:on-surface-variant
-+ - div "Hangul" abs:[89,411 47x18] rel:[0,0 47x18] clip font:14/700 color:font-headline tracking:-0.1
-+ - span "4 due" abs:[298,413 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-+ - div "2 decks · 74 cards" abs:[89,433 250x13] rel:[0,22 250x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-  - div abs:[89,452 250x4] rel:[0,41 250x4] margin:6/0/0/0 clip bg:surface-container r:999
+  - card abs:[22,407 362x71] rel:[14,274 362x71] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[36,516 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:accent@10 r:12
+- - span abs:[46,525 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,525 17x17] rel:[0,0 17x17] clip
+- - div abs:[88,509 252x51] rel:[66,12 252x51]
+- - div abs:[88,509 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Idioms" abs:[88,509 46x18] rel:[0,0 46x18] clip font:14/700 color:font-headline tracking:-0.1
+- - span "3 due" abs:[294,510 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+- - div abs:[88,533 148x15] rel:[0,25 148x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "34 cards" abs:[88,533 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,533 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last 3 days ago" abs:[152,533 84x15] rel:[64,0 84x15] font:12/400 color:on-surface-variant
+- - div abs:[88,555 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+- - div abs:[88,555 197x4] rel:[0,0 197x4] bg:mastery
+- - span abs:[352,525 18x18] rel:[330,28 18x18] flex:row
+- - icon:chevron-right abs:[352,525 18x18] rel:[0,0 18x18] clip
+- - card abs:[22,579 362x73] rel:[14,446 362x73] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+  - div abs:[36,424 36x36] rel:[14,17 36x36] flex:row justify:center align:center bg:success@10 r:12
+  - span abs:[46,434 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,607 17x17] rel:[0,0 17x17] clip
++ - icon:folder abs:[46,434 17x17] rel:[0,0 17x17] clip
+  - div abs:[88,419 252x47] rel:[66,12 252x47]
+  - div abs:[88,419 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Verb conjugation" abs:[88,591 115x18] rel:[0,0 115x18] clip font:14/700 color:font-headline tracking:-0.1
+- - div abs:[88,614 158x15] rel:[0,23 158x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "148 cards" abs:[88,614 56x15] rel:[0,0 56x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[150,614 3x15] rel:[62,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last a week ago" abs:[159,614 87x15] rel:[71,0 87x15] font:12/400 color:on-surface-variant
++ - div "Hangul" abs:[88,419 47x18] rel:[0,0 47x18] clip font:14/700 color:font-headline tracking:-0.1
++ - span "4 due" abs:[294,421 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
++ - div "2 decks · 74 cards" abs:[88,441 252x15] rel:[0,22 252x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
+  - div abs:[88,462 252x4] rel:[0,43 252x4] margin:6/0/0/0 clip bg:surface-container r:999
   ...
-  - span abs:[47,504 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,683 17x17] rel:[0,0 17x17] clip
-+ - icon:folder abs:[47,504 17x17] rel:[0,0 17x17] clip
-  - div abs:[89,490 250x45] rel:[67,13 250x45]
-  - div abs:[89,490 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Particles" abs:[89,667 58x18] rel:[0,0 58x18] clip font:14/700 color:font-headline tracking:-0.1
-- - div abs:[89,691 109x13] rel:[0,24 109x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "30 cards" abs:[89,691 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,691 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last never" abs:[149,691 50x13] rel:[60,0 50x13] font:11/400 color:on-surface-variant
-+ - div "Grammar" abs:[89,490 63x18] rel:[0,0 63x18] clip font:14/700 color:font-headline tracking:-0.1
-+ - span "6 due" abs:[298,492 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-+ - div "4 decks · 138 cards" abs:[89,512 250x13] rel:[0,22 250x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-  - div abs:[89,531 250x4] rel:[0,41 250x4] margin:6/0/0/0 clip bg:surface-container r:999
+  - span abs:[46,512 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,688 17x17] rel:[0,0 17x17] clip
++ - icon:folder abs:[46,512 17x17] rel:[0,0 17x17] clip
+  - div abs:[88,498 252x47] rel:[66,12 252x47]
+  - div abs:[88,498 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Particles" abs:[88,672 58x18] rel:[0,0 58x18] clip font:14/700 color:font-headline tracking:-0.1
+- - div abs:[88,695 118x15] rel:[0,23 118x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "30 cards" abs:[88,695 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,695 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last never" abs:[152,695 54x15] rel:[64,0 54x15] font:12/400 color:on-surface-variant
++ - div "Grammar" abs:[88,498 63x18] rel:[0,0 63x18] clip font:14/700 color:font-headline tracking:-0.1
++ - span "6 due" abs:[294,499 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
++ - div "4 decks · 138 cards" abs:[88,519 252x15] rel:[0,22 252x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
+  - div abs:[88,540 252x4] rel:[0,43 252x4] margin:6/0/0/0 clip bg:surface-container r:999
   ...
-  - icon:chevron-right abs:[351,504 18x18] rel:[0,0 18x18] clip
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
-+ - button "New subfolder" abs:[223,712 159x52] rel:[215,704 159x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - icon:chevron-right abs:[352,512 18x18] rel:[0,0 18x18] clip
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
++ - button "New subfolder" abs:[223,712 159x52] rel:[215,704 159x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
   - span abs:[239,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 + - icon:folder-plus abs:[239,729 18x18] rel:[0,0 18x18] clip
@@ -320,147 +320,147 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II" abs:[137,102 42x13] rel:[129,2 42x13] font:11/700 color:font-headline tracking:0.1
-  - div abs:[22,129 362x371] rel:[14,121 362x371] margin:6/0/0/0
-    - div "Empty folder" abs:[22,129 130x25] rel:[0,0 130x25] flex:row gap:8 align:center pad:6/14/6/10 margin:0/0/12/0 bg:seed-indigo@8 font:11/700 color:seed-indigo tracking:0.3 r:999
-      - span abs:[32,136 12x12] rel:[10,7 12x12] flex:row
-        - icon:folder-plus abs:[32,136 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,166 362x207] rel:[0,37 362x207] mx:MxCard pad:22/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[173,189 60x60] rel:[151,23 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
-        - span abs:[190,206 26x26] rel:[17,17 26x26] flex:row
-          - icon:folder-open abs:[190,206 26x26] rel:[0,0 26x26] clip
-      - div "What goes in here?" abs:[41,263 324x22] rel:[19,97 324x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Add decks to study cards directly, or nest subfolders to keep things organized. Folders hold one or the other once you start." abs:[41,291 324x59] rel:[19,125 324x59] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-    - div abs:[22,387 362x44] rel:[0,258 362x44] flex:row gap:10 margin:0/0/14/0
-      - pill-btn abs:[22,387 176x44] rel:[0,0 176x44] mx:MxPrimaryButton flex:col gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/0 bg:seed-indigo r:13
-        - span abs:[101,389 18x18] rel:[79,2 18x18] flex:row
-          - icon:layers abs:[101,389 18x18] rel:[0,0 18x18] clip
-        - span "New deck" abs:[78,414 64x14] rel:[56,27 64x14] font:13/600/14 color:on-primary text:center tracking:0.1
-      - pill-btn abs:[208,387 176x44] rel:[186,0 176x44] mx:MxActionButton flex:col gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/0 bg:seed-indigo@10 r:13
-        - span abs:[287,389 18x18] rel:[79,2 18x18] flex:row
-          - icon:folder-plus abs:[287,389 18x18] rel:[0,0 18x18] clip
-        - span "New subfolder" abs:[249,414 93x14] rel:[41,27 93x14] font:13/600/14 color:seed-indigo text:center tracking:0.1
-    - div abs:[22,445 362x55] rel:[0,316 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:10 border:1px seed-indigo@14
-      - span abs:[35,456 13x13] rel:[13,11 13x13] flex:row
-        - icon:info abs:[35,456 13x13] rel:[0,0 13x13] clip
-      - span "Once this folder holds decks or subfolders, the other option moves into the overflow menu." abs:[56,456 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II" abs:[60,70 290x21] rel:[52,18 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II" abs:[143,110 46x15] rel:[135,2 46x15] font:12/700 color:font-headline tracking:0.1
+  - div abs:[22,139 362x377] rel:[14,131 362x377] margin:6/0/0/0
+    - div "Empty folder" abs:[22,139 138x27] rel:[0,0 138x27] flex:row gap:8 align:center pad:6/14/6/10 margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) font:12/700 color:seed-indigo tracking:0.3 r:999
+      - span abs:[32,147 12x12] rel:[10,8 12x12] flex:row
+        - icon:folder-plus abs:[32,147 12x12] rel:[0,0 12x12] clip
+    - card abs:[22,178 362x208] rel:[0,39 362x208] mx:MxCard pad:22/18 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[173,200 60x60] rel:[151,22 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+        - span abs:[190,217 26x26] rel:[17,17 26x26] flex:row
+          - icon:folder-open abs:[190,217 26x26] rel:[0,0 26x26] clip
+      - div "What goes in here?" abs:[40,274 326x21] rel:[18,96 326x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Add decks to study cards directly, or nest subfolders to keep things organized. Folders hold one or the other once you start." abs:[40,301 326x63] rel:[18,123 326x63] pad:0/6 font:14/400/21 color:on-surface-variant text:center
+    - div abs:[22,400 362x44] rel:[0,261 362x44] flex:row gap:10 margin:0/0/14/0
+      - pill-btn abs:[22,400 176x44] rel:[0,0 176x44] mx:MxPrimaryButton flex:col gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/0 bg:seed-indigo r:13
+        - span abs:[101,402 18x18] rel:[79,2 18x18] flex:row
+          - icon:layers abs:[101,402 18x18] rel:[0,0 18x18] clip
+        - span "New deck" abs:[76,427 69x15] rel:[54,27 69x15] font:14/600/15 color:on-primary text:center tracking:0.1
+      - pill-btn abs:[208,400 176x44] rel:[186,0 176x44] mx:MxActionButton flex:col gap:7 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:13
+        - span abs:[287,402 18x18] rel:[79,2 18x18] flex:row
+          - icon:folder-plus abs:[287,402 18x18] rel:[0,0 18x18] clip
+        - span "New subfolder" abs:[246,427 100x15] rel:[38,27 100x15] font:14/600/15 color:seed-indigo text:center tracking:0.1
+    - div abs:[22,458 362x58] rel:[0,319 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,469 13x13] rel:[13,11 13x13] flex:row
+        - icon:info abs:[35,469 13x13] rel:[0,0 13x13] clip
+      - span "Once this folder holds decks or subfolders, the other option moves into the overflow menu." abs:[56,469 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
 ```
 
 ## State: Search empty (ordered diff vs Decks)
 
 ```diff
-  - span "TOPIK II" abs:[137,102 42x13] rel:[129,2 42x13] font:11/700 color:font-headline tracking:0.1
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll scrollh:714
-+ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll
-  - card abs:[22,123 362x139] rel:[14,0 362x139] mx:MxCard pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
+  - span "TOPIK II" abs:[143,110 46x15] rel:[135,2 46x15] font:12/700 color:font-headline tracking:0.1
+- - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll scrollh:708
++ - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll
+  - card abs:[22,133 362x145] rel:[14,0 362x145] mx:MxCard pad:14 margin:0/0/12/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
   ...
-  - div abs:[26,284 85x13] rel:[4,11 85x13] flex:row gap:8 align:center
-- - ov "5 decks" abs:[26,284 55x13] rel:[0,0 55x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - ov "No matches" abs:[26,284 85x13] rel:[0,0 85x13] font:11/700 color:on-surface-variant tracking:1.2
-  - div abs:[255,276 125x30] rel:[233,2 125x30] flex:row gap:4 align:center
+  - div abs:[26,300 75x13] rel:[4,11 75x13] flex:row gap:8 align:center
+- - ov "5 decks" abs:[26,300 48x13] rel:[0,0 48x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - ov "No matches" abs:[26,300 75x13] rel:[0,0 75x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+  - div abs:[252,292 128x30] rel:[230,2 128x30] flex:row gap:4 align:center
   ...
-  - icon:chevron-down abs:[359,285 11x11] rel:[0,0 11x11] clip
-- - card abs:[22,316 362x77] rel:[14,193 362x77] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[37,336 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-- - span abs:[47,346 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,346 17x17] rel:[0,0 17x17] clip
-- - div abs:[89,329 250x51] rel:[67,13 250x51]
-- - div abs:[89,329 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Vocab — chapter 1" abs:[89,329 123x18] rel:[0,0 123x18] clip font:14/700 color:font-headline tracking:-0.1
-- - span "8 due" abs:[298,331 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[89,355 116x13] rel:[0,26 116x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "62 cards" abs:[89,355 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,355 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last 2h ago" abs:[149,355 56x13] rel:[60,0 56x13] font:11/400 color:on-surface-variant
-- - div abs:[89,376 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-- - div abs:[89,376 210x4] rel:[0,0 210x4] bg:mastery
-- - span abs:[351,345 18x18] rel:[329,30 18x18] flex:row
-- - icon:chevron-right abs:[351,345 18x18] rel:[0,0 18x18] clip
-- - card abs:[22,401 362x77] rel:[14,278 362x77] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[37,421 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-- - span abs:[47,431 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,431 17x17] rel:[0,0 17x17] clip
-- - div abs:[89,414 250x51] rel:[67,13 250x51]
-- - div abs:[89,414 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Vocab — chapter 2" abs:[89,414 126x18] rel:[0,0 126x18] clip font:14/700 color:font-headline tracking:-0.1
-- - span "12 due" abs:[292,416 47x18] rel:[203,2 47x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[89,440 132x13] rel:[0,26 132x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "58 cards" abs:[89,440 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,440 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last yesterday" abs:[149,440 73x13] rel:[60,0 73x13] font:11/400 color:on-surface-variant
-- - div abs:[89,461 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-- - div abs:[89,461 130x4] rel:[0,0 130x4] bg:seed-indigo
-- - span abs:[351,430 18x18] rel:[329,30 18x18] flex:row
-- - icon:chevron-right abs:[351,430 18x18] rel:[0,0 18x18] clip
-- - card abs:[22,486 362x77] rel:[14,363 362x77] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[37,506 36x36] rel:[15,21 36x36] flex:row justify:center align:center bg:accent@10 r:10
-- - span abs:[47,516 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,516 17x17] rel:[0,0 17x17] clip
-- - div abs:[89,499 250x51] rel:[67,13 250x51]
-- - div abs:[89,499 250x20] rel:[0,0 250x20] flex:row gap:8 justify:between align:baseline
-- - div "Idioms" abs:[89,499 46x18] rel:[0,0 46x18] clip font:14/700 color:font-headline tracking:-0.1
-- - span "3 due" abs:[298,501 41x18] rel:[209,2 41x18] flex:row align:center shrink:0 pad:0/7 bg:seed-indigo@10 font:10/700 color:seed-indigo r:999
-- - div abs:[89,525 136x13] rel:[0,26 136x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "34 cards" abs:[89,525 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,525 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last 3 days ago" abs:[149,525 77x13] rel:[60,0 77x13] font:11/400 color:on-surface-variant
-- - div abs:[89,546 250x4] rel:[0,47 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-- - div abs:[89,546 195x4] rel:[0,0 195x4] bg:mastery
-- - span abs:[351,515 18x18] rel:[329,30 18x18] flex:row
-- - icon:chevron-right abs:[351,515 18x18] rel:[0,0 18x18] clip
-- - card abs:[22,571 362x75] rel:[14,448 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[37,590 36x36] rel:[15,20 36x36] flex:row justify:center align:center bg:success@10 r:10
-- - span abs:[47,600 17x17] rel:[10,10 17x17] flex:row
-- - icon:layers abs:[47,600 17x17] rel:[0,0 17x17] clip
-- - div abs:[89,584 250x49] rel:[67,13 250x49]
-- - div abs:[89,584 250x18] rel:[0,0 250x18] flex:row gap:8 justify:between align:baseline
-- - div "Verb conjugation" abs:[89,584 115x18] rel:[0,0 115x18] clip font:14/700 color:font-headline tracking:-0.1
-- - div abs:[89,608 146x13] rel:[0,24 146x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "148 cards" abs:[89,608 51x13] rel:[0,0 51x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[146,608 3x13] rel:[57,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last a week ago" abs:[155,608 80x13] rel:[66,0 80x13] font:11/400 color:on-surface-variant
-- - div abs:[89,629 250x4] rel:[0,45 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-- - div abs:[89,629 235x4] rel:[0,0 235x4] bg:mastery
-- - span abs:[351,599 18x18] rel:[329,29 18x18] flex:row
-- - icon:chevron-right abs:[351,599 18x18] rel:[0,0 18x18] clip
-- - card abs:[22,654 362x75] rel:[14,531 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[37,673 36x36] rel:[15,20 36x36] flex:row justify:center align:center bg:warning@10 r:10
-+ - card abs:[22,316 362x180] rel:[14,193 362x180] mx:MxCard pad:32/22 bg:on-primary r:12 border:1px seed-indigo@14
-+ - div abs:[181,349 44x44] rel:[159,33 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
-  - span abs:[194,362 18x18] rel:[13,13 18x18] flex:row
-- - icon:layers abs:[47,683 17x17] rel:[0,0 17x17] clip
-- - div abs:[89,667 250x49] rel:[67,13 250x49]
-- - div abs:[89,667 250x18] rel:[0,0 250x18] flex:row gap:8 justify:between align:baseline
-- - div "Particles" abs:[89,667 58x18] rel:[0,0 58x18] clip font:14/700 color:font-headline tracking:-0.1
-- - div abs:[89,691 109x13] rel:[0,24 109x13] flex:row gap:6 align:center margin:2/0/0/0
-- - span "30 cards" abs:[89,691 45x13] rel:[0,0 45x13] font:11/400 color:on-surface-variant
-- - span "·" abs:[140,691 3x13] rel:[51,0 3x13] font:11/400 color:on-surface-variant op:0.5
-- - span "last never" abs:[149,691 50x13] rel:[60,0 50x13] font:11/400 color:on-surface-variant
-- - div abs:[89,712 250x4] rel:[0,45 250x4] margin:6/0/0/0 clip bg:surface-container r:999
-- - div abs:[89,712 103x4] rel:[0,0 103x4] bg:seed-indigo
-- - span abs:[351,682 18x18] rel:[329,29 18x18] flex:row
-- - icon:chevron-right abs:[351,682 18x18] rel:[0,0 18x18] clip
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - icon:chevron-down abs:[359,301 11x11] rel:[0,0 11x11] clip
+- - card abs:[22,332 362x75] rel:[14,199 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[36,351 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:12
+- - span abs:[46,360 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,360 17x17] rel:[0,0 17x17] clip
+- - div abs:[88,344 252x51] rel:[66,12 252x51]
+- - div abs:[88,344 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Vocab — chapter 1" abs:[88,344 123x18] rel:[0,0 123x18] clip font:14/700 color:font-headline tracking:-0.1
+- - span "8 due" abs:[294,345 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+- - div abs:[88,368 125x15] rel:[0,25 125x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "62 cards" abs:[88,368 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,368 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last 2h ago" abs:[152,368 61x15] rel:[64,0 61x15] font:12/400 color:on-surface-variant
+- - div abs:[88,390 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+- - div abs:[88,390 212x4] rel:[0,0 212x4] bg:mastery
+- - span abs:[352,360 18x18] rel:[330,28 18x18] flex:row
+- - icon:chevron-right abs:[352,360 18x18] rel:[0,0 18x18] clip
+- - card abs:[22,414 362x75] rel:[14,281 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[36,433 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:12
+- - span abs:[46,443 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,443 17x17] rel:[0,0 17x17] clip
+- - div abs:[88,426 252x51] rel:[66,12 252x51]
+- - div abs:[88,426 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Vocab — chapter 2" abs:[88,426 126x18] rel:[0,0 126x18] clip font:14/700 color:font-headline tracking:-0.1
+- - span "12 due" abs:[287,428 53x18] rel:[199,2 53x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+- - div abs:[88,451 143x15] rel:[0,25 143x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "58 cards" abs:[88,451 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,451 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last yesterday" abs:[152,451 79x15] rel:[64,0 79x15] font:12/400 color:on-surface-variant
+- - div abs:[88,473 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+- - div abs:[88,473 131x4] rel:[0,0 131x4] bg:seed-indigo
+- - span abs:[352,442 18x18] rel:[330,28 18x18] flex:row
+- - icon:chevron-right abs:[352,442 18x18] rel:[0,0 18x18] clip
+- - card abs:[22,497 362x75] rel:[14,364 362x75] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[36,516 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:accent@10 r:12
+- - span abs:[46,525 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,525 17x17] rel:[0,0 17x17] clip
+- - div abs:[88,509 252x51] rel:[66,12 252x51]
+- - div abs:[88,509 252x20] rel:[0,0 252x20] flex:row gap:8 justify:between align:baseline
+- - div "Idioms" abs:[88,509 46x18] rel:[0,0 46x18] clip font:14/700 color:font-headline tracking:-0.1
+- - span "3 due" abs:[294,510 46x18] rel:[206,2 46x18] flex:row align:center shrink:0 pad:0/7 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+- - div abs:[88,533 148x15] rel:[0,25 148x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "34 cards" abs:[88,533 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,533 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last 3 days ago" abs:[152,533 84x15] rel:[64,0 84x15] font:12/400 color:on-surface-variant
+- - div abs:[88,555 252x4] rel:[0,47 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+- - div abs:[88,555 197x4] rel:[0,0 197x4] bg:mastery
+- - span abs:[352,525 18x18] rel:[330,28 18x18] flex:row
+- - icon:chevron-right abs:[352,525 18x18] rel:[0,0 18x18] clip
+- - card abs:[22,579 362x73] rel:[14,446 362x73] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[36,598 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:success@10 r:12
+- - span abs:[46,607 17x17] rel:[10,10 17x17] flex:row
+- - icon:layers abs:[46,607 17x17] rel:[0,0 17x17] clip
+- - div abs:[88,591 252x49] rel:[66,12 252x49]
+- - div abs:[88,591 252x18] rel:[0,0 252x18] flex:row gap:8 justify:between align:baseline
+- - div "Verb conjugation" abs:[88,591 115x18] rel:[0,0 115x18] clip font:14/700 color:font-headline tracking:-0.1
+- - div abs:[88,614 158x15] rel:[0,23 158x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "148 cards" abs:[88,614 56x15] rel:[0,0 56x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[150,614 3x15] rel:[62,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last a week ago" abs:[159,614 87x15] rel:[71,0 87x15] font:12/400 color:on-surface-variant
+- - div abs:[88,636 252x4] rel:[0,45 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+- - div abs:[88,636 237x4] rel:[0,0 237x4] bg:mastery
+- - span abs:[352,607 18x18] rel:[330,28 18x18] flex:row
+- - icon:chevron-right abs:[352,607 18x18] rel:[0,0 18x18] clip
+- - card abs:[22,660 362x73] rel:[14,527 362x73] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[36,679 36x36] rel:[14,19 36x36] flex:row justify:center align:center bg:warning@10 r:12
++ - card abs:[22,332 362x178] rel:[14,199 362x178] mx:MxCard pad:32/22 bg:on-primary r:20 shadow:1/2
++ - div abs:[181,364 44x44] rel:[159,32 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
+  - span abs:[194,377 18x18] rel:[13,13 18x18] flex:row
+- - icon:layers abs:[46,688 17x17] rel:[0,0 17x17] clip
+- - div abs:[88,672 252x49] rel:[66,12 252x49]
+- - div abs:[88,672 252x18] rel:[0,0 252x18] flex:row gap:8 justify:between align:baseline
+- - div "Particles" abs:[88,672 58x18] rel:[0,0 58x18] clip font:14/700 color:font-headline tracking:-0.1
+- - div abs:[88,695 118x15] rel:[0,23 118x15] flex:row gap:6 align:center margin:2/0/0/0
+- - span "30 cards" abs:[88,695 49x15] rel:[0,0 49x15] font:12/400 color:on-surface-variant
+- - span "·" abs:[143,695 3x15] rel:[55,0 3x15] font:12/400 color:on-surface-variant op:0.5
+- - span "last never" abs:[152,695 54x15] rel:[64,0 54x15] font:12/400 color:on-surface-variant
+- - div abs:[88,717 252x4] rel:[0,45 252x4] margin:6/0/0/0 clip bg:surface-container r:999
+- - div abs:[88,717 103x4] rel:[0,0 103x4] bg:seed-indigo
+- - span abs:[352,688 18x18] rel:[330,28 18x18] flex:row
+- - icon:chevron-right abs:[352,688 18x18] rel:[0,0 18x18] clip
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
-+ - icon:search abs:[194,362 18x18] rel:[0,0 18x18] clip
-+ - div "No items match "chap 9"" abs:[45,405 316x18] rel:[23,89 316x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
-+ - div "Try a different spelling or clear the search to see everything." abs:[45,427 316x36] rel:[23,111 316x36] font:12/400/18 color:on-surface-variant text:center
++ - icon:search abs:[194,377 18x18] rel:[0,0 18x18] clip
++ - div "No items match "chap 9"" abs:[44,420 318x18] rel:[22,88 318x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
++ - div "Try a different spelling or clear the search to see everything." abs:[44,442 318x36] rel:[22,110 318x36] font:12/400/18 color:on-surface-variant text:center
 ```
 
 ## State: Loading (full — differs too much from base)
@@ -473,43 +473,43 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II" abs:[137,102 42x13] rel:[129,2 42x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll
-    - card abs:[22,123 362x62] rel:[14,0 362x62] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,136 36x36] rel:[15,13 36x36] bg:surface-container-high r:10 op:0.55
-      - div abs:[89,138 250x33] rel:[67,15 250x33]
-        - span abs:[89,144 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.55
-        - span abs:[89,167 250x4] rel:[0,29 250x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
-    - card abs:[22,193 362x62] rel:[14,70 362x62] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,206 36x36] rel:[15,13 36x36] bg:surface-container-high r:10 op:0.55
-      - div abs:[89,208 250x33] rel:[67,15 250x33]
-        - span abs:[89,214 130x11] rel:[0,6 130x11] bg:surface-container-high r:6 op:0.55
-        - span abs:[89,237 250x4] rel:[0,29 250x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
-    - card abs:[22,263 362x62] rel:[14,140 362x62] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,276 36x36] rel:[15,13 36x36] bg:surface-container-high r:10 op:0.55
-      - div abs:[89,278 250x33] rel:[67,15 250x33]
-        - span abs:[89,284 160x11] rel:[0,6 160x11] bg:surface-container-high r:6 op:0.55
-        - span abs:[89,307 250x4] rel:[0,29 250x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
-    - card abs:[22,333 362x62] rel:[14,210 362x62] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,346 36x36] rel:[15,13 36x36] bg:surface-container-high r:10 op:0.55
-      - div abs:[89,348 250x33] rel:[67,15 250x33]
-        - span abs:[89,354 190x11] rel:[0,6 190x11] bg:surface-container-high r:6 op:0.55
-        - span abs:[89,377 250x4] rel:[0,29 250x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II" abs:[60,70 290x21] rel:[52,18 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II" abs:[143,110 46x15] rel:[135,2 46x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/100/14 layout_hint:scroll
+    - card abs:[22,133 362x60] rel:[14,0 362x60] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,145 36x36] rel:[14,12 36x36] bg:surface-container-high r:12 op:0.55
+      - div abs:[88,147 252x33] rel:[66,14 252x33]
+        - span abs:[88,153 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.55
+        - span abs:[88,176 252x4] rel:[0,29 252x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
+    - card abs:[22,201 362x60] rel:[14,68 362x60] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,213 36x36] rel:[14,12 36x36] bg:surface-container-high r:12 op:0.55
+      - div abs:[88,215 252x33] rel:[66,14 252x33]
+        - span abs:[88,221 130x11] rel:[0,6 130x11] bg:surface-container-high r:6 op:0.55
+        - span abs:[88,244 252x4] rel:[0,29 252x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
+    - card abs:[22,269 362x60] rel:[14,136 362x60] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,281 36x36] rel:[14,12 36x36] bg:surface-container-high r:12 op:0.55
+      - div abs:[88,283 252x33] rel:[66,14 252x33]
+        - span abs:[88,289 160x11] rel:[0,6 160x11] bg:surface-container-high r:6 op:0.55
+        - span abs:[88,312 252x4] rel:[0,29 252x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
+    - card abs:[22,337 362x60] rel:[14,204 362x60] mx:MxCard grid cols:3 gap:12 align:center pad:12/14 margin:0/0/8/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,349 36x36] rel:[14,12 36x36] bg:surface-container-high r:12 op:0.55
+      - div abs:[88,351 252x33] rel:[66,14 252x33]
+        - span abs:[88,357 190x11] rel:[0,6 190x11] bg:surface-container-high r:6 op:0.55
+        - span abs:[88,380 252x4] rel:[0,29 252x4] margin:8/0/0/0 bg:surface-container-high r:999 op:0.35
 ```
 
 ## State: Error (full — differs too much from base)
@@ -522,136 +522,136 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II" abs:[60,66 290x21] rel:[52,14 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II" abs:[137,102 42x13] rel:[129,2 42x13] font:11/700 color:font-headline tracking:0.1
-  - card abs:[22,131 362x271] rel:[14,123 362x271] mx:MxCard pad:40/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
-    - div abs:[177,172 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
-      - span abs:[192,187 22x22] rel:[15,15 22x22] flex:row
-        - icon:cloud-off abs:[192,187 22x22] rel:[0,0 22x22] clip
-    - div "Couldn't open this folder" abs:[45,238 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
-    - div "Your data is safe on this device. Try again in a moment." abs:[45,265 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Retry" abs:[158,321 90x40] rel:[136,190 90x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-      - span abs:[176,334 14x14] rel:[18,13 14x14] flex:row
-        - icon:refresh-cw abs:[176,334 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II" abs:[60,70 290x21] rel:[52,18 290x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x2+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II" abs:[143,110 46x15] rel:[135,2 46x15] font:12/700 color:font-headline tracking:0.1
+  - card abs:[22,141 362x280] rel:[14,133 362x280] mx:MxCard pad:40/22 margin:8/0/0/0 bg:on-primary r:20 shadow:1/2
+    - div abs:[177,181 52x52] rel:[155,40 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+      - span abs:[192,196 22x22] rel:[15,15 22x22] flex:row
+        - icon:cloud-off abs:[192,196 22x22] rel:[0,0 22x22] clip
+    - div "Couldn't open this folder" abs:[44,247 318x21] rel:[22,106 318x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+    - div "Your data is safe on this device. Try again in a moment." abs:[44,274 318x43] rel:[22,133 318x43] margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+    - pill-btn "Retry" abs:[157,333 93x48] rel:[135,192 93x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+      - span abs:[175,350 14x14] rel:[18,17 14x14] flex:row
+        - icon:refresh-cw abs:[175,350 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Delete (ordered diff vs Decks)
 
 ```diff
-  - icon:chevron-right abs:[351,682 18x18] rel:[0,0 18x18] clip
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - icon:chevron-right abs:[352,688 18x18] rel:[0,0 18x18] clip
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-+ - div abs:[33,210 340x375] rel:[25,202 340x375] repeat:x4(unit=1) maxw:340 clip bg:surface-container-high r:18 shadow:16/40
-+ - item[1] div abs:[33,210 340x150] rel:[0,0 340x150] pad:18/18/4/18
-+ - div abs:[179,228 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@12 r:14
-+ - span abs:[192,241 22x22] rel:[13,13 22x22] flex:row
-+ - icon:folder-x abs:[192,241 22x22] rel:[0,0 22x22] clip
-+ - div "Delete this folder?" abs:[51,288 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-+ - div "and its 5 decks will be removed from your library." abs:[51,316 304x40] rel:[18,106 304x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-+ - strong "TOPIK II" abs:[67,318 49x16] rel:[16,2 49x16] font:13/700/20 color:font-headline text:center
-+ - div abs:[51,375 304x58] rel:[18,164 304x58] flex:row gap:8 align:center pad:10/12 bg:mastery@8 r:11 border:1px mastery@20
-+ - span abs:[64,396 15x15] rel:[13,22 15x15] flex:row
-+ - icon:shield-check abs:[64,396 15x15] rel:[0,0 15x15] clip
-+ - div "Cards in those decks — nothing is permanently lost." abs:[87,386 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
-+ - strong "move to "Unsorted"" abs:[207,387 116x15] rel:[120,1 116x15] font:12/700/18 color:font-headline
-+ - item[3] div abs:[33,437 340x81] rel:[0,226 340x81] pad:14/18/4/18
-+ - ov "Type to confirm" abs:[51,451 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
-+ - div abs:[51,470 304x44] rel:[18,33 304x44] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px error
-+ - span "TOPIK II" abs:[64,483 52x18] rel:[13,13 52x18] font:14/600 color:font-headline
-+ - span abs:[124,483 2x18] rel:[73,13 2x18] bg:error
-+ - item[4] div abs:[33,518 340x68] rel:[0,307 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,532 143x40] rel:[14,14 143x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Delete folder" abs:[198,532 161x40] rel:[165,14 161x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-+ - span abs:[227,545 14x14] rel:[29,13 14x14] flex:row
-+ - icon:trash-2 abs:[227,545 14x14] rel:[0,0 14x14] clip
++ - div abs:[33,205 340x385] rel:[25,197 340x385] repeat:x4(unit=1) maxw:340 clip bg:surface-container-high r:18 shadow:16/40
++ - item[1] div abs:[33,205 340x152] rel:[0,0 340x152] pad:18/18/4/18
++ - div abs:[179,223 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@12 r:14
++ - span abs:[192,236 22x22] rel:[13,13 22x22] flex:row
++ - icon:folder-x abs:[192,236 22x22] rel:[0,0 22x22] clip
++ - div "Delete this folder?" abs:[51,283 304x21] rel:[18,78 304x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
++ - div "and its 5 decks will be removed from your library." abs:[51,310 304x43] rel:[18,105 304x43] pad:0/6 font:14/400/22 color:on-surface-variant text:center
++ - strong "TOPIK II" abs:[74,311 52x18] rel:[23,1 52x18] font:14/700/22 color:font-headline text:center
++ - div abs:[51,372 304x58] rel:[18,166 304x58] flex:row gap:8 align:center pad:10/12 bg:mastery@8 r:12 border:1px mastery@20
++ - span abs:[64,393 15x15] rel:[13,22 15x15] flex:row
++ - icon:shield-check abs:[64,393 15x15] rel:[0,0 15x15] clip
++ - div "Cards in those decks — nothing is permanently lost." abs:[87,383 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
++ - strong "move to "Unsorted"" abs:[207,384 116x15] rel:[120,1 116x15] font:12/700/18 color:font-headline
++ - item[3] div abs:[33,434 340x81] rel:[0,228 340x81] pad:14/18/4/18
++ - ov "Type to confirm" abs:[51,448 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div abs:[51,467 304x44] rel:[18,33 304x44] flex:row gap:8 align:center pad:0/12 bg:on-primary r:12 border:1px error
++ - span "TOPIK II" abs:[64,480 52x18] rel:[13,13 52x18] font:14/600 color:font-headline
++ - span abs:[124,480 2x18] rel:[73,13 2x18] bg:error
++ - item[4] div abs:[33,515 340x76] rel:[0,309 340x76] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,529 142x48] rel:[14,14 142x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Delete folder" abs:[197,529 162x48] rel:[164,14 162x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - span abs:[223,546 14x14] rel:[26,17 14x14] flex:row
++ - icon:trash-2 abs:[223,546 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Move sheet (ordered diff vs Decks)
 
 ```diff
-  - icon:chevron-right abs:[351,682 18x18] rel:[0,0 18x18] clip
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - icon:chevron-right abs:[352,688 18x18] rel:[0,0 18x18] clip
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
-+ - div abs:[8,311 390x477] rel:[0,303 390x477] flex:col maxh:85 pos:absolute clip z:51 bg:surface-container-high r:20 shadow:-10/30
-+ - div abs:[8,311 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
-+ - span abs:[185,319 36x4] rel:[177,8 36x4] bg:outline-variant r:999
-+ - div abs:[8,327 390x59] rel:[0,16 390x59] pad:4/18/12/18
-+ - div "Move "TOPIK II" to…" abs:[26,331 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
-+ - div "Pick a parent folder. All decks and cards inside come along." abs:[26,356 354x18] rel:[18,29 354x18] font:12/400/18 color:on-surface-variant
-+ - div abs:[26,386 354x35] rel:[18,75 354x35] flex:row wrap gap:6 align:center repeat:x2(unit=2) pad:10/12 margin:0/18/10/18 bg:on-primary r:10
-+ - item[1] span abs:[38,398 12x12] rel:[12,12 12x12] flex:row
-+ - icon:folder abs:[38,398 12x12] rel:[0,0 12x12] clip
-+ - span "Library" abs:[56,396 39x15] rel:[30,10 39x15] font:12/400 color:on-surface-variant
-+ - item[2] span abs:[101,398 11x11] rel:[75,12 11x11] flex:row
-+ - icon:chevron-right abs:[101,398 11x11] rel:[0,0 11x11] clip
-+ - span "Korean" abs:[118,396 42x15] rel:[92,10 42x15] font:12/700 color:font-headline
-+ - hide-scroll abs:[8,431 390x290] rel:[0,120 390x290] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/8/10/8 layout_hint:scroll clip
-+ - item[1] button abs:[16,431 374x56] rel:[8,0 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,445 28x28] rel:[10,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-+ - span abs:[34,453 13x13] rel:[8,8 13x13] flex:row
-+ - icon:home abs:[34,453 13x13] rel:[0,0 13x13] clip
-+ - div abs:[68,443 286x32] rel:[52,12 286x32]
-+ - div "Library (root)" abs:[68,443 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "4 folders" abs:[68,462 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,452 14x14] rel:[350,21 14x14] flex:row
-+ - icon:chevron-right abs:[366,452 14x14] rel:[0,0 14x14] clip
-+ - item[2] button abs:[16,487 374x56] rel:[8,56 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10 op:0.45
-+ - div abs:[26,501 28x28] rel:[10,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-+ - span abs:[34,509 13x13] rel:[8,8 13x13] flex:row
-+ - icon:flag abs:[34,509 13x13] rel:[0,0 13x13] clip
-+ - div abs:[68,499 251x32] rel:[52,12 251x32]
-+ - div "Korean" abs:[68,499 251x18] rel:[0,0 251x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "4 subfolders · 286 cards" abs:[68,518 251x13] rel:[0,19 251x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span "Current" abs:[331,509 49x12] rel:[315,22 49x12] font:10/700 color:on-surface-variant tracking:0.3
-+ - item[3] button abs:[16,543 374x56] rel:[8,112 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,557 28x28] rel:[10,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-+ - span abs:[34,565 13x13] rel:[8,8 13x13] flex:row
-+ - icon:flag abs:[34,565 13x13] rel:[0,0 13x13] clip
-+ - div abs:[68,555 286x32] rel:[52,12 286x32]
-+ - div "Japanese" abs:[68,555 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "5 decks · 248 cards" abs:[68,574 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,564 14x14] rel:[350,21 14x14] flex:row
-+ - icon:chevron-right abs:[366,564 14x14] rel:[0,0 14x14] clip
-+ - item[4] button abs:[16,599 374x56] rel:[8,168 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,613 28x28] rel:[10,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-+ - span abs:[34,621 13x13] rel:[8,8 13x13] flex:row
-+ - icon:flag abs:[34,621 13x13] rel:[0,0 13x13] clip
-+ - div abs:[68,611 286x32] rel:[52,12 286x32]
-+ - div "Mandarin" abs:[68,611 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "3 decks · 180 cards" abs:[68,630 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,620 14x14] rel:[350,21 14x14] flex:row
-+ - icon:chevron-right abs:[366,620 14x14] rel:[0,0 14x14] clip
-+ - item[5] button abs:[16,655 374x56] rel:[8,224 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,669 28x28] rel:[10,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-+ - span abs:[34,677 13x13] rel:[8,8 13x13] flex:row
-+ - icon:archive abs:[34,677 13x13] rel:[0,0 13x13] clip
-+ - div abs:[68,667 286x32] rel:[52,12 286x32]
-+ - div "Archive" abs:[68,667 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "2 folders · hidden from Library" abs:[68,686 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,676 14x14] rel:[350,21 14x14] flex:row
-+ - icon:chevron-right abs:[366,676 14x14] rel:[0,0 14x14] clip
-+ - div abs:[8,721 390x67] rel:[0,410 390x67] flex:row gap:8 pad:10/14/16/14 border-t:1px seed-indigo@14
-+ - pill-btn "Cancel" abs:[22,732 160x40] rel:[14,11 160x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Move here" abs:[190,732 194x40] rel:[182,11 194x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-+ - span abs:[244,745 14x14] rel:[54,13 14x14] flex:row
-+ - icon:folder-tree abs:[244,745 14x14] rel:[0,0 14x14] clip
++ - div abs:[8,293 390x495] rel:[0,285 390x495] flex:col maxh:85 pos:absolute clip z:51 bg:surface-container-high r:20 shadow:-10/30
++ - div abs:[8,293 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
++ - span abs:[185,301 36x4] rel:[177,8 36x4] bg:outline-variant r:999
++ - div abs:[8,309 390x59] rel:[0,16 390x59] pad:4/18/12/18
++ - div "Move "TOPIK II" to…" abs:[26,313 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
++ - div "Pick a parent folder. All decks and cards inside come along." abs:[26,338 354x18] rel:[18,29 354x18] font:12/400/18 color:on-surface-variant
++ - div abs:[26,368 354x35] rel:[18,75 354x35] flex:row wrap gap:6 align:center repeat:x2(unit=2) pad:10/12 margin:0/18/10/18 bg:on-primary r:12
++ - item[1] span abs:[38,380 12x12] rel:[12,12 12x12] flex:row
++ - icon:folder abs:[38,380 12x12] rel:[0,0 12x12] clip
++ - span "Library" abs:[56,378 39x15] rel:[30,10 39x15] font:12/400 color:on-surface-variant
++ - item[2] span abs:[101,380 11x11] rel:[75,12 11x11] flex:row
++ - icon:chevron-right abs:[101,380 11x11] rel:[0,0 11x11] clip
++ - span "Korean" abs:[118,378 42x15] rel:[92,10 42x15] font:12/700 color:font-headline
++ - hide-scroll abs:[8,413 390x300] rel:[0,120 390x300] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/8/10/8 layout_hint:scroll clip
++ - item[1] button abs:[16,413 374x58] rel:[8,0 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,428 28x28] rel:[10,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
++ - span abs:[34,436 13x13] rel:[8,8 13x13] flex:row
++ - icon:home abs:[34,436 13x13] rel:[0,0 13x13] clip
++ - div abs:[68,425 286x34] rel:[52,12 286x34]
++ - div "Library (root)" abs:[68,425 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
++ - div "4 folders" abs:[68,444 286x15] rel:[0,19 286x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,435 14x14] rel:[350,22 14x14] flex:row
++ - icon:chevron-right abs:[366,435 14x14] rel:[0,0 14x14] clip
++ - item[2] button abs:[16,471 374x58] rel:[8,58 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12 op:0.45
++ - div abs:[26,486 28x28] rel:[10,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
++ - span abs:[34,494 13x13] rel:[8,8 13x13] flex:row
++ - icon:flag abs:[34,494 13x13] rel:[0,0 13x13] clip
++ - div abs:[68,483 242x34] rel:[52,12 242x34]
++ - div "Korean" abs:[68,483 242x18] rel:[0,0 242x18] font:14/600 color:font-headline tracking:-0.1
++ - div "4 subfolders · 286 cards" abs:[68,502 242x15] rel:[0,19 242x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span "Current" abs:[322,493 58x15] rel:[306,22 58x15] font:12/700 color:on-surface-variant tracking:0.3
++ - item[3] button abs:[16,529 374x58] rel:[8,116 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,544 28x28] rel:[10,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
++ - span abs:[34,552 13x13] rel:[8,8 13x13] flex:row
++ - icon:flag abs:[34,552 13x13] rel:[0,0 13x13] clip
++ - div abs:[68,541 286x34] rel:[52,12 286x34]
++ - div "Japanese" abs:[68,541 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
++ - div "5 decks · 248 cards" abs:[68,560 286x15] rel:[0,19 286x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,551 14x14] rel:[350,22 14x14] flex:row
++ - icon:chevron-right abs:[366,551 14x14] rel:[0,0 14x14] clip
++ - item[4] button abs:[16,587 374x58] rel:[8,174 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,602 28x28] rel:[10,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
++ - span abs:[34,610 13x13] rel:[8,8 13x13] flex:row
++ - icon:flag abs:[34,610 13x13] rel:[0,0 13x13] clip
++ - div abs:[68,599 286x34] rel:[52,12 286x34]
++ - div "Mandarin" abs:[68,599 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
++ - div "3 decks · 180 cards" abs:[68,618 286x15] rel:[0,19 286x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,609 14x14] rel:[350,22 14x14] flex:row
++ - icon:chevron-right abs:[366,609 14x14] rel:[0,0 14x14] clip
++ - item[5] button abs:[16,645 374x58] rel:[8,232 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,660 28x28] rel:[10,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
++ - span abs:[34,668 13x13] rel:[8,8 13x13] flex:row
++ - icon:archive abs:[34,668 13x13] rel:[0,0 13x13] clip
++ - div abs:[68,657 286x34] rel:[52,12 286x34]
++ - div "Archive" abs:[68,657 286x18] rel:[0,0 286x18] font:14/600 color:font-headline tracking:-0.1
++ - div "2 folders · hidden from Library" abs:[68,676 286x15] rel:[0,19 286x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,667 14x14] rel:[350,22 14x14] flex:row
++ - icon:chevron-right abs:[366,667 14x14] rel:[0,0 14x14] clip
++ - div abs:[8,713 390x75] rel:[0,420 390x75] flex:row gap:8 pad:10/14/16/14 border-t:1px seed-indigo@14
++ - pill-btn "Cancel" abs:[22,724 159x48] rel:[14,11 159x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Move here" abs:[189,724 195x48] rel:[181,11 195x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - span abs:[241,741 14x14] rel:[52,17 14x14] flex:row
++ - icon:folder-tree abs:[241,741 14x14] rel:[0,0 14x14] clip
 ```

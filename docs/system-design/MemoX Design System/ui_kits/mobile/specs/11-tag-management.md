@@ -46,137 +46,137 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:762
-    - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
-        - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
-      - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
-    - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
-          - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
-        - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
-          - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x628] rel:[14,100 362x628] mx:MxCard repeat:x11(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-      - item[1] div abs:[23,201 360x57] rel:[1,1 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,215 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,223 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,223 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,213 156x32] rel:[58,12 156x32]
-          - div "TOPIK II" abs:[81,213 156x18] rel:[0,0 156x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "142 cards" abs:[81,232 156x13] rel:[0,19 156x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - span "Most used" abs:[249,219 78x20] rel:[226,18 78x20] flex:row gap:4 align:center pad:0/7 bg:#d9891e@12 font:10/700 color:streak r:999
-          - span abs:[256,224 10x10] rel:[7,5 10x10] flex:row
-            - icon:flame abs:[256,224 10x10] rel:[0,0 10x10] clip
-        - icon-btn abs:[339,214 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,219 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,219 20x20] rel:[0,0 20x20] clip
-      - item[2] div abs:[23,258 360x57] rel:[1,58 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,272 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,280 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,280 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,270 234x32] rel:[58,12 234x32]
-          - div "noun" abs:[81,270 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "88 cards" abs:[81,289 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,271 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,276 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,276 20x20] rel:[0,0 20x20] clip
-      - item[3] div abs:[23,315 360x57] rel:[1,115 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,329 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,337 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,337 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,327 234x32] rel:[58,12 234x32]
-          - div "verb" abs:[81,327 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "71 cards" abs:[81,346 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,328 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,333 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,333 20x20] rel:[0,0 20x20] clip
-      - item[4] div abs:[23,372 360x57] rel:[1,172 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,386 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,394 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,394 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,384 234x32] rel:[58,12 234x32]
-          - div "people" abs:[81,384 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "46 cards" abs:[81,403 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,385 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,390 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,390 20x20] rel:[0,0 20x20] clip
-      - item[5] div abs:[23,429 360x57] rel:[1,229 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,443 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,451 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,451 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,441 234x32] rel:[58,12 234x32]
-          - div "food" abs:[81,441 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "34 cards" abs:[81,460 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,442 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,447 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,447 20x20] rel:[0,0 20x20] clip
-      - item[6] div abs:[23,486 360x57] rel:[1,286 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,500 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,508 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,508 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,498 234x32] rel:[58,12 234x32]
-          - div "adjective" abs:[81,498 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "28 cards" abs:[81,517 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,499 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,504 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,504 20x20] rel:[0,0 20x20] clip
-      - item[7] div abs:[23,543 360x57] rel:[1,343 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,557 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,565 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,565 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,555 234x32] rel:[58,12 234x32]
-          - div "business" abs:[81,555 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "22 cards" abs:[81,574 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,561 20x20] rel:[0,0 20x20] clip
-      - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,614 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,622 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,622 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,612 234x32] rel:[58,12 234x32]
-          - div "travel" abs:[81,612 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "18 cards" abs:[81,631 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,613 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,618 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,618 20x20] rel:[0,0 20x20] clip
-      - item[9] div abs:[23,657 360x57] rel:[1,457 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,671 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,679 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,679 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,669 234x32] rel:[58,12 234x32]
-          - div "idioms" abs:[81,669 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "11 cards" abs:[81,688 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,670 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,675 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,675 20x20] rel:[0,0 20x20] clip
-      - item[10] div abs:[23,714 360x57] rel:[1,514 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,728 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,736 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,736 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,726 234x32] rel:[58,12 234x32]
-          - div "numbers" abs:[81,726 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "6 cards" abs:[81,745 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,727 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,732 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,732 20x20] rel:[0,0 20x20] clip
-      - item[11] div abs:[23,771 360x56] rel:[1,571 360x56] grid cols:4 gap:12 align:center pad:12/14
-        - div abs:[37,785 28x28] rel:[14,14 28x28] flex:row justify:center align:center bg:seed-indigo@8 r:8
-          - span abs:[45,793 13x13] rel:[8,8 13x13] flex:row
-            - icon:tag abs:[45,793 13x13] rel:[0,0 13x13] clip
-        - div abs:[81,783 234x32] rel:[58,12 234x32]
-          - div "archive 2023" abs:[81,783 234x18] rel:[0,0 234x18] clip font:14/600 color:font-headline tracking:-0.1
-          - div "3 cards" abs:[81,802 234x13] rel:[0,19 234x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-        - icon-btn abs:[339,784 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-          - span abs:[344,789 20x20] rel:[5,5 20x20] flex:row
-            - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Manage tags" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded pad:0/20/20/20 layout_hint:scroll scrollh:788
+    - div abs:[28,108 350x46] rel:[20,0 350x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[43,123 16x16] rel:[15,15 16x16] flex:row
+        - icon:search abs:[43,123 16x16] rel:[0,0 16x16] clip
+      - span "Search tags" abs:[69,122 294x18] rel:[41,14 294x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
+    - div abs:[28,168 350x40] rel:[20,60 350x40] flex:row justify:between align:center pad:0/4/10/4
+      - ov "14 tags" abs:[32,177 44x13] rel:[4,9 44x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - pill-btn "Most used" abs:[251,168 123x30] rel:[223,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span abs:[264,177 12x12] rel:[13,9 12x12] flex:row
+          - icon:arrow-down-up abs:[264,177 12x12] rel:[0,0 12x12] clip
+        - span abs:[349,177 12x12] rel:[98,9 12x12] flex:row
+          - icon:chevron-down abs:[349,177 12x12] rel:[0,0 12x12] clip
+    - card abs:[28,208 350x648] rel:[20,100 350x648] mx:MxCard repeat:x11(unit=1) clip bg:on-primary r:20 shadow:1/2
+      - item[1] div abs:[28,208 350x59] rel:[0,0 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,223 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,231 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,231 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,220 136x34] rel:[58,12 136x34]
+          - div "TOPIK II" abs:[86,220 136x18] rel:[0,0 136x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "142 cards" abs:[86,239 136x15] rel:[0,19 136x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - span "Most used" abs:[234,227 89x20] rel:[206,19 89x20] flex:row gap:4 align:center pad:0/7 bg:#d9891e@12 font:12/700 color:streak r:999
+          - span abs:[241,232 10x10] rel:[7,5 10x10] flex:row
+            - icon:flame abs:[241,232 10x10] rel:[0,0 10x10] clip
+        - icon-btn abs:[334,222 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,227 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,227 20x20] rel:[0,0 20x20] clip
+      - item[2] div abs:[28,267 350x59] rel:[0,59 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,282 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,290 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,290 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,279 224x34] rel:[58,12 224x34]
+          - div "noun" abs:[86,279 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "88 cards" abs:[86,298 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,281 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,286 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,286 20x20] rel:[0,0 20x20] clip
+      - item[3] div abs:[28,326 350x59] rel:[0,118 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,341 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,349 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,349 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,338 224x34] rel:[58,12 224x34]
+          - div "verb" abs:[86,338 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "71 cards" abs:[86,357 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,340 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,345 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,345 20x20] rel:[0,0 20x20] clip
+      - item[4] div abs:[28,385 350x59] rel:[0,177 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,400 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,408 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,408 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,397 224x34] rel:[58,12 224x34]
+          - div "people" abs:[86,397 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "46 cards" abs:[86,416 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,399 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,404 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,404 20x20] rel:[0,0 20x20] clip
+      - item[5] div abs:[28,444 350x59] rel:[0,236 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,459 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,467 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,467 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,456 224x34] rel:[58,12 224x34]
+          - div "food" abs:[86,456 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "34 cards" abs:[86,475 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,458 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,463 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,463 20x20] rel:[0,0 20x20] clip
+      - item[6] div abs:[28,503 350x59] rel:[0,295 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,518 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,526 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,526 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,515 224x34] rel:[58,12 224x34]
+          - div "adjective" abs:[86,515 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "28 cards" abs:[86,534 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,517 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,522 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,522 20x20] rel:[0,0 20x20] clip
+      - item[7] div abs:[28,562 350x59] rel:[0,354 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,577 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,585 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,585 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,574 224x34] rel:[58,12 224x34]
+          - div "business" abs:[86,574 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "22 cards" abs:[86,593 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,576 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,581 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,581 20x20] rel:[0,0 20x20] clip
+      - item[8] div abs:[28,621 350x59] rel:[0,413 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,636 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,644 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,644 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,633 224x34] rel:[58,12 224x34]
+          - div "travel" abs:[86,633 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "18 cards" abs:[86,652 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,635 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,640 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,640 20x20] rel:[0,0 20x20] clip
+      - item[9] div abs:[28,680 350x59] rel:[0,472 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,695 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,703 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,703 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,692 224x34] rel:[58,12 224x34]
+          - div "idioms" abs:[86,692 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "11 cards" abs:[86,711 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,694 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,699 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,699 20x20] rel:[0,0 20x20] clip
+      - item[10] div abs:[28,739 350x59] rel:[0,531 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,754 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,762 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,762 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,751 224x34] rel:[58,12 224x34]
+          - div "numbers" abs:[86,751 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "6 cards" abs:[86,770 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,753 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,758 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,758 20x20] rel:[0,0 20x20] clip
+      - item[11] div abs:[28,798 350x58] rel:[0,590 350x58] grid cols:4 gap:12 align:center pad:12/14
+        - div abs:[42,813 28x28] rel:[14,15 28x28] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+          - span abs:[50,821 13x13] rel:[8,8 13x13] flex:row
+            - icon:tag abs:[50,821 13x13] rel:[0,0 13x13] clip
+        - div abs:[86,810 224x34] rel:[58,12 224x34]
+          - div "archive 2023" abs:[86,810 224x18] rel:[0,0 224x18] clip font:14/600 color:font-headline tracking:-0.1
+          - div "3 cards" abs:[86,829 224x15] rel:[0,19 224x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+        - icon-btn abs:[334,812 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+          - span abs:[339,817 20x20] rel:[5,5 20x20] flex:row
+            - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
 ```
 
 ## State: Loading (full — differs too much from base)
@@ -189,49 +189,49 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
-        - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
-      - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
-    - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "14 tags" abs:[26,169 51x13] rel:[4,9 51x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
-          - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
-        - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
-          - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x316] rel:[14,100 362x316] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,201 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
-        - span abs:[37,218 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
-        - div abs:[81,214 246x36] rel:[58,13 246x36]
-          - span abs:[81,220 80x11] rel:[0,6 80x11] bg:surface-container-high r:6 op:0.5
-          - span abs:[81,241 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,264 360x63] rel:[1,64 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
-        - span abs:[37,281 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
-        - div abs:[81,277 246x36] rel:[58,13 246x36]
-          - span abs:[81,283 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.5
-          - span abs:[81,304 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,327 360x63] rel:[1,127 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
-        - span abs:[37,344 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
-        - div abs:[81,340 246x36] rel:[58,13 246x36]
-          - span abs:[81,346 120x11] rel:[0,6 120x11] bg:surface-container-high r:6 op:0.5
-          - span abs:[81,367 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,390 360x63] rel:[1,190 360x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
-        - span abs:[37,407 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
-        - div abs:[81,403 246x36] rel:[58,13 246x36]
-          - span abs:[81,409 140x11] rel:[0,6 140x11] bg:surface-container-high r:6 op:0.5
-          - span abs:[81,430 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
-      - div abs:[23,453 360x62] rel:[1,253 360x62] grid cols:3 gap:12 align:center pad:13/14
-        - span abs:[37,470 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
-        - div abs:[81,466 246x36] rel:[58,13 246x36]
-          - span abs:[81,472 160x11] rel:[0,6 160x11] bg:surface-container-high r:6 op:0.5
-          - span abs:[81,493 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Manage tags" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded pad:0/20/20/20 layout_hint:scroll
+    - div abs:[28,108 350x46] rel:[20,0 350x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[43,123 16x16] rel:[15,15 16x16] flex:row
+        - icon:search abs:[43,123 16x16] rel:[0,0 16x16] clip
+      - span "Search tags" abs:[69,122 294x18] rel:[41,14 294x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
+    - div abs:[28,168 350x40] rel:[20,60 350x40] flex:row justify:between align:center pad:0/4/10/4
+      - ov "14 tags" abs:[32,177 44x13] rel:[4,9 44x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - pill-btn "Most used" abs:[251,168 123x30] rel:[223,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span abs:[264,177 12x12] rel:[13,9 12x12] flex:row
+          - icon:arrow-down-up abs:[264,177 12x12] rel:[0,0 12x12] clip
+        - span abs:[349,177 12x12] rel:[98,9 12x12] flex:row
+          - icon:chevron-down abs:[349,177 12x12] rel:[0,0 12x12] clip
+    - card abs:[28,208 350x314] rel:[20,100 350x314] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+      - div abs:[28,208 350x63] rel:[0,0 350x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+        - span abs:[42,225 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[86,221 236x36] rel:[58,13 236x36]
+          - span abs:[86,227 80x11] rel:[0,6 80x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[86,248 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
+      - div abs:[28,271 350x63] rel:[0,63 350x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+        - span abs:[42,288 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[86,284 236x36] rel:[58,13 236x36]
+          - span abs:[86,290 100x11] rel:[0,6 100x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[86,311 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
+      - div abs:[28,334 350x63] rel:[0,126 350x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+        - span abs:[42,351 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[86,347 236x36] rel:[58,13 236x36]
+          - span abs:[86,353 120x11] rel:[0,6 120x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[86,374 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
+      - div abs:[28,397 350x63] rel:[0,189 350x63] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+        - span abs:[42,414 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[86,410 236x36] rel:[58,13 236x36]
+          - span abs:[86,416 140x11] rel:[0,6 140x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[86,437 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
+      - div abs:[28,460 350x62] rel:[0,252 350x62] grid cols:3 gap:12 align:center pad:13/14
+        - span abs:[42,477 28x28] rel:[14,17 28x28] bg:surface-container-high r:8 op:0.5
+        - div abs:[86,473 236x36] rel:[58,13 236x36]
+          - span abs:[86,479 160x11] rel:[0,6 160x11] bg:surface-container-high r:6 op:0.5
+          - span abs:[86,500 50x9] rel:[0,27 50x9] margin:6/0/0/0 bg:surface-container-high r:6 op:0.35
 ```
 
 ## State: Empty (full — differs too much from base)
@@ -244,32 +244,32 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
-        - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
-      - span "Search tags" abs:[63,114 306x18] rel:[41,14 306x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
-    - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "No tags" abs:[26,169 57x13] rel:[4,9 57x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
-          - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
-        - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
-          - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x273] rel:[14,100 362x273] mx:MxCard pad:40/22 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[175,241 56x56] rel:[153,41 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
-        - span abs:[190,256 26x26] rel:[15,15 26x26] flex:row
-          - icon:tag abs:[190,256 26x26] rel:[0,0 26x26] clip
-      - div "No tags yet" abs:[45,311 316x21] rel:[23,111 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
-      - div "Tags appear here as you add them when creating or editing flashcards." abs:[45,338 316x40] rel:[23,138 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Go to library" abs:[138,394 130x38] rel:[116,194 130x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-        - span abs:[154,406 14x14] rel:[16,12 14x14] flex:row
-          - icon:layers abs:[154,406 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Manage tags" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded pad:0/20/20/20 layout_hint:scroll
+    - div abs:[28,108 350x46] rel:[20,0 350x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[43,123 16x16] rel:[15,15 16x16] flex:row
+        - icon:search abs:[43,123 16x16] rel:[0,0 16x16] clip
+      - span "Search tags" abs:[69,122 294x18] rel:[41,14 294x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:on-surface-variant op:0.7
+    - div abs:[28,168 350x40] rel:[20,60 350x40] flex:row justify:between align:center pad:0/4/10/4
+      - ov "No tags" abs:[32,177 50x13] rel:[4,9 50x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - pill-btn "Most used" abs:[251,168 123x30] rel:[223,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span abs:[264,177 12x12] rel:[13,9 12x12] flex:row
+          - icon:arrow-down-up abs:[264,177 12x12] rel:[0,0 12x12] clip
+        - span abs:[349,177 12x12] rel:[98,9 12x12] flex:row
+          - icon:chevron-down abs:[349,177 12x12] rel:[0,0 12x12] clip
+    - card abs:[28,208 350x274] rel:[20,100 350x274] mx:MxCard pad:40/22 bg:on-primary r:20 shadow:1/2
+      - div abs:[175,248 56x56] rel:[147,40 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+        - span abs:[190,263 26x26] rel:[15,15 26x26] flex:row
+          - icon:tag abs:[190,263 26x26] rel:[0,0 26x26] clip
+      - div "No tags yet" abs:[50,318 306x21] rel:[22,110 306x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Tags appear here as you add them when creating or editing flashcards." abs:[50,345 306x43] rel:[22,137 306x43] margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+      - pill-btn "Go to library" abs:[135,404 136x38] rel:[107,196 136x38] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[151,416 14x14] rel:[16,12 14x14] flex:row
+          - icon:layers abs:[151,416 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Search empty (full — differs too much from base)
@@ -282,267 +282,267 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Manage tags" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - div abs:[22,100 362x46] rel:[14,0 362x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,115 16x16] rel:[15,15 16x16] flex:row
-        - icon:search abs:[37,115 16x16] rel:[0,0 16x16] clip
-      - span "phras" abs:[63,114 270x18] rel:[41,14 270x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:font-headline
-      - icon-btn abs:[343,110 26x26] rel:[321,10 26x26] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-        - span abs:[346,113 20x20] rel:[3,3 20x20] flex:row
-          - icon:x abs:[346,113 20x20] rel:[0,0 20x20] clip
-    - div abs:[22,160 362x40] rel:[14,60 362x40] flex:row justify:between align:center pad:0/4/10/4
-      - ov "No matches" abs:[26,169 85x13] rel:[4,9 85x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Most used" abs:[257,160 123x30] rel:[235,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span abs:[270,169 12x12] rel:[13,9 12x12] flex:row
-          - icon:arrow-down-up abs:[270,169 12x12] rel:[0,0 12x12] clip
-        - span abs:[355,169 12x12] rel:[98,9 12x12] flex:row
-          - icon:chevron-down abs:[355,169 12x12] rel:[0,0 12x12] clip
-    - card abs:[22,200 362x162] rel:[14,100 362x162] mx:MxCard pad:32/22 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[181,233 44x44] rel:[159,33 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
-        - span abs:[194,246 18x18] rel:[13,13 18x18] flex:row
-          - icon:search abs:[194,246 18x18] rel:[0,0 18x18] clip
-      - div "No tags match "phras"" abs:[45,289 316x18] rel:[23,89 316x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
-      - div "Try a different spelling. Tag search is case-insensitive." abs:[45,311 316x18] rel:[23,111 316x18] font:12/400/18 color:on-surface-variant text:center
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Manage tags" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded pad:0/20/20/20 layout_hint:scroll
+    - div abs:[28,108 350x46] rel:[20,0 350x46] flex:row gap:10 align:center pad:0/14 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[43,123 16x16] rel:[15,15 16x16] flex:row
+        - icon:search abs:[43,123 16x16] rel:[0,0 16x16] clip
+      - span "phras" abs:[69,122 258x18] rel:[41,14 258x18] grow:1 basis:0 layout_hint:expanded clip font:14/400 color:font-headline
+      - icon-btn abs:[337,118 26x26] rel:[309,10 26x26] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+        - span abs:[340,121 20x20] rel:[3,3 20x20] flex:row
+          - icon:x abs:[340,121 20x20] rel:[0,0 20x20] clip
+    - div abs:[28,168 350x40] rel:[20,60 350x40] flex:row justify:between align:center pad:0/4/10/4
+      - ov "No matches" abs:[32,177 75x13] rel:[4,9 75x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - pill-btn "Most used" abs:[251,168 123x30] rel:[223,0 123x30] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/12 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span abs:[264,177 12x12] rel:[13,9 12x12] flex:row
+          - icon:arrow-down-up abs:[264,177 12x12] rel:[0,0 12x12] clip
+        - span abs:[349,177 12x12] rel:[98,9 12x12] flex:row
+          - icon:chevron-down abs:[349,177 12x12] rel:[0,0 12x12] clip
+    - card abs:[28,208 350x160] rel:[20,100 350x160] mx:MxCard pad:32/22 bg:on-primary r:20 shadow:1/2
+      - div abs:[181,240 44x44] rel:[153,32 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
+        - span abs:[194,253 18x18] rel:[13,13 18x18] flex:row
+          - icon:search abs:[194,253 18x18] rel:[0,0 18x18] clip
+      - div "No tags match "phras"" abs:[50,296 306x18] rel:[22,88 306x18] margin:0/0/4/0 font:14/700 color:font-headline text:center
+      - div "Try a different spelling. Tag search is case-insensitive." abs:[50,318 306x18] rel:[22,110 306x18] font:12/400/18 color:on-surface-variant text:center
 ```
 
 ## State: Action sheet (ordered diff vs Loaded)
 
 ```diff
-  - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
+  - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
-+ - div abs:[8,399 390x389] rel:[0,391 390x389] flex:col maxh:85 pos:absolute clip z:51 bg:surface-container-high r:20 shadow:-10/30
-+ - div abs:[8,399 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
-+ - span abs:[185,407 36x4] rel:[177,8 36x4] bg:outline-variant r:999
-+ - div abs:[8,415 390x57] rel:[0,16 390x57] pad:8/18/6/18
-+ - div abs:[26,423 354x26] rel:[18,8 354x26] flex:row gap:10 align:center margin:0/0/4/0
-+ - span "people" abs:[26,423 102x26] rel:[0,0 102x26] flex:row gap:6 align:center pad:0/10 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
-+ - span abs:[36,431 11x11] rel:[10,8 11x11] flex:row
-+ - icon:tag abs:[36,431 11x11] rel:[0,0 11x11] clip
-+ - span "· 46" abs:[101,430 18x12] rel:[75,7 18x12] font:10/700 color:seed-indigo op:0.7
-+ - div "Tag actions" abs:[26,453 354x13] rel:[18,38 354x13] pad:0/2 font:11/400 color:on-surface-variant
-+ - div abs:[8,472 390x316] rel:[0,73 390x316] repeat:x2+(unit=2) pad:6/8/14/8
-+ - item[1] button abs:[16,478 374x57] rel:[8,6 374x57] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,492 30x30] rel:[10,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span abs:[34,500 14x14] rel:[8,8 14x14] flex:row
-+ - icon:play abs:[34,500 14x14] rel:[0,0 14x14] clip
-+ - div abs:[70,490 282x33] rel:[54,12 282x33]
-+ - div "Study cards with this tag" abs:[70,490 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "Start a session with the 46 cards" abs:[70,510 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[364,499 16x16] rel:[348,21 16x16] flex:row
-+ - icon:chevron-right abs:[364,499 16x16] rel:[0,0 16x16] clip
-+ - button abs:[16,535 374x57] rel:[8,63 374x57] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,549 30x30] rel:[10,14 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span abs:[34,557 14x14] rel:[8,8 14x14] flex:row
-+ - icon:list abs:[34,557 14x14] rel:[0,0 14x14] clip
-+ - div abs:[70,547 282x33] rel:[54,12 282x33]
-+ - div "View cards with this tag" abs:[70,547 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
-+ - div "Open the global tag-filtered list" abs:[70,567 282x13] rel:[0,20 282x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[364,556 16x16] rel:[348,21 16x16] flex:row
-+ - icon:chevron-right abs:[364,556 16x16] rel:[0,0 16x16] clip
-+ - item[2] button abs:[16,592 374x54] rel:[8,120 374x54] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,604 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span abs:[34,612 14x14] rel:[8,8 14x14] flex:row
-+ - icon:pencil abs:[34,612 14x14] rel:[0,0 14x14] clip
-+ - div "Rename tag" abs:[70,610 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
-+ - span abs:[364,611 16x16] rel:[348,19 16x16] flex:row
-+ - icon:chevron-right abs:[364,611 16x16] rel:[0,0 16x16] clip
-+ - button abs:[16,646 374x54] rel:[8,174 374x54] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,658 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-+ - span abs:[34,666 14x14] rel:[8,8 14x14] flex:row
-+ - icon:git-merge abs:[34,666 14x14] rel:[0,0 14x14] clip
-+ - div "Merge into another tag" abs:[70,664 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
-+ - span abs:[364,665 16x16] rel:[348,19 16x16] flex:row
-+ - icon:chevron-right abs:[364,665 16x16] rel:[0,0 16x16] clip
-+ - div abs:[26,708 354x1] rel:[18,236 354x1] margin:8/10 bg:outline-variant
-+ - button abs:[16,717 374x57] rel:[8,245 374x57] mx:? grid cols:2 gap:12 align:center pad:12/10 r:10
-+ - div abs:[26,731 30x30] rel:[10,14 30x30] flex:row justify:center align:center bg:#dc4848@10 r:9
-+ - span abs:[34,739 14x14] rel:[8,8 14x14] flex:row
-+ - icon:trash-2 abs:[34,739 14x14] rel:[0,0 14x14] clip
-+ - div abs:[70,729 310x33] rel:[54,12 310x33]
-+ - div "Delete tag" abs:[70,729 310x18] rel:[0,0 310x18] font:14/600 color:error tracking:-0.1
-+ - div "Keeps all 46 cards" abs:[70,749 310x13] rel:[0,20 310x13] margin:2/0/0/0 font:11/400 color:on-surface-variant
++ - div abs:[8,391 390x397] rel:[0,383 390x397] flex:col maxh:85 pos:absolute clip z:51 bg:surface-container-high r:20 shadow:-10/30
++ - div abs:[8,391 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
++ - span abs:[185,399 36x4] rel:[177,8 36x4] bg:outline-variant r:999
++ - div abs:[8,407 390x59] rel:[0,16 390x59] pad:8/18/6/18
++ - div abs:[26,415 354x26] rel:[18,8 354x26] flex:row gap:10 align:center margin:0/0/4/0
++ - span "people" abs:[26,415 106x26] rel:[0,0 106x26] flex:row gap:6 align:center pad:0/10 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo r:999
++ - span abs:[36,423 11x11] rel:[10,8 11x11] flex:row
++ - icon:tag abs:[36,423 11x11] rel:[0,0 11x11] clip
++ - span "· 46" abs:[101,421 21x15] rel:[75,6 21x15] font:12/700 color:seed-indigo op:0.7
++ - div "Tag actions" abs:[26,445 354x15] rel:[18,38 354x15] pad:0/2 font:12/400 color:on-surface-variant
++ - div abs:[8,466 390x322] rel:[0,75 390x322] repeat:x2+(unit=2) pad:6/8/14/8
++ - item[1] button abs:[16,472 374x59] rel:[8,6 374x59] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,487 30x30] rel:[10,15 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
++ - span abs:[34,495 14x14] rel:[8,8 14x14] flex:row
++ - icon:play abs:[34,495 14x14] rel:[0,0 14x14] clip
++ - div abs:[70,484 282x35] rel:[54,12 282x35]
++ - div "Study cards with this tag" abs:[70,484 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
++ - div "Start a session with the 46 cards" abs:[70,504 282x15] rel:[0,20 282x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[364,494 16x16] rel:[348,22 16x16] flex:row
++ - icon:chevron-right abs:[364,494 16x16] rel:[0,0 16x16] clip
++ - button abs:[16,531 374x59] rel:[8,65 374x59] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,546 30x30] rel:[10,15 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
++ - span abs:[34,554 14x14] rel:[8,8 14x14] flex:row
++ - icon:list abs:[34,554 14x14] rel:[0,0 14x14] clip
++ - div abs:[70,543 282x35] rel:[54,12 282x35]
++ - div "View cards with this tag" abs:[70,543 282x18] rel:[0,0 282x18] font:14/600 color:font-headline tracking:-0.1
++ - div "Open the global tag-filtered list" abs:[70,563 282x15] rel:[0,20 282x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[364,553 16x16] rel:[348,22 16x16] flex:row
++ - icon:chevron-right abs:[364,553 16x16] rel:[0,0 16x16] clip
++ - item[2] button abs:[16,590 374x54] rel:[8,124 374x54] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,602 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
++ - span abs:[34,610 14x14] rel:[8,8 14x14] flex:row
++ - icon:pencil abs:[34,610 14x14] rel:[0,0 14x14] clip
++ - div "Rename tag" abs:[70,608 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
++ - span abs:[364,609 16x16] rel:[348,19 16x16] flex:row
++ - icon:chevron-right abs:[364,609 16x16] rel:[0,0 16x16] clip
++ - button abs:[16,644 374x54] rel:[8,178 374x54] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,656 30x30] rel:[10,12 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
++ - span abs:[34,664 14x14] rel:[8,8 14x14] flex:row
++ - icon:git-merge abs:[34,664 14x14] rel:[0,0 14x14] clip
++ - div "Merge into another tag" abs:[70,662 282x18] rel:[54,18 282x18] font:14/600 color:font-headline tracking:-0.1
++ - span abs:[364,663 16x16] rel:[348,19 16x16] flex:row
++ - icon:chevron-right abs:[364,663 16x16] rel:[0,0 16x16] clip
++ - div abs:[26,706 354x1] rel:[18,240 354x1] margin:8/10 bg:outline-variant
++ - button abs:[16,715 374x59] rel:[8,249 374x59] mx:? grid cols:2 gap:12 align:center pad:12/10 r:12
++ - div abs:[26,730 30x30] rel:[10,15 30x30] flex:row justify:center align:center bg:#dc4848@10 r:9
++ - span abs:[34,738 14x14] rel:[8,8 14x14] flex:row
++ - icon:trash-2 abs:[34,738 14x14] rel:[0,0 14x14] clip
++ - div abs:[70,727 310x35] rel:[54,12 310x35]
++ - div "Delete tag" abs:[70,727 310x18] rel:[0,0 310x18] font:14/600 color:error tracking:-0.1
++ - div "Keeps all 46 cards" abs:[70,747 310x15] rel:[0,20 310x15] margin:2/0/0/0 font:12/400 color:on-surface-variant
 ```
 
 ## State: Rename (ordered diff vs Loaded)
 
 ```diff
-  - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
+  - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-+ - div abs:[33,281 340x235] rel:[25,273 340x235] maxw:340 clip bg:surface r:18 shadow:16/40
-+ - div abs:[33,281 340x67] rel:[0,0 340x67] pad:18/18/6/18
-+ - div "Rename tag" abs:[51,299 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
-+ - div "Renaming updates every card that uses ." abs:[51,324 304x18] rel:[18,43 304x18] font:12/400/18 color:on-surface-variant
-+ - strong "people" abs:[274,325 42x15] rel:[223,1 42x15] font:12/700/18 color:font-headline
-+ - div abs:[33,348 340x100] rel:[0,67 340x100] pad:12/18/4/18
-+ - ov "New name" abs:[51,360 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
-+ - div abs:[51,379 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px seed-indigo
-+ - span "humans" abs:[64,393 53x18] rel:[13,14 53x18] font:14/600 color:font-headline
-+ - span abs:[125,393 2x18] rel:[74,14 2x18] bg:seed-indigo
-+ - div "Tag names are case-insensitive." abs:[51,431 304x13] rel:[18,83 304x13] pad:0/2 margin:6/0/0/0 font:11/400 color:on-surface-variant
-+ - div abs:[33,448 340x68] rel:[0,167 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,462 134x40] rel:[14,14 134x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Rename" abs:[189,462 170x40] rel:[156,14 170x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
++ - div abs:[33,276 340x245] rel:[25,268 340x245] maxw:340 clip bg:surface r:18 shadow:16/40
++ - div abs:[33,276 340x67] rel:[0,0 340x67] pad:18/18/6/18
++ - div "Rename tag" abs:[51,294 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
++ - div "Renaming updates every card that uses ." abs:[51,319 304x18] rel:[18,43 304x18] font:12/400/18 color:on-surface-variant
++ - strong "people" abs:[274,320 42x15] rel:[223,1 42x15] font:12/700/18 color:font-headline
++ - div abs:[33,343 340x102] rel:[0,67 340x102] pad:12/18/4/18
++ - ov "New name" abs:[51,355 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div abs:[51,374 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:12 border:1px seed-indigo
++ - span "humans" abs:[64,388 53x18] rel:[13,14 53x18] font:14/600 color:font-headline
++ - span abs:[125,388 2x18] rel:[74,14 2x18] bg:seed-indigo
++ - div "Tag names are case-insensitive." abs:[51,426 304x15] rel:[18,83 304x15] pad:0/2 margin:6/0/0/0 font:12/400 color:on-surface-variant
++ - div abs:[33,445 340x76] rel:[0,169 340x76] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,459 133x48] rel:[14,14 133x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Rename" abs:[188,459 171x48] rel:[155,14 171x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
 ```
 
 ## State: Rename to merge (ordered diff vs Loaded)
 
 ```diff
-  - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
+  - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-+ - div abs:[33,199 340x398] rel:[25,191 340x398] repeat:x4(unit=1) maxw:340 clip bg:surface r:18 shadow:16/40
-+ - item[1] div abs:[33,199 340x67] rel:[0,0 340x67] pad:18/18/6/18
-+ - div "Rename tag" abs:[51,217 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
-+ - div "Renaming updates every card that uses ." abs:[51,242 304x18] rel:[18,43 304x18] font:12/400/18 color:on-surface-variant
-+ - strong "people" abs:[274,243 42x15] rel:[223,1 42x15] font:12/700/18 color:font-headline
-+ - item[2] div abs:[33,266 340x100] rel:[0,67 340x100] pad:12/18/4/18
-+ - ov "New name" abs:[51,278 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
-+ - div abs:[51,297 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px streak
-+ - span "noun" abs:[64,311 34x18] rel:[13,14 34x18] font:14/600 color:font-headline
-+ - span abs:[106,311 2x18] rel:[55,14 2x18] bg:seed-indigo
-+ - div "Tag names are case-insensitive." abs:[51,349 304x13] rel:[18,83 304x13] pad:0/2 margin:6/0/0/0 font:11/400 color:on-surface-variant
-+ - div abs:[51,374 304x155] rel:[18,175 304x155] pad:12 bg:#d9891e@8 r:12 border:1px #d9891e@22
-+ - div abs:[64,387 278x36] rel:[13,13 278x36] flex:row gap:8 align:start margin:0/0/10/0
-+ - span abs:[64,387 15x15] rel:[0,0 15x15] flex:row
-+ - icon:git-merge abs:[64,387 15x15] rel:[0,0 15x15] clip
-+ - div "A tag called already exists. Continuing will these two tags." abs:[87,387 255x36] rel:[23,0 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
-+ - strong "noun" abs:[155,388 29x15] rel:[68,1 29x15] font:12/700/18 color:font-headline
-+ - strong "merge" abs:[107,406 38x15] rel:[20,19 38x15] font:12/700/18 color:font-headline
-+ - div abs:[64,433 278x42] rel:[13,59 278x42] flex:row wrap gap:8 align:center pad:8/10 bg:on-primary@50 r:10
-+ - span "people" abs:[74,441 102x26] rel:[10,8 102x26] flex:row gap:6 align:center pad:0/10 bg:surface-container font:12/600 color:font-headline r:999
-+ - span abs:[84,449 11x11] rel:[10,8 11x11] flex:row
-+ - icon:tag abs:[84,449 11x11] rel:[0,0 11x11] clip
-+ - span "· 46" abs:[149,448 18x12] rel:[75,7 18x12] font:10/700 color:font-headline op:0.7
-+ - span abs:[184,447 14x14] rel:[120,14 14x14] flex:row
-+ - icon:arrow-right abs:[184,447 14x14] rel:[0,0 14x14] clip
-+ - span "noun" abs:[206,441 96x26] rel:[142,8 96x26] flex:row gap:6 align:center pad:0/10 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
-+ - span abs:[216,449 11x11] rel:[10,8 11x11] flex:row
-+ - icon:tag abs:[216,449 11x11] rel:[0,0 11x11] clip
-+ - span "· 134" abs:[268,448 24x12] rel:[62,7 24x12] font:10/700 color:seed-indigo op:0.7
-+ - div "No cards are deleted. The combined tag will hold all 134 cards." abs:[64,483 278x33] rel:[13,109 278x33] margin:8/0/0/0 font:11/400/17 color:on-surface-variant
-+ - item[4] div abs:[33,529 340x68] rel:[0,330 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,543 134x40] rel:[14,14 134x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Merge tags" abs:[189,543 170x40] rel:[156,14 170x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:streak font:13/600 color:on-primary text:center tracking:0.1 r:11
-+ - span abs:[228,556 14x14] rel:[39,13 14x14] flex:row
-+ - icon:git-merge abs:[228,556 14x14] rel:[0,0 14x14] clip
++ - div abs:[33,193 340x411] rel:[25,185 340x411] repeat:x4(unit=1) maxw:340 clip bg:surface r:18 shadow:16/40
++ - item[1] div abs:[33,193 340x67] rel:[0,0 340x67] pad:18/18/6/18
++ - div "Rename tag" abs:[51,211 304x21] rel:[18,18 304x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
++ - div "Renaming updates every card that uses ." abs:[51,236 304x18] rel:[18,43 304x18] font:12/400/18 color:on-surface-variant
++ - strong "people" abs:[274,237 42x15] rel:[223,1 42x15] font:12/700/18 color:font-headline
++ - item[2] div abs:[33,260 340x102] rel:[0,67 340x102] pad:12/18/4/18
++ - ov "New name" abs:[51,272 304x13] rel:[18,12 304x13] margin:0/0/6/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div abs:[51,291 304x46] rel:[18,31 304x46] flex:row gap:8 align:center pad:0/12 bg:on-primary r:12 border:1px streak
++ - span "noun" abs:[64,305 34x18] rel:[13,14 34x18] font:14/600 color:font-headline
++ - span abs:[106,305 2x18] rel:[55,14 2x18] bg:seed-indigo
++ - div "Tag names are case-insensitive." abs:[51,343 304x15] rel:[18,83 304x15] pad:0/2 margin:6/0/0/0 font:12/400 color:on-surface-variant
++ - div abs:[51,370 304x158] rel:[18,177 304x158] pad:12 bg:#d9891e@8 r:12 border:1px #d9891e@22
++ - div abs:[64,383 278x36] rel:[13,13 278x36] flex:row gap:8 align:start margin:0/0/10/0
++ - span abs:[64,383 15x15] rel:[0,0 15x15] flex:row
++ - icon:git-merge abs:[64,383 15x15] rel:[0,0 15x15] clip
++ - div "A tag called already exists. Continuing will these two tags." abs:[87,383 255x36] rel:[23,0 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
++ - strong "noun" abs:[155,384 29x15] rel:[68,1 29x15] font:12/700/18 color:font-headline
++ - strong "merge" abs:[107,402 38x15] rel:[20,19 38x15] font:12/700/18 color:font-headline
++ - div abs:[64,429 278x42] rel:[13,59 278x42] flex:row wrap gap:8 align:center pad:8/10 bg:on-primary@50 r:12
++ - span "people" abs:[74,437 106x26] rel:[10,8 106x26] flex:row gap:6 align:center pad:0/10 bg:surface-container font:12/600 color:font-headline r:999
++ - span abs:[84,444 11x11] rel:[10,8 11x11] flex:row
++ - icon:tag abs:[84,444 11x11] rel:[0,0 11x11] clip
++ - span "· 46" abs:[149,442 21x15] rel:[75,6 21x15] font:12/700 color:font-headline op:0.7
++ - span abs:[188,443 14x14] rel:[124,14 14x14] flex:row
++ - icon:arrow-right abs:[188,443 14x14] rel:[0,0 14x14] clip
++ - span "noun" abs:[210,437 100x26] rel:[146,8 100x26] flex:row gap:6 align:center pad:0/10 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo r:999
++ - span abs:[220,444 11x11] rel:[10,8 11x11] flex:row
++ - icon:tag abs:[220,444 11x11] rel:[0,0 11x11] clip
++ - span "· 134" abs:[272,442 28x15] rel:[62,6 28x15] font:12/700 color:seed-indigo op:0.7
++ - div "No cards are deleted. The combined tag will hold all 134 cards." abs:[64,479 278x36] rel:[13,109 278x36] margin:8/0/0/0 font:12/400/18 color:on-surface-variant
++ - item[4] div abs:[33,528 340x76] rel:[0,335 340x76] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,542 133x48] rel:[14,14 133x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Merge tags" abs:[188,542 171x48] rel:[155,14 171x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/16 bg:streak font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - span abs:[225,559 14x14] rel:[37,17 14x14] flex:row
++ - icon:git-merge abs:[225,559 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Merge sheet (ordered diff vs Loaded)
 
 ```diff
-  - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
+  - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
-+ - div abs:[8,289 390x499] rel:[0,281 390x499] flex:col maxh:85 pos:absolute clip z:51 bg:surface-container-high r:20 shadow:-10/30
-+ - div abs:[8,289 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
-+ - span abs:[185,297 36x4] rel:[177,8 36x4] bg:outline-variant r:999
-+ - div abs:[8,305 390x77] rel:[0,16 390x77] pad:4/18/12/18
-+ - div "Merge "people" into…" abs:[26,309 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
-+ - div "Cards under will move to the tag you pick. No cards are deleted." abs:[26,334 354x36] rel:[18,29 354x36] font:12/400/18 color:on-surface-variant
-+ - strong "people" abs:[98,335 42x15] rel:[72,1 42x15] font:12/700/18 color:font-headline
-+ - div abs:[26,382 354x42] rel:[18,93 354x42] flex:row gap:10 align:center pad:0/12 bg:on-primary r:10 border:1px seed-indigo@14
-+ - span abs:[39,396 14x14] rel:[13,14 14x14] flex:row
-+ - icon:search abs:[39,396 14x14] rel:[0,0 14x14] clip
-+ - span "Search tags" abs:[63,395 73x16] rel:[37,13 73x16] font:13/400 color:on-surface-variant op:0.7
-+ - hide-scroll abs:[8,434 390x238] rel:[0,145 390x238] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/8/14/8 layout_hint:scroll clip
-+ - item[1] button abs:[16,434 374x56] rel:[8,0 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 bg:seed-indigo@6 r:10
-+ - span abs:[26,453 18x18] rel:[10,19 18x18] bg:on-primary r:999 border:5px seed-indigo
-+ - div abs:[60,446 294x32] rel:[44,12 294x32]
-+ - div "noun" abs:[60,446 294x18] rel:[0,0 294x18] font:14/700 color:font-headline
-+ - div "88 cards" abs:[60,465 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,455 14x14] rel:[350,21 14x14] flex:row
-+ - icon:tag abs:[366,455 14x14] rel:[0,0 14x14] clip
-+ - item[2] button abs:[16,490 374x56] rel:[8,56 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - span abs:[26,509 18x18] rel:[10,19 18x18] r:999 border:2px outline-variant
-+ - div abs:[60,502 294x32] rel:[44,12 294x32]
-+ - div "verb" abs:[60,502 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
-+ - div "71 cards" abs:[60,521 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,511 14x14] rel:[350,21 14x14] flex:row
-+ - icon:tag abs:[366,511 14x14] rel:[0,0 14x14] clip
-+ - item[3] button abs:[16,546 374x56] rel:[8,112 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - span abs:[26,565 18x18] rel:[10,19 18x18] r:999 border:2px outline-variant
-+ - div abs:[60,558 294x32] rel:[44,12 294x32]
-+ - div "food" abs:[60,558 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
-+ - div "34 cards" abs:[60,577 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,567 14x14] rel:[350,21 14x14] flex:row
-+ - icon:tag abs:[366,567 14x14] rel:[0,0 14x14] clip
-+ - item[4] button abs:[16,602 374x56] rel:[8,168 374x56] mx:? grid cols:3 gap:12 align:center pad:12/10 r:10
-+ - span abs:[26,621 18x18] rel:[10,19 18x18] r:999 border:2px outline-variant
-+ - div abs:[60,614 294x32] rel:[44,12 294x32]
-+ - div "business" abs:[60,614 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
-+ - div "22 cards" abs:[60,633 294x13] rel:[0,19 294x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-+ - span abs:[366,623 14x14] rel:[350,21 14x14] flex:row
-+ - icon:tag abs:[366,623 14x14] rel:[0,0 14x14] clip
-+ - div abs:[26,672 354x48] rel:[18,383 354x48] flex:row wrap gap:8 align:center pad:10/12 bg:seed-indigo@6 r:11 border:1px seed-indigo@16
-+ - span "people" abs:[39,683 102x26] rel:[13,11 102x26] flex:row gap:6 align:center pad:0/10 bg:surface-container font:12/600 color:font-headline r:999
-+ - span abs:[49,691 11x11] rel:[10,8 11x11] flex:row
-+ - icon:tag abs:[49,691 11x11] rel:[0,0 11x11] clip
-+ - span "· 46" abs:[114,690 18x12] rel:[75,7 18x12] font:10/700 color:font-headline op:0.7
-+ - span abs:[149,689 14x14] rel:[123,17 14x14] flex:row
-+ - icon:arrow-right abs:[149,689 14x14] rel:[0,0 14x14] clip
-+ - span "noun" abs:[171,683 96x26] rel:[145,11 96x26] flex:row gap:6 align:center pad:0/10 bg:seed-indigo@10 font:12/600 color:seed-indigo r:999
-+ - span abs:[181,691 11x11] rel:[10,8 11x11] flex:row
-+ - icon:tag abs:[181,691 11x11] rel:[0,0 11x11] clip
-+ - span "· 134" abs:[233,690 24x12] rel:[62,7 24x12] font:10/700 color:seed-indigo op:0.7
-+ - div abs:[8,732 390x56] rel:[0,443 390x56] flex:row gap:8 pad:0/14/16/14
-+ - pill-btn "Cancel" abs:[22,732 155x40] rel:[14,0 155x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Merge 46 cards" abs:[185,732 199x40] rel:[177,0 199x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-+ - span abs:[225,745 14x14] rel:[41,13 14x14] flex:row
-+ - icon:git-merge abs:[225,745 14x14] rel:[0,0 14x14] clip
++ - div abs:[8,265 390x523] rel:[0,257 390x523] flex:col maxh:85 pos:absolute clip z:51 bg:surface-container-high r:20 shadow:-10/30
++ - div abs:[8,265 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
++ - span abs:[185,273 36x4] rel:[177,8 36x4] bg:outline-variant r:999
++ - div abs:[8,281 390x77] rel:[0,16 390x77] pad:4/18/12/18
++ - div "Merge "people" into…" abs:[26,285 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
++ - div "Cards under will move to the tag you pick. No cards are deleted." abs:[26,310 354x36] rel:[18,29 354x36] font:12/400/18 color:on-surface-variant
++ - strong "people" abs:[98,311 42x15] rel:[72,1 42x15] font:12/700/18 color:font-headline
++ - div abs:[26,358 354x50] rel:[18,93 354x50] flex:row gap:10 align:center pad:0/12 bg:on-primary r:12 border:1px seed-indigo@14
++ - span abs:[39,376 14x14] rel:[13,18 14x14] flex:row
++ - icon:search abs:[39,376 14x14] rel:[0,0 14x14] clip
++ - span "Search tags" abs:[63,374 79x18] rel:[37,16 79x18] font:14/400 color:on-surface-variant op:0.7
++ - hide-scroll abs:[8,418 390x246] rel:[0,153 390x246] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/8/14/8 layout_hint:scroll clip
++ - item[1] button abs:[16,418 374x58] rel:[8,0 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 bg:color(srgb 0.321569 0.396078 0.960784 / 0.06) r:12
++ - span abs:[26,438 18x18] rel:[10,20 18x18] bg:on-primary r:999 border:5px seed-indigo
++ - div abs:[60,430 294x34] rel:[44,12 294x34]
++ - div "noun" abs:[60,430 294x18] rel:[0,0 294x18] font:14/700 color:font-headline
++ - div "88 cards" abs:[60,449 294x15] rel:[0,19 294x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,440 14x14] rel:[350,22 14x14] flex:row
++ - icon:tag abs:[366,440 14x14] rel:[0,0 14x14] clip
++ - item[2] button abs:[16,476 374x58] rel:[8,58 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - span abs:[26,496 18x18] rel:[10,20 18x18] r:999 border:2px outline-variant
++ - div abs:[60,488 294x34] rel:[44,12 294x34]
++ - div "verb" abs:[60,488 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
++ - div "71 cards" abs:[60,507 294x15] rel:[0,19 294x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,498 14x14] rel:[350,22 14x14] flex:row
++ - icon:tag abs:[366,498 14x14] rel:[0,0 14x14] clip
++ - item[3] button abs:[16,534 374x58] rel:[8,116 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - span abs:[26,554 18x18] rel:[10,20 18x18] r:999 border:2px outline-variant
++ - div abs:[60,546 294x34] rel:[44,12 294x34]
++ - div "food" abs:[60,546 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
++ - div "34 cards" abs:[60,565 294x15] rel:[0,19 294x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,556 14x14] rel:[350,22 14x14] flex:row
++ - icon:tag abs:[366,556 14x14] rel:[0,0 14x14] clip
++ - item[4] button abs:[16,592 374x58] rel:[8,174 374x58] mx:? grid cols:3 gap:12 align:center pad:12/10 r:12
++ - span abs:[26,612 18x18] rel:[10,20 18x18] r:999 border:2px outline-variant
++ - div abs:[60,604 294x34] rel:[44,12 294x34]
++ - div "business" abs:[60,604 294x18] rel:[0,0 294x18] font:14/600 color:font-headline
++ - div "22 cards" abs:[60,623 294x15] rel:[0,19 294x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
++ - span abs:[366,614 14x14] rel:[350,22 14x14] flex:row
++ - icon:tag abs:[366,614 14x14] rel:[0,0 14x14] clip
++ - div abs:[26,664 354x48] rel:[18,399 354x48] flex:row wrap gap:8 align:center pad:10/12 bg:color(srgb 0.321569 0.396078 0.960784 / 0.06) r:12 border:1px color(srgb 0.321569 0.396078 0.960784 / 0.16)
++ - span "people" abs:[39,675 106x26] rel:[13,11 106x26] flex:row gap:6 align:center pad:0/10 bg:surface-container font:12/600 color:font-headline r:999
++ - span abs:[49,683 11x11] rel:[10,8 11x11] flex:row
++ - icon:tag abs:[49,683 11x11] rel:[0,0 11x11] clip
++ - span "· 46" abs:[114,681 21x15] rel:[75,6 21x15] font:12/700 color:font-headline op:0.7
++ - span abs:[153,681 14x14] rel:[127,17 14x14] flex:row
++ - icon:arrow-right abs:[153,681 14x14] rel:[0,0 14x14] clip
++ - span "noun" abs:[175,675 100x26] rel:[149,11 100x26] flex:row gap:6 align:center pad:0/10 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo r:999
++ - span abs:[185,683 11x11] rel:[10,8 11x11] flex:row
++ - icon:tag abs:[185,683 11x11] rel:[0,0 11x11] clip
++ - span "· 134" abs:[237,681 28x15] rel:[62,6 28x15] font:12/700 color:seed-indigo op:0.7
++ - div abs:[8,724 390x64] rel:[0,459 390x64] flex:row gap:8 pad:0/14/16/14
++ - pill-btn "Cancel" abs:[22,724 154x48] rel:[14,0 154x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Merge 46 cards" abs:[184,724 200x48] rel:[176,0 200x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - span abs:[221,741 14x14] rel:[37,17 14x14] flex:row
++ - icon:git-merge abs:[221,741 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Delete (ordered diff vs Loaded)
 
 ```diff
-  - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
+  - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-+ - div abs:[33,261 340x274] rel:[25,253 340x274] maxw:340 clip bg:surface r:18 shadow:16/40
-+ - div abs:[33,261 340x130] rel:[0,0 340x130] pad:18/18/4/18
-+ - div abs:[179,279 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@10 r:14
-+ - span abs:[192,292 22x22] rel:[13,13 22x22] flex:row
-+ - icon:tag abs:[192,292 22x22] rel:[0,0 22x22] clip
-+ - div "Delete this tag?" abs:[51,339 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-+ - div "The tag will be removed from 46 cards." abs:[51,367 304x20] rel:[18,106 304x20] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-+ - strong "people" abs:[110,369 45x16] rel:[59,2 45x16] font:13/700/20 color:font-headline text:center
-+ - div abs:[51,405 304x58] rel:[18,144 304x58] flex:row gap:8 align:center pad:10/12 bg:mastery@8 r:11 border:1px mastery@20
-+ - span abs:[64,427 15x15] rel:[13,22 15x15] flex:row
-+ - icon:shield-check abs:[64,427 15x15] rel:[0,0 15x15] clip
-+ - div "Your . Only the tag label is removed." abs:[87,416 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
-+ - strong "46 cards are kept" abs:[114,417 100x15] rel:[27,1 100x15] font:12/700/18 color:font-headline
-+ - div abs:[33,467 340x68] rel:[0,206 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,481 143x40] rel:[14,14 143x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Delete tag" abs:[198,481 161x40] rel:[165,14 161x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-+ - span abs:[235,494 14x14] rel:[38,13 14x14] flex:row
-+ - icon:trash-2 abs:[235,494 14x14] rel:[0,0 14x14] clip
++ - div abs:[33,246 340x304] rel:[25,238 340x304] maxw:340 clip bg:surface r:18 shadow:16/40
++ - div abs:[33,246 340x152] rel:[0,0 340x152] pad:18/18/4/18
++ - div abs:[179,264 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@10 r:14
++ - span abs:[192,277 22x22] rel:[13,13 22x22] flex:row
++ - icon:tag abs:[192,277 22x22] rel:[0,0 22x22] clip
++ - div "Delete this tag?" abs:[51,324 304x21] rel:[18,78 304x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
++ - div "The tag will be removed from 46 cards." abs:[51,351 304x43] rel:[18,105 304x43] pad:0/6 font:14/400/22 color:on-surface-variant text:center
++ - strong "people" abs:[124,352 49x18] rel:[73,1 49x18] font:14/700/22 color:font-headline text:center
++ - div abs:[51,412 304x58] rel:[18,166 304x58] flex:row gap:8 align:center pad:10/12 bg:mastery@8 r:12 border:1px mastery@20
++ - span abs:[64,434 15x15] rel:[13,22 15x15] flex:row
++ - icon:shield-check abs:[64,434 15x15] rel:[0,0 15x15] clip
++ - div "Your . Only the tag label is removed." abs:[87,423 255x36] rel:[36,11 255x36] grow:1 basis:0 layout_hint:expanded font:12/400/18 color:font-headline
++ - strong "46 cards are kept" abs:[114,424 100x15] rel:[27,1 100x15] font:12/700/18 color:font-headline
++ - div abs:[33,474 340x76] rel:[0,228 340x76] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,488 142x48] rel:[14,14 142x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Delete tag" abs:[197,488 162x48] rel:[164,14 162x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - span abs:[232,505 14x14] rel:[35,17 14x14] flex:row
++ - icon:trash-2 abs:[232,505 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Busy row (ordered diff vs Loaded)
 
 ```diff
-  - div "22 cards" abs:[81,574 246x13] rel:[0,19 246x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-- - icon-btn abs:[339,556 30x30] rel:[316,13 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-- - span abs:[344,561 20x20] rel:[5,5 20x20] flex:row
-- - icon:more-vertical abs:[344,561 20x20] rel:[0,0 20x20] clip
-+ - span abs:[351,562 18x18] rel:[328,19 18x18] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
-  - item[8] div abs:[23,600 360x57] rel:[1,400 360x57] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+  - div "22 cards" abs:[86,593 236x15] rel:[0,19 236x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+- - icon-btn abs:[334,576 30x30] rel:[306,14 30x30] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+- - span abs:[339,581 20x20] rel:[5,5 20x20] flex:row
+- - icon:more-vertical abs:[339,581 20x20] rel:[0,0 20x20] clip
++ - span abs:[346,582 18x18] rel:[318,20 18x18] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+  - item[8] div abs:[28,621 350x59] rel:[0,413 350x59] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
   ...
 ```
 
 ## State: Op error (ordered diff vs Loaded)
 
 ```diff
-  - icon:more-vertical abs:[344,789 20x20] rel:[0,0 20x20] clip
-+ - div abs:[22,708 362x62] rel:[14,700 362x62] flex:row gap:10 align:start pad:12/14 pos:absolute z:60 bg:#34395d r:12 shadow:8/24
-+ - span abs:[36,720 16x16] rel:[14,12 16x16] flex:row
-+ - icon:alert-circle abs:[36,720 16x16] rel:[0,0 16x16] clip
-+ - div abs:[62,720 257x38] rel:[40,12 257x38] grow:1 basis:0 layout_hint:expanded
-+ - div "Couldn't rename tag" abs:[62,720 257x19] rel:[0,0 257x19] margin:0/0/2/0 font:13/700/19 color:on-primary
-+ - div "Nothing changed. Try again in a moment." abs:[62,741 257x17] rel:[0,21 257x17] font:12/400/17 color:on-primary op:0.8
-+ - button "Retry" abs:[329,720 41x20] rel:[307,12 41x20] mx:? pad:2/4 font:13/600 color:on-primary text:center
+  - icon:more-vertical abs:[339,817 20x20] rel:[0,0 20x20] clip
++ - div abs:[22,706 362x64] rel:[14,698 362x64] flex:row gap:10 align:start pad:12/14 pos:absolute z:60 bg:#34395d r:12 shadow:8/24
++ - span abs:[36,718 16x16] rel:[14,12 16x16] flex:row
++ - icon:alert-circle abs:[36,718 16x16] rel:[0,0 16x16] clip
++ - div abs:[62,718 254x40] rel:[40,12 254x40] grow:1 basis:0 layout_hint:expanded
++ - div "Couldn't rename tag" abs:[62,718 254x20] rel:[0,0 254x20] margin:0/0/2/0 font:14/700/20 color:on-primary
++ - div "Nothing changed. Try again in a moment." abs:[62,741 254x17] rel:[0,22 254x17] font:12/400/17 color:on-primary op:0.8
++ - button "Retry" abs:[326,718 44x22] rel:[304,12 44x22] mx:? pad:2/4 font:14/600 color:on-primary text:center
 ```

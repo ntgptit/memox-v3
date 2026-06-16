@@ -257,4 +257,20 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | Playing | `23-audio-speech--playing--light.png` | `23-audio-speech--playing--dark.png` |
 | Saving | `23-audio-speech--saving--light.png` | `23-audio-speech--saving--dark.png` |
 
-Total: 23 screens · 135 states · 270 PNGs.
+## 24 — Appearance
+
+| State | Light | Dark |
+| --- | --- | --- |
+| System | `24-appearance--system--light.png` | `24-appearance--system--dark.png` |
+| Light | `24-appearance--light--light.png` | `24-appearance--light--dark.png` |
+| Dark | `24-appearance--dark--light.png` | `24-appearance--dark--dark.png` |
+
+## 25 — Language
+
+| State | Light | Dark |
+| --- | --- | --- |
+| English | `25-language--english--light.png` | `25-language--english--dark.png` |
+| Searching | `25-language--searching--light.png` | `25-language--searching--dark.png` |
+| Switched | `25-language--switched--light.png` | `25-language--switched--dark.png` |
+
+Total: 25 screens · 141 states · 282 PNGs.

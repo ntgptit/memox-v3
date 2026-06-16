@@ -46,42 +46,42 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:end align:center pad:0/8
-    - button "Skip" abs:[338,60 52x32] rel:[330,8 52x32] mx:? pad:8/12 font:13/600 color:on-surface-variant text:center
-  - scroll abs:[8,100 390x593] rel:[0,92 390x593] flex:col justify:center grow:1 basis:0 layout_hint:expanded pad:20/22/0/22 layout_hint:scroll
-    - div abs:[30,182 346x209] rel:[22,82 346x209] margin:0/0/24/0
-      - div abs:[163,182 80x80] rel:[133,0 80x80] flex:row justify:center align:center margin:0/0/18/0 bg:seed-indigo r:22 shadow:12/32
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:end align:center pad:0/8
+    - button "Skip" abs:[336,63 54x34] rel:[328,11 54x34] mx:? pad:8/12 font:14/600 color:on-surface-variant text:center
+  - scroll abs:[8,108 390x583] rel:[0,100 390x583] flex:col justify:center grow:1 basis:0 layout_hint:expanded pad:20/22/0/22 layout_hint:scroll
+    - div abs:[30,182 346x209] rel:[22,74 346x209] margin:0/0/24/0
+      - div abs:[163,182 80x80] rel:[133,0 80x80] flex:row justify:center align:center margin:0/0/18/0 bg:seed-indigo r:22 shadow:0/1
         - span abs:[185,204 36x36] rel:[22,22 36x36] flex:row
           - icon:sparkles abs:[185,204 36x36] rel:[0,0 36x36] clip
       - div "Remember more,at your own pace." abs:[30,280 346x60] rel:[0,98 346x60] margin:0/0/8/0 font:26/700/30 color:font-headline text:center tracking:-0.6
-      - div "Calm flashcards that surface what you need each day. Local-first — your cards live on this device." abs:[30,347 346x43] rel:[0,166 346x43] pad:0/4 font:14/400/22 color:on-surface-variant text:center
-    - div abs:[30,415 346x197] rel:[22,315 346x197] flex:col gap:10 margin:0/0/20/0
-      - card abs:[30,415 346x59] rel:[0,0 346x59] mx:MxCard grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[45,429 30x30] rel:[15,14 30x30] flex:row justify:center align:center bg:seed-indigo@10 r:9
-          - span abs:[53,437 14x14] rel:[8,8 14x14] flex:row
-            - icon:cloud abs:[53,437 14x14] rel:[0,0 14x14] clip
-        - div abs:[91,428 270x33] rel:[61,13 270x33]
-          - div "Local-first" abs:[91,428 270x16] rel:[0,0 270x16] font:13/700 color:font-headline tracking:-0.1
-          - div "No sign-in needed. Sync is optional, anytime." abs:[91,445 270x16] rel:[0,17 270x16] margin:1/0/0/0 font:11/400/16 color:on-surface-variant
-      - card abs:[30,484 346x59] rel:[0,69 346x59] mx:MxCard grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[45,498 30x30] rel:[15,14 30x30] flex:row justify:center align:center bg:seed-indigo@10 r:9
-          - span abs:[53,506 14x14] rel:[8,8 14x14] flex:row
-            - icon:sun abs:[53,506 14x14] rel:[0,0 14x14] clip
-        - div abs:[91,497 270x33] rel:[61,13 270x33]
-          - div "A daily rhythm" abs:[91,497 270x16] rel:[0,0 270x16] font:13/700 color:font-headline tracking:-0.1
-          - div "Short sessions, surfaced by what’s due." abs:[91,514 270x16] rel:[0,17 270x16] margin:1/0/0/0 font:11/400/16 color:on-surface-variant
-      - card abs:[30,553 346x59] rel:[0,138 346x59] mx:MxCard grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[45,567 30x30] rel:[15,14 30x30] flex:row justify:center align:center bg:seed-indigo@10 r:9
-          - span abs:[53,575 14x14] rel:[8,8 14x14] flex:row
-            - icon:shield-check abs:[53,575 14x14] rel:[0,0 14x14] clip
-        - div abs:[91,566 270x33] rel:[61,13 270x33]
-          - div "No streak pressure" abs:[91,566 270x16] rel:[0,0 270x16] font:13/700 color:font-headline tracking:-0.1
-          - div "Skip a day. Your progress is safe." abs:[91,583 270x16] rel:[0,17 270x16] margin:1/0/0/0 font:11/400/16 color:on-surface-variant
-  - div abs:[8,693 390x95] rel:[0,685 390x95] pad:10/18/18/18
-    - pill-btn "Let’s start" abs:[26,703 354x44] rel:[18,10 354x44] mx:MxPrimaryButton flex:row gap:8 justify:center align:center pad:0/18 bg:seed-indigo font:15/600 color:on-primary text:center tracking:0.1 r:14
-      - span abs:[236,717 16x16] rel:[210,14 16x16] flex:row
-        - icon:arrow-right abs:[236,717 16x16] rel:[0,0 16x16] clip
-    - div "You’re always in control. Sign-in is optional." abs:[26,757 354x13] rel:[18,64 354x13] margin:10/0/0/0 font:11/400 color:on-surface-variant text:center
+      - div "Calm flashcards that surface what you need each day. Local-first — your cards live on this device." abs:[30,348 346x43] rel:[0,166 346x43] pad:0/4 font:14/400/22 color:on-surface-variant text:center
+    - div abs:[30,415 346x201] rel:[22,307 346x201] flex:col gap:10 margin:0/0/20/0
+      - card abs:[30,415 346x60] rel:[0,0 346x60] mx:MxCard grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:20 shadow:1/2
+        - div abs:[44,431 30x30] rel:[14,15 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:9
+          - span abs:[52,439 14x14] rel:[8,8 14x14] flex:row
+            - icon:cloud abs:[52,439 14x14] rel:[0,0 14x14] clip
+        - div abs:[90,427 272x36] rel:[60,12 272x36]
+          - div "Local-first" abs:[90,427 272x18] rel:[0,0 272x18] font:14/700 color:font-headline tracking:-0.1
+          - div "No sign-in needed. Sync is optional, anytime." abs:[90,446 272x17] rel:[0,19 272x17] margin:1/0/0/0 font:12/400/17 color:on-surface-variant
+      - card abs:[30,486 346x60] rel:[0,70 346x60] mx:MxCard grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:20 shadow:1/2
+        - div abs:[44,501 30x30] rel:[14,15 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:9
+          - span abs:[52,509 14x14] rel:[8,8 14x14] flex:row
+            - icon:sun abs:[52,509 14x14] rel:[0,0 14x14] clip
+        - div abs:[90,498 272x36] rel:[60,12 272x36]
+          - div "A daily rhythm" abs:[90,498 272x18] rel:[0,0 272x18] font:14/700 color:font-headline tracking:-0.1
+          - div "Short sessions, surfaced by what’s due." abs:[90,517 272x17] rel:[0,19 272x17] margin:1/0/0/0 font:12/400/17 color:on-surface-variant
+      - card abs:[30,556 346x60] rel:[0,141 346x60] mx:MxCard grid cols:2 gap:12 align:center pad:12/14 bg:on-primary r:20 shadow:1/2
+        - div abs:[44,571 30x30] rel:[14,15 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:9
+          - span abs:[52,579 14x14] rel:[8,8 14x14] flex:row
+            - icon:shield-check abs:[52,579 14x14] rel:[0,0 14x14] clip
+        - div abs:[90,568 272x36] rel:[60,12 272x36]
+          - div "No streak pressure" abs:[90,568 272x18] rel:[0,0 272x18] font:14/700 color:font-headline tracking:-0.1
+          - div "Skip a day. Your progress is safe." abs:[90,587 272x17] rel:[0,19 272x17] margin:1/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[8,691 390x97] rel:[0,683 390x97] pad:10/18/18/18
+    - pill-btn "Let’s start" abs:[26,701 354x44] rel:[18,10 354x44] mx:MxPrimaryButton flex:row gap:8 justify:center align:center pad:0/16 bg:seed-indigo font:16/600 color:on-primary text:center tracking:0.1 r:14
+      - span abs:[238,715 16x16] rel:[212,14 16x16] flex:row
+        - icon:arrow-right abs:[238,715 16x16] rel:[0,0 16x16] clip
+    - div "You’re always in control. Sign-in is optional." abs:[26,755 354x15] rel:[18,64 354x15] margin:10/0/0/0 font:12/400 color:on-surface-variant text:center
 ```
 
 ## State: Zero state (full — differs too much from base)
@@ -102,44 +102,44 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
 ```
 
 ## State: Create deck (full — differs too much from base)
@@ -160,70 +160,70 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
-  - div abs:[8,479 390x309] rel:[0,471 390x309] repeat:x2(unit=2) pad:0/0/14/0 pos:absolute z:51 bg:surface-container-high r:20 shadow:-10/30
-    - item[1] div abs:[8,479 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
-      - span abs:[185,487 36x4] rel:[177,8 36x4] bg:outline-variant r:999
-    - div abs:[8,495 390x61] rel:[0,16 390x61] pad:4/18/14/18
-      - div "Name your first deck" abs:[26,499 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
-      - div "You can rename it or move it into folders anytime." abs:[26,524 354x18] rel:[18,29 354x18] font:12/400/18 color:on-surface-variant
-    - item[2] div abs:[8,556 390x174] rel:[0,77 390x174] pad:0/18/14/18
-      - ov "Deck name" abs:[26,556 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[26,575 354x46] rel:[18,19 354x46] flex:row gap:8 align:center pad:0/14 bg:on-primary r:11 border:1px seed-indigo
-        - span "Korean — TOPIK starter" abs:[41,589 156x18] rel:[15,14 156x18] font:14/600 color:font-headline
-        - span abs:[205,589 2x18] rel:[179,14 2x18] bg:seed-indigo
-      - div abs:[26,635 354x13] rel:[18,79 354x13] flex:row gap:6 align:center margin:14/0/6/0
-        - span abs:[26,636 11x11] rel:[0,1 11x11] flex:row
-          - icon:sparkles abs:[26,636 11x11] rel:[0,0 11x11] clip
-        - ov "Or try a starter" abs:[43,635 117x13] rel:[17,0 117x13] font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[26,654 354x62] rel:[18,98 354x62] flex:row wrap gap:6 repeat:x4(unit=1)
-        - item[1] button "Korean basics" abs:[26,654 107x28] rel:[0,0 107x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-        - item[2] button "Japanese kana" abs:[139,654 110x28] rel:[113,0 110x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-        - item[3] button "Vocabulary" abs:[255,654 92x28] rel:[229,0 92x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-        - item[4] button "GRE words" abs:[26,688 89x28] rel:[0,34 89x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
-    - div abs:[8,730 390x44] rel:[0,251 390x44] flex:row gap:8 pad:4/14/0/14
-      - pill-btn "Cancel" abs:[22,734 160x40] rel:[14,4 160x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-      - pill-btn "Create deck" abs:[190,734 194x40] rel:[182,4 194x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-        - span abs:[238,747 14x14] rel:[48,13 14x14] flex:row
-          - icon:check abs:[238,747 14x14] rel:[0,0 14x14] clip
+  - div abs:[8,471 390x317] rel:[0,463 390x317] repeat:x2(unit=2) pad:0/0/14/0 pos:absolute z:51 bg:surface-container-high r:20 shadow:-10/30
+    - item[1] div abs:[8,471 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
+      - span abs:[185,479 36x4] rel:[177,8 36x4] bg:outline-variant r:999
+    - div abs:[8,487 390x61] rel:[0,16 390x61] pad:4/18/14/18
+      - div "Name your first deck" abs:[26,491 354x21] rel:[18,4 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
+      - div "You can rename it or move it into folders anytime." abs:[26,516 354x18] rel:[18,29 354x18] font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[8,548 390x174] rel:[0,77 390x174] pad:0/18/14/18
+      - ov "Deck name" abs:[26,548 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[26,567 354x46] rel:[18,19 354x46] flex:row gap:8 align:center pad:0/14 bg:on-primary r:12 border:1px seed-indigo
+        - span "Korean — TOPIK starter" abs:[41,581 156x18] rel:[15,14 156x18] font:14/600 color:font-headline
+        - span abs:[205,581 2x18] rel:[179,14 2x18] bg:seed-indigo
+      - div abs:[26,627 354x13] rel:[18,79 354x13] flex:row gap:6 align:center margin:14/0/6/0
+        - span abs:[26,628 11x11] rel:[0,1 11x11] flex:row
+          - icon:sparkles abs:[26,628 11x11] rel:[0,0 11x11] clip
+        - ov "Or try a starter" abs:[43,627 102x13] rel:[17,0 102x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[26,646 354x62] rel:[18,98 354x62] flex:row wrap gap:6 repeat:x4(unit=1)
+        - item[1] button "Korean basics" abs:[26,646 107x28] rel:[0,0 107x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+        - item[2] button "Japanese kana" abs:[139,646 110x28] rel:[113,0 110x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+        - item[3] button "Vocabulary" abs:[255,646 92x28] rel:[229,0 92x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+        - item[4] button "GRE words" abs:[26,680 89x28] rel:[0,34 89x28] mx:? pad:0/12 bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+    - div abs:[8,722 390x52] rel:[0,251 390x52] flex:row gap:8 pad:4/14/0/14
+      - pill-btn "Cancel" abs:[22,726 159x48] rel:[14,4 159x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Create deck" abs:[189,726 195x48] rel:[181,4 195x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.3 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[234,743 14x14] rel:[45,17 14x14] flex:row
+          - icon:check abs:[234,743 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Deck for import (full — differs too much from base)
@@ -244,68 +244,68 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
-  - div abs:[8,459 390x329] rel:[0,451 390x329] repeat:x2(unit=2) pad:0/0/14/0 pos:absolute z:51 bg:surface-container-high r:20 shadow:-10/30
-    - item[1] div abs:[8,459 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
-      - span abs:[185,467 36x4] rel:[177,8 36x4] bg:outline-variant r:999
-    - div abs:[8,475 390x109] rel:[0,16 390x109] pad:4/18/12/18
-      - div "Step 1 of 2" abs:[26,480 100x21] rel:[18,5 100x21] flex:row gap:6 align:center pad:4/10 margin:0/0/10/0 bg:success@10 font:11/700 color:mastery tracking:0.3 r:999
-        - span abs:[36,485 11x11] rel:[10,5 11x11] flex:row
-          - icon:upload abs:[36,485 11x11] rel:[0,0 11x11] clip
-      - div "Where should the imported cards go?" abs:[26,511 354x21] rel:[18,36 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
-      - div "We need a destination deck first. We won’t create it until you pick the file." abs:[26,536 354x36] rel:[18,61 354x36] font:12/400/18 color:on-surface-variant
-    - item[2] div abs:[8,584 390x146] rel:[0,125 390x146] pad:0/18/14/18
-      - ov "Deck name" abs:[26,584 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[26,603 354x46] rel:[18,19 354x46] flex:row gap:8 align:center pad:0/14 bg:on-primary r:11 border:1px seed-indigo
-        - span "Imported vocabulary" abs:[41,617 142x18] rel:[15,14 142x18] font:14/600 color:font-headline
-        - span abs:[191,617 2x18] rel:[165,14 2x18] bg:seed-indigo
-      - div abs:[26,661 354x55] rel:[18,77 354x55] flex:row gap:8 align:start pad:10/12 margin:12/0/0/0 bg:#d9891e@5 r:10 border:1px #d9891e@16
-        - span abs:[39,672 13x13] rel:[13,11 13x13] flex:row
-          - icon:info abs:[39,672 13x13] rel:[0,0 13x13] clip
-        - span "If you cancel after this step, the empty deck is discarded — nothing left behind." abs:[60,672 307x33] rel:[34,11 307x33] font:11/400/17 color:font-headline
-    - div abs:[8,730 390x44] rel:[0,271 390x44] flex:row gap:8 pad:4/14/0/14
-      - pill-btn "Cancel" abs:[22,734 155x40] rel:[14,4 155x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-      - pill-btn "Continue to import" abs:[185,734 199x40] rel:[177,4 199x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-        - span abs:[340,747 14x14] rel:[156,13 14x14] flex:row
-          - icon:arrow-right abs:[340,747 14x14] rel:[0,0 14x14] clip
+  - div abs:[8,447 390x341] rel:[0,439 390x341] repeat:x2(unit=2) pad:0/0/14/0 pos:absolute z:51 bg:surface-container-high r:20 shadow:-10/30
+    - item[1] div abs:[8,447 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
+      - span abs:[185,455 36x4] rel:[177,8 36x4] bg:outline-variant r:999
+    - div abs:[8,463 390x110] rel:[0,16 390x110] pad:4/18/12/18
+      - div "Step 1 of 2" abs:[26,467 105x23] rel:[18,4 105x23] flex:row gap:6 align:center pad:4/10 margin:0/0/10/0 bg:success@10 font:12/700 color:mastery tracking:0.3 r:999
+        - span abs:[36,473 11x11] rel:[10,6 11x11] flex:row
+          - icon:upload abs:[36,473 11x11] rel:[0,0 11x11] clip
+      - div "Where should the imported cards go?" abs:[26,500 354x21] rel:[18,37 354x21] margin:0/0/4/0 font:16/700 color:font-headline tracking:-0.2
+      - div "We need a destination deck first. We won’t create it until you pick the file." abs:[26,525 354x36] rel:[18,62 354x36] font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[8,573 390x149] rel:[0,126 390x149] pad:0/18/14/18
+      - ov "Deck name" abs:[26,573 354x13] rel:[18,0 354x13] margin:0/0/6/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[26,592 354x46] rel:[18,19 354x46] flex:row gap:8 align:center pad:0/14 bg:on-primary r:12 border:1px seed-indigo
+        - span "Imported vocabulary" abs:[41,606 142x18] rel:[15,14 142x18] font:14/600 color:font-headline
+        - span abs:[191,606 2x18] rel:[165,14 2x18] bg:seed-indigo
+      - div abs:[26,650 354x58] rel:[18,77 354x58] flex:row gap:8 align:start pad:10/12 margin:12/0/0/0 bg:#d9891e@5 r:12 border:1px #d9891e@16
+        - span abs:[39,661 13x13] rel:[13,11 13x13] flex:row
+          - icon:info abs:[39,661 13x13] rel:[0,0 13x13] clip
+        - span "If you cancel after this step, the empty deck is discarded — nothing left behind." abs:[60,661 307x36] rel:[34,11 307x36] font:12/400/18 color:font-headline
+    - div abs:[8,722 390x52] rel:[0,275 390x52] flex:row gap:8 pad:4/14/0/14
+      - pill-btn "Cancel" abs:[22,726 154x48] rel:[14,4 154x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Continue to import" abs:[184,726 200x48] rel:[176,4 200x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[345,743 14x14] rel:[161,17 14x14] flex:row
+          - icon:arrow-right abs:[345,743 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Signing in (full — differs too much from base)
@@ -326,52 +326,52 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
   - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-    - div abs:[31,295 344x207] rel:[23,287 344x207] pad:24/22 maxw:300 bg:surface-container-high r:18 shadow:16/40
-      - div abs:[177,319 52x52] rel:[146,24 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:14
-        - span abs:[188,330 30x30] rel:[11,11 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
-      - div "Signing in to Google" abs:[53,385 300x19] rel:[22,90 300x19] margin:0/0/6/0 font:15/700 color:font-headline text:center
-      - div "Continue in the Google sign-in window." abs:[53,410 300x18] rel:[22,115 300x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
-      - pill-btn "Cancel" abs:[167,442 71x36] rel:[136,147 71x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/14 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
+    - div abs:[31,294 344x209] rel:[23,286 344x209] pad:24/22 maxw:300 bg:surface-container-high r:18 shadow:16/40
+      - div abs:[177,318 52x52] rel:[146,24 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:14
+        - span abs:[188,329 30x30] rel:[11,11 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+      - div "Signing in to Google" abs:[53,384 300x21] rel:[22,90 300x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - div "Continue in the Google sign-in window." abs:[53,411 300x18] rel:[22,117 300x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
+      - pill-btn "Cancel" abs:[167,443 71x36] rel:[136,149 71x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/14 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
 ```
 
 ## State: Restore prompt (full — differs too much from base)
@@ -392,63 +392,63 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
-  - div abs:[8,591 390x197] rel:[0,583 390x197] repeat:x2(unit=2) pad:0/0/14/0 pos:absolute z:51 bg:surface-container-high r:20 shadow:-10/30
-    - item[1] div abs:[8,591 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
-      - span abs:[185,599 36x4] rel:[177,8 36x4] bg:outline-variant r:999
-    - div abs:[8,607 390x104] rel:[0,16 390x104] pad:4/18/14/18
-      - div abs:[26,611 354x36] rel:[18,4 354x36] flex:row gap:10 align:center margin:0/0/10/0
-        - div abs:[26,611 36x36] rel:[0,0 36x36] flex:row justify:center align:center shrink:0 bg:#d9891e@12 r:11
-          - span abs:[36,621 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[36,621 16x16] rel:[0,0 16x16] clip
-        - div abs:[72,612 249x33] rel:[46,2 249x33]
-          - div "We found a backup" abs:[72,612 249x19] rel:[0,0 249x19] font:15/700 color:font-headline tracking:-0.2
-          - div "alex@memox.app · 326 cards · saved 4 days ago" abs:[72,632 249x13] rel:[0,20 249x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-      - div "Restoring will pull all decks, cards, and history from Drive onto this device." abs:[26,657 354x40] rel:[18,50 354x40] font:13/400/20 color:font-headline
-    - item[2] div abs:[8,711 390x40] rel:[0,120 390x40] flex:row gap:8 pad:0/14
-      - pill-btn "Not now" abs:[22,711 155x40] rel:[14,0 155x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-      - pill-btn "Restore now" abs:[185,711 199x40] rel:[177,0 199x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-        - span abs:[235,724 14x14] rel:[50,13 14x14] flex:row
-          - icon:cloud-download abs:[235,724 14x14] rel:[0,0 14x14] clip
-    - div "You can do this later from Settings." abs:[8,761 390x13] rel:[0,170 390x13] margin:10/0/0/0 font:11/400 color:on-surface-variant text:center
+  - div abs:[8,577 390x211] rel:[0,569 390x211] repeat:x2(unit=2) pad:0/0/14/0 pos:absolute z:51 bg:surface-container-high r:20 shadow:-10/30
+    - item[1] div abs:[8,577 390x16] rel:[0,0 390x16] flex:row justify:center pad:8/0/4/0
+      - span abs:[185,585 36x4] rel:[177,8 36x4] bg:outline-variant r:999
+    - div abs:[8,593 390x108] rel:[0,16 390x108] pad:4/18/14/18
+      - div abs:[26,597 354x37] rel:[18,4 354x37] flex:row gap:10 align:center margin:0/0/10/0
+        - div abs:[26,597 36x36] rel:[0,1 36x36] flex:row justify:center align:center shrink:0 bg:#d9891e@12 r:12
+          - span abs:[36,607 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[36,607 16x16] rel:[0,0 16x16] clip
+        - div abs:[72,597 271x37] rel:[46,0 271x37]
+          - div "We found a backup" abs:[72,597 271x21] rel:[0,0 271x21] font:16/700 color:font-headline tracking:-0.2
+          - div "alex@memox.app · 326 cards · saved 4 days ago" abs:[72,619 271x15] rel:[0,22 271x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+      - div "Restoring will pull all decks, cards, and history from Drive onto this device." abs:[26,644 354x43] rel:[18,51 354x43] font:14/400/22 color:font-headline
+    - item[2] div abs:[8,701 390x48] rel:[0,124 390x48] flex:row gap:8 pad:0/14
+      - pill-btn "Not now" abs:[22,701 154x48] rel:[14,0 154x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+      - pill-btn "Restore now" abs:[184,701 200x48] rel:[176,0 200x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1.4 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[231,718 14x14] rel:[47,17 14x14] flex:row
+          - icon:cloud-download abs:[231,718 14x14] rel:[0,0 14x14] clip
+    - div "You can do this later from Settings." abs:[8,759 390x15] rel:[0,182 390x15] margin:10/0/0/0 font:12/400 color:on-surface-variant text:center
 ```
 
 ## State: Restoring (full — differs too much from base)
@@ -469,54 +469,54 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
   - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-    - div abs:[26,301 354x195] rel:[18,293 354x195] repeat:x2+(unit=2) pad:24/22 maxw:320 bg:surface-container-high r:18 shadow:16/40
-      - item[1] div abs:[177,325 52x52] rel:[151,24 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:14
-        - span abs:[188,336 30x30] rel:[11,11 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
-      - div "Restoring your library" abs:[48,391 310x19] rel:[22,90 310x19] margin:0/0/4/0 font:15/700 color:font-headline text:center
-      - item[2] div "Pulling 326 cards from Drive. Don’t close the app yet." abs:[48,414 310x18] rel:[22,113 310x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
-      - div abs:[48,446 310x5] rel:[22,145 310x5] clip bg:surface-container r:999
+    - div abs:[26,299 354x199] rel:[18,291 354x199] repeat:x2+(unit=2) pad:24/22 maxw:320 bg:surface-container-high r:18 shadow:16/40
+      - item[1] div abs:[177,323 52x52] rel:[151,24 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:14
+        - span abs:[188,334 30x30] rel:[11,11 30x30] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+      - div "Restoring your library" abs:[48,389 310x21] rel:[22,90 310x21] margin:0/0/4/0 font:16/700 color:font-headline text:center
+      - item[2] div "Pulling 326 cards from Drive. Don’t close the app yet." abs:[48,414 310x18] rel:[22,115 310x18] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
+      - div abs:[48,446 310x5] rel:[22,147 310x5] clip bg:surface-container r:999
         - div abs:[48,446 130x5] rel:[0,0 130x5] bg:seed-indigo r:999
-      - div "136 of 326" abs:[48,459 310x13] rel:[22,158 310x13] margin:8/0/0/0 font:11/400 color:on-surface-variant text:center
+      - div "136 of 326" abs:[48,459 310x15] rel:[22,160 310x15] margin:8/0/0/0 font:12/400 color:on-surface-variant text:center
 ```
 
 ## State: Restore failed (full — differs too much from base)
@@ -537,58 +537,58 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
   - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-    - div abs:[43,261 320x273] rel:[35,253 320x273] maxw:320 clip bg:surface-container-high r:18 shadow:16/40
-      - div abs:[43,261 320x157] rel:[0,0 320x157] pad:22/22/4/22
-        - div abs:[177,283 52x52] rel:[134,22 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@10 r:14
-          - span abs:[192,298 22x22] rel:[15,15 22x22] flex:row
-            - icon:cloud-off abs:[192,298 22x22] rel:[0,0 22x22] clip
-        - div "Restore didn’t finish" abs:[65,347 276x21] rel:[22,86 276x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
-        - div "Nothing was added to your device. You can try again, or start with a fresh deck." abs:[65,374 276x40] rel:[22,113 276x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-      - div abs:[43,419 320x116] rel:[0,157 320x116] flex:col gap:8 pad:14
-        - pill-btn "Try restore again" abs:[57,433 292x40] rel:[14,14 292x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-          - span abs:[141,446 14x14] rel:[84,13 14x14] flex:row
-            - icon:refresh-cw abs:[141,446 14x14] rel:[0,0 14x14] clip
-        - pill-btn "Continue without restoring" abs:[57,481 292x40] rel:[14,62 292x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
+    - div abs:[43,252 320x292] rel:[35,244 320x292] maxw:320 clip bg:surface-container-high r:18 shadow:16/40
+      - div abs:[43,252 320x160] rel:[0,0 320x160] pad:22/22/4/22
+        - div abs:[177,274 52x52] rel:[134,22 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@10 r:14
+          - span abs:[192,289 22x22] rel:[15,15 22x22] flex:row
+            - icon:cloud-off abs:[192,289 22x22] rel:[0,0 22x22] clip
+        - div "Restore didn’t finish" abs:[65,338 276x21] rel:[22,86 276x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+        - div "Nothing was added to your device. You can try again, or start with a fresh deck." abs:[65,365 276x43] rel:[22,113 276x43] pad:0/6 font:14/400/22 color:on-surface-variant text:center
+      - div abs:[43,412 320x132] rel:[0,160 320x132] flex:col gap:8 pad:14
+        - pill-btn "Try restore again" abs:[57,426 292x48] rel:[14,14 292x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+          - span abs:[137,443 14x14] rel:[80,17 14x14] flex:row
+            - icon:refresh-cw abs:[137,443 14x14] rel:[0,0 14x14] clip
+        - pill-btn "Continue without restoring" abs:[57,482 292x48] rel:[14,70 292x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
 ```
 
 ## State: Import handoff (full — differs too much from base)
@@ -609,51 +609,51 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - span abs:[356,78 20x20] rel:[8,8 20x20] flex:row
           - icon:settings abs:[356,78 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,140 390x648] rel:[0,132 390x648] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,140 362x165] rel:[14,0 362x165] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 r:12 border:1px seed-indigo@18
-      - div abs:[177,159 52x52] rel:[155,19 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:seed-indigo@14 r:15
-        - span abs:[192,174 22x22] rel:[15,15 22x22] flex:row
-          - icon:sparkles abs:[192,174 22x22] rel:[0,0 22x22] clip
-      - div "Three ways to begin" abs:[39,223 328x22] rel:[17,83 328x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[39,251 328x37] rel:[17,111 328x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
-    - div abs:[22,319 362x224] rel:[14,179 362x224] flex:col gap:10 margin:0/0/18/0
-      - button abs:[22,319 362x72] rel:[0,0 362x72] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:6/20
-        - div abs:[36,335 40x40] rel:[14,16 40x40] flex:row justify:center align:center bg:on-primary@18 r:11
-          - span abs:[47,346 18x18] rel:[11,11 18x18] flex:row
-            - icon:layers abs:[47,346 18x18] rel:[0,0 18x18] clip
-        - div abs:[92,337 248x35] rel:[70,18 248x35]
-          - div "Create your first deck" abs:[92,337 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
-          - div "Start blank · add cards one at a time" abs:[92,357 248x15] rel:[0,20 248x15] font:11/400/15 color:on-primary op:0.85
-        - span abs:[352,347 18x16] rel:[330,28 18x16] flex:row
-          - icon:arrow-right abs:[352,347 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,401 362x66] rel:[0,82 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,416 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:10
-          - span abs:[47,426 16x16] rel:[10,10 16x16] flex:row
-            - icon:upload abs:[47,426 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,416 250x35] rel:[67,15 250x35]
-          - div "Import from a file" abs:[89,416 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "CSV, TSV, or Excel · preview before adding" abs:[89,436 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,426 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,426 16x16] rel:[0,0 16x16] clip
-      - button abs:[22,477 362x66] rel:[0,158 362x66] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
-        - div abs:[37,492 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:#d9891e@12 r:10
-          - span abs:[47,502 16x16] rel:[10,10 16x16] flex:row
-            - icon:cloud-download abs:[47,502 16x16] rel:[0,0 16x16] clip
-        - div abs:[89,492 250x35] rel:[67,15 250x35]
-          - div "Sign in & restore" abs:[89,492 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
-          - div "Returning user · pull from Google Drive backup" abs:[89,512 250x15] rel:[0,20 250x15] font:11/400/15 color:on-surface-variant
-        - span abs:[351,502 18x16] rel:[329,25 18x16] flex:row
-          - icon:chevron-right abs:[351,502 16x16] rel:[0,0 16x16] clip
-    - div abs:[22,561 362x55] rel:[14,421 362x55] flex:row gap:8 align:start pad:10/12 bg:on-primary r:11 border:1px seed-indigo@14
-      - span abs:[35,572 13x13] rel:[13,11 13x13] flex:row
-        - icon:lock abs:[35,572 13x13] rel:[0,0 13x13] clip
-      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,572 315x33] rel:[34,11 315x33] font:11/400/17 color:on-surface-variant
+    - card abs:[22,140 362x162] rel:[14,0 362x162] mx:MxCard pad:18/16/16/16 margin:0/0/14/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[177,158 52x52] rel:[155,18 52x52] flex:row justify:center align:center margin:0/0/12/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:15
+        - span abs:[192,173 22x22] rel:[15,15 22x22] flex:row
+          - icon:sparkles abs:[192,173 22x22] rel:[0,0 22x22] clip
+      - div "Three ways to begin" abs:[38,222 330x21] rel:[16,82 330x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
+      - div "Pick what fits. You can do the others later — none of these locks you in." abs:[38,249 330x37] rel:[16,109 330x37] pad:0/4 font:12/400/19 color:on-surface-variant text:center
+    - div abs:[22,316 362x250] rel:[14,176 362x250] flex:col gap:10 margin:0/0/18/0
+      - button abs:[22,316 362x80] rel:[0,0 362x80] mx:? grid cols:3 gap:12 align:center pad:16/14 bg:seed-indigo r:14 shadow:0/1
+        - div abs:[36,332 40x48] rel:[14,16 40x48] flex:row justify:center align:center bg:on-primary@18 r:12
+          - span abs:[47,347 18x18] rel:[11,15 18x18] flex:row
+            - icon:layers abs:[47,347 18x18] rel:[0,0 18x18] clip
+        - div abs:[92,338 248x37] rel:[70,22 248x37]
+          - div "Create your first deck" abs:[92,338 248x18] rel:[0,0 248x18] margin:0/0/2/0 font:14/700 color:on-primary tracking:-0.1
+          - div "Start blank · add cards one at a time" abs:[92,358 248x17] rel:[0,20 248x17] font:12/400/17 color:on-primary op:0.85
+        - span abs:[352,348 18x16] rel:[330,32 18x16] flex:row
+          - icon:arrow-right abs:[352,348 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,406 362x67] rel:[0,90 362x67] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,422 36x36] rel:[15,15 36x36] flex:row justify:center align:center bg:success@12 r:12
+          - span abs:[47,432 16x16] rel:[10,10 16x16] flex:row
+            - icon:upload abs:[47,432 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,421 250x37] rel:[67,15 250x37]
+          - div "Import from a file" abs:[89,421 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "CSV, TSV, or Excel · preview before adding" abs:[89,441 250x17] rel:[0,20 250x17] font:12/400/17 color:on-surface-variant
+        - span abs:[351,432 18x16] rel:[329,25 18x16] flex:row
+          - icon:chevron-right abs:[351,432 16x16] rel:[0,0 16x16] clip
+      - button abs:[22,483 362x84] rel:[0,167 362x84] mx:? grid cols:3 gap:12 align:center pad:14 bg:on-primary r:14 border:1px seed-indigo@14
+        - div abs:[37,507 36x36] rel:[15,24 36x36] flex:row justify:center align:center bg:#d9891e@12 r:12
+          - span abs:[47,517 16x16] rel:[10,10 16x16] flex:row
+            - icon:cloud-download abs:[47,517 16x16] rel:[0,0 16x16] clip
+        - div abs:[89,498 250x54] rel:[67,15 250x54]
+          - div "Sign in & restore" abs:[89,498 250x18] rel:[0,0 250x18] margin:0/0/2/0 font:14/700 color:font-headline tracking:-0.1
+          - div "Returning user · pull from Google Drive backup" abs:[89,518 250x34] rel:[0,20 250x34] font:12/400/17 color:on-surface-variant
+        - span abs:[351,517 18x16] rel:[329,34 18x16] flex:row
+          - icon:chevron-right abs:[351,517 16x16] rel:[0,0 16x16] clip
+    - div abs:[22,585 362x58] rel:[14,445 362x58] flex:row gap:8 align:start pad:10/12 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,596 13x13] rel:[13,11 13x13] flex:row
+        - icon:lock abs:[35,596 13x13] rel:[0,0 13x13] clip
+      - span "Your cards stay on this device. Sign-in is optional and never required." abs:[56,596 315x36] rel:[34,11 315x36] font:12/400/18 color:on-surface-variant
   - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
   - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-    - div abs:[31,300 344x196] rel:[23,292 344x196] pad:22 maxw:300 bg:surface-container-high r:18 shadow:16/40
-      - div abs:[181,322 44x44] rel:[150,22 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:success@12 r:12
-        - span abs:[193,334 20x20] rel:[12,12 20x20] flex:row
-          - icon:check abs:[193,334 20x20] rel:[0,0 20x20] clip
-      - div "Deck ready" abs:[53,378 300x19] rel:[22,78 300x19] margin:0/0/4/0 font:15/700 color:font-headline text:center
-      - div ""Imported vocabulary" was created. Opening the import screen…" abs:[53,401 300x36] rel:[22,101 300x36] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
-      - span abs:[193,454 20x20] rel:[162,154 20x20] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+    - div abs:[31,299 344x198] rel:[23,291 344x198] pad:22 maxw:300 bg:surface-container-high r:18 shadow:16/40
+      - div abs:[181,321 44x44] rel:[150,22 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:success@12 r:12
+        - span abs:[193,333 20x20] rel:[12,12 20x20] flex:row
+          - icon:check abs:[193,333 20x20] rel:[0,0 20x20] clip
+      - div "Deck ready" abs:[53,377 300x21] rel:[22,78 300x21] margin:0/0/4/0 font:16/700 color:font-headline text:center
+      - div ""Imported vocabulary" was created. Opening the import screen…" abs:[53,402 300x36] rel:[22,103 300x36] margin:0/0/14/0 font:12/400/18 color:on-surface-variant text:center
+      - span abs:[193,455 20x20] rel:[162,156 20x20] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
 ```

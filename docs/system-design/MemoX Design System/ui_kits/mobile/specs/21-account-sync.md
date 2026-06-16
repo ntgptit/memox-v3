@@ -46,79 +46,79 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - card abs:[22,100 362x267] rel:[14,0 362x267] mx:MxCard pad:24/18/20/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[175,125 56x56] rel:[153,25 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
-        - span abs:[189,139 28x28] rel:[14,14 28x28] flex:row
-          - icon:cloud abs:[189,139 28x28] rel:[0,0 28x28] clip
-      - div "Back up to your Google Drive" abs:[41,195 324x23] rel:[19,95 324x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.3
-      - div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." abs:[41,226 324x60] rel:[19,126 324x60] pad:0/4 margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-        - em "when you choose" abs:[236,248 109x16] rel:[195,22 109x16] font:13/600/20 color:font-headline text:center
-      - pill-btn "Sign in with Google" abs:[41,302 324x44] rel:[19,202 324x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/18 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
-        - svg abs:[124,315 18x18] rel:[83,13 18x18] clip
-    - ov "What stays local" abs:[22,381 362x21] rel:[14,281 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - card abs:[22,402 362x182] rel:[14,302 362x182] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,403 360x60] rel:[1,1 360x60] flex:row gap:12 align:start pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,415 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:9
-          - span abs:[45,423 15x15] rel:[8,8 15x15] flex:row
-            - icon:smartphone abs:[45,423 15x15] rel:[0,0 15x15] clip
-        - div abs:[79,415 290x35] rel:[56,12 290x35] grow:1 basis:0 layout_hint:expanded
-          - div "All your decks live on this device" abs:[79,415 290x16] rel:[0,0 290x16] font:13/600 color:font-headline tracking:-0.1
-          - div "Study, edit, and review work offline." abs:[79,433 290x17] rel:[0,18 290x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-      - div abs:[23,464 360x60] rel:[1,61 360x60] flex:row gap:12 align:start pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,476 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:9
-          - span abs:[45,483 15x15] rel:[8,8 15x15] flex:row
-            - icon:shield-check abs:[45,483 15x15] rel:[0,0 15x15] clip
-        - div abs:[79,476 290x35] rel:[56,12 290x35] grow:1 basis:0 layout_hint:expanded
-          - div "No account needed to use MemoX" abs:[79,476 290x16] rel:[0,0 290x16] font:13/600 color:font-headline tracking:-0.1
-          - div "Sign in only when you want a backup." abs:[79,494 290x17] rel:[0,18 290x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-      - div abs:[23,524 360x59] rel:[1,122 360x59] flex:row gap:12 align:start pad:12/14
-        - div abs:[37,536 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:9
-          - span abs:[45,544 15x15] rel:[8,8 15x15] flex:row
-            - icon:upload-cloud abs:[45,544 15x15] rel:[0,0 15x15] clip
-        - div abs:[79,536 290x35] rel:[56,12 290x35] grow:1 basis:0 layout_hint:expanded
-          - div "You decide when to upload" abs:[79,536 290x16] rel:[0,0 290x16] font:13/600 color:font-headline tracking:-0.1
-          - div "Drive backups are always manual." abs:[79,554 290x17] rel:[0,18 290x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded pad:0/20/20/20 layout_hint:scroll
+    - card abs:[28,108 350x270] rel:[20,0 350x270] mx:MxCard pad:24/18/20/18 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[175,132 56x56] rel:[147,24 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+        - span abs:[189,146 28x28] rel:[14,14 28x28] flex:row
+          - icon:cloud abs:[189,146 28x28] rel:[0,0 28x28] clip
+      - div "Back up to your Google Drive" abs:[46,202 314x23] rel:[18,94 314x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.3
+      - div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." abs:[46,233 314x65] rel:[18,125 314x65] pad:0/4 margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+        - em "when you choose" abs:[103,256 248x40] rel:[57,23 248x40] font:14/600/22 color:font-headline text:center
+      - pill-btn "Sign in with Google" abs:[46,314 314x44] rel:[18,206 314x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/16 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
+        - svg abs:[124,327 18x18] rel:[78,13 18x18] clip
+    - ov "What stays local" abs:[28,392 350x21] rel:[20,284 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+    - card abs:[28,413 350x186] rel:[20,305 350x186] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+      - div abs:[28,413 350x62] rel:[0,0 350x62] flex:row gap:12 align:start pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,425 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+          - span abs:[50,433 15x15] rel:[8,8 15x15] flex:row
+            - icon:smartphone abs:[50,433 15x15] rel:[0,0 15x15] clip
+        - div abs:[84,425 280x37] rel:[56,12 280x37] grow:1 basis:0 layout_hint:expanded
+          - div "All your decks live on this device" abs:[84,425 280x18] rel:[0,0 280x18] font:14/600 color:font-headline tracking:-0.1
+          - div "Study, edit, and review work offline." abs:[84,445 280x17] rel:[0,20 280x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+      - div abs:[28,475 350x62] rel:[0,62 350x62] flex:row gap:12 align:start pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[42,487 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+          - span abs:[50,495 15x15] rel:[8,8 15x15] flex:row
+            - icon:shield-check abs:[50,495 15x15] rel:[0,0 15x15] clip
+        - div abs:[84,487 280x37] rel:[56,12 280x37] grow:1 basis:0 layout_hint:expanded
+          - div "No account needed to use MemoX" abs:[84,487 280x18] rel:[0,0 280x18] font:14/600 color:font-headline tracking:-0.1
+          - div "Sign in only when you want a backup." abs:[84,507 280x17] rel:[0,20 280x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+      - div abs:[28,538 350x61] rel:[0,125 350x61] flex:row gap:12 align:start pad:12/14
+        - div abs:[42,550 30x30] rel:[14,12 30x30] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+          - span abs:[50,557 15x15] rel:[8,8 15x15] flex:row
+            - icon:upload-cloud abs:[50,557 15x15] rel:[0,0 15x15] clip
+        - div abs:[84,550 280x37] rel:[56,12 280x37] grow:1 basis:0 layout_hint:expanded
+          - div "You decide when to upload" abs:[84,550 280x18] rel:[0,0 280x18] font:14/600 color:font-headline tracking:-0.1
+          - div "Drive backups are always manual." abs:[84,570 280x17] rel:[0,20 280x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
 ```
 
 ## State: Signing in (ordered diff vs Signed out)
 
 ```diff
-  - em "when you choose" abs:[236,248 109x16] rel:[195,22 109x16] font:13/600/20 color:font-headline text:center
-- - pill-btn "Sign in with Google" abs:[41,302 324x44] rel:[19,202 324x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/18 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
-- - svg abs:[124,315 18x18] rel:[83,13 18x18] clip
-+ - pill-btn "Signing in…" abs:[41,302 324x44] rel:[19,202 324x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/18 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2 op:0.85
-+ - span abs:[151,315 18x18] rel:[110,13 18x18] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
-  - ov "What stays local" abs:[22,381 362x21] rel:[14,281 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
+  - em "when you choose" abs:[103,256 248x40] rel:[57,23 248x40] font:14/600/22 color:font-headline text:center
+- - pill-btn "Sign in with Google" abs:[46,314 314x44] rel:[18,206 314x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/16 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
+- - svg abs:[124,327 18x18] rel:[78,13 18x18] clip
++ - pill-btn "Signing in…" abs:[46,314 314x44] rel:[18,206 314x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/16 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2 op:0.85
++ - span abs:[151,327 18x18] rel:[105,13 18x18] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+  - ov "What stays local" abs:[28,392 350x21] rel:[20,284 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
   ...
 ```
 
 ## State: Sign-in failed (ordered diff vs Signed out)
 
 ```diff
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-- - card abs:[22,100 362x267] rel:[14,0 362x267] mx:MxCard pad:24/18/20/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[175,125 56x56] rel:[153,25 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
-+ - card abs:[22,100 362x359] rel:[14,0 362x359] mx:MxCard repeat:x2+(unit=2) pad:24/18/20/18 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[175,125 56x56] rel:[153,25 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
-  - span abs:[189,139 28x28] rel:[14,14 28x28] flex:row
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded pad:0/20/20/20 layout_hint:scroll
+- - card abs:[28,108 350x270] rel:[20,0 350x270] mx:MxCard pad:24/18/20/18 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+- - div abs:[175,132 56x56] rel:[147,24 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
++ - card abs:[28,108 350x364] rel:[20,0 350x364] mx:MxCard repeat:x2+(unit=2) pad:24/18/20/18 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
++ - item[1] div abs:[175,132 56x56] rel:[147,24 56x56] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+  - span abs:[189,146 28x28] rel:[14,14 28x28] flex:row
   ...
-  - div "Back up to your Google Drive" abs:[41,195 324x23] rel:[19,95 324x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.3
-- - div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." abs:[41,226 324x60] rel:[19,126 324x60] pad:0/4 margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-+ - item[2] div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." abs:[41,226 324x60] rel:[19,126 324x60] pad:0/4 margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-  - em "when you choose" abs:[236,248 109x16] rel:[195,22 109x16] font:13/600/20 color:font-headline text:center
-+ - div abs:[41,302 324x80] rel:[19,202 324x80] flex:row gap:10 align:start pad:12/14 bg:#dc4848@8 r:12 border:1px #dc4848@22
-+ - span abs:[56,317 16x16] rel:[15,15 16x16] flex:row
-+ - icon:alert-circle abs:[56,317 16x16] rel:[0,0 16x16] clip
-+ - div abs:[82,315 268x54] rel:[41,13 268x54] grow:1 basis:0 layout_hint:expanded
-+ - div "Couldn't sign in" abs:[82,315 268x16] rel:[0,0 268x16] font:13/700 color:font-headline tracking:-0.1
-+ - div "Check your connection and try again. No data left your device." abs:[82,333 268x36] rel:[0,18 268x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
-  - pill-btn "Sign in with Google" abs:[41,394 324x44] rel:[19,294 324x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/18 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
+  - div "Back up to your Google Drive" abs:[46,202 314x23] rel:[18,94 314x23] margin:0/0/8/0 font:18/700 color:font-headline text:center tracking:-0.3
+- - div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." abs:[46,233 314x65] rel:[18,125 314x65] pad:0/4 margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
++ - item[2] div "MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically." abs:[46,233 314x65] rel:[18,125 314x65] pad:0/4 margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+  - em "when you choose" abs:[103,256 248x40] rel:[57,23 248x40] font:14/600/22 color:font-headline text:center
++ - div abs:[46,314 314x82] rel:[18,206 314x82] flex:row gap:10 align:start pad:12/14 bg:#dc4848@8 r:12 border:1px #dc4848@22
++ - span abs:[61,329 16x16] rel:[15,15 16x16] flex:row
++ - icon:alert-circle abs:[61,329 16x16] rel:[0,0 16x16] clip
++ - div abs:[87,327 258x56] rel:[41,13 258x56] grow:1 basis:0 layout_hint:expanded
++ - div "Couldn't sign in" abs:[87,327 258x18] rel:[0,0 258x18] font:14/700 color:font-headline tracking:-0.1
++ - div "Check your connection and try again. No data left your device." abs:[87,347 258x36] rel:[0,20 258x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
+  - pill-btn "Sign in with Google" abs:[46,408 314x44] rel:[18,300 314x44] mx:MxActionButton flex:row gap:10 justify:center align:center pad:0/16 bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
   ...
 ```
 
@@ -132,86 +132,86 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:824
-    - item[1] div abs:[22,100 362x185] rel:[14,0 362x185] margin:0/0/16/0
-      - ov "Account" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,121 362x164] rel:[0,21 362x164] flex:col gap:10
-        - card abs:[22,121 362x129] rel:[0,0 362x129] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,122 360x70] rel:[1,1 360x70] flex:row gap:12 align:center pad:14
-            - div "AL" abs:[37,136 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 font:16/700 color:on-primary tracking:0.2 r:999
-            - div abs:[91,138 230x39] rel:[68,16 230x39] grow:1 basis:0 layout_hint:expanded
-              - div "alex.minh@gmail.com" abs:[91,138 230x18] rel:[0,0 230x18] clip font:14/600 color:font-headline
-              - div abs:[91,161 124x13] rel:[0,23 124x13] flex:row gap:6 align:center margin:2/0/0/0
-                - svg abs:[91,162 11x11] rel:[0,1 11x11] clip
-                - span "Google · linked Apr 8" abs:[108,161 107x13] rel:[17,0 107x13] font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
-                - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
-            - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
-              - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
-                - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
-            - pill-btn "Switch account" abs:[208,203 161x36] rel:[185,11 161x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:10
-              - span abs:[233,214 14x14] rel:[25,11 14x14] flex:row
-                - icon:repeat abs:[233,214 14x14] rel:[0,0 14x14] clip
-        - div "Signing out keeps every deck and card on this device." abs:[22,260 362x25] rel:[0,139 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[2] div abs:[22,301 362x143] rel:[14,201 362x143] margin:0/0/16/0
-      - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
-        - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
-              - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
-                - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,337 238x32] rel:[60,14 238x32] grow:1 basis:0 layout_hint:expanded
-              - div "Alex's Pixel 8" abs:[83,337 238x18] rel:[0,0 238x18] font:14/600 color:font-headline
-              - div "Device label" abs:[83,356 238x13] rel:[0,19 238x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,335 36x36] rel:[310,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,343 20x20] rel:[8,8 20x20] flex:row
-                - icon:pencil abs:[341,343 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,384 360x59] rel:[1,62 360x59] grid cols:3 gap:12 pad:12/14
-            - div abs:[37,396 103x35] rel:[14,12 103x35]
-              - div "4" abs:[37,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "decks" abs:[37,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[152,396 103x35] rel:[129,12 103x35]
-              - div "142" abs:[152,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "cards" abs:[152,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[266,396 103x35] rel:[243,12 103x35]
-              - div "2 h" abs:[266,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "last active" abs:[266,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-    - item[3] div abs:[22,460 362x239] rel:[14,360 362x239] margin:0/0/16/0
-      - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,481 362x218] rel:[0,21 362x218] flex:col gap:10
-        - card abs:[22,481 362x218] rel:[0,0 362x218] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:surface-container r:10
-              - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
-                - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,495 286x32] rel:[60,13 286x32] grow:1 basis:0 layout_hint:expanded
-              - div "No backup yet" abs:[83,495 286x18] rel:[0,0 286x18] font:14/600 color:font-headline
-              - div "Upload to create your first backup." abs:[83,514 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-          - div abs:[23,541 360x112] rel:[1,60 360x112] flex:col gap:8 pad:12/14
-            - pill-btn "Upload to Drive" abs:[37,553 332x40] rel:[14,12 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-              - span abs:[143,565 16x16] rel:[106,12 16x16] flex:row
-                - icon:upload-cloud abs:[143,565 16x16] rel:[0,0 16x16] clip
-            - pill-btn "Restore from Drive" abs:[37,601 332x40] rel:[14,60 332x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant op:0.45
-              - span abs:[133,613 15x15] rel:[96,13 15x15] flex:row
-                - icon:download abs:[133,613 15x15] rel:[0,0 15x15] clip
-          - div "Uploads include decks, cards, tags, and review history. Settings stay local." abs:[23,653 360x45] rel:[1,172 360x45] pad:0/14/12/14 font:11/400/17 color:on-surface-variant
-    - item[4] div abs:[22,715 362x179] rel:[14,615 362x179] margin:0/0/16/0
-      - ov "Danger zone" abs:[22,715 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,736 362x158] rel:[0,21 362x158] flex:col gap:10
-        - card abs:[22,736 362x158] rel:[0,0 362x158] mx:MxCard pad:14 bg:#dc4848@3 r:12 border:1px #dc4848@20
-          - div "Remove account from MemoX" abs:[37,751 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
-          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[37,773 332x54] rel:[15,37 332x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
-          - pill-btn "Remove account" abs:[37,839 332x40] rel:[15,103 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-            - span abs:[139,852 14x14] rel:[102,13 14x14] flex:row
-              - icon:trash-2 abs:[139,852 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:852
+    - item[1] div abs:[28,108 350x184] rel:[20,0 350x184] margin:0/0/16/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,129 350x163] rel:[0,21 350x163] flex:col gap:10
+        - card abs:[28,129 350x127] rel:[0,0 350x127] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,129 350x70] rel:[0,0 350x70] flex:row gap:12 align:center pad:14
+            - div "AL" abs:[42,143 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+            - div abs:[96,145 220x39] rel:[68,16 220x39] grow:1 basis:0 layout_hint:expanded
+              - div "alex.minh@gmail.com" abs:[96,145 220x18] rel:[0,0 220x18] clip font:14/600 color:font-headline
+              - div abs:[96,167 134x15] rel:[0,22 134x15] flex:row gap:6 align:center margin:2/0/0/0
+                - svg abs:[96,169 11x11] rel:[0,2 11x11] clip
+                - span "Google · linked Apr 8" abs:[113,167 117x15] rel:[17,0 117x15] font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,146 36x36] rel:[300,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,154 20x20] rel:[8,8 20x20] flex:row
+                - icon:refresh-cw abs:[336,154 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,199 350x57] rel:[0,70 350x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
+            - pill-btn "Sign out" abs:[42,210 158x36] rel:[14,11 158x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[87,221 14x14] rel:[45,11 14x14] flex:row
+                - icon:log-out abs:[87,221 14x14] rel:[0,0 14x14] clip
+            - pill-btn "Switch account" abs:[208,210 156x36] rel:[180,11 156x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              - span abs:[230,221 14x14] rel:[22,11 14x14] flex:row
+                - icon:repeat abs:[230,221 14x14] rel:[0,0 14x14] clip
+        - div "Signing out keeps every deck and card on this device." abs:[28,266 350x26] rel:[0,137 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[28,308 350x143] rel:[20,200 350x143] margin:0/0/16/0
+      - ov "This device" abs:[28,308 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,329 350x122] rel:[0,21 350x122] flex:col gap:10
+        - card abs:[28,329 350x122] rel:[0,0 350x122] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,329 350x61] rel:[0,0 350x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - icon-tile abs:[42,342 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+              - span abs:[51,351 16x16] rel:[9,9 16x16] flex:row
+                - icon:smartphone abs:[51,351 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,342 228x34] rel:[60,13 228x34] grow:1 basis:0 layout_hint:expanded
+              - div "Alex's Pixel 8" abs:[88,342 228x18] rel:[0,0 228x18] font:14/600 color:font-headline
+              - div "Device label" abs:[88,361 228x15] rel:[0,19 228x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,341 36x36] rel:[300,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,349 20x20] rel:[8,8 20x20] flex:row
+                - icon:pencil abs:[336,349 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,390 350x61] rel:[0,61 350x61] grid cols:3 gap:12 pad:12/14
+            - div abs:[42,402 99x37] rel:[14,12 99x37]
+              - div "4" abs:[42,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "decks" abs:[42,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[153,402 99x37] rel:[125,12 99x37]
+              - div "142" abs:[153,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "cards" abs:[153,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[265,402 99x37] rel:[237,12 99x37]
+              - div "2 h" abs:[265,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "last active" abs:[265,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+    - item[3] div abs:[28,467 350x256] rel:[20,359 350x256] margin:0/0/16/0
+      - ov "Drive backup" abs:[28,467 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,488 350x235] rel:[0,21 350x235] flex:col gap:10
+        - card abs:[28,488 350x235] rel:[0,0 350x235] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,488 350x59] rel:[0,0 350x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - div abs:[42,500 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:surface-container r:12
+              - span abs:[51,509 16x16] rel:[9,9 16x16] flex:row
+                - icon:cloud abs:[51,509 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,500 276x34] rel:[60,12 276x34] grow:1 basis:0 layout_hint:expanded
+              - div "No backup yet" abs:[88,500 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+              - div "Upload to create your first backup." abs:[88,519 276x15] rel:[0,19 276x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+          - div abs:[28,547 350x128] rel:[0,59 350x128] flex:col gap:8 pad:12/14
+            - pill-btn "Upload to Drive" abs:[42,559 322x48] rel:[14,12 322x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+              - span abs:[139,575 16x16] rel:[97,16 16x16] flex:row
+                - icon:upload-cloud abs:[139,575 16x16] rel:[0,0 16x16] clip
+            - pill-btn "Restore from Drive" abs:[42,615 322x48] rel:[14,68 322x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant op:0.45
+              - span abs:[129,632 15x15] rel:[87,17 15x15] flex:row
+                - icon:download abs:[129,632 15x15] rel:[0,0 15x15] clip
+          - div "Uploads include decks, cards, tags, and review history. Settings stay local." abs:[28,675 350x48] rel:[0,187 350x48] pad:0/14/12/14 font:12/400/18 color:on-surface-variant
+    - item[4] div abs:[28,739 350x185] rel:[20,631 350x185] margin:0/0/16/0
+      - ov "Danger zone" abs:[28,739 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,760 350x164] rel:[0,21 350x164] flex:col gap:10
+        - card abs:[28,760 350x164] rel:[0,0 350x164] mx:MxCard pad:14 bg:#dc4848@3 r:20 shadow:1/2
+          - div "Remove account from MemoX" abs:[42,774 322x18] rel:[14,14 322x18] margin:0/0/4/0 font:14/600 color:font-headline
+          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[42,796 322x54] rel:[14,36 322x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+          - pill-btn "Remove account" abs:[42,862 322x48] rel:[14,102 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            - span abs:[135,879 14x14] rel:[93,17 14x14] flex:row
+              - icon:trash-2 abs:[135,879 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Ready (full — differs too much from base)
@@ -224,89 +224,89 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:807
-    - item[1] div abs:[22,100 362x185] rel:[14,0 362x185] margin:0/0/16/0
-      - ov "Account" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,121 362x164] rel:[0,21 362x164] flex:col gap:10
-        - card abs:[22,121 362x129] rel:[0,0 362x129] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,122 360x70] rel:[1,1 360x70] flex:row gap:12 align:center pad:14
-            - div "AL" abs:[37,136 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 font:16/700 color:on-primary tracking:0.2 r:999
-            - div abs:[91,138 230x39] rel:[68,16 230x39] grow:1 basis:0 layout_hint:expanded
-              - div "alex.minh@gmail.com" abs:[91,138 230x18] rel:[0,0 230x18] clip font:14/600 color:font-headline
-              - div abs:[91,161 124x13] rel:[0,23 124x13] flex:row gap:6 align:center margin:2/0/0/0
-                - svg abs:[91,162 11x11] rel:[0,1 11x11] clip
-                - span "Google · linked Apr 8" abs:[108,161 107x13] rel:[17,0 107x13] font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
-                - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
-            - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
-              - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
-                - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
-            - pill-btn "Switch account" abs:[208,203 161x36] rel:[185,11 161x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:10
-              - span abs:[233,214 14x14] rel:[25,11 14x14] flex:row
-                - icon:repeat abs:[233,214 14x14] rel:[0,0 14x14] clip
-        - div "Signing out keeps every deck and card on this device." abs:[22,260 362x25] rel:[0,139 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[2] div abs:[22,301 362x143] rel:[14,201 362x143] margin:0/0/16/0
-      - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
-        - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
-              - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
-                - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,337 238x32] rel:[60,14 238x32] grow:1 basis:0 layout_hint:expanded
-              - div "Alex's Pixel 8" abs:[83,337 238x18] rel:[0,0 238x18] font:14/600 color:font-headline
-              - div "Device label" abs:[83,356 238x13] rel:[0,19 238x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,335 36x36] rel:[310,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,343 20x20] rel:[8,8 20x20] flex:row
-                - icon:pencil abs:[341,343 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,384 360x59] rel:[1,62 360x59] grid cols:3 gap:12 pad:12/14
-            - div abs:[37,396 103x35] rel:[14,12 103x35]
-              - div "4" abs:[37,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "decks" abs:[37,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[152,396 103x35] rel:[129,12 103x35]
-              - div "142" abs:[152,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "cards" abs:[152,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[266,396 103x35] rel:[243,12 103x35]
-              - div "2 h" abs:[266,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "last active" abs:[266,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-    - item[3] div abs:[22,460 362x223] rel:[14,360 362x223] margin:0/0/16/0
-      - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,481 362x202] rel:[0,21 362x202] flex:col gap:10
-        - card abs:[22,481 362x202] rel:[0,0 362x202] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
-              - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
-                - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,495 212x32] rel:[60,13 212x32] grow:1 basis:0 layout_hint:expanded
-              - div "Last upload 2 days ago" abs:[83,495 212x18] rel:[0,0 212x18] font:14/600 color:font-headline
-              - div "142 cards · 4 decks" abs:[83,514 212x13] rel:[0,19 212x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - span "Matches" abs:[307,504 62x13] rel:[284,23 62x13] flex:row gap:4 align:center font:11/600 color:mastery
-              - span abs:[307,505 12x12] rel:[0,1 12x12] flex:row
-                - icon:check abs:[307,505 12x12] rel:[0,0 12x12] clip
-          - div abs:[23,541 360x112] rel:[1,60 360x112] flex:col gap:8 pad:12/14
-            - pill-btn "Upload to Drive" abs:[37,553 332x40] rel:[14,12 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-              - span abs:[143,565 16x16] rel:[106,12 16x16] flex:row
-                - icon:upload-cloud abs:[143,565 16x16] rel:[0,0 16x16] clip
-            - pill-btn "Restore from Drive" abs:[37,601 332x40] rel:[14,60 332x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-              - span abs:[133,613 15x15] rel:[96,13 15x15] flex:row
-                - icon:download abs:[133,613 15x15] rel:[0,0 15x15] clip
-          - div "Backups are manual — MemoX never uploads automatically." abs:[23,653 360x29] rel:[1,172 360x29] pad:0/14/12/14 font:11/400/17 color:on-surface-variant
-    - item[4] div abs:[22,698 362x179] rel:[14,598 362x179] margin:0/0/16/0
-      - ov "Danger zone" abs:[22,698 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,719 362x158] rel:[0,21 362x158] flex:col gap:10
-        - card abs:[22,719 362x158] rel:[0,0 362x158] mx:MxCard pad:14 bg:#dc4848@3 r:12 border:1px #dc4848@20
-          - div "Remove account from MemoX" abs:[37,734 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
-          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[37,756 332x54] rel:[15,37 332x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
-          - pill-btn "Remove account" abs:[37,822 332x40] rel:[15,103 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-            - span abs:[139,835 14x14] rel:[102,13 14x14] flex:row
-              - icon:trash-2 abs:[139,835 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:852
+    - item[1] div abs:[28,108 350x184] rel:[20,0 350x184] margin:0/0/16/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,129 350x163] rel:[0,21 350x163] flex:col gap:10
+        - card abs:[28,129 350x127] rel:[0,0 350x127] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,129 350x70] rel:[0,0 350x70] flex:row gap:12 align:center pad:14
+            - div "AL" abs:[42,143 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+            - div abs:[96,145 220x39] rel:[68,16 220x39] grow:1 basis:0 layout_hint:expanded
+              - div "alex.minh@gmail.com" abs:[96,145 220x18] rel:[0,0 220x18] clip font:14/600 color:font-headline
+              - div abs:[96,167 134x15] rel:[0,22 134x15] flex:row gap:6 align:center margin:2/0/0/0
+                - svg abs:[96,169 11x11] rel:[0,2 11x11] clip
+                - span "Google · linked Apr 8" abs:[113,167 117x15] rel:[17,0 117x15] font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,146 36x36] rel:[300,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,154 20x20] rel:[8,8 20x20] flex:row
+                - icon:refresh-cw abs:[336,154 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,199 350x57] rel:[0,70 350x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
+            - pill-btn "Sign out" abs:[42,210 158x36] rel:[14,11 158x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[87,221 14x14] rel:[45,11 14x14] flex:row
+                - icon:log-out abs:[87,221 14x14] rel:[0,0 14x14] clip
+            - pill-btn "Switch account" abs:[208,210 156x36] rel:[180,11 156x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              - span abs:[230,221 14x14] rel:[22,11 14x14] flex:row
+                - icon:repeat abs:[230,221 14x14] rel:[0,0 14x14] clip
+        - div "Signing out keeps every deck and card on this device." abs:[28,266 350x26] rel:[0,137 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[28,308 350x143] rel:[20,200 350x143] margin:0/0/16/0
+      - ov "This device" abs:[28,308 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,329 350x122] rel:[0,21 350x122] flex:col gap:10
+        - card abs:[28,329 350x122] rel:[0,0 350x122] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,329 350x61] rel:[0,0 350x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - icon-tile abs:[42,342 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+              - span abs:[51,351 16x16] rel:[9,9 16x16] flex:row
+                - icon:smartphone abs:[51,351 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,342 228x34] rel:[60,13 228x34] grow:1 basis:0 layout_hint:expanded
+              - div "Alex's Pixel 8" abs:[88,342 228x18] rel:[0,0 228x18] font:14/600 color:font-headline
+              - div "Device label" abs:[88,361 228x15] rel:[0,19 228x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,341 36x36] rel:[300,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,349 20x20] rel:[8,8 20x20] flex:row
+                - icon:pencil abs:[336,349 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,390 350x61] rel:[0,61 350x61] grid cols:3 gap:12 pad:12/14
+            - div abs:[42,402 99x37] rel:[14,12 99x37]
+              - div "4" abs:[42,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "decks" abs:[42,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[153,402 99x37] rel:[125,12 99x37]
+              - div "142" abs:[153,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "cards" abs:[153,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[265,402 99x37] rel:[237,12 99x37]
+              - div "2 h" abs:[265,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "last active" abs:[265,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+    - item[3] div abs:[28,467 350x256] rel:[20,359 350x256] margin:0/0/16/0
+      - ov "Drive backup" abs:[28,467 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,488 350x235] rel:[0,21 350x235] flex:col gap:10
+        - card abs:[28,488 350x235] rel:[0,0 350x235] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,488 350x59] rel:[0,0 350x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - div abs:[42,500 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:12
+              - span abs:[51,509 16x16] rel:[9,9 16x16] flex:row
+                - icon:cloud abs:[51,509 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,500 198x34] rel:[60,12 198x34] grow:1 basis:0 layout_hint:expanded
+              - div "Last upload 2 days ago" abs:[88,500 198x18] rel:[0,0 198x18] font:14/600 color:font-headline
+              - div "142 cards · 4 decks" abs:[88,519 198x15] rel:[0,19 198x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - span "Matches" abs:[298,510 66x15] rel:[270,22 66x15] flex:row gap:4 align:center font:12/600 color:mastery
+              - span abs:[298,511 12x12] rel:[0,2 12x12] flex:row
+                - icon:check abs:[298,511 12x12] rel:[0,0 12x12] clip
+          - div abs:[28,547 350x128] rel:[0,59 350x128] flex:col gap:8 pad:12/14
+            - pill-btn "Upload to Drive" abs:[42,559 322x48] rel:[14,12 322x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+              - span abs:[139,575 16x16] rel:[97,16 16x16] flex:row
+                - icon:upload-cloud abs:[139,575 16x16] rel:[0,0 16x16] clip
+            - pill-btn "Restore from Drive" abs:[42,615 322x48] rel:[14,68 322x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[129,632 15x15] rel:[87,17 15x15] flex:row
+                - icon:download abs:[129,632 15x15] rel:[0,0 15x15] clip
+          - div "Backups are manual — MemoX never uploads automatically." abs:[28,675 350x48] rel:[0,187 350x48] pad:0/14/12/14 font:12/400/18 color:on-surface-variant
+    - item[4] div abs:[28,739 350x185] rel:[20,631 350x185] margin:0/0/16/0
+      - ov "Danger zone" abs:[28,739 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,760 350x164] rel:[0,21 350x164] flex:col gap:10
+        - card abs:[28,760 350x164] rel:[0,0 350x164] mx:MxCard pad:14 bg:#dc4848@3 r:20 shadow:1/2
+          - div "Remove account from MemoX" abs:[42,774 322x18] rel:[14,14 322x18] margin:0/0/4/0 font:14/600 color:font-headline
+          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[42,796 322x54] rel:[14,36 322x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+          - pill-btn "Remove account" abs:[42,862 322x48] rel:[14,102 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            - span abs:[135,879 14x14] rel:[93,17 14x14] flex:row
+              - icon:trash-2 abs:[135,879 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Uploading (full — differs too much from base)
@@ -319,95 +319,95 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:884
-    - item[1] div abs:[22,100 362x185] rel:[14,0 362x185] margin:0/0/16/0
-      - ov "Account" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,121 362x164] rel:[0,21 362x164] flex:col gap:10
-        - card abs:[22,121 362x129] rel:[0,0 362x129] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,122 360x70] rel:[1,1 360x70] flex:row gap:12 align:center pad:14
-            - div "AL" abs:[37,136 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 font:16/700 color:on-primary tracking:0.2 r:999
-            - div abs:[91,138 230x39] rel:[68,16 230x39] grow:1 basis:0 layout_hint:expanded
-              - div "alex.minh@gmail.com" abs:[91,138 230x18] rel:[0,0 230x18] clip font:14/600 color:font-headline
-              - div abs:[91,161 124x13] rel:[0,23 124x13] flex:row gap:6 align:center margin:2/0/0/0
-                - svg abs:[91,162 11x11] rel:[0,1 11x11] clip
-                - span "Google · linked Apr 8" abs:[108,161 107x13] rel:[17,0 107x13] font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
-                - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
-            - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
-              - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
-                - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
-            - pill-btn "Switch account" abs:[208,203 161x36] rel:[185,11 161x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:10
-              - span abs:[233,214 14x14] rel:[25,11 14x14] flex:row
-                - icon:repeat abs:[233,214 14x14] rel:[0,0 14x14] clip
-        - div "Signing out keeps every deck and card on this device." abs:[22,260 362x25] rel:[0,139 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[2] div abs:[22,301 362x143] rel:[14,201 362x143] margin:0/0/16/0
-      - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
-        - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
-              - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
-                - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,337 238x32] rel:[60,14 238x32] grow:1 basis:0 layout_hint:expanded
-              - div "Alex's Pixel 8" abs:[83,337 238x18] rel:[0,0 238x18] font:14/600 color:font-headline
-              - div "Device label" abs:[83,356 238x13] rel:[0,19 238x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,335 36x36] rel:[310,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,343 20x20] rel:[8,8 20x20] flex:row
-                - icon:pencil abs:[341,343 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,384 360x59] rel:[1,62 360x59] grid cols:3 gap:12 pad:12/14
-            - div abs:[37,396 103x35] rel:[14,12 103x35]
-              - div "4" abs:[37,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "decks" abs:[37,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[152,396 103x35] rel:[129,12 103x35]
-              - div "142" abs:[152,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "cards" abs:[152,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[266,396 103x35] rel:[243,12 103x35]
-              - div "2 h" abs:[266,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "last active" abs:[266,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-    - item[3] div abs:[22,460 362x300] rel:[14,360 362x300] margin:0/0/16/0
-      - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,481 362x279] rel:[0,21 362x279] flex:col gap:10
-        - card abs:[22,481 362x279] rel:[0,0 362x279] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
-              - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
-                - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,495 212x32] rel:[60,13 212x32] grow:1 basis:0 layout_hint:expanded
-              - div "Last upload 2 days ago" abs:[83,495 212x18] rel:[0,0 212x18] font:14/600 color:font-headline
-              - div "142 cards · 4 decks" abs:[83,514 212x13] rel:[0,19 212x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - span "Matches" abs:[307,504 62x13] rel:[284,23 62x13] flex:row gap:4 align:center font:11/600 color:mastery
-              - span abs:[307,505 12x12] rel:[0,1 12x12] flex:row
-                - icon:check abs:[307,505 12x12] rel:[0,0 12x12] clip
-          - item[2] div abs:[23,541 360x77] rel:[1,60 360x77] pad:14 border-b:1px seed-indigo@14
-            - div abs:[37,555 332x15] rel:[14,14 332x15] flex:row justify:between align:center margin:0/0/8/0
-              - div "Uploading to Drive…" abs:[37,555 116x15] rel:[0,0 116x15] font:12/600 color:seed-indigo
-              - div "64%" abs:[344,556 25x13] rel:[307,1 25x13] font:11/700 color:on-surface-variant
-            - div abs:[37,578 332x6] rel:[14,37 332x6] clip bg:surface-container r:999
-              - div abs:[37,578 212x6] rel:[0,0 212x6] bg:seed-indigo r:999
-            - div "91 / 142 cards · keep this screen open" abs:[37,590 332x13] rel:[14,49 332x13] margin:6/0/0/0 font:11/400 color:on-surface-variant
-          - item[3] div abs:[23,618 360x112] rel:[1,137 360x112] flex:col gap:8 pad:12/14
-            - pill-btn "Uploading… 64%" abs:[37,630 332x40] rel:[14,12 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11 op:0.5
-              - span abs:[137,641 17x17] rel:[100,12 17x17] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
-            - pill-btn "Restore from Drive" abs:[37,678 332x40] rel:[14,60 332x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant op:0.45
-              - span abs:[133,690 15x15] rel:[96,13 15x15] flex:row
-                - icon:download abs:[133,690 15x15] rel:[0,0 15x15] clip
-          - item[4] div "Backups are manual — MemoX never uploads automatically." abs:[23,730 360x29] rel:[1,249 360x29] pad:0/14/12/14 font:11/400/17 color:on-surface-variant
-    - item[4] div abs:[22,775 362x179] rel:[14,675 362x179] margin:0/0/16/0
-      - ov "Danger zone" abs:[22,775 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,796 362x158] rel:[0,21 362x158] flex:col gap:10
-        - card abs:[22,796 362x158] rel:[0,0 362x158] mx:MxCard pad:14 bg:#dc4848@3 r:12 border:1px #dc4848@20
-          - div "Remove account from MemoX" abs:[37,811 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
-          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[37,833 332x54] rel:[15,37 332x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
-          - pill-btn "Remove account" abs:[37,899 332x40] rel:[15,103 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-            - span abs:[139,912 14x14] rel:[102,13 14x14] flex:row
-              - icon:trash-2 abs:[139,912 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:931
+    - item[1] div abs:[28,108 350x184] rel:[20,0 350x184] margin:0/0/16/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,129 350x163] rel:[0,21 350x163] flex:col gap:10
+        - card abs:[28,129 350x127] rel:[0,0 350x127] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,129 350x70] rel:[0,0 350x70] flex:row gap:12 align:center pad:14
+            - div "AL" abs:[42,143 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+            - div abs:[96,145 220x39] rel:[68,16 220x39] grow:1 basis:0 layout_hint:expanded
+              - div "alex.minh@gmail.com" abs:[96,145 220x18] rel:[0,0 220x18] clip font:14/600 color:font-headline
+              - div abs:[96,167 134x15] rel:[0,22 134x15] flex:row gap:6 align:center margin:2/0/0/0
+                - svg abs:[96,169 11x11] rel:[0,2 11x11] clip
+                - span "Google · linked Apr 8" abs:[113,167 117x15] rel:[17,0 117x15] font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,146 36x36] rel:[300,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,154 20x20] rel:[8,8 20x20] flex:row
+                - icon:refresh-cw abs:[336,154 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,199 350x57] rel:[0,70 350x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
+            - pill-btn "Sign out" abs:[42,210 158x36] rel:[14,11 158x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[87,221 14x14] rel:[45,11 14x14] flex:row
+                - icon:log-out abs:[87,221 14x14] rel:[0,0 14x14] clip
+            - pill-btn "Switch account" abs:[208,210 156x36] rel:[180,11 156x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              - span abs:[230,221 14x14] rel:[22,11 14x14] flex:row
+                - icon:repeat abs:[230,221 14x14] rel:[0,0 14x14] clip
+        - div "Signing out keeps every deck and card on this device." abs:[28,266 350x26] rel:[0,137 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[28,308 350x143] rel:[20,200 350x143] margin:0/0/16/0
+      - ov "This device" abs:[28,308 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,329 350x122] rel:[0,21 350x122] flex:col gap:10
+        - card abs:[28,329 350x122] rel:[0,0 350x122] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,329 350x61] rel:[0,0 350x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - icon-tile abs:[42,342 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+              - span abs:[51,351 16x16] rel:[9,9 16x16] flex:row
+                - icon:smartphone abs:[51,351 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,342 228x34] rel:[60,13 228x34] grow:1 basis:0 layout_hint:expanded
+              - div "Alex's Pixel 8" abs:[88,342 228x18] rel:[0,0 228x18] font:14/600 color:font-headline
+              - div "Device label" abs:[88,361 228x15] rel:[0,19 228x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,341 36x36] rel:[300,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,349 20x20] rel:[8,8 20x20] flex:row
+                - icon:pencil abs:[336,349 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,390 350x61] rel:[0,61 350x61] grid cols:3 gap:12 pad:12/14
+            - div abs:[42,402 99x37] rel:[14,12 99x37]
+              - div "4" abs:[42,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "decks" abs:[42,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[153,402 99x37] rel:[125,12 99x37]
+              - div "142" abs:[153,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "cards" abs:[153,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[265,402 99x37] rel:[237,12 99x37]
+              - div "2 h" abs:[265,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "last active" abs:[265,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+    - item[3] div abs:[28,467 350x335] rel:[20,359 350x335] margin:0/0/16/0
+      - ov "Drive backup" abs:[28,467 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,488 350x314] rel:[0,21 350x314] flex:col gap:10
+        - card abs:[28,488 350x314] rel:[0,0 350x314] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:20 shadow:1/2
+          - item[1] div abs:[28,488 350x59] rel:[0,0 350x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - div abs:[42,500 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:12
+              - span abs:[51,509 16x16] rel:[9,9 16x16] flex:row
+                - icon:cloud abs:[51,509 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,500 198x34] rel:[60,12 198x34] grow:1 basis:0 layout_hint:expanded
+              - div "Last upload 2 days ago" abs:[88,500 198x18] rel:[0,0 198x18] font:14/600 color:font-headline
+              - div "142 cards · 4 decks" abs:[88,519 198x15] rel:[0,19 198x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - span "Matches" abs:[298,510 66x15] rel:[270,22 66x15] flex:row gap:4 align:center font:12/600 color:mastery
+              - span abs:[298,511 12x12] rel:[0,2 12x12] flex:row
+                - icon:check abs:[298,511 12x12] rel:[0,0 12x12] clip
+          - item[2] div abs:[28,547 350x79] rel:[0,59 350x79] pad:14 border-b:1px seed-indigo@14
+            - div abs:[42,561 322x15] rel:[14,14 322x15] flex:row justify:between align:center margin:0/0/8/0
+              - div "Uploading to Drive…" abs:[42,561 116x15] rel:[0,0 116x15] font:12/600 color:seed-indigo
+              - div "64%" abs:[337,561 27x15] rel:[295,0 27x15] font:12/700 color:on-surface-variant
+            - div abs:[42,584 322x6] rel:[14,37 322x6] clip bg:surface-container r:999
+              - div abs:[42,584 206x6] rel:[0,0 206x6] bg:seed-indigo r:999
+            - div "91 / 142 cards · keep this screen open" abs:[42,596 322x15] rel:[14,49 322x15] margin:6/0/0/0 font:12/400 color:on-surface-variant
+          - item[3] div abs:[28,626 350x128] rel:[0,138 350x128] flex:col gap:8 pad:12/14
+            - pill-btn "Uploading… 64%" abs:[42,638 322x48] rel:[14,12 322x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.5
+              - span abs:[133,654 17x17] rel:[91,16 17x17] r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
+            - pill-btn "Restore from Drive" abs:[42,694 322x48] rel:[14,68 322x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant op:0.45
+              - span abs:[129,711 15x15] rel:[87,17 15x15] flex:row
+                - icon:download abs:[129,711 15x15] rel:[0,0 15x15] clip
+          - item[4] div "Backups are manual — MemoX never uploads automatically." abs:[28,754 350x48] rel:[0,266 350x48] pad:0/14/12/14 font:12/400/18 color:on-surface-variant
+    - item[4] div abs:[28,818 350x185] rel:[20,710 350x185] margin:0/0/16/0
+      - ov "Danger zone" abs:[28,818 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,839 350x164] rel:[0,21 350x164] flex:col gap:10
+        - card abs:[28,839 350x164] rel:[0,0 350x164] mx:MxCard pad:14 bg:#dc4848@3 r:20 shadow:1/2
+          - div "Remove account from MemoX" abs:[42,853 322x18] rel:[14,14 322x18] margin:0/0/4/0 font:14/600 color:font-headline
+          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[42,875 322x54] rel:[14,36 322x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+          - pill-btn "Remove account" abs:[42,941 322x48] rel:[14,102 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            - span abs:[135,958 14x14] rel:[93,17 14x14] flex:row
+              - icon:trash-2 abs:[135,958 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Restore warn (full — differs too much from base)
@@ -420,92 +420,92 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:947
-    - item[1] div abs:[22,100 362x185] rel:[14,0 362x185] margin:0/0/16/0
-      - ov "Account" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,121 362x164] rel:[0,21 362x164] flex:col gap:10
-        - card abs:[22,121 362x129] rel:[0,0 362x129] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,122 360x70] rel:[1,1 360x70] flex:row gap:12 align:center pad:14
-            - div "AL" abs:[37,136 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 font:16/700 color:on-primary tracking:0.2 r:999
-            - div abs:[91,138 230x39] rel:[68,16 230x39] grow:1 basis:0 layout_hint:expanded
-              - div "alex.minh@gmail.com" abs:[91,138 230x18] rel:[0,0 230x18] clip font:14/600 color:font-headline
-              - div abs:[91,161 124x13] rel:[0,23 124x13] flex:row gap:6 align:center margin:2/0/0/0
-                - svg abs:[91,162 11x11] rel:[0,1 11x11] clip
-                - span "Google · linked Apr 8" abs:[108,161 107x13] rel:[17,0 107x13] font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
-                - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
-            - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
-              - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
-                - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
-            - pill-btn "Switch account" abs:[208,203 161x36] rel:[185,11 161x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:10
-              - span abs:[233,214 14x14] rel:[25,11 14x14] flex:row
-                - icon:repeat abs:[233,214 14x14] rel:[0,0 14x14] clip
-        - div "Signing out keeps every deck and card on this device." abs:[22,260 362x25] rel:[0,139 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[2] div abs:[22,301 362x143] rel:[14,201 362x143] margin:0/0/16/0
-      - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
-        - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
-              - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
-                - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,337 238x32] rel:[60,14 238x32] grow:1 basis:0 layout_hint:expanded
-              - div "Alex's Pixel 8" abs:[83,337 238x18] rel:[0,0 238x18] font:14/600 color:font-headline
-              - div "Device label" abs:[83,356 238x13] rel:[0,19 238x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,335 36x36] rel:[310,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,343 20x20] rel:[8,8 20x20] flex:row
-                - icon:pencil abs:[341,343 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,384 360x59] rel:[1,62 360x59] grid cols:3 gap:12 pad:12/14
-            - div abs:[37,396 103x35] rel:[14,12 103x35]
-              - div "4" abs:[37,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "decks" abs:[37,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[152,396 103x35] rel:[129,12 103x35]
-              - div "142" abs:[152,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "cards" abs:[152,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[266,396 103x35] rel:[243,12 103x35]
-              - div "2 h" abs:[266,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "last active" abs:[266,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-    - item[3] div abs:[22,460 362x362] rel:[14,360 362x362] margin:0/0/16/0
-      - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,481 362x341] rel:[0,21 362x341] flex:col gap:10
-        - card abs:[22,481 362x341] rel:[0,0 362x341] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:#d9891e@12 r:10
-              - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
-                - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,495 286x32] rel:[60,13 286x32] grow:1 basis:0 layout_hint:expanded
-              - div "Last upload 11 days ago" abs:[83,495 286x18] rel:[0,0 286x18] font:14/600 color:font-headline
-              - div "178 cards · 5 decks · from Galaxy S23" abs:[83,514 286x13] rel:[0,19 286x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-          - div abs:[37,553 332x98] rel:[15,72 332x98] flex:row gap:10 align:start pad:12/14 bg:#d9891e@10 r:12 border:1px #d9891e@24
-            - span abs:[52,568 16x16] rel:[15,15 16x16] flex:row
-              - icon:alert-triangle abs:[52,568 16x16] rel:[0,0 16x16] clip
-            - div abs:[78,566 276x72] rel:[41,13 276x72] grow:1 basis:0 layout_hint:expanded
-              - div "Backup is from a different device" abs:[78,566 276x16] rel:[0,0 276x16] font:13/700 color:font-headline tracking:-0.1
-              - div "Restoring will replace the 142 cards on this device with the 178 cards from Galaxy S23. Upload local first to keep both safe." abs:[78,584 276x54] rel:[0,18 276x54] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
-          - item[3] div abs:[23,664 360x112] rel:[1,183 360x112] flex:col gap:8 pad:12/14
-            - pill-btn "Upload local first" abs:[37,676 332x40] rel:[14,12 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-              - span abs:[138,688 16x16] rel:[101,12 16x16] flex:row
-                - icon:upload-cloud abs:[138,688 16x16] rel:[0,0 16x16] clip
-            - pill-btn "Restore anyway" abs:[37,724 332x40] rel:[14,60 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:error text:center tracking:0.1 r:11 border:1px #dc4848@40
-              - span abs:[142,736 15x15] rel:[105,13 15x15] flex:row
-                - icon:download abs:[142,736 15x15] rel:[0,0 15x15] clip
-          - item[4] div "Restore replaces everything on this device. There is no undo after step 2." abs:[23,776 360x45] rel:[1,295 360x45] pad:0/14/12/14 font:11/400/17 color:on-surface-variant
-    - item[4] div abs:[22,838 362x179] rel:[14,738 362x179] margin:0/0/16/0
-      - ov "Danger zone" abs:[22,838 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,859 362x158] rel:[0,21 362x158] flex:col gap:10
-        - card abs:[22,859 362x158] rel:[0,0 362x158] mx:MxCard pad:14 bg:#dc4848@3 r:12 border:1px #dc4848@20
-          - div "Remove account from MemoX" abs:[37,874 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
-          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[37,896 332x54] rel:[15,37 332x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
-          - pill-btn "Remove account" abs:[37,962 332x40] rel:[15,103 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-            - span abs:[139,975 14x14] rel:[102,13 14x14] flex:row
-              - icon:trash-2 abs:[139,975 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:977
+    - item[1] div abs:[28,108 350x184] rel:[20,0 350x184] margin:0/0/16/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,129 350x163] rel:[0,21 350x163] flex:col gap:10
+        - card abs:[28,129 350x127] rel:[0,0 350x127] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,129 350x70] rel:[0,0 350x70] flex:row gap:12 align:center pad:14
+            - div "AL" abs:[42,143 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+            - div abs:[96,145 220x39] rel:[68,16 220x39] grow:1 basis:0 layout_hint:expanded
+              - div "alex.minh@gmail.com" abs:[96,145 220x18] rel:[0,0 220x18] clip font:14/600 color:font-headline
+              - div abs:[96,167 134x15] rel:[0,22 134x15] flex:row gap:6 align:center margin:2/0/0/0
+                - svg abs:[96,169 11x11] rel:[0,2 11x11] clip
+                - span "Google · linked Apr 8" abs:[113,167 117x15] rel:[17,0 117x15] font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,146 36x36] rel:[300,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,154 20x20] rel:[8,8 20x20] flex:row
+                - icon:refresh-cw abs:[336,154 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,199 350x57] rel:[0,70 350x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
+            - pill-btn "Sign out" abs:[42,210 158x36] rel:[14,11 158x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[87,221 14x14] rel:[45,11 14x14] flex:row
+                - icon:log-out abs:[87,221 14x14] rel:[0,0 14x14] clip
+            - pill-btn "Switch account" abs:[208,210 156x36] rel:[180,11 156x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              - span abs:[230,221 14x14] rel:[22,11 14x14] flex:row
+                - icon:repeat abs:[230,221 14x14] rel:[0,0 14x14] clip
+        - div "Signing out keeps every deck and card on this device." abs:[28,266 350x26] rel:[0,137 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[28,308 350x143] rel:[20,200 350x143] margin:0/0/16/0
+      - ov "This device" abs:[28,308 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,329 350x122] rel:[0,21 350x122] flex:col gap:10
+        - card abs:[28,329 350x122] rel:[0,0 350x122] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,329 350x61] rel:[0,0 350x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - icon-tile abs:[42,342 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+              - span abs:[51,351 16x16] rel:[9,9 16x16] flex:row
+                - icon:smartphone abs:[51,351 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,342 228x34] rel:[60,13 228x34] grow:1 basis:0 layout_hint:expanded
+              - div "Alex's Pixel 8" abs:[88,342 228x18] rel:[0,0 228x18] font:14/600 color:font-headline
+              - div "Device label" abs:[88,361 228x15] rel:[0,19 228x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,341 36x36] rel:[300,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,349 20x20] rel:[8,8 20x20] flex:row
+                - icon:pencil abs:[336,349 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,390 350x61] rel:[0,61 350x61] grid cols:3 gap:12 pad:12/14
+            - div abs:[42,402 99x37] rel:[14,12 99x37]
+              - div "4" abs:[42,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "decks" abs:[42,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[153,402 99x37] rel:[125,12 99x37]
+              - div "142" abs:[153,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "cards" abs:[153,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[265,402 99x37] rel:[237,12 99x37]
+              - div "2 h" abs:[265,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "last active" abs:[265,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+    - item[3] div abs:[28,467 350x381] rel:[20,359 350x381] margin:0/0/16/0
+      - ov "Drive backup" abs:[28,467 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,488 350x360] rel:[0,21 350x360] flex:col gap:10
+        - card abs:[28,488 350x360] rel:[0,0 350x360] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:20 shadow:1/2
+          - item[1] div abs:[28,488 350x59] rel:[0,0 350x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - div abs:[42,500 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:#d9891e@12 r:12
+              - span abs:[51,509 16x16] rel:[9,9 16x16] flex:row
+                - icon:cloud abs:[51,509 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,500 276x34] rel:[60,12 276x34] grow:1 basis:0 layout_hint:expanded
+              - div "Last upload 11 days ago" abs:[88,500 276x18] rel:[0,0 276x18] font:14/600 color:font-headline
+              - div "178 cards · 5 decks · from Galaxy S23" abs:[88,519 276x15] rel:[0,19 276x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+          - div abs:[42,559 322x100] rel:[14,71 322x100] flex:row gap:10 align:start pad:12/14 bg:#d9891e@10 r:12 border:1px #d9891e@24
+            - span abs:[57,574 16x16] rel:[15,15 16x16] flex:row
+              - icon:alert-triangle abs:[57,574 16x16] rel:[0,0 16x16] clip
+            - div abs:[83,572 266x74] rel:[41,13 266x74] grow:1 basis:0 layout_hint:expanded
+              - div "Backup is from a different device" abs:[83,572 266x18] rel:[0,0 266x18] font:14/700 color:font-headline tracking:-0.1
+              - div "Restoring will replace the 142 cards on this device with the 178 cards from Galaxy S23. Upload local first to keep both safe." abs:[83,592 266x54] rel:[0,20 266x54] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
+          - item[3] div abs:[28,672 350x128] rel:[0,184 350x128] flex:col gap:8 pad:12/14
+            - pill-btn "Upload local first" abs:[42,684 322x48] rel:[14,12 322x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+              - span abs:[134,700 16x16] rel:[92,16 16x16] flex:row
+                - icon:upload-cloud abs:[134,700 16x16] rel:[0,0 16x16] clip
+            - pill-btn "Restore anyway" abs:[42,740 322x48] rel:[14,68 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:error text:center tracking:0.1 r:12 border:1px #dc4848@40
+              - span abs:[138,757 15x15] rel:[96,17 15x15] flex:row
+                - icon:download abs:[138,757 15x15] rel:[0,0 15x15] clip
+          - item[4] div "Restore replaces everything on this device. There is no undo after step 2." abs:[28,800 350x48] rel:[0,312 350x48] pad:0/14/12/14 font:12/400/18 color:on-surface-variant
+    - item[4] div abs:[28,864 350x185] rel:[20,756 350x185] margin:0/0/16/0
+      - ov "Danger zone" abs:[28,864 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,885 350x164] rel:[0,21 350x164] flex:col gap:10
+        - card abs:[28,885 350x164] rel:[0,0 350x164] mx:MxCard pad:14 bg:#dc4848@3 r:20 shadow:1/2
+          - div "Remove account from MemoX" abs:[42,899 322x18] rel:[14,14 322x18] margin:0/0/4/0 font:14/600 color:font-headline
+          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[42,921 322x54] rel:[14,36 322x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+          - pill-btn "Remove account" abs:[42,987 322x48] rel:[14,102 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            - span abs:[135,1004 14x14] rel:[93,17 14x14] flex:row
+              - icon:trash-2 abs:[135,1004 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Restoring (full — differs too much from base)
@@ -518,92 +518,92 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:874
-    - item[1] div abs:[22,100 362x185] rel:[14,0 362x185] margin:0/0/16/0
-      - ov "Account" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,121 362x164] rel:[0,21 362x164] flex:col gap:10
-        - card abs:[22,121 362x129] rel:[0,0 362x129] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,122 360x70] rel:[1,1 360x70] flex:row gap:12 align:center pad:14
-            - div "AL" abs:[37,136 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 font:16/700 color:on-primary tracking:0.2 r:999
-            - div abs:[91,138 230x39] rel:[68,16 230x39] grow:1 basis:0 layout_hint:expanded
-              - div "alex.minh@gmail.com" abs:[91,138 230x18] rel:[0,0 230x18] clip font:14/600 color:font-headline
-              - div abs:[91,161 124x13] rel:[0,23 124x13] flex:row gap:6 align:center margin:2/0/0/0
-                - svg abs:[91,162 11x11] rel:[0,1 11x11] clip
-                - span "Google · linked Apr 8" abs:[108,161 107x13] rel:[17,0 107x13] font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,139 36x36] rel:[310,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,147 20x20] rel:[8,8 20x20] flex:row
-                - icon:refresh-cw abs:[341,147 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,192 360x57] rel:[1,71 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
-            - pill-btn "Sign out" abs:[37,203 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
-              - span abs:[84,214 14x14] rel:[47,11 14x14] flex:row
-                - icon:log-out abs:[84,214 14x14] rel:[0,0 14x14] clip
-            - pill-btn "Switch account" abs:[208,203 161x36] rel:[185,11 161x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:10
-              - span abs:[233,214 14x14] rel:[25,11 14x14] flex:row
-                - icon:repeat abs:[233,214 14x14] rel:[0,0 14x14] clip
-        - div "Signing out keeps every deck and card on this device." abs:[22,260 362x25] rel:[0,139 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[2] div abs:[22,301 362x143] rel:[14,201 362x143] margin:0/0/16/0
-      - ov "This device" abs:[22,301 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,322 362x122] rel:[0,21 362x122] flex:col gap:10
-        - card abs:[22,322 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,323 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - icon-tile abs:[37,336 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
-              - span abs:[46,345 16x16] rel:[9,9 16x16] flex:row
-                - icon:smartphone abs:[46,345 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,337 238x32] rel:[60,14 238x32] grow:1 basis:0 layout_hint:expanded
-              - div "Alex's Pixel 8" abs:[83,337 238x18] rel:[0,0 238x18] font:14/600 color:font-headline
-              - div "Device label" abs:[83,356 238x13] rel:[0,19 238x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,335 36x36] rel:[310,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,343 20x20] rel:[8,8 20x20] flex:row
-                - icon:pencil abs:[341,343 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,384 360x59] rel:[1,62 360x59] grid cols:3 gap:12 pad:12/14
-            - div abs:[37,396 103x35] rel:[14,12 103x35]
-              - div "4" abs:[37,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "decks" abs:[37,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[152,396 103x35] rel:[129,12 103x35]
-              - div "142" abs:[152,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "cards" abs:[152,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[266,396 103x35] rel:[243,12 103x35]
-              - div "2 h" abs:[266,396 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "last active" abs:[266,418 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-    - item[3] div abs:[22,460 362x290] rel:[14,360 362x290] margin:0/0/16/0
-      - ov "Drive backup" abs:[22,460 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,481 362x269] rel:[0,21 362x269] flex:col gap:10
-        - card abs:[22,481 362x269] rel:[0,0 362x269] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:12 border:1px seed-indigo@14
-          - item[1] div abs:[23,482 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - div abs:[37,494 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
-              - span abs:[46,503 16x16] rel:[9,9 16x16] flex:row
-                - icon:cloud abs:[46,503 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,495 212x32] rel:[60,13 212x32] grow:1 basis:0 layout_hint:expanded
-              - div "Last upload 2 days ago" abs:[83,495 212x18] rel:[0,0 212x18] font:14/600 color:font-headline
-              - div "142 cards · 4 decks" abs:[83,514 212x13] rel:[0,19 212x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - span "Matches" abs:[307,504 62x13] rel:[284,23 62x13] flex:row gap:4 align:center font:11/600 color:mastery
-              - span abs:[307,505 12x12] rel:[0,1 12x12] flex:row
-                - icon:check abs:[307,505 12x12] rel:[0,0 12x12] clip
-          - item[2] div abs:[23,541 360x115] rel:[1,60 360x115] repeat:x2(unit=2) pad:14 border-b:1px seed-indigo@14
-            - item[1] div abs:[37,555 332x13] rel:[14,14 332x13] flex:row justify:between align:center margin:0/0/4/0
-              - div "Step 1 of 2" abs:[37,555 63x13] rel:[0,0 63x13] font:11/700 color:on-surface-variant tracking:0.3
-              - div "38%" abs:[344,555 25x13] rel:[307,0 25x13] font:11/700 color:on-surface-variant
-            - div "Snapshotting local data first…" abs:[37,572 332x16] rel:[14,31 332x16] margin:0/0/8/0 font:13/600 color:font-headline
-            - item[2] div abs:[37,596 332x6] rel:[14,55 332x6] clip bg:surface-container r:999
-              - div abs:[37,596 126x6] rel:[0,0 126x6] bg:seed-indigo r:999
-            - div "You can cancel until step 2 starts. Local data stays safe either way." abs:[37,608 332x33] rel:[14,67 332x33] margin:6/0/0/0 font:11/400/17 color:on-surface-variant
-          - item[3] div abs:[23,656 360x64] rel:[1,175 360x64] flex:col gap:8 pad:12/14
-            - pill-btn "Cancel restore" abs:[37,668 332x40] rel:[14,12 332x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-          - item[4] div "Backups are manual — MemoX never uploads automatically." abs:[23,720 360x29] rel:[1,239 360x29] pad:0/14/12/14 font:11/400/17 color:on-surface-variant
-    - item[4] div abs:[22,765 362x179] rel:[14,665 362x179] margin:0/0/16/0
-      - ov "Danger zone" abs:[22,765 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,786 362x158] rel:[0,21 362x158] flex:col gap:10
-        - card abs:[22,786 362x158] rel:[0,0 362x158] mx:MxCard pad:14 bg:#dc4848@3 r:12 border:1px #dc4848@20
-          - div "Remove account from MemoX" abs:[37,801 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
-          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[37,823 332x54] rel:[15,37 332x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
-          - pill-btn "Remove account" abs:[37,889 332x40] rel:[15,103 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-            - span abs:[139,902 14x14] rel:[102,13 14x14] flex:row
-              - icon:trash-2 abs:[139,902 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:918
+    - item[1] div abs:[28,108 350x184] rel:[20,0 350x184] margin:0/0/16/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,129 350x163] rel:[0,21 350x163] flex:col gap:10
+        - card abs:[28,129 350x127] rel:[0,0 350x127] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,129 350x70] rel:[0,0 350x70] flex:row gap:12 align:center pad:14
+            - div "AL" abs:[42,143 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+            - div abs:[96,145 220x39] rel:[68,16 220x39] grow:1 basis:0 layout_hint:expanded
+              - div "alex.minh@gmail.com" abs:[96,145 220x18] rel:[0,0 220x18] clip font:14/600 color:font-headline
+              - div abs:[96,167 134x15] rel:[0,22 134x15] flex:row gap:6 align:center margin:2/0/0/0
+                - svg abs:[96,169 11x11] rel:[0,2 11x11] clip
+                - span "Google · linked Apr 8" abs:[113,167 117x15] rel:[17,0 117x15] font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,146 36x36] rel:[300,17 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,154 20x20] rel:[8,8 20x20] flex:row
+                - icon:refresh-cw abs:[336,154 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,199 350x57] rel:[0,70 350x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
+            - pill-btn "Sign out" abs:[42,210 158x36] rel:[14,11 158x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[87,221 14x14] rel:[45,11 14x14] flex:row
+                - icon:log-out abs:[87,221 14x14] rel:[0,0 14x14] clip
+            - pill-btn "Switch account" abs:[208,210 156x36] rel:[180,11 156x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              - span abs:[230,221 14x14] rel:[22,11 14x14] flex:row
+                - icon:repeat abs:[230,221 14x14] rel:[0,0 14x14] clip
+        - div "Signing out keeps every deck and card on this device." abs:[28,266 350x26] rel:[0,137 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[28,308 350x143] rel:[20,200 350x143] margin:0/0/16/0
+      - ov "This device" abs:[28,308 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,329 350x122] rel:[0,21 350x122] flex:col gap:10
+        - card abs:[28,329 350x122] rel:[0,0 350x122] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,329 350x61] rel:[0,0 350x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - icon-tile abs:[42,342 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+              - span abs:[51,351 16x16] rel:[9,9 16x16] flex:row
+                - icon:smartphone abs:[51,351 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,342 228x34] rel:[60,13 228x34] grow:1 basis:0 layout_hint:expanded
+              - div "Alex's Pixel 8" abs:[88,342 228x18] rel:[0,0 228x18] font:14/600 color:font-headline
+              - div "Device label" abs:[88,361 228x15] rel:[0,19 228x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,341 36x36] rel:[300,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,349 20x20] rel:[8,8 20x20] flex:row
+                - icon:pencil abs:[336,349 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,390 350x61] rel:[0,61 350x61] grid cols:3 gap:12 pad:12/14
+            - div abs:[42,402 99x37] rel:[14,12 99x37]
+              - div "4" abs:[42,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "decks" abs:[42,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[153,402 99x37] rel:[125,12 99x37]
+              - div "142" abs:[153,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "cards" abs:[153,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[265,402 99x37] rel:[237,12 99x37]
+              - div "2 h" abs:[265,402 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "last active" abs:[265,424 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+    - item[3] div abs:[28,467 350x322] rel:[20,359 350x322] margin:0/0/16/0
+      - ov "Drive backup" abs:[28,467 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,488 350x301] rel:[0,21 350x301] flex:col gap:10
+        - card abs:[28,488 350x301] rel:[0,0 350x301] mx:MxCard repeat:x4(unit=1) clip bg:on-primary r:20 shadow:1/2
+          - item[1] div abs:[28,488 350x59] rel:[0,0 350x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - div abs:[42,500 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:12
+              - span abs:[51,509 16x16] rel:[9,9 16x16] flex:row
+                - icon:cloud abs:[51,509 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,500 198x34] rel:[60,12 198x34] grow:1 basis:0 layout_hint:expanded
+              - div "Last upload 2 days ago" abs:[88,500 198x18] rel:[0,0 198x18] font:14/600 color:font-headline
+              - div "142 cards · 4 decks" abs:[88,519 198x15] rel:[0,19 198x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - span "Matches" abs:[298,510 66x15] rel:[270,22 66x15] flex:row gap:4 align:center font:12/600 color:mastery
+              - span abs:[298,511 12x12] rel:[0,2 12x12] flex:row
+                - icon:check abs:[298,511 12x12] rel:[0,0 12x12] clip
+          - item[2] div abs:[28,547 350x122] rel:[0,59 350x122] repeat:x2(unit=2) pad:14 border-b:1px seed-indigo@14
+            - item[1] div abs:[42,561 322x15] rel:[14,14 322x15] flex:row justify:between align:center margin:0/0/4/0
+              - div "Step 1 of 2" abs:[42,561 68x15] rel:[0,0 68x15] font:12/700 color:on-surface-variant tracking:0.3
+              - div "38%" abs:[337,561 27x15] rel:[295,0 27x15] font:12/700 color:on-surface-variant
+            - div "Snapshotting local data first…" abs:[42,580 322x18] rel:[14,33 322x18] margin:0/0/8/0 font:14/600 color:font-headline
+            - item[2] div abs:[42,606 322x6] rel:[14,59 322x6] clip bg:surface-container r:999
+              - div abs:[42,606 122x6] rel:[0,0 122x6] bg:seed-indigo r:999
+            - div "You can cancel until step 2 starts. Local data stays safe either way." abs:[42,618 322x36] rel:[14,71 322x36] margin:6/0/0/0 font:12/400/18 color:on-surface-variant
+          - item[3] div abs:[28,669 350x72] rel:[0,181 350x72] flex:col gap:8 pad:12/14
+            - pill-btn "Cancel restore" abs:[42,681 322x48] rel:[14,12 322x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+          - item[4] div "Backups are manual — MemoX never uploads automatically." abs:[28,741 350x48] rel:[0,253 350x48] pad:0/14/12/14 font:12/400/18 color:on-surface-variant
+    - item[4] div abs:[28,805 350x185] rel:[20,697 350x185] margin:0/0/16/0
+      - ov "Danger zone" abs:[28,805 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,826 350x164] rel:[0,21 350x164] flex:col gap:10
+        - card abs:[28,826 350x164] rel:[0,0 350x164] mx:MxCard pad:14 bg:#dc4848@3 r:20 shadow:1/2
+          - div "Remove account from MemoX" abs:[42,840 322x18] rel:[14,14 322x18] margin:0/0/4/0 font:14/600 color:font-headline
+          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[42,862 322x54] rel:[14,36 322x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+          - pill-btn "Remove account" abs:[42,928 322x48] rel:[14,102 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            - span abs:[135,945 14x14] rel:[93,17 14x14] flex:row
+              - icon:trash-2 abs:[135,945 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Token expired (full — differs too much from base)
@@ -616,94 +616,94 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Account & Drive sync" abs:[56,66 334x21] rel:[48,14 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:943
-    - item[1] div abs:[22,100 362x321] rel:[14,0 362x321] margin:0/0/16/0
-      - ov "Account" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,121 362x300] rel:[0,21 362x300] flex:col gap:10
-        - card abs:[22,121 362x265] rel:[0,0 362x265] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,122 360x70] rel:[1,1 360x70] flex:row gap:12 align:center pad:14
-            - div "AL" abs:[37,136 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 font:16/700 color:on-primary tracking:0.2 r:999
-            - div abs:[91,138 194x39] rel:[68,16 194x39] grow:1 basis:0 layout_hint:expanded
-              - div "alex.minh@gmail.com" abs:[91,138 194x18] rel:[0,0 194x18] clip font:14/600 color:font-headline
-              - div abs:[91,161 124x13] rel:[0,23 124x13] flex:row gap:6 align:center margin:2/0/0/0
-                - svg abs:[91,162 11x11] rel:[0,1 11x11] clip
-                - span "Google · linked Apr 8" abs:[108,161 107x13] rel:[17,0 107x13] font:11/400 color:on-surface-variant
-            - span "Expired" abs:[297,145 72x24] rel:[274,23 72x24] flex:row gap:4 align:center pad:0/8 bg:#d9891e@12 font:11/700 color:streak r:999
-              - span abs:[305,152 11x11] rel:[8,7 11x11] flex:row
-                - icon:alert-triangle abs:[305,152 11x11] rel:[0,0 11x11] clip
-          - div abs:[37,192 332x122] rel:[15,71 332x122] flex:row gap:10 align:start pad:12/14 bg:#d9891e@10 r:12 border:1px #d9891e@24
-            - span abs:[52,207 16x16] rel:[15,15 16x16] flex:row
-              - icon:key-round abs:[52,207 16x16] rel:[0,0 16x16] clip
-            - div abs:[78,205 276x96] rel:[41,13 276x96] grow:1 basis:0 layout_hint:expanded
-              - div "Drive access expired" abs:[78,205 276x16] rel:[0,0 276x16] font:13/700 color:font-headline tracking:-0.1
-              - div "Sign in again to upload or restore. Your local data is untouched." abs:[78,223 276x36] rel:[0,18 276x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
-              - pill-btn "Sign in again" abs:[78,267 101x34] rel:[0,62 101x34] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:10
-          - div abs:[23,328 360x57] rel:[1,207 360x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
-            - pill-btn "Sign out" abs:[37,339 163x36] rel:[14,11 163x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:12/600 color:seed-indigo text:center tracking:0.1 r:10 border:1px outline-variant
-              - span abs:[84,350 14x14] rel:[47,11 14x14] flex:row
-                - icon:log-out abs:[84,350 14x14] rel:[0,0 14x14] clip
-            - pill-btn "Switch account" abs:[208,339 161x36] rel:[185,11 161x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:10
-              - span abs:[233,350 14x14] rel:[25,11 14x14] flex:row
-                - icon:repeat abs:[233,350 14x14] rel:[0,0 14x14] clip
-        - div "Signing out keeps every deck and card on this device." abs:[22,396 362x25] rel:[0,275 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[2] div abs:[22,437 362x143] rel:[14,337 362x143] margin:0/0/16/0
-      - ov "This device" abs:[22,437 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,458 362x122] rel:[0,21 362x122] flex:col gap:10
-        - card abs:[22,458 362x122] rel:[0,0 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,459 360x61] rel:[1,1 360x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - icon-tile abs:[37,472 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:seed-indigo@10 r:10
-              - span abs:[46,481 16x16] rel:[9,9 16x16] flex:row
-                - icon:smartphone abs:[46,481 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,473 238x32] rel:[60,14 238x32] grow:1 basis:0 layout_hint:expanded
-              - div "Alex's Pixel 8" abs:[83,473 238x18] rel:[0,0 238x18] font:14/600 color:font-headline
-              - div "Device label" abs:[83,492 238x13] rel:[0,19 238x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - icon-btn abs:[333,471 36x36] rel:[310,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-              - span abs:[341,479 20x20] rel:[8,8 20x20] flex:row
-                - icon:pencil abs:[341,479 20x20] rel:[0,0 20x20] clip
-          - div abs:[23,520 360x59] rel:[1,62 360x59] grid cols:3 gap:12 pad:12/14
-            - div abs:[37,532 103x35] rel:[14,12 103x35]
-              - div "4" abs:[37,532 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "decks" abs:[37,554 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[152,532 103x35] rel:[129,12 103x35]
-              - div "142" abs:[152,532 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "cards" abs:[152,554 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - div abs:[266,532 103x35] rel:[243,12 103x35]
-              - div "2 h" abs:[266,532 103x21] rel:[0,0 103x21] font:16/700 color:font-headline tracking:-0.3
-              - div "last active" abs:[266,554 103x13] rel:[0,22 103x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-    - item[3] div abs:[22,596 362x223] rel:[14,496 362x223] margin:0/0/16/0
-      - ov "Drive backup" abs:[22,596 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,617 362x202] rel:[0,21 362x202] flex:col gap:10
-        - card abs:[22,617 362x202] rel:[0,0 362x202] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[23,618 360x59] rel:[1,1 360x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-            - div abs:[37,630 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:10
-              - span abs:[46,639 16x16] rel:[9,9 16x16] flex:row
-                - icon:cloud abs:[46,639 16x16] rel:[0,0 16x16] clip
-            - div abs:[83,631 212x32] rel:[60,13 212x32] grow:1 basis:0 layout_hint:expanded
-              - div "Last upload 2 days ago" abs:[83,631 212x18] rel:[0,0 212x18] font:14/600 color:font-headline
-              - div "142 cards · 4 decks" abs:[83,650 212x13] rel:[0,19 212x13] margin:1/0/0/0 font:11/400 color:on-surface-variant
-            - span "Matches" abs:[307,640 62x13] rel:[284,23 62x13] flex:row gap:4 align:center font:11/600 color:mastery
-              - span abs:[307,641 12x12] rel:[0,1 12x12] flex:row
-                - icon:check abs:[307,641 12x12] rel:[0,0 12x12] clip
-          - div abs:[23,677 360x112] rel:[1,60 360x112] flex:col gap:8 pad:12/14
-            - pill-btn "Upload to Drive" abs:[37,689 332x40] rel:[14,12 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11 op:0.5
-              - span abs:[143,701 16x16] rel:[106,12 16x16] flex:row
-                - icon:upload-cloud abs:[143,701 16x16] rel:[0,0 16x16] clip
-            - pill-btn "Restore from Drive" abs:[37,737 332x40] rel:[14,60 332x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant op:0.45
-              - span abs:[133,749 15x15] rel:[96,13 15x15] flex:row
-                - icon:download abs:[133,749 15x15] rel:[0,0 15x15] clip
-          - div "Backups are manual — MemoX never uploads automatically." abs:[23,789 360x29] rel:[1,172 360x29] pad:0/14/12/14 font:11/400/17 color:on-surface-variant
-    - item[4] div abs:[22,834 362x179] rel:[14,734 362x179] margin:0/0/16/0
-      - ov "Danger zone" abs:[22,834 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[22,855 362x158] rel:[0,21 362x158] flex:col gap:10
-        - card abs:[22,855 362x158] rel:[0,0 362x158] mx:MxCard pad:14 bg:#dc4848@3 r:12 border:1px #dc4848@20
-          - div "Remove account from MemoX" abs:[37,870 332x18] rel:[15,15 332x18] margin:0/0/4/0 font:14/600 color:font-headline
-          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[37,892 332x54] rel:[15,37 332x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
-          - pill-btn "Remove account" abs:[37,958 332x40] rel:[15,103 332x40] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-            - span abs:[139,971 14x14] rel:[102,13 14x14] flex:row
-              - icon:trash-2 abs:[139,971 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Account & Drive sync" abs:[56,70 334x21] rel:[48,18 334x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x4(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:990
+    - item[1] div abs:[28,108 350x322] rel:[20,0 350x322] margin:0/0/16/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,129 350x301] rel:[0,21 350x301] flex:col gap:10
+        - card abs:[28,129 350x265] rel:[0,0 350x265] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,129 350x70] rel:[0,0 350x70] flex:row gap:12 align:center pad:14
+            - div "AL" abs:[42,143 42x42] rel:[14,14 42x42] flex:row justify:center align:center shrink:0 bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+            - div abs:[96,145 180x39] rel:[68,16 180x39] grow:1 basis:0 layout_hint:expanded
+              - div "alex.minh@gmail.com" abs:[96,145 180x18] rel:[0,0 180x18] clip font:14/600 color:font-headline
+              - div abs:[96,167 134x15] rel:[0,22 134x15] flex:row gap:6 align:center margin:2/0/0/0
+                - svg abs:[96,169 11x11] rel:[0,2 11x11] clip
+                - span "Google · linked Apr 8" abs:[113,167 117x15] rel:[17,0 117x15] font:12/400 color:on-surface-variant
+            - span "Expired" abs:[288,152 76x24] rel:[260,23 76x24] flex:row gap:4 align:center pad:0/8 bg:#d9891e@12 font:12/700 color:streak r:999
+              - span abs:[296,159 11x11] rel:[8,7 11x11] flex:row
+                - icon:alert-triangle abs:[296,159 11x11] rel:[0,0 11x11] clip
+          - div abs:[42,199 322x124] rel:[14,70 322x124] flex:row gap:10 align:start pad:12/14 bg:#d9891e@10 r:12 border:1px #d9891e@24
+            - span abs:[57,214 16x16] rel:[15,15 16x16] flex:row
+              - icon:key-round abs:[57,214 16x16] rel:[0,0 16x16] clip
+            - div abs:[83,212 266x98] rel:[41,13 266x98] grow:1 basis:0 layout_hint:expanded
+              - div "Drive access expired" abs:[83,212 266x18] rel:[0,0 266x18] font:14/700 color:font-headline tracking:-0.1
+              - div "Sign in again to upload or restore. Your local data is untouched." abs:[83,232 266x36] rel:[0,20 266x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
+              - pill-btn "Sign in again" abs:[83,276 101x34] rel:[0,64 101x34] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:12
+          - div abs:[28,337 350x57] rel:[0,208 350x57] flex:row gap:8 pad:10/14 border-t:1px seed-indigo@14
+            - pill-btn "Sign out" abs:[42,348 158x36] rel:[14,11 158x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              - span abs:[87,359 14x14] rel:[45,11 14x14] flex:row
+                - icon:log-out abs:[87,359 14x14] rel:[0,0 14x14] clip
+            - pill-btn "Switch account" abs:[208,348 156x36] rel:[180,11 156x36] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              - span abs:[230,359 14x14] rel:[22,11 14x14] flex:row
+                - icon:repeat abs:[230,359 14x14] rel:[0,0 14x14] clip
+        - div "Signing out keeps every deck and card on this device." abs:[28,404 350x26] rel:[0,275 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[2] div abs:[28,446 350x143] rel:[20,338 350x143] margin:0/0/16/0
+      - ov "This device" abs:[28,446 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,467 350x122] rel:[0,21 350x122] flex:col gap:10
+        - card abs:[28,467 350x122] rel:[0,0 350x122] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,467 350x61] rel:[0,0 350x61] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - icon-tile abs:[42,480 34x34] rel:[14,13 34x34] mx:MxIconTile flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+              - span abs:[51,489 16x16] rel:[9,9 16x16] flex:row
+                - icon:smartphone abs:[51,489 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,480 228x34] rel:[60,13 228x34] grow:1 basis:0 layout_hint:expanded
+              - div "Alex's Pixel 8" abs:[88,480 228x18] rel:[0,0 228x18] font:14/600 color:font-headline
+              - div "Device label" abs:[88,499 228x15] rel:[0,19 228x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - icon-btn abs:[328,479 36x36] rel:[300,12 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+              - span abs:[336,487 20x20] rel:[8,8 20x20] flex:row
+                - icon:pencil abs:[336,487 20x20] rel:[0,0 20x20] clip
+          - div abs:[28,528 350x61] rel:[0,61 350x61] grid cols:3 gap:12 pad:12/14
+            - div abs:[42,540 99x37] rel:[14,12 99x37]
+              - div "4" abs:[42,540 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "decks" abs:[42,562 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[153,540 99x37] rel:[125,12 99x37]
+              - div "142" abs:[153,540 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "cards" abs:[153,562 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - div abs:[265,540 99x37] rel:[237,12 99x37]
+              - div "2 h" abs:[265,540 99x21] rel:[0,0 99x21] font:16/700 color:font-headline tracking:-0.3
+              - div "last active" abs:[265,562 99x15] rel:[0,22 99x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+    - item[3] div abs:[28,605 350x256] rel:[20,497 350x256] margin:0/0/16/0
+      - ov "Drive backup" abs:[28,605 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,626 350x235] rel:[0,21 350x235] flex:col gap:10
+        - card abs:[28,626 350x235] rel:[0,0 350x235] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+          - div abs:[28,626 350x59] rel:[0,0 350x59] flex:row gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+            - div abs:[42,638 34x34] rel:[14,12 34x34] flex:row justify:center align:center bg:mastery@10 r:12
+              - span abs:[51,647 16x16] rel:[9,9 16x16] flex:row
+                - icon:cloud abs:[51,647 16x16] rel:[0,0 16x16] clip
+            - div abs:[88,638 198x34] rel:[60,12 198x34] grow:1 basis:0 layout_hint:expanded
+              - div "Last upload 2 days ago" abs:[88,638 198x18] rel:[0,0 198x18] font:14/600 color:font-headline
+              - div "142 cards · 4 decks" abs:[88,657 198x15] rel:[0,19 198x15] margin:1/0/0/0 font:12/400 color:on-surface-variant
+            - span "Matches" abs:[298,648 66x15] rel:[270,22 66x15] flex:row gap:4 align:center font:12/600 color:mastery
+              - span abs:[298,649 12x12] rel:[0,2 12x12] flex:row
+                - icon:check abs:[298,649 12x12] rel:[0,0 12x12] clip
+          - div abs:[28,685 350x128] rel:[0,59 350x128] flex:col gap:8 pad:12/14
+            - pill-btn "Upload to Drive" abs:[42,697 322x48] rel:[14,12 322x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.5
+              - span abs:[139,713 16x16] rel:[97,16 16x16] flex:row
+                - icon:upload-cloud abs:[139,713 16x16] rel:[0,0 16x16] clip
+            - pill-btn "Restore from Drive" abs:[42,753 322x48] rel:[14,68 322x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant op:0.45
+              - span abs:[129,770 15x15] rel:[87,17 15x15] flex:row
+                - icon:download abs:[129,770 15x15] rel:[0,0 15x15] clip
+          - div "Backups are manual — MemoX never uploads automatically." abs:[28,813 350x48] rel:[0,187 350x48] pad:0/14/12/14 font:12/400/18 color:on-surface-variant
+    - item[4] div abs:[28,877 350x185] rel:[20,769 350x185] margin:0/0/16/0
+      - ov "Danger zone" abs:[28,877 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[28,898 350x164] rel:[0,21 350x164] flex:col gap:10
+        - card abs:[28,898 350x164] rel:[0,0 350x164] mx:MxCard pad:14 bg:#dc4848@3 r:20 shadow:1/2
+          - div "Remove account from MemoX" abs:[42,912 322x18] rel:[14,14 322x18] margin:0/0/4/0 font:14/600 color:font-headline
+          - div "Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device." abs:[42,934 322x54] rel:[14,36 322x54] margin:0/0/12/0 font:12/400/18 color:on-surface-variant
+          - pill-btn "Remove account" abs:[42,1000 322x48] rel:[14,102 322x48] mx:MxActionButton flex:row gap:6 justify:center align:center pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            - span abs:[135,1017 14x14] rel:[93,17 14x14] flex:row
+              - icon:trash-2 abs:[135,1017 14x14] rel:[0,0 14x14] clip
 ```

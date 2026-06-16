@@ -46,49 +46,49 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - div abs:[62,67 279x18] rel:[54,15 279x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Fill" abs:[62,67 40x18] rel:[0,0 40x18] pad:3/8 bg:mastery@12 font:10/700 color:mastery tracking:1.2 r:999
-      - div abs:[110,74 231x4] rel:[48,7 231x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
-        - div abs:[110,74 185x4] rel:[0,0 185x4] bg:mastery
-    - div "12 / 15" abs:[351,69 39x15] rel:[343,17 39x15] font:12/600 color:on-surface-variant
-  - div abs:[8,100 390x618] rel:[0,92 390x618] flex:col gap:10 grow:1 basis:0 layout_hint:expanded pad:8/14/0/14
-    - card abs:[22,108 362x304] rel:[14,8 362x304] mx:MxCard flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:18/16 minh:160 pos:relative bg:on-primary r:12 border:1px seed-indigo@14
-      - icon-btn abs:[343,117 32x32] rel:[321,9 32x32] mx:MxIconButton flex:row justify:center align:center pos:absolute r:999
-        - span abs:[349,123 20x20] rel:[6,6 20x20] flex:row
-          - icon:pencil abs:[349,123 20x20] rel:[0,0 20x20] clip
-      - div "Make someone laugh / Làm cho cười, gây cười, buồn cười (Động từ, là dạng sai khiến của động từ "웃다 – cười", mang nghĩa khiến người khác bật cười hoặc thấy buồn cười)." abs:[39,217 328x87] rel:[17,109 328x87] font:14/400/22 color:font-headline text:center
-    - card abs:[22,422 362x296] rel:[14,322 362x296] mx:MxCard flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:12 border:1px seed-indigo@14
-      - div abs:[171,547 64x46] rel:[149,125 64x46] flex:row gap:4 align:center
-        - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline tracking:-0.4
-        - span abs:[233,555 2x30] rel:[62,8 2x30] bg:mastery
-  - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
-    - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
-    - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - div abs:[62,70 279x21] rel:[54,18 279x21] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
+      - span "Fill" abs:[62,70 44x21] rel:[0,0 44x21] pad:3/8 bg:mastery@12 font:12/700 color:mastery tracking:1.2 r:999
+      - div abs:[114,78 227x4] rel:[52,9 227x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
+        - div abs:[114,78 182x4] rel:[0,0 182x4] bg:mastery
+    - div "12 / 15" abs:[351,73 39x15] rel:[343,21 39x15] font:12/600 color:on-surface-variant
+  - div abs:[8,108 390x602] rel:[0,100 390x602] flex:col gap:10 grow:1 basis:0 layout_hint:expanded pad:8/14/0/14
+    - card abs:[22,116 362x296] rel:[14,8 362x296] mx:MxCard flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:18/16 minh:160 pos:relative bg:on-primary r:20 shadow:1/2
+      - icon-btn abs:[344,124 32x32] rel:[322,8 32x32] mx:MxIconButton flex:row justify:center align:center pos:absolute r:999
+        - span abs:[350,130 20x20] rel:[6,6 20x20] flex:row
+          - icon:pencil abs:[350,130 20x20] rel:[0,0 20x20] clip
+      - div "Make someone laugh / Làm cho cười, gây cười, buồn cười (Động từ, là dạng sai khiến của động từ "웃다 – cười", mang nghĩa khiến người khác bật cười hoặc thấy buồn cười)." abs:[38,221 330x87] rel:[16,105 330x87] font:14/400/22 color:font-headline text:center
+    - card abs:[22,422 362x288] rel:[14,314 362x288] mx:MxCard flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:20 shadow:1/2
+      - div abs:[171,543 64x46] rel:[149,121 64x46] flex:row gap:4 align:center
+        - span "웃기" abs:[171,543 58x46] rel:[0,0 58x46] font:32/700 color:font-headline tracking:-0.4
+        - span abs:[233,551 2x30] rel:[62,8 2x30] bg:mastery
+  - div abs:[8,710 390x78] rel:[0,702 390x78] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
+    - pill-btn "Hint" abs:[38,724 160x48] rel:[30,14 160x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 maxw:160 font:14/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
+    - pill-btn "Check" abs:[208,724 160x48] rel:[200,14 160x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 maxw:160 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
 ```
 
 ## State: Wrong (ordered diff vs Input)
 
 ```diff
-  - card abs:[22,422 362x296] rel:[14,322 362x296] mx:MxCard flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:12 border:1px seed-indigo@14
-- - div abs:[171,547 64x46] rel:[149,125 64x46] flex:row gap:4 align:center
-- - span "웃기" abs:[171,547 58x46] rel:[0,0 58x46] font:32/700 color:font-headline tracking:-0.4
-- - span abs:[233,555 2x30] rel:[62,8 2x30] bg:mastery
-+ - icon-btn abs:[343,431 32x32] rel:[321,9 32x32] mx:MxIconButton flex:row justify:center align:center pos:absolute r:999
-+ - span abs:[349,437 20x20] rel:[6,6 20x20] flex:row
-+ - icon:volume-2 abs:[349,437 20x20] rel:[0,0 20x20] clip
-+ - icon-btn abs:[31,677 32x32] rel:[9,255 32x32] mx:MxIconButton flex:row justify:center align:center pos:absolute r:999
-+ - span abs:[37,683 20x20] rel:[6,6 20x20] flex:row
-+ - icon:rotate-ccw abs:[37,683 20x20] rel:[0,0 20x20] clip
-+ - div abs:[170,532 65x76] rel:[148,110 65x76] flex:col gap:6 align:center
-+ - div "우겨다" abs:[170,532 65x35] rel:[0,0 65x35] font:24/700 color:seed-rose tracking:-0.3
-+ - div "웃기다" abs:[170,573 65x35] rel:[0,41 65x35] font:24/700 color:font-headline tracking:-0.3
-  - div abs:[8,718 390x70] rel:[0,710 390x70] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
-- - pill-btn "Hint" abs:[38,732 160x40] rel:[30,14 160x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
-- - pill-btn "Check" abs:[208,732 160x40] rel:[200,14 160x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
-+ - pill-btn "Mark correct" abs:[38,732 160x40] rel:[30,14 160x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 font:13/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
-+ - pill-btn "Try again" abs:[208,732 160x40] rel:[200,14 160x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 maxw:160 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:999
+  - card abs:[22,422 362x288] rel:[14,314 362x288] mx:MxCard flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:14 minh:160 pos:relative bg:surface-container-low r:20 shadow:1/2
+- - div abs:[171,543 64x46] rel:[149,121 64x46] flex:row gap:4 align:center
+- - span "웃기" abs:[171,543 58x46] rel:[0,0 58x46] font:32/700 color:font-headline tracking:-0.4
+- - span abs:[233,551 2x30] rel:[62,8 2x30] bg:mastery
++ - icon-btn abs:[344,430 32x32] rel:[322,8 32x32] mx:MxIconButton flex:row justify:center align:center pos:absolute r:999
++ - span abs:[350,436 20x20] rel:[6,6 20x20] flex:row
++ - icon:volume-2 abs:[350,436 20x20] rel:[0,0 20x20] clip
++ - icon-btn abs:[30,670 32x32] rel:[8,248 32x32] mx:MxIconButton flex:row justify:center align:center pos:absolute r:999
++ - span abs:[36,676 20x20] rel:[6,6 20x20] flex:row
++ - icon:rotate-ccw abs:[36,676 20x20] rel:[0,0 20x20] clip
++ - div abs:[170,528 65x76] rel:[148,106 65x76] flex:col gap:6 align:center
++ - div "우겨다" abs:[170,528 65x35] rel:[0,0 65x35] font:24/700 color:seed-rose tracking:-0.3
++ - div "웃기다" abs:[170,569 65x35] rel:[0,41 65x35] font:24/700 color:font-headline tracking:-0.3
+  - div abs:[8,710 390x78] rel:[0,702 390x78] flex:row gap:10 justify:center shrink:0 pad:14/14/16/14
+- - pill-btn "Hint" abs:[38,724 160x48] rel:[30,14 160x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 maxw:160 font:14/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
+- - pill-btn "Check" abs:[208,724 160x48] rel:[200,14 160x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 maxw:160 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
++ - pill-btn "Mark correct" abs:[38,724 160x48] rel:[30,14 160x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 maxw:160 font:14/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
++ - pill-btn "Try again" abs:[208,724 160x48] rel:[200,14 160x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 maxw:160 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
 ```

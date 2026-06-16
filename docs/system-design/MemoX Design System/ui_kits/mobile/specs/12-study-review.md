@@ -46,25 +46,32 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - div abs:[72,74 264x4] rel:[64,22 264x4] grow:1 basis:0 layout_hint:expanded margin:0/16 clip bg:surface-container r:999
-      - div abs:[72,74 92x4] rel:[0,0 92x4] bg:seed-indigo
-    - div "8 / 23" abs:[356,68 34x16] rel:[348,16 34x16] font:13/600 color:on-surface-variant
-  - div abs:[8,100 390x688] rel:[0,92 390x688] flex:col gap:14 grow:1 basis:0 layout_hint:expanded pad:6/14/12/14
-    - card abs:[22,106 362x620] rel:[14,6 362x620] mx:MxCard flex:col grow:1 basis:0 layout_hint:expanded bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,107 360x309] rel:[1,1 360x309] flex:col justify:center align:center grow:1 basis:0 layout_hint:expanded pad:20/16/8/16 pos:relative
-        - ov "Korean" abs:[43,123 54x13] rel:[20,16 54x13] pos:absolute font:11/700 color:on-surface-variant tracking:1.2
-        - div "먹다" abs:[174,249 58x37] rel:[151,142 58x37] font:32/700/37 color:font-headline text:center tracking:-0.5
-      - div abs:[43,416 320x1] rel:[21,310 320x1] margin:0/20 bg:outline-variant op:0.5
-      - div abs:[23,417 360x309] rel:[1,311 360x309] flex:col gap:14 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/16/20/16 pos:relative
-        - ov "Meaning" abs:[43,433 61x13] rel:[20,16 61x13] pos:absolute font:11/700 color:on-surface-variant tracking:1.2
-        - div "to eat" abs:[170,522 66x30] rel:[147,106 66x30] font:24/600 color:font-headline text:center tracking:-0.3
-        - div "아침을 먹었어요." abs:[141,566 125x41] rel:[118,150 125x41] pad:10/14 maxw:280 bg:surface-container-low font:14/400/21 color:on-surface-variant text:center r:10
-    - div abs:[22,740 362x36] rel:[14,640 362x36] flex:row gap:8 justify:center align:center pad:10/14
-      - span abs:[111,750 16x16] rel:[89,10 16x16] flex:row
-        - icon:chevrons-right abs:[111,750 16x16] rel:[0,0 16x16] clip
-      - span "Swipe left for the next card" abs:[135,751 159x15] rel:[113,11 159x15] font:12/400 color:on-surface-variant tracking:0.3
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - div abs:[72,78 261x4] rel:[64,26 261x4] grow:1 basis:0 layout_hint:expanded margin:0/16 clip bg:surface-container r:999
+      - div abs:[72,78 91x4] rel:[0,0 91x4] bg:seed-indigo
+    - div "8 / 23" abs:[353,71 37x18] rel:[345,19 37x18] font:14/600 color:on-surface-variant
+  - div abs:[8,108 390x680] rel:[0,100 390x680] flex:col gap:14 grow:1 basis:0 layout_hint:expanded pad:6/14/12/14
+    - card abs:[22,114 362x570] rel:[14,6 362x570] mx:MxCard flex:col grow:1 basis:0 layout_hint:expanded bg:on-primary r:20 shadow:1/2
+      - div abs:[22,114 362x285] rel:[0,0 362x285] flex:col justify:center align:center grow:1 basis:0 layout_hint:expanded pad:20/16/8/16 pos:relative
+        - ov "Korean" abs:[42,130 48x13] rel:[20,16 48x13] pos:absolute font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        - div "먹다" abs:[174,244 58x37] rel:[152,130 58x37] font:32/700/37 color:font-headline text:center tracking:-0.5
+      - div abs:[42,399 322x1] rel:[20,285 322x1] margin:0/20 bg:outline-variant op:0.5
+      - div abs:[22,400 362x285] rel:[0,286 362x285] flex:col gap:14 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:8/16/20/16 pos:relative
+        - ov "Meaning" abs:[42,416 54x13] rel:[20,16 54x13] pos:absolute font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        - div "to eat" abs:[170,493 66x30] rel:[148,94 66x30] font:24/600 color:font-headline text:center tracking:-0.3
+        - div "아침을 먹었어요." abs:[141,537 125x41] rel:[119,138 125x41] pad:10/14 maxw:280 bg:surface-container-low font:14/400/21 color:on-surface-variant text:center r:12
+    - div abs:[22,698 362x48] rel:[14,590 362x48] flex:row gap:10 align:center
+      - pill-btn "Previous" abs:[22,698 176x48] rel:[0,0 176x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:surface-container font:14/600 color:font-headline text:center tracking:0.1 r:12
+        - span abs:[69,713 18x18] rel:[47,15 18x18] flex:row
+          - icon:arrow-left abs:[69,713 18x18] rel:[0,0 18x18] clip
+      - pill-btn "Next" abs:[208,698 176x48] rel:[186,0 176x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[306,713 18x18] rel:[98,15 18x18] flex:row
+          - icon:arrow-right abs:[306,713 18x18] rel:[0,0 18x18] clip
+    - div abs:[22,760 362x16] rel:[14,652 362x16] flex:row gap:8 justify:center align:center
+      - span abs:[105,760 16x16] rel:[83,0 16x16] flex:row
+        - icon:chevrons-right abs:[105,760 16x16] rel:[0,0 16x16] clip
+      - span "or swipe the card to continue" abs:[129,761 172x15] rel:[107,1 172x15] font:12/400 color:on-surface-variant tracking:0.3
 ```

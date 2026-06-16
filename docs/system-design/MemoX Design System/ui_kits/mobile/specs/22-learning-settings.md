@@ -46,226 +46,230 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Learning" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-    - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999 op:0
-      - span abs:[332,71 11x11] rel:[9,5 11x11] flex:row
-        - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
-  - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:924
-    - item[1] div abs:[22,100 362x311] rel:[14,0 362x311] margin:0/0/18/0
-      - ov "Daily goal" abs:[22,100 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,121 362x290] rel:[0,21 362x290] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,122 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
-          - div abs:[37,135 276x37] rel:[14,13 276x37]
-            - div "Set a daily goal" abs:[37,135 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
-            - div "Track how many cards you complete each day." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[325,141 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
-            - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
-              - span abs:[346,144 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-        - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14
-          - item[1] div abs:[37,201 332x30] rel:[14,15 332x30] flex:row justify:between align:baseline margin:0/0/14/0
-            - ov "Cards per day" abs:[37,215 101x13] rel:[0,14 101x13] font:11/700 color:on-surface-variant tracking:1.2
-            - div abs:[305,201 64x30] rel:[268,0 64x30] flex:row gap:4 align:baseline
-              - span "20" abs:[305,201 28x30] rel:[0,0 28x30] font:24/700 color:seed-indigo tracking:-0.5
-              - span "cards" abs:[337,214 32x15] rel:[32,13 32x15] font:12/400 color:on-surface-variant
-          - div abs:[37,245 332x24] rel:[14,59 332x24] margin:0/0/8/0 pos:relative
-            - div abs:[37,254 332x6] rel:[0,9 332x6] pos:absolute transform:translate(0,-3) bg:surface-container-high r:999
-            - div abs:[37,254 26x6] rel:[0,9 26x6] pos:absolute transform:translate(0,-3) bg:seed-indigo r:999
-            - div abs:[50,244 26x26] rel:[13,-1 26x26] pos:absolute transform:translate(-13,-13) bg:on-primary r:999 border:2px seed-indigo shadow:2/6
-            - div abs:[36,256 2x2] rel:[-1,11 2x2] pos:absolute transform:translate(-1,-1) bg:on-primary@85 r:999
-            - div abs:[119,256 2x2] rel:[82,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
-            - div abs:[202,256 2x2] rel:[165,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
-            - div abs:[285,256 2x2] rel:[248,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
-            - div abs:[368,256 2x2] rel:[331,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
-          - item[2] div abs:[37,277 332x13] rel:[14,91 332x13] flex:row justify:between repeat:x5(unit=1) pad:0/2
-            - item[1] span "5" abs:[39,277 7x13] rel:[2,0 7x13] font:11/400 color:on-surface-variant
-            - item[2] span "50" abs:[108,277 13x13] rel:[71,0 13x13] font:11/400 color:on-surface-variant op:0.7
-            - item[3] span "100" abs:[183,277 20x13] rel:[146,0 20x13] font:11/400 color:on-surface-variant op:0.7
-            - item[4] span "150" abs:[265,277 20x13] rel:[228,0 20x13] font:11/400 color:on-surface-variant op:0.7
-            - item[5] span "200" abs:[347,277 20x13] rel:[310,0 20x13] font:11/400 color:on-surface-variant
-          - div abs:[37,300 332x13] rel:[14,114 332x13] flex:row gap:5 align:center margin:10/0/0/0
-            - span abs:[37,301 11x11] rel:[0,1 11x11] flex:row
-              - icon:info abs:[37,301 11x11] rel:[0,0 11x11] clip
-            - span "Drag to adjust in steps of 5" abs:[53,300 137x13] rel:[16,0 137x13] font:11/400 color:on-surface-variant
-        - div abs:[23,329 360x81] rel:[1,208 360x81] grid cols:3 gap:12 align:center pad:13/14
-          - div abs:[37,355 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span abs:[45,362 15x15] rel:[8,8 15x15] flex:row
-              - icon:flame abs:[45,362 15x15] rel:[0,0 15x15] clip
-          - div abs:[83,342 230x55] rel:[60,13 230x55]
-            - div "Show streak counter" abs:[83,342 230x18] rel:[0,0 230x18] font:14/600 color:font-headline tracking:-0.1
-            - div "Display your current streak on Home and Stats." abs:[83,362 230x35] rel:[0,20 230x35] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[325,357 44x26] rel:[302,27 44x26] flex:row gap:6 align:center
-            - span abs:[325,357 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
-              - span abs:[346,360 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-    - item[2] div abs:[22,429 362x168] rel:[14,329 362x168] margin:0/0/18/0
-      - ov "Reminder" abs:[22,429 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,450 362x122] rel:[0,21 362x122] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,451 360x64] rel:[1,1 360x64] grid cols:2 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
-          - div abs:[37,464 276x37] rel:[14,13 276x37]
-            - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
-            - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[325,470 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
-            - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
-              - span abs:[328,473 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-        - div abs:[23,516 360x56] rel:[1,65 360x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-          - div abs:[37,529 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span abs:[45,536 15x15] rel:[8,8 15x15] flex:row
-              - icon:clock abs:[45,536 15x15] rel:[0,0 15x15] clip
-          - div "Reminder time" abs:[83,535 214x18] rel:[60,19 214x18] font:14/600 color:font-headline tracking:-0.1
-          - div abs:[309,535 60x18] rel:[286,19 60x18] flex:row gap:6 align:center
-            - div "20:00" abs:[309,535 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
-              - span abs:[353,536 16x16] rel:[44,1 16x16] flex:row
-                - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
-      - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[3] div abs:[22,615 362x86] rel:[14,515 362x86] margin:0/0/18/0
-      - ov "Tags" abs:[22,615 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,636 362x65] rel:[0,21 362x65] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,637 360x63] rel:[1,1 360x63] grid cols:3 gap:12 align:center pad:13/14
-          - div abs:[37,654 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span abs:[45,661 15x15] rel:[8,8 15x15] flex:row
-              - icon:tag abs:[45,661 15x15] rel:[0,0 15x15] clip
-          - div abs:[83,650 256x37] rel:[60,13 256x37]
-            - div "Manage tags" abs:[83,650 256x18] rel:[0,0 256x18] font:14/600 color:font-headline tracking:-0.1
-            - div "14 tags across all decks" abs:[83,670 256x17] rel:[0,20 256x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[351,660 18x18] rel:[328,23 18x18] flex:row gap:6 align:center
-            - span abs:[351,660 18x18] rel:[0,0 18x18] flex:row
-              - icon:chevron-right abs:[351,660 18x18] rel:[0,0 18x18] clip
-    - item[4] div abs:[22,719 362x240] rel:[14,619 362x240] margin:0/0/18/0
-      - ov "Study defaults" abs:[22,719 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,740 362x194] rel:[0,21 362x194] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,741 360x64] rel:[1,1 360x64] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14 op:0.45
-          - div abs:[37,758 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span abs:[45,766 15x15] rel:[8,8 15x15] flex:row
-              - icon:shuffle abs:[45,766 15x15] rel:[0,0 15x15] clip
-          - div abs:[83,754 225x37] rel:[60,13 225x37]
-            - div "Default shuffle" abs:[83,754 225x18] rel:[0,0 225x18] font:14/600 color:font-headline tracking:-0.1
-            - div "Randomize card order in every session" abs:[83,774 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[320,762 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
-            - span "Soon" abs:[320,762 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
-        - div abs:[23,806 360x64] rel:[1,65 360x64] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14 op:0.45
-          - div abs:[37,823 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span abs:[45,830 15x15] rel:[8,8 15x15] flex:row
-              - icon:layers abs:[45,830 15x15] rel:[0,0 15x15] clip
-          - div abs:[83,819 225x37] rel:[60,13 225x37]
-            - div "Default study mode" abs:[83,819 225x18] rel:[0,0 225x18] font:14/600 color:font-headline tracking:-0.1
-            - div "Review, Match, Guess, Recall, or Fill" abs:[83,839 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[320,827 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
-            - span "Soon" abs:[320,827 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
-        - div abs:[23,870 360x63] rel:[1,130 360x63] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-          - div abs:[37,887 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
-            - span abs:[45,894 15x15] rel:[8,8 15x15] flex:row
-              - icon:eye abs:[45,894 15x15] rel:[0,0 15x15] clip
-          - div abs:[83,883 225x37] rel:[60,13 225x37]
-            - div "Show example sentence" abs:[83,883 225x18] rel:[0,0 225x18] font:14/600 color:font-headline tracking:-0.1
-            - div "Reveal the example with the meaning" abs:[83,903 225x17] rel:[0,20 225x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-          - div abs:[320,891 49x22] rel:[297,21 49x22] flex:row gap:6 align:center
-            - span "Soon" abs:[320,891 49x22] rel:[0,0 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
-      - div "Available in a future update." abs:[22,935 362x25] rel:[0,215 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-    - item[5] div "Changes save automatically." abs:[22,977 362x33] rel:[14,877 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Learning" abs:[56,70 260x21] rel:[48,18 260x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+    - div "Saved" abs:[320,69 70x23] rel:[312,17 70x23] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:12/600 color:mastery r:999 op:0
+      - span abs:[329,75 11x11] rel:[9,6 11x11] flex:row
+        - icon:check abs:[329,75 11x11] rel:[0,0 11x11] clip
+  - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:967
+    - item[1] div abs:[28,108 350x313] rel:[20,0 350x313] margin:0/0/18/0
+      - ov "Daily goal" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,129 350x292] rel:[0,21 350x292] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,129 350x64] rel:[0,0 350x64] grid cols:2 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+          - div abs:[42,142 266x37] rel:[14,13 266x37]
+            - div "Set a daily goal" abs:[42,142 266x18] rel:[0,0 266x18] font:14/600 color:font-headline tracking:-0.1
+            - div "Track how many cards you complete each day." abs:[42,162 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,148 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+            - span abs:[320,148 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+              - span abs:[341,151 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+        - div abs:[28,193 350x147] rel:[0,64 350x147] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14
+          - item[1] div abs:[42,208 322x30] rel:[14,15 322x30] flex:row justify:between align:baseline margin:0/0/14/0
+            - ov "Cards per day" abs:[42,222 89x13] rel:[0,14 89x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+            - div abs:[300,208 64x30] rel:[258,0 64x30] flex:row gap:4 align:baseline
+              - span "20" abs:[300,208 28x30] rel:[0,0 28x30] font:24/700 color:seed-indigo tracking:-0.5
+              - span "cards" abs:[332,221 32x15] rel:[32,13 32x15] font:12/400 color:on-surface-variant
+          - div abs:[42,252 322x24] rel:[14,59 322x24] margin:0/0/8/0 pos:relative
+            - div abs:[42,261 322x6] rel:[0,9 322x6] pos:absolute transform:translate(0,-3) bg:surface-container-high r:999
+            - div abs:[42,261 25x6] rel:[0,9 25x6] pos:absolute transform:translate(0,-3) bg:seed-indigo r:999
+            - div abs:[54,251 26x26] rel:[12,-1 26x26] pos:absolute transform:translate(-13,-13) bg:on-primary r:999 border:2px seed-indigo shadow:0/1
+            - div abs:[41,263 2x2] rel:[-1,11 2x2] pos:absolute transform:translate(-1,-1) bg:on-primary@85 r:999
+            - div abs:[122,263 2x2] rel:[80,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
+            - div abs:[202,263 2x2] rel:[160,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
+            - div abs:[283,263 2x2] rel:[241,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
+            - div abs:[363,263 2x2] rel:[321,11 2x2] pos:absolute transform:translate(-1,-1) bg:outline-variant r:999
+          - item[2] div abs:[42,284 322x15] rel:[14,91 322x15] flex:row justify:between repeat:x5(unit=1) pad:0/2
+            - item[1] span "5" abs:[44,284 7x15] rel:[2,0 7x15] font:12/400 color:on-surface-variant
+            - item[2] span "50" abs:[109,284 14x15] rel:[67,0 14x15] font:12/400 color:on-surface-variant op:0.7
+            - item[3] span "100" abs:[181,284 22x15] rel:[139,0 22x15] font:12/400 color:on-surface-variant op:0.7
+            - item[4] span "150" abs:[261,284 22x15] rel:[219,0 22x15] font:12/400 color:on-surface-variant op:0.7
+            - item[5] span "200" abs:[340,284 22x15] rel:[298,0 22x15] font:12/400 color:on-surface-variant
+          - div abs:[42,309 322x15] rel:[14,116 322x15] flex:row gap:5 align:center margin:10/0/0/0
+            - span abs:[42,311 11x11] rel:[0,2 11x11] flex:row
+              - icon:info abs:[42,311 11x11] rel:[0,0 11x11] clip
+            - span "Drag to adjust in steps of 5" abs:[58,309 149x15] rel:[16,0 149x15] font:12/400 color:on-surface-variant
+        - div abs:[28,340 350x81] rel:[0,211 350x81] grid cols:3 gap:12 align:center pad:13/14
+          - div abs:[42,366 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            - span abs:[50,373 15x15] rel:[8,8 15x15] flex:row
+              - icon:flame abs:[50,373 15x15] rel:[0,0 15x15] clip
+          - div abs:[88,353 220x55] rel:[60,13 220x55]
+            - div "Show streak counter" abs:[88,353 220x18] rel:[0,0 220x18] font:14/600 color:font-headline tracking:-0.1
+            - div "Display your current streak on Home and Stats." abs:[88,373 220x35] rel:[0,20 220x35] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,368 44x26] rel:[292,27 44x26] flex:row gap:6 align:center
+            - span abs:[320,368 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+              - span abs:[341,371 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+    - item[2] div abs:[28,439 350x167] rel:[20,331 350x167] margin:0/0/18/0
+      - ov "Reminder" abs:[28,439 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,460 350x120] rel:[0,21 350x120] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,460 350x64] rel:[0,0 350x64] grid cols:2 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+          - div abs:[42,473 266x37] rel:[14,13 266x37]
+            - div "Daily reminder" abs:[42,473 266x18] rel:[0,0 266x18] font:14/600 color:font-headline tracking:-0.1
+            - div "You decide when to come back." abs:[42,493 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,479 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+            - span abs:[320,479 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
+              - span abs:[323,482 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+        - div abs:[28,525 350x56] rel:[0,64 350x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+          - div abs:[42,538 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            - span abs:[50,545 15x15] rel:[8,8 15x15] flex:row
+              - icon:clock abs:[50,545 15x15] rel:[0,0 15x15] clip
+          - div "Reminder time" abs:[88,544 204x18] rel:[60,19 204x18] font:14/600 color:font-headline tracking:-0.1
+          - div abs:[304,544 60x18] rel:[276,19 60x18] flex:row gap:6 align:center
+            - div "20:00" abs:[304,544 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
+              - span abs:[348,545 16x16] rel:[44,1 16x16] flex:row
+                - icon:chevron-right abs:[348,545 16x16] rel:[0,0 16x16] clip
+      - div "A gentle nudge once a day. Off by default." abs:[28,581 350x26] rel:[0,141 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[3] div abs:[28,625 350x84] rel:[20,517 350x84] margin:0/0/18/0
+      - ov "Tags" abs:[28,625 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,646 350x63] rel:[0,21 350x63] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,646 350x63] rel:[0,0 350x63] grid cols:3 gap:12 align:center pad:13/14
+          - div abs:[42,662 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            - span abs:[50,670 15x15] rel:[8,8 15x15] flex:row
+              - icon:tag abs:[50,670 15x15] rel:[0,0 15x15] clip
+          - div abs:[88,659 246x37] rel:[60,13 246x37]
+            - div "Manage tags" abs:[88,659 246x18] rel:[0,0 246x18] font:14/600 color:font-headline tracking:-0.1
+            - div "14 tags across all decks" abs:[88,679 246x17] rel:[0,20 246x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[346,668 18x18] rel:[318,23 18x18] flex:row gap:6 align:center
+            - span abs:[346,668 18x18] rel:[0,0 18x18] flex:row
+              - icon:chevron-right abs:[346,668 18x18] rel:[0,0 18x18] clip
+    - item[4] div abs:[28,727 350x275] rel:[20,619 350x275] margin:0/0/18/0
+      - ov "Study defaults" abs:[28,727 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,748 350x210] rel:[0,21 350x210] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,748 350x64] rel:[0,0 350x64] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+          - div abs:[42,765 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            - span abs:[50,772 15x15] rel:[8,8 15x15] flex:row
+              - icon:shuffle abs:[50,772 15x15] rel:[0,0 15x15] clip
+          - div abs:[88,761 220x37] rel:[60,13 220x37]
+            - div "Default shuffle" abs:[88,761 220x18] rel:[0,0 220x18] font:14/600 color:font-headline tracking:-0.1
+            - div "Randomize card order in every session" abs:[88,781 220x17] rel:[0,20 220x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,767 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+            - span abs:[320,767 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+              - span abs:[341,770 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+        - div abs:[28,812 350x82] rel:[0,64 350x82] grid cols:3 gap:12 align:center pad:13/14 border-b:1px seed-indigo@14
+          - div abs:[42,838 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            - span abs:[50,845 15x15] rel:[8,8 15x15] flex:row
+              - icon:layers abs:[50,845 15x15] rel:[0,0 15x15] clip
+          - div abs:[88,825 193x55] rel:[60,13 193x55]
+            - div "Default study mode" abs:[88,825 193x18] rel:[0,0 193x18] font:14/600 color:font-headline tracking:-0.1
+            - div "Review, Match, Guess, Recall, or Fill" abs:[88,845 193x35] rel:[0,20 193x35] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[293,844 71x18] rel:[265,31 71x18] flex:row gap:6 align:center
+            - div "Review" abs:[293,844 71x18] rel:[0,0 71x18] flex:row gap:6 align:center font:14/600 color:font-headline
+              - span abs:[348,845 16x16] rel:[55,1 16x16] flex:row
+                - icon:chevron-right abs:[348,845 16x16] rel:[0,0 16x16] clip
+        - div abs:[28,894 350x63] rel:[0,146 350x63] grid cols:3 gap:12 align:center pad:13/14
+          - div abs:[42,911 30x30] rel:[14,17 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            - span abs:[50,918 15x15] rel:[8,8 15x15] flex:row
+              - icon:eye abs:[50,918 15x15] rel:[0,0 15x15] clip
+          - div abs:[88,907 220x37] rel:[60,13 220x37]
+            - div "Show example sentence" abs:[88,907 220x18] rel:[0,0 220x18] font:14/600 color:font-headline tracking:-0.1
+            - div "Reveal the example with the meaning" abs:[88,927 220x17] rel:[0,20 220x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+          - div abs:[320,913 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+            - span abs:[320,913 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+              - span abs:[341,916 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+      - div "Applied to every new session — you can still change them per study." abs:[28,958 350x44] rel:[0,231 350x44] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+    - item[5] div "Changes save automatically." abs:[28,1020 350x35] rel:[20,912 350x35] pad:4/0/16/0 font:12/400 color:on-surface-variant text:center
 ```
 
 ## State: Goal off (ordered diff vs Goal on)
 
 ```diff
-  - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
-- - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:924
-+ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:949
-  - item[1] div abs:[22,100 362x336] rel:[14,0 362x336] margin:0/0/18/0
+  - icon:check abs:[329,75 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:967
++ - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:1011
+  - item[1] div abs:[28,108 350x357] rel:[20,0 350x357] margin:0/0/18/0
   ...
-  - div "Set a daily goal" abs:[37,135 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
-- - div "Track how many cards you complete each day." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-+ - div "Pause goal tracking without losing your streak." abs:[37,155 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-  - div abs:[325,141 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
-- - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
-+ - span abs:[325,141 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
-  - span abs:[328,144 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-- - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14
-+ - div abs:[23,186 360x143] rel:[1,65 360x143] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14 op:0.4
-  - item[1] div abs:[37,201 332x30] rel:[14,15 332x30] flex:row justify:between align:baseline margin:0/0/14/0
+  - div "Set a daily goal" abs:[42,142 266x18] rel:[0,0 266x18] font:14/600 color:font-headline tracking:-0.1
+- - div "Track how many cards you complete each day." abs:[42,162 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
++ - div "Pause goal tracking without losing your streak." abs:[42,162 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[320,148 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+- - span abs:[320,148 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
++ - span abs:[320,148 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
+  - span abs:[323,151 20x20] rel:[3,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+- - div abs:[28,193 350x147] rel:[0,64 350x147] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14
++ - div abs:[28,193 350x147] rel:[0,64 350x147] repeat:x2(unit=2) pad:14/14/16/14 border-t:1px seed-indigo@14 op:0.4
+  - item[1] div abs:[42,208 322x30] rel:[14,15 322x30] flex:row justify:between align:baseline margin:0/0/14/0
   ...
-  - span "Drag to adjust in steps of 5" abs:[53,300 137x13] rel:[16,0 137x13] font:11/400 color:on-surface-variant
-- - div abs:[23,329 360x81] rel:[1,208 360x81] grid cols:3 gap:12 align:center pad:13/14
-+ - div abs:[23,329 360x81] rel:[1,208 360x81] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-  - div abs:[37,355 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+  - span "Drag to adjust in steps of 5" abs:[58,309 149x15] rel:[16,0 149x15] font:12/400 color:on-surface-variant
+- - div abs:[28,340 350x81] rel:[0,211 350x81] grid cols:3 gap:12 align:center pad:13/14
++ - div abs:[28,340 350x81] rel:[0,211 350x81] grid cols:3 gap:12 align:center pad:13/14 op:0.45
+  - div abs:[42,366 30x30] rel:[14,25 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
   ...
-  - div abs:[325,357 44x26] rel:[302,27 44x26] flex:row gap:6 align:center
-- - span abs:[325,357 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
-+ - span abs:[325,357 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999 op:0.45
-  - span abs:[346,360 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-+ - div "Goal is off. Your streak is frozen — it won’t reset while paused." abs:[22,411 362x25] rel:[0,311 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-  - item[2] div abs:[22,454 362x168] rel:[14,354 362x168] margin:0/0/18/0
+  - div abs:[320,368 44x26] rel:[292,27 44x26] flex:row gap:6 align:center
+- - span abs:[320,368 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
++ - span abs:[320,368 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999 op:0.45
+  - span abs:[341,371 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
++ - div "Goal is off. Your streak is frozen — it won’t reset while paused." abs:[28,421 350x44] rel:[0,313 350x44] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+  - item[2] div abs:[28,483 350x167] rel:[20,375 350x167] margin:0/0/18/0
   ...
 ```
 
 ## State: Reminder on (ordered diff vs Goal on)
 
 ```diff
-  - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
-- - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:924
-+ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:900
-  - item[1] div abs:[22,100 362x311] rel:[14,0 362x311] margin:0/0/18/0
+  - icon:check abs:[329,75 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:967
++ - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:941
+  - item[1] div abs:[28,108 350x313] rel:[20,0 350x313] margin:0/0/18/0
   ...
-  - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
-- - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-+ - div "Nudge me to study every day." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-  - div abs:[325,470 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
-- - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
-+ - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
-  - span abs:[346,473 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
-- - div abs:[23,516 360x56] rel:[1,65 360x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
-+ - div abs:[23,516 360x56] rel:[1,65 360x56] grid cols:3 gap:12 align:center pad:13/14
-  - div abs:[37,529 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:seed-indigo@8 r:9
+  - div "Daily reminder" abs:[42,473 266x18] rel:[0,0 266x18] font:14/600 color:font-headline tracking:-0.1
+- - div "You decide when to come back." abs:[42,493 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
++ - div "Nudge me to study every day." abs:[42,493 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[320,479 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+- - span abs:[320,479 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
++ - span abs:[320,479 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+  - span abs:[341,482 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+- - div abs:[28,525 350x56] rel:[0,64 350x56] grid cols:3 gap:12 align:center pad:13/14 op:0.45
++ - div abs:[28,525 350x56] rel:[0,64 350x56] grid cols:3 gap:12 align:center pad:13/14
+  - div abs:[42,538 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
   ...
-  - div abs:[309,535 60x18] rel:[286,19 60x18] flex:row gap:6 align:center
-- - div "20:00" abs:[309,535 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
-+ - div "20:00" abs:[309,535 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:font-headline
-  - span abs:[353,536 16x16] rel:[44,1 16x16] flex:row
-  - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
-- - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-  - item[3] div abs:[22,591 362x86] rel:[14,491 362x86] margin:0/0/18/0
+  - div abs:[304,544 60x18] rel:[276,19 60x18] flex:row gap:6 align:center
+- - div "20:00" abs:[304,544 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:on-surface-variant
++ - div "20:00" abs:[304,544 60x18] rel:[0,0 60x18] flex:row gap:6 align:center font:14/600 color:font-headline
+  - span abs:[348,545 16x16] rel:[44,1 16x16] flex:row
+  - icon:chevron-right abs:[348,545 16x16] rel:[0,0 16x16] clip
+- - div "A gentle nudge once a day. Off by default." abs:[28,581 350x26] rel:[0,141 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
+  - item[3] div abs:[28,599 350x84] rel:[20,491 350x84] margin:0/0/18/0
   ...
 ```
 
 ## State: Perm denied (ordered diff vs Goal on)
 
 ```diff
-  - icon:check abs:[332,71 11x11] rel:[0,0 11x11] clip
-- - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:924
-+ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:1023
-  - item[1] div abs:[22,100 362x311] rel:[14,0 362x311] margin:0/0/18/0
+  - icon:check abs:[329,75 11x11] rel:[0,0 11x11] clip
+- - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:967
++ - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:1066
+  - item[1] div abs:[28,108 350x313] rel:[20,0 350x313] margin:0/0/18/0
   ...
-  - div "Daily reminder" abs:[37,464 276x18] rel:[0,0 276x18] font:14/600 color:font-headline tracking:-0.1
-- - div "You decide when to come back." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-+ - div "Nudge me to study every day." abs:[37,484 276x17] rel:[0,20 276x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
-  - div abs:[325,470 44x26] rel:[302,19 44x26] flex:row gap:6 align:center
-- - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
-+ - span abs:[325,470 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
-  - span abs:[346,473 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
+  - div "Daily reminder" abs:[42,473 266x18] rel:[0,0 266x18] font:14/600 color:font-headline tracking:-0.1
+- - div "You decide when to come back." abs:[42,493 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
++ - div "Nudge me to study every day." abs:[42,493 266x17] rel:[0,20 266x17] margin:2/0/0/0 font:12/400/17 color:on-surface-variant
+  - div abs:[320,479 44x26] rel:[292,19 44x26] flex:row gap:6 align:center
+- - span abs:[320,479 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:surface-container-high r:999
++ - span abs:[320,479 44x26] rel:[0,0 44x26] shrink:0 pos:relative bg:seed-indigo r:999
+  - span abs:[341,482 20x20] rel:[21,3 20x20] pos:absolute bg:on-primary r:999 shadow:1/3
   ...
-  - icon:chevron-right abs:[353,536 16x16] rel:[0,0 16x16] clip
-- - div "A gentle nudge once a day. Off by default." abs:[22,573 362x25] rel:[0,143 362x25] pad:8/6/0/6 font:11/400/17 color:on-surface-variant
-+ - div abs:[23,572 360x123] rel:[1,121 360x123] flex:row gap:10 align:start pad:12/14 bg:#d9891e@6 border-t:1px seed-indigo@14
-+ - span abs:[37,585 16x16] rel:[14,13 16x16] flex:row
-+ - icon:bell-off abs:[37,585 16x16] rel:[0,0 16x16] clip
-+ - div abs:[63,585 306x98] rel:[40,13 306x98] grow:1 basis:0 layout_hint:expanded
-+ - div "Notifications are blocked" abs:[63,585 306x16] rel:[0,0 306x16] font:13/700 color:font-headline tracking:-0.1
-+ - div "Allow MemoX in your phone’s notification settings to receive the reminder." abs:[63,603 306x36] rel:[0,18 306x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
-+ - pill-btn "Open system settings" abs:[63,649 175x34] rel:[0,64 175x34] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 margin:10/0/0/0 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
-+ - span abs:[77,659 13x13] rel:[14,11 13x13] flex:row
-+ - icon:external-link abs:[77,659 13x13] rel:[0,0 13x13] clip
-  - item[3] div abs:[22,714 362x86] rel:[14,614 362x86] margin:0/0/18/0
+  - icon:chevron-right abs:[348,545 16x16] rel:[0,0 16x16] clip
+- - div "A gentle nudge once a day. Off by default." abs:[28,581 350x26] rel:[0,141 350x26] pad:8/6/0/6 font:12/400/18 color:on-surface-variant
++ - div abs:[28,581 350x125] rel:[0,120 350x125] flex:row gap:10 align:start pad:12/14 bg:#d9891e@6 border-t:1px seed-indigo@14
++ - span abs:[42,594 16x16] rel:[14,13 16x16] flex:row
++ - icon:bell-off abs:[42,594 16x16] rel:[0,0 16x16] clip
++ - div abs:[68,594 296x100] rel:[40,13 296x100] grow:1 basis:0 layout_hint:expanded
++ - div "Notifications are blocked" abs:[68,594 296x18] rel:[0,0 296x18] font:14/700 color:font-headline tracking:-0.1
++ - div "Allow MemoX in your phone’s notification settings to receive the reminder." abs:[68,614 296x36] rel:[0,20 296x36] margin:2/0/0/0 font:12/400/18 color:on-surface-variant
++ - pill-btn "Open system settings" abs:[68,660 175x34] rel:[0,66 175x34] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 margin:10/0/0/0 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - span abs:[82,670 13x13] rel:[14,11 13x13] flex:row
++ - icon:external-link abs:[82,670 13x13] rel:[0,0 13x13] clip
+  - item[3] div abs:[28,724 350x84] rel:[20,616 350x84] margin:0/0/18/0
   ...
 ```
 
 ## State: Saving (ordered diff vs Goal on)
 
 ```diff
-  - title "Learning" abs:[56,66 263x21] rel:[48,14 263x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
-- - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999 op:0
-+ - div "Saved" abs:[323,66 67x21] rel:[315,14 67x21] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:11/600 color:mastery r:999
-  - span abs:[332,71 11x11] rel:[9,5 11x11] flex:row
+  - title "Learning" abs:[56,70 260x21] rel:[48,18 260x21] grow:1 basis:0 layout_hint:expanded font:16/700 color:font-headline tracking:-0.3
+- - div "Saved" abs:[320,69 70x23] rel:[312,17 70x23] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:12/600 color:mastery r:999 op:0
++ - div "Saved" abs:[320,69 70x23] rel:[312,17 70x23] flex:row gap:5 align:center pad:4/9 bg:mastery@10 font:12/600 color:mastery r:999
+  - span abs:[329,75 11x11] rel:[9,6 11x11] flex:row
   ...
 ```

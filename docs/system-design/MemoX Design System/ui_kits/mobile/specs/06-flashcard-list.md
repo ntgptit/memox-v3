@@ -46,157 +46,157 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
-      - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1074
-    - card abs:[22,123 362x180] rel:[14,0 362x180] mx:MxCard pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
-      - div abs:[37,138 332x57] rel:[15,15 332x57] flex:row gap:14 align:center margin:0/0/12/0
-        - svg abs:[37,138 56x56] rel:[0,0 56x56] clip
-        - div abs:[107,138 262x57] rel:[70,0 262x57] grow:1 basis:0 layout_hint:expanded
-          - ov "Deck progress" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant tracking:1.2
-          - div "106 of 142 cards mastered" abs:[107,155 262x18] rel:[0,17 262x18] margin:4/0/0/0 font:14/400 color:font-headline
-          - div "23 due · 6 new" abs:[107,180 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
-            - span abs:[107,184 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
-      - div abs:[37,207 332x6] rel:[15,84 332x6] flex:row margin:0/0/10/0 clip bg:surface-container r:999
-        - div abs:[37,207 9x6] rel:[0,0 9x6] bg:status-new
-        - div abs:[46,207 19x6] rel:[9,0 19x6] bg:warning
-        - div abs:[65,207 56x6] rel:[28,0 56x6] bg:seed-indigo
-        - div abs:[121,207 248x6] rel:[84,0 248x6] bg:mastery
-      - div abs:[37,223 332x13] rel:[15,100 332x13] flex:row wrap gap:4 repeat:x4(unit=1) margin:0/0/12/0
-        - item[1] span "New" abs:[37,223 46x13] rel:[0,0 46x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-          - status-dot abs:[37,226 6x6] rel:[0,4 6x6] bg:status-new r:999
-          - span "4" abs:[77,223 7x13] rel:[40,0 7x13] font:11/700 color:font-headline
-        - item[2] span "Learning" abs:[93,223 68x13] rel:[56,0 68x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-          - status-dot abs:[93,226 6x6] rel:[0,4 6x6] bg:warning r:999
-          - span "8" abs:[154,223 7x13] rel:[61,0 7x13] font:11/700 color:font-headline
-        - item[3] span "Reviewing" abs:[171,223 82x13] rel:[134,0 82x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-          - status-dot abs:[171,226 6x6] rel:[0,4 6x6] bg:seed-indigo r:999
-          - span "24" abs:[240,223 13x13] rel:[69,0 13x13] font:11/700 color:font-headline
-        - item[4] span "Mastered" abs:[263,223 86x13] rel:[226,0 86x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-          - status-dot abs:[263,226 6x6] rel:[0,4 6x6] bg:mastery r:999
-          - span "106" abs:[329,223 20x13] rel:[66,0 20x13] font:11/700 color:font-headline
-      - pill-btn "Start study · 23 due" abs:[37,248 332x40] rel:[15,125 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-        - span abs:[126,260 16x16] rel:[89,12 16x16] flex:row
-          - icon:play abs:[126,260 16x16] rel:[0,0 16x16] clip
-    - scroll-x abs:[22,315 362x28] rel:[14,192 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
-      - item[1] pill-btn "All" abs:[22,315 57x28] rel:[0,0 57x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center tracking:0.1 r:999
-        - span "142" abs:[50,323 18x12] rel:[28,8 18x12] font:10/700 color:on-primary text:center tracking:0.1 op:0.75
-      - item[2] pill-btn "Due now" abs:[85,315 86x28] rel:[63,0 86x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span "23" abs:[148,323 12x12] rel:[63,8 12x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-      - item[3] pill-btn "New" abs:[177,315 58x28] rel:[155,0 58x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span "4" abs:[217,323 6x12] rel:[41,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-      - item[4] pill-btn "Flagged" abs:[240,315 94x28] rel:[218,0 94x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span abs:[251,323 11x11] rel:[11,9 11x11] flex:row
-          - icon:flag abs:[251,323 11x11] rel:[0,0 11x11] clip
-        - span "2" abs:[317,323 6x12] rel:[77,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-      - item[5] pill-btn "Mastered" abs:[340,315 97x28] rel:[318,0 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-        - span "106" abs:[408,323 18x12] rel:[68,8 18x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-    - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-      - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-        - span abs:[293,361 11x11] rel:[10,9 11x11] flex:row
-          - icon:arrow-down-up abs:[293,361 11x11] rel:[0,0 11x11] clip
-        - span abs:[359,361 11x11] rel:[76,9 11x11] flex:row
-          - icon:chevron-down abs:[359,361 11x11] rel:[0,0 11x11] clip
-    - div abs:[22,389 362x92] rel:[14,266 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,417 8x8] rel:[13,28 8x8] bg:status-new r:999
-      - div abs:[55,402 271x66] rel:[33,13 271x66]
-        - div "연구자" abs:[55,402 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "researcher / nhà nghiên cứu" abs:[55,425 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,449 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "New" abs:[55,452 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
-          - span "noun" abs:[85,449 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-          - span "people" abs:[130,449 49x18] rel:[75,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[338,402 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
-        - span "now" abs:[338,406 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-    - div abs:[22,488 362x92] rel:[14,365 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,516 8x8] rel:[13,28 8x8] bg:mastery r:999
-      - div abs:[55,501 269x66] rel:[33,13 269x66]
-        - div "공부하다" abs:[55,501 269x20] rel:[0,0 269x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "to study" abs:[55,524 269x17] rel:[0,23 269x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,549 269x18] rel:[0,48 269x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Mastered" abs:[55,552 56x12] rel:[0,3 56x12] font:10/700 color:mastery tracking:0.3
-          - span "verb" abs:[117,549 36x18] rel:[62,0 36x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[336,501 35x20] rel:[314,13 35x20] flex:col gap:6 align:end pad:4/0/0/0
-        - span "in 4d" abs:[336,505 35x16] rel:[0,4 35x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-    - div abs:[22,588 362x92] rel:[14,465 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,616 8x8] rel:[13,28 8x8] bg:warning r:999
-      - div abs:[55,601 271x66] rel:[33,13 271x66]
-        - div "도서관" abs:[55,601 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "library, reading room" abs:[55,624 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,649 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Learning" abs:[55,652 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
-          - span "noun" abs:[114,649 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-          - span "places" abs:[158,649 46x18] rel:[103,0 46x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[338,601 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
-        - span abs:[358,605 13x13] rel:[20,4 13x13] flex:row
-          - icon:flag abs:[358,605 13x13] rel:[0,0 13x13] clip
-        - span "10m" abs:[338,624 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-    - div abs:[22,688 362x92] rel:[14,565 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,716 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
-      - div abs:[55,701 280x66] rel:[33,13 280x66]
-        - div "친구" abs:[55,701 280x20] rel:[0,0 280x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "friend, close companion" abs:[55,724 280x17] rel:[0,23 280x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,749 280x18] rel:[0,48 280x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Reviewing" abs:[55,752 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
-          - span "noun" abs:[120,749 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-          - span "people" abs:[165,749 49x18] rel:[110,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[347,701 24x20] rel:[325,13 24x20] flex:col gap:6 align:end pad:4/0/0/0
-        - span "6h" abs:[347,705 24x16] rel:[0,4 24x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-    - div abs:[22,788 362x92] rel:[14,665 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,816 8x8] rel:[13,28 8x8] bg:warning r:999
-      - div abs:[55,801 271x66] rel:[33,13 271x66]
-        - div "바다" abs:[55,801 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "sea, ocean" abs:[55,824 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,848 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Learning" abs:[55,851 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
-          - span "noun" abs:[114,848 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-          - span "nature" abs:[158,848 45x18] rel:[103,0 45x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[338,801 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
-        - span abs:[358,805 13x13] rel:[20,4 13x13] flex:row
-          - icon:flag abs:[358,805 13x13] rel:[0,0 13x13] clip
-        - span "15m" abs:[338,824 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-    - div abs:[22,887 362x92] rel:[14,764 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,915 8x8] rel:[13,28 8x8] bg:status-new r:999
-      - div abs:[55,900 271x66] rel:[33,13 271x66]
-        - div "영화" abs:[55,900 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "movie / film" abs:[55,923 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,948 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "New" abs:[55,951 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
-          - span "noun" abs:[85,948 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[338,900 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
-        - span "now" abs:[338,904 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-    - div abs:[22,987 362x92] rel:[14,864 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - status-dot abs:[35,1015 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
-      - div abs:[55,1000 279x66] rel:[33,13 279x66]
-        - div "시간" abs:[55,1000 279x20] rel:[0,0 279x20] clip font:16/700/20 color:font-headline tracking:-0.2
-        - div "time, hour" abs:[55,1023 279x17] rel:[0,23 279x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-        - div abs:[55,1048 279x18] rel:[0,48 279x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-          - span "Reviewing" abs:[55,1051 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
-          - span "noun" abs:[120,1048 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-      - div abs:[346,1000 25x20] rel:[324,13 25x20] flex:col gap:6 align:end pad:4/0/0/0
-        - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-  - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II — Vocab" abs:[60,70 250x21] rel:[52,18 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[314,62 36x36] rel:[306,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[322,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:search abs:[322,70 20x20] rel:[0,0 20x20] clip
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II" abs:[143,110 45x15] rel:[135,2 45x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[192,112 12x12] rel:[184,4 12x12] flex:row
+      - icon:chevron-right abs:[192,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II — Vocab" abs:[208,110 100x15] rel:[200,2 100x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1082
+    - card abs:[22,133 362x188] rel:[14,0 362x188] mx:MxCard pad:14 margin:0/0/12/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+      - div abs:[36,147 334x57] rel:[14,14 334x57] flex:row gap:14 align:center margin:0/0/12/0
+        - svg abs:[36,147 56x56] rel:[0,0 56x56] clip
+        - div abs:[106,147 264x57] rel:[70,0 264x57] grow:1 basis:0 layout_hint:expanded
+          - ov "Deck progress" abs:[106,147 264x13] rel:[0,0 264x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          - div "106 of 142 cards mastered" abs:[106,164 264x18] rel:[0,17 264x18] margin:4/0/0/0 font:14/400 color:font-headline
+          - div "23 due · 6 new" abs:[106,189 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
+            - span abs:[106,193 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
+      - div abs:[36,216 334x6] rel:[14,83 334x6] flex:row margin:0/0/10/0 clip bg:surface-container r:999
+        - div abs:[36,216 9x6] rel:[0,0 9x6] bg:status-new
+        - div abs:[45,216 19x6] rel:[9,0 19x6] bg:warning
+        - div abs:[64,216 56x6] rel:[28,0 56x6] bg:seed-indigo
+        - div abs:[121,216 249x6] rel:[85,0 249x6] bg:mastery
+      - div abs:[36,232 334x15] rel:[14,99 334x15] flex:row wrap gap:4 repeat:x4(unit=1) margin:0/0/12/0
+        - item[1] span "New" abs:[36,232 49x15] rel:[0,0 49x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+          - status-dot abs:[36,236 6x6] rel:[0,5 6x6] bg:status-new r:999
+          - span "4" abs:[78,232 7x15] rel:[42,0 7x15] font:12/700 color:font-headline
+        - item[2] span "Learning" abs:[95,232 72x15] rel:[59,0 72x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+          - status-dot abs:[95,236 6x6] rel:[0,5 6x6] bg:warning r:999
+          - span "8" abs:[160,232 7x15] rel:[65,0 7x15] font:12/700 color:font-headline
+        - item[3] span "Reviewing" abs:[177,232 88x15] rel:[141,0 88x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+          - status-dot abs:[177,236 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
+          - span "24" abs:[251,232 14x15] rel:[74,0 14x15] font:12/700 color:font-headline
+        - item[4] span "Mastered" abs:[276,232 92x15] rel:[240,0 92x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+          - status-dot abs:[276,236 6x6] rel:[0,5 6x6] bg:mastery r:999
+          - span "106" abs:[346,232 22x15] rel:[70,0 22x15] font:12/700 color:font-headline
+      - pill-btn "Start study · 23 due" abs:[36,259 334x48] rel:[14,126 334x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[126,275 16x16] rel:[90,16 16x16] flex:row
+          - icon:play abs:[126,275 16x16] rel:[0,0 16x16] clip
+    - scroll-x abs:[22,333 362x28] rel:[14,200 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
+      - item[1] pill-btn "All" abs:[22,333 61x28] rel:[0,0 61x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:999
+        - span "142" abs:[51,339 22x15] rel:[29,7 22x15] font:12/700 color:on-primary text:center tracking:0.1 op:0.75
+      - item[2] pill-btn "Due now" abs:[89,333 93x28] rel:[67,0 93x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span "23" abs:[156,339 15x15] rel:[67,7 15x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+      - item[3] pill-btn "New" abs:[188,333 61x28] rel:[166,0 61x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span "4" abs:[231,339 7x15] rel:[43,7 7x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+      - item[4] pill-btn "Flagged" abs:[255,333 99x28] rel:[233,0 99x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span abs:[266,341 11x11] rel:[11,9 11x11] flex:row
+          - icon:flag abs:[266,341 11x11] rel:[0,0 11x11] clip
+        - span "2" abs:[336,339 7x15] rel:[81,7 7x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+      - item[5] pill-btn "Mastered" abs:[360,333 105x28] rel:[338,0 105x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+        - span "106" abs:[432,339 22x15] rel:[72,7 22x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+    - div abs:[22,369 362x38] rel:[14,236 362x38] flex:row justify:between align:center pad:2/4/8/4
+      - ov "7 cards" abs:[26,378 49x13] rel:[4,10 49x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - pill-btn "Due first" abs:[279,371 101x28] rel:[257,2 101x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
+        - span abs:[289,379 11x11] rel:[10,9 11x11] flex:row
+          - icon:arrow-down-up abs:[289,379 11x11] rel:[0,0 11x11] clip
+        - span abs:[359,379 11x11] rel:[80,9 11x11] flex:row
+          - icon:chevron-down abs:[359,379 11x11] rel:[0,0 11x11] clip
+    - div abs:[22,407 362x92] rel:[14,274 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,435 8x8] rel:[13,28 8x8] bg:status-new r:999
+      - div abs:[55,420 267x66] rel:[33,13 267x66]
+        - div "연구자" abs:[55,420 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "researcher / nhà nghiên cứu" abs:[55,443 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,467 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "New" abs:[55,469 29x15] rel:[0,2 29x15] font:12/700 color:status-new tracking:0.3
+          - span "noun" abs:[90,467 43x18] rel:[35,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+          - span "people" abs:[139,467 56x18] rel:[84,0 56x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[334,420 37x23] rel:[312,13 37x23] flex:col gap:6 align:end pad:4/0/0/0
+        - span "now" abs:[334,424 37x19] rel:[0,4 37x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+    - div abs:[22,506 362x92] rel:[14,373 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,534 8x8] rel:[13,28 8x8] bg:mastery r:999
+      - div abs:[55,519 264x66] rel:[33,13 264x66]
+        - div "공부하다" abs:[55,519 264x20] rel:[0,0 264x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "to study" abs:[55,542 264x17] rel:[0,23 264x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,567 264x18] rel:[0,48 264x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "Mastered" abs:[55,569 67x15] rel:[0,2 67x15] font:12/700 color:mastery tracking:0.3
+          - span "verb" abs:[128,567 40x18] rel:[73,0 40x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[331,519 40x23] rel:[309,13 40x23] flex:col gap:6 align:end pad:4/0/0/0
+        - span "in 4d" abs:[331,523 40x19] rel:[0,4 40x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+    - div abs:[22,606 362x92] rel:[14,473 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,634 8x8] rel:[13,28 8x8] bg:warning r:999
+      - div abs:[55,619 267x66] rel:[33,13 267x66]
+        - div "도서관" abs:[55,619 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "library, reading room" abs:[55,642 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,667 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "Learning" abs:[55,668 63x15] rel:[0,2 63x15] font:12/700 color:warning tracking:0.3
+          - span "noun" abs:[124,667 43x18] rel:[69,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+          - span "places" abs:[173,667 53x18] rel:[118,0 53x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[334,619 38x42] rel:[312,13 38x42] flex:col gap:6 align:end pad:4/0/0/0
+        - span abs:[358,623 13x13] rel:[25,4 13x13] flex:row
+          - icon:flag abs:[358,623 13x13] rel:[0,0 13x13] clip
+        - span "10m" abs:[334,642 38x19] rel:[0,23 38x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+    - div abs:[22,706 362x92] rel:[14,573 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,734 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
+      - div abs:[55,719 278x66] rel:[33,13 278x66]
+        - div "친구" abs:[55,719 278x20] rel:[0,0 278x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "friend, close companion" abs:[55,742 278x17] rel:[0,23 278x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,767 278x18] rel:[0,48 278x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "Reviewing" abs:[55,768 71x15] rel:[0,2 71x15] font:12/700 color:seed-indigo tracking:0.3
+          - span "noun" abs:[132,767 43x18] rel:[77,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+          - span "people" abs:[181,767 56x18] rel:[126,0 56x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[345,719 26x23] rel:[323,13 26x23] flex:col gap:6 align:end pad:4/0/0/0
+        - span "6h" abs:[345,723 26x19] rel:[0,4 26x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+    - div abs:[22,806 362x92] rel:[14,673 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,834 8x8] rel:[13,28 8x8] bg:warning r:999
+      - div abs:[55,819 267x66] rel:[33,13 267x66]
+        - div "바다" abs:[55,819 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "sea, ocean" abs:[55,842 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,866 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "Learning" abs:[55,868 63x15] rel:[0,2 63x15] font:12/700 color:warning tracking:0.3
+          - span "noun" abs:[124,866 43x18] rel:[69,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+          - span "nature" abs:[173,866 51x18] rel:[118,0 51x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[334,819 38x42] rel:[312,13 38x42] flex:col gap:6 align:end pad:4/0/0/0
+        - span abs:[358,823 13x13] rel:[25,4 13x13] flex:row
+          - icon:flag abs:[358,823 13x13] rel:[0,0 13x13] clip
+        - span "15m" abs:[334,842 38x19] rel:[0,23 38x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+    - div abs:[22,905 362x92] rel:[14,772 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,933 8x8] rel:[13,28 8x8] bg:status-new r:999
+      - div abs:[55,918 267x66] rel:[33,13 267x66]
+        - div "영화" abs:[55,918 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "movie / film" abs:[55,941 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,966 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "New" abs:[55,968 29x15] rel:[0,2 29x15] font:12/700 color:status-new tracking:0.3
+          - span "noun" abs:[90,966 43x18] rel:[35,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[334,918 37x23] rel:[312,13 37x23] flex:col gap:6 align:end pad:4/0/0/0
+        - span "now" abs:[334,922 37x19] rel:[0,4 37x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+    - div abs:[22,1005 362x92] rel:[14,872 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - status-dot abs:[35,1033 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
+      - div abs:[55,1018 277x66] rel:[33,13 277x66]
+        - div "시간" abs:[55,1018 277x20] rel:[0,0 277x20] clip font:16/700/20 color:font-headline tracking:-0.2
+        - div "time, hour" abs:[55,1041 277x17] rel:[0,23 277x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+        - div abs:[55,1066 277x18] rel:[0,48 277x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+          - span "Reviewing" abs:[55,1068 71x15] rel:[0,2 71x15] font:12/700 color:seed-indigo tracking:0.3
+          - span "noun" abs:[132,1066 43x18] rel:[77,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+      - div abs:[344,1018 27x23] rel:[322,13 27x23] flex:col gap:6 align:end pad:4/0/0/0
+        - span "2d" abs:[344,1022 27x19] rel:[0,4 27x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+  - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
     - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
       - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 ```
@@ -211,147 +211,147 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
-      - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
-  - div abs:[22,131 362x372] rel:[14,123 362x372] margin:8/0/0/0
-    - card abs:[22,131 362x213] rel:[0,0 362x213] mx:MxCard pad:32/22 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[171,164 64x64] rel:[149,33 64x64] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:18
-        - span abs:[189,182 28x28] rel:[18,18 28x28] flex:row
-          - icon:layers abs:[189,182 28x28] rel:[0,0 28x28] clip
-      - div "No cards in this deck yet" abs:[45,242 316x23] rel:[23,111 316x23] margin:0/0/6/0 font:18/700 color:font-headline text:center tracking:-0.2
-      - div "Add your first flashcard to start studying. You can also paste a list of terms or import a file." abs:[45,271 316x40] rel:[23,140 316x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Add first flashcard" abs:[22,358 362x44] rel:[0,227 362x44] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 margin:0/0/8/0 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:13
-      - span abs:[129,372 17x17] rel:[107,14 17x17] flex:row
-        - icon:plus abs:[129,372 17x17] rel:[0,0 17x17] clip
-    - pill-btn "Import cards (CSV, TSV, Anki)" abs:[22,410 362x40] rel:[0,279 362x40] mx:MxActionButton flex:row gap:7 justify:center align:center pad:0/18 bg:seed-indigo@8 font:13/600 color:seed-indigo text:center tracking:0.1 r:12
-      - span abs:[99,423 15x15] rel:[77,13 15x15] flex:row
-        - icon:upload abs:[99,423 15x15] rel:[0,0 15x15] clip
-    - div abs:[22,464 362x39] rel:[0,333 362x39] flex:row gap:8 align:start pad:10/12 margin:14/0/0/0 bg:on-primary r:10 border:1px seed-indigo@14
-      - span abs:[35,475 13x13] rel:[13,11 13x13] flex:row
-        - icon:info abs:[35,475 13x13] rel:[0,0 13x13] clip
-      - span "Start study is available once you have at least one card." abs:[56,475 282x17] rel:[34,11 282x17] font:11/400/17 color:on-surface-variant
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II — Vocab" abs:[60,70 250x21] rel:[52,18 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[314,62 36x36] rel:[306,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[322,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:search abs:[322,70 20x20] rel:[0,0 20x20] clip
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II" abs:[143,110 45x15] rel:[135,2 45x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[192,112 12x12] rel:[184,4 12x12] flex:row
+      - icon:chevron-right abs:[192,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II — Vocab" abs:[208,110 100x15] rel:[200,2 100x15] font:12/700 color:font-headline tracking:0.1
+  - div abs:[22,141 362x382] rel:[14,133 362x382] margin:8/0/0/0
+    - card abs:[22,141 362x214] rel:[0,0 362x214] mx:MxCard pad:32/22 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[171,173 64x64] rel:[149,32 64x64] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:18
+        - span abs:[189,191 28x28] rel:[18,18 28x28] flex:row
+          - icon:layers abs:[189,191 28x28] rel:[0,0 28x28] clip
+      - div "No cards in this deck yet" abs:[44,251 318x23] rel:[22,110 318x23] margin:0/0/6/0 font:18/700 color:font-headline text:center tracking:-0.2
+      - div "Add your first flashcard to start studying. You can also paste a list of terms or import a file." abs:[44,280 318x43] rel:[22,139 318x43] pad:0/6 font:14/400/22 color:on-surface-variant text:center
+    - pill-btn "Add first flashcard" abs:[22,369 362x44] rel:[0,228 362x44] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 margin:0/0/8/0 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:13
+      - span abs:[129,383 17x17] rel:[107,14 17x17] flex:row
+        - icon:plus abs:[129,383 17x17] rel:[0,0 17x17] clip
+    - pill-btn "Import cards (CSV, TSV, Anki)" abs:[22,421 362x48] rel:[0,280 362x48] mx:MxActionButton flex:row gap:7 justify:center align:center pad:0/16 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) font:14/600 color:seed-indigo text:center tracking:0.1 r:12
+      - span abs:[92,438 15x15] rel:[70,17 15x15] flex:row
+        - icon:upload abs:[92,438 15x15] rel:[0,0 15x15] clip
+    - div abs:[22,483 362x40] rel:[0,342 362x40] flex:row gap:8 align:start pad:10/12 margin:14/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[35,494 13x13] rel:[13,11 13x13] flex:row
+        - icon:info abs:[35,494 13x13] rel:[0,0 13x13] clip
+      - span "Start study is available once you have at least one card." abs:[56,494 307x18] rel:[34,11 307x18] font:12/400/18 color:on-surface-variant
 ```
 
 ## State: Search empty (ordered diff vs Loaded)
 
 ```diff
-  - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1074
-+ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
-  - card abs:[22,123 362x180] rel:[14,0 362x180] mx:MxCard pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
+  - span "TOPIK II — Vocab" abs:[208,110 100x15] rel:[200,2 100x15] font:12/700 color:font-headline tracking:0.1
+- - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1082
++ - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
+  - card abs:[22,133 362x188] rel:[14,0 362x188] mx:MxCard pad:14 margin:0/0/12/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
   ...
-  - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - ov "No matches" abs:[26,360 85x13] rel:[4,10 85x13] font:11/700 color:on-surface-variant tracking:1.2
-  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
+  - div abs:[22,369 362x38] rel:[14,236 362x38] flex:row justify:between align:center pad:2/4/8/4
+- - ov "7 cards" abs:[26,378 49x13] rel:[4,10 49x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - ov "No matches" abs:[26,378 75x13] rel:[4,10 75x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+  - pill-btn "Due first" abs:[279,371 101x28] rel:[257,2 101x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
-  - icon:chevron-down abs:[359,361 11x11] rel:[0,0 11x11] clip
-- - div abs:[22,389 362x92] rel:[14,266 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,417 8x8] rel:[13,28 8x8] bg:status-new r:999
-- - div abs:[55,402 271x66] rel:[33,13 271x66]
-- - div "연구자" abs:[55,402 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "researcher / nhà nghiên cứu" abs:[55,425 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,449 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "New" abs:[55,452 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
-- - span "noun" abs:[85,449 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - span "people" abs:[130,449 49x18] rel:[75,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[338,402 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
-- - span "now" abs:[338,406 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,488 362x92] rel:[14,365 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,516 8x8] rel:[13,28 8x8] bg:mastery r:999
-- - div abs:[55,501 269x66] rel:[33,13 269x66]
-- - div "공부하다" abs:[55,501 269x20] rel:[0,0 269x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "to study" abs:[55,524 269x17] rel:[0,23 269x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,549 269x18] rel:[0,48 269x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Mastered" abs:[55,552 56x12] rel:[0,3 56x12] font:10/700 color:mastery tracking:0.3
-- - span "verb" abs:[117,549 36x18] rel:[62,0 36x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[336,501 35x20] rel:[314,13 35x20] flex:col gap:6 align:end pad:4/0/0/0
-- - span "in 4d" abs:[336,505 35x16] rel:[0,4 35x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,588 362x92] rel:[14,465 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,616 8x8] rel:[13,28 8x8] bg:warning r:999
-- - div abs:[55,601 271x66] rel:[33,13 271x66]
-- - div "도서관" abs:[55,601 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "library, reading room" abs:[55,624 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,649 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Learning" abs:[55,652 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
-- - span "noun" abs:[114,649 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - span "places" abs:[158,649 46x18] rel:[103,0 46x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[338,601 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
-- - span abs:[358,605 13x13] rel:[20,4 13x13] flex:row
-- - icon:flag abs:[358,605 13x13] rel:[0,0 13x13] clip
-- - span "10m" abs:[338,624 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,688 362x92] rel:[14,565 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,716 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
-- - div abs:[55,701 280x66] rel:[33,13 280x66]
-- - div "친구" abs:[55,701 280x20] rel:[0,0 280x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "friend, close companion" abs:[55,724 280x17] rel:[0,23 280x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,749 280x18] rel:[0,48 280x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Reviewing" abs:[55,752 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
-- - span "noun" abs:[120,749 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - span "people" abs:[165,749 49x18] rel:[110,0 49x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[347,701 24x20] rel:[325,13 24x20] flex:col gap:6 align:end pad:4/0/0/0
-- - span "6h" abs:[347,705 24x16] rel:[0,4 24x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,788 362x92] rel:[14,665 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,816 8x8] rel:[13,28 8x8] bg:warning r:999
-- - div abs:[55,801 271x66] rel:[33,13 271x66]
-- - div "바다" abs:[55,801 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "sea, ocean" abs:[55,824 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,848 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Learning" abs:[55,851 53x12] rel:[0,3 53x12] font:10/700 color:warning tracking:0.3
-- - span "noun" abs:[114,848 38x18] rel:[59,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - span "nature" abs:[158,848 45x18] rel:[103,0 45x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[338,801 33x39] rel:[316,13 33x39] flex:col gap:6 align:end pad:4/0/0/0
-+ - card abs:[22,389 362x182] rel:[14,266 362x182] mx:MxCard pad:32/22 bg:on-primary r:12 border:1px seed-indigo@14
-+ - div abs:[181,422 44x44] rel:[159,33 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
-  - span abs:[194,435 18x18] rel:[13,13 18x18] flex:row
-- - icon:flag abs:[358,805 13x13] rel:[0,0 13x13] clip
-- - span "15m" abs:[338,824 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,887 362x92] rel:[14,764 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,915 8x8] rel:[13,28 8x8] bg:status-new r:999
-- - div abs:[55,900 271x66] rel:[33,13 271x66]
-- - div "영화" abs:[55,900 271x20] rel:[0,0 271x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "movie / film" abs:[55,923 271x17] rel:[0,23 271x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,948 271x18] rel:[0,48 271x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "New" abs:[55,951 24x12] rel:[0,3 24x12] font:10/700 color:status-new tracking:0.3
-- - span "noun" abs:[85,948 38x18] rel:[30,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[338,900 33x20] rel:[316,13 33x20] flex:col gap:6 align:end pad:4/0/0/0
-- - span "now" abs:[338,904 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,987 362x92] rel:[14,864 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-- - status-dot abs:[35,1015 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
-- - div abs:[55,1000 279x66] rel:[33,13 279x66]
-- - div "시간" abs:[55,1000 279x20] rel:[0,0 279x20] clip font:16/700/20 color:font-headline tracking:-0.2
-- - div "time, hour" abs:[55,1023 279x17] rel:[0,23 279x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
-- - div abs:[55,1048 279x18] rel:[0,48 279x18] flex:row gap:6 align:center margin:8/0/0/0 clip
-- - span "Reviewing" abs:[55,1051 59x12] rel:[0,3 59x12] font:10/700 color:seed-indigo tracking:0.3
-- - span "noun" abs:[120,1048 38x18] rel:[65,0 38x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:10/600 color:on-surface-variant r:999
-- - div abs:[346,1000 25x20] rel:[324,13 25x20] flex:col gap:6 align:end pad:4/0/0/0
-- - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - icon:chevron-down abs:[359,379 11x11] rel:[0,0 11x11] clip
+- - div abs:[22,407 362x92] rel:[14,274 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,435 8x8] rel:[13,28 8x8] bg:status-new r:999
+- - div abs:[55,420 267x66] rel:[33,13 267x66]
+- - div "연구자" abs:[55,420 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "researcher / nhà nghiên cứu" abs:[55,443 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,467 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "New" abs:[55,469 29x15] rel:[0,2 29x15] font:12/700 color:status-new tracking:0.3
+- - span "noun" abs:[90,467 43x18] rel:[35,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - span "people" abs:[139,467 56x18] rel:[84,0 56x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[334,420 37x23] rel:[312,13 37x23] flex:col gap:6 align:end pad:4/0/0/0
+- - span "now" abs:[334,424 37x19] rel:[0,4 37x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,506 362x92] rel:[14,373 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,534 8x8] rel:[13,28 8x8] bg:mastery r:999
+- - div abs:[55,519 264x66] rel:[33,13 264x66]
+- - div "공부하다" abs:[55,519 264x20] rel:[0,0 264x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "to study" abs:[55,542 264x17] rel:[0,23 264x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,567 264x18] rel:[0,48 264x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "Mastered" abs:[55,569 67x15] rel:[0,2 67x15] font:12/700 color:mastery tracking:0.3
+- - span "verb" abs:[128,567 40x18] rel:[73,0 40x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[331,519 40x23] rel:[309,13 40x23] flex:col gap:6 align:end pad:4/0/0/0
+- - span "in 4d" abs:[331,523 40x19] rel:[0,4 40x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,606 362x92] rel:[14,473 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,634 8x8] rel:[13,28 8x8] bg:warning r:999
+- - div abs:[55,619 267x66] rel:[33,13 267x66]
+- - div "도서관" abs:[55,619 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "library, reading room" abs:[55,642 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,667 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "Learning" abs:[55,668 63x15] rel:[0,2 63x15] font:12/700 color:warning tracking:0.3
+- - span "noun" abs:[124,667 43x18] rel:[69,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - span "places" abs:[173,667 53x18] rel:[118,0 53x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[334,619 38x42] rel:[312,13 38x42] flex:col gap:6 align:end pad:4/0/0/0
+- - span abs:[358,623 13x13] rel:[25,4 13x13] flex:row
+- - icon:flag abs:[358,623 13x13] rel:[0,0 13x13] clip
+- - span "10m" abs:[334,642 38x19] rel:[0,23 38x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,706 362x92] rel:[14,573 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,734 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
+- - div abs:[55,719 278x66] rel:[33,13 278x66]
+- - div "친구" abs:[55,719 278x20] rel:[0,0 278x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "friend, close companion" abs:[55,742 278x17] rel:[0,23 278x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,767 278x18] rel:[0,48 278x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "Reviewing" abs:[55,768 71x15] rel:[0,2 71x15] font:12/700 color:seed-indigo tracking:0.3
+- - span "noun" abs:[132,767 43x18] rel:[77,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - span "people" abs:[181,767 56x18] rel:[126,0 56x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[345,719 26x23] rel:[323,13 26x23] flex:col gap:6 align:end pad:4/0/0/0
+- - span "6h" abs:[345,723 26x19] rel:[0,4 26x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,806 362x92] rel:[14,673 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,834 8x8] rel:[13,28 8x8] bg:warning r:999
+- - div abs:[55,819 267x66] rel:[33,13 267x66]
+- - div "바다" abs:[55,819 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "sea, ocean" abs:[55,842 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,866 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "Learning" abs:[55,868 63x15] rel:[0,2 63x15] font:12/700 color:warning tracking:0.3
+- - span "noun" abs:[124,866 43x18] rel:[69,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - span "nature" abs:[173,866 51x18] rel:[118,0 51x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[334,819 38x42] rel:[312,13 38x42] flex:col gap:6 align:end pad:4/0/0/0
++ - card abs:[22,407 362x180] rel:[14,274 362x180] mx:MxCard pad:32/22 bg:on-primary r:20 shadow:1/2
++ - div abs:[181,439 44x44] rel:[159,32 44x44] flex:row justify:center align:center margin:0/0/12/0 bg:surface-container r:12
+  - span abs:[194,452 18x18] rel:[13,13 18x18] flex:row
+- - icon:flag abs:[358,823 13x13] rel:[0,0 13x13] clip
+- - span "15m" abs:[334,842 38x19] rel:[0,23 38x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,905 362x92] rel:[14,772 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,933 8x8] rel:[13,28 8x8] bg:status-new r:999
+- - div abs:[55,918 267x66] rel:[33,13 267x66]
+- - div "영화" abs:[55,918 267x20] rel:[0,0 267x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "movie / film" abs:[55,941 267x17] rel:[0,23 267x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,966 267x18] rel:[0,48 267x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "New" abs:[55,968 29x15] rel:[0,2 29x15] font:12/700 color:status-new tracking:0.3
+- - span "noun" abs:[90,966 43x18] rel:[35,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[334,918 37x23] rel:[312,13 37x23] flex:col gap:6 align:end pad:4/0/0/0
+- - span "now" abs:[334,922 37x19] rel:[0,4 37x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,1005 362x92] rel:[14,872 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+- - status-dot abs:[35,1033 8x8] rel:[13,28 8x8] bg:seed-indigo r:999
+- - div abs:[55,1018 277x66] rel:[33,13 277x66]
+- - div "시간" abs:[55,1018 277x20] rel:[0,0 277x20] clip font:16/700/20 color:font-headline tracking:-0.2
+- - div "time, hour" abs:[55,1041 277x17] rel:[0,23 277x17] margin:3/0/0/0 clip font:12/400/17 color:on-surface-variant
+- - div abs:[55,1066 277x18] rel:[0,48 277x18] flex:row gap:6 align:center margin:8/0/0/0 clip
+- - span "Reviewing" abs:[55,1068 71x15] rel:[0,2 71x15] font:12/700 color:seed-indigo tracking:0.3
+- - span "noun" abs:[132,1066 43x18] rel:[77,0 43x18] flex:row align:center shrink:0 pad:0/7 bg:surface-container font:12/600 color:on-surface-variant r:999
+- - div abs:[344,1018 27x23] rel:[322,13 27x23] flex:col gap:6 align:end pad:4/0/0/0
+- - span "2d" abs:[344,1022 27x19] rel:[0,4 27x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
-+ - icon:search abs:[194,435 18x18] rel:[0,0 18x18] clip
-+ - div "No cards match "도서"" abs:[45,478 316x20] rel:[23,89 316x20] margin:0/0/4/0 font:14/700 color:font-headline text:center
-+ - div "Try a different term, or clear the search to see all 142 cards." abs:[45,502 316x36] rel:[23,113 316x36] font:12/400/18 color:on-surface-variant text:center
++ - icon:search abs:[194,452 18x18] rel:[0,0 18x18] clip
++ - div "No cards match "도서"" abs:[44,495 318x20] rel:[22,88 318x20] margin:0/0/4/0 font:14/700 color:font-headline text:center
++ - div "Try a different term, or clear the search to see all 142 cards." abs:[44,519 318x36] rel:[22,112 318x36] font:12/400/18 color:on-surface-variant text:center
 ```
 
 ## State: Loading (full — differs too much from base)
@@ -364,59 +364,59 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
-      - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
-    - div abs:[22,123 362x79] rel:[14,0 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,142 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
-      - div abs:[57,136 264x53] rel:[35,13 264x53]
-        - span abs:[57,140 100x13] rel:[0,4 100x13] bg:surface-container-high r:6 op:0.55
-        - span abs:[57,163 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-        - span abs:[57,181 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
-    - div abs:[22,210 362x79] rel:[14,87 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,229 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
-      - div abs:[57,223 264x53] rel:[35,13 264x53]
-        - span abs:[57,227 118x13] rel:[0,4 118x13] bg:surface-container-high r:6 op:0.55
-        - span abs:[57,250 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-        - span abs:[57,268 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
-    - div abs:[22,297 362x79] rel:[14,174 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,316 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
-      - div abs:[57,310 264x53] rel:[35,13 264x53]
-        - span abs:[57,314 136x13] rel:[0,4 136x13] bg:surface-container-high r:6 op:0.55
-        - span abs:[57,337 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-        - span abs:[57,355 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
-    - div abs:[22,384 362x79] rel:[14,261 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,403 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
-      - div abs:[57,397 264x53] rel:[35,13 264x53]
-        - span abs:[57,401 154x13] rel:[0,4 154x13] bg:surface-container-high r:6 op:0.55
-        - span abs:[57,424 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-        - span abs:[57,442 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
-    - div abs:[22,471 362x79] rel:[14,348 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,490 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
-      - div abs:[57,484 264x53] rel:[35,13 264x53]
-        - span abs:[57,488 172x13] rel:[0,4 172x13] bg:surface-container-high r:6 op:0.55
-        - span abs:[57,511 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
-        - span abs:[57,529 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II — Vocab" abs:[60,70 250x21] rel:[52,18 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[314,62 36x36] rel:[306,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[322,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:search abs:[322,70 20x20] rel:[0,0 20x20] clip
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II" abs:[143,110 45x15] rel:[135,2 45x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[192,112 12x12] rel:[184,4 12x12] flex:row
+      - icon:chevron-right abs:[192,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II — Vocab" abs:[208,110 100x15] rel:[200,2 100x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll
+    - div abs:[22,133 362x79] rel:[14,0 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,152 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
+      - div abs:[57,146 264x53] rel:[35,13 264x53]
+        - span abs:[57,150 100x13] rel:[0,4 100x13] bg:surface-container-high r:6 op:0.55
+        - span abs:[57,173 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
+        - span abs:[57,191 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
+    - div abs:[22,220 362x79] rel:[14,87 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,239 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
+      - div abs:[57,233 264x53] rel:[35,13 264x53]
+        - span abs:[57,237 118x13] rel:[0,4 118x13] bg:surface-container-high r:6 op:0.55
+        - span abs:[57,260 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
+        - span abs:[57,278 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
+    - div abs:[22,307 362x79] rel:[14,174 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,326 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
+      - div abs:[57,320 264x53] rel:[35,13 264x53]
+        - span abs:[57,324 136x13] rel:[0,4 136x13] bg:surface-container-high r:6 op:0.55
+        - span abs:[57,347 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
+        - span abs:[57,365 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
+    - div abs:[22,394 362x79] rel:[14,261 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,413 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
+      - div abs:[57,407 264x53] rel:[35,13 264x53]
+        - span abs:[57,411 154x13] rel:[0,4 154x13] bg:surface-container-high r:6 op:0.55
+        - span abs:[57,434 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
+        - span abs:[57,452 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
+    - div abs:[22,481 362x79] rel:[14,348 362x79] grid cols:3 gap:12 align:start pad:12/14 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
+      - span abs:[37,500 8x8] rel:[15,19 8x8] margin:6/0/0/0 bg:surface-container-high r:999 op:0.5
+      - div abs:[57,494 264x53] rel:[35,13 264x53]
+        - span abs:[57,498 172x13] rel:[0,4 172x13] bg:surface-container-high r:6 op:0.55
+        - span abs:[57,521 160x10] rel:[0,27 160x10] margin:6/0/0/0 bg:surface-container-high r:6 op:0.4
+        - span abs:[57,539 80x8] rel:[0,45 80x8] margin:8/0/0/0 bg:surface-container-high r:6 op:0.3
 ```
 
 ## State: Error (full — differs too much from base)
@@ -429,261 +429,261 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-    - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
-    - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
-      - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-    - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
-  - card abs:[22,131 362x271] rel:[14,123 362x271] mx:MxCard pad:40/22 margin:8/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
-    - div abs:[177,172 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
-      - span abs:[192,187 22x22] rel:[15,15 22x22] flex:row
-        - icon:cloud-off abs:[192,187 22x22] rel:[0,0 22x22] clip
-    - div "Couldn't open this deck" abs:[45,238 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
-    - div "Your data is safe on this device. Try again in a moment." abs:[45,265 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-    - pill-btn "Retry" abs:[158,321 90x40] rel:[136,190 90x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-      - span abs:[176,334 14x14] rel:[18,13 14x14] flex:row
-        - icon:refresh-cw abs:[176,334 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "TOPIK II — Vocab" abs:[60,70 250x21] rel:[52,18 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+    - icon-btn abs:[314,62 36x36] rel:[306,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[322,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:search abs:[322,70 20x20] rel:[0,0 20x20] clip
+    - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II" abs:[143,110 45x15] rel:[135,2 45x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[192,112 12x12] rel:[184,4 12x12] flex:row
+      - icon:chevron-right abs:[192,112 12x12] rel:[0,0 12x12] clip
+    - span "TOPIK II — Vocab" abs:[208,110 100x15] rel:[200,2 100x15] font:12/700 color:font-headline tracking:0.1
+  - card abs:[22,141 362x280] rel:[14,133 362x280] mx:MxCard pad:40/22 margin:8/0/0/0 bg:on-primary r:20 shadow:1/2
+    - div abs:[177,181 52x52] rel:[155,40 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+      - span abs:[192,196 22x22] rel:[15,15 22x22] flex:row
+        - icon:cloud-off abs:[192,196 22x22] rel:[0,0 22x22] clip
+    - div "Couldn't open this deck" abs:[44,247 318x21] rel:[22,106 318x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+    - div "Your data is safe on this device. Try again in a moment." abs:[44,274 318x43] rel:[22,133 318x43] margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+    - pill-btn "Retry" abs:[157,333 93x48] rel:[135,192 93x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+      - span abs:[175,350 14x14] rel:[18,17 14x14] flex:row
+        - icon:refresh-cw abs:[175,350 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Delete card (ordered diff vs Loaded)
 
 ```diff
-  - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - ov "0 cards" abs:[26,360 57x13] rel:[4,10 57x13] font:11/700 color:on-surface-variant tracking:1.2
-  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
+  - div abs:[22,369 362x38] rel:[14,236 362x38] flex:row justify:between align:center pad:2/4/8/4
+- - ov "7 cards" abs:[26,378 49x13] rel:[4,10 49x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - ov "0 cards" abs:[26,378 50x13] rel:[4,10 50x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+  - pill-btn "Due first" abs:[279,371 101x28] rel:[257,2 101x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
-  - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - span "2d" abs:[344,1022 27x19] rel:[0,4 27x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-+ - div abs:[33,276 340x245] rel:[25,268 340x245] maxw:340 clip bg:surface-container-high r:18 shadow:16/40
-+ - div abs:[33,276 340x177] rel:[0,0 340x177] pad:18/18/4/18
-+ - div abs:[51,294 304x34] rel:[18,18 304x34] flex:row gap:10 align:center margin:0/0/8/0
-+ - div abs:[51,294 34x34] rel:[0,0 34x34] flex:row justify:center align:center shrink:0 bg:#dc4848@12 r:10
-+ - span abs:[60,303 16x16] rel:[9,9 16x16] flex:row
-+ - icon:trash-2 abs:[60,303 16x16] rel:[0,0 16x16] clip
-+ - div "Delete this flashcard?" abs:[95,300 164x21] rel:[44,7 164x21] font:16/700 color:font-headline tracking:-0.2
-+ - div abs:[51,336 304x65] rel:[18,60 304x65] pad:12/14 margin:4/0/0/0 bg:on-primary r:11 border:1px seed-indigo@14
-+ - div "도서관" abs:[66,349 274x21] rel:[15,13 274x21] margin:0/0/3/0 font:15/700 color:font-headline tracking:-0.2
-+ - div "library, reading room" abs:[66,373 274x15] rel:[15,37 274x15] font:12/400 color:on-surface-variant
-+ - div "Review history for this card will be removed. Other cards in this deck are unaffected." abs:[51,413 304x36] rel:[18,137 304x36] margin:12/0/0/0 font:12/400/18 color:on-surface-variant
-+ - div abs:[33,453 340x68] rel:[0,177 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,467 143x40] rel:[14,14 143x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Delete card" abs:[198,467 161x40] rel:[165,14 161x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11
-+ - span abs:[231,480 14x14] rel:[34,13 14x14] flex:row
-+ - icon:trash-2 abs:[231,480 14x14] rel:[0,0 14x14] clip
++ - div abs:[33,270 340x256] rel:[25,262 340x256] maxw:340 clip bg:surface-container-high r:18 shadow:16/40
++ - div abs:[33,270 340x180] rel:[0,0 340x180] pad:18/18/4/18
++ - div abs:[51,288 304x34] rel:[18,18 304x34] flex:row gap:10 align:center margin:0/0/8/0
++ - div abs:[51,288 34x34] rel:[0,0 34x34] flex:row justify:center align:center shrink:0 bg:#dc4848@12 r:12
++ - span abs:[60,297 16x16] rel:[9,9 16x16] flex:row
++ - icon:trash-2 abs:[60,297 16x16] rel:[0,0 16x16] clip
++ - div "Delete this flashcard?" abs:[95,295 164x21] rel:[44,7 164x21] font:16/700 color:font-headline tracking:-0.2
++ - div abs:[51,330 304x68] rel:[18,60 304x68] pad:12/14 margin:4/0/0/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - div "도서관" abs:[66,343 274x24] rel:[15,13 274x24] margin:0/0/3/0 font:16/700 color:font-headline tracking:-0.2
++ - div "library, reading room" abs:[66,370 274x15] rel:[15,40 274x15] font:12/400 color:on-surface-variant
++ - div "Review history for this card will be removed. Other cards in this deck are unaffected." abs:[51,410 304x36] rel:[18,140 304x36] margin:12/0/0/0 font:12/400/18 color:on-surface-variant
++ - div abs:[33,450 340x76] rel:[0,180 340x76] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,464 142x48] rel:[14,14 142x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Delete card" abs:[197,464 162x48] rel:[164,14 162x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
++ - span abs:[228,481 14x14] rel:[31,17 14x14] flex:row
++ - icon:trash-2 abs:[228,481 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Delete deck (ordered diff vs Loaded)
 
 ```diff
-  - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - ov "0 cards" abs:[26,360 57x13] rel:[4,10 57x13] font:11/700 color:on-surface-variant tracking:1.2
-  - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
+  - div abs:[22,369 362x38] rel:[14,236 362x38] flex:row justify:between align:center pad:2/4/8/4
+- - ov "7 cards" abs:[26,378 49x13] rel:[4,10 49x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - ov "0 cards" abs:[26,378 50x13] rel:[4,10 50x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+  - pill-btn "Due first" abs:[279,371 101x28] rel:[257,2 101x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
   ...
-  - span "2d" abs:[346,1004 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - span "2d" abs:[344,1022 27x19] rel:[0,4 27x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 + - div abs:[8,8 390x780] rel:[0,0 390x780] pos:absolute z:50 bg:#191c1e@45
 + - div abs:[8,8 390x780] rel:[0,0 390x780] flex:row justify:center align:center pad:24/18 pos:absolute z:51
-+ - div abs:[33,248 340x299] rel:[25,240 340x299] maxw:340 clip bg:surface-container-high r:18 shadow:16/40
-+ - div abs:[33,248 340x150] rel:[0,0 340x150] pad:18/18/4/18
-+ - div abs:[179,266 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@12 r:14
-+ - span abs:[192,279 22x22] rel:[13,13 22x22] flex:row
-+ - icon:layers abs:[192,279 22x22] rel:[0,0 22x22] clip
-+ - div "Delete this deck?" abs:[51,326 304x22] rel:[18,78 304x22] margin:0/0/6/0 font:17/700 color:font-headline text:center tracking:-0.2
-+ - div "and its 142 cards will be removed from this folder." abs:[51,354 304x40] rel:[18,106 304x40] pad:0/6 font:13/400/20 color:on-surface-variant text:center
-+ - strong "TOPIK II — Vocab" abs:[78,356 107x16] rel:[27,2 107x16] font:13/700/20 color:font-headline text:center
-+ - div abs:[33,399 340x81] rel:[0,150 340x81] pad:14/18/4/18
-+ - ov "Type the deck name to confirm" abs:[51,413 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:11/700 color:on-surface-variant tracking:1.2
-+ - div abs:[51,432 304x44] rel:[18,33 304x44] flex:row gap:8 align:center pad:0/12 bg:on-primary r:11 border:1px error
-+ - span "TOPIK II — Vo" abs:[64,445 88x18] rel:[13,13 88x18] font:14/600 color:font-headline
-+ - span abs:[160,445 2x18] rel:[109,13 2x18] bg:error
-+ - div abs:[33,480 340x68] rel:[0,231 340x68] flex:row gap:8 pad:14
-+ - pill-btn "Cancel" abs:[47,494 143x40] rel:[14,14 143x40] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/18 font:13/600 color:seed-indigo text:center tracking:0.1 r:11 border:1px outline-variant
-+ - pill-btn "Delete deck" abs:[198,494 161x40] rel:[165,14 161x40] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/18 bg:error font:13/600 color:on-primary text:center tracking:0.1 r:11 op:0.5
-+ - span abs:[230,507 14x14] rel:[32,13 14x14] flex:row
-+ - icon:trash-2 abs:[230,507 14x14] rel:[0,0 14x14] clip
++ - div abs:[33,243 340x309] rel:[25,235 340x309] maxw:340 clip bg:surface-container-high r:18 shadow:16/40
++ - div abs:[33,243 340x152] rel:[0,0 340x152] pad:18/18/4/18
++ - div abs:[179,261 48x48] rel:[146,18 48x48] flex:row justify:center align:center margin:0/0/12/0 bg:#dc4848@12 r:14
++ - span abs:[192,274 22x22] rel:[13,13 22x22] flex:row
++ - icon:layers abs:[192,274 22x22] rel:[0,0 22x22] clip
++ - div "Delete this deck?" abs:[51,321 304x21] rel:[18,78 304x21] margin:0/0/6/0 font:16/700 color:font-headline text:center tracking:-0.2
++ - div "and its 142 cards will be removed from this folder." abs:[51,348 304x43] rel:[18,105 304x43] pad:0/6 font:14/400/22 color:on-surface-variant text:center
++ - strong "TOPIK II — Vocab" abs:[68,349 115x18] rel:[17,1 115x18] font:14/700/22 color:font-headline text:center
++ - div abs:[33,396 340x81] rel:[0,152 340x81] pad:14/18/4/18
++ - ov "Type the deck name to confirm" abs:[51,410 304x13] rel:[18,14 304x13] margin:0/0/6/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div abs:[51,429 304x44] rel:[18,33 304x44] flex:row gap:8 align:center pad:0/12 bg:on-primary r:12 border:1px error
++ - span "TOPIK II — Vo" abs:[64,442 88x18] rel:[13,13 88x18] font:14/600 color:font-headline
++ - span abs:[160,442 2x18] rel:[109,13 2x18] bg:error
++ - div abs:[33,477 340x76] rel:[0,233 340x76] flex:row gap:8 pad:14
++ - pill-btn "Cancel" abs:[47,491 142x48] rel:[14,14 142x48] mx:MxSecondaryButton flex:row gap:6 justify:center align:center grow:1 basis:0 layout_hint:expanded pad:0/16 font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
++ - pill-btn "Delete deck" abs:[197,491 162x48] rel:[164,14 162x48] mx:MxActionButton flex:row gap:6 justify:center align:center grow:1.2 basis:0 layout_hint:expanded pad:0/16 bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.5
++ - span abs:[227,508 14x14] rel:[29,17 14x14] flex:row
++ - icon:trash-2 abs:[227,508 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Reorder (ordered diff vs Loaded)
 
 ```diff
-  - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-- - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-- - title "TOPIK II — Vocab" abs:[60,66 250x21] rel:[52,14 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-- - icon-btn abs:[314,58 36x36] rel:[306,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-- - span abs:[322,66 20x20] rel:[8,8 20x20] flex:row
-- - icon:search abs:[322,66 20x20] rel:[0,0 20x20] clip
-- - icon-btn abs:[354,58 36x36] rel:[346,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-- - span abs:[362,66 20x20] rel:[8,8 20x20] flex:row
-- - icon:more-vertical abs:[362,66 20x20] rel:[0,0 20x20] clip
-- - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-- - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-- - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-- - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-- - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-- - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-- - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-- - item[3] span "TOPIK II" abs:[137,102 41x13] rel:[129,2 41x13] font:11/500 color:on-surface-variant tracking:0.1
-- - span abs:[182,103 12x12] rel:[174,3 12x12] flex:row
-- - icon:chevron-right abs:[182,103 12x12] rel:[0,0 12x12] clip
-- - span "TOPIK II — Vocab" abs:[198,102 92x13] rel:[190,2 92x13] font:11/700 color:font-headline tracking:0.1
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1074
-- - card abs:[22,123 362x180] rel:[14,0 362x180] mx:MxCard pad:14 margin:0/0/12/0 r:12 border:1px seed-indigo@18
-- - div abs:[37,138 332x57] rel:[15,15 332x57] flex:row gap:14 align:center margin:0/0/12/0
-- - svg abs:[37,138 56x56] rel:[0,0 56x56] clip
-- - div abs:[107,138 262x57] rel:[70,0 262x57] grow:1 basis:0 layout_hint:expanded
-- - ov "Deck progress" abs:[107,138 262x13] rel:[0,0 262x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "106 of 142 cards mastered" abs:[107,155 262x18] rel:[0,17 262x18] margin:4/0/0/0 font:14/400 color:font-headline
-- - div "23 due · 6 new" abs:[107,180 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
-- - span abs:[107,184 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
-- - div abs:[37,207 332x6] rel:[15,84 332x6] flex:row margin:0/0/10/0 clip bg:surface-container r:999
-- - div abs:[37,207 9x6] rel:[0,0 9x6] bg:status-new
-- - div abs:[46,207 19x6] rel:[9,0 19x6] bg:warning
-- - div abs:[65,207 56x6] rel:[28,0 56x6] bg:seed-indigo
-- - div abs:[121,207 248x6] rel:[84,0 248x6] bg:mastery
-- - div abs:[37,223 332x13] rel:[15,100 332x13] flex:row wrap gap:4 repeat:x4(unit=1) margin:0/0/12/0
-- - item[1] span "New" abs:[37,223 46x13] rel:[0,0 46x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-- - status-dot abs:[37,226 6x6] rel:[0,4 6x6] bg:status-new r:999
-- - span "4" abs:[77,223 7x13] rel:[40,0 7x13] font:11/700 color:font-headline
-- - item[2] span "Learning" abs:[93,223 68x13] rel:[56,0 68x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-- - status-dot abs:[93,226 6x6] rel:[0,4 6x6] bg:warning r:999
-- - span "8" abs:[154,223 7x13] rel:[61,0 7x13] font:11/700 color:font-headline
-- - item[3] span "Reviewing" abs:[171,223 82x13] rel:[134,0 82x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-- - status-dot abs:[171,226 6x6] rel:[0,4 6x6] bg:seed-indigo r:999
-- - span "24" abs:[240,223 13x13] rel:[69,0 13x13] font:11/700 color:font-headline
-- - item[4] span "Mastered" abs:[263,223 86x13] rel:[226,0 86x13] flex:row gap:5 align:center font:11/400 color:on-surface-variant
-- - status-dot abs:[263,226 6x6] rel:[0,4 6x6] bg:mastery r:999
-- - span "106" abs:[329,223 20x13] rel:[66,0 20x13] font:11/700 color:font-headline
-- - pill-btn "Start study · 23 due" abs:[37,248 332x40] rel:[15,125 332x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
-- - span abs:[126,260 16x16] rel:[89,12 16x16] flex:row
-- - icon:play abs:[126,260 16x16] rel:[0,0 16x16] clip
-- - scroll-x abs:[22,315 362x28] rel:[14,192 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
-- - item[1] pill-btn "All" abs:[22,315 57x28] rel:[0,0 57x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:11/600 color:on-primary text:center tracking:0.1 r:999
-- - span "142" abs:[50,323 18x12] rel:[28,8 18x12] font:10/700 color:on-primary text:center tracking:0.1 op:0.75
-- - item[2] pill-btn "Due now" abs:[85,315 86x28] rel:[63,0 86x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-- - span "23" abs:[148,323 12x12] rel:[63,8 12x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-- - item[3] pill-btn "New" abs:[177,315 58x28] rel:[155,0 58x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-- - span "4" abs:[217,323 6x12] rel:[41,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-- - item[4] pill-btn "Flagged" abs:[240,315 94x28] rel:[218,0 94x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-- - span abs:[251,323 11x11] rel:[11,9 11x11] flex:row
-- - icon:flag abs:[251,323 11x11] rel:[0,0 11x11] clip
-- - span "2" abs:[317,323 6x12] rel:[77,8 6x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-- - item[5] pill-btn "Mastered" abs:[340,315 97x28] rel:[318,0 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:11/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
-- - span "106" abs:[408,323 18x12] rel:[68,8 18x12] font:10/700 color:font-headline text:center tracking:0.1 op:0.6
-- - div abs:[22,351 362x38] rel:[14,228 362x38] flex:row justify:between align:center pad:2/4/8/4
-- - ov "7 cards" abs:[26,360 55x13] rel:[4,10 55x13] font:11/700 color:on-surface-variant tracking:1.2
-- - pill-btn "Due first" abs:[283,353 97x28] rel:[261,2 97x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-- - span abs:[293,361 11x11] rel:[10,9 11x11] flex:row
-- - icon:arrow-down-up abs:[293,361 11x11] rel:[0,0 11x11] clip
-+ - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-+ - title "Reorder cards" abs:[60,66 266x21] rel:[52,14 266x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
-+ - pill-btn "Done" abs:[330,60 60x32] rel:[322,8 60x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
-+ - scroll abs:[8,100 390x688] rel:[0,92 390x688] grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/110/14 layout_hint:scroll scrollh:832
-+ - item[1] div abs:[22,100 362x23] rel:[14,0 362x23] flex:row justify:between align:center pad:2/4/8/4
-+ - ov "7 cards · drag to reorder" abs:[26,102 189x13] rel:[4,2 189x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - item[2] div abs:[22,123 362x92] rel:[14,23 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,136 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-  - span abs:[37,165 16x16] rel:[2,29 16x16] flex:row
-- - icon:chevron-down abs:[359,361 11x11] rel:[0,0 11x11] clip
-- - div abs:[22,389 362x92] rel:[14,266 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - icon:grip-vertical abs:[37,165 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,151 8x8] rel:[45,28 8x8] bg:status-new r:999
-- - div abs:[55,402 271x66] rel:[33,13 271x66]
-+ - item[2] div abs:[87,136 239x66] rel:[65,13 239x66]
-  - div "연구자" abs:[87,136 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+- - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+- - title "TOPIK II — Vocab" abs:[60,70 250x21] rel:[52,18 250x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
+- - icon-btn abs:[314,62 36x36] rel:[306,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+- - span abs:[322,70 20x20] rel:[8,8 20x20] flex:row
+- - icon:search abs:[322,70 20x20] rel:[0,0 20x20] clip
+- - icon-btn abs:[354,62 36x36] rel:[346,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+- - span abs:[362,70 20x20] rel:[8,8 20x20] flex:row
+- - icon:more-vertical abs:[362,70 20x20] rel:[0,0 20x20] clip
+- - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+- - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+- - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+- - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+- - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+- - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+- - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+- - item[3] span "TOPIK II" abs:[143,110 45x15] rel:[135,2 45x15] font:12/500 color:on-surface-variant tracking:0.1
+- - span abs:[192,112 12x12] rel:[184,4 12x12] flex:row
+- - icon:chevron-right abs:[192,112 12x12] rel:[0,0 12x12] clip
+- - span "TOPIK II — Vocab" abs:[208,110 100x15] rel:[200,2 100x15] font:12/700 color:font-headline tracking:0.1
+- - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/110/14 layout_hint:scroll scrollh:1082
+- - card abs:[22,133 362x188] rel:[14,0 362x188] mx:MxCard pad:14 margin:0/0/12/0 bg:color(srgb 0.959294 0.963765 0.997647) r:20 shadow:1/2
+- - div abs:[36,147 334x57] rel:[14,14 334x57] flex:row gap:14 align:center margin:0/0/12/0
+- - svg abs:[36,147 56x56] rel:[0,0 56x56] clip
+- - div abs:[106,147 264x57] rel:[70,0 264x57] grow:1 basis:0 layout_hint:expanded
+- - ov "Deck progress" abs:[106,147 264x13] rel:[0,0 264x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "106 of 142 cards mastered" abs:[106,164 264x18] rel:[0,17 264x18] margin:4/0/0/0 font:14/400 color:font-headline
+- - div "23 due · 6 new" abs:[106,189 90x15] rel:[0,42 90x15] flex:row gap:5 align:center margin:2/0/0/0 font:12/400 color:on-surface-variant
+- - span abs:[106,193 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
+- - div abs:[36,216 334x6] rel:[14,83 334x6] flex:row margin:0/0/10/0 clip bg:surface-container r:999
+- - div abs:[36,216 9x6] rel:[0,0 9x6] bg:status-new
+- - div abs:[45,216 19x6] rel:[9,0 19x6] bg:warning
+- - div abs:[64,216 56x6] rel:[28,0 56x6] bg:seed-indigo
+- - div abs:[121,216 249x6] rel:[85,0 249x6] bg:mastery
+- - div abs:[36,232 334x15] rel:[14,99 334x15] flex:row wrap gap:4 repeat:x4(unit=1) margin:0/0/12/0
+- - item[1] span "New" abs:[36,232 49x15] rel:[0,0 49x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+- - status-dot abs:[36,236 6x6] rel:[0,5 6x6] bg:status-new r:999
+- - span "4" abs:[78,232 7x15] rel:[42,0 7x15] font:12/700 color:font-headline
+- - item[2] span "Learning" abs:[95,232 72x15] rel:[59,0 72x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+- - status-dot abs:[95,236 6x6] rel:[0,5 6x6] bg:warning r:999
+- - span "8" abs:[160,232 7x15] rel:[65,0 7x15] font:12/700 color:font-headline
+- - item[3] span "Reviewing" abs:[177,232 88x15] rel:[141,0 88x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+- - status-dot abs:[177,236 6x6] rel:[0,5 6x6] bg:seed-indigo r:999
+- - span "24" abs:[251,232 14x15] rel:[74,0 14x15] font:12/700 color:font-headline
+- - item[4] span "Mastered" abs:[276,232 92x15] rel:[240,0 92x15] flex:row gap:5 align:center font:12/400 color:on-surface-variant
+- - status-dot abs:[276,236 6x6] rel:[0,5 6x6] bg:mastery r:999
+- - span "106" abs:[346,232 22x15] rel:[70,0 22x15] font:12/700 color:font-headline
+- - pill-btn "Start study · 23 due" abs:[36,259 334x48] rel:[14,126 334x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/16 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+- - span abs:[126,275 16x16] rel:[90,16 16x16] flex:row
+- - icon:play abs:[126,275 16x16] rel:[0,0 16x16] clip
+- - scroll-x abs:[22,333 362x28] rel:[14,200 362x28] flex:row gap:6 repeat:x5(unit=1) layout_hint:scroll
+- - item[1] pill-btn "All" abs:[22,333 61x28] rel:[0,0 61x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:999
+- - span "142" abs:[51,339 22x15] rel:[29,7 22x15] font:12/700 color:on-primary text:center tracking:0.1 op:0.75
+- - item[2] pill-btn "Due now" abs:[89,333 93x28] rel:[67,0 93x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span "23" abs:[156,339 15x15] rel:[67,7 15x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+- - item[3] pill-btn "New" abs:[188,333 61x28] rel:[166,0 61x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span "4" abs:[231,339 7x15] rel:[43,7 7x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+- - item[4] pill-btn "Flagged" abs:[255,333 99x28] rel:[233,0 99x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span abs:[266,341 11x11] rel:[11,9 11x11] flex:row
+- - icon:flag abs:[266,341 11x11] rel:[0,0 11x11] clip
+- - span "2" abs:[336,339 7x15] rel:[81,7 7x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+- - item[5] pill-btn "Mastered" abs:[360,333 105x28] rel:[338,0 105x28] mx:MxActionButton flex:row gap:5 justify:center align:center shrink:0 pad:0/10 bg:on-primary font:12/600 color:font-headline text:center tracking:0.1 r:999 border:1px seed-indigo@14
+- - span "106" abs:[432,339 22x15] rel:[72,7 22x15] font:12/700 color:font-headline text:center tracking:0.1 op:0.6
+- - div abs:[22,369 362x38] rel:[14,236 362x38] flex:row justify:between align:center pad:2/4/8/4
+- - ov "7 cards" abs:[26,378 49x13] rel:[4,10 49x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - pill-btn "Due first" abs:[279,371 101x28] rel:[257,2 101x28] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
+- - span abs:[289,379 11x11] rel:[10,9 11x11] flex:row
+- - icon:arrow-down-up abs:[289,379 11x11] rel:[0,0 11x11] clip
++ - icon:x abs:[24,70 20x20] rel:[0,0 20x20] clip
++ - title "Reorder cards" abs:[60,70 266x21] rel:[52,18 266x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 clip font:16/700 color:font-headline tracking:-0.3
++ - pill-btn "Done" abs:[330,64 60x32] rel:[322,12 60x32] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/14 bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ - scroll abs:[8,108 390x680] rel:[0,100 390x680] grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/110/14 layout_hint:scroll scrollh:832
++ - item[1] div abs:[22,108 362x23] rel:[14,0 362x23] flex:row justify:between align:center pad:2/4/8/4
++ - ov "7 cards · drag to reorder" abs:[26,110 165x13] rel:[4,2 165x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - item[2] div abs:[22,131 362x92] rel:[14,23 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,144 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
+  - span abs:[37,173 16x16] rel:[2,29 16x16] flex:row
+- - icon:chevron-down abs:[359,379 11x11] rel:[0,0 11x11] clip
+- - div abs:[22,407 362x92] rel:[14,274 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - icon:grip-vertical abs:[37,173 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,159 8x8] rel:[45,28 8x8] bg:status-new r:999
+- - div abs:[55,420 267x66] rel:[33,13 267x66]
++ - item[2] div abs:[87,144 235x66] rel:[65,13 235x66]
+  - div "연구자" abs:[87,144 235x20] rel:[0,0 235x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "now" abs:[338,140 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,488 362x92] rel:[14,365 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[3] div abs:[22,223 362x92] rel:[14,123 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,236 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-+ - span abs:[37,265 16x16] rel:[2,29 16x16] flex:row
-+ - icon:grip-vertical abs:[37,265 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,251 8x8] rel:[45,28 8x8] bg:mastery r:999
-- - div abs:[55,501 269x66] rel:[33,13 269x66]
-+ - item[2] div abs:[87,236 237x66] rel:[65,13 237x66]
-  - div "공부하다" abs:[87,236 237x20] rel:[0,0 237x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span "now" abs:[334,148 37x19] rel:[0,4 37x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,506 362x92] rel:[14,373 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[3] div abs:[22,231 362x92] rel:[14,123 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,244 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
++ - span abs:[37,273 16x16] rel:[2,29 16x16] flex:row
++ - icon:grip-vertical abs:[37,273 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,259 8x8] rel:[45,28 8x8] bg:mastery r:999
+- - div abs:[55,519 264x66] rel:[33,13 264x66]
++ - item[2] div abs:[87,244 232x66] rel:[65,13 232x66]
+  - div "공부하다" abs:[87,244 232x20] rel:[0,0 232x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "in 4d" abs:[336,240 35x16] rel:[0,4 35x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,588 362x92] rel:[14,465 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[4] div abs:[22,323 362x92] rel:[14,223 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,336 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-+ - span abs:[37,364 16x16] rel:[2,29 16x16] flex:row
-+ - icon:grip-vertical abs:[37,364 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,351 8x8] rel:[45,28 8x8] bg:warning r:999
-- - div abs:[55,601 271x66] rel:[33,13 271x66]
-+ - item[2] div abs:[87,336 239x66] rel:[65,13 239x66]
-  - div "도서관" abs:[87,336 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span "in 4d" abs:[331,248 40x19] rel:[0,4 40x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,606 362x92] rel:[14,473 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[4] div abs:[22,331 362x92] rel:[14,223 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,344 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
++ - span abs:[37,372 16x16] rel:[2,29 16x16] flex:row
++ - icon:grip-vertical abs:[37,372 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,359 8x8] rel:[45,28 8x8] bg:warning r:999
+- - div abs:[55,619 267x66] rel:[33,13 267x66]
++ - item[2] div abs:[87,344 235x66] rel:[65,13 235x66]
+  - div "도서관" abs:[87,344 235x20] rel:[0,0 235x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "10m" abs:[338,359 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,688 362x92] rel:[14,565 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[5] div abs:[22,422 362x92] rel:[14,322 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,435 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-+ - span abs:[37,464 16x16] rel:[2,29 16x16] flex:row
-+ - icon:grip-vertical abs:[37,464 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,450 8x8] rel:[45,28 8x8] bg:seed-indigo r:999
-- - div abs:[55,701 280x66] rel:[33,13 280x66]
-+ - item[2] div abs:[87,435 248x66] rel:[65,13 248x66]
-  - div "친구" abs:[87,435 248x20] rel:[0,0 248x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span "10m" abs:[334,367 38x19] rel:[0,23 38x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,706 362x92] rel:[14,573 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[5] div abs:[22,430 362x92] rel:[14,322 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,443 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
++ - span abs:[37,472 16x16] rel:[2,29 16x16] flex:row
++ - icon:grip-vertical abs:[37,472 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,458 8x8] rel:[45,28 8x8] bg:seed-indigo r:999
+- - div abs:[55,719 278x66] rel:[33,13 278x66]
++ - item[2] div abs:[87,443 246x66] rel:[65,13 246x66]
+  - div "친구" abs:[87,443 246x20] rel:[0,0 246x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "6h" abs:[347,439 24x16] rel:[0,4 24x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,788 362x92] rel:[14,665 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[6] div abs:[22,522 362x92] rel:[14,422 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,535 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-+ - span abs:[37,564 16x16] rel:[2,29 16x16] flex:row
-+ - icon:grip-vertical abs:[37,564 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,550 8x8] rel:[45,28 8x8] bg:warning r:999
-- - div abs:[55,801 271x66] rel:[33,13 271x66]
-+ - item[2] div abs:[87,535 239x66] rel:[65,13 239x66]
-  - div "바다" abs:[87,535 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span "6h" abs:[345,447 26x19] rel:[0,4 26x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,806 362x92] rel:[14,673 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[6] div abs:[22,530 362x92] rel:[14,422 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,543 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
++ - span abs:[37,572 16x16] rel:[2,29 16x16] flex:row
++ - icon:grip-vertical abs:[37,572 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,558 8x8] rel:[45,28 8x8] bg:warning r:999
+- - div abs:[55,819 267x66] rel:[33,13 267x66]
++ - item[2] div abs:[87,543 235x66] rel:[65,13 235x66]
+  - div "바다" abs:[87,543 235x20] rel:[0,0 235x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "15m" abs:[338,558 33x16] rel:[0,23 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,887 362x92] rel:[14,764 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[7] div abs:[22,622 362x92] rel:[14,522 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,635 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-+ - span abs:[37,664 16x16] rel:[2,29 16x16] flex:row
-+ - icon:grip-vertical abs:[37,664 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,650 8x8] rel:[45,28 8x8] bg:status-new r:999
-- - div abs:[55,900 271x66] rel:[33,13 271x66]
-+ - item[2] div abs:[87,635 239x66] rel:[65,13 239x66]
-  - div "영화" abs:[87,635 239x20] rel:[0,0 239x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span "15m" abs:[334,566 38x19] rel:[0,23 38x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,905 362x92] rel:[14,772 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[7] div abs:[22,630 362x92] rel:[14,522 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,643 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
++ - span abs:[37,672 16x16] rel:[2,29 16x16] flex:row
++ - icon:grip-vertical abs:[37,672 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,658 8x8] rel:[45,28 8x8] bg:status-new r:999
+- - div abs:[55,918 267x66] rel:[33,13 267x66]
++ - item[2] div abs:[87,643 235x66] rel:[65,13 235x66]
+  - div "영화" abs:[87,643 235x20] rel:[0,0 235x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "now" abs:[338,639 33x16] rel:[0,4 33x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - div abs:[22,987 362x92] rel:[14,864 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[8] div abs:[22,722 362x92] rel:[14,622 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
-+ - item[1] div abs:[35,735 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
-+ - span abs:[37,764 16x16] rel:[2,29 16x16] flex:row
-+ - icon:grip-vertical abs:[37,764 16x16] rel:[0,0 16x16] clip
-  - status-dot abs:[67,750 8x8] rel:[45,28 8x8] bg:seed-indigo r:999
-- - div abs:[55,1000 279x66] rel:[33,13 279x66]
-+ - item[2] div abs:[87,735 247x66] rel:[65,13 247x66]
-  - div "시간" abs:[87,735 247x20] rel:[0,0 247x20] clip font:16/700/20 color:font-headline tracking:-0.2
+  - span "now" abs:[334,647 37x19] rel:[0,4 37x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - div abs:[22,1005 362x92] rel:[14,872 362x92] grid cols:3 gap:12 align:start pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[8] div abs:[22,730 362x92] rel:[14,622 362x92] grid cols:4 gap:12 align:start repeat:x2(unit=2) pad:12 margin:0/0/8/0 bg:on-primary r:12 border:1px seed-indigo@14
++ - item[1] div abs:[35,743 20x70] rel:[13,13 20x70] flex:row justify:center align:center pad:4/0/0/0
++ - span abs:[37,772 16x16] rel:[2,29 16x16] flex:row
++ - icon:grip-vertical abs:[37,772 16x16] rel:[0,0 16x16] clip
+  - status-dot abs:[67,758 8x8] rel:[45,28 8x8] bg:seed-indigo r:999
+- - div abs:[55,1018 277x66] rel:[33,13 277x66]
++ - item[2] div abs:[87,743 245x66] rel:[65,13 245x66]
+  - div "시간" abs:[87,743 245x20] rel:[0,0 245x20] clip font:16/700/20 color:font-headline tracking:-0.2
   ...
-  - span "2d" abs:[346,739 25x16] rel:[0,4 25x16] pad:2/6 bg:surface-container font:10/700 color:on-surface-variant r:6
-- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:8/22
+  - span "2d" abs:[344,747 27x19] rel:[0,4 27x19] pad:2/6 bg:surface-container font:12/700 color:on-surface-variant r:6
+- - button "New card" abs:[258,712 124x52] rel:[250,704 124x52] mx:? flex:row gap:8 align:center pad:0/18/0/16 pos:absolute z:30 bg:seed-indigo font:14/600 color:on-primary text:center r:16 shadow:0/1
 - - span abs:[274,729 18x18] rel:[16,17 18x18] flex:row
 - - icon:plus abs:[274,729 18x18] rel:[0,0 18x18] clip
 ```

@@ -46,40 +46,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:x abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - div abs:[62,67 294x18] rel:[54,15 294x18] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
-      - span "Match" abs:[62,67 58x18] rel:[0,0 58x18] pad:3/8 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:1.2 r:999
-      - div abs:[128,74 228x4] rel:[66,7 228x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
-        - div abs:[128,74 114x4] rel:[0,0 114x4] bg:seed-indigo
-    - div "2 / 4" abs:[366,69 24x15] rel:[358,17 24x15] font:12/600 color:on-surface-variant
-  - ov "Board 1 of 3 · 3 pairs left" abs:[22,104 362x27] rel:[14,96 362x27] pad:4/0/10/0 font:11/700 color:on-surface-variant text:center tracking:1.2
-  - scroll abs:[8,131 390x627] rel:[0,123 390x627] grid cols:2 gap:8 grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/14/14 layout_hint:scroll
-    - item[1] div abs:[22,131 177x108] rel:[14,0 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:mastery@12 r:12 border:1px mastery@30 op:0.7
-      - span abs:[68,178 14x14] rel:[46,47 14x14] flex:row
-        - icon:check abs:[68,178 14x14] rel:[0,0 14x14] clip
-      - span "공부하다" abs:[88,172 65x26] rel:[66,41 65x26] margin:0/0/0/6 font:18/700 color:mastery text:center tracking:-0.4
-    - item[2] div abs:[207,131 177x108] rel:[199,0 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:mastery@12 r:12 border:1px mastery@30 op:0.7
-      - span abs:[258,178 14x14] rel:[51,47 14x14] flex:row
-        - icon:check abs:[258,178 14x14] rel:[0,0 14x14] clip
-      - span "to study" abs:[278,176 56x18] rel:[71,45 56x18] margin:0/0/0/6 font:14/600 color:mastery text:center
-    - item[3] div abs:[22,247 177x108] rel:[14,116 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "먹다" abs:[94,288 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center tracking:-0.4
-    - item[4] div abs:[207,247 177x108] rel:[199,116 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:seed-indigo r:12 border:1px seed-indigo
-      - span "to eat" abs:[276,292 39x18] rel:[69,45 39x18] font:14/600 color:on-primary text:center
-    - item[5] div abs:[22,363 177x108] rel:[14,232 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "하늘" abs:[94,404 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center tracking:-0.4
-    - item[6] div abs:[207,363 177x108] rel:[199,232 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "sky" abs:[284,408 23x18] rel:[77,45 23x18] font:14/600 color:font-headline text:center
-    - item[7] div abs:[22,479 177x108] rel:[14,348 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "도서관" abs:[86,520 48x26] rel:[64,41 48x26] font:18/700 color:font-headline text:center tracking:-0.4
-    - item[8] div abs:[207,479 177x108] rel:[199,348 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
-      - span "library" abs:[274,524 42x18] rel:[67,45 42x18] font:14/600 color:font-headline text:center
-  - div abs:[8,758 390x30] rel:[0,750 390x30] flex:row justify:between align:center pad:0/14/16/14
-    - span "0:42" abs:[22,758 45x14] rel:[14,0 45x14] flex:row gap:6 align:center font:11/400 color:on-surface-variant
-      - span abs:[22,758 14x14] rel:[0,0 14x14] flex:row
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:x abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - div abs:[62,70 294x21] rel:[54,18 294x21] flex:row gap:8 align:center grow:1 basis:0 layout_hint:expanded margin:0/6
+      - span "Match" abs:[62,70 65x21] rel:[0,0 65x21] pad:3/8 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:1.2 r:999
+      - div abs:[135,78 221x4] rel:[73,9 221x4] grow:1 basis:0 layout_hint:expanded clip bg:surface-container r:999
+        - div abs:[135,78 110x4] rel:[0,0 110x4] bg:seed-indigo
+    - div "2 / 4" abs:[366,73 24x15] rel:[358,21 24x15] font:12/600 color:on-surface-variant
+  - ov "Board 1 of 3 · 3 pairs left" abs:[22,112 362x27] rel:[14,104 362x27] pad:4/0/10/0 font:10.5/600 color:on-surface-variant text:center tracking:0.6 op:0.85
+  - scroll abs:[8,139 390x618] rel:[0,131 390x618] grid cols:2 gap:8 grow:1 basis:0 layout_hint:expanded repeat:x8(unit=1) pad:0/14/14/14 layout_hint:scroll
+    - item[1] div abs:[22,139 177x108] rel:[14,0 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:mastery@12 r:12 border:1px mastery@30 op:0.7
+      - span abs:[68,186 14x14] rel:[46,47 14x14] flex:row
+        - icon:check abs:[68,186 14x14] rel:[0,0 14x14] clip
+      - span "공부하다" abs:[88,180 65x26] rel:[66,41 65x26] margin:0/0/0/6 font:18/700 color:mastery text:center tracking:-0.4
+    - item[2] div abs:[207,139 177x108] rel:[199,0 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:mastery@12 r:12 border:1px mastery@30 op:0.7
+      - span abs:[258,186 14x14] rel:[51,47 14x14] flex:row
+        - icon:check abs:[258,186 14x14] rel:[0,0 14x14] clip
+      - span "to study" abs:[278,184 56x18] rel:[71,45 56x18] margin:0/0/0/6 font:14/600 color:mastery text:center
+    - item[3] div abs:[22,255 177x108] rel:[14,116 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
+      - span "먹다" abs:[94,296 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center tracking:-0.4
+    - item[4] div abs:[207,255 177x108] rel:[199,116 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:seed-indigo r:12 border:1px seed-indigo
+      - span "to eat" abs:[276,300 39x18] rel:[69,45 39x18] font:14/600 color:on-primary text:center
+    - item[5] div abs:[22,371 177x108] rel:[14,232 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
+      - span "하늘" abs:[94,412 32x26] rel:[72,41 32x26] font:18/700 color:font-headline text:center tracking:-0.4
+    - item[6] div abs:[207,371 177x108] rel:[199,232 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
+      - span "sky" abs:[284,416 23x18] rel:[77,45 23x18] font:14/600 color:font-headline text:center
+    - item[7] div abs:[22,487 177x108] rel:[14,348 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
+      - span "도서관" abs:[86,528 48x26] rel:[64,41 48x26] font:18/700 color:font-headline text:center tracking:-0.4
+    - item[8] div abs:[207,487 177x108] rel:[199,348 177x108] flex:row justify:center align:center pad:14/12 minh:78 bg:on-primary r:12 border:1px seed-indigo@14
+      - span "library" abs:[274,532 42x18] rel:[67,45 42x18] font:14/600 color:font-headline text:center
+  - div abs:[8,757 390x31] rel:[0,749 390x31] flex:row justify:between align:center pad:0/14/16/14
+    - span "0:42" abs:[22,757 47x15] rel:[14,0 47x15] flex:row gap:6 align:center font:12/400 color:on-surface-variant
+      - span abs:[22,758 14x14] rel:[0,1 14x14] flex:row
         - icon:timer abs:[22,758 14x14] rel:[0,0 14x14] clip
-    - span "1 mistake" abs:[337,759 47x13] rel:[329,1 47x13] font:11/400 color:on-surface-variant
+    - span "1 mistake" abs:[333,757 51x15] rel:[325,0 51x15] font:12/400 color:on-surface-variant
 ```

@@ -51,147 +51,147 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - icon-btn abs:[348,62 36x36] rel:[340,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
       - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
         - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
-  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1088
-    - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1112
+    - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:12
       - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
       - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
       - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-    - card abs:[22,160 362x197] rel:[14,52 362x197] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,175 332x59] rel:[15,15 332x59] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-        - div abs:[37,175 103x59] rel:[0,0 103x59]
-          - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
-          - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-          - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-      - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
-        - div abs:[39,246 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[39,282 40x43] rel:[0,35 40x43] bg:seed-indigo@55 r:4
-        - div abs:[87,246 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[87,261 40x64] rel:[0,14 40x64] bg:seed-indigo@55 r:4
-        - div abs:[135,246 40x78] rel:[98,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[135,322 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
-        - div abs:[183,246 40x78] rel:[146,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[183,246 40x78] rel:[0,0 40x78] bg:seed-indigo@55 r:4
-        - div abs:[231,246 40x78] rel:[194,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[231,275 40x50] rel:[0,28 40x50] bg:seed-indigo@55 r:4
-        - div abs:[279,246 40x78] rel:[242,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[279,292 40x32] rel:[0,46 40x32] bg:seed-indigo@55 r:4
-        - div abs:[327,246 40x78] rel:[290,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-          - div abs:[327,264 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
-      - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
-        - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-        - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-        - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-        - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-        - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-        - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-        - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-    - card abs:[22,369 362x182] rel:[14,261 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,384 332x60] rel:[15,15 332x60] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-        - div abs:[37,384 133x60] rel:[0,0 133x60]
-          - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant tracking:1.2
-          - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-          - span abs:[37,431 133x13] rel:[0,46 133x13] flex:row gap:4 align:center
-            - span abs:[37,432 11x11] rel:[0,1 11x11] flex:row
-              - icon:trending-up abs:[37,432 11x11] rel:[0,0 11x11] clip
-            - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
-            - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
-      - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
-    - card abs:[22,564 362x284] rel:[14,456 362x284] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,579 332x59] rel:[15,15 332x59] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-        - div abs:[37,579 126x59] rel:[0,0 126x59]
-          - ov "Box distribution" abs:[37,579 126x13] rel:[0,0 126x13] font:11/700 color:on-surface-variant tracking:1.2
-          - div "414" abs:[37,596 126x26] rel:[0,17 126x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-          - div "total cards across boxes" abs:[37,625 126x13] rel:[0,46 126x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-      - div abs:[37,650 332x161] rel:[15,86 332x161] flex:col gap:7 repeat:x8(unit=1)
-        - item[1] div abs:[37,650 332x14] rel:[0,0 332x14] grid cols:3 gap:8 align:center
-          - span "B1" abs:[37,651 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,650 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,650 74x14] rel:[0,0 74x14] bg:seed-indigo op:0.43125
-          - span "24" abs:[337,651 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[2] div abs:[37,671 332x14] rel:[0,21 332x14] grid cols:3 gap:8 align:center
-          - span "B2" abs:[37,672 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,671 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,671 118x14] rel:[0,0 118x14] bg:seed-indigo op:0.5125
-          - span "38" abs:[337,672 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[3] div abs:[37,692 332x14] rel:[0,42 332x14] grid cols:3 gap:8 align:center
-          - span "B3" abs:[37,693 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,692 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,692 167x14] rel:[0,0 167x14] bg:seed-indigo op:0.59375
-          - span "54" abs:[337,693 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[4] div abs:[37,713 332x14] rel:[0,63 332x14] grid cols:3 gap:8 align:center
-          - span "B4" abs:[37,714 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,713 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,713 220x14] rel:[0,0 220x14] bg:seed-indigo op:0.675
-          - span "71" abs:[337,714 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[5] div abs:[37,734 332x14] rel:[0,84 332x14] grid cols:3 gap:8 align:center
-          - span "B5" abs:[37,735 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,734 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,734 266x14] rel:[0,0 266x14] bg:seed-indigo op:0.75625
-          - span "86" abs:[337,735 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[6] div abs:[37,755 332x14] rel:[0,105 332x14] grid cols:3 gap:8 align:center
-          - span "B6" abs:[37,756 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,755 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,755 192x14] rel:[0,0 192x14] bg:mastery op:0.8375
-          - span "62" abs:[337,756 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[7] div abs:[37,776 332x14] rel:[0,126 332x14] grid cols:3 gap:8 align:center
-          - span "B7" abs:[37,777 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,776 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,776 148x14] rel:[0,0 148x14] bg:mastery op:0.91875
-          - span "48" abs:[337,777 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-        - item[8] div abs:[37,797 332x14] rel:[0,147 332x14] grid cols:3 gap:8 align:center
-          - span "B8" abs:[37,798 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-          - div abs:[63,797 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-            - div abs:[63,797 96x14] rel:[0,0 96x14] bg:mastery
-          - span "31" abs:[337,798 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-      - div abs:[37,821 332x12] rel:[15,257 332x12] flex:row justify:between pad:0/22 margin:10/0/0/0
-        - span "B1 · least known" abs:[59,821 73x12] rel:[22,0 73x12] font:10/400 color:on-surface-variant
-        - span "B8 · best known" abs:[273,821 74x12] rel:[236,0 74x12] font:10/400 color:on-surface-variant
-    - card abs:[22,860 362x113] rel:[14,752 362x113] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[37,875 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-        - ov "Streak" abs:[37,875 49x13] rel:[0,0 49x13] font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[37,900 332x58] rel:[15,40 332x58] flex:row gap:10
-        - div abs:[37,900 161x58] rel:[0,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
-          - div abs:[50,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
-            - span abs:[59,922 15x15] rel:[9,9 15x15] flex:row
-              - icon:flame abs:[59,922 15x15] rel:[0,0 15x15] clip
-          - div abs:[92,914 52x31] rel:[55,14 52x31]
-            - div "Current" abs:[92,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant tracking:0.3
-            - div "11 days" abs:[92,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
-        - div abs:[208,900 161x58] rel:[171,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
-          - div abs:[221,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
-            - span abs:[230,922 15x15] rel:[9,9 15x15] flex:row
-              - icon:award abs:[230,922 15x15] rel:[0,0 15x15] clip
-          - div abs:[263,914 52x31] rel:[55,14 52x31]
-            - div "Longest" abs:[263,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant tracking:0.3
-            - div "42 days" abs:[263,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
-    - ov "Card states" abs:[22,985 362x23] rel:[14,877 362x23] pad:2/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-    - card abs:[22,1008 362x131] rel:[14,900 362x131] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[23,1009 360x73] rel:[1,1 360x73] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
-        - div abs:[37,1030 30x30] rel:[14,21 30x30] flex:row justify:center align:center bg:surface-container r:9
-          - span abs:[45,1038 14x14] rel:[8,8 14x14] flex:row
-            - icon:pause-circle abs:[45,1038 14x14] rel:[0,0 14x14] clip
-        - div abs:[81,1021 188x48] rel:[58,12 188x48]
-          - div "Suspended" abs:[81,1021 188x16] rel:[0,0 188x16] font:13/600 color:font-headline tracking:-0.1
-          - div "Out of rotation until you resume them" abs:[81,1038 188x31] rel:[0,17 188x31] margin:1/0/0/0 font:11/400/15 color:on-surface-variant
-        - div abs:[281,1029 61x32] rel:[258,20 61x32]
-          - div "8" abs:[281,1029 61x19] rel:[0,0 61x19] font:15/700 color:font-headline text:right
-          - div "in your library" abs:[281,1049 61x12] rel:[0,20 61x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
-        - span abs:[354,1038 15x15] rel:[331,28 15x15] flex:row
-          - icon:chevron-right abs:[354,1038 15x15] rel:[0,0 15x15] clip
-      - div abs:[23,1082 360x56] rel:[1,74 360x56] grid cols:4 gap:12 align:center pad:12/14
-        - div abs:[37,1095 30x30] rel:[14,13 30x30] flex:row justify:center align:center bg:surface-container r:9
-          - span abs:[45,1103 14x14] rel:[8,8 14x14] flex:row
-            - icon:moon abs:[45,1103 14x14] rel:[0,0 14x14] clip
-        - div abs:[81,1094 199x32] rel:[58,12 199x32]
-          - div "Buried today" abs:[81,1094 199x16] rel:[0,0 199x16] font:13/600 color:font-headline tracking:-0.1
-          - div "Skipped until tomorrow" abs:[81,1111 199x15] rel:[0,17 199x15] margin:1/0/0/0 font:11/400/15 color:on-surface-variant
-        - div abs:[292,1094 50x32] rel:[269,12 50x32]
-          - div "4" abs:[292,1094 50x19] rel:[0,0 50x19] font:15/700 color:font-headline text:right
-          - div "today only" abs:[292,1114 50x12] rel:[0,20 50x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
-        - span abs:[354,1103 15x15] rel:[331,21 15x15] flex:row
-          - icon:chevron-right abs:[354,1103 15x15] rel:[0,0 15x15] clip
-    - div "Read-only summary · last 7 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - card abs:[22,160 362x200] rel:[14,52 362x200] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,174 334x61] rel:[14,14 334x61] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - div abs:[36,174 112x61] rel:[0,0 112x61]
+          - ov "Cards studied" abs:[36,174 112x13] rel:[0,0 112x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          - div "92" abs:[36,191 112x26] rel:[0,17 112x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+          - div "over the past 7 days" abs:[36,220 112x15] rel:[0,46 112x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
+      - div abs:[36,247 334x78] rel:[14,87 334x78] flex:row gap:8 align:end pad:0/2
+        - div abs:[38,247 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[38,283 40x43] rel:[0,35 40x43] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+        - div abs:[86,247 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[86,262 40x64] rel:[0,14 40x64] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+        - div abs:[135,247 40x78] rel:[99,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[135,323 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
+        - div abs:[183,247 40x78] rel:[147,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[183,247 40x78] rel:[0,0 40x78] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+        - div abs:[231,247 40x78] rel:[195,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[231,276 40x50] rel:[0,28 40x50] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+        - div abs:[279,247 40x78] rel:[243,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[279,293 40x32] rel:[0,46 40x32] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+        - div abs:[328,247 40x78] rel:[292,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+          - div abs:[328,265 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
+      - div abs:[36,331 334x15] rel:[14,171 334x15] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+        - item[1] span "M" abs:[38,331 40x15] rel:[2,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+        - item[2] span "T" abs:[86,331 40x15] rel:[50,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+        - item[3] span "W" abs:[135,331 40x15] rel:[99,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+        - item[4] span "T" abs:[183,331 40x15] rel:[147,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+        - item[5] span "F" abs:[231,331 40x15] rel:[195,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+        - item[6] span "S" abs:[279,331 40x15] rel:[243,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+        - item[7] span "S" abs:[328,331 40x15] rel:[292,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+    - card abs:[22,372 362x182] rel:[14,264 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,386 334x62] rel:[14,14 334x62] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - div abs:[36,386 143x62] rel:[0,0 143x62]
+          - ov "Accuracy" abs:[36,386 143x13] rel:[0,0 143x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          - div "73%" abs:[36,403 143x26] rel:[0,17 143x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+          - span abs:[36,433 143x15] rel:[0,46 143x15] flex:row gap:4 align:center
+            - span abs:[36,435 11x11] rel:[0,2 11x11] flex:row
+              - icon:trending-up abs:[36,435 11x11] rel:[0,0 11x11] clip
+            - span "+4%" abs:[51,433 28x15] rel:[15,0 28x15] font:12/600 color:mastery
+            - span "vs previous week" abs:[83,433 96x15] rel:[47,0 96x15] font:12/400 color:on-surface-variant op:0.7
+      - svg abs:[36,461 334x80] rel:[14,88 334x80] clip
+    - card abs:[22,567 362x295] rel:[14,459 362x295] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,581 334x61] rel:[14,14 334x61] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - div abs:[36,581 137x61] rel:[0,0 137x61]
+          - ov "Box distribution" abs:[36,581 137x13] rel:[0,0 137x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          - div "414" abs:[36,598 137x26] rel:[0,17 137x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+          - div "total cards across boxes" abs:[36,627 137x15] rel:[0,46 137x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
+      - div abs:[36,654 334x169] rel:[14,87 334x169] flex:col gap:7 repeat:x8(unit=1)
+        - item[1] div abs:[36,654 334x15] rel:[0,0 334x15] grid cols:3 gap:8 align:center
+          - span "B1" abs:[36,654 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,655 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,655 75x14] rel:[0,0 75x14] bg:seed-indigo op:0.43125
+          - span "24" abs:[338,654 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[2] div abs:[36,676 334x15] rel:[0,22 334x15] grid cols:3 gap:8 align:center
+          - span "B2" abs:[36,676 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,677 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,677 118x14] rel:[0,0 118x14] bg:seed-indigo op:0.5125
+          - span "38" abs:[338,676 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[3] div abs:[36,698 334x15] rel:[0,44 334x15] grid cols:3 gap:8 align:center
+          - span "B3" abs:[36,698 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,699 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,699 168x14] rel:[0,0 168x14] bg:seed-indigo op:0.59375
+          - span "54" abs:[338,698 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[4] div abs:[36,720 334x15] rel:[0,66 334x15] grid cols:3 gap:8 align:center
+          - span "B4" abs:[36,720 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,721 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,721 221x14] rel:[0,0 221x14] bg:seed-indigo op:0.675
+          - span "71" abs:[338,720 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[5] div abs:[36,742 334x15] rel:[0,88 334x15] grid cols:3 gap:8 align:center
+          - span "B5" abs:[36,742 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,743 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,743 268x14] rel:[0,0 268x14] bg:seed-indigo op:0.75625
+          - span "86" abs:[338,742 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[6] div abs:[36,764 334x15] rel:[0,110 334x15] grid cols:3 gap:8 align:center
+          - span "B6" abs:[36,764 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,765 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,765 193x14] rel:[0,0 193x14] bg:mastery op:0.8375
+          - span "62" abs:[338,764 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[7] div abs:[36,786 334x15] rel:[0,132 334x15] grid cols:3 gap:8 align:center
+          - span "B7" abs:[36,786 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,787 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,787 150x14] rel:[0,0 150x14] bg:mastery op:0.91875
+          - span "48" abs:[338,786 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+        - item[8] div abs:[36,808 334x15] rel:[0,154 334x15] grid cols:3 gap:8 align:center
+          - span "B8" abs:[36,808 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+          - div abs:[62,809 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+            - div abs:[62,809 97x14] rel:[0,0 97x14] bg:mastery
+          - span "31" abs:[338,808 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+      - div abs:[36,833 334x15] rel:[14,266 334x15] flex:row justify:between pad:0/22 margin:10/0/0/0
+        - span "B1 · least known" abs:[58,833 88x15] rel:[22,0 88x15] font:12/400 color:on-surface-variant
+        - span "B8 · best known" abs:[259,833 89x15] rel:[223,0 89x15] font:12/400 color:on-surface-variant
+    - card abs:[22,874 362x113] rel:[14,766 362x113] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[36,888 334x13] rel:[14,14 334x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+        - ov "Streak" abs:[36,888 43x13] rel:[0,0 43x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[36,913 334x60] rel:[14,39 334x60] flex:row gap:10
+        - div abs:[36,913 162x60] rel:[0,0 162x60] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[49,927 32x32] rel:[13,14 32x32] flex:row justify:center align:center shrink:0 r:9
+            - span abs:[58,936 15x15] rel:[9,9 15x15] flex:row
+              - icon:flame abs:[58,936 15x15] rel:[0,0 15x15] clip
+          - div abs:[91,926 58x34] rel:[55,13 58x34]
+            - div "Current" abs:[91,926 58x15] rel:[0,0 58x15] font:12/700 color:on-surface-variant tracking:0.3
+            - div "11 days" abs:[91,942 58x18] rel:[0,16 58x18] margin:1/0/0/0 font:14/700 color:font-headline
+        - div abs:[208,913 162x60] rel:[172,0 162x60] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[221,927 32x32] rel:[13,14 32x32] flex:row justify:center align:center shrink:0 r:9
+            - span abs:[230,936 15x15] rel:[9,9 15x15] flex:row
+              - icon:award abs:[230,936 15x15] rel:[0,0 15x15] clip
+          - div abs:[263,926 59x34] rel:[55,13 59x34]
+            - div "Longest" abs:[263,926 59x15] rel:[0,0 59x15] font:12/700 color:on-surface-variant tracking:0.3
+            - div "42 days" abs:[263,942 59x18] rel:[0,16 59x18] margin:1/0/0/0 font:14/700 color:font-headline
+    - ov "Card states" abs:[22,999 362x23] rel:[14,891 362x23] pad:2/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+    - card abs:[22,1022 362x139] rel:[14,914 362x139] mx:MxCard margin:0/0/14/0 clip bg:on-primary r:20 shadow:1/2
+      - div abs:[22,1022 362x78] rel:[0,0 362x78] grid cols:4 gap:12 align:center pad:12/14 border-b:1px seed-indigo@14
+        - div abs:[36,1045 30x30] rel:[14,23 30x30] flex:row justify:center align:center bg:surface-container r:9
+          - span abs:[44,1053 14x14] rel:[8,8 14x14] flex:row
+            - icon:pause-circle abs:[44,1053 14x14] rel:[0,0 14x14] clip
+        - div abs:[80,1034 177x53] rel:[58,12 177x53]
+          - div "Suspended" abs:[80,1034 177x18] rel:[0,0 177x18] font:14/600 color:font-headline tracking:-0.1
+          - div "Out of rotation until you resume them" abs:[80,1053 177x34] rel:[0,19 177x34] margin:1/0/0/0 font:12/400/17 color:on-surface-variant
+        - div abs:[269,1042 74x37] rel:[247,20 74x37]
+          - div "8" abs:[269,1042 74x21] rel:[0,0 74x21] font:16/700 color:font-headline text:right
+          - div "in your library" abs:[269,1064 74x15] rel:[0,22 74x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right
+        - span abs:[355,1053 15x15] rel:[333,31 15x15] flex:row
+          - icon:chevron-right abs:[355,1053 15x15] rel:[0,0 15x15] clip
+      - div abs:[22,1100 362x61] rel:[0,78 362x61] grid cols:4 gap:12 align:center pad:12/14
+        - div abs:[36,1115 30x30] rel:[14,16 30x30] flex:row justify:center align:center bg:surface-container r:9
+          - span abs:[44,1123 14x14] rel:[8,8 14x14] flex:row
+            - icon:moon abs:[44,1123 14x14] rel:[0,0 14x14] clip
+        - div abs:[80,1112 191x36] rel:[58,13 191x36]
+          - div "Buried today" abs:[80,1112 191x18] rel:[0,0 191x18] font:14/600 color:font-headline tracking:-0.1
+          - div "Skipped until tomorrow" abs:[80,1131 191x17] rel:[0,19 191x17] margin:1/0/0/0 font:12/400/17 color:on-surface-variant
+        - div abs:[283,1112 60x37] rel:[261,12 60x37]
+          - div "4" abs:[283,1112 60x21] rel:[0,0 60x21] font:16/700 color:font-headline text:right
+          - div "today only" abs:[283,1134 60x15] rel:[0,22 60x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right
+        - span abs:[355,1123 15x15] rel:[333,23 15x15] flex:row
+          - icon:chevron-right abs:[355,1123 15x15] rel:[0,0 15x15] clip
+    - div "Read-only summary · last 7 days" abs:[22,1175 362x31] rel:[14,1067 362x31] pad:4/0/12/0 font:12/400 color:on-surface-variant text:center
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:16 border:1px seed-indigo@14
     - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
@@ -201,7 +201,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
     - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
-      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
@@ -214,100 +214,100 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Month (ordered diff vs Week)
 
 ```diff
-  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:12
 - - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
 - - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
 + - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
 + - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
   - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
   ...
-  - ov "Cards studied" abs:[37,175 110x13] rel:[0,0 110x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-- - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-- - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
-+ - div "398" abs:[37,192 110x26] rel:[0,17 110x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-+ - div "over the past 28 days" abs:[37,221 110x13] rel:[0,46 110x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-+ - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:3 align:end pad:0/2
-  - div abs:[39,246 9x78] rel:[2,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+  - ov "Cards studied" abs:[36,174 120x13] rel:[0,0 120x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "92" abs:[36,191 112x26] rel:[0,17 112x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+- - div "over the past 7 days" abs:[36,220 112x15] rel:[0,46 112x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
+- - div abs:[36,247 334x78] rel:[14,87 334x78] flex:row gap:8 align:end pad:0/2
++ - div "398" abs:[36,191 120x26] rel:[0,17 120x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
++ - div "over the past 28 days" abs:[36,220 120x15] rel:[0,46 120x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
++ - div abs:[36,247 334x78] rel:[14,87 334x78] flex:row gap:3 align:end pad:0/2
+  - div abs:[38,247 9x78] rel:[2,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
   ...
-  - div abs:[63,246 9x78] rel:[26,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[63,261 9x64] rel:[0,14 9x64] bg:seed-indigo@55 r:4
-+ - div abs:[74,246 9x78] rel:[37,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[74,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
-+ - div abs:[86,246 9x78] rel:[49,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-  - div abs:[86,322 9x2] rel:[0,76 9x2] bg:surface-container-high r:4
+  - div abs:[62,247 9x78] rel:[26,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[62,262 9x64] rel:[0,14 9x64] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[74,247 9x78] rel:[38,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[74,269 9x57] rel:[0,21 9x57] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[86,247 9x78] rel:[50,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+  - div abs:[86,323 9x2] rel:[0,76 9x2] bg:surface-container-high r:4
   ...
-  - div abs:[134,246 9x78] rel:[97,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[134,282 9x43] rel:[0,35 9x43] bg:seed-indigo@55 r:4
-+ - div abs:[145,246 9x78] rel:[108,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[145,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
-+ - div abs:[157,246 9x78] rel:[120,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[157,246 9x78] rel:[0,0 9x78] bg:seed-indigo@55 r:4
-+ - div abs:[169,246 9x78] rel:[132,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[169,275 9x50] rel:[0,28 9x50] bg:seed-indigo@55 r:4
-+ - div abs:[181,246 9x78] rel:[144,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[181,278 9x46] rel:[0,32 9x46] bg:seed-indigo@55 r:4
-+ - div abs:[193,246 9x78] rel:[156,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[193,261 9x64] rel:[0,14 9x64] bg:seed-indigo@55 r:4
-+ - div abs:[204,246 9x78] rel:[167,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[204,296 9x28] rel:[0,50 9x28] bg:seed-indigo@55 r:4
-+ - div abs:[216,246 9x78] rel:[179,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[216,285 9x39] rel:[0,39 9x39] bg:seed-indigo@55 r:4
-+ - div abs:[228,246 9x78] rel:[191,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[228,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
-+ - div abs:[240,246 9x78] rel:[203,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[240,257 9x67] rel:[0,11 9x67] bg:seed-indigo@55 r:4
-+ - div abs:[252,246 9x78] rel:[215,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[252,271 9x53] rel:[0,25 9x53] bg:seed-indigo@55 r:4
-+ - div abs:[264,246 9x78] rel:[227,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[264,282 9x43] rel:[0,35 9x43] bg:seed-indigo@55 r:4
-+ - div abs:[275,246 9x78] rel:[238,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[275,264 9x60] rel:[0,18 9x60] bg:seed-indigo@55 r:4
-+ - div abs:[287,246 9x78] rel:[250,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[287,275 9x50] rel:[0,28 9x50] bg:seed-indigo@55 r:4
-+ - div abs:[299,246 9x78] rel:[262,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[299,322 9x2] rel:[0,76 9x2] bg:surface-container-high r:4
-+ - div abs:[311,246 9x78] rel:[274,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[311,278 9x46] rel:[0,32 9x46] bg:seed-indigo@55 r:4
-+ - div abs:[323,246 9x78] rel:[286,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[323,268 9x57] rel:[0,21 9x57] bg:seed-indigo@55 r:4
-+ - div abs:[335,246 9x78] rel:[298,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[335,246 9x78] rel:[0,0 9x78] bg:seed-indigo@55 r:4
-+ - div abs:[346,246 9x78] rel:[309,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-+ - div abs:[346,261 9x64] rel:[0,14 9x64] bg:seed-indigo@55 r:4
-+ - div abs:[358,246 9x78] rel:[321,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-  - div abs:[358,275 9x50] rel:[0,28 9x50] bg:seed-indigo r:4
-- - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
-- - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:3 repeat:x14(unit=2) pad:0/2 margin:6/0/0/0
-+ - item[1] span "1" abs:[39,330 8x12] rel:[2,0 8x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - item[3] span "5" abs:[84,330 8x12] rel:[47,0 8x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - span "10" abs:[141,330 12x12] rel:[104,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - item[8] span "15" abs:[201,330 12x12] rel:[164,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - span "20" abs:[261,330 12x12] rel:[224,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - item[13] span "25" abs:[321,330 12x12] rel:[284,0 12x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-  - card abs:[22,369 362x182] rel:[14,261 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[133,247 9x78] rel:[97,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[133,283 9x43] rel:[0,35 9x43] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[145,247 9x78] rel:[109,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[145,269 9x57] rel:[0,21 9x57] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[157,247 9x78] rel:[121,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[157,247 9x78] rel:[0,0 9x78] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[169,247 9x78] rel:[133,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[169,276 9x50] rel:[0,28 9x50] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[181,247 9x78] rel:[145,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[181,279 9x46] rel:[0,32 9x46] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[193,247 9x78] rel:[157,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[193,262 9x64] rel:[0,14 9x64] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[205,247 9x78] rel:[169,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[205,297 9x28] rel:[0,50 9x28] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[216,247 9x78] rel:[180,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[216,286 9x39] rel:[0,39 9x39] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[228,247 9x78] rel:[192,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[228,269 9x57] rel:[0,21 9x57] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[240,247 9x78] rel:[204,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[240,258 9x67] rel:[0,11 9x67] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[252,247 9x78] rel:[216,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[252,272 9x53] rel:[0,25 9x53] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[264,247 9x78] rel:[228,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[264,283 9x43] rel:[0,35 9x43] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[276,247 9x78] rel:[240,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[276,265 9x60] rel:[0,18 9x60] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[288,247 9x78] rel:[252,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[288,276 9x50] rel:[0,28 9x50] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[300,247 9x78] rel:[264,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[300,323 9x2] rel:[0,76 9x2] bg:surface-container-high r:4
++ - div abs:[312,247 9x78] rel:[276,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[312,279 9x46] rel:[0,32 9x46] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[323,247 9x78] rel:[287,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[323,269 9x57] rel:[0,21 9x57] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[335,247 9x78] rel:[299,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[335,247 9x78] rel:[0,0 9x78] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[347,247 9x78] rel:[311,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
++ - div abs:[347,262 9x64] rel:[0,14 9x64] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
++ - div abs:[359,247 9x78] rel:[323,0 9x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+  - div abs:[359,276 9x50] rel:[0,28 9x50] bg:seed-indigo r:4
+- - div abs:[36,331 334x15] rel:[14,171 334x15] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+- - item[1] span "M" abs:[38,331 40x15] rel:[2,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[2] span "T" abs:[86,331 40x15] rel:[50,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[3] span "W" abs:[135,331 40x15] rel:[99,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[4] span "T" abs:[183,331 40x15] rel:[147,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[5] span "F" abs:[231,331 40x15] rel:[195,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[6] span "S" abs:[279,331 40x15] rel:[243,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[7] span "S" abs:[328,331 40x15] rel:[292,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - div abs:[36,331 334x15] rel:[14,171 334x15] flex:row gap:3 repeat:x14(unit=2) pad:0/2 margin:6/0/0/0
++ - item[1] span "1" abs:[38,331 8x15] rel:[2,0 8x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - item[3] span "5" abs:[82,331 8x15] rel:[46,0 8x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - span "10" abs:[137,331 14x15] rel:[101,0 14x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - item[8] span "15" abs:[198,331 14x15] rel:[162,0 14x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - span "20" abs:[259,331 14x15] rel:[223,0 14x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - item[13] span "25" abs:[321,331 14x15] rel:[285,0 14x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+  - card abs:[22,372 362x182] rel:[14,264 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
   ...
-  - ov "Accuracy" abs:[37,384 139x13] rel:[0,0 139x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-+ - div "77%" abs:[37,401 139x26] rel:[0,17 139x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-  - span abs:[37,431 139x13] rel:[0,46 139x13] flex:row gap:4 align:center
+  - ov "Accuracy" abs:[36,386 149x13] rel:[0,0 149x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "73%" abs:[36,403 143x26] rel:[0,17 143x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
++ - div "77%" abs:[36,403 149x26] rel:[0,17 149x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+  - span abs:[36,433 149x15] rel:[0,46 149x15] flex:row gap:4 align:center
   ...
-  - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
-- - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
-+ - span "vs previous month" abs:[81,431 94x13] rel:[44,0 94x13] font:11/400 color:on-surface-variant op:0.7
-  - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
+  - span "+4%" abs:[51,433 28x15] rel:[15,0 28x15] font:12/600 color:mastery
+- - span "vs previous week" abs:[83,433 96x15] rel:[47,0 96x15] font:12/400 color:on-surface-variant op:0.7
++ - span "vs previous month" abs:[83,433 103x15] rel:[47,0 103x15] font:12/400 color:on-surface-variant op:0.7
+  - svg abs:[36,461 334x80] rel:[14,88 334x80] clip
   ...
-  - icon:chevron-right abs:[354,1103 15x15] rel:[0,0 15x15] clip
-- - div "Read-only summary · last 7 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
-+ - div "Read-only summary · last 28 days" abs:[22,1153 362x29] rel:[14,1045 362x29] pad:4/0/12/0 font:11/400 color:on-surface-variant text:center
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+  - icon:chevron-right abs:[355,1123 15x15] rel:[0,0 15x15] clip
+- - div "Read-only summary · last 7 days" abs:[22,1175 362x31] rel:[14,1067 362x31] pad:4/0/12/0 font:12/400 color:on-surface-variant text:center
++ - div "Read-only summary · last 28 days" abs:[22,1175 362x31] rel:[14,1067 362x31] pad:4/0/12/0 font:12/400 color:on-surface-variant text:center
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:16 border:1px seed-indigo@14
   ...
 ```
 
@@ -327,23 +327,23 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - span abs:[356,70 20x20] rel:[8,8 20x20] flex:row
         - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll
-    - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+    - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:12
       - button "Week" abs:[25,111 65x32] rel:[3,3 65x32] mx:? pad:0/16 bg:on-primary font:12/600 color:font-headline text:center r:9 shadow:1/2
       - button "Month" abs:[92,111 69x32] rel:[70,3 69x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
       - button "All time" abs:[163,111 74x32] rel:[141,3 74x32] mx:? pad:0/16 font:12/600 color:on-surface-variant text:center r:9
-    - card abs:[22,160 362x151] rel:[14,52 362x151] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,175 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
-      - span abs:[37,192 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
-      - span abs:[37,226 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
-    - card abs:[22,323 362x151] rel:[14,215 362x151] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,338 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
-      - span abs:[37,355 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
-      - span abs:[37,389 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
-    - card abs:[22,486 362x151] rel:[14,378 362x151] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - span abs:[37,501 80x9] rel:[15,15 80x9] bg:surface-container-high r:6 op:0.4
-      - span abs:[37,518 120x20] rel:[15,32 120x20] bg:surface-container-high r:6 op:0.5
-      - span abs:[37,552 332x70] rel:[15,66 332x70] bg:surface-container-high r:10 op:0.5
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - card abs:[22,160 362x149] rel:[14,52 362x149] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,174 80x9] rel:[14,14 80x9] bg:surface-container-high r:6 op:0.4
+      - span abs:[36,191 120x20] rel:[14,31 120x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[36,225 334x70] rel:[14,65 334x70] bg:surface-container-high r:10 op:0.5
+    - card abs:[22,321 362x149] rel:[14,213 362x149] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,335 80x9] rel:[14,14 80x9] bg:surface-container-high r:6 op:0.4
+      - span abs:[36,352 120x20] rel:[14,31 120x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[36,386 334x70] rel:[14,65 334x70] bg:surface-container-high r:10 op:0.5
+    - card abs:[22,482 362x149] rel:[14,374 362x149] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+      - span abs:[36,496 80x9] rel:[14,14 80x9] bg:surface-container-high r:6 op:0.4
+      - span abs:[36,513 120x20] rel:[14,31 120x20] bg:surface-container-high r:6 op:0.5
+      - span abs:[36,547 334x70] rel:[14,65 334x70] bg:surface-container-high r:10 op:0.5
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:16 border:1px seed-indigo@14
     - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
@@ -353,7 +353,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
     - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
-      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center
@@ -367,135 +367,135 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
-- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1088
-+ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:821
-  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1112
++ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:823
+  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:12
   ...
-  - div abs:[37,175 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-- - div abs:[37,175 103x59] rel:[0,0 103x59]
-- - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-- - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-- - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
-- - div abs:[39,246 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[39,282 40x43] rel:[0,35 40x43] bg:seed-indigo@55 r:4
-- - div abs:[87,246 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[87,261 40x64] rel:[0,14 40x64] bg:seed-indigo@55 r:4
-- - div abs:[135,246 40x78] rel:[98,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[135,322 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
-- - div abs:[183,246 40x78] rel:[146,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[183,246 40x78] rel:[0,0 40x78] bg:seed-indigo@55 r:4
-- - div abs:[231,246 40x78] rel:[194,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[231,275 40x50] rel:[0,28 40x50] bg:seed-indigo@55 r:4
-- - div abs:[279,246 40x78] rel:[242,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[279,292 40x32] rel:[0,46 40x32] bg:seed-indigo@55 r:4
-- - div abs:[327,246 40x78] rel:[290,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[327,264 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
-- - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
-- - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - div "No study sessions in this range yet. Start any deck to begin tracking trends." abs:[37,200 332x86] rel:[15,40 332x86] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,313 362x123] rel:[14,205 362x123] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-  - div abs:[37,328 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-- - div abs:[37,384 133x60] rel:[0,0 133x60]
-- - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-- - span abs:[37,431 133x13] rel:[0,46 133x13] flex:row gap:4 align:center
-- - span abs:[37,432 11x11] rel:[0,1 11x11] flex:row
-- - icon:trending-up abs:[37,432 11x11] rel:[0,0 11x11] clip
-- - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
-- - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
-- - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
-+ - ov "Accuracy" abs:[37,328 72x13] rel:[0,0 72x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - div "Accuracy appears once you've answered cards." abs:[37,353 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,448 362x123] rel:[14,340 362x123] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
-  - div abs:[37,463 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-- - div abs:[37,579 126x59] rel:[0,0 126x59]
-- - ov "Box distribution" abs:[37,579 126x13] rel:[0,0 126x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "414" abs:[37,596 126x26] rel:[0,17 126x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-- - div "total cards across boxes" abs:[37,625 126x13] rel:[0,46 126x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-- - div abs:[37,650 332x161] rel:[15,86 332x161] flex:col gap:7 repeat:x8(unit=1)
-- - item[1] div abs:[37,650 332x14] rel:[0,0 332x14] grid cols:3 gap:8 align:center
-- - span "B1" abs:[37,651 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,650 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,650 74x14] rel:[0,0 74x14] bg:seed-indigo op:0.43125
-- - span "24" abs:[337,651 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[2] div abs:[37,671 332x14] rel:[0,21 332x14] grid cols:3 gap:8 align:center
-- - span "B2" abs:[37,672 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,671 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,671 118x14] rel:[0,0 118x14] bg:seed-indigo op:0.5125
-- - span "38" abs:[337,672 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[3] div abs:[37,692 332x14] rel:[0,42 332x14] grid cols:3 gap:8 align:center
-- - span "B3" abs:[37,693 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,692 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,692 167x14] rel:[0,0 167x14] bg:seed-indigo op:0.59375
-- - span "54" abs:[337,693 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[4] div abs:[37,713 332x14] rel:[0,63 332x14] grid cols:3 gap:8 align:center
-- - span "B4" abs:[37,714 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,713 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,713 220x14] rel:[0,0 220x14] bg:seed-indigo op:0.675
-- - span "71" abs:[337,714 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[5] div abs:[37,734 332x14] rel:[0,84 332x14] grid cols:3 gap:8 align:center
-- - span "B5" abs:[37,735 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,734 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,734 266x14] rel:[0,0 266x14] bg:seed-indigo op:0.75625
-- - span "86" abs:[337,735 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[6] div abs:[37,755 332x14] rel:[0,105 332x14] grid cols:3 gap:8 align:center
-- - span "B6" abs:[37,756 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,755 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,755 192x14] rel:[0,0 192x14] bg:mastery op:0.8375
-- - span "62" abs:[337,756 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[7] div abs:[37,776 332x14] rel:[0,126 332x14] grid cols:3 gap:8 align:center
-- - span "B7" abs:[37,777 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,776 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,776 148x14] rel:[0,0 148x14] bg:mastery op:0.91875
-- - span "48" abs:[337,777 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - item[8] div abs:[37,797 332x14] rel:[0,147 332x14] grid cols:3 gap:8 align:center
-- - span "B8" abs:[37,798 18x13] rel:[0,1 18x13] font:11/700 color:on-surface-variant text:right
-- - div abs:[63,797 266x14] rel:[26,0 266x14] pos:relative clip bg:surface-container r:5
-- - div abs:[63,797 96x14] rel:[0,0 96x14] bg:mastery
-- - span "31" abs:[337,798 32x13] rel:[300,1 32x13] font:11/700 color:font-headline text:right
-- - div abs:[37,821 332x12] rel:[15,257 332x12] flex:row justify:between pad:0/22 margin:10/0/0/0
-- - span "B1 · least known" abs:[59,821 73x12] rel:[22,0 73x12] font:10/400 color:on-surface-variant
-- - span "B8 · best known" abs:[273,821 74x12] rel:[236,0 74x12] font:10/400 color:on-surface-variant
-+ - ov "Box distribution" abs:[37,463 122x13] rel:[0,0 122x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - div "Cards spread across boxes as you study them." abs:[37,488 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,583 362x123] rel:[14,475 362x123] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[36,174 334x13] rel:[14,14 334x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[36,174 112x61] rel:[0,0 112x61]
+- - ov "Cards studied" abs:[36,174 112x13] rel:[0,0 112x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "92" abs:[36,191 112x26] rel:[0,17 112x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+- - div "over the past 7 days" abs:[36,220 112x15] rel:[0,46 112x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
+- - div abs:[36,247 334x78] rel:[14,87 334x78] flex:row gap:8 align:end pad:0/2
+- - div abs:[38,247 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[38,283 40x43] rel:[0,35 40x43] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[86,247 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[86,262 40x64] rel:[0,14 40x64] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[135,247 40x78] rel:[99,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[135,323 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
+- - div abs:[183,247 40x78] rel:[147,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[183,247 40x78] rel:[0,0 40x78] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[231,247 40x78] rel:[195,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[231,276 40x50] rel:[0,28 40x50] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[279,247 40x78] rel:[243,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[279,293 40x32] rel:[0,46 40x32] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[328,247 40x78] rel:[292,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[328,265 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
+- - div abs:[36,331 334x15] rel:[14,171 334x15] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+- - item[1] span "M" abs:[38,331 40x15] rel:[2,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[2] span "T" abs:[86,331 40x15] rel:[50,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[3] span "W" abs:[135,331 40x15] rel:[99,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[4] span "T" abs:[183,331 40x15] rel:[147,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[5] span "F" abs:[231,331 40x15] rel:[195,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[6] span "S" abs:[279,331 40x15] rel:[243,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[7] span "S" abs:[328,331 40x15] rel:[292,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - ov "Cards studied" abs:[36,174 91x13] rel:[0,0 91x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div "No study sessions in this range yet. Start any deck to begin tracking trends." abs:[36,199 334x86] rel:[14,39 334x86] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:12 border:1px outline-variant
+  - card abs:[22,311 362x121] rel:[14,203 362x121] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+  - div abs:[36,325 334x13] rel:[14,14 334x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[36,386 143x62] rel:[0,0 143x62]
+- - ov "Accuracy" abs:[36,386 143x13] rel:[0,0 143x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "73%" abs:[36,403 143x26] rel:[0,17 143x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+- - span abs:[36,433 143x15] rel:[0,46 143x15] flex:row gap:4 align:center
+- - span abs:[36,435 11x11] rel:[0,2 11x11] flex:row
+- - icon:trending-up abs:[36,435 11x11] rel:[0,0 11x11] clip
+- - span "+4%" abs:[51,433 28x15] rel:[15,0 28x15] font:12/600 color:mastery
+- - span "vs previous week" abs:[83,433 96x15] rel:[47,0 96x15] font:12/400 color:on-surface-variant op:0.7
+- - svg abs:[36,461 334x80] rel:[14,88 334x80] clip
++ - ov "Accuracy" abs:[36,325 64x13] rel:[0,0 64x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div "Accuracy appears once you've answered cards." abs:[36,350 334x68] rel:[14,39 334x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:12 border:1px outline-variant
+  - card abs:[22,444 362x121] rel:[14,336 362x121] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
+  - div abs:[36,458 334x13] rel:[14,14 334x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[36,581 137x61] rel:[0,0 137x61]
+- - ov "Box distribution" abs:[36,581 137x13] rel:[0,0 137x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "414" abs:[36,598 137x26] rel:[0,17 137x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+- - div "total cards across boxes" abs:[36,627 137x15] rel:[0,46 137x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
+- - div abs:[36,654 334x169] rel:[14,87 334x169] flex:col gap:7 repeat:x8(unit=1)
+- - item[1] div abs:[36,654 334x15] rel:[0,0 334x15] grid cols:3 gap:8 align:center
+- - span "B1" abs:[36,654 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,655 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,655 75x14] rel:[0,0 75x14] bg:seed-indigo op:0.43125
+- - span "24" abs:[338,654 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[2] div abs:[36,676 334x15] rel:[0,22 334x15] grid cols:3 gap:8 align:center
+- - span "B2" abs:[36,676 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,677 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,677 118x14] rel:[0,0 118x14] bg:seed-indigo op:0.5125
+- - span "38" abs:[338,676 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[3] div abs:[36,698 334x15] rel:[0,44 334x15] grid cols:3 gap:8 align:center
+- - span "B3" abs:[36,698 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,699 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,699 168x14] rel:[0,0 168x14] bg:seed-indigo op:0.59375
+- - span "54" abs:[338,698 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[4] div abs:[36,720 334x15] rel:[0,66 334x15] grid cols:3 gap:8 align:center
+- - span "B4" abs:[36,720 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,721 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,721 221x14] rel:[0,0 221x14] bg:seed-indigo op:0.675
+- - span "71" abs:[338,720 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[5] div abs:[36,742 334x15] rel:[0,88 334x15] grid cols:3 gap:8 align:center
+- - span "B5" abs:[36,742 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,743 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,743 268x14] rel:[0,0 268x14] bg:seed-indigo op:0.75625
+- - span "86" abs:[338,742 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[6] div abs:[36,764 334x15] rel:[0,110 334x15] grid cols:3 gap:8 align:center
+- - span "B6" abs:[36,764 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,765 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,765 193x14] rel:[0,0 193x14] bg:mastery op:0.8375
+- - span "62" abs:[338,764 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[7] div abs:[36,786 334x15] rel:[0,132 334x15] grid cols:3 gap:8 align:center
+- - span "B7" abs:[36,786 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,787 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,787 150x14] rel:[0,0 150x14] bg:mastery op:0.91875
+- - span "48" abs:[338,786 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - item[8] div abs:[36,808 334x15] rel:[0,154 334x15] grid cols:3 gap:8 align:center
+- - span "B8" abs:[36,808 18x15] rel:[0,0 18x15] font:12/700 color:on-surface-variant text:right
+- - div abs:[62,809 268x14] rel:[26,1 268x14] pos:relative clip bg:surface-container r:5
+- - div abs:[62,809 97x14] rel:[0,0 97x14] bg:mastery
+- - span "31" abs:[338,808 32x15] rel:[302,0 32x15] font:12/700 color:font-headline text:right
+- - div abs:[36,833 334x15] rel:[14,266 334x15] flex:row justify:between pad:0/22 margin:10/0/0/0
+- - span "B1 · least known" abs:[58,833 88x15] rel:[22,0 88x15] font:12/400 color:on-surface-variant
+- - span "B8 · best known" abs:[259,833 89x15] rel:[223,0 89x15] font:12/400 color:on-surface-variant
++ - ov "Box distribution" abs:[36,458 107x13] rel:[0,0 107x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div "Cards spread across boxes as you study them." abs:[36,483 334x68] rel:[14,39 334x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:12 border:1px outline-variant
+  - card abs:[22,577 362x121] rel:[14,469 362x121] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
   ...
-  - ov "Streak" abs:[37,598 49x13] rel:[0,0 49x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div abs:[37,900 332x58] rel:[15,40 332x58] flex:row gap:10
-- - div abs:[37,900 161x58] rel:[0,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
-- - div abs:[50,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
-- - span abs:[59,922 15x15] rel:[9,9 15x15] flex:row
-- - icon:flame abs:[59,922 15x15] rel:[0,0 15x15] clip
-- - div abs:[92,914 52x31] rel:[55,14 52x31]
-- - div "Current" abs:[92,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant tracking:0.3
-- - div "11 days" abs:[92,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
-- - div abs:[208,900 161x58] rel:[171,0 161x58] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:11 border:1px seed-indigo@14
-- - div abs:[221,913 32x32] rel:[13,13 32x32] flex:row justify:center align:center shrink:0 r:9
-- - span abs:[230,922 15x15] rel:[9,9 15x15] flex:row
-- - icon:award abs:[230,922 15x15] rel:[0,0 15x15] clip
-- - div abs:[263,914 52x31] rel:[55,14 52x31]
-- - div "Longest" abs:[263,914 52x12] rel:[0,0 52x12] font:10/700 color:on-surface-variant tracking:0.3
-- - div "42 days" abs:[263,927 52x18] rel:[0,13 52x18] margin:1/0/0/0 font:14/700 color:font-headline
-+ - div "A streak starts after one study session." abs:[37,623 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - ov "Card states" abs:[22,718 362x23] rel:[14,610 362x23] pad:2/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
+  - ov "Streak" abs:[36,591 43x13] rel:[0,0 43x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div abs:[36,913 334x60] rel:[14,39 334x60] flex:row gap:10
+- - div abs:[36,913 162x60] rel:[0,0 162x60] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[49,927 32x32] rel:[13,14 32x32] flex:row justify:center align:center shrink:0 r:9
+- - span abs:[58,936 15x15] rel:[9,9 15x15] flex:row
+- - icon:flame abs:[58,936 15x15] rel:[0,0 15x15] clip
+- - div abs:[91,926 58x34] rel:[55,13 58x34]
+- - div "Current" abs:[91,926 58x15] rel:[0,0 58x15] font:12/700 color:on-surface-variant tracking:0.3
+- - div "11 days" abs:[91,942 58x18] rel:[0,16 58x18] margin:1/0/0/0 font:14/700 color:font-headline
+- - div abs:[208,913 162x60] rel:[172,0 162x60] flex:row gap:10 align:center grow:1 basis:0 layout_hint:expanded pad:12 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[221,927 32x32] rel:[13,14 32x32] flex:row justify:center align:center shrink:0 r:9
+- - span abs:[230,936 15x15] rel:[9,9 15x15] flex:row
+- - icon:award abs:[230,936 15x15] rel:[0,0 15x15] clip
+- - div abs:[263,926 59x34] rel:[55,13 59x34]
+- - div "Longest" abs:[263,926 59x15] rel:[0,0 59x15] font:12/700 color:on-surface-variant tracking:0.3
+- - div "42 days" abs:[263,942 59x18] rel:[0,16 59x18] margin:1/0/0/0 font:14/700 color:font-headline
++ - div "A streak starts after one study session." abs:[36,616 334x68] rel:[14,39 334x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:12 border:1px outline-variant
+  - ov "Card states" abs:[22,710 362x23] rel:[14,602 362x23] pad:2/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
   ...
-  - div abs:[281,762 61x32] rel:[258,20 61x32]
-- - div "8" abs:[281,1029 61x19] rel:[0,0 61x19] font:15/700 color:font-headline text:right
-+ - div "0" abs:[281,762 61x19] rel:[0,0 61x19] font:15/700 color:font-headline text:right
-  - div "in your library" abs:[281,782 61x12] rel:[0,20 61x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
+  - div abs:[269,753 74x37] rel:[247,20 74x37]
+- - div "8" abs:[269,1042 74x21] rel:[0,0 74x21] font:16/700 color:font-headline text:right
++ - div "0" abs:[269,753 74x21] rel:[0,0 74x21] font:16/700 color:font-headline text:right
+  - div "in your library" abs:[269,775 74x15] rel:[0,22 74x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right
   ...
-  - div abs:[292,827 50x32] rel:[269,12 50x32]
-- - div "4" abs:[292,1094 50x19] rel:[0,0 50x19] font:15/700 color:font-headline text:right
-+ - div "0" abs:[292,827 50x19] rel:[0,0 50x19] font:15/700 color:font-headline text:right
-  - div "today only" abs:[292,847 50x12] rel:[0,20 50x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right
+  - div abs:[283,823 60x37] rel:[261,12 60x37]
+- - div "4" abs:[283,1112 60x21] rel:[0,0 60x21] font:16/700 color:font-headline text:right
++ - div "0" abs:[283,823 60x21] rel:[0,0 60x21] font:16/700 color:font-headline text:right
+  - div "today only" abs:[283,845 60x15] rel:[0,22 60x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right
   ...
 ```
 
@@ -503,46 +503,46 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
-- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1088
-+ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1062
-  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1112
++ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1082
+  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:12
   ...
-  - div abs:[37,175 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-- - div abs:[37,175 103x59] rel:[0,0 103x59]
-- - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "92" abs:[37,192 103x26] rel:[0,17 103x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-- - div "over the past 7 days" abs:[37,221 103x13] rel:[0,46 103x13] margin:3/0/0/0 font:11/400 color:on-surface-variant
-- - div abs:[37,246 332x78] rel:[15,86 332x78] flex:row gap:8 align:end pad:0/2
-- - div abs:[39,246 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[39,282 40x43] rel:[0,35 40x43] bg:seed-indigo@55 r:4
-- - div abs:[87,246 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[87,261 40x64] rel:[0,14 40x64] bg:seed-indigo@55 r:4
-- - div abs:[135,246 40x78] rel:[98,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[135,322 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
-- - div abs:[183,246 40x78] rel:[146,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[183,246 40x78] rel:[0,0 40x78] bg:seed-indigo@55 r:4
-- - div abs:[231,246 40x78] rel:[194,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[231,275 40x50] rel:[0,28 40x50] bg:seed-indigo@55 r:4
-- - div abs:[279,246 40x78] rel:[242,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[279,292 40x32] rel:[0,46 40x32] bg:seed-indigo@55 r:4
-- - div abs:[327,246 40x78] rel:[290,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
-- - div abs:[327,264 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
-- - div abs:[37,330 332x12] rel:[15,170 332x12] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
-- - item[1] span "M" abs:[39,330 40x12] rel:[2,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[2] span "T" abs:[87,330 40x12] rel:[50,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[3] span "W" abs:[135,330 40x12] rel:[98,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[4] span "T" abs:[183,330 40x12] rel:[146,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[5] span "F" abs:[231,330 40x12] rel:[194,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[6] span "S" abs:[279,330 40x12] rel:[242,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-- - item[7] span "S" abs:[327,330 40x12] rel:[290,0 40x12] grow:1 basis:0 layout_hint:expanded font:10/400 color:on-surface-variant text:center
-+ - ov "Cards studied" abs:[37,175 103x13] rel:[0,0 103x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - div "Only 1 day of data so far." abs:[37,200 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-+ - div abs:[37,278 332x39] rel:[15,118 332x39] flex:row gap:8 align:start pad:10/12 margin:10/0/0/0 bg:seed-indigo@4 r:11 border:1px seed-indigo@14
-+ - span abs:[50,289 13x13] rel:[13,11 13x13] flex:row
-+ - icon:info abs:[50,289 13x13] rel:[0,0 13x13] clip
-+ - span "Trend appears after of data." abs:[71,289 180x17] rel:[34,11 180x17] font:11/400/17 color:on-surface-variant
-+ - strong "3 days" abs:[174,290 35x13] rel:[103,1 35x13] font:11/700/17 color:font-headline
-  - card abs:[22,344 362x182] rel:[14,236 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[36,174 334x13] rel:[14,14 334x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[36,174 112x61] rel:[0,0 112x61]
+- - ov "Cards studied" abs:[36,174 112x13] rel:[0,0 112x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "92" abs:[36,191 112x26] rel:[0,17 112x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+- - div "over the past 7 days" abs:[36,220 112x15] rel:[0,46 112x15] margin:3/0/0/0 font:12/400 color:on-surface-variant
+- - div abs:[36,247 334x78] rel:[14,87 334x78] flex:row gap:8 align:end pad:0/2
+- - div abs:[38,247 40x78] rel:[2,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[38,283 40x43] rel:[0,35 40x43] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[86,247 40x78] rel:[50,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[86,262 40x64] rel:[0,14 40x64] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[135,247 40x78] rel:[99,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[135,323 40x2] rel:[0,76 40x2] bg:surface-container-high r:4
+- - div abs:[183,247 40x78] rel:[147,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[183,247 40x78] rel:[0,0 40x78] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[231,247 40x78] rel:[195,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[231,276 40x50] rel:[0,28 40x50] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[279,247 40x78] rel:[243,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[279,293 40x32] rel:[0,46 40x32] bg:color(srgb 0.321569 0.396078 0.960784 / 0.55) r:4
+- - div abs:[328,247 40x78] rel:[292,0 40x78] flex:col justify:end align:center grow:1 basis:0 layout_hint:expanded
+- - div abs:[328,265 40x60] rel:[0,18 40x60] bg:seed-indigo r:4
+- - div abs:[36,331 334x15] rel:[14,171 334x15] flex:row gap:8 repeat:x7(unit=1) pad:0/2 margin:6/0/0/0
+- - item[1] span "M" abs:[38,331 40x15] rel:[2,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[2] span "T" abs:[86,331 40x15] rel:[50,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[3] span "W" abs:[135,331 40x15] rel:[99,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[4] span "T" abs:[183,331 40x15] rel:[147,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[5] span "F" abs:[231,331 40x15] rel:[195,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[6] span "S" abs:[279,331 40x15] rel:[243,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
+- - item[7] span "S" abs:[328,331 40x15] rel:[292,0 40x15] grow:1 basis:0 layout_hint:expanded font:12/400 color:on-surface-variant text:center
++ - ov "Cards studied" abs:[36,174 91x13] rel:[0,0 91x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div "Only 1 day of data so far." abs:[36,199 334x68] rel:[14,39 334x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:12 border:1px outline-variant
++ - div abs:[36,277 334x40] rel:[14,117 334x40] flex:row gap:8 align:start pad:10/12 margin:10/0/0/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.04) r:12 border:1px color(srgb 0.321569 0.396078 0.960784 / 0.14)
++ - span abs:[49,288 13x13] rel:[13,11 13x13] flex:row
++ - icon:info abs:[49,288 13x13] rel:[0,0 13x13] clip
++ - span "Trend appears after of data." abs:[70,288 196x18] rel:[34,11 196x18] font:12/400/18 color:on-surface-variant
++ - strong "3 days" abs:[183,289 38x15] rel:[113,1 38x15] font:12/700/18 color:font-headline
+  - card abs:[22,343 362x182] rel:[14,235 362x182] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
   ...
 ```
 
@@ -550,23 +550,23 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - icon:help-circle abs:[356,70 20x20] rel:[0,0 20x20] clip
-- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1088
-+ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1029
-  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:11
+- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1112
++ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded pad:0/14/14/14 layout_hint:scroll scrollh:1050
+  - div abs:[22,108 219x38] rel:[14,0 219x38] flex:row gap:2 pad:3 margin:0/0/14/0 bg:surface-container r:12
   ...
-  - div abs:[37,384 332x13] rel:[15,15 332x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
-- - div abs:[37,384 133x60] rel:[0,0 133x60]
-- - ov "Accuracy" abs:[37,384 133x13] rel:[0,0 133x13] font:11/700 color:on-surface-variant tracking:1.2
-- - div "73%" abs:[37,401 133x26] rel:[0,17 133x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
-- - span abs:[37,431 133x13] rel:[0,46 133x13] flex:row gap:4 align:center
-- - span abs:[37,432 11x11] rel:[0,1 11x11] flex:row
-- - icon:trending-up abs:[37,432 11x11] rel:[0,0 11x11] clip
-- - span "+4%" abs:[52,431 25x13] rel:[15,0 25x13] font:11/600 color:mastery
-- - span "vs previous week" abs:[81,431 88x13] rel:[44,0 88x13] font:11/400 color:on-surface-variant op:0.7
-- - svg abs:[37,457 332x80] rel:[15,87 332x80] clip
-+ - ov "Accuracy" abs:[37,384 72x13] rel:[0,0 72x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - div "Not enough answered cards yet to show accuracy." abs:[37,409 332x68] rel:[15,40 332x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:11 border:1px outline-variant
-  - card abs:[22,504 362x284] rel:[14,396 362x284] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - div abs:[36,386 334x13] rel:[14,14 334x13] flex:row gap:8 justify:between align:baseline margin:0/0/12/0
+- - div abs:[36,386 143x62] rel:[0,0 143x62]
+- - ov "Accuracy" abs:[36,386 143x13] rel:[0,0 143x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - div "73%" abs:[36,403 143x26] rel:[0,17 143x26] margin:4/0/0/0 font:24/700/26 color:font-headline tracking:-0.5
+- - span abs:[36,433 143x15] rel:[0,46 143x15] flex:row gap:4 align:center
+- - span abs:[36,435 11x11] rel:[0,2 11x11] flex:row
+- - icon:trending-up abs:[36,435 11x11] rel:[0,0 11x11] clip
+- - span "+4%" abs:[51,433 28x15] rel:[15,0 28x15] font:12/600 color:mastery
+- - span "vs previous week" abs:[83,433 96x15] rel:[47,0 96x15] font:12/400 color:on-surface-variant op:0.7
+- - svg abs:[36,461 334x80] rel:[14,88 334x80] clip
++ - ov "Accuracy" abs:[36,386 64x13] rel:[0,0 64x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - div "Not enough answered cards yet to show accuracy." abs:[36,411 334x68] rel:[14,39 334x68] pad:24/16 bg:on-primary font:12/400/18 color:on-surface-variant text:center r:12 border:1px outline-variant
+  - card abs:[22,505 362x295] rel:[14,397 362x295] mx:MxCard pad:14 margin:0/0/12/0 bg:on-primary r:20 shadow:1/2
   ...
 ```
 
@@ -583,16 +583,16 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/14
     - div "Progress" abs:[22,65 100x30] rel:[14,13 100x30] font:24/700 color:font-headline tracking:-0.5
   - scroll abs:[8,108 390x598] rel:[0,100 390x598] flex:row justify:center align:center grow:1 basis:0 layout_hint:expanded pad:24/22 layout_hint:scroll
-    - card abs:[30,275 346x263] rel:[22,167 346x263] mx:MxCard pad:36/22 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[177,312 52x52] rel:[147,37 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
-        - span abs:[192,327 22x22] rel:[15,15 22x22] flex:row
-          - icon:cloud-off abs:[192,327 22x22] rel:[0,0 22x22] clip
-      - div "Couldn't summarise your progress" abs:[53,378 300x21] rel:[23,103 300x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
-      - div "Your study history is safe on this device. Try again in a moment." abs:[53,405 300x40] rel:[23,130 300x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Retry" abs:[158,462 90x40] rel:[128,186 90x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-        - span abs:[176,475 14x14] rel:[18,13 14x14] flex:row
-          - icon:refresh-cw abs:[176,475 14x14] rel:[0,0 14x14] clip
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+    - card abs:[30,271 346x272] rel:[22,163 346x272] mx:MxCard pad:36/22 bg:on-primary r:20 shadow:1/2
+      - div abs:[177,307 52x52] rel:[147,36 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+        - span abs:[192,322 22x22] rel:[15,15 22x22] flex:row
+          - icon:cloud-off abs:[192,322 22x22] rel:[0,0 22x22] clip
+      - div "Couldn't summarise your progress" abs:[52,373 302x21] rel:[22,102 302x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - div "Your study history is safe on this device. Try again in a moment." abs:[52,400 302x43] rel:[22,129 302x43] margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+      - pill-btn "Retry" abs:[157,459 93x48] rel:[127,188 93x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[175,476 14x14] rel:[18,17 14x14] flex:row
+          - icon:refresh-cw abs:[175,476 14x14] rel:[0,0 14x14] clip
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:16 border:1px seed-indigo@14
     - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
@@ -602,7 +602,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:layers abs:[147,725 20x20] rel:[0,0 20x20] clip
       - span "Library" abs:[140,750 33x12] rel:[29,33 33x12] font:10/600 color:on-surface-variant text:center
     - item[3] bn-item abs:[203,713 92x61] rel:[185,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
-      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+      - bn-pill abs:[225,721 48x30] rel:[22,8 48x30] pad:4/14 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:999
         - span abs:[239,725 20x20] rel:[14,4 20x20] flex:row
           - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,754 25x12] rel:[33,41 25x12] font:10/600 color:seed-indigo text:center

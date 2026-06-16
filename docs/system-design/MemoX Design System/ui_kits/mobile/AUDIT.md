@@ -33,8 +33,8 @@ Nebula, focusing on theme correctness and UX friendliness. Findings:
   in-app these are real state transitions, not prop-seeded mounts.
 
 **Reviewed and confirmed correct (no change needed)**
-- **Toast / snackbar** now uses the shared surface-container-highest tone with an error-accent
-  icon, keeping the failure state lighter and closer to the gallery snackbar mock. Good.
+- **Toast / snackbar** (Tag op-error) uses a fixed dark slate (`rgb(52,57,93)`) with light
+  text in *both* themes — the M3 inverse-surface pattern. Legible in light and dark. Good.
 - **Primary buttons** keep brand indigo `#5265F5` + white label in dark (the scoped
   `.memox-dark` deliberately overrides primary back to indigo rather than the lifted
   `#8B9AFF`), so `#fff`-on-primary contrast holds in both themes.
@@ -47,6 +47,88 @@ Nebula, focusing on theme correctness and UX friendliness. Findings:
 
 **Verdict:** theme parity and UX are consistent and friendly across all 23 screens; the only
 real defects were the scrollbar overflow and the duplicated Recall/Fill states, both fixed.
+
+---
+
+## 0.1 Pass 3 — token-compliance (“tokens are law”) + a11y hardening
+
+A third pass enforced the design-token contract inside the phone-frame screens (no raw hex,
+no raw px for color/size/radius/type) and closed the remaining accessibility gaps. As before,
+fixes were applied at the **shared-primitive level** wherever possible so all 23 screens
+benefit at once. Off-scale values were left **only** inside the Foundations (`.tok-*`) and
+Components (`.wid-*`) documentation panels, where the brief explicitly permits them.
+
+### Token compliance (Part 1)
+
+| ID | Fix | Location | Before → After |
+|---|---|---|---|
+| **A1** | Card radius snapped to token | `.card` primitive | `border-radius: 12px` → `var(--memox-radius-card)` (16). Padding `12px` → `var(--memox-space-md)`. |
+| **A1** | Bottom-nav radius snapped to token | `.bottom-nav` primitive | `border-radius: 18px` (off-scale) → `var(--memox-radius-lg)` (16). 18 sat between `lg 16` and `xl 24`; chose `lg` so the bar matches card radius. |
+| **A2** | Button height + radius to tokens | `.pill-btn` primitive **and** ~87 inline overrides | `height: 40px` → `var(--memox-size-button)` (48); `border-radius: 10/11px` → `var(--memox-radius-button)` / `var(--memox-radius-md)` (12); `padding 0 18px` → `0 var(--memox-space-lg)`; `font-size 13px` → `var(--memox-fs-body-small)` (14). The primitive alone was invisible because nearly every button re-declared `height: 40` inline, so the 87 inline overrides were swept to the token too. No bottom-sheet footer overflows at 48px in the 780px frame. |
+| **A3** | App bar height + title size | `.appbar` / `.appbar .title` | `height: 48px` → `var(--memox-size-appbar)` (56); title `17px` (off-scale) → `var(--memox-fs-title-medium)` (16). |
+| **A4** | Off-scale font sizes snapped to the collapsed scale | 335 inline `fontSize` values across screens | `9/10/11 → 12`, `13 → 14`, `15 → 16`, `17 → 16`, `19 → 20`. Named offenders covered: breadcrumb `11 → 12`, Study counter `13 → 14`, Study mode badge `10 → 12`. Snapped to numeric scale steps to match the kit’s existing inline-numeric convention (on-scale sizes like 12/14/16 are already numbers, not vars). Decimal sizes (10.5–13.5) remain **only** in the `.wid-*` Components panel. |
+| **A5** | Literal indigo → token-derived color | `.icon-btn:hover`, `.bn-pill`, `.icon-tile` primitives + 101 inline tints + 1 gradient | `rgba(82,101,245,α)` → `color-mix(in srgb, var(--memox-primary) α%, transparent)`; the one accent literal `rgba(139,111,245,α)` → `var(--memox-accent)`. **Pixel-identical** in both themes: the scoped `.memox-dark` block keeps `--memox-primary` at `#5265F5` and never overrides `--memox-accent`, so `color-mix` resolves to the exact original RGBA in Light *and* Dark (verified: `color(srgb 0.32 0.40 0.96 / 0.1)`). The hero gradient at the “Continue studying” avatar (was `#5265F5 → #8B9AFF`) was tokenized to `var(--memox-primary) → color-mix(… var(--memox-primary) 62%, white)` — kept as a gradient (see B1), just no longer raw hex. |
+
+**Intentionally left (documented exceptions):**
+- The three **dark-mode primitive tints** (`.memox-dark .icon-btn:hover` `rgba(108,124,255,…)`, `.memox-dark .bn-pill` / `.icon-tile` `rgba(139,154,255,…)`) are kept as literals. They are theme-layer values — exactly like the hex token definitions in the same `.memox-dark` block — and use the *lifted* Nebula violet, which is not derivable from the scoped indigo `--memox-primary`. The brief sanctions keeping these consistent as-is.
+- The eight **hero / CTA tint gradients** (see B1) retain their indigo/violet/amber/green stops pending the keep-or-flatten product decision; their surrounding card borders *were* tokenized.
+- **Seed-palette hexes** (`#5265F5`, `#A78BFA`, `#4DB6AC`, … in the deck/folder color picker) are kept as data — they *are* the canonical `--memox-seed-*` source values the tokens are defined from.
+- `'#fff'` button-label colors and the `.tok-*` / `.wid-*` documentation-panel values are out of scope by the brief.
+- **Compact button state-variants** (`height: 34/36` on inline error/banner `pill-btn`s) and `minHeight: 40` on the two text-field primitives are deliberate dense-chrome sizes, not drifted copies of the old 40px default; resizing them to 48 would change layout in fixed-height cards, which the brief forbids. Flagged for a future size-token (`--memox-size-button-compact`) instead.
+- A follow-up sweep also snapped the remaining `borderRadius: 10` (33 sites — icon tiles, search fields, compact buttons) and the deck-list banner `borderRadius: 14` to `var(--memox-radius-md)` / `var(--memox-radius-lg)`.
+
+### Accessibility / UX (Part 2)
+
+| ID | Fix | Location | Detail |
+|---|---|---|---|
+| **C1** | Visible, keyboard-focusable **Next / Previous** controls on Study · Review | `StudyScreen` | Added a `pill-btn` Previous (secondary) + Next (primary) row built from the brand primitive + tokens; disabled at the ends via `var(--memox-op-disabled)`. The swipe gesture is unchanged. The old swipe-only hint is reworded (see C2). |
+| **C2** | Swipe-direction copy + intent | `StudyScreen` onUp | **Chose Option B** — kept the V1 behavior (both directions advance to the next card) because Review is a single linear pass and distinct again/good semantics live in Recall/Guess, not here. Making left/right distinct would need new visual feedback = a redesign (out of scope). Fixed the misleading hint `“Swipe left for the next card”` → `“or swipe the card to continue”` and added a code comment documenting the simplification. |
+| **C3** | Icon-button hit area to the documented 48dp | `.icon-btn::after` | `44×44` → `var(--memox-size-touch)` (48×48), matching `SizeTokens.touch`. Visual circle unchanged. |
+| **C4** | Clickable rows made focusable + given a role | shared `Row` (settings nav + settings section), `TagRow`, `DeckRow` | Wrapped row roots in `role="button" tabIndex={0}` (`tabIndex=-1` + `aria-disabled` when disabled/dimmed); extended the global focus ring to `[role="button"]:focus-visible`. Layout unchanged (attributes only). The static **result-list `Row`** (no tap target) was left as a plain `<div>`. Per-screen one-off inline rows remain as-is — they are `InkWell`/`ListTile` (already focusable + semantic) in Flutter; converting dozens inline risks layout regressions for no app benefit. |
+
+### Open product decisions (recommendation only — NO code changed)
+
+**B1 — Gradients in chrome (9 `linear-gradient` usages vs. the "no gradients" rule).**
+The stated rule is *"No gradients in UI chrome — the only gradient anywhere is the mastery
+tri-stop gradient,"* yet nine gradients exist in screen chrome. Current inventory (post-pass
+line numbers):
+
+| Line | Where | Gradient |
+|---|---|---|
+| ~1450 | Dashboard · "Continue studying" avatar disc | primary → 62 % primary-on-white (tokenized this pass, still a gradient) |
+| ~3498 | Deck list · "Today's review" banner | indigo 8 % → violet 8 % tint |
+| ~4369 | Deck detail · summary header card | indigo 6 % → violet 10 % tint |
+| ~5039 | Folder detail · summary header card | indigo 6 % → violet 10 % tint |
+| ~8335 | Streak / reminder card | amber 8 % → indigo 8 % tint |
+| ~8519 | Premium / upsell hero card | indigo 10 % → violet 10 % tint |
+| ~9292 | Quiz result hero (non-defensive state) | green 10 % → indigo 10 % tint |
+| ~9683 | Stats screen · page background wash | surface → indigo 4 % vertical wash |
+| ~9794 | Stats screen · summary hero card | indigo 6 % → violet 10 % tint |
+
+All nine are *very low-alpha tints* (4–10 %) on hero/summary "moment" cards — a consistent,
+deliberate-looking pattern, not scattered drift. **Recommendation: option (a)** — update the
+rule to allow one named pattern, e.g. *"hero-CTA tint gradient: 135°, two stops, ≤10 % alpha,
+stops drawn from primary/accent/status tokens; allowed only on hero/summary cards, never on
+buttons, nav, or list rows."* This legalizes the existing visual language at zero visual cost.
+If the team prefers strictness, option (b) is mechanical: flatten each to
+`var(--memox-primary-container)` (or the matching status `*-container`) — ~9 one-line edits,
+slight loss of warmth on the hero cards. Decide once, then enforce via the named pattern.
+
+**B2 — Mastery rendering: single-color vs tri-stop (internal inconsistency).**
+`masteryColor()` (line ~382) now returns a **single status color** per threshold
+(`--memox-status-learning` < 34 % < `--memox-status-reviewing` < 67 % < `--memox-mastery`),
+and all 8 call sites (progress bars + ring charts) use it. But `colors_and_type.css` still
+ships `--memox-mastery-low/mid/high` in **both** themes, and the README/this audit still call
+the tri-stop mastery gradient "the only gradient" — so the rule's lone sanctioned gradient no
+longer exists in the UI. **Recommendation: resolve to the single-color model** (it's what
+ships; thresholds map cleanly to the status vocabulary and read better at 6 px bar heights
+than a tri-stop ramp). If single-color wins, retire: the `--memox-mastery-low/mid/high` tokens
+(light + dark blocks in `colors_and_type.css`), the corresponding Flutter token fields, the
+"tri-stop mastery gradient" sentence in README/AUDIT prose, and rewrite the B1 rule above
+without the "only gradient" exemption. If tri-stop wins instead, `masteryColor()` reverts to a
+`linear-gradient(90deg, low, mid, high)` fill clipped by the progress width — but that
+contradicts the current shipped look. Either way, **one** model should own mastery; today the
+tokens promise one thing and the code does another.
 
 ---
 

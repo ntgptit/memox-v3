@@ -46,436 +46,436 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Card history" abs:[60,66 262x21] rel:[52,14 262x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
-    - pill-btn "Edit" abs:[326,60 64x32] rel:[318,8 64x32] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/12 bg:seed-indigo@10 font:12/600 color:seed-indigo text:center tracking:0.1 r:9
-      - span abs:[338,70 12x12] rel:[12,10 12x12] flex:row
-        - icon:pencil abs:[338,70 12x12] rel:[0,0 12x12] clip
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
-      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1233
-    - card abs:[22,123 362x72] rel:[14,0 362x72] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[39,138 237x42] rel:[17,15 237x42]
-        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline tracking:-0.3
-        - div "Researcher / Nhà nghiên cứu" abs:[39,165 237x15] rel:[0,27 237x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
-      - span "Box 3 / 5" abs:[288,147 79x24] rel:[266,24 79x24] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:11/700 color:seed-indigo r:999
-        - span abs:[297,154 11x11] rel:[9,7 11x11] flex:row
-          - icon:zap abs:[297,154 11x11] rel:[0,0 11x11] clip
-    - card abs:[22,209 362x219] rel:[14,86 362x219] mx:MxCard pad:14 margin:0/0/16/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - ov "Current progress" abs:[37,224 332x13] rel:[15,15 332x13] margin:0/0/10/0 font:11/700 color:on-surface-variant tracking:1.2
-      - div abs:[37,247 332x10] rel:[15,38 332x10] flex:row gap:8 align:center margin:0/0/12/0
-        - div abs:[37,249 60x6] rel:[0,2 60x6] grow:1 basis:0 layout_hint:expanded bg:seed-indigo@40 r:999
-        - div abs:[105,249 60x6] rel:[68,2 60x6] grow:1 basis:0 layout_hint:expanded bg:seed-indigo@40 r:999
-        - div abs:[173,247 60x10] rel:[136,0 60x10] grow:1 basis:0 layout_hint:expanded bg:seed-indigo r:999
-        - div abs:[241,249 60x6] rel:[204,2 60x6] grow:1 basis:0 layout_hint:expanded bg:surface-container-high r:999
-        - div abs:[309,249 60x6] rel:[272,2 60x6] grow:1 basis:0 layout_hint:expanded bg:surface-container-high r:999
-      - div abs:[37,269 332x12] rel:[15,60 332x12] flex:row justify:between pad:0/2 margin:0/0/14/0
-        - span "Box 1" abs:[39,269 26x12] rel:[2,0 26x12] font:10/400 color:on-surface-variant
-        - span "Box 3" abs:[190,269 26x12] rel:[153,0 26x12] font:10/400 color:on-surface-variant
-        - span "Box 5" abs:[341,269 26x12] rel:[304,0 26x12] font:10/400 color:on-surface-variant
-      - div abs:[37,295 332x118] rel:[15,86 332x118] grid cols:2 gap:14 repeat:x6(unit=1)
-        - item[1] div abs:[37,295 159x30] rel:[0,0 159x30] flex:row gap:10 align:center
-          - div abs:[37,296 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
-            - span abs:[45,304 13x13] rel:[8,8 13x13] flex:row
-              - icon:clock abs:[45,304 13x13] rel:[0,0 13x13] clip
-          - div abs:[75,295 53x30] rel:[38,0 53x30]
-            - div "Due" abs:[75,295 53x13] rel:[0,0 53x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
-            - div "in 6 days" abs:[75,309 53x16] rel:[0,14 53x16] clip font:13/700 color:font-headline tracking:-0.1
-        - item[2] div abs:[210,295 159x30] rel:[173,0 159x30] flex:row gap:10 align:center
-          - div abs:[210,296 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
-            - span abs:[218,304 13x13] rel:[8,8 13x13] flex:row
-              - icon:repeat abs:[218,304 13x13] rel:[0,0 13x13] clip
-          - div abs:[248,295 44x30] rel:[38,0 44x30]
-            - div "Reviews" abs:[248,295 44x13] rel:[0,0 44x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
-            - div "14" abs:[248,309 44x16] rel:[0,14 44x16] clip font:13/700 color:font-headline tracking:-0.1
-        - item[3] div abs:[37,339 159x30] rel:[0,44 159x30] flex:row gap:10 align:center
-          - div abs:[37,340 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
-            - span abs:[45,348 13x13] rel:[8,8 13x13] flex:row
-              - icon:target abs:[45,348 13x13] rel:[0,0 13x13] clip
-          - div abs:[75,339 56x30] rel:[38,0 56x30]
-            - div "Recall rate" abs:[75,339 56x13] rel:[0,0 56x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
-            - div "78%" abs:[75,353 56x16] rel:[0,14 56x16] clip font:13/700 color:font-headline tracking:-0.1
-        - item[4] div abs:[210,339 159x30] rel:[173,44 159x30] flex:row gap:10 align:center
-          - div abs:[210,340 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
-            - span abs:[218,348 13x13] rel:[8,8 13x13] flex:row
-              - icon:rotate-ccw abs:[218,348 13x13] rel:[0,0 13x13] clip
-          - div abs:[248,339 39x30] rel:[38,0 39x30]
-            - div "Lapses" abs:[248,339 39x13] rel:[0,0 39x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
-            - div "2" abs:[248,353 39x16] rel:[0,14 39x16] clip font:13/700 color:font-headline tracking:-0.1
-        - item[5] div abs:[37,383 159x30] rel:[0,88 159x30] flex:row gap:10 align:center
-          - div abs:[37,384 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
-            - span abs:[45,392 13x13] rel:[8,8 13x13] flex:row
-              - icon:flame abs:[45,392 13x13] rel:[0,0 13x13] clip
-          - div abs:[75,383 78x30] rel:[38,0 78x30]
-            - div "Correct streak" abs:[75,383 78x13] rel:[0,0 78x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
-            - div "4 in a row" abs:[75,397 78x16] rel:[0,14 78x16] clip font:13/700 color:font-headline tracking:-0.1
-        - item[6] div abs:[210,383 159x30] rel:[173,88 159x30] flex:row gap:10 align:center
-          - div abs:[210,384 28x28] rel:[0,1 28x28] flex:row justify:center align:center shrink:0 bg:seed-indigo@8 r:8
-            - span abs:[218,392 13x13] rel:[8,8 13x13] flex:row
-              - icon:calendar abs:[218,392 13x13] rel:[0,0 13x13] clip
-          - div abs:[248,383 68x30] rel:[38,0 68x30]
-            - div "Since added" abs:[248,383 68x13] rel:[0,0 68x13] margin:0/0/1/0 font:11/400 color:on-surface-variant tracking:0.2
-            - div "23 days" abs:[248,397 68x16] rel:[0,14 68x16] clip font:13/700 color:font-headline tracking:-0.1
-    - div abs:[22,444 362x38] rel:[14,321 362x38] flex:row justify:between align:center pad:2/4/10/4
-      - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant tracking:1.2
-      - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-        - span abs:[286,454 11x11] rel:[10,8 11x11] flex:row
-          - icon:filter abs:[286,454 11x11] rel:[0,0 11x11] clip
-        - span abs:[359,454 11x11] rel:[83,8 11x11] flex:row
-          - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
-    - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
-      - item[1] div abs:[33,490 2x834] rel:[11,8 2x834] pos:absolute bg:surface-container r:999
-      - div abs:[46,482 338x100] rel:[24,0 338x100] margin:0/0/12/0 pos:relative
-        - span abs:[27,490 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
-        - div abs:[46,482 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,495 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
-              - span abs:[70,503 11x11] rel:[9,6 11x11] flex:row
-                - icon:check abs:[70,503 11x11] rel:[0,0 11x11] clip
-            - div abs:[310,495 59x26] rel:[249,0 59x26]
-              - div "2h ago" abs:[310,495 59x13] rel:[0,0 59x13] font:11/600 color:font-headline text:right
-              - div "today, 14:32" abs:[310,509 59x12] rel:[0,14 59x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Answered correctly" abs:[61,529 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-          - div abs:[61,556 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-            - div abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-              - span abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-                - span "B2" abs:[61,556 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
-                - span abs:[78,557 11x11] rel:[17,1 11x11] flex:row
-                  - icon:arrow-right abs:[78,557 11x11] rel:[0,0 11x11] clip
-                - span "B3" abs:[92,556 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
-            - span "Recall" abs:[116,556 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[116,557 10x10] rel:[0,2 10x10] flex:row
-                - icon:layers abs:[116,557 10x10] rel:[0,0 10x10] clip
-            - span "1.4s" abs:[172,556 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[172,557 10x10] rel:[0,2 10x10] flex:row
-                - icon:timer abs:[172,557 10x10] rel:[0,0 10x10] clip
-      - item[2] div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
-        - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
-        - div abs:[46,594 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,607 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak tracking:0.3 r:999
-              - span abs:[70,614 11x11] rel:[9,6 11x11] flex:row
-                - icon:corner-up-right abs:[70,614 11x11] rel:[0,0 11x11] clip
-            - div abs:[305,607 64x26] rel:[244,0 64x26]
-              - div "yesterday" abs:[305,607 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-              - div "May 26, 09:10" abs:[305,621 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Got it back after a slip" abs:[61,641 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-          - div abs:[61,668 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-            - div abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-              - span abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-                - span "B1" abs:[61,668 14x13] rel:[0,0 14x13] font:11/600 color:streak op:0.6
-                - span abs:[78,669 11x11] rel:[17,1 11x11] flex:row
-                  - icon:arrow-right abs:[78,669 11x11] rel:[0,0 11x11] clip
-                - span "B2" abs:[92,668 14x13] rel:[31,0 14x13] font:11/700 color:streak
-            - span "Fill" abs:[116,668 28x13] rel:[55,0 28x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[116,669 10x10] rel:[0,2 10x10] flex:row
-                - icon:layers abs:[116,669 10x10] rel:[0,0 10x10] clip
-            - span "4.2s" abs:[154,668 36x13] rel:[93,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[154,669 10x10] rel:[0,2 10x10] flex:row
-                - icon:timer abs:[154,669 10x10] rel:[0,0 10x10] clip
-      - div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
-        - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
-        - div abs:[46,706 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,719 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error tracking:0.3 r:999
-              - span abs:[70,726 11x11] rel:[9,6 11x11] flex:row
-                - icon:rotate-ccw abs:[70,726 11x11] rel:[0,0 11x11] clip
-            - div abs:[305,719 64x26] rel:[244,0 64x26]
-              - div "2 days ago" abs:[305,719 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-              - div "May 25, 21:48" abs:[305,733 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Couldn’t recall — reset to box 1" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-          - div abs:[61,780 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-            - div abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-              - span abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-                - span "B3" abs:[61,780 14x13] rel:[0,0 14x13] font:11/600 color:error op:0.6
-                - span abs:[78,781 11x11] rel:[17,1 11x11] flex:row
-                  - icon:arrow-left abs:[78,781 11x11] rel:[0,0 11x11] clip
-                - span "B1" abs:[92,780 14x13] rel:[31,0 14x13] font:11/700 color:error
-            - span "Recall" abs:[116,780 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[116,781 10x10] rel:[0,2 10x10] flex:row
-                - icon:layers abs:[116,781 10x10] rel:[0,0 10x10] clip
-            - span "6.8s" abs:[172,780 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[172,781 10x10] rel:[0,2 10x10] flex:row
-                - icon:timer abs:[172,781 10x10] rel:[0,0 10x10] clip
-      - item[3] div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
-        - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
-        - div abs:[46,818 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,831 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
-              - span abs:[70,838 11x11] rel:[9,6 11x11] flex:row
-                - icon:pencil abs:[70,838 11x11] rel:[0,0 11x11] clip
-            - div abs:[305,831 64x26] rel:[244,0 64x26]
-              - div "4 days ago" abs:[305,831 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-              - div "May 23, 08:00" abs:[305,845 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Edit · meaning updated" abs:[61,865 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-      - div abs:[46,908 338x100] rel:[24,426 338x100] margin:0/0/12/0 pos:relative
-        - span abs:[27,916 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
-        - div abs:[46,908 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,921 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
-              - span abs:[70,929 11x11] rel:[9,6 11x11] flex:row
-                - icon:check abs:[70,929 11x11] rel:[0,0 11x11] clip
-            - div abs:[305,921 64x26] rel:[244,0 64x26]
-              - div "a week ago" abs:[305,921 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-              - div "May 20, 19:14" abs:[305,935 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Answered correctly" abs:[61,955 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-          - div abs:[61,982 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-            - div abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-              - span abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-                - span "B2" abs:[61,982 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
-                - span abs:[78,983 11x11] rel:[17,1 11x11] flex:row
-                  - icon:arrow-right abs:[78,983 11x11] rel:[0,0 11x11] clip
-                - span "B3" abs:[92,982 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
-            - span "Match" abs:[116,982 46x13] rel:[55,0 46x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[116,984 10x10] rel:[0,2 10x10] flex:row
-                - icon:layers abs:[116,984 10x10] rel:[0,0 10x10] clip
-            - span "0.9s" abs:[173,982 36x13] rel:[112,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[173,984 10x10] rel:[0,2 10x10] flex:row
-                - icon:timer abs:[173,984 10x10] rel:[0,0 10x10] clip
-      - item[4] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
-        - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
-        - div abs:[46,1020 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,1033 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
-              - span abs:[70,1041 11x11] rel:[9,6 11x11] flex:row
-                - icon:check abs:[70,1041 11x11] rel:[0,0 11x11] clip
-            - div abs:[305,1033 64x26] rel:[244,0 64x26]
-              - div "10 days ago" abs:[305,1033 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-              - div "May 17, 07:32" abs:[305,1047 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Answered correctly" abs:[61,1067 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-          - div abs:[61,1094 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-            - div abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-              - span abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-                - span "B1" abs:[61,1094 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
-                - span abs:[78,1095 11x11] rel:[17,1 11x11] flex:row
-                  - icon:arrow-right abs:[78,1095 11x11] rel:[0,0 11x11] clip
-                - span "B2" abs:[92,1094 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
-            - span "Review" abs:[116,1094 51x13] rel:[55,0 51x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[116,1096 10x10] rel:[0,2 10x10] flex:row
-                - icon:layers abs:[116,1096 10x10] rel:[0,0 10x10] clip
-            - span "1.6s" abs:[178,1094 36x13] rel:[117,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-              - span abs:[178,1096 10x10] rel:[0,2 10x10] flex:row
-                - icon:timer abs:[178,1096 10x10] rel:[0,0 10x10] clip
-      - div abs:[46,1132 338x79] rel:[24,650 338x79] margin:0/0/12/0 pos:relative
-        - span abs:[27,1140 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
-        - div abs:[46,1132 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,1145 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
-              - span abs:[70,1153 11x11] rel:[9,6 11x11] flex:row
-                - icon:mic abs:[70,1153 11x11] rel:[0,0 11x11] clip
-            - div abs:[305,1145 64x26] rel:[244,0 64x26]
-              - div "13 days ago" abs:[305,1145 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-              - div "May 14, 22:08" abs:[305,1159 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Pronunciation recorded" abs:[61,1179 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-      - item[5] div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
-        - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
-        - div abs:[46,1223 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - div abs:[61,1236 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-            - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery tracking:0.3 r:999
-              - span abs:[70,1243 11x11] rel:[9,6 11x11] flex:row
-                - icon:sparkles abs:[70,1243 11x11] rel:[0,0 11x11] clip
-            - div abs:[306,1236 63x26] rel:[245,0 63x26]
-              - div "23 days ago" abs:[306,1236 63x13] rel:[0,0 63x13] font:11/600 color:font-headline text:right
-              - div "May 4, 10:00" abs:[306,1250 63x12] rel:[0,14 63x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-          - div "Card added to TOPIK II — Vocab" abs:[61,1270 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-      - div abs:[46,1314 338x18] rel:[24,832 338x18] margin:4/0/0/0 pos:relative
-        - span abs:[27,1318 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
-        - div "Beginning of history" abs:[46,1314 338x18] rel:[0,0 338x18] pad:5/0/0/0 font:11/400 color:on-surface-variant
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Card history" abs:[60,70 262x21] rel:[52,18 262x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
+    - pill-btn "Edit" abs:[326,64 64x32] rel:[318,12 64x32] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/12 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo text:center tracking:0.1 r:9
+      - span abs:[338,74 12x12] rel:[12,10 12x12] flex:row
+        - icon:pencil abs:[338,74 12x12] rel:[0,0 12x12] clip
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[143,110 98x15] rel:[135,2 98x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[245,112 12x12] rel:[237,4 12x12] flex:row
+      - icon:chevron-right abs:[245,112 12x12] rel:[0,0 12x12] clip
+    - span "History" abs:[261,110 43x15] rel:[253,2 43x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1307
+    - card abs:[22,133 362x70] rel:[14,0 362x70] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[38,147 235x42] rel:[16,14 235x42]
+        - div "연구자" abs:[38,147 235x24] rel:[0,0 235x24] font:20/700/24 color:font-headline tracking:-0.3
+        - div "Researcher / Nhà nghiên cứu" abs:[38,174 235x15] rel:[0,27 235x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
+      - span "Box 3 / 5" abs:[285,156 83x24] rel:[263,23 83x24] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+        - span abs:[294,163 11x11] rel:[9,7 11x11] flex:row
+          - icon:zap abs:[294,163 11x11] rel:[0,0 11x11] clip
+    - card abs:[22,217 362x232] rel:[14,84 362x232] mx:MxCard pad:14 margin:0/0/16/0 bg:on-primary r:20 shadow:1/2
+      - ov "Current progress" abs:[36,231 334x13] rel:[14,14 334x13] margin:0/0/10/0 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - div abs:[36,254 334x10] rel:[14,37 334x10] flex:row gap:8 align:center margin:0/0/12/0
+        - div abs:[36,256 60x6] rel:[0,2 60x6] grow:1 basis:0 layout_hint:expanded bg:color(srgb 0.321569 0.396078 0.960784 / 0.4) r:999
+        - div abs:[104,256 60x6] rel:[68,2 60x6] grow:1 basis:0 layout_hint:expanded bg:color(srgb 0.321569 0.396078 0.960784 / 0.4) r:999
+        - div abs:[173,254 60x10] rel:[137,0 60x10] grow:1 basis:0 layout_hint:expanded bg:seed-indigo r:999
+        - div abs:[241,256 60x6] rel:[205,2 60x6] grow:1 basis:0 layout_hint:expanded bg:surface-container-high r:999
+        - div abs:[310,256 60x6] rel:[274,2 60x6] grow:1 basis:0 layout_hint:expanded bg:surface-container-high r:999
+      - div abs:[36,276 334x15] rel:[14,59 334x15] flex:row justify:between pad:0/2 margin:0/0/14/0
+        - span "Box 1" abs:[38,276 31x15] rel:[2,0 31x15] font:12/400 color:on-surface-variant
+        - span "Box 3" abs:[187,276 31x15] rel:[151,0 31x15] font:12/400 color:on-surface-variant
+        - span "Box 5" abs:[337,276 31x15] rel:[301,0 31x15] font:12/400 color:on-surface-variant
+      - div abs:[36,305 334x130] rel:[14,88 334x130] grid cols:2 gap:14 repeat:x6(unit=1)
+        - item[1] div abs:[36,305 160x34] rel:[0,0 160x34] flex:row gap:10 align:center
+          - div abs:[36,308 28x28] rel:[0,3 28x28] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+            - span abs:[44,316 13x13] rel:[8,8 13x13] flex:row
+              - icon:clock abs:[44,316 13x13] rel:[0,0 13x13] clip
+          - div abs:[74,305 57x34] rel:[38,0 57x34]
+            - div "Due" abs:[74,305 57x15] rel:[0,0 57x15] margin:0/0/1/0 font:12/400 color:on-surface-variant tracking:0.2
+            - div "in 6 days" abs:[74,321 57x18] rel:[0,16 57x18] clip font:14/700 color:font-headline tracking:-0.1
+        - item[2] div abs:[210,305 160x34] rel:[174,0 160x34] flex:row gap:10 align:center
+          - div abs:[210,308 28x28] rel:[0,3 28x28] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+            - span abs:[218,316 13x13] rel:[8,8 13x13] flex:row
+              - icon:repeat abs:[218,316 13x13] rel:[0,0 13x13] clip
+          - div abs:[248,305 48x34] rel:[38,0 48x34]
+            - div "Reviews" abs:[248,305 48x15] rel:[0,0 48x15] margin:0/0/1/0 font:12/400 color:on-surface-variant tracking:0.2
+            - div "14" abs:[248,321 48x18] rel:[0,16 48x18] clip font:14/700 color:font-headline tracking:-0.1
+        - item[3] div abs:[36,353 160x34] rel:[0,48 160x34] flex:row gap:10 align:center
+          - div abs:[36,356 28x28] rel:[0,3 28x28] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+            - span abs:[44,364 13x13] rel:[8,8 13x13] flex:row
+              - icon:target abs:[44,364 13x13] rel:[0,0 13x13] clip
+          - div abs:[74,353 61x34] rel:[38,0 61x34]
+            - div "Recall rate" abs:[74,353 61x15] rel:[0,0 61x15] margin:0/0/1/0 font:12/400 color:on-surface-variant tracking:0.2
+            - div "78%" abs:[74,369 61x18] rel:[0,16 61x18] clip font:14/700 color:font-headline tracking:-0.1
+        - item[4] div abs:[210,353 160x34] rel:[174,48 160x34] flex:row gap:10 align:center
+          - div abs:[210,356 28x28] rel:[0,3 28x28] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+            - span abs:[218,364 13x13] rel:[8,8 13x13] flex:row
+              - icon:rotate-ccw abs:[218,364 13x13] rel:[0,0 13x13] clip
+          - div abs:[248,353 42x34] rel:[38,0 42x34]
+            - div "Lapses" abs:[248,353 42x15] rel:[0,0 42x15] margin:0/0/1/0 font:12/400 color:on-surface-variant tracking:0.2
+            - div "2" abs:[248,369 42x18] rel:[0,16 42x18] clip font:14/700 color:font-headline tracking:-0.1
+        - item[5] div abs:[36,401 160x34] rel:[0,96 160x34] flex:row gap:10 align:center
+          - div abs:[36,404 28x28] rel:[0,3 28x28] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+            - span abs:[44,412 13x13] rel:[8,8 13x13] flex:row
+              - icon:flame abs:[44,412 13x13] rel:[0,0 13x13] clip
+          - div abs:[74,401 85x34] rel:[38,0 85x34]
+            - div "Correct streak" abs:[74,401 85x15] rel:[0,0 85x15] margin:0/0/1/0 font:12/400 color:on-surface-variant tracking:0.2
+            - div "4 in a row" abs:[74,417 85x18] rel:[0,16 85x18] clip font:14/700 color:font-headline tracking:-0.1
+        - item[6] div abs:[210,401 160x34] rel:[174,96 160x34] flex:row gap:10 align:center
+          - div abs:[210,404 28x28] rel:[0,3 28x28] flex:row justify:center align:center shrink:0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:8
+            - span abs:[218,412 13x13] rel:[8,8 13x13] flex:row
+              - icon:calendar abs:[218,412 13x13] rel:[0,0 13x13] clip
+          - div abs:[248,401 74x34] rel:[38,0 74x34]
+            - div "Since added" abs:[248,401 74x15] rel:[0,0 74x15] margin:0/0/1/0 font:12/400 color:on-surface-variant tracking:0.2
+            - div "23 days" abs:[248,417 74x18] rel:[0,16 74x18] clip font:14/700 color:font-headline tracking:-0.1
+    - div abs:[22,465 362x38] rel:[14,332 362x38] flex:row justify:between align:center pad:2/4/10/4
+      - ov "Timeline · 8 events" abs:[26,474 114x13] rel:[4,9 114x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - pill-btn "All events" abs:[272,467 108x26] rel:[250,2 108x26] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
+        - span abs:[282,475 11x11] rel:[10,8 11x11] flex:row
+          - icon:filter abs:[282,475 11x11] rel:[0,0 11x11] clip
+        - span abs:[359,475 11x11] rel:[87,8 11x11] flex:row
+          - icon:chevron-down abs:[359,475 11x11] rel:[0,0 11x11] clip
+    - div abs:[22,503 362x913] rel:[14,370 362x913] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
+      - item[1] div abs:[33,511 2x897] rel:[11,8 2x897] pos:absolute bg:surface-container r:999
+      - div abs:[46,503 338x108] rel:[24,0 338x108] margin:0/0/12/0 pos:relative
+        - span abs:[27,511 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+        - div abs:[46,503 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,516 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Correct" abs:[61,521 95x22] rel:[0,5 95x22] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:0.3 r:999
+              - span abs:[70,526 11x11] rel:[9,6 11x11] flex:row
+                - icon:check abs:[70,526 11x11] rel:[0,0 11x11] clip
+            - div abs:[298,516 71x31] rel:[237,0 71x31]
+              - div "2h ago" abs:[298,516 71x15] rel:[0,0 71x15] font:12/600 color:font-headline text:right
+              - div "today, 14:32" abs:[298,532 71x15] rel:[0,16 71x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Answered correctly" abs:[61,555 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+          - div abs:[61,583 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+            - div abs:[61,583 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+              - span abs:[61,583 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+                - span "B2" abs:[61,583 16x15] rel:[0,0 16x15] font:12/600 color:seed-indigo op:0.6
+                - span abs:[80,585 11x11] rel:[19,2 11x11] flex:row
+                  - icon:arrow-right abs:[80,585 11x11] rel:[0,0 11x11] clip
+                - span "B3" abs:[94,583 16x15] rel:[33,0 16x15] font:12/700 color:seed-indigo
+            - span "Recall" abs:[119,583 48x15] rel:[58,0 48x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[119,586 10x10] rel:[0,3 10x10] flex:row
+                - icon:layers abs:[119,586 10x10] rel:[0,0 10x10] clip
+            - span "1.4s" abs:[177,583 38x15] rel:[116,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[177,586 10x10] rel:[0,3 10x10] flex:row
+                - icon:timer abs:[177,586 10x10] rel:[0,0 10x10] clip
+      - item[2] div abs:[46,623 338x108] rel:[24,120 338x108] margin:0/0/12/0 pos:relative
+        - span abs:[27,631 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
+        - div abs:[46,623 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,636 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Recovered" abs:[61,641 111x22] rel:[0,5 111x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:12/700 color:streak tracking:0.3 r:999
+              - span abs:[70,646 11x11] rel:[9,6 11x11] flex:row
+                - icon:corner-up-right abs:[70,646 11x11] rel:[0,0 11x11] clip
+            - div abs:[292,636 77x31] rel:[231,0 77x31]
+              - div "yesterday" abs:[292,636 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+              - div "May 26, 09:10" abs:[292,652 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Got it back after a slip" abs:[61,675 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+          - div abs:[61,704 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+            - div abs:[61,704 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+              - span abs:[61,704 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+                - span "B1" abs:[61,704 16x15] rel:[0,0 16x15] font:12/600 color:streak op:0.6
+                - span abs:[80,706 11x11] rel:[19,2 11x11] flex:row
+                  - icon:arrow-right abs:[80,706 11x11] rel:[0,0 11x11] clip
+                - span "B2" abs:[94,704 16x15] rel:[33,0 16x15] font:12/700 color:streak
+            - span "Fill" abs:[119,704 29x15] rel:[58,0 29x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[119,706 10x10] rel:[0,3 10x10] flex:row
+                - icon:layers abs:[119,706 10x10] rel:[0,0 10x10] clip
+            - span "4.2s" abs:[158,704 38x15] rel:[97,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[158,706 10x10] rel:[0,3 10x10] flex:row
+                - icon:timer abs:[158,706 10x10] rel:[0,0 10x10] clip
+      - div abs:[46,744 338x108] rel:[24,241 338x108] margin:0/0/12/0 pos:relative
+        - span abs:[27,752 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
+        - div abs:[46,744 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,757 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Forgot" abs:[61,761 88x22] rel:[0,5 88x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:12/700 color:error tracking:0.3 r:999
+              - span abs:[70,767 11x11] rel:[9,6 11x11] flex:row
+                - icon:rotate-ccw abs:[70,767 11x11] rel:[0,0 11x11] clip
+            - div abs:[292,757 77x31] rel:[231,0 77x31]
+              - div "2 days ago" abs:[292,757 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+              - div "May 25, 21:48" abs:[292,773 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Couldn’t recall — reset to box 1" abs:[61,796 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+          - div abs:[61,824 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+            - div abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+              - span abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+                - span "B3" abs:[61,824 16x15] rel:[0,0 16x15] font:12/600 color:error op:0.6
+                - span abs:[80,826 11x11] rel:[19,2 11x11] flex:row
+                  - icon:arrow-left abs:[80,826 11x11] rel:[0,0 11x11] clip
+                - span "B1" abs:[94,824 16x15] rel:[33,0 16x15] font:12/700 color:error
+            - span "Recall" abs:[119,824 48x15] rel:[58,0 48x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[119,826 10x10] rel:[0,3 10x10] flex:row
+                - icon:layers abs:[119,826 10x10] rel:[0,0 10x10] clip
+            - span "6.8s" abs:[177,824 38x15] rel:[116,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[177,826 10x10] rel:[0,3 10x10] flex:row
+                - icon:timer abs:[177,826 10x10] rel:[0,0 10x10] clip
+      - item[3] div abs:[46,864 338x85] rel:[24,361 338x85] margin:0/0/12/0 pos:relative
+        - span abs:[27,872 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+        - div abs:[46,864 338x85] rel:[0,0 338x85] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,877 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Edited" abs:[61,881 78x22] rel:[0,5 78x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:12/700 color:on-surface-variant tracking:0.3 r:999
+              - span abs:[70,887 11x11] rel:[9,6 11x11] flex:row
+                - icon:pencil abs:[70,887 11x11] rel:[0,0 11x11] clip
+            - div abs:[292,877 77x31] rel:[231,0 77x31]
+              - div "4 days ago" abs:[292,877 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+              - div "May 23, 08:00" abs:[292,893 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Edit · meaning updated" abs:[61,916 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+      - div abs:[46,961 338x108] rel:[24,458 338x108] margin:0/0/12/0 pos:relative
+        - span abs:[27,969 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+        - div abs:[46,961 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,974 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Correct" abs:[61,979 95x22] rel:[0,5 95x22] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:0.3 r:999
+              - span abs:[70,984 11x11] rel:[9,6 11x11] flex:row
+                - icon:check abs:[70,984 11x11] rel:[0,0 11x11] clip
+            - div abs:[292,974 77x31] rel:[231,0 77x31]
+              - div "a week ago" abs:[292,974 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+              - div "May 20, 19:14" abs:[292,990 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Answered correctly" abs:[61,1013 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+          - div abs:[61,1041 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+            - div abs:[61,1041 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+              - span abs:[61,1041 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+                - span "B2" abs:[61,1041 16x15] rel:[0,0 16x15] font:12/600 color:seed-indigo op:0.6
+                - span abs:[80,1043 11x11] rel:[19,2 11x11] flex:row
+                  - icon:arrow-right abs:[80,1043 11x11] rel:[0,0 11x11] clip
+                - span "B3" abs:[94,1041 16x15] rel:[33,0 16x15] font:12/700 color:seed-indigo
+            - span "Match" abs:[119,1041 49x15] rel:[58,0 49x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[119,1044 10x10] rel:[0,3 10x10] flex:row
+                - icon:layers abs:[119,1044 10x10] rel:[0,0 10x10] clip
+            - span "0.9s" abs:[178,1041 38x15] rel:[117,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[178,1044 10x10] rel:[0,3 10x10] flex:row
+                - icon:timer abs:[178,1044 10x10] rel:[0,0 10x10] clip
+      - item[4] div abs:[46,1081 338x108] rel:[24,578 338x108] margin:0/0/12/0 pos:relative
+        - span abs:[27,1089 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+        - div abs:[46,1081 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,1094 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Correct" abs:[61,1099 95x22] rel:[0,5 95x22] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:0.3 r:999
+              - span abs:[70,1104 11x11] rel:[9,6 11x11] flex:row
+                - icon:check abs:[70,1104 11x11] rel:[0,0 11x11] clip
+            - div abs:[292,1094 77x31] rel:[231,0 77x31]
+              - div "10 days ago" abs:[292,1094 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+              - div "May 17, 07:32" abs:[292,1110 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Answered correctly" abs:[61,1133 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+          - div abs:[61,1162 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+            - div abs:[61,1162 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+              - span abs:[61,1162 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+                - span "B1" abs:[61,1162 16x15] rel:[0,0 16x15] font:12/600 color:seed-indigo op:0.6
+                - span abs:[80,1164 11x11] rel:[19,2 11x11] flex:row
+                  - icon:arrow-right abs:[80,1164 11x11] rel:[0,0 11x11] clip
+                - span "B2" abs:[94,1162 16x15] rel:[33,0 16x15] font:12/700 color:seed-indigo
+            - span "Review" abs:[119,1162 55x15] rel:[58,0 55x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[119,1164 10x10] rel:[0,3 10x10] flex:row
+                - icon:layers abs:[119,1164 10x10] rel:[0,0 10x10] clip
+            - span "1.6s" abs:[184,1162 38x15] rel:[123,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+              - span abs:[184,1164 10x10] rel:[0,3 10x10] flex:row
+                - icon:timer abs:[184,1164 10x10] rel:[0,0 10x10] clip
+      - div abs:[46,1202 338x85] rel:[24,699 338x85] margin:0/0/12/0 pos:relative
+        - span abs:[27,1210 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+        - div abs:[46,1202 338x85] rel:[0,0 338x85] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,1215 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Audio added" abs:[61,1219 121x22] rel:[0,5 121x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:12/700 color:on-surface-variant tracking:0.3 r:999
+              - span abs:[70,1225 11x11] rel:[9,6 11x11] flex:row
+                - icon:mic abs:[70,1225 11x11] rel:[0,0 11x11] clip
+            - div abs:[292,1215 77x31] rel:[231,0 77x31]
+              - div "13 days ago" abs:[292,1215 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+              - div "May 14, 22:08" abs:[292,1231 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Pronunciation recorded" abs:[61,1254 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+      - item[5] div abs:[46,1299 338x85] rel:[24,796 338x85] margin:0/0/12/0 pos:relative
+        - span abs:[27,1307 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
+        - div abs:[46,1299 338x85] rel:[0,0 338x85] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - div abs:[61,1312 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+            - span "Created" abs:[61,1317 91x22] rel:[0,5 91x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:12/700 color:mastery tracking:0.3 r:999
+              - span abs:[70,1322 11x11] rel:[9,6 11x11] flex:row
+                - icon:sparkles abs:[70,1322 11x11] rel:[0,0 11x11] clip
+            - div abs:[299,1312 70x31] rel:[238,0 70x31]
+              - div "23 days ago" abs:[299,1312 70x15] rel:[0,0 70x15] font:12/600 color:font-headline text:right
+              - div "May 4, 10:00" abs:[299,1328 70x15] rel:[0,16 70x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+          - div "Card added to TOPIK II — Vocab" abs:[61,1351 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+      - div abs:[46,1396 338x20] rel:[24,893 338x20] margin:4/0/0/0 pos:relative
+        - span abs:[27,1400 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
+        - div "Beginning of history" abs:[46,1396 338x20] rel:[0,0 338x20] pad:5/0/0/0 font:12/400 color:on-surface-variant
 ```
 
 ## State: Empty (ordered diff vs Loaded)
 
 ```diff
-  - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1233
-+ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
-  - card abs:[22,123 362x72] rel:[14,0 362x72] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - span "History" abs:[261,110 43x15] rel:[253,2 43x15] font:12/700 color:font-headline tracking:0.1
+- - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1307
++ - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:687
+  - card abs:[22,133 362x70] rel:[14,0 362x70] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
   ...
-  - div abs:[22,444 362x25] rel:[14,321 362x25] flex:row justify:between align:center pad:2/4/10/4
-- - ov "Timeline · 8 events" abs:[26,453 131x13] rel:[4,9 131x13] font:11/700 color:on-surface-variant tracking:1.2
-- - pill-btn "All events" abs:[276,446 104x26] rel:[254,2 104x26] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:11/600 color:on-surface-variant text:center tracking:0.1 r:999
-+ - ov "Timeline" abs:[26,446 59x13] rel:[4,2 59x13] font:11/700 color:on-surface-variant tracking:1.2
-+ - card abs:[22,469 362x296] rel:[14,346 362x296] mx:MxCard pad:40/22/32/22 bg:on-primary r:12 border:1px seed-indigo@14
-+ - div abs:[173,510 60x60] rel:[151,41 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:seed-indigo@10 r:16
-  - span abs:[190,527 26x26] rel:[17,17 26x26] flex:row
-- - icon:filter abs:[286,454 11x11] rel:[0,0 11x11] clip
-+ - icon:clock abs:[190,527 26x26] rel:[0,0 26x26] clip
-+ - div "No reviews yet" abs:[45,584 316x22] rel:[23,115 316x22] margin:0/0/8/0 font:17/700 color:font-headline text:center tracking:-0.2
-+ - div "History appears here after you study this card. Open it in a session and your attempts will start showing up." abs:[45,614 316x60] rel:[23,145 316x60] margin:0/0/18/0 font:13/400/20 color:on-surface-variant text:center
-+ - pill-btn "Study this card now" abs:[113,692 181x40] rel:[91,223 181x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-  - span abs:[131,705 14x14] rel:[18,13 14x14] flex:row
-- - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
-- - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
-- - item[1] div abs:[33,490 2x834] rel:[11,8 2x834] pos:absolute bg:surface-container r:999
-- - div abs:[46,482 338x100] rel:[24,0 338x100] margin:0/0/12/0 pos:relative
-- - span abs:[27,490 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
-- - div abs:[46,482 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,495 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Correct" abs:[61,497 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
-- - span abs:[70,503 11x11] rel:[9,6 11x11] flex:row
-- - icon:check abs:[70,503 11x11] rel:[0,0 11x11] clip
-- - div abs:[310,495 59x26] rel:[249,0 59x26]
-- - div "2h ago" abs:[310,495 59x13] rel:[0,0 59x13] font:11/600 color:font-headline text:right
-- - div "today, 14:32" abs:[310,509 59x12] rel:[0,14 59x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Answered correctly" abs:[61,529 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-- - div abs:[61,556 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-- - div abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-- - span abs:[61,556 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-- - span "B2" abs:[61,556 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
-- - span abs:[78,557 11x11] rel:[17,1 11x11] flex:row
-- - icon:arrow-right abs:[78,557 11x11] rel:[0,0 11x11] clip
-- - span "B3" abs:[92,556 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
-- - span "Recall" abs:[116,556 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[116,557 10x10] rel:[0,2 10x10] flex:row
-- - icon:layers abs:[116,557 10x10] rel:[0,0 10x10] clip
-- - span "1.4s" abs:[172,556 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[172,557 10x10] rel:[0,2 10x10] flex:row
-- - icon:timer abs:[172,557 10x10] rel:[0,0 10x10] clip
-- - item[2] div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
-- - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
-- - div abs:[46,594 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,607 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Recovered" abs:[61,609 98x22] rel:[0,2 98x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:10/700 color:streak tracking:0.3 r:999
-- - span abs:[70,614 11x11] rel:[9,6 11x11] flex:row
-- - icon:corner-up-right abs:[70,614 11x11] rel:[0,0 11x11] clip
-- - div abs:[305,607 64x26] rel:[244,0 64x26]
-- - div "yesterday" abs:[305,607 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-- - div "May 26, 09:10" abs:[305,621 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Got it back after a slip" abs:[61,641 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-- - div abs:[61,668 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-- - div abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-- - span abs:[61,668 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-- - span "B1" abs:[61,668 14x13] rel:[0,0 14x13] font:11/600 color:streak op:0.6
-- - span abs:[78,669 11x11] rel:[17,1 11x11] flex:row
-- - icon:arrow-right abs:[78,669 11x11] rel:[0,0 11x11] clip
-- - span "B2" abs:[92,668 14x13] rel:[31,0 14x13] font:11/700 color:streak
-- - span "Fill" abs:[116,668 28x13] rel:[55,0 28x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[116,669 10x10] rel:[0,2 10x10] flex:row
-- - icon:layers abs:[116,669 10x10] rel:[0,0 10x10] clip
-- - span "4.2s" abs:[154,668 36x13] rel:[93,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[154,669 10x10] rel:[0,2 10x10] flex:row
-- - icon:timer abs:[154,669 10x10] rel:[0,0 10x10] clip
-- - div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
-- - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
-- - div abs:[46,706 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,719 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Forgot" abs:[61,721 79x22] rel:[0,2 79x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:10/700 color:error tracking:0.3 r:999
-- - span abs:[70,726 11x11] rel:[9,6 11x11] flex:row
-- - icon:rotate-ccw abs:[70,726 11x11] rel:[0,0 11x11] clip
-- - div abs:[305,719 64x26] rel:[244,0 64x26]
-- - div "2 days ago" abs:[305,719 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-- - div "May 25, 21:48" abs:[305,733 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Couldn’t recall — reset to box 1" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-- - div abs:[61,780 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-- - div abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-- - span abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-- - span "B3" abs:[61,780 14x13] rel:[0,0 14x13] font:11/600 color:error op:0.6
-- - span abs:[78,781 11x11] rel:[17,1 11x11] flex:row
-- - icon:arrow-left abs:[78,781 11x11] rel:[0,0 11x11] clip
-- - span "B1" abs:[92,780 14x13] rel:[31,0 14x13] font:11/700 color:error
-- - span "Recall" abs:[116,780 45x13] rel:[55,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[116,781 10x10] rel:[0,2 10x10] flex:row
-- - icon:layers abs:[116,781 10x10] rel:[0,0 10x10] clip
-- - span "6.8s" abs:[172,780 36x13] rel:[111,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[172,781 10x10] rel:[0,2 10x10] flex:row
-- - icon:timer abs:[172,781 10x10] rel:[0,0 10x10] clip
-- - item[3] div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
-- - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
-- - div abs:[46,818 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,831 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Edited" abs:[61,833 71x22] rel:[0,2 71x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
-- - span abs:[70,838 11x11] rel:[9,6 11x11] flex:row
-- - icon:pencil abs:[70,838 11x11] rel:[0,0 11x11] clip
-- - div abs:[305,831 64x26] rel:[244,0 64x26]
-- - div "4 days ago" abs:[305,831 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-- - div "May 23, 08:00" abs:[305,845 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Edit · meaning updated" abs:[61,865 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-- - div abs:[46,908 338x100] rel:[24,426 338x100] margin:0/0/12/0 pos:relative
-- - span abs:[27,916 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
-- - div abs:[46,908 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,921 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Correct" abs:[61,923 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
-- - span abs:[70,929 11x11] rel:[9,6 11x11] flex:row
-- - icon:check abs:[70,929 11x11] rel:[0,0 11x11] clip
-- - div abs:[305,921 64x26] rel:[244,0 64x26]
-- - div "a week ago" abs:[305,921 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-- - div "May 20, 19:14" abs:[305,935 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Answered correctly" abs:[61,955 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-- - div abs:[61,982 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-- - div abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-- - span abs:[61,982 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-- - span "B2" abs:[61,982 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
-- - span abs:[78,983 11x11] rel:[17,1 11x11] flex:row
-- - icon:arrow-right abs:[78,983 11x11] rel:[0,0 11x11] clip
-- - span "B3" abs:[92,982 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
-- - span "Match" abs:[116,982 46x13] rel:[55,0 46x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[116,984 10x10] rel:[0,2 10x10] flex:row
-- - icon:layers abs:[116,984 10x10] rel:[0,0 10x10] clip
-- - span "0.9s" abs:[173,982 36x13] rel:[112,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[173,984 10x10] rel:[0,2 10x10] flex:row
-- - icon:timer abs:[173,984 10x10] rel:[0,0 10x10] clip
-- - item[4] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
-- - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
-- - div abs:[46,1020 338x100] rel:[0,0 338x100] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,1033 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Correct" abs:[61,1035 85x22] rel:[0,2 85x22] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:10/700 color:seed-indigo tracking:0.3 r:999
-- - span abs:[70,1041 11x11] rel:[9,6 11x11] flex:row
-- - icon:check abs:[70,1041 11x11] rel:[0,0 11x11] clip
-- - div abs:[305,1033 64x26] rel:[244,0 64x26]
-- - div "10 days ago" abs:[305,1033 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-- - div "May 17, 07:32" abs:[305,1047 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Answered correctly" abs:[61,1067 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-- - div abs:[61,1094 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-- - div abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-- - span abs:[61,1094 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-- - span "B1" abs:[61,1094 14x13] rel:[0,0 14x13] font:11/600 color:seed-indigo op:0.6
-- - span abs:[78,1095 11x11] rel:[17,1 11x11] flex:row
-- - icon:arrow-right abs:[78,1095 11x11] rel:[0,0 11x11] clip
-- - span "B2" abs:[92,1094 14x13] rel:[31,0 14x13] font:11/700 color:seed-indigo
-- - span "Review" abs:[116,1094 51x13] rel:[55,0 51x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[116,1096 10x10] rel:[0,2 10x10] flex:row
-- - icon:layers abs:[116,1096 10x10] rel:[0,0 10x10] clip
-- - span "1.6s" abs:[178,1094 36x13] rel:[117,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[178,1096 10x10] rel:[0,2 10x10] flex:row
-- - icon:timer abs:[178,1096 10x10] rel:[0,0 10x10] clip
-- - div abs:[46,1132 338x79] rel:[24,650 338x79] margin:0/0/12/0 pos:relative
-- - span abs:[27,1140 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
-- - div abs:[46,1132 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,1145 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Audio added" abs:[61,1147 107x22] rel:[0,2 107x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:10/700 color:on-surface-variant tracking:0.3 r:999
-- - span abs:[70,1153 11x11] rel:[9,6 11x11] flex:row
-- - icon:mic abs:[70,1153 11x11] rel:[0,0 11x11] clip
-- - div abs:[305,1145 64x26] rel:[244,0 64x26]
-- - div "13 days ago" abs:[305,1145 64x13] rel:[0,0 64x13] font:11/600 color:font-headline text:right
-- - div "May 14, 22:08" abs:[305,1159 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Pronunciation recorded" abs:[61,1179 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-- - item[5] div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
-- - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
-- - div abs:[46,1223 338x79] rel:[0,0 338x79] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-- - div abs:[61,1236 308x26] rel:[15,13 308x26] flex:row gap:8 justify:between align:center margin:0/0/8/0
-- - span "Created" abs:[61,1238 82x22] rel:[0,2 82x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:10/700 color:mastery tracking:0.3 r:999
-- - span abs:[70,1243 11x11] rel:[9,6 11x11] flex:row
-- - icon:sparkles abs:[70,1243 11x11] rel:[0,0 11x11] clip
-- - div abs:[306,1236 63x26] rel:[245,0 63x26]
-- - div "23 days ago" abs:[306,1236 63x13] rel:[0,0 63x13] font:11/600 color:font-headline text:right
-- - div "May 4, 10:00" abs:[306,1250 63x12] rel:[0,14 63x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Card added to TOPIK II — Vocab" abs:[61,1270 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-- - div abs:[46,1314 338x18] rel:[24,832 338x18] margin:4/0/0/0 pos:relative
-- - span abs:[27,1318 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
-- - div "Beginning of history" abs:[46,1314 338x18] rel:[0,0 338x18] pad:5/0/0/0 font:11/400 color:on-surface-variant
-+ - icon:play abs:[131,705 14x14] rel:[0,0 14x14] clip
+  - div abs:[22,465 362x25] rel:[14,332 362x25] flex:row justify:between align:center pad:2/4/10/4
+- - ov "Timeline · 8 events" abs:[26,474 114x13] rel:[4,9 114x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+- - pill-btn "All events" abs:[272,467 108x26] rel:[250,2 108x26] mx:MxActionButton flex:row gap:5 justify:center align:center pad:0/10 font:12/600 color:on-surface-variant text:center tracking:0.1 r:999
++ - ov "Timeline" abs:[26,467 51x13] rel:[4,2 51x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
++ - card abs:[22,490 362x306] rel:[14,357 362x306] mx:MxCard pad:40/22/32/22 bg:on-primary r:20 shadow:1/2
++ - div abs:[173,530 60x60] rel:[151,40 60x60] flex:row justify:center align:center margin:0/0/14/0 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+  - span abs:[190,547 26x26] rel:[17,17 26x26] flex:row
+- - icon:filter abs:[282,475 11x11] rel:[0,0 11x11] clip
++ - icon:clock abs:[190,547 26x26] rel:[0,0 26x26] clip
++ - div "No reviews yet" abs:[44,604 318x21] rel:[22,114 318x21] margin:0/0/8/0 font:16/700 color:font-headline text:center tracking:-0.2
++ - div "History appears here after you study this card. Open it in a session and your attempts will start showing up." abs:[44,633 318x65] rel:[22,143 318x65] margin:0/0/18/0 font:14/400/22 color:on-surface-variant text:center
++ - pill-btn "Study this card now" abs:[108,716 190x48] rel:[86,226 190x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+  - span abs:[126,733 14x14] rel:[18,17 14x14] flex:row
+- - icon:chevron-down abs:[359,475 11x11] rel:[0,0 11x11] clip
+- - div abs:[22,503 362x913] rel:[14,370 362x913] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
+- - item[1] div abs:[33,511 2x897] rel:[11,8 2x897] pos:absolute bg:surface-container r:999
+- - div abs:[46,503 338x108] rel:[24,0 338x108] margin:0/0/12/0 pos:relative
+- - span abs:[27,511 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+- - div abs:[46,503 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,516 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Correct" abs:[61,521 95x22] rel:[0,5 95x22] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:0.3 r:999
+- - span abs:[70,526 11x11] rel:[9,6 11x11] flex:row
+- - icon:check abs:[70,526 11x11] rel:[0,0 11x11] clip
+- - div abs:[298,516 71x31] rel:[237,0 71x31]
+- - div "2h ago" abs:[298,516 71x15] rel:[0,0 71x15] font:12/600 color:font-headline text:right
+- - div "today, 14:32" abs:[298,532 71x15] rel:[0,16 71x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Answered correctly" abs:[61,555 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+- - div abs:[61,583 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+- - div abs:[61,583 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+- - span abs:[61,583 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+- - span "B2" abs:[61,583 16x15] rel:[0,0 16x15] font:12/600 color:seed-indigo op:0.6
+- - span abs:[80,585 11x11] rel:[19,2 11x11] flex:row
+- - icon:arrow-right abs:[80,585 11x11] rel:[0,0 11x11] clip
+- - span "B3" abs:[94,583 16x15] rel:[33,0 16x15] font:12/700 color:seed-indigo
+- - span "Recall" abs:[119,583 48x15] rel:[58,0 48x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[119,586 10x10] rel:[0,3 10x10] flex:row
+- - icon:layers abs:[119,586 10x10] rel:[0,0 10x10] clip
+- - span "1.4s" abs:[177,583 38x15] rel:[116,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[177,586 10x10] rel:[0,3 10x10] flex:row
+- - icon:timer abs:[177,586 10x10] rel:[0,0 10x10] clip
+- - item[2] div abs:[46,623 338x108] rel:[24,120 338x108] margin:0/0/12/0 pos:relative
+- - span abs:[27,631 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
+- - div abs:[46,623 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,636 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Recovered" abs:[61,641 111x22] rel:[0,5 111x22] flex:row gap:5 align:center pad:0/9 bg:#d9891e@12 font:12/700 color:streak tracking:0.3 r:999
+- - span abs:[70,646 11x11] rel:[9,6 11x11] flex:row
+- - icon:corner-up-right abs:[70,646 11x11] rel:[0,0 11x11] clip
+- - div abs:[292,636 77x31] rel:[231,0 77x31]
+- - div "yesterday" abs:[292,636 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+- - div "May 26, 09:10" abs:[292,652 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Got it back after a slip" abs:[61,675 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+- - div abs:[61,704 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+- - div abs:[61,704 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+- - span abs:[61,704 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+- - span "B1" abs:[61,704 16x15] rel:[0,0 16x15] font:12/600 color:streak op:0.6
+- - span abs:[80,706 11x11] rel:[19,2 11x11] flex:row
+- - icon:arrow-right abs:[80,706 11x11] rel:[0,0 11x11] clip
+- - span "B2" abs:[94,704 16x15] rel:[33,0 16x15] font:12/700 color:streak
+- - span "Fill" abs:[119,704 29x15] rel:[58,0 29x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[119,706 10x10] rel:[0,3 10x10] flex:row
+- - icon:layers abs:[119,706 10x10] rel:[0,0 10x10] clip
+- - span "4.2s" abs:[158,704 38x15] rel:[97,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[158,706 10x10] rel:[0,3 10x10] flex:row
+- - icon:timer abs:[158,706 10x10] rel:[0,0 10x10] clip
+- - div abs:[46,744 338x108] rel:[24,241 338x108] margin:0/0/12/0 pos:relative
+- - span abs:[27,752 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
+- - div abs:[46,744 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,757 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Forgot" abs:[61,761 88x22] rel:[0,5 88x22] flex:row gap:5 align:center pad:0/9 bg:#dc4848@10 font:12/700 color:error tracking:0.3 r:999
+- - span abs:[70,767 11x11] rel:[9,6 11x11] flex:row
+- - icon:rotate-ccw abs:[70,767 11x11] rel:[0,0 11x11] clip
+- - div abs:[292,757 77x31] rel:[231,0 77x31]
+- - div "2 days ago" abs:[292,757 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+- - div "May 25, 21:48" abs:[292,773 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Couldn’t recall — reset to box 1" abs:[61,796 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+- - div abs:[61,824 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+- - div abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+- - span abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+- - span "B3" abs:[61,824 16x15] rel:[0,0 16x15] font:12/600 color:error op:0.6
+- - span abs:[80,826 11x11] rel:[19,2 11x11] flex:row
+- - icon:arrow-left abs:[80,826 11x11] rel:[0,0 11x11] clip
+- - span "B1" abs:[94,824 16x15] rel:[33,0 16x15] font:12/700 color:error
+- - span "Recall" abs:[119,824 48x15] rel:[58,0 48x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[119,826 10x10] rel:[0,3 10x10] flex:row
+- - icon:layers abs:[119,826 10x10] rel:[0,0 10x10] clip
+- - span "6.8s" abs:[177,824 38x15] rel:[116,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[177,826 10x10] rel:[0,3 10x10] flex:row
+- - icon:timer abs:[177,826 10x10] rel:[0,0 10x10] clip
+- - item[3] div abs:[46,864 338x85] rel:[24,361 338x85] margin:0/0/12/0 pos:relative
+- - span abs:[27,872 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+- - div abs:[46,864 338x85] rel:[0,0 338x85] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,877 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Edited" abs:[61,881 78x22] rel:[0,5 78x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:12/700 color:on-surface-variant tracking:0.3 r:999
+- - span abs:[70,887 11x11] rel:[9,6 11x11] flex:row
+- - icon:pencil abs:[70,887 11x11] rel:[0,0 11x11] clip
+- - div abs:[292,877 77x31] rel:[231,0 77x31]
+- - div "4 days ago" abs:[292,877 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+- - div "May 23, 08:00" abs:[292,893 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Edit · meaning updated" abs:[61,916 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+- - div abs:[46,961 338x108] rel:[24,458 338x108] margin:0/0/12/0 pos:relative
+- - span abs:[27,969 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+- - div abs:[46,961 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,974 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Correct" abs:[61,979 95x22] rel:[0,5 95x22] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:0.3 r:999
+- - span abs:[70,984 11x11] rel:[9,6 11x11] flex:row
+- - icon:check abs:[70,984 11x11] rel:[0,0 11x11] clip
+- - div abs:[292,974 77x31] rel:[231,0 77x31]
+- - div "a week ago" abs:[292,974 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+- - div "May 20, 19:14" abs:[292,990 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Answered correctly" abs:[61,1013 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+- - div abs:[61,1041 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+- - div abs:[61,1041 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+- - span abs:[61,1041 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+- - span "B2" abs:[61,1041 16x15] rel:[0,0 16x15] font:12/600 color:seed-indigo op:0.6
+- - span abs:[80,1043 11x11] rel:[19,2 11x11] flex:row
+- - icon:arrow-right abs:[80,1043 11x11] rel:[0,0 11x11] clip
+- - span "B3" abs:[94,1041 16x15] rel:[33,0 16x15] font:12/700 color:seed-indigo
+- - span "Match" abs:[119,1041 49x15] rel:[58,0 49x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[119,1044 10x10] rel:[0,3 10x10] flex:row
+- - icon:layers abs:[119,1044 10x10] rel:[0,0 10x10] clip
+- - span "0.9s" abs:[178,1041 38x15] rel:[117,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[178,1044 10x10] rel:[0,3 10x10] flex:row
+- - icon:timer abs:[178,1044 10x10] rel:[0,0 10x10] clip
+- - item[4] div abs:[46,1081 338x108] rel:[24,578 338x108] margin:0/0/12/0 pos:relative
+- - span abs:[27,1089 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+- - div abs:[46,1081 338x108] rel:[0,0 338x108] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,1094 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Correct" abs:[61,1099 95x22] rel:[0,5 95x22] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo tracking:0.3 r:999
+- - span abs:[70,1104 11x11] rel:[9,6 11x11] flex:row
+- - icon:check abs:[70,1104 11x11] rel:[0,0 11x11] clip
+- - div abs:[292,1094 77x31] rel:[231,0 77x31]
+- - div "10 days ago" abs:[292,1094 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+- - div "May 17, 07:32" abs:[292,1110 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Answered correctly" abs:[61,1133 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+- - div abs:[61,1162 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+- - div abs:[61,1162 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+- - span abs:[61,1162 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+- - span "B1" abs:[61,1162 16x15] rel:[0,0 16x15] font:12/600 color:seed-indigo op:0.6
+- - span abs:[80,1164 11x11] rel:[19,2 11x11] flex:row
+- - icon:arrow-right abs:[80,1164 11x11] rel:[0,0 11x11] clip
+- - span "B2" abs:[94,1162 16x15] rel:[33,0 16x15] font:12/700 color:seed-indigo
+- - span "Review" abs:[119,1162 55x15] rel:[58,0 55x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[119,1164 10x10] rel:[0,3 10x10] flex:row
+- - icon:layers abs:[119,1164 10x10] rel:[0,0 10x10] clip
+- - span "1.6s" abs:[184,1162 38x15] rel:[123,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[184,1164 10x10] rel:[0,3 10x10] flex:row
+- - icon:timer abs:[184,1164 10x10] rel:[0,0 10x10] clip
+- - div abs:[46,1202 338x85] rel:[24,699 338x85] margin:0/0/12/0 pos:relative
+- - span abs:[27,1210 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+- - div abs:[46,1202 338x85] rel:[0,0 338x85] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,1215 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Audio added" abs:[61,1219 121x22] rel:[0,5 121x22] flex:row gap:5 align:center pad:0/9 bg:surface-container font:12/700 color:on-surface-variant tracking:0.3 r:999
+- - span abs:[70,1225 11x11] rel:[9,6 11x11] flex:row
+- - icon:mic abs:[70,1225 11x11] rel:[0,0 11x11] clip
+- - div abs:[292,1215 77x31] rel:[231,0 77x31]
+- - div "13 days ago" abs:[292,1215 77x15] rel:[0,0 77x15] font:12/600 color:font-headline text:right
+- - div "May 14, 22:08" abs:[292,1231 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Pronunciation recorded" abs:[61,1254 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+- - item[5] div abs:[46,1299 338x85] rel:[24,796 338x85] margin:0/0/12/0 pos:relative
+- - span abs:[27,1307 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
+- - div abs:[46,1299 338x85] rel:[0,0 338x85] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+- - div abs:[61,1312 308x31] rel:[15,13 308x31] flex:row gap:8 justify:between align:center margin:0/0/8/0
+- - span "Created" abs:[61,1317 91x22] rel:[0,5 91x22] flex:row gap:5 align:center pad:0/9 bg:mastery@10 font:12/700 color:mastery tracking:0.3 r:999
+- - span abs:[70,1322 11x11] rel:[9,6 11x11] flex:row
+- - icon:sparkles abs:[70,1322 11x11] rel:[0,0 11x11] clip
+- - div abs:[299,1312 70x31] rel:[238,0 70x31]
+- - div "23 days ago" abs:[299,1312 70x15] rel:[0,0 70x15] font:12/600 color:font-headline text:right
+- - div "May 4, 10:00" abs:[299,1328 70x15] rel:[0,16 70x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Card added to TOPIK II — Vocab" abs:[61,1351 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+- - div abs:[46,1396 338x20] rel:[24,893 338x20] margin:4/0/0/0 pos:relative
+- - span abs:[27,1400 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
+- - div "Beginning of history" abs:[46,1396 338x20] rel:[0,0 338x20] pad:5/0/0/0 font:12/400 color:on-surface-variant
++ - icon:play abs:[126,733 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Loading (full — differs too much from base)
@@ -488,55 +488,55 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
-      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
-    - card abs:[22,123 362x65] rel:[14,0 362x65] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[39,138 316x35] rel:[17,15 316x35]
-        - span abs:[39,138 140x18] rel:[0,0 140x18] bg:surface-container-high r:6 op:0.5
-        - span abs:[39,162 180x11] rel:[0,24 180x11] bg:surface-container-high r:6 op:0.4
-    - div abs:[22,202 362x25] rel:[14,79 362x25] flex:row justify:between align:center pad:2/4/10/4
-      - ov "Loading timeline" abs:[26,204 121x13] rel:[4,2 121x13] font:11/700 color:on-surface-variant tracking:1.2
-    - div abs:[22,227 362x338] rel:[14,104 362x338] pad:0/0/0/24 pos:relative
-      - div abs:[33,235 2x322] rel:[11,8 2x322] pos:absolute bg:surface-container r:999
-      - div abs:[46,227 338x74] rel:[24,0 338x74] margin:0/0/14/0 pos:relative
-        - span abs:[27,233 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
-        - div abs:[46,227 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - span abs:[61,240 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
-          - span abs:[61,257 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
-          - span abs:[61,278 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
-      - div abs:[46,315 338x74] rel:[24,88 338x74] margin:0/0/14/0 pos:relative
-        - span abs:[27,321 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
-        - div abs:[46,315 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - span abs:[61,328 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
-          - span abs:[61,345 262x13] rel:[15,30 262x13] bg:surface-container-high r:6 op:0.5
-          - span abs:[61,366 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
-      - div abs:[46,403 338x74] rel:[24,176 338x74] margin:0/0/14/0 pos:relative
-        - span abs:[27,409 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
-        - div abs:[46,403 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - span abs:[61,416 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
-          - span abs:[61,433 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
-          - span abs:[61,454 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
-      - div abs:[46,491 338x74] rel:[24,264 338x74] margin:0/0/14/0 pos:relative
-        - span abs:[27,497 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
-        - div abs:[46,491 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
-          - span abs:[61,504 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
-          - span abs:[61,521 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
-          - span abs:[61,542 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Card history" abs:[60,70 330x21] rel:[52,18 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[143,110 98x15] rel:[135,2 98x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[245,112 12x12] rel:[237,4 12x12] flex:row
+      - icon:chevron-right abs:[245,112 12x12] rel:[0,0 12x12] clip
+    - span "History" abs:[261,110 43x15] rel:[253,2 43x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+    - card abs:[22,133 362x63] rel:[14,0 362x63] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[38,147 318x35] rel:[16,14 318x35]
+        - span abs:[38,147 140x18] rel:[0,0 140x18] bg:surface-container-high r:6 op:0.5
+        - span abs:[38,171 180x11] rel:[0,24 180x11] bg:surface-container-high r:6 op:0.4
+    - div abs:[22,210 362x25] rel:[14,77 362x25] flex:row justify:between align:center pad:2/4/10/4
+      - ov "Loading timeline" abs:[26,212 107x13] rel:[4,2 107x13] font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+    - div abs:[22,235 362x338] rel:[14,102 362x338] pad:0/0/0/24 pos:relative
+      - div abs:[33,243 2x322] rel:[11,8 2x322] pos:absolute bg:surface-container r:999
+      - div abs:[46,235 338x74] rel:[24,0 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,241 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,235 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,248 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,265 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,286 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+      - div abs:[46,323 338x74] rel:[24,88 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,329 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,323 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,336 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,353 262x13] rel:[15,30 262x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,374 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+      - div abs:[46,411 338x74] rel:[24,176 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,417 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,411 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,424 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,441 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,462 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
+      - div abs:[46,499 338x74] rel:[24,264 338x74] margin:0/0/14/0 pos:relative
+        - span abs:[27,505 14x14] rel:[-19,6 14x14] pos:absolute bg:surface-container-high r:999 op:0.55
+        - div abs:[46,499 338x74] rel:[0,0 338x74] pad:12/14 bg:on-primary r:12 border:1px seed-indigo@14
+          - span abs:[61,512 70x9] rel:[15,13 70x9] bg:surface-container-high r:6 op:0.4
+          - span abs:[61,529 216x13] rel:[15,30 216x13] bg:surface-container-high r:6 op:0.5
+          - span abs:[61,550 120x10] rel:[15,51 120x10] bg:surface-container-high r:6 op:0.35
 ```
 
 ## State: Error (full — differs too much from base)
@@ -549,97 +549,97 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[314,24 16x12] rel:[0,0 16x12] clip
       - svg abs:[334,24 14x12] rel:[20,0 14x12] clip
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
-  - appbar abs:[8,52 390x48] rel:[0,44 390x48] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
-    - icon-btn abs:[16,58 36x36] rel:[8,6 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
-      - span abs:[24,66 20x20] rel:[8,8 20x20] flex:row
-        - icon:arrow-left abs:[24,66 20x20] rel:[0,0 20x20] clip
-    - title "Card history" abs:[60,66 330x21] rel:[52,14 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
-  - scroll-x abs:[8,100 390x23] rel:[0,92 390x23] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
-    - item[1] span "Library" abs:[22,102 37x13] rel:[14,2 37x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[63,103 12x12] rel:[55,3 12x12] flex:row
-      - icon:chevron-right abs:[63,103 12x12] rel:[0,0 12x12] clip
-    - item[2] span "Korean" abs:[79,102 38x13] rel:[71,2 38x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[121,103 12x12] rel:[113,3 12x12] flex:row
-      - icon:chevron-right abs:[121,103 12x12] rel:[0,0 12x12] clip
-    - item[3] span "TOPIK II — Vocab" abs:[137,102 90x13] rel:[129,2 90x13] font:11/500 color:on-surface-variant tracking:0.1
-    - span abs:[231,103 12x12] rel:[223,3 12x12] flex:row
-      - icon:chevron-right abs:[231,103 12x12] rel:[0,0 12x12] clip
-    - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
-  - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
-    - card abs:[22,123 362x72] rel:[14,0 362x72] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[39,138 237x42] rel:[17,15 237x42]
-        - div "연구자" abs:[39,138 237x24] rel:[0,0 237x24] font:20/700/24 color:font-headline tracking:-0.3
-        - div "Researcher / Nhà nghiên cứu" abs:[39,165 237x15] rel:[0,27 237x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
-      - span "Box 3 / 5" abs:[288,147 79x24] rel:[266,24 79x24] flex:row gap:5 align:center pad:0/9 bg:seed-indigo@10 font:11/700 color:seed-indigo r:999
-        - span abs:[297,154 11x11] rel:[9,7 11x11] flex:row
-          - icon:zap abs:[297,154 11x11] rel:[0,0 11x11] clip
-    - card abs:[22,209 362x271] rel:[14,86 362x271] mx:MxCard pad:40/22 bg:on-primary r:12 border:1px seed-indigo@14
-      - div abs:[177,250 52x52] rel:[155,41 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
-        - span abs:[192,265 22x22] rel:[15,15 22x22] flex:row
-          - icon:cloud-off abs:[192,265 22x22] rel:[0,0 22x22] clip
-      - div "Couldn't load history" abs:[45,316 316x21] rel:[23,107 316x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
-      - div "Your data is safe on this device. Try again in a moment." abs:[45,343 316x40] rel:[23,134 316x40] margin:0/0/16/0 font:13/400/20 color:on-surface-variant text:center
-      - pill-btn "Retry" abs:[158,399 90x40] rel:[136,190 90x40] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:13/600 color:on-primary text:center tracking:0.1 r:11
-        - span abs:[176,412 14x14] rel:[18,13 14x14] flex:row
-          - icon:refresh-cw abs:[176,412 14x14] rel:[0,0 14x14] clip
+  - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 justify:between align:center pad:0/8
+    - icon-btn abs:[16,62 36x36] rel:[8,10 36x36] mx:MxIconButton flex:row justify:center align:center pos:relative r:999
+      - span abs:[24,70 20x20] rel:[8,8 20x20] flex:row
+        - icon:arrow-left abs:[24,70 20x20] rel:[0,0 20x20] clip
+    - title "Card history" abs:[60,70 330x21] rel:[52,18 330x21] grow:1 basis:0 layout_hint:expanded margin:0/0/0/4 font:16/700 color:font-headline tracking:-0.3
+  - scroll-x abs:[8,108 390x25] rel:[0,100 390x25] flex:row gap:4 align:center repeat:x3+(unit=2) pad:2/14/8/14 layout_hint:scroll
+    - item[1] span "Library" abs:[22,110 40x15] rel:[14,2 40x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[66,112 12x12] rel:[58,4 12x12] flex:row
+      - icon:chevron-right abs:[66,112 12x12] rel:[0,0 12x12] clip
+    - item[2] span "Korean" abs:[82,110 42x15] rel:[74,2 42x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[127,112 12x12] rel:[119,4 12x12] flex:row
+      - icon:chevron-right abs:[127,112 12x12] rel:[0,0 12x12] clip
+    - item[3] span "TOPIK II — Vocab" abs:[143,110 98x15] rel:[135,2 98x15] font:12/500 color:on-surface-variant tracking:0.1
+    - span abs:[245,112 12x12] rel:[237,4 12x12] flex:row
+      - icon:chevron-right abs:[245,112 12x12] rel:[0,0 12x12] clip
+    - span "History" abs:[261,110 43x15] rel:[253,2 43x15] font:12/700 color:font-headline tracking:0.1
+  - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll
+    - card abs:[22,133 362x70] rel:[14,0 362x70] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
+      - div abs:[38,147 235x42] rel:[16,14 235x42]
+        - div "연구자" abs:[38,147 235x24] rel:[0,0 235x24] font:20/700/24 color:font-headline tracking:-0.3
+        - div "Researcher / Nhà nghiên cứu" abs:[38,174 235x15] rel:[0,27 235x15] margin:3/0/0/0 clip font:12/400 color:on-surface-variant
+      - span "Box 3 / 5" abs:[285,156 83x24] rel:[263,23 83x24] flex:row gap:5 align:center pad:0/9 bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+        - span abs:[294,163 11x11] rel:[9,7 11x11] flex:row
+          - icon:zap abs:[294,163 11x11] rel:[0,0 11x11] clip
+    - card abs:[22,217 362x280] rel:[14,84 362x280] mx:MxCard pad:40/22 bg:on-primary r:20 shadow:1/2
+      - div abs:[177,257 52x52] rel:[155,40 52x52] flex:row justify:center align:center margin:0/0/14/0 bg:#dc4848@10 r:14
+        - span abs:[192,272 22x22] rel:[15,15 22x22] flex:row
+          - icon:cloud-off abs:[192,272 22x22] rel:[0,0 22x22] clip
+      - div "Couldn't load history" abs:[44,323 318x21] rel:[22,106 318x21] margin:0/0/6/0 font:16/700 color:font-headline text:center
+      - div "Your data is safe on this device. Try again in a moment." abs:[44,350 318x43] rel:[22,133 318x43] margin:0/0/16/0 font:14/400/22 color:on-surface-variant text:center
+      - pill-btn "Retry" abs:[157,409 93x48] rel:[135,192 93x48] mx:MxPrimaryButton flex:row gap:6 justify:center align:center pad:0/18 bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        - span abs:[175,426 14x14] rel:[18,17 14x14] flex:row
+          - icon:refresh-cw abs:[175,426 14x14] rel:[0,0 14x14] clip
 ```
 
 ## State: Partial (ordered diff vs Loaded)
 
 ```diff
-  - span "History" abs:[247,102 39x13] rel:[239,2 39x13] font:11/700 color:font-headline tracking:0.1
-- - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1233
-+ - scroll abs:[8,123 390x665] rel:[0,115 390x665] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1215
-  - card abs:[22,123 362x72] rel:[14,0 362x72] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:12 border:1px seed-indigo@14
+  - span "History" abs:[261,110 43x15] rel:[253,2 43x15] font:12/700 color:font-headline tracking:0.1
+- - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1307
++ - scroll abs:[8,133 390x655] rel:[0,125 390x655] grow:1 basis:0 layout_hint:expanded pad:0/14/24/14 layout_hint:scroll scrollh:1287
+  - card abs:[22,133 362x70] rel:[14,0 362x70] mx:MxCard grid cols:2 gap:12 align:center pad:14/16 margin:0/0/14/0 bg:on-primary r:20 shadow:1/2
   ...
-  - icon:chevron-down abs:[359,454 11x11] rel:[0,0 11x11] clip
-- - div abs:[22,482 362x850] rel:[14,359 362x850] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
-+ - div abs:[22,482 362x820] rel:[14,359 362x820] repeat:x3(unit=3) pad:0/0/0/24 pos:relative
-  - item[1] div abs:[33,490 2x804] rel:[11,8 2x804] pos:absolute bg:surface-container r:999
+  - icon:chevron-down abs:[359,475 11x11] rel:[0,0 11x11] clip
+- - div abs:[22,503 362x913] rel:[14,370 362x913] repeat:x5(unit=2) pad:0/0/0/24 pos:relative
++ - div abs:[22,503 362x881] rel:[14,370 362x881] repeat:x3(unit=3) pad:0/0/0/24 pos:relative
+  - item[1] div abs:[33,511 2x865] rel:[11,8 2x865] pos:absolute bg:surface-container r:999
   ...
-  - icon:timer abs:[172,557 10x10] rel:[0,0 10x10] clip
-- - item[2] div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
-+ - div abs:[46,594 338x100] rel:[24,112 338x100] margin:0/0/12/0 pos:relative
-  - span abs:[27,602 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
+  - icon:timer abs:[177,586 10x10] rel:[0,0 10x10] clip
+- - item[2] div abs:[46,623 338x108] rel:[24,120 338x108] margin:0/0/12/0 pos:relative
++ - div abs:[46,623 338x108] rel:[24,120 338x108] margin:0/0/12/0 pos:relative
+  - span abs:[27,631 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px streak
   ...
-  - icon:layers abs:[116,669 10x10] rel:[0,0 10x10] clip
-- - span "4.2s" abs:[154,668 36x13] rel:[93,0 36x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
-- - span abs:[154,669 10x10] rel:[0,2 10x10] flex:row
-- - icon:timer abs:[154,669 10x10] rel:[0,0 10x10] clip
-- - div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
-+ - span "duration not logged" abs:[154,668 104x13] rel:[93,0 104x13] font:11/400 color:on-surface-variant op:0.7
-+ - item[2] div abs:[46,706 338x100] rel:[24,224 338x100] margin:0/0/12/0 pos:relative
-  - span abs:[27,714 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
+  - icon:layers abs:[119,706 10x10] rel:[0,0 10x10] clip
+- - span "4.2s" abs:[158,704 38x15] rel:[97,0 38x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
+- - span abs:[158,706 10x10] rel:[0,3 10x10] flex:row
+- - icon:timer abs:[158,706 10x10] rel:[0,0 10x10] clip
+- - div abs:[46,744 338x108] rel:[24,241 338x108] margin:0/0/12/0 pos:relative
++ - span "duration not logged" abs:[158,704 113x15] rel:[97,0 113x15] font:12/400 color:on-surface-variant op:0.7
++ - item[2] div abs:[46,744 338x108] rel:[24,241 338x108] margin:0/0/12/0 pos:relative
+  - span abs:[27,752 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px error
   ...
-  - div "May 25, 21:48" abs:[305,733 64x12] rel:[0,14 64x12] margin:1/0/0/0 font:10/400 color:on-surface-variant text:right op:0.7
-- - div "Couldn’t recall — reset to box 1" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-+ - div "Logged with missing details" abs:[61,753 308x19] rel:[15,47 308x19] margin:0/0/8/0 font:13/400/19 color:font-headline
-  - div abs:[61,780 308x13] rel:[15,74 308x13] flex:row wrap gap:4 align:center
-- - div abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:8 align:center
-- - span abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:3 align:center
-- - span "B3" abs:[61,780 14x13] rel:[0,0 14x13] font:11/600 color:error op:0.6
-- - span abs:[78,781 11x11] rel:[17,1 11x11] flex:row
-- - icon:arrow-left abs:[78,781 11x11] rel:[0,0 11x11] clip
-- - span "B1" abs:[92,780 14x13] rel:[31,0 14x13] font:11/700 color:error
-  - span "Recall" abs:[61,780 45x13] rel:[0,0 45x13] flex:row gap:4 align:center font:11/400 color:on-surface-variant
+  - div "May 25, 21:48" abs:[292,773 77x15] rel:[0,16 77x15] margin:1/0/0/0 font:12/400 color:on-surface-variant text:right op:0.7
+- - div "Couldn’t recall — reset to box 1" abs:[61,796 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
++ - div "Logged with missing details" abs:[61,796 308x20] rel:[15,52 308x20] margin:0/0/8/0 font:14/400/20 color:font-headline
+  - div abs:[61,824 308x15] rel:[15,80 308x15] flex:row wrap gap:4 align:center
+- - div abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:8 align:center
+- - span abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:3 align:center
+- - span "B3" abs:[61,824 16x15] rel:[0,0 16x15] font:12/600 color:error op:0.6
+- - span abs:[80,826 11x11] rel:[19,2 11x11] flex:row
+- - icon:arrow-left abs:[80,826 11x11] rel:[0,0 11x11] clip
+- - span "B1" abs:[94,824 16x15] rel:[33,0 16x15] font:12/700 color:error
+  - span "Recall" abs:[61,824 48x15] rel:[0,0 48x15] flex:row gap:4 align:center font:12/400 color:on-surface-variant
   ...
-  - icon:timer abs:[116,781 10x10] rel:[0,0 10x10] clip
-- - item[3] div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
-+ - div abs:[46,818 338x79] rel:[24,336 338x79] margin:0/0/12/0 pos:relative
-  - span abs:[27,826 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
+  - icon:timer abs:[119,826 10x10] rel:[0,0 10x10] clip
+- - item[3] div abs:[46,864 338x85] rel:[24,361 338x85] margin:0/0/12/0 pos:relative
++ - div abs:[46,864 338x85] rel:[24,361 338x85] margin:0/0/12/0 pos:relative
+  - span abs:[27,872 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px on-surface-variant
   ...
-  - icon:timer abs:[173,984 10x10] rel:[0,0 10x10] clip
-- - item[4] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
-+ - item[3] div abs:[46,1020 338x100] rel:[24,538 338x100] margin:0/0/12/0 pos:relative
-  - span abs:[27,1028 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
+  - icon:timer abs:[178,1044 10x10] rel:[0,0 10x10] clip
+- - item[4] div abs:[46,1081 338x108] rel:[24,578 338x108] margin:0/0/12/0 pos:relative
++ - item[3] div abs:[46,1081 338x108] rel:[24,578 338x108] margin:0/0/12/0 pos:relative
+  - span abs:[27,1089 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px seed-indigo
   ...
-  - div "Pronunciation recorded" abs:[61,1179 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-- - item[5] div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
-+ - div abs:[46,1223 338x79] rel:[24,741 338x79] margin:0/0/12/0 pos:relative
-  - span abs:[27,1231 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
+  - div "Pronunciation recorded" abs:[61,1254 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+- - item[5] div abs:[46,1299 338x85] rel:[24,796 338x85] margin:0/0/12/0 pos:relative
++ - div abs:[46,1299 338x85] rel:[24,796 338x85] margin:0/0/12/0 pos:relative
+  - span abs:[27,1307 14x14] rel:[-19,8 14x14] pos:absolute bg:surface r:999 border:3px mastery
   ...
-  - div "Card added to TOPIK II — Vocab" abs:[61,1270 308x19] rel:[15,47 308x19] font:13/400/19 color:font-headline
-- - div abs:[46,1314 338x18] rel:[24,832 338x18] margin:4/0/0/0 pos:relative
-- - span abs:[27,1318 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
-- - div "Beginning of history" abs:[46,1314 338x18] rel:[0,0 338x18] pad:5/0/0/0 font:11/400 color:on-surface-variant
+  - div "Card added to TOPIK II — Vocab" abs:[61,1351 308x20] rel:[15,52 308x20] font:14/400/20 color:font-headline
+- - div abs:[46,1396 338x20] rel:[24,893 338x20] margin:4/0/0/0 pos:relative
+- - span abs:[27,1400 14x14] rel:[-19,4 14x14] pos:absolute bg:surface-container r:999 border:2px outline-variant
+- - div "Beginning of history" abs:[46,1396 338x20] rel:[0,0 338x20] pad:5/0/0/0 font:12/400 color:on-surface-variant
 ```

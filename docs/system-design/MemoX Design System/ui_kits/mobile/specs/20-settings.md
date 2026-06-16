@@ -48,82 +48,84 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - svg abs:[352,24 22x12] rel:[38,0 22x12] clip
   - appbar abs:[8,52 390x56] rel:[0,44 390x56] mx:MxAppBar flex:row gap:4 align:center pad:0/14
     - div "Settings" abs:[22,65 94x30] rel:[14,13 94x30] font:24/700 color:font-headline tracking:-0.5
-  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/14/14/14 layout_hint:scroll scrollh:662
-    - item[1] div abs:[22,108 362x87] rel:[14,0 362x87] margin:0/0/18/0
-      - ov "Account" abs:[22,108 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,129 362x66] rel:[0,21 362x66] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,130 360x64] rel:[1,1 360x64] grid cols:3 gap:14 align:center pad:14
-          - div abs:[37,144 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,153 18x18] rel:[9,9 18x18] flex:row
-              - icon:user-circle abs:[46,153 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,144 246x36] rel:[68,14 246x36]
-            - div "Account & sync" abs:[91,144 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-            - div "alex@memox.app · synced 2 min ago" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span abs:[351,153 18x18] rel:[328,23 18x18] flex:row
-            - icon:chevron-right abs:[351,153 18x18] rel:[0,0 18x18] clip
-    - item[2] div abs:[22,213 362x217] rel:[14,105 362x217] margin:0/0/18/0
-      - ov "Study" abs:[22,213 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,234 362x196] rel:[0,21 362x196] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,235 360x65] rel:[1,1 360x65] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
-          - div abs:[37,249 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,258 18x18] rel:[9,9 18x18] flex:row
-              - icon:target abs:[46,258 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,249 246x36] rel:[68,14 246x36]
-            - div "Learning" abs:[91,249 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-            - div "20 cards / day · 5 study modes" abs:[91,270 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span abs:[351,258 18x18] rel:[328,23 18x18] flex:row
-            - icon:chevron-right abs:[351,258 18x18] rel:[0,0 18x18] clip
-        - div abs:[23,300 360x65] rel:[1,66 360x65] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
-          - div abs:[37,314 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,323 18x18] rel:[9,9 18x18] flex:row
-              - icon:volume-2 abs:[46,323 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,314 246x36] rel:[68,14 246x36]
-            - div "Audio & speech" abs:[91,314 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-            - div "Korean voice · 0.9× speed" abs:[91,335 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span abs:[351,323 18x18] rel:[328,23 18x18] flex:row
-            - icon:chevron-right abs:[351,323 18x18] rel:[0,0 18x18] clip
-        - div abs:[23,365 360x64] rel:[1,131 360x64] grid cols:3 gap:14 align:center pad:14
-          - div abs:[37,379 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,388 18x18] rel:[9,9 18x18] flex:row
-              - icon:tag abs:[46,388 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,379 246x36] rel:[68,14 246x36]
-            - div "Manage tags" abs:[91,379 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-            - div "14 tags" abs:[91,400 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span abs:[351,388 18x18] rel:[328,23 18x18] flex:row
-            - icon:chevron-right abs:[351,388 18x18] rel:[0,0 18x18] clip
-    - item[3] div abs:[22,448 362x152] rel:[14,340 362x152] margin:0/0/18/0
-      - ov "App" abs:[22,448 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,469 362x131] rel:[0,21 362x131] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,470 360x65] rel:[1,1 360x65] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14 op:0.55
-          - div abs:[37,484 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,493 18x18] rel:[9,9 18x18] flex:row
-              - icon:sun abs:[46,493 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,484 215x36] rel:[68,14 215x36]
-            - div "Appearance" abs:[91,484 215x19] rel:[0,0 215x19] font:15/600 color:font-headline tracking:-0.1
-            - div "Light, dark, system" abs:[91,505 215x15] rel:[0,21 215x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span "Soon" abs:[320,491 49x22] rel:[297,21 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
-        - div abs:[23,535 360x64] rel:[1,66 360x64] grid cols:3 gap:14 align:center pad:14 op:0.55
-          - div abs:[37,549 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,558 18x18] rel:[9,9 18x18] flex:row
-              - icon:globe abs:[46,558 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,549 215x36] rel:[68,14 215x36]
-            - div "Language" abs:[91,549 215x19] rel:[0,0 215x19] font:15/600 color:font-headline tracking:-0.1
-            - div "English" abs:[91,570 215x15] rel:[0,21 215x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span "Soon" abs:[320,556 49x22] rel:[297,21 49x22] flex:row align:center pad:0/8 bg:surface-container font:10/700 color:on-surface-variant tracking:0.4 r:999
-    - item[4] div abs:[22,618 362x87] rel:[14,510 362x87] margin:0/0/18/0
-      - ov "About" abs:[22,618 362x21] rel:[0,0 362x21] pad:0/4/8/4 font:11/700 color:on-surface-variant tracking:1.2
-      - card abs:[22,639 362x66] rel:[0,21 362x66] mx:MxCard clip bg:on-primary r:12 border:1px seed-indigo@14
-        - div abs:[23,640 360x64] rel:[1,1 360x64] grid cols:3 gap:14 align:center pad:14
-          - div abs:[37,654 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-            - span abs:[46,663 18x18] rel:[9,9 18x18] flex:row
-              - icon:info abs:[46,663 18x18] rel:[0,0 18x18] clip
-          - div abs:[91,654 246x36] rel:[68,14 246x36]
-            - div "About MemoX" abs:[91,654 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-            - div "Version 1.4.2 (build 248)" abs:[91,675 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-          - span abs:[351,663 18x18] rel:[328,23 18x18] flex:row
-            - icon:chevron-right abs:[351,663 18x18] rel:[0,0 18x18] clip
-    - item[5] div "Made for calm learning · MemoX" abs:[22,723 362x33] rel:[14,615 362x33] pad:4/0/16/0 font:11/400 color:on-surface-variant text:center tracking:0.2
-  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:18 border:1px seed-indigo@14
+  - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:676
+    - item[1] div abs:[28,108 350x87] rel:[20,0 350x87] margin:0/0/18/0
+      - ov "Account" abs:[28,108 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,129 350x66] rel:[0,21 350x66] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,129 350x66] rel:[0,0 350x66] grid cols:3 gap:14 align:center pad:14
+          - div abs:[42,144 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,153 18x18] rel:[9,9 18x18] flex:row
+              - icon:user-circle abs:[51,153 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,143 236x38] rel:[68,14 236x38]
+            - div "Account & sync" abs:[96,143 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "alex@memox.app · synced 2 min ago" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,153 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,153 18x18] rel:[0,0 18x18] clip
+    - item[2] div abs:[28,213 350x221] rel:[20,105 350x221] margin:0/0/18/0
+      - ov "Study" abs:[28,213 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,234 350x200] rel:[0,21 350x200] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,234 350x67] rel:[0,0 350x67] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
+          - div abs:[42,249 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,258 18x18] rel:[9,9 18x18] flex:row
+              - icon:target abs:[51,258 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,248 236x38] rel:[68,14 236x38]
+            - div "Learning" abs:[96,248 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "20 cards / day · 5 study modes" abs:[96,271 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,258 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,258 18x18] rel:[0,0 18x18] clip
+        - div abs:[28,301 350x67] rel:[0,67 350x67] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
+          - div abs:[42,316 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,325 18x18] rel:[9,9 18x18] flex:row
+              - icon:volume-2 abs:[51,325 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,315 236x38] rel:[68,14 236x38]
+            - div "Audio & speech" abs:[96,315 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "Korean voice · 0.9× speed" abs:[96,338 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,325 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,325 18x18] rel:[0,0 18x18] clip
+        - div abs:[28,368 350x66] rel:[0,134 350x66] grid cols:3 gap:14 align:center pad:14
+          - div abs:[42,383 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,392 18x18] rel:[9,9 18x18] flex:row
+              - icon:tag abs:[51,392 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,382 236x38] rel:[68,14 236x38]
+            - div "Manage tags" abs:[96,382 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "14 tags" abs:[96,405 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,392 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,392 18x18] rel:[0,0 18x18] clip
+    - item[3] div abs:[28,452 350x154] rel:[20,344 350x154] margin:0/0/18/0
+      - ov "App" abs:[28,452 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,473 350x133] rel:[0,21 350x133] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,473 350x67] rel:[0,0 350x67] grid cols:3 gap:14 align:center pad:14 border-b:1px seed-indigo@14
+          - div abs:[42,488 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,497 18x18] rel:[9,9 18x18] flex:row
+              - icon:palette abs:[51,497 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,487 236x38] rel:[68,14 236x38]
+            - div "Appearance" abs:[96,487 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "System · matches your phone" abs:[96,510 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,497 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,497 18x18] rel:[0,0 18x18] clip
+        - div abs:[28,540 350x66] rel:[0,67 350x66] grid cols:3 gap:14 align:center pad:14
+          - div abs:[42,555 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,564 18x18] rel:[9,9 18x18] flex:row
+              - icon:globe abs:[51,564 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,554 236x38] rel:[68,14 236x38]
+            - div "Language" abs:[96,554 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "English" abs:[96,577 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,564 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,564 18x18] rel:[0,0 18x18] clip
+    - item[4] div abs:[28,624 350x87] rel:[20,516 350x87] margin:0/0/18/0
+      - ov "About" abs:[28,624 350x21] rel:[0,0 350x21] pad:0/4/8/4 font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      - card abs:[28,645 350x66] rel:[0,21 350x66] mx:MxCard clip bg:on-primary r:20 shadow:1/2
+        - div abs:[28,645 350x66] rel:[0,0 350x66] grid cols:3 gap:14 align:center pad:14
+          - div abs:[42,660 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
+            - span abs:[51,669 18x18] rel:[9,9 18x18] flex:row
+              - icon:info abs:[51,669 18x18] rel:[0,0 18x18] clip
+          - div abs:[96,659 236x38] rel:[68,14 236x38]
+            - div "About MemoX" abs:[96,659 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+            - div "Version 1.4.2 (build 248)" abs:[96,682 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+          - span abs:[346,669 18x18] rel:[318,24 18x18] flex:row
+            - icon:chevron-right abs:[346,669 18x18] rel:[0,0 18x18] clip
+    - item[5] div "Made for calm learning · MemoX" abs:[28,729 350x35] rel:[20,621 350x35] pad:4/0/16/0 font:12/400 color:on-surface-variant text:center tracking:0.2
+  - bottom-nav abs:[18,710 370x66] rel:[10,702 370x66] mx:MxBottomNavigationBar grid cols:4 align:center repeat:x4(unit=1) bg:chrome-glass r:16 border:1px seed-indigo@14
     - item[1] bn-item abs:[19,717 92x53] rel:[1,7 92x53] mx:? flex:col gap:3 align:center pad:8/0
       - span abs:[55,725 20x20] rel:[36,8 20x20] flex:row
         - icon:home abs:[55,725 20x20] rel:[0,0 20x20] clip
@@ -137,7 +139,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - icon:bar-chart-3 abs:[239,725 20x20] rel:[0,0 20x20] clip
       - span "Stats" abs:[236,750 25x12] rel:[33,33 25x12] font:10/600 color:on-surface-variant text:center
     - item[4] bn-item abs:[295,713 92x61] rel:[277,3 92x61] mx:? flex:col gap:3 align:center pad:8/0
-      - bn-pill abs:[317,721 48x30] rel:[22,8 48x30] pad:4/14 bg:seed-indigo@14 r:999
+      - bn-pill abs:[317,721 48x30] rel:[22,8 48x30] pad:4/14 bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:999
         - span abs:[331,725 20x20] rel:[14,4 20x20] flex:row
           - icon:settings abs:[331,725 20x20] rel:[0,0 20x20] clip
       - span "Settings" abs:[321,754 41x12] rel:[26,41 41x12] font:10/600 color:seed-indigo text:center
@@ -146,83 +148,100 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Loading (ordered diff vs Populated)
 
 ```diff
-  - div "Account & sync" abs:[91,147 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "alex@memox.app · synced 2 min ago" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div abs:[91,168 246x10] rel:[0,21 246x10] flex:row gap:6 align:center margin:2/0/0/0 clip
-+ - span abs:[91,168 160x10] rel:[0,0 160x10] bg:surface-container-high r:6 op:0.55
-  - span abs:[351,153 18x18] rel:[328,23 18x18] flex:row
+  - div "Settings" abs:[22,65 94x30] rel:[14,13 94x30] font:24/700 color:font-headline tracking:-0.5
+- - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:676
++ - scroll abs:[8,108 390x598] rel:[0,100 390x598] grow:1 basis:0 layout_hint:expanded repeat:x5(unit=1) pad:0/20/20/20 layout_hint:scroll scrollh:662
+  - item[1] div abs:[28,108 350x85] rel:[20,0 350x85] margin:0/0/18/0
   ...
-  - div "Learning" abs:[91,252 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "20 cards / day · 5 study modes" abs:[91,270 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div abs:[91,273 246x10] rel:[0,21 246x10] flex:row gap:6 align:center margin:2/0/0/0 clip
-+ - span abs:[91,273 170x10] rel:[0,0 170x10] bg:surface-container-high r:6 op:0.55
-  - span abs:[351,258 18x18] rel:[328,23 18x18] flex:row
+  - div "Account & sync" abs:[96,145 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "alex@memox.app · synced 2 min ago" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,168 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,168 160x10] rel:[0,0 160x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,152 18x18] rel:[318,23 18x18] flex:row
   ...
-  - div "Audio & speech" abs:[91,317 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "Korean voice · 0.9× speed" abs:[91,335 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div abs:[91,338 246x10] rel:[0,21 246x10] flex:row gap:6 align:center margin:2/0/0/0 clip
-+ - span abs:[91,338 140x10] rel:[0,0 140x10] bg:surface-container-high r:6 op:0.55
-  - span abs:[351,323 18x18] rel:[328,23 18x18] flex:row
+  - div "Learning" abs:[96,248 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "20 cards / day · 5 study modes" abs:[96,271 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,271 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,271 170x10] rel:[0,0 170x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,255 18x18] rel:[318,23 18x18] flex:row
   ...
-  - div "Manage tags" abs:[91,382 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "14 tags" abs:[91,400 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div abs:[91,403 246x10] rel:[0,21 246x10] flex:row gap:6 align:center margin:2/0/0/0 clip
-+ - span abs:[91,403 60x10] rel:[0,0 60x10] bg:surface-container-high r:6 op:0.55
-  - span abs:[351,388 18x18] rel:[328,23 18x18] flex:row
+  - div "Audio & speech" abs:[96,313 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "Korean voice · 0.9× speed" abs:[96,338 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,336 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,336 140x10] rel:[0,0 140x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,320 18x18] rel:[318,23 18x18] flex:row
   ...
-  - div "About MemoX" abs:[91,657 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "Version 1.4.2 (build 248)" abs:[91,675 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div abs:[91,678 246x10] rel:[0,21 246x10] flex:row gap:6 align:center margin:2/0/0/0 clip
-+ - span abs:[91,678 150x10] rel:[0,0 150x10] bg:surface-container-high r:6 op:0.55
-  - span abs:[351,663 18x18] rel:[328,23 18x18] flex:row
+  - div "Manage tags" abs:[96,378 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "14 tags" abs:[96,405 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,401 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,401 60x10] rel:[0,0 60x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,385 18x18] rel:[318,23 18x18] flex:row
+  ...
+  - div "Appearance" abs:[96,481 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "System · matches your phone" abs:[96,510 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,504 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,504 180x10] rel:[0,0 180x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,488 18x18] rel:[318,23 18x18] flex:row
+  ...
+  - div "Language" abs:[96,546 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "English" abs:[96,577 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,569 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,569 70x10] rel:[0,0 70x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,553 18x18] rel:[318,23 18x18] flex:row
+  ...
+  - div "About MemoX" abs:[96,649 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "Version 1.4.2 (build 248)" abs:[96,682 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div abs:[96,672 236x10] rel:[0,23 236x10] flex:row gap:6 align:center margin:2/0/0/0 clip
++ - span abs:[96,672 150x10] rel:[0,0 150x10] bg:surface-container-high r:6 op:0.55
+  - span abs:[346,656 18x18] rel:[318,23 18x18] flex:row
   ...
 ```
 
 ## State: Signed out (ordered diff vs Populated)
 
 ```diff
-  - div abs:[23,130 360x64] rel:[1,1 360x64] grid cols:3 gap:14 align:center pad:14
-- - div abs:[37,144 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-+ - div abs:[37,144 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:surface-container r:10
-  - span abs:[46,153 18x18] rel:[9,9 18x18] flex:row
-- - icon:user-circle abs:[46,153 18x18] rel:[0,0 18x18] clip
-+ - icon:log-in abs:[46,153 18x18] rel:[0,0 18x18] clip
-  - div abs:[91,144 246x36] rel:[68,14 246x36]
-- - div "Account & sync" abs:[91,144 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "alex@memox.app · synced 2 min ago" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div "Sign in & sync" abs:[91,144 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-+ - div "Save your progress across devices" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-  - span abs:[351,153 18x18] rel:[328,23 18x18] flex:row
+  - div abs:[28,129 350x66] rel:[0,0 350x66] grid cols:3 gap:14 align:center pad:14
+- - div abs:[42,144 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
++ - div abs:[42,144 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:surface-container r:12
+  - span abs:[51,153 18x18] rel:[9,9 18x18] flex:row
+- - icon:user-circle abs:[51,153 18x18] rel:[0,0 18x18] clip
++ - icon:log-in abs:[51,153 18x18] rel:[0,0 18x18] clip
+  - div abs:[96,143 236x38] rel:[68,14 236x38]
+- - div "Account & sync" abs:[96,143 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "alex@memox.app · synced 2 min ago" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div "Sign in & sync" abs:[96,143 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
++ - div "Save your progress across devices" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+  - span abs:[346,153 18x18] rel:[318,24 18x18] flex:row
   ...
 ```
 
 ## State: Signing in (ordered diff vs Populated)
 
 ```diff
-  - div "Account & sync" abs:[91,144 246x19] rel:[0,0 246x19] font:15/600 color:font-headline tracking:-0.1
-- - div "alex@memox.app · synced 2 min ago" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - div "Signing in…" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - span abs:[91,166 14x14] rel:[0,1 14x14] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
-  - span abs:[351,153 18x18] rel:[328,23 18x18] flex:row
+  - div "Account & sync" abs:[96,143 236x21] rel:[0,0 236x21] font:16/600 color:font-headline tracking:-0.1
+- - div "alex@memox.app · synced 2 min ago" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - div "Signing in…" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - span abs:[96,167 14x14] rel:[0,1 14x14] r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
+  - span abs:[346,153 18x18] rel:[318,24 18x18] flex:row
   ...
 ```
 
 ## State: Sync error (ordered diff vs Populated)
 
 ```diff
-  - div abs:[23,130 360x64] rel:[1,1 360x64] grid cols:3 gap:14 align:center pad:14
-- - div abs:[37,144 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:seed-indigo@10 r:10
-+ - div abs:[37,144 36x36] rel:[14,14 36x36] flex:row justify:center align:center bg:#d9891e@10 r:10
-  - span abs:[46,153 18x18] rel:[9,9 18x18] flex:row
+  - div abs:[28,129 350x66] rel:[0,0 350x66] grid cols:3 gap:14 align:center pad:14
+- - div abs:[42,144 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
++ - div abs:[42,144 36x36] rel:[14,15 36x36] flex:row justify:center align:center bg:#d9891e@10 r:12
+  - span abs:[51,153 18x18] rel:[9,9 18x18] flex:row
   ...
-  - div "Account & sync" abs:[91,144 205x19] rel:[0,0 205x19] font:15/600 color:font-headline tracking:-0.1
-- - div "alex@memox.app · synced 2 min ago" abs:[91,165 246x15] rel:[0,21 246x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-- - span abs:[351,153 18x18] rel:[328,23 18x18] flex:row
-- - icon:chevron-right abs:[351,153 18x18] rel:[0,0 18x18] clip
-+ - div "alex@memox.app · last synced 2 days ago" abs:[91,165 205x15] rel:[0,21 205x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
-+ - span "Retry" abs:[310,150 59x24] rel:[287,20 59x24] flex:row gap:4 align:center pad:0/8 bg:#d9891e@12 font:11/600 color:streak r:999
-+ - span abs:[318,157 11x11] rel:[8,7 11x11] flex:row
-+ - icon:cloud-off abs:[318,157 11x11] rel:[0,0 11x11] clip
-  - item[2] div abs:[22,213 362x217] rel:[14,105 362x217] margin:0/0/18/0
+  - div "Account & sync" abs:[96,143 192x21] rel:[0,0 192x21] font:16/600 color:font-headline tracking:-0.1
+- - div "alex@memox.app · synced 2 min ago" abs:[96,166 236x15] rel:[0,23 236x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
+- - span abs:[346,153 18x18] rel:[318,24 18x18] flex:row
+- - icon:chevron-right abs:[346,153 18x18] rel:[0,0 18x18] clip
++ - div "alex@memox.app · last synced 2 days ago" abs:[96,166 192x15] rel:[0,23 192x15] flex:row gap:6 align:center margin:2/0/0/0 clip font:12/400 color:on-surface-variant
++ - span "Retry" abs:[302,150 62x24] rel:[274,21 62x24] flex:row gap:4 align:center pad:0/8 bg:#d9891e@12 font:12/600 color:streak r:999
++ - span abs:[310,157 11x11] rel:[8,7 11x11] flex:row
++ - icon:cloud-off abs:[310,157 11x11] rel:[0,0 11x11] clip
+  - item[2] div abs:[28,213 350x221] rel:[20,105 350x221] margin:0/0/18/0
   ...
 ```
