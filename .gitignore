@@ -69,4 +69,6 @@ tool/ui_kit_shots/package-lock.json
 tool/verify/.last-pass.json
 
 # Claude Code agent worktrees (internal tool state — not project files)
-.claude/
+# but DO track shared sub-agent definitions in .claude/agents/
+.claude/*
+!.claude/agents/

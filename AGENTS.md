@@ -33,6 +33,16 @@ Code and docs ship in the SAME commit when behavior, schema, route, rule, or con
 | During | Follow contracts; don't invent behavior; update docs alongside code. |
 | After | Run `CLAUDE.md` §Pre-commit parity check. Run `node tool/verify/run.mjs` (single-entry verification chain — auto-detects docs vs code scope; pass `--test <paths>` for targeted tests). File report (see below). |
 
+## Sub-agent delegation
+
+When delegating to sub-agents, follow `docs/agent/orchestration.md` (fan-out vs
+sequential, token budget by model, anti-patterns). Custom agents live in
+`.claude/agents/`: MemoX specialists `srs-reviewer`, `ui-parity-checker`,
+`docs-drift-detector`, plus MemoX-tailored overrides of the agent-skills plugin
+personas `code-reviewer` and `test-engineer`. Each loads only its task-type docs and
+returns severity-ordered findings, never raw files. Sub-agents are read-mostly; the
+orchestrator owns edits and the `node tool/verify/run.mjs` gate.
+
 ## Drift detection
 
 When you start a task, verify that the docs you read are consistent with the code in your scope. If not:

@@ -145,6 +145,7 @@ Trước khi code, đọc related docs (theo "Required reading" bên dưới). N
 | Adding log site | `docs/quality/observability-contract.md` |
 | Adding user-facing string | `docs/ui-ux/l10n-copy-contract.md` |
 | Giving task to agent | `docs/agent/agent-task-template.md` |
+| Delegating to sub-agents | `docs/agent/orchestration.md` (fan-out vs sequential, token budget, anti-patterns) + custom agents in `.claude/agents/` |
 | Review code | `docs/checklist/recursive-agent-review.md` |
 | Complete task | `docs/checklist/implementation-checklist.md` |
 
