@@ -38,10 +38,13 @@ Code and docs ship in the SAME commit when behavior, schema, route, rule, or con
 When delegating to sub-agents, follow `docs/agent/orchestration.md` (fan-out vs
 sequential, token budget by model, anti-patterns). Custom agents live in
 `.claude/agents/`: MemoX specialists `srs-reviewer`, `ui-parity-checker`,
-`docs-drift-detector`, plus MemoX-tailored overrides of the agent-skills plugin
-personas `code-reviewer` and `test-engineer`. Each loads only its task-type docs and
-returns severity-ordered findings, never raw files. Sub-agents are read-mostly; the
-orchestrator owns edits and the `node tool/verify/run.mjs` gate.
+`docs-drift-detector`; MemoX-tailored overrides `code-reviewer` and `test-engineer`;
+and the vendored canonical SDLC set (`requirements-analyst`, `solution-architect`,
+`security-auditor`, `performance-auditor`, `debugger`, `refactoring-specialist`,
+`devops-engineer`, `tech-writer`, synced from `ntgptit/claude-sdlc-agents`). Each
+loads only its task-type docs and returns severity-ordered findings, never raw files.
+Sub-agents are read-mostly; the orchestrator owns edits and the
+`node tool/verify/run.mjs` gate.
 
 ## Drift detection
 

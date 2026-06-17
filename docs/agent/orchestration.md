@@ -97,11 +97,15 @@ MemoX runs a hybrid:
   `test-engineer`, `web-performance-auditor`), lifecycle commands, and skills
   (`context-engineering`, …). Auto-discovered, activate by `description`.
 - **Local layer (manual, specific):** `.claude/agents/` holds MemoX specialists
-  (`srs-reviewer`, `ui-parity-checker`, `docs-drift-detector`) plus MemoX-tailored
-  *overrides* of generic personas (`code-reviewer`, `test-engineer`). **Local/project
-  agents take precedence over plugin agents of the same name** — so `/review` and
-  `/ship` automatically pick up the MemoX-aware versions (Clean-Architecture
-  boundaries, doc-parity, `tool/verify` gate).
+  (`srs-reviewer`, `ui-parity-checker`, `docs-drift-detector`), MemoX-tailored
+  *overrides* of two generic personas (`code-reviewer`, `test-engineer`), and the
+  vendored canonical SDLC set (`requirements-analyst`, `solution-architect`,
+  `security-auditor`, `performance-auditor`, `debugger`, `refactoring-specialist`,
+  `devops-engineer`, `tech-writer`) so the repo is self-contained for anyone who
+  clones it. The canonical agents are kept in sync with their source repo
+  `ntgptit/claude-sdlc-agents`. **Local/project agents take precedence over plugin
+  agents of the same name** — so `/review` and `/ship` automatically pick up the
+  MemoX-aware versions (Clean-Architecture boundaries, doc-parity, `tool/verify` gate).
 
 ## MemoX canonical flows
 
