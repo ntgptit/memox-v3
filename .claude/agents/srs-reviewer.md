@@ -1,11 +1,6 @@
 ---
 name: srs-reviewer
-description: >
-  Use proactively. Reviews or verifies SRS / study-flow logic in MemoX. Use when a change touches
-  box intervals, result finalization, box transitions, study modes, or the
-  study-session repository. Returns severity-ordered findings with file:line
-  citations and the exact decision-table / interval-table rows affected. Does NOT
-  edit code — review and report only.
+description: Use proactively to review MemoX SRS/study-flow logic when a change touches box intervals, finalization, transitions, study modes, or the study-session repo. Returns findings + affected decision/interval rows. Read-only.
 tools: Glob, Grep, Read, Bash
 model: sonnet
 ---

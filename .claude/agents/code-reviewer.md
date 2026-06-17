@@ -1,11 +1,6 @@
 ---
 name: code-reviewer
-description: >
-  Use proactively. MemoX-tailored senior code reviewer (overrides the agent-skills
-  plugin version). Evaluates a change across correctness, readability, architecture,
-  security, performance — PLUS MemoX gates: Clean-Architecture boundaries, doc-code
-  parity, design-system compliance, and the tool/verify gate. Use before merge, and
-  it is the code-quality persona that /review and /ship fan out to.
+description: Use proactively for senior review of a MemoX change across the five axes PLUS MemoX gates (Clean-Architecture boundaries, doc-parity, design-system, tool/verify). Overrides the plugin code-reviewer; /review and /ship fan out to it. Read-only.
 tools: Glob, Grep, Read, Bash
 model: sonnet
 ---

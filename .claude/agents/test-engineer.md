@@ -1,11 +1,6 @@
 ---
 name: test-engineer
-description: >
-  Use proactively. MemoX-tailored QA engineer (overrides the agent-skills plugin
-  version). Designs test suites, writes tests, and analyzes coverage gaps for a
-  Flutter/Dart change — mapped onto MemoX's test layers (unit / widget / golden) and
-  the bug-CLASS gate map. Use when writing tests, or as the coverage persona /ship
-  fans out to.
+description: Use proactively to design tests and analyze coverage for a Flutter/Dart change mapped to MemoX test layers (unit/widget/golden) and the bug-CLASS gate map. Overrides the plugin test-engineer; /ship fans out to it.
 tools: Glob, Grep, Read, Bash
 model: sonnet
 ---

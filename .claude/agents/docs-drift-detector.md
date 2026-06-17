@@ -1,11 +1,6 @@
 ---
 name: docs-drift-detector
-description: >
-  Use proactively. Detects doc-code drift in MemoX before/after a change. Use to answer "do the docs
-  still match the code?" — checks the CLAUDE.md trigger map, runs doc_guard, and
-  reports stale path/symbol/test refs, term renames, WBS log gaps, and ARB issues.
-  Returns a drift report in the repo's DRIFT DETECTED format. Report only; proposes
-  fixes but does not edit.
+description: Use proactively to detect MemoX doc-code drift — runs doc_guard + the CLAUDE.md trigger map, reports stale path/symbol/test refs, term renames, WBS gaps, ARB issues in DRIFT DETECTED format. Read-only.
 tools: Glob, Grep, Read, Bash
 model: sonnet
 ---

@@ -1,11 +1,6 @@
 ---
 name: ui-parity-checker
-description: >
-  Use proactively. Checks a MemoX screen/widget against its mock for visual + behavior parity. Use
-  after building or changing any screen under lib/presentation/features/**. Reads
-  the shots/ PNGs (light+dark, all states) and the measured specs, maps every mock
-  state to the implementation, and runs the golden diff. Returns a parity verdict
-  with an unmapped-state / gap list. Review and report only — does not edit code.
+description: Use proactively after building/changing any screen under lib/presentation/features/** to check it against its mock (shots/ PNGs all states + golden diff). Returns a parity verdict + gap list. Read-only.
 tools: Glob, Grep, Read, Bash
 model: sonnet
 ---
