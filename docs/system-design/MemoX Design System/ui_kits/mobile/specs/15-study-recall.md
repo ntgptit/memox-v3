@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -83,139 +82,127 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 justify:between align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:x
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [62,70 286x21]
-        rel: [54,18 286x21]
+        abs: [62,60 291x21]
+        rel: [54,8 291x21]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: margin:0/6
       - node: span
         text: Recall
         box:
-          abs: [62,70 69x21]
-          rel: [0,0 69x21]
+          abs: [62,60 73x21]
+          rel: [0,0 73x21]
         spacing: pad:3/8
-        style: bg:mastery@12 font:12/700 color:mastery tracking:1.2 r:999
-      - node: div
-        box:
-          abs: [139,78 209x4]
-          rel: [77,9 209x4]
-        flex: grow:1 basis:0 layout_hint:expanded
-        position: clip
-        style: bg:surface-container r:999
-        - node: div
-          box:
-            abs: [139,78 140x4]
-            rel: [0,0 140x4]
-          style: bg:mastery
+        style: font:12/700 color:#000000 tracking:1.2 r:999
     - node: div
       text: 8 / 12
       box:
-        abs: [358,73 32x15]
-        rel: [350,21 32x15]
-      style: font:12/600 color:on-surface-variant
+        abs: [363,63 27x15]
+        rel: [355,11 27x15]
+      style: font:12/600 color:#000000
   - node: div
     box:
-      abs: [8,108 390x602]
-      rel: [0,100 390x602]
+      abs: [8,88 390x652]
+      rel: [0,80 390x652]
     layout: flex:col gap:10
     flex: grow:1 basis:0 layout_hint:expanded
     spacing: pad:8/14/0/14
     - node: card
       mx: MxCard
       box:
-        abs: [22,116 362x290]
-        rel: [14,8 362x290]
+        abs: [22,96 362x315]
+        rel: [14,8 362x315]
       layout: flex:row justify:center align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:14
       size: minh:160
       position: pos:relative
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [344,124 32x32]
+          abs: [344,104 32x32]
           rel: [322,8 32x32]
         layout: flex:row justify:center align:center
         position: pos:absolute
         style: r:999
         - node: span
           box:
-            abs: [350,130 20x20]
+            abs: [350,110 20x20]
             rel: [6,6 20x20]
           layout: flex:row
           - node: icon:pencil
             box:
-              abs: [350,130 20x20]
+              abs: [350,110 20x20]
               rel: [0,0 20x20]
             position: clip
       - node: div
         text: 연구자
         box:
-          abs: [160,243 87x37]
-          rel: [138,127 87x37]
-        style: font:32/700/37 color:font-headline text:center tracking:-0.5
+          abs: [160,235 87x37]
+          rel: [138,139 87x37]
+        style: font:32/700/37 color:#000000 text:center tracking:-0.5
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [344,366 32x32]
-          rel: [322,250 32x32]
+          abs: [344,371 32x32]
+          rel: [322,275 32x32]
         layout: flex:row justify:center align:center
         position: pos:absolute
         style: r:999
         - node: span
           box:
-            abs: [350,372 20x20]
+            abs: [350,377 20x20]
             rel: [6,6 20x20]
           layout: flex:row
           - node: icon:volume-2
             box:
-              abs: [350,372 20x20]
+              abs: [350,377 20x20]
               rel: [0,0 20x20]
             position: clip
     - node: card
       mx: MxCard
       box:
-        abs: [22,416 362x294]
-        rel: [14,308 362x294]
+        abs: [22,421 362x319]
+        rel: [14,333 362x319]
       layout: flex:row justify:center align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:16
       size: minh:160
-      style: bg:surface-container-low r:20 shadow:1/2
+      style: r:20
       - node: div
         box:
-          abs: [133,556 140x14]
-          rel: [111,140 140x14]
-        style: bg:surface-container-high r:999 op:0.7
+          abs: [133,574 140x14]
+          rel: [111,153 140x14]
+        style: r:999 op:0.7
   - node: div
     box:
-      abs: [8,710 390x78]
-      rel: [0,702 390x78]
+      abs: [8,740 390x48]
+      rel: [0,732 390x48]
     layout: flex:row gap:10 justify:center
     flex: shrink:0
     spacing: pad:14/14/16/14
@@ -223,11 +210,11 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       text: Show answer
       mx: MxPrimaryButton
       box:
-        abs: [122,724 163x48]
-        rel: [114,14 163x48]
+        abs: [121,754 163x18]
+        rel: [113,14 163x18]
       layout: flex:row gap:6 justify:center align:center
       spacing: pad:0/36
-      style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
+      style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 ```
 
 ## State: Revealed (ordered diff vs Hidden)
@@ -236,28 +223,28 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: card
   mx: MxCard
   box:
-  abs: [22,416 362x294]
-  rel: [14,308 362x294]
+  abs: [22,421 362x319]
+  rel: [14,333 362x319]
   layout: flex:row justify:center align:center
   flex: grow:1 basis:0 layout_hint:expanded
   spacing: pad:16
   size: minh:160
-  style: bg:surface-container-low r:20 shadow:1/2
+  style: r:20
 - - node: div
 - box:
-- abs: [133,556 140x14]
-- rel: [111,140 140x14]
-- style: bg:surface-container-high r:999 op:0.7
+- abs: [133,574 140x14]
+- rel: [111,153 140x14]
+- style: r:999 op:0.7
 + - node: div
 + text: Researcher / Nhà nghiên cứu — person who conducts research. Hán-Việt: Nghiên cứu giả (硏究者). 연구 = research, 자 = person.
 + box:
-+ abs: [38,530 330x65]
-+ rel: [16,114 330x65]
-+ style: font:14/400/22 color:font-headline text:center
++ abs: [38,548 330x65]
++ rel: [16,127 330x65]
++ style: font:14/400/22 color:#000000 text:center
   - node: div
   box:
-  abs: [8,710 390x78]
-  rel: [0,702 390x78]
+  abs: [8,740 390x48]
+  rel: [0,732 390x48]
   layout: flex:row gap:10 justify:center
   flex: shrink:0
   spacing: pad:14/14/16/14
@@ -265,31 +252,29 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - text: Show answer
 - mx: MxPrimaryButton
 - box:
-- abs: [122,724 163x48]
-- rel: [114,14 163x48]
+- abs: [121,754 163x18]
+- rel: [113,14 163x18]
 - layout: flex:row gap:6 justify:center align:center
 - spacing: pad:0/36
-- style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
+- style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 + - node: pill-btn
 + text: Forgot
 + mx: MxPrimaryButton
 + box:
-+ abs: [38,724 160x48]
-+ rel: [30,14 160x48]
++ abs: [38,754 160x18]
++ rel: [30,14 160x18]
 + layout: flex:row gap:6 justify:center align:center
 + flex: grow:1 basis:0 layout_hint:expanded
-+ spacing: pad:0/16
 + size: maxw:160
-+ style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
++ style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 + - node: pill-btn
 + text: Got it
 + mx: MxPrimaryButton
 + box:
-+ abs: [208,724 160x48]
-+ rel: [200,14 160x48]
++ abs: [208,754 160x18]
++ rel: [200,14 160x18]
 + layout: flex:row gap:6 justify:center align:center
 + flex: grow:1 basis:0 layout_hint:expanded
-+ spacing: pad:0/16
 + size: maxw:160
-+ style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
++ style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 ```

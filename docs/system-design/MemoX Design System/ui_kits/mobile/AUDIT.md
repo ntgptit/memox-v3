@@ -1,5 +1,29 @@
 # MemoX Mobile UI Kit — Audit & Improvement Pass
 
+> ## Pass 4 — premium polish (systemic primitives + key screens)
+> Targeted the open items from the systemic audit (§MOBILE_UI_AUDIT) at the
+> shared layer so every screen benefits, plus the four flagged "judgement-call"
+> screens.
+>
+> **Tokens / theme**
+> - New neutral **`--memox-shadow-fab`** (light `0 8px 24px rgba(15,22,56,.12)`, dark `0 10px 28px rgba(0,0,0,.5)`); the FAB's old colored primary glow (36% indigo) is retired — elevation is now tonal, not branded (fixes H3/H7).
+> - **Dark card separation:** `.memox-dark .card` now carries the indigo `--memox-border-ghost`, so paper-indigo cards have a defining edge on the near-adjacent dark surface ladder (fixes H7/M2).
+> - **Density:** `.ov` overline 10.5/600/.85α → **11/700/1α**; bottom-nav labels 10 → **11** (fixes M3/M4 scanning legibility).
+> - FAB radius `16px` magic number → `var(--memox-radius-lg)`.
+>
+> **Shared primitives (`_shared.jsx`)**
+> - **`SearchField`** — real mobile search (52px input token, leading search glyph, trailing CLEAR when filled / VOICE when empty). Replaces the desktop-style static span + **Cmd-K `kbd` hint** on Library (fixes H5).
+> - **`Badge`** — one count/status pill (tonal or `solid`, 5 tones, roomy padding + tabular nums). Fixes the cramped **"23due"** rendering (M1): `inline-flex` was trimming the whitespace-only text node; the badge's `gap` + single-string child restores the space.
+>
+> **Key screens**
+> - **Dashboard CTA hierarchy (H6):** exactly one solid primary now — *Start today's review*. *Resume* demoted to a tonal (primary-soft) action; *Start new learning* demoted to a quiet text action with a `Badge`. Recent-deck due pills → `Badge`; `${col}1F` hex-alpha → `color-mix` (C2).
+> - **Library:** search bar → `SearchField`; folder due pills → `Badge`; folder/​result icon tiles `${seed}1F` → `color-mix` (C2).
+>
+> Verified light + dark via an isolated harness (`_harness.html`, since the full
+> 23-screen gallery is too heavy to screenshot in one pass).
+
+# MemoX Mobile UI Kit — Audit & Improvement Pass
+
 **Scope:** mobile, Flutter only. No web / desktop / tablet / React / PWA assumptions.
 **Subject:** `ui_kits/mobile/index.html` — the 23-screen light+dark click-through.
 **Goal:** make the existing kit more complete, more consistent, more accessible, and
@@ -35,9 +59,11 @@ Nebula, focusing on theme correctness and UX friendliness. Findings:
 **Reviewed and confirmed correct (no change needed)**
 - **Toast / snackbar** (Tag op-error) uses a fixed dark slate (`rgb(52,57,93)`) with light
   text in *both* themes — the M3 inverse-surface pattern. Legible in light and dark. Good.
-- **Primary buttons** keep brand indigo `#5265F5` + white label in dark (the scoped
-  `.memox-dark` deliberately overrides primary back to indigo rather than the lifted
-  `#8B9AFF`), so `#fff`-on-primary contrast holds in both themes.
+- **Primary buttons** use the accessible dark primary `#8B9AFF` with deep-navy label
+  `--memox-on-primary: #11173A` in dark (Phase 0: the scoped `.memox-dark` and the
+  `colors_and_type.css` media-query scope are value-identical — `#8B9AFF` was lifted from
+  the old `#5265F5` so it clears AA both as a CTA fill and as primary-colored text/icons),
+  so label-on-primary contrast holds in both themes.
 - **The white Google sign-in button** is intentionally white in both themes (brand button).
 - **Color-coded state feedback** (Match matched=green, Guess correct=green/wrong=red/faded,
   mastery bars threshold-colored amber→indigo→green, streak orange, success teal) all use

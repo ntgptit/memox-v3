@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -83,66 +82,53 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 justify:between align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:x
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
-      box:
-        abs: [72,78 261x4]
-        rel: [64,26 261x4]
-      flex: grow:1 basis:0 layout_hint:expanded
-      spacing: margin:0/16
-      position: clip
-      style: bg:surface-container r:999
-      - node: div
-        box:
-          abs: [72,78 91x4]
-          rel: [0,0 91x4]
-        style: bg:seed-indigo
-    - node: div
       text: 8 / 23
       box:
-        abs: [353,71 37x18]
-        rel: [345,19 37x18]
-      style: font:14/600 color:on-surface-variant
+        abs: [358,62 32x16]
+        rel: [350,10 32x16]
+      style: font:14/600 color:#000000
   - node: div
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     layout: flex:col gap:14
     flex: grow:1 basis:0 layout_hint:expanded
     spacing: pad:6/14/12/14
     - node: card
       mx: MxCard
       box:
-        abs: [22,114 362x570]
-        rel: [14,6 362x570]
+        abs: [22,94 362x620]
+        rel: [14,6 362x620]
       layout: flex:col
       flex: grow:1 basis:0 layout_hint:expanded
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: div
         box:
-          abs: [22,114 362x285]
-          rel: [0,0 362x285]
+          abs: [22,94 362x310]
+          rel: [0,0 362x310]
         layout: flex:col justify:center align:center
         flex: grow:1 basis:0 layout_hint:expanded
         spacing: pad:20/16/8/16
@@ -150,26 +136,26 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: ov
           text: Korean
           box:
-            abs: [42,130 48x13]
-            rel: [20,16 48x13]
+            abs: [42,110 52x12]
+            rel: [20,16 52x12]
           position: pos:absolute
-          style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          style: font:11/700 color:#000000 tracking:0.6
         - node: div
           text: 먹다
           box:
-            abs: [174,244 58x37]
-            rel: [152,130 58x37]
-          style: font:32/700/37 color:font-headline text:center tracking:-0.5
+            abs: [174,236 58x37]
+            rel: [152,142 58x37]
+          style: font:32/700/37 color:#000000 text:center tracking:-0.5
       - node: div
         box:
-          abs: [42,399 322x1]
-          rel: [20,285 322x1]
+          abs: [42,404 322x1]
+          rel: [20,310 322x1]
         spacing: margin:0/20
-        style: bg:outline-variant op:0.5
+        style: op:0.5
       - node: div
         box:
-          abs: [22,400 362x285]
-          rel: [0,286 362x285]
+          abs: [22,405 362x310]
+          rel: [0,311 362x310]
         layout: flex:col gap:14 justify:center align:center
         flex: grow:1 basis:0 layout_hint:expanded
         spacing: pad:8/16/20/16
@@ -177,88 +163,86 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: ov
           text: Meaning
           box:
-            abs: [42,416 54x13]
-            rel: [20,16 54x13]
+            abs: [42,421 59x12]
+            rel: [20,16 59x12]
           position: pos:absolute
-          style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+          style: font:11/700 color:#000000 tracking:0.6
         - node: div
           text: to eat
           box:
-            abs: [170,493 66x30]
-            rel: [148,94 66x30]
-          style: font:24/600 color:font-headline text:center tracking:-0.3
+            abs: [176,512 55x27]
+            rel: [154,108 55x27]
+          style: font:24/600 color:#000000 text:center tracking:-0.3
         - node: div
           text: 아침을 먹었어요.
           box:
-            abs: [141,537 125x41]
-            rel: [119,138 125x41]
+            abs: [140,553 125x41]
+            rel: [118,149 125x41]
           spacing: pad:10/14
           size: maxw:280
-          style: bg:surface-container-low font:14/400/21 color:on-surface-variant text:center r:12
+          style: font:14/400/21 color:#000000 text:center
     - node: div
       box:
-        abs: [22,698 362x48]
-        rel: [14,590 362x48]
+        abs: [22,728 362x18]
+        rel: [14,640 362x18]
       layout: flex:row gap:10 align:center
       - node: pill-btn
         text: Previous
         mx: MxSecondaryButton
         box:
-          abs: [22,698 176x48]
-          rel: [0,0 176x48]
+          abs: [22,728 176x18]
+          rel: [0,0 176x18]
         layout: flex:row gap:6 justify:center align:center
         flex: grow:1 basis:0 layout_hint:expanded
-        spacing: pad:0/16
-        style: bg:surface-container font:14/600 color:font-headline text:center tracking:0.1 r:12
+        style: font:16/600 color:#000000 text:center tracking:0.1
         - node: span
           box:
-            abs: [69,713 18x18]
-            rel: [47,15 18x18]
+            abs: [68,728 18x18]
+            rel: [46,0 18x18]
           layout: flex:row
           - node: icon:arrow-left
             box:
-              abs: [69,713 18x18]
+              abs: [68,728 18x18]
               rel: [0,0 18x18]
             position: clip
       - node: pill-btn
         text: Next
         mx: MxPrimaryButton
         box:
-          abs: [208,698 176x48]
-          rel: [186,0 176x48]
+          abs: [208,728 176x18]
+          rel: [186,0 176x18]
         layout: flex:row gap:6 justify:center align:center
         flex: grow:1 basis:0 layout_hint:expanded
-        spacing: pad:0/16
-        style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+        style: font:16/600 color:#000000 text:center tracking:0.1
         - node: span
           box:
-            abs: [306,713 18x18]
-            rel: [98,15 18x18]
+            abs: [306,728 18x18]
+            rel: [98,0 18x18]
           layout: flex:row
           - node: icon:arrow-right
             box:
-              abs: [306,713 18x18]
+              abs: [306,728 18x18]
               rel: [0,0 18x18]
             position: clip
     - node: div
       box:
         abs: [22,760 362x16]
-        rel: [14,652 362x16]
+        rel: [14,672 362x16]
       layout: flex:row gap:8 justify:center align:center
       - node: span
         box:
-          abs: [105,760 16x16]
-          rel: [83,0 16x16]
+          abs: [117,760 16x16]
+          rel: [95,0 16x16]
         layout: flex:row
         - node: icon:chevrons-right
           box:
-            abs: [105,760 16x16]
+            abs: [117,760 16x16]
             rel: [0,0 16x16]
           position: clip
       - node: span
         text: or swipe the card to continue
         box:
-          abs: [129,761 172x15]
-          rel: [107,1 172x15]
-        style: font:12/400 color:on-surface-variant tracking:0.3
+          abs: [141,761 148x15]
+          rel: [119,1 148x15]
+        style: font:12/400 color:#000000 tracking:0.3
 ```

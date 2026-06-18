@@ -27,8 +27,9 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
+import { startKitServer } from './serve_kit.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..', '..');
@@ -618,7 +619,10 @@ async function main() {
   });
   const page = await browser.newPage();
   page.on('pageerror', (e) => console.warn('pageerror:', e.message));
-  await page.goto(pathToFileURL(kitHtml).href, { waitUntil: 'networkidle2', timeout: 120000 });
+  // Serve the kit over HTTP so external `text/babel src=screens/*.jsx` scripts load
+  // (browsers block fetch of local files under file://).
+  const kitServer = await startKitServer(kitDir);
+  await page.goto(`${kitServer.origin}/index.html`, { waitUntil: 'networkidle2', timeout: 120000 });
   await page.waitForSelector('.row .row-num', { timeout: 120000 });
   await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
   await page.evaluate((m) => { window.__MX_COMPONENT_MAP = m; }, compMap);
@@ -728,6 +732,7 @@ async function main() {
   console.log(`done: ${manifest.length} spec files -> ${outDir}`);
   console.log(`source hash: ${sourceHash}`);
   await browser.close();
+  await kitServer.close();
 }
 
 main().catch((e) => {

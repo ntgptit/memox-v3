@@ -12,8 +12,9 @@
 
 import { existsSync, mkdirSync, writeFileSync, readdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
+import { startKitServer } from './serve_kit.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..', '..');
@@ -59,7 +60,10 @@ async function main() {
   const page = await browser.newPage();
 
   page.on('pageerror', (e) => console.warn('pageerror:', e.message));
-  await page.goto(pathToFileURL(kitHtml).href, { waitUntil: 'networkidle2', timeout: 120000 });
+  // Serve the kit over HTTP so external `text/babel src=screens/*.jsx` scripts load
+  // (browsers block fetch of local files under file://).
+  const kitServer = await startKitServer(kitDir);
+  await page.goto(`${kitServer.origin}/index.html`, { waitUntil: 'networkidle2', timeout: 120000 });
 
   // Babel-in-browser compile can take a while; wait for the rows to exist.
   await page.waitForSelector('.row .row-num', { timeout: 120000 });
@@ -160,6 +164,7 @@ async function main() {
 
   console.log(`done: ${manifest.length} screens, ${totalStates} states, ${shotCount} shots -> ${outDir}`);
   await browser.close();
+  await kitServer.close();
 }
 
 main().catch((e) => {

@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -83,228 +82,163 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Learning
       box:
-        abs: [56,70 260x21]
-        rel: [48,18 260x21]
+        abs: [56,61 265x18]
+        rel: [48,9 265x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
     - node: div
       text: Saved
       box:
-        abs: [320,69 70x23]
-        rel: [312,17 70x23]
+        abs: [325,59 65x23]
+        rel: [317,7 65x23]
       layout: flex:row gap:5 align:center
       spacing: pad:4/9
-      style: bg:mastery@10 font:12/600 color:mastery r:999 op:0
+      style: font:12/600 color:#000000 r:999 op:0
       - node: span
         box:
-          abs: [329,75 11x11]
+          abs: [334,65 11x11]
           rel: [9,6 11x11]
         layout: flex:row
         - node: icon:check
           box:
-            abs: [329,75 11x11]
+            abs: [334,65 11x11]
             rel: [0,0 11x11]
           position: clip
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x5(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:967
+    scroll: scrollh:868
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x313]
-        rel: [20,0 350x313]
+        abs: [8,88 390x286]
+        rel: [0,0 390x286]
       spacing: margin:0/0/18/0
       - node: ov
         text: Daily goal
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: card
         mx: MxCard
         box:
-          abs: [28,129 350x292]
-          rel: [0,21 350x292]
+          abs: [8,108 390x266]
+          rel: [0,20 390x266]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [28,129 350x64]
-            rel: [0,0 350x64]
+            abs: [8,108 390x61]
+            rel: [0,0 390x61]
           layout: grid cols:2 gap:12 align:center
           spacing: pad:13/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,142 266x37]
-              rel: [14,13 266x37]
+              abs: [22,121 306x35]
+              rel: [14,13 306x35]
             - node: div
               text: Set a daily goal
               box:
-                abs: [42,142 266x18]
-                rel: [0,0 266x18]
-              style: font:14/600 color:font-headline tracking:-0.1
+                abs: [22,121 306x16]
+                rel: [0,0 306x16]
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: Track how many cards you complete each day.
               box:
-                abs: [42,162 266x17]
-                rel: [0,20 266x17]
+                abs: [22,139 306x17]
+                rel: [0,18 306x17]
               spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              style: font:12/400/17 color:#000000
           - node: div
             box:
-              abs: [320,148 44x26]
-              rel: [292,19 44x26]
+              abs: [340,126 44x26]
+              rel: [332,18 44x26]
             layout: flex:row gap:6 align:center
-            - node: span
-              box:
-                abs: [320,148 44x26]
-                rel: [0,0 44x26]
-              flex: shrink:0
-              position: pos:relative
-              style: bg:seed-indigo r:999
-              - node: span
-                box:
-                  abs: [341,151 20x20]
-                  rel: [21,3 20x20]
-                position: pos:absolute
-                style: bg:on-primary r:999 shadow:1/3
         - node: div
           box:
-            abs: [28,193 350x147]
-            rel: [0,64 350x147]
+            abs: [8,169 390x143]
+            rel: [0,61 390x143]
           repeat: x2(unit=2)
           spacing: pad:14/14/16/14
-          style: border-t:1px seed-indigo@14
           - node: div
             item: item[1]
             box:
-              abs: [42,208 322x30]
-              rel: [14,15 322x30]
+              abs: [22,183 362x27]
+              rel: [14,14 362x27]
             layout: flex:row justify:between align:baseline
             spacing: margin:0/0/14/0
             - node: ov
               text: Cards per day
               box:
-                abs: [42,222 89x13]
-                rel: [0,14 89x13]
-              style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+                abs: [22,194 96x12]
+                rel: [0,11 96x12]
+              style: font:11/700 color:#000000 tracking:0.6
             - node: div
               box:
-                abs: [300,208 64x30]
-                rel: [258,0 64x30]
+                abs: [332,183 52x27]
+                rel: [310,0 52x27]
               layout: flex:row gap:4 align:baseline
               - node: span
                 text: 20
                 box:
-                  abs: [300,208 28x30]
-                  rel: [0,0 28x30]
-                style: font:24/700 color:seed-indigo tracking:-0.5
+                  abs: [332,183 23x27]
+                  rel: [0,0 23x27]
+                style: font:24/700 color:#000000 tracking:-0.5
               - node: span
                 text: cards
                 box:
-                  abs: [332,221 32x15]
-                  rel: [32,13 32x15]
-                style: font:12/400 color:on-surface-variant
+                  abs: [359,193 25x15]
+                  rel: [27,10 25x15]
+                style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [42,252 322x24]
-              rel: [14,59 322x24]
+              abs: [22,224 362x24]
+              rel: [14,55 362x24]
             spacing: margin:0/0/8/0
             position: pos:relative
             - node: div
               box:
-                abs: [42,261 322x6]
-                rel: [0,9 322x6]
-              position: pos:absolute
-              transform: transform:translate(0,-3)
-              style: bg:surface-container-high r:999
-            - node: div
-              box:
-                abs: [42,261 25x6]
-                rel: [0,9 25x6]
-              position: pos:absolute
-              transform: transform:translate(0,-3)
-              style: bg:seed-indigo r:999
-            - node: div
-              box:
-                abs: [54,251 26x26]
-                rel: [12,-1 26x26]
-              position: pos:absolute
-              transform: transform:translate(-13,-13)
-              style: bg:on-primary r:999 border:2px seed-indigo shadow:0/1
-            - node: div
-              box:
-                abs: [41,263 2x2]
+                abs: [21,235 2x2]
                 rel: [-1,11 2x2]
               position: pos:absolute
               transform: transform:translate(-1,-1)
-              style: bg:on-primary@85 r:999
-            - node: div
-              box:
-                abs: [122,263 2x2]
-                rel: [80,11 2x2]
-              position: pos:absolute
-              transform: transform:translate(-1,-1)
-              style: bg:outline-variant r:999
-            - node: div
-              box:
-                abs: [202,263 2x2]
-                rel: [160,11 2x2]
-              position: pos:absolute
-              transform: transform:translate(-1,-1)
-              style: bg:outline-variant r:999
-            - node: div
-              box:
-                abs: [283,263 2x2]
-                rel: [241,11 2x2]
-              position: pos:absolute
-              transform: transform:translate(-1,-1)
-              style: bg:outline-variant r:999
-            - node: div
-              box:
-                abs: [363,263 2x2]
-                rel: [321,11 2x2]
-              position: pos:absolute
-              transform: transform:translate(-1,-1)
-              style: bg:outline-variant r:999
+              style: bg:#ffffff@85 r:999
           - node: div
             item: item[2]
             box:
-              abs: [42,284 322x15]
-              rel: [14,91 322x15]
+              abs: [22,256 362x15]
+              rel: [14,87 362x15]
             layout: flex:row justify:between
             repeat: x5(unit=1)
             spacing: pad:0/2
@@ -312,522 +246,460 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               item: item[1]
               text: 5
               box:
-                abs: [44,284 7x15]
-                rel: [2,0 7x15]
-              style: font:12/400 color:on-surface-variant
+                abs: [24,256 6x15]
+                rel: [2,0 6x15]
+              style: font:12/400 color:#000000
             - node: span
               item: item[2]
               text: 50
               box:
-                abs: [109,284 14x15]
-                rel: [67,0 14x15]
-              style: font:12/400 color:on-surface-variant op:0.7
+                abs: [102,256 12x15]
+                rel: [80,0 12x15]
+              style: font:12/400 color:#000000 op:0.7
             - node: span
               item: item[3]
               text: 100
               box:
-                abs: [181,284 22x15]
-                rel: [139,0 22x15]
-              style: font:12/400 color:on-surface-variant op:0.7
+                abs: [185,256 18x15]
+                rel: [163,0 18x15]
+              style: font:12/400 color:#000000 op:0.7
             - node: span
               item: item[4]
               text: 150
               box:
-                abs: [261,284 22x15]
-                rel: [219,0 22x15]
-              style: font:12/400 color:on-surface-variant op:0.7
+                abs: [275,256 18x15]
+                rel: [253,0 18x15]
+              style: font:12/400 color:#000000 op:0.7
             - node: span
               item: item[5]
               text: 200
               box:
-                abs: [340,284 22x15]
-                rel: [298,0 22x15]
-              style: font:12/400 color:on-surface-variant
+                abs: [364,256 18x15]
+                rel: [342,0 18x15]
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [42,309 322x15]
-              rel: [14,116 322x15]
+              abs: [22,281 362x15]
+              rel: [14,112 362x15]
             layout: flex:row gap:5 align:center
             spacing: margin:10/0/0/0
             - node: span
               box:
-                abs: [42,311 11x11]
+                abs: [22,283 11x11]
                 rel: [0,2 11x11]
               layout: flex:row
               - node: icon:info
                 box:
-                  abs: [42,311 11x11]
+                  abs: [22,283 11x11]
                   rel: [0,0 11x11]
                 position: clip
             - node: span
               text: Drag to adjust in steps of 5
               box:
-                abs: [58,309 149x15]
-                rel: [16,0 149x15]
-              style: font:12/400 color:on-surface-variant
+                abs: [38,281 129x15]
+                rel: [16,0 129x15]
+              style: font:12/400 color:#000000
         - node: div
           box:
-            abs: [28,340 350x81]
-            rel: [0,211 350x81]
+            abs: [8,312 390x61]
+            rel: [0,204 390x61]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:13/14
           - node: div
             box:
-              abs: [42,366 30x30]
-              rel: [14,25 30x30]
+              abs: [22,328 30x30]
+              rel: [14,16 30x30]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            style: r:9
             - node: span
               box:
-                abs: [50,373 15x15]
+                abs: [30,336 15x15]
                 rel: [8,8 15x15]
               layout: flex:row
               - node: icon:flame
                 box:
-                  abs: [50,373 15x15]
+                  abs: [30,336 15x15]
                   rel: [0,0 15x15]
                 position: clip
           - node: div
             box:
-              abs: [88,353 220x55]
-              rel: [60,13 220x55]
+              abs: [68,325 260x35]
+              rel: [60,13 260x35]
             - node: div
               text: Show streak counter
               box:
-                abs: [88,353 220x18]
-                rel: [0,0 220x18]
-              style: font:14/600 color:font-headline tracking:-0.1
+                abs: [68,325 260x16]
+                rel: [0,0 260x16]
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: Display your current streak on Home and Stats.
               box:
-                abs: [88,373 220x35]
-                rel: [0,20 220x35]
+                abs: [68,343 260x17]
+                rel: [0,18 260x17]
               spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              style: font:12/400/17 color:#000000
           - node: div
             box:
-              abs: [320,368 44x26]
-              rel: [292,27 44x26]
+              abs: [340,330 44x26]
+              rel: [332,18 44x26]
             layout: flex:row gap:6 align:center
-            - node: span
-              box:
-                abs: [320,368 44x26]
-                rel: [0,0 44x26]
-              flex: shrink:0
-              position: pos:relative
-              style: bg:seed-indigo r:999
-              - node: span
-                box:
-                  abs: [341,371 20x20]
-                  rel: [21,3 20x20]
-                position: pos:absolute
-                style: bg:on-primary r:999 shadow:1/3
     - node: div
       item: item[2]
       box:
-        abs: [28,439 350x167]
-        rel: [20,331 350x167]
+        abs: [8,392 390x163]
+        rel: [0,304 390x163]
       spacing: margin:0/0/18/0
       - node: ov
         text: Reminder
         box:
-          abs: [28,439 350x21]
-          rel: [0,0 350x21]
+          abs: [8,392 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: card
         mx: MxCard
         box:
-          abs: [28,460 350x120]
-          rel: [0,21 350x120]
+          abs: [8,412 390x117]
+          rel: [0,20 390x117]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [28,460 350x64]
-            rel: [0,0 350x64]
+            abs: [8,412 390x61]
+            rel: [0,0 390x61]
           layout: grid cols:2 gap:12 align:center
           spacing: pad:13/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,473 266x37]
-              rel: [14,13 266x37]
+              abs: [22,425 306x35]
+              rel: [14,13 306x35]
             - node: div
               text: Daily reminder
               box:
-                abs: [42,473 266x18]
-                rel: [0,0 266x18]
-              style: font:14/600 color:font-headline tracking:-0.1
+                abs: [22,425 306x16]
+                rel: [0,0 306x16]
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: You decide when to come back.
               box:
-                abs: [42,493 266x17]
-                rel: [0,20 266x17]
+                abs: [22,443 306x17]
+                rel: [0,18 306x17]
               spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              style: font:12/400/17 color:#000000
           - node: div
             box:
-              abs: [320,479 44x26]
-              rel: [292,19 44x26]
+              abs: [340,429 44x26]
+              rel: [332,18 44x26]
             layout: flex:row gap:6 align:center
-            - node: span
-              box:
-                abs: [320,479 44x26]
-                rel: [0,0 44x26]
-              flex: shrink:0
-              position: pos:relative
-              style: bg:surface-container-high r:999
-              - node: span
-                box:
-                  abs: [323,482 20x20]
-                  rel: [3,3 20x20]
-                position: pos:absolute
-                style: bg:on-primary r:999 shadow:1/3
         - node: div
           box:
-            abs: [28,525 350x56]
-            rel: [0,64 350x56]
+            abs: [8,473 390x56]
+            rel: [0,61 390x56]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:13/14
           style: op:0.45
           - node: div
             box:
-              abs: [42,538 30x30]
+              abs: [22,486 30x30]
               rel: [14,13 30x30]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            style: r:9
             - node: span
               box:
-                abs: [50,545 15x15]
+                abs: [30,494 15x15]
                 rel: [8,8 15x15]
               layout: flex:row
               - node: icon:clock
                 box:
-                  abs: [50,545 15x15]
+                  abs: [30,494 15x15]
                   rel: [0,0 15x15]
                 position: clip
           - node: div
             text: Reminder time
             box:
-              abs: [88,544 204x18]
-              rel: [60,19 204x18]
-            style: font:14/600 color:font-headline tracking:-0.1
+              abs: [68,493 249x16]
+              rel: [60,20 249x16]
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             box:
-              abs: [304,544 60x18]
-              rel: [276,19 60x18]
+              abs: [329,493 55x16]
+              rel: [321,20 55x16]
             layout: flex:row gap:6 align:center
             - node: div
               text: 20:00
               box:
-                abs: [304,544 60x18]
-                rel: [0,0 60x18]
+                abs: [329,493 55x16]
+                rel: [0,0 55x16]
               layout: flex:row gap:6 align:center
-              style: font:14/600 color:on-surface-variant
+              style: font:14/600 color:#000000
               - node: span
                 box:
-                  abs: [348,545 16x16]
-                  rel: [44,1 16x16]
+                  abs: [368,493 16x16]
+                  rel: [39,0 16x16]
                 layout: flex:row
                 - node: icon:chevron-right
                   box:
-                    abs: [348,545 16x16]
+                    abs: [368,493 16x16]
                     rel: [0,0 16x16]
                   position: clip
       - node: div
         text: A gentle nudge once a day. Off by default.
         box:
-          abs: [28,581 350x26]
-          rel: [0,141 350x26]
+          abs: [8,529 390x26]
+          rel: [0,137 390x26]
         spacing: pad:8/6/0/6
-        style: font:12/400/18 color:on-surface-variant
+        style: font:12/400/18 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,625 350x84]
-        rel: [20,517 350x84]
+        abs: [8,573 390x81]
+        rel: [0,485 390x81]
       spacing: margin:0/0/18/0
       - node: ov
         text: Tags
         box:
-          abs: [28,625 350x21]
-          rel: [0,0 350x21]
+          abs: [8,573 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
-      - node: card
-        mx: MxCard
+        style: font:11/700 color:#000000 tracking:0.6
+      - node: div
         box:
-          abs: [28,646 350x63]
-          rel: [0,21 350x63]
-        position: clip
-        style: bg:on-primary r:20 shadow:1/2
+          abs: [8,593 390x61]
+          rel: [0,20 390x61]
+        layout: grid cols:3 gap:12 align:center
+        spacing: pad:13/14
         - node: div
           box:
-            abs: [28,646 350x63]
-            rel: [0,0 350x63]
-          layout: grid cols:3 gap:12 align:center
-          spacing: pad:13/14
-          - node: div
+            abs: [22,609 30x30]
+            rel: [14,16 30x30]
+          layout: flex:row justify:center align:center
+          style: r:9
+          - node: span
             box:
-              abs: [42,662 30x30]
-              rel: [14,17 30x30]
-            layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
-            - node: span
+              abs: [30,616 15x15]
+              rel: [8,8 15x15]
+            layout: flex:row
+            - node: icon:tag
               box:
-                abs: [50,670 15x15]
-                rel: [8,8 15x15]
-              layout: flex:row
-              - node: icon:tag
-                box:
-                  abs: [50,670 15x15]
-                  rel: [0,0 15x15]
-                position: clip
+                abs: [30,616 15x15]
+                rel: [0,0 15x15]
+              position: clip
+        - node: div
+          box:
+            abs: [68,606 286x35]
+            rel: [60,13 286x35]
           - node: div
+            text: Manage tags
             box:
-              abs: [88,659 246x37]
-              rel: [60,13 246x37]
-            - node: div
-              text: Manage tags
-              box:
-                abs: [88,659 246x18]
-                rel: [0,0 246x18]
-              style: font:14/600 color:font-headline tracking:-0.1
-            - node: div
-              text: 14 tags across all decks
-              box:
-                abs: [88,679 246x17]
-                rel: [0,20 246x17]
-              spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              abs: [68,606 286x16]
+              rel: [0,0 286x16]
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
+            text: 14 tags across all decks
             box:
-              abs: [346,668 18x18]
-              rel: [318,23 18x18]
-            layout: flex:row gap:6 align:center
-            - node: span
+              abs: [68,624 286x17]
+              rel: [0,18 286x17]
+            spacing: margin:2/0/0/0
+            style: font:12/400/17 color:#000000
+        - node: div
+          box:
+            abs: [366,615 18x18]
+            rel: [358,22 18x18]
+          layout: flex:row gap:6 align:center
+          - node: span
+            box:
+              abs: [366,615 18x18]
+              rel: [0,0 18x18]
+            layout: flex:row
+            - node: icon:chevron-right
               box:
-                abs: [346,668 18x18]
+                abs: [366,615 18x18]
                 rel: [0,0 18x18]
-              layout: flex:row
-              - node: icon:chevron-right
-                box:
-                  abs: [346,668 18x18]
-                  rel: [0,0 18x18]
-                position: clip
+              position: clip
     - node: div
       item: item[4]
       box:
-        abs: [28,727 350x275]
-        rel: [20,619 350x275]
+        abs: [8,673 390x230]
+        rel: [0,585 390x230]
       spacing: margin:0/0/18/0
       - node: ov
         text: Study defaults
         box:
-          abs: [28,727 350x21]
-          rel: [0,0 350x21]
+          abs: [8,673 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: card
         mx: MxCard
         box:
-          abs: [28,748 350x210]
-          rel: [0,21 350x210]
+          abs: [8,693 390x184]
+          rel: [0,20 390x184]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [28,748 350x64]
-            rel: [0,0 350x64]
+            abs: [8,693 390x61]
+            rel: [0,0 390x61]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:13/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,765 30x30]
-              rel: [14,17 30x30]
+              abs: [22,708 30x30]
+              rel: [14,16 30x30]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            style: r:9
             - node: span
               box:
-                abs: [50,772 15x15]
+                abs: [30,716 15x15]
                 rel: [8,8 15x15]
               layout: flex:row
               - node: icon:shuffle
                 box:
-                  abs: [50,772 15x15]
+                  abs: [30,716 15x15]
                   rel: [0,0 15x15]
                 position: clip
           - node: div
             box:
-              abs: [88,761 220x37]
-              rel: [60,13 220x37]
+              abs: [68,706 260x35]
+              rel: [60,13 260x35]
             - node: div
               text: Default shuffle
               box:
-                abs: [88,761 220x18]
-                rel: [0,0 220x18]
-              style: font:14/600 color:font-headline tracking:-0.1
+                abs: [68,706 260x16]
+                rel: [0,0 260x16]
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: Randomize card order in every session
               box:
-                abs: [88,781 220x17]
-                rel: [0,20 220x17]
+                abs: [68,724 260x17]
+                rel: [0,18 260x17]
               spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              style: font:12/400/17 color:#000000
           - node: div
             box:
-              abs: [320,767 44x26]
-              rel: [292,19 44x26]
+              abs: [340,710 44x26]
+              rel: [332,18 44x26]
             layout: flex:row gap:6 align:center
-            - node: span
-              box:
-                abs: [320,767 44x26]
-                rel: [0,0 44x26]
-              flex: shrink:0
-              position: pos:relative
-              style: bg:seed-indigo r:999
-              - node: span
-                box:
-                  abs: [341,770 20x20]
-                  rel: [21,3 20x20]
-                position: pos:absolute
-                style: bg:on-primary r:999 shadow:1/3
         - node: div
           box:
-            abs: [28,812 350x82]
-            rel: [0,64 350x82]
+            abs: [8,754 390x61]
+            rel: [0,61 390x61]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:13/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,838 30x30]
-              rel: [14,25 30x30]
+              abs: [22,770 30x30]
+              rel: [14,16 30x30]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            style: r:9
             - node: span
               box:
-                abs: [50,845 15x15]
+                abs: [30,777 15x15]
                 rel: [8,8 15x15]
               layout: flex:row
               - node: icon:layers
                 box:
-                  abs: [50,845 15x15]
+                  abs: [30,777 15x15]
                   rel: [0,0 15x15]
                 position: clip
           - node: div
             box:
-              abs: [88,825 193x55]
-              rel: [60,13 193x55]
+              abs: [68,767 238x35]
+              rel: [60,13 238x35]
             - node: div
               text: Default study mode
               box:
-                abs: [88,825 193x18]
-                rel: [0,0 193x18]
-              style: font:14/600 color:font-headline tracking:-0.1
+                abs: [68,767 238x16]
+                rel: [0,0 238x16]
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: Review, Match, Guess, Recall, or Fill
               box:
-                abs: [88,845 193x35]
-                rel: [0,20 193x35]
+                abs: [68,785 238x17]
+                rel: [0,18 238x17]
               spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              style: font:12/400/17 color:#000000
           - node: div
             box:
-              abs: [293,844 71x18]
-              rel: [265,31 71x18]
+              abs: [318,777 66x16]
+              rel: [310,23 66x16]
             layout: flex:row gap:6 align:center
             - node: div
               text: Review
               box:
-                abs: [293,844 71x18]
-                rel: [0,0 71x18]
+                abs: [318,777 66x16]
+                rel: [0,0 66x16]
               layout: flex:row gap:6 align:center
-              style: font:14/600 color:font-headline
+              style: font:14/600 color:#000000
               - node: span
                 box:
-                  abs: [348,845 16x16]
-                  rel: [55,1 16x16]
+                  abs: [368,777 16x16]
+                  rel: [50,0 16x16]
                 layout: flex:row
                 - node: icon:chevron-right
                   box:
-                    abs: [348,845 16x16]
+                    abs: [368,777 16x16]
                     rel: [0,0 16x16]
                   position: clip
         - node: div
           box:
-            abs: [28,894 350x63]
-            rel: [0,146 350x63]
+            abs: [8,815 390x61]
+            rel: [0,123 390x61]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:13/14
           - node: div
             box:
-              abs: [42,911 30x30]
-              rel: [14,17 30x30]
+              abs: [22,831 30x30]
+              rel: [14,16 30x30]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+            style: r:9
             - node: span
               box:
-                abs: [50,918 15x15]
+                abs: [30,839 15x15]
                 rel: [8,8 15x15]
               layout: flex:row
               - node: icon:eye
                 box:
-                  abs: [50,918 15x15]
+                  abs: [30,839 15x15]
                   rel: [0,0 15x15]
                 position: clip
           - node: div
             box:
-              abs: [88,907 220x37]
-              rel: [60,13 220x37]
+              abs: [68,828 260x35]
+              rel: [60,13 260x35]
             - node: div
               text: Show example sentence
               box:
-                abs: [88,907 220x18]
-                rel: [0,0 220x18]
-              style: font:14/600 color:font-headline tracking:-0.1
+                abs: [68,828 260x16]
+                rel: [0,0 260x16]
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: Reveal the example with the meaning
               box:
-                abs: [88,927 220x17]
-                rel: [0,20 220x17]
+                abs: [68,846 260x17]
+                rel: [0,18 260x17]
               spacing: margin:2/0/0/0
-              style: font:12/400/17 color:on-surface-variant
+              style: font:12/400/17 color:#000000
           - node: div
             box:
-              abs: [320,913 44x26]
-              rel: [292,19 44x26]
+              abs: [340,833 44x26]
+              rel: [332,18 44x26]
             layout: flex:row gap:6 align:center
-            - node: span
-              box:
-                abs: [320,913 44x26]
-                rel: [0,0 44x26]
-              flex: shrink:0
-              position: pos:relative
-              style: bg:seed-indigo r:999
-              - node: span
-                box:
-                  abs: [341,916 20x20]
-                  rel: [21,3 20x20]
-                position: pos:absolute
-                style: bg:on-primary r:999 shadow:1/3
       - node: div
         text: Applied to every new session — you can still change them per study.
         box:
-          abs: [28,958 350x44]
-          rel: [0,231 350x44]
+          abs: [8,877 390x26]
+          rel: [0,204 390x26]
         spacing: pad:8/6/0/6
-        style: font:12/400/18 color:on-surface-variant
+        style: font:12/400/18 color:#000000
     - node: div
       item: item[5]
       text: Changes save automatically.
       box:
-        abs: [28,1020 350x35]
-        rel: [20,912 350x35]
+        abs: [8,921 390x35]
+        rel: [0,833 390x35]
       spacing: pad:4/0/16/0
-      style: font:12/400 color:on-surface-variant text:center
+      style: font:12/400 color:#000000 text:center
 ```
 
 ## State: Goal off (ordered diff vs Goal on)
@@ -835,164 +707,128 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - node: icon:check
   box:
-  abs: [329,75 11x11]
+  abs: [334,65 11x11]
   rel: [0,0 11x11]
   position: clip
 - - node: scroll
 - box:
-- abs: [8,108 390x680]
-- rel: [0,100 390x680]
+- abs: [8,88 390x700]
+- rel: [0,80 390x700]
 - flex: grow:1 basis:0 layout_hint:expanded
 - repeat: x5(unit=1)
-- spacing: pad:0/20/20/20
 - position: layout_hint:scroll
-- scroll: scrollh:967
+- scroll: scrollh:868
 + - node: scroll
 + box:
-+ abs: [8,108 390x680]
-+ rel: [0,100 390x680]
++ abs: [8,88 390x700]
++ rel: [0,80 390x700]
 + flex: grow:1 basis:0 layout_hint:expanded
 + repeat: x5(unit=1)
-+ spacing: pad:0/20/20/20
 + position: layout_hint:scroll
-+ scroll: scrollh:1011
++ scroll: scrollh:894
   - node: div
   item: item[1]
   box:
-  abs: [28,108 350x357]
-  rel: [20,0 350x357]
+  abs: [8,88 390x312]
+  rel: [0,0 390x312]
   spacing: margin:0/0/18/0
   ...
   - node: div
   text: Set a daily goal
   box:
-  abs: [42,142 266x18]
-  rel: [0,0 266x18]
-  style: font:14/600 color:font-headline tracking:-0.1
+  abs: [22,121 306x16]
+  rel: [0,0 306x16]
+  style: font:14/600 color:#000000 tracking:-0.1
 - - node: div
 - text: Track how many cards you complete each day.
 - box:
-- abs: [42,162 266x17]
-- rel: [0,20 266x17]
+- abs: [22,139 306x17]
+- rel: [0,18 306x17]
 - spacing: margin:2/0/0/0
-- style: font:12/400/17 color:on-surface-variant
+- style: font:12/400/17 color:#000000
 + - node: div
 + text: Pause goal tracking without losing your streak.
 + box:
-+ abs: [42,162 266x17]
-+ rel: [0,20 266x17]
++ abs: [22,139 306x17]
++ rel: [0,18 306x17]
 + spacing: margin:2/0/0/0
-+ style: font:12/400/17 color:on-surface-variant
++ style: font:12/400/17 color:#000000
   - node: div
   box:
-  abs: [320,148 44x26]
-  rel: [292,19 44x26]
+  abs: [340,126 44x26]
+  rel: [332,18 44x26]
   layout: flex:row gap:6 align:center
-- - node: span
-- box:
-- abs: [320,148 44x26]
-- rel: [0,0 44x26]
-- flex: shrink:0
-- position: pos:relative
-- style: bg:seed-indigo r:999
-+ - node: span
-+ box:
-+ abs: [320,148 44x26]
-+ rel: [0,0 44x26]
-+ flex: shrink:0
-+ position: pos:relative
-+ style: bg:surface-container-high r:999
-  - node: span
-  box:
-  abs: [323,151 20x20]
-  rel: [3,3 20x20]
-  position: pos:absolute
-  style: bg:on-primary r:999 shadow:1/3
 - - node: div
 - box:
-- abs: [28,193 350x147]
-- rel: [0,64 350x147]
+- abs: [8,169 390x143]
+- rel: [0,61 390x143]
 - repeat: x2(unit=2)
 - spacing: pad:14/14/16/14
-- style: border-t:1px seed-indigo@14
 + - node: div
 + box:
-+ abs: [28,193 350x147]
-+ rel: [0,64 350x147]
++ abs: [8,169 390x143]
++ rel: [0,61 390x143]
 + repeat: x2(unit=2)
 + spacing: pad:14/14/16/14
-+ style: border-t:1px seed-indigo@14 op:0.4
++ style: op:0.4
   - node: div
   item: item[1]
   box:
-  abs: [42,208 322x30]
-  rel: [14,15 322x30]
+  abs: [22,183 362x27]
+  rel: [14,14 362x27]
   layout: flex:row justify:between align:baseline
   spacing: margin:0/0/14/0
   ...
   - node: span
   text: Drag to adjust in steps of 5
   box:
-  abs: [58,309 149x15]
-  rel: [16,0 149x15]
-  style: font:12/400 color:on-surface-variant
+  abs: [38,281 129x15]
+  rel: [16,0 129x15]
+  style: font:12/400 color:#000000
 - - node: div
 - box:
-- abs: [28,340 350x81]
-- rel: [0,211 350x81]
+- abs: [8,312 390x61]
+- rel: [0,204 390x61]
 - layout: grid cols:3 gap:12 align:center
 - spacing: pad:13/14
 + - node: div
 + box:
-+ abs: [28,340 350x81]
-+ rel: [0,211 350x81]
++ abs: [8,312 390x61]
++ rel: [0,204 390x61]
 + layout: grid cols:3 gap:12 align:center
 + spacing: pad:13/14
 + style: op:0.45
   - node: div
   box:
-  abs: [42,366 30x30]
-  rel: [14,25 30x30]
+  abs: [22,328 30x30]
+  rel: [14,16 30x30]
   layout: flex:row justify:center align:center
-  style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+  style: r:9
   ...
   - node: div
   box:
-  abs: [320,368 44x26]
-  rel: [292,27 44x26]
+  abs: [340,330 44x26]
+  rel: [332,18 44x26]
   layout: flex:row gap:6 align:center
-- - node: span
-- box:
-- abs: [320,368 44x26]
-- rel: [0,0 44x26]
-- flex: shrink:0
-- position: pos:relative
-- style: bg:seed-indigo r:999
 + - node: span
 + box:
-+ abs: [320,368 44x26]
++ abs: [340,330 44x26]
 + rel: [0,0 44x26]
 + flex: shrink:0
 + position: pos:relative
-+ style: bg:seed-indigo r:999 op:0.45
-  - node: span
-  box:
-  abs: [341,371 20x20]
-  rel: [21,3 20x20]
-  position: pos:absolute
-  style: bg:on-primary r:999 shadow:1/3
++ style: r:999 op:0.45
 + - node: div
 + text: Goal is off. Your streak is frozen — it won’t reset while paused.
 + box:
-+ abs: [28,421 350x44]
-+ rel: [0,313 350x44]
++ abs: [8,374 390x26]
++ rel: [0,286 390x26]
 + spacing: pad:8/6/0/6
-+ style: font:12/400/18 color:on-surface-variant
++ style: font:12/400/18 color:#000000
   - node: div
   item: item[2]
   box:
-  abs: [28,483 350x167]
-  rel: [20,375 350x167]
+  abs: [8,418 390x163]
+  rel: [0,330 390x163]
   spacing: margin:0/0/18/0
   ...
 ```
@@ -1002,140 +838,94 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - node: icon:check
   box:
-  abs: [329,75 11x11]
+  abs: [334,65 11x11]
   rel: [0,0 11x11]
   position: clip
 - - node: scroll
 - box:
-- abs: [8,108 390x680]
-- rel: [0,100 390x680]
+- abs: [8,88 390x700]
+- rel: [0,80 390x700]
 - flex: grow:1 basis:0 layout_hint:expanded
 - repeat: x5(unit=1)
-- spacing: pad:0/20/20/20
 - position: layout_hint:scroll
-- scroll: scrollh:967
+- scroll: scrollh:868
 + - node: scroll
 + box:
-+ abs: [8,108 390x680]
-+ rel: [0,100 390x680]
++ abs: [8,88 390x700]
++ rel: [0,80 390x700]
 + flex: grow:1 basis:0 layout_hint:expanded
 + repeat: x5(unit=1)
-+ spacing: pad:0/20/20/20
 + position: layout_hint:scroll
-+ scroll: scrollh:941
++ scroll: scrollh:842
   - node: div
   item: item[1]
   box:
-  abs: [28,108 350x313]
-  rel: [20,0 350x313]
+  abs: [8,88 390x286]
+  rel: [0,0 390x286]
   spacing: margin:0/0/18/0
   ...
   - node: div
   text: Daily reminder
   box:
-  abs: [42,473 266x18]
-  rel: [0,0 266x18]
-  style: font:14/600 color:font-headline tracking:-0.1
+  abs: [22,425 306x16]
+  rel: [0,0 306x16]
+  style: font:14/600 color:#000000 tracking:-0.1
 - - node: div
 - text: You decide when to come back.
 - box:
-- abs: [42,493 266x17]
-- rel: [0,20 266x17]
+- abs: [22,443 306x17]
+- rel: [0,18 306x17]
 - spacing: margin:2/0/0/0
-- style: font:12/400/17 color:on-surface-variant
+- style: font:12/400/17 color:#000000
 + - node: div
 + text: Nudge me to study every day.
 + box:
-+ abs: [42,493 266x17]
-+ rel: [0,20 266x17]
++ abs: [22,443 306x17]
++ rel: [0,18 306x17]
 + spacing: margin:2/0/0/0
-+ style: font:12/400/17 color:on-surface-variant
++ style: font:12/400/17 color:#000000
   - node: div
   box:
-  abs: [320,479 44x26]
-  rel: [292,19 44x26]
+  abs: [340,429 44x26]
+  rel: [332,18 44x26]
   layout: flex:row gap:6 align:center
-- - node: span
-- box:
-- abs: [320,479 44x26]
-- rel: [0,0 44x26]
-- flex: shrink:0
-- position: pos:relative
-- style: bg:surface-container-high r:999
-+ - node: span
-+ box:
-+ abs: [320,479 44x26]
-+ rel: [0,0 44x26]
-+ flex: shrink:0
-+ position: pos:relative
-+ style: bg:seed-indigo r:999
-  - node: span
-  box:
-  abs: [341,482 20x20]
-  rel: [21,3 20x20]
-  position: pos:absolute
-  style: bg:on-primary r:999 shadow:1/3
 - - node: div
 - box:
-- abs: [28,525 350x56]
-- rel: [0,64 350x56]
+- abs: [8,473 390x56]
+- rel: [0,61 390x56]
 - layout: grid cols:3 gap:12 align:center
 - spacing: pad:13/14
 - style: op:0.45
 + - node: div
 + box:
-+ abs: [28,525 350x56]
-+ rel: [0,64 350x56]
++ abs: [8,473 390x56]
++ rel: [0,61 390x56]
 + layout: grid cols:3 gap:12 align:center
 + spacing: pad:13/14
   - node: div
   box:
-  abs: [42,538 30x30]
+  abs: [22,486 30x30]
   rel: [14,13 30x30]
   layout: flex:row justify:center align:center
-  style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+  style: r:9
   ...
-  - node: div
-  box:
-  abs: [304,544 60x18]
-  rel: [276,19 60x18]
-  layout: flex:row gap:6 align:center
-- - node: div
-- text: 20:00
-- box:
-- abs: [304,544 60x18]
-- rel: [0,0 60x18]
-- layout: flex:row gap:6 align:center
-- style: font:14/600 color:on-surface-variant
-+ - node: div
-+ text: 20:00
-+ box:
-+ abs: [304,544 60x18]
-+ rel: [0,0 60x18]
-+ layout: flex:row gap:6 align:center
-+ style: font:14/600 color:font-headline
-  - node: span
-  box:
-  abs: [348,545 16x16]
-  rel: [44,1 16x16]
-  layout: flex:row
   - node: icon:chevron-right
   box:
-  abs: [348,545 16x16]
+  abs: [368,493 16x16]
   rel: [0,0 16x16]
   position: clip
 - - node: div
 - text: A gentle nudge once a day. Off by default.
 - box:
-- abs: [28,581 350x26]
-- rel: [0,141 350x26]
+- abs: [8,529 390x26]
+- rel: [0,137 390x26]
 - spacing: pad:8/6/0/6
-- style: font:12/400/18 color:on-surface-variant
+- style: font:12/400/18 color:#000000
   - node: div
   item: item[3]
   box:
-  abs: [28,599 350x84]
-  rel: [20,491 350x84]
+  abs: [8,547 390x81]
+  rel: [0,459 390x81]
   spacing: margin:0/0/18/0
   ...
 ```
@@ -1145,151 +935,128 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - node: icon:check
   box:
-  abs: [329,75 11x11]
+  abs: [334,65 11x11]
   rel: [0,0 11x11]
   position: clip
 - - node: scroll
 - box:
-- abs: [8,108 390x680]
-- rel: [0,100 390x680]
+- abs: [8,88 390x700]
+- rel: [0,80 390x700]
 - flex: grow:1 basis:0 layout_hint:expanded
 - repeat: x5(unit=1)
-- spacing: pad:0/20/20/20
 - position: layout_hint:scroll
-- scroll: scrollh:967
+- scroll: scrollh:868
 + - node: scroll
 + box:
-+ abs: [8,108 390x680]
-+ rel: [0,100 390x680]
++ abs: [8,88 390x700]
++ rel: [0,80 390x700]
 + flex: grow:1 basis:0 layout_hint:expanded
 + repeat: x5(unit=1)
-+ spacing: pad:0/20/20/20
 + position: layout_hint:scroll
-+ scroll: scrollh:1066
++ scroll: scrollh:964
   - node: div
   item: item[1]
   box:
-  abs: [28,108 350x313]
-  rel: [20,0 350x313]
+  abs: [8,88 390x286]
+  rel: [0,0 390x286]
   spacing: margin:0/0/18/0
   ...
   - node: div
   text: Daily reminder
   box:
-  abs: [42,473 266x18]
-  rel: [0,0 266x18]
-  style: font:14/600 color:font-headline tracking:-0.1
+  abs: [22,425 306x16]
+  rel: [0,0 306x16]
+  style: font:14/600 color:#000000 tracking:-0.1
 - - node: div
 - text: You decide when to come back.
 - box:
-- abs: [42,493 266x17]
-- rel: [0,20 266x17]
+- abs: [22,443 306x17]
+- rel: [0,18 306x17]
 - spacing: margin:2/0/0/0
-- style: font:12/400/17 color:on-surface-variant
+- style: font:12/400/17 color:#000000
 + - node: div
 + text: Nudge me to study every day.
 + box:
-+ abs: [42,493 266x17]
-+ rel: [0,20 266x17]
++ abs: [22,443 306x17]
++ rel: [0,18 306x17]
 + spacing: margin:2/0/0/0
-+ style: font:12/400/17 color:on-surface-variant
++ style: font:12/400/17 color:#000000
   - node: div
   box:
-  abs: [320,479 44x26]
-  rel: [292,19 44x26]
+  abs: [340,429 44x26]
+  rel: [332,18 44x26]
   layout: flex:row gap:6 align:center
-- - node: span
-- box:
-- abs: [320,479 44x26]
-- rel: [0,0 44x26]
-- flex: shrink:0
-- position: pos:relative
-- style: bg:surface-container-high r:999
-+ - node: span
-+ box:
-+ abs: [320,479 44x26]
-+ rel: [0,0 44x26]
-+ flex: shrink:0
-+ position: pos:relative
-+ style: bg:seed-indigo r:999
-  - node: span
-  box:
-  abs: [341,482 20x20]
-  rel: [21,3 20x20]
-  position: pos:absolute
-  style: bg:on-primary r:999 shadow:1/3
   ...
   - node: icon:chevron-right
   box:
-  abs: [348,545 16x16]
+  abs: [368,493 16x16]
   rel: [0,0 16x16]
   position: clip
 - - node: div
 - text: A gentle nudge once a day. Off by default.
 - box:
-- abs: [28,581 350x26]
-- rel: [0,141 350x26]
+- abs: [8,529 390x26]
+- rel: [0,137 390x26]
 - spacing: pad:8/6/0/6
-- style: font:12/400/18 color:on-surface-variant
+- style: font:12/400/18 color:#000000
 + - node: div
 + box:
-+ abs: [28,581 350x125]
-+ rel: [0,120 350x125]
++ abs: [8,529 390x122]
++ rel: [0,117 390x122]
 + layout: flex:row gap:10 align:start
 + spacing: pad:12/14
-+ style: bg:#d9891e@6 border-t:1px seed-indigo@14
 + - node: span
 + box:
-+ abs: [42,594 16x16]
-+ rel: [14,13 16x16]
++ abs: [22,541 16x16]
++ rel: [14,12 16x16]
 + layout: flex:row
 + - node: icon:bell-off
 + box:
-+ abs: [42,594 16x16]
++ abs: [22,541 16x16]
 + rel: [0,0 16x16]
 + position: clip
 + - node: div
 + box:
-+ abs: [68,594 296x100]
-+ rel: [40,13 296x100]
++ abs: [48,541 336x98]
++ rel: [40,12 336x98]
 + flex: grow:1 basis:0 layout_hint:expanded
 + - node: div
 + text: Notifications are blocked
 + box:
-+ abs: [68,594 296x18]
-+ rel: [0,0 296x18]
-+ style: font:14/700 color:font-headline tracking:-0.1
++ abs: [48,541 336x16]
++ rel: [0,0 336x16]
++ style: font:14/700 color:#000000 tracking:-0.1
 + - node: div
 + text: Allow MemoX in your phone’s notification settings to receive the reminder.
 + box:
-+ abs: [68,614 296x36]
-+ rel: [0,20 296x36]
++ abs: [48,559 336x36]
++ rel: [0,18 336x36]
 + spacing: margin:2/0/0/0
-+ style: font:12/400/18 color:on-surface-variant
++ style: font:12/400/18 color:#000000
 + - node: pill-btn
 + text: Open system settings
 + mx: MxPrimaryButton
 + box:
-+ abs: [68,660 175x34]
-+ rel: [0,66 175x34]
++ abs: [48,605 156x34]
++ rel: [0,64 156x34]
 + layout: flex:row gap:6 justify:center align:center
 + spacing: pad:0/14 margin:10/0/0/0
-+ style: bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:9
++ style: font:12/600 color:#000000 text:center tracking:0.1 r:9
 + - node: span
 + box:
-+ abs: [82,670 13x13]
++ abs: [62,616 13x13]
 + rel: [14,11 13x13]
 + layout: flex:row
 + - node: icon:external-link
 + box:
-+ abs: [82,670 13x13]
++ abs: [62,616 13x13]
 + rel: [0,0 13x13]
 + position: clip
   - node: div
   item: item[3]
   box:
-  abs: [28,724 350x84]
-  rel: [20,616 350x84]
+  abs: [8,669 390x81]
+  rel: [0,581 390x81]
   spacing: margin:0/0/18/0
   ...
 ```
@@ -1300,29 +1067,29 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: title
   text: Learning
   box:
-  abs: [56,70 260x21]
-  rel: [48,18 260x21]
+  abs: [56,61 265x18]
+  rel: [48,9 265x18]
   flex: grow:1 basis:0 layout_hint:expanded
-  style: font:16/700 color:font-headline tracking:-0.3
+  style: font:16/700 color:#000000 tracking:-0.3
 - - node: div
 - text: Saved
 - box:
-- abs: [320,69 70x23]
-- rel: [312,17 70x23]
+- abs: [325,59 65x23]
+- rel: [317,7 65x23]
 - layout: flex:row gap:5 align:center
 - spacing: pad:4/9
-- style: bg:mastery@10 font:12/600 color:mastery r:999 op:0
+- style: font:12/600 color:#000000 r:999 op:0
 + - node: div
 + text: Saved
 + box:
-+ abs: [320,69 70x23]
-+ rel: [312,17 70x23]
++ abs: [325,59 65x23]
++ rel: [317,7 65x23]
 + layout: flex:row gap:5 align:center
 + spacing: pad:4/9
-+ style: bg:mastery@10 font:12/600 color:mastery r:999
++ style: font:12/600 color:#000000 r:999
   - node: span
   box:
-  abs: [329,75 11x11]
+  abs: [334,65 11x11]
   rel: [9,6 11x11]
   layout: flex:row
   ...

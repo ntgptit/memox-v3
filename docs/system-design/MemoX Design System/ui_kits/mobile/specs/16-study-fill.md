@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -83,133 +82,116 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 justify:between align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:x
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [62,70 279x21]
-        rel: [54,18 279x21]
+        abs: [62,60 285x21]
+        rel: [54,8 285x21]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: margin:0/6
       - node: span
         text: Fill
         box:
-          abs: [62,70 44x21]
-          rel: [0,0 44x21]
+          abs: [62,60 49x21]
+          rel: [0,0 49x21]
         spacing: pad:3/8
-        style: bg:mastery@12 font:12/700 color:mastery tracking:1.2 r:999
-      - node: div
-        box:
-          abs: [114,78 227x4]
-          rel: [52,9 227x4]
-        flex: grow:1 basis:0 layout_hint:expanded
-        position: clip
-        style: bg:surface-container r:999
-        - node: div
-          box:
-            abs: [114,78 182x4]
-            rel: [0,0 182x4]
-          style: bg:mastery
+        style: font:12/700 color:#000000 tracking:1.2 r:999
     - node: div
       text: 12 / 15
       box:
-        abs: [351,73 39x15]
-        rel: [343,21 39x15]
-      style: font:12/600 color:on-surface-variant
+        abs: [357,63 33x15]
+        rel: [349,11 33x15]
+      style: font:12/600 color:#000000
   - node: div
     box:
-      abs: [8,108 390x602]
-      rel: [0,100 390x602]
+      abs: [8,88 390x652]
+      rel: [0,80 390x652]
     layout: flex:col gap:10
     flex: grow:1 basis:0 layout_hint:expanded
     spacing: pad:8/14/0/14
     - node: card
       mx: MxCard
       box:
-        abs: [22,116 362x296]
-        rel: [14,8 362x296]
+        abs: [22,96 362x321]
+        rel: [14,8 362x321]
       layout: flex:row justify:center align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:18/16
       size: minh:160
       position: pos:relative
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [344,124 32x32]
+          abs: [344,104 32x32]
           rel: [322,8 32x32]
         layout: flex:row justify:center align:center
         position: pos:absolute
         style: r:999
         - node: span
           box:
-            abs: [350,130 20x20]
+            abs: [350,110 20x20]
             rel: [6,6 20x20]
           layout: flex:row
           - node: icon:pencil
             box:
-              abs: [350,130 20x20]
+              abs: [350,110 20x20]
               rel: [0,0 20x20]
             position: clip
       - node: div
         text: Make someone laugh / Làm cho cười, gây cười, buồn cười (Động từ, là dạng sai khiến của động từ "웃다 – cười", mang nghĩa khiến người khác bật cười hoặc thấy buồn cười).
         box:
-          abs: [38,221 330x87]
-          rel: [16,105 330x87]
-        style: font:14/400/22 color:font-headline text:center
+          abs: [38,213 330x87]
+          rel: [16,117 330x87]
+        style: font:14/400/22 color:#000000 text:center
     - node: card
       mx: MxCard
       box:
-        abs: [22,422 362x288]
-        rel: [14,314 362x288]
+        abs: [22,427 362x313]
+        rel: [14,339 362x313]
       layout: flex:row justify:center align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:14
       size: minh:160
       position: pos:relative
-      style: bg:surface-container-low r:20 shadow:1/2
+      style: r:20
       - node: div
         box:
-          abs: [171,543 64x46]
-          rel: [149,121 64x46]
+          abs: [171,561 64x46]
+          rel: [149,134 64x46]
         layout: flex:row gap:4 align:center
         - node: span
           text: 웃기
           box:
-            abs: [171,543 58x46]
+            abs: [171,561 58x46]
             rel: [0,0 58x46]
-          style: font:32/700 color:font-headline tracking:-0.4
-        - node: span
-          box:
-            abs: [233,551 2x30]
-            rel: [62,8 2x30]
-          style: bg:mastery
+          style: font:32/700 color:#000000 tracking:-0.4
   - node: div
     box:
-      abs: [8,710 390x78]
-      rel: [0,702 390x78]
+      abs: [8,740 390x48]
+      rel: [0,732 390x48]
     layout: flex:row gap:10 justify:center
     flex: shrink:0
     spacing: pad:14/14/16/14
@@ -217,24 +199,22 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       text: Hint
       mx: MxActionButton
       box:
-        abs: [38,724 160x48]
-        rel: [30,14 160x48]
+        abs: [38,754 160x18]
+        rel: [30,14 160x18]
       layout: flex:row gap:6 justify:center align:center
       flex: grow:1 basis:0 layout_hint:expanded
-      spacing: pad:0/16
       size: maxw:160
-      style: font:14/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
+      style: font:16/600 color:#000000 text:center tracking:0.1 r:999
     - node: pill-btn
       text: Check
       mx: MxPrimaryButton
       box:
-        abs: [208,724 160x48]
-        rel: [200,14 160x48]
+        abs: [208,754 160x18]
+        rel: [200,14 160x18]
       layout: flex:row gap:6 justify:center align:center
       flex: grow:1 basis:0 layout_hint:expanded
-      spacing: pad:0/16
       size: maxw:160
-      style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
+      style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 ```
 
 ## State: Wrong (ordered diff vs Input)
@@ -243,87 +223,82 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: card
   mx: MxCard
   box:
-  abs: [22,422 362x288]
-  rel: [14,314 362x288]
+  abs: [22,427 362x313]
+  rel: [14,339 362x313]
   layout: flex:row justify:center align:center
   flex: grow:1 basis:0 layout_hint:expanded
   spacing: pad:14
   size: minh:160
   position: pos:relative
-  style: bg:surface-container-low r:20 shadow:1/2
+  style: r:20
 - - node: div
 - box:
-- abs: [171,543 64x46]
-- rel: [149,121 64x46]
+- abs: [171,561 64x46]
+- rel: [149,134 64x46]
 - layout: flex:row gap:4 align:center
 - - node: span
 - text: 웃기
 - box:
-- abs: [171,543 58x46]
+- abs: [171,561 58x46]
 - rel: [0,0 58x46]
-- style: font:32/700 color:font-headline tracking:-0.4
-- - node: span
-- box:
-- abs: [233,551 2x30]
-- rel: [62,8 2x30]
-- style: bg:mastery
+- style: font:32/700 color:#000000 tracking:-0.4
 + - node: icon-btn
 + mx: MxIconButton
 + box:
-+ abs: [344,430 32x32]
++ abs: [344,435 32x32]
 + rel: [322,8 32x32]
 + layout: flex:row justify:center align:center
 + position: pos:absolute
 + style: r:999
 + - node: span
 + box:
-+ abs: [350,436 20x20]
++ abs: [350,441 20x20]
 + rel: [6,6 20x20]
 + layout: flex:row
 + - node: icon:volume-2
 + box:
-+ abs: [350,436 20x20]
++ abs: [350,441 20x20]
 + rel: [0,0 20x20]
 + position: clip
 + - node: icon-btn
 + mx: MxIconButton
 + box:
-+ abs: [30,670 32x32]
-+ rel: [8,248 32x32]
++ abs: [30,700 32x32]
++ rel: [8,273 32x32]
 + layout: flex:row justify:center align:center
 + position: pos:absolute
 + style: r:999
 + - node: span
 + box:
-+ abs: [36,676 20x20]
++ abs: [36,706 20x20]
 + rel: [6,6 20x20]
 + layout: flex:row
 + - node: icon:rotate-ccw
 + box:
-+ abs: [36,676 20x20]
++ abs: [36,706 20x20]
 + rel: [0,0 20x20]
 + position: clip
 + - node: div
 + box:
-+ abs: [170,528 65x76]
-+ rel: [148,106 65x76]
++ abs: [170,546 65x76]
++ rel: [148,119 65x76]
 + layout: flex:col gap:6 align:center
 + - node: div
 + text: 우겨다
 + box:
-+ abs: [170,528 65x35]
++ abs: [170,546 65x35]
 + rel: [0,0 65x35]
-+ style: font:24/700 color:seed-rose tracking:-0.3
++ style: font:24/700 color:#000000 tracking:-0.3
 + - node: div
 + text: 웃기다
 + box:
-+ abs: [170,569 65x35]
++ abs: [170,587 65x35]
 + rel: [0,41 65x35]
-+ style: font:24/700 color:font-headline tracking:-0.3
++ style: font:24/700 color:#000000 tracking:-0.3
   - node: div
   box:
-  abs: [8,710 390x78]
-  rel: [0,702 390x78]
+  abs: [8,740 390x48]
+  rel: [0,732 390x48]
   layout: flex:row gap:10 justify:center
   flex: shrink:0
   spacing: pad:14/14/16/14
@@ -331,44 +306,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - text: Hint
 - mx: MxActionButton
 - box:
-- abs: [38,724 160x48]
-- rel: [30,14 160x48]
+- abs: [38,754 160x18]
+- rel: [30,14 160x18]
 - layout: flex:row gap:6 justify:center align:center
 - flex: grow:1 basis:0 layout_hint:expanded
-- spacing: pad:0/16
 - size: maxw:160
-- style: font:14/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
+- style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 - - node: pill-btn
 - text: Check
 - mx: MxPrimaryButton
 - box:
-- abs: [208,724 160x48]
-- rel: [200,14 160x48]
+- abs: [208,754 160x18]
+- rel: [200,14 160x18]
 - layout: flex:row gap:6 justify:center align:center
 - flex: grow:1 basis:0 layout_hint:expanded
-- spacing: pad:0/16
 - size: maxw:160
-- style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
+- style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 + - node: pill-btn
 + text: Mark correct
 + mx: MxActionButton
 + box:
-+ abs: [38,724 160x48]
-+ rel: [30,14 160x48]
++ abs: [38,754 160x18]
++ rel: [30,14 160x18]
 + layout: flex:row gap:6 justify:center align:center
 + flex: grow:1 basis:0 layout_hint:expanded
-+ spacing: pad:0/16
 + size: maxw:160
-+ style: font:14/600 color:seed-indigo text:center tracking:0.1 r:999 border:1px seed-indigo
++ style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 + - node: pill-btn
 + text: Try again
 + mx: MxPrimaryButton
 + box:
-+ abs: [208,724 160x48]
-+ rel: [200,14 160x48]
++ abs: [208,754 160x18]
++ rel: [200,14 160x18]
 + layout: flex:row gap:6 justify:center align:center
 + flex: grow:1 basis:0 layout_hint:expanded
-+ spacing: pad:0/16
 + size: maxw:160
-+ style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:999
++ style: font:16/600 color:#000000 text:center tracking:0.1 r:999
 ```

@@ -63,6 +63,23 @@ side by side.
   applied through the scoped `.memox-dark` block in `index.html` (the in-page Light/Dark toggle),
   which mirrors the Tokyo Nebula dark tokens from the shared stylesheet.
 
+## File layout
+
+Each screen lives in its own file under [`screens/`](./screens) so it can be reviewed and
+edited in isolation instead of scrolling one ~11k-line `index.html`:
+
+- `screens/_shared.jsx` — shared chrome (`StatusBar`, `Ic`, `BottomNav`, `Breadcrumb`,
+  `OfflineBanner`, `StudyTopBar`, `masteryColor`). Loaded **first**; publishes these to `window`.
+- `screens/<ScreenName>.jsx` — one component per file (e.g. `DashboardScreen.jsx`). Each reads
+  the shared chrome from `window`, defines its screen, and publishes itself back to `window`.
+- `index.html` — loads `_shared.jsx` then every screen as ordered `<script type="text/babel" src>`
+  tags, and keeps the gallery harness (`GROUPS`, `ScreenRow`, token/widget docs, `App`) inline.
+
+Each file is wrapped in an IIFE so its top-level bindings stay local (sibling `<script>` tags
+otherwise share one global scope); components cross files only via `window`. To add a screen:
+create `screens/NewScreen.jsx` (copy an existing file's wrapper), add a `<script src>` line in
+`index.html`, and a `GROUPS` entry.
+
 ## Source mapping
 
 Each screen mirrors a feature page under `lib/features/**` (e.g. study modes →

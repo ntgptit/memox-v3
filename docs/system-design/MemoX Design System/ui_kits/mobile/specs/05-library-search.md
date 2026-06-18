@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -83,608 +82,593 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x38]
+      rel: [0,44 390x38]
     layout: flex:row gap:8 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,53 36x36]
+        rel: [8,1 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,61 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,61 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [60,60 330x40]
-        rel: [52,8 330x40]
+        abs: [60,52 330x38]
+        rel: [52,0 330x38]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:0/12
-      style: bg:on-primary r:12 border:1px seed-indigo
       - node: span
         box:
-          abs: [73,73 15x15]
-          rel: [13,13 15x15]
+          abs: [72,64 15x15]
+          rel: [12,12 15x15]
         layout: flex:row
         - node: icon:search
           box:
-            abs: [73,73 15x15]
+            abs: [72,64 15x15]
             rel: [0,0 15x15]
           position: clip
       - node: span
         text: Search library
         box:
-          abs: [96,71 281x18]
-          rel: [36,11 281x18]
+          abs: [95,63 283x16]
+          rel: [35,11 283x16]
         layout: flex:row align:center
         flex: grow:1 basis:0 layout_hint:expanded
         position: clip
-        style: font:14/500 color:on-surface-variant
-        - node: span
-          box:
-            abs: [191,72 2x16]
-            rel: [95,1 2x16]
-          spacing: margin:0/0/0/4
-          style: bg:seed-indigo
+        style: font:14/500 color:#000000
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,90 390x698]
+      rel: [0,82 390x698]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x2+(unit=2)
-    spacing: pad:0/14/14/14
     position: layout_hint:scroll
     - node: div
       item: item[1]
       box:
-        abs: [22,108 362x25]
-        rel: [14,0 362x25]
+        abs: [8,90 390x25]
+        rel: [0,0 390x25]
       layout: flex:row justify:between align:center
       spacing: pad:2/4/8/4
       - node: div
         box:
-          abs: [26,111 125x13]
-          rel: [4,3 125x13]
+          abs: [12,94 134x12]
+          rel: [4,4 134x12]
         layout: flex:row gap:6 align:center
         - node: span
           box:
-            abs: [26,112 11x11]
+            abs: [12,94 11x11]
             rel: [0,1 11x11]
           layout: flex:row
           - node: icon:clock
             box:
-              abs: [26,112 11x11]
+              abs: [12,94 11x11]
               rel: [0,0 11x11]
             position: clip
         - node: ov
           text: Recent searches
           box:
-            abs: [43,111 108x13]
-            rel: [17,0 108x13]
-          style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+            abs: [29,94 117x12]
+            rel: [17,0 117x12]
+          style: font:11/700 color:#000000 tracking:0.6
       - node: button
         text: Clear
         mx: ?
         box:
-          abs: [349,110 31x15]
-          rel: [327,2 31x15]
-        style: font:12/600 color:on-surface-variant text:center
+          abs: [365,92 29x15]
+          rel: [357,2 29x15]
+        style: font:12/600 color:#000000 text:center
     - node: card
       mx: MxCard
       box:
-        abs: [22,133 362x223]
-        rel: [14,25 362x223]
+        abs: [8,115 390x216]
+        rel: [0,25 390x216]
       repeat: x4(unit=1)
       spacing: margin:0/0/18/0
       position: clip
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: div
         item: item[1]
         box:
-          abs: [22,133 362x57]
-          rel: [0,0 362x57]
+          abs: [8,115 390x56]
+          rel: [0,0 390x56]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:10/14
-        style: border-b:1px seed-indigo@14
         - node: span
           box:
-            abs: [36,155 24x13]
+            abs: [22,137 24x13]
             rel: [14,22 24x13]
           layout: flex:row
           - node: icon:rotate-ccw
             box:
-              abs: [36,155 13x13]
+              abs: [22,137 13x13]
               rel: [0,0 13x13]
             position: clip
         - node: div
           box:
-            abs: [72,143 262x36]
-            rel: [50,10 262x36]
+            abs: [58,125 290x36]
+            rel: [50,10 290x36]
           - node: div
             text: 연구자
             box:
-              abs: [72,143 262x20]
-              rel: [0,0 262x20]
+              abs: [58,125 290x20]
+              rel: [0,0 290x20]
             position: clip
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: 12 results
             box:
-              abs: [72,164 262x15]
-              rel: [0,21 262x15]
+              abs: [58,146 290x15]
+              rel: [0,21 290x15]
             spacing: margin:1/0/0/0
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: icon-btn
           mx: MxIconButton
           box:
-            abs: [346,149 24x24]
-            rel: [324,16 24x24]
+            abs: [360,131 24x24]
+            rel: [352,16 24x24]
           layout: flex:row justify:center align:center
           position: pos:relative
           style: r:999
           - node: span
             box:
-              abs: [348,151 20x20]
+              abs: [362,133 20x20]
               rel: [2,2 20x20]
             layout: flex:row
             - node: icon:x
               box:
-                abs: [348,151 20x20]
+                abs: [362,133 20x20]
                 rel: [0,0 20x20]
               position: clip
       - node: div
         item: item[2]
         box:
-          abs: [22,190 362x55]
-          rel: [0,57 362x55]
+          abs: [8,171 390x52]
+          rel: [0,56 390x52]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:10/14
-        style: border-b:1px seed-indigo@14
         - node: span
           box:
-            abs: [36,211 24x13]
-            rel: [14,21 24x13]
+            abs: [22,191 24x13]
+            rel: [14,20 24x13]
           layout: flex:row
           - node: icon:rotate-ccw
             box:
-              abs: [36,211 13x13]
+              abs: [22,191 13x13]
               rel: [0,0 13x13]
             position: clip
         - node: div
           box:
-            abs: [72,200 262x34]
-            rel: [50,10 262x34]
+            abs: [58,181 290x32]
+            rel: [50,10 290x32]
           - node: div
             text: TOPIK II
             box:
-              abs: [72,200 262x18]
-              rel: [0,0 262x18]
+              abs: [58,181 290x16]
+              rel: [0,0 290x16]
             position: clip
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: 7 results · folder
             box:
-              abs: [72,219 262x15]
-              rel: [0,19 262x15]
+              abs: [58,198 290x15]
+              rel: [0,17 290x15]
             spacing: margin:1/0/0/0
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: icon-btn
           mx: MxIconButton
           box:
-            abs: [346,205 24x24]
-            rel: [324,15 24x24]
+            abs: [360,185 24x24]
+            rel: [352,14 24x24]
           layout: flex:row justify:center align:center
           position: pos:relative
           style: r:999
           - node: span
             box:
-              abs: [348,207 20x20]
+              abs: [362,187 20x20]
               rel: [2,2 20x20]
             layout: flex:row
             - node: icon:x
               box:
-                abs: [348,207 20x20]
+                abs: [362,187 20x20]
                 rel: [0,0 20x20]
               position: clip
       - node: div
         item: item[3]
         box:
-          abs: [22,245 362x55]
-          rel: [0,112 362x55]
+          abs: [8,223 390x52]
+          rel: [0,108 390x52]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:10/14
-        style: border-b:1px seed-indigo@14
         - node: span
           box:
-            abs: [36,266 24x13]
-            rel: [14,21 24x13]
+            abs: [22,243 24x13]
+            rel: [14,20 24x13]
           layout: flex:row
           - node: icon:rotate-ccw
             box:
-              abs: [36,266 13x13]
+              abs: [22,243 13x13]
               rel: [0,0 13x13]
             position: clip
         - node: div
           box:
-            abs: [72,255 262x34]
-            rel: [50,10 262x34]
+            abs: [58,233 290x32]
+            rel: [50,10 290x32]
           - node: div
             text: verb
             box:
-              abs: [72,255 262x18]
-              rel: [0,0 262x18]
+              abs: [58,233 290x16]
+              rel: [0,0 290x16]
             position: clip
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: 1 tag · 71 cards
             box:
-              abs: [72,274 262x15]
-              rel: [0,19 262x15]
+              abs: [58,250 290x15]
+              rel: [0,17 290x15]
             spacing: margin:1/0/0/0
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: icon-btn
           mx: MxIconButton
           box:
-            abs: [346,260 24x24]
-            rel: [324,15 24x24]
+            abs: [360,237 24x24]
+            rel: [352,14 24x24]
           layout: flex:row justify:center align:center
           position: pos:relative
           style: r:999
           - node: span
             box:
-              abs: [348,262 20x20]
+              abs: [362,239 20x20]
               rel: [2,2 20x20]
             layout: flex:row
             - node: icon:x
               box:
-                abs: [348,262 20x20]
+                abs: [362,239 20x20]
                 rel: [0,0 20x20]
               position: clip
       - node: div
         item: item[4]
         box:
-          abs: [22,300 362x56]
-          rel: [0,167 362x56]
+          abs: [8,275 390x56]
+          rel: [0,160 390x56]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:10/14
         - node: span
           box:
-            abs: [36,322 24x13]
+            abs: [22,297 24x13]
             rel: [14,22 24x13]
           layout: flex:row
           - node: icon:rotate-ccw
             box:
-              abs: [36,322 13x13]
+              abs: [22,297 13x13]
               rel: [0,0 13x13]
             position: clip
         - node: div
           box:
-            abs: [72,310 262x36]
-            rel: [50,10 262x36]
+            abs: [58,285 290x36]
+            rel: [50,10 290x36]
           - node: div
             text: 도서관
             box:
-              abs: [72,310 262x20]
-              rel: [0,0 262x20]
+              abs: [58,285 290x20]
+              rel: [0,0 290x20]
             position: clip
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: 1 card
             box:
-              abs: [72,331 262x15]
-              rel: [0,21 262x15]
+              abs: [58,306 290x15]
+              rel: [0,21 290x15]
             spacing: margin:1/0/0/0
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: icon-btn
           mx: MxIconButton
           box:
-            abs: [346,316 24x24]
-            rel: [324,16 24x24]
+            abs: [360,291 24x24]
+            rel: [352,16 24x24]
           layout: flex:row justify:center align:center
           position: pos:relative
           style: r:999
           - node: span
             box:
-              abs: [348,318 20x20]
+              abs: [362,293 20x20]
               rel: [2,2 20x20]
             layout: flex:row
             - node: icon:x
               box:
-                abs: [348,318 20x20]
+                abs: [362,293 20x20]
                 rel: [0,0 20x20]
               position: clip
     - node: ov
       text: Try searching
       box:
-        abs: [26,381 108x13]
-        rel: [18,273 108x13]
+        abs: [12,354 117x12]
+        rel: [4,264 117x12]
       layout: flex:row gap:6 align:center
-      style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      style: font:11/700 color:#000000 tracking:0.6
       - node: span
         box:
-          abs: [26,382 11x11]
+          abs: [12,354 11x11]
           rel: [0,1 11x11]
         layout: flex:row
         - node: icon:sparkles
           box:
-            abs: [26,382 11x11]
+            abs: [12,354 11x11]
             rel: [0,0 11x11]
           position: clip
     - node: card
       mx: MxCard
       box:
-        abs: [22,405 362x229]
-        rel: [14,297 362x229]
+        abs: [8,377 390x219]
+        rel: [0,287 390x219]
       repeat: x4(unit=1)
       spacing: margin:0/0/14/0
       position: clip
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: div
         item: item[1]
         box:
-          abs: [22,405 362x57]
-          rel: [0,0 362x57]
+          abs: [8,377 390x54]
+          rel: [0,0 390x54]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:11/14
-        style: border-b:1px seed-indigo@14
         - node: div
           box:
-            abs: [36,420 26x26]
-            rel: [14,15 26x26]
+            abs: [22,391 26x26]
+            rel: [14,14 26x26]
           layout: flex:row justify:center align:center
-          style: bg:seed-indigo@12 r:8
+          style: r:8
           - node: span
             box:
-              abs: [43,427 13x13]
+              abs: [29,398 13x13]
               rel: [7,7 13x13]
             layout: flex:row
             - node: icon:folder
               box:
-                abs: [43,427 13x13]
+                abs: [29,398 13x13]
                 rel: [0,0 13x13]
               position: clip
         - node: div
           box:
-            abs: [78,416 266x34]
-            rel: [56,11 266x34]
+            abs: [64,388 294x32]
+            rel: [56,11 294x32]
           - node: div
             text: a folder name
             box:
-              abs: [78,416 266x18]
-              rel: [0,0 266x18]
+              abs: [64,388 294x16]
+              rel: [0,0 294x16]
             position: clip
-            style: font:14/600 color:font-headline tracking:-0.1
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: Korean, Japanese
             box:
-              abs: [78,435 266x15]
-              rel: [0,19 266x15]
+              abs: [64,405 294x15]
+              rel: [0,17 294x15]
             spacing: margin:1/0/0/0
             position: clip
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: div
           box:
-            abs: [356,426 14x14]
-            rel: [334,21 14x14]
+            abs: [370,397 14x14]
+            rel: [362,20 14x14]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [356,426 14x14]
+              abs: [370,397 14x14]
               rel: [0,0 14x14]
             layout: flex:row
             - node: icon:arrow-up-left
               box:
-                abs: [356,426 14x14]
+                abs: [370,397 14x14]
                 rel: [0,0 14x14]
               position: clip
       - node: div
         item: item[2]
         box:
-          abs: [22,462 362x57]
-          rel: [0,57 362x57]
+          abs: [8,431 390x54]
+          rel: [0,54 390x54]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:11/14
-        style: border-b:1px seed-indigo@14
         - node: div
           box:
-            abs: [36,477 26x26]
-            rel: [14,15 26x26]
+            abs: [22,445 26x26]
+            rel: [14,14 26x26]
           layout: flex:row justify:center align:center
-          style: bg:accent@12 r:8
+          style: r:8
           - node: span
             box:
-              abs: [43,484 13x13]
+              abs: [29,452 13x13]
               rel: [7,7 13x13]
             layout: flex:row
             - node: icon:layers
               box:
-                abs: [43,484 13x13]
+                abs: [29,452 13x13]
                 rel: [0,0 13x13]
               position: clip
         - node: div
           box:
-            abs: [78,473 266x34]
-            rel: [56,11 266x34]
+            abs: [64,442 294x32]
+            rel: [56,11 294x32]
           - node: div
             text: a deck
             box:
-              abs: [78,473 266x18]
-              rel: [0,0 266x18]
+              abs: [64,442 294x16]
+              rel: [0,0 294x16]
             position: clip
-            style: font:14/600 color:font-headline tracking:-0.1
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: TOPIK II — Vocab
             box:
-              abs: [78,492 266x15]
-              rel: [0,19 266x15]
+              abs: [64,459 294x15]
+              rel: [0,17 294x15]
             spacing: margin:1/0/0/0
             position: clip
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: div
           box:
-            abs: [356,483 14x14]
-            rel: [334,21 14x14]
+            abs: [370,451 14x14]
+            rel: [362,20 14x14]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [356,483 14x14]
+              abs: [370,451 14x14]
               rel: [0,0 14x14]
             layout: flex:row
             - node: icon:arrow-up-left
               box:
-                abs: [356,483 14x14]
+                abs: [370,451 14x14]
                 rel: [0,0 14x14]
               position: clip
       - node: div
         item: item[3]
         box:
-          abs: [22,519 362x59]
-          rel: [0,114 362x59]
+          abs: [8,485 390x57]
+          rel: [0,108 390x57]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:11/14
-        style: border-b:1px seed-indigo@14
         - node: div
           box:
-            abs: [36,535 26x26]
+            abs: [22,501 26x26]
             rel: [14,16 26x26]
           layout: flex:row justify:center align:center
           style: r:8
           - node: span
             box:
-              abs: [43,542 13x13]
+              abs: [29,507 13x13]
               rel: [7,7 13x13]
             layout: flex:row
             - node: icon:copy
               box:
-                abs: [43,542 13x13]
+                abs: [29,507 13x13]
                 rel: [0,0 13x13]
               position: clip
         - node: div
           box:
-            abs: [78,530 266x36]
-            rel: [56,11 266x36]
+            abs: [64,496 294x35]
+            rel: [56,11 294x35]
           - node: div
             text: a card term or meaning
             box:
-              abs: [78,530 266x18]
-              rel: [0,0 266x18]
+              abs: [64,496 294x16]
+              rel: [0,0 294x16]
             position: clip
-            style: font:14/600 color:font-headline tracking:-0.1
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: 연구자, library
             box:
-              abs: [78,549 266x17]
-              rel: [0,19 266x17]
+              abs: [64,513 294x18]
+              rel: [0,17 294x18]
             spacing: margin:1/0/0/0
             position: clip
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: div
           box:
-            abs: [356,541 14x14]
-            rel: [334,22 14x14]
+            abs: [370,507 14x14]
+            rel: [362,22 14x14]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [356,541 14x14]
+              abs: [370,507 14x14]
               rel: [0,0 14x14]
             layout: flex:row
             - node: icon:arrow-up-left
               box:
-                abs: [356,541 14x14]
+                abs: [370,507 14x14]
                 rel: [0,0 14x14]
               position: clip
       - node: div
         item: item[4]
         box:
-          abs: [22,578 362x56]
-          rel: [0,173 362x56]
+          abs: [8,542 390x54]
+          rel: [0,165 390x54]
         layout: grid cols:3 gap:12 align:center
         spacing: pad:11/14
         - node: div
           box:
-            abs: [36,593 26x26]
-            rel: [14,15 26x26]
+            abs: [22,556 26x26]
+            rel: [14,14 26x26]
           layout: flex:row justify:center align:center
           style: r:8
           - node: span
             box:
-              abs: [43,600 13x13]
+              abs: [29,563 13x13]
               rel: [7,7 13x13]
             layout: flex:row
             - node: icon:tag
               box:
-                abs: [43,600 13x13]
+                abs: [29,563 13x13]
                 rel: [0,0 13x13]
               position: clip
         - node: div
           box:
-            abs: [78,589 266x34]
-            rel: [56,11 266x34]
+            abs: [64,553 294x32]
+            rel: [56,11 294x32]
           - node: div
             text: a tag
             box:
-              abs: [78,589 266x18]
-              rel: [0,0 266x18]
+              abs: [64,553 294x16]
+              rel: [0,0 294x16]
             position: clip
-            style: font:14/600 color:font-headline tracking:-0.1
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: noun, verb, food
             box:
-              abs: [78,608 266x15]
-              rel: [0,19 266x15]
+              abs: [64,570 294x15]
+              rel: [0,17 294x15]
             spacing: margin:1/0/0/0
             position: clip
-            style: font:12/400 color:on-surface-variant
+            style: font:12/400 color:#000000
         - node: div
           box:
-            abs: [356,599 14x14]
-            rel: [334,21 14x14]
+            abs: [370,562 14x14]
+            rel: [362,20 14x14]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [356,599 14x14]
+              abs: [370,562 14x14]
               rel: [0,0 14x14]
             layout: flex:row
             - node: icon:arrow-up-left
               box:
-                abs: [356,599 14x14]
+                abs: [370,562 14x14]
                 rel: [0,0 14x14]
               position: clip
     - node: div
       box:
-        abs: [22,648 362x58]
-        rel: [14,540 362x58]
+        abs: [8,610 390x38]
+        rel: [0,520 390x38]
       layout: flex:row gap:8 align:start
       spacing: pad:10/12
-      style: bg:on-primary r:12 border:1px seed-indigo@14
       - node: span
         box:
-          abs: [35,659 13x13]
-          rel: [13,11 13x13]
+          abs: [20,620 13x13]
+          rel: [12,10 13x13]
         layout: flex:row
         - node: icon:info
           box:
-            abs: [35,659 13x13]
+            abs: [20,620 13x13]
             rel: [0,0 13x13]
           position: clip
       - node: span
         text: Search is case-insensitive. Korean, English, and Vietnamese all work.
         box:
-          abs: [56,659 315x36]
-          rel: [34,11 315x36]
-        style: font:12/400/18 color:on-surface-variant
+          abs: [41,620 334x18]
+          rel: [33,10 334x18]
+        style: font:12/400/18 color:#000000
 ```
 
 ## State: Loading (full — differs too much from base)
@@ -697,7 +681,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -707,9 +690,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -733,83 +716,76 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x38]
+      rel: [0,44 390x38]
     layout: flex:row gap:8 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,53 36x36]
+        rel: [8,1 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,61 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,61 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [60,60 330x40]
-        rel: [52,8 330x40]
+        abs: [60,52 330x38]
+        rel: [52,0 330x38]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:0/12
-      style: bg:on-primary r:12 border:1px seed-indigo
       - node: span
         box:
-          abs: [73,73 15x15]
-          rel: [13,13 15x15]
+          abs: [72,64 15x15]
+          rel: [12,12 15x15]
         layout: flex:row
         - node: icon:search
           box:
-            abs: [73,73 15x15]
+            abs: [72,64 15x15]
             rel: [0,0 15x15]
           position: clip
       - node: span
         text: 연구
         box:
-          abs: [96,70 249x20]
-          rel: [36,10 249x20]
+          abs: [95,61 251x20]
+          rel: [35,9 251x20]
         layout: flex:row align:center
         flex: grow:1 basis:0 layout_hint:expanded
         position: clip
-        style: font:14/600 color:font-headline
-        - node: span
-          box:
-            abs: [124,72 2x16]
-            rel: [28,2 2x16]
-          spacing: margin:0/0/0/2
-          style: bg:seed-indigo
+        style: font:14/600 color:#000000
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [353,68 24x24]
-          rel: [293,8 24x24]
+          abs: [354,59 24x24]
+          rel: [294,7 24x24]
         layout: flex:row justify:center align:center
         position: pos:relative
         style: r:999
         - node: span
           box:
-            abs: [355,70 20x20]
+            abs: [356,61 20x20]
             rel: [2,2 20x20]
           layout: flex:row
           - node: icon:x-circle
             box:
-              abs: [355,70 20x20]
+              abs: [356,61 20x20]
               rel: [0,0 20x20]
             position: clip
   - node: scroll-x
     box:
-      abs: [22,108 362x28]
-      rel: [14,100 362x28]
+      abs: [22,90 362x28]
+      rel: [14,82 362x28]
     layout: flex:row gap:6
     repeat: x5(unit=1)
     position: layout_hint:scroll
@@ -818,339 +794,334 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       text: All
       mx: ?
       box:
-        abs: [22,108 54x28]
-        rel: [0,0 54x28]
+        abs: [22,90 52x28]
+        rel: [0,0 52x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:seed-indigo font:12/600 color:on-primary text:center r:999
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         text: 18
         box:
-          abs: [51,115 14x15]
-          rel: [29,7 14x15]
-        style: font:12/700 color:on-primary text:center op:0.75
+          abs: [52,97 12x15]
+          rel: [30,7 12x15]
+        style: font:12/700 color:#000000 text:center op:0.75
     - node: button
       item: item[2]
       text: Folders
       mx: ?
       box:
-        abs: [82,108 94x28]
-        rel: [60,0 94x28]
+        abs: [80,90 86x28]
+        rel: [58,0 86x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [93,117 11x11]
-          rel: [11,9 11x11]
+          abs: [90,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:folder
           box:
-            abs: [93,117 11x11]
+            abs: [90,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 1
         box:
-          abs: [157,115 7x15]
-          rel: [76,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [150,97 6x15]
+          rel: [70,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[3]
       text: Decks
       mx: ?
       box:
-        abs: [181,108 87x28]
-        rel: [159,0 87x28]
+        abs: [172,90 78x28]
+        rel: [150,0 78x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [192,117 11x11]
-          rel: [11,9 11x11]
+          abs: [182,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:layers
           box:
-            abs: [192,117 11x11]
+            abs: [182,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 2
         box:
-          abs: [250,115 7x15]
-          rel: [68,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [234,97 6x15]
+          rel: [62,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[4]
       text: Flashcards
       mx: ?
       box:
-        abs: [274,108 120x28]
-        rel: [252,0 120x28]
+        abs: [256,90 109x28]
+        rel: [234,0 109x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [285,117 11x11]
-          rel: [11,9 11x11]
+          abs: [266,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:copy
           box:
-            abs: [285,117 11x11]
+            abs: [266,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 12
         box:
-          abs: [369,115 14x15]
-          rel: [95,7 14x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [343,97 12x15]
+          rel: [87,7 12x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[5]
       text: Tags
       mx: ?
       box:
-        abs: [400,108 77x28]
-        rel: [378,0 77x28]
+        abs: [371,90 71x28]
+        rel: [349,0 71x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [411,117 11x11]
-          rel: [11,9 11x11]
+          abs: [381,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:tag
           box:
-            abs: [411,117 11x11]
+            abs: [381,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 3
         box:
-          abs: [459,115 7x15]
-          rel: [59,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [425,97 6x15]
+          rel: [55,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
   - node: scroll
     box:
-      abs: [8,146 390x642]
-      rel: [0,138 390x642]
+      abs: [8,128 390x660]
+      rel: [0,120 390x660]
     flex: grow:1 basis:0 layout_hint:expanded
-    spacing: pad:0/14/14/14
     position: layout_hint:scroll
     - node: ov
       text: Searching for "연구"…
       box:
-        abs: [26,156 136x13]
-        rel: [18,10 136x13]
-      style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        abs: [12,136 150x12]
+        rel: [4,8 150x12]
+      style: font:11/700 color:#000000 tracking:0.6
     - node: div
       box:
-        abs: [22,179 362x171]
-        rel: [14,33 362x171]
+        abs: [8,158 390x169]
+        rel: [0,30 390x169]
       spacing: margin:0/0/14/0
       - node: div
         box:
-          abs: [22,179 362x19]
-          rel: [0,0 362x19]
+          abs: [8,158 390x19]
+          rel: [0,0 390x19]
         layout: flex:row gap:6
         spacing: pad:2/4/8/4
         - node: span
           box:
-            abs: [26,181 70x9]
+            abs: [12,160 70x9]
             rel: [4,2 70x9]
-          style: bg:surface-container-high r:6 op:0.4
+          style: r:6 op:0.4
       - node: card
         mx: MxCard
         box:
-          abs: [22,198 362x152]
-          rel: [0,19 362x152]
+          abs: [8,177 390x150]
+          rel: [0,19 390x150]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [22,198 362x51]
-            rel: [0,0 362x51]
+            abs: [8,177 390x50]
+            rel: [0,0 390x50]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:12/14
-          style: border-b:1px seed-indigo@14
           - node: span
             box:
-              abs: [36,210 26x26]
+              abs: [22,189 26x26]
               rel: [14,12 26x26]
-            style: bg:surface-container-high r:8 op:0.5
+            style: r:8 op:0.5
           - node: div
             box:
-              abs: [78,210 260x26]
-              rel: [56,12 260x26]
+              abs: [64,189 288x26]
+              rel: [56,12 288x26]
             - node: span
               box:
-                abs: [78,210 90x11]
+                abs: [64,189 90x11]
                 rel: [0,0 90x11]
-              style: bg:surface-container-high r:6 op:0.5
+              style: r:6 op:0.5
             - node: span
               box:
-                abs: [78,227 60x9]
+                abs: [64,206 60x9]
                 rel: [0,17 60x9]
-              style: bg:surface-container-high r:6 op:0.4
+              style: r:6 op:0.4
         - node: div
           box:
-            abs: [22,249 362x51]
-            rel: [0,51 362x51]
+            abs: [8,227 390x50]
+            rel: [0,50 390x50]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:12/14
-          style: border-b:1px seed-indigo@14
           - node: span
             box:
-              abs: [36,261 26x26]
+              abs: [22,239 26x26]
               rel: [14,12 26x26]
-            style: bg:surface-container-high r:8 op:0.5
+            style: r:8 op:0.5
           - node: div
             box:
-              abs: [78,261 260x26]
-              rel: [56,12 260x26]
+              abs: [64,239 288x26]
+              rel: [56,12 288x26]
             - node: span
               box:
-                abs: [78,261 120x11]
+                abs: [64,239 120x11]
                 rel: [0,0 120x11]
-              style: bg:surface-container-high r:6 op:0.5
+              style: r:6 op:0.5
             - node: span
               box:
-                abs: [78,278 80x9]
+                abs: [64,256 80x9]
                 rel: [0,17 80x9]
-              style: bg:surface-container-high r:6 op:0.4
+              style: r:6 op:0.4
         - node: div
           box:
-            abs: [22,300 362x50]
-            rel: [0,102 362x50]
+            abs: [8,277 390x50]
+            rel: [0,100 390x50]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:12/14
           - node: span
             box:
-              abs: [36,312 26x26]
+              abs: [22,289 26x26]
               rel: [14,12 26x26]
-            style: bg:surface-container-high r:8 op:0.5
+            style: r:8 op:0.5
           - node: div
             box:
-              abs: [78,312 260x26]
-              rel: [56,12 260x26]
+              abs: [64,289 288x26]
+              rel: [56,12 288x26]
             - node: span
               box:
-                abs: [78,312 150x11]
+                abs: [64,289 150x11]
                 rel: [0,0 150x11]
-              style: bg:surface-container-high r:6 op:0.5
+              style: r:6 op:0.5
             - node: span
               box:
-                abs: [78,329 100x9]
+                abs: [64,306 100x9]
                 rel: [0,17 100x9]
-              style: bg:surface-container-high r:6 op:0.4
+              style: r:6 op:0.4
     - node: div
       box:
-        abs: [22,364 362x171]
-        rel: [14,218 362x171]
+        abs: [8,341 390x169]
+        rel: [0,213 390x169]
       spacing: margin:0/0/14/0
       - node: div
         box:
-          abs: [22,364 362x19]
-          rel: [0,0 362x19]
+          abs: [8,341 390x19]
+          rel: [0,0 390x19]
         layout: flex:row gap:6
         spacing: pad:2/4/8/4
         - node: span
           box:
-            abs: [26,366 70x9]
+            abs: [12,343 70x9]
             rel: [4,2 70x9]
-          style: bg:surface-container-high r:6 op:0.4
+          style: r:6 op:0.4
       - node: card
         mx: MxCard
         box:
-          abs: [22,383 362x152]
-          rel: [0,19 362x152]
+          abs: [8,360 390x150]
+          rel: [0,19 390x150]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [22,383 362x51]
-            rel: [0,0 362x51]
+            abs: [8,360 390x50]
+            rel: [0,0 390x50]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:12/14
-          style: border-b:1px seed-indigo@14
           - node: span
             box:
-              abs: [36,395 26x26]
+              abs: [22,372 26x26]
               rel: [14,12 26x26]
-            style: bg:surface-container-high r:8 op:0.5
+            style: r:8 op:0.5
           - node: div
             box:
-              abs: [78,395 260x26]
-              rel: [56,12 260x26]
+              abs: [64,372 288x26]
+              rel: [56,12 288x26]
             - node: span
               box:
-                abs: [78,395 90x11]
+                abs: [64,372 90x11]
                 rel: [0,0 90x11]
-              style: bg:surface-container-high r:6 op:0.5
+              style: r:6 op:0.5
             - node: span
               box:
-                abs: [78,412 60x9]
+                abs: [64,389 60x9]
                 rel: [0,17 60x9]
-              style: bg:surface-container-high r:6 op:0.4
+              style: r:6 op:0.4
         - node: div
           box:
-            abs: [22,434 362x51]
-            rel: [0,51 362x51]
+            abs: [8,410 390x50]
+            rel: [0,50 390x50]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:12/14
-          style: border-b:1px seed-indigo@14
           - node: span
             box:
-              abs: [36,446 26x26]
+              abs: [22,422 26x26]
               rel: [14,12 26x26]
-            style: bg:surface-container-high r:8 op:0.5
+            style: r:8 op:0.5
           - node: div
             box:
-              abs: [78,446 260x26]
-              rel: [56,12 260x26]
+              abs: [64,422 288x26]
+              rel: [56,12 288x26]
             - node: span
               box:
-                abs: [78,446 120x11]
+                abs: [64,422 120x11]
                 rel: [0,0 120x11]
-              style: bg:surface-container-high r:6 op:0.5
+              style: r:6 op:0.5
             - node: span
               box:
-                abs: [78,463 80x9]
+                abs: [64,439 80x9]
                 rel: [0,17 80x9]
-              style: bg:surface-container-high r:6 op:0.4
+              style: r:6 op:0.4
         - node: div
           box:
-            abs: [22,485 362x50]
-            rel: [0,102 362x50]
+            abs: [8,460 390x50]
+            rel: [0,100 390x50]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:12/14
           - node: span
             box:
-              abs: [36,497 26x26]
+              abs: [22,472 26x26]
               rel: [14,12 26x26]
-            style: bg:surface-container-high r:8 op:0.5
+            style: r:8 op:0.5
           - node: div
             box:
-              abs: [78,497 260x26]
-              rel: [56,12 260x26]
+              abs: [64,472 288x26]
+              rel: [56,12 288x26]
             - node: span
               box:
-                abs: [78,497 150x11]
+                abs: [64,472 150x11]
                 rel: [0,0 150x11]
-              style: bg:surface-container-high r:6 op:0.5
+              style: r:6 op:0.5
             - node: span
               box:
-                abs: [78,514 100x9]
+                abs: [64,489 100x9]
                 rel: [0,17 100x9]
-              style: bg:surface-container-high r:6 op:0.4
+              style: r:6 op:0.4
 ```
 
 ## State: Results (full — differs too much from base)
@@ -1163,7 +1134,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -1173,9 +1143,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -1199,83 +1169,76 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x38]
+      rel: [0,44 390x38]
     layout: flex:row gap:8 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,53 36x36]
+        rel: [8,1 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,61 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,61 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [60,60 330x40]
-        rel: [52,8 330x40]
+        abs: [60,52 330x38]
+        rel: [52,0 330x38]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:0/12
-      style: bg:on-primary r:12 border:1px seed-indigo
       - node: span
         box:
-          abs: [73,73 15x15]
-          rel: [13,13 15x15]
+          abs: [72,64 15x15]
+          rel: [12,12 15x15]
         layout: flex:row
         - node: icon:search
           box:
-            abs: [73,73 15x15]
+            abs: [72,64 15x15]
             rel: [0,0 15x15]
           position: clip
       - node: span
         text: 연구
         box:
-          abs: [96,70 249x20]
-          rel: [36,10 249x20]
+          abs: [95,61 251x20]
+          rel: [35,9 251x20]
         layout: flex:row align:center
         flex: grow:1 basis:0 layout_hint:expanded
         position: clip
-        style: font:14/600 color:font-headline
-        - node: span
-          box:
-            abs: [124,72 2x16]
-            rel: [28,2 2x16]
-          spacing: margin:0/0/0/2
-          style: bg:seed-indigo
+        style: font:14/600 color:#000000
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [353,68 24x24]
-          rel: [293,8 24x24]
+          abs: [354,59 24x24]
+          rel: [294,7 24x24]
         layout: flex:row justify:center align:center
         position: pos:relative
         style: r:999
         - node: span
           box:
-            abs: [355,70 20x20]
+            abs: [356,61 20x20]
             rel: [2,2 20x20]
           layout: flex:row
           - node: icon:x-circle
             box:
-              abs: [355,70 20x20]
+              abs: [356,61 20x20]
               rel: [0,0 20x20]
             position: clip
   - node: scroll-x
     box:
-      abs: [22,108 362x28]
-      rel: [14,100 362x28]
+      abs: [22,90 362x28]
+      rel: [14,82 362x28]
     layout: flex:row gap:6
     repeat: x5(unit=1)
     position: layout_hint:scroll
@@ -1284,904 +1247,891 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       text: All
       mx: ?
       box:
-        abs: [22,108 54x28]
-        rel: [0,0 54x28]
+        abs: [22,90 52x28]
+        rel: [0,0 52x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:seed-indigo font:12/600 color:on-primary text:center r:999
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         text: 18
         box:
-          abs: [51,115 14x15]
-          rel: [29,7 14x15]
-        style: font:12/700 color:on-primary text:center op:0.75
+          abs: [52,97 12x15]
+          rel: [30,7 12x15]
+        style: font:12/700 color:#000000 text:center op:0.75
     - node: button
       item: item[2]
       text: Folders
       mx: ?
       box:
-        abs: [82,108 94x28]
-        rel: [60,0 94x28]
+        abs: [80,90 86x28]
+        rel: [58,0 86x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [93,117 11x11]
-          rel: [11,9 11x11]
+          abs: [90,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:folder
           box:
-            abs: [93,117 11x11]
+            abs: [90,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 1
         box:
-          abs: [157,115 7x15]
-          rel: [76,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [150,97 6x15]
+          rel: [70,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[3]
       text: Decks
       mx: ?
       box:
-        abs: [181,108 87x28]
-        rel: [159,0 87x28]
+        abs: [172,90 78x28]
+        rel: [150,0 78x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [192,117 11x11]
-          rel: [11,9 11x11]
+          abs: [182,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:layers
           box:
-            abs: [192,117 11x11]
+            abs: [182,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 2
         box:
-          abs: [250,115 7x15]
-          rel: [68,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [234,97 6x15]
+          rel: [62,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[4]
       text: Flashcards
       mx: ?
       box:
-        abs: [274,108 120x28]
-        rel: [252,0 120x28]
+        abs: [256,90 109x28]
+        rel: [234,0 109x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [285,117 11x11]
-          rel: [11,9 11x11]
+          abs: [266,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:copy
           box:
-            abs: [285,117 11x11]
+            abs: [266,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 12
         box:
-          abs: [369,115 14x15]
-          rel: [95,7 14x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [343,97 12x15]
+          rel: [87,7 12x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[5]
       text: Tags
       mx: ?
       box:
-        abs: [400,108 77x28]
-        rel: [378,0 77x28]
+        abs: [371,90 71x28]
+        rel: [349,0 71x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [411,117 11x11]
-          rel: [11,9 11x11]
+          abs: [381,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:tag
           box:
-            abs: [411,117 11x11]
+            abs: [381,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 3
         box:
-          abs: [459,115 7x15]
-          rel: [59,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [425,97 6x15]
+          rel: [55,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
   - node: scroll
     box:
-      abs: [8,146 390x642]
-      rel: [0,138 390x642]
+      abs: [8,128 390x660]
+      rel: [0,120 390x660]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x6(unit=1)
-    spacing: pad:0/14/14/14
     position: layout_hint:scroll
-    scroll: scrollh:755
+    scroll: scrollh:727
     - node: ov
       text: 18 results for "연구"
       box:
-        abs: [26,154 126x13]
-        rel: [18,8 126x13]
-      style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        abs: [12,134 135x12]
+        rel: [4,6 135x12]
+      style: font:11/700 color:#000000 tracking:0.6
     - node: div
       item: item[2]
       box:
-        abs: [22,179 362x81]
-        rel: [14,33 362x81]
+        abs: [8,158 390x81]
+        rel: [0,30 390x81]
       spacing: margin:0/0/16/0
       - node: div
         box:
-          abs: [22,179 362x23]
-          rel: [0,0 362x23]
+          abs: [8,158 390x23]
+          rel: [0,0 390x23]
         layout: flex:row justify:between align:center
         spacing: pad:0/4/8/4
         - node: div
           box:
-            abs: [26,179 101x15]
-            rel: [4,0 101x15]
+            abs: [12,158 100x15]
+            rel: [4,0 100x15]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [26,181 11x11]
+              abs: [12,160 11x11]
               rel: [0,2 11x11]
             layout: flex:row
             - node: icon:folder
               box:
-                abs: [26,181 11x11]
+                abs: [12,160 11x11]
                 rel: [0,0 11x11]
               position: clip
           - node: span
             text: Folders
             box:
-              abs: [43,179 58x15]
-              rel: [17,0 58x15]
-            style: font:12/700 color:seed-indigo tracking:0.4
+              abs: [29,158 59x15]
+              rel: [17,0 59x15]
+            style: font:12/700 color:#000000 tracking:0.4
           - node: span
             text: 1
             box:
-              abs: [107,179 19x15]
-              rel: [81,0 19x15]
+              abs: [94,158 18x15]
+              rel: [82,0 18x15]
             spacing: pad:0/6
-            style: bg:surface-container font:12/700 color:on-surface-variant r:999
-      - node: card
-        mx: MxCard
+            style: font:12/700 color:#000000 r:999
+      - node: div
         box:
-          abs: [22,202 362x58]
-          rel: [0,23 362x58]
-        position: clip
-        style: bg:on-primary r:20 shadow:1/2
+          abs: [8,181 390x58]
+          rel: [0,23 390x58]
+        layout: grid cols:3 gap:12 align:center
+        spacing: pad:11/14
         - node: div
           box:
-            abs: [22,202 362x58]
-            rel: [0,0 362x58]
-          layout: grid cols:3 gap:12 align:center
-          spacing: pad:11/14
-          - node: div
+            abs: [22,197 26x26]
+            rel: [14,16 26x26]
+          layout: flex:row justify:center align:center
+          style: r:8
+          - node: span
             box:
-              abs: [36,218 26x26]
-              rel: [14,16 26x26]
-            layout: flex:row justify:center align:center
-            style: bg:seed-indigo@12 r:8
-            - node: span
+              abs: [29,204 13x13]
+              rel: [7,7 13x13]
+            layout: flex:row
+            - node: icon:folder
               box:
-                abs: [43,225 13x13]
-                rel: [7,7 13x13]
-              layout: flex:row
-              - node: icon:folder
-                box:
-                  abs: [43,225 13x13]
-                  rel: [0,0 13x13]
-                position: clip
-          - node: div
-            box:
-              abs: [78,213 265x36]
-              rel: [56,11 265x36]
-            - node: div
-              text: Korean — TOPIK roots
-              box:
-                abs: [78,213 265x20]
-                rel: [0,0 265x20]
+                abs: [29,204 13x13]
+                rel: [0,0 13x13]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
-              - node: mark
-                text: 연구
-                box:
-                  abs: [128,214 30x18]
-                  rel: [50,1 30x18]
-                spacing: pad:0/2
-                style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.18) font:14/700 color:seed-indigo tracking:-0.1 r:3
-            - node: div
-              text: 4 subfolders · 286 cards
-              box:
-                abs: [78,234 265x15]
-                rel: [0,21 265x15]
-              spacing: margin:1/0/0/0
-              position: clip
-              style: font:12/400 color:on-surface-variant
+        - node: div
+          box:
+            abs: [64,192 293x36]
+            rel: [56,11 293x36]
           - node: div
+            text: Korean — TOPIK roots
             box:
-              abs: [355,224 15x15]
-              rel: [333,22 15x15]
-            layout: flex:row gap:6 align:center
-            - node: span
+              abs: [64,192 293x20]
+              rel: [0,0 293x20]
+            position: clip
+            style: font:14/600 color:#000000 tracking:-0.1
+            - node: mark
+              text: 연구
               box:
-                abs: [355,224 15x15]
+                abs: [112,196 30x15]
+                rel: [48,4 30x15]
+              spacing: pad:0/2
+              style: font:14/700 color:#000000 tracking:-0.1 r:3
+          - node: div
+            text: 4 subfolders · 286 cards
+            box:
+              abs: [64,213 293x15]
+              rel: [0,21 293x15]
+            spacing: margin:1/0/0/0
+            position: clip
+            style: font:12/400 color:#000000
+        - node: div
+          box:
+            abs: [369,203 15x15]
+            rel: [361,22 15x15]
+          layout: flex:row gap:6 align:center
+          - node: span
+            box:
+              abs: [369,203 15x15]
+              rel: [0,0 15x15]
+            layout: flex:row
+            - node: icon:chevron-right
+              box:
+                abs: [369,203 15x15]
                 rel: [0,0 15x15]
-              layout: flex:row
-              - node: icon:chevron-right
-                box:
-                  abs: [355,224 15x15]
-                  rel: [0,0 15x15]
-                position: clip
+              position: clip
     - node: div
       item: item[3]
       box:
-        abs: [22,276 362x140]
-        rel: [14,130 362x140]
+        abs: [8,255 390x139]
+        rel: [0,127 390x139]
       spacing: margin:0/0/16/0
       - node: div
         box:
-          abs: [22,276 362x23]
-          rel: [0,0 362x23]
+          abs: [8,255 390x23]
+          rel: [0,0 390x23]
         layout: flex:row justify:between align:center
         spacing: pad:0/4/8/4
         - node: div
           box:
-            abs: [26,276 85x15]
-            rel: [4,0 85x15]
+            abs: [12,255 84x15]
+            rel: [4,0 84x15]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [26,278 11x11]
+              abs: [12,257 11x11]
               rel: [0,2 11x11]
             layout: flex:row
             - node: icon:layers
               box:
-                abs: [26,278 11x11]
+                abs: [12,257 11x11]
                 rel: [0,0 11x11]
               position: clip
           - node: span
             text: Decks
             box:
-              abs: [43,276 43x15]
+              abs: [29,255 43x15]
               rel: [17,0 43x15]
-            style: font:12/700 color:accent tracking:0.4
+            style: font:12/700 color:#000000 tracking:0.4
           - node: span
             text: 2
             box:
-              abs: [92,276 19x15]
-              rel: [66,0 19x15]
+              abs: [78,255 18x15]
+              rel: [66,0 18x15]
             spacing: pad:0/6
-            style: bg:surface-container font:12/700 color:on-surface-variant r:999
+            style: font:12/700 color:#000000 r:999
       - node: card
         mx: MxCard
         box:
-          abs: [22,299 362x117]
-          rel: [0,23 362x117]
+          abs: [8,278 390x116]
+          rel: [0,23 390x116]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [22,299 362x59]
-            rel: [0,0 362x59]
+            abs: [8,278 390x58]
+            rel: [0,0 390x58]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [36,315 26x26]
+              abs: [22,294 26x26]
               rel: [14,16 26x26]
             layout: flex:row justify:center align:center
-            style: bg:accent@12 r:8
+            style: r:8
             - node: span
               box:
-                abs: [43,322 13x13]
+                abs: [29,301 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:layers
                 box:
-                  abs: [43,322 13x13]
+                  abs: [29,301 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,310 234x36]
-              rel: [56,11 234x36]
+              abs: [64,289 266x36]
+              rel: [56,11 266x36]
             - node: div
               text: vocabulary
               box:
-                abs: [78,310 234x20]
-                rel: [0,0 234x20]
+                abs: [64,289 266x20]
+                rel: [0,0 266x20]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
               - node: mark
                 text: 연구
                 box:
-                  abs: [78,311 30x18]
-                  rel: [0,1 30x18]
+                  abs: [64,293 30x15]
+                  rel: [0,4 30x15]
                 spacing: pad:0/2
-                style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.18) font:14/700 color:seed-indigo tracking:-0.1 r:3
+                style: font:14/700 color:#000000 tracking:-0.1 r:3
             - node: div
               text: 62 cards · Korean / TOPIK II
               box:
-                abs: [78,331 234x15]
-                rel: [0,21 234x15]
+                abs: [64,310 266x15]
+                rel: [0,21 266x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [324,319 46x18]
-              rel: [302,20 46x18]
+              abs: [342,298 42x18]
+              rel: [334,20 42x18]
             layout: flex:row gap:6 align:center
             - node: span
               text: 8 due
               box:
-                abs: [324,319 46x18]
-                rel: [0,0 46x18]
+                abs: [342,298 42x18]
+                rel: [0,0 42x18]
               layout: flex:row align:center
               spacing: pad:0/7
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/700 color:seed-indigo r:999
+              style: font:12/700 color:#000000 r:999
         - node: div
           box:
-            abs: [22,358 362x58]
-            rel: [0,59 362x58]
+            abs: [8,336 390x58]
+            rel: [0,58 390x58]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
           - node: div
             box:
-              abs: [36,374 26x26]
+              abs: [22,352 26x26]
               rel: [14,16 26x26]
             layout: flex:row justify:center align:center
-            style: bg:accent@12 r:8
+            style: r:8
             - node: span
               box:
-                abs: [43,381 13x13]
+                abs: [29,359 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:layers
                 box:
-                  abs: [43,381 13x13]
+                  abs: [29,359 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,369 265x36]
-              rel: [56,11 265x36]
+              abs: [64,347 293x36]
+              rel: [56,11 293x36]
             - node: div
               text: Academic terms
               box:
-                abs: [78,369 265x20]
-                rel: [0,0 265x20]
+                abs: [64,347 293x20]
+                rel: [0,0 293x20]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
               - node: mark
                 text: 연구
                 box:
-                  abs: [148,370 30x18]
-                  rel: [70,1 30x18]
+                  abs: [126,351 30x15]
+                  rel: [62,4 30x15]
                 spacing: pad:0/2
-                style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.18) font:14/700 color:seed-indigo tracking:-0.1 r:3
+                style: font:14/700 color:#000000 tracking:-0.1 r:3
             - node: div
               text: 34 cards · Korean / Advanced
               box:
-                abs: [78,390 265x15]
-                rel: [0,21 265x15]
+                abs: [64,368 293x15]
+                rel: [0,21 293x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [355,380 15x15]
-              rel: [333,22 15x15]
+              abs: [369,358 15x15]
+              rel: [361,22 15x15]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [355,380 15x15]
+                abs: [369,358 15x15]
                 rel: [0,0 15x15]
               layout: flex:row
               - node: icon:chevron-right
                 box:
-                  abs: [355,380 15x15]
+                  abs: [369,358 15x15]
                   rel: [0,0 15x15]
                 position: clip
     - node: div
       item: item[4]
       box:
-        abs: [22,432 362x199]
-        rel: [14,286 362x199]
+        abs: [8,410 390x197]
+        rel: [0,282 390x197]
       spacing: margin:0/0/16/0
       - node: div
         box:
-          abs: [22,432 362x23]
-          rel: [0,0 362x23]
+          abs: [8,410 390x23]
+          rel: [0,0 390x23]
         layout: flex:row justify:between align:center
         spacing: pad:0/4/8/4
         - node: div
           box:
-            abs: [26,432 134x15]
-            rel: [4,0 134x15]
+            abs: [12,410 132x15]
+            rel: [4,0 132x15]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [26,434 11x11]
+              abs: [12,412 11x11]
               rel: [0,2 11x11]
             layout: flex:row
             - node: icon:copy
               box:
-                abs: [26,434 11x11]
+                abs: [12,412 11x11]
                 rel: [0,0 11x11]
               position: clip
           - node: span
             text: Flashcards
             box:
-              abs: [43,432 85x15]
+              abs: [29,410 85x15]
               rel: [17,0 85x15]
-            style: font:12/700 color:mastery tracking:0.4
+            style: font:12/700 color:#000000 tracking:0.4
           - node: span
             text: 12
             box:
-              abs: [134,432 26x15]
-              rel: [108,0 26x15]
+              abs: [120,410 24x15]
+              rel: [108,0 24x15]
             spacing: pad:0/6
-            style: bg:surface-container font:12/700 color:on-surface-variant r:999
+            style: font:12/700 color:#000000 r:999
         - node: button
           text: See all
           mx: ?
           box:
-            abs: [329,432 51x15]
-            rel: [307,0 51x15]
+            abs: [347,410 47x15]
+            rel: [339,0 47x15]
           layout: flex:row gap:3 align:center
-          style: font:12/600 color:seed-indigo text:center
+          style: font:12/600 color:#000000 text:center
           - node: span
             box:
-              abs: [369,434 11x11]
-              rel: [40,2 11x11]
+              abs: [383,412 11x11]
+              rel: [36,2 11x11]
             layout: flex:row
             - node: icon:chevron-right
               box:
-                abs: [369,434 11x11]
+                abs: [383,412 11x11]
                 rel: [0,0 11x11]
               position: clip
       - node: card
         mx: MxCard
         box:
-          abs: [22,455 362x176]
-          rel: [0,23 362x176]
+          abs: [8,433 390x174]
+          rel: [0,23 390x174]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [22,455 362x59]
-            rel: [0,0 362x59]
+            abs: [8,433 390x58]
+            rel: [0,0 390x58]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [36,471 26x26]
+              abs: [22,449 26x26]
               rel: [14,16 26x26]
             layout: flex:row justify:center align:center
             style: r:8
             - node: span
               box:
-                abs: [43,478 13x13]
+                abs: [29,456 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:copy
                 box:
-                  abs: [43,478 13x13]
+                  abs: [29,456 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,466 265x36]
-              rel: [56,11 265x36]
+              abs: [64,444 293x36]
+              rel: [56,11 293x36]
             - node: div
               text: 자
               box:
-                abs: [78,466 265x20]
-                rel: [0,0 265x20]
+                abs: [64,444 293x20]
+                rel: [0,0 293x20]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
               - node: mark
                 text: 연구
                 box:
-                  abs: [78,467 30x18]
-                  rel: [0,1 30x18]
+                  abs: [64,448 30x15]
+                  rel: [0,4 30x15]
                 spacing: pad:0/2
-                style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.18) font:14/700 color:seed-indigo tracking:-0.1 r:3
+                style: font:14/700 color:#000000 tracking:-0.1 r:3
             - node: div
               text: researcher / nhà nghiên cứu
               box:
-                abs: [78,487 265x15]
-                rel: [0,21 265x15]
+                abs: [64,465 293x15]
+                rel: [0,21 293x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [355,477 15x15]
-              rel: [333,22 15x15]
+              abs: [369,455 15x15]
+              rel: [361,22 15x15]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [355,477 15x15]
+                abs: [369,455 15x15]
                 rel: [0,0 15x15]
               layout: flex:row
               - node: icon:chevron-right
                 box:
-                  abs: [355,477 15x15]
+                  abs: [369,455 15x15]
                   rel: [0,0 15x15]
                 position: clip
         - node: div
           box:
-            abs: [22,514 362x59]
-            rel: [0,59 362x59]
+            abs: [8,491 390x58]
+            rel: [0,58 390x58]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [36,530 26x26]
+              abs: [22,507 26x26]
               rel: [14,16 26x26]
             layout: flex:row justify:center align:center
             style: r:8
             - node: span
               box:
-                abs: [43,537 13x13]
+                abs: [29,514 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:copy
                 box:
-                  abs: [43,537 13x13]
+                  abs: [29,514 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,525 265x36]
-              rel: [56,11 265x36]
+              abs: [64,502 293x36]
+              rel: [56,11 293x36]
             - node: div
               text: 하다
               box:
-                abs: [78,525 265x20]
-                rel: [0,0 265x20]
+                abs: [64,502 293x20]
+                rel: [0,0 293x20]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
               - node: mark
                 text: 연구
                 box:
-                  abs: [78,526 30x18]
-                  rel: [0,1 30x18]
+                  abs: [64,506 30x15]
+                  rel: [0,4 30x15]
                 spacing: pad:0/2
-                style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.18) font:14/700 color:seed-indigo tracking:-0.1 r:3
+                style: font:14/700 color:#000000 tracking:-0.1 r:3
             - node: div
               text: to research, to study
               box:
-                abs: [78,546 265x15]
-                rel: [0,21 265x15]
+                abs: [64,523 293x15]
+                rel: [0,21 293x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [355,536 15x15]
-              rel: [333,22 15x15]
+              abs: [369,513 15x15]
+              rel: [361,22 15x15]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [355,536 15x15]
+                abs: [369,513 15x15]
                 rel: [0,0 15x15]
               layout: flex:row
               - node: icon:chevron-right
                 box:
-                  abs: [355,536 15x15]
+                  abs: [369,513 15x15]
                   rel: [0,0 15x15]
                 position: clip
         - node: div
           box:
-            abs: [22,573 362x58]
-            rel: [0,118 362x58]
+            abs: [8,549 390x58]
+            rel: [0,116 390x58]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
           - node: div
             box:
-              abs: [36,589 26x26]
+              abs: [22,565 26x26]
               rel: [14,16 26x26]
             layout: flex:row justify:center align:center
             style: r:8
             - node: span
               box:
-                abs: [43,596 13x13]
+                abs: [29,572 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:copy
                 box:
-                  abs: [43,596 13x13]
+                  abs: [29,572 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,584 265x36]
-              rel: [56,11 265x36]
+              abs: [64,560 293x36]
+              rel: [56,11 293x36]
             - node: div
               text: 실
               box:
-                abs: [78,584 265x20]
-                rel: [0,0 265x20]
+                abs: [64,560 293x20]
+                rel: [0,0 293x20]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
               - node: mark
                 text: 연구
                 box:
-                  abs: [78,585 30x18]
-                  rel: [0,1 30x18]
+                  abs: [64,564 30x15]
+                  rel: [0,4 30x15]
                 spacing: pad:0/2
-                style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.18) font:14/700 color:seed-indigo tracking:-0.1 r:3
+                style: font:14/700 color:#000000 tracking:-0.1 r:3
             - node: div
               text: lab, research room
               box:
-                abs: [78,605 265x15]
-                rel: [0,21 265x15]
+                abs: [64,581 293x15]
+                rel: [0,21 293x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [355,595 15x15]
-              rel: [333,22 15x15]
+              abs: [369,571 15x15]
+              rel: [361,22 15x15]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [355,595 15x15]
+                abs: [369,571 15x15]
                 rel: [0,0 15x15]
               layout: flex:row
               - node: icon:chevron-right
                 box:
-                  abs: [355,595 15x15]
+                  abs: [369,571 15x15]
                   rel: [0,0 15x15]
                 position: clip
     - node: div
       item: item[5]
       box:
-        abs: [22,647 362x193]
-        rel: [14,501 362x193]
+        abs: [8,623 390x185]
+        rel: [0,495 390x185]
       spacing: margin:0/0/16/0
       - node: div
         box:
-          abs: [22,647 362x23]
-          rel: [0,0 362x23]
+          abs: [8,623 390x23]
+          rel: [0,0 390x23]
         layout: flex:row justify:between align:center
         spacing: pad:0/4/8/4
         - node: div
           box:
-            abs: [26,647 75x15]
-            rel: [4,0 75x15]
+            abs: [12,623 74x15]
+            rel: [4,0 74x15]
           layout: flex:row gap:6 align:center
           - node: span
             box:
-              abs: [26,649 11x11]
+              abs: [12,625 11x11]
               rel: [0,2 11x11]
             layout: flex:row
             - node: icon:tag
               box:
-                abs: [26,649 11x11]
+                abs: [12,625 11x11]
                 rel: [0,0 11x11]
               position: clip
           - node: span
             text: Tags
             box:
-              abs: [43,647 33x15]
+              abs: [29,623 33x15]
               rel: [17,0 33x15]
-            style: font:12/700 color:streak tracking:0.4
+            style: font:12/700 color:#000000 tracking:0.4
           - node: span
             text: 3
             box:
-              abs: [82,647 19x15]
-              rel: [56,0 19x15]
+              abs: [68,623 18x15]
+              rel: [56,0 18x15]
             spacing: pad:0/6
-            style: bg:surface-container font:12/700 color:on-surface-variant r:999
+            style: font:12/700 color:#000000 r:999
       - node: card
         mx: MxCard
         box:
-          abs: [22,670 362x170]
-          rel: [0,23 362x170]
+          abs: [8,646 390x162]
+          rel: [0,23 390x162]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [22,670 362x57]
-            rel: [0,0 362x57]
+            abs: [8,646 390x54]
+            rel: [0,0 390x54]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [36,685 26x26]
-              rel: [14,15 26x26]
+              abs: [22,660 26x26]
+              rel: [14,14 26x26]
             layout: flex:row justify:center align:center
             style: r:8
             - node: span
               box:
-                abs: [43,692 13x13]
+                abs: [29,667 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:tag
                 box:
-                  abs: [43,692 13x13]
+                  abs: [29,667 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,681 266x34]
-              rel: [56,11 266x34]
+              abs: [64,657 294x32]
+              rel: [56,11 294x32]
             - node: div
               text: research
               box:
-                abs: [78,681 266x18]
-                rel: [0,0 266x18]
+                abs: [64,657 294x16]
+                rel: [0,0 294x16]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: 24 cards across all decks
               box:
-                abs: [78,700 266x15]
-                rel: [0,19 266x15]
+                abs: [64,674 294x15]
+                rel: [0,17 294x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [356,691 14x14]
-              rel: [334,21 14x14]
+              abs: [370,666 14x14]
+              rel: [362,20 14x14]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [356,691 14x14]
+                abs: [370,666 14x14]
                 rel: [0,0 14x14]
               layout: flex:row
               - node: icon:arrow-up-right
                 box:
-                  abs: [356,691 14x14]
+                  abs: [370,666 14x14]
                   rel: [0,0 14x14]
                 position: clip
         - node: div
           box:
-            abs: [22,727 362x57]
-            rel: [0,57 362x57]
+            abs: [8,700 390x54]
+            rel: [0,54 390x54]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [36,742 26x26]
-              rel: [14,15 26x26]
+              abs: [22,714 26x26]
+              rel: [14,14 26x26]
             layout: flex:row justify:center align:center
             style: r:8
             - node: span
               box:
-                abs: [43,749 13x13]
+                abs: [29,721 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:tag
                 box:
-                  abs: [43,749 13x13]
+                  abs: [29,721 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,738 266x34]
-              rel: [56,11 266x34]
+              abs: [64,711 294x32]
+              rel: [56,11 294x32]
             - node: div
               text: researcher
               box:
-                abs: [78,738 266x18]
-                rel: [0,0 266x18]
+                abs: [64,711 294x16]
+                rel: [0,0 294x16]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: 8 cards across all decks
               box:
-                abs: [78,757 266x15]
-                rel: [0,19 266x15]
+                abs: [64,728 294x15]
+                rel: [0,17 294x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [356,748 14x14]
-              rel: [334,21 14x14]
+              abs: [370,720 14x14]
+              rel: [362,20 14x14]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [356,748 14x14]
+                abs: [370,720 14x14]
                 rel: [0,0 14x14]
               layout: flex:row
               - node: icon:arrow-up-right
                 box:
-                  abs: [356,748 14x14]
+                  abs: [370,720 14x14]
                   rel: [0,0 14x14]
                 position: clip
         - node: div
           box:
-            abs: [22,784 362x56]
-            rel: [0,114 362x56]
+            abs: [8,754 390x54]
+            rel: [0,108 390x54]
           layout: grid cols:3 gap:12 align:center
           spacing: pad:11/14
           - node: div
             box:
-              abs: [36,799 26x26]
-              rel: [14,15 26x26]
+              abs: [22,768 26x26]
+              rel: [14,14 26x26]
             layout: flex:row justify:center align:center
             style: r:8
             - node: span
               box:
-                abs: [43,806 13x13]
+                abs: [29,775 13x13]
                 rel: [7,7 13x13]
               layout: flex:row
               - node: icon:tag
                 box:
-                  abs: [43,806 13x13]
+                  abs: [29,775 13x13]
                   rel: [0,0 13x13]
                 position: clip
           - node: div
             box:
-              abs: [78,795 266x34]
-              rel: [56,11 266x34]
+              abs: [64,765 294x32]
+              rel: [56,11 294x32]
             - node: div
               text: research-lab
               box:
-                abs: [78,795 266x18]
-                rel: [0,0 266x18]
+                abs: [64,765 294x16]
+                rel: [0,0 294x16]
               position: clip
-              style: font:14/600 color:font-headline tracking:-0.1
+              style: font:14/600 color:#000000 tracking:-0.1
             - node: div
               text: 5 cards across all decks
               box:
-                abs: [78,814 266x15]
-                rel: [0,19 266x15]
+                abs: [64,782 294x15]
+                rel: [0,17 294x15]
               spacing: margin:1/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [356,805 14x14]
-              rel: [334,21 14x14]
+              abs: [370,774 14x14]
+              rel: [362,20 14x14]
             layout: flex:row gap:6 align:center
             - node: span
               box:
-                abs: [356,805 14x14]
+                abs: [370,774 14x14]
                 rel: [0,0 14x14]
               layout: flex:row
               - node: icon:arrow-up-right
                 box:
-                  abs: [356,805 14x14]
+                  abs: [370,774 14x14]
                   rel: [0,0 14x14]
                 position: clip
     - node: div
       item: item[6]
       text: Showing top results · matches are case-insensitive
       box:
-        abs: [22,856 362x31]
-        rel: [14,710 362x31]
+        abs: [8,824 390x31]
+        rel: [0,696 390x31]
       spacing: pad:4/0/12/0
-      style: font:12/400 color:on-surface-variant text:center
+      style: font:12/400 color:#000000 text:center
 ```
 
 ## State: No results (full — differs too much from base)
@@ -2194,7 +2144,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -2204,9 +2153,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -2230,83 +2179,76 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x38]
+      rel: [0,44 390x38]
     layout: flex:row gap:8 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,53 36x36]
+        rel: [8,1 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,61 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,61 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [60,60 330x40]
-        rel: [52,8 330x40]
+        abs: [60,52 330x38]
+        rel: [52,0 330x38]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:0/12
-      style: bg:on-primary r:12 border:1px seed-indigo
       - node: span
         box:
-          abs: [73,73 15x15]
-          rel: [13,13 15x15]
+          abs: [72,64 15x15]
+          rel: [12,12 15x15]
         layout: flex:row
         - node: icon:search
           box:
-            abs: [73,73 15x15]
+            abs: [72,64 15x15]
             rel: [0,0 15x15]
           position: clip
       - node: span
         text: phras
         box:
-          abs: [96,71 249x18]
-          rel: [36,11 249x18]
+          abs: [95,63 251x16]
+          rel: [35,11 251x16]
         layout: flex:row align:center
         flex: grow:1 basis:0 layout_hint:expanded
         position: clip
-        style: font:14/600 color:font-headline
-        - node: span
-          box:
-            abs: [136,72 2x16]
-            rel: [40,1 2x16]
-          spacing: margin:0/0/0/2
-          style: bg:seed-indigo
+        style: font:14/600 color:#000000
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [353,68 24x24]
-          rel: [293,8 24x24]
+          abs: [354,59 24x24]
+          rel: [294,7 24x24]
         layout: flex:row justify:center align:center
         position: pos:relative
         style: r:999
         - node: span
           box:
-            abs: [355,70 20x20]
+            abs: [356,61 20x20]
             rel: [2,2 20x20]
           layout: flex:row
           - node: icon:x-circle
             box:
-              abs: [355,70 20x20]
+              abs: [356,61 20x20]
               rel: [0,0 20x20]
             position: clip
   - node: scroll-x
     box:
-      abs: [22,108 362x28]
-      rel: [14,100 362x28]
+      abs: [22,90 362x28]
+      rel: [14,82 362x28]
     layout: flex:row gap:6
     repeat: x5(unit=1)
     position: layout_hint:scroll
@@ -2315,227 +2257,227 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       text: All
       mx: ?
       box:
-        abs: [22,108 46x28]
+        abs: [22,90 46x28]
         rel: [0,0 46x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:seed-indigo font:12/600 color:on-primary text:center r:999
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         text: 0
         box:
-          abs: [51,115 7x15]
-          rel: [29,7 7x15]
-        style: font:12/700 color:on-primary text:center op:0.75
+          abs: [52,97 6x15]
+          rel: [30,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.75
     - node: button
       item: item[2]
       text: Folders
       mx: ?
       box:
-        abs: [74,108 94x28]
-        rel: [52,0 94x28]
+        abs: [74,90 86x28]
+        rel: [52,0 86x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [85,117 11x11]
-          rel: [11,9 11x11]
+          abs: [84,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:folder
           box:
-            abs: [85,117 11x11]
+            abs: [84,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 0
         box:
-          abs: [150,115 7x15]
-          rel: [76,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [144,97 6x15]
+          rel: [70,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[3]
       text: Decks
       mx: ?
       box:
-        abs: [174,108 87x28]
-        rel: [152,0 87x28]
+        abs: [166,90 78x28]
+        rel: [144,0 78x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [185,117 11x11]
-          rel: [11,9 11x11]
+          abs: [176,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:layers
           box:
-            abs: [185,117 11x11]
+            abs: [176,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 0
         box:
-          abs: [243,115 7x15]
-          rel: [68,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [228,97 6x15]
+          rel: [62,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[4]
       text: Flashcards
       mx: ?
       box:
-        abs: [267,108 113x28]
-        rel: [245,0 113x28]
+        abs: [250,90 103x28]
+        rel: [228,0 103x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [278,117 11x11]
-          rel: [11,9 11x11]
+          abs: [260,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:copy
           box:
-            abs: [278,117 11x11]
+            abs: [260,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 0
         box:
-          abs: [362,115 7x15]
-          rel: [95,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [337,97 6x15]
+          rel: [87,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
     - node: button
       item: item[5]
       text: Tags
       mx: ?
       box:
-        abs: [386,108 77x28]
-        rel: [364,0 77x28]
+        abs: [359,90 71x28]
+        rel: [337,0 71x28]
       layout: flex:row gap:5 align:center
       flex: shrink:0
       spacing: pad:0/10
-      style: bg:on-primary font:12/600 color:font-headline text:center r:999 border:1px seed-indigo@14
+      style: font:12/600 color:#000000 text:center r:999
       - node: span
         box:
-          abs: [397,117 11x11]
-          rel: [11,9 11x11]
+          abs: [369,99 11x11]
+          rel: [10,9 11x11]
         layout: flex:row
         - node: icon:tag
           box:
-            abs: [397,117 11x11]
+            abs: [369,99 11x11]
             rel: [0,0 11x11]
           position: clip
       - node: span
         text: 0
         box:
-          abs: [444,115 7x15]
-          rel: [59,7 7x15]
-        style: font:12/700 color:font-headline text:center op:0.6
+          abs: [413,97 6x15]
+          rel: [55,7 6x15]
+        style: font:12/700 color:#000000 text:center op:0.6
   - node: card
     mx: MxCard
     box:
-      abs: [22,154 362x274]
-      rel: [14,146 362x274]
+      abs: [8,136 390x249]
+      rel: [0,128 390x249]
     repeat: x2(unit=2)
     spacing: pad:36/22 margin:8/0/0/0
-    style: bg:on-primary r:20 shadow:1/2
+    style: r:20
     - node: div
       item: item[1]
       box:
-        abs: [177,190 52x52]
-        rel: [155,36 52x52]
+        abs: [177,172 52x52]
+        rel: [169,36 52x52]
       layout: flex:row justify:center align:center
       spacing: margin:0/0/14/0
-      style: bg:surface-container r:14
+      style: r:14
       - node: span
         box:
-          abs: [192,205 22x22]
+          abs: [192,187 22x22]
           rel: [15,15 22x22]
         layout: flex:row
         - node: icon:search-x
           box:
-            abs: [192,205 22x22]
+            abs: [192,187 22x22]
             rel: [0,0 22x22]
           position: clip
     - node: div
       text: No matches for "phras"
       box:
-        abs: [44,256 318x21]
-        rel: [22,102 318x21]
+        abs: [30,238 346x18]
+        rel: [22,102 346x18]
       spacing: margin:0/0/6/0
-      style: font:16/700 color:font-headline text:center
+      style: font:16/700 color:#000000 text:center
     - node: div
       item: item[2]
       text: Check the spelling, or try a shorter keyword. Search runs across folders, decks, cards, and tags.
       box:
-        abs: [44,283 318x65]
-        rel: [22,129 318x65]
+        abs: [30,262 346x43]
+        rel: [22,126 346x43]
       spacing: pad:0/8 margin:0/0/16/0
-      style: font:14/400/22 color:on-surface-variant text:center
+      style: font:14/400/22 color:#000000 text:center
     - node: div
       box:
-        abs: [44,364 318x28]
-        rel: [22,210 318x28]
+        abs: [30,321 346x28]
+        rel: [22,185 346x28]
       layout: flex:row wrap gap:6 justify:center
       - node: button
         text: phrase
         mx: ?
         box:
-          abs: [71,364 80x28]
-          rel: [27,0 80x28]
+          abs: [78,321 75x28]
+          rel: [48,0 75x28]
         layout: flex:row gap:5 align:center
         spacing: pad:0/12
-        style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo text:center r:999
+        style: font:12/600 color:#000000 text:center r:999
         - node: span
           box:
-            abs: [83,373 11x11]
+            abs: [90,330 11x11]
             rel: [12,9 11x11]
           layout: flex:row
           - node: icon:search
             box:
-              abs: [83,373 11x11]
+              abs: [90,330 11x11]
               rel: [0,0 11x11]
             position: clip
       - node: button
         text: phrasal
         mx: ?
         box:
-          abs: [157,364 82x28]
-          rel: [113,0 82x28]
+          abs: [158,321 79x28]
+          rel: [128,0 79x28]
         layout: flex:row gap:5 align:center
         spacing: pad:0/12
-        style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo text:center r:999
+        style: font:12/600 color:#000000 text:center r:999
         - node: span
           box:
-            abs: [169,373 11x11]
+            abs: [170,330 11x11]
             rel: [12,9 11x11]
           layout: flex:row
           - node: icon:search
             box:
-              abs: [169,373 11x11]
+              abs: [170,330 11x11]
               rel: [0,0 11x11]
             position: clip
       - node: button
         text: phrasing
         mx: ?
         box:
-          abs: [245,364 90x28]
-          rel: [201,0 90x28]
+          abs: [243,321 85x28]
+          rel: [213,0 85x28]
         layout: flex:row gap:5 align:center
         spacing: pad:0/12
-        style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) font:12/600 color:seed-indigo text:center r:999
+        style: font:12/600 color:#000000 text:center r:999
         - node: span
           box:
-            abs: [257,373 11x11]
+            abs: [255,330 11x11]
             rel: [12,9 11x11]
           layout: flex:row
           - node: icon:search
             box:
-              abs: [257,373 11x11]
+              abs: [255,330 11x11]
               rel: [0,0 11x11]
             position: clip
 ```
@@ -2550,7 +2492,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -2560,9 +2501,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -2586,134 +2527,127 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x38]
+      rel: [0,44 390x38]
     layout: flex:row gap:8 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,53 36x36]
+        rel: [8,1 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,61 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,61 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: div
       box:
-        abs: [60,60 330x40]
-        rel: [52,8 330x40]
+        abs: [60,52 330x38]
+        rel: [52,0 330x38]
       layout: flex:row gap:8 align:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:0/12
-      style: bg:on-primary r:12 border:1px seed-indigo
       - node: span
         box:
-          abs: [73,73 15x15]
-          rel: [13,13 15x15]
+          abs: [72,64 15x15]
+          rel: [12,12 15x15]
         layout: flex:row
         - node: icon:search
           box:
-            abs: [73,73 15x15]
+            abs: [72,64 15x15]
             rel: [0,0 15x15]
           position: clip
       - node: span
         text: 연구
         box:
-          abs: [96,70 249x20]
-          rel: [36,10 249x20]
+          abs: [95,61 251x20]
+          rel: [35,9 251x20]
         layout: flex:row align:center
         flex: grow:1 basis:0 layout_hint:expanded
         position: clip
-        style: font:14/600 color:font-headline
-        - node: span
-          box:
-            abs: [124,72 2x16]
-            rel: [28,2 2x16]
-          spacing: margin:0/0/0/2
-          style: bg:seed-indigo
+        style: font:14/600 color:#000000
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [353,68 24x24]
-          rel: [293,8 24x24]
+          abs: [354,59 24x24]
+          rel: [294,7 24x24]
         layout: flex:row justify:center align:center
         position: pos:relative
         style: r:999
         - node: span
           box:
-            abs: [355,70 20x20]
+            abs: [356,61 20x20]
             rel: [2,2 20x20]
           layout: flex:row
           - node: icon:x-circle
             box:
-              abs: [355,70 20x20]
+              abs: [356,61 20x20]
               rel: [0,0 20x20]
             position: clip
   - node: card
     mx: MxCard
     box:
-      abs: [22,116 362x280]
-      rel: [14,108 362x280]
+      abs: [8,98 390x227]
+      rel: [0,90 390x227]
     spacing: pad:40/22 margin:8/0/0/0
-    style: bg:on-primary r:20 shadow:1/2
+    style: r:20
     - node: div
       box:
-        abs: [177,156 52x52]
-        rel: [155,40 52x52]
+        abs: [177,138 52x52]
+        rel: [169,40 52x52]
       layout: flex:row justify:center align:center
       spacing: margin:0/0/14/0
-      style: bg:#dc4848@10 r:14
+      style: r:14
       - node: span
         box:
-          abs: [192,171 22x22]
+          abs: [192,153 22x22]
           rel: [15,15 22x22]
         layout: flex:row
         - node: icon:cloud-off
           box:
-            abs: [192,171 22x22]
+            abs: [192,153 22x22]
             rel: [0,0 22x22]
           position: clip
     - node: div
       text: Search didn't run
       box:
-        abs: [44,222 318x21]
-        rel: [22,106 318x21]
+        abs: [30,204 346x18]
+        rel: [22,106 346x18]
       spacing: margin:0/0/6/0
-      style: font:16/700 color:font-headline text:center
+      style: font:16/700 color:#000000 text:center
     - node: div
       text: Your library is safe on this device. Try again in a moment.
       box:
-        abs: [44,249 318x43]
-        rel: [22,133 318x43]
+        abs: [30,228 346x22]
+        rel: [22,130 346x22]
       spacing: margin:0/0/16/0
-      style: font:14/400/22 color:on-surface-variant text:center
+      style: font:14/400/22 color:#000000 text:center
     - node: pill-btn
       text: Retry
       mx: MxPrimaryButton
       box:
-        abs: [157,308 93x48]
-        rel: [135,192 93x48]
+        abs: [158,266 91x16]
+        rel: [150,168 91x16]
       layout: flex:row gap:6 justify:center align:center
       spacing: pad:0/18
-      style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+      style: font:14/600 color:#000000 text:center tracking:0.1
       - node: span
         box:
-          abs: [175,325 14x14]
-          rel: [18,17 14x14]
+          abs: [176,267 14x14]
+          rel: [18,1 14x14]
         layout: flex:row
         - node: icon:refresh-cw
           box:
-            abs: [175,325 14x14]
+            abs: [176,267 14x14]
             rel: [0,0 14x14]
           position: clip
 ```

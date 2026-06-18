@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -83,239 +82,235 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
     - node: card
       mx: MxCard
       box:
-        abs: [28,108 350x270]
-        rel: [20,0 350x270]
+        abs: [8,88 390x268]
+        rel: [0,0 390x268]
       spacing: pad:24/18/20/18 margin:0/0/14/0
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: div
         box:
-          abs: [175,132 56x56]
-          rel: [147,24 56x56]
+          abs: [175,112 56x56]
+          rel: [167,24 56x56]
         layout: flex:row justify:center align:center
         spacing: margin:0/0/14/0
-        style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+        style: r:16
         - node: span
           box:
-            abs: [189,146 28x28]
+            abs: [189,126 28x28]
             rel: [14,14 28x28]
           layout: flex:row
           - node: icon:cloud
             box:
-              abs: [189,146 28x28]
+              abs: [189,126 28x28]
               rel: [0,0 28x28]
             position: clip
       - node: div
         text: Back up to your Google Drive
         box:
-          abs: [46,202 314x23]
-          rel: [18,94 314x23]
+          abs: [26,182 354x21]
+          rel: [18,94 354x21]
         spacing: margin:0/0/8/0
-        style: font:18/700 color:font-headline text:center tracking:-0.3
+        style: font:18/700 color:#000000 text:center tracking:-0.3
       - node: div
         text: MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically.
         box:
-          abs: [46,233 314x65]
-          rel: [18,125 314x65]
+          abs: [26,211 354x65]
+          rel: [18,123 354x65]
         spacing: pad:0/4 margin:0/0/16/0
-        style: font:14/400/22 color:on-surface-variant text:center
+        style: font:14/400/22 color:#000000 text:center
         - node: em
           text: when you choose
           box:
-            abs: [103,256 248x40]
-            rel: [57,23 248x40]
-          style: font:14/600/22 color:font-headline text:center
+            abs: [192,236 100x15]
+            rel: [166,25 100x15]
+          style: font:14/600/22 color:#000000 text:center
       - node: pill-btn
         text: Sign in with Google
         mx: MxActionButton
         box:
-          abs: [46,314 314x44]
-          rel: [18,206 314x44]
+          abs: [26,292 354x44]
+          rel: [18,204 354x44]
         layout: flex:row gap:10 justify:center align:center
-        spacing: pad:0/16
-        style: bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
+        style: bg:#ffffff font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
         - node: svg
           box:
-            abs: [124,327 18x18]
-            rel: [78,13 18x18]
+            abs: [130,305 18x18]
+            rel: [104,13 18x18]
           position: clip
     - node: ov
       text: What stays local
       box:
-        abs: [28,392 350x21]
-        rel: [20,284 350x21]
+        abs: [8,370 390x20]
+        rel: [0,282 390x20]
       spacing: pad:0/4/8/4
-      style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+      style: font:11/700 color:#000000 tracking:0.6
     - node: card
       mx: MxCard
       box:
-        abs: [28,413 350x186]
-        rel: [20,305 350x186]
+        abs: [8,390 390x178]
+        rel: [0,302 390x178]
       position: clip
-      style: bg:on-primary r:20 shadow:1/2
+      style: r:20
       - node: div
         box:
-          abs: [28,413 350x62]
-          rel: [0,0 350x62]
+          abs: [8,390 390x59]
+          rel: [0,0 390x59]
         layout: flex:row gap:12 align:start
         spacing: pad:12/14
-        style: border-b:1px seed-indigo@14
         - node: div
           box:
-            abs: [42,425 30x30]
+            abs: [22,402 30x30]
             rel: [14,12 30x30]
           layout: flex:row justify:center align:center
           flex: shrink:0
-          style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+          style: r:9
           - node: span
             box:
-              abs: [50,433 15x15]
+              abs: [30,410 15x15]
               rel: [8,8 15x15]
             layout: flex:row
             - node: icon:smartphone
               box:
-                abs: [50,433 15x15]
+                abs: [30,410 15x15]
                 rel: [0,0 15x15]
               position: clip
         - node: div
           box:
-            abs: [84,425 280x37]
-            rel: [56,12 280x37]
+            abs: [64,402 320x35]
+            rel: [56,12 320x35]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: div
             text: All your decks live on this device
             box:
-              abs: [84,425 280x18]
-              rel: [0,0 280x18]
-            style: font:14/600 color:font-headline tracking:-0.1
+              abs: [64,402 320x16]
+              rel: [0,0 320x16]
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: Study, edit, and review work offline.
             box:
-              abs: [84,445 280x17]
-              rel: [0,20 280x17]
+              abs: [64,420 320x17]
+              rel: [0,18 320x17]
             spacing: margin:2/0/0/0
-            style: font:12/400/17 color:on-surface-variant
+            style: font:12/400/17 color:#000000
       - node: div
         box:
-          abs: [28,475 350x62]
-          rel: [0,62 350x62]
+          abs: [8,449 390x59]
+          rel: [0,59 390x59]
         layout: flex:row gap:12 align:start
         spacing: pad:12/14
-        style: border-b:1px seed-indigo@14
         - node: div
           box:
-            abs: [42,487 30x30]
+            abs: [22,461 30x30]
             rel: [14,12 30x30]
           layout: flex:row justify:center align:center
           flex: shrink:0
-          style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+          style: r:9
           - node: span
             box:
-              abs: [50,495 15x15]
+              abs: [30,469 15x15]
               rel: [8,8 15x15]
             layout: flex:row
             - node: icon:shield-check
               box:
-                abs: [50,495 15x15]
+                abs: [30,469 15x15]
                 rel: [0,0 15x15]
               position: clip
         - node: div
           box:
-            abs: [84,487 280x37]
-            rel: [56,12 280x37]
+            abs: [64,461 320x35]
+            rel: [56,12 320x35]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: div
             text: No account needed to use MemoX
             box:
-              abs: [84,487 280x18]
-              rel: [0,0 280x18]
-            style: font:14/600 color:font-headline tracking:-0.1
+              abs: [64,461 320x16]
+              rel: [0,0 320x16]
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: Sign in only when you want a backup.
             box:
-              abs: [84,507 280x17]
-              rel: [0,20 280x17]
+              abs: [64,479 320x17]
+              rel: [0,18 320x17]
             spacing: margin:2/0/0/0
-            style: font:12/400/17 color:on-surface-variant
+            style: font:12/400/17 color:#000000
       - node: div
         box:
-          abs: [28,538 350x61]
-          rel: [0,125 350x61]
+          abs: [8,509 390x59]
+          rel: [0,119 390x59]
         layout: flex:row gap:12 align:start
         spacing: pad:12/14
         - node: div
           box:
-            abs: [42,550 30x30]
+            abs: [22,521 30x30]
             rel: [14,12 30x30]
           layout: flex:row justify:center align:center
           flex: shrink:0
-          style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.08) r:9
+          style: r:9
           - node: span
             box:
-              abs: [50,557 15x15]
+              abs: [30,528 15x15]
               rel: [8,8 15x15]
             layout: flex:row
             - node: icon:upload-cloud
               box:
-                abs: [50,557 15x15]
+                abs: [30,528 15x15]
                 rel: [0,0 15x15]
               position: clip
         - node: div
           box:
-            abs: [84,550 280x37]
-            rel: [56,12 280x37]
+            abs: [64,521 320x35]
+            rel: [56,12 320x35]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: div
             text: You decide when to upload
             box:
-              abs: [84,550 280x18]
-              rel: [0,0 280x18]
-            style: font:14/600 color:font-headline tracking:-0.1
+              abs: [64,521 320x16]
+              rel: [0,0 320x16]
+            style: font:14/600 color:#000000 tracking:-0.1
           - node: div
             text: Drive backups are always manual.
             box:
-              abs: [84,570 280x17]
-              rel: [0,20 280x17]
+              abs: [64,539 320x17]
+              rel: [0,18 320x17]
             spacing: margin:2/0/0/0
-            style: font:12/400/17 color:on-surface-variant
+            style: font:12/400/17 color:#000000
 ```
 
 ## State: Signing in (ordered diff vs Signed out)
@@ -324,44 +319,37 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: em
   text: when you choose
   box:
-  abs: [103,256 248x40]
-  rel: [57,23 248x40]
-  style: font:14/600/22 color:font-headline text:center
+  abs: [192,236 100x15]
+  rel: [166,25 100x15]
+  style: font:14/600/22 color:#000000 text:center
 - - node: pill-btn
 - text: Sign in with Google
 - mx: MxActionButton
 - box:
-- abs: [46,314 314x44]
-- rel: [18,206 314x44]
+- abs: [26,292 354x44]
+- rel: [18,204 354x44]
 - layout: flex:row gap:10 justify:center align:center
-- spacing: pad:0/16
-- style: bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
+- style: bg:#ffffff font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
 - - node: svg
 - box:
-- abs: [124,327 18x18]
-- rel: [78,13 18x18]
+- abs: [130,305 18x18]
+- rel: [104,13 18x18]
 - position: clip
 + - node: pill-btn
 + text: Signing in…
 + mx: MxActionButton
 + box:
-+ abs: [46,314 314x44]
-+ rel: [18,206 314x44]
++ abs: [26,292 354x44]
++ rel: [18,204 354x44]
 + layout: flex:row gap:10 justify:center align:center
-+ spacing: pad:0/16
-+ style: bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2 op:0.85
-+ - node: span
-+ box:
-+ abs: [151,327 18x18]
-+ rel: [105,13 18x18]
-+ style: r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
++ style: bg:#ffffff font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2 op:0.85
   - node: ov
   text: What stays local
   box:
-  abs: [28,392 350x21]
-  rel: [20,284 350x21]
+  abs: [8,370 390x20]
+  rel: [0,282 390x20]
   spacing: pad:0/4/8/4
-  style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+  style: font:11/700 color:#000000 tracking:0.6
   ...
 ```
 
@@ -370,119 +358,117 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - node: scroll
   box:
-  abs: [8,108 390x680]
-  rel: [0,100 390x680]
+  abs: [8,88 390x700]
+  rel: [0,80 390x700]
   flex: grow:1 basis:0 layout_hint:expanded
-  spacing: pad:0/20/20/20
   position: layout_hint:scroll
 - - node: card
 - mx: MxCard
 - box:
-- abs: [28,108 350x270]
-- rel: [20,0 350x270]
+- abs: [8,88 390x268]
+- rel: [0,0 390x268]
 - spacing: pad:24/18/20/18 margin:0/0/14/0
-- style: bg:on-primary r:20 shadow:1/2
+- style: r:20
 - - node: div
 - box:
-- abs: [175,132 56x56]
-- rel: [147,24 56x56]
+- abs: [175,112 56x56]
+- rel: [167,24 56x56]
 - layout: flex:row justify:center align:center
 - spacing: margin:0/0/14/0
-- style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
+- style: r:16
 + - node: card
 + mx: MxCard
 + box:
-+ abs: [28,108 350x364]
-+ rel: [20,0 350x364]
++ abs: [8,88 390x358]
++ rel: [0,0 390x358]
 + repeat: x2+(unit=2)
 + spacing: pad:24/18/20/18 margin:0/0/14/0
-+ style: bg:on-primary r:20 shadow:1/2
++ style: r:20
 + - node: div
 + item: item[1]
 + box:
-+ abs: [175,132 56x56]
-+ rel: [147,24 56x56]
++ abs: [175,112 56x56]
++ rel: [167,24 56x56]
 + layout: flex:row justify:center align:center
 + spacing: margin:0/0/14/0
-+ style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:16
++ style: r:16
   - node: span
   box:
-  abs: [189,146 28x28]
+  abs: [189,126 28x28]
   rel: [14,14 28x28]
   layout: flex:row
   ...
   - node: div
   text: Back up to your Google Drive
   box:
-  abs: [46,202 314x23]
-  rel: [18,94 314x23]
+  abs: [26,182 354x21]
+  rel: [18,94 354x21]
   spacing: margin:0/0/8/0
-  style: font:18/700 color:font-headline text:center tracking:-0.3
+  style: font:18/700 color:#000000 text:center tracking:-0.3
 - - node: div
 - text: MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically.
 - box:
-- abs: [46,233 314x65]
-- rel: [18,125 314x65]
+- abs: [26,211 354x65]
+- rel: [18,123 354x65]
 - spacing: pad:0/4 margin:0/0/16/0
-- style: font:14/400/22 color:on-surface-variant text:center
+- style: font:14/400/22 color:#000000 text:center
 + - node: div
 + item: item[2]
 + text: MemoX works fully offline. Linking Drive lets you upload and restore your decks — never automatically.
 + box:
-+ abs: [46,233 314x65]
-+ rel: [18,125 314x65]
++ abs: [26,211 354x65]
++ rel: [18,123 354x65]
 + spacing: pad:0/4 margin:0/0/16/0
-+ style: font:14/400/22 color:on-surface-variant text:center
++ style: font:14/400/22 color:#000000 text:center
   - node: em
   text: when you choose
   box:
-  abs: [103,256 248x40]
-  rel: [57,23 248x40]
-  style: font:14/600/22 color:font-headline text:center
+  abs: [192,236 100x15]
+  rel: [166,25 100x15]
+  style: font:14/600/22 color:#000000 text:center
 + - node: div
 + box:
-+ abs: [46,314 314x82]
-+ rel: [18,206 314x82]
++ abs: [26,292 354x78]
++ rel: [18,204 354x78]
 + layout: flex:row gap:10 align:start
 + spacing: pad:12/14
-+ style: bg:#dc4848@8 r:12 border:1px #dc4848@22
++ style: r:12
 + - node: span
 + box:
-+ abs: [61,329 16x16]
-+ rel: [15,15 16x16]
++ abs: [40,305 16x16]
++ rel: [14,13 16x16]
 + layout: flex:row
 + - node: icon:alert-circle
 + box:
-+ abs: [61,329 16x16]
++ abs: [40,305 16x16]
 + rel: [0,0 16x16]
 + position: clip
 + - node: div
 + box:
-+ abs: [87,327 258x56]
-+ rel: [41,13 258x56]
++ abs: [66,304 300x54]
++ rel: [40,12 300x54]
 + flex: grow:1 basis:0 layout_hint:expanded
 + - node: div
 + text: Couldn't sign in
 + box:
-+ abs: [87,327 258x18]
-+ rel: [0,0 258x18]
-+ style: font:14/700 color:font-headline tracking:-0.1
++ abs: [66,304 300x16]
++ rel: [0,0 300x16]
++ style: font:14/700 color:#000000 tracking:-0.1
 + - node: div
 + text: Check your connection and try again. No data left your device.
 + box:
-+ abs: [87,347 258x36]
-+ rel: [0,20 258x36]
++ abs: [66,322 300x36]
++ rel: [0,18 300x36]
 + spacing: margin:2/0/0/0
-+ style: font:12/400/18 color:on-surface-variant
++ style: font:12/400/18 color:#000000
   - node: pill-btn
   text: Sign in with Google
   mx: MxActionButton
   box:
-  abs: [46,408 314x44]
-  rel: [18,300 314x44]
+  abs: [26,382 354x44]
+  rel: [18,294 354x44]
   layout: flex:row gap:10 justify:center align:center
-  spacing: pad:0/16
-  style: bg:on-primary font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
+  style: bg:#ffffff font:14/600 color:#191c1e text:center tracking:0.1 r:12 border:1px #000000@12 shadow:1/2
   ...
 ```
 
@@ -496,7 +482,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -506,9 +491,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -532,499 +517,487 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x4(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:852
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x184]
-        rel: [20,0 350x184]
+        abs: [8,88 390x182]
+        rel: [0,0 390x182]
       spacing: margin:0/0/16/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,129 350x163]
-          rel: [0,21 350x163]
+          abs: [8,108 390x162]
+          rel: [0,20 390x162]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,129 350x127]
-            rel: [0,0 350x127]
+            abs: [8,108 390x126]
+            rel: [0,0 390x126]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,129 350x70]
-              rel: [0,0 350x70]
+              abs: [8,108 390x70]
+              rel: [0,0 390x70]
             layout: flex:row gap:12 align:center
             spacing: pad:14
             - node: div
               text: AL
               box:
-                abs: [42,143 42x42]
+                abs: [22,122 42x42]
                 rel: [14,14 42x42]
               layout: flex:row justify:center align:center
               flex: shrink:0
-              style: bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+              style: font:16/700 color:#000000 tracking:0.2 r:999
             - node: div
               box:
-                abs: [96,145 220x39]
-                rel: [68,16 220x39]
+                abs: [76,126 260x35]
+                rel: [68,18 260x35]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: alex.minh@gmail.com
                 box:
-                  abs: [96,145 220x18]
-                  rel: [0,0 220x18]
+                  abs: [76,126 260x16]
+                  rel: [0,0 260x16]
                 position: clip
-                style: font:14/600 color:font-headline
+                style: font:14/600 color:#000000
               - node: div
                 box:
-                  abs: [96,167 134x15]
-                  rel: [0,22 134x15]
+                  abs: [76,144 122x15]
+                  rel: [0,18 122x15]
                 layout: flex:row gap:6 align:center
                 spacing: margin:2/0/0/0
                 - node: svg
                   box:
-                    abs: [96,169 11x11]
+                    abs: [76,146 11x11]
                     rel: [0,2 11x11]
                   position: clip
                 - node: span
                   text: Google · linked Apr 8
                   box:
-                    abs: [113,167 117x15]
-                    rel: [17,0 117x15]
-                  style: font:12/400 color:on-surface-variant
+                    abs: [93,144 105x15]
+                    rel: [17,0 105x15]
+                  style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,146 36x36]
-                rel: [300,17 36x36]
+                abs: [348,125 36x36]
+                rel: [340,17 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,154 20x20]
+                  abs: [356,133 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:refresh-cw
                   box:
-                    abs: [336,154 20x20]
+                    abs: [356,133 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,199 350x57]
-              rel: [0,70 350x57]
+              abs: [8,178 390x56]
+              rel: [0,70 390x56]
             layout: flex:row gap:8
             spacing: pad:10/14
-            style: border-t:1px seed-indigo@14
             - node: pill-btn
               text: Sign out
               mx: MxSecondaryButton
               box:
-                abs: [42,210 158x36]
-                rel: [14,11 158x36]
+                abs: [22,188 177x36]
+                rel: [14,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [87,221 14x14]
-                  rel: [45,11 14x14]
+                  abs: [79,199 14x14]
+                  rel: [57,11 14x14]
                 layout: flex:row
                 - node: icon:log-out
                   box:
-                    abs: [87,221 14x14]
+                    abs: [79,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
             - node: pill-btn
               text: Switch account
               mx: MxSecondaryButton
               box:
-                abs: [208,210 156x36]
-                rel: [180,11 156x36]
+                abs: [207,188 177x36]
+                rel: [199,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [230,221 14x14]
-                  rel: [22,11 14x14]
+                  abs: [246,199 14x14]
+                  rel: [39,11 14x14]
                 layout: flex:row
                 - node: icon:repeat
                   box:
-                    abs: [230,221 14x14]
+                    abs: [246,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
         - node: div
           text: Signing out keeps every deck and card on this device.
           box:
-            abs: [28,266 350x26]
-            rel: [0,137 350x26]
+            abs: [8,244 390x26]
+            rel: [0,136 390x26]
           spacing: pad:8/6/0/6
-          style: font:12/400/18 color:on-surface-variant
+          style: font:12/400/18 color:#000000
     - node: div
       item: item[2]
       box:
-        abs: [28,308 350x143]
-        rel: [20,200 350x143]
+        abs: [8,286 390x138]
+        rel: [0,198 390x138]
       spacing: margin:0/0/16/0
       - node: ov
         text: This device
         box:
-          abs: [28,308 350x21]
-          rel: [0,0 350x21]
+          abs: [8,286 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,329 350x122]
-          rel: [0,21 350x122]
+          abs: [8,306 390x118]
+          rel: [0,20 390x118]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,329 350x122]
-            rel: [0,0 350x122]
+            abs: [8,306 390x118]
+            rel: [0,0 390x118]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,329 350x61]
-              rel: [0,0 350x61]
+              abs: [8,306 390x60]
+              rel: [0,0 390x60]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: icon-tile
               mx: MxIconTile
               box:
-                abs: [42,342 34x34]
+                abs: [22,319 34x34]
                 rel: [14,13 34x34]
               layout: flex:row justify:center align:center
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
               - node: span
                 box:
-                  abs: [51,351 16x16]
+                  abs: [31,328 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:smartphone
                   box:
-                    abs: [51,351 16x16]
+                    abs: [31,328 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,342 228x34]
-                rel: [60,13 228x34]
+                abs: [68,320 268x32]
+                rel: [60,14 268x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Alex's Pixel 8
                 box:
-                  abs: [88,342 228x18]
-                  rel: [0,0 228x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,320 268x16]
+                  rel: [0,0 268x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Device label
                 box:
-                  abs: [88,361 228x15]
-                  rel: [0,19 228x15]
+                  abs: [68,337 268x15]
+                  rel: [0,17 268x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,341 36x36]
-                rel: [300,12 36x36]
+                abs: [348,318 36x36]
+                rel: [340,12 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,349 20x20]
+                  abs: [356,326 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:pencil
                   box:
-                    abs: [336,349 20x20]
+                    abs: [356,326 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,390 350x61]
-              rel: [0,61 350x61]
+              abs: [8,366 390x58]
+              rel: [0,60 390x58]
             layout: grid cols:3 gap:12
             spacing: pad:12/14
             - node: div
               box:
-                abs: [42,402 99x37]
-                rel: [14,12 99x37]
+                abs: [22,378 113x34]
+                rel: [14,12 113x34]
               - node: div
                 text: 4
                 box:
-                  abs: [42,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [22,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: decks
                 box:
-                  abs: [42,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [22,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [153,402 99x37]
-                rel: [125,12 99x37]
+                abs: [147,378 113x34]
+                rel: [139,12 113x34]
               - node: div
                 text: 142
                 box:
-                  abs: [153,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [147,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: cards
                 box:
-                  abs: [153,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [147,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [265,402 99x37]
-                rel: [237,12 99x37]
+                abs: [271,378 113x34]
+                rel: [263,12 113x34]
               - node: div
                 text: 2 h
                 box:
-                  abs: [265,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [271,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: last active
                 box:
-                  abs: [265,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [271,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,467 350x256]
-        rel: [20,359 350x256]
+        abs: [8,440 390x176]
+        rel: [0,352 390x176]
       spacing: margin:0/0/16/0
       - node: ov
         text: Drive backup
         box:
-          abs: [28,467 350x21]
-          rel: [0,0 350x21]
+          abs: [8,440 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,488 350x235]
-          rel: [0,21 350x235]
+          abs: [8,460 390x156]
+          rel: [0,20 390x156]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,488 350x235]
-            rel: [0,0 350x235]
+            abs: [8,460 390x156]
+            rel: [0,0 390x156]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,488 350x59]
-              rel: [0,0 350x59]
+              abs: [8,460 390x58]
+              rel: [0,0 390x58]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,500 34x34]
+                abs: [22,472 34x34]
                 rel: [14,12 34x34]
               layout: flex:row justify:center align:center
-              style: bg:surface-container r:12
               - node: span
                 box:
-                  abs: [51,509 16x16]
+                  abs: [31,481 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:cloud
                   box:
-                    abs: [51,509 16x16]
+                    abs: [31,481 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,500 276x34]
-                rel: [60,12 276x34]
+                abs: [68,473 316x32]
+                rel: [60,13 316x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: No backup yet
                 box:
-                  abs: [88,500 276x18]
-                  rel: [0,0 276x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,473 316x16]
+                  rel: [0,0 316x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Upload to create your first backup.
                 box:
-                  abs: [88,519 276x15]
-                  rel: [0,19 276x15]
+                  abs: [68,490 316x15]
+                  rel: [0,17 316x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [28,547 350x128]
-              rel: [0,59 350x128]
+              abs: [8,518 390x68]
+              rel: [0,58 390x68]
             layout: flex:col gap:8
             spacing: pad:12/14
             - node: pill-btn
               text: Upload to Drive
               mx: MxPrimaryButton
               box:
-                abs: [42,559 322x48]
-                rel: [14,12 322x48]
+                abs: [22,530 362x18]
+                rel: [14,12 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+              style: font:16/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [139,575 16x16]
-                  rel: [97,16 16x16]
+                  abs: [137,531 16x16]
+                  rel: [115,1 16x16]
                 layout: flex:row
                 - node: icon:upload-cloud
                   box:
-                    abs: [139,575 16x16]
+                    abs: [137,531 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: pill-btn
               text: Restore from Drive
               mx: MxSecondaryButton
               box:
-                abs: [42,615 322x48]
-                rel: [14,68 322x48]
+                abs: [22,556 362x18]
+                rel: [14,38 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant op:0.45
+              style: font:16/600 color:#000000 text:center tracking:0.1 op:0.45
               - node: span
                 box:
-                  abs: [129,632 15x15]
-                  rel: [87,17 15x15]
+                  abs: [126,558 15x15]
+                  rel: [104,2 15x15]
                 layout: flex:row
                 - node: icon:download
                   box:
-                    abs: [129,632 15x15]
+                    abs: [126,558 15x15]
                     rel: [0,0 15x15]
                   position: clip
           - node: div
             text: Uploads include decks, cards, tags, and review history. Settings stay local.
             box:
-              abs: [28,675 350x48]
-              rel: [0,187 350x48]
+              abs: [8,586 390x30]
+              rel: [0,126 390x30]
             spacing: pad:0/14/12/14
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
     - node: div
       item: item[4]
       box:
-        abs: [28,739 350x185]
-        rel: [20,631 350x185]
+        abs: [8,632 390x135]
+        rel: [0,544 390x135]
       spacing: margin:0/0/16/0
       - node: ov
         text: Danger zone
         box:
-          abs: [28,739 350x21]
-          rel: [0,0 350x21]
+          abs: [8,632 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,760 350x164]
-          rel: [0,21 350x164]
+          abs: [8,652 390x115]
+          rel: [0,20 390x115]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,760 350x164]
-            rel: [0,0 350x164]
+            abs: [8,652 390x115]
+            rel: [0,0 390x115]
           spacing: pad:14
-          style: bg:#dc4848@3 r:20 shadow:1/2
+          style: r:20
           - node: div
             text: Remove account from MemoX
             box:
-              abs: [42,774 322x18]
-              rel: [14,14 322x18]
+              abs: [22,666 362x16]
+              rel: [14,14 362x16]
             spacing: margin:0/0/4/0
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device.
             box:
-              abs: [42,796 322x54]
-              rel: [14,36 322x54]
+              abs: [22,686 362x36]
+              rel: [14,34 362x36]
             spacing: margin:0/0/12/0
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
           - node: pill-btn
             text: Remove account
             mx: MxActionButton
             box:
-              abs: [42,862 322x48]
-              rel: [14,102 322x48]
+              abs: [22,734 362x16]
+              rel: [14,82 362x16]
             layout: flex:row gap:6 justify:center align:center
-            spacing: pad:0/16
-            style: bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            style: font:14/600 color:#000000 text:center tracking:0.1
             - node: span
               box:
-                abs: [135,879 14x14]
-                rel: [93,17 14x14]
+                abs: [143,735 14x14]
+                rel: [121,1 14x14]
               layout: flex:row
               - node: icon:trash-2
                 box:
-                  abs: [135,879 14x14]
+                  abs: [143,735 14x14]
                   rel: [0,0 14x14]
                 position: clip
 ```
@@ -1039,7 +1012,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -1049,9 +1021,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -1075,516 +1047,504 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x4(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:852
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x184]
-        rel: [20,0 350x184]
+        abs: [8,88 390x182]
+        rel: [0,0 390x182]
       spacing: margin:0/0/16/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,129 350x163]
-          rel: [0,21 350x163]
+          abs: [8,108 390x162]
+          rel: [0,20 390x162]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,129 350x127]
-            rel: [0,0 350x127]
+            abs: [8,108 390x126]
+            rel: [0,0 390x126]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,129 350x70]
-              rel: [0,0 350x70]
+              abs: [8,108 390x70]
+              rel: [0,0 390x70]
             layout: flex:row gap:12 align:center
             spacing: pad:14
             - node: div
               text: AL
               box:
-                abs: [42,143 42x42]
+                abs: [22,122 42x42]
                 rel: [14,14 42x42]
               layout: flex:row justify:center align:center
               flex: shrink:0
-              style: bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+              style: font:16/700 color:#000000 tracking:0.2 r:999
             - node: div
               box:
-                abs: [96,145 220x39]
-                rel: [68,16 220x39]
+                abs: [76,126 260x35]
+                rel: [68,18 260x35]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: alex.minh@gmail.com
                 box:
-                  abs: [96,145 220x18]
-                  rel: [0,0 220x18]
+                  abs: [76,126 260x16]
+                  rel: [0,0 260x16]
                 position: clip
-                style: font:14/600 color:font-headline
+                style: font:14/600 color:#000000
               - node: div
                 box:
-                  abs: [96,167 134x15]
-                  rel: [0,22 134x15]
+                  abs: [76,144 122x15]
+                  rel: [0,18 122x15]
                 layout: flex:row gap:6 align:center
                 spacing: margin:2/0/0/0
                 - node: svg
                   box:
-                    abs: [96,169 11x11]
+                    abs: [76,146 11x11]
                     rel: [0,2 11x11]
                   position: clip
                 - node: span
                   text: Google · linked Apr 8
                   box:
-                    abs: [113,167 117x15]
-                    rel: [17,0 117x15]
-                  style: font:12/400 color:on-surface-variant
+                    abs: [93,144 105x15]
+                    rel: [17,0 105x15]
+                  style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,146 36x36]
-                rel: [300,17 36x36]
+                abs: [348,125 36x36]
+                rel: [340,17 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,154 20x20]
+                  abs: [356,133 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:refresh-cw
                   box:
-                    abs: [336,154 20x20]
+                    abs: [356,133 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,199 350x57]
-              rel: [0,70 350x57]
+              abs: [8,178 390x56]
+              rel: [0,70 390x56]
             layout: flex:row gap:8
             spacing: pad:10/14
-            style: border-t:1px seed-indigo@14
             - node: pill-btn
               text: Sign out
               mx: MxSecondaryButton
               box:
-                abs: [42,210 158x36]
-                rel: [14,11 158x36]
+                abs: [22,188 177x36]
+                rel: [14,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [87,221 14x14]
-                  rel: [45,11 14x14]
+                  abs: [79,199 14x14]
+                  rel: [57,11 14x14]
                 layout: flex:row
                 - node: icon:log-out
                   box:
-                    abs: [87,221 14x14]
+                    abs: [79,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
             - node: pill-btn
               text: Switch account
               mx: MxSecondaryButton
               box:
-                abs: [208,210 156x36]
-                rel: [180,11 156x36]
+                abs: [207,188 177x36]
+                rel: [199,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [230,221 14x14]
-                  rel: [22,11 14x14]
+                  abs: [246,199 14x14]
+                  rel: [39,11 14x14]
                 layout: flex:row
                 - node: icon:repeat
                   box:
-                    abs: [230,221 14x14]
+                    abs: [246,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
         - node: div
           text: Signing out keeps every deck and card on this device.
           box:
-            abs: [28,266 350x26]
-            rel: [0,137 350x26]
+            abs: [8,244 390x26]
+            rel: [0,136 390x26]
           spacing: pad:8/6/0/6
-          style: font:12/400/18 color:on-surface-variant
+          style: font:12/400/18 color:#000000
     - node: div
       item: item[2]
       box:
-        abs: [28,308 350x143]
-        rel: [20,200 350x143]
+        abs: [8,286 390x138]
+        rel: [0,198 390x138]
       spacing: margin:0/0/16/0
       - node: ov
         text: This device
         box:
-          abs: [28,308 350x21]
-          rel: [0,0 350x21]
+          abs: [8,286 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,329 350x122]
-          rel: [0,21 350x122]
+          abs: [8,306 390x118]
+          rel: [0,20 390x118]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,329 350x122]
-            rel: [0,0 350x122]
+            abs: [8,306 390x118]
+            rel: [0,0 390x118]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,329 350x61]
-              rel: [0,0 350x61]
+              abs: [8,306 390x60]
+              rel: [0,0 390x60]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: icon-tile
               mx: MxIconTile
               box:
-                abs: [42,342 34x34]
+                abs: [22,319 34x34]
                 rel: [14,13 34x34]
               layout: flex:row justify:center align:center
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
               - node: span
                 box:
-                  abs: [51,351 16x16]
+                  abs: [31,328 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:smartphone
                   box:
-                    abs: [51,351 16x16]
+                    abs: [31,328 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,342 228x34]
-                rel: [60,13 228x34]
+                abs: [68,320 268x32]
+                rel: [60,14 268x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Alex's Pixel 8
                 box:
-                  abs: [88,342 228x18]
-                  rel: [0,0 228x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,320 268x16]
+                  rel: [0,0 268x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Device label
                 box:
-                  abs: [88,361 228x15]
-                  rel: [0,19 228x15]
+                  abs: [68,337 268x15]
+                  rel: [0,17 268x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,341 36x36]
-                rel: [300,12 36x36]
+                abs: [348,318 36x36]
+                rel: [340,12 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,349 20x20]
+                  abs: [356,326 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:pencil
                   box:
-                    abs: [336,349 20x20]
+                    abs: [356,326 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,390 350x61]
-              rel: [0,61 350x61]
+              abs: [8,366 390x58]
+              rel: [0,60 390x58]
             layout: grid cols:3 gap:12
             spacing: pad:12/14
             - node: div
               box:
-                abs: [42,402 99x37]
-                rel: [14,12 99x37]
+                abs: [22,378 113x34]
+                rel: [14,12 113x34]
               - node: div
                 text: 4
                 box:
-                  abs: [42,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [22,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: decks
                 box:
-                  abs: [42,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [22,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [153,402 99x37]
-                rel: [125,12 99x37]
+                abs: [147,378 113x34]
+                rel: [139,12 113x34]
               - node: div
                 text: 142
                 box:
-                  abs: [153,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [147,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: cards
                 box:
-                  abs: [153,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [147,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [265,402 99x37]
-                rel: [237,12 99x37]
+                abs: [271,378 113x34]
+                rel: [263,12 113x34]
               - node: div
                 text: 2 h
                 box:
-                  abs: [265,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [271,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: last active
                 box:
-                  abs: [265,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [271,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,467 350x256]
-        rel: [20,359 350x256]
+        abs: [8,440 390x176]
+        rel: [0,352 390x176]
       spacing: margin:0/0/16/0
       - node: ov
         text: Drive backup
         box:
-          abs: [28,467 350x21]
-          rel: [0,0 350x21]
+          abs: [8,440 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,488 350x235]
-          rel: [0,21 350x235]
+          abs: [8,460 390x156]
+          rel: [0,20 390x156]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,488 350x235]
-            rel: [0,0 350x235]
+            abs: [8,460 390x156]
+            rel: [0,0 390x156]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,488 350x59]
-              rel: [0,0 350x59]
+              abs: [8,460 390x58]
+              rel: [0,0 390x58]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,500 34x34]
+                abs: [22,472 34x34]
                 rel: [14,12 34x34]
               layout: flex:row justify:center align:center
-              style: bg:mastery@10 r:12
               - node: span
                 box:
-                  abs: [51,509 16x16]
+                  abs: [31,481 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:cloud
                   box:
-                    abs: [51,509 16x16]
+                    abs: [31,481 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,500 198x34]
-                rel: [60,12 198x34]
+                abs: [68,473 245x32]
+                rel: [60,13 245x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Last upload 2 days ago
                 box:
-                  abs: [88,500 198x18]
-                  rel: [0,0 198x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,473 245x16]
+                  rel: [0,0 245x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: 142 cards · 4 decks
                 box:
-                  abs: [88,519 198x15]
-                  rel: [0,19 198x15]
+                  abs: [68,490 245x15]
+                  rel: [0,17 245x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: span
               text: Matches
               box:
-                abs: [298,510 66x15]
-                rel: [270,22 66x15]
+                abs: [325,482 59x15]
+                rel: [317,22 59x15]
               layout: flex:row gap:4 align:center
-              style: font:12/600 color:mastery
+              style: font:12/600 color:#000000
               - node: span
                 box:
-                  abs: [298,511 12x12]
+                  abs: [325,483 12x12]
                   rel: [0,2 12x12]
                 layout: flex:row
                 - node: icon:check
                   box:
-                    abs: [298,511 12x12]
+                    abs: [325,483 12x12]
                     rel: [0,0 12x12]
                   position: clip
           - node: div
             box:
-              abs: [28,547 350x128]
-              rel: [0,59 350x128]
+              abs: [8,518 390x68]
+              rel: [0,58 390x68]
             layout: flex:col gap:8
             spacing: pad:12/14
             - node: pill-btn
               text: Upload to Drive
               mx: MxPrimaryButton
               box:
-                abs: [42,559 322x48]
-                rel: [14,12 322x48]
+                abs: [22,530 362x18]
+                rel: [14,12 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+              style: font:16/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [139,575 16x16]
-                  rel: [97,16 16x16]
+                  abs: [137,531 16x16]
+                  rel: [115,1 16x16]
                 layout: flex:row
                 - node: icon:upload-cloud
                   box:
-                    abs: [139,575 16x16]
+                    abs: [137,531 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: pill-btn
               text: Restore from Drive
               mx: MxSecondaryButton
               box:
-                abs: [42,615 322x48]
-                rel: [14,68 322x48]
+                abs: [22,556 362x18]
+                rel: [14,38 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:16/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [129,632 15x15]
-                  rel: [87,17 15x15]
+                  abs: [126,558 15x15]
+                  rel: [104,2 15x15]
                 layout: flex:row
                 - node: icon:download
                   box:
-                    abs: [129,632 15x15]
+                    abs: [126,558 15x15]
                     rel: [0,0 15x15]
                   position: clip
           - node: div
             text: Backups are manual — MemoX never uploads automatically.
             box:
-              abs: [28,675 350x48]
-              rel: [0,187 350x48]
+              abs: [8,586 390x30]
+              rel: [0,126 390x30]
             spacing: pad:0/14/12/14
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
     - node: div
       item: item[4]
       box:
-        abs: [28,739 350x185]
-        rel: [20,631 350x185]
+        abs: [8,632 390x135]
+        rel: [0,544 390x135]
       spacing: margin:0/0/16/0
       - node: ov
         text: Danger zone
         box:
-          abs: [28,739 350x21]
-          rel: [0,0 350x21]
+          abs: [8,632 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,760 350x164]
-          rel: [0,21 350x164]
+          abs: [8,652 390x115]
+          rel: [0,20 390x115]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,760 350x164]
-            rel: [0,0 350x164]
+            abs: [8,652 390x115]
+            rel: [0,0 390x115]
           spacing: pad:14
-          style: bg:#dc4848@3 r:20 shadow:1/2
+          style: r:20
           - node: div
             text: Remove account from MemoX
             box:
-              abs: [42,774 322x18]
-              rel: [14,14 322x18]
+              abs: [22,666 362x16]
+              rel: [14,14 362x16]
             spacing: margin:0/0/4/0
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device.
             box:
-              abs: [42,796 322x54]
-              rel: [14,36 322x54]
+              abs: [22,686 362x36]
+              rel: [14,34 362x36]
             spacing: margin:0/0/12/0
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
           - node: pill-btn
             text: Remove account
             mx: MxActionButton
             box:
-              abs: [42,862 322x48]
-              rel: [14,102 322x48]
+              abs: [22,734 362x16]
+              rel: [14,82 362x16]
             layout: flex:row gap:6 justify:center align:center
-            spacing: pad:0/16
-            style: bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            style: font:14/600 color:#000000 text:center tracking:0.1
             - node: span
               box:
-                abs: [135,879 14x14]
-                rel: [93,17 14x14]
+                abs: [143,735 14x14]
+                rel: [121,1 14x14]
               layout: flex:row
               - node: icon:trash-2
                 box:
-                  abs: [135,879 14x14]
+                  abs: [143,735 14x14]
                   rel: [0,0 14x14]
                 position: clip
 ```
@@ -1599,7 +1559,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -1609,9 +1568,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -1635,558 +1594,530 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x4(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:931
+    scroll: scrollh:773
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x184]
-        rel: [20,0 350x184]
+        abs: [8,88 390x182]
+        rel: [0,0 390x182]
       spacing: margin:0/0/16/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,129 350x163]
-          rel: [0,21 350x163]
+          abs: [8,108 390x162]
+          rel: [0,20 390x162]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,129 350x127]
-            rel: [0,0 350x127]
+            abs: [8,108 390x126]
+            rel: [0,0 390x126]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,129 350x70]
-              rel: [0,0 350x70]
+              abs: [8,108 390x70]
+              rel: [0,0 390x70]
             layout: flex:row gap:12 align:center
             spacing: pad:14
             - node: div
               text: AL
               box:
-                abs: [42,143 42x42]
+                abs: [22,122 42x42]
                 rel: [14,14 42x42]
               layout: flex:row justify:center align:center
               flex: shrink:0
-              style: bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+              style: font:16/700 color:#000000 tracking:0.2 r:999
             - node: div
               box:
-                abs: [96,145 220x39]
-                rel: [68,16 220x39]
+                abs: [76,126 260x35]
+                rel: [68,18 260x35]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: alex.minh@gmail.com
                 box:
-                  abs: [96,145 220x18]
-                  rel: [0,0 220x18]
+                  abs: [76,126 260x16]
+                  rel: [0,0 260x16]
                 position: clip
-                style: font:14/600 color:font-headline
+                style: font:14/600 color:#000000
               - node: div
                 box:
-                  abs: [96,167 134x15]
-                  rel: [0,22 134x15]
+                  abs: [76,144 122x15]
+                  rel: [0,18 122x15]
                 layout: flex:row gap:6 align:center
                 spacing: margin:2/0/0/0
                 - node: svg
                   box:
-                    abs: [96,169 11x11]
+                    abs: [76,146 11x11]
                     rel: [0,2 11x11]
                   position: clip
                 - node: span
                   text: Google · linked Apr 8
                   box:
-                    abs: [113,167 117x15]
-                    rel: [17,0 117x15]
-                  style: font:12/400 color:on-surface-variant
+                    abs: [93,144 105x15]
+                    rel: [17,0 105x15]
+                  style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,146 36x36]
-                rel: [300,17 36x36]
+                abs: [348,125 36x36]
+                rel: [340,17 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,154 20x20]
+                  abs: [356,133 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:refresh-cw
                   box:
-                    abs: [336,154 20x20]
+                    abs: [356,133 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,199 350x57]
-              rel: [0,70 350x57]
+              abs: [8,178 390x56]
+              rel: [0,70 390x56]
             layout: flex:row gap:8
             spacing: pad:10/14
-            style: border-t:1px seed-indigo@14
             - node: pill-btn
               text: Sign out
               mx: MxSecondaryButton
               box:
-                abs: [42,210 158x36]
-                rel: [14,11 158x36]
+                abs: [22,188 177x36]
+                rel: [14,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [87,221 14x14]
-                  rel: [45,11 14x14]
+                  abs: [79,199 14x14]
+                  rel: [57,11 14x14]
                 layout: flex:row
                 - node: icon:log-out
                   box:
-                    abs: [87,221 14x14]
+                    abs: [79,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
             - node: pill-btn
               text: Switch account
               mx: MxSecondaryButton
               box:
-                abs: [208,210 156x36]
-                rel: [180,11 156x36]
+                abs: [207,188 177x36]
+                rel: [199,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [230,221 14x14]
-                  rel: [22,11 14x14]
+                  abs: [246,199 14x14]
+                  rel: [39,11 14x14]
                 layout: flex:row
                 - node: icon:repeat
                   box:
-                    abs: [230,221 14x14]
+                    abs: [246,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
         - node: div
           text: Signing out keeps every deck and card on this device.
           box:
-            abs: [28,266 350x26]
-            rel: [0,137 350x26]
+            abs: [8,244 390x26]
+            rel: [0,136 390x26]
           spacing: pad:8/6/0/6
-          style: font:12/400/18 color:on-surface-variant
+          style: font:12/400/18 color:#000000
     - node: div
       item: item[2]
       box:
-        abs: [28,308 350x143]
-        rel: [20,200 350x143]
+        abs: [8,286 390x138]
+        rel: [0,198 390x138]
       spacing: margin:0/0/16/0
       - node: ov
         text: This device
         box:
-          abs: [28,308 350x21]
-          rel: [0,0 350x21]
+          abs: [8,286 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,329 350x122]
-          rel: [0,21 350x122]
+          abs: [8,306 390x118]
+          rel: [0,20 390x118]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,329 350x122]
-            rel: [0,0 350x122]
+            abs: [8,306 390x118]
+            rel: [0,0 390x118]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,329 350x61]
-              rel: [0,0 350x61]
+              abs: [8,306 390x60]
+              rel: [0,0 390x60]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: icon-tile
               mx: MxIconTile
               box:
-                abs: [42,342 34x34]
+                abs: [22,319 34x34]
                 rel: [14,13 34x34]
               layout: flex:row justify:center align:center
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
               - node: span
                 box:
-                  abs: [51,351 16x16]
+                  abs: [31,328 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:smartphone
                   box:
-                    abs: [51,351 16x16]
+                    abs: [31,328 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,342 228x34]
-                rel: [60,13 228x34]
+                abs: [68,320 268x32]
+                rel: [60,14 268x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Alex's Pixel 8
                 box:
-                  abs: [88,342 228x18]
-                  rel: [0,0 228x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,320 268x16]
+                  rel: [0,0 268x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Device label
                 box:
-                  abs: [88,361 228x15]
-                  rel: [0,19 228x15]
+                  abs: [68,337 268x15]
+                  rel: [0,17 268x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,341 36x36]
-                rel: [300,12 36x36]
+                abs: [348,318 36x36]
+                rel: [340,12 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,349 20x20]
+                  abs: [356,326 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:pencil
                   box:
-                    abs: [336,349 20x20]
+                    abs: [356,326 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,390 350x61]
-              rel: [0,61 350x61]
+              abs: [8,366 390x58]
+              rel: [0,60 390x58]
             layout: grid cols:3 gap:12
             spacing: pad:12/14
             - node: div
               box:
-                abs: [42,402 99x37]
-                rel: [14,12 99x37]
+                abs: [22,378 113x34]
+                rel: [14,12 113x34]
               - node: div
                 text: 4
                 box:
-                  abs: [42,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [22,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: decks
                 box:
-                  abs: [42,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [22,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [153,402 99x37]
-                rel: [125,12 99x37]
+                abs: [147,378 113x34]
+                rel: [139,12 113x34]
               - node: div
                 text: 142
                 box:
-                  abs: [153,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [147,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: cards
                 box:
-                  abs: [153,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [147,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [265,402 99x37]
-                rel: [237,12 99x37]
+                abs: [271,378 113x34]
+                rel: [263,12 113x34]
               - node: div
                 text: 2 h
                 box:
-                  abs: [265,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [271,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: last active
                 box:
-                  abs: [265,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [271,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,467 350x335]
-        rel: [20,359 350x335]
+        abs: [8,440 390x254]
+        rel: [0,352 390x254]
       spacing: margin:0/0/16/0
       - node: ov
         text: Drive backup
         box:
-          abs: [28,467 350x21]
-          rel: [0,0 350x21]
+          abs: [8,440 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,488 350x314]
-          rel: [0,21 350x314]
+          abs: [8,460 390x234]
+          rel: [0,20 390x234]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,488 350x314]
-            rel: [0,0 350x314]
+            abs: [8,460 390x234]
+            rel: [0,0 390x234]
           repeat: x4(unit=1)
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             item: item[1]
             box:
-              abs: [28,488 350x59]
-              rel: [0,0 350x59]
+              abs: [8,460 390x58]
+              rel: [0,0 390x58]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,500 34x34]
+                abs: [22,472 34x34]
                 rel: [14,12 34x34]
               layout: flex:row justify:center align:center
-              style: bg:mastery@10 r:12
               - node: span
                 box:
-                  abs: [51,509 16x16]
+                  abs: [31,481 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:cloud
                   box:
-                    abs: [51,509 16x16]
+                    abs: [31,481 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,500 198x34]
-                rel: [60,12 198x34]
+                abs: [68,473 245x32]
+                rel: [60,13 245x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Last upload 2 days ago
                 box:
-                  abs: [88,500 198x18]
-                  rel: [0,0 198x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,473 245x16]
+                  rel: [0,0 245x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: 142 cards · 4 decks
                 box:
-                  abs: [88,519 198x15]
-                  rel: [0,19 198x15]
+                  abs: [68,490 245x15]
+                  rel: [0,17 245x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: span
               text: Matches
               box:
-                abs: [298,510 66x15]
-                rel: [270,22 66x15]
+                abs: [325,482 59x15]
+                rel: [317,22 59x15]
               layout: flex:row gap:4 align:center
-              style: font:12/600 color:mastery
+              style: font:12/600 color:#000000
               - node: span
                 box:
-                  abs: [298,511 12x12]
+                  abs: [325,483 12x12]
                   rel: [0,2 12x12]
                 layout: flex:row
                 - node: icon:check
                   box:
-                    abs: [298,511 12x12]
+                    abs: [325,483 12x12]
                     rel: [0,0 12x12]
                   position: clip
           - node: div
             item: item[2]
             box:
-              abs: [28,547 350x79]
-              rel: [0,59 350x79]
+              abs: [8,518 390x78]
+              rel: [0,58 390x78]
             spacing: pad:14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,561 322x15]
-                rel: [14,14 322x15]
+                abs: [22,532 362x15]
+                rel: [14,14 362x15]
               layout: flex:row justify:between align:center
               spacing: margin:0/0/8/0
               - node: div
                 text: Uploading to Drive…
                 box:
-                  abs: [42,561 116x15]
-                  rel: [0,0 116x15]
-                style: font:12/600 color:seed-indigo
+                  abs: [22,532 110x15]
+                  rel: [0,0 110x15]
+                style: font:12/600 color:#000000
               - node: div
                 text: 64%
                 box:
-                  abs: [337,561 27x15]
-                  rel: [295,0 27x15]
-                style: font:12/700 color:on-surface-variant
-            - node: div
-              box:
-                abs: [42,584 322x6]
-                rel: [14,37 322x6]
-              position: clip
-              style: bg:surface-container r:999
-              - node: div
-                box:
-                  abs: [42,584 206x6]
-                  rel: [0,0 206x6]
-                style: bg:seed-indigo r:999
+                  abs: [360,532 24x15]
+                  rel: [338,0 24x15]
+                style: font:12/700 color:#000000
             - node: div
               text: 91 / 142 cards · keep this screen open
               box:
-                abs: [42,596 322x15]
-                rel: [14,49 322x15]
+                abs: [22,567 362x15]
+                rel: [14,49 362x15]
               spacing: margin:6/0/0/0
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: div
             item: item[3]
             box:
-              abs: [28,626 350x128]
-              rel: [0,138 350x128]
+              abs: [8,596 390x68]
+              rel: [0,136 390x68]
             layout: flex:col gap:8
             spacing: pad:12/14
             - node: pill-btn
               text: Uploading… 64%
               mx: MxPrimaryButton
               box:
-                abs: [42,638 322x48]
-                rel: [14,12 322x48]
+                abs: [22,608 362x18]
+                rel: [14,12 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.5
-              - node: span
-                box:
-                  abs: [133,654 17x17]
-                  rel: [91,16 17x17]
-                style: r:999 border-t:2px transparent border-r:2px on-primary border-b:2px on-primary border-l:2px on-primary
+              style: font:16/600 color:#000000 text:center tracking:0.1 op:0.5
             - node: pill-btn
               text: Restore from Drive
               mx: MxSecondaryButton
               box:
-                abs: [42,694 322x48]
-                rel: [14,68 322x48]
+                abs: [22,634 362x18]
+                rel: [14,38 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant op:0.45
+              style: font:16/600 color:#000000 text:center tracking:0.1 op:0.45
               - node: span
                 box:
-                  abs: [129,711 15x15]
-                  rel: [87,17 15x15]
+                  abs: [126,636 15x15]
+                  rel: [104,2 15x15]
                 layout: flex:row
                 - node: icon:download
                   box:
-                    abs: [129,711 15x15]
+                    abs: [126,636 15x15]
                     rel: [0,0 15x15]
                   position: clip
           - node: div
             item: item[4]
             text: Backups are manual — MemoX never uploads automatically.
             box:
-              abs: [28,754 350x48]
-              rel: [0,266 350x48]
+              abs: [8,664 390x30]
+              rel: [0,204 390x30]
             spacing: pad:0/14/12/14
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
     - node: div
       item: item[4]
       box:
-        abs: [28,818 350x185]
-        rel: [20,710 350x185]
+        abs: [8,710 390x135]
+        rel: [0,622 390x135]
       spacing: margin:0/0/16/0
       - node: ov
         text: Danger zone
         box:
-          abs: [28,818 350x21]
-          rel: [0,0 350x21]
+          abs: [8,710 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,839 350x164]
-          rel: [0,21 350x164]
+          abs: [8,730 390x115]
+          rel: [0,20 390x115]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,839 350x164]
-            rel: [0,0 350x164]
+            abs: [8,730 390x115]
+            rel: [0,0 390x115]
           spacing: pad:14
-          style: bg:#dc4848@3 r:20 shadow:1/2
+          style: r:20
           - node: div
             text: Remove account from MemoX
             box:
-              abs: [42,853 322x18]
-              rel: [14,14 322x18]
+              abs: [22,744 362x16]
+              rel: [14,14 362x16]
             spacing: margin:0/0/4/0
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device.
             box:
-              abs: [42,875 322x54]
-              rel: [14,36 322x54]
+              abs: [22,764 362x36]
+              rel: [14,34 362x36]
             spacing: margin:0/0/12/0
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
           - node: pill-btn
             text: Remove account
             mx: MxActionButton
             box:
-              abs: [42,941 322x48]
-              rel: [14,102 322x48]
+              abs: [22,812 362x16]
+              rel: [14,82 362x16]
             layout: flex:row gap:6 justify:center align:center
-            spacing: pad:0/16
-            style: bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            style: font:14/600 color:#000000 text:center tracking:0.1
             - node: span
               box:
-                abs: [135,958 14x14]
-                rel: [93,17 14x14]
+                abs: [143,813 14x14]
+                rel: [121,1 14x14]
               layout: flex:row
               - node: icon:trash-2
                 box:
-                  abs: [135,958 14x14]
+                  abs: [143,813 14x14]
                   rel: [0,0 14x14]
                 position: clip
 ```
@@ -2201,7 +2132,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -2211,9 +2141,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -2237,538 +2167,527 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x4(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:977
+    scroll: scrollh:795
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x184]
-        rel: [20,0 350x184]
+        abs: [8,88 390x182]
+        rel: [0,0 390x182]
       spacing: margin:0/0/16/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,129 350x163]
-          rel: [0,21 350x163]
+          abs: [8,108 390x162]
+          rel: [0,20 390x162]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,129 350x127]
-            rel: [0,0 350x127]
+            abs: [8,108 390x126]
+            rel: [0,0 390x126]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,129 350x70]
-              rel: [0,0 350x70]
+              abs: [8,108 390x70]
+              rel: [0,0 390x70]
             layout: flex:row gap:12 align:center
             spacing: pad:14
             - node: div
               text: AL
               box:
-                abs: [42,143 42x42]
+                abs: [22,122 42x42]
                 rel: [14,14 42x42]
               layout: flex:row justify:center align:center
               flex: shrink:0
-              style: bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+              style: font:16/700 color:#000000 tracking:0.2 r:999
             - node: div
               box:
-                abs: [96,145 220x39]
-                rel: [68,16 220x39]
+                abs: [76,126 260x35]
+                rel: [68,18 260x35]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: alex.minh@gmail.com
                 box:
-                  abs: [96,145 220x18]
-                  rel: [0,0 220x18]
+                  abs: [76,126 260x16]
+                  rel: [0,0 260x16]
                 position: clip
-                style: font:14/600 color:font-headline
+                style: font:14/600 color:#000000
               - node: div
                 box:
-                  abs: [96,167 134x15]
-                  rel: [0,22 134x15]
+                  abs: [76,144 122x15]
+                  rel: [0,18 122x15]
                 layout: flex:row gap:6 align:center
                 spacing: margin:2/0/0/0
                 - node: svg
                   box:
-                    abs: [96,169 11x11]
+                    abs: [76,146 11x11]
                     rel: [0,2 11x11]
                   position: clip
                 - node: span
                   text: Google · linked Apr 8
                   box:
-                    abs: [113,167 117x15]
-                    rel: [17,0 117x15]
-                  style: font:12/400 color:on-surface-variant
+                    abs: [93,144 105x15]
+                    rel: [17,0 105x15]
+                  style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,146 36x36]
-                rel: [300,17 36x36]
+                abs: [348,125 36x36]
+                rel: [340,17 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,154 20x20]
+                  abs: [356,133 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:refresh-cw
                   box:
-                    abs: [336,154 20x20]
+                    abs: [356,133 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,199 350x57]
-              rel: [0,70 350x57]
+              abs: [8,178 390x56]
+              rel: [0,70 390x56]
             layout: flex:row gap:8
             spacing: pad:10/14
-            style: border-t:1px seed-indigo@14
             - node: pill-btn
               text: Sign out
               mx: MxSecondaryButton
               box:
-                abs: [42,210 158x36]
-                rel: [14,11 158x36]
+                abs: [22,188 177x36]
+                rel: [14,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [87,221 14x14]
-                  rel: [45,11 14x14]
+                  abs: [79,199 14x14]
+                  rel: [57,11 14x14]
                 layout: flex:row
                 - node: icon:log-out
                   box:
-                    abs: [87,221 14x14]
+                    abs: [79,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
             - node: pill-btn
               text: Switch account
               mx: MxSecondaryButton
               box:
-                abs: [208,210 156x36]
-                rel: [180,11 156x36]
+                abs: [207,188 177x36]
+                rel: [199,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [230,221 14x14]
-                  rel: [22,11 14x14]
+                  abs: [246,199 14x14]
+                  rel: [39,11 14x14]
                 layout: flex:row
                 - node: icon:repeat
                   box:
-                    abs: [230,221 14x14]
+                    abs: [246,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
         - node: div
           text: Signing out keeps every deck and card on this device.
           box:
-            abs: [28,266 350x26]
-            rel: [0,137 350x26]
+            abs: [8,244 390x26]
+            rel: [0,136 390x26]
           spacing: pad:8/6/0/6
-          style: font:12/400/18 color:on-surface-variant
+          style: font:12/400/18 color:#000000
     - node: div
       item: item[2]
       box:
-        abs: [28,308 350x143]
-        rel: [20,200 350x143]
+        abs: [8,286 390x138]
+        rel: [0,198 390x138]
       spacing: margin:0/0/16/0
       - node: ov
         text: This device
         box:
-          abs: [28,308 350x21]
-          rel: [0,0 350x21]
+          abs: [8,286 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,329 350x122]
-          rel: [0,21 350x122]
+          abs: [8,306 390x118]
+          rel: [0,20 390x118]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,329 350x122]
-            rel: [0,0 350x122]
+            abs: [8,306 390x118]
+            rel: [0,0 390x118]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,329 350x61]
-              rel: [0,0 350x61]
+              abs: [8,306 390x60]
+              rel: [0,0 390x60]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: icon-tile
               mx: MxIconTile
               box:
-                abs: [42,342 34x34]
+                abs: [22,319 34x34]
                 rel: [14,13 34x34]
               layout: flex:row justify:center align:center
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
               - node: span
                 box:
-                  abs: [51,351 16x16]
+                  abs: [31,328 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:smartphone
                   box:
-                    abs: [51,351 16x16]
+                    abs: [31,328 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,342 228x34]
-                rel: [60,13 228x34]
+                abs: [68,320 268x32]
+                rel: [60,14 268x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Alex's Pixel 8
                 box:
-                  abs: [88,342 228x18]
-                  rel: [0,0 228x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,320 268x16]
+                  rel: [0,0 268x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Device label
                 box:
-                  abs: [88,361 228x15]
-                  rel: [0,19 228x15]
+                  abs: [68,337 268x15]
+                  rel: [0,17 268x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,341 36x36]
-                rel: [300,12 36x36]
+                abs: [348,318 36x36]
+                rel: [340,12 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,349 20x20]
+                  abs: [356,326 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:pencil
                   box:
-                    abs: [336,349 20x20]
+                    abs: [356,326 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,390 350x61]
-              rel: [0,61 350x61]
+              abs: [8,366 390x58]
+              rel: [0,60 390x58]
             layout: grid cols:3 gap:12
             spacing: pad:12/14
             - node: div
               box:
-                abs: [42,402 99x37]
-                rel: [14,12 99x37]
+                abs: [22,378 113x34]
+                rel: [14,12 113x34]
               - node: div
                 text: 4
                 box:
-                  abs: [42,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [22,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: decks
                 box:
-                  abs: [42,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [22,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [153,402 99x37]
-                rel: [125,12 99x37]
+                abs: [147,378 113x34]
+                rel: [139,12 113x34]
               - node: div
                 text: 142
                 box:
-                  abs: [153,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [147,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: cards
                 box:
-                  abs: [153,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [147,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [265,402 99x37]
-                rel: [237,12 99x37]
+                abs: [271,378 113x34]
+                rel: [263,12 113x34]
               - node: div
                 text: 2 h
                 box:
-                  abs: [265,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [271,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: last active
                 box:
-                  abs: [265,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [271,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,467 350x381]
-        rel: [20,359 350x381]
+        abs: [8,440 390x276]
+        rel: [0,352 390x276]
       spacing: margin:0/0/16/0
       - node: ov
         text: Drive backup
         box:
-          abs: [28,467 350x21]
-          rel: [0,0 350x21]
+          abs: [8,440 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,488 350x360]
-          rel: [0,21 350x360]
+          abs: [8,460 390x256]
+          rel: [0,20 390x256]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,488 350x360]
-            rel: [0,0 350x360]
+            abs: [8,460 390x256]
+            rel: [0,0 390x256]
           repeat: x4(unit=1)
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             item: item[1]
             box:
-              abs: [28,488 350x59]
-              rel: [0,0 350x59]
+              abs: [8,460 390x58]
+              rel: [0,0 390x58]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,500 34x34]
+                abs: [22,472 34x34]
                 rel: [14,12 34x34]
               layout: flex:row justify:center align:center
-              style: bg:#d9891e@12 r:12
               - node: span
                 box:
-                  abs: [51,509 16x16]
+                  abs: [31,481 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:cloud
                   box:
-                    abs: [51,509 16x16]
+                    abs: [31,481 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,500 276x34]
-                rel: [60,12 276x34]
+                abs: [68,473 316x32]
+                rel: [60,13 316x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Last upload 11 days ago
                 box:
-                  abs: [88,500 276x18]
-                  rel: [0,0 276x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,473 316x16]
+                  rel: [0,0 316x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: 178 cards · 5 decks · from Galaxy S23
                 box:
-                  abs: [88,519 276x15]
-                  rel: [0,19 276x15]
+                  abs: [68,490 316x15]
+                  rel: [0,17 316x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
           - node: div
             box:
-              abs: [42,559 322x100]
-              rel: [14,71 322x100]
+              abs: [22,530 362x78]
+              rel: [14,70 362x78]
             layout: flex:row gap:10 align:start
             spacing: pad:12/14
-            style: bg:#d9891e@10 r:12 border:1px #d9891e@24
+            style: r:12
             - node: span
               box:
-                abs: [57,574 16x16]
-                rel: [15,15 16x16]
+                abs: [36,543 16x16]
+                rel: [14,13 16x16]
               layout: flex:row
               - node: icon:alert-triangle
                 box:
-                  abs: [57,574 16x16]
+                  abs: [36,543 16x16]
                   rel: [0,0 16x16]
                 position: clip
             - node: div
               box:
-                abs: [83,572 266x74]
-                rel: [41,13 266x74]
+                abs: [62,542 308x54]
+                rel: [40,12 308x54]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Backup is from a different device
                 box:
-                  abs: [83,572 266x18]
-                  rel: [0,0 266x18]
-                style: font:14/700 color:font-headline tracking:-0.1
+                  abs: [62,542 308x16]
+                  rel: [0,0 308x16]
+                style: font:14/700 color:#000000 tracking:-0.1
               - node: div
                 text: Restoring will replace the 142 cards on this device with the 178 cards from Galaxy S23. Upload local first to keep both safe.
                 box:
-                  abs: [83,592 266x54]
-                  rel: [0,20 266x54]
+                  abs: [62,560 308x36]
+                  rel: [0,18 308x36]
                 spacing: margin:2/0/0/0
-                style: font:12/400/18 color:on-surface-variant
+                style: font:12/400/18 color:#000000
           - node: div
             item: item[3]
             box:
-              abs: [28,672 350x128]
-              rel: [0,184 350x128]
+              abs: [8,620 390x66]
+              rel: [0,160 390x66]
             layout: flex:col gap:8
             spacing: pad:12/14
             - node: pill-btn
               text: Upload local first
               mx: MxPrimaryButton
               box:
-                abs: [42,684 322x48]
-                rel: [14,12 322x48]
+                abs: [22,632 362x18]
+                rel: [14,12 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12
+              style: font:16/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [134,700 16x16]
-                  rel: [92,16 16x16]
+                  abs: [132,633 16x16]
+                  rel: [110,1 16x16]
                 layout: flex:row
                 - node: icon:upload-cloud
                   box:
-                    abs: [134,700 16x16]
+                    abs: [132,633 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: pill-btn
               text: Restore anyway
               mx: MxActionButton
               box:
-                abs: [42,740 322x48]
-                rel: [14,68 322x48]
+                abs: [22,658 362x16]
+                rel: [14,38 362x16]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: font:14/600 color:error text:center tracking:0.1 r:12 border:1px #dc4848@40
+              style: font:14/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [138,757 15x15]
-                  rel: [96,17 15x15]
+                  abs: [144,659 15x15]
+                  rel: [122,1 15x15]
                 layout: flex:row
                 - node: icon:download
                   box:
-                    abs: [138,757 15x15]
+                    abs: [144,659 15x15]
                     rel: [0,0 15x15]
                   position: clip
           - node: div
             item: item[4]
             text: Restore replaces everything on this device. There is no undo after step 2.
             box:
-              abs: [28,800 350x48]
-              rel: [0,312 350x48]
+              abs: [8,686 390x30]
+              rel: [0,226 390x30]
             spacing: pad:0/14/12/14
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
     - node: div
       item: item[4]
       box:
-        abs: [28,864 350x185]
-        rel: [20,756 350x185]
+        abs: [8,732 390x135]
+        rel: [0,644 390x135]
       spacing: margin:0/0/16/0
       - node: ov
         text: Danger zone
         box:
-          abs: [28,864 350x21]
-          rel: [0,0 350x21]
+          abs: [8,732 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,885 350x164]
-          rel: [0,21 350x164]
+          abs: [8,752 390x115]
+          rel: [0,20 390x115]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,885 350x164]
-            rel: [0,0 350x164]
+            abs: [8,752 390x115]
+            rel: [0,0 390x115]
           spacing: pad:14
-          style: bg:#dc4848@3 r:20 shadow:1/2
+          style: r:20
           - node: div
             text: Remove account from MemoX
             box:
-              abs: [42,899 322x18]
-              rel: [14,14 322x18]
+              abs: [22,766 362x16]
+              rel: [14,14 362x16]
             spacing: margin:0/0/4/0
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device.
             box:
-              abs: [42,921 322x54]
-              rel: [14,36 322x54]
+              abs: [22,786 362x36]
+              rel: [14,34 362x36]
             spacing: margin:0/0/12/0
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
           - node: pill-btn
             text: Remove account
             mx: MxActionButton
             box:
-              abs: [42,987 322x48]
-              rel: [14,102 322x48]
+              abs: [22,834 362x16]
+              rel: [14,82 362x16]
             layout: flex:row gap:6 justify:center align:center
-            spacing: pad:0/16
-            style: bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            style: font:14/600 color:#000000 text:center tracking:0.1
             - node: span
               box:
-                abs: [135,1004 14x14]
-                rel: [93,17 14x14]
+                abs: [143,835 14x14]
+                rel: [121,1 14x14]
               layout: flex:row
               - node: icon:trash-2
                 box:
-                  abs: [135,1004 14x14]
+                  abs: [143,835 14x14]
                   rel: [0,0 14x14]
                 position: clip
 ```
@@ -2783,7 +2702,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -2793,9 +2711,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -2819,544 +2737,521 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x4(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:918
+    scroll: scrollh:770
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x184]
-        rel: [20,0 350x184]
+        abs: [8,88 390x182]
+        rel: [0,0 390x182]
       spacing: margin:0/0/16/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,129 350x163]
-          rel: [0,21 350x163]
+          abs: [8,108 390x162]
+          rel: [0,20 390x162]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,129 350x127]
-            rel: [0,0 350x127]
+            abs: [8,108 390x126]
+            rel: [0,0 390x126]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,129 350x70]
-              rel: [0,0 350x70]
+              abs: [8,108 390x70]
+              rel: [0,0 390x70]
             layout: flex:row gap:12 align:center
             spacing: pad:14
             - node: div
               text: AL
               box:
-                abs: [42,143 42x42]
+                abs: [22,122 42x42]
                 rel: [14,14 42x42]
               layout: flex:row justify:center align:center
               flex: shrink:0
-              style: bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+              style: font:16/700 color:#000000 tracking:0.2 r:999
             - node: div
               box:
-                abs: [96,145 220x39]
-                rel: [68,16 220x39]
+                abs: [76,126 260x35]
+                rel: [68,18 260x35]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: alex.minh@gmail.com
                 box:
-                  abs: [96,145 220x18]
-                  rel: [0,0 220x18]
+                  abs: [76,126 260x16]
+                  rel: [0,0 260x16]
                 position: clip
-                style: font:14/600 color:font-headline
+                style: font:14/600 color:#000000
               - node: div
                 box:
-                  abs: [96,167 134x15]
-                  rel: [0,22 134x15]
+                  abs: [76,144 122x15]
+                  rel: [0,18 122x15]
                 layout: flex:row gap:6 align:center
                 spacing: margin:2/0/0/0
                 - node: svg
                   box:
-                    abs: [96,169 11x11]
+                    abs: [76,146 11x11]
                     rel: [0,2 11x11]
                   position: clip
                 - node: span
                   text: Google · linked Apr 8
                   box:
-                    abs: [113,167 117x15]
-                    rel: [17,0 117x15]
-                  style: font:12/400 color:on-surface-variant
+                    abs: [93,144 105x15]
+                    rel: [17,0 105x15]
+                  style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,146 36x36]
-                rel: [300,17 36x36]
+                abs: [348,125 36x36]
+                rel: [340,17 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,154 20x20]
+                  abs: [356,133 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:refresh-cw
                   box:
-                    abs: [336,154 20x20]
+                    abs: [356,133 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,199 350x57]
-              rel: [0,70 350x57]
+              abs: [8,178 390x56]
+              rel: [0,70 390x56]
             layout: flex:row gap:8
             spacing: pad:10/14
-            style: border-t:1px seed-indigo@14
             - node: pill-btn
               text: Sign out
               mx: MxSecondaryButton
               box:
-                abs: [42,210 158x36]
-                rel: [14,11 158x36]
+                abs: [22,188 177x36]
+                rel: [14,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [87,221 14x14]
-                  rel: [45,11 14x14]
+                  abs: [79,199 14x14]
+                  rel: [57,11 14x14]
                 layout: flex:row
                 - node: icon:log-out
                   box:
-                    abs: [87,221 14x14]
+                    abs: [79,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
             - node: pill-btn
               text: Switch account
               mx: MxSecondaryButton
               box:
-                abs: [208,210 156x36]
-                rel: [180,11 156x36]
+                abs: [207,188 177x36]
+                rel: [199,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [230,221 14x14]
-                  rel: [22,11 14x14]
+                  abs: [246,199 14x14]
+                  rel: [39,11 14x14]
                 layout: flex:row
                 - node: icon:repeat
                   box:
-                    abs: [230,221 14x14]
+                    abs: [246,199 14x14]
                     rel: [0,0 14x14]
                   position: clip
         - node: div
           text: Signing out keeps every deck and card on this device.
           box:
-            abs: [28,266 350x26]
-            rel: [0,137 350x26]
+            abs: [8,244 390x26]
+            rel: [0,136 390x26]
           spacing: pad:8/6/0/6
-          style: font:12/400/18 color:on-surface-variant
+          style: font:12/400/18 color:#000000
     - node: div
       item: item[2]
       box:
-        abs: [28,308 350x143]
-        rel: [20,200 350x143]
+        abs: [8,286 390x138]
+        rel: [0,198 390x138]
       spacing: margin:0/0/16/0
       - node: ov
         text: This device
         box:
-          abs: [28,308 350x21]
-          rel: [0,0 350x21]
+          abs: [8,286 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,329 350x122]
-          rel: [0,21 350x122]
+          abs: [8,306 390x118]
+          rel: [0,20 390x118]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,329 350x122]
-            rel: [0,0 350x122]
+            abs: [8,306 390x118]
+            rel: [0,0 390x118]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,329 350x61]
-              rel: [0,0 350x61]
+              abs: [8,306 390x60]
+              rel: [0,0 390x60]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: icon-tile
               mx: MxIconTile
               box:
-                abs: [42,342 34x34]
+                abs: [22,319 34x34]
                 rel: [14,13 34x34]
               layout: flex:row justify:center align:center
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
               - node: span
                 box:
-                  abs: [51,351 16x16]
+                  abs: [31,328 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:smartphone
                   box:
-                    abs: [51,351 16x16]
+                    abs: [31,328 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,342 228x34]
-                rel: [60,13 228x34]
+                abs: [68,320 268x32]
+                rel: [60,14 268x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Alex's Pixel 8
                 box:
-                  abs: [88,342 228x18]
-                  rel: [0,0 228x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,320 268x16]
+                  rel: [0,0 268x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Device label
                 box:
-                  abs: [88,361 228x15]
-                  rel: [0,19 228x15]
+                  abs: [68,337 268x15]
+                  rel: [0,17 268x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,341 36x36]
-                rel: [300,12 36x36]
+                abs: [348,318 36x36]
+                rel: [340,12 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,349 20x20]
+                  abs: [356,326 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:pencil
                   box:
-                    abs: [336,349 20x20]
+                    abs: [356,326 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,390 350x61]
-              rel: [0,61 350x61]
+              abs: [8,366 390x58]
+              rel: [0,60 390x58]
             layout: grid cols:3 gap:12
             spacing: pad:12/14
             - node: div
               box:
-                abs: [42,402 99x37]
-                rel: [14,12 99x37]
+                abs: [22,378 113x34]
+                rel: [14,12 113x34]
               - node: div
                 text: 4
                 box:
-                  abs: [42,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [22,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: decks
                 box:
-                  abs: [42,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [22,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [153,402 99x37]
-                rel: [125,12 99x37]
+                abs: [147,378 113x34]
+                rel: [139,12 113x34]
               - node: div
                 text: 142
                 box:
-                  abs: [153,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [147,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: cards
                 box:
-                  abs: [153,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [147,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [265,402 99x37]
-                rel: [237,12 99x37]
+                abs: [271,378 113x34]
+                rel: [263,12 113x34]
               - node: div
                 text: 2 h
                 box:
-                  abs: [265,402 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [271,378 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: last active
                 box:
-                  abs: [265,424 99x15]
-                  rel: [0,22 99x15]
+                  abs: [271,397 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,467 350x322]
-        rel: [20,359 350x322]
+        abs: [8,440 390x251]
+        rel: [0,352 390x251]
       spacing: margin:0/0/16/0
       - node: ov
         text: Drive backup
         box:
-          abs: [28,467 350x21]
-          rel: [0,0 350x21]
+          abs: [8,440 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,488 350x301]
-          rel: [0,21 350x301]
+          abs: [8,460 390x231]
+          rel: [0,20 390x231]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,488 350x301]
-            rel: [0,0 350x301]
+            abs: [8,460 390x231]
+            rel: [0,0 390x231]
           repeat: x4(unit=1)
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             item: item[1]
             box:
-              abs: [28,488 350x59]
-              rel: [0,0 350x59]
+              abs: [8,460 390x58]
+              rel: [0,0 390x58]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,500 34x34]
+                abs: [22,472 34x34]
                 rel: [14,12 34x34]
               layout: flex:row justify:center align:center
-              style: bg:mastery@10 r:12
               - node: span
                 box:
-                  abs: [51,509 16x16]
+                  abs: [31,481 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:cloud
                   box:
-                    abs: [51,509 16x16]
+                    abs: [31,481 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,500 198x34]
-                rel: [60,12 198x34]
+                abs: [68,473 245x32]
+                rel: [60,13 245x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Last upload 2 days ago
                 box:
-                  abs: [88,500 198x18]
-                  rel: [0,0 198x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,473 245x16]
+                  rel: [0,0 245x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: 142 cards · 4 decks
                 box:
-                  abs: [88,519 198x15]
-                  rel: [0,19 198x15]
+                  abs: [68,490 245x15]
+                  rel: [0,17 245x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: span
               text: Matches
               box:
-                abs: [298,510 66x15]
-                rel: [270,22 66x15]
+                abs: [325,482 59x15]
+                rel: [317,22 59x15]
               layout: flex:row gap:4 align:center
-              style: font:12/600 color:mastery
+              style: font:12/600 color:#000000
               - node: span
                 box:
-                  abs: [298,511 12x12]
+                  abs: [325,483 12x12]
                   rel: [0,2 12x12]
                 layout: flex:row
                 - node: icon:check
                   box:
-                    abs: [298,511 12x12]
+                    abs: [325,483 12x12]
                     rel: [0,0 12x12]
                   position: clip
           - node: div
             item: item[2]
             box:
-              abs: [28,547 350x122]
-              rel: [0,59 350x122]
+              abs: [8,518 390x101]
+              rel: [0,58 390x101]
             repeat: x2(unit=2)
             spacing: pad:14
-            style: border-b:1px seed-indigo@14
             - node: div
               item: item[1]
               box:
-                abs: [42,561 322x15]
-                rel: [14,14 322x15]
+                abs: [22,532 362x15]
+                rel: [14,14 362x15]
               layout: flex:row justify:between align:center
               spacing: margin:0/0/4/0
               - node: div
                 text: Step 1 of 2
                 box:
-                  abs: [42,561 68x15]
-                  rel: [0,0 68x15]
-                style: font:12/700 color:on-surface-variant tracking:0.3
+                  abs: [22,532 70x15]
+                  rel: [0,0 70x15]
+                style: font:12/700 color:#000000 tracking:0.3
               - node: div
                 text: 38%
                 box:
-                  abs: [337,561 27x15]
-                  rel: [295,0 27x15]
-                style: font:12/700 color:on-surface-variant
+                  abs: [360,532 24x15]
+                  rel: [338,0 24x15]
+                style: font:12/700 color:#000000
             - node: div
               text: Snapshotting local data first…
               box:
-                abs: [42,580 322x18]
-                rel: [14,33 322x18]
+                abs: [22,551 362x16]
+                rel: [14,33 362x16]
               spacing: margin:0/0/8/0
-              style: font:14/600 color:font-headline
-            - node: div
-              item: item[2]
-              box:
-                abs: [42,606 322x6]
-                rel: [14,59 322x6]
-              position: clip
-              style: bg:surface-container r:999
-              - node: div
-                box:
-                  abs: [42,606 122x6]
-                  rel: [0,0 122x6]
-                style: bg:seed-indigo r:999
+              style: font:14/600 color:#000000
             - node: div
               text: You can cancel until step 2 starts. Local data stays safe either way.
               box:
-                abs: [42,618 322x36]
-                rel: [14,71 322x36]
+                abs: [22,587 362x18]
+                rel: [14,69 362x18]
               spacing: margin:6/0/0/0
-              style: font:12/400/18 color:on-surface-variant
+              style: font:12/400/18 color:#000000
           - node: div
             item: item[3]
             box:
-              abs: [28,669 350x72]
-              rel: [0,181 350x72]
+              abs: [8,619 390x42]
+              rel: [0,159 390x42]
             layout: flex:col gap:8
             spacing: pad:12/14
             - node: pill-btn
               text: Cancel restore
               mx: MxSecondaryButton
               box:
-                abs: [42,681 322x48]
-                rel: [14,12 322x48]
+                abs: [22,631 362x18]
+                rel: [14,12 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:16/600 color:#000000 text:center tracking:0.1
           - node: div
             item: item[4]
             text: Backups are manual — MemoX never uploads automatically.
             box:
-              abs: [28,741 350x48]
-              rel: [0,253 350x48]
+              abs: [8,661 390x30]
+              rel: [0,201 390x30]
             spacing: pad:0/14/12/14
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
     - node: div
       item: item[4]
       box:
-        abs: [28,805 350x185]
-        rel: [20,697 350x185]
+        abs: [8,707 390x135]
+        rel: [0,619 390x135]
       spacing: margin:0/0/16/0
       - node: ov
         text: Danger zone
         box:
-          abs: [28,805 350x21]
-          rel: [0,0 350x21]
+          abs: [8,707 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,826 350x164]
-          rel: [0,21 350x164]
+          abs: [8,727 390x115]
+          rel: [0,20 390x115]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,826 350x164]
-            rel: [0,0 350x164]
+            abs: [8,727 390x115]
+            rel: [0,0 390x115]
           spacing: pad:14
-          style: bg:#dc4848@3 r:20 shadow:1/2
+          style: r:20
           - node: div
             text: Remove account from MemoX
             box:
-              abs: [42,840 322x18]
-              rel: [14,14 322x18]
+              abs: [22,741 362x16]
+              rel: [14,14 362x16]
             spacing: margin:0/0/4/0
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device.
             box:
-              abs: [42,862 322x54]
-              rel: [14,36 322x54]
+              abs: [22,761 362x36]
+              rel: [14,34 362x36]
             spacing: margin:0/0/12/0
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
           - node: pill-btn
             text: Remove account
             mx: MxActionButton
             box:
-              abs: [42,928 322x48]
-              rel: [14,102 322x48]
+              abs: [22,809 362x16]
+              rel: [14,82 362x16]
             layout: flex:row gap:6 justify:center align:center
-            spacing: pad:0/16
-            style: bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            style: font:14/600 color:#000000 text:center tracking:0.1
             - node: span
               box:
-                abs: [135,945 14x14]
-                rel: [93,17 14x14]
+                abs: [143,810 14x14]
+                rel: [121,1 14x14]
               layout: flex:row
               - node: icon:trash-2
                 box:
-                  abs: [135,945 14x14]
+                  abs: [143,810 14x14]
                   rel: [0,0 14x14]
                 position: clip
 ```
@@ -3371,7 +3266,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -3381,9 +3275,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -3407,560 +3301,549 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: appbar
     mx: MxAppBar
     box:
-      abs: [8,52 390x56]
-      rel: [0,44 390x56]
+      abs: [8,52 390x36]
+      rel: [0,44 390x36]
     layout: flex:row gap:4 align:center
     spacing: pad:0/8
     - node: icon-btn
       mx: MxIconButton
       box:
-        abs: [16,62 36x36]
-        rel: [8,10 36x36]
+        abs: [16,52 36x36]
+        rel: [8,0 36x36]
       layout: flex:row justify:center align:center
       position: pos:relative
       style: r:999
       - node: span
         box:
-          abs: [24,70 20x20]
+          abs: [24,60 20x20]
           rel: [8,8 20x20]
         layout: flex:row
         - node: icon:arrow-left
           box:
-            abs: [24,70 20x20]
+            abs: [24,60 20x20]
             rel: [0,0 20x20]
           position: clip
     - node: title
       text: Account & Drive sync
       box:
-        abs: [56,70 334x21]
-        rel: [48,18 334x21]
+        abs: [56,61 334x18]
+        rel: [48,9 334x18]
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:font-headline tracking:-0.3
+      style: font:16/700 color:#000000 tracking:-0.3
   - node: scroll
     box:
-      abs: [8,108 390x680]
-      rel: [0,100 390x680]
+      abs: [8,88 390x700]
+      rel: [0,80 390x700]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x4(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:990
+    scroll: scrollh:811
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x322]
-        rel: [20,0 350x322]
+        abs: [8,88 390x298]
+        rel: [0,0 390x298]
       spacing: margin:0/0/16/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,88 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,129 350x301]
-          rel: [0,21 350x301]
+          abs: [8,108 390x278]
+          rel: [0,20 390x278]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,129 350x265]
-            rel: [0,0 350x265]
+            abs: [8,108 390x242]
+            rel: [0,0 390x242]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,129 350x70]
-              rel: [0,0 350x70]
+              abs: [8,108 390x70]
+              rel: [0,0 390x70]
             layout: flex:row gap:12 align:center
             spacing: pad:14
             - node: div
               text: AL
               box:
-                abs: [42,143 42x42]
+                abs: [22,122 42x42]
                 rel: [14,14 42x42]
               layout: flex:row justify:center align:center
               flex: shrink:0
-              style: bg:seed-indigo font:16/700 color:on-primary tracking:0.2 r:999
+              style: font:16/700 color:#000000 tracking:0.2 r:999
             - node: div
               box:
-                abs: [96,145 180x39]
-                rel: [68,16 180x39]
+                abs: [76,126 224x35]
+                rel: [68,18 224x35]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: alex.minh@gmail.com
                 box:
-                  abs: [96,145 180x18]
-                  rel: [0,0 180x18]
+                  abs: [76,126 224x16]
+                  rel: [0,0 224x16]
                 position: clip
-                style: font:14/600 color:font-headline
+                style: font:14/600 color:#000000
               - node: div
                 box:
-                  abs: [96,167 134x15]
-                  rel: [0,22 134x15]
+                  abs: [76,144 122x15]
+                  rel: [0,18 122x15]
                 layout: flex:row gap:6 align:center
                 spacing: margin:2/0/0/0
                 - node: svg
                   box:
-                    abs: [96,169 11x11]
+                    abs: [76,146 11x11]
                     rel: [0,2 11x11]
                   position: clip
                 - node: span
                   text: Google · linked Apr 8
                   box:
-                    abs: [113,167 117x15]
-                    rel: [17,0 117x15]
-                  style: font:12/400 color:on-surface-variant
+                    abs: [93,144 105x15]
+                    rel: [17,0 105x15]
+                  style: font:12/400 color:#000000
             - node: span
               text: Expired
               box:
-                abs: [288,152 76x24]
-                rel: [260,23 76x24]
+                abs: [312,131 72x24]
+                rel: [304,23 72x24]
               layout: flex:row gap:4 align:center
               spacing: pad:0/8
-              style: bg:#d9891e@12 font:12/700 color:streak r:999
+              style: font:12/700 color:#000000 r:999
               - node: span
                 box:
-                  abs: [296,159 11x11]
+                  abs: [320,138 11x11]
                   rel: [8,7 11x11]
                 layout: flex:row
                 - node: icon:alert-triangle
                   box:
-                    abs: [296,159 11x11]
+                    abs: [320,138 11x11]
                     rel: [0,0 11x11]
                   position: clip
           - node: div
             box:
-              abs: [42,199 322x124]
-              rel: [14,70 322x124]
+              abs: [22,178 362x102]
+              rel: [14,70 362x102]
             layout: flex:row gap:10 align:start
             spacing: pad:12/14
-            style: bg:#d9891e@10 r:12 border:1px #d9891e@24
+            style: r:12
             - node: span
               box:
-                abs: [57,214 16x16]
-                rel: [15,15 16x16]
+                abs: [36,191 16x16]
+                rel: [14,13 16x16]
               layout: flex:row
               - node: icon:key-round
                 box:
-                  abs: [57,214 16x16]
+                  abs: [36,191 16x16]
                   rel: [0,0 16x16]
                 position: clip
             - node: div
               box:
-                abs: [83,212 266x98]
-                rel: [41,13 266x98]
+                abs: [62,190 308x78]
+                rel: [40,12 308x78]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Drive access expired
                 box:
-                  abs: [83,212 266x18]
-                  rel: [0,0 266x18]
-                style: font:14/700 color:font-headline tracking:-0.1
+                  abs: [62,190 308x16]
+                  rel: [0,0 308x16]
+                style: font:14/700 color:#000000 tracking:-0.1
               - node: div
                 text: Sign in again to upload or restore. Your local data is untouched.
                 box:
-                  abs: [83,232 266x36]
-                  rel: [0,20 266x36]
+                  abs: [62,208 308x18]
+                  rel: [0,18 308x18]
                 spacing: margin:2/0/0/0
-                style: font:12/400/18 color:on-surface-variant
+                style: font:12/400/18 color:#000000
               - node: pill-btn
                 text: Sign in again
                 mx: MxPrimaryButton
                 box:
-                  abs: [83,276 101x34]
-                  rel: [0,64 101x34]
+                  abs: [62,234 96x34]
+                  rel: [0,44 96x34]
                 layout: flex:row gap:6 justify:center align:center
                 spacing: pad:0/14
-                style: bg:seed-indigo font:12/600 color:on-primary text:center tracking:0.1 r:12
+                style: font:12/600 color:#000000 text:center tracking:0.1
           - node: div
             box:
-              abs: [28,337 350x57]
-              rel: [0,208 350x57]
+              abs: [8,294 390x56]
+              rel: [0,186 390x56]
             layout: flex:row gap:8
             spacing: pad:10/14
-            style: border-t:1px seed-indigo@14
             - node: pill-btn
               text: Sign out
               mx: MxSecondaryButton
               box:
-                abs: [42,348 158x36]
-                rel: [14,11 158x36]
+                abs: [22,304 177x36]
+                rel: [14,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: font:12/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [87,359 14x14]
-                  rel: [45,11 14x14]
+                  abs: [79,315 14x14]
+                  rel: [57,11 14x14]
                 layout: flex:row
                 - node: icon:log-out
                   box:
-                    abs: [87,359 14x14]
+                    abs: [79,315 14x14]
                     rel: [0,0 14x14]
                   position: clip
             - node: pill-btn
               text: Switch account
               mx: MxSecondaryButton
               box:
-                abs: [208,348 156x36]
-                rel: [180,11 156x36]
+                abs: [207,304 177x36]
+                rel: [199,10 177x36]
               layout: flex:row gap:6 justify:center align:center
               flex: grow:1 basis:0 layout_hint:expanded
-              spacing: pad:0/16
-              style: bg:surface-container font:12/600 color:font-headline text:center tracking:0.1 r:12
+              style: font:12/600 color:#000000 text:center tracking:0.1
               - node: span
                 box:
-                  abs: [230,359 14x14]
-                  rel: [22,11 14x14]
+                  abs: [246,315 14x14]
+                  rel: [39,11 14x14]
                 layout: flex:row
                 - node: icon:repeat
                   box:
-                    abs: [230,359 14x14]
+                    abs: [246,315 14x14]
                     rel: [0,0 14x14]
                   position: clip
         - node: div
           text: Signing out keeps every deck and card on this device.
           box:
-            abs: [28,404 350x26]
-            rel: [0,275 350x26]
+            abs: [8,360 390x26]
+            rel: [0,252 390x26]
           spacing: pad:8/6/0/6
-          style: font:12/400/18 color:on-surface-variant
+          style: font:12/400/18 color:#000000
     - node: div
       item: item[2]
       box:
-        abs: [28,446 350x143]
-        rel: [20,338 350x143]
+        abs: [8,402 390x138]
+        rel: [0,314 390x138]
       spacing: margin:0/0/16/0
       - node: ov
         text: This device
         box:
-          abs: [28,446 350x21]
-          rel: [0,0 350x21]
+          abs: [8,402 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,467 350x122]
-          rel: [0,21 350x122]
+          abs: [8,422 390x118]
+          rel: [0,20 390x118]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,467 350x122]
-            rel: [0,0 350x122]
+            abs: [8,422 390x118]
+            rel: [0,0 390x118]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,467 350x61]
-              rel: [0,0 350x61]
+              abs: [8,422 390x60]
+              rel: [0,0 390x60]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: icon-tile
               mx: MxIconTile
               box:
-                abs: [42,480 34x34]
+                abs: [22,435 34x34]
                 rel: [14,13 34x34]
               layout: flex:row justify:center align:center
-              style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
               - node: span
                 box:
-                  abs: [51,489 16x16]
+                  abs: [31,444 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:smartphone
                   box:
-                    abs: [51,489 16x16]
+                    abs: [31,444 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,480 228x34]
-                rel: [60,13 228x34]
+                abs: [68,436 268x32]
+                rel: [60,14 268x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Alex's Pixel 8
                 box:
-                  abs: [88,480 228x18]
-                  rel: [0,0 228x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,436 268x16]
+                  rel: [0,0 268x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: Device label
                 box:
-                  abs: [88,499 228x15]
-                  rel: [0,19 228x15]
+                  abs: [68,453 268x15]
+                  rel: [0,17 268x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: icon-btn
               mx: MxIconButton
               box:
-                abs: [328,479 36x36]
-                rel: [300,12 36x36]
+                abs: [348,434 36x36]
+                rel: [340,12 36x36]
               layout: flex:row justify:center align:center
               position: pos:relative
               style: r:999
               - node: span
                 box:
-                  abs: [336,487 20x20]
+                  abs: [356,442 20x20]
                   rel: [8,8 20x20]
                 layout: flex:row
                 - node: icon:pencil
                   box:
-                    abs: [336,487 20x20]
+                    abs: [356,442 20x20]
                     rel: [0,0 20x20]
                   position: clip
           - node: div
             box:
-              abs: [28,528 350x61]
-              rel: [0,61 350x61]
+              abs: [8,482 390x58]
+              rel: [0,60 390x58]
             layout: grid cols:3 gap:12
             spacing: pad:12/14
             - node: div
               box:
-                abs: [42,540 99x37]
-                rel: [14,12 99x37]
+                abs: [22,494 113x34]
+                rel: [14,12 113x34]
               - node: div
                 text: 4
                 box:
-                  abs: [42,540 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [22,494 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: decks
                 box:
-                  abs: [42,562 99x15]
-                  rel: [0,22 99x15]
+                  abs: [22,513 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [153,540 99x37]
-                rel: [125,12 99x37]
+                abs: [147,494 113x34]
+                rel: [139,12 113x34]
               - node: div
                 text: 142
                 box:
-                  abs: [153,540 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [147,494 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: cards
                 box:
-                  abs: [153,562 99x15]
-                  rel: [0,22 99x15]
+                  abs: [147,513 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: div
               box:
-                abs: [265,540 99x37]
-                rel: [237,12 99x37]
+                abs: [271,494 113x34]
+                rel: [263,12 113x34]
               - node: div
                 text: 2 h
                 box:
-                  abs: [265,540 99x21]
-                  rel: [0,0 99x21]
-                style: font:16/700 color:font-headline tracking:-0.3
+                  abs: [271,494 113x18]
+                  rel: [0,0 113x18]
+                style: font:16/700 color:#000000 tracking:-0.3
               - node: div
                 text: last active
                 box:
-                  abs: [265,562 99x15]
-                  rel: [0,22 99x15]
+                  abs: [271,513 113x15]
+                  rel: [0,19 113x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
     - node: div
       item: item[3]
       box:
-        abs: [28,605 350x256]
-        rel: [20,497 350x256]
+        abs: [8,556 390x176]
+        rel: [0,468 390x176]
       spacing: margin:0/0/16/0
       - node: ov
         text: Drive backup
         box:
-          abs: [28,605 350x21]
-          rel: [0,0 350x21]
+          abs: [8,556 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,626 350x235]
-          rel: [0,21 350x235]
+          abs: [8,576 390x156]
+          rel: [0,20 390x156]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,626 350x235]
-            rel: [0,0 350x235]
+            abs: [8,576 390x156]
+            rel: [0,0 390x156]
           position: clip
-          style: bg:on-primary r:20 shadow:1/2
+          style: r:20
           - node: div
             box:
-              abs: [28,626 350x59]
-              rel: [0,0 350x59]
+              abs: [8,576 390x58]
+              rel: [0,0 390x58]
             layout: flex:row gap:12 align:center
             spacing: pad:12/14
-            style: border-b:1px seed-indigo@14
             - node: div
               box:
-                abs: [42,638 34x34]
+                abs: [22,588 34x34]
                 rel: [14,12 34x34]
               layout: flex:row justify:center align:center
-              style: bg:mastery@10 r:12
               - node: span
                 box:
-                  abs: [51,647 16x16]
+                  abs: [31,597 16x16]
                   rel: [9,9 16x16]
                 layout: flex:row
                 - node: icon:cloud
                   box:
-                    abs: [51,647 16x16]
+                    abs: [31,597 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: div
               box:
-                abs: [88,638 198x34]
-                rel: [60,12 198x34]
+                abs: [68,589 245x32]
+                rel: [60,13 245x32]
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 text: Last upload 2 days ago
                 box:
-                  abs: [88,638 198x18]
-                  rel: [0,0 198x18]
-                style: font:14/600 color:font-headline
+                  abs: [68,589 245x16]
+                  rel: [0,0 245x16]
+                style: font:14/600 color:#000000
               - node: div
                 text: 142 cards · 4 decks
                 box:
-                  abs: [88,657 198x15]
-                  rel: [0,19 198x15]
+                  abs: [68,606 245x15]
+                  rel: [0,17 245x15]
                 spacing: margin:1/0/0/0
-                style: font:12/400 color:on-surface-variant
+                style: font:12/400 color:#000000
             - node: span
               text: Matches
               box:
-                abs: [298,648 66x15]
-                rel: [270,22 66x15]
+                abs: [325,598 59x15]
+                rel: [317,22 59x15]
               layout: flex:row gap:4 align:center
-              style: font:12/600 color:mastery
+              style: font:12/600 color:#000000
               - node: span
                 box:
-                  abs: [298,649 12x12]
+                  abs: [325,599 12x12]
                   rel: [0,2 12x12]
                 layout: flex:row
                 - node: icon:check
                   box:
-                    abs: [298,649 12x12]
+                    abs: [325,599 12x12]
                     rel: [0,0 12x12]
                   position: clip
           - node: div
             box:
-              abs: [28,685 350x128]
-              rel: [0,59 350x128]
+              abs: [8,634 390x68]
+              rel: [0,58 390x68]
             layout: flex:col gap:8
             spacing: pad:12/14
             - node: pill-btn
               text: Upload to Drive
               mx: MxPrimaryButton
               box:
-                abs: [42,697 322x48]
-                rel: [14,12 322x48]
+                abs: [22,646 362x18]
+                rel: [14,12 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: bg:seed-indigo font:14/600 color:on-primary text:center tracking:0.1 r:12 op:0.5
+              style: font:16/600 color:#000000 text:center tracking:0.1 op:0.5
               - node: span
                 box:
-                  abs: [139,713 16x16]
-                  rel: [97,16 16x16]
+                  abs: [137,647 16x16]
+                  rel: [115,1 16x16]
                 layout: flex:row
                 - node: icon:upload-cloud
                   box:
-                    abs: [139,713 16x16]
+                    abs: [137,647 16x16]
                     rel: [0,0 16x16]
                   position: clip
             - node: pill-btn
               text: Restore from Drive
               mx: MxSecondaryButton
               box:
-                abs: [42,753 322x48]
-                rel: [14,68 322x48]
+                abs: [22,672 362x18]
+                rel: [14,38 362x18]
               layout: flex:row gap:6 justify:center align:center
-              spacing: pad:0/16
-              style: font:14/600 color:seed-indigo text:center tracking:0.1 r:12 border:1px outline-variant op:0.45
+              style: font:16/600 color:#000000 text:center tracking:0.1 op:0.45
               - node: span
                 box:
-                  abs: [129,770 15x15]
-                  rel: [87,17 15x15]
+                  abs: [126,674 15x15]
+                  rel: [104,2 15x15]
                 layout: flex:row
                 - node: icon:download
                   box:
-                    abs: [129,770 15x15]
+                    abs: [126,674 15x15]
                     rel: [0,0 15x15]
                   position: clip
           - node: div
             text: Backups are manual — MemoX never uploads automatically.
             box:
-              abs: [28,813 350x48]
-              rel: [0,187 350x48]
+              abs: [8,702 390x30]
+              rel: [0,126 390x30]
             spacing: pad:0/14/12/14
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
     - node: div
       item: item[4]
       box:
-        abs: [28,877 350x185]
-        rel: [20,769 350x185]
+        abs: [8,748 390x135]
+        rel: [0,660 390x135]
       spacing: margin:0/0/16/0
       - node: ov
         text: Danger zone
         box:
-          abs: [28,877 350x21]
-          rel: [0,0 350x21]
+          abs: [8,748 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: div
         box:
-          abs: [28,898 350x164]
-          rel: [0,21 350x164]
+          abs: [8,768 390x115]
+          rel: [0,20 390x115]
         layout: flex:col gap:10
         - node: card
           mx: MxCard
           box:
-            abs: [28,898 350x164]
-            rel: [0,0 350x164]
+            abs: [8,768 390x115]
+            rel: [0,0 390x115]
           spacing: pad:14
-          style: bg:#dc4848@3 r:20 shadow:1/2
+          style: r:20
           - node: div
             text: Remove account from MemoX
             box:
-              abs: [42,912 322x18]
-              rel: [14,14 322x18]
+              abs: [22,782 362x16]
+              rel: [14,14 362x16]
             spacing: margin:0/0/4/0
-            style: font:14/600 color:font-headline
+            style: font:14/600 color:#000000
           - node: div
             text: Unlinks Google Drive and clears the linked email from this app. Your decks, cards, and review history stay on this device.
             box:
-              abs: [42,934 322x54]
-              rel: [14,36 322x54]
+              abs: [22,802 362x36]
+              rel: [14,34 362x36]
             spacing: margin:0/0/12/0
-            style: font:12/400/18 color:on-surface-variant
+            style: font:12/400/18 color:#000000
           - node: pill-btn
             text: Remove account
             mx: MxActionButton
             box:
-              abs: [42,1000 322x48]
-              rel: [14,102 322x48]
+              abs: [22,850 362x16]
+              rel: [14,82 362x16]
             layout: flex:row gap:6 justify:center align:center
-            spacing: pad:0/16
-            style: bg:error font:14/600 color:on-primary text:center tracking:0.1 r:12
+            style: font:14/600 color:#000000 text:center tracking:0.1
             - node: span
               box:
-                abs: [135,1017 14x14]
-                rel: [93,17 14x14]
+                abs: [143,851 14x14]
+                rel: [121,1 14x14]
               layout: flex:row
               - node: icon:trash-2
                 box:
-                  abs: [135,1017 14x14]
+                  abs: [143,851 14x14]
                   rel: [0,0 14x14]
                 position: clip
 ```

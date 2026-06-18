@@ -47,7 +47,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     rel: [8,8 390x780]
   layout: flex:col
   position: pos:relative clip
-  style: bg:surface
   - node: statusbar
     box:
       abs: [8,8 390x44]
@@ -57,9 +56,9 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: span
       text: 9:41
       box:
-        abs: [32,21 28x18]
-        rel: [24,13 28x18]
-      style: font:14/600 color:font-headline
+        abs: [32,22 26x16]
+        rel: [24,14 26x16]
+      style: font:14/600 color:#000000
     - node: span
       box:
         abs: [314,24 60x12]
@@ -90,841 +89,778 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: div
       text: Settings
       box:
-        abs: [22,65 94x30]
-        rel: [14,13 94x30]
-      style: font:24/700 color:font-headline tracking:-0.5
+        abs: [22,67 77x27]
+        rel: [14,15 77x27]
+      style: font:24/700 color:#000000 tracking:-0.5
   - node: scroll
     box:
-      abs: [8,108 390x598]
-      rel: [0,100 390x598]
+      abs: [8,108 390x600]
+      rel: [0,100 390x600]
     flex: grow:1 basis:0 layout_hint:expanded
     repeat: x5(unit=1)
-    spacing: pad:0/20/20/20
     position: layout_hint:scroll
-    scroll: scrollh:676
+    scroll: scrollh:635
     - node: div
       item: item[1]
       box:
-        abs: [28,108 350x87]
-        rel: [20,0 350x87]
+        abs: [8,108 390x84]
+        rel: [0,0 390x84]
       spacing: margin:0/0/18/0
       - node: ov
         text: Account
         box:
-          abs: [28,108 350x21]
-          rel: [0,0 350x21]
+          abs: [8,108 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
-      - node: card
-        mx: MxCard
+        style: font:11/700 color:#000000 tracking:0.6
+      - node: div
         box:
-          abs: [28,129 350x66]
-          rel: [0,21 350x66]
-        position: clip
-        style: bg:on-primary r:20 shadow:1/2
+          abs: [8,128 390x64]
+          rel: [0,20 390x64]
+        layout: grid cols:3 gap:14 align:center
+        spacing: pad:14
         - node: div
           box:
-            abs: [28,129 350x66]
-            rel: [0,0 350x66]
-          layout: grid cols:3 gap:14 align:center
-          spacing: pad:14
-          - node: div
-            box:
-              abs: [42,144 36x36]
-              rel: [14,15 36x36]
-            layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
-            - node: span
-              box:
-                abs: [51,153 18x18]
-                rel: [9,9 18x18]
-              layout: flex:row
-              - node: icon:user-circle
-                box:
-                  abs: [51,153 18x18]
-                  rel: [0,0 18x18]
-                position: clip
-          - node: div
-            box:
-              abs: [96,143 236x38]
-              rel: [68,14 236x38]
-            - node: div
-              text: Account & sync
-              box:
-                abs: [96,143 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
-            - node: div
-              text: alex@memox.app · synced 2 min ago
-              box:
-                abs: [96,166 236x15]
-                rel: [0,23 236x15]
-              layout: flex:row gap:6 align:center
-              spacing: margin:2/0/0/0
-              position: clip
-              style: font:12/400 color:on-surface-variant
+            abs: [22,142 36x36]
+            rel: [14,14 36x36]
+          layout: flex:row justify:center align:center
           - node: span
             box:
-              abs: [346,153 18x18]
-              rel: [318,24 18x18]
+              abs: [31,151 18x18]
+              rel: [9,9 18x18]
             layout: flex:row
-            - node: icon:chevron-right
+            - node: icon:user-circle
               box:
-                abs: [346,153 18x18]
+                abs: [31,151 18x18]
                 rel: [0,0 18x18]
               position: clip
+        - node: div
+          box:
+            abs: [76,143 276x35]
+            rel: [68,15 276x35]
+          - node: div
+            text: Account & sync
+            box:
+              abs: [76,143 276x18]
+              rel: [0,0 276x18]
+            style: font:16/600 color:#000000 tracking:-0.1
+          - node: div
+            text: alex@memox.app · synced 2 min ago
+            box:
+              abs: [76,163 276x15]
+              rel: [0,20 276x15]
+            layout: flex:row gap:6 align:center
+            spacing: margin:2/0/0/0
+            position: clip
+            style: font:12/400 color:#000000
+        - node: span
+          box:
+            abs: [366,151 18x18]
+            rel: [358,23 18x18]
+          layout: flex:row
+          - node: icon:chevron-right
+            box:
+              abs: [366,151 18x18]
+              rel: [0,0 18x18]
+            position: clip
     - node: div
       item: item[2]
       box:
-        abs: [28,213 350x221]
-        rel: [20,105 350x221]
+        abs: [8,210 390x212]
+        rel: [0,102 390x212]
       spacing: margin:0/0/18/0
       - node: ov
         text: Study
         box:
-          abs: [28,213 350x21]
-          rel: [0,0 350x21]
+          abs: [8,210 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: card
         mx: MxCard
         box:
-          abs: [28,234 350x200]
-          rel: [0,21 350x200]
+          abs: [8,230 390x192]
+          rel: [0,20 390x192]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [28,234 350x67]
-            rel: [0,0 350x67]
+            abs: [8,230 390x64]
+            rel: [0,0 390x64]
           layout: grid cols:3 gap:14 align:center
           spacing: pad:14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,249 36x36]
-              rel: [14,15 36x36]
+              abs: [22,244 36x36]
+              rel: [14,14 36x36]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
             - node: span
               box:
-                abs: [51,258 18x18]
+                abs: [31,253 18x18]
                 rel: [9,9 18x18]
               layout: flex:row
               - node: icon:target
                 box:
-                  abs: [51,258 18x18]
+                  abs: [31,253 18x18]
                   rel: [0,0 18x18]
                 position: clip
           - node: div
             box:
-              abs: [96,248 236x38]
-              rel: [68,14 236x38]
+              abs: [76,245 276x35]
+              rel: [68,15 276x35]
             - node: div
               text: Learning
               box:
-                abs: [96,248 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
+                abs: [76,245 276x18]
+                rel: [0,0 276x18]
+              style: font:16/600 color:#000000 tracking:-0.1
             - node: div
               text: 20 cards / day · 5 study modes
               box:
-                abs: [96,271 236x15]
-                rel: [0,23 236x15]
+                abs: [76,265 276x15]
+                rel: [0,20 276x15]
               layout: flex:row gap:6 align:center
               spacing: margin:2/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: span
             box:
-              abs: [346,258 18x18]
-              rel: [318,24 18x18]
+              abs: [366,253 18x18]
+              rel: [358,23 18x18]
             layout: flex:row
             - node: icon:chevron-right
               box:
-                abs: [346,258 18x18]
+                abs: [366,253 18x18]
                 rel: [0,0 18x18]
               position: clip
         - node: div
           box:
-            abs: [28,301 350x67]
-            rel: [0,67 350x67]
+            abs: [8,294 390x64]
+            rel: [0,64 390x64]
           layout: grid cols:3 gap:14 align:center
           spacing: pad:14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,316 36x36]
-              rel: [14,15 36x36]
+              abs: [22,308 36x36]
+              rel: [14,14 36x36]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
             - node: span
               box:
-                abs: [51,325 18x18]
+                abs: [31,317 18x18]
                 rel: [9,9 18x18]
               layout: flex:row
               - node: icon:volume-2
                 box:
-                  abs: [51,325 18x18]
+                  abs: [31,317 18x18]
                   rel: [0,0 18x18]
                 position: clip
           - node: div
             box:
-              abs: [96,315 236x38]
-              rel: [68,14 236x38]
+              abs: [76,309 276x35]
+              rel: [68,15 276x35]
             - node: div
               text: Audio & speech
               box:
-                abs: [96,315 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
+                abs: [76,309 276x18]
+                rel: [0,0 276x18]
+              style: font:16/600 color:#000000 tracking:-0.1
             - node: div
               text: Korean voice · 0.9× speed
               box:
-                abs: [96,338 236x15]
-                rel: [0,23 236x15]
+                abs: [76,329 276x15]
+                rel: [0,20 276x15]
               layout: flex:row gap:6 align:center
               spacing: margin:2/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: span
             box:
-              abs: [346,325 18x18]
-              rel: [318,24 18x18]
+              abs: [366,317 18x18]
+              rel: [358,23 18x18]
             layout: flex:row
             - node: icon:chevron-right
               box:
-                abs: [346,325 18x18]
+                abs: [366,317 18x18]
                 rel: [0,0 18x18]
               position: clip
         - node: div
           box:
-            abs: [28,368 350x66]
-            rel: [0,134 350x66]
+            abs: [8,358 390x64]
+            rel: [0,128 390x64]
           layout: grid cols:3 gap:14 align:center
           spacing: pad:14
           - node: div
             box:
-              abs: [42,383 36x36]
-              rel: [14,15 36x36]
+              abs: [22,372 36x36]
+              rel: [14,14 36x36]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
             - node: span
               box:
-                abs: [51,392 18x18]
+                abs: [31,381 18x18]
                 rel: [9,9 18x18]
               layout: flex:row
               - node: icon:tag
                 box:
-                  abs: [51,392 18x18]
+                  abs: [31,381 18x18]
                   rel: [0,0 18x18]
                 position: clip
           - node: div
             box:
-              abs: [96,382 236x38]
-              rel: [68,14 236x38]
+              abs: [76,373 276x35]
+              rel: [68,15 276x35]
             - node: div
               text: Manage tags
               box:
-                abs: [96,382 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
+                abs: [76,373 276x18]
+                rel: [0,0 276x18]
+              style: font:16/600 color:#000000 tracking:-0.1
             - node: div
               text: 14 tags
               box:
-                abs: [96,405 236x15]
-                rel: [0,23 236x15]
+                abs: [76,393 276x15]
+                rel: [0,20 276x15]
               layout: flex:row gap:6 align:center
               spacing: margin:2/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: span
             box:
-              abs: [346,392 18x18]
-              rel: [318,24 18x18]
+              abs: [366,381 18x18]
+              rel: [358,23 18x18]
             layout: flex:row
             - node: icon:chevron-right
               box:
-                abs: [346,392 18x18]
+                abs: [366,381 18x18]
                 rel: [0,0 18x18]
               position: clip
     - node: div
       item: item[3]
       box:
-        abs: [28,452 350x154]
-        rel: [20,344 350x154]
+        abs: [8,440 390x148]
+        rel: [0,332 390x148]
       spacing: margin:0/0/18/0
       - node: ov
         text: App
         box:
-          abs: [28,452 350x21]
-          rel: [0,0 350x21]
+          abs: [8,440 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
+        style: font:11/700 color:#000000 tracking:0.6
       - node: card
         mx: MxCard
         box:
-          abs: [28,473 350x133]
-          rel: [0,21 350x133]
+          abs: [8,460 390x128]
+          rel: [0,20 390x128]
         position: clip
-        style: bg:on-primary r:20 shadow:1/2
+        style: r:20
         - node: div
           box:
-            abs: [28,473 350x67]
-            rel: [0,0 350x67]
+            abs: [8,460 390x64]
+            rel: [0,0 390x64]
           layout: grid cols:3 gap:14 align:center
           spacing: pad:14
-          style: border-b:1px seed-indigo@14
           - node: div
             box:
-              abs: [42,488 36x36]
-              rel: [14,15 36x36]
+              abs: [22,474 36x36]
+              rel: [14,14 36x36]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
             - node: span
               box:
-                abs: [51,497 18x18]
+                abs: [31,483 18x18]
                 rel: [9,9 18x18]
               layout: flex:row
               - node: icon:palette
                 box:
-                  abs: [51,497 18x18]
+                  abs: [31,483 18x18]
                   rel: [0,0 18x18]
                 position: clip
           - node: div
             box:
-              abs: [96,487 236x38]
-              rel: [68,14 236x38]
+              abs: [76,475 276x35]
+              rel: [68,15 276x35]
             - node: div
               text: Appearance
               box:
-                abs: [96,487 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
+                abs: [76,475 276x18]
+                rel: [0,0 276x18]
+              style: font:16/600 color:#000000 tracking:-0.1
             - node: div
               text: System · matches your phone
               box:
-                abs: [96,510 236x15]
-                rel: [0,23 236x15]
+                abs: [76,495 276x15]
+                rel: [0,20 276x15]
               layout: flex:row gap:6 align:center
               spacing: margin:2/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: span
             box:
-              abs: [346,497 18x18]
-              rel: [318,24 18x18]
+              abs: [366,483 18x18]
+              rel: [358,23 18x18]
             layout: flex:row
             - node: icon:chevron-right
               box:
-                abs: [346,497 18x18]
+                abs: [366,483 18x18]
                 rel: [0,0 18x18]
               position: clip
         - node: div
           box:
-            abs: [28,540 350x66]
-            rel: [0,67 350x66]
+            abs: [8,524 390x64]
+            rel: [0,64 390x64]
           layout: grid cols:3 gap:14 align:center
           spacing: pad:14
           - node: div
             box:
-              abs: [42,555 36x36]
-              rel: [14,15 36x36]
+              abs: [22,538 36x36]
+              rel: [14,14 36x36]
             layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
             - node: span
               box:
-                abs: [51,564 18x18]
+                abs: [31,547 18x18]
                 rel: [9,9 18x18]
               layout: flex:row
               - node: icon:globe
                 box:
-                  abs: [51,564 18x18]
+                  abs: [31,547 18x18]
                   rel: [0,0 18x18]
                 position: clip
           - node: div
             box:
-              abs: [96,554 236x38]
-              rel: [68,14 236x38]
+              abs: [76,539 276x35]
+              rel: [68,15 276x35]
             - node: div
               text: Language
               box:
-                abs: [96,554 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
+                abs: [76,539 276x18]
+                rel: [0,0 276x18]
+              style: font:16/600 color:#000000 tracking:-0.1
             - node: div
               text: English
               box:
-                abs: [96,577 236x15]
-                rel: [0,23 236x15]
+                abs: [76,559 276x15]
+                rel: [0,20 276x15]
               layout: flex:row gap:6 align:center
               spacing: margin:2/0/0/0
               position: clip
-              style: font:12/400 color:on-surface-variant
+              style: font:12/400 color:#000000
           - node: span
             box:
-              abs: [346,564 18x18]
-              rel: [318,24 18x18]
+              abs: [366,547 18x18]
+              rel: [358,23 18x18]
             layout: flex:row
             - node: icon:chevron-right
               box:
-                abs: [346,564 18x18]
+                abs: [366,547 18x18]
                 rel: [0,0 18x18]
               position: clip
     - node: div
       item: item[4]
       box:
-        abs: [28,624 350x87]
-        rel: [20,516 350x87]
+        abs: [8,606 390x84]
+        rel: [0,498 390x84]
       spacing: margin:0/0/18/0
       - node: ov
         text: About
         box:
-          abs: [28,624 350x21]
-          rel: [0,0 350x21]
+          abs: [8,606 390x20]
+          rel: [0,0 390x20]
         spacing: pad:0/4/8/4
-        style: font:10.5/600 color:on-surface-variant tracking:0.6 op:0.85
-      - node: card
-        mx: MxCard
+        style: font:11/700 color:#000000 tracking:0.6
+      - node: div
         box:
-          abs: [28,645 350x66]
-          rel: [0,21 350x66]
-        position: clip
-        style: bg:on-primary r:20 shadow:1/2
+          abs: [8,626 390x64]
+          rel: [0,20 390x64]
+        layout: grid cols:3 gap:14 align:center
+        spacing: pad:14
         - node: div
           box:
-            abs: [28,645 350x66]
-            rel: [0,0 350x66]
-          layout: grid cols:3 gap:14 align:center
-          spacing: pad:14
-          - node: div
-            box:
-              abs: [42,660 36x36]
-              rel: [14,15 36x36]
-            layout: flex:row justify:center align:center
-            style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
-            - node: span
-              box:
-                abs: [51,669 18x18]
-                rel: [9,9 18x18]
-              layout: flex:row
-              - node: icon:info
-                box:
-                  abs: [51,669 18x18]
-                  rel: [0,0 18x18]
-                position: clip
-          - node: div
-            box:
-              abs: [96,659 236x38]
-              rel: [68,14 236x38]
-            - node: div
-              text: About MemoX
-              box:
-                abs: [96,659 236x21]
-                rel: [0,0 236x21]
-              style: font:16/600 color:font-headline tracking:-0.1
-            - node: div
-              text: Version 1.4.2 (build 248)
-              box:
-                abs: [96,682 236x15]
-                rel: [0,23 236x15]
-              layout: flex:row gap:6 align:center
-              spacing: margin:2/0/0/0
-              position: clip
-              style: font:12/400 color:on-surface-variant
+            abs: [22,640 36x36]
+            rel: [14,14 36x36]
+          layout: flex:row justify:center align:center
           - node: span
             box:
-              abs: [346,669 18x18]
-              rel: [318,24 18x18]
+              abs: [31,649 18x18]
+              rel: [9,9 18x18]
             layout: flex:row
-            - node: icon:chevron-right
+            - node: icon:info
               box:
-                abs: [346,669 18x18]
+                abs: [31,649 18x18]
                 rel: [0,0 18x18]
               position: clip
+        - node: div
+          box:
+            abs: [76,641 276x35]
+            rel: [68,15 276x35]
+          - node: div
+            text: About MemoX
+            box:
+              abs: [76,641 276x18]
+              rel: [0,0 276x18]
+            style: font:16/600 color:#000000 tracking:-0.1
+          - node: div
+            text: Version 1.4.2 (build 248)
+            box:
+              abs: [76,661 276x15]
+              rel: [0,20 276x15]
+            layout: flex:row gap:6 align:center
+            spacing: margin:2/0/0/0
+            position: clip
+            style: font:12/400 color:#000000
+        - node: span
+          box:
+            abs: [366,649 18x18]
+            rel: [358,23 18x18]
+          layout: flex:row
+          - node: icon:chevron-right
+            box:
+              abs: [366,649 18x18]
+              rel: [0,0 18x18]
+            position: clip
     - node: div
       item: item[5]
       text: Made for calm learning · MemoX
       box:
-        abs: [28,729 350x35]
-        rel: [20,621 350x35]
+        abs: [8,708 390x35]
+        rel: [0,600 390x35]
       spacing: pad:4/0/16/0
-      style: font:12/400 color:on-surface-variant text:center tracking:0.2
+      style: font:12/400 color:#000000 text:center tracking:0.2
   - node: bottom-nav
     mx: MxBottomNavigationBar
     box:
-      abs: [18,710 370x66]
-      rel: [10,702 370x66]
+      abs: [18,712 370x64]
+      rel: [10,704 370x64]
     layout: grid cols:4 align:center
     repeat: x4(unit=1)
-    style: bg:chrome-glass r:16 border:1px seed-indigo@14
     - node: bn-item
       item: item[1]
       mx: ?
       box:
-        abs: [19,717 92x53]
-        rel: [1,7 92x53]
+        abs: [18,718 93x53]
+        rel: [0,6 93x53]
       layout: flex:col gap:3 align:center
       spacing: pad:8/0
       - node: span
         box:
-          abs: [55,725 20x20]
+          abs: [54,726 20x20]
           rel: [36,8 20x20]
         layout: flex:row
         - node: icon:home
           box:
-            abs: [55,725 20x20]
+            abs: [54,726 20x20]
             rel: [0,0 20x20]
           position: clip
       - node: span
         text: Home
         box:
-          abs: [50,750 29x12]
-          rel: [31,33 29x12]
-        style: font:10/600 color:on-surface-variant text:center
+          abs: [50,751 28x12]
+          rel: [32,33 28x12]
+        style: font:11/600 color:#000000 text:center
     - node: bn-item
       item: item[2]
       mx: ?
       box:
-        abs: [111,717 92x53]
-        rel: [93,7 92x53]
+        abs: [111,718 93x53]
+        rel: [93,6 93x53]
       layout: flex:col gap:3 align:center
       spacing: pad:8/0
       - node: span
         box:
-          abs: [147,725 20x20]
+          abs: [147,726 20x20]
           rel: [36,8 20x20]
         layout: flex:row
         - node: icon:layers
           box:
-            abs: [147,725 20x20]
+            abs: [147,726 20x20]
             rel: [0,0 20x20]
           position: clip
       - node: span
         text: Library
         box:
-          abs: [140,750 33x12]
-          rel: [29,33 33x12]
-        style: font:10/600 color:on-surface-variant text:center
+          abs: [138,751 37x12]
+          rel: [28,33 37x12]
+        style: font:11/600 color:#000000 text:center
     - node: bn-item
       item: item[3]
       mx: ?
       box:
-        abs: [203,717 92x53]
-        rel: [185,7 92x53]
+        abs: [203,718 93x53]
+        rel: [185,6 93x53]
       layout: flex:col gap:3 align:center
       spacing: pad:8/0
       - node: span
         box:
-          abs: [239,725 20x20]
+          abs: [239,726 20x20]
           rel: [36,8 20x20]
         layout: flex:row
         - node: icon:bar-chart-3
           box:
-            abs: [239,725 20x20]
+            abs: [239,726 20x20]
             rel: [0,0 20x20]
           position: clip
       - node: span
         text: Stats
         box:
-          abs: [236,750 25x12]
-          rel: [33,33 25x12]
-        style: font:10/600 color:on-surface-variant text:center
+          abs: [238,751 23x12]
+          rel: [35,33 23x12]
+        style: font:11/600 color:#000000 text:center
     - node: bn-item
       item: item[4]
       mx: ?
       box:
-        abs: [295,713 92x61]
-        rel: [277,3 92x61]
+        abs: [296,714 93x61]
+        rel: [278,2 93x61]
       layout: flex:col gap:3 align:center
       spacing: pad:8/0
-      - node: bn-pill
+      - node: span
         box:
-          abs: [317,721 48x30]
-          rel: [22,8 48x30]
-        spacing: pad:4/14
-        style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.14) r:999
-        - node: span
+          abs: [332,726 20x20]
+          rel: [36,12 20x20]
+        layout: flex:row
+        - node: icon:settings
           box:
-            abs: [331,725 20x20]
-            rel: [14,4 20x20]
-          layout: flex:row
-          - node: icon:settings
-            box:
-              abs: [331,725 20x20]
-              rel: [0,0 20x20]
-            position: clip
+            abs: [332,726 20x20]
+            rel: [0,0 20x20]
+          position: clip
       - node: span
         text: Settings
         box:
-          abs: [321,754 41x12]
-          rel: [26,41 41x12]
-        style: font:10/600 color:seed-indigo text:center
+          abs: [323,755 37x12]
+          rel: [28,41 37x12]
+        style: font:11/600 color:#000000 text:center
 ```
 
 ## State: Loading (ordered diff vs Populated)
 
 ```diff
   - node: div
-  text: Settings
-  box:
-  abs: [22,65 94x30]
-  rel: [14,13 94x30]
-  style: font:24/700 color:font-headline tracking:-0.5
-- - node: scroll
-- box:
-- abs: [8,108 390x598]
-- rel: [0,100 390x598]
-- flex: grow:1 basis:0 layout_hint:expanded
-- repeat: x5(unit=1)
-- spacing: pad:0/20/20/20
-- position: layout_hint:scroll
-- scroll: scrollh:676
-+ - node: scroll
-+ box:
-+ abs: [8,108 390x598]
-+ rel: [0,100 390x598]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ repeat: x5(unit=1)
-+ spacing: pad:0/20/20/20
-+ position: layout_hint:scroll
-+ scroll: scrollh:662
-  - node: div
-  item: item[1]
-  box:
-  abs: [28,108 350x85]
-  rel: [20,0 350x85]
-  spacing: margin:0/0/18/0
-  ...
-  - node: div
   text: Account & sync
   box:
-  abs: [96,145 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,145 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: alex@memox.app · synced 2 min ago
 - box:
-- abs: [96,166 236x15]
-- rel: [0,23 236x15]
+- abs: [76,163 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,168 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,165 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,168 160x10]
++ abs: [76,165 160x10]
 + rel: [0,0 160x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,152 18x18]
-  rel: [318,23 18x18]
+  abs: [366,151 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
   - node: div
   text: Learning
   box:
-  abs: [96,248 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,247 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: 20 cards / day · 5 study modes
 - box:
-- abs: [96,271 236x15]
-- rel: [0,23 236x15]
+- abs: [76,265 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,271 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,267 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,271 170x10]
++ abs: [76,267 170x10]
 + rel: [0,0 170x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,255 18x18]
-  rel: [318,23 18x18]
+  abs: [366,253 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
   - node: div
   text: Audio & speech
   box:
-  abs: [96,313 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,311 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: Korean voice · 0.9× speed
 - box:
-- abs: [96,338 236x15]
-- rel: [0,23 236x15]
+- abs: [76,329 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,336 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,331 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,336 140x10]
++ abs: [76,331 140x10]
 + rel: [0,0 140x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,320 18x18]
-  rel: [318,23 18x18]
+  abs: [366,317 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
   - node: div
   text: Manage tags
   box:
-  abs: [96,378 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,375 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: 14 tags
 - box:
-- abs: [96,405 236x15]
-- rel: [0,23 236x15]
+- abs: [76,393 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,401 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,395 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,401 60x10]
++ abs: [76,395 60x10]
 + rel: [0,0 60x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,385 18x18]
-  rel: [318,23 18x18]
+  abs: [366,381 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
   - node: div
   text: Appearance
   box:
-  abs: [96,481 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,477 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: System · matches your phone
 - box:
-- abs: [96,510 236x15]
-- rel: [0,23 236x15]
+- abs: [76,495 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,504 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,497 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,504 180x10]
++ abs: [76,497 180x10]
 + rel: [0,0 180x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,488 18x18]
-  rel: [318,23 18x18]
+  abs: [366,483 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
   - node: div
   text: Language
   box:
-  abs: [96,546 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,541 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: English
 - box:
-- abs: [96,577 236x15]
-- rel: [0,23 236x15]
+- abs: [76,559 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,569 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,561 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,569 70x10]
++ abs: [76,561 70x10]
 + rel: [0,0 70x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,553 18x18]
-  rel: [318,23 18x18]
+  abs: [366,547 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
   - node: div
   text: About MemoX
   box:
-  abs: [96,649 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,643 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: Version 1.4.2 (build 248)
 - box:
-- abs: [96,682 236x15]
-- rel: [0,23 236x15]
+- abs: [76,661 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + box:
-+ abs: [96,672 236x10]
-+ rel: [0,23 236x10]
++ abs: [76,663 276x10]
++ rel: [0,20 276x10]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
 + - node: span
 + box:
-+ abs: [96,672 150x10]
++ abs: [76,663 150x10]
 + rel: [0,0 150x10]
-+ style: bg:surface-container-high r:6 op:0.55
++ style: r:6 op:0.55
   - node: span
   box:
-  abs: [346,656 18x18]
-  rel: [318,23 18x18]
+  abs: [366,649 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
 ```
@@ -932,77 +868,59 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Signed out (ordered diff vs Populated)
 
 ```diff
-  - node: div
-  box:
-  abs: [28,129 350x66]
-  rel: [0,0 350x66]
-  layout: grid cols:3 gap:14 align:center
-  spacing: pad:14
-- - node: div
-- box:
-- abs: [42,144 36x36]
-- rel: [14,15 36x36]
-- layout: flex:row justify:center align:center
-- style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
-+ - node: div
-+ box:
-+ abs: [42,144 36x36]
-+ rel: [14,15 36x36]
-+ layout: flex:row justify:center align:center
-+ style: bg:surface-container r:12
   - node: span
   box:
-  abs: [51,153 18x18]
+  abs: [31,151 18x18]
   rel: [9,9 18x18]
   layout: flex:row
 - - node: icon:user-circle
 - box:
-- abs: [51,153 18x18]
+- abs: [31,151 18x18]
 - rel: [0,0 18x18]
 - position: clip
 + - node: icon:log-in
 + box:
-+ abs: [51,153 18x18]
++ abs: [31,151 18x18]
 + rel: [0,0 18x18]
 + position: clip
   - node: div
   box:
-  abs: [96,143 236x38]
-  rel: [68,14 236x38]
+  abs: [76,143 276x35]
+  rel: [68,15 276x35]
 - - node: div
 - text: Account & sync
 - box:
-- abs: [96,143 236x21]
-- rel: [0,0 236x21]
-- style: font:16/600 color:font-headline tracking:-0.1
+- abs: [76,143 276x18]
+- rel: [0,0 276x18]
+- style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: alex@memox.app · synced 2 min ago
 - box:
-- abs: [96,166 236x15]
-- rel: [0,23 236x15]
+- abs: [76,163 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + text: Sign in & sync
 + box:
-+ abs: [96,143 236x21]
-+ rel: [0,0 236x21]
-+ style: font:16/600 color:font-headline tracking:-0.1
++ abs: [76,143 276x18]
++ rel: [0,0 276x18]
++ style: font:16/600 color:#000000 tracking:-0.1
 + - node: div
 + text: Save your progress across devices
 + box:
-+ abs: [96,166 236x15]
-+ rel: [0,23 236x15]
++ abs: [76,163 276x15]
++ rel: [0,20 276x15]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
-+ style: font:12/400 color:on-surface-variant
++ style: font:12/400 color:#000000
   - node: span
   box:
-  abs: [346,153 18x18]
-  rel: [318,24 18x18]
+  abs: [366,151 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
 ```
@@ -1013,36 +931,31 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: div
   text: Account & sync
   box:
-  abs: [96,143 236x21]
-  rel: [0,0 236x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,143 276x18]
+  rel: [0,0 276x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: alex@memox.app · synced 2 min ago
 - box:
-- abs: [96,166 236x15]
-- rel: [0,23 236x15]
+- abs: [76,163 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 + - node: div
 + text: Signing in…
 + box:
-+ abs: [96,166 236x15]
-+ rel: [0,23 236x15]
++ abs: [76,163 276x15]
++ rel: [0,20 276x15]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
-+ style: font:12/400 color:on-surface-variant
-+ - node: span
-+ box:
-+ abs: [96,167 14x14]
-+ rel: [0,1 14x14]
-+ style: r:999 border-t:2px transparent border-r:2px seed-indigo border-b:2px seed-indigo border-l:2px seed-indigo
++ style: font:12/400 color:#000000
   - node: span
   box:
-  abs: [346,153 18x18]
-  rel: [318,24 18x18]
+  abs: [366,151 18x18]
+  rel: [358,23 18x18]
   layout: flex:row
   ...
 ```
@@ -1051,86 +964,62 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
 ```diff
   - node: div
-  box:
-  abs: [28,129 350x66]
-  rel: [0,0 350x66]
-  layout: grid cols:3 gap:14 align:center
-  spacing: pad:14
-- - node: div
-- box:
-- abs: [42,144 36x36]
-- rel: [14,15 36x36]
-- layout: flex:row justify:center align:center
-- style: bg:color(srgb 0.321569 0.396078 0.960784 / 0.1) r:12
-+ - node: div
-+ box:
-+ abs: [42,144 36x36]
-+ rel: [14,15 36x36]
-+ layout: flex:row justify:center align:center
-+ style: bg:#d9891e@10 r:12
-  - node: span
-  box:
-  abs: [51,153 18x18]
-  rel: [9,9 18x18]
-  layout: flex:row
-  ...
-  - node: div
   text: Account & sync
   box:
-  abs: [96,143 192x21]
-  rel: [0,0 192x21]
-  style: font:16/600 color:font-headline tracking:-0.1
+  abs: [76,143 234x18]
+  rel: [0,0 234x18]
+  style: font:16/600 color:#000000 tracking:-0.1
 - - node: div
 - text: alex@memox.app · synced 2 min ago
 - box:
-- abs: [96,166 236x15]
-- rel: [0,23 236x15]
+- abs: [76,163 276x15]
+- rel: [0,20 276x15]
 - layout: flex:row gap:6 align:center
 - spacing: margin:2/0/0/0
 - position: clip
-- style: font:12/400 color:on-surface-variant
+- style: font:12/400 color:#000000
 - - node: span
 - box:
-- abs: [346,153 18x18]
-- rel: [318,24 18x18]
+- abs: [366,151 18x18]
+- rel: [358,23 18x18]
 - layout: flex:row
 - - node: icon:chevron-right
 - box:
-- abs: [346,153 18x18]
+- abs: [366,151 18x18]
 - rel: [0,0 18x18]
 - position: clip
 + - node: div
 + text: alex@memox.app · last synced 2 days ago
 + box:
-+ abs: [96,166 192x15]
-+ rel: [0,23 192x15]
++ abs: [76,163 234x15]
++ rel: [0,20 234x15]
 + layout: flex:row gap:6 align:center
 + spacing: margin:2/0/0/0
 + position: clip
-+ style: font:12/400 color:on-surface-variant
++ style: font:12/400 color:#000000
 + - node: span
 + text: Retry
 + box:
-+ abs: [302,150 62x24]
-+ rel: [274,21 62x24]
++ abs: [324,148 60x24]
++ rel: [316,20 60x24]
 + layout: flex:row gap:4 align:center
 + spacing: pad:0/8
-+ style: bg:#d9891e@12 font:12/600 color:streak r:999
++ style: font:12/600 color:#000000 r:999
 + - node: span
 + box:
-+ abs: [310,157 11x11]
++ abs: [332,155 11x11]
 + rel: [8,7 11x11]
 + layout: flex:row
 + - node: icon:cloud-off
 + box:
-+ abs: [310,157 11x11]
++ abs: [332,155 11x11]
 + rel: [0,0 11x11]
 + position: clip
   - node: div
   item: item[2]
   box:
-  abs: [28,213 350x221]
-  rel: [20,105 350x221]
+  abs: [8,210 390x212]
+  rel: [0,102 390x212]
   spacing: margin:0/0/18/0
   ...
 ```

@@ -61,6 +61,11 @@
   /* ── Brand / core roles — Tokyo Pure Light ─────────────────── */
   --memox-primary:            #5265F5;
   --memox-on-primary:         #FFFFFF;
+  /* Lifted indigo for primary-COLORED TEXT/ICONS on the page surface.
+     In light it equals --memox-primary (passes AA on light). In dark it lifts
+     so primary-colored text/links/icons clear AA on the deep-navy surface,
+     while --memox-primary stays the brand-solid button FILL (white text). */
+  --memox-primary-bright:     #5265F5;
   --memox-primary-container:  #E0E5FE;
   --memox-on-primary-container: #1A2580;
   --memox-secondary:          #6E7CD9;
@@ -214,17 +219,67 @@
   /* ── Chrome glass ──────────────────────────────────────────── */
   --memox-chrome-glass: rgba(247, 249, 254, 0.84);
   --memox-chrome-blur: saturate(180%) blur(18px); /* @kind other */
+
+  /* ── Phase 0 — semantic role layer (the kit consumes THESE) ───
+   * Stable, intent-named tokens mapped onto the ladder above. Old vars
+   * remain as the underlying source values; these are the public surface. */
+  --memox-bg:              var(--memox-surface);            /* page background */
+  --memox-surface-raised:  var(--memox-surface-bright);     /* elevated card */
+  --memox-surface-muted:   var(--memox-surface-container-low);
+  --memox-surface-hero:    color-mix(in srgb, var(--memox-primary) 5%, var(--memox-surface-bright));
+  --memox-chrome:          var(--memox-chrome-glass);
+  --memox-border:          var(--memox-outline-variant);
+  --memox-text-primary:    var(--memox-on-surface);
+  --memox-text-secondary:  var(--memox-on-surface-variant);
+  --memox-text-muted:      var(--memox-outline);
+
+  --memox-primary-hover:   #4453D4;
+  --memox-primary-soft:    color-mix(in srgb, var(--memox-primary) 10%, transparent);
+  --memox-primary-border:  color-mix(in srgb, var(--memox-primary) 24%, transparent);
+
+  --memox-danger:          var(--memox-error);
+  --memox-on-danger:       var(--memox-on-error);
+  --memox-danger-soft:     color-mix(in srgb, var(--memox-error) 8%, transparent);
+  --memox-danger-border:   color-mix(in srgb, var(--memox-error) 22%, transparent);
+  --memox-error-fill:      #DC2D4E; /* solid destructive-button fill (light) */
+  --memox-on-error-fill:   #FFFFFF;   /* text/icons on error-fill CTA — fill is dark in both modes, white invariant */
+  --memox-on-streak:       #FFFFFF;   /* text/icons on streak-orange fill — invariant white */
+
+  --memox-on-success:      #FFFFFF;
+  --memox-success-soft:    color-mix(in srgb, var(--memox-success) 10%, transparent);
+  --memox-success-border:  color-mix(in srgb, var(--memox-success) 22%, transparent);
+
+  --memox-on-warning:      #3A2A00;
+  --memox-warning-soft:    color-mix(in srgb, var(--memox-warning) 12%, transparent);
+  --memox-warning-border:  color-mix(in srgb, var(--memox-warning) 26%, transparent);
+
+  --memox-on-inverse-surface: #E8EAFC; /* text/icons on fixed-dark inverse surfaces (toasts, snackbars) */
+
+  --memox-progress-track:  var(--memox-surface-container-high);
+  --memox-badge-bg:        var(--memox-surface-container);
+
+  --memox-shadow-none:     none;
+  --memox-shadow-soft:     0 1px 2px rgba(15,22,56,0.04);
+  --memox-shadow-card:     0 12px 32px rgba(15,22,56,0.10);
+  --memox-shadow-chrome:   0 -2px 12px rgba(15,22,56,0.05);
+  /* Neutral FAB elevation — replaces the old colored primary glow. Tonal, not branded. */
+  --memox-shadow-fab:      0 8px 24px rgba(15,22,56,0.12);
 }
 
 /* ── Dark mode — Tokyo Nebula ────────────────────────────────
  * Deep navy night sky. Paper indigo cards. Violet accent.
  * Outlines stay indigo (faded), never gray — that's the signature.
  */
-@media (prefers-color-scheme: dark) {
-  :root[data-memox-theme="auto"],
-  :root[data-memox-theme="dark"] {
-    --memox-primary:            #8B9AFF;   /* lifted for AA on #0A0E27 */
-    --memox-on-primary:         #0A0E27;
+/* Manual dark — applies regardless of OS preference. The declaration block is
+   identical to the auto/OS-dark block below; keep the two in sync. */
+:root[data-memox-theme="dark"] {
+    /* Phase 0: ONE accessible dark primary. The light-indigo #8B9AFF clears AA
+       as text/icons/links on the navy surface AND, with the deep-navy
+       --memox-on-primary, as a solid CTA fill. Manual (.memox-dark) and this
+       media-query scope are kept identical. */
+    --memox-primary:            #8B9AFF;   /* was #5265F5 — see Phase 0 note */
+    --memox-on-primary:         #11173A;   /* deep navy content on the light-indigo fill */
+    --memox-primary-bright:     #8B9AFF;   /* alias — equal to --memox-primary now */
     --memox-primary-container:  #2D346A;
     --memox-on-primary-container: #D9DFFF;
     --memox-secondary:          #9DA8E8;
@@ -269,6 +324,130 @@
 
     --memox-border-ghost: 1px solid rgba(139, 154, 255, 0.16); /* @kind other */
     --memox-chrome-glass: rgba(10, 14, 39, 0.84);
+
+    /* ── Phase 0 — semantic role layer (dark) ─────────────────── */
+    --memox-bg:              var(--memox-surface);
+    --memox-surface-raised:  var(--memox-surface-container-lowest);  /* paper indigo — floated card, matches .card intent */
+    --memox-surface-muted:   var(--memox-surface-container-low);
+    --memox-surface-hero:    color-mix(in srgb, var(--memox-primary) 12%, var(--memox-surface));
+    --memox-chrome:          var(--memox-chrome-glass);
+    --memox-border:          var(--memox-outline-variant);
+    --memox-text-primary:    var(--memox-on-surface);
+    --memox-text-secondary:  var(--memox-on-surface-variant);
+    --memox-text-muted:      var(--memox-outline);
+    --memox-primary-hover:   #A6B2FF;
+    --memox-primary-soft:    color-mix(in srgb, var(--memox-primary) 20%, transparent);
+    --memox-primary-border:  color-mix(in srgb, var(--memox-primary) 32%, transparent);
+    --memox-danger:          var(--memox-error);
+    --memox-on-danger:       #2A0A12;
+    --memox-danger-soft:     color-mix(in srgb, var(--memox-error) 16%, transparent);
+    --memox-danger-border:   color-mix(in srgb, var(--memox-error) 32%, transparent);
+    --memox-error-fill:      #B0485C; /* solid destructive-button fill (dark) */
+    --memox-on-error-fill:   #FFFFFF;   /* unchanged — fill is dark in both modes */
+    --memox-on-streak:       #FFFFFF;   /* unchanged — streak always warm, needs white text */
+    --memox-on-success:      #06231A;
+    --memox-success-soft:    color-mix(in srgb, var(--memox-success) 18%, transparent);
+    --memox-success-border:  color-mix(in srgb, var(--memox-success) 32%, transparent);
+    --memox-on-warning:      #2A1E00;
+    --memox-warning-soft:    color-mix(in srgb, var(--memox-warning) 18%, transparent);
+    --memox-warning-border:  color-mix(in srgb, var(--memox-warning) 32%, transparent);
+    --memox-progress-track:  var(--memox-surface-container-high);
+    --memox-badge-bg:        var(--memox-surface-container);
+    --memox-shadow-none:     none;
+    --memox-shadow-soft:     none;
+    --memox-shadow-card:     0 16px 40px rgba(0,0,0,0.42);
+    --memox-shadow-chrome:   0 -2px 14px rgba(0,0,0,0.36);
+    --memox-shadow-fab:      0 10px 28px rgba(0,0,0,0.5);
+  }
+
+/* Auto — follow the OS preference. */
+@media (prefers-color-scheme: dark) {
+  :root[data-memox-theme="auto"] {
+    /* Phase 0: ONE accessible dark primary. The light-indigo #8B9AFF clears AA
+       as text/icons/links on the navy surface AND, with the deep-navy
+       --memox-on-primary, as a solid CTA fill. Manual (.memox-dark) and this
+       media-query scope are kept identical. */
+    --memox-primary:            #8B9AFF;   /* was #5265F5 — see Phase 0 note */
+    --memox-on-primary:         #11173A;   /* deep navy content on the light-indigo fill */
+    --memox-primary-bright:     #8B9AFF;   /* alias — equal to --memox-primary now */
+    --memox-primary-container:  #2D346A;
+    --memox-on-primary-container: #D9DFFF;
+    --memox-secondary:          #9DA8E8;
+    --memox-accent:             #B5A0FF;   /* signature violet */
+    --memox-on-accent:          #0A0E27;
+
+    --memox-surface:                    #0A0E27;   /* deep navy night */
+    --memox-surface-bright:             #232B5A;
+    --memox-surface-dim:                #060925;
+    --memox-surface-container-lowest:   #131A3A;   /* paper indigo — cards float */
+    --memox-surface-container-low:      #1B2249;
+    --memox-surface-container:          #232B5A;
+    --memox-surface-container-high:     #2C356E;
+    --memox-surface-container-highest:  #353D7E;
+
+    --memox-on-surface:          #E4E8FA;
+    --memox-on-surface-variant:  #A4ACD0;
+    --memox-outline:             #5A6BAE;   /* mid indigo — visible */
+    --memox-outline-variant:     #2A3267;   /* faded indigo — never gray */
+
+    --memox-success: #6FE0BD;
+    --memox-mastery: #6FE0BD;
+    --memox-mastery-fixed: #1F4A37;
+    --memox-on-mastery-fixed: #C7F2D8;
+    --memox-error:   #FF8FA3;
+    --memox-warning: #FFC658;
+    --memox-streak:  #FFAE6E;
+
+    --memox-status-new:        #6B75A3;
+    --memox-status-learning:   #FFC658;
+    --memox-status-reviewing:  #8B9AFF;
+    --memox-status-mastered:   #6FE0BD;
+
+    --memox-rating-again: #FF8FA3;
+    --memox-rating-hard:  #FFC658;
+    --memox-rating-good:  #8B9AFF;
+    --memox-rating-easy:  #6FE0BD;
+
+    --memox-mastery-low:  #8B4F66;
+    --memox-mastery-mid:  #8B7338;
+    --memox-mastery-high: #3F8070;
+
+    --memox-border-ghost: 1px solid rgba(139, 154, 255, 0.16); /* @kind other */
+    --memox-chrome-glass: rgba(10, 14, 39, 0.84);
+
+    /* ── Phase 0 — semantic role layer (dark) ─────────────────── */
+    --memox-bg:              var(--memox-surface);
+    --memox-surface-raised:  var(--memox-surface-container-lowest);  /* paper indigo — floated card, matches .card intent */
+    --memox-surface-muted:   var(--memox-surface-container-low);
+    --memox-surface-hero:    color-mix(in srgb, var(--memox-primary) 12%, var(--memox-surface));
+    --memox-chrome:          var(--memox-chrome-glass);
+    --memox-border:          var(--memox-outline-variant);
+    --memox-text-primary:    var(--memox-on-surface);
+    --memox-text-secondary:  var(--memox-on-surface-variant);
+    --memox-text-muted:      var(--memox-outline);
+    --memox-primary-hover:   #A6B2FF;
+    --memox-primary-soft:    color-mix(in srgb, var(--memox-primary) 20%, transparent);
+    --memox-primary-border:  color-mix(in srgb, var(--memox-primary) 32%, transparent);
+    --memox-danger:          var(--memox-error);
+    --memox-on-danger:       #2A0A12;
+    --memox-danger-soft:     color-mix(in srgb, var(--memox-error) 16%, transparent);
+    --memox-danger-border:   color-mix(in srgb, var(--memox-error) 32%, transparent);
+    --memox-error-fill:      #B0485C; /* solid destructive-button fill (dark) */
+    --memox-on-error-fill:   #FFFFFF;   /* unchanged — fill is dark in both modes */
+    --memox-on-streak:       #FFFFFF;   /* unchanged — streak always warm, needs white text */
+    --memox-on-success:      #06231A;
+    --memox-success-soft:    color-mix(in srgb, var(--memox-success) 18%, transparent);
+    --memox-success-border:  color-mix(in srgb, var(--memox-success) 32%, transparent);
+    --memox-on-warning:      #2A1E00;
+    --memox-warning-soft:    color-mix(in srgb, var(--memox-warning) 18%, transparent);
+    --memox-warning-border:  color-mix(in srgb, var(--memox-warning) 32%, transparent);
+    --memox-progress-track:  var(--memox-surface-container-high);
+    --memox-badge-bg:        var(--memox-surface-container);
+    --memox-shadow-none:     none;
+    --memox-shadow-soft:     none;
+    --memox-shadow-card:     0 16px 40px rgba(0,0,0,0.42);
+    --memox-shadow-chrome:   0 -2px 14px rgba(0,0,0,0.36);
+    --memox-shadow-fab:      0 10px 28px rgba(0,0,0,0.5);
   }
 }
 
