@@ -36,10 +36,29 @@ Terminology used by the `Layer` column:
 
 MemoX priority is a **usable flashcard/SRS app**. The WBS must drive real user flow, not architecture-only progress.
 
-- Do not build all BE at once; do not create one huge "build all backend" task.
-- Do not build isolated FE shells without a real data contract behind them.
-- Every flow is decomposed into BE function and FE function tasks; FE rows normally depend on their BE row.
-- Preferred sequence inside each function: **BE function → BE tests → FE wiring → FE/widget tests → integration behavior → docs/decision-table parity → polish only if needed**.
+**Rebuild strategy (2026-06-19, adopted for the from-scratch rebuild).** Because the full spec set
+already exists (a prior build proved the design), the rebuild uses a **phase-front-loaded** order
+that front-loads the two highest-reuse layers, then assembles screens fast:
+
+1. **Foundation first** (Phase 0) — boot, router, l10n, Drift infra so `tool/verify` runs.
+2. **Core shared-widget kit next** (Phase 1) — the ~10–12 `Mx*` widgets used across most screens,
+   built upfront from the design-system shots so feature screens become *assembly, not invention*.
+3. **BE by entity group** (Phase 2/4/6) — CRUD/domain/data built per **FK-dependency subsystem**
+   (content → study → reporting), not one screen at a time. This is allowed by the "up to 7
+   tightly coupled rows sharing a subsystem and dependency chain" rule below — it is **not** a
+   single "build all backend" task.
+4. **Screen assembly** (Phase 3/5/7) — once the widget kit + that group's BE contracts exist,
+   wire screens. Each screen depends on real providers + real `Mx*` widgets, so it lands in 1–2
+   iterations instead of 4–6.
+
+See §4.1 **Rebuild Delivery Phases** for the phase → WBS-ID map.
+
+Standing rules (still apply within every phase):
+
+- Do not create one huge "build all backend" task. BE batching is **per entity-group subsystem**, capped at the 7-row rule.
+- Do not build isolated FE feature shells without a real data contract behind them (the shared-widget kit in Phase 1 is the deliberate exception: it is data-less by design and golden-tested in isolation).
+- Build **core** shared widgets upfront (Phase 1); build **feature-specific** widgets (e.g. `MatchBoard`, `BoxStepper`) with their owning feature, not before.
+- Preferred sequence inside each feature function: **BE function → BE tests → FE wiring → FE/widget tests → integration behavior → docs/decision-table parity → polish only if needed**.
 - New tasks should move the app toward: create content → study content → resume study → finish session → see progress.
 - One prompt may cover up to 7 tightly coupled WBS rows/subtasks when they share a subsystem and dependency chain. List every row/subtask explicitly, stop before unrelated subsystems, and do not mix BE/FE unless the prompt says to.
 
@@ -58,17 +77,46 @@ Row format: `WBS ID | Flow | Function | Layer | Deliverable | Status | Depends o
 
 Commit ID rules: implemented rows carry the verified commit that landed the function (file-creation or feature commit verified from history); planned/future rows carry `TBD`. The commit of the current WBS update is never written into rows (it is unknown until commit); §10 tracks per-commit history.
 
+### 4.1 Rebuild Delivery Phases (2026-06-19)
+
+The **feature groups below (Group 1–10) define WHAT to build** and their dependencies. This phase
+map defines the **ORDER to build them in** for the from-scratch rebuild — front-loading the two
+highest-reuse layers (widget kit + per-group BE) so screens become assembly. Build phases in order;
+inside a phase, follow the per-row `Depends on`.
+
+| Phase | Goal | WBS IDs in scope | Exit criteria |
+| --- | --- | --- | --- |
+| **0 — Foundation** | `tool/verify` runs on code; app boots | 1.1.1, 1.1.3, 1.1.4, 1.1.5 | `node tool/verify/run.mjs` runs code chain; empty app boots; doc_guard re-baselined; `docs/_generated/` regenerated |
+| **1 — Core widget kit** | ~10–12 `Mx*` widgets, golden-tested | 1.1.2, 1.2.1–1.2.5 | Every core widget has light+dark goldens; no feature screen needs a new shared surface |
+| **2 — BE Group A: content** | Folder/Deck/Flashcard/Tag CRUD + import/export/bulk BE | 2.1.1–2.21.1 (BE rows), 3.1.1/3.2.1/3.4.1/3.5.1/3.7.1 (read models), 6.x BE, 8.7.1, 8.9.1 | Content + search + import/export use cases pass unit tests; FK chain `folders→decks→flashcards` solid |
+| **3 — Library + Import screens** | Assemble content/library/import FE | 2.x FE rows, 3.1.2/3.2.2/3.4.2/3.5.2, 6.1.1/6.3.1/6.5.1 | Create→browse→import content works end-to-end |
+| **4 — BE Group B: study/SRS** | Study session + SRS + mode strategies BE | 4.1.1–4.11.2 (BE rows), 4.5.x strategies | Session create→answer→finalize→SRS transition pass table-driven tests |
+| **5 — Study screens (5 modes)** | Assemble study/result FE | 4.1.2/4.1.3/4.1.4, 4.3.2, 4.4.2, 4.5.3/4.5.5/4.5.7/4.5.9/4.5.11, 4.7.2, 4.9.1 | Full study loop playable in all implemented modes |
+| **6 — BE Group C: reporting** | Progress/history/dashboard read models | 7.1.1–7.6.2, 5.1.1/5.2.1/5.4.1/5.6.1 | Read models composed + tested |
+| **7 — Dashboard + Progress + History screens** | Assemble "look back" FE | 5.x FE, 7.5.x, 7.6.3 | Dashboard + Progress + Card history render all states |
+| **8 — Settings & cross-cutting** | Settings hub, TTS, learning settings, account | 8.1.x–8.5.x, TTS rows | Settings shells wired to real BE |
+| **Ongoing** | Quality gates | Group 9 (9.1–9.17), Group 10 | Enforced every task; never "done" |
+
+Phases 2/4/6 are **BE-by-subsystem** (allowed under the 7-row coupling rule); phases 3/5/7 assemble
+screens on the Phase-1 widget kit + that group's BE contracts. Phase 8 and any feature-specific
+widget (e.g. `MatchBoard`, `BoxStepper`, `ProgressRing`) land with their owning feature, not upfront.
+
 ### Group 1 — Project foundation
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1.1 | Foundation | Architecture baseline | BE | Clean Architecture skeleton (`app`/`core`/`domain`/`data`/`presentation`) with DI providers | Specified | none | `lib/app/di/**`, `lib/domain/**`, `lib/data/**` | TBD | Implement |
-| 1.1.2 | Foundation | Design system baseline | FE | Theme tokens + `Mx*` shared widget kit | Specified | none | `lib/core/theme/**`, `lib/presentation/shared/**` | TBD | Extend tokens/widgets only per approved feature need |
-| 1.1.3 | Foundation | Routing baseline | FE | GoRouter shell, `RouteNames`/`RoutePaths` constants, placeholder discipline | Specified | none | `lib/app/router/app_router.dart` | TBD | Implement |
-| 1.1.4 | Foundation | l10n baseline | FE | ARB en/vi + generated localizations pipeline | Specified | none | `lib/l10n/app_en.arb`, `lib/l10n/app_vi.arb` | TBD | Implement |
-| 1.1.5 | Foundation | Drift/database baseline | BE | `.drift` schema layout, `AppDatabase` v4, migration infrastructure v2–v4 | Specified | none | `lib/data/datasources/local/app_database.dart`, `lib/data/datasources/local/migrations/**`, `test/data/migrations/**` | TBD | No action; any schema change follows §9 rules |
-| 1.1.6 | Foundation | Guard/verification baseline | Test | Analyzer + `dart fix`/`format` + targeted tests workflow; guard ruleset when present | Specified | none | `docs/checklist/implementation-checklist.md` | TBD | Add CI status checks (see 9.10) |
-| 1.1.7 | Foundation | Docs baseline | Docs | Business docs, wireframes, contracts, decision tables as source of truth | Specified | none | `docs/business/index.md`, `docs/decision-tables/memox-core-decision-table.md` | TBD | Maintain parity per commit (history spans many commits; no single anchor) |
+| 1.1.1 | Foundation | Architecture baseline | BE | Clean Architecture skeleton (`app`/`core`/`domain`/`data`/`presentation`) with DI providers | Specified | none | `lib/app/di/**`, `lib/domain/**`, `lib/data/**` | TBD | Implement (Phase 0) |
+| 1.1.2 | Foundation | Theme tokens + design-system baseline | FE | Theme tokens (colors/type/spacing/radius), `MxTheme`, dark/light schemes from the design system | Specified | none | `lib/core/theme/**` | TBD | Implement (Phase 1) — feeds the widget kit |
+| 1.1.3 | Foundation | Routing baseline | FE | GoRouter shell, `RouteNames`/`RoutePaths` constants, placeholder discipline | Specified | none | `lib/app/router/app_router.dart` | TBD | Implement (Phase 0) |
+| 1.1.4 | Foundation | l10n baseline | FE | ARB en/vi + generated localizations pipeline | Specified | none | `lib/l10n/app_en.arb`, `lib/l10n/app_vi.arb` | TBD | Implement (Phase 0) |
+| 1.1.5 | Foundation | Drift/database baseline | BE | `.drift` schema layout, `AppDatabase`, migration infrastructure + first table | Specified | none | `lib/data/datasources/local/app_database.dart`, `lib/data/datasources/local/migrations/**`, `test/data/migrations/**` | TBD | Implement (Phase 0); later schema change follows §9 |
+| 1.1.6 | Foundation | Guard/verification baseline | Test | `tool/verify` single-entry chain + `tool/doc_guard`; analyzer/format/targeted-test workflow | Implemented | none | `tool/verify/run.mjs`, `tool/doc_guard/run.mjs`, `docs/checklist/implementation-checklist.md` | TBD | Re-baseline doc_guard after Phase 0; add CI (9.10) |
+| 1.1.7 | Foundation | Docs baseline | Docs | Business docs, wireframes, contracts, decision tables as source of truth | Implemented | none | `docs/business/index.md`, `docs/decision-tables/memox-core-decision-table.md` | TBD | Maintain parity per commit |
+| 1.2.1 | Foundation | Core widget kit — surfaces & shell | FE | `MxContentShell`, `MxCard`, `MxListTile`, `MxAvatar` built from shots; golden per state (light+dark) | Specified | 1.1.2 | `lib/presentation/shared/widgets/surfaces/**`, `lib/presentation/shared/layouts/**` | TBD | Implement (Phase 1) — highest reuse (~18/23 screens) |
+| 1.2.2 | Foundation | Core widget kit — navigation & app bar | FE | `MxAppBar`, `MxBottomNav`, `MxBreadcrumb`; selected/elevated states; goldens | Specified | 1.1.2, 1.1.3 | `lib/presentation/shared/widgets/navigation/**` | TBD | Implement (Phase 1) — on every main screen |
+| 1.2.3 | Foundation | Core widget kit — actions & inputs | FE | `MxButton`/`MxActionButton`/`MxCardActions`, `MxSearchField`, base input field; goldens + geometry contract | Specified | 1.1.2 | `lib/presentation/shared/widgets/buttons/**`, `lib/presentation/shared/widgets/inputs/**` | TBD | Implement (Phase 1) |
+| 1.2.4 | Foundation | Core widget kit — state widgets | FE | `MxLoadingState`, `MxEmptyState`, `MxErrorState`, `MxNoResultsState`; goldens; semantics | Specified | 1.1.2 | `lib/presentation/shared/widgets/states/**` | TBD | Implement (Phase 1) — 23/23 screens depend on these |
+| 1.2.5 | Foundation | Core widget kit — dialogs & sheets | FE | `MxDialog`, `MxConfirmDialog`, `MxBottomSheet` shells with content slot; goldens | Specified | 1.2.1 | `lib/presentation/shared/dialogs/**`, `docs/wireframes/24-shared-dialogs.md`, `docs/wireframes/25-shared-bottom-sheets.md` | TBD | Implement (Phase 1) |
 
 ### Group 2 — Content management
 
@@ -289,20 +337,19 @@ Commit ID rules: implemented rows carry the verified commit that landed the func
 
 ## 5. Next 10 Tasks (in delivery order)
 
-> **Rebuild reset (2026-06-19):** Toàn bộ code đã được xóa để build lại từ đầu. Priority dưới đây cần được xác định lại theo thứ tự delivery logic từ foundation → BE → FE → integration.
+> **Rebuild reset (2026-06-19):** Code deleted; rebuild from scratch. Order follows §4.1 Rebuild
+> Delivery Phases — Phase 0 → 1 → 2 first. Each item = one agent prompt (≤7 coupled rows).
 
-Priority recommended order cho rebuild:
-
-1. **1.1.1–1.1.5 Foundation** — Clean Architecture skeleton, design system, routing, l10n, Drift/DB baseline.
-2. **2.1.1–2.1.2 Folder Create BE+FE** — First content management flow end-to-end.
-3. **2.2.1–2.9.2 Folder+Deck CRUD** — Full content management backbone.
-4. **2.11.1–2.13.2 Flashcard CRUD** — Core flashcard operations.
-5. **3.1.1–3.4.2 Library flow** — Overview, folder detail, flashcard list screens.
-6. **4.1.1–4.6.2 Study/SRS flow** — Study entry, session, grading, finalization, SRS.
-7. **5.x Dashboard** — Dashboard with resume/today CTA.
-8. **7.x Progress** — Progress screen and history.
-9. **6.x Import** — CSV import flow.
-10. **8.x Settings** — Settings hub, TTS, Account.
+1. **Phase 0 · 1.1.1 + 1.1.3 + 1.1.4** — boot `main.dart`, GoRouter shell + route constants, ARB en/vi baseline. Goal: app boots.
+2. **Phase 0 · 1.1.5** — Drift `AppDatabase` + migration infra + first table (folders). Then `flutter pub get`, re-baseline doc_guard, regenerate `docs/_generated/`. Goal: `tool/verify` code chain runs.
+3. **Phase 1 · 1.1.2 + 1.2.1** — theme tokens + surfaces/shell widgets (`MxContentShell`/`MxCard`/`MxListTile`); goldens.
+4. **Phase 1 · 1.2.2 + 1.2.3** — nav/app-bar + actions/inputs widgets; goldens.
+5. **Phase 1 · 1.2.4 + 1.2.5** — state widgets + dialog/sheet shells; goldens. Goal: core widget kit complete.
+6. **Phase 2A · 2.1.1 + 2.2.1 + 2.3.1 + 2.4.1** — Folder CRUD BE (create/rename/delete/move) + unit tests.
+7. **Phase 2A · 2.7.1 + 2.8.1 + 2.9.1 + 2.19.1** — Deck CRUD BE + tests.
+8. **Phase 2A · 2.11.1 + 2.12.1 + 2.13.1 + 2.15.1** — Flashcard CRUD + tags BE + tests.
+9. **Phase 2A · 3.1.1 + 3.2.1 + 3.4.1 + 3.5.1** — Library/folder-detail/flashcard-list/search read models BE.
+10. **Phase 3 · 3.1.2 + 3.2.2 + 2.1.2** — first assembled screens (Library overview, Folder detail, Create-folder dialog) on the widget kit + Phase-2A BE.
 
 ## 6. Deferred / Future / Rejected Register
 
@@ -396,6 +443,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| TBD | 2026-06-19 | 1.1.1–1.2.5, §2, §4.1, §5 | Restructure WBS for optimized rebuild workflow: phased delivery strategy in §2, new §4.1 Rebuild Delivery Phases (phase→WBS map), split 1.1.2 into theme + explicit core-widget rows 1.2.1–1.2.5, 1.1.6/1.1.7 corrected to Implemented (tool/+docs/ present), §5 Next Tasks aligned to Phase 0/1/2A |
 | *(rebuild start)* | 2026-06-19 | all | Code deleted; all WBS rows reset to Specified; rebuild begins from scratch. |
 | TBD | 2026-06-16 | 3.2.3, 4.5.10 | New cards count as NEW not due: stop writing `due_at=now` on create + migration v11 (clear due_at for `review_count=0`); `new_count` read model on folder-detail deck/subfolder rows; folder summary `{n} new`/`{m} due` + Study new / Review due CTAs; deck-row new badge; srs-review/flashcard/contract/wireframe/WBS parity |
 | TBD | 2026-06-16 | 4.5.12, 4.1.2 | Study mode-chain persistence backbone: `StudyFlow`/`StudyFlowPlan` + `StudyFlowResolver`, schema v10 (`study_sessions.study_flow`/`current_mode`) + migration/test, persist flow+firstMode at create (new deck/folder → `new_full_cycle`), behavior-preserving; plus study-entry deep-link fixes (`goBackOrLibrary` safe-back, NotFound vs invalid-params copy) |
