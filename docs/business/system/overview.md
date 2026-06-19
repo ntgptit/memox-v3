@@ -55,11 +55,11 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Session batch limit (`maxSessionItems`)| Specified| `docs/business/study/study-flow.md`|
 | Daily new-card limit| Specified| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
-| Manual-create duplicate soft-warning| Specified| `docs/business/flashcard/flashcard-management.md`|
+| Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|
 | Due-time local-midnight normalization| Specified| `docs/business/srs/srs-review.md`|
 | Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
 | Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
-| Global search screen (folders/decks/flashcards)| Specified| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
+| Global search screen (folders/decks/flashcards)| Specified (BE Implemented — WBS 3.5.1; FE 3.5.2 pending)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
 | Global search: tags section + recent + popular| Future Proposal — needs tag subsystem + `shared_preferences`| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
 | Zero-content guidance / thin onboarding| V1 guideline — owner-split across current empty states and Account Settings restore| `docs/wireframes/23-onboarding.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/02-library.md`, `docs/wireframes/19-settings-account.md`|
 | Full onboarding flow| Future Proposal — no standalone route/feature/first-launch wizard in V1| `docs/wireframes/23-onboarding.md`|

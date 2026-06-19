@@ -16,8 +16,8 @@ code per the "do not downgrade target concepts" rule.
 **Current schema** (`AppDatabase.currentSchemaVersion`): **3** (rebuild
 baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1;
 `flashcards` + `flashcard_progress` + `flashcard_tags` added v3 2026-06-20
-WBS 2.11.1). The Drift layer was reset and is being re-added per feature slice.
-Tables shipped so far:
+WBS 2.11.1/2.16.1). The Drift layer was reset and is being re-added per feature
+slice. Tables shipped so far:
 
 | Table     | Columns (current)                                                                                                |
 |-----------|------------------------------------------------------------------------------------------------------------------|

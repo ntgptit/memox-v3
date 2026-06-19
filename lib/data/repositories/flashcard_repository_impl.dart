@@ -12,6 +12,7 @@ import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
@@ -289,6 +290,41 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       });
     } catch (error) {
       return _fail<void>(_storageWrite(error));
+    }
+  }
+
+  @override
+  Future<Result<FlashcardDuplicateCheckResult>> checkManualDuplicate({
+    required DeckId deckId,
+    required String front,
+    required String back,
+    FlashcardId? excludeId,
+  }) async {
+    final String loweredFront = front.trim().toLowerCase();
+    final String loweredBack = back.trim().toLowerCase();
+
+    try {
+      final List<FlashcardRow> cards = await _dao.flashcardsInDeck(deckId);
+      final List<FlashcardId> matches = cards
+          .where(
+            (FlashcardRow c) =>
+                c.id != excludeId &&
+                c.front.trim().toLowerCase() == loweredFront &&
+                c.back.trim().toLowerCase() == loweredBack,
+          )
+          .map((FlashcardRow c) => c.id)
+          .toList(growable: false);
+
+      return _ok(
+        matches.isEmpty
+            ? FlashcardDuplicateCheckResult.unique
+            : FlashcardDuplicateCheckResult(
+                isDuplicate: true,
+                matchingFlashcardIds: matches,
+              ),
+      );
+    } catch (error) {
+      return _fail<FlashcardDuplicateCheckResult>(_storageRead(error));
     }
   }
 

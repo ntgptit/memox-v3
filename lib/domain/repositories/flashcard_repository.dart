@@ -1,5 +1,6 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
@@ -91,5 +92,17 @@ abstract interface class FlashcardRepository {
   Future<Result<void>> reorderFlashcards({
     required DeckId deckId,
     required List<FlashcardId> orderedIds,
+  });
+
+  /// Non-blocking manual duplicate **soft-warning** check (WBS 2.20.1): is there
+  /// an existing card in [deckId] whose trimmed, case-insensitive `front` +
+  /// `back` matches [front] + [back]? [excludeId] skips the card itself on edit.
+  /// Never rejects a save — returns a [FlashcardDuplicateCheckResult] for the
+  /// editor's "save anyway?" flow. Decision row C40.
+  Future<Result<FlashcardDuplicateCheckResult>> checkManualDuplicate({
+    required DeckId deckId,
+    required String front,
+    required String back,
+    FlashcardId? excludeId,
   });
 }

@@ -50,7 +50,8 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C37 | Flashcard list filters | Status/search composition and deterministic order | Search composes with status filter; filtered rows keep stable deck order | C0+C1 | TBD |
 | C38 | Flashcard list filters | Tag empty / single / multi / normalization / scope | Empty selected tags return all cards; single normalized tag filter stays deck-scoped; multi-tag filter uses AND semantics and keeps stable order | C0+C1 | TBD |
 | C39 | Flashcard list filters | Tag composition / no-results | Tag filter composes with search + status; no-results keeps `totalCount` at the full deck total | C0+C1 | TBD |
-| C40 | Manual duplicate check | Create/edit save with same-deck duplicate front/back | Return `hasDuplicate=true` without blocking save; edit mode ignores the current card; missing deck/card and blank fields return typed failures | C0+C1 | TBD |
+| C40 | Manual duplicate check | Create/edit save with same-deck duplicate front/back | Return `isDuplicate=true` (with matching ids) without blocking save; trimmed + case-insensitive `front`+`back` compare; deck-scoped; edit mode ignores the current card via `excludeId` | C0+C1 | test/data/repositories/flashcard_repository_impl_duplicate_behavior_test.dart, test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart |
+| C41 | Create/edit card | Parent deck (WBS 2.16.1) | Card cannot exist without a deck: non-null `deck_id` FK→decks ON DELETE CASCADE; create under a missing deck returns `NotFoundFailure(deck)`; update on a missing card returns `NotFoundFailure(flashcard)` | C0+C1 | test/data/repositories/flashcard_repository_impl_test.dart, test/data/migrations/app_database_schema_test.dart |
 
 ## Import
 
