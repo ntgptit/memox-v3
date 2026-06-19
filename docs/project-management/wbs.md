@@ -95,7 +95,7 @@ inside a phase, follow the per-row `Depends on`.
 | **6 — BE Group C: reporting** | Progress/history/dashboard read models | 7.1.1–7.6.2, 5.1.1/5.2.1/5.4.1/5.6.1 | Read models composed + tested |
 | **7 — Dashboard + Progress + History screens** | Assemble "look back" FE | 5.x FE, 7.5.x, 7.6.3 | Dashboard + Progress + Card history render all states |
 | **8 — Settings & cross-cutting** | Settings hub, TTS, learning settings, account | 8.1.x–8.5.x, TTS rows | Settings shells wired to real BE |
-| **Ongoing** | Quality gates | Group 9 (9.1–9.17), Group 10 | Enforced every task; never "done" |
+| **Ongoing** | Quality gates | Group 9 (9.1–9.18), Group 10 | Enforced every task; never "done" |
 
 Phases 2/4/6 are **BE-by-subsystem** (allowed under the 7-row coupling rule); phases 3/5/7 assemble
 screens on the Phase-1 widget kit + that group's BE contracts. Phase 8 and any feature-specific
@@ -323,6 +323,7 @@ widget (e.g. `MatchBoard`, `BoxStepper`, `ProgressRing`) land with their owning 
 | 9.15 | Quality | Unified verify entry point — ENFORCED | Test | `node tool/verify/run.mjs`: one command, canonical chain, scope auto-detection, single summary. **Enforcement (2026-06-12, after piecemeal-verify relapse):** `--quick` legalizes the inner dev loop through the same entry; a docs/code PASS writes a content-state-bound pass-marker; the pre-commit hook (`--check-marker`) rejects commits without a matching marker and requires a code-chain marker when code is staged. Running verification commands individually is now a hard-rule violation AND technically uncommittable | Specified | 9.11 | `tool/verify/run.mjs`, `.githooks/pre-commit`, `CLAUDE.md` §Hard rules + §Verification; enforcement live-tested (commit blocked without marker → PASS → commit allowed) | TBD | New clones: `git config core.hooksPath .githooks` |
 | 9.16 | Quality | Where-is feature index | Docs | `docs/_generated/where-is.md`: deterministic feature → docs/source/tests/mock-shots/WBS cross-reference (42 features; file lists resolved LIVE per generate; output linted by doc_guard); AGENTS.md fast-lookup table routes Codex to the same infra | Specified | 9.13 | `docs/_generated/where-is.md`, `tool/doc_guard/run.mjs` (`WHERE_IS` registry), `AGENTS.md` §Where to look for what | TBD | Add a registry row when a new feature area lands; regen with `generate` |
 | 9.17 | Quality | Pre-commit hook + repo hygiene | Test | `.githooks/pre-commit` runs doc_guard + whitespace check on every commit (opt-in `git config core.hooksPath .githooks`, activated in this clone); `.gitattributes` normalizes line endings ending the CRLF warning flood | Specified | 9.11 | `.githooks/pre-commit`, `.gitattributes`; live-tested on the landing commit | TBD | New clones run the one-time `core.hooksPath` config (documented in hook header + `tool/README.md`) |
+| 9.18 | Quality | Task prompt generator | Test | `tool/prompt_gen/run.mjs` — generates Claude Code prompts from WBS IDs embedding the full 6-step dev loop (Read→Drift→Implement→InnerLoop→DesignParity→FullVerify+Commit); supports single ID, multi-ID batch, `--phase N`, `--list`, `--next` | Implemented | 1.1.6 | `tool/prompt_gen/run.mjs`, `tool/README.md` | `7dd04e0` | Use before each task: `node tool/prompt_gen/run.mjs <WBS_ID>` |
 
 ### Group 10 — Release readiness
 
@@ -443,6 +444,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `7dd04e0` | 2026-06-19 | 9.18 | Add `tool/prompt_gen/run.mjs`: generates Claude Code prompts from WBS IDs embedding the 6-step dev loop; supports single/batch/phase/list/next modes; registered in `tool/README.md` (§3.6, trigger matrix, portability table) |
 | TBD | 2026-06-19 | 1.1.1–1.2.5, §2, §4.1, §5 | Restructure WBS for optimized rebuild workflow: phased delivery strategy in §2, new §4.1 Rebuild Delivery Phases (phase→WBS map), split 1.1.2 into theme + explicit core-widget rows 1.2.1–1.2.5, 1.1.6/1.1.7 corrected to Implemented (tool/+docs/ present), §5 Next Tasks aligned to Phase 0/1/2A |
 | *(rebuild start)* | 2026-06-19 | all | Code deleted; all WBS rows reset to Specified; rebuild begins from scratch. |
 | TBD | 2026-06-16 | 3.2.3, 4.5.10 | New cards count as NEW not due: stop writing `due_at=now` on create + migration v11 (clear due_at for `review_count=0`); `new_count` read model on folder-detail deck/subfolder rows; folder summary `{n} new`/`{m} due` + Study new / Review due CTAs; deck-row new badge; srs-review/flashcard/contract/wireframe/WBS parity |
