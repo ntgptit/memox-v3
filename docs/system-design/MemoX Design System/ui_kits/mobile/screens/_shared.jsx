@@ -219,10 +219,13 @@
   );
 
   // Multiline text control matching the .field look (single-line uses .field).
-  // `invalid` swaps the border to danger for validation states.
+  // `invalid` swaps the border to danger for validation states. A long answer
+  // scrolls inside a capped height (maxHeight) instead of pushing the Save bar /
+  // footer off-screen — front/back fields stay safe with real long content.
   const TextArea = ({ invalid, style, ...rest }) => (
     <textarea {...rest} style={{
-      width: '100%', minHeight: '96px', resize: 'none',
+      width: '100%', minHeight: '96px', maxHeight: 'calc(var(--memox-space-12) * 4)',
+      overflowY: 'auto', resize: 'none',
       padding: 'var(--memox-space-3) var(--memox-space-4)',
       background: 'var(--memox-surface)',
       border: `1px solid ${invalid ? 'var(--memox-danger)' : 'var(--memox-outline-variant)'}`,
@@ -386,16 +389,22 @@
   // primary accent and scale to `max` (or the data peak). `dim` softens the whole
   // chart for low-confidence ranges (insufficient data). One owner so weekly and
   // ranged charts share the same bars, gaps and day labels.
-  const BarChart = ({ data, max, dim }) => {
+  // `unit` (e.g. "cards") only feeds the accessible label, not the visible value
+  // (kept terse + tabular). Every column carries BOTH a visible numeric value and
+  // an aria-label so the data never depends on bar color/height alone (a11y +
+  // colorblind-safe); a null value renders a dashed "no data" column, labelled too.
+  const BarChart = ({ data, max, dim, unit = 'cards' }) => {
     const peak = max || Math.max(1, ...data.map((d) => d.value || 0));
     return (
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: S(2), height: 'calc(var(--memox-space-12) * 3)', opacity: dim ? 'var(--memox-op-disabled)' : 1 }}>
+      <div role="img" aria-label={`Bar chart: ${data.map((d) => `${d.label} ${d.value != null ? d.value + ' ' + unit : 'no data'}`).join(', ')}`}
+        style={{ display: 'flex', alignItems: 'flex-end', gap: S(2), height: 'calc(var(--memox-space-12) * 3)', opacity: dim ? 'var(--memox-op-disabled)' : 1 }}>
         {data.map((d, i) => {
           const has = d.value != null;
           const h = has ? Math.max(4, Math.round((d.value / peak) * 100)) : 0;
           return (
-            <div key={i} style={{ flex: 1, minWidth: 0, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: S(2) }}>
-              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+            <div key={i} style={{ flex: 1, minWidth: 0, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: S(1) }}>
+              <span aria-hidden="true" style={{ fontSize: 'var(--memox-fs-label-small)', fontWeight: 'var(--memox-weight-bold)', color: has ? 'var(--memox-text-secondary)' : 'var(--memox-text-3)', fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{has ? d.value : '\u2013'}</span>
+              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', minHeight: 0 }}>
                 {has ? (
                   <div style={{ width: '100%', height: h + '%', borderRadius: 'var(--memox-radius-sm)', background: 'var(--memox-primary)' }}></div>
                 ) : (

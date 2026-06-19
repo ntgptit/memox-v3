@@ -163,7 +163,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             abs: [21,144 348x96]
             rel: [0,23 348x96]
           spacing: pad:12/16
-          size: minh:96
+          size: minh:96 maxh:192
           position: layout_hint:scroll
           style: bg:accent-contrast r:14 border:1px border
       - node: div
@@ -187,7 +187,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             abs: [21,279 348x96]
             rel: [0,23 348x96]
           spacing: pad:12/16
-          size: minh:96
+          size: minh:96 maxh:192
           position: layout_hint:scroll
           style: bg:accent-contrast r:14 border:1px border
       - node: hr
@@ -274,7 +274,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,144 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -283,7 +283,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,144 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: div
@@ -303,7 +303,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,279 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -312,7 +312,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,279 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: hr
@@ -371,7 +371,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,144 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -380,7 +380,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,144 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: div
@@ -400,7 +400,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,279 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -409,7 +409,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,279 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: hr
@@ -604,7 +604,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,644 348x72]
 + rel: [0,23 348x72]
 + spacing: pad:12/16
-+ size: minh:72
++ size: minh:72 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast r:14 border:1px border
 ```
@@ -623,7 +623,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,144 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -631,7 +631,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,144 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast r:14 border:1px danger
 + - node: div
@@ -714,7 +714,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,144 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -723,7 +723,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,144 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: div
@@ -743,7 +743,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,279 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -752,7 +752,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,279 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: hr
@@ -848,7 +848,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,144 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -857,7 +857,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,216 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: div
@@ -877,7 +877,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - abs: [21,279 348x96]
 - rel: [0,23 348x96]
 - spacing: pad:12/16
-- size: minh:96
+- size: minh:96 maxh:192
 - position: layout_hint:scroll
 - style: bg:accent-contrast r:14 border:1px border
 + - node: textarea
@@ -886,7 +886,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + abs: [21,351 348x96]
 + rel: [0,23 348x96]
 + spacing: pad:12/16
-+ size: minh:96
++ size: minh:96 maxh:192
 + position: layout_hint:scroll
 + style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: hr

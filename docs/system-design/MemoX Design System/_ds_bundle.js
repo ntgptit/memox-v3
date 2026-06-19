@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":3,"namespace":"DesignSystem_48ad9c","components":[{"name":"Avatar","sourcePath":"components/core/Avatar.jsx"},{"name":"Badge","sourcePath":"components/core/Badge.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"Chip","sourcePath":"components/core/Chip.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"SegmentedControl","sourcePath":"components/core/SegmentedControl.jsx"},{"name":"Switch","sourcePath":"components/core/Switch.jsx"},{"name":"NoteCard","sourcePath":"components/mobile/NoteCard.jsx"}],"sourceHashes":{"components/core/Avatar.jsx":"6fb896786b20","components/core/Badge.jsx":"5c2c0e0189ba","components/core/Button.jsx":"db60dd3ede0f","components/core/Card.jsx":"47a7a56a082b","components/core/Chip.jsx":"25f83cc08614","components/core/IconButton.jsx":"9c68965eb8c0","components/core/SegmentedControl.jsx":"f0b9c15222b6","components/core/Switch.jsx":"6b0cd9388d4e","components/mobile/NoteCard.jsx":"e780eea25703","tools/check-ui-kit.js":"be8d53e53c4f","ui_kits/mobile/screens/00-components.jsx":"77cd197a3b0f","ui_kits/mobile/screens/01-onboarding.jsx":"c205e46e14a9","ui_kits/mobile/screens/02-dashboard.jsx":"867f75cebb66","ui_kits/mobile/screens/03-library.jsx":"6690e1c63464","ui_kits/mobile/screens/04-folder.jsx":"73af0ba1b731","ui_kits/mobile/screens/05-search.jsx":"c738c3e37cc3","ui_kits/mobile/screens/06-flashcard-list.jsx":"c581810127c4","ui_kits/mobile/screens/07-flashcard-create.jsx":"b2cc95107c0c","ui_kits/mobile/screens/08-flashcard-edit.jsx":"278e4919966a","ui_kits/mobile/screens/09-flashcard-history.jsx":"1c180eacaba6","ui_kits/mobile/screens/10-deck-import.jsx":"6dfb20d7cd68","ui_kits/mobile/screens/11-tag-management.jsx":"e92d623a41a0","ui_kits/mobile/screens/12-study-review.jsx":"f96858d16542","ui_kits/mobile/screens/13-study-match.jsx":"389897a11003","ui_kits/mobile/screens/14-study-guess.jsx":"409ed128d205","ui_kits/mobile/screens/15-study-recall.jsx":"4cb7b102a64d","ui_kits/mobile/screens/16-study-fill.jsx":"e20517af9cd8","ui_kits/mobile/screens/17-study-result.jsx":"742b91ebb7e0","ui_kits/mobile/screens/18-stats.jsx":"c34f6912532e","ui_kits/mobile/screens/19-progress.jsx":"ba0eeecc2296","ui_kits/mobile/screens/20-settings.jsx":"e6a2b2256ca9","ui_kits/mobile/screens/21-account-sync.jsx":"29f6cc815c78","ui_kits/mobile/screens/22-learning-settings.jsx":"d6d02915ea47","ui_kits/mobile/screens/23-audio-speech.jsx":"75277876f8e4","ui_kits/mobile/screens/24-appearance.jsx":"3d3a2141bc40","ui_kits/mobile/screens/25-language.jsx":"efe935022f7b"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":3,"namespace":"DesignSystem_48ad9c","components":[{"name":"Avatar","sourcePath":"components/core/Avatar.jsx"},{"name":"Badge","sourcePath":"components/core/Badge.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"Chip","sourcePath":"components/core/Chip.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"SegmentedControl","sourcePath":"components/core/SegmentedControl.jsx"},{"name":"Switch","sourcePath":"components/core/Switch.jsx"},{"name":"NoteCard","sourcePath":"components/mobile/NoteCard.jsx"}],"sourceHashes":{"components/core/Avatar.jsx":"6fb896786b20","components/core/Badge.jsx":"5c2c0e0189ba","components/core/Button.jsx":"db60dd3ede0f","components/core/Card.jsx":"47a7a56a082b","components/core/Chip.jsx":"25f83cc08614","components/core/IconButton.jsx":"9c68965eb8c0","components/core/SegmentedControl.jsx":"f0b9c15222b6","components/core/Switch.jsx":"6b0cd9388d4e","components/mobile/NoteCard.jsx":"e780eea25703","tools/check-ui-kit.js":"be8d53e53c4f","ui_kits/mobile/screens/00-components.jsx":"77cd197a3b0f","ui_kits/mobile/screens/01-onboarding.jsx":"c205e46e14a9","ui_kits/mobile/screens/02-dashboard.jsx":"867f75cebb66","ui_kits/mobile/screens/03-library.jsx":"6690e1c63464","ui_kits/mobile/screens/04-folder.jsx":"73af0ba1b731","ui_kits/mobile/screens/05-search.jsx":"c738c3e37cc3","ui_kits/mobile/screens/06-flashcard-list.jsx":"c581810127c4","ui_kits/mobile/screens/07-flashcard-create.jsx":"b2cc95107c0c","ui_kits/mobile/screens/08-flashcard-edit.jsx":"278e4919966a","ui_kits/mobile/screens/09-flashcard-history.jsx":"1c180eacaba6","ui_kits/mobile/screens/10-deck-import.jsx":"3c52746489f8","ui_kits/mobile/screens/11-tag-management.jsx":"e92d623a41a0","ui_kits/mobile/screens/12-study-review.jsx":"f96858d16542","ui_kits/mobile/screens/13-study-match.jsx":"389897a11003","ui_kits/mobile/screens/14-study-guess.jsx":"409ed128d205","ui_kits/mobile/screens/15-study-recall.jsx":"4cb7b102a64d","ui_kits/mobile/screens/16-study-fill.jsx":"e20517af9cd8","ui_kits/mobile/screens/17-study-result.jsx":"742b91ebb7e0","ui_kits/mobile/screens/18-stats.jsx":"c34f6912532e","ui_kits/mobile/screens/19-progress.jsx":"ba0eeecc2296","ui_kits/mobile/screens/20-settings.jsx":"e6a2b2256ca9","ui_kits/mobile/screens/21-account-sync.jsx":"29f6cc815c78","ui_kits/mobile/screens/22-learning-settings.jsx":"d6d02915ea47","ui_kits/mobile/screens/23-audio-speech.jsx":"75277876f8e4","ui_kits/mobile/screens/24-appearance.jsx":"3d3a2141bc40","ui_kits/mobile/screens/25-language.jsx":"efe935022f7b"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 
@@ -4852,47 +4852,26 @@ try { (() => {
   function Screen({
     variant
   }) {
-    // ----- empty: dropzone -----
+    // ----- empty: choose a file (mobile-first) -----
     if (variant === 'empty') {
       return /*#__PURE__*/React.createElement("div", {
         className: "app"
-      }, /*#__PURE__*/React.createElement(Bar, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: S(3),
-          padding: `${S(10)} var(--memox-space-6)`,
-          textAlign: 'center',
-          border: '2px dashed var(--memox-outline-variant)',
-          borderRadius: 'var(--memox-radius-card)',
-          background: 'var(--memox-surface)'
-        }
-      }, /*#__PURE__*/React.createElement(TileLg, {
-        icon: "upload-cloud",
-        tint: "var(--memox-primary)"
-      }), /*#__PURE__*/React.createElement("div", {
-        className: "title",
-        style: {
-          marginTop: S(1)
-        }
-      }, "Drop a file to import"), /*#__PURE__*/React.createElement("div", {
-        className: "muted",
-        style: {
-          fontSize: 'var(--memox-fs-label-large)',
-          maxWidth: '240px'
-        }
-      }, "Drag a file here, or browse to choose one from your device."), /*#__PURE__*/React.createElement("button", {
+      }, /*#__PURE__*/React.createElement(Bar, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(HeroCard, {
+        icon: "file-up",
+        tint: "var(--memox-primary)",
+        title: "Import cards from a file",
+        desc: "Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX."
+      }, /*#__PURE__*/React.createElement("button", {
         className: "pill-btn primary",
         style: {
-          marginTop: S(2)
+          width: '100%'
         }
       }, /*#__PURE__*/React.createElement(Icon, {
         name: "folder-open"
-      }), "Browse files")), /*#__PURE__*/React.createElement(Banner, {
+      }), "Choose file")), /*#__PURE__*/React.createElement(Banner, {
         tone: "info",
         icon: "info"
-      }, "Supports CSV, TSV and Anki (.apkg) files.")));
+      }, "Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.")));
     }
 
     // ----- file selected: file card + parse action -----

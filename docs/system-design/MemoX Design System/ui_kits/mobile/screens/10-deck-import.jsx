@@ -78,24 +78,17 @@
   );
 
   function Screen({ variant }) {
-    // ----- empty: dropzone -----
+    // ----- empty: choose a file (mobile-first) -----
     if (variant === 'empty') {
       return (
         <div className="app">
           <Bar />
           <Body>
-            <div style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: S(3),
-              padding: `${S(10)} var(--memox-space-6)`, textAlign: 'center',
-              border: '2px dashed var(--memox-outline-variant)', borderRadius: 'var(--memox-radius-card)',
-              background: 'var(--memox-surface)',
-            }}>
-              <TileLg icon="upload-cloud" tint="var(--memox-primary)" />
-              <div className="title" style={{ marginTop: S(1) }}>Drop a file to import</div>
-              <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', maxWidth: '240px' }}>Drag a file here, or browse to choose one from your device.</div>
-              <button className="pill-btn primary" style={{ marginTop: S(2) }}><Icon name="folder-open" />Browse files</button>
-            </div>
-            <Banner tone="info" icon="info">Supports CSV, TSV and Anki (.apkg) files.</Banner>
+            <HeroCard icon="file-up" tint="var(--memox-primary)" title="Import cards from a file"
+              desc="Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.">
+              <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="folder-open" />Choose file</button>
+            </HeroCard>
+            <Banner tone="info" icon="info">Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.</Banner>
           </Body>
         </div>
       );

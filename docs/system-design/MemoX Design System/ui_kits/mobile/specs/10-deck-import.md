@@ -127,72 +127,78 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:16/20/48/20
       position: layout_hint:scroll
-      - node: div
+      - node: card
+        mx: MxCard
         box:
-          abs: [21,121 348x295]
-          rel: [20,16 348x295]
-        layout: flex:col gap:12 align:center
-        spacing: pad:40/24
-        style: bg:accent-contrast r:20 border:2px border
+          abs: [21,121 348x260]
+          rel: [20,16 348x260]
+        spacing: pad:24
+        style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,163 56x56]
-            rel: [146,42 56x56]
+            abs: [167,146 56x56]
+            rel: [146,25 56x56]
           layout: grid cols:1 align:center
-          flex: shrink:0
+          spacing: margin:0/121/16/121
           style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-          - node: icon:upload-cloud
+          - node: icon:file-up
             box:
-              abs: [183,179 24x24]
+              abs: [183,162 24x24]
               rel: [16,16 24x24]
             position: clip
-        - node: title
-          text: Drop a file to import
+        - node: div
+          text: Import cards from a file
           box:
-            abs: [122,235 147x21]
-            rel: [101,114 147x21]
-          spacing: margin:4/0/0/0
-          style: font:16/700 color:text text:center tracking:-0.3
+            abs: [46,218 298x28]
+            rel: [25,97 298x28]
+          spacing: margin:0/0/4/0
+          style: font:22/800 color:text text:center tracking:-0.4
         - node: muted
-          text: Drag a file here, or browse to choose one from your device.
+          text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
           box:
-            abs: [75,274 240x36]
-            rel: [54,153 240x36]
-          spacing: margin:6/0/0/0
-          size: maxw:240
-          style: font:14/400 color:text-2 text:center
-        - node: pill-btn
-          text: Browse files
-          mx: MxPrimaryButton
+            abs: [55,250 280x42]
+            rel: [34,129 280x42]
+          spacing: margin:4/9/0/9
+          size: maxw:280
+          style: font:14/400/21 color:text-2 text:center
+        - node: div
           box:
-            abs: [121,330 147x44]
-            rel: [100,209 147x44]
-          layout: flex:row gap:8 justify:center align:center
-          spacing: pad:0/20 margin:8/0/0/0
-          style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
-          - node: icon:folder-open
+            abs: [46,312 298x44]
+            rel: [25,191 298x44]
+          layout: flex:col gap:8
+          spacing: margin:20/0/0/0
+          - node: pill-btn
+            text: Choose file
+            mx: MxPrimaryButton
             box:
-              abs: [142,344 16x16]
-              rel: [21,14 16x16]
-            position: clip
+              abs: [46,312 298x44]
+              rel: [0,0 298x44]
+            layout: flex:row gap:8 justify:center align:center
+            spacing: pad:0/20
+            style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+            - node: icon:folder-open
+              box:
+                abs: [145,326 16x16]
+                rel: [99,14 16x16]
+              position: clip
       - node: banner
         box:
-          abs: [21,432 348x44]
-          rel: [20,327 348x44]
+          abs: [21,397 348x78]
+          rel: [20,292 348x78]
         layout: flex:row gap:12 align:center
         spacing: pad:12/16
         style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
         - node: icon:info
           box:
-            abs: [37,444 20x20]
-            rel: [16,12 20x20]
+            abs: [37,426 20x20]
+            rel: [16,29 20x20]
           flex: shrink:0
           position: clip
         - node: span
-          text: Supports CSV, TSV and Anki (.apkg) files.
+          text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
           box:
-            abs: [69,445 284x18]
-            rel: [48,13 284x18]
+            abs: [69,409 284x54]
+            rel: [48,12 284x54]
           flex: grow:1 basis:0 layout_hint:expanded
           style: font:14/600 color:info
 ```
@@ -208,72 +214,78 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   flex: grow:1 basis:0 layout_hint:expanded
   spacing: pad:16/20/48/20
   position: layout_hint:scroll
-- - node: div
+- - node: card
+- mx: MxCard
 - box:
-- abs: [21,121 348x295]
-- rel: [20,16 348x295]
-- layout: flex:col gap:12 align:center
-- spacing: pad:40/24
-- style: bg:accent-contrast r:20 border:2px border
+- abs: [21,121 348x260]
+- rel: [20,16 348x260]
+- spacing: pad:24
+- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
 - - node: tile-lg
 - box:
-- abs: [167,163 56x56]
-- rel: [146,42 56x56]
+- abs: [167,146 56x56]
+- rel: [146,25 56x56]
 - layout: grid cols:1 align:center
-- flex: shrink:0
+- spacing: margin:0/121/16/121
 - style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-- - node: icon:upload-cloud
+- - node: icon:file-up
 - box:
-- abs: [183,179 24x24]
+- abs: [183,162 24x24]
 - rel: [16,16 24x24]
 - position: clip
-- - node: title
-- text: Drop a file to import
+- - node: div
+- text: Import cards from a file
 - box:
-- abs: [122,235 147x21]
-- rel: [101,114 147x21]
-- spacing: margin:4/0/0/0
-- style: font:16/700 color:text text:center tracking:-0.3
+- abs: [46,218 298x28]
+- rel: [25,97 298x28]
+- spacing: margin:0/0/4/0
+- style: font:22/800 color:text text:center tracking:-0.4
 - - node: muted
-- text: Drag a file here, or browse to choose one from your device.
+- text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
 - box:
-- abs: [75,274 240x36]
-- rel: [54,153 240x36]
-- spacing: margin:6/0/0/0
-- size: maxw:240
-- style: font:14/400 color:text-2 text:center
+- abs: [55,250 280x42]
+- rel: [34,129 280x42]
+- spacing: margin:4/9/0/9
+- size: maxw:280
+- style: font:14/400/21 color:text-2 text:center
+- - node: div
+- box:
+- abs: [46,312 298x44]
+- rel: [25,191 298x44]
+- layout: flex:col gap:8
+- spacing: margin:20/0/0/0
 - - node: pill-btn
-- text: Browse files
+- text: Choose file
 - mx: MxPrimaryButton
 - box:
-- abs: [121,330 147x44]
-- rel: [100,209 147x44]
+- abs: [46,312 298x44]
+- rel: [0,0 298x44]
 - layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20 margin:8/0/0/0
+- spacing: pad:0/20
 - style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
 - - node: icon:folder-open
 - box:
-- abs: [142,344 16x16]
-- rel: [21,14 16x16]
+- abs: [145,326 16x16]
+- rel: [99,14 16x16]
 - position: clip
 - - node: banner
 - box:
-- abs: [21,432 348x44]
-- rel: [20,327 348x44]
+- abs: [21,397 348x78]
+- rel: [20,292 348x78]
 - layout: flex:row gap:12 align:center
 - spacing: pad:12/16
 - style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
 - - node: icon:info
 - box:
-- abs: [37,444 20x20]
-- rel: [16,12 20x20]
+- abs: [37,426 20x20]
+- rel: [16,29 20x20]
 - flex: shrink:0
 - position: clip
 - - node: span
-- text: Supports CSV, TSV and Anki (.apkg) files.
+- text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
 - box:
-- abs: [69,445 284x18]
-- rel: [48,13 284x18]
+- abs: [69,409 284x54]
+- rel: [48,12 284x54]
 - flex: grow:1 basis:0 layout_hint:expanded
 - style: font:14/600 color:info
 + - node: card
@@ -372,72 +384,78 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - flex: grow:1 basis:0 layout_hint:expanded
 - spacing: pad:16/20/48/20
 - position: layout_hint:scroll
-- - node: div
+- - node: card
+- mx: MxCard
 - box:
-- abs: [21,121 348x295]
-- rel: [20,16 348x295]
-- layout: flex:col gap:12 align:center
-- spacing: pad:40/24
-- style: bg:accent-contrast r:20 border:2px border
+- abs: [21,121 348x260]
+- rel: [20,16 348x260]
+- spacing: pad:24
+- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
 - - node: tile-lg
 - box:
-- abs: [167,163 56x56]
-- rel: [146,42 56x56]
+- abs: [167,146 56x56]
+- rel: [146,25 56x56]
 - layout: grid cols:1 align:center
-- flex: shrink:0
+- spacing: margin:0/121/16/121
 - style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-- - node: icon:upload-cloud
+- - node: icon:file-up
 - box:
-- abs: [183,179 24x24]
+- abs: [183,162 24x24]
 - rel: [16,16 24x24]
 - position: clip
-- - node: title
-- text: Drop a file to import
+- - node: div
+- text: Import cards from a file
 - box:
-- abs: [122,235 147x21]
-- rel: [101,114 147x21]
-- spacing: margin:4/0/0/0
-- style: font:16/700 color:text text:center tracking:-0.3
+- abs: [46,218 298x28]
+- rel: [25,97 298x28]
+- spacing: margin:0/0/4/0
+- style: font:22/800 color:text text:center tracking:-0.4
 - - node: muted
-- text: Drag a file here, or browse to choose one from your device.
+- text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
 - box:
-- abs: [75,274 240x36]
-- rel: [54,153 240x36]
-- spacing: margin:6/0/0/0
-- size: maxw:240
-- style: font:14/400 color:text-2 text:center
+- abs: [55,250 280x42]
+- rel: [34,129 280x42]
+- spacing: margin:4/9/0/9
+- size: maxw:280
+- style: font:14/400/21 color:text-2 text:center
+- - node: div
+- box:
+- abs: [46,312 298x44]
+- rel: [25,191 298x44]
+- layout: flex:col gap:8
+- spacing: margin:20/0/0/0
 - - node: pill-btn
-- text: Browse files
+- text: Choose file
 - mx: MxPrimaryButton
 - box:
-- abs: [121,330 147x44]
-- rel: [100,209 147x44]
+- abs: [46,312 298x44]
+- rel: [0,0 298x44]
 - layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20 margin:8/0/0/0
+- spacing: pad:0/20
 - style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
 - - node: icon:folder-open
 - box:
-- abs: [142,344 16x16]
-- rel: [21,14 16x16]
+- abs: [145,326 16x16]
+- rel: [99,14 16x16]
 - position: clip
 - - node: banner
 - box:
-- abs: [21,432 348x44]
-- rel: [20,327 348x44]
+- abs: [21,397 348x78]
+- rel: [20,292 348x78]
 - layout: flex:row gap:12 align:center
 - spacing: pad:12/16
 - style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
 - - node: icon:info
 - box:
-- abs: [37,444 20x20]
-- rel: [16,12 20x20]
+- abs: [37,426 20x20]
+- rel: [16,29 20x20]
 - flex: shrink:0
 - position: clip
 - - node: span
-- text: Supports CSV, TSV and Anki (.apkg) files.
+- text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
 - box:
-- abs: [69,445 284x18]
-- rel: [48,13 284x18]
+- abs: [69,409 284x54]
+- rel: [48,12 284x54]
 - flex: grow:1 basis:0 layout_hint:expanded
 - style: font:14/600 color:info
 + - node: div
@@ -1370,72 +1388,78 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - flex: grow:1 basis:0 layout_hint:expanded
 - spacing: pad:16/20/48/20
 - position: layout_hint:scroll
-- - node: div
+- - node: card
+- mx: MxCard
 - box:
-- abs: [21,121 348x295]
-- rel: [20,16 348x295]
-- layout: flex:col gap:12 align:center
-- spacing: pad:40/24
-- style: bg:accent-contrast r:20 border:2px border
+- abs: [21,121 348x260]
+- rel: [20,16 348x260]
+- spacing: pad:24
+- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
 - - node: tile-lg
 - box:
-- abs: [167,163 56x56]
-- rel: [146,42 56x56]
+- abs: [167,146 56x56]
+- rel: [146,25 56x56]
 - layout: grid cols:1 align:center
-- flex: shrink:0
+- spacing: margin:0/121/16/121
 - style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-- - node: icon:upload-cloud
+- - node: icon:file-up
 - box:
-- abs: [183,179 24x24]
+- abs: [183,162 24x24]
 - rel: [16,16 24x24]
 - position: clip
-- - node: title
-- text: Drop a file to import
+- - node: div
+- text: Import cards from a file
 - box:
-- abs: [122,235 147x21]
-- rel: [101,114 147x21]
-- spacing: margin:4/0/0/0
-- style: font:16/700 color:text text:center tracking:-0.3
+- abs: [46,218 298x28]
+- rel: [25,97 298x28]
+- spacing: margin:0/0/4/0
+- style: font:22/800 color:text text:center tracking:-0.4
 - - node: muted
-- text: Drag a file here, or browse to choose one from your device.
+- text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
 - box:
-- abs: [75,274 240x36]
-- rel: [54,153 240x36]
-- spacing: margin:6/0/0/0
-- size: maxw:240
-- style: font:14/400 color:text-2 text:center
+- abs: [55,250 280x42]
+- rel: [34,129 280x42]
+- spacing: margin:4/9/0/9
+- size: maxw:280
+- style: font:14/400/21 color:text-2 text:center
+- - node: div
+- box:
+- abs: [46,312 298x44]
+- rel: [25,191 298x44]
+- layout: flex:col gap:8
+- spacing: margin:20/0/0/0
 - - node: pill-btn
-- text: Browse files
+- text: Choose file
 - mx: MxPrimaryButton
 - box:
-- abs: [121,330 147x44]
-- rel: [100,209 147x44]
+- abs: [46,312 298x44]
+- rel: [0,0 298x44]
 - layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20 margin:8/0/0/0
+- spacing: pad:0/20
 - style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
 - - node: icon:folder-open
 - box:
-- abs: [142,344 16x16]
-- rel: [21,14 16x16]
+- abs: [145,326 16x16]
+- rel: [99,14 16x16]
 - position: clip
 - - node: banner
 - box:
-- abs: [21,432 348x44]
-- rel: [20,327 348x44]
+- abs: [21,397 348x78]
+- rel: [20,292 348x78]
 - layout: flex:row gap:12 align:center
 - spacing: pad:12/16
 - style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
 - - node: icon:info
 - box:
-- abs: [37,444 20x20]
-- rel: [16,12 20x20]
+- abs: [37,426 20x20]
+- rel: [16,29 20x20]
 - flex: shrink:0
 - position: clip
 - - node: span
-- text: Supports CSV, TSV and Anki (.apkg) files.
+- text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
 - box:
-- abs: [69,445 284x18]
-- rel: [48,13 284x18]
+- abs: [69,409 284x54]
+- rel: [48,12 284x54]
 - flex: grow:1 basis:0 layout_hint:expanded
 - style: font:14/600 color:info
 + - node: div
@@ -1512,74 +1536,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - flex: grow:1 basis:0 layout_hint:expanded
 - spacing: pad:16/20/48/20
 - position: layout_hint:scroll
-- - node: div
-- box:
-- abs: [21,121 348x295]
-- rel: [20,16 348x295]
-- layout: flex:col gap:12 align:center
-- spacing: pad:40/24
-- style: bg:accent-contrast r:20 border:2px border
-- - node: tile-lg
-- box:
-- abs: [167,163 56x56]
-- rel: [146,42 56x56]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-- - node: icon:upload-cloud
-- box:
-- abs: [183,179 24x24]
-- rel: [16,16 24x24]
-- position: clip
-- - node: title
-- text: Drop a file to import
-- box:
-- abs: [122,235 147x21]
-- rel: [101,114 147x21]
-- spacing: margin:4/0/0/0
-- style: font:16/700 color:text text:center tracking:-0.3
-- - node: muted
-- text: Drag a file here, or browse to choose one from your device.
-- box:
-- abs: [75,274 240x36]
-- rel: [54,153 240x36]
-- spacing: margin:6/0/0/0
-- size: maxw:240
-- style: font:14/400 color:text-2 text:center
-- - node: pill-btn
-- text: Browse files
-- mx: MxPrimaryButton
-- box:
-- abs: [121,330 147x44]
-- rel: [100,209 147x44]
-- layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20 margin:8/0/0/0
-- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
-- - node: icon:folder-open
-- box:
-- abs: [142,344 16x16]
-- rel: [21,14 16x16]
-- position: clip
-- - node: banner
-- box:
-- abs: [21,432 348x44]
-- rel: [20,327 348x44]
-- layout: flex:row gap:12 align:center
-- spacing: pad:12/16
-- style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
-- - node: icon:info
-- box:
-- abs: [37,444 20x20]
-- rel: [16,12 20x20]
-- flex: shrink:0
-- position: clip
-- - node: span
-- text: Supports CSV, TSV and Anki (.apkg) files.
-- box:
-- abs: [69,445 284x18]
-- rel: [48,13 284x18]
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:info
 + - node: div
 + box:
 + abs: [1,105 388x664]
@@ -1588,13 +1544,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + flex: grow:1 basis:0 layout_hint:expanded
 + spacing: pad:16/20/48/20
 + position: layout_hint:scroll
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [21,265 348x312]
-+ rel: [20,160 348x312]
-+ spacing: pad:24
-+ style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+  - node: card
+  mx: MxCard
+  box:
+  abs: [21,265 348x312]
+  rel: [20,160 348x312]
+  spacing: pad:24
+  style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+- - node: tile-lg
+- box:
+- abs: [167,146 56x56]
+- rel: [146,25 56x56]
+- layout: grid cols:1 align:center
+- spacing: margin:0/121/16/121
+- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
+- - node: icon:file-up
+- box:
+- abs: [183,162 24x24]
+- rel: [16,16 24x24]
+- position: clip
+- - node: div
+- text: Import cards from a file
+- box:
+- abs: [46,218 298x28]
+- rel: [25,97 298x28]
+- spacing: margin:0/0/4/0
+- style: font:22/800 color:text text:center tracking:-0.4
+- - node: muted
+- text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
+- box:
+- abs: [55,250 280x42]
+- rel: [34,129 280x42]
+- spacing: margin:4/9/0/9
+- size: maxw:280
+- style: font:14/400/21 color:text-2 text:center
 + - node: tile-lg
 + box:
 + abs: [167,290 56x56]
@@ -1622,12 +1605,46 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: margin:4/9/0/9
 + size: maxw:280
 + style: font:14/400/21 color:text-2 text:center
-+ - node: div
-+ box:
-+ abs: [46,456 298x96]
-+ rel: [25,191 298x96]
-+ layout: flex:col gap:8
-+ spacing: margin:20/0/0/0
+  - node: div
+  box:
+  abs: [46,456 298x96]
+  rel: [25,191 298x96]
+  layout: flex:col gap:8
+  spacing: margin:20/0/0/0
+- - node: pill-btn
+- text: Choose file
+- mx: MxPrimaryButton
+- box:
+- abs: [46,312 298x44]
+- rel: [0,0 298x44]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/20
+- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+- - node: icon:folder-open
+- box:
+- abs: [145,326 16x16]
+- rel: [99,14 16x16]
+- position: clip
+- - node: banner
+- box:
+- abs: [21,397 348x78]
+- rel: [20,292 348x78]
+- layout: flex:row gap:12 align:center
+- spacing: pad:12/16
+- style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
+- - node: icon:info
+- box:
+- abs: [37,426 20x20]
+- rel: [16,29 20x20]
+- flex: shrink:0
+- position: clip
+- - node: span
+- text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
+- box:
+- abs: [69,409 284x54]
+- rel: [48,12 284x54]
+- flex: grow:1 basis:0 layout_hint:expanded
+- style: font:14/600 color:info
 + - node: pill-btn
 + text: Open deck
 + mx: MxPrimaryButton
@@ -1672,74 +1689,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - flex: grow:1 basis:0 layout_hint:expanded
 - spacing: pad:16/20/48/20
 - position: layout_hint:scroll
-- - node: div
-- box:
-- abs: [21,121 348x295]
-- rel: [20,16 348x295]
-- layout: flex:col gap:12 align:center
-- spacing: pad:40/24
-- style: bg:accent-contrast r:20 border:2px border
-- - node: tile-lg
-- box:
-- abs: [167,163 56x56]
-- rel: [146,42 56x56]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-- - node: icon:upload-cloud
-- box:
-- abs: [183,179 24x24]
-- rel: [16,16 24x24]
-- position: clip
-- - node: title
-- text: Drop a file to import
-- box:
-- abs: [122,235 147x21]
-- rel: [101,114 147x21]
-- spacing: margin:4/0/0/0
-- style: font:16/700 color:text text:center tracking:-0.3
-- - node: muted
-- text: Drag a file here, or browse to choose one from your device.
-- box:
-- abs: [75,274 240x36]
-- rel: [54,153 240x36]
-- spacing: margin:6/0/0/0
-- size: maxw:240
-- style: font:14/400 color:text-2 text:center
-- - node: pill-btn
-- text: Browse files
-- mx: MxPrimaryButton
-- box:
-- abs: [121,330 147x44]
-- rel: [100,209 147x44]
-- layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20 margin:8/0/0/0
-- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
-- - node: icon:folder-open
-- box:
-- abs: [142,344 16x16]
-- rel: [21,14 16x16]
-- position: clip
-- - node: banner
-- box:
-- abs: [21,432 348x44]
-- rel: [20,327 348x44]
-- layout: flex:row gap:12 align:center
-- spacing: pad:12/16
-- style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
-- - node: icon:info
-- box:
-- abs: [37,444 20x20]
-- rel: [16,12 20x20]
-- flex: shrink:0
-- position: clip
-- - node: span
-- text: Supports CSV, TSV and Anki (.apkg) files.
-- box:
-- abs: [69,445 284x18]
-- rel: [48,13 284x18]
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:info
 + - node: div
 + box:
 + abs: [1,105 388x664]
@@ -1748,13 +1697,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + flex: grow:1 basis:0 layout_hint:expanded
 + spacing: pad:16/20/48/20
 + position: layout_hint:scroll
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [21,265 348x312]
-+ rel: [20,160 348x312]
-+ spacing: pad:24
-+ style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+  - node: card
+  mx: MxCard
+  box:
+  abs: [21,265 348x312]
+  rel: [20,160 348x312]
+  spacing: pad:24
+  style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+- - node: tile-lg
+- box:
+- abs: [167,146 56x56]
+- rel: [146,25 56x56]
+- layout: grid cols:1 align:center
+- spacing: margin:0/121/16/121
+- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
+- - node: icon:file-up
+- box:
+- abs: [183,162 24x24]
+- rel: [16,16 24x24]
+- position: clip
+- - node: div
+- text: Import cards from a file
+- box:
+- abs: [46,218 298x28]
+- rel: [25,97 298x28]
+- spacing: margin:0/0/4/0
+- style: font:22/800 color:text text:center tracking:-0.4
+- - node: muted
+- text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
+- box:
+- abs: [55,250 280x42]
+- rel: [34,129 280x42]
+- spacing: margin:4/9/0/9
+- size: maxw:280
+- style: font:14/400/21 color:text-2 text:center
 + - node: tile-lg
 + box:
 + abs: [167,290 56x56]
@@ -1782,12 +1758,46 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: margin:4/9/0/9
 + size: maxw:280
 + style: font:14/400/21 color:text-2 text:center
-+ - node: div
-+ box:
-+ abs: [46,456 298x96]
-+ rel: [25,191 298x96]
-+ layout: flex:col gap:8
-+ spacing: margin:20/0/0/0
+  - node: div
+  box:
+  abs: [46,456 298x96]
+  rel: [25,191 298x96]
+  layout: flex:col gap:8
+  spacing: margin:20/0/0/0
+- - node: pill-btn
+- text: Choose file
+- mx: MxPrimaryButton
+- box:
+- abs: [46,312 298x44]
+- rel: [0,0 298x44]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/20
+- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+- - node: icon:folder-open
+- box:
+- abs: [145,326 16x16]
+- rel: [99,14 16x16]
+- position: clip
+- - node: banner
+- box:
+- abs: [21,397 348x78]
+- rel: [20,292 348x78]
+- layout: flex:row gap:12 align:center
+- spacing: pad:12/16
+- style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
+- - node: icon:info
+- box:
+- abs: [37,426 20x20]
+- rel: [16,29 20x20]
+- flex: shrink:0
+- position: clip
+- - node: span
+- text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
+- box:
+- abs: [69,409 284x54]
+- rel: [48,12 284x54]
+- flex: grow:1 basis:0 layout_hint:expanded
+- style: font:14/600 color:info
 + - node: pill-btn
 + text: Review skipped
 + mx: MxPrimaryButton
@@ -1832,74 +1842,6 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - flex: grow:1 basis:0 layout_hint:expanded
 - spacing: pad:16/20/48/20
 - position: layout_hint:scroll
-- - node: div
-- box:
-- abs: [21,121 348x295]
-- rel: [20,16 348x295]
-- layout: flex:col gap:12 align:center
-- spacing: pad:40/24
-- style: bg:accent-contrast r:20 border:2px border
-- - node: tile-lg
-- box:
-- abs: [167,163 56x56]
-- rel: [146,42 56x56]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
-- - node: icon:upload-cloud
-- box:
-- abs: [183,179 24x24]
-- rel: [16,16 24x24]
-- position: clip
-- - node: title
-- text: Drop a file to import
-- box:
-- abs: [122,235 147x21]
-- rel: [101,114 147x21]
-- spacing: margin:4/0/0/0
-- style: font:16/700 color:text text:center tracking:-0.3
-- - node: muted
-- text: Drag a file here, or browse to choose one from your device.
-- box:
-- abs: [75,274 240x36]
-- rel: [54,153 240x36]
-- spacing: margin:6/0/0/0
-- size: maxw:240
-- style: font:14/400 color:text-2 text:center
-- - node: pill-btn
-- text: Browse files
-- mx: MxPrimaryButton
-- box:
-- abs: [121,330 147x44]
-- rel: [100,209 147x44]
-- layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20 margin:8/0/0/0
-- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
-- - node: icon:folder-open
-- box:
-- abs: [142,344 16x16]
-- rel: [21,14 16x16]
-- position: clip
-- - node: banner
-- box:
-- abs: [21,432 348x44]
-- rel: [20,327 348x44]
-- layout: flex:row gap:12 align:center
-- spacing: pad:12/16
-- style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
-- - node: icon:info
-- box:
-- abs: [37,444 20x20]
-- rel: [16,12 20x20]
-- flex: shrink:0
-- position: clip
-- - node: span
-- text: Supports CSV, TSV and Anki (.apkg) files.
-- box:
-- abs: [69,445 284x18]
-- rel: [48,13 284x18]
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:info
 + - node: div
 + box:
 + abs: [1,105 388x664]
@@ -1908,13 +1850,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + flex: grow:1 basis:0 layout_hint:expanded
 + spacing: pad:16/20/48/20
 + position: layout_hint:scroll
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [21,265 348x312]
-+ rel: [20,160 348x312]
-+ spacing: pad:24
-+ style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+  - node: card
+  mx: MxCard
+  box:
+  abs: [21,265 348x312]
+  rel: [20,160 348x312]
+  spacing: pad:24
+  style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+- - node: tile-lg
+- box:
+- abs: [167,146 56x56]
+- rel: [146,25 56x56]
+- layout: grid cols:1 align:center
+- spacing: margin:0/121/16/121
+- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
+- - node: icon:file-up
+- box:
+- abs: [183,162 24x24]
+- rel: [16,16 24x24]
+- position: clip
+- - node: div
+- text: Import cards from a file
+- box:
+- abs: [46,218 298x28]
+- rel: [25,97 298x28]
+- spacing: margin:0/0/4/0
+- style: font:22/800 color:text text:center tracking:-0.4
+- - node: muted
+- text: Pick a CSV, TSV or Anki (.apkg) file from your device to bring its cards into MemoX.
+- box:
+- abs: [55,250 280x42]
+- rel: [34,129 280x42]
+- spacing: margin:4/9/0/9
+- size: maxw:280
+- style: font:14/400/21 color:text-2 text:center
 + - node: tile-lg
 + box:
 + abs: [167,290 56x56]
@@ -1942,12 +1911,46 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + spacing: margin:4/9/0/9
 + size: maxw:280
 + style: font:14/400/21 color:text-2 text:center
-+ - node: div
-+ box:
-+ abs: [46,456 298x96]
-+ rel: [25,191 298x96]
-+ layout: flex:col gap:8
-+ spacing: margin:20/0/0/0
+  - node: div
+  box:
+  abs: [46,456 298x96]
+  rel: [25,191 298x96]
+  layout: flex:col gap:8
+  spacing: margin:20/0/0/0
+- - node: pill-btn
+- text: Choose file
+- mx: MxPrimaryButton
+- box:
+- abs: [46,312 298x44]
+- rel: [0,0 298x44]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/20
+- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+- - node: icon:folder-open
+- box:
+- abs: [145,326 16x16]
+- rel: [99,14 16x16]
+- position: clip
+- - node: banner
+- box:
+- abs: [21,397 348x78]
+- rel: [20,292 348x78]
+- layout: flex:row gap:12 align:center
+- spacing: pad:12/16
+- style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
+- - node: icon:info
+- box:
+- abs: [37,426 20x20]
+- rel: [16,29 20x20]
+- flex: shrink:0
+- position: clip
+- - node: span
+- text: Supports CSV, TSV and Anki (.apkg) files. On the web you can also drag a file onto this screen.
+- box:
+- abs: [69,409 284x54]
+- rel: [48,12 284x54]
+- flex: grow:1 basis:0 layout_hint:expanded
+- style: font:14/600 color:info
 + - node: pill-btn
 + text: Try again
 + mx: MxPrimaryButton

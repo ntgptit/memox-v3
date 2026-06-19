@@ -154,18 +154,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [38,164 38x144]
               rel: [0,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 18
+              box:
+                abs: [50,164 13x11]
+                rel: [12,0 13x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [38,164 38x123]
-                rel: [0,0 38x123]
+                abs: [38,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [38,216 38x71]
-                  rel: [0,52 38x71]
+                  abs: [38,226 38x65]
+                  rel: [0,47 38x65]
                 style: bg:accent r:10
             - node: span
               text: M
@@ -178,18 +184,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [84,164 38x144]
               rel: [46,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 24
+              box:
+                abs: [96,164 13x11]
+                rel: [12,0 13x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [84,164 38x123]
-                rel: [0,0 38x123]
+                abs: [84,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [84,192 38x95]
-                  rel: [0,28 38x95]
+                  abs: [84,205 38x86]
+                  rel: [0,26 38x86]
                 style: bg:accent r:10
             - node: span
               text: T
@@ -202,18 +214,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [130,164 38x144]
               rel: [92,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 12
+              box:
+                abs: [142,164 13x11]
+                rel: [12,0 13x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [130,164 38x123]
-                rel: [0,0 38x123]
+                abs: [130,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [130,239 38x48]
-                  rel: [0,75 38x48]
+                  abs: [130,247 38x44]
+                  rel: [0,68 38x44]
                 style: bg:accent r:10
             - node: span
               text: W
@@ -226,18 +244,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [176,164 38x144]
               rel: [138,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 31
+              box:
+                abs: [188,164 13x11]
+                rel: [12,0 13x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [176,164 38x123]
-                rel: [0,0 38x123]
+                abs: [176,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [176,164 38x123]
-                  rel: [0,0 38x123]
+                  abs: [176,179 38x112]
+                  rel: [0,0 38x112]
                 style: bg:accent r:10
             - node: span
               text: T
@@ -250,18 +274,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [222,164 38x144]
               rel: [184,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 22
+              box:
+                abs: [234,164 13x11]
+                rel: [12,0 13x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [222,164 38x123]
-                rel: [0,0 38x123]
+                abs: [222,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [222,200 38x87]
-                  rel: [0,36 38x87]
+                  abs: [222,211 38x80]
+                  rel: [0,32 38x80]
                 style: bg:accent r:10
             - node: span
               text: F
@@ -274,18 +304,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [268,164 38x144]
               rel: [230,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 9
+              box:
+                abs: [284,164 7x11]
+                rel: [16,0 7x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [268,164 38x123]
-                rel: [0,0 38x123]
+                abs: [268,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [268,251 38x36]
-                  rel: [0,87 38x36]
+                  abs: [268,259 38x32]
+                  rel: [0,80 38x32]
                 style: bg:accent r:10
             - node: span
               text: S
@@ -298,18 +334,24 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             box:
               abs: [314,164 38x144]
               rel: [276,0 38x144]
-            layout: flex:col gap:8 align:center
+            layout: flex:col gap:4 align:center
             flex: grow:1 basis:0 layout_hint:expanded
+            - node: span
+              text: 16
+              box:
+                abs: [326,164 13x11]
+                rel: [12,0 13x11]
+              style: font:11/700 color:text-2
             - node: div
               box:
-                abs: [314,164 38x123]
-                rel: [0,0 38x123]
+                abs: [314,179 38x112]
+                rel: [0,15 38x112]
               layout: flex:row justify:center align:end
               flex: grow:1 basis:0 layout_hint:expanded
               - node: div
                 box:
-                  abs: [314,223 38x64]
-                  rel: [0,59 38x64]
+                  abs: [314,233 38x58]
+                  rel: [0,54 38x58]
                 style: bg:accent r:10
             - node: span
               text: S
