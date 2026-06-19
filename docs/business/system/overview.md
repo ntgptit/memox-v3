@@ -1,6 +1,7 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-19
 applies_to: product scope
+note: Rebuild reset — all implementation statuses reset to Specified on 2026-06-19.
 ---
 
 # MemoX Product Overview
@@ -30,45 +31,45 @@ It helps users:
 
 This overview lists product capabilities. The detailed contract for each lives in a feature doc.
 
-| Capability | Status | Spec location |
-| --- | --- | --- |
-| Folder CRUD + move | Implemented (create/rename/move/delete with tests) | `docs/business/folder/folder-management.md` |
-| Folder reorder | Partial (BE use case implemented, commit `48e55584`; FE wiring Specified) | `docs/business/folder/folder-management.md` |
-| Deck create/delete + target language column | Implemented (create/delete; `target_language` in schema) | `docs/business/deck/deck-management.md` |
-| Deck rename / reorder | Partial (BE implemented, commit `48e55584`; FE wiring Specified) | `docs/business/deck/deck-management.md` |
-| Deck target-language picker UI | Specified | `docs/business/deck/deck-management.md` |
-| Deck import | Implemented / Partial (CSV paste + duplicate detection + structured-text backend; file picker/Excel UI deferred) | `docs/business/flashcard/flashcard-management.md` (import section) |
-| Deck export | Specified | `docs/business/export/export.md` |
-| Flashcard CRUD + tag | Implemented (create/edit/delete/list/tags with tests; reorder BE only) | `docs/business/flashcard/flashcard-management.md` |
-| Flashcard import preview/validation | Implemented / Partial | `docs/business/flashcard/flashcard-management.md` (import section) |
-| Flashcard selection export | Specified | `docs/business/export/export.md` |
-| Study session | Partial | `docs/business/study/study-flow.md` |
-| Resume / continue session | Partial (gate resume/start-over + Dashboard card Implemented; deck/folder banners Future) | `docs/business/resume/resume-session.md` |
-| Empty scope handling | Specified | `docs/business/study/study-flow.md` (empty scope matrix) |
-| SRS review (Leitner 8-box) | Implemented (finalization transitions + intervals, table-driven tests) | `docs/business/srs/srs-review.md` |
-| Bury / suspend cards | Partial (schema + queue exclusion Implemented; user actions Specified) | `docs/business/study-actions/bury-suspend.md` |
-| Tag filter + study-by-tag + management | Specified | `docs/business/tags/tag-system.md` |
-| Bulk operations on flashcards | Specified | `docs/business/bulk/bulk-operations.md` |
-| Deck move between folders | Specified | `docs/business/deck/deck-management.md` |
-| Session batch limit (`maxSessionItems`) | Specified | `docs/business/study/study-flow.md` |
-| Daily new-card limit | Specified | `docs/business/srs/srs-review.md` |
-| Answer re-grade before finalize | Specified (ships with first retry mode) | `docs/business/study/study-flow.md` |
-| Manual-create duplicate soft-warning | Specified | `docs/business/flashcard/flashcard-management.md` |
-| Due-time local-midnight normalization | Specified | `docs/business/srs/srs-review.md` |
-| Card history view | Implemented | `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md` |
-| Inline/scope-local search | V1 guideline | `docs/business/search/global-search.md` |
-| Global search screen (folders/decks/flashcards) | Implemented | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |
-| Global search: tags section + recent + popular | Future Proposal — needs tag subsystem + `shared_preferences` | `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md` |
-| Zero-content guidance / thin onboarding | V1 guideline — owner-split across current empty states and Account Settings restore | `docs/wireframes/23-onboarding.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/02-library.md`, `docs/wireframes/19-settings-account.md` |
-| Full onboarding flow | Future Proposal — no standalone route/feature/first-launch wizard in V1 | `docs/wireframes/23-onboarding.md` |
-| Daily goal + streak + reminders | Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets. | `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md` |
-| Progress tracking | Implemented (read-only V1: range activity, accuracy, box distribution, study-day streak, card-state counts) | `docs/wireframes/03-progress.md`, `docs/business/srs/srs-review.md` |
-| TTS / audio settings | Specified | `docs/business/tts/tts-settings.md` |
-| Account linking (Google) | Specified — display-only Account screen shipped (WBS 8.5.1); interactive sign-in pending (8.6.1) | `docs/business/account-sync/account-sync.md` |
-| Drive sync (backup/restore with safety) | Specified | `docs/business/account-sync/account-sync.md` |
-| Per-deck TTS override | Planned | not yet specified |
-| Export with metadata (tags, SRS, etc.) | Out of scope | use Drive sync for backup |
-| Multi-language TTS | Out of scope (current phase) | English/Korean only; deck `target_language` gates playback |
+| Capability| Status| Spec location|
+| ---| ---| ---|
+| Folder CRUD + move| Specified| `docs/business/folder/folder-management.md`|
+| Folder reorder| Specified| `docs/business/folder/folder-management.md`|
+| Deck create/delete + target language column| Specified| `docs/business/deck/deck-management.md`|
+| Deck rename / reorder| Specified| `docs/business/deck/deck-management.md`|
+| Deck target-language picker UI| Specified| `docs/business/deck/deck-management.md`|
+| Deck import| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
+| Deck export| Specified| `docs/business/export/export.md`|
+| Flashcard CRUD + tag| Specified| `docs/business/flashcard/flashcard-management.md`|
+| Flashcard import preview/validation| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
+| Flashcard selection export| Specified| `docs/business/export/export.md`|
+| Study session| Specified| `docs/business/study/study-flow.md`|
+| Resume / continue session| Specified| `docs/business/resume/resume-session.md`|
+| Empty scope handling| Specified| `docs/business/study/study-flow.md` (empty scope matrix)|
+| SRS review (Leitner 8-box)| Specified| `docs/business/srs/srs-review.md`|
+| Bury / suspend cards| Specified| `docs/business/study-actions/bury-suspend.md`|
+| Tag filter + study-by-tag + management| Specified| `docs/business/tags/tag-system.md`|
+| Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
+| Deck move between folders| Specified| `docs/business/deck/deck-management.md`|
+| Session batch limit (`maxSessionItems`)| Specified| `docs/business/study/study-flow.md`|
+| Daily new-card limit| Specified| `docs/business/srs/srs-review.md`|
+| Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
+| Manual-create duplicate soft-warning| Specified| `docs/business/flashcard/flashcard-management.md`|
+| Due-time local-midnight normalization| Specified| `docs/business/srs/srs-review.md`|
+| Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
+| Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
+| Global search screen (folders/decks/flashcards)| Specified| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
+| Global search: tags section + recent + popular| Future Proposal — needs tag subsystem + `shared_preferences`| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
+| Zero-content guidance / thin onboarding| V1 guideline — owner-split across current empty states and Account Settings restore| `docs/wireframes/23-onboarding.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/02-library.md`, `docs/wireframes/19-settings-account.md`|
+| Full onboarding flow| Future Proposal — no standalone route/feature/first-launch wizard in V1| `docs/wireframes/23-onboarding.md`|
+| Daily goal + streak + reminders| Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets.| `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md`|
+| Progress tracking| Specified| `docs/wireframes/03-progress.md`, `docs/business/srs/srs-review.md`|
+| TTS / audio settings| Specified| `docs/business/tts/tts-settings.md`|
+| Account linking (Google)| Specified — display-only Account screen shipped (WBS 8.5.1); interactive sign-in pending (8.6.1)| `docs/business/account-sync/account-sync.md`|
+| Drive sync (backup/restore with safety)| Specified| `docs/business/account-sync/account-sync.md`|
+| Per-deck TTS override| Planned| not yet specified|
+| Export with metadata (tags, SRS, etc.)| Out of scope| use Drive sync for backup|
+| Multi-language TTS| Out of scope (current phase)| English/Korean only; deck `target_language` gates playback|
 
 Agents must not implement capabilities outside this table without first creating or extending a spec doc. Agents also must not implement rows marked Future Proposal without an explicit promotion: update this table's status AND the corresponding row in the Deferred / Future / Rejected register of `docs/project-management/wbs.md` (§6) in the same commit. (The former gate file `v1-implementation-scope-2026-05-29.md` no longer exists; the WBS register is the promotion record.)
 
@@ -85,34 +86,34 @@ Agents must not implement capabilities outside this table without first creating
 
 See `docs/business/glossary.md` for full definitions.
 
-| Entity | Meaning |
-| --- | --- |
-| Folder | Organizes subfolders or decks |
-| Deck | Contains flashcards |
-| Flashcard | Learning unit |
-| Flashcard progress | SRS state |
-| Study session | Persisted learning/review session |
-| Study session item | One queued card task |
-| Study attempt | One answer attempt |
-| TTS settings | Audio/speech preferences |
+| Entity| Meaning|
+| ---| ---|
+| Folder| Organizes subfolders or decks|
+| Deck| Contains flashcards|
+| Flashcard| Learning unit|
+| Flashcard progress| SRS state|
+| Study session| Persisted learning/review session|
+| Study session item| One queued card task|
+| Study attempt| One answer attempt|
+| TTS settings| Audio/speech preferences|
 
 ## Main app areas
 
-| Area | Responsibility |
-| --- | --- |
-| Dashboard | Daily summary and quick actions |
-| Library | Content management and study entry |
-| Progress | Learning progress |
-| Settings | Hub for sub-areas below |
+| Area| Responsibility|
+| ---| ---|
+| Dashboard| Daily summary and quick actions|
+| Library| Content management and study entry|
+| Progress| Learning progress|
+| Settings| Hub for sub-areas below|
 
 Settings sub-areas:
 
-| Sub-area | Responsibility | Spec |
-| --- | --- | --- |
-| Account | Google account linking + Drive sync | `docs/business/account-sync/account-sync.md` |
-| Learning | Current V1 study defaults; daily-goal/streak/reminder controls remain Target/Future | `docs/business/study/study-flow.md`, `docs/wireframes/20-settings-learning.md` |
-| Audio/Speech | Current V1 global/front-language TTS settings; independent per-language tabs remain Target/Future | `docs/business/tts/tts-settings.md`, `docs/wireframes/21-settings-audio-speech.md` |
-| Appearance/Locale | Disabled Future rows on Settings Hub | `docs/wireframes/04-settings-hub.md` |
+| Sub-area| Responsibility| Spec|
+| ---| ---| ---|
+| Account| Google account linking + Drive sync| `docs/business/account-sync/account-sync.md`|
+| Learning| Current V1 study defaults; daily-goal/streak/reminder controls remain Target/Future| `docs/business/study/study-flow.md`, `docs/wireframes/20-settings-learning.md`|
+| Audio/Speech| Current V1 global/front-language TTS settings; independent per-language tabs remain Target/Future| `docs/business/tts/tts-settings.md`, `docs/wireframes/21-settings-audio-speech.md`|
+| Appearance/Locale| Disabled Future rows on Settings Hub| `docs/wireframes/04-settings-hub.md`|
 
 ## Study modes
 
