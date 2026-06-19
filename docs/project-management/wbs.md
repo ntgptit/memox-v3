@@ -444,6 +444,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `60e096de` | 2026-06-19 | 1.1.1 | Implement Clean Architecture skeleton with error handling, app bootstrap, theme/router setup, domain/data layer pattern examples, and dependency injection infrastructure |
 | `7dd04e0` | 2026-06-19 | 9.18 | Add `tool/prompt_gen/run.mjs`: generates Claude Code prompts from WBS IDs embedding the 6-step dev loop; supports single/batch/phase/list/next modes; registered in `tool/README.md` (§3.6, trigger matrix, portability table) |
 | TBD | 2026-06-19 | 1.1.1–1.2.5, §2, §4.1, §5 | Restructure WBS for optimized rebuild workflow: phased delivery strategy in §2, new §4.1 Rebuild Delivery Phases (phase→WBS map), split 1.1.2 into theme + explicit core-widget rows 1.2.1–1.2.5, 1.1.6/1.1.7 corrected to Implemented (tool/+docs/ present), §5 Next Tasks aligned to Phase 0/1/2A |
 | *(rebuild start)* | 2026-06-19 | all | Code deleted; all WBS rows reset to Specified; rebuild begins from scratch. |
