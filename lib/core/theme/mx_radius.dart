@@ -47,4 +47,9 @@ abstract final class MxRadius {
 
   /// Floating action button border radius (`--memox-radius-fab`).
   static const BorderRadius fabAll = BorderRadius.all(Radius.circular(fab));
+
+  /// Top-only rounding for bottom sheets / modal hosts.
+  static const BorderRadius topSheet = BorderRadius.vertical(
+    top: Radius.circular(xl),
+  );
 }

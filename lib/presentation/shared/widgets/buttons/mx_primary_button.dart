@@ -27,6 +27,7 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 /// - icon: optional leading glyph.
 /// - size: density (defaults to medium).
 /// - fullWidth: stretch to the available width (defaults to false).
+/// - destructive: use the danger fill for irreversible actions (delete/discard).
 class MxPrimaryButton extends StatelessWidget {
   const MxPrimaryButton({
     required this.label,
@@ -34,6 +35,7 @@ class MxPrimaryButton extends StatelessWidget {
     this.icon,
     this.size = MxButtonSize.medium,
     this.fullWidth = false,
+    this.destructive = false,
     super.key,
   });
 
@@ -42,6 +44,7 @@ class MxPrimaryButton extends StatelessWidget {
   final IconData? icon;
   final MxButtonSize size;
   final bool fullWidth;
+  final bool destructive;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,7 @@ class MxPrimaryButton extends StatelessWidget {
     final Widget button = FilledButton(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
-        backgroundColor: colors.accent,
+        backgroundColor: destructive ? colors.danger : colors.accent,
         foregroundColor: colors.accentContrast,
         disabledBackgroundColor: colors.surfaceMuted,
         disabledForegroundColor: colors.textTertiary,
