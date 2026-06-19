@@ -12,12 +12,13 @@ part 'folder_detail.freezed.dart';
 ///   [folder] (root → leaf), used to render the path header.
 /// - [subfolders] — direct child folders with their own [FolderSummary] counts,
 ///   in stable order.
-/// - [deckCount] / [cardCount] / [dueCount] — subtree counts for [folder],
-///   same semantics as [FolderSummary].
+/// - [deckCount] / [cardCount] / [dueCount] — counts for [folder], same
+///   semantics as [FolderSummary] ([deckCount] direct; [cardCount]/[dueCount]
+///   recursive over the subtree). Live as of WBS 3.7.1.
 ///
-/// > V1 scope (WBS 3.2.1): the `decks` / `flashcards` tables do not exist yet,
-/// > so child **decks** are not listed and [deckCount]/[cardCount]/[dueCount]
-/// > are structurally `0`. Both land with WBS 2.7.x / 2.11.x.
+/// > V1 scope (WBS 3.2.1): child **decks** are not listed as tiles yet — that
+/// > read model lands with the Folder-detail FE/deck-tile work. The aggregate
+/// > counts above are populated.
 @freezed
 sealed class FolderDetail with _$FolderDetail {
   const factory FolderDetail({
