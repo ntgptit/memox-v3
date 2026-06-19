@@ -125,6 +125,20 @@ If any step is skipped, report it explicitly.
 
 ## Shipped migrations
 
+**Rebuild baseline (2026-06-19, WBS 1.1.5):** the Drift layer was reset. Current
+code is at **schema v1** — `app_database.dart` with the `folders` table, the
+migration infrastructure (`onCreate`/`onUpgrade`/`beforeOpen` in
+`AppDatabase.migration`), and the platform-isolated connection. Future schema
+bumps add a `migrations/v<N>_*.dart` step file plus an `onUpgrade` step.
+
+| Version | File | What changed |
+|---------|------|--------------|
+| v1 | `app_database.dart` (onCreate) | Rebuild baseline: `folders` table + `idx_folders_parent`; foreign keys + WAL enabled. Schema test: `test/data/migrations/app_database_schema_test.dart`. |
+
+The rows below describe the **prior iteration's** migration sequence (the target
+history the rebuild migrates toward); their step files are not present in the
+current tree until each table is re-added:
+
 | Version | File | What changed |
 |---------|------|--------------|
 | v11 | `v11_clear_new_card_due_at.dart` | Data correction: `UPDATE flashcard_progress SET due_at = NULL WHERE review_count = 0 AND due_at IS NOT NULL` so never-studied cards count as NEW (not due). Earlier creation wrote `due_at = now`; brand-new cards must have `due_at = NULL`. Migration test: `test/data/migrations/clear_new_card_due_at_migration_test.dart`. |

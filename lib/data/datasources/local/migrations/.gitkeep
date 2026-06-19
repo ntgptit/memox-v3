@@ -1,0 +1,4 @@
+# Drift migration step files live here, named `v<N>_<description>.dart`
+# (e.g. v2_add_decks.dart), one per schema-version bump. The baseline ships
+# schema v1 (onCreate only), so no step file exists yet. See
+# `docs/database/migration-contract.md`.

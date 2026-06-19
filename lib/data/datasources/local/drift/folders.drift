@@ -1,0 +1,18 @@
+-- Folders: the content-tree root. A folder is either a root (parent_id NULL)
+-- or a subfolder (self-FK to another folder). See
+-- docs/database/schema-contract.md §Current schema (folders).
+--
+-- parent_id uses ON DELETE RESTRICT: no orphan is created via the direct FK;
+-- cascade cleanup is handled inside a transaction by the repository layer.
+-- Timestamps are UTC epoch milliseconds; ids are text (UUID-like).
+CREATE TABLE folders (
+  id TEXT NOT NULL PRIMARY KEY,
+  parent_id TEXT REFERENCES folders (id) ON DELETE RESTRICT,
+  name TEXT NOT NULL,
+  content_mode TEXT NOT NULL,
+  sort_order INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+) AS FolderRow;
+
+CREATE INDEX idx_folders_parent ON folders (parent_id);

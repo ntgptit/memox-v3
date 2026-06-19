@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-06-16
+last_updated: 2026-06-19
 applies_to: Drift schema, all tables, migrations
-schema_version: 11 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`)
+schema_version: 1 (rebuild baseline; see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
 ---
 
 # Database Schema Contract
@@ -13,10 +13,19 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **9**. Tables shipped
-so far (added for the Library, Study, and TTS features):
+**Current schema** (`AppDatabase.currentSchemaVersion`): **1** (rebuild
+baseline, 2026-06-19, WBS 1.1.5). The Drift layer was reset and is being
+re-added per feature slice. Tables shipped so far:
 
-| Table                | Columns (current)                                                                                                                                                                                     |
+| Table     | Columns (current)                                                                                       |
+|-----------|---------------------------------------------------------------------------------------------------------|
+| `folders` | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`  |
+
+The table below is the **target table shape** the rebuild migrates toward (the
+mature schema from the prior iteration); it is intentionally ahead of the
+current code per the "do not downgrade target concepts" rule:
+
+| Table                | Columns (target)                                                                                                                                                                                     |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `folders`            | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`                                                                                               |
 | `decks`              | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language`, `sort_order`, `created_at`, `updated_at`                                                                                          |
