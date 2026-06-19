@@ -41,7 +41,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Deck target-language picker UI| Specified| `docs/business/deck/deck-management.md`|
 | Deck import| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
 | Deck export| Specified| `docs/business/export/export.md`|
-| Flashcard CRUD + tag| Specified| `docs/business/flashcard/flashcard-management.md`|
+| Flashcard CRUD + tag| Specified (BE Current — WBS 2.11.1/2.12.1/2.13.1/2.14.1; create/update/delete/reorder + create-time tags. `move`, bulk, status/tag filters Future)| `docs/business/flashcard/flashcard-management.md`|
 | Flashcard import preview/validation| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
 | Flashcard selection export| Specified| `docs/business/export/export.md`|
 | Study session| Specified| `docs/business/study/study-flow.md`|

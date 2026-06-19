@@ -16,14 +16,14 @@ applies_to: Flashcard CRUD and Import behavior branches
 
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
-| C1 | Create card | Valid front/back + optional example/hint/pronunciation | Persist deck-owned card with appended `sort_order`; trim front/back; blank optional fields stored as `null`. (Initial `flashcard_progress` row + tags deferred until those tables ship — WBS 2.15.x/SRS) | C0+C1 | test/data/repositories/flashcard_repository_impl_test.dart::C1 |
-| C2 | Create card | Blank front | Reject after trim; repository returns `ValidationFailure(front, empty)` | C1 | test/data/repositories/flashcard_repository_impl_test.dart::C2 |
-| C3 | Create card | Blank back | Reject after trim; repository returns `ValidationFailure(back, empty)` | C1 | test/data/repositories/flashcard_repository_impl_test.dart::C3 |
+| C1 | Create card | Valid front/back + optional example/hint/pronunciation/tags | Persist card + initial progress row (box 1, due_at NULL, zero counters) + normalized tag rows in one transaction; optional notes trimmed, blank → NULL | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C1) |
+| C2 | Create card | Blank front (whitespace-only) | Reject after trim with `ValidationFailure(front, empty)`; nothing persisted | C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C2) |
+| C3 | Create card | Blank back (whitespace-only) | Reject after trim with `ValidationFailure(back, empty)`; nothing persisted | C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C3) |
 | C4 | Edit card | Existing card opens through shared editor | Load deck/card context, prefill the form, and show the danger zone | C0+C1 | TBD |
-| C5 | Edit card | Learned front/back changed on a progressed card | Show progress-policy dialog, then update with keep/reset choice | C0+C1 | TBD |
-| C6 | Delete card | Confirmed from flashcard list row/bulk action | Delete card and dependent data | C0+C1 | TBD |
+| C5 | Edit card | Learned front/back changed on a progressed card | Update content + replace tags; `keepProgress` (default) preserves the progress row, `resetProgress` returns it to box 1 / unscheduled / zero counters | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C5) |
+| C6 | Delete card | Confirmed from flashcard list row/bulk action | Delete the card; its `flashcard_progress` + `flashcard_tags` rows cascade via FK; missing card → `NotFoundFailure` | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C6) |
 | C7 | Import CSV preview | Valid front/back rows + optional extra columns | Trim front/back and preview the valid rows without writing to DB | C0+C1 | TBD |
-| C8 | Create card | Whitespace-only front | Reject after trim; repository returns validation failure | C1 | test/data/repositories/flashcard_repository_impl_test.dart::C2 |
+| C8 | Create card | Target deck missing | Repository returns `NotFoundFailure(deck)`; nothing persisted | C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C8) |
 | C9 | Create editor close | Blank draft | Leave without discard dialog | C1 | TBD |
 | C10 | Create editor close | Front typed but unsaved | Show discard dialog | C1 | TBD |
 | C11 | Create editor discard | User cancels discard | Stay on editor and keep typed input | C1 | TBD |
@@ -43,9 +43,9 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C30 | Import CSV preview | Empty front or empty back | Surface a row-level validation message with the line number | C1 | TBD |
 | C31 | Import CSV preview | Preview action on CSV text | Do not call repository create/insert/commit logic; keep deferred CTA disabled | C0+C1 | TBD |
 | C32 | Import CSV preview | Quoted CSV values | Parse quoted commas and escaped quotes correctly | C0+C1 | TBD |
-| C33 | Reorder cards | Full sibling list in same deck | Persist deterministic `sort_order` transactionally | C0+C1 | TBD |
-| C34 | Reorder cards | Duplicate/missing/cross-deck/partial list | Reject and preserve the previous order | C1 | TBD |
-| C35 | Flashcard list filters | No filter / compatibility / unknown deck | Default list still returns all cards; `statusFilter=all` matches default; existing no-arg callers stay valid; missing deck still yields `NotFoundFailure` | C0+C1 | TBD |
+| C33 | Reorder cards | Full sibling list in same deck | Persist deterministic `sort_order` (list position) transactionally | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C33) |
+| C34 | Reorder cards | Duplicate/missing/cross-deck/partial list | Reject with `ValidationFailure(orderedIds, invalidFormat)` and preserve the previous order | C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C34) |
+| C35 | Flashcard list load | No filter / front-back search / unknown deck | Default list returns all cards in `sort_order`; non-blank search filters cards by front/back (case-insensitive) while `totalCount` stays the full deck total; missing deck yields `NotFoundFailure` | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C35) |
 | C36 | Flashcard list filters | Status = active / due / suspended / buried | `active` excludes suspended/currently-buried and keeps expired-buried; `due` includes past-due and due-now, excludes future-due/suspended/buried; `suspended` returns suspended only; `buried` returns currently buried only | C0+C1 | TBD |
 | C37 | Flashcard list filters | Status/search composition and deterministic order | Search composes with status filter; filtered rows keep stable deck order | C0+C1 | TBD |
 | C38 | Flashcard list filters | Tag empty / single / multi / normalization / scope | Empty selected tags return all cards; single normalized tag filter stays deck-scoped; multi-tag filter uses AND semantics and keeps stable order | C0+C1 | TBD |

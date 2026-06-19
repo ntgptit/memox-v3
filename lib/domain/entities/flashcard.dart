@@ -3,18 +3,18 @@ import 'package:memox/domain/types/ids.dart';
 
 part 'flashcard.freezed.dart';
 
-/// A study card owned by exactly one deck.
+/// A single flashcard belonging to exactly one deck.
 ///
-/// Every flashcard is deck-owned: [deckId] is non-null and references a deck
-/// (root-level / deckless flashcards are Rejected / Out of Scope — the
-/// parent-child invariant in `docs/business/flashcard/flashcard-management.md`
-/// §Rules and WBS 2.16.1). [front] and [back] are required content;
-/// [exampleSentence], [pronunciation], [hint], and [partOfSpeech] are optional
-/// detail text stored as `null` (never an empty string) when blank.
+/// [front] and [back] are the required content fields (non-empty after trim).
+/// [exampleSentence], [pronunciation], and [hint] are optional notes, stored as
+/// `null` (never an empty string) when blank after trim. [tags] are normalized
+/// (lowercased, trimmed, deduped case-insensitively) and persisted separately in
+/// `flashcard_tags`. See `docs/business/flashcard/flashcard-management.md` and
+/// the `flashcards` table in `docs/database/schema-contract.md`.
 ///
-/// Timestamps are UTC epoch milliseconds (as persisted); the mapper converts to
-/// [DateTime] at the data boundary. See the `flashcards` table in
-/// `docs/database/schema-contract.md`.
+/// Timestamps are UTC epoch milliseconds as persisted; the mapper converts to
+/// [DateTime] at the data boundary. SRS state lives on [FlashcardProgress]
+/// (1:1), never on this entity.
 @freezed
 sealed class Flashcard with _$Flashcard {
   const factory Flashcard({
@@ -25,8 +25,7 @@ sealed class Flashcard with _$Flashcard {
     String? exampleSentence,
     String? pronunciation,
     String? hint,
-    String? partOfSpeech,
-    required bool isFlagged,
+    @Default(<TagName>[]) List<TagName> tags,
     required int sortOrder,
     required DateTime createdAt,
     required DateTime updatedAt,

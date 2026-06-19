@@ -1,35 +1,41 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
+import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/ids.dart';
 
-/// Update an existing flashcard's content (WBS 2.12.1). Trim/required
-/// validation and the not-found guard live in
-/// [FlashcardRepository.updateFlashcard]; deck ownership and `sort_order` are
-/// preserved.
+/// Update a flashcard's content + tags, optionally resetting SRS progress.
+/// Validation, tag-replace semantics, and the optional progress reset live in
+/// [FlashcardRepository.updateFlashcard]. The editor passes
+/// [FlashcardProgressEditPolicy.keepProgress] by default and only switches to
+/// [FlashcardProgressEditPolicy.resetProgress] after the explicit
+/// progress-policy dialog.
 ///
-/// Contract: `docs/contracts/usecase-contracts/flashcard.md`
-/// §UpdateFlashcardUseCase. Decision rows C2, C3, C41.
+/// Contract: `docs/contracts/usecase-contracts/flashcard.md` §UpdateFlashcardUseCase.
+/// Decision row C5 (`docs/decision-tables/flashcard.md`).
 class UpdateFlashcardUseCase {
   const UpdateFlashcardUseCase({required this.repository});
 
   final FlashcardRepository repository;
 
   Future<Result<Flashcard>> call({
-    required FlashcardId id,
+    required FlashcardId flashcardId,
     required String front,
     required String back,
     String? exampleSentence,
     String? pronunciation,
     String? hint,
-    String? partOfSpeech,
+    List<String> tags = const <String>[],
+    FlashcardProgressEditPolicy progressPolicy =
+        FlashcardProgressEditPolicy.keepProgress,
   }) => repository.updateFlashcard(
-    id: id,
+    flashcardId: flashcardId,
     front: front,
     back: back,
     exampleSentence: exampleSentence,
     pronunciation: pronunciation,
     hint: hint,
-    partOfSpeech: partOfSpeech,
+    tags: tags,
+    progressPolicy: progressPolicy,
   );
 }

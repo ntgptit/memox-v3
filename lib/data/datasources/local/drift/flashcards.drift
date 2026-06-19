@@ -1,13 +1,10 @@
--- Flashcards: a deck-owned study card. Every flashcard belongs to exactly one
--- deck (deck_id NOT NULL, FK→decks ON DELETE CASCADE), so deleting a deck (or a
--- folder above it) removes its flashcards. front/back are required content;
--- example_sentence/pronunciation/hint are optional detail text (NULL when the
--- editor leaves them blank — never an empty string). is_flagged backs the
--- Flagged filter; part_of_speech is optional lowercase free text. Timestamps are
--- UTC epoch milliseconds; ids are text (UUID-like).
---
--- Parent-child invariant (WBS 2.16.1): a flashcard cannot exist without a deck.
--- See docs/database/schema-contract.md §Current schema (flashcards) and
+-- Flashcards: a single card belonging to exactly one deck. deck_id uses
+-- ON DELETE CASCADE so deleting a deck removes its cards (and, via the cascade
+-- chain below, their progress + tag rows). front/back are the required content
+-- fields (non-empty after trim, enforced in the repository); example_sentence,
+-- pronunciation, and hint are optional notes stored as NULL when blank.
+-- Timestamps are UTC epoch milliseconds; ids are text (UUID-like). See
+-- docs/database/schema-contract.md §flashcards and
 -- docs/business/flashcard/flashcard-management.md.
 CREATE TABLE flashcards (
   id TEXT NOT NULL PRIMARY KEY,
@@ -17,11 +14,32 @@ CREATE TABLE flashcards (
   example_sentence TEXT,
   pronunciation TEXT,
   hint TEXT,
-  part_of_speech TEXT,
-  is_flagged BOOLEAN NOT NULL DEFAULT 0,
   sort_order INTEGER NOT NULL,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 ) AS FlashcardRow;
 
 CREATE INDEX idx_flashcards_deck ON flashcards (deck_id);
+
+-- SRS scheduling state, 1:1 with flashcards (flashcard_id is both PK and FK with
+-- ON DELETE CASCADE). A brand-new card starts in box 1 with due_at = NULL (NEW
+-- until first studied) and zeroed counters. box_number / due_at / review_count /
+-- lapse_count are only mutated by the study/SRS path, never the editor.
+CREATE TABLE flashcard_progress (
+  flashcard_id TEXT NOT NULL PRIMARY KEY REFERENCES flashcards (id) ON DELETE CASCADE,
+  box_number INTEGER NOT NULL DEFAULT 1,
+  due_at INTEGER,
+  review_count INTEGER NOT NULL DEFAULT 0,
+  lapse_count INTEGER NOT NULL DEFAULT 0
+) AS FlashcardProgressRow;
+
+-- Per-card tags (0..N), stored lowercased + trimmed (case-insensitive identity).
+-- flashcard_id uses ON DELETE CASCADE. idx_flashcard_tags_tag supports tag
+-- lookups; the (flashcard_id, tag) PK enforces per-card uniqueness.
+CREATE TABLE flashcard_tags (
+  flashcard_id TEXT NOT NULL REFERENCES flashcards (id) ON DELETE CASCADE,
+  tag TEXT NOT NULL,
+  PRIMARY KEY (flashcard_id, tag)
+) AS FlashcardTagRow;
+
+CREATE INDEX idx_flashcard_tags_tag ON flashcard_tags (tag);

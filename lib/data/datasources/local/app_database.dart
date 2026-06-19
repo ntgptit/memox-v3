@@ -17,8 +17,8 @@ part 'app_database.g.dart';
 /// `migrations/v<N>_*.dart` step file (`docs/database/migration-contract.md`).
 ///
 /// v2 (WBS 2.7.1): added the `decks` table (`migrations/v2_add_decks.dart`).
-/// v3 (WBS 2.11.1/2.16.1): added the `flashcards` table
-/// (`migrations/v3_add_flashcards.dart`).
+/// v3 (WBS 2.11.1): added the `flashcards`, `flashcard_progress`, and
+/// `flashcard_tags` tables (`migrations/v3_add_flashcards.dart`).
 @DriftDatabase(
   include: <String>{
     'drift/folders.drift',

@@ -49,59 +49,77 @@ void main() {
           );
     }
 
+    Future<void> insertFlashcardRow(String id, String deckId) async {
+      final int ts = now();
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: id,
+              deckId: deckId,
+              front: 'front',
+              back: 'back',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+    }
+
     test('creates the flashcards table and round-trips a card', () async {
       await db.customStatement('PRAGMA foreign_keys = ON');
       await insertFolderRow('folder');
-      await insertDeckRow('deck', 'folder');
-      final int ts = now();
-      await db
-          .into(db.flashcards)
-          .insert(
-            FlashcardsCompanion.insert(
-              id: 'c1',
-              deckId: 'deck',
-              front: 'apple',
-              back: '사과',
-              sortOrder: 0,
-              createdAt: ts,
-              updatedAt: ts,
-            ),
-          );
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
 
       final List<FlashcardRow> rows = await db.select(db.flashcards).get();
       expect(rows, hasLength(1));
-      expect(rows.single.front, 'apple');
-      expect(rows.single.deckId, 'deck');
-      // is_flagged defaults to false; optional fields default to null.
-      expect(rows.single.isFlagged, isFalse);
+      expect(rows.single.front, 'front');
       expect(rows.single.exampleSentence, isNull);
     });
 
-    test('cascades flashcard delete when its deck is removed', () async {
+    test('flashcard_progress 1:1 cascades when its card is deleted', () async {
       await db.customStatement('PRAGMA foreign_keys = ON');
       await insertFolderRow('folder');
-      await insertDeckRow('deck', 'folder');
-      final int ts = now();
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
       await db
-          .into(db.flashcards)
+          .into(db.flashcardProgress)
+          .insert(FlashcardProgressCompanion.insert(flashcardId: 'c1'));
+
+      await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
+
+      expect(await db.select(db.flashcardProgress).get(), isEmpty);
+    });
+
+    test('flashcard_tags cascade when their card is deleted', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await db
+          .into(db.flashcardTags)
           .insert(
-            FlashcardsCompanion.insert(
-              id: 'c1',
-              deckId: 'deck',
-              front: 'apple',
-              back: '사과',
-              sortOrder: 0,
-              createdAt: ts,
-              updatedAt: ts,
-            ),
+            FlashcardTagsCompanion.insert(flashcardId: 'c1', tag: 'noun'),
           );
 
-      await (db.delete(db.decks)..where((t) => t.id.equals('deck'))).go();
+      await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
+
+      expect(await db.select(db.flashcardTags).get(), isEmpty);
+    });
+
+    test('deleting a deck cascades its flashcards', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+
+      await (db.delete(db.decks)..where((t) => t.id.equals('d1'))).go();
 
       expect(await db.select(db.flashcards).get(), isEmpty);
     });
 
-    test('rejects a flashcard with a missing deck (parent-child FK)', () async {
+    test('rejects a flashcard with a missing deck (FK)', () async {
       await db.customStatement('PRAGMA foreign_keys = ON');
       final int ts = now();
       expect(
@@ -111,8 +129,8 @@ void main() {
               FlashcardsCompanion.insert(
                 id: 'orphan',
                 deckId: 'does-not-exist',
-                front: 'apple',
-                back: '사과',
+                front: 'f',
+                back: 'b',
                 sortOrder: 0,
                 createdAt: ts,
                 updatedAt: ts,

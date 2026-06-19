@@ -7,6 +7,7 @@ import 'package:memox/core/util/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/deck_dao.dart';
 import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
+import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 
@@ -26,6 +27,7 @@ void main() {
       repo = FlashcardRepositoryImpl(
         dao: FlashcardDao(db),
         deckDao: DeckDao(db),
+        folderDao: FolderDao(db),
         idGenerator: IdGenerator(Random(11)),
         nowMs: () => clock++,
       );
