@@ -242,13 +242,18 @@ function checkArb(lib) {
 
 // ── check 6: schema-contract version matches code ────────────────────────────
 function checkSchema() {
-  const db = readFileSync(join(repoRoot, 'lib', 'data', 'datasources', 'local', 'app_database.dart'), 'utf8');
-  const codeV = db.match(/currentSchemaVersion\s*=\s*(\d+)/)?.[1];
   const contractPath = join(repoRoot, 'docs', 'database', 'schema-contract.md');
   const contract = readFileSync(contractPath, 'utf8');
-  const docV = contract.match(/schema_version:\s*(\d+)/)?.[1];
-  if (codeV && docV && codeV !== docV)
-    err(contractPath, 1, `schema_version drift: doc says v${docV}, code says v${codeV}`);
+  // The data layer may be absent mid-rebuild (reset 717f5b82); only cross-check
+  // the schema version when the database file actually exists.
+  const dbPath = join(repoRoot, 'lib', 'data', 'datasources', 'local', 'app_database.dart');
+  if (existsSync(dbPath)) {
+    const db = readFileSync(dbPath, 'utf8');
+    const codeV = db.match(/currentSchemaVersion\s*=\s*(\d+)/)?.[1];
+    const docV = contract.match(/schema_version:\s*(\d+)/)?.[1];
+    if (codeV && docV && codeV !== docV)
+      err(contractPath, 1, `schema_version drift: doc says v${docV}, code says v${codeV}`);
+  }
   const tables = driftTables();
   for (const t of tables.keys()) {
     if (!contract.includes(`\`${t}\``) && !contract.includes(`| \`${t}\``) && !contract.includes(t))
