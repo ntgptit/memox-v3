@@ -42,6 +42,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** `1.1.1`
 **Evidence / Source:** `lib/app/di/**`, `lib/domain/**`, `lib/data/**`
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports

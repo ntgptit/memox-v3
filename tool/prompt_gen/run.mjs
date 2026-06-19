@@ -322,19 +322,20 @@ dart run build_runner build --delete-conflicting-outputs
     return `**Presentation order:**
 1. Read ALL \`shots/\` PNGs for this screen (light + dark, EVERY state)
 2. Build mapping table: mock element → component/token → scope (Current/Future/Rejected)
-3. Wire screen to existing provider (do NOT bypass UseCase → Repository flow)
+3. Wire screen to existing **Riverpod Annotation provider** (\`@riverpod\` for state, \`@freezed\` for models; do NOT bypass UseCase → Repository flow)
 4. Add ARB keys for new copy (\`lib/l10n/app_en.arb\` + \`lib/l10n/app_vi.arb\`)
 5. Widget tests: loaded, empty, loading, error, navigation
 6. Golden per state: light + dark at 390×780 (\`matchesGoldenFile\`)
 
-After ARB changes: \`node tool/verify/run.mjs --quick\` triggers \`gen-l10n\` automatically.`;
+After \`@riverpod\`, \`@freezed\`, or ARB changes: \`node tool/verify/run.mjs --quick\` triggers \`build_runner\` + \`gen-l10n\` automatically.`;
   }
   if (l.includes('integration')) {
     return `**Integration order:**
 1. Confirm BE contracts exist and unit tests pass
-2. Wire presentation → use case → repository
+2. Wire presentation → **Riverpod Annotation provider** → use case → repository
 3. End-to-end navigation test
-4. Widget/integration tests covering the cross-layer flow`;
+4. Widget/integration tests covering the cross-layer flow
+5. After any \`@riverpod\` / \`@freezed\` change: \`dart run build_runner build --delete-conflicting-outputs\``;
   }
   return `Follow the layer-appropriate order from CLAUDE.md §Mandatory workflow.`;
 }
@@ -423,6 +424,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** \`${row.id}\`
 **Evidence / Source:** ${row.evidence || '(see business docs)'}
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (\`@riverpod\`, \`@freezed\`, code-generated; after any change, run \`dart run build_runner build --delete-conflicting-outputs\`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
@@ -457,9 +460,9 @@ ${designParityBlock}
 
 ### 6.1 Full verification
 \`\`\`bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 \`\`\`
-This runs: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
+This runs all checks: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
 
 After it runs \`dart fix\` / \`dart format\`, inspect the diff and revert changes outside this task's scope.
 
@@ -658,7 +661,7 @@ node tool/verify/run.mjs --quick --test <test-paths>
 ## Step 6 — Full verify + parity + commit
 
 \`\`\`bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 \`\`\`
 
 Pre-commit parity check (8 ticks — CLAUDE.md §Pre-commit parity check):

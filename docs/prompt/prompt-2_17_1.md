@@ -54,6 +54,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** `2.17.1`
 **Evidence / Source:** `lib/domain/types/flashcard_status_filter.dart`, `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart`
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
@@ -100,9 +102,9 @@ node tool/verify/run.mjs --quick --test <test-paths>
 
 ### 6.1 Full verification
 ```bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 ```
-This runs: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
+This runs all checks: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
 
 After it runs `dart fix` / `dart format`, inspect the diff and revert changes outside this task's scope.
 

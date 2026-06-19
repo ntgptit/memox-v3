@@ -69,6 +69,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** `3.2.3`
 **Evidence / Source:** `lib/data/repositories/flashcard_repository_impl_imports.dart`, `lib/data/datasources/local/migrations/v11_clear_new_card_due_at.dart`, `lib/data/datasources/local/drift/folder_queries.drift`, `lib/presentation/features/folders/widgets/folder_detail_summary.dart`, `lib/presentation/features/folders/widgets/folder_deck_tile.dart`, `test/presentation/features/folders/folder_detail_test.dart`, `test/data/migrations/clear_new_card_due_at_migration_test.dart`, `docs/business/srs/srs-review.md`, `docs/wireframes/05-folder-detail.md`
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
@@ -148,9 +150,9 @@ node tool/verify/run.mjs --quick --test <test-paths>
 
 ### 6.1 Full verification
 ```bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 ```
-This runs: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
+This runs all checks: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
 
 After it runs `dart fix` / `dart format`, inspect the diff and revert changes outside this task's scope.
 

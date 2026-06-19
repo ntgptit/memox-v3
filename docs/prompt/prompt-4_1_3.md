@@ -63,6 +63,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** `4.1.3`
 **Evidence / Source:** `docs/wireframes/06-flashcard-list.md` (component row 4 target)
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
@@ -80,12 +82,12 @@ Do NOT continue the task until user confirms resolution.
 **Presentation order:**
 1. Read ALL `shots/` PNGs for this screen (light + dark, EVERY state)
 2. Build mapping table: mock element → component/token → scope (Current/Future/Rejected)
-3. Wire screen to existing provider (do NOT bypass UseCase → Repository flow)
+3. Wire screen to existing **Riverpod Annotation provider** (`@riverpod` for state, `@freezed` for models; do NOT bypass UseCase → Repository flow)
 4. Add ARB keys for new copy (`lib/l10n/app_en.arb` + `lib/l10n/app_vi.arb`)
 5. Widget tests: loaded, empty, loading, error, navigation
 6. Golden per state: light + dark at 390×780 (`matchesGoldenFile`)
 
-After ARB changes: `node tool/verify/run.mjs --quick` triggers `gen-l10n` automatically.
+After `@riverpod`, `@freezed`, or ARB changes: `node tool/verify/run.mjs --quick` triggers `build_runner` + `gen-l10n` automatically.
 
 ---
 
@@ -138,9 +140,9 @@ node tool/verify/run.mjs --quick --test <test-paths>
 
 ### 6.1 Full verification
 ```bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 ```
-This runs: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
+This runs all checks: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
 
 After it runs `dart fix` / `dart format`, inspect the diff and revert changes outside this task's scope.
 

@@ -50,6 +50,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** `8.4.1`
 **Evidence / Source:** `lib/domain/services/tts_service.dart`, `lib/domain/services/tts_playback_policy.dart`, `lib/domain/models/tts_settings.dart`, `lib/domain/models/tts_voice.dart`, `lib/domain/repositories/tts_settings_repository.dart`, `lib/domain/usecases/tts_usecases.dart`, `lib/data/services/flutter_tts_service.dart`, `lib/data/datasources/local/drift/tts_settings.drift`, `lib/data/datasources/local/migrations/v9_add_tts_settings.dart`, `lib/data/datasources/local/daos/tts_settings_dao.dart`, `lib/data/repositories/tts_settings_repository_impl.dart`, `lib/app/di/tts_providers.dart`, `lib/presentation/features/settings/providers/tts_settings_notifier.dart`, `test/domain/services/tts_settings_normalization_test.dart`, `test/domain/usecases/speak_flashcard_test.dart`, `test/data/migrations/tts_settings_migration_test.dart`
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
@@ -96,9 +98,9 @@ node tool/verify/run.mjs --quick --test <test-paths>
 
 ### 6.1 Full verification
 ```bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 ```
-This runs: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
+This runs all checks: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
 
 After it runs `dart fix` / `dart format`, inspect the diff and revert changes outside this task's scope.
 

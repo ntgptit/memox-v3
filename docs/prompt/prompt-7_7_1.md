@@ -67,6 +67,8 @@ Do NOT continue the task until user confirms resolution.
 **WBS ID:** `7.7.1`
 **Evidence / Source:** `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart`, `test/data/repositories/progress_repository_impl_test.dart`
 
+**Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
+
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
@@ -83,9 +85,10 @@ Do NOT continue the task until user confirms resolution.
 
 **Integration order:**
 1. Confirm BE contracts exist and unit tests pass
-2. Wire presentation → use case → repository
+2. Wire presentation → **Riverpod Annotation provider** → use case → repository
 3. End-to-end navigation test
 4. Widget/integration tests covering the cross-layer flow
+5. After any `@riverpod` / `@freezed` change: `dart run build_runner build --delete-conflicting-outputs`
 
 ---
 
@@ -138,9 +141,9 @@ node tool/verify/run.mjs --quick --test <test-paths>
 
 ### 6.1 Full verification
 ```bash
-node tool/verify/run.mjs --test <test-paths>
+node tool/verify/run.mjs --full
 ```
-This runs: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
+This runs all checks: gen-l10n (if ARB changed) → build_runner → guard → doc_guard → dart fix → dart format → flutter analyze → flutter test → diff --check → writes pass-marker.
 
 After it runs `dart fix` / `dart format`, inspect the diff and revert changes outside this task's scope.
 
