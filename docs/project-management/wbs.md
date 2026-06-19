@@ -444,6 +444,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `TBD` | 2026-06-19 | 9.13 | Make `doc_guard generate` resilient to the incremental rebuild (guard the hardcoded `study_usecases.dart` read with `existsSync`); regenerate `docs/_generated/{repo-map,where-is}.md` to current state (schema v1, 5 routes/placeholders, 0 screens) — restores the cold-start snapshot lost in the rebuild reset |
 | `TBD` | 2026-06-19 | 1.1.5 | Drift/database baseline: `AppDatabase` (schema v1), `folders.drift` first table + `idx_folders_parent`, `onCreate`/`onUpgrade`/`beforeOpen` migration infra (FK + WAL), native/web platform connection, `AppConstants.localDatabaseName`, `appDatabaseProvider` (keepAlive), schema test; update schema/migration contracts to the rebuild baseline; flip 1.1.5 Specified→Implemented |
 | `c159be24` | 2026-06-19 | 1.1.4 | l10n baseline: add `app_vi.arb`, wire `gen-l10n` output into `MaterialApp` (`localizationsDelegates`/`supportedLocales`/`onGenerateTitle`), en/vi `AppLocalizations` tests; flip 1.1.4 Specified→Implemented |
 | `b1c08600` | 2026-06-19 | 1.1.3 | Routing baseline: GoRouter shell with top-level destinations (`/home`/`/library`/`/progress`/`/settings`) from navigation-flow, `/`→Library `rootRedirect`, `RouteNames`/`RoutePaths`/`RouteDefaults` constants, `RoutePlaceholder` placeholder discipline; router widget tests; flip 1.1.3 Specified→Implemented |

@@ -399,7 +399,8 @@ function generate() {
     const files = countGlob(`lib/domain/usecases/${d}`);
     return `${d}(${files.length})`;
   });
-  const studyUc = readFileSync(join(repoRoot, 'lib/domain/study/usecases/study_usecases.dart'), 'utf8');
+  const studyUcPath = join(repoRoot, 'lib/domain/study/usecases/study_usecases.dart');
+  const studyUc = existsSync(studyUcPath) ? readFileSync(studyUcPath, 'utf8') : '';
   const studyClasses = [...studyUc.matchAll(/^class (\w+UseCase)/gm)].map((m) => m[1]);
   const screens = countGlob('lib/presentation/features').filter((p) => p.includes('/screens/'));
   const repos = countGlob('lib/domain/repositories');
