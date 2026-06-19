@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-15
+last_updated: 2026-06-20
 applies_to: Drift schema migrations
 ---
 
@@ -130,10 +130,11 @@ If any step is skipped, report it explicitly.
 (`onCreate`/`onUpgrade`/`beforeOpen` in `AppDatabase.migration`) and the
 platform-isolated connection. Each schema bump adds a `migrations/v<N>_*.dart`
 step file plus an `onUpgrade` step (guarded by `from`). Current code is at
-**schema v2**.
+**schema v3**.
 
 | Version | File | What changed |
 |---------|------|--------------|
+| v3 | `v3_add_flashcards.dart` | Added the `flashcards` (`id`, `deck_id` FK→decks ON DELETE CASCADE, `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, timestamps) + `idx_flashcards_deck`; `flashcard_progress` (`flashcard_id` PK = FK→flashcards ON DELETE CASCADE, `box_number` DEFAULT 1, `due_at?`, `review_count` DEFAULT 0, `lapse_count` DEFAULT 0); and `flashcard_tags` (`flashcard_id` FK→flashcards ON DELETE CASCADE, `tag`, PK `(flashcard_id, tag)`) + `idx_flashcard_tags_tag` tables. Additive. Migration test: `test/data/migrations/v3_add_flashcards_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.11.1. |
 | v2 | `v2_add_decks.dart` | Added the `decks` table (`id`, `folder_id` FK→folders ON DELETE CASCADE, `name`, `target_language` DEFAULT `'korean'`, `sort_order`, timestamps) + `idx_decks_folder`. Additive. Migration test: `test/data/migrations/v2_add_decks_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.7.1. |
 | v1 | `app_database.dart` (onCreate) | Rebuild baseline: `folders` table + `idx_folders_parent`; foreign keys + WAL enabled. Schema test: `test/data/migrations/app_database_schema_test.dart`. |
 

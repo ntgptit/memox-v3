@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-06-19
+last_updated: 2026-06-20
 applies_to: Drift schema, all tables, migrations
-schema_version: 2 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
+schema_version: 3 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
 ---
 
 # Database Schema Contract
@@ -13,15 +13,19 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **2** (rebuild
-baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1). The
-Drift layer was reset and is being re-added per feature slice. Tables shipped so
-far:
+**Current schema** (`AppDatabase.currentSchemaVersion`): **3** (rebuild
+baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1;
+`flashcards` + `flashcard_progress` + `flashcard_tags` added v3 2026-06-20
+WBS 2.11.1). The Drift layer was reset and is being re-added per feature slice.
+Tables shipped so far:
 
 | Table     | Columns (current)                                                                                                |
 |-----------|------------------------------------------------------------------------------------------------------------------|
 | `folders` | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`           |
 | `decks`   | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language` (TEXT NOT NULL DEFAULT `'korean'`), `sort_order`, `created_at`, `updated_at` + index `idx_decks_folder` |
+| `flashcards` | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, `created_at`, `updated_at` + index `idx_flashcards_deck`. (Target adds `part_of_speech?`, `is_flagged` — Future, not yet shipped in the rebuild.) |
+| `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number` (DEFAULT 1), `due_at?`, `review_count` (DEFAULT 0), `lapse_count` (DEFAULT 0). (Target adds `buried_until?`, `is_suspended`, `last_studied_at?`, `last_reset_at?` + `idx_flashcard_progress_eligibility` — Future, block on bury/suspend + history epics.) |
+| `flashcard_tags` | `flashcard_id` (FK→flashcards, cascade), `tag` (lowercased), PK `(flashcard_id, tag)` + index `idx_flashcard_tags_tag` |
 
 The table below is the **target table shape** the rebuild migrates toward (the
 mature schema from the prior iteration); it is intentionally ahead of the

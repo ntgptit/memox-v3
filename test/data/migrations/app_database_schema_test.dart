@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v2)', () {
+  group('AppDatabase schema (v3)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,115 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 2);
-      expect(db.schemaVersion, 2);
+      expect(AppDatabase.currentSchemaVersion, 3);
+      expect(db.schemaVersion, 3);
+    });
+
+    Future<void> insertDeckRow(String id, String folderId) async {
+      final int ts = now();
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: id,
+              folderId: folderId,
+              name: id,
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+    }
+
+    Future<void> insertFlashcardRow(String id, String deckId) async {
+      final int ts = now();
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: id,
+              deckId: deckId,
+              front: 'front',
+              back: 'back',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+    }
+
+    test('creates the flashcards table and round-trips a card', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+
+      final List<FlashcardRow> rows = await db.select(db.flashcards).get();
+      expect(rows, hasLength(1));
+      expect(rows.single.front, 'front');
+      expect(rows.single.exampleSentence, isNull);
+    });
+
+    test('flashcard_progress 1:1 cascades when its card is deleted', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await db
+          .into(db.flashcardProgress)
+          .insert(FlashcardProgressCompanion.insert(flashcardId: 'c1'));
+
+      await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
+
+      expect(await db.select(db.flashcardProgress).get(), isEmpty);
+    });
+
+    test('flashcard_tags cascade when their card is deleted', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await db
+          .into(db.flashcardTags)
+          .insert(
+            FlashcardTagsCompanion.insert(flashcardId: 'c1', tag: 'noun'),
+          );
+
+      await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
+
+      expect(await db.select(db.flashcardTags).get(), isEmpty);
+    });
+
+    test('deleting a deck cascades its flashcards', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+
+      await (db.delete(db.decks)..where((t) => t.id.equals('d1'))).go();
+
+      expect(await db.select(db.flashcards).get(), isEmpty);
+    });
+
+    test('rejects a flashcard with a missing deck (FK)', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      final int ts = now();
+      expect(
+        () => db
+            .into(db.flashcards)
+            .insert(
+              FlashcardsCompanion.insert(
+                id: 'orphan',
+                deckId: 'does-not-exist',
+                front: 'f',
+                back: 'b',
+                sortOrder: 0,
+                createdAt: ts,
+                updatedAt: ts,
+              ),
+            ),
+        throwsA(isA<Exception>()),
+      );
     });
 
     test('creates the decks table and round-trips a deck', () async {

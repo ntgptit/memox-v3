@@ -11,3 +11,12 @@ typedef FolderId = String;
 
 /// Identifier of a [Deck] row (`decks.id`).
 typedef DeckId = String;
+
+/// Identifier of a flashcard row (`flashcards.id`).
+typedef FlashcardId = String;
+
+/// A normalized tag name (lowercased, trimmed) stored in `flashcard_tags.tag`.
+///
+/// Unlike the other ids this is the value itself, not a UUID
+/// (`docs/contracts/types-catalog.md` §FlashcardId, DeckId, FolderId, TagName).
+typedef TagName = String;
