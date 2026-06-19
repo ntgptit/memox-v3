@@ -8,14 +8,14 @@ WBS row status before assuming anything exists. If this file looks stale, regene
 
 | Feature | Docs | Source | Tests | Mock | WBS |
 | --- | --- | --- | --- | --- | --- |
-| Folder create | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md`<br>`docs/wireframes/24-shared-dialogs.md` | — | — | `shots/03-*`<br>`shots/04-*` | 2.1.x |
-| Folder rename | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md` | — | — | `shots/03-*`<br>`shots/04-*` | 2.2.x |
-| Folder delete | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md` | — | — | `shots/03-*`<br>`shots/04-*` | 2.3.x, 2.21.1 |
+| Folder create | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md`<br>`docs/wireframes/24-shared-dialogs.md` | `lib/domain/usecases/folder/create_root_folder_usecase.dart`<br>`lib/domain/usecases/folder/create_subfolder_usecase.dart` | — | `shots/03-*`<br>`shots/04-*` | 2.1.x |
+| Folder rename | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md` | `lib/domain/usecases/folder/rename_folder_usecase.dart` | — | `shots/03-*`<br>`shots/04-*` | 2.2.x |
+| Folder delete | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md` | `lib/domain/usecases/folder/delete_folder_usecase.dart` | — | `shots/03-*`<br>`shots/04-*` | 2.3.x, 2.21.1 |
 | Folder move | `docs/business/folder/folder-management.md`<br>`docs/contracts/usecase-contracts/folder.md` | — | — | `shots/04-*` | 2.4.x |
 | Folder reorder | `docs/business/folder/folder-management.md` | — | — | `shots/04-*` | 2.5.x |
-| Folder content-mode lock | `docs/business/folder/folder-management.md`<br>`docs/business/glossary.md` | — | — | `shots/04-*` | 2.6.1 |
-| Library overview | `docs/business/folder/folder-management.md`<br>`docs/wireframes/02-library.md`<br>`docs/design/screens/library-overview.visual-contract.md` | — | — | `shots/03-*` | 3.1.x |
-| Folder detail screen | `docs/business/folder/folder-management.md`<br>`docs/wireframes/05-folder-detail.md` | — | — | `shots/04-*` | 3.2.x |
+| Folder content-mode lock | `docs/business/folder/folder-management.md`<br>`docs/business/glossary.md` | `lib/domain/types/content_mode.dart` | — | `shots/04-*` | 2.6.1 |
+| Library overview | `docs/business/folder/folder-management.md`<br>`docs/wireframes/02-library.md`<br>`docs/design/screens/library-overview.visual-contract.md` | `lib/domain/models/library_overview.dart`<br>`lib/domain/usecases/folder/watch_library_overview_usecase.dart` | — | `shots/03-*` | 3.1.x |
+| Folder detail screen | `docs/business/folder/folder-management.md`<br>`docs/wireframes/05-folder-detail.md` | `lib/domain/models/folder_detail.dart`<br>`lib/domain/usecases/folder/watch_folder_detail_usecase.dart` | — | `shots/04-*` | 3.2.x |
 | Deck create | `docs/business/deck/deck-management.md`<br>`docs/contracts/usecase-contracts/deck.md` | — | — | `shots/04-*` | 2.7.x |
 | Deck rename | `docs/business/deck/deck-management.md`<br>`docs/contracts/usecase-contracts/deck.md` | — | — | `shots/06-*` | 2.8.x |
 | Deck delete | `docs/business/deck/deck-management.md` | — | — | `shots/06-*` | 2.9.x |
@@ -49,4 +49,4 @@ WBS row status before assuming anything exists. If this file looks stale, regene
 | Audio / TTS | `docs/business/tts/tts-settings.md`<br>`docs/wireframes/21-settings-audio-speech.md` | — | — | `shots/23-*` | 8.4.x |
 | Account & Drive sync | `docs/business/account-sync/account-sync.md`<br>`docs/wireframes/19-settings-account.md` | — | — | `shots/21-*` | 8.5.x, 8.6.x |
 | Router / navigation | `docs/business/navigation/navigation-flow.md` | `lib/app/router/app_router.dart`<br>`lib/app/router/redirect.dart`<br>`lib/app/router/route_names.dart`<br>`lib/app/router/route_paths.dart`<br>`lib/app/router/route_placeholder.dart` | `test/app/router/app_router_test.dart` | — | 1.1.3 |
-| Schema / migrations | `docs/database/schema-contract.md`<br>`docs/database/migration-contract.md`<br>`docs/database/drift-guide.md` | `lib/data/datasources/local/app_database.dart`<br>`lib/data/datasources/local/drift/folders.drift`<br>`lib/data/datasources/local/migrations/.gitkeep` | `test/data/migrations/app_database_schema_test.dart` | — | 1.1.5 |
+| Schema / migrations | `docs/database/schema-contract.md`<br>`docs/database/migration-contract.md`<br>`docs/database/drift-guide.md` | `lib/data/datasources/local/app_database.dart`<br>`lib/data/datasources/local/drift/folders.drift`<br>`lib/data/datasources/local/drift/folder_queries.drift`<br>`lib/data/datasources/local/migrations/.gitkeep` | `test/data/migrations/app_database_schema_test.dart` | — | 1.1.5 |

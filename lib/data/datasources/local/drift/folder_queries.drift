@@ -1,0 +1,55 @@
+import 'folders.drift';
+
+-- Read queries for the Library overview and Folder detail screens, plus the
+-- recursive helpers used by delete-cascade and breadcrumb resolution. Single
+-- table mutations (insert/update/delete) use Drift's query builder in
+-- FolderDao instead — see docs/database/drift-guide.md.
+
+-- Root folders (Library root), each with its direct subfolder count. Stable
+-- order: manual sort_order, then created_at, then id as a deterministic
+-- tie-breaker. WBS 3.1.1.
+rootFolderSummaries:
+SELECT
+  folders.**,
+  (SELECT COUNT(*) FROM folders sub WHERE sub.parent_id = folders.id)
+    AS subfolder_count
+FROM folders
+WHERE folders.parent_id IS NULL
+ORDER BY folders.sort_order, folders.created_at, folders.id;
+
+-- Direct child folders of :parentId with their own subfolder counts, same
+-- stable order. WBS 3.2.1.
+childFolderSummaries(:parentId AS TEXT):
+SELECT
+  folders.**,
+  (SELECT COUNT(*) FROM folders sub WHERE sub.parent_id = folders.id)
+    AS subfolder_count
+FROM folders
+WHERE folders.parent_id = :parentId
+ORDER BY folders.sort_order, folders.created_at, folders.id;
+
+-- Ancestor chain for :id, ordered root -> leaf (inclusive of :id) for the
+-- folder-detail breadcrumb header. WBS 3.2.1.
+breadcrumb(:id AS TEXT):
+WITH RECURSIVE ancestors(id, depth) AS (
+  SELECT :id, 0
+  UNION ALL
+  SELECT folders.parent_id, ancestors.depth + 1
+  FROM folders JOIN ancestors ON folders.id = ancestors.id
+  WHERE folders.parent_id IS NOT NULL
+)
+SELECT folders.**
+FROM ancestors JOIN folders ON folders.id = ancestors.id
+ORDER BY ancestors.depth DESC;
+
+-- :id and every descendant folder id, deepest first. Used by delete cascade so
+-- leaves are removed before their parents (parent_id FK is ON DELETE RESTRICT).
+-- WBS 2.3.1.
+descendantFolderIdsDeepestFirst(:id AS TEXT):
+WITH RECURSIVE descendants(id, depth) AS (
+  SELECT :id, 0
+  UNION ALL
+  SELECT folders.id, descendants.depth + 1
+  FROM folders JOIN descendants ON folders.parent_id = descendants.id
+)
+SELECT id FROM descendants ORDER BY depth DESC;

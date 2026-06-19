@@ -5,16 +5,22 @@ status: contract
 
 # Folder Use Cases Contract
 
-> **Implementation status (2026-06-10, Prompt MX-BE-CONTENT-ORDERING-RENAME-BATCH-20260610-001):**
-> `RenameFolderUseCase`, `MoveFolderUseCase`, `DeleteFolderUseCase`,
-> `GetFolderMoveTargetsUseCase`, and `ReorderFoldersUseCase` are **implemented** over the existing
-> `Result<Failure, T>` contract (not yet `Either`) and wired in
-> `lib/app/di/folder_providers.dart`. Code:
-> `lib/domain/usecases/folder/{rename_folder,move_folder,delete_folder,get_folder_move_targets,reorder_folders}_usecase.dart`,
-> backed by `FolderRepository.{renameFolder,moveFolder,deleteFolder,getFolderMoveTargets,reorderFolders}`.
-> They power the Library Overview folder action sheet (`docs/wireframes/02-library.md` §Overflow
-> sheet). Tests: `test/data/repositories/folder_repository_impl_test.dart` (F8-F11) +
-> `test/domain/usecases/folder/reorder_folders_usecase_test.dart`.
+> **Implementation status (v3 rebuild, 2026-06-20, WBS 2.1.1/2.2.1/2.3.1/2.6.1/3.1.1/3.2.1):**
+> Implemented over the record `Result<T>` contract (not `Either`/`fpdart`) and wired in
+> `lib/app/di/folder_providers.dart`:
+> `CreateRootFolderUseCase`, `CreateSubfolderUseCase`, `RenameFolderUseCase`, `DeleteFolderUseCase`,
+> `WatchLibraryOverviewUseCase`, `WatchFolderDetailUseCase`
+> (`lib/domain/usecases/folder/*_usecase.dart`), backed by
+> `FolderRepository.{createRootFolder,createSubfolder,renameFolder,deleteFolder,watchLibraryOverview,watchFolderDetail}`.
+> Tests: `test/data/repositories/folder_repository_impl_test.dart` (F1-F4/F8/F9) +
+> `test/data/repositories/folder_read_queries_test.dart`.
+>
+> **Not yet implemented (target, deferred):** `MoveFolderUseCase`, `ReorderFoldersUseCase`,
+> `GetFolderMoveTargetsUseCase`, `ListAllFoldersUseCase`, `CreateDeckInFolderUseCase` and the
+> deck-side of the read models / cascade — these depend on the decks/flashcards tables and the
+> move/reorder features (WBS 2.4.x/2.5.x/2.7.x/2.11.x). The signatures below use the **target**
+> `Either<Failure, T>`/`Unit` style; the live code uses `Result<T>`. Names also differ where the
+> rebuild split create into root/subfolder use cases.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 

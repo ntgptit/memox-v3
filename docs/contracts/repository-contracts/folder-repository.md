@@ -5,19 +5,28 @@ status: contract
 
 # Folder Repository Contract
 
-> **Implemented surface (2026-06-06, Prompt 49D):** the live `FolderRepository` uses the existing
-> `Result<T>` contract (not yet `Either`) and these method names:
-> `renameFolder({folderId, name})`, `moveFolder({folderId, newParentId})`,
-> `renameDeck({deckId, name})`, `reorderFolders({parentId, orderedIds})`,
-> `reorderDecks({parentId, orderedIds})`,
-> `deleteFolder({folderId})` → `Result<void>`, and `getFolderMoveTargets({folderId})` →
-> `Result<List<FolderMoveTarget>>` (root + all folders, blocked rows annotated, never hidden). The
-> `Either`/`Unit` signatures below are the target style. Move locks the destination to `subfolders`
-> when unlocked and reverts an emptied old parent to `unlocked`; cycle and decks-lock rejections are
-> enforced before the update. Backed by `FolderDao.{updateFolderName,updateDeckName,
-> updateFolderParent,updateDeckSortOrder,deleteFolderById,descendantFolderIdsDepthFirst,
-> siblingFolderNames,deckNames,childFolderCount,allFolders,getDeckItems}`.
-> Tests: `test/data/repositories/folder_repository_impl_test.dart`.
+> **Implemented surface (v3 rebuild, 2026-06-20, WBS 2.1.1/2.2.1/2.3.1/2.6.1/3.1.1/3.2.1):** the
+> live `FolderRepository` (`lib/domain/repositories/folder_repository.dart`,
+> `FolderRepositoryImpl` + `folder_repo_impl_mutation_helpers.dart` part) uses the existing record
+> `Result<T>` contract (not `Either`/`fpdart`) and these **folders-only** members:
+> `watchLibraryOverview()` → `Stream<LibraryOverview>`,
+> `watchFolderDetail(id)` → `Stream<FolderDetail?>`,
+> `createRootFolder({name})`, `createSubfolder({parentId, name})`,
+> `renameFolder({id, newName})` → `Result<Folder>`, and `deleteFolder({id})` → `Result<void>`.
+> Backed by `FolderDao` (recursive/aggregate reads in
+> `lib/data/datasources/local/drift/folder_queries.drift`: `rootFolderSummaries`,
+> `childFolderSummaries`, `breadcrumb`, `descendantFolderIdsDeepestFirst`; single-table mutations via
+> the query builder) + `FolderMapper` + injectable `IdGenerator`/clock. Create-subfolder locks an
+> `unlocked` parent to `subfolders`; delete cascades descendant **folders** deepest-first and reverts
+> an emptied parent to `unlocked`, one transaction. Tests:
+> `test/data/repositories/folder_repository_impl_test.dart` (mutations, F1-F4/F8/F9),
+> `test/data/repositories/folder_read_queries_test.dart` (reads).
+>
+> **Deferred until the decks/flashcards tables ship (WBS 2.7.x/2.11.x):** `move`/`reorder`/
+> `updateContentMode` members; deck/flashcard/progress/session delete cascade; child **decks** + the
+> non-zero `deckCount`/`cardCount`/`dueCount` on the read models (F12/F13); the deck-side content
+> guard (`folder_contains_subfolders`, F6). The remaining `Either`/`Unit` signatures and methods
+> below are the **target** style/surface, intentionally ahead of the current code.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
