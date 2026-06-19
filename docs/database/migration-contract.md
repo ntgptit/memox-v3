@@ -125,14 +125,16 @@ If any step is skipped, report it explicitly.
 
 ## Shipped migrations
 
-**Rebuild baseline (2026-06-19, WBS 1.1.5):** the Drift layer was reset. Current
-code is at **schema v1** — `app_database.dart` with the `folders` table, the
-migration infrastructure (`onCreate`/`onUpgrade`/`beforeOpen` in
-`AppDatabase.migration`), and the platform-isolated connection. Future schema
-bumps add a `migrations/v<N>_*.dart` step file plus an `onUpgrade` step.
+**Rebuild baseline (2026-06-19, WBS 1.1.5):** the Drift layer was reset.
+`app_database.dart` ships the migration infrastructure
+(`onCreate`/`onUpgrade`/`beforeOpen` in `AppDatabase.migration`) and the
+platform-isolated connection. Each schema bump adds a `migrations/v<N>_*.dart`
+step file plus an `onUpgrade` step (guarded by `from`). Current code is at
+**schema v2**.
 
 | Version | File | What changed |
 |---------|------|--------------|
+| v2 | `v2_add_decks.dart` | Added the `decks` table (`id`, `folder_id` FK→folders ON DELETE CASCADE, `name`, `target_language` DEFAULT `'korean'`, `sort_order`, timestamps) + `idx_decks_folder`. Additive. Migration test: `test/data/migrations/v2_add_decks_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.7.1. |
 | v1 | `app_database.dart` (onCreate) | Rebuild baseline: `folders` table + `idx_folders_parent`; foreign keys + WAL enabled. Schema test: `test/data/migrations/app_database_schema_test.dart`. |
 
 The rows below describe the **prior iteration's** migration sequence (the target

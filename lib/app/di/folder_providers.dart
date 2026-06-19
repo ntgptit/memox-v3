@@ -1,7 +1,12 @@
 import 'package:memox/app/di/database_providers.dart';
+import 'package:memox/data/datasources/local/daos/deck_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
+import 'package:memox/domain/usecases/deck/create_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/move_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/rename_deck_usecase.dart';
+import 'package:memox/domain/usecases/deck/reorder_decks_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_root_folder_usecase.dart';
 import 'package:memox/domain/usecases/folder/create_subfolder_usecase.dart';
 import 'package:memox/domain/usecases/folder/delete_folder_usecase.dart';
@@ -23,8 +28,13 @@ part 'folder_providers.g.dart';
 FolderDao folderDao(Ref ref) => FolderDao(ref.watch(appDatabaseProvider));
 
 @riverpod
-FolderRepository folderRepository(Ref ref) =>
-    FolderRepositoryImpl(dao: ref.watch(folderDaoProvider));
+DeckDao deckDao(Ref ref) => DeckDao(ref.watch(appDatabaseProvider));
+
+@riverpod
+FolderRepository folderRepository(Ref ref) => FolderRepositoryImpl(
+  dao: ref.watch(folderDaoProvider),
+  deckDao: ref.watch(deckDaoProvider),
+);
 
 @riverpod
 CreateRootFolderUseCase createRootFolderUseCase(Ref ref) =>
@@ -65,3 +75,19 @@ WatchLibraryOverviewUseCase watchLibraryOverviewUseCase(Ref ref) =>
 @riverpod
 WatchFolderDetailUseCase watchFolderDetailUseCase(Ref ref) =>
     WatchFolderDetailUseCase(repository: ref.watch(folderRepositoryProvider));
+
+@riverpod
+CreateDeckUseCase createDeckUseCase(Ref ref) =>
+    CreateDeckUseCase(repository: ref.watch(folderRepositoryProvider));
+
+@riverpod
+RenameDeckUseCase renameDeckUseCase(Ref ref) =>
+    RenameDeckUseCase(repository: ref.watch(folderRepositoryProvider));
+
+@riverpod
+ReorderDecksUseCase reorderDecksUseCase(Ref ref) =>
+    ReorderDecksUseCase(repository: ref.watch(folderRepositoryProvider));
+
+@riverpod
+MoveDeckUseCase moveDeckUseCase(Ref ref) =>
+    MoveDeckUseCase(repository: ref.watch(folderRepositoryProvider));

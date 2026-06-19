@@ -7,6 +7,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/util/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/data/datasources/local/daos/deck_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
@@ -30,6 +31,7 @@ void main() {
       clock = 1000;
       repo = FolderRepositoryImpl(
         dao: dao,
+        deckDao: DeckDao(db),
         idGenerator: IdGenerator(Random(42)),
         nowMs: () => clock++,
       );

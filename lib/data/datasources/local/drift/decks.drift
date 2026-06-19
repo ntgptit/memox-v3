@@ -1,0 +1,21 @@
+-- Decks: a folder-owned collection of flashcards. Every deck belongs to exactly
+-- one folder (root-level decks are Rejected / Out of Scope), so folder_id is
+-- NOT NULL. See docs/database/schema-contract.md §Current schema (decks) and
+-- docs/business/deck/deck-management.md.
+--
+-- folder_id uses ON DELETE CASCADE: deleting a folder removes its decks (the
+-- folder repository deletes folders deepest-first inside a transaction, so the
+-- cascade fires for each removed folder). target_language is the lowercase
+-- TargetLanguage enum name and defaults to 'korean'. Timestamps are UTC epoch
+-- milliseconds; ids are text (UUID-like).
+CREATE TABLE decks (
+  id TEXT NOT NULL PRIMARY KEY,
+  folder_id TEXT NOT NULL REFERENCES folders (id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  target_language TEXT NOT NULL DEFAULT 'korean',
+  sort_order INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+) AS DeckRow;
+
+CREATE INDEX idx_decks_folder ON decks (folder_id);

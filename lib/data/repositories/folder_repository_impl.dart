@@ -3,8 +3,11 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/util/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/data/datasources/local/daos/deck_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
+import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
+import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
@@ -13,6 +16,7 @@ import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/target_language.dart';
 
 part 'folder_repo_impl_mutation_helpers.dart';
 
@@ -28,13 +32,16 @@ part 'folder_repo_impl_mutation_helpers.dart';
 class FolderRepositoryImpl implements FolderRepository {
   FolderRepositoryImpl({
     required FolderDao dao,
+    required DeckDao deckDao,
     IdGenerator? idGenerator,
     int Function()? nowMs,
   }) : _dao = dao,
+       _deckDao = deckDao,
        _idGenerator = idGenerator ?? IdGenerator(),
        _nowMs = nowMs ?? _defaultNowMs;
 
   final FolderDao _dao;
+  final DeckDao _deckDao;
   final IdGenerator _idGenerator;
   final int Function() _nowMs;
 
@@ -395,6 +402,203 @@ class FolderRepositoryImpl implements FolderRepository {
       });
     } catch (error) {
       return _fail<void>(_storageWrite(error));
+    }
+  }
+
+  // ---- Deck mutations ----
+
+  @override
+  Future<Result<Deck>> createDeck({
+    required FolderId folderId,
+    required String name,
+    required TargetLanguage targetLanguage,
+  }) async {
+    final String trimmed = name.trim();
+    final Failure? invalid = _validateName(trimmed);
+    if (invalid != null) return _fail<Deck>(invalid);
+
+    try {
+      return await _dao.runInTransaction(() async {
+        final FolderRow? folder = await _dao.findFolderById(folderId);
+        if (folder == null) {
+          return _fail<Deck>(const Failure.notFound(entity: 'folder'));
+        }
+        final ContentMode mode = FolderMapper.contentModeFromStorage(
+          folder.contentMode,
+        );
+        final Failure? guard = _deckParentGuard(mode);
+        if (guard != null) return _fail<Deck>(guard);
+
+        final List<DeckRow> siblings = await _deckDao.decksInFolder(folderId);
+        final Failure? duplicate = _duplicateDeckAmong(siblings, trimmed);
+        if (duplicate != null) return _fail<Deck>(duplicate);
+
+        final Deck deck = _buildNewDeck(
+          folderId: folderId,
+          name: trimmed,
+          targetLanguage: targetLanguage,
+          siblings: siblings,
+        );
+        await _deckDao.insertDeck(_deckInsertCompanion(deck));
+
+        if (mode == ContentMode.unlocked) {
+          await _dao.updateFolderColumns(
+            folderId,
+            FoldersCompanion(
+              contentMode: Value(
+                FolderMapper.contentModeToStorage(ContentMode.decks),
+              ),
+              updatedAt: Value(_nowMs()),
+            ),
+          );
+        }
+        return _ok(deck);
+      });
+    } catch (error) {
+      return _fail<Deck>(_storageWriteDecks(error));
+    }
+  }
+
+  @override
+  Future<Result<Deck>> renameDeck({
+    required DeckId deckId,
+    required String newName,
+  }) async {
+    final String trimmed = newName.trim();
+    final Failure? invalid = _validateName(trimmed);
+    if (invalid != null) return _fail<Deck>(invalid);
+
+    try {
+      return await _dao.runInTransaction(() async {
+        final DeckRow? row = await _deckDao.findDeckById(deckId);
+        if (row == null) {
+          return _fail<Deck>(const Failure.notFound(entity: 'deck'));
+        }
+        // No-op when the trimmed name is unchanged.
+        if (row.name == trimmed) return _ok(DeckMapper.fromRow(row));
+
+        final List<DeckRow> siblings = await _deckDao.decksInFolder(
+          row.folderId,
+        );
+        final Failure? duplicate = _duplicateDeckAmong(
+          siblings,
+          trimmed,
+          excludeId: deckId,
+        );
+        if (duplicate != null) return _fail<Deck>(duplicate);
+
+        final int now = _nowMs();
+        await _deckDao.updateDeckColumns(
+          deckId,
+          DecksCompanion(name: Value(trimmed), updatedAt: Value(now)),
+        );
+        return _ok(
+          DeckMapper.fromRow(row).copyWith(
+            name: trimmed,
+            updatedAt: DateTime.fromMillisecondsSinceEpoch(now, isUtc: true),
+          ),
+        );
+      });
+    } catch (error) {
+      return _fail<Deck>(_storageWriteDecks(error));
+    }
+  }
+
+  @override
+  Future<Result<void>> reorderDecks({
+    required FolderId folderId,
+    required List<DeckId> orderedIds,
+  }) async {
+    try {
+      return await _dao.runInTransaction(() async {
+        final List<DeckRow> siblings = await _deckDao.decksInFolder(folderId);
+        final Failure? invalid = _validateDeckReorder(siblings, orderedIds);
+        if (invalid != null) return _fail<void>(invalid);
+
+        final int now = _nowMs();
+        for (int i = 0; i < orderedIds.length; i++) {
+          await _deckDao.updateDeckColumns(
+            orderedIds[i],
+            DecksCompanion(sortOrder: Value(i), updatedAt: Value(now)),
+          );
+        }
+        return _ok<void>(null);
+      });
+    } catch (error) {
+      return _fail<void>(_storageWriteDecks(error));
+    }
+  }
+
+  @override
+  Future<Result<Deck>> moveDeck({
+    required DeckId deckId,
+    required FolderId newFolderId,
+  }) async {
+    try {
+      return await _dao.runInTransaction(() async {
+        final DeckRow? row = await _deckDao.findDeckById(deckId);
+        if (row == null) {
+          return _fail<Deck>(const Failure.notFound(entity: 'deck'));
+        }
+        // No-op when the deck already lives in the requested folder.
+        if (row.folderId == newFolderId) return _ok(DeckMapper.fromRow(row));
+
+        final FolderRow? destination = await _dao.findFolderById(newFolderId);
+        if (destination == null) {
+          return _fail<Deck>(const Failure.notFound(entity: 'folder'));
+        }
+        final ContentMode destinationMode = FolderMapper.contentModeFromStorage(
+          destination.contentMode,
+        );
+        final Failure? guard = _deckParentGuard(destinationMode);
+        if (guard != null) return _fail<Deck>(guard);
+
+        final List<DeckRow> destinationDecks = await _deckDao.decksInFolder(
+          newFolderId,
+        );
+        final Failure? duplicate = _duplicateDeckAmong(
+          destinationDecks,
+          row.name,
+        );
+        if (duplicate != null) return _fail<Deck>(duplicate);
+
+        final int now = _nowMs();
+        final int newSortOrder = _nextDeckSortOrder(destinationDecks);
+        await _deckDao.updateDeckColumns(
+          deckId,
+          DecksCompanion(
+            folderId: Value(newFolderId),
+            sortOrder: Value(newSortOrder),
+            updatedAt: Value(now),
+          ),
+        );
+
+        // Lock a previously-unlocked destination to decks.
+        if (destinationMode == ContentMode.unlocked) {
+          await _dao.updateFolderColumns(
+            newFolderId,
+            FoldersCompanion(
+              contentMode: Value(
+                FolderMapper.contentModeToStorage(ContentMode.decks),
+              ),
+              updatedAt: Value(now),
+            ),
+          );
+        }
+
+        // Revert the source folder to unlocked once it has no decks left.
+        await _revertFolderIfNoDecks(row.folderId);
+
+        return _ok(
+          DeckMapper.fromRow(row).copyWith(
+            folderId: newFolderId,
+            sortOrder: newSortOrder,
+            updatedAt: DateTime.fromMillisecondsSinceEpoch(now, isUtc: true),
+          ),
+        );
+      });
+    } catch (error) {
+      return _fail<Deck>(_storageWriteDecks(error));
     }
   }
 

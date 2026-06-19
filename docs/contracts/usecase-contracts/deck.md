@@ -14,14 +14,21 @@ status: contract
 > The nullable-deck-parent design (formerly `docs/database/migrations/nullable-deck-parent-migration.md`, file removed) is retained only
 > as a rejected historical design note. Do not implement it.
 
-> **Current implementation note (2026-06-10, Prompt MX-BE-CONTENT-ORDERING-RENAME-BATCH-20260610-001):**
-> `RenameDeckUseCase` and `ReorderDecksUseCase` are implemented over the existing `Result`-based
-> contract and wired in `lib/app/di/folder_providers.dart`. Code:
-> `lib/domain/usecases/deck/{rename_deck,reorder_decks}_usecase.dart`, backed by
-> `FolderRepository.{renameDeck,reorderDecks}`. Tests:
-> `test/domain/usecases/deck/rename_deck_usecase_test.dart`,
-> `test/domain/usecases/deck/reorder_decks_usecase_test.dart`,
-> `test/data/repositories/folder_repository_impl_test.dart` (deck rename/reorder rows).
+> **Current implementation note (2026-06-20, WBS 2.7.1 / 2.8.1 / 2.10.1 / 2.19.1):**
+> `CreateDeckUseCase`, `RenameDeckUseCase`, `ReorderDecksUseCase`, and `MoveDeckUseCase` are
+> implemented over the project `Result` contract (NOT `Either` — see the target-architecture note
+> below) and wired in `lib/app/di/folder_providers.dart`. Decks are folder-owned, so the use cases
+> are backed by `FolderRepository.{createDeck,renameDeck,reorderDecks,moveDeck}` (there is no
+> separate `DeckRepository`). Code: `lib/domain/usecases/deck/{create_deck,rename_deck,
+> reorder_decks,move_deck}_usecase.dart`. Tests:
+> `test/domain/usecases/deck/{create,rename,reorder,move}_deck*_usecase_test.dart`,
+> `test/data/repositories/folder_repository_impl_deck_test.dart` and
+> `folder_repository_impl_move_deck_test.dart`.
+>
+> **Deferred (Specified):** `DeleteDeckUseCase` (WBS 2.9.x), `UpdateDeckUseCase`,
+> `GetDeckDetailUseCase`, and `WatchDeckCountsUseCase` (WBS 3.7.x) are NOT yet implemented — their
+> cascade / due-count logic depends on the `flashcards` and `flashcard_progress` tables, which have
+> not shipped (WBS 2.11.x). Signatures below remain the target contract.
 
 ## RenameDeckUseCase
 

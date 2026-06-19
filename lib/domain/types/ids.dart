@@ -8,3 +8,6 @@ library;
 
 /// Identifier of a [Folder] row (`folders.id`).
 typedef FolderId = String;
+
+/// Identifier of a [Deck] row (`decks.id`).
+typedef DeckId = String;

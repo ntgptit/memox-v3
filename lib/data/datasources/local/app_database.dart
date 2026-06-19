@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:memox/data/datasources/local/connection/database_connection.dart';
+import 'package:memox/data/datasources/local/migrations/v2_add_decks.dart';
 
 part 'app_database.g.dart';
 
@@ -13,7 +14,9 @@ part 'app_database.g.dart';
 /// migration infrastructure ([migration]). New tables append to `include:`,
 /// bump [currentSchemaVersion], and add an `onUpgrade` step plus a
 /// `migrations/v<N>_*.dart` step file (`docs/database/migration-contract.md`).
-@DriftDatabase(include: <String>{'drift/folders.drift'})
+///
+/// v2 (WBS 2.7.1): added the `decks` table (`migrations/v2_add_decks.dart`).
+@DriftDatabase(include: <String>{'drift/folders.drift', 'drift/decks.drift'})
 class AppDatabase extends _$AppDatabase {
   /// Production constructor — opens the platform connection (off the UI
   /// isolate on native; `WasmDatabase` on web).
@@ -24,7 +27,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 1;
+  static const int currentSchemaVersion = 2;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -40,8 +43,11 @@ class AppDatabase extends _$AppDatabase {
       await m.createAll();
     },
     onUpgrade: (Migrator m, int from, int to) async {
-      // No upgrade steps at the baseline version. Append ordered steps here as
-      // the schema grows (one per version, oldest first).
+      // Ordered steps, oldest first (one per version). Each guarded by `from`
+      // so a multi-version upgrade runs every intervening step.
+      if (from < 2) {
+        await migrateV1ToV2(m, this);
+      }
     },
     beforeOpen: (OpeningDetails details) async {
       await customStatement('PRAGMA foreign_keys = ON');

@@ -16,11 +16,11 @@ WBS row status before assuming anything exists. If this file looks stale, regene
 | Folder content-mode lock | `docs/business/folder/folder-management.md`<br>`docs/business/glossary.md` | `lib/domain/types/content_mode.dart` | — | `shots/04-*` | 2.6.1 |
 | Library overview | `docs/business/folder/folder-management.md`<br>`docs/wireframes/02-library.md`<br>`docs/design/screens/library-overview.visual-contract.md` | `lib/domain/models/library_overview.dart`<br>`lib/domain/usecases/folder/watch_library_overview_usecase.dart` | — | `shots/03-*` | 3.1.x |
 | Folder detail screen | `docs/business/folder/folder-management.md`<br>`docs/wireframes/05-folder-detail.md` | `lib/domain/models/folder_detail.dart`<br>`lib/domain/usecases/folder/watch_folder_detail_usecase.dart` | — | `shots/04-*` | 3.2.x |
-| Deck create | `docs/business/deck/deck-management.md`<br>`docs/contracts/usecase-contracts/deck.md` | — | — | `shots/04-*` | 2.7.x |
-| Deck rename | `docs/business/deck/deck-management.md`<br>`docs/contracts/usecase-contracts/deck.md` | — | — | `shots/06-*` | 2.8.x |
+| Deck create | `docs/business/deck/deck-management.md`<br>`docs/contracts/usecase-contracts/deck.md` | `lib/domain/usecases/deck/create_deck_usecase.dart` | `test/domain/usecases/deck/create_deck_usecase_test.dart` | `shots/04-*` | 2.7.x |
+| Deck rename | `docs/business/deck/deck-management.md`<br>`docs/contracts/usecase-contracts/deck.md` | `lib/domain/usecases/deck/rename_deck_usecase.dart` | `test/domain/usecases/deck/rename_deck_usecase_test.dart` | `shots/06-*` | 2.8.x |
 | Deck delete | `docs/business/deck/deck-management.md` | — | — | `shots/06-*` | 2.9.x |
-| Deck reorder | `docs/business/deck/deck-management.md` | — | — | `shots/04-*` | 2.10.x |
-| Deck move | `docs/business/deck/deck-management.md` | — | — | `shots/04-*` | 2.19.x |
+| Deck reorder | `docs/business/deck/deck-management.md` | `lib/domain/usecases/deck/reorder_decks_usecase.dart` | `test/domain/usecases/deck/reorder_decks_usecase_test.dart` | `shots/04-*` | 2.10.x |
+| Deck move | `docs/business/deck/deck-management.md` | `lib/domain/usecases/deck/move_deck_usecase.dart` | `test/data/repositories/folder_repository_impl_move_deck_test.dart`<br>`test/domain/usecases/deck/move_deck_usecase_test.dart` | `shots/04-*` | 2.19.x |
 | Deck import (CSV/structured) | `docs/business/flashcard/flashcard-management.md`<br>`docs/wireframes/10-deck-import.md` | — | — | `shots/10-*` | 6.x |
 | Import duplicate policy | `docs/business/flashcard/flashcard-management.md` | — | — | `shots/10-*` | 6.6.x |
 | Manual duplicate soft-warning | `docs/business/flashcard/flashcard-management.md` | — | — | `shots/07-*` | 2.20.x |
@@ -49,4 +49,4 @@ WBS row status before assuming anything exists. If this file looks stale, regene
 | Audio / TTS | `docs/business/tts/tts-settings.md`<br>`docs/wireframes/21-settings-audio-speech.md` | — | — | `shots/23-*` | 8.4.x |
 | Account & Drive sync | `docs/business/account-sync/account-sync.md`<br>`docs/wireframes/19-settings-account.md` | — | — | `shots/21-*` | 8.5.x, 8.6.x |
 | Router / navigation | `docs/business/navigation/navigation-flow.md` | `lib/app/router/app_router.dart`<br>`lib/app/router/redirect.dart`<br>`lib/app/router/route_names.dart`<br>`lib/app/router/route_paths.dart`<br>`lib/app/router/route_placeholder.dart` | `test/app/router/app_router_test.dart` | — | 1.1.3 |
-| Schema / migrations | `docs/database/schema-contract.md`<br>`docs/database/migration-contract.md`<br>`docs/database/drift-guide.md` | `lib/data/datasources/local/app_database.dart`<br>`lib/data/datasources/local/drift/folders.drift`<br>`lib/data/datasources/local/drift/folder_queries.drift`<br>`lib/data/datasources/local/migrations/.gitkeep` | `test/data/migrations/app_database_schema_test.dart` | — | 1.1.5 |
+| Schema / migrations | `docs/database/schema-contract.md`<br>`docs/database/migration-contract.md`<br>`docs/database/drift-guide.md` | `lib/data/datasources/local/app_database.dart`<br>`lib/data/datasources/local/drift/decks.drift`<br>`lib/data/datasources/local/drift/folders.drift`<br>`lib/data/datasources/local/drift/folder_queries.drift`<br>`lib/data/datasources/local/migrations/.gitkeep`<br>*+1 more* | `test/data/migrations/app_database_schema_test.dart`<br>`test/data/migrations/v2_add_decks_migration_test.dart` | — | 1.1.5 |

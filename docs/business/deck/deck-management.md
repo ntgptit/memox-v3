@@ -5,16 +5,23 @@ applies_to: deck entity and deck management feature
 
 # Deck Management
 
-> **Status: Partial — schema + rename/reorder/move backend Current; FE wiring and language picker UI
-> Specified; root-level decks Rejected / Out of Scope (verified 2026-06-10).**
+> **Status: Partial — `decks` table + create/rename/reorder/move backend Current (schema v2,
+> 2026-06-20); deck delete + due/card counts Specified (blocked on `flashcards`/`flashcard_progress`,
+> WBS 2.11.x); FE wiring and language picker UI Specified; root-level decks Rejected / Out of
+> Scope.**
 >
-> The `decks.target_language TEXT NOT NULL DEFAULT 'korean'` column **exists in the current
-> schema** (`lib/data/datasources/local/drift/`; the create path persists it) — no migration is
-> pending for it. Deck rename, reorder, and move **backends are implemented** (`RenameDeckUseCase`,
-> `ReorderDecksUseCase`, `MoveDeckUseCase` over `FolderRepository.renameDeck/reorderDecks/moveDeck`,
-> commits `48e55584` and `7c34ea3c`, with tests). What remains Specified: wiring rename/reorder/move into the deck actions UI, the
-> target-language picker in deck create/edit UI, and TTS gating (blocked on the TTS service, WBS
-> 8.4.x — not on schema).
+> The `decks` table shipped in **schema v2** (`lib/data/datasources/local/drift/decks.drift`,
+> migration `v2_add_decks.dart`) with `folder_id` (FK→folders ON DELETE CASCADE) and
+> `target_language TEXT NOT NULL DEFAULT 'korean'`. Deck **create, rename, reorder, and move**
+> backends are implemented as `FolderRepository.createDeck/renameDeck/reorderDecks/moveDeck`
+> (decks are folder-owned, so there is no separate `DeckRepository`), with use cases
+> `CreateDeckUseCase`, `RenameDeckUseCase`, `ReorderDecksUseCase`, `MoveDeckUseCase` over the
+> project `Result` contract (WBS 2.7.1 / 2.8.1 / 2.10.1 / 2.19.1), and tests. **Deck delete
+> (WBS 2.9.x)** and **folder/deck due+card counts (WBS 3.7.x)** remain Specified: their cascade /
+> due-exclusion logic depends on the `flashcards` and `flashcard_progress` tables, which have not
+> shipped yet (WBS 2.11.x). What also remains Specified: wiring create/rename/reorder/move into the
+> deck actions UI, the target-language picker in deck create/edit UI, and TTS gating (blocked on the
+> TTS service, WBS 8.4.x — not on schema).
 >
 > Product ownership rejected root-level decks: every deck must belong to exactly one folder,
 > `decks.folder_id` stays non-null, and deck create/move/reorder/duplicate APIs remain
@@ -160,9 +167,12 @@ Do not add a separate deck detail route unless route contract and navigation doc
 - `lib/data/datasources/local/drift/` (decks table definition)
 - `lib/domain/entities/deck.dart`
 - `lib/domain/repositories/folder_repository.dart` — deck operations live on the folder
-  repository (`createDeck`, `deleteDeck`, `renameDeck`, `reorderDecks`); there is NO separate
-  `deck_repository.dart`
-- `lib/domain/usecases/deck/**` (`create_deck_usecase.dart`, `delete_deck_usecase.dart`,
-  `rename_deck_usecase.dart`, `reorder_decks_usecase.dart`)
+  repository (`createDeck`, `renameDeck`, `reorderDecks`, `moveDeck`); there is NO separate
+  `deck_repository.dart`. `deleteDeck` is deferred until the flashcard/progress tables ship
+  (WBS 2.9.x)
+- `lib/domain/usecases/deck/**` (`create_deck_usecase.dart`, `rename_deck_usecase.dart`,
+  `reorder_decks_usecase.dart`, `move_deck_usecase.dart`)
+- `lib/data/datasources/local/daos/deck_dao.dart`, `lib/data/mappers/deck_mapper.dart`,
+  `lib/domain/entities/deck.dart`, `lib/domain/types/target_language.dart`
 - `lib/presentation/features/folders/**` (deck tiles in Folder Detail) and
   `lib/presentation/features/flashcards/**` (deck actions sheet)

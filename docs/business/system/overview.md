@@ -35,8 +35,9 @@ This overview lists product capabilities. The detailed contract for each lives i
 | ---| ---| ---|
 | Folder CRUD + move| Specified| `docs/business/folder/folder-management.md`|
 | Folder reorder| Specified| `docs/business/folder/folder-management.md`|
-| Deck create/delete + target language column| Specified| `docs/business/deck/deck-management.md`|
-| Deck rename / reorder| Specified| `docs/business/deck/deck-management.md`|
+| Deck create + target language column| Specified (BE Current — WBS 2.7.1)| `docs/business/deck/deck-management.md`|
+| Deck delete| Specified (deferred — WBS 2.9.x, blocked on flashcards/progress)| `docs/business/deck/deck-management.md`|
+| Deck rename / reorder| Specified (BE Current — WBS 2.8.1 / 2.10.1)| `docs/business/deck/deck-management.md`|
 | Deck target-language picker UI| Specified| `docs/business/deck/deck-management.md`|
 | Deck import| Specified | `docs/business/flashcard/flashcard-management.md` (import section)|
 | Deck export| Specified| `docs/business/export/export.md`|
@@ -50,7 +51,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Bury / suspend cards| Specified| `docs/business/study-actions/bury-suspend.md`|
 | Tag filter + study-by-tag + management| Specified| `docs/business/tags/tag-system.md`|
 | Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
-| Deck move between folders| Specified| `docs/business/deck/deck-management.md`|
+| Deck move between folders| Specified (BE Current — WBS 2.19.1)| `docs/business/deck/deck-management.md`|
 | Session batch limit (`maxSessionItems`)| Specified| `docs/business/study/study-flow.md`|
 | Daily new-card limit| Specified| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|

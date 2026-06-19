@@ -37,8 +37,8 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
   /// the generic error (decision row F4).
   ///
   /// > The symmetric guard (a `subfolders`-locked parent rejecting a *deck*
-  /// > with `folder_contains_subfolders`, F6) lands with deck creation
-  /// > (WBS 2.7.x) once the `decks` table exists.
+  /// > with `folder_contains_subfolders`, F6) is [_deckParentGuard], used by
+  /// > deck create/move (WBS 2.7.1 / 2.19.1).
   Failure? _subfolderGuard(ContentMode parentMode) =>
       parentMode == ContentMode.decks
       ? const Failure.unsupportedAction(message: 'folder_contains_decks')
@@ -87,10 +87,11 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
   );
 
   /// Recursively delete [id] and its descendant folders, deepest first so the
-  /// `parent_id` RESTRICT FK is never violated (F8).
+  /// `parent_id` RESTRICT FK is never violated (F8). Each removed folder's decks
+  /// are cleaned up by the `decks.folder_id` ON DELETE CASCADE FK (schema v2).
   ///
-  /// > V1 scope: descendant **folders** only. Deck/flashcard/progress/session
-  /// > cleanup is added when those tables ship (WBS 2.7.x onward).
+  /// > V1 scope: folders + their decks. Flashcard/progress/session cleanup is
+  /// > added when those tables ship (WBS 2.11.x onward).
   Future<void> _cascadeDeleteFolder(FolderId id) async {
     final List<String> ids = await _dao.getDescendantFolderIdsDeepestFirst(id);
     for (final String folderId in ids) {
@@ -148,6 +149,130 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
     }
     return names.reversed.toList(growable: false);
   }
+
+  // ---- Deck helpers (WBS 2.7.1 / 2.8.1 / 2.10.1 / 2.19.1) ----
+  //
+  // Decks are folder-owned, so their mutations live on the folder repository.
+  // Spec: `docs/business/deck/deck-management.md` §Rules; decision rows D1, D2,
+  // D4, D6-D10 (`docs/decision-tables/deck.md`).
+
+  /// Deck-parent content-mode guard: a folder locked to subfolders cannot take a
+  /// deck (the symmetric counterpart of [_subfolderGuard], F6). Typed so Folder
+  /// Detail can localize it rather than show the generic error. Decision rows
+  /// D1, D9/D10.
+  Failure? _deckParentGuard(ContentMode folderMode) =>
+      folderMode == ContentMode.subfolders
+      ? const Failure.unsupportedAction(message: 'folder_contains_subfolders')
+      : null;
+
+  /// Reject a case-insensitive duplicate deck name among [siblings] (a rename or
+  /// move excludes the deck itself via [excludeId]). Decision rows D6, D10.
+  Failure? _duplicateDeckAmong(
+    List<DeckRow> siblings,
+    String trimmedName, {
+    String? excludeId,
+  }) {
+    final String lowered = trimmedName.toLowerCase();
+    final bool clash = siblings.any(
+      (DeckRow d) => d.id != excludeId && d.name.toLowerCase() == lowered,
+    );
+    return clash
+        ? const Failure.validation(
+            field: 'name',
+            code: ValidationCode.duplicate,
+          )
+        : null;
+  }
+
+  /// Next `sort_order` among deck [siblings]: append after the current max
+  /// (0 when there are none).
+  int _nextDeckSortOrder(List<DeckRow> siblings) {
+    if (siblings.isEmpty) return 0;
+    return siblings
+            .map((DeckRow d) => d.sortOrder)
+            .reduce((int a, int b) => a > b ? a : b) +
+        1;
+  }
+
+  /// Build a fresh [Deck] with a generated id, appended `sort_order`, and
+  /// current timestamps.
+  Deck _buildNewDeck({
+    required FolderId folderId,
+    required String name,
+    required TargetLanguage targetLanguage,
+    required List<DeckRow> siblings,
+  }) {
+    final int now = _nowMs();
+    final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(
+      now,
+      isUtc: true,
+    );
+    return Deck(
+      id: _idGenerator.newId(),
+      folderId: folderId,
+      name: name,
+      targetLanguage: targetLanguage,
+      sortOrder: _nextDeckSortOrder(siblings),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    );
+  }
+
+  DecksCompanion _deckInsertCompanion(Deck deck) => DecksCompanion.insert(
+    id: deck.id,
+    folderId: deck.folderId,
+    name: deck.name,
+    targetLanguage: Value(
+      DeckMapper.targetLanguageToStorage(deck.targetLanguage),
+    ),
+    sortOrder: deck.sortOrder,
+    createdAt: deck.createdAt.toUtc().millisecondsSinceEpoch,
+    updatedAt: deck.updatedAt.toUtc().millisecondsSinceEpoch,
+  );
+
+  /// Reject a deck reorder whose [orderedIds] is not exactly the [siblings] set:
+  /// duplicates, or any missing/extra/cross-folder id. Validated before any
+  /// write, so the previous order is preserved on rejection (D8).
+  Failure? _validateDeckReorder(
+    List<DeckRow> siblings,
+    List<DeckId> orderedIds,
+  ) {
+    final Set<String> orderedSet = orderedIds.toSet();
+    final bool hasDuplicates = orderedSet.length != orderedIds.length;
+    final Set<String> siblingIds = siblings.map((DeckRow d) => d.id).toSet();
+    final bool sameSet =
+        orderedSet.length == siblingIds.length &&
+        orderedSet.containsAll(siblingIds);
+    return hasDuplicates || !sameSet
+        ? const Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.invalidFormat,
+          )
+        : null;
+  }
+
+  /// Revert a source folder to `unlocked` once it has no decks left (D9). A
+  /// decks-mode folder never holds subfolders, so a zero deck count is enough.
+  Future<void> _revertFolderIfNoDecks(FolderId folderId) async {
+    final int remaining = await _deckDao.deckCountInFolder(folderId);
+    if (remaining != 0) return;
+    await _dao.updateFolderColumns(
+      folderId,
+      FoldersCompanion(
+        contentMode: Value(
+          FolderMapper.contentModeToStorage(ContentMode.unlocked),
+        ),
+        updatedAt: Value(_nowMs()),
+      ),
+    );
+  }
+
+  /// Storage write failure wrapper for caught exceptions on the `decks` table.
+  Failure _storageWriteDecks(Object error) => Failure.storage(
+    operation: StorageOp.write,
+    table: 'decks',
+    cause: error.toString(),
+  );
 
   /// Storage write failure wrapper for caught exceptions.
   Failure _storageWrite(Object error) => Failure.storage(

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase baseline schema (v1)', () {
+  group('AppDatabase schema (v2)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -12,9 +12,92 @@ void main() {
 
     int now() => DateTime.now().toUtc().millisecondsSinceEpoch;
 
-    test('reports the baseline schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 1);
-      expect(db.schemaVersion, 1);
+    Future<void> insertFolderRow(String id) async {
+      final int ts = now();
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: id,
+              name: id,
+              contentMode: 'decks',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+    }
+
+    test('reports the current schema version', () {
+      expect(AppDatabase.currentSchemaVersion, 2);
+      expect(db.schemaVersion, 2);
+    });
+
+    test('creates the decks table and round-trips a deck', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      final int ts = now();
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'folder',
+              name: 'Verbs',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+
+      final List<DeckRow> rows = await db.select(db.decks).get();
+      expect(rows, hasLength(1));
+      expect(rows.single.name, 'Verbs');
+      expect(rows.single.folderId, 'folder');
+      // target_language defaults to 'korean'.
+      expect(rows.single.targetLanguage, 'korean');
+    });
+
+    test('cascades deck delete when its folder is removed', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      final int ts = now();
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'folder',
+              name: 'Verbs',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+
+      await (db.delete(db.folders)..where((t) => t.id.equals('folder'))).go();
+
+      expect(await db.select(db.decks).get(), isEmpty);
+    });
+
+    test('rejects a deck with a missing folder (FK)', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      final int ts = now();
+      expect(
+        () => db
+            .into(db.decks)
+            .insert(
+              DecksCompanion.insert(
+                id: 'orphan',
+                folderId: 'does-not-exist',
+                name: 'Orphan',
+                sortOrder: 0,
+                createdAt: ts,
+                updatedAt: ts,
+              ),
+            ),
+        throwsA(isA<Exception>()),
+      );
     });
 
     test('creates the folders table and round-trips a root folder', () async {
