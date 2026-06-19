@@ -3,13 +3,19 @@
 // Usage (from repo root or this dir; zero npm dependencies):
 //   node tool/prompt_gen/run.mjs <WBS_ID> [<WBS_ID2> ...]   # generate prompt(s)
 //   node tool/prompt_gen/run.mjs --phase <N>                 # phase overview + ready rows
+//   node tool/prompt_gen/run.mjs --all-prompts               # gen prompts for all non-done rows
 //   node tool/prompt_gen/run.mjs --list [--status <S>]       # list all WBS rows
 //   node tool/prompt_gen/run.mjs --next                      # show §5 Next tasks from WBS
 //
-// Output: stdout — pipe to a file or copy-paste into Claude Code.
+// Add --out-dir <path> to any command to write one file per WBS ID instead of stdout:
+//   node tool/prompt_gen/run.mjs 1.2.1 --out-dir /tmp
+//   node tool/prompt_gen/run.mjs --phase 0 --out-dir /tmp
+//   node tool/prompt_gen/run.mjs --all-prompts --status Specified --out-dir /tmp
+//
+// Output: stdout (default) or <out-dir>/prompt-{WBS_ID}.md per row.
 // Exit codes: 0 = ok, 1 = unknown WBS ID or usage error.
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -505,57 +511,48 @@ Follow \`docs/checklist/implementation-checklist.md\` §Final report template. I
 `;
 }
 
-// ── phase overview ────────────────────────────────────────────────────────────
+// ── phase row resolution (shared by phase overview + --out-dir) ───────────────
 
-function generatePhaseOverview(phaseKey, phases, allRows) {
+function resolvePhaseRows(phaseKey, phases, allRows) {
   const phase = phases.get(phaseKey);
   if (!phase) {
     console.error(`Unknown phase: ${phaseKey}. Available: ${[...phases.keys()].join(', ')}`);
     process.exit(1);
   }
-
-  // Heuristic: which rows belong to this phase?
-  // Use the scope description to extract WBS ID prefixes / explicit IDs.
   const scopeText = phase.scope;
   const mentionedIds = new Set();
-
-  // Extract explicit IDs like 1.1.1 or ranges like 1.2.1–1.2.5
   for (const m of scopeText.matchAll(/(\d+\.\d+(?:\.\d+)?)/g)) mentionedIds.add(m[1]);
-
-  // For range notation (e.g. "2.1.1–2.21.1"), collect all rows in that group
   const groupPrefixes = new Set();
   for (const m of scopeText.matchAll(/(\d+)\.\d+\.?\d*[–-]\d+\.\d+/g)) groupPrefixes.add(m[1]);
   for (const m of scopeText.matchAll(/(\d+)\.x/g)) groupPrefixes.add(m[1]);
 
-  const phaseRows = [...allRows.values()].filter((r) => {
-    if (mentionedIds.has(r.id)) return true;
-    const groupPrefix = r.id.split('.')[0];
-    return groupPrefixes.has(groupPrefix);
-  });
+  return {
+    phase,
+    todo: [...allRows.values()].filter((r) => {
+      const inScope = mentionedIds.has(r.id) || groupPrefixes.has(r.id.split('.')[0]);
+      return inScope && !['Implemented', 'Rejected', 'Future'].includes(r.status);
+    }),
+    done: [...allRows.values()].filter((r) => {
+      const inScope = mentionedIds.has(r.id) || groupPrefixes.has(r.id.split('.')[0]);
+      return inScope && r.status === 'Implemented';
+    }),
+  };
+}
 
-  // Filter to only actionable (non-Implemented, non-Rejected, non-Future) rows
-  const todo = phaseRows.filter((r) => !['Implemented', 'Rejected', 'Future'].includes(r.status));
-  const done = phaseRows.filter((r) => r.status === 'Implemented');
+// ── phase overview (text) ─────────────────────────────────────────────────────
 
-  const tableRows = todo.map(
-    (r) => `| \`${r.id}\` | ${r.function} | ${r.layer} | ${r.dependsOn} | **${r.status}** |`
-  ).join('\n');
-
-  const doneRows = done.map(
-    (r) => `| \`${r.id}\` | ${r.function} | ${r.layer} | ✅ ${r.status} |`
-  ).join('\n');
-
-  // Dependency-ready rows: all deps Implemented
+function generatePhaseOverview(phaseKey, phases, allRows) {
+  const { phase, todo, done } = resolvePhaseRows(phaseKey, phases, allRows);
   const ready = todo.filter((r) => {
     if (!r.dependsOn || r.dependsOn === 'none' || r.dependsOn === '-') return true;
-    const deps = r.dependsOn.split(/[,;\/]/).map((d) => d.trim()).filter(Boolean);
-    return deps.every((dep) => allRows.get(dep)?.status === 'Implemented');
+    return r.dependsOn.split(/[,;\/]/).map((d) => d.trim()).filter(Boolean)
+      .every((dep) => allRows.get(dep)?.status === 'Implemented');
   });
 
   return `# Phase ${phaseKey} Overview — ${phase.goal}
 
 **Generated:** ${today}
-**Scope:** ${scopeText}
+**Scope:** ${phase.scope}
 
 ## Exit criteria
 ${phase.exit}
@@ -564,9 +561,9 @@ ${phase.exit}
 
 | WBS ID | Function | Layer | Depends on | Status |
 | --- | --- | --- | --- | --- |
-${tableRows || '_(none — phase complete)_'}
+${todo.map((r) => `| \`${r.id}\` | ${r.function} | ${r.layer} | ${r.dependsOn} | **${r.status}** |`).join('\n') || '_(none — phase complete)_'}
 
-${doneRows ? `### Already implemented\n\n| WBS ID | Function | Layer | Status |\n| --- | --- | --- | --- |\n${doneRows}\n` : ''}
+${done.length ? `### Already implemented\n\n| WBS ID | Function | Layer | Status |\n| --- | --- | --- | --- |\n${done.map((r) => `| \`${r.id}\` | ${r.function} | ${r.layer} | ✅ ${r.status} |`).join('\n')}\n` : ''}
 ## Ready to start now (all deps Implemented)
 
 ${ready.length
@@ -591,99 +588,22 @@ ${ready[0] ? `node tool/prompt_gen/run.mjs ${ready[0].id}` : 'node tool/prompt_g
 function generateList(allRows, filterStatus) {
   let rows = [...allRows.values()];
   if (filterStatus) rows = rows.filter((r) => r.status.toLowerCase() === filterStatus.toLowerCase());
-
-  const lines = rows.map(
-    (r) => `| \`${r.id}\` | ${r.flow} | ${r.function} | ${r.layer} | ${r.status} |`
-  );
-
+  const lines = rows.map((r) => `| \`${r.id}\` | ${r.flow} | ${r.function} | ${r.layer} | ${r.status} |`);
   return `# WBS Row List${filterStatus ? ` (status: ${filterStatus})` : ''}\n\nGenerated: ${today}\n\n| WBS ID | Flow | Function | Layer | Status |\n| --- | --- | --- | --- | --- |\n${lines.join('\n')}\n`;
 }
 
-// ── main ──────────────────────────────────────────────────────────────────────
+// ── combined multi-row prompt (stdout mode) ───────────────────────────────────
 
-function main() {
-  const args = process.argv.slice(2);
+function generateMultiPrompt(rows, allRows) {
+  const combinedIds = rows.map((r) => r.id).join(', ');
+  const allDeps = [...new Set(rows.flatMap((r) => depWarnings(r, allRows)))];
+  const allSpecific = [...new Set(rows.flatMap((r) => buildReadingList(r, detectEntity(r))))];
+  const hasAnyFE = rows.some((r) => r.layer.toLowerCase().includes('fe') || r.layer.toLowerCase().includes('integration'));
 
-  if (args.length === 0 || args[0] === '--help') {
-    console.log(`Usage:
-  node tool/prompt_gen/run.mjs <WBS_ID> [<WBS_ID2> ...]   # generate prompt(s)
-  node tool/prompt_gen/run.mjs --phase <N>                 # phase overview + ready rows
-  node tool/prompt_gen/run.mjs --list [--status <S>]       # list all WBS rows
-  node tool/prompt_gen/run.mjs --next                      # show §5 Next tasks from WBS
-
-Examples:
-  node tool/prompt_gen/run.mjs 1.2.1
-  node tool/prompt_gen/run.mjs 1.1.1 1.1.3 1.1.4          # multi-row prompt
-  node tool/prompt_gen/run.mjs --phase 0
-  node tool/prompt_gen/run.mjs --list --status Specified`);
-    process.exit(0);
-  }
-
-  if (!existsSync(wbsPath)) {
-    console.error(`WBS not found: ${wbsPath}`);
-    process.exit(2);
-  }
-
-  const wbsText = readFileSync(wbsPath, 'utf8');
-  const allRows = parseWbsRows(wbsText);
-  const phases = parsePhaseTable(wbsText);
-
-  // --phase N
-  if (args[0] === '--phase') {
-    const phaseKey = args[1];
-    if (!phaseKey) { console.error('Usage: --phase <N>'); process.exit(1); }
-    console.log(generatePhaseOverview(phaseKey, phases, allRows));
-    return;
-  }
-
-  // --list [--status S]
-  if (args[0] === '--list') {
-    const si = args.indexOf('--status');
-    const filterStatus = si >= 0 ? args[si + 1] : null;
-    console.log(generateList(allRows, filterStatus));
-    return;
-  }
-
-  // --next
-  if (args[0] === '--next') {
-    console.log(parseNextSection(wbsText));
-    return;
-  }
-
-  // WBS ID(s)
-  const ids = args.filter((a) => !a.startsWith('--'));
-  if (ids.length === 0) {
-    console.error('No WBS IDs provided. Run with --help for usage.');
-    process.exit(1);
-  }
-
-  const rows = [];
-  for (const id of ids) {
-    const row = allRows.get(id);
-    if (!row) {
-      console.error(`WBS ID not found: ${id}`);
-      const suggestions = [...allRows.keys()].filter((k) => k.startsWith(id.split('.')[0] + '.'));
-      if (suggestions.length) console.error(`  Did you mean one of: ${suggestions.slice(0, 6).join(', ')}?`);
-      process.exit(1);
-    }
-    rows.push(row);
-  }
-
-  if (rows.length === 1) {
-    console.log(generatePrompt(rows[0], allRows));
-  } else {
-    // Multi-row: generate a combined prompt
-    const combinedIds = rows.map((r) => r.id).join(', ');
-    const combinedFunctions = rows.map((r) => r.function).join(' + ');
-    const allDeps = [...new Set(rows.flatMap((r) => depWarnings(r, allRows)))];
-    const allSpecific = [...new Set(rows.flatMap((r) => buildReadingList(r, detectEntity(r))))];
-    const allEvidence = rows.map((r) => r.evidence).filter(Boolean).join('; ');
-    const hasAnyFE = rows.some((r) => r.layer.toLowerCase().includes('fe') || r.layer.toLowerCase().includes('integration'));
-
-    console.log(`# Claude Code Task Prompt — WBS ${combinedIds}
+  return `# Claude Code Task Prompt — WBS ${combinedIds}
 
 **Generated:** ${today}
-**Tasks:** ${combinedFunctions}
+**Tasks:** ${rows.map((r) => r.function).join(' + ')}
 
 > This prompt covers ${rows.length} tightly coupled WBS rows. Build them in dependency order.
 
@@ -750,7 +670,155 @@ git add <files> && git commit -m "<message>" && git push -u origin <branch>
 ## Expected report
 
 Follow \`docs/checklist/implementation-checklist.md\`. List each WBS ID separately in the impact sections.
-`);
+`;
+}
+
+// ── file output helper ────────────────────────────────────────────────────────
+
+function writeToDir(outDir, rows, allRows) {
+  mkdirSync(outDir, { recursive: true });
+  const written = [];
+  for (const row of rows) {
+    const content = generatePrompt(row, allRows);
+    const safeName = row.id.replace(/\./g, '_');
+    const filePath = join(outDir, `prompt-${safeName}.md`);
+    writeFileSync(filePath, content, 'utf8');
+    written.push({ id: row.id, file: filePath, status: row.status, fn: row.function });
+  }
+  return written;
+}
+
+// ── main ──────────────────────────────────────────────────────────────────────
+
+function main() {
+  const args = process.argv.slice(2);
+
+  if (args.length === 0 || args[0] === '--help') {
+    console.log(`Usage:
+  node tool/prompt_gen/run.mjs <WBS_ID> [<WBS_ID2> ...]         # generate prompt(s) → stdout
+  node tool/prompt_gen/run.mjs --phase <N>                       # phase overview → stdout
+  node tool/prompt_gen/run.mjs --all-prompts [--status <S>]      # gen all rows → stdout (stream)
+  node tool/prompt_gen/run.mjs --list [--status <S>]             # list rows → stdout
+  node tool/prompt_gen/run.mjs --next                            # §5 Next tasks → stdout
+
+Add --out-dir <path> to write one file per WBS ID instead of stdout:
+  node tool/prompt_gen/run.mjs 1.2.1 --out-dir /tmp
+  node tool/prompt_gen/run.mjs --phase 0 --out-dir /tmp          # all todo rows in phase
+  node tool/prompt_gen/run.mjs --all-prompts --status Specified --out-dir /tmp
+
+Examples:
+  node tool/prompt_gen/run.mjs 1.2.1
+  node tool/prompt_gen/run.mjs 1.1.1 1.1.3 1.1.4               # batch prompt
+  node tool/prompt_gen/run.mjs --phase 0
+  node tool/prompt_gen/run.mjs --all-prompts --status Specified --out-dir /tmp/prompts`);
+    process.exit(0);
+  }
+
+  if (!existsSync(wbsPath)) {
+    console.error(`WBS not found: ${wbsPath}`);
+    process.exit(2);
+  }
+
+  const wbsText = readFileSync(wbsPath, 'utf8');
+  const allRows = parseWbsRows(wbsText);
+  const phases = parsePhaseTable(wbsText);
+
+  // Parse shared flags
+  const outDirIdx = args.indexOf('--out-dir');
+  const outDir = outDirIdx >= 0 ? args[outDirIdx + 1] : null;
+  const statusIdx = args.indexOf('--status');
+  const filterStatus = statusIdx >= 0 ? args[statusIdx + 1] : null;
+
+  // --phase N [--out-dir <path>]
+  if (args[0] === '--phase') {
+    const phaseKey = args[1];
+    if (!phaseKey || phaseKey.startsWith('--')) { console.error('Usage: --phase <N>'); process.exit(1); }
+
+    if (outDir) {
+      const { phase, todo } = resolvePhaseRows(phaseKey, phases, allRows);
+      if (todo.length === 0) {
+        console.log(`Phase ${phaseKey} has no remaining rows to generate prompts for.`);
+        return;
+      }
+      const written = writeToDir(outDir, todo, allRows);
+      console.log(`Phase ${phaseKey} — ${phase.goal}`);
+      console.log(`Written ${written.length} prompt file(s) to ${outDir}:\n`);
+      for (const { id, file, status, fn } of written) {
+        console.log(`  [${status}] ${id} — ${fn}\n           → ${file}`);
+      }
+    } else {
+      console.log(generatePhaseOverview(phaseKey, phases, allRows));
+    }
+    return;
+  }
+
+  // --all-prompts [--status <S>] [--out-dir <path>]
+  if (args[0] === '--all-prompts') {
+    const SKIP = ['Implemented', 'Rejected', 'Future'];
+    let rows = [...allRows.values()].filter((r) => !SKIP.includes(r.status));
+    if (filterStatus) rows = rows.filter((r) => r.status.toLowerCase() === filterStatus.toLowerCase());
+    if (rows.length === 0) {
+      console.log(`No rows match${filterStatus ? ` status="${filterStatus}"` : ''}.`);
+      return;
+    }
+
+    if (outDir) {
+      const written = writeToDir(outDir, rows, allRows);
+      console.log(`Written ${written.length} prompt file(s) to ${outDir}:\n`);
+      for (const { id, file, status, fn } of written) {
+        console.log(`  [${status}] ${id} — ${fn}\n           → ${file}`);
+      }
+    } else {
+      // Stdout stream: prompts separated by a clear divider
+      for (let i = 0; i < rows.length; i++) {
+        if (i > 0) console.log('\n\n' + '='.repeat(80) + '\n\n');
+        console.log(generatePrompt(rows[i], allRows));
+      }
+    }
+    return;
+  }
+
+  // --list [--status S]
+  if (args[0] === '--list') {
+    console.log(generateList(allRows, filterStatus));
+    return;
+  }
+
+  // --next
+  if (args[0] === '--next') {
+    console.log(parseNextSection(wbsText));
+    return;
+  }
+
+  // WBS ID(s) [--out-dir <path>]
+  const ids = args.filter((a) => !a.startsWith('--') && a !== (outDir ?? ''));
+  if (ids.length === 0) {
+    console.error('No WBS IDs provided. Run with --help for usage.');
+    process.exit(1);
+  }
+
+  const rows = [];
+  for (const id of ids) {
+    const row = allRows.get(id);
+    if (!row) {
+      console.error(`WBS ID not found: ${id}`);
+      const suggestions = [...allRows.keys()].filter((k) => k.startsWith(id.split('.')[0] + '.'));
+      if (suggestions.length) console.error(`  Did you mean one of: ${suggestions.slice(0, 6).join(', ')}?`);
+      process.exit(1);
+    }
+    rows.push(row);
+  }
+
+  if (outDir) {
+    const written = writeToDir(outDir, rows, allRows);
+    console.log(`Written ${written.length} prompt file(s) to ${outDir}:\n`);
+    for (const { id, file, status, fn } of written) {
+      console.log(`  [${status}] ${id} — ${fn}\n           → ${file}`);
+    }
+  } else if (rows.length === 1) {
+    console.log(generatePrompt(rows[0], allRows));
+  } else {
+    console.log(generateMultiPrompt(rows, allRows));
   }
 }
 
