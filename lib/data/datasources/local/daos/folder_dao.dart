@@ -40,6 +40,17 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
     folders,
   )..where((Folders t) => t.id.equals(id))).getSingleOrNull();
 
+  /// Every folder in a deterministic order (`sort_order`, then `created_at`,
+  /// then `id`). Used to build the flat move-target list and resolve each
+  /// folder's breadcrumb in Dart.
+  Future<List<FolderRow>> listAllFolders() =>
+      (select(folders)..orderBy(<OrderClauseGenerator<Folders>>[
+            (Folders t) => OrderingTerm(expression: t.sortOrder),
+            (Folders t) => OrderingTerm(expression: t.createdAt),
+            (Folders t) => OrderingTerm(expression: t.id),
+          ]))
+          .get();
+
   /// Siblings under [parentId] (root siblings when `null`). Used for
   /// case-insensitive duplicate checks and next `sort_order` in Dart.
   Future<List<FolderRow>> siblingFolders(String? parentId) =>

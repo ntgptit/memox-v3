@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/failure.dart';
@@ -10,6 +11,7 @@ import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/types/content_mode.dart';
 
 void main() {
@@ -265,6 +267,324 @@ void main() {
     test('delete rejects a missing folder', () async {
       final result = await repo.deleteFolder(id: 'ghost');
       expect(result.failure, isA<NotFoundFailure>());
+    });
+
+    // ---- Move (WBS 2.4.1, decision rows F7, F14-F17) ----
+
+    Future<FolderRow> rowOf(String id) async => (await dao.findFolderById(id))!;
+
+    test('F14: moves a folder into an unlocked parent and locks it', () async {
+      final source = await repo.createRootFolder(name: 'Source');
+      final dest = await repo.createRootFolder(name: 'Dest');
+
+      final moved = await repo.moveFolder(
+        id: source.data!.id,
+        newParentId: dest.data!.id,
+      );
+
+      expect(moved.isSuccess, isTrue);
+      expect(moved.data!.parentId, dest.data!.id);
+      expect(moved.data!.sortOrder, 0); // first child of Dest
+      expect((await rowOf(source.data!.id)).parentId, dest.data!.id);
+      expect(await modeOf(dest.data!.id), ContentMode.subfolders);
+    });
+
+    test(
+      'F14: moving the last child reverts the old parent to unlocked',
+      () async {
+        final parent = await repo.createRootFolder(name: 'Parent');
+        final c1 = await repo.createSubfolder(
+          parentId: parent.data!.id,
+          name: 'C1',
+        );
+        final c2 = await repo.createSubfolder(
+          parentId: parent.data!.id,
+          name: 'C2',
+        );
+        final dest = await repo.createRootFolder(name: 'Dest');
+
+        await repo.moveFolder(id: c1.data!.id, newParentId: dest.data!.id);
+        expect(
+          await modeOf(parent.data!.id),
+          ContentMode.subfolders,
+        ); // C2 left
+
+        await repo.moveFolder(id: c2.data!.id, newParentId: dest.data!.id);
+        expect(await modeOf(parent.data!.id), ContentMode.unlocked); // emptied
+      },
+    );
+
+    test('F19: move to the current parent is a no-op', () async {
+      final folder = await repo.createRootFolder(name: 'Root');
+
+      final moved = await repo.moveFolder(
+        id: folder.data!.id,
+        newParentId: null,
+      );
+
+      expect(moved.isSuccess, isTrue);
+      expect(moved.data!.parentId, isNull);
+      expect(moved.data!.sortOrder, folder.data!.sortOrder); // unchanged
+    });
+
+    test('F7: rejects moving a folder into itself (cycle)', () async {
+      final folder = await repo.createRootFolder(name: 'Self');
+
+      final moved = await repo.moveFolder(
+        id: folder.data!.id,
+        newParentId: folder.data!.id,
+      );
+
+      expect(
+        moved.failure,
+        isA<ValidationFailure>().having(
+          (ValidationFailure f) => f.code,
+          'code',
+          ValidationCode.cycleDetected,
+        ),
+      );
+    });
+
+    test('F7: rejects moving a folder into a descendant (cycle)', () async {
+      final parent = await repo.createRootFolder(name: 'Parent');
+      final child = await repo.createSubfolder(
+        parentId: parent.data!.id,
+        name: 'Child',
+      );
+
+      final moved = await repo.moveFolder(
+        id: parent.data!.id,
+        newParentId: child.data!.id,
+      );
+
+      expect(
+        moved.failure,
+        isA<ValidationFailure>().having(
+          (ValidationFailure f) => f.code,
+          'code',
+          ValidationCode.cycleDetected,
+        ),
+      );
+      expect((await rowOf(parent.data!.id)).parentId, isNull); // unchanged
+    });
+
+    test(
+      'F7: a decks-locked descendant is a cycle, not a decks-lock',
+      () async {
+        final parent = await repo.createRootFolder(name: 'Parent');
+        final child = await repo.createSubfolder(
+          parentId: parent.data!.id,
+          name: 'Child',
+        );
+        // Force the descendant into decks mode to exercise guard ordering.
+        await dao.updateFolderColumns(
+          child.data!.id,
+          const FoldersCompanion(contentMode: Value('decks')),
+        );
+
+        final moved = await repo.moveFolder(
+          id: parent.data!.id,
+          newParentId: child.data!.id,
+        );
+
+        expect(
+          moved.failure,
+          isA<ValidationFailure>().having(
+            (ValidationFailure f) => f.code,
+            'code',
+            ValidationCode.cycleDetected,
+          ),
+        );
+      },
+    );
+
+    test('F15: rejects moving into a decks-locked parent (typed)', () async {
+      const String decksId = 'decks-parent';
+      await dao.insertFolder(
+        FoldersCompanion.insert(
+          id: decksId,
+          name: 'Decks',
+          contentMode: 'decks',
+          sortOrder: 0,
+          createdAt: 0,
+          updatedAt: 0,
+        ),
+      );
+      final folder = await repo.createRootFolder(name: 'Movable');
+
+      final moved = await repo.moveFolder(
+        id: folder.data!.id,
+        newParentId: decksId,
+      );
+
+      expect(
+        moved.failure,
+        isA<UnsupportedActionFailure>().having(
+          (UnsupportedActionFailure f) => f.message,
+          'message',
+          'folder_contains_decks',
+        ),
+      );
+    });
+
+    test('F16: rejects a move that duplicates a destination sibling', () async {
+      final parent = await repo.createRootFolder(name: 'Parent');
+      await repo.createSubfolder(parentId: parent.data!.id, name: 'Dup');
+      final mover = await repo.createRootFolder(name: 'dup'); // root, same name
+
+      final moved = await repo.moveFolder(
+        id: mover.data!.id,
+        newParentId: parent.data!.id,
+      );
+
+      expect(
+        moved.failure,
+        isA<ValidationFailure>().having(
+          (ValidationFailure f) => f.code,
+          'code',
+          ValidationCode.duplicate,
+        ),
+      );
+    });
+
+    test('F17: rejects a move to a missing parent', () async {
+      final folder = await repo.createRootFolder(name: 'Movable');
+      final moved = await repo.moveFolder(
+        id: folder.data!.id,
+        newParentId: 'ghost',
+      );
+      expect(moved.failure, isA<NotFoundFailure>());
+    });
+
+    test('move rejects a missing folder', () async {
+      final moved = await repo.moveFolder(id: 'ghost', newParentId: null);
+      expect(moved.failure, isA<NotFoundFailure>());
+    });
+
+    // ---- Move targets (WBS 2.4.1, decision row F18) ----
+
+    FolderMoveTarget targetFor(List<FolderMoveTarget> targets, String? id) =>
+        targets.firstWhere((FolderMoveTarget t) => t.id == id);
+
+    test('F18: annotates root, cycle, decks-lock and current parent', () async {
+      final a = await repo.createRootFolder(name: 'A');
+      final a1 = await repo.createSubfolder(parentId: a.data!.id, name: 'A1');
+      final b = await repo.createRootFolder(name: 'B');
+      const String decksId = 'decks-folder';
+      await dao.insertFolder(
+        FoldersCompanion.insert(
+          id: decksId,
+          name: 'Decks',
+          contentMode: 'decks',
+          sortOrder: 5,
+          createdAt: 0,
+          updatedAt: 0,
+        ),
+      );
+
+      final result = await repo.getFolderMoveTargets(folderId: a.data!.id);
+
+      expect(result.isSuccess, isTrue);
+      final List<FolderMoveTarget> targets = result.data!;
+
+      // Library root: selectable, current parent of root folder A.
+      final FolderMoveTarget root = targetFor(targets, null);
+      expect(root.block, isNull);
+      expect(root.isCurrentParent, isTrue);
+      expect(root.breadcrumb, isEmpty);
+
+      // A itself and descendant A1 are cycle-blocked.
+      expect(targetFor(targets, a.data!.id).block, FolderMoveBlock.cycle);
+      expect(targetFor(targets, a1.data!.id).block, FolderMoveBlock.cycle);
+      expect(targetFor(targets, a1.data!.id).breadcrumb, <String>['A', 'A1']);
+
+      // Unrelated unlocked folder B is selectable.
+      expect(targetFor(targets, b.data!.id).block, isNull);
+
+      // Decks-locked folder is blocked but still listed.
+      expect(targetFor(targets, decksId).block, FolderMoveBlock.lockedToDecks);
+    });
+
+    test(
+      'F18: marks the immediate parent as current for a subfolder',
+      () async {
+        final a = await repo.createRootFolder(name: 'A');
+        final a1 = await repo.createSubfolder(parentId: a.data!.id, name: 'A1');
+
+        final result = await repo.getFolderMoveTargets(folderId: a1.data!.id);
+
+        final List<FolderMoveTarget> targets = result.data!;
+        expect(targetFor(targets, a.data!.id).isCurrentParent, isTrue);
+        expect(targetFor(targets, null).isCurrentParent, isFalse);
+      },
+    );
+
+    // ---- Reorder (WBS 2.5.1, decision rows F10, F11) ----
+
+    test(
+      'F10: reorders siblings and persists deterministic sort_order',
+      () async {
+        final a = await repo.createRootFolder(name: 'A');
+        final b = await repo.createRootFolder(name: 'B');
+        final c = await repo.createRootFolder(name: 'C');
+
+        final result = await repo.reorderFolders(
+          parentId: null,
+          orderedIds: <String>[c.data!.id, a.data!.id, b.data!.id],
+        );
+
+        expect(result.isSuccess, isTrue);
+        expect((await rowOf(c.data!.id)).sortOrder, 0);
+        expect((await rowOf(a.data!.id)).sortOrder, 1);
+        expect((await rowOf(b.data!.id)).sortOrder, 2);
+      },
+    );
+
+    test('F11: rejects a duplicate id and preserves the order', () async {
+      final a = await repo.createRootFolder(name: 'A');
+      final b = await repo.createRootFolder(name: 'B');
+      await repo.createRootFolder(name: 'C');
+
+      final result = await repo.reorderFolders(
+        parentId: null,
+        orderedIds: <String>[a.data!.id, a.data!.id, b.data!.id],
+      );
+
+      expect(
+        result.failure,
+        isA<ValidationFailure>().having(
+          (ValidationFailure f) => f.code,
+          'code',
+          ValidationCode.invalidFormat,
+        ),
+      );
+      expect((await rowOf(a.data!.id)).sortOrder, 0); // unchanged
+    });
+
+    test('F11: rejects a partial sibling list', () async {
+      final a = await repo.createRootFolder(name: 'A');
+      final b = await repo.createRootFolder(name: 'B');
+      await repo.createRootFolder(name: 'C');
+
+      final result = await repo.reorderFolders(
+        parentId: null,
+        orderedIds: <String>[a.data!.id, b.data!.id], // missing C
+      );
+
+      expect(result.failure, isA<ValidationFailure>());
+    });
+
+    test('F11: rejects a cross-parent id', () async {
+      final a = await repo.createRootFolder(name: 'A');
+      final b = await repo.createRootFolder(name: 'B');
+      final sub = await repo.createSubfolder(parentId: a.data!.id, name: 'Sub');
+
+      final result = await repo.reorderFolders(
+        parentId: null,
+        orderedIds: <String>[a.data!.id, b.data!.id, sub.data!.id],
+      );
+
+      expect(result.failure, isA<ValidationFailure>());
     });
   });
 }

@@ -64,6 +64,14 @@ stateDiagram-v2
   parents use `folder_contains_subfolders`. Folder Detail maps these to localized snackbar copy and
   must not show the generic unexpected-error message for this case.
 - Moving folder must not create cycle.
+- Moving a folder recomputes its `sort_order` (appended in the destination), locks an `unlocked`
+  destination to `subfolders`, and reverts the emptied old parent to `unlocked`. Moving into a
+  `decks`-locked destination is rejected (typed `folder_contains_decks`); a name that duplicates a
+  destination sibling is rejected; moving into the current parent is a no-op.
+- The move picker lists every folder (plus Library root) and **disables**, never hides, the folder
+  itself, its descendants (cycle) and `decks`-locked folders.
+- Reorder accepts the **full** sibling list only; a list with duplicate/missing/extra/cross-parent
+  ids is rejected and the previous order is preserved.
 - Deleting last child returns folder to `unlocked`.
 - Deleting folder deletes nested content according to persistence rules.
 - **Delete confirmation must state the blast radius (Specified, WBS 2.21.x):** the confirm dialog

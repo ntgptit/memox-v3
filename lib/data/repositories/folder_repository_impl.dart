@@ -7,6 +7,7 @@ import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_detail.dart';
+import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
@@ -220,6 +221,176 @@ class FolderRepositoryImpl implements FolderRepository {
         }
         await _cascadeDeleteFolder(id);
         await _revertParentIfEmptied(row.parentId);
+        return _ok<void>(null);
+      });
+    } catch (error) {
+      return _fail<void>(_storageWrite(error));
+    }
+  }
+
+  @override
+  Future<Result<Folder>> moveFolder({
+    required FolderId id,
+    required FolderId? newParentId,
+  }) async {
+    try {
+      return await _dao.runInTransaction(() async {
+        final FolderRow? row = await _dao.findFolderById(id);
+        if (row == null) {
+          return _fail<Folder>(const Failure.notFound(entity: 'folder'));
+        }
+        // No-op when the folder is already under the requested parent.
+        if (row.parentId == newParentId) return _ok(FolderMapper.fromRow(row));
+
+        ContentMode? newParentMode;
+        if (newParentId != null) {
+          final FolderRow? parent = await _dao.findFolderById(newParentId);
+          if (parent == null) {
+            return _fail<Folder>(const Failure.notFound(entity: 'folder'));
+          }
+          newParentMode = FolderMapper.contentModeFromStorage(
+            parent.contentMode,
+          );
+
+          // Cycle takes priority over the content-mode guard: the destination
+          // must not be the folder itself or any of its descendants (the
+          // recursive set includes the folder id). A decks-locked descendant is
+          // still a cycle (F7), not `folder_contains_decks`.
+          final Set<String> subtree =
+              (await _dao.getDescendantFolderIdsDeepestFirst(id)).toSet();
+          if (subtree.contains(newParentId)) {
+            return _fail<Folder>(
+              const Failure.validation(
+                field: 'newParentId',
+                code: ValidationCode.cycleDetected,
+              ),
+            );
+          }
+
+          final Failure? guard = _subfolderGuard(newParentMode);
+          if (guard != null) return _fail<Folder>(guard);
+        }
+
+        final List<FolderRow> siblings = await _dao.siblingFolders(newParentId);
+        final Failure? duplicate = _duplicateAmong(
+          siblings,
+          row.name,
+          excludeId: id,
+        );
+        if (duplicate != null) return _fail<Folder>(duplicate);
+
+        final int now = _nowMs();
+        final int newSortOrder = _nextSortOrder(siblings);
+        await _dao.updateFolderColumns(
+          id,
+          FoldersCompanion(
+            parentId: Value(newParentId),
+            sortOrder: Value(newSortOrder),
+            updatedAt: Value(now),
+          ),
+        );
+
+        // Lock a previously-unlocked destination to subfolders.
+        if (newParentId != null && newParentMode == ContentMode.unlocked) {
+          await _dao.updateFolderColumns(
+            newParentId,
+            FoldersCompanion(
+              contentMode: Value(
+                FolderMapper.contentModeToStorage(ContentMode.subfolders),
+              ),
+              updatedAt: Value(now),
+            ),
+          );
+        }
+
+        // Revert the old parent to unlocked once it has no children left.
+        await _revertParentIfEmptied(row.parentId);
+
+        return _ok(
+          FolderMapper.fromRow(row).copyWith(
+            parentId: newParentId,
+            sortOrder: newSortOrder,
+            updatedAt: DateTime.fromMillisecondsSinceEpoch(now, isUtc: true),
+          ),
+        );
+      });
+    } catch (error) {
+      return _fail<Folder>(_storageWrite(error));
+    }
+  }
+
+  @override
+  Future<Result<List<FolderMoveTarget>>> getFolderMoveTargets({
+    required FolderId folderId,
+  }) async {
+    try {
+      final FolderRow? folder = await _dao.findFolderById(folderId);
+      final FolderId? currentParentId = folder?.parentId;
+      final Set<String> subtree =
+          (await _dao.getDescendantFolderIdsDeepestFirst(folderId)).toSet();
+      final List<FolderRow> all = await _dao.listAllFolders();
+      final Map<String, FolderRow> byId = <String, FolderRow>{
+        for (final FolderRow r in all) r.id: r,
+      };
+
+      final List<FolderMoveTarget> folderTargets =
+          all.map((FolderRow r) {
+            final ContentMode mode = FolderMapper.contentModeFromStorage(
+              r.contentMode,
+            );
+            final FolderMoveBlock? block = subtree.contains(r.id)
+                ? FolderMoveBlock.cycle
+                : (mode == ContentMode.decks
+                      ? FolderMoveBlock.lockedToDecks
+                      : null);
+            return FolderMoveTarget(
+              id: r.id,
+              name: r.name,
+              breadcrumb: _breadcrumbNames(r, byId),
+              isCurrentParent: r.id == currentParentId,
+              block: block,
+            );
+          }).toList()..sort(
+            // Join on NUL — never valid in a folder name — so a name that
+            // contains the separator cannot corrupt the breadcrumb sort key.
+            (FolderMoveTarget a, FolderMoveTarget b) => a.breadcrumb
+                .join(' ')
+                .toLowerCase()
+                .compareTo(b.breadcrumb.join(' ').toLowerCase()),
+          );
+
+      final FolderMoveTarget root = FolderMoveTarget(
+        id: null,
+        name: '',
+        breadcrumb: const <String>[],
+        isCurrentParent: currentParentId == null,
+        block: null,
+      );
+
+      return _ok(<FolderMoveTarget>[root, ...folderTargets]);
+    } catch (error) {
+      return _fail<List<FolderMoveTarget>>(_storageRead(error));
+    }
+  }
+
+  @override
+  Future<Result<void>> reorderFolders({
+    required FolderId? parentId,
+    required List<FolderId> orderedIds,
+  }) async {
+    try {
+      return await _dao.runInTransaction(() async {
+        final List<FolderRow> siblings = await _dao.siblingFolders(parentId);
+        final Failure? invalid = _validateReorder(siblings, orderedIds);
+        if (invalid != null) return _fail<void>(invalid);
+
+        final int now = _nowMs();
+        for (int i = 0; i < orderedIds.length; i++) {
+          await _dao.updateFolderColumns(
+            orderedIds[i],
+            FoldersCompanion(sortOrder: Value(i), updatedAt: Value(now)),
+          );
+        }
         return _ok<void>(null);
       });
     } catch (error) {

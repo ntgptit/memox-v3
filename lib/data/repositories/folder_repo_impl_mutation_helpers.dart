@@ -114,9 +114,51 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
     );
   }
 
+  /// Reject a reorder whose [orderedIds] is not exactly the [siblings] set:
+  /// duplicates, or any missing/extra/cross-parent id (length mismatch or an id
+  /// outside the sibling set). The caller validates before any write, so the
+  /// previous order is preserved on rejection (F11).
+  Failure? _validateReorder(
+    List<FolderRow> siblings,
+    List<FolderId> orderedIds,
+  ) {
+    final Set<String> orderedSet = orderedIds.toSet();
+    final bool hasDuplicates = orderedSet.length != orderedIds.length;
+    final Set<String> siblingIds = siblings.map((FolderRow s) => s.id).toSet();
+    final bool sameSet =
+        orderedSet.length == siblingIds.length &&
+        orderedSet.containsAll(siblingIds);
+    return hasDuplicates || !sameSet
+        ? const Failure.validation(
+            field: 'orderedIds',
+            code: ValidationCode.invalidFormat,
+          )
+        : null;
+  }
+
+  /// Ancestor names root -> leaf (inclusive of [row]) resolved from the
+  /// in-memory [byId] map — no per-folder query. Used to label move targets.
+  List<String> _breadcrumbNames(FolderRow row, Map<String, FolderRow> byId) {
+    final List<String> names = <String>[];
+    FolderRow? current = row;
+    while (current != null) {
+      names.add(current.name);
+      final String? parentId = current.parentId;
+      current = parentId == null ? null : byId[parentId];
+    }
+    return names.reversed.toList(growable: false);
+  }
+
   /// Storage write failure wrapper for caught exceptions.
   Failure _storageWrite(Object error) => Failure.storage(
     operation: StorageOp.write,
+    table: 'folders',
+    cause: error.toString(),
+  );
+
+  /// Storage read failure wrapper for caught exceptions (move-target query).
+  Failure _storageRead(Object error) => Failure.storage(
+    operation: StorageOp.read,
     table: 'folders',
     cause: error.toString(),
   );
