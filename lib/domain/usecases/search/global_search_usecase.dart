@@ -137,7 +137,7 @@ class GlobalSearchUseCase {
   /// 0 = exact, 1 = starts-with, 2 = substring, 3 = no match (filtered out by
   /// SQL, kept defensive). Compares against the normalized (lowercased) value.
   int _matchRank(String value, String query) {
-    final String lowered = value.toLowerCase();
+    final String lowered = StringUtils.caseFold(value);
     if (lowered == query) return 0;
     if (lowered.startsWith(query)) return 1;
     if (lowered.contains(query)) return 2;

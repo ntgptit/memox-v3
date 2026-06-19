@@ -27,10 +27,12 @@ status: contract
 > `lib/data/repositories/folder_repository_impl.dart` + `folder_repo_impl_mutation_helpers.dart`)
 > over the project `Result` contract — there is **no** separate `DeckRepository` /
 > `deck_repository_impl.dart`. Implemented: `createDeck`, `renameDeck`, `reorderDecks`, `moveDeck`,
-> backed by `DeckDao` (`lib/data/datasources/local/daos/deck_dao.dart`) and `DeckMapper`. The
-> abstract `DeckRepository` surface below is the **target** read/write contract; `delete`, the read
-> streams, and counts (`watchDeckCounts`) are deferred until the `flashcards`/`flashcard_progress`
-> tables ship (WBS 2.9.x / 2.11.x / 3.7.x).
+> `deleteDeck` (WBS 2.9.1 — deck-row delete cascades to flashcards + `flashcard_progress` +
+> `flashcard_tags` via the schema FK chain, schema v3; reverts the source folder to `unlocked` when
+> it loses its last deck; study attempt/session cascade is added with WBS 4.x), backed by `DeckDao`
+> (`lib/data/datasources/local/daos/deck_dao.dart`) and `DeckMapper`. The abstract `DeckRepository`
+> surface below is the **target** read/write contract; the read streams and counts
+> (`watchDeckCounts`) are deferred until the recursive count read model ships (WBS 3.7.x).
 
 `abstract class DeckRepository` (target). Deck mutations are currently hosted on
 `FolderRepository` (see the note above), not a standalone

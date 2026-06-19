@@ -602,6 +602,26 @@ class FolderRepositoryImpl implements FolderRepository {
     }
   }
 
+  @override
+  Future<Result<void>> deleteDeck({required DeckId deckId}) async {
+    try {
+      return await _dao.runInTransaction(() async {
+        final DeckRow? row = await _deckDao.findDeckById(deckId);
+        if (row == null) {
+          return _fail<void>(const Failure.notFound(entity: 'deck'));
+        }
+        // Deleting the deck row cascades to its flashcards and, through the
+        // schema chain, their progress + tag rows (ON DELETE CASCADE).
+        await _deckDao.deleteDeckById(deckId);
+        // Revert the source folder to unlocked once it has no decks left (D3).
+        await _revertFolderIfNoDecks(row.folderId);
+        return _ok<void>(null);
+      });
+    } catch (error) {
+      return _fail<void>(_storageWriteDecks(error));
+    }
+  }
+
   // ---- Result builders ----
 
   Result<T> _ok<T>(T data) => (failure: null, data: data);

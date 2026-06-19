@@ -9,6 +9,13 @@ abstract final class StringUtils {
   static String normalizeQuery(String raw) =>
       raw.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
 
+  /// Case-fold a value for case-insensitive comparison/matching (lowercase
+  /// only, no trimming or whitespace collapse). Centralizes case normalization
+  /// so comparison semantics stay consistent across search, dedupe, and
+  /// matching, satisfying the `memox.coding.string_normalization_via_string_utils`
+  /// guard rule for domain/presentation code.
+  static String caseFold(String value) => value.toLowerCase();
+
   /// Escape the LIKE wildcards `%` and `_` plus the escape character `\` itself
   /// so a raw user query is matched literally. The caller must declare
   /// `ESCAPE '\'` on the LIKE clause. Order matters: escape the backslash first.
