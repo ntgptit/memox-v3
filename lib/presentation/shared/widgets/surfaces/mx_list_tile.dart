@@ -46,6 +46,9 @@ class MxListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MxColors colors = context.mxColors;
+    final Widget? leading = this.leading;
+    final String? subtitle = this.subtitle;
+    final Widget? trailing = this.trailing;
     return MxTappable(
       onTap: onTap,
       borderRadius: MxRadius.smAll,
@@ -54,7 +57,7 @@ class MxListTile extends StatelessWidget {
         child: Row(
           children: <Widget>[
             if (leading != null) ...<Widget>[
-              leading!,
+              leading,
               const SizedBox(width: MxSpacing.space3),
             ],
             Expanded(
@@ -70,7 +73,7 @@ class MxListTile extends StatelessWidget {
                   ),
                   if (subtitle != null)
                     Text(
-                      subtitle!,
+                      subtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colors.textSecondary,
                       ),
@@ -82,7 +85,7 @@ class MxListTile extends StatelessWidget {
             ),
             if (trailing != null) ...<Widget>[
               const SizedBox(width: MxSpacing.space2),
-              trailing!,
+              trailing,
             ],
           ],
         ),

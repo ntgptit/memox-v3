@@ -42,6 +42,7 @@ class MxBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MxColors colors = context.mxColors;
+    final String? title = this.title;
     return SafeArea(
       top: false,
       child: Padding(
@@ -70,7 +71,7 @@ class MxBottomSheet extends StatelessWidget {
             ),
             if (title != null) ...<Widget>[
               const SizedBox(height: MxSpacing.space4),
-              Text(title!, style: theme.textTheme.titleLarge),
+              Text(title, style: theme.textTheme.titleLarge),
             ],
             const SizedBox(height: MxSpacing.space4),
             child,

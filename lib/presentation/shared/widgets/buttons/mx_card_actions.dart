@@ -28,14 +28,17 @@ class MxCardActions extends StatelessWidget {
   final Widget? secondary;
 
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: <Widget>[
-      if (secondary != null) ...<Widget>[
-        secondary!,
-        const SizedBox(width: MxSpacing.space2),
+  Widget build(BuildContext context) {
+    final Widget? secondary = this.secondary;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        if (secondary != null) ...<Widget>[
+          secondary,
+          const SizedBox(width: MxSpacing.space2),
+        ],
+        primary,
       ],
-      primary,
-    ],
-  );
+    );
+  }
 }

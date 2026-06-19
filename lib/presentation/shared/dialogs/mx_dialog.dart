@@ -45,7 +45,7 @@ class MxDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(borderRadius: MxRadius.lgAll),
       title: Text(title, style: theme.textTheme.titleLarge),
       content: DefaultTextStyle.merge(
-        style: theme.textTheme.bodyMedium!.copyWith(
+        style: theme.textTheme.bodyMedium?.copyWith(
           color: colors.textSecondary,
         ),
         child: content,

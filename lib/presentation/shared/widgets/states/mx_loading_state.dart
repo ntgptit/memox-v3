@@ -32,6 +32,7 @@ class MxLoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MxColors colors = context.mxColors;
+    final String? message = this.message;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -40,7 +41,7 @@ class MxLoadingState extends StatelessWidget {
           if (message != null) ...<Widget>[
             const SizedBox(height: MxSpacing.space4),
             Text(
-              message!,
+              message,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colors.textSecondary,
               ),

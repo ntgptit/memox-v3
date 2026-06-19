@@ -44,6 +44,7 @@ class MxNoResultsState extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MxColors colors = context.mxColors;
+    final Widget? action = this.action;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(MxSpacing.space6),
@@ -75,7 +76,7 @@ class MxNoResultsState extends StatelessWidget {
             ),
             if (action != null) ...<Widget>[
               const SizedBox(height: MxSpacing.space5),
-              action!,
+              action,
             ],
           ],
         ),

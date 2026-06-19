@@ -37,13 +37,14 @@ class MxContentShell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: MxSpacing.screen),
       child: child,
     );
+    final double? maxWidth = this.maxWidth;
     if (maxWidth == null) {
       return gutter;
     }
     return Align(
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth!),
+        constraints: BoxConstraints(maxWidth: maxWidth),
         child: gutter,
       ),
     );
