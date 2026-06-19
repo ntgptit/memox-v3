@@ -30,7 +30,7 @@ WBS row status before assuming anything exists. If this file looks stale, regene
 | Flashcard reorder | `docs/business/flashcard/flashcard-management.md` | — | — | `shots/06-*` | 2.14.x |
 | Flashcard list screen | `docs/business/flashcard/flashcard-management.md`<br>`docs/wireframes/06-flashcard-list.md` | — | — | `shots/06-*` | 3.4.x |
 | Flashcard tags (input/validation) | `docs/business/tags/tag-system.md`<br>`docs/contracts/usecase-contracts/tag.md` | — | — | `shots/07-*` | 2.15.x |
-| Global search | `docs/business/search/global-search.md`<br>`docs/wireframes/11-library-search.md` | — | — | `shots/05-*` | 3.5.x |
+| Global search | `docs/business/search/global-search.md`<br>`docs/wireframes/11-library-search.md` | `lib/presentation/shared/widgets/inputs/mx_search_field.dart` | — | `shots/05-*` | 3.5.x |
 | Study entry gate | `docs/business/study/study-flow.md`<br>`docs/wireframes/12-study-entry-gate.md`<br>`docs/contracts/usecase-contracts/study.md` | — | — | — | 4.1.x |
 | Study session create/resume/restart | `docs/business/study/study-flow.md`<br>`docs/business/resume/resume-session.md` | — | — | — | 4.2.x |
 | Study review shell (current card/reveal) | `docs/business/study/study-flow.md`<br>`docs/wireframes/16-study-session-recall.md` | — | — | `shots/15-*` | 4.3.x |
