@@ -348,7 +348,7 @@ function generatePrompt(row, allRows) {
   const isFE = layer.includes('fe') || layer.includes('integration');
   const isBE = layer.includes('be') || layer.includes('integration');
   const shotsNote = isFE && entityInfo?.wireframes?.length
-    ? `\n### Mock shots (FE/Integration tasks)\nFor each wireframe above, locate the PNG set:\n- \`docs/system-design/MemoX Design System/ui_kits/mobile/shots/INDEX.md\` → find screen rows\n- Open **all state PNGs** (light + dark) before writing a single widget\n- For exact measurements without vision: \`docs/system-design/MemoX Design System/ui_kits/mobile/specs/INDEX.md\``
+    ? `\n### Mock shots (FE/Integration tasks — before any code)\n1. Locate PNG set for each wireframe via \`shots/INDEX.md\` → find all states (light + dark)\n2. Create mapping table: mock element → existing component → implementation plan → scope (Current/Future/Rejected)\n3. Check \`docs/design/screens/{screen}.visual-contract.md\` if it exists\n4. For exact measurements (without vision): \`docs/system-design/MemoX Design System/ui_kits/mobile/specs/INDEX.md\` → \`specs/NN-{screen}.md\`\n5. **Do not code until every visible mock element is mapped** — silent gaps are parity failures`
     : '';
 
   const depBlock = deps.length
@@ -426,11 +426,12 @@ Do NOT continue the task until user confirms resolution.
 **Hard rules (do not violate):**
 - Do NOT bypass UseCase → Repository → DAO flow
 - Do NOT import data layer from domain; domain has no outward imports
-- Do NOT hardcode route strings, colors, text styles, user-facing strings
+- Do NOT hardcode route strings, colors, text styles, user-facing strings, durations
 - Do NOT use \`ref.watch\` inside callbacks
 - Do NOT add new shared widget if existing one works
+- Do NOT use raw Material components, colors, spacing, or radii — use MemoX Design System tokens/components (FE: \`Mx*\`, \`--memox-*\` vars; BE: follow style guide)
 - Do NOT commit without running \`node tool/verify/run.mjs\` (produces pass-marker)
-- Do NOT run \`flutter analyze\` / \`flutter test\` / \`build_runner\` directly — use \`verify\`
+- Do NOT run \`flutter analyze\` / \`flutter test\` / \`build_runner\` directly — use \`verify\` tool
 
 ---
 
