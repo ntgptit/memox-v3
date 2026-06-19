@@ -82,8 +82,8 @@ const ENTITY_PATTERNS = [
   [/\bfolder/i, 'folder'],
   [/\bdeck/i, 'deck'],
   [/\bflashcard|\bimport|\bexport/i, 'flashcard'],
+  [/\bstudy.session|\bstudy.entry|\bsession|study.mode|\breview.mode|\bmatch|\bguess|\brecall|\bfill.mode|\bentry.gate/i, 'study'],
   [/\bsrs|\bleitner|\bspaced.repet/i, 'srs'],
-  [/\bstudy.session|\bsession|study.mode|\breview.mode|\bmatch|\bguess|\brecall|\bfill.mode/i, 'study'],
   [/\bbury|\bsuspend/i, 'study-actions'],
   [/\bresume.session|\bresumable/i, 'resume'],
   [/\btag/i, 'tag'],
@@ -130,10 +130,10 @@ const ENTITY_DOCS = {
     usecase: 'docs/contracts/usecase-contracts/study.md',
     repo: 'docs/contracts/repository-contracts/study-repository.md',
     business: ['docs/business/study/study-flow.md', 'docs/business/srs/srs-review.md'],
-    wireframes: ['docs/wireframes/12-study-setup.md', 'docs/wireframes/13-study-session-review.md',
+    wireframes: ['docs/wireframes/12-study-entry-gate.md', 'docs/wireframes/13-study-session-review.md',
       'docs/wireframes/14-study-session-match.md', 'docs/wireframes/15-study-session-guess.md',
       'docs/wireframes/16-study-session-recall.md', 'docs/wireframes/17-study-session-fill.md',
-      'docs/wireframes/18-study-session-result.md'],
+      'docs/wireframes/18-study-result.md'],
   },
   srs: {
     usecase: 'docs/contracts/usecase-contracts/srs.md',
@@ -261,6 +261,7 @@ function buildReadingList(row, entity) {
     specific.push('docs/ui-ux/action-hierarchy-contract.md');
     specific.push('docs/ui-ux/l10n-copy-contract.md');
     specific.push('docs/system-design/MemoX Design System/README.md');
+    specific.push('docs/system-design/MemoX Design System/CLAUDE.md');
     if (entityInfo?.wireframes?.length) specific.push(...entityInfo.wireframes);
     if (entityInfo?.business?.length && !(isBE || isIntegration)) specific.push(...entityInfo.business);
     specific.push('docs/decision-tables/memox-core-decision-table.md');
@@ -380,6 +381,12 @@ function generatePrompt(row, allRows) {
    - [ ] Full-width / large buttons: each one justified or guard-commented
    - [ ] No card-level large/fullWidth violation
    - [ ] \`MxActionButton\` / \`MxCardActions\` preferred over raw buttons
+6. Design System compliance (MemoX Design System/CLAUDE.md):
+   - [ ] All shadows: neutral only, no colored/glowing shadows (use \`--memox-shadow-sm/md/lg\`)
+   - [ ] Spacing/radius/colors: token-driven via \`--memox-*\` only, no hardcoded px/hex
+   - [ ] Shared primitives used: \`window.MX\` (Icon, S, PillBtn, Chip, ListRow, etc.) + contract classes (.card, .card-row, .list-row)
+   - [ ] Side-by-side cards: use \`.card-row\` wrapper (equal-height stretch), not hand-rolled flex
+   - [ ] If UI-kit screen: pass \`node tools/check-ui-kit.js\` (0 errors required)
 ` : '';
 
   return `# Claude Code Task Prompt — WBS ${row.id}: ${row.function}
