@@ -203,7 +203,34 @@ This convention applies to **backtick references** in markdown body text and tab
 8. Update decision table nếu thêm/sửa behavior branch.
 9. Check MemoX Design System compliance nếu có thay đổi UI: token usage, shared component usage, no raw component bypass.
 10. Chạy verification theo `docs/checklist/implementation-checklist.md`.
-11. Báo cáo theo format trong checklist, **bao gồm section "Docs updated"** liệt kê file docs đã sửa và lý do, section `Guard status`, và lý do nếu bỏ qua command nào.
+11. **Auto-review fan-out** (xem `## Auto-delegation (subagent fan-out)` bên dưới): sau khi verify PASS, trước khi báo cáo, tự fan-out sang `code-reviewer` + `docs-drift-detector`.
+12. Báo cáo theo format trong checklist, **bao gồm section "Docs updated"** liệt kê file docs đã sửa và lý do, section `Guard status`, section `Subagent review` (tóm tắt finding của code-reviewer + docs-drift-detector, hoặc lý do skip), và lý do nếu bỏ qua command nào.
+
+## Auto-delegation (subagent fan-out)
+
+> Quy tắc này do product owner thiết lập (2026-06-20) và là **standing authorization**: với
+> repo MemoX, agent chính ĐƯỢC PHÉP và ĐƯỢC YÊU CẦU tự spawn các review-subagent dưới đây sau task
+> code mà không cần user nhắc lại từng lần. Đây là tự-động-hóa "mềm" (model-driven), không phải hook
+> harness — phiên sau phải đọc và tuân thủ mục này.
+
+Sau khi hoàn tất một task **thay đổi code** và `node tool/verify/run.mjs` đã PASS, **trước khi
+viết báo cáo cuối**, tự fan-out **song song** (một lượt, nhiều `Agent` call):
+
+- `code-reviewer` — review diff theo 5 trục + MemoX gates (Clean-Architecture, doc-parity,
+  design-system, tool/verify).
+- `docs-drift-detector` — quét doc-code drift còn sót (path/symbol/test-ref ma, WBS gap, ARB).
+
+Xử lý kết quả:
+
+- Tổng hợp finding của cả hai vào section `Subagent review` của báo cáo.
+- Nếu có finding **blocker/nghiêm trọng** (vi phạm hard rule, drift thật, test thiếu cho branch
+  mới): sửa rồi mới kết thúc; nếu cần re-verify thì chạy lại `tool/verify`.
+- Finding nhỏ/không chắc: liệt kê trong báo cáo để user quyết định, không tự ý mở rộng scope.
+
+**Bỏ qua fan-out** (ghi rõ lý do trong báo cáo) khi: task docs-only thuần; đổi trivial
+(rename/format/comment); user yêu cầu nhanh hoặc "không review"; hoặc verify chưa PASS (sửa cho
+xanh trước đã). Với task động đến SRS/study-flow, thêm `srs-reviewer`; với task UI screen, thêm
+`ui-parity-checker`.
 
 ## UI Mock Design Parity
 
