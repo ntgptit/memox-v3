@@ -1,0 +1,607 @@
+<!-- @dsCard group="Mobile" viewport="920x720" name="Mobile UI Kit — Gallery" subtitle="MEMOX_KIT engine: each screen rendered light + dark, with state stepper" -->
+<!-- @startingPoint section="Mobile" subtitle="MemoX Mobile UI Kit — gallery of note screens, light + dark" viewport="920x720" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style data-omelette-print-defaults>
+@media print {
+  @page { margin: 0; }
+  body { padding: 0.5in; box-sizing: border-box; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+  figure, table, pre, blockquote, img, svg, tr, [class~="card" i] { break-inside: avoid; }
+  img, svg { max-width: 100%; }
+  p { orphans: 3; widows: 3; }
+}
+</style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MemoX — Mobile UI Kit</title>
+
+<link rel="stylesheet" href="../../colors_and_type.css" />
+<link rel="stylesheet" href="../../memox-components.css" />
+
+<!-- React 18 (UMD) + Babel + Lucide, from CDN -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+<style>
+  * { box-sizing: border-box; }
+  /* Mobile build — hide scrollbars everywhere (scroll still works) */
+  * { scrollbar-width: none; -ms-overflow-style: none; }
+  *::-webkit-scrollbar { width: 0; height: 0; background: transparent; }
+  html, body { margin: 0; }
+  body {
+    background: var(--memox-bg);
+    color: var(--memox-text);
+    font-family: var(--memox-font-sans);
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s ease, color .25s ease;
+  }
+
+  /* ---- Page header --------------------------------------------------- */
+  .gallery-head {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; gap: var(--memox-space-4);
+    padding: 18px 28px;
+    background: color-mix(in srgb, var(--memox-bg) 86%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--memox-divider);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: var(--memox-accent); color: var(--memox-accent-contrast);
+    display: grid; place-items: center;
+    font-weight: var(--memox-weight-extrabold); font-size: 17px;
+    box-shadow: var(--memox-shadow-sm);
+  }
+  .brand-name { font-weight: var(--memox-weight-bold); font-size: 18px; letter-spacing: var(--memox-tracking-tight); }
+  .brand-name b { color: var(--memox-accent); }
+  .brand-sub { color: var(--memox-text-3); font-size: 13px; font-weight: 500; }
+  .head-spacer { flex: 1; }
+
+  .theme-toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: var(--memox-radius-pill);
+    border: 1px solid var(--memox-border-strong);
+    background: var(--memox-surface); color: var(--memox-text-2);
+    font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .theme-toggle:hover { border-color: var(--memox-accent); color: var(--memox-text); }
+  .theme-toggle i { width: 16px; height: 16px; }
+
+  /* ---- Rows ---------------------------------------------------------- */
+  .gallery {
+    max-width: 920px; margin: 0 auto; padding: 28px 28px 120px;
+    display: flex; flex-direction: column; gap: 56px;
+  }
+  .row {
+    display: flex; flex-direction: column;
+    gap: 22px; align-items: flex-start;
+  }
+  .row-head {
+    display: flex; flex-wrap: wrap; align-items: center;
+    column-gap: 16px; row-gap: 12px; width: 100%;
+  }
+  .row-frames {
+    display: flex; align-items: flex-start; gap: 28px;
+  }
+  .row-num {
+    flex: none;
+    font-family: var(--memox-font-mono); font-size: 13px; font-weight: 600;
+    color: var(--memox-accent);
+    background: var(--memox-accent-soft);
+    padding: 4px 9px; border-radius: var(--memox-radius-sm);
+  }
+  .row-title {
+    flex: 1 1 200px;
+    font-size: 19px; font-weight: var(--memox-weight-bold);
+    letter-spacing: var(--memox-tracking-tight);
+  }
+  .stepper {
+    flex: none; display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px; border-radius: var(--memox-radius-pill);
+    background: var(--memox-surface-2); border: 1px solid var(--memox-border);
+  }
+  .stepper button {
+    width: 28px; height: 28px; border-radius: var(--memox-radius-pill);
+    border: none; background: transparent; cursor: pointer;
+    color: var(--memox-text-2); font-size: 18px; line-height: 1;
+    display: grid; place-items: center;
+    transition: background .12s ease, color .12s ease;
+  }
+  .stepper button:hover { background: var(--memox-surface); color: var(--memox-text); }
+  .stepper button:active { transform: scale(0.92); }
+  .st-label {
+    min-width: 116px; text-align: center;
+    font-size: 12.5px; font-weight: 600; color: var(--memox-text-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Device frame -------------------------------------------------- */
+  .frame-wrap {
+    flex: 0 0 390px;
+    background: var(--memox-bg);
+    border-radius: 44px;
+    padding: 10px;
+    border: 1px solid var(--memox-border);
+    box-shadow: var(--memox-shadow-lg);
+  }
+  .frame-wrap.memox-dark { box-shadow: var(--memox-shadow-lg); }
+  .phone {
+    width: 390px; height: 770px;
+    background: var(--memox-bg);
+    border-radius: 36px; overflow: hidden;
+    position: relative;
+    border: 1px solid var(--memox-divider);
+    display: flex; flex-direction: column;
+  }
+  .memox-statusbar {
+    flex: none; height: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 26px 0 30px;
+    font-size: 15px; font-weight: 700; color: var(--memox-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .memox-statusbar .sb-icons { display: inline-flex; align-items: center; gap: 7px; }
+  .memox-statusbar .sb-icons i { width: 17px; height: 17px; }
+  .phone-canvas {
+    flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    background: var(--memox-bg);
+  }
+  .phone-canvas::-webkit-scrollbar { width: 0; height: 0; }
+
+  .frame-tag {
+    flex: 0 0 100%;
+    margin-top: -8px;
+    display: flex; gap: 390px; padding-left: 8px;
+  }
+</style>
+</head>
+<body>
+  <header class="gallery-head">
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div>
+        <div class="brand-name">Memo<b>X</b></div>
+      </div>
+      <span class="brand-sub">Mobile UI Kit</span>
+    </div>
+    <div class="head-spacer"></div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle chrome theme">
+      <i data-lucide="moon"></i><span id="themeLabel">Dark chrome</span>
+    </button>
+  </header>
+
+  <main class="gallery" id="gallery"></main>
+
+  <!-- ================= ENGINE ================= -->
+  <script>
+  (function () {
+    const queue = [];
+    const rows = [];
+    let ready = false;
+
+    function libsReady() {
+      return window.React && window.ReactDOM && window.ReactDOM.createRoot && window.lucide;
+    }
+
+    function refreshIcons() {
+      // React 18 commits asynchronously (and initial Babel compile delays it),
+      // so the <i data-lucide> nodes may not exist yet on early passes. Always
+      // poll for a minimum window (~1s) to catch the commit, then keep going
+      // while any unconverted icons remain — never stop on a momentary zero.
+      var tries = 0;
+      function run() {
+        try { window.lucide.createIcons(); } catch (e) {}
+        tries++;
+        if (tries < 8 || (tries < 40 && document.querySelector('.phone i[data-lucide]'))) {
+          setTimeout(run, 120);
+        }
+      }
+      requestAnimationFrame(run);
+    }
+
+    function buildStatusbar() {
+      const sb = document.createElement('div');
+      sb.className = 'memox-statusbar';
+      sb.innerHTML =
+        '<span class="sb-time">9:41</span>' +
+        '<span class="sb-icons">' +
+          '<i data-lucide="signal-high"></i>' +
+          '<i data-lucide="wifi"></i>' +
+          '<i data-lucide="battery-full"></i>' +
+        '</span>';
+      return sb;
+    }
+
+    function makePhone(themeClass) {
+      const wrap = document.createElement('div');
+      wrap.className = 'frame-wrap ' + themeClass;
+      const phone = document.createElement('div');
+      phone.className = 'phone';
+      phone.appendChild(buildStatusbar());
+      wrap.appendChild(phone);
+      // fresh canvas + root is created on every render (see renderInto)
+      return { wrap, phone, root: null };
+    }
+
+    // Discard any previous root/DOM and mount the element into a brand-new
+    // canvas node. Fresh container per render means Lucide's <i>→<svg> swaps
+    // never leave stale fibers for React to trip over on the next state.
+    function renderInto(slot, el) {
+      if (slot.root) { try { slot.root.unmount(); } catch (e) {} }
+      if (slot.iconObs) { try { slot.iconObs.disconnect(); } catch (e) {} }
+      const old = slot.phone.querySelector('.phone-canvas');
+      if (old) old.remove();
+      const canvas = document.createElement('div');
+      canvas.className = 'phone-canvas';
+      slot.phone.appendChild(canvas);
+      slot.root = window.ReactDOM.createRoot(canvas);
+      slot.root.render(el);
+      // Event-driven icon conversion: convert <i data-lucide> the moment React
+      // commits them (and after its dev double-render), with no timing guesses.
+      // Converting removes the <i>, so the guard prevents an observer loop.
+      var t = null;
+      slot.iconObs = new MutationObserver(function () {
+        if (canvas.querySelector('i[data-lucide]')) {
+          clearTimeout(t);
+          t = setTimeout(function () { try { window.lucide.createIcons(); } catch (e) {} }, 20);
+        }
+      });
+      slot.iconObs.observe(canvas, { childList: true, subtree: true });
+    }
+
+    function buildRow(def) {
+      const states = def.states || [];
+      const multi = states.length > 1;
+      const row = document.createElement('div');
+      row.className = 'row';
+
+      const head = document.createElement('div');
+      head.className = 'row-head';
+      const frames = document.createElement('div');
+      frames.className = 'row-frames';
+      row.appendChild(head);
+      row.appendChild(frames);
+
+      const num = document.createElement('span');
+      num.className = 'row-num';
+      num.textContent = def.num;
+
+      const title = document.createElement('span');
+      title.className = 'row-title';
+      title.textContent = def.title;
+
+      head.appendChild(num);
+      head.appendChild(title);
+
+      let label = null;
+      const ctx = { idx: 0 };
+
+      if (multi) {
+        const stepper = document.createElement('div');
+        stepper.className = 'stepper';
+        const prev = document.createElement('button');
+        prev.setAttribute('aria-label', 'Prev state');
+        prev.textContent = '\u2039';
+        label = document.createElement('span');
+        label.className = 'st-label';
+        const next = document.createElement('button');
+        next.setAttribute('aria-label', 'Next state');
+        next.textContent = '\u203A';
+        stepper.appendChild(prev);
+        stepper.appendChild(label);
+        stepper.appendChild(next);
+        head.appendChild(stepper);
+
+        prev.addEventListener('click', function () {
+          ctx.idx = (ctx.idx - 1 + states.length) % states.length;
+          renderState();
+        });
+        next.addEventListener('click', function () {
+          ctx.idx = (ctx.idx + 1) % states.length;
+          renderState();
+        });
+      }
+
+      const light = makePhone('memox-light');
+      const dark = makePhone('memox-dark');
+      frames.appendChild(light.wrap);
+      frames.appendChild(dark.wrap);
+
+      function renderState() {
+        const st = states[ctx.idx];
+        if (!st) return;
+        if (label) {
+          label.textContent = st.label + ' \u00B7 ' + (ctx.idx + 1) + '/' + states.length;
+        }
+        let el = null;
+        try { el = st.render(); } catch (e) { console.error('render error in ' + def.num, e); }
+        renderInto(light, el);
+        renderInto(dark, el);
+        refreshIcons();
+      }
+
+      rows.push({ row, renderState, rendered: false });
+      document.getElementById('gallery').appendChild(row);
+      return rows[rows.length - 1];
+    }
+
+    // Render rows on build. Also attach a lazy observer purely as a no-op
+    // safety: rows are already rendered, so IO just re-confirms icons.
+    const io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { refreshIcons(); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '200px 0px' }) : null;
+
+    function flush() {
+      while (queue.length) {
+        const def = queue.shift();
+        const rec = buildRow(def);
+        rec.rendered = true;
+        rec.renderState();
+        if (io) io.observe(rec.row);
+      }
+    }
+
+    window.MEMOX_KIT = {
+      register: function (def) {
+        queue.push(def);
+        if (ready) flush();
+      }
+    };
+
+    function boot() {
+      if (!libsReady()) { setTimeout(boot, 40); return; }
+      ready = true;
+      flush();
+      refreshIcons();
+    }
+    boot();
+
+    // Theme toggle — chrome only; every row always shows BOTH frames.
+    const toggle = document.getElementById('themeToggle');
+    const label = document.getElementById('themeLabel');
+    toggle.addEventListener('click', function () {
+      const dark = document.documentElement.classList.toggle('memox-dark');
+      label.textContent = dark ? 'Light chrome' : 'Dark chrome';
+      toggle.querySelector('i').setAttribute('data-lucide', dark ? 'sun' : 'moon');
+      refreshIcons();
+    });
+  })();
+  </script>
+
+  <!-- ================= SCREENS ================= -->
+  <script type="text/babel" src="screens/_shared.jsx"></script>
+  <script type="text/babel" src="screens/00-components.jsx"></script>
+  <script type="text/babel" src="screens/01-onboarding.jsx"></script>
+  <script type="text/babel" src="screens/02-dashboard.jsx"></script>
+  <script type="text/babel" src="screens/03-library.jsx"></script>
+  <script type="text/babel" src="screens/04-folder.jsx"></script>
+  <script type="text/babel" src="screens/05-search.jsx"></script>
+  <script type="text/babel" src="screens/06-flashcard-list.jsx"></script>
+  <script type="text/babel" src="screens/07-flashcard-create.jsx"></script>
+  <script type="text/babel" src="screens/08-flashcard-edit.jsx"></script>
+  <script type="text/babel" src="screens/09-flashcard-history.jsx"></script>
+  <script type="text/babel" src="screens/10-deck-import.jsx"></script>
+  <script type="text/babel" src="screens/11-tag-management.jsx"></script>
+  <script type="text/babel" src="screens/12-study-review.jsx"></script>
+  <script type="text/babel" src="screens/13-study-match.jsx"></script>
+  <script type="text/babel" src="screens/14-study-guess.jsx"></script>
+  <script type="text/babel" src="screens/15-study-recall.jsx"></script>
+  <script type="text/babel" src="screens/16-study-fill.jsx"></script>
+  <script type="text/babel" src="screens/17-study-result.jsx"></script>
+  <script type="text/babel" src="screens/20-settings.jsx"></script>
+  <script type="text/babel" src="screens/21-account-sync.jsx"></script>
+  <script type="text/babel" src="screens/22-learning-settings.jsx"></script>
+  <script type="text/babel" src="screens/23-audio-speech.jsx"></script>
+  <script type="text/babel" src="screens/24-appearance.jsx"></script>
+  <script type="text/babel" src="screens/25-language.jsx"></script>
+<script>
+(async () => {
+  if (!document.title || !document.title.trim()) document.title = "index";
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  @page { margin: 0.5cm; }\n  figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    print-color-adjust: exact; -webkit-print-color-adjust: exact;\n    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  // Reveal content gated on scroll or visibility before printing. Lazy <img>,
+  // IntersectionObserver fade-ins, and collapsed <details> don't render while
+  // off-screen, so a long page would print with them blank or closed. Open
+  // every <details>, force native-lazy images eager, and scroll the document
+  // through its full height to trip lazy-load + IO; then wait (bounded) for the
+  // newly-triggered images. Inert for deck-stage (slides aren't scroll-gated).
+  try {
+    for (const d of document.querySelectorAll('details')) d.open = true;
+    for (const img of document.querySelectorAll('img[loading="lazy"]'))
+      img.loading = 'eager';
+    const scroller = document.scrollingElement || document.documentElement;
+    const full = Math.max(scroller.scrollHeight, document.body.scrollHeight);
+    const step = window.innerHeight || 800;
+    for (let y = 0; y <= full; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+    window.scrollTo(0, 0);
+    await Promise.race([
+      Promise.all(
+        [...document.images].map((img) =>
+          img.complete
+            ? null
+            : new Promise((res) => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+              })
+        )
+      ),
+      new Promise((r) => setTimeout(r, 4000)),
+    ]);
+  } catch (e) {}
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  // Re-append deck-stage's @page last so no author @page can add a margin and
+  // spill each full-bleed slide onto two sheets. Backstop for old copies.
+  if (ds) {
+    let pg = document.getElementById('deck-stage-print-page');
+    if (!pg) {
+      pg = document.createElement('style');
+      pg.textContent = '@page{size:' + (+ds.getAttribute('width') || 1920) +
+        'px ' + (+ds.getAttribute('height') || 1080) + 'px;margin:0}';
+    }
+    document.body.appendChild(pg);
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  // Relax break-inside on oversized elements. An element taller than a
+  // printable page can't honor break-inside: avoid — browsers either overflow
+  // it or push it whole to the next page, leaving a blank gap, then break it
+  // anyway at an arbitrary point. After the final layout (content revealed,
+  // animations jumped), find elements taller than a page that still compute
+  // break-inside: avoid and reset them to auto, so the browser breaks them at
+  // their children's boundaries instead (children keep their own avoid). PAGE_PX
+  // is a conservative portrait estimate at 96 CSS px/in — Letter/A4 usable
+  // height minus our 0.5in margins — so only clearly-oversized elements are
+  // touched and under-page elements still stay whole. Skipped for decks, whose
+  // slides are sized to the page.
+  try {
+    if (!document.querySelector('deck-stage')) {
+      const PAGE_PX = 1024;
+      // Our print defaults add a body padding inset only when we also zero the
+      // @page margin; computed style can't tell us (it reports screen media),
+      // so read the injected rule directly.
+      const defaults = document.querySelector('style[data-omelette-print-defaults]');
+      const pageInset = /body\s*\{[^}]*padding/.test(defaults ? defaults.textContent || '' : '');
+      const SEL = 'section,article,figure,table,pre,blockquote,[class~="card" i],[class~="page" i],[class~="sheet" i]';
+      for (const el of document.body.querySelectorAll(SEL)) {
+        if (el instanceof HTMLElement && el.offsetHeight > PAGE_PX) {
+          el.setAttribute('data-om-oversized', '');
+          // Fake-paged docs simulate sheets with over-tall break-after:page
+          // boxes; honoring the break spills half-blank pages and ends a
+          // colored box mid-sheet. Flow them, and (only when we own the page
+          // inset) drop the redundant padding/background via the rule below.
+          const cs = getComputedStyle(el);
+          if (cs.breakAfter === 'page' || cs.pageBreakAfter === 'always') {
+            el.setAttribute('data-om-fakepage', '');
+          }
+        }
+      }
+      const ost = document.createElement('style');
+      ost.textContent = '@media print{' +
+        '[data-om-oversized]{break-inside:auto !important;page-break-inside:auto !important}' +
+        '[data-om-fakepage]{break-after:auto !important;page-break-after:auto !important}' +
+        (pageInset ? '[data-om-fakepage]{padding:0 !important;background:none !important}' : '') +
+        '}';
+      document.head.appendChild(ost);
+    }
+  } catch (e) {}
+  // macOS Preview renders Skia-PDF Luminosity soft-masks as opaque grey boxes;
+  // swap the CSS that triggers them for Preview-safe forms.
+  try {
+    for (const el of document.body.querySelectorAll('*')) {
+      const cs = getComputedStyle(el);
+
+      if (cs.boxShadow !== 'none' && cs.filter === 'none') {
+        const outs = [], kept = [];
+        for (const s of cs.boxShadow.split(/,(?![^(]*[)])/)) {
+          const t = s.trim();
+          const m = t.match(/^(rgba?[(][^)]+[)]) (-?[0-9.]+px) (-?[0-9.]+px) ([0-9.]+px) -?[0-9.]+px$/);
+          if (m && parseFloat(m[4]) > 0) outs.push('drop-shadow(' + m[2] + ' ' + m[3] + ' ' + m[4] + ' ' + m[1] + ')');
+          else kept.push(t);
+        }
+        if (outs.length) {
+          el.style.setProperty('filter', outs.join(' '), 'important');
+          el.style.setProperty('box-shadow', kept.join(', ') || 'none', 'important');
+        }
+      }
+
+      const mask = cs.maskImage && cs.maskImage !== 'none' ? cs.maskImage : cs.webkitMaskImage;
+      if (mask && mask !== 'none' && cs.filter === 'none') el.style.setProperty('filter', 'opacity(1)', 'important');
+    }
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

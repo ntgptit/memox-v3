@@ -5,14 +5,15 @@ UI kit for agents without strong image input: element trees with containment hie
 layout intent, repeated-item runs, bounding boxes, and `--memox-*` token-resolved styles.
 Pair with `../shots/*.png` when vision is available.
 
-Source `index.html` sha256: `807cef51d416c14f7fae5938d422bae200888c825528710b68d2dff063796910` (mirror of `specs/.source-hash`; the
+Source `index.html` sha256: `b7aae35f7c97ed4692de9b01b01bc30c1ab123be7274f3b13a3dcd1d5f44e8f5` (mirror of `specs/.source-hash`; the
 freshness check in `tool/verify/run.mjs` fails if `index.html` changed without re-export).
 
 | # | Screen | Spec file | States |
 | --- | --- | --- | --- |
+| 00 | Components | `00-components.md` | 1 |
 | 01 | Onboarding | `01-onboarding.md` | 9 |
 | 02 | Dashboard | `02-dashboard.md` | 9 |
-| 03 | Library overview | `03-library-overview.md` | 11 |
+| 03 | Library overview | `03-library-overview.md` | 6 |
 | 04 | Folder detail | `04-folder-detail.md` | 8 |
 | 05 | Library search | `05-library-search.md` | 5 |
 | 06 | Flashcard list | `06-flashcard-list.md` | 8 |
@@ -22,7 +23,7 @@ freshness check in `tool/verify/run.mjs` fails if `index.html` changed without r
 | 10 | Deck import | `10-deck-import.md` | 9 |
 | 11 | Tag management | `11-tag-management.md` | 11 |
 | 12 | Study · Review | `12-study-review.md` | 1 |
-| 13 | Study · Match | `13-study-match.md` | 1 |
+| 13 | Study · Match | `13-study-match.md` | 3 |
 | 14 | Study · Guess | `14-study-guess.md` | 1 |
 | 15 | Study · Recall | `15-study-recall.md` | 2 |
 | 16 | Study · Fill | `16-study-fill.md` | 2 |
@@ -36,4 +37,4 @@ freshness check in `tool/verify/run.mjs` fails if `index.html` changed without r
 | 24 | Appearance | `24-appearance.md` | 3 |
 | 25 | Language | `25-language.md` | 3 |
 
-Total: 25 screens · 141 states.
+Total: 26 screens · 139 states.

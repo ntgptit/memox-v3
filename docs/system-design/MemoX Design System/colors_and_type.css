@@ -1,548 +1,311 @@
-/*
- * MemoX Design Tokens — CSS custom properties
- *
- * Source of truth: lib/core/theme/tokens/** in github.com/ntgptit/memox @ main.
- * This file mirrors those Dart abstract-final classes as CSS variables and
- * provides semantic selectors (h1, .caption, etc) so agents can style quickly.
- */
+/* ============================================================================
+   MemoX — Colors & Type tokens
+   ----------------------------------------------------------------------------
+   NOTE: These token VALUES are a crafted placeholder palette for MemoX.
+   The original spec asked to paste an exact :root{}/.memox-dark{} block that
+   was not present in the conversation. Replace the values below with your
+   canonical tokens if you have them — every component reads var(--memox-*),
+   so swapping values here re-themes the entire system. Do not hardcode colors
+   downstream.
+   ============================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-:root {
-  /* ── Type families ─────────────────────────────────────────── */
-  --memox-font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --memox-font-headline: var(--memox-font-sans);
+:root,
+.memox-light {
+  /* ---- Brand / accent (Tokyo Free — light blue primary) -------------- */
+  --memox-accent: #5569FF;
+  --memox-accent-soft: #EEF0FF;
+  --memox-accent-contrast: #FFFFFF;
+  /* True white constant (theme-neutral) — for text/knobs on colored fills. */
+  --memox-true-white: #FFFFFF;
 
-  /* ── Type scale (collapsed: 48 / 32 / 24 / 20 / 16 / 14 / 12) ── */
-  --memox-fs-stat-display: 48px;
-  --memox-fs-display-large: 32px;
-  --memox-fs-display-medium: 32px;
-  --memox-fs-headline-large: 24px;
-  --memox-fs-title-large: 24px;
-  --memox-fs-headline-medium: 20px;
-  --memox-fs-title-medium: 16px;
+  /* ---- Surfaces (Tokyo Free White) ------------------------------------- */
+  --memox-bg: #F2F5F9;
+  --memox-surface: #FFFFFF;
+  --memox-surface-2: #EDEFF4;
+  --memox-overlay: rgba(34, 51, 84, 0.45);
+
+  /* ---- Text (Tokyo navy ink #223354) ----------------------------------- */
+  --memox-text: #223354;
+  --memox-text-2: #5A6378;
+  --memox-text-3: #9098AC;
+
+  /* ---- Lines (Tokyo black[10] dividers) -------------------------------- */
+  --memox-border: #E6E8EE;
+  --memox-border-strong: #D5D8E1;
+  --memox-divider: #EEEFF3;
+  --memox-focus-ring: rgba(85, 105, 255, 0.30);
+
+  /* ---- Semantic (Tokyo Free; soft = main @ 10% on white) --------------- */
+  --memox-success: #2E9E5B;
+  --memox-success-soft: #E9F4EE;
+  --memox-warn: #FFA319;
+  --memox-danger: #DD4257;
+  --memox-danger-soft: #FBEAEC;
+  --memox-info: #33C2FF;
+
+  /* ---- Note label colors (memo highlights) ----------------------------- */
+  --memox-note-yellow: #FFD75E;
+  --memox-note-amber: #FFB454;
+  --memox-note-green: #8FD79A;
+  --memox-note-teal: #6FD3C4;
+  --memox-note-blue: #84B6F7;
+  --memox-note-violet: #B9A4F0;
+  --memox-note-pink: #F6A8C4;
+  --memox-note-clay: #E2917A;
+
+  /* ---- Radii ----------------------------------------------------------- */
+  --memox-radius-xs: 6px;
+  --memox-radius-sm: 10px;
+  --memox-radius-md: 14px;
+  --memox-radius-lg: 20px;
+  --memox-radius-xl: 28px;
+  --memox-radius-pill: 999px;
+
+  /* ---- Spacing scale (4px base) ---------------------------------------- */
+  --memox-space-1: 4px;
+  --memox-space-2: 8px;
+  --memox-space-3: 12px;
+  --memox-space-4: 16px;
+  --memox-space-5: 20px;
+  --memox-space-6: 24px;
+  --memox-space-8: 32px;
+  --memox-space-10: 40px;
+  --memox-space-12: 48px;
+
+  /* ---- Elevation / shadow ---------------------------------------------- */
+  /* Calm, neutral elevation — a learning app stays quiet. Low opacity, no
+     colored glows. Use sm for cards, md for floating controls (FAB/popover),
+     lg only for sheets/dialogs. Prefer borders over shadow where you can. */
+  --memox-shadow-sm: 0 1px 2px rgba(27, 26, 23, 0.05);
+  --memox-shadow-md: 0 2px 8px rgba(27, 26, 23, 0.06);
+  --memox-shadow-lg: 0 8px 28px rgba(27, 26, 23, 0.10);
+  /* Deprecated colored glow — now a neutral alias of -md. Do not reintroduce a glow. */
+  --memox-shadow-accent: var(--memox-shadow-md);
+
+  /* ---- Typography ------------------------------------------------------ */
+  --memox-font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --memox-font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --memox-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --memox-size-display: 34px;
+  --memox-size-title: 26px;
+  --memox-size-h1: 22px;
+  --memox-size-h2: 18px;
+
+  --memox-weight-regular: 400;
+  --memox-weight-medium: 500;
+  --memox-weight-semibold: 600;
+  --memox-weight-bold: 700;
+  --memox-weight-extrabold: 800;
+
+  --memox-leading-tight: 1.15;
+  --memox-leading-snug: 1.35;
+  --memox-leading-normal: 1.5;
+
+  --memox-tracking-tight: -0.02em;
+}
+
+/* ============================================================================
+   Dark theme — scope class. Applying .memox-dark to any container (e.g. a
+   .frame-wrap) remaps the same token names; descendants need no changes.
+   ============================================================================ */
+.memox-dark {
+  --memox-accent: #5E72FF;
+  --memox-accent-soft: #1A2350;
+  --memox-accent-contrast: #FFFFFF;
+
+  --memox-bg: #070C27;
+  --memox-surface: #111633;
+  --memox-surface-2: #191E3B;
+  --memox-overlay: rgba(0, 0, 0, 0.6);
+
+  --memox-text: #CBCCD2;
+  --memox-text-2: #9EA4C1;
+  --memox-text-3: #6F7490;
+
+  --memox-border: #272C48;
+  --memox-border-strong: #353B5C;
+  --memox-divider: #1F243F;
+  --memox-focus-ring: rgba(140, 124, 240, 0.4);
+
+  --memox-success: #46B87C;
+  --memox-success-soft: #14301F;
+  --memox-warn: #FFA319;
+  --memox-danger: #F26B79;
+  --memox-danger-soft: #2E1620;
+  --memox-info: #33C2FF;
+
+  --memox-note-yellow: #C9A93E;
+  --memox-note-amber: #C98A3C;
+  --memox-note-green: #5FA76C;
+  --memox-note-teal: #4AA396;
+  --memox-note-blue: #5687C4;
+  --memox-note-violet: #8B79C0;
+  --memox-note-pink: #C47B97;
+  --memox-note-clay: #B36C57;
+
+  --memox-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --memox-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.38);
+  --memox-shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.48);
+  --memox-shadow-accent: var(--memox-shadow-md);
+}
+
+/* ============================================================================
+   CONTRACT LAYER — Material-style semantic tokens consumed by the class-based
+   component system in memox-components.css. Aliases reference the base palette
+   above, so they auto-flip in .memox-dark with no per-token override needed.
+   ============================================================================ */
+:root,
+.memox-light {
+  /* ---- Semantic color roles ---- */
+  --memox-primary: var(--memox-accent);
+  --memox-on-primary: var(--memox-accent-contrast);
+  --memox-text-primary: var(--memox-text);
+  --memox-text-secondary: var(--memox-text-2);
+  --memox-surface-raised: var(--memox-surface);
+  --memox-outline: var(--memox-border-strong);
+  --memox-outline-variant: var(--memox-border);
+  --memox-border-ghost: var(--memox-divider);
+  --memox-progress-track: var(--memox-surface-2);
+  --memox-shadow-soft: var(--memox-shadow-sm);
+
+  /* ---- Status (spaced-repetition states) ---- */
+  --memox-status-new: var(--memox-info);
+  --memox-status-learning: var(--memox-warn);
+  --memox-status-reviewing: var(--memox-note-teal);
+  --memox-status-mastered: var(--memox-success);
+
+  /* ---- Mastery scale (per-deck progress: low → mid → high) ---- */
+  --memox-mastery-low: var(--memox-danger);
+  --memox-mastery-mid: var(--memox-warn);
+  --memox-mastery-high: var(--memox-success);
+
+  /* ---- Study rating (an answer scored right / wrong) ---- */
+  --memox-rating-correct: var(--memox-success);
+  --memox-rating-correct-soft: var(--memox-success-soft);
+  --memox-rating-wrong: var(--memox-danger);
+  --memox-rating-wrong-soft: var(--memox-danger-soft);
+
+  /* ---- Self-assessment (Recall: how well did I know it) ---- */
+  --memox-self-missed: var(--memox-danger);
+  --memox-self-partial: var(--memox-warn);
+  --memox-self-got: var(--memox-success);
+
+  /* ---- State opacities (used via color-mix) ---- */
+  --memox-op-hover: 0.08;          /* @kind other */
+  --memox-op-selected: 0.12;       /* @kind other */
+  --memox-op-disabled: 0.38;       /* @kind other */
+  --memox-op-border-subtle: 0.40;  /* @kind other */
+
+  /* ---- Type roles ---- */
+  --memox-fs-headline-medium: 24px;
   --memox-fs-title-small: 16px;
-  --memox-fs-body-large: 16px;
-  --memox-fs-body-medium: 16px;
-  --memox-fs-body-small: 14px;
+  --memox-fs-body-small: 13px;
   --memox-fs-label-large: 14px;
   --memox-fs-label-medium: 12px;
-  --memox-fs-label-small: 12px;
-  --memox-fs-caption: 12px;
+  --memox-fs-label-small: 11px;
+  --memox-ls-section: 0.08em;
 
-  /* ── Font weights ──────────────────────────────────────────── */
-  --memox-fw-regular: 400; /* @kind font */
-  --memox-fw-medium: 500; /* @kind font */
-  --memox-fw-semibold: 600; /* @kind font */
-  --memox-fw-bold: 700; /* @kind font */
-  --memox-fw-extrabold: 800; /* @kind font */
-
-  /* ── Letter spacing ────────────────────────────────────────── */
-  --memox-ls-heading: -0.64px; /* @kind font */ /* tight, applied to display + headlines */
-  --memox-ls-body: 0; /* @kind font */
-  --memox-ls-label: 0.72px; /* @kind font */
-  --memox-ls-section: 1.2px; /* @kind font */ /* ALL CAPS overlines */
-
-  /* ── Line heights ──────────────────────────────────────────── */
-  --memox-lh-display: 1.1; /* @kind font */
-  --memox-lh-heading: 1.2; /* @kind font */
-  --memox-lh-body: 1.5; /* @kind font */
-  --memox-lh-caption: 1.4; /* @kind font */
-  --memox-lh-relaxed: 1.6; /* @kind font */
-
-  /* ── Seeds (user-switchable in Settings) ───────────────────── */
-  --memox-seed-indigo: #5265F5;   /* Tokyo Pure Light primary */
-  --memox-seed-violet: #A78BFA;   /* Nebula accent */
-  --memox-seed-teal:   #4DB6AC;
-  --memox-seed-rose:   #E57373;
-  --memox-seed-amber:  #FFB74D;
-  --memox-seed-sage:   #81C784;
-
-  /* ── Brand / core roles — Tokyo Pure Light ─────────────────── */
-  --memox-primary:            #5265F5;
-  --memox-on-primary:         #FFFFFF;
-  /* Lifted indigo for primary-COLORED TEXT/ICONS on the page surface.
-     In light it equals --memox-primary (passes AA on light). In dark it lifts
-     so primary-colored text/links/icons clear AA on the deep-navy surface,
-     while --memox-primary stays the brand-solid button FILL (white text). */
-  --memox-primary-bright:     #5265F5;
-  --memox-primary-container:  #E0E5FE;
-  --memox-on-primary-container: #1A2580;
-  --memox-secondary:          #6E7CD9;
-  --memox-on-secondary:       #FFFFFF;
-  --memox-accent:             #8B6FF5;   /* violet — used sparingly in Light, signature in Nebula */
-  --memox-on-accent:          #FFFFFF;
-  --memox-tertiary:           #004E1A;
-  --memox-on-tertiary:        #FFFFFF;
-  --memox-error:              #DC2D4E;
-  --memox-on-error:           #FFFFFF;
-
-  /* ── Surface ladder — Tokyo Pure Light ─────────────────────── */
-  /* Cool, blue-tinted whites — never warm. Step lift is subtle. */
-  --memox-surface:                    #F7F9FE;
-  --memox-surface-bright:             #FFFFFF;
-  --memox-surface-dim:                #DAE0EF;
-  --memox-surface-container-lowest:   #FFFFFF;
-  --memox-surface-container-low:      #F1F4FB;
-  --memox-surface-container:          #E9EDF7;
-  --memox-surface-container-high:     #E2E7F3;
-  --memox-surface-container-highest:  #DAE0EF;
-
-  --memox-on-surface:          #0F1638;   /* deep cool navy text */
-  --memox-on-surface-variant:  #4A5278;   /* muted navy */
-  --memox-outline:             #7C85AB;   /* cool gray-indigo */
-  --memox-outline-variant:     #C5CBE3;   /* very light indigo */
-
-  /* ── Semantic (light) ──────────────────────────────────────── */
-  --memox-success:           #2BA88B;
-  --memox-warning:           #F59E0B;
-  --memox-mastery:           #1F8A5B;   /* friendlier green than #004E1A */
-  --memox-mastery-fixed:     #C7F2D8;
-  --memox-on-mastery-fixed:  #04331A;
-  --memox-streak:            #F97316;
-
-  /* ── Mastery gradient (low → mid → high) ──────────────────── */
-  --memox-mastery-low:  #E57373;
-  --memox-mastery-mid:  #F59E0B;
-  --memox-mastery-high: #1F8A5B;
-
-  /* ── Card status ───────────────────────────────────────────── */
-  --memox-status-new:        #8C95B8;
-  --memox-status-learning:   #F59E0B;
-  --memox-status-reviewing:  #5265F5;
-  --memox-status-mastered:   #1F8A5B;
-
-  /* ── Review ratings ────────────────────────────────────────── */
-  --memox-rating-again: #E57373;
-  --memox-rating-hard:  #F59E0B;
-  --memox-rating-good:  #5265F5;
-  --memox-rating-easy:  #2BA88B;
-
-  /* ── Recall self-assessment ────────────────────────────────── */
-  --memox-self-missed:  #E57373;
-  --memox-self-partial: #FFB74D;
-  --memox-self-gotit:   #4DB6AC;
-
-  /* ── Spacing (4dp grid) ────────────────────────────────────── */
-  --memox-space-xxs: 2px;
-  --memox-space-xs:  4px;
-  --memox-space-sm:  8px;
-  --memox-space-md:  12px;
-  --memox-space-lg:  16px;
-  --memox-space-xl:  24px;
-  --memox-space-xxl: 32px;
-  --memox-space-xxxl: 48px;
-
-  --memox-space-card:    16px;
-  --memox-space-screen:  24px;
-  --memox-space-section: 32px;
-
-  /* ── Radii ─────────────────────────────────────────────────── */
-  --memox-radius-xs:   4px;
-  --memox-radius-sm:   8px;
-  --memox-radius-md:   12px;
-  --memox-radius-lg:   16px;
-  --memox-radius-xl:   24px;
-  --memox-radius-xxl:  28px;
-  --memox-radius-full: 999px;
-  --memox-radius-card:   16px;
-  --memox-radius-button: 12px;
-  --memox-radius-input:  12px;
-  --memox-radius-chip:   999px;
-  --memox-radius-fab:    28px;
-
-  /* ── Sizes ─────────────────────────────────────────────────── */
-  --memox-size-touch: 48px;
-  --memox-size-icon-xs: 16px;
-  --memox-size-icon-sm: 20px;
-  --memox-size-icon-md: 24px;
-  --memox-size-icon-lg: 32px;
-  --memox-size-icon-xl: 64px;
-  --memox-size-button:    48px;
-  --memox-size-button-sm: 36px;
-  --memox-size-button-lg: 52px;
-  --memox-size-input:   52px;
-  --memox-size-chip:    32px;
+  /* ---- Component sizes ---- */
+  --memox-size-appbar: 56px;
+  --memox-size-appbar-lg: 88px;
+  --memox-size-bottom-nav: 64px;
+  --memox-size-button: 44px;
   --memox-size-chip-sm: 24px;
-  --memox-size-appbar:    56px;
-  --memox-size-appbar-lg: 64px;
-  --memox-size-bottom-nav: 80px;
   --memox-size-fab: 56px;
+  --memox-size-icon-btn: 40px;
+  --memox-size-icon-tile: 40px;
+  --memox-size-ring: 72px;
+  --memox-hit: 48px;
 
-  /* ── Borders ───────────────────────────────────────────────── */
-  --memox-border-width: 1px;
-  --memox-border-width-thick: 4px;
-  /* Ghost border — defining low-contrast edge, indigo-tinted (Tokyo) */
-  --memox-border-ghost: 1px solid rgba(82, 101, 245, 0.14); /* @kind other */
-  --memox-border-strong: 1px solid var(--memox-outline-variant);
-  --memox-border-accent: 4px solid var(--memox-primary);
+  /* ---- Match (study) pair-card height system ----
+     One source of truth for the Match-the-pairs grid so every card — normal,
+     selected, correct, wrong — shares the same comfortable size, and the WHOLE
+     grid switches strategy together (never one tall card among short ones).
+     Two height tiers, both floors not fixed heights, so text clamps + the floor
+     keep every card in a grid identical:
+       • standard — meanings up to 2 lines (the default).
+       • long     — opt-in when a grid holds a long definition: 3 lines + a taller
+                    floor, applied to every card in that grid at once.
+     Meanings longer than the long tier clamp with an ellipsis and expose a
+     "tap to read" affordance that opens the full text in a bottom sheet — so a
+     truncated meaning never leaves the user guessing. Theme-neutral: light/dark
+     reuse these (states only recolor, never resize). */
+  --memox-match-card-min-h: 76px;          /* standard / compact floor */
+  --memox-match-card-standard-h: 76px;     /* default 2-line floor (alias) */
+  --memox-match-card-long-h: 100px;        /* 3-line long-text floor */
+  --memox-match-card-pad-x: var(--memox-space-4);
+  --memox-match-card-pad-y: var(--memox-space-4);
+  --memox-match-card-gap: var(--memox-space-3);
+  --memox-match-card-radius: var(--memox-radius-md);
+  --memox-match-card-line-height: var(--memox-leading-snug);
+  --memox-match-card-max-lines: 2; /* @kind other */        /* standard cards clamp here */
+  --memox-match-card-long-max-lines: 3; /* @kind other */   /* long-text grids clamp here */
 
-  /* ── Opacity tokens ────────────────────────────────────────── */
-  --memox-op-soft-tint: 0.05; /* @kind other */
-  --memox-op-hover: 0.08; /* @kind other */
-  --memox-op-focus: 0.12; /* @kind other */
-  --memox-op-press: 0.12; /* @kind other */
-  --memox-op-drag: 0.16; /* @kind other */
-  --memox-op-selected: 0.18; /* @kind other */
-  --memox-op-disabled: 0.38; /* @kind other */
-  --memox-op-hint: 0.50; /* @kind other */
-  --memox-op-divider: 0.12; /* @kind other */
-  --memox-op-outline: 0.08; /* @kind other */
-  --memox-op-border-subtle: 0.15; /* @kind other */
-  --memox-op-glass: 0.84; /* @kind other */
-  --memox-op-scrim: 0.32; /* @kind other */
-  --memox-op-fade-out: 0.40; /* @kind other */
+  --memox-icon-sm: 16px;
+  --memox-icon-md: 20px;
+  --memox-icon-lg: 24px;
 
-  /* ── Elevation (tonal; shadows cap at 6%) ──────────────────── */
-  --memox-shadow-max-opacity: 0.06; /* @kind other */
-  --memox-shadow-level0: none;
-  --memox-shadow-level1: 0 1px 2px rgba(25, 28, 30, 0.04), 0 1px 1px rgba(25, 28, 30, 0.03);
-  --memox-shadow-level2: 0 4px 12px rgba(25, 28, 30, 0.04);
-  --memox-shadow-level3: 0 12px 32px rgba(25, 28, 30, 0.06);
-  --memox-shadow-level5: 0 24px 48px rgba(25, 28, 30, 0.06);
+  /* ---- Radius roles ---- */
+  --memox-radius-full: var(--memox-radius-pill);
+  --memox-radius-card: var(--memox-radius-lg);
+  --memox-radius-button: var(--memox-radius-pill);
+  --memox-radius-fab: 18px;
 
-  /* ── Motion ────────────────────────────────────────────────── */
-  --memox-dur-instant: 50ms; /* @kind other */
-  --memox-dur-fast:    100ms; /* @kind other */
-  --memox-dur-normal:  200ms; /* @kind other */
-  --memox-dur-slow:    300ms; /* @kind other */
-  --memox-dur-slower:  500ms; /* @kind other */
-  --memox-dur-card-flip: 350ms; /* @kind other */
-  --memox-dur-count-up:  400ms; /* @kind other */
-  --memox-dur-chart-draw: 600ms; /* @kind other */
+  /* ---- Spacing roles ---- */
+  --memox-space-screen: 20px;
+  --memox-space-card: 16px;
+  /* Mobile density: vertical rhythm between stacked sections/cards inside a
+     scroll body. Tuned for content efficiency (16, not 20) so screens show more
+     useful content without feeling cramped. Screen bodies read this instead of
+     hardcoding a per-screen gap, so the rhythm is consistent and tunable here. */
+  --memox-gap-section: var(--memox-space-4);
 
-  --memox-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */ /* M3 standard (easeInOut) */
-  --memox-ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1); /* @kind other */ /* M3 emphasized */
-  --memox-ease-enter: cubic-bezier(0, 0, 0.2, 1); /* @kind other */
-  --memox-ease-exit:  cubic-bezier(0.4, 0, 1, 1); /* @kind other */
-
-  /* ── Chrome glass ──────────────────────────────────────────── */
-  --memox-chrome-glass: rgba(247, 249, 254, 0.84);
-  --memox-chrome-blur: saturate(180%) blur(18px); /* @kind other */
-
-  /* ── Phase 0 — semantic role layer (the kit consumes THESE) ───
-   * Stable, intent-named tokens mapped onto the ladder above. Old vars
-   * remain as the underlying source values; these are the public surface. */
-  --memox-bg:              var(--memox-surface);            /* page background */
-  --memox-surface-raised:  var(--memox-surface-bright);     /* elevated card */
-  --memox-surface-muted:   var(--memox-surface-container-low);
-  --memox-surface-hero:    color-mix(in srgb, var(--memox-primary) 5%, var(--memox-surface-bright));
-  --memox-chrome:          var(--memox-chrome-glass);
-  --memox-border:          var(--memox-outline-variant);
-  --memox-text-primary:    var(--memox-on-surface);
-  --memox-text-secondary:  var(--memox-on-surface-variant);
-  --memox-text-muted:      var(--memox-outline);
-
-  --memox-primary-hover:   #4453D4;
-  --memox-primary-soft:    color-mix(in srgb, var(--memox-primary) 10%, transparent);
-  --memox-primary-border:  color-mix(in srgb, var(--memox-primary) 24%, transparent);
-
-  --memox-danger:          var(--memox-error);
-  --memox-on-danger:       var(--memox-on-error);
-  --memox-danger-soft:     color-mix(in srgb, var(--memox-error) 8%, transparent);
-  --memox-danger-border:   color-mix(in srgb, var(--memox-error) 22%, transparent);
-  --memox-error-fill:      #DC2D4E; /* solid destructive-button fill (light) */
-  --memox-on-error-fill:   #FFFFFF;   /* text/icons on error-fill CTA — fill is dark in both modes, white invariant */
-  --memox-on-streak:       #FFFFFF;   /* text/icons on streak-orange fill — invariant white */
-
-  --memox-on-success:      #FFFFFF;
-  --memox-success-soft:    color-mix(in srgb, var(--memox-success) 10%, transparent);
-  --memox-success-border:  color-mix(in srgb, var(--memox-success) 22%, transparent);
-
-  --memox-on-warning:      #3A2A00;
-  --memox-warning-soft:    color-mix(in srgb, var(--memox-warning) 12%, transparent);
-  --memox-warning-border:  color-mix(in srgb, var(--memox-warning) 26%, transparent);
-
-  --memox-on-inverse-surface: #E8EAFC; /* text/icons on fixed-dark inverse surfaces (toasts, snackbars) */
-
-  --memox-progress-track:  var(--memox-surface-container-high);
-  --memox-badge-bg:        var(--memox-surface-container);
-
-  --memox-shadow-none:     none;
-  --memox-shadow-soft:     0 1px 2px rgba(15,22,56,0.04);
-  --memox-shadow-card:     0 12px 32px rgba(15,22,56,0.10);
-  --memox-shadow-chrome:   0 -2px 12px rgba(15,22,56,0.05);
-  /* Neutral FAB elevation — replaces the old colored primary glow. Tonal, not branded. */
-  --memox-shadow-fab:      0 8px 24px rgba(15,22,56,0.12);
+  /* ---- Safe area ----
+     Bottom inset for the device home indicator. Resolves to 0 on hardware
+     without an inset (and in the kit's mock frames), and to the real inset on
+     notch/gesture phones. Every bottom-docked surface (bottom nav, sheet,
+     fixed study/action footer) adds this so primary actions never sit under
+     the home bar. Theme-neutral — declared once, inherited by .memox-dark. */
+  --memox-safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* ── Dark mode — Tokyo Nebula ────────────────────────────────
- * Deep navy night sky. Paper indigo cards. Violet accent.
- * Outlines stay indigo (faded), never gray — that's the signature.
- */
-/* Manual dark — applies regardless of OS preference. The declaration block is
-   identical to the auto/OS-dark block below; keep the two in sync. */
-:root[data-memox-theme="dark"] {
-    /* Phase 0: ONE accessible dark primary. The light-indigo #8B9AFF clears AA
-       as text/icons/links on the navy surface AND, with the deep-navy
-       --memox-on-primary, as a solid CTA fill. Manual (.memox-dark) and this
-       media-query scope are kept identical. */
-    --memox-primary:            #8B9AFF;   /* was #5265F5 — see Phase 0 note */
-    --memox-on-primary:         #11173A;   /* deep navy content on the light-indigo fill */
-    --memox-primary-bright:     #8B9AFF;   /* alias — equal to --memox-primary now */
-    --memox-primary-container:  #2D346A;
-    --memox-on-primary-container: #D9DFFF;
-    --memox-secondary:          #9DA8E8;
-    --memox-accent:             #B5A0FF;   /* signature violet */
-    --memox-on-accent:          #0A0E27;
+/* Dark: re-declare every alias that references the base palette so its
+   var() resolves against .memox-dark's values (custom properties compute on
+   the element they're declared on and then inherit as-is — without this block
+   the contract tokens would stay frozen at their light values). Theme-neutral
+   tokens (sizes, type, radius, spacing, opacities) are inherited from :root. */
+.memox-dark {
+  --memox-primary: var(--memox-accent);
+  --memox-on-primary: var(--memox-accent-contrast);
+  --memox-text-primary: var(--memox-text);
+  --memox-text-secondary: var(--memox-text-2);
+  --memox-surface-raised: var(--memox-surface);
+  --memox-outline: var(--memox-border-strong);
+  --memox-outline-variant: var(--memox-border);
+  --memox-border-ghost: var(--memox-border);
+  --memox-progress-track: var(--memox-surface-2);
+  --memox-shadow-soft: none;
 
-    --memox-surface:                    #0A0E27;   /* deep navy night */
-    --memox-surface-bright:             #232B5A;
-    --memox-surface-dim:                #060925;
-    --memox-surface-container-lowest:   #131A3A;   /* paper indigo — cards float */
-    --memox-surface-container-low:      #1B2249;
-    --memox-surface-container:          #232B5A;
-    --memox-surface-container-high:     #2C356E;
-    --memox-surface-container-highest:  #353D7E;
+  --memox-status-new: var(--memox-info);
+  --memox-status-learning: var(--memox-warn);
+  --memox-status-reviewing: var(--memox-note-teal);
+  --memox-status-mastered: var(--memox-success);
 
-    --memox-on-surface:          #E4E8FA;
-    --memox-on-surface-variant:  #A4ACD0;
-    --memox-outline:             #5A6BAE;   /* mid indigo — visible */
-    --memox-outline-variant:     #2A3267;   /* faded indigo — never gray */
+  /* Mastery scale re-aliased so it resolves against the dark base palette. */
+  --memox-mastery-low: var(--memox-danger);
+  --memox-mastery-mid: var(--memox-warn);
+  --memox-mastery-high: var(--memox-success);
 
-    --memox-success: #6FE0BD;
-    --memox-mastery: #6FE0BD;
-    --memox-mastery-fixed: #1F4A37;
-    --memox-on-mastery-fixed: #C7F2D8;
-    --memox-error:   #FF8FA3;
-    --memox-warning: #FFC658;
-    --memox-streak:  #FFAE6E;
-
-    --memox-status-new:        #6B75A3;
-    --memox-status-learning:   #FFC658;
-    --memox-status-reviewing:  #8B9AFF;
-    --memox-status-mastered:   #6FE0BD;
-
-    --memox-rating-again: #FF8FA3;
-    --memox-rating-hard:  #FFC658;
-    --memox-rating-good:  #8B9AFF;
-    --memox-rating-easy:  #6FE0BD;
-
-    --memox-mastery-low:  #8B4F66;
-    --memox-mastery-mid:  #8B7338;
-    --memox-mastery-high: #3F8070;
-
-    --memox-border-ghost: 1px solid rgba(139, 154, 255, 0.16); /* @kind other */
-    --memox-chrome-glass: rgba(10, 14, 39, 0.84);
-
-    /* ── Phase 0 — semantic role layer (dark) ─────────────────── */
-    --memox-bg:              var(--memox-surface);
-    --memox-surface-raised:  var(--memox-surface-container-lowest);  /* paper indigo — floated card, matches .card intent */
-    --memox-surface-muted:   var(--memox-surface-container-low);
-    --memox-surface-hero:    color-mix(in srgb, var(--memox-primary) 12%, var(--memox-surface));
-    --memox-chrome:          var(--memox-chrome-glass);
-    --memox-border:          var(--memox-outline-variant);
-    --memox-text-primary:    var(--memox-on-surface);
-    --memox-text-secondary:  var(--memox-on-surface-variant);
-    --memox-text-muted:      var(--memox-outline);
-    --memox-primary-hover:   #A6B2FF;
-    --memox-primary-soft:    color-mix(in srgb, var(--memox-primary) 20%, transparent);
-    --memox-primary-border:  color-mix(in srgb, var(--memox-primary) 32%, transparent);
-    --memox-danger:          var(--memox-error);
-    --memox-on-danger:       #2A0A12;
-    --memox-danger-soft:     color-mix(in srgb, var(--memox-error) 16%, transparent);
-    --memox-danger-border:   color-mix(in srgb, var(--memox-error) 32%, transparent);
-    --memox-error-fill:      #B0485C; /* solid destructive-button fill (dark) */
-    --memox-on-error-fill:   #FFFFFF;   /* unchanged — fill is dark in both modes */
-    --memox-on-streak:       #FFFFFF;   /* unchanged — streak always warm, needs white text */
-    --memox-on-success:      #06231A;
-    --memox-success-soft:    color-mix(in srgb, var(--memox-success) 18%, transparent);
-    --memox-success-border:  color-mix(in srgb, var(--memox-success) 32%, transparent);
-    --memox-on-warning:      #2A1E00;
-    --memox-warning-soft:    color-mix(in srgb, var(--memox-warning) 18%, transparent);
-    --memox-warning-border:  color-mix(in srgb, var(--memox-warning) 32%, transparent);
-    --memox-progress-track:  var(--memox-surface-container-high);
-    --memox-badge-bg:        var(--memox-surface-container);
-    --memox-shadow-none:     none;
-    --memox-shadow-soft:     none;
-    --memox-shadow-card:     0 16px 40px rgba(0,0,0,0.42);
-    --memox-shadow-chrome:   0 -2px 14px rgba(0,0,0,0.36);
-    --memox-shadow-fab:      0 10px 28px rgba(0,0,0,0.5);
-  }
-
-/* Auto — follow the OS preference. */
-@media (prefers-color-scheme: dark) {
-  :root[data-memox-theme="auto"] {
-    /* Phase 0: ONE accessible dark primary. The light-indigo #8B9AFF clears AA
-       as text/icons/links on the navy surface AND, with the deep-navy
-       --memox-on-primary, as a solid CTA fill. Manual (.memox-dark) and this
-       media-query scope are kept identical. */
-    --memox-primary:            #8B9AFF;   /* was #5265F5 — see Phase 0 note */
-    --memox-on-primary:         #11173A;   /* deep navy content on the light-indigo fill */
-    --memox-primary-bright:     #8B9AFF;   /* alias — equal to --memox-primary now */
-    --memox-primary-container:  #2D346A;
-    --memox-on-primary-container: #D9DFFF;
-    --memox-secondary:          #9DA8E8;
-    --memox-accent:             #B5A0FF;   /* signature violet */
-    --memox-on-accent:          #0A0E27;
-
-    --memox-surface:                    #0A0E27;   /* deep navy night */
-    --memox-surface-bright:             #232B5A;
-    --memox-surface-dim:                #060925;
-    --memox-surface-container-lowest:   #131A3A;   /* paper indigo — cards float */
-    --memox-surface-container-low:      #1B2249;
-    --memox-surface-container:          #232B5A;
-    --memox-surface-container-high:     #2C356E;
-    --memox-surface-container-highest:  #353D7E;
-
-    --memox-on-surface:          #E4E8FA;
-    --memox-on-surface-variant:  #A4ACD0;
-    --memox-outline:             #5A6BAE;   /* mid indigo — visible */
-    --memox-outline-variant:     #2A3267;   /* faded indigo — never gray */
-
-    --memox-success: #6FE0BD;
-    --memox-mastery: #6FE0BD;
-    --memox-mastery-fixed: #1F4A37;
-    --memox-on-mastery-fixed: #C7F2D8;
-    --memox-error:   #FF8FA3;
-    --memox-warning: #FFC658;
-    --memox-streak:  #FFAE6E;
-
-    --memox-status-new:        #6B75A3;
-    --memox-status-learning:   #FFC658;
-    --memox-status-reviewing:  #8B9AFF;
-    --memox-status-mastered:   #6FE0BD;
-
-    --memox-rating-again: #FF8FA3;
-    --memox-rating-hard:  #FFC658;
-    --memox-rating-good:  #8B9AFF;
-    --memox-rating-easy:  #6FE0BD;
-
-    --memox-mastery-low:  #8B4F66;
-    --memox-mastery-mid:  #8B7338;
-    --memox-mastery-high: #3F8070;
-
-    --memox-border-ghost: 1px solid rgba(139, 154, 255, 0.16); /* @kind other */
-    --memox-chrome-glass: rgba(10, 14, 39, 0.84);
-
-    /* ── Phase 0 — semantic role layer (dark) ─────────────────── */
-    --memox-bg:              var(--memox-surface);
-    --memox-surface-raised:  var(--memox-surface-container-lowest);  /* paper indigo — floated card, matches .card intent */
-    --memox-surface-muted:   var(--memox-surface-container-low);
-    --memox-surface-hero:    color-mix(in srgb, var(--memox-primary) 12%, var(--memox-surface));
-    --memox-chrome:          var(--memox-chrome-glass);
-    --memox-border:          var(--memox-outline-variant);
-    --memox-text-primary:    var(--memox-on-surface);
-    --memox-text-secondary:  var(--memox-on-surface-variant);
-    --memox-text-muted:      var(--memox-outline);
-    --memox-primary-hover:   #A6B2FF;
-    --memox-primary-soft:    color-mix(in srgb, var(--memox-primary) 20%, transparent);
-    --memox-primary-border:  color-mix(in srgb, var(--memox-primary) 32%, transparent);
-    --memox-danger:          var(--memox-error);
-    --memox-on-danger:       #2A0A12;
-    --memox-danger-soft:     color-mix(in srgb, var(--memox-error) 16%, transparent);
-    --memox-danger-border:   color-mix(in srgb, var(--memox-error) 32%, transparent);
-    --memox-error-fill:      #B0485C; /* solid destructive-button fill (dark) */
-    --memox-on-error-fill:   #FFFFFF;   /* unchanged — fill is dark in both modes */
-    --memox-on-streak:       #FFFFFF;   /* unchanged — streak always warm, needs white text */
-    --memox-on-success:      #06231A;
-    --memox-success-soft:    color-mix(in srgb, var(--memox-success) 18%, transparent);
-    --memox-success-border:  color-mix(in srgb, var(--memox-success) 32%, transparent);
-    --memox-on-warning:      #2A1E00;
-    --memox-warning-soft:    color-mix(in srgb, var(--memox-warning) 18%, transparent);
-    --memox-warning-border:  color-mix(in srgb, var(--memox-warning) 32%, transparent);
-    --memox-progress-track:  var(--memox-surface-container-high);
-    --memox-badge-bg:        var(--memox-surface-container);
-    --memox-shadow-none:     none;
-    --memox-shadow-soft:     none;
-    --memox-shadow-card:     0 16px 40px rgba(0,0,0,0.42);
-    --memox-shadow-chrome:   0 -2px 14px rgba(0,0,0,0.36);
-    --memox-shadow-fab:      0 10px 28px rgba(0,0,0,0.5);
-  }
-}
-
-/* ── Base element mapping ────────────────────────────────────── */
-html, body {
-  font-family: var(--memox-font-sans);
-  background: var(--memox-surface);
-  color: var(--memox-on-surface);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ── Semantic type roles ─────────────────────────────────────── */
-.memox-stat-display {
-  font-size: var(--memox-fs-stat-display);
-  font-weight: var(--memox-fw-semibold);
-  line-height: var(--memox-lh-display);
-  letter-spacing: var(--memox-ls-heading);
-  font-variant-numeric: tabular-nums;
-}
-h1, .memox-display-large, .memox-h1 {
-  font-size: var(--memox-fs-display-large);
-  font-weight: var(--memox-fw-bold);
-  line-height: var(--memox-lh-heading);
-  letter-spacing: var(--memox-ls-heading);
-  margin: 0;
-}
-h2, .memox-headline-large, .memox-h2 {
-  font-size: var(--memox-fs-headline-large);
-  font-weight: var(--memox-fw-semibold);
-  line-height: var(--memox-lh-heading);
-  letter-spacing: var(--memox-ls-heading);
-  margin: 0;
-}
-h3, .memox-headline-medium, .memox-h3 {
-  font-size: var(--memox-fs-headline-medium);
-  font-weight: var(--memox-fw-semibold);
-  line-height: var(--memox-lh-heading);
-  margin: 0;
-}
-h4, .memox-title-medium, .memox-h4 {
-  font-size: var(--memox-fs-title-medium);
-  font-weight: var(--memox-fw-medium);
-  line-height: var(--memox-lh-body);
-  margin: 0;
-}
-p, .memox-body {
-  font-size: var(--memox-fs-body-large);
-  font-weight: var(--memox-fw-regular);
-  line-height: var(--memox-lh-body);
-  margin: 0;
-}
-.memox-body-small {
-  font-size: var(--memox-fs-body-small);
-  line-height: var(--memox-lh-body);
-  color: var(--memox-on-surface-variant);
-}
-.memox-caption {
-  font-size: var(--memox-fs-caption);
-  font-weight: var(--memox-fw-medium);
-  line-height: var(--memox-lh-caption);
-  letter-spacing: var(--memox-ls-label);
-  color: var(--memox-on-surface-variant);
-}
-.memox-overline {
-  font-size: var(--memox-fs-label-small);
-  font-weight: var(--memox-fw-bold);
-  line-height: var(--memox-lh-caption);
-  letter-spacing: var(--memox-ls-section);
-  text-transform: uppercase;
-  color: var(--memox-on-surface-variant);
-}
-.memox-app-title {
-  font-size: var(--memox-fs-title-large);
-  font-weight: var(--memox-fw-extrabold);
-  line-height: var(--memox-lh-heading);
-  letter-spacing: var(--memox-ls-heading);
-}
-.memox-tabular {
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── Primitives ──────────────────────────────────────────────── */
-.memox-card {
-  background: var(--memox-surface-container-lowest);
-  border: var(--memox-border-ghost);
-  border-radius: var(--memox-radius-card);
-  padding: var(--memox-space-card);
-}
-.memox-chrome {
-  background: var(--memox-chrome-glass);
-  backdrop-filter: var(--memox-chrome-blur);
-  -webkit-backdrop-filter: var(--memox-chrome-blur);
-}
-.memox-focus-ring:focus-visible {
-  outline: 2px solid var(--memox-primary);
-  outline-offset: 2px;
+  /* Study rating + self-assessment — re-aliased so they resolve against the
+     dark base palette (success/danger/warn flip for dark). */
+  --memox-rating-correct: var(--memox-success);
+  --memox-rating-correct-soft: var(--memox-success-soft);
+  --memox-rating-wrong: var(--memox-danger);
+  --memox-rating-wrong-soft: var(--memox-danger-soft);
+  --memox-self-missed: var(--memox-danger);
+  --memox-self-partial: var(--memox-warn);
+  --memox-self-got: var(--memox-success);
 }

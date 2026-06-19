@@ -40,321 +40,316 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- node: app
-  mx: MxScaffold
+- node: div
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,1 388x48]
+    rel: [1,1 388x48]
+  layout: flex:row justify:between align:center
+  flex: shrink:0
+  spacing: pad:0/26/0/30
+  - node: sb-time
+    text: 9:41
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
-      box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
-        box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
+      abs: [31,16 33x19]
+      rel: [30,15 33x19]
+    style: font:15/700 color:text
+  - node: sb-icons
     box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 justify:between align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
+      abs: [277,13 86x24]
+      rel: [276,12 86x24]
+    layout: flex:row gap:7 align:center
+    - node: icon:signal-high
       box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
+        abs: [277,13 24x24]
+        rel: [0,0 24x24]
+      position: clip
+    - node: icon:wifi
+      box:
+        abs: [308,13 24x24]
+        rel: [31,0 24x24]
+      position: clip
+    - node: icon:battery-full
+      box:
+        abs: [339,13 24x24]
+        rel: [62,0 24x24]
+      position: clip
+- node: phone-canvas
+  box:
+    abs: [1,49 388x720]
+    rel: [1,49 388x720]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,49 388x720]
+      rel: [0,0 388x720]
+    layout: flex:col
+    size: minh:100
+    position: pos:relative
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
+      box:
+        abs: [1,49 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:12 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
         box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
+          abs: [21,57 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
         - node: icon:x
           box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
+            abs: [31,67 20x20]
+            rel: [10,10 20x20]
           position: clip
-    - node: div
-      box:
-        abs: [62,60 291x21]
-        rel: [54,8 291x21]
-      layout: flex:row gap:8 align:center
-      flex: grow:1 basis:0 layout_hint:expanded
-      spacing: margin:0/6
-      - node: span
-        text: Guess
+      - node: progress
         box:
-          abs: [62,60 61x21]
-          rel: [0,0 61x21]
-        spacing: pad:3/8
-        style: font:12/700 color:#000000 tracking:1.2 r:999
+          abs: [73,75 247x4]
+          rel: [72,26 247x4]
+        position: clip
+        style: bg:surface-2 r:999
+        - node: progress-fill
+          box:
+            abs: [73,75 62x4]
+            rel: [0,0 62x4]
+          style: bg:accent r:999
+      - node: span
+        text: 5
+        box:
+          abs: [332,68 37x18]
+          rel: [331,19 37x18]
+        flex: shrink:0
+        style: font:14/700 color:text-2
+        - node: span
+          text: / 20
+          box:
+            abs: [340,68 29x18]
+            rel: [8,0 29x18]
+          style: font:14/700 color:text-3
     - node: div
-      text: 5 / 20
       box:
-        abs: [363,63 27x15]
-        rel: [355,11 27x15]
-      style: font:12/600 color:#000000
-  - node: hide-scroll
-    box:
-      abs: [8,88 390x652]
-      rel: [0,80 390x652]
-    layout: flex:col
-    flex: grow:1 basis:0 layout_hint:expanded
-    position: layout_hint:scroll clip
-    scroll: scrollh:720
-    - node: div
-      box:
-        abs: [8,88 390x720]
-        rel: [0,0 390x720]
-      layout: flex:col gap:14
-      spacing: pad:8/14/0/14
+        abs: [1,105 388x587]
+        rel: [0,56 388x587]
+      layout: flex:col
+      flex: grow:1 basis:0 layout_hint:expanded
+      spacing: pad:16/20
+      position: layout_hint:scroll
       - node: card
         mx: MxCard
         box:
-          abs: [22,96 362x246]
-          rel: [14,8 362x246]
-        layout: flex:col gap:10 justify:center
-        flex: shrink:0
-        spacing: pad:34/14/32/14
-        size: minh:180
-        style: r:20
+          abs: [21,121 348x139]
+          rel: [20,16 348x139]
+        spacing: pad:20 margin:0/0/20/0
+        style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: ov
-          text: What is this?
+          text: What does this mean?
           box:
-            abs: [36,191 334x12]
-            rel: [14,95 334x12]
-          style: font:11/700 color:#000000 text:center tracking:0.6
+            abs: [42,142 306x15]
+            rel: [21,21 306x15]
+          layout: flex:row gap:8 align:center
+          spacing: margin:0/0/8/0
+          style: font:12/700 color:text-3 tracking:1
         - node: div
-          text: 도서관
+          text: 火曜日
           box:
-            abs: [36,213 334x37]
-            rel: [14,117 334x37]
-          style: font:32/700/37 color:#000000 text:center tracking:-0.5
+            abs: [42,165 306x41]
+            rel: [21,44 306x41]
+          style: font:37.4/800/41 color:text tracking:-0.7
+        - node: muted
+          text: かようび · kayoubi
+          box:
+            abs: [42,210 306x29]
+            rel: [21,89 306x29]
+          spacing: margin:4/0/0/0
+          style: font:18/500 color:text-2
       - node: div
         box:
-          abs: [22,356 362x452]
-          rel: [14,268 362x452]
+          abs: [21,280 348x322]
+          rel: [20,175 348x322]
         layout: flex:col gap:8
-        flex: shrink:0
         repeat: x5(unit=1)
-        - node: div
+        - node: choice
           item: item[1]
+          mx: ?
           box:
-            abs: [22,356 362x84]
-            rel: [0,0 362x84]
+            abs: [21,280 348x58]
+            rel: [0,0 348x58]
           layout: flex:row gap:12 align:center
-          spacing: pad:12/14
-          size: minh:60
-          style: r:12 op:0.36
-          - node: span
+          spacing: pad:16
+          size: minh:48
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border op:0.38
+          - node: choice-key
             text: A
             box:
-              abs: [36,383 30x30]
-              rel: [14,27 30x30]
-            layout: flex:row justify:center align:center
+              abs: [38,297 24x24]
+              rel: [17,17 24x24]
+            layout: grid cols:1 align:center
             flex: shrink:0
-            style: font:12/700 color:#000000 r:999 border:1px #000000 op:0.85
-          - node: div
+            style: font:12/700/16 color:text r:999 border:1px border
+          - node: choice-text
+            text: Sunday
             box:
-              abs: [78,388 292x20]
-              rel: [56,32 292x20]
-            layout: flex:col gap:2
+              abs: [74,300 278x19]
+              rel: [53,20 278x19]
             flex: grow:1 basis:0 layout_hint:expanded
-            - node: div
-              text: kitchen
-              box:
-                abs: [78,388 292x20]
-                rel: [0,0 292x20]
-              style: font:16/700/20 color:#000000 tracking:-0.1
-        - node: div
+            style: font:14/600/19 color:text
+        - node: choice
           item: item[2]
+          mx: ?
           box:
-            abs: [22,448 362x84]
-            rel: [0,92 362x84]
+            abs: [21,346 348x58]
+            rel: [0,66 348x58]
           layout: flex:row gap:12 align:center
-          spacing: pad:12/14
-          size: minh:60
-          style: r:12
-          - node: span
+          spacing: pad:16
+          size: minh:48
+          position: pos:relative
+          style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success
+          - node: choice-key
             text: B
             box:
-              abs: [36,475 30x30]
-              rel: [14,27 30x30]
-            layout: flex:row justify:center align:center
+              abs: [38,363 24x24]
+              rel: [17,17 24x24]
+            layout: grid cols:1 align:center
             flex: shrink:0
-            style: font:12/700 color:#000000 r:999 border:1px #000000 op:0.85
-          - node: div
+            style: font:12/700/16 color:success r:999 border:1px success
+          - node: choice-text
+            text: Tuesday
             box:
-              abs: [78,462 262x56]
-              rel: [56,14 262x56]
-            layout: flex:col gap:2
+              abs: [74,366 246x19]
+              rel: [53,20 246x19]
             flex: grow:1 basis:0 layout_hint:expanded
-            - node: div
-              text: library
-              box:
-                abs: [78,462 262x20]
-                rel: [0,0 262x20]
-              style: font:16/700/20 color:#000000 tracking:-0.1
-            - node: div
-              text: public building or room with a collection of books for reading or borrowing
-              box:
-                abs: [78,484 262x34]
-                rel: [0,22 262x34]
-              style: font:12/400/17 color:#000000 op:0.72
-          - node: span
+            style: font:14/600/19 color:success
+          - node: choice-mark
             box:
-              abs: [352,481 18x18]
-              rel: [330,33 18x18]
-            layout: flex:row
+              abs: [332,365 20x20]
+              rel: [311,19 20x20]
+            layout: grid cols:1 align:center
+            flex: shrink:0
             - node: icon:check
               box:
-                abs: [352,481 18x18]
-                rel: [0,0 18x18]
+                abs: [332,365 20x20]
+                rel: [0,0 20x20]
               position: clip
-        - node: div
+        - node: choice
           item: item[3]
+          mx: ?
           box:
-            abs: [22,540 362x84]
-            rel: [0,184 362x84]
+            abs: [21,412 348x58]
+            rel: [0,132 348x58]
           layout: flex:row gap:12 align:center
-          spacing: pad:12/14
-          size: minh:60
-          style: r:12
-          - node: span
+          spacing: pad:16
+          size: minh:48
+          position: pos:relative
+          style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+          - node: choice-key
             text: C
             box:
-              abs: [36,567 30x30]
-              rel: [14,27 30x30]
-            layout: flex:row justify:center align:center
+              abs: [38,429 24x24]
+              rel: [17,17 24x24]
+            layout: grid cols:1 align:center
             flex: shrink:0
-            style: font:12/700 color:#000000 r:999 border:1px #000000 op:0.85
-          - node: div
+            style: font:12/700/16 color:danger r:999 border:1px danger
+          - node: choice-text
+            text: Thursday
             box:
-              abs: [78,563 262x39]
-              rel: [56,23 262x39]
-            layout: flex:col gap:2
+              abs: [74,432 246x19]
+              rel: [53,20 246x19]
             flex: grow:1 basis:0 layout_hint:expanded
-            - node: div
-              text: school
-              box:
-                abs: [78,563 262x20]
-                rel: [0,0 262x20]
-              style: font:16/700/20 color:#000000 tracking:-0.1
-            - node: div
-              text: institution for educating children
-              box:
-                abs: [78,585 262x17]
-                rel: [0,22 262x17]
-              style: font:12/400/17 color:#000000 op:0.72
-          - node: span
+            style: font:14/600/19 color:danger
+          - node: choice-mark
             box:
-              abs: [352,573 18x18]
-              rel: [330,33 18x18]
-            layout: flex:row
+              abs: [332,431 20x20]
+              rel: [311,19 20x20]
+            layout: grid cols:1 align:center
+            flex: shrink:0
             - node: icon:x
               box:
-                abs: [352,573 18x18]
-                rel: [0,0 18x18]
+                abs: [332,431 20x20]
+                rel: [0,0 20x20]
               position: clip
-        - node: div
+        - node: choice
           item: item[4]
+          mx: ?
           box:
-            abs: [22,632 362x84]
-            rel: [0,276 362x84]
+            abs: [21,478 348x58]
+            rel: [0,198 348x58]
           layout: flex:row gap:12 align:center
-          spacing: pad:12/14
-          size: minh:60
-          style: r:12 op:0.36
-          - node: span
+          spacing: pad:16
+          size: minh:48
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border op:0.38
+          - node: choice-key
             text: D
             box:
-              abs: [36,659 30x30]
-              rel: [14,27 30x30]
-            layout: flex:row justify:center align:center
+              abs: [38,495 24x24]
+              rel: [17,17 24x24]
+            layout: grid cols:1 align:center
             flex: shrink:0
-            style: font:12/700 color:#000000 r:999 border:1px #000000 op:0.85
-          - node: div
+            style: font:12/700/16 color:text r:999 border:1px border
+          - node: choice-text
+            text: Saturday
             box:
-              abs: [78,664 292x20]
-              rel: [56,32 292x20]
-            layout: flex:col gap:2
+              abs: [74,498 278x19]
+              rel: [53,20 278x19]
             flex: grow:1 basis:0 layout_hint:expanded
-            - node: div
-              text: office
-              box:
-                abs: [78,664 292x20]
-                rel: [0,0 292x20]
-              style: font:16/700/20 color:#000000 tracking:-0.1
-        - node: div
+            style: font:14/600/19 color:text
+        - node: choice
           item: item[5]
+          mx: ?
           box:
-            abs: [22,724 362x84]
-            rel: [0,368 362x84]
+            abs: [21,544 348x58]
+            rel: [0,264 348x58]
           layout: flex:row gap:12 align:center
-          spacing: pad:12/14
-          size: minh:60
-          style: r:12 op:0.36
-          - node: span
+          spacing: pad:16
+          size: minh:48
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border op:0.38
+          - node: choice-key
             text: E
             box:
-              abs: [36,751 30x30]
-              rel: [14,27 30x30]
-            layout: flex:row justify:center align:center
+              abs: [38,561 24x24]
+              rel: [17,17 24x24]
+            layout: grid cols:1 align:center
             flex: shrink:0
-            style: font:12/700 color:#000000 r:999 border:1px #000000 op:0.85
-          - node: div
+            style: font:12/700/16 color:text r:999 border:1px border
+          - node: choice-text
+            text: Monday
             box:
-              abs: [78,756 292x20]
-              rel: [56,32 292x20]
-            layout: flex:col gap:2
+              abs: [74,564 278x19]
+              rel: [53,20 278x19]
             flex: grow:1 basis:0 layout_hint:expanded
-            - node: div
-              text: classroom
-              box:
-                abs: [78,756 292x20]
-                rel: [0,0 292x20]
-              style: font:16/700/20 color:#000000 tracking:-0.1
-  - node: div
-    box:
-      abs: [8,740 390x48]
-      rel: [0,732 390x48]
-    layout: flex:col gap:6
-    flex: shrink:0
-    spacing: pad:10/14/14/14
+            style: font:14/600/19 color:text
     - node: div
-      text: Next card in 0.8s
       box:
-        abs: [22,750 362x15]
-        rel: [14,10 362x15]
-      style: font:12/600 color:#000000 text:center tracking:1.2
+        abs: [1,692 388x77]
+        rel: [0,643 388x77]
+      layout: flex:col gap:8
+      flex: shrink:0
+      spacing: pad:12/20/20/20
+      style: border-t:1px divider
+      - node: pill-btn
+        text: Next
+        mx: MxPrimaryButton
+        box:
+          abs: [21,705 348x44]
+          rel: [20,13 348x44]
+        layout: flex:row gap:8 justify:center align:center
+        spacing: pad:0/20
+        style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+        - node: icon:arrow-right
+          box:
+            abs: [207,719 16x16]
+            rel: [186,14 16x16]
+          position: clip
 ```

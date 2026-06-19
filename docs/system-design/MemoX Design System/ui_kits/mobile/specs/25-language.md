@@ -37,688 +37,403 @@ raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mapp
 deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
 has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
-## Base state: English
+## Base state: System
 
 ```text
-- node: app
-  mx: MxScaffold
+- node: div
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,1 388x48]
+    rel: [1,1 388x48]
+  layout: flex:row justify:between align:center
+  flex: shrink:0
+  spacing: pad:0/26/0/30
+  - node: sb-time
+    text: 9:41
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
-      box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
-        box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
+      abs: [31,16 33x19]
+      rel: [30,15 33x19]
+    style: font:15/700 color:text
+  - node: sb-icons
     box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
+      abs: [277,13 86x24]
+      rel: [276,12 86x24]
+    layout: flex:row gap:7 align:center
+    - node: icon:signal-high
       box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
-        box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
-        - node: icon:arrow-left
-          box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
-          position: clip
-    - node: title
-      text: Language
-      box:
-        abs: [56,61 290x18]
-        rel: [48,9 290x18]
-      flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:#000000 tracking:-0.3
-  - node: scroll
-    box:
-      abs: [8,88 390x700]
-      rel: [0,80 390x700]
-    flex: grow:1 basis:0 layout_hint:expanded
-    position: layout_hint:scroll
-    scroll: scrollh:706
-    - node: div
-      box:
-        abs: [8,88 390x44]
-        rel: [0,0 390x44]
-      layout: flex:row gap:10 align:center
-      spacing: pad:0/14 margin:0/0/16/0
-      style: r:12
-      - node: span
-        box:
-          abs: [22,102 16x16]
-          rel: [14,14 16x16]
-        layout: flex:row
-        - node: icon:search
-          box:
-            abs: [22,102 16x16]
-            rel: [0,0 16x16]
-          position: clip
-      - node: span
-        text: Search languages
-        box:
-          abs: [48,102 336x16]
-          rel: [40,14 336x16]
-        flex: grow:1 basis:0 layout_hint:expanded
-        style: font:14/400 color:#000000
-    - node: card
-      mx: MxCard
-      box:
-        abs: [8,148 390x600]
-        rel: [0,60 390x600]
-      repeat: x10(unit=1)
-      spacing: margin:0/0/8/0
+        abs: [277,13 24x24]
+        rel: [0,0 24x24]
       position: clip
-      style: r:20
-      - node: div
-        item: item[1]
-        box:
-          abs: [8,148 390x59]
-          rel: [0,0 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,161 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: English
-            box:
-              abs: [24,161 322x17]
-              rel: [0,0 322x17]
-            style: font:15/700 color:#000000 tracking:-0.1
-          - node: div
-            text: English
-            box:
-              abs: [24,179 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-        - node: span
-          box:
-            abs: [358,166 24x24]
-            rel: [350,18 24x24]
-          layout: flex:row justify:center align:center
-          style: r:999
-          - node: span
-            box:
-              abs: [363,170 15x15]
-              rel: [5,5 15x15]
-            layout: flex:row
-            - node: icon:check
-              box:
-                abs: [363,170 15x15]
-                rel: [0,0 15x15]
-              position: clip
-      - node: div
-        item: item[2]
-        box:
-          abs: [8,207 390x59]
-          rel: [0,59 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,220 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: Tiếng Việt
-            box:
-              abs: [24,220 322x17]
-              rel: [0,0 322x17]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Vietnamese
-            box:
-              abs: [24,238 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[3]
-        box:
-          abs: [8,266 390x63]
-          rel: [0,118 390x63]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,279 322x37]
-            rel: [16,13 322x37]
-          - node: div
-            text: 한국어
-            box:
-              abs: [24,279 322x21]
-              rel: [0,0 322x21]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Korean
-            box:
-              abs: [24,301 322x15]
-              rel: [0,22 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[4]
-        box:
-          abs: [8,329 390x62]
-          rel: [0,181 390x62]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,342 322x36]
-            rel: [16,13 322x36]
-          - node: div
-            text: 日本語
-            box:
-              abs: [24,342 322x20]
-              rel: [0,0 322x20]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Japanese
-            box:
-              abs: [24,363 322x15]
-              rel: [0,21 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[5]
-        box:
-          abs: [8,391 390x62]
-          rel: [0,243 390x62]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,404 322x36]
-            rel: [16,13 322x36]
-          - node: div
-            text: 中文 (简体)
-            box:
-              abs: [24,404 322x20]
-              rel: [0,0 322x20]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Chinese, Simplified
-            box:
-              abs: [24,425 322x15]
-              rel: [0,21 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[6]
-        box:
-          abs: [8,453 390x59]
-          rel: [0,305 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,466 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: Español
-            box:
-              abs: [24,466 322x17]
-              rel: [0,0 322x17]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Spanish
-            box:
-              abs: [24,484 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[7]
-        box:
-          abs: [8,512 390x59]
-          rel: [0,364 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,525 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: Français
-            box:
-              abs: [24,525 322x17]
-              rel: [0,0 322x17]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: French
-            box:
-              abs: [24,543 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[8]
-        box:
-          abs: [8,571 390x59]
-          rel: [0,423 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,584 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: Deutsch
-            box:
-              abs: [24,584 322x17]
-              rel: [0,0 322x17]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: German
-            box:
-              abs: [24,602 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[9]
-        box:
-          abs: [8,630 390x59]
-          rel: [0,482 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,643 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: Português
-            box:
-              abs: [24,643 322x17]
-              rel: [0,0 322x17]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Portuguese
-            box:
-              abs: [24,661 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-      - node: div
-        item: item[10]
-        box:
-          abs: [8,689 390x59]
-          rel: [0,541 390x59]
-        layout: grid cols:2 gap:12 align:center
-        spacing: pad:13/16
-        - node: div
-          box:
-            abs: [24,702 322x33]
-            rel: [16,13 322x33]
-          - node: div
-            text: Bahasa Indonesia
-            box:
-              abs: [24,702 322x17]
-              rel: [0,0 322x17]
-            style: font:15/500 color:#000000 tracking:-0.1
-          - node: div
-            text: Indonesian
-            box:
-              abs: [24,720 322x15]
-              rel: [0,18 322x15]
-            spacing: margin:1/0/0/0
-            style: font:12/400 color:#000000
-    - node: div
-      text: Sets the app’s interface language. Your cards stay in their original language.
+    - node: icon:wifi
       box:
-        abs: [8,756 390x38]
-        rel: [0,668 390x38]
-      spacing: pad:4/12/16/12
-      style: font:12/400/18 color:#000000 text:center
-```
-
-## State: Searching (full — differs too much from base)
-
-```text
-- node: app
-  mx: MxScaffold
+        abs: [308,13 24x24]
+        rel: [31,0 24x24]
+      position: clip
+    - node: icon:battery-full
+      box:
+        abs: [339,13 24x24]
+        rel: [62,0 24x24]
+      position: clip
+- node: phone-canvas
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,49 388x720]
+    rel: [1,49 388x720]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
+      abs: [1,49 388x720]
+      rel: [0,0 388x720]
+    layout: flex:col
+    size: minh:100
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
       box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
+        abs: [1,49 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:8 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
         box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
-    box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
-      box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
-        box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
+          abs: [21,57 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
         - node: icon:arrow-left
           box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
+            abs: [31,67 20x20]
+            rel: [10,10 20x20]
           position: clip
-    - node: title
-      text: Language
-      box:
-        abs: [56,61 290x18]
-        rel: [48,9 290x18]
-      flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:#000000 tracking:-0.3
-  - node: scroll
-    box:
-      abs: [8,88 390x700]
-      rel: [0,80 390x700]
-    flex: grow:1 basis:0 layout_hint:expanded
-    position: layout_hint:scroll
-    - node: div
-      box:
-        abs: [8,88 390x44]
-        rel: [0,0 390x44]
-      layout: flex:row gap:10 align:center
-      spacing: pad:0/14 margin:0/0/16/0
-      style: r:12
-      - node: span
+      - node: appbar-title
+        text: Language
         box:
-          abs: [22,102 16x16]
-          rel: [14,14 16x16]
-        layout: flex:row
-        - node: icon:search
-          box:
-            abs: [22,102 16x16]
-            rel: [0,0 16x16]
-          position: clip
-      - node: span
-        text: viet
-        box:
-          abs: [48,102 311x16]
-          rel: [40,14 311x16]
+          abs: [77,62 292x30]
+          rel: [76,13 292x30]
         flex: grow:1 basis:0 layout_hint:expanded
-        style: font:14/400 color:#000000
-      - node: span
+        spacing: margin:0/0/0/8
+        style: font:24/700 color:text tracking:-0.5
+    - node: div
+      box:
+        abs: [1,105 388x664]
+        rel: [0,56 388x664]
+      layout: flex:col gap:8
+      flex: grow:1 basis:0 layout_hint:expanded
+      spacing: pad:16/20/24/20
+      position: layout_hint:scroll
+      - node: ov
+        text: App language
         box:
-          abs: [369,103 15x15]
-          rel: [361,15 15x15]
-        layout: flex:row
-        - node: icon:x
+          abs: [21,121 348x15]
+          rel: [20,16 348x15]
+        layout: flex:row gap:8 align:center
+        spacing: pad:0/0/0/4
+        style: font:12/700 color:text-2 tracking:1
+      - node: list-card
+        box:
+          abs: [21,144 348x212]
+          rel: [20,39 348x212]
+        spacing: pad:8/16
+        style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+        - node: list-row
           box:
-            abs: [369,103 15x15]
-            rel: [0,0 15x15]
+            abs: [30,153 330x64]
+            rel: [9,9 330x64]
+          layout: flex:row gap:12 align:center
+          spacing: pad:12/8 margin:0/-8
+          size: minh:48
+          style: r:14
+          - node: icon-tile
+            mx: MxIconTile
+            box:
+              abs: [38,165 40x40]
+              rel: [8,12 40x40]
+            layout: grid cols:1 align:center
+            flex: shrink:0
+            style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.08) r:14
+            - node: icon:smartphone
+              box:
+                abs: [48,175 20x20]
+                rel: [10,10 20x20]
+              position: clip
+          - node: list-row-main
+            box:
+              abs: [90,165 226x40]
+              rel: [60,12 226x40]
+            layout: flex:col gap:3
+            flex: grow:1 basis:0 layout_hint:expanded
+            - node: list-row-title
+              text: System default
+              box:
+                abs: [90,165 226x21]
+                rel: [0,0 226x21]
+              position: clip
+              style: font:16/600 color:text
+            - node: list-row-meta
+              text: English (United States)
+              box:
+                abs: [90,189 226x16]
+                rel: [0,24 226x16]
+              position: clip
+              style: font:13/400 color:text-2
+          - node: radio
+            box:
+              abs: [328,173 24x24]
+              rel: [298,20 24x24]
+            layout: grid cols:1 align:center
+            flex: shrink:0
+            style: r:999 border:2px accent
+        - node: div
+          box:
+            abs: [38,217 314x65]
+            rel: [17,73 314x65]
+          - node: hr
+            box:
+              abs: [90,217 262x1]
+              rel: [52,0 262x1]
+            spacing: margin:0/0/0/52
+            style: bg:divider
+          - node: list-row
+            box:
+              abs: [30,218 330x64]
+              rel: [-8,1 330x64]
+            layout: flex:row gap:12 align:center
+            spacing: pad:12/8 margin:0/-8
+            size: minh:48
+            style: r:14
+            - node: icon-tile
+              mx: MxIconTile
+              box:
+                abs: [38,230 40x40]
+                rel: [8,12 40x40]
+              layout: grid cols:1 align:center
+              flex: shrink:0
+              style: bg:color(srgb 0.2 0.760784 1 / 0.08) r:14
+              - node: icon:globe
+                box:
+                  abs: [48,240 20x20]
+                  rel: [10,10 20x20]
+                position: clip
+            - node: list-row-main
+              box:
+                abs: [90,230 226x40]
+                rel: [60,12 226x40]
+              layout: flex:col gap:3
+              flex: grow:1 basis:0 layout_hint:expanded
+              - node: list-row-title
+                text: English
+                box:
+                  abs: [90,230 226x21]
+                  rel: [0,0 226x21]
+                position: clip
+                style: font:16/600 color:text
+              - node: list-row-meta
+                text: English
+                box:
+                  abs: [90,254 226x16]
+                  rel: [0,24 226x16]
+                position: clip
+                style: font:13/400 color:text-2
+            - node: radio
+              box:
+                abs: [328,238 24x24]
+                rel: [298,20 24x24]
+              layout: grid align:center
+              flex: shrink:0
+              style: r:999 border:2px border-strong
+        - node: div
+          box:
+            abs: [38,282 314x65]
+            rel: [17,138 314x65]
+          - node: hr
+            box:
+              abs: [90,282 262x1]
+              rel: [52,0 262x1]
+            spacing: margin:0/0/0/52
+            style: bg:divider
+          - node: list-row
+            box:
+              abs: [30,283 330x64]
+              rel: [-8,1 330x64]
+            layout: flex:row gap:12 align:center
+            spacing: pad:12/8 margin:0/-8
+            size: minh:48
+            style: r:14
+            - node: icon-tile
+              mx: MxIconTile
+              box:
+                abs: [38,295 40x40]
+                rel: [8,12 40x40]
+              layout: grid cols:1 align:center
+              flex: shrink:0
+              style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.08) r:14
+              - node: icon:globe
+                box:
+                  abs: [48,305 20x20]
+                  rel: [10,10 20x20]
+                position: clip
+            - node: list-row-main
+              box:
+                abs: [90,295 226x40]
+                rel: [60,12 226x40]
+              layout: flex:col gap:3
+              flex: grow:1 basis:0 layout_hint:expanded
+              - node: list-row-title
+                text: Tiếng Việt
+                box:
+                  abs: [90,295 226x21]
+                  rel: [0,0 226x21]
+                position: clip
+                style: font:16/600 color:text
+              - node: list-row-meta
+                text: Vietnamese
+                box:
+                  abs: [90,319 226x16]
+                  rel: [0,24 226x16]
+                position: clip
+                style: font:13/400 color:text-2
+            - node: radio
+              box:
+                abs: [328,303 24x24]
+                rel: [298,20 24x24]
+              layout: grid align:center
+              flex: shrink:0
+              style: r:999 border:2px border-strong
+      - node: muted
+        text: Changing the language restarts the app.
+        box:
+          abs: [21,364 348x24]
+          rel: [20,259 348x24]
+        layout: flex:row gap:8 align:center
+        spacing: pad:8/4/0/4
+        style: font:13/400 color:text-2
+        - node: icon:info
+          box:
+            abs: [25,372 16x16]
+            rel: [4,8 16x16]
           position: clip
-    - node: div
-      box:
-        abs: [8,148 390x59]
-        rel: [0,60 390x59]
-      layout: grid cols:2 gap:12 align:center
-      spacing: pad:13/16
-      - node: div
-        box:
-          abs: [24,161 322x33]
-          rel: [16,13 322x33]
-        - node: div
-          text: Tiếng Việt
-          box:
-            abs: [24,161 322x17]
-            rel: [0,0 322x17]
-          style: font:15/500 color:#000000 tracking:-0.1
-        - node: div
-          text: Vietnamese
-          box:
-            abs: [24,179 322x15]
-            rel: [0,18 322x15]
-          spacing: margin:1/0/0/0
-          style: font:12/400 color:#000000
-    - node: div
-      text: Sets the app’s interface language. Your cards stay in their original language.
-      box:
-        abs: [8,215 390x38]
-        rel: [0,127 390x38]
-      spacing: pad:4/12/16/12
-      style: font:12/400/18 color:#000000 text:center
 ```
 
-## State: Switched (ordered diff vs English)
+## State: English (ordered diff vs System)
 
 ```diff
-  - node: title
-  text: Language
+  - node: list-row-meta
+  text: English (United States)
   box:
-  abs: [56,61 290x18]
-  rel: [48,9 290x18]
-  flex: grow:1 basis:0 layout_hint:expanded
-  style: font:16/700 color:#000000 tracking:-0.3
-- - node: scroll
+  abs: [90,189 226x16]
+  rel: [0,24 226x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
 - box:
-- abs: [8,88 390x700]
-- rel: [0,80 390x700]
-- flex: grow:1 basis:0 layout_hint:expanded
-- position: layout_hint:scroll
-- scroll: scrollh:706
-+ - node: scroll
+- abs: [328,173 24x24]
+- rel: [298,20 24x24]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- style: r:999 border:2px accent
++ - node: radio
 + box:
-+ abs: [8,88 390x700]
-+ rel: [0,80 390x700]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ position: layout_hint:scroll
-+ scroll: scrollh:779
-+ - node: div
-+ box:
-+ abs: [8,88 390x59]
-+ rel: [0,0 390x59]
-+ layout: flex:row gap:10 align:start
-+ spacing: pad:11/14 margin:0/0/14/0
-+ style: r:12
-+ - node: span
-+ box:
-+ abs: [22,99 16x16]
-+ rel: [14,11 16x16]
-+ layout: flex:row
-+ - node: icon:refresh-cw
-+ box:
-+ abs: [22,99 16x16]
-+ rel: [0,0 16x16]
-+ position: clip
-+ - node: div
-+ box:
-+ abs: [48,99 336x37]
-+ rel: [40,11 336x37]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ - node: strong
-+ text: Restart to finish.
-+ box:
-+ abs: [48,101 86x14]
-+ rel: [0,2 86x14]
-+ style: font:12/700/19 color:#000000
-+ - node: span
-+ text: MemoX will switch to Tiếng Việt the next time you open it.
-+ box:
-+ abs: [48,101 316x33]
-+ rel: [0,2 316x33]
-+ style: font:12/400/19 color:#000000
++ abs: [328,173 24x24]
++ rel: [298,20 24x24]
++ layout: grid align:center
++ flex: shrink:0
++ style: r:999 border:2px border-strong
   - node: div
   box:
-  abs: [8,161 390x44]
-  rel: [0,73 390x44]
-  layout: flex:row gap:10 align:center
-  spacing: pad:0/14 margin:0/0/16/0
-  style: r:12
+  abs: [38,217 314x65]
+  rel: [17,73 314x65]
   ...
-  - node: div
-  box:
-  abs: [24,234 322x33]
-  rel: [16,13 322x33]
-- - node: div
-- text: English
-- box:
-- abs: [24,161 322x17]
-- rel: [0,0 322x17]
-- style: font:15/700 color:#000000 tracking:-0.1
-+ - node: div
-+ text: English
-+ box:
-+ abs: [24,234 322x17]
-+ rel: [0,0 322x17]
-+ style: font:15/500 color:#000000 tracking:-0.1
-  - node: div
+  - node: list-row-meta
   text: English
   box:
-  abs: [24,252 322x15]
-  rel: [0,18 322x15]
-  spacing: margin:1/0/0/0
-  style: font:12/400 color:#000000
-- - node: span
+  abs: [90,254 226x16]
+  rel: [0,24 226x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
 - box:
-- abs: [358,166 24x24]
-- rel: [350,18 24x24]
-- layout: flex:row justify:center align:center
-- style: r:999
-- - node: span
-- box:
-- abs: [363,170 15x15]
-- rel: [5,5 15x15]
-- layout: flex:row
-- - node: icon:check
-- box:
-- abs: [363,170 15x15]
-- rel: [0,0 15x15]
-- position: clip
-  - node: div
-  item: item[2]
-  box:
-  abs: [8,280 390x59]
-  rel: [0,59 390x59]
-  layout: grid cols:2 gap:12 align:center
-  spacing: pad:13/16
-  - node: div
-  box:
-  abs: [24,293 322x33]
-  rel: [16,13 322x33]
-- - node: div
-- text: Tiếng Việt
-- box:
-- abs: [24,220 322x17]
-- rel: [0,0 322x17]
-- style: font:15/500 color:#000000 tracking:-0.1
-+ - node: div
-+ text: Tiếng Việt
+- abs: [328,238 24x24]
+- rel: [298,20 24x24]
+- layout: grid align:center
+- flex: shrink:0
+- style: r:999 border:2px border-strong
++ - node: radio
 + box:
-+ abs: [24,293 322x17]
-+ rel: [0,0 322x17]
-+ style: font:15/700 color:#000000 tracking:-0.1
++ abs: [328,238 24x24]
++ rel: [298,20 24x24]
++ layout: grid cols:1 align:center
++ flex: shrink:0
++ style: r:999 border:2px accent
   - node: div
+  box:
+  abs: [38,282 314x65]
+  rel: [17,138 314x65]
+  ...
+```
+
+## State: Vietnamese (ordered diff vs System)
+
+```diff
+  - node: list-row-meta
+  text: English (United States)
+  box:
+  abs: [90,189 226x16]
+  rel: [0,24 226x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
+- box:
+- abs: [328,173 24x24]
+- rel: [298,20 24x24]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- style: r:999 border:2px accent
++ - node: radio
++ box:
++ abs: [328,173 24x24]
++ rel: [298,20 24x24]
++ layout: grid align:center
++ flex: shrink:0
++ style: r:999 border:2px border-strong
+  - node: div
+  box:
+  abs: [38,217 314x65]
+  rel: [17,73 314x65]
+  ...
+  - node: list-row-meta
   text: Vietnamese
   box:
-  abs: [24,311 322x15]
-  rel: [0,18 322x15]
-  spacing: margin:1/0/0/0
-  style: font:12/400 color:#000000
-+ - node: span
+  abs: [90,319 226x16]
+  rel: [0,24 226x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
+- box:
+- abs: [328,303 24x24]
+- rel: [298,20 24x24]
+- layout: grid align:center
+- flex: shrink:0
+- style: r:999 border:2px border-strong
++ - node: radio
 + box:
-+ abs: [358,298 24x24]
-+ rel: [350,18 24x24]
-+ layout: flex:row justify:center align:center
-+ style: r:999
-+ - node: span
-+ box:
-+ abs: [363,302 15x15]
-+ rel: [5,5 15x15]
-+ layout: flex:row
-+ - node: icon:check
-+ box:
-+ abs: [363,302 15x15]
-+ rel: [0,0 15x15]
-+ position: clip
-  - node: div
-  item: item[3]
++ abs: [328,303 24x24]
++ rel: [298,20 24x24]
++ layout: grid cols:1 align:center
++ flex: shrink:0
++ style: r:999 border:2px accent
+  - node: muted
+  text: Changing the language restarts the app.
   box:
-  abs: [8,339 390x63]
-  rel: [0,118 390x63]
-  layout: grid cols:2 gap:12 align:center
-  spacing: pad:13/16
+  abs: [21,364 348x24]
+  rel: [20,259 348x24]
+  layout: flex:row gap:8 align:center
+  spacing: pad:8/4/0/4
+  style: font:13/400 color:text-2
   ...
 ```

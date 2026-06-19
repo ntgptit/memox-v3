@@ -7,6 +7,12 @@ Every screen state ships as a light + dark PNG pair at 390px width. These PNGs
 are the canonical visual mock reference for UI tasks — read the PNG, not the
 10k-line `index.html` source.
 
+## 00 — Components
+
+| State | Light | Dark |
+| --- | --- | --- |
+| Default | `00-components--default--light.png` | `00-components--default--dark.png` |
+
 ## 01 — Onboarding
 
 | State | Light | Dark |
@@ -42,14 +48,9 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | Loaded | `03-library-overview--loaded--light.png` | `03-library-overview--loaded--dark.png` |
 | Loading | `03-library-overview--loading--light.png` | `03-library-overview--loading--dark.png` |
 | Empty | `03-library-overview--empty--light.png` | `03-library-overview--empty--dark.png` |
-| Error | `03-library-overview--error--light.png` | `03-library-overview--error--dark.png` |
 | Search | `03-library-overview--search--light.png` | `03-library-overview--search--dark.png` |
 | Overflow sheet | `03-library-overview--overflow-sheet--light.png` | `03-library-overview--overflow-sheet--dark.png` |
-| Create folder | `03-library-overview--create-folder--light.png` | `03-library-overview--create-folder--dark.png` |
-| Rename folder | `03-library-overview--rename-folder--light.png` | `03-library-overview--rename-folder--dark.png` |
-| Move folder | `03-library-overview--move-folder--light.png` | `03-library-overview--move-folder--dark.png` |
-| Archive folder | `03-library-overview--archive-folder--light.png` | `03-library-overview--archive-folder--dark.png` |
-| Delete folder | `03-library-overview--delete-folder--light.png` | `03-library-overview--delete-folder--dark.png` |
+| Error | `03-library-overview--error--light.png` | `03-library-overview--error--dark.png` |
 
 ## 04 — Folder detail
 
@@ -57,20 +58,20 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | --- | --- | --- |
 | Decks | `04-folder-detail--decks--light.png` | `04-folder-detail--decks--dark.png` |
 | Subfolders | `04-folder-detail--subfolders--light.png` | `04-folder-detail--subfolders--dark.png` |
-| Unlocked | `04-folder-detail--unlocked--light.png` | `04-folder-detail--unlocked--dark.png` |
+| Empty / unlocked | `04-folder-detail--empty-unlocked--light.png` | `04-folder-detail--empty-unlocked--dark.png` |
 | Search empty | `04-folder-detail--search-empty--light.png` | `04-folder-detail--search-empty--dark.png` |
 | Loading | `04-folder-detail--loading--light.png` | `04-folder-detail--loading--dark.png` |
 | Error | `04-folder-detail--error--light.png` | `04-folder-detail--error--dark.png` |
-| Delete | `04-folder-detail--delete--light.png` | `04-folder-detail--delete--dark.png` |
+| Delete confirm | `04-folder-detail--delete-confirm--light.png` | `04-folder-detail--delete-confirm--dark.png` |
 | Move sheet | `04-folder-detail--move-sheet--light.png` | `04-folder-detail--move-sheet--dark.png` |
 
 ## 05 — Library search
 
 | State | Light | Dark |
 | --- | --- | --- |
+| Results | `05-library-search--results--light.png` | `05-library-search--results--dark.png` |
 | Empty | `05-library-search--empty--light.png` | `05-library-search--empty--dark.png` |
 | Loading | `05-library-search--loading--light.png` | `05-library-search--loading--dark.png` |
-| Results | `05-library-search--results--light.png` | `05-library-search--results--dark.png` |
 | No results | `05-library-search--no-results--light.png` | `05-library-search--no-results--dark.png` |
 | Error | `05-library-search--error--light.png` | `05-library-search--error--dark.png` |
 
@@ -127,8 +128,8 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | Empty | `10-deck-import--empty--light.png` | `10-deck-import--empty--dark.png` |
 | File selected | `10-deck-import--file-selected--light.png` | `10-deck-import--file-selected--dark.png` |
 | Parsing | `10-deck-import--parsing--light.png` | `10-deck-import--parsing--dark.png` |
-| Preview all | `10-deck-import--preview-all--light.png` | `10-deck-import--preview-all--dark.png` |
-| Preview mixed | `10-deck-import--preview-mixed--light.png` | `10-deck-import--preview-mixed--dark.png` |
+| Preview · all valid | `10-deck-import--preview-all-valid--light.png` | `10-deck-import--preview-all-valid--dark.png` |
+| Preview · mixed | `10-deck-import--preview-mixed--light.png` | `10-deck-import--preview-mixed--dark.png` |
 | Importing | `10-deck-import--importing--light.png` | `10-deck-import--importing--dark.png` |
 | Success | `10-deck-import--success--light.png` | `10-deck-import--success--dark.png` |
 | Partial | `10-deck-import--partial--light.png` | `10-deck-import--partial--dark.png` |
@@ -144,10 +145,10 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | Search empty | `11-tag-management--search-empty--light.png` | `11-tag-management--search-empty--dark.png` |
 | Action sheet | `11-tag-management--action-sheet--light.png` | `11-tag-management--action-sheet--dark.png` |
 | Rename | `11-tag-management--rename--light.png` | `11-tag-management--rename--dark.png` |
-| Rename to merge | `11-tag-management--rename-to-merge--light.png` | `11-tag-management--rename-to-merge--dark.png` |
+| Rename → merge | `11-tag-management--rename-merge--light.png` | `11-tag-management--rename-merge--dark.png` |
 | Merge sheet | `11-tag-management--merge-sheet--light.png` | `11-tag-management--merge-sheet--dark.png` |
 | Delete | `11-tag-management--delete--light.png` | `11-tag-management--delete--dark.png` |
-| Busy row | `11-tag-management--busy-row--light.png` | `11-tag-management--busy-row--dark.png` |
+| Busy | `11-tag-management--busy--light.png` | `11-tag-management--busy--dark.png` |
 | Op error | `11-tag-management--op-error--light.png` | `11-tag-management--op-error--dark.png` |
 
 ## 12 — Study · Review
@@ -160,7 +161,9 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 
 | State | Light | Dark |
 | --- | --- | --- |
-| Default | `13-study-match--default--light.png` | `13-study-match--default--dark.png` |
+| Matching | `13-study-match--matching--light.png` | `13-study-match--matching--dark.png` |
+| Long meanings | `13-study-match--long-meanings--light.png` | `13-study-match--long-meanings--dark.png` |
+| Read full meaning | `13-study-match--read-full-meaning--light.png` | `13-study-match--read-full-meaning--dark.png` |
 
 ## 14 — Study · Guess
 
@@ -216,10 +219,10 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | State | Light | Dark |
 | --- | --- | --- |
 | Populated | `20-settings--populated--light.png` | `20-settings--populated--dark.png` |
-| Loading | `20-settings--loading--light.png` | `20-settings--loading--dark.png` |
 | Signed out | `20-settings--signed-out--light.png` | `20-settings--signed-out--dark.png` |
 | Signing in | `20-settings--signing-in--light.png` | `20-settings--signing-in--dark.png` |
 | Sync error | `20-settings--sync-error--light.png` | `20-settings--sync-error--dark.png` |
+| Loading | `20-settings--loading--light.png` | `20-settings--loading--dark.png` |
 
 ## 21 — Account sync
 
@@ -227,7 +230,7 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | --- | --- | --- |
 | Signed out | `21-account-sync--signed-out--light.png` | `21-account-sync--signed-out--dark.png` |
 | Signing in | `21-account-sync--signing-in--light.png` | `21-account-sync--signing-in--dark.png` |
-| Sign-in failed | `21-account-sync--sign-in-failed--light.png` | `21-account-sync--sign-in-failed--dark.png` |
+| Failed | `21-account-sync--failed--light.png` | `21-account-sync--failed--dark.png` |
 | No backup | `21-account-sync--no-backup--light.png` | `21-account-sync--no-backup--dark.png` |
 | Ready | `21-account-sync--ready--light.png` | `21-account-sync--ready--dark.png` |
 | Uploading | `21-account-sync--uploading--light.png` | `21-account-sync--uploading--dark.png` |
@@ -251,10 +254,10 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | --- | --- | --- |
 | Korean | `23-audio-speech--korean--light.png` | `23-audio-speech--korean--dark.png` |
 | English | `23-audio-speech--english--light.png` | `23-audio-speech--english--dark.png` |
+| Playing | `23-audio-speech--playing--light.png` | `23-audio-speech--playing--dark.png` |
 | Loading | `23-audio-speech--loading--light.png` | `23-audio-speech--loading--dark.png` |
 | No voices | `23-audio-speech--no-voices--light.png` | `23-audio-speech--no-voices--dark.png` |
 | Engine error | `23-audio-speech--engine-error--light.png` | `23-audio-speech--engine-error--dark.png` |
-| Playing | `23-audio-speech--playing--light.png` | `23-audio-speech--playing--dark.png` |
 | Saving | `23-audio-speech--saving--light.png` | `23-audio-speech--saving--dark.png` |
 
 ## 24 — Appearance
@@ -269,8 +272,8 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 
 | State | Light | Dark |
 | --- | --- | --- |
+| System | `25-language--system--light.png` | `25-language--system--dark.png` |
 | English | `25-language--english--light.png` | `25-language--english--dark.png` |
-| Searching | `25-language--searching--light.png` | `25-language--searching--dark.png` |
-| Switched | `25-language--switched--light.png` | `25-language--switched--dark.png` |
+| Vietnamese | `25-language--vietnamese--light.png` | `25-language--vietnamese--dark.png` |
 
-Total: 25 screens · 141 states · 282 PNGs.
+Total: 26 screens · 139 states · 278 PNGs.

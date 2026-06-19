@@ -1,0 +1,4 @@
+/* MemoX design system — global entry. Consumers link THIS file.
+   Keep this file to @import lines only. */
+@import "./colors_and_type.css";
+@import "./memox-components.css";

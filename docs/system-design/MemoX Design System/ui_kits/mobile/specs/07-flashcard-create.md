@@ -40,2019 +40,859 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Empty
 
 ```text
-- node: app
-  mx: MxScaffold
+- node: div
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,1 388x48]
+    rel: [1,1 388x48]
+  layout: flex:row justify:between align:center
+  flex: shrink:0
+  spacing: pad:0/26/0/30
+  - node: sb-time
+    text: 9:41
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
-      box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
-        box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
+      abs: [31,16 33x19]
+      rel: [30,15 33x19]
+    style: font:15/700 color:text
+  - node: sb-icons
     box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 justify:between align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
+      abs: [277,13 86x24]
+      rel: [276,12 86x24]
+    layout: flex:row gap:7 align:center
+    - node: icon:signal-high
       box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
-        box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
-        - node: icon:x
-          box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
-          position: clip
-    - node: title
-      text: New flashcard
+        abs: [277,13 24x24]
+        rel: [0,0 24x24]
+      position: clip
+    - node: icon:wifi
       box:
-        abs: [60,61 274x18]
-        rel: [52,9 274x18]
-      flex: grow:1 basis:0 layout_hint:expanded
-      spacing: margin:0/0/0/4
-      style: font:16/700 color:#000000 tracking:-0.3
-    - node: pill-btn
-      text: Save
-      mx: MxPrimaryButton
+        abs: [308,13 24x24]
+        rel: [31,0 24x24]
+      position: clip
+    - node: icon:battery-full
       box:
-        abs: [338,54 52x32]
-        rel: [330,2 52x32]
-      layout: flex:row gap:6 justify:center align:center
-      spacing: pad:0/14
-      style: font:12/600 color:#000000 text:center tracking:0.1 r:9 op:0.45
-  - node: scroll-x
+        abs: [339,13 24x24]
+        rel: [62,0 24x24]
+      position: clip
+- node: phone-canvas
+  box:
+    abs: [1,49 388x720]
+    rel: [1,49 388x720]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
     box:
-      abs: [8,88 390x25]
-      rel: [0,80 390x25]
-    layout: flex:row gap:4 align:center
-    repeat: x3+(unit=2)
-    spacing: pad:2/14/8/14
-    position: layout_hint:scroll
-    - node: span
-      item: item[1]
-      text: Library
+      abs: [1,49 388x720]
+      rel: [0,0 388x720]
+    layout: flex:col
+    size: minh:100
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
       box:
-        abs: [22,90 37x15]
-        rel: [14,2 37x15]
-      style: font:12/500 color:#000000 tracking:0.1
-    - node: span
-      box:
-        abs: [63,92 12x12]
-        rel: [55,4 12x12]
-      layout: flex:row
-      - node: icon:chevron-right
-        box:
-          abs: [63,92 12x12]
-          rel: [0,0 12x12]
-        position: clip
-    - node: span
-      item: item[2]
-      text: Korean
-      box:
-        abs: [79,90 36x15]
-        rel: [71,2 36x15]
-      style: font:12/500 color:#000000 tracking:0.1
-    - node: span
-      box:
-        abs: [119,92 12x12]
-        rel: [111,4 12x12]
-      layout: flex:row
-      - node: icon:chevron-right
-        box:
-          abs: [119,92 12x12]
-          rel: [0,0 12x12]
-        position: clip
-    - node: span
-      item: item[3]
-      text: TOPIK II — Vocab
-      box:
-        abs: [135,90 95x15]
-        rel: [127,2 95x15]
-      style: font:12/500 color:#000000 tracking:0.1
-    - node: span
-      box:
-        abs: [234,92 12x12]
-        rel: [226,4 12x12]
-      layout: flex:row
-      - node: icon:chevron-right
-        box:
-          abs: [234,92 12x12]
-          rel: [0,0 12x12]
-        position: clip
-    - node: span
-      text: New card
-      box:
-        abs: [250,90 50x15]
-        rel: [242,2 50x15]
-      style: font:12/700 color:#000000 tracking:0.1
-  - node: scroll
-    box:
-      abs: [8,113 390x608]
-      rel: [0,105 390x608]
-    flex: grow:1 basis:0 layout_hint:expanded
-    position: layout_hint:scroll
-    - node: div
-      box:
-        abs: [8,113 171x34]
-        rel: [0,0 171x34]
+        abs: [1,49 388x56]
+        rel: [0,0 388x56]
       layout: flex:row gap:8 align:center
-      spacing: pad:6/12/6/8 margin:0/0/16/0
-      style: r:999
-      - node: span
-        box:
-          abs: [16,119 22x22]
-          rel: [8,6 22x22]
-        layout: flex:row justify:center align:center
-        style: r:7
-        - node: span
-          box:
-            abs: [21,124 13x13]
-            rel: [5,5 13x13]
-          layout: flex:row
-          - node: icon:layers
-            box:
-              abs: [21,124 13x13]
-              rel: [0,0 13x13]
-            position: clip
-      - node: span
-        text: TOPIK II — Vocab
-        box:
-          abs: [46,123 100x15]
-          rel: [38,10 100x15]
-        style: font:12/600 color:#000000
-      - node: span
-        box:
-          abs: [154,124 13x13]
-          rel: [146,11 13x13]
-        layout: flex:row
-        - node: icon:chevron-down
-          box:
-            abs: [154,124 13x13]
-            rel: [0,0 13x13]
-          position: clip
-    - node: ov
-      text: Required
-      box:
-        abs: [179,128 84x22]
-        rel: [171,15 84x22]
-      layout: flex:row gap:6 align:center
-      spacing: pad:0/4/10/4
-      style: font:11/700 color:#000000 tracking:0.6
-    - node: div
-      box:
-        abs: [8,163 390x21]
-        rel: [0,50 390x21]
-      layout: flex:row justify:between align:baseline
-      spacing: pad:0/4/6/4
-      - node: div
-        box:
-          abs: [12,163 159x15]
-          rel: [4,0 159x15]
-        layout: flex:row gap:5 align:baseline
-        - node: ov
-          text: Front · Korean
-          box:
-            abs: [12,164 104x12]
-            rel: [0,1 104x12]
-          style: font:11/700 color:#000000 tracking:0.6
-        - node: span
-          text: Required
-          box:
-            abs: [121,163 50x15]
-            rel: [109,0 50x15]
-          style: font:12/700 color:#000000 tracking:0.3
-      - node: span
-        text: 0 / 60
-        box:
-          abs: [365,163 29x15]
-          rel: [357,0 29x15]
-        style: font:12/600 color:#000000 tracking:0.2
-    - node: card
-      mx: MxCard
-      box:
-        abs: [8,184 390x96]
-        rel: [0,71 390x96]
-      layout: flex:row align:center
-      spacing: pad:14/42/14/14 margin:0/0/14/0
-      size: minh:66
-      position: pos:relative
-      style: r:20 border:1px #000000
-      - node: div
-        box:
-          abs: [23,223 213x18]
-          rel: [15,39 213x18]
-        layout: flex:row gap:2 align:center
-        style: op:0.6
-        - node: span
-          text: The term you want to remember
-          box:
-            abs: [23,223 207x18]
-            rel: [0,0 207x18]
-          style: font:16/500 color:#000000
+      spacing: pad:0/20
+      style: bg:bg
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [361,217 30x30]
-          rel: [353,33 30x30]
-        layout: flex:row justify:center align:center
-        position: pos:absolute
-        transform: transform:translate(0,-15)
-        style: r:999
-        - node: span
-          box:
-            abs: [366,222 20x20]
-            rel: [5,5 20x20]
-          layout: flex:row
-          - node: icon:mic
-            box:
-              abs: [366,222 20x20]
-              rel: [0,0 20x20]
-            position: clip
-    - node: div
-      box:
-        abs: [8,294 390x21]
-        rel: [0,181 390x21]
-      layout: flex:row justify:between align:baseline
-      spacing: pad:0/4/6/4
-      - node: div
-        box:
-          abs: [12,294 159x15]
-          rel: [4,0 159x15]
-        layout: flex:row gap:5 align:baseline
-        - node: ov
-          text: Back · Meaning
-          box:
-            abs: [12,295 104x12]
-            rel: [0,1 104x12]
-          style: font:11/700 color:#000000 tracking:0.6
-        - node: span
-          text: Required
-          box:
-            abs: [121,294 50x15]
-            rel: [109,0 50x15]
-          style: font:12/700 color:#000000 tracking:0.3
-      - node: span
-        text: 0 / 240
-        box:
-          abs: [359,294 35x15]
-          rel: [351,0 35x15]
-        style: font:12/600 color:#000000 tracking:0.2
-    - node: card
-      mx: MxCard
-      box:
-        abs: [8,315 390x100]
-        rel: [0,202 390x100]
-      layout: flex:row align:center
-      spacing: pad:12/14 margin:0/0/14/0
-      size: minh:76
-      style: r:20
-      - node: div
-        text: English, Vietnamese, or both — comma-separated reads cleanest.
-        box:
-          abs: [22,344 362x42]
-          rel: [14,29 362x42]
-        style: font:14/400/21 color:#000000 op:0.65
-    - node: button
-      mx: ?
-      box:
-        abs: [8,429 390x42]
-        rel: [0,316 390x42]
-      layout: flex:row justify:between align:center
-      spacing: pad:0/14 margin:0/0/18/0
-      - node: span
-        text: Add details
-        box:
-          abs: [22,443 233x15]
-          rel: [14,14 233x15]
-        layout: flex:row gap:8 align:center
-        style: font:12/600 color:#000000 text:center
-        - node: span
-          box:
-            abs: [22,444 13x13]
-            rel: [0,1 13x13]
-          layout: flex:row
-          - node: icon:sparkles
-            box:
-              abs: [22,444 13x13]
-              rel: [0,0 13x13]
-            position: clip
-        - node: span
-          text: example · hint · pronunciation
-          box:
-            abs: [109,443 146x15]
-            rel: [87,0 146x15]
-          style: font:12/500 color:#000000 text:center
-      - node: span
-        box:
-          abs: [370,443 14x14]
-          rel: [362,14 14x14]
-        layout: flex:row
-        - node: icon:chevron-down
-          box:
-            abs: [370,443 14x14]
-            rel: [0,0 14x14]
-          position: clip
-    - node: div
-      box:
-        abs: [8,489 390x23]
-        rel: [0,376 390x23]
-      layout: flex:row gap:6 align:center
-      spacing: pad:0/4/8/4
-      - node: span
-        box:
-          abs: [12,491 11x11]
-          rel: [4,2 11x11]
-        layout: flex:row
-        - node: icon:tag
-          box:
-            abs: [12,491 11x11]
-            rel: [0,0 11x11]
-          position: clip
-      - node: span
-        text: Tags
-        box:
-          abs: [29,489 33x15]
-          rel: [21,0 33x15]
-        style: font:12/600 color:#000000 tracking:0.4
-      - node: span
-        text: · optional
-        box:
-          abs: [68,489 46x15]
-          rel: [60,0 46x15]
-        style: font:12/500 color:#000000 op:0.55
-    - node: div
-      box:
-        abs: [8,512 390x28]
-        rel: [0,399 390x28]
-      layout: flex:row wrap gap:6
-      spacing: margin:0/0/18/0
-      - node: button
-        text: Add tag
-        mx: ?
-        box:
-          abs: [8,512 81x28]
-          rel: [0,0 81x28]
-        layout: flex:row gap:4 align:center
-        spacing: pad:0/12
-        style: font:12/600 color:#000000 text:center r:999
-        - node: span
-          box:
-            abs: [20,520 12x12]
-            rel: [12,8 12x12]
-          layout: flex:row
-          - node: icon:plus
-            box:
-              abs: [20,520 12x12]
-              rel: [0,0 12x12]
-            position: clip
-  - node: div
-    box:
-      abs: [8,721 390x67]
-      rel: [0,713 390x67]
-    layout: flex:col gap:10
-    spacing: pad:10/14/16/14
-    - node: div
-      box:
-        abs: [22,731 362x16]
-        rel: [14,10 362x16]
-      layout: flex:row gap:10
-      - node: pill-btn
-        text: Cancel
-        mx: MxSecondaryButton
-        box:
-          abs: [22,731 78x16]
-          rel: [0,0 78x16]
-        layout: flex:row gap:6 justify:center align:center
+          abs: [21,57 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
         flex: shrink:0
-        spacing: pad:0/18
-        style: font:14/600 color:#000000 text:center tracking:0.1 r:12
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
+        - node: icon:x
+          box:
+            abs: [31,67 20x20]
+            rel: [10,10 20x20]
+          position: clip
+      - node: appbar-title
+        text: New card
+        box:
+          abs: [77,62 206x30]
+          rel: [76,13 206x30]
+        flex: grow:1 basis:0 layout_hint:expanded
+        spacing: margin:0/0/0/8
+        style: font:24/700 color:text tracking:-0.5
       - node: pill-btn
-        text: Save card
+        text: Save
         mx: MxPrimaryButton
         box:
-          abs: [110,731 274x16]
-          rel: [88,0 274x16]
+          abs: [291,65 78x24]
+          rel: [290,16 78x24]
         layout: flex:row gap:8 justify:center align:center
-        flex: grow:1 basis:0 layout_hint:expanded
-        style: font:14/600 color:#000000 text:center tracking:0.1 r:12 op:0.45
-        - node: span
+        spacing: pad:0/12
+        size: minw:76
+        style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
+        - node: icon:check
           box:
-            abs: [205,731 16x16]
-            rel: [95,0 16x16]
-          layout: flex:row
-          - node: icon:check
-            box:
-              abs: [205,731 16x16]
-              rel: [0,0 16x16]
-            position: clip
+            abs: [304,69 16x16]
+            rel: [13,4 16x16]
+          position: clip
     - node: div
-      text: Front and back are required to save.
       box:
-        abs: [22,757 362x15]
-        rel: [14,36 362x15]
-      style: font:12/400 color:#000000 text:center op:0.7
+        abs: [1,105 388x664]
+        rel: [0,56 388x664]
+      layout: flex:col gap:16
+      flex: grow:1 basis:0 layout_hint:expanded
+      spacing: pad:16/20/48/20
+      position: layout_hint:scroll
+      - node: div
+        box:
+          abs: [21,121 348x119]
+          rel: [20,16 348x119]
+        layout: flex:col gap:8
+        - node: ov
+          box:
+            abs: [21,121 348x15]
+            rel: [0,0 348x15]
+          layout: flex:row gap:8 justify:between align:center
+          - node: span
+            text: Front
+            box:
+              abs: [21,121 46x15]
+              rel: [0,0 46x15]
+            style: font:12/700 color:text-2 tracking:1
+        - node: textarea
+          box:
+            abs: [21,144 348x96]
+            rel: [0,23 348x96]
+          spacing: pad:12/16
+          size: minh:96
+          position: layout_hint:scroll
+          style: bg:accent-contrast r:14 border:1px border
+      - node: div
+        box:
+          abs: [21,256 348x119]
+          rel: [20,151 348x119]
+        layout: flex:col gap:8
+        - node: ov
+          box:
+            abs: [21,256 348x15]
+            rel: [0,0 348x15]
+          layout: flex:row gap:8 justify:between align:center
+          - node: span
+            text: Back
+            box:
+              abs: [21,256 38x15]
+              rel: [0,0 38x15]
+            style: font:12/700 color:text-2 tracking:1
+        - node: textarea
+          box:
+            abs: [21,279 348x96]
+            rel: [0,23 348x96]
+          spacing: pad:12/16
+          size: minh:96
+          position: layout_hint:scroll
+          style: bg:accent-contrast r:14 border:1px border
+      - node: hr
+        box:
+          abs: [21,391 348x1]
+          rel: [20,286 348x1]
+        style: bg:divider
+      - node: div
+        box:
+          abs: [21,408 348x21]
+          rel: [20,303 348x21]
+        layout: flex:col
+        - node: button
+          mx: ?
+          box:
+            abs: [21,408 348x21]
+            rel: [0,0 348x21]
+          layout: flex:row gap:8 align:center
+          spacing: pad:0/4
+          - node: icon:chevron-right
+            box:
+              abs: [25,409 20x20]
+              rel: [4,1 20x20]
+            position: clip
+          - node: section-head-title
+            text: Details
+            box:
+              abs: [53,408 52x21]
+              rel: [32,0 52x21]
+            style: font:16/700 color:text text:center tracking:-0.3
+          - node: muted
+            text: Optional
+            box:
+              abs: [310,411 55x16]
+              rel: [289,3 55x16]
+            style: font:13/600 color:text-2 text:center
 ```
 
 ## State: Valid (ordered diff vs Empty)
 
 ```diff
-  - node: title
-  text: New flashcard
+  - node: appbar-title
+  text: New card
   box:
-  abs: [60,61 274x18]
-  rel: [52,9 274x18]
+  abs: [77,62 206x30]
+  rel: [76,13 206x30]
   flex: grow:1 basis:0 layout_hint:expanded
-  spacing: margin:0/0/0/4
-  style: font:16/700 color:#000000 tracking:-0.3
+  spacing: margin:0/0/0/8
+  style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
 - text: Save
 - mx: MxPrimaryButton
 - box:
-- abs: [338,54 52x32]
-- rel: [330,2 52x32]
-- layout: flex:row gap:6 justify:center align:center
-- spacing: pad:0/14
-- style: font:12/600 color:#000000 text:center tracking:0.1 r:9 op:0.45
+- abs: [291,65 78x24]
+- rel: [290,16 78x24]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/12
+- size: minw:76
+- style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
 + - node: pill-btn
 + text: Save
 + mx: MxPrimaryButton
 + box:
-+ abs: [338,54 52x32]
-+ rel: [330,2 52x32]
-+ layout: flex:row gap:6 justify:center align:center
-+ spacing: pad:0/14
-+ style: font:12/600 color:#000000 text:center tracking:0.1 r:9
-  - node: scroll-x
-  box:
-  abs: [8,88 390x25]
-  rel: [0,80 390x25]
-  layout: flex:row gap:4 align:center
-  repeat: x3+(unit=2)
-  spacing: pad:2/14/8/14
-  position: layout_hint:scroll
-  ...
-  - node: span
-  text: Required
-  box:
-  abs: [121,163 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 60
-- box:
-- abs: [365,163 29x15]
-- rel: [357,0 29x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,184 390x96]
-- rel: [0,71 390x96]
-- layout: flex:row align:center
-- spacing: pad:14/42/14/14 margin:0/0/14/0
-- size: minh:66
-- position: pos:relative
-- style: r:20 border:1px #000000
-- - node: div
-- box:
-- abs: [23,223 213x18]
-- rel: [15,39 213x18]
-- layout: flex:row gap:2 align:center
-- style: op:0.6
-- - node: span
-- text: The term you want to remember
-- box:
-- abs: [23,223 207x18]
-- rel: [0,0 207x18]
-- style: font:16/500 color:#000000
-+ - node: span
-+ text: 3 / 60
-+ box:
-+ abs: [365,163 29x15]
-+ rel: [357,0 29x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,184 390x94]
-+ rel: [0,71 390x94]
-+ layout: flex:row align:center
-+ spacing: pad:14/42/14/14 margin:0/0/14/0
-+ size: minh:66
-+ position: pos:relative
-+ style: r:20
-+ - node: div
-+ text: 연구자
-+ box:
-+ abs: [22,218 60x26]
-+ rel: [14,34 60x26]
-+ style: font:22/700/26 color:#000000 tracking:-0.4
-  - node: icon-btn
-  mx: MxIconButton
-  box:
-  abs: [362,216 30x30]
-  rel: [354,32 30x30]
-  layout: flex:row justify:center align:center
-  position: pos:absolute
-  transform: transform:translate(0,-15)
-  style: r:999
-  ...
-  - node: span
-  text: Required
-  box:
-  abs: [121,292 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 240
-- box:
-- abs: [359,294 35x15]
-- rel: [351,0 35x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,315 390x100]
-- rel: [0,202 390x100]
-- layout: flex:row align:center
-- spacing: pad:12/14 margin:0/0/14/0
-- size: minh:76
-- style: r:20
-- - node: div
-- text: English, Vietnamese, or both — comma-separated reads cleanest.
-- box:
-- abs: [22,344 362x42]
-- rel: [14,29 362x42]
-- style: font:14/400/21 color:#000000 op:0.65
-+ - node: span
-+ text: 27 / 240
-+ box:
-+ abs: [353,292 41x15]
-+ rel: [345,0 41x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,313 390x100]
-+ rel: [0,200 390x100]
-+ layout: flex:row align:start
-+ spacing: pad:12/14 margin:0/0/14/0
-+ size: minh:76
-+ style: r:20
-+ - node: div
-+ text: Researcher / Nhà nghiên cứu
-+ box:
-+ abs: [22,325 185x23]
-+ rel: [14,12 185x23]
-+ style: font:16/500/23 color:#000000
-  - node: button
-  mx: ?
-  box:
-  abs: [8,427 390x42]
-  rel: [0,314 390x42]
-  layout: flex:row justify:between align:center
-  spacing: pad:0/14 margin:0/0/18/0
-  ...
-  - node: div
-  box:
-  abs: [8,510 390x28]
-  rel: [0,397 390x28]
-  layout: flex:row wrap gap:6
-  spacing: margin:0/0/18/0
-+ - node: span
-+ text: TOPIK II
-+ box:
-+ abs: [8,510 88x28]
-+ rel: [0,0 88x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [77,519 11x11]
-+ rel: [69,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [77,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: noun
-+ box:
-+ abs: [102,510 63x28]
-+ rel: [94,0 63x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [146,519 11x11]
-+ rel: [44,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [146,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: people
-+ box:
-+ abs: [171,510 70x28]
-+ rel: [163,0 70x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [222,519 11x11]
-+ rel: [51,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [222,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-  - node: button
-  text: Add tag
-  mx: ?
-  box:
-  abs: [247,510 81x28]
-  rel: [239,0 81x28]
-  layout: flex:row gap:4 align:center
-  spacing: pad:0/12
-  style: font:12/600 color:#000000 text:center r:999
-  ...
-  - node: pill-btn
-  text: Cancel
-  mx: MxSecondaryButton
-  box:
-  abs: [22,731 78x16]
-  rel: [0,0 78x16]
-  layout: flex:row gap:6 justify:center align:center
-  flex: shrink:0
-  spacing: pad:0/18
-  style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-- - node: pill-btn
-- text: Save card
-- mx: MxPrimaryButton
-- box:
-- abs: [110,731 274x16]
-- rel: [88,0 274x16]
-- layout: flex:row gap:8 justify:center align:center
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:#000000 text:center tracking:0.1 r:12 op:0.45
-+ - node: pill-btn
-+ text: Save card
-+ mx: MxPrimaryButton
-+ box:
-+ abs: [110,731 274x16]
-+ rel: [88,0 274x16]
++ abs: [291,65 78x24]
++ rel: [290,16 78x24]
 + layout: flex:row gap:8 justify:center align:center
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-  - node: span
-  box:
-  abs: [205,731 16x16]
-  rel: [95,0 16x16]
-  layout: flex:row
++ spacing: pad:0/12
++ size: minw:76
++ style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
   - node: icon:check
   box:
-  abs: [205,731 16x16]
-  rel: [0,0 16x16]
+  abs: [304,69 16x16]
+  rel: [13,4 16x16]
   position: clip
-- - node: div
-- text: Front and back are required to save.
+  ...
+  - node: span
+  text: Front
+  box:
+  abs: [21,121 46x15]
+  rel: [0,0 46x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [22,757 362x15]
-- rel: [14,36 362x15]
-- style: font:12/400 color:#000000 text:center op:0.7
-+ - node: div
-+ text: You can keep adding cards after saving.
+- abs: [21,144 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: 日本
 + box:
-+ abs: [22,757 362x15]
-+ rel: [14,36 362x15]
-+ style: font:12/400 color:#000000 text:center op:0.7
++ abs: [21,144 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: div
+  box:
+  abs: [21,256 348x119]
+  rel: [20,151 348x119]
+  layout: flex:col gap:8
+  ...
+  - node: span
+  text: Back
+  box:
+  abs: [21,256 38x15]
+  rel: [0,0 38x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
+- box:
+- abs: [21,279 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: Japan / にほん
++ box:
++ abs: [21,279 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: hr
+  box:
+  abs: [21,391 348x1]
+  rel: [20,286 348x1]
+  style: bg:divider
+  ...
 ```
 
 ## State: Details open (ordered diff vs Empty)
 
 ```diff
-  - node: title
-  text: New flashcard
+  - node: appbar-title
+  text: New card
   box:
-  abs: [60,61 274x18]
-  rel: [52,9 274x18]
+  abs: [77,62 206x30]
+  rel: [76,13 206x30]
   flex: grow:1 basis:0 layout_hint:expanded
-  spacing: margin:0/0/0/4
-  style: font:16/700 color:#000000 tracking:-0.3
+  spacing: margin:0/0/0/8
+  style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
 - text: Save
 - mx: MxPrimaryButton
 - box:
-- abs: [338,54 52x32]
-- rel: [330,2 52x32]
-- layout: flex:row gap:6 justify:center align:center
-- spacing: pad:0/14
-- style: font:12/600 color:#000000 text:center tracking:0.1 r:9 op:0.45
+- abs: [291,65 78x24]
+- rel: [290,16 78x24]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/12
+- size: minw:76
+- style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
 + - node: pill-btn
 + text: Save
 + mx: MxPrimaryButton
 + box:
-+ abs: [338,54 52x32]
-+ rel: [330,2 52x32]
-+ layout: flex:row gap:6 justify:center align:center
-+ spacing: pad:0/14
-+ style: font:12/600 color:#000000 text:center tracking:0.1 r:9
-  - node: scroll-x
-  box:
-  abs: [8,88 390x25]
-  rel: [0,80 390x25]
-  layout: flex:row gap:4 align:center
-  repeat: x3+(unit=2)
-  spacing: pad:2/14/8/14
-  position: layout_hint:scroll
-  ...
-  - node: span
-  text: New card
-  box:
-  abs: [250,90 50x15]
-  rel: [242,2 50x15]
-  style: font:12/700 color:#000000 tracking:0.1
-- - node: scroll
-- box:
-- abs: [8,113 390x608]
-- rel: [0,105 390x608]
-- flex: grow:1 basis:0 layout_hint:expanded
-- position: layout_hint:scroll
-+ - node: scroll
-+ box:
-+ abs: [8,113 390x608]
-+ rel: [0,105 390x608]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ position: layout_hint:scroll
-+ scroll: scrollh:730
-  - node: div
-  box:
-  abs: [8,113 171x34]
-  rel: [0,0 171x34]
-  layout: flex:row gap:8 align:center
-  spacing: pad:6/12/6/8 margin:0/0/16/0
-  style: r:999
-  ...
-  - node: span
-  text: Required
-  box:
-  abs: [121,163 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 60
-- box:
-- abs: [365,163 29x15]
-- rel: [357,0 29x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,184 390x96]
-- rel: [0,71 390x96]
-- layout: flex:row align:center
-- spacing: pad:14/42/14/14 margin:0/0/14/0
-- size: minh:66
-- position: pos:relative
-- style: r:20 border:1px #000000
-- - node: div
-- box:
-- abs: [23,223 213x18]
-- rel: [15,39 213x18]
-- layout: flex:row gap:2 align:center
-- style: op:0.6
-- - node: span
-- text: The term you want to remember
-- box:
-- abs: [23,223 207x18]
-- rel: [0,0 207x18]
-- style: font:16/500 color:#000000
-+ - node: span
-+ text: 3 / 60
-+ box:
-+ abs: [365,163 29x15]
-+ rel: [357,0 29x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,184 390x94]
-+ rel: [0,71 390x94]
-+ layout: flex:row align:center
-+ spacing: pad:14/42/14/14 margin:0/0/14/0
-+ size: minh:66
-+ position: pos:relative
-+ style: r:20
-+ - node: div
-+ text: 연구자
-+ box:
-+ abs: [22,218 60x26]
-+ rel: [14,34 60x26]
-+ style: font:22/700/26 color:#000000 tracking:-0.4
-  - node: icon-btn
-  mx: MxIconButton
-  box:
-  abs: [362,216 30x30]
-  rel: [354,32 30x30]
-  layout: flex:row justify:center align:center
-  position: pos:absolute
-  transform: transform:translate(0,-15)
-  style: r:999
-  ...
-  - node: span
-  text: Required
-  box:
-  abs: [121,292 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 240
-- box:
-- abs: [359,294 35x15]
-- rel: [351,0 35x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,315 390x100]
-- rel: [0,202 390x100]
-- layout: flex:row align:center
-- spacing: pad:12/14 margin:0/0/14/0
-- size: minh:76
-- style: r:20
-- - node: div
-- text: English, Vietnamese, or both — comma-separated reads cleanest.
-- box:
-- abs: [22,344 362x42]
-- rel: [14,29 362x42]
-- style: font:14/400/21 color:#000000 op:0.65
-- - node: button
-- mx: ?
-- box:
-- abs: [8,429 390x42]
-- rel: [0,316 390x42]
-- layout: flex:row justify:between align:center
-- spacing: pad:0/14 margin:0/0/18/0
-+ - node: span
-+ text: 27 / 240
-+ box:
-+ abs: [353,292 41x15]
-+ rel: [345,0 41x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,313 390x100]
-+ rel: [0,200 390x100]
-+ layout: flex:row align:start
-+ spacing: pad:12/14 margin:0/0/14/0
-+ size: minh:76
-+ style: r:20
-+ - node: div
-+ text: Researcher / Nhà nghiên cứu
-+ box:
-+ abs: [22,325 185x23]
-+ rel: [14,12 185x23]
-+ style: font:16/500/23 color:#000000
-+ - node: button
-+ mx: ?
-+ box:
-+ abs: [8,427 390x42]
-+ rel: [0,314 390x42]
-+ layout: flex:row justify:between align:center
-+ spacing: pad:0/14 margin:0/0/14/0
-  - node: span
-  text: Add details
-  box:
-  abs: [22,441 233x15]
-  rel: [14,14 233x15]
-  layout: flex:row gap:8 align:center
-  style: font:12/600 color:#000000 text:center
-  ...
-  - node: span
-  box:
-  abs: [370,441 14x14]
-  rel: [362,14 14x14]
-  layout: flex:row
-- - node: icon:chevron-down
-- box:
-- abs: [370,443 14x14]
-- rel: [0,0 14x14]
-- position: clip
-+ - node: icon:chevron-up
-+ box:
-+ abs: [370,441 14x14]
-+ rel: [0,0 14x14]
-+ position: clip
-+ - node: div
-+ box:
-+ abs: [8,483 390x267]
-+ rel: [0,370 390x267]
-+ layout: flex:col gap:12
-+ spacing: margin:0/0/18/0
-+ - node: div
-+ box:
-+ abs: [8,483 390x81]
-+ rel: [0,0 390x81]
-+ - node: div
-+ box:
-+ abs: [8,483 390x21]
-+ rel: [0,0 390x21]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/4/6/4
-+ - node: span
-+ box:
-+ abs: [12,485 11x11]
-+ rel: [4,2 11x11]
-+ layout: flex:row
-+ - node: icon:message-square
-+ box:
-+ abs: [12,485 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: Example sentence
-+ box:
-+ abs: [29,483 134x15]
-+ rel: [21,0 134x15]
-+ style: font:12/600 color:#000000 tracking:0.4
-+ - node: span
-+ text: · optional
-+ box:
-+ abs: [169,483 46x15]
-+ rel: [161,0 46x15]
-+ style: font:12/500 color:#000000 op:0.55
-+ - node: div
-+ box:
-+ abs: [8,504 390x60]
-+ rel: [0,21 390x60]
-+ layout: flex:row gap:8 justify:between align:center
-+ spacing: pad:10/12
-+ size: minh:40
-+ - node: span
-+ text: 그는 유명한 언어학 연구자이다.
-+ box:
-+ abs: [20,524 366x20]
-+ rel: [12,20 366x20]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ position: clip
-+ style: font:14/400/20 color:#000000
-+ - node: div
-+ box:
-+ abs: [8,576 390x81]
-+ rel: [0,93 390x81]
-+ - node: div
-+ box:
-+ abs: [8,576 390x21]
-+ rel: [0,0 390x21]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/4/6/4
-+ - node: span
-+ box:
-+ abs: [12,578 11x11]
-+ rel: [4,2 11x11]
-+ layout: flex:row
-+ - node: icon:lightbulb
-+ box:
-+ abs: [12,578 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: Hint
-+ box:
-+ abs: [29,576 32x15]
-+ rel: [21,0 32x15]
-+ style: font:12/600 color:#000000 tracking:0.4
-+ - node: span
-+ text: · optional
-+ box:
-+ abs: [67,576 46x15]
-+ rel: [59,0 46x15]
-+ style: font:12/500 color:#000000 op:0.55
-+ - node: div
-+ box:
-+ abs: [8,597 390x60]
-+ rel: [0,21 390x60]
-+ layout: flex:row gap:8 justify:between align:center
-+ spacing: pad:10/12
-+ size: minh:40
-+ - node: span
-+ text: 연구 = research · 자 = person
-+ box:
-+ abs: [20,617 366x20]
-+ rel: [12,20 366x20]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ position: clip
-+ style: font:14/400/20 color:#000000
-+ - node: div
-+ box:
-+ abs: [8,669 390x81]
-+ rel: [0,186 390x81]
-+ - node: div
-+ box:
-+ abs: [8,669 390x21]
-+ rel: [0,0 390x21]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/4/6/4
-+ - node: span
-+ box:
-+ abs: [12,671 11x11]
-+ rel: [4,2 11x11]
-+ layout: flex:row
-+ - node: icon:volume-2
-+ box:
-+ abs: [12,671 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: Pronunciation · romanization
-+ box:
-+ abs: [29,669 222x15]
-+ rel: [21,0 222x15]
-+ style: font:12/600 color:#000000 tracking:0.4
-+ - node: span
-+ text: · optional
-+ box:
-+ abs: [257,669 46x15]
-+ rel: [249,0 46x15]
-+ style: font:12/500 color:#000000 op:0.55
-+ - node: div
-+ box:
-+ abs: [8,690 390x60]
-+ rel: [0,21 390x60]
-+ layout: flex:row gap:8 justify:between align:center
-+ spacing: pad:10/12
-+ size: minh:40
-+ - node: span
-+ text: yeon-gu-ja
-+ box:
-+ abs: [20,710 332x20]
-+ rel: [12,20 332x20]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ position: clip
-+ style: font:14/400/20 color:#000000
-+ - node: icon-btn
-+ mx: MxIconButton
-+ box:
-+ abs: [360,707 26x26]
-+ rel: [352,17 26x26]
-+ layout: flex:row justify:center align:center
-+ position: pos:relative
-+ style: r:999
-+ - node: span
-+ box:
-+ abs: [363,710 20x20]
-+ rel: [3,3 20x20]
-+ layout: flex:row
-+ - node: icon:volume-2
-+ box:
-+ abs: [363,710 20x20]
-+ rel: [0,0 20x20]
-+ position: clip
-  - node: div
-  box:
-  abs: [8,768 390x23]
-  rel: [0,655 390x23]
-  layout: flex:row gap:6 align:center
-  spacing: pad:0/4/8/4
-  ...
-  - node: div
-  box:
-  abs: [8,791 390x28]
-  rel: [0,678 390x28]
-  layout: flex:row wrap gap:6
-  spacing: margin:0/0/18/0
-+ - node: span
-+ text: TOPIK II
-+ box:
-+ abs: [8,791 88x28]
-+ rel: [0,0 88x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [77,800 11x11]
-+ rel: [69,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [77,800 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: noun
-+ box:
-+ abs: [102,791 63x28]
-+ rel: [94,0 63x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [146,800 11x11]
-+ rel: [44,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [146,800 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: people
-+ box:
-+ abs: [171,791 70x28]
-+ rel: [163,0 70x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [222,800 11x11]
-+ rel: [51,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [222,800 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-  - node: button
-  text: Add tag
-  mx: ?
-  box:
-  abs: [247,791 81x28]
-  rel: [239,0 81x28]
-  layout: flex:row gap:4 align:center
-  spacing: pad:0/12
-  style: font:12/600 color:#000000 text:center r:999
-  ...
-  - node: pill-btn
-  text: Cancel
-  mx: MxSecondaryButton
-  box:
-  abs: [22,731 78x16]
-  rel: [0,0 78x16]
-  layout: flex:row gap:6 justify:center align:center
-  flex: shrink:0
-  spacing: pad:0/18
-  style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-- - node: pill-btn
-- text: Save card
-- mx: MxPrimaryButton
-- box:
-- abs: [110,731 274x16]
-- rel: [88,0 274x16]
-- layout: flex:row gap:8 justify:center align:center
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:#000000 text:center tracking:0.1 r:12 op:0.45
-+ - node: pill-btn
-+ text: Save card
-+ mx: MxPrimaryButton
-+ box:
-+ abs: [110,731 274x16]
-+ rel: [88,0 274x16]
++ abs: [291,65 78x24]
++ rel: [290,16 78x24]
 + layout: flex:row gap:8 justify:center align:center
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-  - node: span
-  box:
-  abs: [205,731 16x16]
-  rel: [95,0 16x16]
-  layout: flex:row
++ spacing: pad:0/12
++ size: minw:76
++ style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
   - node: icon:check
   box:
-  abs: [205,731 16x16]
-  rel: [0,0 16x16]
+  abs: [304,69 16x16]
+  rel: [13,4 16x16]
   position: clip
-- - node: div
-- text: Front and back are required to save.
+  ...
+  - node: span
+  text: Front
+  box:
+  abs: [21,121 46x15]
+  rel: [0,0 46x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [22,757 362x15]
-- rel: [14,36 362x15]
-- style: font:12/400 color:#000000 text:center op:0.7
-+ - node: div
-+ text: You can keep adding cards after saving.
+- abs: [21,144 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: 日本
 + box:
-+ abs: [22,757 362x15]
-+ rel: [14,36 362x15]
-+ style: font:12/400 color:#000000 text:center op:0.7
++ abs: [21,144 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: div
+  box:
+  abs: [21,256 348x119]
+  rel: [20,151 348x119]
+  layout: flex:col gap:8
+  ...
+  - node: span
+  text: Back
+  box:
+  abs: [21,256 38x15]
+  rel: [0,0 38x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
+- box:
+- abs: [21,279 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: Japan / にほん
++ box:
++ abs: [21,279 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: hr
+  box:
+  abs: [21,391 348x1]
+  rel: [20,286 348x1]
+  style: bg:divider
+- - node: div
+- box:
+- abs: [21,408 348x21]
+- rel: [20,303 348x21]
+- layout: flex:col
++ - node: div
++ box:
++ abs: [21,408 348x308]
++ rel: [20,303 348x308]
++ layout: flex:col gap:16
+  - node: button
+  mx: ?
+  box:
+  abs: [21,408 348x21]
+  rel: [0,0 348x21]
+  layout: flex:row gap:8 align:center
+  spacing: pad:0/4
+- - node: icon:chevron-right
+- box:
+- abs: [25,409 20x20]
+- rel: [4,1 20x20]
+- position: clip
++ - node: icon:chevron-down
++ box:
++ abs: [25,409 20x20]
++ rel: [4,1 20x20]
++ position: clip
+  - node: section-head-title
+  text: Details
+  box:
+  abs: [53,408 52x21]
+  rel: [32,0 52x21]
+  style: font:16/700 color:text text:center tracking:-0.3
+- - node: muted
+- text: Optional
+- box:
+- abs: [310,411 55x16]
+- rel: [289,3 55x16]
+- style: font:13/600 color:text-2 text:center
++ - node: muted
++ text: tags · note
++ box:
++ abs: [299,411 66x16]
++ rel: [278,3 66x16]
++ style: font:13/600 color:text-2 text:center
++ - node: div
++ box:
++ abs: [21,445 348x271]
++ rel: [0,37 348x271]
++ layout: flex:col gap:16
++ spacing: pad:8/0/0/0
++ - node: div
++ box:
++ abs: [21,453 348x89]
++ rel: [0,8 348x89]
++ layout: flex:col gap:8
++ - node: ov
++ box:
++ abs: [21,453 348x15]
++ rel: [0,0 348x15]
++ layout: flex:row gap:8 justify:between align:center
++ - node: span
++ text: Deck
++ box:
++ abs: [21,453 37x15]
++ rel: [0,0 37x15]
++ style: font:12/700 color:text-2 tracking:1
++ - node: card
++ mx: MxCard
++ box:
++ abs: [21,476 348x66]
++ rel: [0,23 348x66]
++ layout: flex:row gap:12 align:center
++ spacing: pad:12
++ style: bg:accent-contrast r:20 border:1px divider
++ - node: icon-tile
++ mx: MxIconTile
++ box:
++ abs: [34,489 40x40]
++ rel: [13,13 40x40]
++ layout: grid cols:1 align:center
++ flex: shrink:0
++ style: bg:color(srgb 0.2 0.760784 1 / 0.08) r:14
++ - node: icon:languages
++ box:
++ abs: [44,499 20x20]
++ rel: [10,10 20x20]
++ position: clip
++ - node: title
++ text: Japanese · N5
++ box:
++ abs: [86,500 238x18]
++ rel: [65,24 238x18]
++ flex: grow:1 basis:0 layout_hint:expanded
++ style: font:14/700 color:text tracking:-0.3
++ - node: icon:chevron-right
++ box:
++ abs: [336,499 20x20]
++ rel: [315,23 20x20]
++ position: clip
++ - node: div
++ box:
++ abs: [21,558 348x47]
++ rel: [0,113 348x47]
++ layout: flex:col gap:8
++ - node: ov
++ box:
++ abs: [21,558 348x15]
++ rel: [0,0 348x15]
++ layout: flex:row gap:8 justify:between align:center
++ - node: span
++ text: Tags
++ box:
++ abs: [21,558 35x15]
++ rel: [0,0 35x15]
++ style: font:12/700 color:text-2 tracking:1
++ - node: div
++ box:
++ abs: [21,581 348x24]
++ rel: [0,23 348x24]
++ layout: flex:row wrap gap:8
++ - node: chip
++ text: kanji
++ box:
++ abs: [21,581 77x24]
++ rel: [0,0 77x24]
++ layout: flex:row gap:4 align:center
++ spacing: pad:0/12
++ style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.12) font:11/700 color:text-2 tracking:0.1 r:999
++ - node: icon:hash
++ box:
++ abs: [33,581 24x24]
++ rel: [12,0 24x24]
++ position: clip
++ - node: chip
++ text: n5
++ box:
++ abs: [106,581 66x24]
++ rel: [85,0 66x24]
++ layout: flex:row gap:4 align:center
++ spacing: pad:0/12
++ style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.12) font:11/700 color:text-2 tracking:0.1 r:999
++ - node: icon:hash
++ box:
++ abs: [118,581 24x24]
++ rel: [12,0 24x24]
++ position: clip
++ - node: chip
++ text: Add tag
++ box:
++ abs: [180,581 97x24]
++ rel: [159,0 97x24]
++ layout: flex:row gap:4 align:center
++ spacing: pad:0/12
++ style: font:11/700 color:text-2 tracking:0.1 r:999 border:1px border
++ - node: icon:plus
++ box:
++ abs: [193,581 24x24]
++ rel: [13,0 24x24]
++ position: clip
++ - node: div
++ box:
++ abs: [21,621 348x95]
++ rel: [0,176 348x95]
++ layout: flex:col gap:8
++ - node: ov
++ box:
++ abs: [21,621 348x15]
++ rel: [0,0 348x15]
++ layout: flex:row gap:8 justify:between align:center
++ - node: span
++ text: Note
++ box:
++ abs: [21,621 37x15]
++ rel: [0,0 37x15]
++ style: font:12/700 color:text-2 tracking:1
++ - node: span
++ text: Optional
++ box:
++ abs: [299,621 70x15]
++ rel: [278,0 70x15]
++ style: font:12/700 color:text-3 tracking:1
++ - node: textarea
++ box:
++ abs: [21,644 348x72]
++ rel: [0,23 348x72]
++ spacing: pad:12/16
++ size: minh:72
++ position: layout_hint:scroll
++ style: bg:accent-contrast r:14 border:1px border
 ```
 
 ## State: Validation (ordered diff vs Empty)
 
 ```diff
   - node: span
-  text: Required
+  text: Front
   box:
-  abs: [121,163 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 60
+  abs: [21,121 46x15]
+  rel: [0,0 46x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [365,163 29x15]
-- rel: [357,0 29x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,184 390x96]
-- rel: [0,71 390x96]
-- layout: flex:row align:center
-- spacing: pad:14/42/14/14 margin:0/0/14/0
-- size: minh:66
-- position: pos:relative
-- style: r:20 border:1px #000000
-- - node: div
-- box:
-- abs: [23,223 213x18]
-- rel: [15,39 213x18]
-- layout: flex:row gap:2 align:center
-- style: op:0.6
-- - node: span
-- text: The term you want to remember
-- box:
-- abs: [23,223 207x18]
-- rel: [0,0 207x18]
-- style: font:16/500 color:#000000
-+ - node: span
-+ text: 3 / 60
+- abs: [21,144 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
 + box:
-+ abs: [365,163 29x15]
-+ rel: [357,0 29x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,184 390x94]
-+ rel: [0,71 390x94]
-+ layout: flex:row align:center
-+ spacing: pad:14/42/14/14 margin:0/0/14/0
-+ size: minh:66
-+ position: pos:relative
-+ style: r:20
++ abs: [21,144 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast r:14 border:1px danger
 + - node: div
-+ text: 연구자
++ text: The front of the card is required.
 + box:
-+ abs: [22,218 60x26]
-+ rel: [14,34 60x26]
-+ style: font:22/700/26 color:#000000 tracking:-0.4
-  - node: icon-btn
-  mx: MxIconButton
-  box:
-  abs: [362,216 30x30]
-  rel: [354,32 30x30]
-  layout: flex:row justify:center align:center
-  position: pos:absolute
-  transform: transform:translate(0,-15)
-  style: r:999
-  ...
-  - node: span
-  text: 0 / 240
-  box:
-  abs: [359,292 35x15]
-  rel: [351,0 35x15]
-  style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,315 390x100]
-- rel: [0,202 390x100]
-- layout: flex:row align:center
-- spacing: pad:12/14 margin:0/0/14/0
-- size: minh:76
-- style: r:20
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,313 390x102]
-+ rel: [0,200 390x102]
-+ layout: flex:row align:center
-+ spacing: pad:12/14 margin:0/0/8/0
-+ size: minh:76
-+ style: r:20 border:1px #000000
-  - node: div
-  text: English, Vietnamese, or both — comma-separated reads cleanest.
-  box:
-  abs: [23,343 360x42]
-  rel: [15,30 360x42]
-  style: font:14/400/21 color:#000000 op:0.65
-+ - node: div
-+ box:
-+ abs: [8,423 390x15]
-+ rel: [0,310 390x15]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/4 margin:0/0/14/0
-+ - node: span
-+ box:
-+ abs: [12,425 12x12]
-+ rel: [4,2 12x12]
-+ layout: flex:row
++ abs: [21,248 348x16]
++ rel: [0,127 348x16]
++ layout: flex:row gap:4 align:center
++ style: font:13/700 color:danger
 + - node: icon:alert-circle
 + box:
-+ abs: [12,425 12x12]
-+ rel: [0,0 12x12]
++ abs: [21,248 16x16]
++ rel: [0,0 16x16]
 + position: clip
-+ - node: span
-+ text: Add a meaning so this card can be answered.
-+ box:
-+ abs: [30,423 230x15]
-+ rel: [22,0 230x15]
-+ style: font:12/600 color:#000000
-  - node: button
-  mx: ?
+  - node: div
   box:
-  abs: [8,452 390x42]
-  rel: [0,339 390x42]
-  layout: flex:row justify:between align:center
-  spacing: pad:0/14 margin:0/0/18/0
+  abs: [21,280 348x119]
+  rel: [20,175 348x119]
+  layout: flex:col gap:8
   ...
-  - node: icon:check
-  box:
-  abs: [205,731 16x16]
-  rel: [0,0 16x16]
-  position: clip
-- - node: div
-- text: Front and back are required to save.
-- box:
-- abs: [22,757 362x15]
-- rel: [14,36 362x15]
-- style: font:12/400 color:#000000 text:center op:0.7
-+ - node: div
-+ text: Add the missing field to enable save.
-+ box:
-+ abs: [22,757 362x15]
-+ rel: [14,36 362x15]
-+ style: font:12/400 color:#000000 text:center op:0.7
 ```
 
 ## State: Saving (ordered diff vs Empty)
 
 ```diff
-  - node: title
-  text: New flashcard
+  - node: appbar-title
+  text: New card
   box:
-  abs: [60,61 230x18]
-  rel: [52,9 230x18]
+  abs: [77,62 208x30]
+  rel: [76,13 208x30]
   flex: grow:1 basis:0 layout_hint:expanded
-  spacing: margin:0/0/0/4
-  style: font:16/700 color:#000000 tracking:-0.3
+  spacing: margin:0/0/0/8
+  style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
 - text: Save
 - mx: MxPrimaryButton
 - box:
-- abs: [338,54 52x32]
-- rel: [330,2 52x32]
-- layout: flex:row gap:6 justify:center align:center
-- spacing: pad:0/14
-- style: font:12/600 color:#000000 text:center tracking:0.1 r:9 op:0.45
+- abs: [291,65 78x24]
+- rel: [290,16 78x24]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/12
+- size: minw:76
+- style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
+- - node: icon:check
+- box:
+- abs: [304,69 16x16]
+- rel: [13,4 16x16]
+- position: clip
 + - node: pill-btn
-+ text: Saving…
 + mx: MxPrimaryButton
 + box:
-+ abs: [294,54 96x32]
-+ rel: [286,2 96x32]
-+ layout: flex:row gap:6 justify:center align:center
-+ spacing: pad:0/14
-+ style: font:12/600 color:#000000 text:center tracking:0.1 r:9 op:0.45
-+ - node: span
++ abs: [293,65 76x24]
++ rel: [292,16 76x24]
++ layout: flex:row gap:8 justify:center align:center
++ spacing: pad:0/12
++ size: minw:76
++ style: bg:accent r:999 border:1px transparent op:0.38
++ - node: spinner
 + box:
-+ abs: [308,63 15x15]
-+ rel: [14,9 15x15]
-+ style: r:999 border-t:2px transparent border-r:2px #ffffff border-b:2px #ffffff border-l:2px #ffffff
-  - node: scroll-x
++ abs: [323,69 16x16]
++ rel: [30,4 16x16]
++ style: r:999 border-t:2px accent border-r:2px border border-b:2px border border-l:2px border
+  - node: div
   box:
-  abs: [8,88 390x25]
-  rel: [0,80 390x25]
-  layout: flex:row gap:4 align:center
-  repeat: x3+(unit=2)
-  spacing: pad:2/14/8/14
+  abs: [1,105 388x664]
+  rel: [0,56 388x664]
+  layout: flex:col gap:16
+  flex: grow:1 basis:0 layout_hint:expanded
+  spacing: pad:16/20/48/20
   position: layout_hint:scroll
   ...
   - node: span
-  text: Required
+  text: Front
   box:
-  abs: [121,163 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 60
+  abs: [21,121 46x15]
+  rel: [0,0 46x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [365,163 29x15]
-- rel: [357,0 29x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,184 390x96]
-- rel: [0,71 390x96]
-- layout: flex:row align:center
-- spacing: pad:14/42/14/14 margin:0/0/14/0
-- size: minh:66
-- position: pos:relative
-- style: r:20 border:1px #000000
-- - node: div
-- box:
-- abs: [23,223 213x18]
-- rel: [15,39 213x18]
-- layout: flex:row gap:2 align:center
-- style: op:0.6
-- - node: span
-- text: The term you want to remember
-- box:
-- abs: [23,223 207x18]
-- rel: [0,0 207x18]
-- style: font:16/500 color:#000000
-+ - node: span
-+ text: 3 / 60
+- abs: [21,144 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: 日本
 + box:
-+ abs: [365,163 29x15]
-+ rel: [357,0 29x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,184 390x94]
-+ rel: [0,71 390x94]
-+ layout: flex:row align:center
-+ spacing: pad:14/42/14/14 margin:0/0/14/0
-+ size: minh:66
-+ position: pos:relative
-+ style: r:20
-+ - node: div
-+ text: 연구자
-+ box:
-+ abs: [22,218 60x26]
-+ rel: [14,34 60x26]
-+ style: font:22/700/26 color:#000000 tracking:-0.4
-  - node: icon-btn
-  mx: MxIconButton
-  box:
-  abs: [362,216 30x30]
-  rel: [354,32 30x30]
-  layout: flex:row justify:center align:center
-  position: pos:absolute
-  transform: transform:translate(0,-15)
-  style: r:999
-  ...
-  - node: span
-  text: Required
-  box:
-  abs: [121,292 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 240
-- box:
-- abs: [359,294 35x15]
-- rel: [351,0 35x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,315 390x100]
-- rel: [0,202 390x100]
-- layout: flex:row align:center
-- spacing: pad:12/14 margin:0/0/14/0
-- size: minh:76
-- style: r:20
-- - node: div
-- text: English, Vietnamese, or both — comma-separated reads cleanest.
-- box:
-- abs: [22,344 362x42]
-- rel: [14,29 362x42]
-- style: font:14/400/21 color:#000000 op:0.65
-+ - node: span
-+ text: 27 / 240
-+ box:
-+ abs: [353,292 41x15]
-+ rel: [345,0 41x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,313 390x100]
-+ rel: [0,200 390x100]
-+ layout: flex:row align:start
-+ spacing: pad:12/14 margin:0/0/14/0
-+ size: minh:76
-+ style: r:20
-+ - node: div
-+ text: Researcher / Nhà nghiên cứu
-+ box:
-+ abs: [22,325 185x23]
-+ rel: [14,12 185x23]
-+ style: font:16/500/23 color:#000000
-  - node: button
-  mx: ?
-  box:
-  abs: [8,427 390x42]
-  rel: [0,314 390x42]
-  layout: flex:row justify:between align:center
-  spacing: pad:0/14 margin:0/0/18/0
-  ...
++ abs: [21,144 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
   - node: div
   box:
-  abs: [8,510 390x28]
-  rel: [0,397 390x28]
-  layout: flex:row wrap gap:6
-  spacing: margin:0/0/18/0
-+ - node: span
-+ text: TOPIK II
-+ box:
-+ abs: [8,510 88x28]
-+ rel: [0,0 88x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [77,519 11x11]
-+ rel: [69,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [77,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: noun
-+ box:
-+ abs: [102,510 63x28]
-+ rel: [94,0 63x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [146,519 11x11]
-+ rel: [44,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [146,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: people
-+ box:
-+ abs: [171,510 70x28]
-+ rel: [163,0 70x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [222,519 11x11]
-+ rel: [51,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [222,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-  - node: button
-  text: Add tag
-  mx: ?
-  box:
-  abs: [247,510 81x28]
-  rel: [239,0 81x28]
-  layout: flex:row gap:4 align:center
-  spacing: pad:0/12
-  style: font:12/600 color:#000000 text:center r:999
+  abs: [21,256 348x119]
+  rel: [20,151 348x119]
+  layout: flex:col gap:8
   ...
-  - node: pill-btn
-  text: Cancel
-  mx: MxSecondaryButton
+  - node: span
+  text: Back
   box:
-  abs: [22,729 78x18]
-  rel: [0,0 78x18]
-  layout: flex:row gap:6 justify:center align:center
-  flex: shrink:0
-  spacing: pad:0/18
-  style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-- - node: pill-btn
-- text: Save card
-- mx: MxPrimaryButton
+  abs: [21,256 38x15]
+  rel: [0,0 38x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [110,731 274x16]
-- rel: [88,0 274x16]
-- layout: flex:row gap:8 justify:center align:center
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:#000000 text:center tracking:0.1 r:12 op:0.45
-- - node: span
-- box:
-- abs: [205,731 16x16]
-- rel: [95,0 16x16]
-- layout: flex:row
-- - node: icon:check
-- box:
-- abs: [205,731 16x16]
-- rel: [0,0 16x16]
-- position: clip
-- - node: div
-- text: Front and back are required to save.
-- box:
-- abs: [22,757 362x15]
-- rel: [14,36 362x15]
-- style: font:12/400 color:#000000 text:center op:0.7
-+ - node: pill-btn
-+ text: Saving…
-+ mx: MxPrimaryButton
+- abs: [21,279 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: Japan / にほん
 + box:
-+ abs: [110,729 274x18]
-+ rel: [88,0 274x18]
-+ layout: flex:row gap:8 justify:center align:center
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ style: font:14/600 color:#000000 text:center tracking:0.1 r:12 op:0.45
-+ - node: span
-+ box:
-+ abs: [206,729 18x18]
-+ rel: [97,0 18x18]
-+ style: r:999 border-t:2px transparent border-r:2px #ffffff border-b:2px #ffffff border-l:2px #ffffff
-+ - node: div
-+ text: Saving to this device…
-+ box:
-+ abs: [22,757 362x15]
-+ rel: [14,38 362x15]
-+ style: font:12/400 color:#000000 text:center op:0.7
++ abs: [21,279 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: hr
+  box:
+  abs: [21,391 348x1]
+  rel: [20,286 348x1]
+  style: bg:divider
+  ...
 ```
 
 ## State: Save failed (ordered diff vs Empty)
 
 ```diff
-  - node: title
-  text: New flashcard
+  - node: appbar-title
+  text: New card
   box:
-  abs: [60,61 274x18]
-  rel: [52,9 274x18]
+  abs: [77,62 206x30]
+  rel: [76,13 206x30]
   flex: grow:1 basis:0 layout_hint:expanded
-  spacing: margin:0/0/0/4
-  style: font:16/700 color:#000000 tracking:-0.3
+  spacing: margin:0/0/0/8
+  style: font:24/700 color:text tracking:-0.5
 - - node: pill-btn
 - text: Save
 - mx: MxPrimaryButton
 - box:
-- abs: [338,54 52x32]
-- rel: [330,2 52x32]
-- layout: flex:row gap:6 justify:center align:center
-- spacing: pad:0/14
-- style: font:12/600 color:#000000 text:center tracking:0.1 r:9 op:0.45
+- abs: [291,65 78x24]
+- rel: [290,16 78x24]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/12
+- size: minw:76
+- style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent op:0.38
 + - node: pill-btn
 + text: Save
 + mx: MxPrimaryButton
 + box:
-+ abs: [338,54 52x32]
-+ rel: [330,2 52x32]
-+ layout: flex:row gap:6 justify:center align:center
-+ spacing: pad:0/14
-+ style: font:12/600 color:#000000 text:center tracking:0.1 r:9
-  - node: scroll-x
++ abs: [291,65 78x24]
++ rel: [290,16 78x24]
++ layout: flex:row gap:8 justify:center align:center
++ spacing: pad:0/12
++ size: minw:76
++ style: bg:accent font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+  - node: icon:check
   box:
-  abs: [8,88 390x25]
-  rel: [0,80 390x25]
-  layout: flex:row gap:4 align:center
-  repeat: x3+(unit=2)
-  spacing: pad:2/14/8/14
+  abs: [304,69 16x16]
+  rel: [13,4 16x16]
+  position: clip
++ - node: banner
++ box:
++ abs: [21,105 348x60]
++ rel: [20,56 348x60]
++ layout: flex:row gap:12 align:center
++ spacing: pad:12/16
++ style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14
++ - node: icon:alert-triangle
++ box:
++ abs: [37,125 20x20]
++ rel: [16,20 20x20]
++ flex: shrink:0
++ position: clip
++ - node: span
++ text: Couldn't save — your card is kept here.
++ box:
++ abs: [69,117 215x36]
++ rel: [48,12 215x36]
++ flex: grow:1 basis:0 layout_hint:expanded
++ style: font:14/600 color:danger
++ - node: pill-btn
++ text: Retry
++ mx: MxActionButton
++ box:
++ abs: [296,123 57x24]
++ rel: [275,18 57x24]
++ layout: flex:row gap:8 justify:center align:center
++ spacing: pad:0/12
++ style: bg:danger font:12/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+  - node: div
+  box:
+  abs: [1,177 388x592]
+  rel: [0,128 388x592]
+  layout: flex:col gap:16
+  flex: grow:1 basis:0 layout_hint:expanded
+  spacing: pad:16/20/48/20
   position: layout_hint:scroll
   ...
   - node: span
-  text: Required
+  text: Front
   box:
-  abs: [121,163 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 60
+  abs: [21,193 46x15]
+  rel: [0,0 46x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [365,163 29x15]
-- rel: [357,0 29x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,184 390x96]
-- rel: [0,71 390x96]
-- layout: flex:row align:center
-- spacing: pad:14/42/14/14 margin:0/0/14/0
-- size: minh:66
-- position: pos:relative
-- style: r:20 border:1px #000000
-- - node: div
-- box:
-- abs: [23,223 213x18]
-- rel: [15,39 213x18]
-- layout: flex:row gap:2 align:center
-- style: op:0.6
-- - node: span
-- text: The term you want to remember
-- box:
-- abs: [23,223 207x18]
-- rel: [0,0 207x18]
-- style: font:16/500 color:#000000
-+ - node: span
-+ text: 3 / 60
+- abs: [21,144 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: 日本
 + box:
-+ abs: [365,163 29x15]
-+ rel: [357,0 29x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,184 390x94]
-+ rel: [0,71 390x94]
-+ layout: flex:row align:center
-+ spacing: pad:14/42/14/14 margin:0/0/14/0
-+ size: minh:66
-+ position: pos:relative
-+ style: r:20
-+ - node: div
-+ text: 연구자
-+ box:
-+ abs: [22,218 60x26]
-+ rel: [14,34 60x26]
-+ style: font:22/700/26 color:#000000 tracking:-0.4
-  - node: icon-btn
-  mx: MxIconButton
++ abs: [21,216 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: div
   box:
-  abs: [362,216 30x30]
-  rel: [354,32 30x30]
-  layout: flex:row justify:center align:center
-  position: pos:absolute
-  transform: transform:translate(0,-15)
-  style: r:999
+  abs: [21,328 348x119]
+  rel: [20,151 348x119]
+  layout: flex:col gap:8
   ...
   - node: span
-  text: Required
+  text: Back
   box:
-  abs: [121,292 50x15]
-  rel: [109,0 50x15]
-  style: font:12/700 color:#000000 tracking:0.3
-- - node: span
-- text: 0 / 240
+  abs: [21,328 38x15]
+  rel: [0,0 38x15]
+  style: font:12/700 color:text-2 tracking:1
+- - node: textarea
 - box:
-- abs: [359,294 35x15]
-- rel: [351,0 35x15]
-- style: font:12/600 color:#000000 tracking:0.2
-- - node: card
-- mx: MxCard
-- box:
-- abs: [8,315 390x100]
-- rel: [0,202 390x100]
-- layout: flex:row align:center
-- spacing: pad:12/14 margin:0/0/14/0
-- size: minh:76
-- style: r:20
-- - node: div
-- text: English, Vietnamese, or both — comma-separated reads cleanest.
-- box:
-- abs: [22,344 362x42]
-- rel: [14,29 362x42]
-- style: font:14/400/21 color:#000000 op:0.65
-+ - node: span
-+ text: 27 / 240
+- abs: [21,279 348x96]
+- rel: [0,23 348x96]
+- spacing: pad:12/16
+- size: minh:96
+- position: layout_hint:scroll
+- style: bg:accent-contrast r:14 border:1px border
++ - node: textarea
++ text: Japan / にほん
 + box:
-+ abs: [353,292 41x15]
-+ rel: [345,0 41x15]
-+ style: font:12/600 color:#000000 tracking:0.2
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [8,313 390x100]
-+ rel: [0,200 390x100]
-+ layout: flex:row align:start
-+ spacing: pad:12/14 margin:0/0/14/0
-+ size: minh:76
-+ style: r:20
-+ - node: div
-+ text: Researcher / Nhà nghiên cứu
-+ box:
-+ abs: [22,325 185x23]
-+ rel: [14,12 185x23]
-+ style: font:16/500/23 color:#000000
-  - node: button
-  mx: ?
++ abs: [21,351 348x96]
++ rel: [0,23 348x96]
++ spacing: pad:12/16
++ size: minh:96
++ position: layout_hint:scroll
++ style: bg:accent-contrast font:14/500/21 color:text r:14 border:1px border
+  - node: hr
   box:
-  abs: [8,427 390x42]
-  rel: [0,314 390x42]
-  layout: flex:row justify:between align:center
-  spacing: pad:0/14 margin:0/0/18/0
+  abs: [21,463 348x1]
+  rel: [20,286 348x1]
+  style: bg:divider
   ...
-  - node: div
-  box:
-  abs: [8,510 390x28]
-  rel: [0,397 390x28]
-  layout: flex:row wrap gap:6
-  spacing: margin:0/0/18/0
-+ - node: span
-+ text: TOPIK II
-+ box:
-+ abs: [8,510 88x28]
-+ rel: [0,0 88x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [77,519 11x11]
-+ rel: [69,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [77,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: noun
-+ box:
-+ abs: [102,510 63x28]
-+ rel: [94,0 63x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [146,519 11x11]
-+ rel: [44,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [146,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-+ - node: span
-+ text: people
-+ box:
-+ abs: [171,510 70x28]
-+ rel: [163,0 70x28]
-+ layout: flex:row gap:6 align:center
-+ spacing: pad:0/8/0/12
-+ style: font:12/600 color:#000000 r:999
-+ - node: span
-+ box:
-+ abs: [222,519 11x11]
-+ rel: [51,9 11x11]
-+ layout: flex:row
-+ - node: icon:x
-+ box:
-+ abs: [222,519 11x11]
-+ rel: [0,0 11x11]
-+ position: clip
-  - node: button
-  text: Add tag
-  mx: ?
-  box:
-  abs: [247,510 81x28]
-  rel: [239,0 81x28]
-  layout: flex:row gap:4 align:center
-  spacing: pad:0/12
-  style: font:12/600 color:#000000 text:center r:999
-  ...
-  - node: div
-  box:
-  abs: [8,674 390x114]
-  rel: [0,666 390x114]
-  layout: flex:col gap:10
-  spacing: pad:10/14/16/14
-+ - node: div
-+ box:
-+ abs: [22,684 362x37]
-+ rel: [14,10 362x37]
-+ layout: flex:row gap:8 align:start
-+ spacing: pad:10/12
-+ - node: span
-+ box:
-+ abs: [34,694 14x14]
-+ rel: [12,10 14x14]
-+ layout: flex:row
-+ - node: icon:alert-circle
-+ box:
-+ abs: [34,694 14x14]
-+ rel: [0,0 14x14]
-+ position: clip
-+ - node: div
-+ box:
-+ abs: [56,694 316x17]
-+ rel: [34,10 316x17]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ - node: strong
-+ text: Couldn't save card.
-+ box:
-+ abs: [56,695 100x14]
-+ rel: [0,1 100x14]
-+ style: font:12/700/17 color:#000000
-+ - node: span
-+ text: Nothing was lost. Tap Save to try again.
-+ box:
-+ abs: [159,695 192x14]
-+ rel: [103,1 192x14]
-+ style: font:12/400/17 color:#000000
-  - node: div
-  box:
-  abs: [22,731 362x16]
-  rel: [14,57 362x16]
-  layout: flex:row gap:10
-  - node: pill-btn
-  text: Cancel
-  mx: MxSecondaryButton
-  box:
-  abs: [22,731 78x16]
-  rel: [0,0 78x16]
-  layout: flex:row gap:6 justify:center align:center
-  flex: shrink:0
-  spacing: pad:0/18
-  style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-- - node: pill-btn
-- text: Save card
-- mx: MxPrimaryButton
-- box:
-- abs: [110,731 274x16]
-- rel: [88,0 274x16]
-- layout: flex:row gap:8 justify:center align:center
-- flex: grow:1 basis:0 layout_hint:expanded
-- style: font:14/600 color:#000000 text:center tracking:0.1 r:12 op:0.45
-+ - node: pill-btn
-+ text: Retry save
-+ mx: MxPrimaryButton
-+ box:
-+ abs: [110,731 274x16]
-+ rel: [88,0 274x16]
-+ layout: flex:row gap:8 justify:center align:center
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ style: font:14/600 color:#000000 text:center tracking:0.1 r:12
-  - node: span
-  box:
-  abs: [203,732 15x15]
-  rel: [93,1 15x15]
-  layout: flex:row
-- - node: icon:check
-- box:
-- abs: [205,731 16x16]
-- rel: [0,0 16x16]
-- position: clip
-- - node: div
-- text: Front and back are required to save.
-- box:
-- abs: [22,757 362x15]
-- rel: [14,36 362x15]
-- style: font:12/400 color:#000000 text:center op:0.7
-+ - node: icon:refresh-cw
-+ box:
-+ abs: [203,732 15x15]
-+ rel: [0,0 15x15]
-+ position: clip
-+ - node: div
-+ text: You can keep adding cards after saving.
-+ box:
-+ abs: [22,757 362x15]
-+ rel: [14,83 362x15]
-+ style: font:12/400 color:#000000 text:center op:0.7
 ```

@@ -1,302 +1,424 @@
-/* MemoX Mobile — shared primitives & layout chrome
-   Loaded FIRST (before every screen file). Wrapped in an IIFE; publishes the
-   shared chrome to window so each screen file can read it via
-   const { StatusBar, Ic, BottomNav, Breadcrumb, OfflineBanner, StudyTopBar, masteryColor } = window;
-   Edit shared chrome (status bar, bottom nav, icon wrapper, study top bar, mastery ramp) here. */
+/* MemoX UI kit — shared screen primitives. Single source of truth for the thin
+   JSX wrappers over the .memox-components.css contract classes. Loaded before
+   any screen; every screen reads helpers from window.MX so there is ONE copy to
+   maintain (avoids per-screen drift / future refactors). */
 (function () {
-const { useState, useEffect } = React;
+  const Icon = ({ name, style }) => <i data-lucide={name} style={style}></i>;
 
-function StatusBar() {
-  return (
-    <div className="statusbar">
-      <span>9:41</span>
-      <span style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M1 11h2V7H1v4zm4 0h2V4H5v7zm4 0h2V1H9v10zm4 0h2V8h-2v3z" /></svg>
-        <svg width="14" height="12" viewBox="0 0 14 12" fill="currentColor"><path d="M7 10.3a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zm0-3a3 3 0 0 1 2.12.88l1.06-1.06a4.5 4.5 0 0 0-6.36 0l1.06 1.06A3 3 0 0 1 7 7.3zm0-3a6 6 0 0 1 4.24 1.76l1.07-1.07a7.5 7.5 0 0 0-10.62 0l1.07 1.07A6 6 0 0 1 7 4.3z" /></svg>
-        <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="1" y="1" width="18" height="10" rx="2" stroke="currentColor" strokeOpacity=".4" /><rect x="2.5" y="2.5" width="13" height="7" rx="1" fill="currentColor" /><rect x="20" y="4" width="1.5" height="4" rx=".5" fill="currentColor" /></svg>
-      </span>
-    </div>);
+  // spacing token helper: S(4) -> "var(--memox-space-4)"
+  const S = (k) => `var(--memox-space-${k})`;
 
-}
+  const PillBtn = ({ variant = 'primary', icon, iconRight, sm, full, disabled, children, ...rest }) => (
+    <button className={`pill-btn ${variant}${sm ? ' sm' : ''}`} disabled={disabled}
+      style={full ? { width: '100%' } : undefined} {...rest}>
+      {icon && <Icon name={icon} />}{children}{iconRight && <Icon name={iconRight} />}
+    </button>
+  );
 
-// Single-color mastery fill — replaces tri-stop gradient.
-// Returns the appropriate status color token based on percentage thresholds.
-function masteryColor(pct) {
-  if (pct < 0.34) return 'var(--memox-status-learning)'; // amber — early
-  if (pct < 0.67) return 'var(--memox-status-reviewing)'; // primary — mid
-  return 'var(--memox-status-mastered)'; // green — high
-}
+  const IconBtn = ({ icon, label, ...rest }) => (
+    <button className="icon-btn" aria-label={label} {...rest}><Icon name={icon} /></button>
+  );
 
-function Ic({ name, size = 22, color, label }) {
-  const ref = React.useRef();
-  React.useEffect(() => {
-    if (ref.current && window.lucide) {
-      ref.current.innerHTML = '';
-      const i = document.createElement('i');
-      i.setAttribute('data-lucide', name);
-      ref.current.appendChild(i);
-      window.lucide.createIcons({ icons: window.lucide.icons });
-      const svg = ref.current.querySelector('svg');
-      if (svg) {
-        svg.setAttribute('width', size);
-        svg.setAttribute('height', size);
-        if (color) svg.style.stroke = color;
-      }
-    }
-  }, [name, size, color]);
-  // Icons are decorative by default (the surrounding button/text carries meaning).
-  // Pass `label` only when the icon is the sole carrier of meaning.
-  const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' };
-  return <span ref={ref} {...a11y} style={{ display: 'inline-flex', lineHeight: 0 }} />;
-}
+  const IconTile = ({ icon, color, solid, style }) => (
+    <span className={`icon-tile${solid ? ' solid' : ''}`} style={{ '--tile': color, ...style }}><Icon name={icon} /></span>
+  );
 
-/* Breadcrumb — folder/deck/card hierarchy path. Last segment is the current location. */
-function Breadcrumb({ segments }) {
-  return (
-    <div className="scroll-x" style={{
-      display: 'flex', alignItems: 'center', gap: 4,
-      padding: '2px 14px 8px',
-      fontSize: 12
-    }}>
-      {segments.map((s, i) => {
-        const last = i === segments.length - 1;
-        return (
-          <React.Fragment key={i}>
-            <span style={{
-              color: last ? 'var(--memox-on-surface)' : 'var(--memox-on-surface-variant)',
-              fontWeight: last ? 700 : 500,
-              whiteSpace: 'nowrap',
-              cursor: last ? 'default' : 'pointer',
-              letterSpacing: 0.1
-            }}>{s.label}</span>
-            {!last && <Ic name="chevron-right" size={12} color="var(--memox-outline)" />}
-          </React.Fragment>);
+  // Large hero/resume tile. tonal by default, solid when `solid`.
+  const TileLg = ({ icon, tint, solid, style }) => (
+    <span className={`tile-lg ${solid ? 'solid' : 'tonal'}`} style={{ '--tile': tint, ...style }}><Icon name={icon} /></span>
+  );
 
-      })}
-    </div>);
+  const Chip = ({ status, solid, icon, children }) => (
+    <span className={`chip${status ? ' ' + status : ''}${solid ? ' solid' : ''}`}>
+      {icon && <Icon name={icon} />}{children}
+    </span>
+  );
 
-}
+  const Overline = ({ dot, icon, color, children }) => (
+    <div className="ov" style={color ? { color } : undefined}>
+      {dot && <span className="status-dot" style={{ '--dot': dot }}></span>}
+      {icon && <Icon name={icon} />}{children}
+    </div>
+  );
 
-function BottomNav({ active, onChange }) {
-  const items = [
-  { id: 'home', icon: 'home', label: 'Home' },
-  { id: 'library', icon: 'layers', label: 'Library' },
-  { id: 'stats', icon: 'bar-chart-3', label: 'Stats' },
-  { id: 'settings', icon: 'settings', label: 'Settings' }];
+  const Progress = ({ value }) => (
+    <div className="progress"><div className="progress-fill" style={{ width: value + '%' }}></div></div>
+  );
 
-  return (
-    <div className="bottom-nav-wrap">
-      <div className="bottom-nav" role="navigation" aria-label="Primary">
-        {items.map((it) =>
-        <button type="button" key={it.id}
-          aria-current={active === it.id ? 'page' : undefined}
-          aria-label={it.label}
-          className={"bn-item " + (active === it.id ? 'active' : '')} onClick={() => onChange(it.id)}>
-            <span className="bn-pill"><Ic name={it.icon} size={22} /></span>
-            <span>{it.label}</span>
-          </button>
+  const SectionHead = ({ title, action }) => (
+    <div className="section-head"><span className="section-head-title">{title}</span>{action}</div>
+  );
+
+  // Strong, scannable list row. Trailing affordance is consistent everywhere:
+  // an optional due badge (solid when the count is high, soft when low) followed
+  // by a chevron, so every row reads as tappable. `trail` is an escape hatch for
+  // a custom trailing element; `chevron={false}` drops the chevron.
+  const DUE_STRONG = 15; // at/above this many cards due, the badge goes solid
+  const ListRow = ({ icon, color, title, meta, due, trail, chevron = true }) => (
+    <div className="list-row">
+      <IconTile icon={icon} color={color} />
+      <div className="list-row-main">
+        <div className="list-row-title">{title}</div>
+        {meta != null && <div className="list-row-meta">{meta}</div>}
+      </div>
+      <span className="list-row-trail">
+        {due != null && due > 0 && (
+          <span className={`chip due${due >= DUE_STRONG ? ' solid' : ''}`}>{due} due</span>
         )}
-      </div>
-    </div>);
-
-}
-
-/* Offline banner — shared, reusable connectivity-lost notice.
-   Local-first voice: reassure first, never alarm. role="status" so AT announces
-   it politely. Reuse on any surface that attempts Drive sync (Dashboard, Library,
-   Study result). Flutter mapping: a MaterialBanner / inline Container driven by a
-   connectivity stream; copy via l10n keys. */
-function OfflineBanner() {
-  return (
-    <div role="status" style={{
-      display: 'flex', alignItems: 'flex-start', gap: 10,
-      padding: '10px 14px', marginBottom: 14,
-      background: 'var(--memox-surface-container)',
-      border: 'var(--memox-border-ghost)', borderRadius: 12
-    }}>
-      <Ic name="cloud-off" size={16} color="var(--memox-on-surface-variant)" />
-      <div style={{ flex: 1, fontSize: 12, lineHeight: 1.55 }}>
-        <strong style={{ fontWeight: 700 }}>You’re offline.</strong>{' '}
-        <span style={{ color: 'var(--memox-on-surface-variant)' }}>Your cards are saved on this device. Drive sync resumes when you reconnect.</span>
-      </div>
-    </div>);
-}
-
-/* ─────── Shared: SearchField — real mobile search input (not a desktop shortcut) ───────
-   Replaces the old static-span + Cmd-K affordance. Renders as a tappable field with a
-   leading search glyph, placeholder/value, and a trailing CLEAR (when filled) or VOICE
-   (when empty) button — the two affordances a phone search actually offers. Height is the
-   input token (52). Flutter: TextField(prefixIcon: search, suffixIcon: clear|mic). */
-function SearchField({ placeholder = 'Search', value = '', active = false, onClick, style }) {
-  const filled = !!(value && value.length);
-  return (
-    <div role="search" onClick={onClick} style={{
-      display: 'flex', alignItems: 'center', gap: 10,
-      height: 'var(--memox-size-input)', padding: '0 6px 0 14px',
-      background: active ? 'var(--memox-surface-container-lowest)' : 'var(--memox-surface-container)',
-      border: active ? '1px solid var(--memox-primary)' : 'var(--memox-border-ghost)',
-      borderRadius: 'var(--memox-radius-input)', cursor: 'text',
-      transition: 'background 160ms var(--memox-ease-standard), border-color 160ms var(--memox-ease-standard)',
-      ...style
-    }}>
-      <Ic name="search" size={18} color={active ? 'var(--memox-primary)' : 'var(--memox-on-surface-variant)'} />
-      <span style={{
-        flex: 1, minWidth: 0, fontSize: 16, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-        color: filled ? 'var(--memox-on-surface)' : 'var(--memox-on-surface-variant)'
-      }}>
-        {filled ? value : placeholder}
-        {active &&
-          <span style={{ display: 'inline-block', width: 2, height: 18, verticalAlign: 'text-bottom', marginLeft: 1, background: 'var(--memox-primary)', animation: 'memoxBlink 1s infinite' }} />}
+        {trail}
+        {chevron && <Icon name="chevron-right" />}
       </span>
-      {filled ?
-        <button className="icon-btn" aria-label="Clear search" style={{ width: 36, height: 36 }}>
-          <Ic name="x" size={18} color="var(--memox-on-surface-variant)" />
-        </button> :
-        <button className="icon-btn" aria-label="Search by voice" style={{ width: 36, height: 36 }}>
-          <Ic name="mic" size={18} color="var(--memox-on-surface-variant)" />
-        </button>}
-    </div>);
+    </div>
+  );
 
-}
+  // Centered hero / empty-state / error card: tile + title + desc + actions.
+  // One place owns the spacing so screens never hand-roll it.
+  const HeroCard = ({ icon, tint, solid, title, desc, children }) => (
+    <div className="card" style={{ textAlign: 'center', padding: S(6) }}>
+      <TileLg icon={icon} tint={tint} solid={solid} style={{ margin: `0 auto ${S(4)}` }} />
+      <div style={{ fontSize: 'var(--memox-size-h1)', fontWeight: 'var(--memox-weight-extrabold)', letterSpacing: 'var(--memox-tracking-tight)', color: 'var(--memox-text-primary)', marginBottom: S(1) }}>{title}</div>
+      {desc && <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', lineHeight: 1.5, maxWidth: '280px', margin: `${S(1)} auto 0` }}>{desc}</div>}
+      {children && <div style={{ display: 'flex', flexDirection: 'column', gap: S(2), marginTop: S(5) }}>{children}</div>}
+    </div>
+  );
 
-/* ─────── Shared: Badge — one count/status pill for every screen ───────
-   Tonal by default (soft tint + colored label), or `solid` for a filled pill.
-   Roomy padding + tabular nums fix the cramped ‘23due” rendering. Always feed it
-   text WITH the unit (‘23 due”) so the space is part of the label.
-   Flutter: a small Chip / Container(pill). */
-function Badge({ children, tone = 'primary', solid = false, style }) {
-  const map = {
-    primary: 'var(--memox-primary)',
-    streak:  'var(--memox-streak)',
-    mastery: 'var(--memox-mastery)',
-    danger:  'var(--memox-error)',
-    neutral: 'var(--memox-on-surface-variant)'
-  };
-  const c = map[tone] || map.primary;
-  return (
-    <span style={{
-      height: 22, padding: '0 9px', borderRadius: 999, flexShrink: 0,
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-      fontSize: 12, fontWeight: 700, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums',
-      color: solid ? 'var(--memox-on-primary)' : c,
-      background: solid ? c : `color-mix(in srgb, ${c} 12%, transparent)`,
-      ...style
-    }}>{children}</span>);
+  // Centered empty / no-results state that is NOT wrapped in a card (the bare
+  // tile + title + desc used by search-empty and empty list screens). One owner
+  // so every empty screen reads identically. Pass actions as children.
+  const EmptyState = ({ icon, tint = 'var(--memox-text-secondary)', title, desc, pad = 8, children }) => (
+    <div style={{ flex: 1, display: 'grid', placeItems: 'center', padding: `${S(pad)} 0` }}>
+      <div style={{ textAlign: 'center' }}>
+        <TileLg icon={icon} tint={tint} style={{ margin: '0 auto' }} />
+        <div className="title" style={{ marginTop: S(4) }}>{title}</div>
+        {desc && <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', marginTop: S(1), maxWidth: '260px', marginInline: 'auto' }}>{desc}</div>}
+        {children && <div style={{ marginTop: S(5) }}>{children}</div>}
+      </div>
+    </div>
+  );
 
-}
+  // Non-blocking notice strip (.banner). `tone`: warn | danger | info (drives the
+  // color via the contract class); `tint` overrides it with any token. Optional
+  // `action` renders a solid tone-matched button on the right. One owner so every
+  // banner — and its retry/CTA button — looks identical across screens.
+  const Banner = ({ tone, icon, tint, action, style, children }) => (
+    <div className={`banner${tone ? ' ' + tone : ''}`} style={{ ...(tint ? { '--bn': tint } : null), ...style }}>
+      {icon && <Icon name={icon} />}
+      <span style={{ flex: 1 }}>{children}</span>
+      {action && <button className="pill-btn sm solid" style={{ '--btn': 'var(--bn)' }}>{action}</button>}
+    </div>
+  );
 
-/* ─────── Shared: Study top bar (close + mode badge + progress + counter) ─────── */
-function StudyTopBar({ mode, accent = 'var(--memox-primary)', accentBg = 'color-mix(in srgb, var(--memox-primary) 10%, transparent)', current, total, onClose }) {
-  return (
-    <div className="appbar" style={{ justifyContent: 'space-between' }}>
-      <button className="icon-btn" onClick={onClose}><Ic name="x" size={20} /></button>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, margin: '0 6px' }}>
-        <span style={{
-          fontSize: 12, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase',
-          color: accent, padding: '3px 8px', background: accentBg, borderRadius: 999
-        }}>{mode}</span>
-        <div style={{ flex: 1, height: 4, background: 'var(--memox-surface-container)', borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${current / total * 100}%`, background: accent, transition: 'width 200ms cubic-bezier(0.2,0,0,1)' }} />
+  // Horizontal info card: tile + title + sub, optional trailing element.
+  const InfoRow = ({ icon, tint, title, desc, trail }) => (
+    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
+      <IconTile icon={icon} color={tint} />
+      <div style={{ flex: 1 }}>
+        <div className="title">{title}</div>
+        <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)' }}>{desc}</div>
+      </div>
+      {trail}
+    </div>
+  );
+
+  // Flat, tappable selector row (a shadow-less .card): icon tile + label +
+  // trailing chevron. The "choose a deck / value" picker dropped inside a form
+  // field. One owner so every picker reads identically (was hand-rolled per
+  // screen in create/edit).
+  const PickerRow = ({ icon, tint = 'var(--memox-primary)', title, ...rest }) => (
+    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(3), boxShadow: 'none', cursor: 'pointer' }} {...rest}>
+      <IconTile icon={icon} color={tint} />
+      <span className="title" style={{ flex: 1, fontSize: 'var(--memox-fs-label-large)' }}>{title}</span>
+      <Icon name="chevron-right" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)', color: 'var(--memox-text-secondary)' }} />
+    </div>
+  );
+
+  // Lightweight, mobile-native stat row (NOT a desktop dashboard widget): evenly
+  // spaced centered metrics, sentence-case labels, no table dividers. Pass each
+  // stat as [value, label, accent?]; the `accent` one sits in a soft tinted
+  // column so the action metric (e.g. "Due") reads as the most important number.
+  const StatSummary = ({ stats }) => (
+    <div className="card" style={{ display: 'flex', alignItems: 'stretch', padding: S(2), gap: S(1) }}>
+      {stats.map(([value, label, accent]) => (
+        <div key={label} style={{
+          flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+          justifyContent: 'center', gap: S(1), padding: `${S(2)} ${S(1)}`,
+          borderRadius: 'var(--memox-radius-md)',
+          background: accent ? 'color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent)' : 'transparent',
+        }}>
+          <div style={{ fontSize: 'var(--memox-size-title)', fontWeight: 'var(--memox-weight-extrabold)', lineHeight: 1, letterSpacing: 'var(--memox-tracking-tight)', fontVariantNumeric: 'tabular-nums', color: accent ? 'var(--memox-primary)' : 'var(--memox-text-primary)' }}>{value}</div>
+          <div style={{ fontSize: 'var(--memox-fs-body-small)', fontWeight: 'var(--memox-weight-semibold)', color: accent ? 'var(--memox-primary)' : 'var(--memox-text-secondary)' }}>{label}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // Native grouped list: an optional overline header (+ count) sits ABOVE the
+  // rounded card (iOS-style section grouping), with inset hairlines between rows,
+  // so a floating list card reads as a labelled group, not a stray web container.
+  const ListGroup = ({ heading, items, kind }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
+      {heading && (
+        <div className="ov" style={{ paddingLeft: S(1) }}>
+          {heading}<span style={{ marginLeft: S(1), color: 'var(--memox-text-3)' }}>{items.length}</span>
+        </div>
+      )}
+      <div className="list-card">
+        {items.map((it, i) => (
+          <div key={it.name}>
+            {i > 0 && <div className="hr inset"></div>}
+            <ListRow icon={it.icon} color={it.tint} title={it.name} meta={it.meta}
+              due={kind === 'deck' ? it.due : undefined} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Bottom tab bar. `active` = label of the current tab. One source of truth so
+  // every screen ships the same four destinations in the same order.
+  const NAV_ITEMS = [['Home', 'house'], ['Library', 'library'], ['Stats', 'bar-chart-3'], ['Settings', 'settings']];
+  const BottomNav = ({ active = 'Home' }) => (
+    <div className="bottom-nav">
+      {NAV_ITEMS.map(([label, icon]) => (
+        <button key={label} className={`bottom-nav-item${label === active ? ' active' : ''}`}>
+          <span className="nav-ind"><Icon name={icon} /></span>{label}
+        </button>
+      ))}
+    </div>
+  );
+
+  // Floating action button. Screens own positioning via `style` (absolute over
+  // the bottom nav); the component only owns the look + hit target.
+  const Fab = ({ icon = 'plus', label = 'Create', style, ...rest }) => (
+    <button className="fab" aria-label={label} style={style} {...rest}><Icon name={icon} /></button>
+  );
+
+  // Skeleton block — the one shimmer shape every loading state composes from.
+  const Sk = ({ h, w, r }) => (
+    <div className="skeleton" style={{ height: h, width: w || '100%', borderRadius: r || 'var(--memox-radius-sm)' }}></div>
+  );
+
+  // ---- Forms ---------------------------------------------------------------
+  // Labelled form group: an overline label (optional "Optional"/right slot) above
+  // a control, with a red field-error message below when `error` is set. One owner
+  // of the label/spacing/error treatment so every form field reads identically.
+  const FormField = ({ label, right, error, children }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}>
+      {label && (
+        <div className="ov" style={{ justifyContent: 'space-between' }}>
+          <span>{label}</span>{right && <span style={{ color: 'var(--memox-text-3)' }}>{right}</span>}
+        </div>
+      )}
+      {children}
+      {error && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: S(1), color: 'var(--memox-danger)', fontSize: 'var(--memox-fs-body-small)', fontWeight: 'var(--memox-weight-bold)' }}>
+          <Icon name="alert-circle" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)' }} />{error}
+        </div>
+      )}
+    </div>
+  );
+
+  // Multiline text control matching the .field look (single-line uses .field).
+  // `invalid` swaps the border to danger for validation states.
+  const TextArea = ({ invalid, style, ...rest }) => (
+    <textarea {...rest} style={{
+      width: '100%', minHeight: '96px', resize: 'none',
+      padding: 'var(--memox-space-3) var(--memox-space-4)',
+      background: 'var(--memox-surface)',
+      border: `1px solid ${invalid ? 'var(--memox-danger)' : 'var(--memox-outline-variant)'}`,
+      borderRadius: 'var(--memox-radius-md)', fontFamily: 'var(--memox-font-sans)',
+      fontSize: 'var(--memox-fs-label-large)', fontWeight: 'var(--memox-weight-medium)', lineHeight: 1.5,
+      color: 'var(--memox-text-primary)', ...style,
+    }} />
+  );
+
+  // ---- Overlays ------------------------------------------------------------
+  // Centered modal: scrim + .dialog. Children are the dialog body. One owner of
+  // the scrim + centering + width so every confirm/rename dialog is consistent.
+  const Modal = ({ children }) => (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'grid', placeItems: 'center', padding: S(6) }}>
+      <div className="scrim"></div>
+      <div className="dialog" style={{ position: 'relative', width: '100%' }}>{children}</div>
+    </div>
+  );
+
+  // Bottom sheet: scrim + docked .sheet with grabber and optional title row.
+  const Sheet = ({ title, children }) => (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+      <div className="scrim"></div>
+      <div className="sheet" style={{ position: 'relative' }}>
+        <div className="sheet-grabber"></div>
+        {title && <div className="section-head" style={{ marginBottom: S(3) }}><span className="section-head-title">{title}</span></div>}
+        {children}
+      </div>
+    </div>
+  );
+
+  // Loading/working overlay: scrim + centered spinner with a label. Use for a
+  // blocking in-flight operation (busy state) over existing content.
+  const BusyOverlay = ({ label = 'Working\u2026' }) => (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'grid', placeItems: 'center', padding: S(6) }}>
+      <div className="scrim"></div>
+      <div className="dialog" style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: S(3), width: 'auto', padding: S(6) }}>
+        <div className="spinner"></div>
+        <div className="title" style={{ fontSize: 'var(--memox-fs-label-large)' }}>{label}</div>
+      </div>
+    </div>
+  );
+
+  // ---- Study --------------------------------------------------------------
+  // Top bar for every in-session study screen: exit × · progress bar · "x / N"
+  // card counter. One owner so all five study modes share identical chrome.
+  const StudyTopBar = ({ index, total }) => (
+    <div className="appbar" style={{ gap: S(3) }}>
+      <button className="icon-btn" aria-label="Exit study"><Icon name="x" /></button>
+      <div style={{ flex: 1 }}><Progress value={total ? Math.min(100, (index / total) * 100) : 0} /></div>
+      <span style={{ flex: 'none', fontSize: 'var(--memox-fs-label-large)', fontWeight: 'var(--memox-weight-bold)', color: 'var(--memox-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>
+        {index}<span style={{ color: 'var(--memox-text-3)' }}>{' / '}{total}</span>
+      </span>
+    </div>
+  );
+
+  // Study session frame: top progress bar + scrollable body + a fixed footer
+  // action area (the place every mode puts Next / Check / self-rate buttons).
+  // `center` vertically balances short content (e.g. Match's pair grid) so the
+  // slack is shared above and below instead of pooling into one dead gap over
+  // the footer — taller modes leave it off and stay top-aligned.
+  const StudyShell = ({ index, total, children, footer, bodyStyle, center }) => (
+    <div className="app" style={{ position: 'relative' }}>
+      <StudyTopBar index={index} total={total} />
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${S(4)} var(--memox-space-screen)`, display: 'flex', flexDirection: 'column', ...(center ? { justifyContent: 'center' } : null), ...bodyStyle }}>
+        {children}
+      </div>
+      {footer && (
+        <div style={{ flex: 'none', padding: `${S(3)} var(--memox-space-screen) calc(${S(5)} + var(--memox-safe-bottom))`, display: 'flex', flexDirection: 'column', gap: S(2), borderTop: '1px solid var(--memox-border-ghost)' }}>
+          {footer}
+        </div>
+      )}
+    </div>
+  );
+
+  // One selectable answer cell. `state`: 'selected' | 'correct' | 'wrong'.
+  // `k` = leading key badge (A–E); `mark` = trailing state icon. `more` shows the
+  // corner "tap to read" hint on a card whose meaning is still truncated after
+  // clamping (the card opens a full-text sheet). (.choice classes)
+  const StudyOption = ({ state, k, mark, dim, clamp, more, children, ...rest }) => (
+    <button className={`choice${state ? ' ' + state : ''}${dim ? ' dim' : ''}${clamp ? ' clamp' : ''}`} {...rest}>
+      {k != null && <span className="choice-key">{k}</span>}
+      <span className="choice-text">{children}</span>
+      {mark && <span className="choice-mark"><Icon name={mark} /></span>}
+      {more && <span className="choice-more"><Icon name="ellipsis" /></span>}
+    </button>
+  );
+
+  // Self-rate button (Recall). `tone` selects a self-* token.
+  const SELF_TINT = { missed: 'var(--memox-self-missed)', partial: 'var(--memox-self-partial)', got: 'var(--memox-self-got)' };
+  const RateBtn = ({ tone = 'got', icon, children, ...rest }) => (
+    <button className="rate-btn" style={{ '--rt': SELF_TINT[tone] }} {...rest}>
+      <Icon name={icon} />{children}
+    </button>
+  );
+
+  // Correct-answer reveal panel. `tone`: 'correct' (default) | 'wrong'.
+  const AnswerReveal = ({ label = 'Answer', tone = 'correct', children }) => (
+    <div className="answer-box" style={{ '--ab': tone === 'wrong' ? 'var(--memox-rating-wrong)' : 'var(--memox-rating-correct)' }}>
+      <div className="ov" style={{ color: tone === 'wrong' ? 'var(--memox-rating-wrong)' : 'var(--memox-rating-correct)', marginBottom: S(1) }}>{label}</div>
+      <div style={{ fontSize: 'var(--memox-size-h2)', fontWeight: 'var(--memox-weight-bold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>{children}</div>
+    </div>
+  );
+
+  // ---- Settings -----------------------------------------------------------
+  // Round avatar. `initials` for text, `icon` for a glyph (e.g. signed-out).
+  // `lg` for the 56px account-header size; `tint` selects the color.
+  const Avatar = ({ initials, icon, tint = 'var(--memox-primary)', lg }) => (
+    <span className={`avatar${lg ? ' lg' : ''}`} style={{ '--av': tint }}>
+      {icon ? <Icon name={icon} /> : initials}
+    </span>
+  );
+
+  // On/off switch (.switch). Presentational — the kit shows fixed states.
+  const Toggle = ({ on, disabled }) => (
+    <button className={`switch${on ? ' on' : ''}`} disabled={disabled} aria-label="Toggle" aria-pressed={!!on}></button>
+  );
+
+  // Value slider (.slider). `value` within [min,max] positions fill + thumb.
+  const Slider = ({ value, min = 0, max = 100 }) => {
+    const pct = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
+    return (
+      <div className="slider">
+        <div className="slider-track">
+          <div className="slider-fill" style={{ width: pct + '%' }}></div>
+          <div className="slider-thumb" style={{ left: pct + '%' }}></div>
         </div>
       </div>
-      <div style={{ fontSize: 12, fontWeight: 600, fontVariantNumeric: 'tabular-nums', color: 'var(--memox-on-surface-variant)' }}>{current} / {total}</div>
-    </div>);
+    );
+  };
 
-}
+  // Single-select row: icon-tile + label/desc + radio indicator (.radio). For
+  // theme / language / voice pickers. `icon` optional (text-only radio lists).
+  const RadioRow = ({ icon, tint, title, desc, selected, lead }) => (
+    <div className="list-row">
+      {lead}
+      {icon && <IconTile icon={icon} color={tint} />}
+      <div className="list-row-main">
+        <div className="list-row-title">{title}</div>
+        {desc != null && <div className="list-row-meta">{desc}</div>}
+      </div>
+      <span className={`radio${selected ? ' on' : ''}`}></span>
+    </div>
+  );
 
-/* ════════════════════════════════════════════════════════════════════════
-   SHARED MOBILE LAYOUT PRIMITIVES
-   One layout vocabulary for every screen, kept deliberately close to the
-   Flutter widget tree so this mock translates 1:1 later. Spacing & bottom
-   clearance are token-derived (see .app vars in index.html + LAYOUT.md) —
-   never hand-tuned per screen.
+  // ---- Stats / progress ---------------------------------------------------
+  // Segmented range/mode toggle (e.g. Week | Month). `value` = the active option
+  // label; `options` = the labels in order. Presentational — the kit shows fixed
+  // states. One owner so every range/mode switch reads identically (.segmented).
+  const Segmented = ({ options, value }) => (
+    <div className="segmented" role="tablist">
+      {options.map((o) => (
+        <button key={o} role="tab" aria-selected={o === value}
+          className={`segmented-item${o === value ? ' active' : ''}`}>{o}</button>
+      ))}
+    </div>
+  );
 
-   Conceptual mapping
-     MobileScaffold → Scaffold + SafeArea
-     ScreenHeader   → AppBar
-     ScreenScroll   → Expanded( SingleChildScrollView )   (a.k.a. the body)
-     BottomBar      → Scaffold.bottomNavigationBar / persistentFooterButtons
-     Fab            → Scaffold.floatingActionButton  (the ONLY pinned content)
-   Pinned/absolute positioning is reserved for true chrome only: FAB, bottom
-   nav, sheets, scrims, toasts, modal overlays — never normal content.
-   ════════════════════════════════════════════════════════════════════════ */
+  // Column chart for study activity. `data` = [{ label, value }]; a null/undefined
+  // value renders a dashed "no data" column (for partial ranges). Bars use the
+  // primary accent and scale to `max` (or the data peak). `dim` softens the whole
+  // chart for low-confidence ranges (insufficient data). One owner so weekly and
+  // ranged charts share the same bars, gaps and day labels.
+  const BarChart = ({ data, max, dim }) => {
+    const peak = max || Math.max(1, ...data.map((d) => d.value || 0));
+    return (
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: S(2), height: 'calc(var(--memox-space-12) * 3)', opacity: dim ? 'var(--memox-op-disabled)' : 1 }}>
+        {data.map((d, i) => {
+          const has = d.value != null;
+          const h = has ? Math.max(4, Math.round((d.value / peak) * 100)) : 0;
+          return (
+            <div key={i} style={{ flex: 1, minWidth: 0, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: S(2) }}>
+              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                {has ? (
+                  <div style={{ width: '100%', height: h + '%', borderRadius: 'var(--memox-radius-sm)', background: 'var(--memox-primary)' }}></div>
+                ) : (
+                  <div style={{ width: '100%', height: '100%', borderRadius: 'var(--memox-radius-sm)', border: '1px dashed var(--memox-border-strong)' }}></div>
+                )}
+              </div>
+              <span style={{ fontSize: 'var(--memox-fs-label-small)', fontWeight: 'var(--memox-weight-semibold)', color: 'var(--memox-text-secondary)' }}>{d.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
-/* MobileScaffold — the column shell every screen shares.
-   Children render in flow: header → scroll body → bottom bar. Pinned chrome
-   (fab, overlay) layers on top via absolute positioning and is passed
-   separately so it never interferes with the in-flow column.
-     <MobileScaffold
-        header={<ScreenHeader …/>}
-        bottomBar={<BottomNav …/>}            // or a sticky footer
-        fab={<Fab …/>}                         // optional, pinned
-        overlay={sheetOrDialogNode}>           // optional, pinned full-bleed
-       …scroll children…
-     </MobileScaffold>
-   `clearance` ('base' | 'fab' | 'fab-nav') is forwarded to the inner
-   ScreenScroll so its bottom padding matches the pinned chrome present. */
-function MobileScaffold({ header, children, bottomBar, fab, overlay, clearance = 'base', scrollProps = {}, style }) {
-  return (
-    <div className="app" style={style}>
-      <StatusBar />
-      {header}
-      <ScreenScroll clearance={clearance} {...scrollProps}>{children}</ScreenScroll>
-      {fab || null}
-      {bottomBar || null}
-      {overlay || null}
-    </div>);
-}
+  // Per-deck mastery bar. Fill width = `value`%; the tint steps through the
+  // mastery scale (low < 50 ≤ mid < 80 ≤ high) so weak decks read low, strong
+  // decks read high at a glance. One owner of the threshold logic + bar look.
+  const MASTERY_TINT = (v) => (v >= 80 ? 'var(--memox-mastery-high)' : v >= 50 ? 'var(--memox-mastery-mid)' : 'var(--memox-mastery-low)');
+  const MasteryBar = ({ value }) => (
+    <div style={{ height: S(2), borderRadius: 'var(--memox-radius-full)', background: 'var(--memox-progress-track)', overflow: 'hidden' }}>
+      <div style={{ height: '100%', width: value + '%', borderRadius: 'var(--memox-radius-full)', background: MASTERY_TINT(value) }}></div>
+    </div>
+  );
 
-/* ScreenScroll — the single scrollable body. Flutter: Expanded(SingleChildScrollView).
-   Horizontal gutter + bottom clearance come from tokens; `clearance` picks the
-   variant so the last item always clears any pinned chrome:
-     'base'    → nav / sticky footer / plain screen   (comfort gap only)
-     'fab'     → screen has a FAB, no bottom nav
-     'fab-nav' → screen has a FAB floating above the nav
-   Extra className/style still compose (e.g. grid bodies, custom top padding). */
-function ScreenScroll({ clearance = 'base', className = '', style, children, ...rest }) {
-  const variant = clearance === 'fab' ? ' scroll-fab' : clearance === 'fab-nav' ? ' scroll-fab-nav' : '';
-  return (
-    <div className={('scroll' + variant + (className ? ' ' + className : '')).trim()} style={style} {...rest}>
-      {children}
-    </div>);
-}
-
-/* ScreenHeader — standard app bar. Flutter: AppBar(leading, title, actions).
-   `leading`/`actions` are nodes (icon buttons); `large` switches to the taller
-   title treatment. Keeps every screen's top chrome structurally identical. */
-function ScreenHeader({ leading, title, actions, large = false, center = false, style, children }) {
-  if (children) return <div className={'appbar' + (large ? ' appbar-lg' : '')} style={style}>{children}</div>;
-  return (
-    <div className={'appbar' + (large ? ' appbar-lg' : '')} style={style}>
-      {leading || null}
-      <div className="title" style={{ flex: 1, textAlign: center ? 'center' : 'left', fontSize: large ? 22 : undefined, fontWeight: 700, letterSpacing: '-0.3px' }}>{title}</div>
-      {actions ? <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>{actions}</div> : null}
-    </div>);
-}
-
-/* BottomBar — in-flow bottom chrome wrapper for sticky footers / commit bars
-   (Save, Done, Cancel/Confirm). Flutter: Scaffold.bottomNavigationBar.
-   A sibling of the scroll — it never overlaps content, so the scroll only needs
-   the 'base' comfort clearance. Carries the device safe-area inset. */
-function BottomBar({ children, style }) {
-  return (
-    <div style={{
-      flexShrink: 0, padding: '10px var(--screen-gutter) calc(16px + env(safe-area-inset-bottom, 0px))',
-      borderTop: 'var(--memox-border-ghost)', background: 'var(--memox-surface)',
-      display: 'flex', flexDirection: 'column', gap: 8, ...style
-    }}>{children}</div>);
-}
-
-/* Fab — shared extended FloatingActionButton (pinned chrome). Flutter:
-   FloatingActionButton.extended. Position/safe-area come from .fab tokens;
-   pass `aboveNav` on screens that also show the bottom nav so it lifts clear. */
-function Fab({ icon, label, onClick, aboveNav = false, style }) {
-  return (
-    <button type="button" className={'fab' + (aboveNav ? ' fab-above-nav' : '')} onClick={onClick} aria-label={label} style={style}>
-      {icon ? <Ic name={icon} size={18} color="var(--memox-on-primary)" /> : null}
-      {label ? <span>{label}</span> : null}
-    </button>);
-}
-
-Object.assign(window, { StatusBar, masteryColor, Ic, Breadcrumb, BottomNav, OfflineBanner, SearchField, Badge, StudyTopBar, MobileScaffold, ScreenScroll, ScreenHeader, BottomBar, Fab });
+  window.MX = { Icon, S, PillBtn, IconBtn, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListGroup, HeroCard, InfoRow, PickerRow, EmptyState, Banner, BottomNav, Fab, Sk, FormField, TextArea, Modal, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
 })();

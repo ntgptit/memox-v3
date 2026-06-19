@@ -1,0 +1,83 @@
+<!-- @dsCard group="Components" viewport="700x430" name="Core — Buttons, controls, badges" subtitle="Button, IconButton, Chip, Badge, Switch, SegmentedControl, Avatar" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../../colors_and_type.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--memox-bg); font-family: var(--memox-font-sans); color: var(--memox-text); }
+  .wrap { padding: 22px 24px; display: flex; flex-direction: column; gap: 20px; }
+  .group { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .lbl { width: 100%; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--memox-text-3); margin-bottom: -4px; }
+</style>
+</head>
+<body>
+<div id="root" class="wrap"></div>
+<script type="text/babel">
+  const { Button, IconButton, Chip, Badge, Switch, SegmentedControl, Avatar } = window.DesignSystem_48ad9c;
+
+  function Demo() {
+    const [on, setOn] = React.useState(true);
+    const [seg, setSeg] = React.useState('Dark');
+    return (
+      <>
+        <div className="group">
+          <span className="lbl">Button — variants & sizes</span>
+          <Button variant="primary" icon="plus">New note</Button>
+          <Button variant="secondary">Cancel</Button>
+          <Button variant="soft" iconRight="arrow-right">Continue</Button>
+          <Button variant="ghost">Skip</Button>
+          <Button variant="danger" icon="trash-2">Delete</Button>
+          <Button variant="primary" size="sm">Small</Button>
+          <Button variant="primary" disabled>Disabled</Button>
+        </div>
+        <div className="group">
+          <span className="lbl">IconButton</span>
+          <IconButton icon="search" label="Search" />
+          <IconButton icon="bold" active label="Bold" />
+          <IconButton icon="italic" label="Italic" />
+          <IconButton icon="more-horizontal" variant="surface" label="More" />
+          <IconButton icon="plus" variant="accent" label="New" />
+        </div>
+        <div className="group">
+          <span className="lbl">Chip — filters</span>
+          <Chip selected>All</Chip>
+          <Chip dot="var(--memox-note-amber)">Work</Chip>
+          <Chip dot="var(--memox-note-green)">Personal</Chip>
+          <Chip icon="pin">Pinned</Chip>
+        </div>
+        <div className="group">
+          <span className="lbl">Badge — tones</span>
+          <Badge tone="accent">Pro</Badge>
+          <Badge tone="success" icon="check">Saved</Badge>
+          <Badge tone="warn">Draft</Badge>
+          <Badge tone="danger" solid>Overdue</Badge>
+          <Badge tone="info">Synced</Badge>
+          <Badge tone="neutral">#launch</Badge>
+        </div>
+        <div className="group" style={{ alignItems: 'center' }}>
+          <span className="lbl">Switch · SegmentedControl · Avatar</span>
+          <Switch checked={on} onChange={setOn} />
+          <div style={{ width: 220 }}>
+            <SegmentedControl options={['Light','Dark','Auto']} value={seg} onChange={setSeg} />
+          </div>
+          <Avatar name="An Nguyễn" />
+          <Avatar name="Linh Tran" />
+        </div>
+      </>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<Demo />);
+  requestAnimationFrame(() => lucide.createIcons());
+  // re-run icons after react commits
+  setTimeout(() => lucide.createIcons(), 120);
+</script>
+</body>
+</html>

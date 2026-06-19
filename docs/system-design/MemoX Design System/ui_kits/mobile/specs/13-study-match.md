@@ -37,277 +37,1449 @@ raw kit CSS class (e.g. `ov`, `title`) and is NOT a resolved component. Two mapp
 deliberately MISSING, not guessed: a bare `#rrggbb` is an un-tokenized color, and quoted text
 has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 
-## Base state: Default
+## Base state: Matching
 
 ```text
-- node: app
-  mx: MxScaffold
+- node: div
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,1 388x48]
+    rel: [1,1 388x48]
+  layout: flex:row justify:between align:center
+  flex: shrink:0
+  spacing: pad:0/26/0/30
+  - node: sb-time
+    text: 9:41
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
-      box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
-        box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
+      abs: [31,16 33x19]
+      rel: [30,15 33x19]
+    style: font:15/700 color:text
+  - node: sb-icons
     box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 justify:between align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
+      abs: [277,13 86x24]
+      rel: [276,12 86x24]
+    layout: flex:row gap:7 align:center
+    - node: icon:signal-high
       box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
+        abs: [277,13 24x24]
+        rel: [0,0 24x24]
+      position: clip
+    - node: icon:wifi
+      box:
+        abs: [308,13 24x24]
+        rel: [31,0 24x24]
+      position: clip
+    - node: icon:battery-full
+      box:
+        abs: [339,13 24x24]
+        rel: [62,0 24x24]
+      position: clip
+- node: phone-canvas
+  box:
+    abs: [1,49 388x720]
+    rel: [1,49 388x720]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,49 388x720]
+      rel: [0,0 388x720]
+    layout: flex:col
+    size: minh:100
+    position: pos:relative
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
+      box:
+        abs: [1,49 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:12 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
         box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
+          abs: [21,57 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
         - node: icon:x
           box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
+            abs: [31,67 20x20]
+            rel: [10,10 20x20]
           position: clip
+      - node: progress
+        box:
+          abs: [73,75 255x4]
+          rel: [72,26 255x4]
+        position: clip
+        style: bg:surface-2 r:999
+        - node: progress-fill
+          box:
+            abs: [73,75 51x4]
+            rel: [0,0 51x4]
+          style: bg:accent r:999
+      - node: span
+        text: 1
+        box:
+          abs: [340,68 29x18]
+          rel: [339,19 29x18]
+        flex: shrink:0
+        style: font:14/700 color:text-2
+        - node: span
+          text: / 5
+          box:
+            abs: [349,68 20x18]
+            rel: [8,0 20x18]
+          style: font:14/700 color:text-3
     - node: div
       box:
-        abs: [62,60 297x21]
-        rel: [54,8 297x21]
-      layout: flex:row gap:8 align:center
+        abs: [1,105 388x587]
+        rel: [0,56 388x587]
+      layout: flex:col justify:center
       flex: grow:1 basis:0 layout_hint:expanded
-      spacing: margin:0/6
-      - node: span
-        text: Match
+      spacing: pad:16/20
+      position: layout_hint:scroll
+      - node: div
         box:
-          abs: [62,60 67x21]
-          rel: [0,0 67x21]
-        spacing: pad:3/8
-        style: font:12/700 color:#000000 tracking:1.2 r:999
-    - node: div
-      text: 2 / 4
-      box:
-        abs: [369,63 21x15]
-        rel: [361,11 21x15]
-      style: font:12/600 color:#000000
-  - node: ov
-    text: Board 1 of 3 · 3 pairs left
-    box:
-      abs: [22,92 362x26]
-      rel: [14,84 362x26]
-    spacing: pad:4/0/10/0
-    style: font:11/700 color:#000000 text:center tracking:0.6
-  - node: scroll
-    box:
-      abs: [8,118 390x639]
-      rel: [0,110 390x639]
-    layout: grid cols:2 gap:8
-    flex: grow:1 basis:0 layout_hint:expanded
-    repeat: x8(unit=1)
-    position: layout_hint:scroll
-    - node: div
-      item: item[1]
-      box:
-        abs: [8,118 191x106]
-        rel: [0,0 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12 op:0.7
-      - node: span
-        box:
-          abs: [61,164 14x14]
-          rel: [53,46 14x14]
-        layout: flex:row
-        - node: icon:check
+          abs: [21,132 348x50]
+          rel: [20,27 348x50]
+        spacing: margin:0/0/20/0
+        - node: title
+          text: Match the pairs
           box:
-            abs: [61,164 14x14]
-            rel: [0,0 14x14]
-          position: clip
-      - node: span
-        text: 공부하다
-        box:
-          abs: [81,158 65x26]
-          rel: [73,40 65x26]
-        spacing: margin:0/0/0/6
-        style: font:18/700 color:#000000 text:center tracking:-0.4
-    - node: div
-      item: item[2]
-      box:
-        abs: [207,118 191x106]
-        rel: [199,0 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12 op:0.7
-      - node: span
-        box:
-          abs: [269,164 14x14]
-          rel: [62,46 14x14]
-        layout: flex:row
-        - node: icon:check
+            abs: [21,132 348x28]
+            rel: [0,0 348x28]
+          style: font:22/700 color:text text:center tracking:-0.4
+        - node: muted
+          text: Tap a term, then its meaning.
           box:
-            abs: [269,164 14x14]
-            rel: [0,0 14x14]
+            abs: [21,164 348x18]
+            rel: [0,32 348x18]
+          spacing: margin:4/0/0/0
+          style: font:14/400 color:text-2 text:center
+      - node: match-grid
+        box:
+          abs: [21,202 348x428]
+          rel: [20,97 348x428]
+        layout: grid cols:2 gap:12
+        repeat: x10(unit=1)
+        - node: choice
+          item: item[1]
+          mx: ?
+          box:
+            abs: [21,202 168x76]
+            rel: [0,0 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
+          - node: choice-text
+            text: 水
+            box:
+              abs: [38,221 102x38]
+              rel: [17,19 102x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:success
+          - node: choice-mark
+            box:
+              abs: [152,230 20x20]
+              rel: [131,28 20x20]
+            layout: grid cols:1 align:center
+            flex: shrink:0
+            - node: icon:check
+              box:
+                abs: [152,230 20x20]
+                rel: [0,0 20x20]
+              position: clip
+        - node: choice
+          item: item[2]
+          mx: ?
+          box:
+            abs: [201,202 168x76]
+            rel: [180,0 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+          - node: choice-text
+            text: fire
+            box:
+              abs: [218,221 102x38]
+              rel: [17,19 102x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:danger
+          - node: choice-mark
+            box:
+              abs: [332,230 20x20]
+              rel: [131,28 20x20]
+            layout: grid cols:1 align:center
+            flex: shrink:0
+            - node: icon:x
+              box:
+                abs: [332,230 20x20]
+                rel: [0,0 20x20]
+              position: clip
+        - node: choice
+          item: item[3]
+          mx: ?
+          box:
+            abs: [21,290 168x76]
+            rel: [0,88 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+          - node: choice-text
+            text: 火
+            box:
+              abs: [38,309 102x38]
+              rel: [17,19 102x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:danger
+          - node: choice-mark
+            box:
+              abs: [152,318 20x20]
+              rel: [131,28 20x20]
+            layout: grid cols:1 align:center
+            flex: shrink:0
+            - node: icon:x
+              box:
+                abs: [152,318 20x20]
+                rel: [0,0 20x20]
+              position: clip
+        - node: choice
+          item: item[4]
+          mx: ?
+          box:
+            abs: [201,290 168x76]
+            rel: [180,88 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
+          - node: choice-text
+            text: water
+            box:
+              abs: [218,309 102x38]
+              rel: [17,19 102x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:success
+          - node: choice-mark
+            box:
+              abs: [332,318 20x20]
+              rel: [131,28 20x20]
+            layout: grid cols:1 align:center
+            flex: shrink:0
+            - node: icon:check
+              box:
+                abs: [332,318 20x20]
+                rel: [0,0 20x20]
+              position: clip
+        - node: choice
+          item: item[5]
+          mx: ?
+          box:
+            abs: [21,378 168x76]
+            rel: [0,176 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14 border:1px accent
+          - node: choice-text
+            text: 日本
+            box:
+              abs: [38,397 134x38]
+              rel: [17,19 134x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:accent
+        - node: choice
+          item: item[6]
+          mx: ?
+          box:
+            abs: [201,378 168x76]
+            rel: [180,176 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: book
+            box:
+              abs: [218,397 134x38]
+              rel: [17,19 134x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[7]
+          mx: ?
+          box:
+            abs: [21,466 168x76]
+            rel: [0,264 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 山
+            box:
+              abs: [38,485 134x38]
+              rel: [17,19 134x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[8]
+          mx: ?
+          box:
+            abs: [201,466 168x76]
+            rel: [180,264 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: a tall landform rising above its surroundings
+            box:
+              abs: [218,485 134x38]
+              rel: [17,19 134x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[9]
+          mx: ?
+          box:
+            abs: [21,554 168x76]
+            rel: [0,352 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 本
+            box:
+              abs: [38,573 134x38]
+              rel: [17,19 134x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[10]
+          mx: ?
+          box:
+            abs: [201,554 168x76]
+            rel: [180,352 168x76]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:76
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: Japan
+            box:
+              abs: [218,573 134x38]
+              rel: [17,19 134x38]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:38
+            position: clip
+            style: font:14/600/19 color:text
+      - node: div
+        box:
+          abs: [21,650 348x16]
+          rel: [20,545 348x16]
+        layout: flex:row gap:16 justify:center
+        spacing: margin:20/0/0/0
+        - node: span
+          text: 1 matched
+          box:
+            abs: [134,650 69x16]
+            rel: [113,0 69x16]
+          layout: flex:row gap:4 align:center
+          style: font:13/700 color:text-2
+        - node: span
+          text: 4 left
+          box:
+            abs: [219,650 37x16]
+            rel: [198,0 37x16]
+          layout: flex:row gap:4 align:center
+          style: font:13/700 color:text-2
+    - node: div
+      box:
+        abs: [1,692 388x77]
+        rel: [0,643 388x77]
+      layout: flex:col gap:8
+      flex: shrink:0
+      spacing: pad:12/20/20/20
+      style: border-t:1px divider
+      - node: pill-btn
+        text: Shuffle & restart
+        mx: MxSecondaryButton
+        box:
+          abs: [21,705 348x44]
+          rel: [20,13 348x44]
+        layout: flex:row gap:8 justify:center align:center
+        spacing: pad:0/20
+        style: font:14/700 color:text text:center tracking:-0.1 r:999 border:1px border
+        - node: icon:rotate-ccw
+          box:
+            abs: [129,719 16x16]
+            rel: [108,14 16x16]
           position: clip
-      - node: span
-        text: to study
-        box:
-          abs: [289,163 48x16]
-          rel: [82,45 48x16]
-        spacing: margin:0/0/0/6
-        style: font:14/600 color:#000000 text:center
-    - node: div
-      item: item[3]
-      box:
-        abs: [8,232 191x106]
-        rel: [0,114 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12
-      - node: span
-        text: 먹다
-        box:
-          abs: [87,272 32x26]
-          rel: [79,40 32x26]
-        style: font:18/700 color:#000000 text:center tracking:-0.4
-    - node: div
-      item: item[4]
-      box:
-        abs: [207,232 191x106]
-        rel: [199,114 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12
-      - node: span
-        text: to eat
-        box:
-          abs: [286,277 33x16]
-          rel: [79,45 33x16]
-        style: font:14/600 color:#000000 text:center
-    - node: div
-      item: item[5]
-      box:
-        abs: [8,346 191x106]
-        rel: [0,228 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12
-      - node: span
-        text: 하늘
-        box:
-          abs: [87,386 32x26]
-          rel: [79,40 32x26]
-        style: font:18/700 color:#000000 text:center tracking:-0.4
-    - node: div
-      item: item[6]
-      box:
-        abs: [207,346 191x106]
-        rel: [199,228 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12
-      - node: span
-        text: sky
-        box:
-          abs: [292,391 20x16]
-          rel: [85,45 20x16]
-        style: font:14/600 color:#000000 text:center
-    - node: div
-      item: item[7]
-      box:
-        abs: [8,460 191x106]
-        rel: [0,342 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12
-      - node: span
-        text: 도서관
-        box:
-          abs: [79,500 48x26]
-          rel: [71,40 48x26]
-        style: font:18/700 color:#000000 text:center tracking:-0.4
-    - node: div
-      item: item[8]
-      box:
-        abs: [207,460 191x106]
-        rel: [199,342 191x106]
-      layout: flex:row justify:center align:center
-      spacing: pad:14/12
-      size: minh:78
-      style: r:12
-      - node: span
-        text: library
-        box:
-          abs: [282,505 42x16]
-          rel: [75,45 42x16]
-        style: font:14/600 color:#000000 text:center
+```
+
+## State: Long meanings (ordered diff vs Matching)
+
+```diff
+  - node: progress-fill
+  box:
+  abs: [73,75 102x4]
+  rel: [0,0 102x4]
+  style: bg:accent r:999
+- - node: span
+- text: 1
+- box:
+- abs: [340,68 29x18]
+- rel: [339,19 29x18]
+- flex: shrink:0
+- style: font:14/700 color:text-2
++ - node: span
++ text: 2
++ box:
++ abs: [340,68 29x18]
++ rel: [339,19 29x18]
++ flex: shrink:0
++ style: font:14/700 color:text-2
+  - node: span
+  text: / 5
+  box:
+  abs: [349,68 20x18]
+  rel: [8,0 20x18]
+  style: font:14/700 color:text-3
+  ...
+  - node: title
+  text: Match the pairs
+  box:
+  abs: [21,184 348x28]
+  rel: [0,0 348x28]
+  style: font:22/700 color:text text:center tracking:-0.4
+- - node: muted
+- text: Tap a term, then its meaning.
+- box:
+- abs: [21,164 348x18]
+- rel: [0,32 348x18]
+- spacing: margin:4/0/0/0
+- style: font:14/400 color:text-2 text:center
+- - node: match-grid
+- box:
+- abs: [21,202 348x428]
+- rel: [20,97 348x428]
+- layout: grid cols:2 gap:12
+- repeat: x10(unit=1)
+- - node: choice
+- item: item[1]
+- mx: ?
+- box:
+- abs: [21,202 168x76]
+- rel: [0,0 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
+- - node: choice-text
+- text: 水
+- box:
+- abs: [38,221 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:success
+- - node: choice-mark
+- box:
+- abs: [152,230 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:check
+- box:
+- abs: [152,230 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[2]
+- mx: ?
+- box:
+- abs: [201,202 168x76]
+- rel: [180,0 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+- - node: choice-text
+- text: fire
+- box:
+- abs: [218,221 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:danger
+- - node: choice-mark
+- box:
+- abs: [332,230 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:x
+- box:
+- abs: [332,230 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[3]
+- mx: ?
+- box:
+- abs: [21,290 168x76]
+- rel: [0,88 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+- - node: choice-text
+- text: 火
+- box:
+- abs: [38,309 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:danger
+- - node: choice-mark
+- box:
+- abs: [152,318 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:x
+- box:
+- abs: [152,318 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[4]
+- mx: ?
+- box:
+- abs: [201,290 168x76]
+- rel: [180,88 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
+- - node: choice-text
+- text: water
+- box:
+- abs: [218,309 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:success
+- - node: choice-mark
+- box:
+- abs: [332,318 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:check
+- box:
+- abs: [332,318 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[5]
+- mx: ?
+- box:
+- abs: [21,378 168x76]
+- rel: [0,176 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14 border:1px accent
+- - node: choice-text
+- text: 日本
+- box:
+- abs: [38,397 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:accent
+- - node: choice
+- item: item[6]
+- mx: ?
+- box:
+- abs: [201,378 168x76]
+- rel: [180,176 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: book
+- box:
+- abs: [218,397 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[7]
+- mx: ?
+- box:
+- abs: [21,466 168x76]
+- rel: [0,264 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: 山
+- box:
+- abs: [38,485 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[8]
+- mx: ?
+- box:
+- abs: [201,466 168x76]
+- rel: [180,264 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: a tall landform rising above its surroundings
+- box:
+- abs: [218,485 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[9]
+- mx: ?
+- box:
+- abs: [21,554 168x76]
+- rel: [0,352 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: 本
+- box:
+- abs: [38,573 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[10]
+- mx: ?
+- box:
+- abs: [201,554 168x76]
+- rel: [180,352 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: Japan
+- box:
+- abs: [218,573 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
++ - node: muted
++ text: Longer meanings show up to three lines.
++ box:
++ abs: [21,216 348x18]
++ rel: [0,32 348x18]
++ spacing: margin:4/0/0/0
++ style: font:14/400 color:text-2 text:center
++ - node: match-grid
++ box:
++ abs: [21,254 348x324]
++ rel: [20,149 348x324]
++ layout: grid cols:2 gap:12
++ repeat: x6(unit=1)
++ - node: choice
++ item: item[1]
++ mx: ?
++ box:
++ abs: [21,254 168x100]
++ rel: [0,0 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: 山
++ box:
++ abs: [38,275 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[2]
++ mx: ?
++ box:
++ abs: [201,254 168x100]
++ rel: [180,0 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: a tall landform rising high above the surrounding land
++ box:
++ abs: [218,275 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[3]
++ mx: ?
++ box:
++ abs: [21,366 168x100]
++ rel: [0,112 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: 勉強
++ box:
++ abs: [38,387 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[4]
++ mx: ?
++ box:
++ abs: [201,366 168x100]
++ rel: [180,112 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: the act of studying or learning something with focused effort over time
++ box:
++ abs: [218,387 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[5]
++ mx: ?
++ box:
++ abs: [21,478 168x100]
++ rel: [0,224 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: 図書館
++ box:
++ abs: [38,499 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[6]
++ mx: ?
++ box:
++ abs: [201,478 168x100]
++ rel: [180,224 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
++ box:
++ abs: [218,499 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice-more
++ box:
++ abs: [340,553 16x16]
++ rel: [139,75 16x16]
++ layout: grid cols:1 align:center
++ position: pos:absolute
++ - node: icon:ellipsis
++ box:
++ abs: [340,553 16x16]
++ rel: [0,0 16x16]
++ position: clip
   - node: div
-    box:
-      abs: [8,757 390x31]
-      rel: [0,749 390x31]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/14/16/14
-    - node: span
-      text: 0:42
-      box:
-        abs: [22,757 41x15]
-        rel: [14,0 41x15]
-      layout: flex:row gap:6 align:center
-      style: font:12/400 color:#000000
-      - node: span
-        box:
-          abs: [22,758 14x14]
-          rel: [0,1 14x14]
-        layout: flex:row
-        - node: icon:timer
-          box:
-            abs: [22,758 14x14]
-            rel: [0,0 14x14]
-          position: clip
-    - node: span
-      text: 1 mistake
-      box:
-        abs: [338,757 46x15]
-        rel: [330,0 46x15]
-      style: font:12/400 color:#000000
+  box:
+  abs: [21,598 348x16]
+  rel: [20,493 348x16]
+  layout: flex:row gap:16 justify:center
+  spacing: margin:20/0/0/0
+- - node: span
+- text: 1 matched
+- box:
+- abs: [134,650 69x16]
+- rel: [113,0 69x16]
+- layout: flex:row gap:4 align:center
+- style: font:13/700 color:text-2
+- - node: span
+- text: 4 left
+- box:
+- abs: [219,650 37x16]
+- rel: [198,0 37x16]
+- layout: flex:row gap:4 align:center
+- style: font:13/700 color:text-2
++ - node: span
++ text: 0 matched
++ box:
++ abs: [132,598 73x16]
++ rel: [111,0 73x16]
++ layout: flex:row gap:4 align:center
++ style: font:13/700 color:text-2
++ - node: span
++ text: 3 left
++ box:
++ abs: [221,598 36x16]
++ rel: [200,0 36x16]
++ layout: flex:row gap:4 align:center
++ style: font:13/700 color:text-2
+  - node: div
+  box:
+  abs: [1,692 388x77]
+  rel: [0,643 388x77]
+  layout: flex:col gap:8
+  flex: shrink:0
+  spacing: pad:12/20/20/20
+  style: border-t:1px divider
+  ...
+```
+
+## State: Read full meaning (ordered diff vs Matching)
+
+```diff
+  - node: progress-fill
+  box:
+  abs: [73,75 102x4]
+  rel: [0,0 102x4]
+  style: bg:accent r:999
+- - node: span
+- text: 1
+- box:
+- abs: [340,68 29x18]
+- rel: [339,19 29x18]
+- flex: shrink:0
+- style: font:14/700 color:text-2
++ - node: span
++ text: 2
++ box:
++ abs: [340,68 29x18]
++ rel: [339,19 29x18]
++ flex: shrink:0
++ style: font:14/700 color:text-2
+  - node: span
+  text: / 5
+  box:
+  abs: [349,68 20x18]
+  rel: [8,0 20x18]
+  style: font:14/700 color:text-3
+  ...
+  - node: title
+  text: Match the pairs
+  box:
+  abs: [21,184 348x28]
+  rel: [0,0 348x28]
+  style: font:22/700 color:text text:center tracking:-0.4
+- - node: muted
+- text: Tap a term, then its meaning.
+- box:
+- abs: [21,164 348x18]
+- rel: [0,32 348x18]
+- spacing: margin:4/0/0/0
+- style: font:14/400 color:text-2 text:center
+- - node: match-grid
+- box:
+- abs: [21,202 348x428]
+- rel: [20,97 348x428]
+- layout: grid cols:2 gap:12
+- repeat: x10(unit=1)
+- - node: choice
+- item: item[1]
+- mx: ?
+- box:
+- abs: [21,202 168x76]
+- rel: [0,0 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
+- - node: choice-text
+- text: 水
+- box:
+- abs: [38,221 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:success
+- - node: choice-mark
+- box:
+- abs: [152,230 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:check
+- box:
+- abs: [152,230 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[2]
+- mx: ?
+- box:
+- abs: [201,202 168x76]
+- rel: [180,0 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+- - node: choice-text
+- text: fire
+- box:
+- abs: [218,221 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:danger
+- - node: choice-mark
+- box:
+- abs: [332,230 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:x
+- box:
+- abs: [332,230 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[3]
+- mx: ?
+- box:
+- abs: [21,290 168x76]
+- rel: [0,88 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
+- - node: choice-text
+- text: 火
+- box:
+- abs: [38,309 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:danger
+- - node: choice-mark
+- box:
+- abs: [152,318 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:x
+- box:
+- abs: [152,318 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[4]
+- mx: ?
+- box:
+- abs: [201,290 168x76]
+- rel: [180,88 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
+- - node: choice-text
+- text: water
+- box:
+- abs: [218,309 102x38]
+- rel: [17,19 102x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:success
+- - node: choice-mark
+- box:
+- abs: [332,318 20x20]
+- rel: [131,28 20x20]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- - node: icon:check
+- box:
+- abs: [332,318 20x20]
+- rel: [0,0 20x20]
+- position: clip
+- - node: choice
+- item: item[5]
+- mx: ?
+- box:
+- abs: [21,378 168x76]
+- rel: [0,176 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14 border:1px accent
+- - node: choice-text
+- text: 日本
+- box:
+- abs: [38,397 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:accent
+- - node: choice
+- item: item[6]
+- mx: ?
+- box:
+- abs: [201,378 168x76]
+- rel: [180,176 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: book
+- box:
+- abs: [218,397 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[7]
+- mx: ?
+- box:
+- abs: [21,466 168x76]
+- rel: [0,264 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: 山
+- box:
+- abs: [38,485 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[8]
+- mx: ?
+- box:
+- abs: [201,466 168x76]
+- rel: [180,264 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: a tall landform rising above its surroundings
+- box:
+- abs: [218,485 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[9]
+- mx: ?
+- box:
+- abs: [21,554 168x76]
+- rel: [0,352 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: 本
+- box:
+- abs: [38,573 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
+- - node: choice
+- item: item[10]
+- mx: ?
+- box:
+- abs: [201,554 168x76]
+- rel: [180,352 168x76]
+- layout: flex:row gap:12 align:center
+- spacing: pad:16
+- size: minh:76
+- position: pos:relative
+- style: bg:accent-contrast r:14 border:1px border
+- - node: choice-text
+- text: Japan
+- box:
+- abs: [218,573 134x38]
+- rel: [17,19 134x38]
+- flex: grow:1 basis:0 layout_hint:expanded
+- size: minh:38
+- position: clip
+- style: font:14/600/19 color:text
++ - node: muted
++ text: Tap a clipped meaning to read it in full.
++ box:
++ abs: [21,216 348x18]
++ rel: [0,32 348x18]
++ spacing: margin:4/0/0/0
++ style: font:14/400 color:text-2 text:center
++ - node: match-grid
++ box:
++ abs: [21,254 348x324]
++ rel: [20,149 348x324]
++ layout: grid cols:2 gap:12
++ repeat: x6(unit=1)
++ - node: choice
++ item: item[1]
++ mx: ?
++ box:
++ abs: [21,254 168x100]
++ rel: [0,0 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: 山
++ box:
++ abs: [38,275 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[2]
++ mx: ?
++ box:
++ abs: [201,254 168x100]
++ rel: [180,0 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: a tall landform rising high above the surrounding land
++ box:
++ abs: [218,275 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[3]
++ mx: ?
++ box:
++ abs: [21,366 168x100]
++ rel: [0,112 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: 勉強
++ box:
++ abs: [38,387 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[4]
++ mx: ?
++ box:
++ abs: [201,366 168x100]
++ rel: [180,112 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: the act of studying or learning something with focused effort over time
++ box:
++ abs: [218,387 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[5]
++ mx: ?
++ box:
++ abs: [21,478 168x100]
++ rel: [0,224 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: 図書館
++ box:
++ abs: [38,499 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice
++ item: item[6]
++ mx: ?
++ box:
++ abs: [201,478 168x100]
++ rel: [180,224 168x100]
++ layout: flex:row gap:12 align:center
++ spacing: pad:16
++ size: minh:100
++ position: pos:relative
++ style: bg:accent-contrast r:14 border:1px border
++ - node: choice-text
++ text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
++ box:
++ abs: [218,499 134x57]
++ rel: [17,22 134x57]
++ flex: grow:1 basis:0 layout_hint:expanded
++ size: minh:57
++ position: clip
++ style: font:14/600/19 color:text
++ - node: choice-more
++ box:
++ abs: [340,553 16x16]
++ rel: [139,75 16x16]
++ layout: grid cols:1 align:center
++ position: pos:absolute
++ - node: icon:ellipsis
++ box:
++ abs: [340,553 16x16]
++ rel: [0,0 16x16]
++ position: clip
+  - node: div
+  box:
+  abs: [21,598 348x16]
+  rel: [20,493 348x16]
+  layout: flex:row gap:16 justify:center
+  spacing: margin:20/0/0/0
+- - node: span
+- text: 1 matched
+- box:
+- abs: [134,650 69x16]
+- rel: [113,0 69x16]
+- layout: flex:row gap:4 align:center
+- style: font:13/700 color:text-2
+- - node: span
+- text: 4 left
+- box:
+- abs: [219,650 37x16]
+- rel: [198,0 37x16]
+- layout: flex:row gap:4 align:center
+- style: font:13/700 color:text-2
++ - node: span
++ text: 0 matched
++ box:
++ abs: [132,598 73x16]
++ rel: [111,0 73x16]
++ layout: flex:row gap:4 align:center
++ style: font:13/700 color:text-2
++ - node: span
++ text: 3 left
++ box:
++ abs: [221,598 36x16]
++ rel: [200,0 36x16]
++ layout: flex:row gap:4 align:center
++ style: font:13/700 color:text-2
++ - node: div
++ box:
++ abs: [1,49 388x720]
++ rel: [0,-56 388x720]
++ layout: flex:col justify:end
++ position: pos:absolute z:20
++ - node: scrim
++ box:
++ abs: [1,49 388x720]
++ rel: [0,0 388x720]
++ position: pos:absolute
++ style: bg:overlay
++ - node: sheet
++ box:
++ abs: [1,488 388x281]
++ rel: [0,439 388x281]
++ spacing: pad:20/20/24/20
++ position: pos:relative
++ style: bg:accent-contrast r:28 shadow:8/28
++ - node: sheet-grabber
++ box:
++ abs: [175,508 40x4]
++ rel: [174,20 40x4]
++ spacing: margin:0/154/16/154
++ style: bg:border r:999
++ - node: section-head
++ mx: MxSectionHeader
++ box:
++ abs: [21,528 348x21]
++ rel: [20,40 348x21]
++ layout: flex:row gap:12 justify:between align:center
++ spacing: margin:0/0/12/0
++ - node: section-head-title
++ text: Full meaning
++ box:
++ abs: [21,528 93x21]
++ rel: [0,0 93x21]
++ style: font:16/700 color:text tracking:-0.3
++ - node: div
++ text: Meaning
++ box:
++ abs: [21,561 348x16]
++ rel: [20,73 348x16]
++ layout: flex:row gap:8 align:center
++ spacing: margin:0/0/8/0
++ style: font:12/700 color:text-2 tracking:1
++ - node: icon:book-open
++ box:
++ abs: [21,561 16x16]
++ rel: [0,0 16x16]
++ position: clip
++ - node: div
++ text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
++ box:
++ abs: [21,585 348x96]
++ rel: [20,97 348x96]
++ style: font:16/600/24 color:text
++ - node: pill-btn
++ text: Got it
++ mx: MxPrimaryButton
++ box:
++ abs: [21,701 348x44]
++ rel: [20,213 348x44]
++ layout: flex:row gap:8 justify:center align:center
++ spacing: pad:0/20
++ style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+  - node: div
+  box:
+  abs: [1,692 388x77]
+  rel: [0,643 388x77]
+  layout: flex:col gap:8
+  flex: shrink:0
+  spacing: pad:12/20/20/20
+  style: border-t:1px divider
+  ...
 ```

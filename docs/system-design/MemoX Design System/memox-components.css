@@ -1,0 +1,786 @@
+/* ============================================================================
+   MemoX — Component contract (class-based, 100% token-driven)
+   Every value reads var(--memox-*). Works in light and .memox-dark unchanged.
+   Load AFTER colors_and_type.css. Icons: Lucide <i data-lucide> → <svg>; sizes
+   are driven from tokens via the parent selectors below.
+   ============================================================================ */
+
+/* ---- App shell ----------------------------------------------------------- */
+.app {
+  background: var(--memox-bg);
+  color: var(--memox-text-primary);
+  font-family: var(--memox-font-sans);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- App bar ------------------------------------------------------------- */
+.appbar,
+.appbar-lg {
+  display: flex;
+  padding-left: var(--memox-space-screen);
+  padding-right: var(--memox-space-screen);
+  gap: var(--memox-space-2);
+  background: var(--memox-bg);
+}
+.appbar {
+  height: var(--memox-size-appbar);
+  align-items: center;
+}
+.appbar-lg {
+  height: var(--memox-size-appbar-lg);
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-bottom: var(--memox-space-3);
+}
+.appbar-titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.appbar-title {
+  font-size: var(--memox-fs-headline-medium);
+  font-weight: var(--memox-weight-bold);
+  letter-spacing: var(--memox-tracking-tight);
+  color: var(--memox-text-primary);
+}
+.appbar-subtitle {
+  font-size: var(--memox-fs-label-large);
+  font-weight: var(--memox-weight-medium);
+  color: var(--memox-text-secondary);
+}
+.appbar .spacer, .appbar-lg .spacer { flex: 1; }
+
+/* ---- Bottom navigation --------------------------------------------------- */
+.bottom-nav {
+  /* min-height (not height) so the home-indicator safe area can grow the bar
+     below the tappable row without squashing the items. */
+  min-height: var(--memox-size-bottom-nav);
+  padding-bottom: var(--memox-safe-bottom);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: color-mix(in srgb, var(--memox-surface-raised) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--memox-border-ghost);
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--memox-space-1);
+  color: var(--memox-text-secondary);
+  font-size: var(--memox-fs-label-small);
+  font-weight: var(--memox-weight-semibold);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.bottom-nav-item .nav-ind {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 30px;
+  border-radius: var(--memox-radius-full);
+}
+.bottom-nav-item svg { width: var(--memox-icon-lg); height: var(--memox-icon-lg); }
+.bottom-nav-item.active { color: var(--memox-primary); font-weight: var(--memox-weight-bold); }
+.bottom-nav-item.active .nav-ind {
+  background: color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent);
+}
+
+/* ---- Card ---------------------------------------------------------------- */
+.card {
+  background: var(--memox-surface-raised);
+  border: 1px solid var(--memox-border-ghost);
+  border-radius: var(--memox-radius-card);
+  padding: var(--memox-space-card);
+  box-shadow: var(--memox-shadow-soft);
+}
+.card.accent {
+  background: color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent);
+  border-color: color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-border-subtle) * 100%), transparent);
+  box-shadow: none;
+}
+
+/* List card: a .card whose padding makes the inset row press-highlight sit an
+   EVEN distance from every edge. Each .list-row bleeds var(--memox-space-2) past
+   its text column horizontally (negative margin), so the card's vertical padding
+   is that same value and its horizontal padding is space-2 larger — the highlight
+   gap ends up identical on all four sides. Use this (NOT .card + inline padding)
+   for any rounded list of .list-row items. */
+.list-card {
+  background: var(--memox-surface-raised);
+  border: 1px solid var(--memox-border-ghost);
+  border-radius: var(--memox-radius-card);
+  box-shadow: var(--memox-shadow-soft);
+  padding: var(--memox-space-2) var(--memox-space-card);
+}
+
+/* Equal-height card row: lay two-or-more cards side by side and they always
+   match height (flex stretch) and share width. Use this for any row of cards
+   instead of hand-rolling flex on each card — prevents height drift. */
+.card-row {
+  display: flex;
+  gap: var(--memox-space-3);
+  align-items: stretch;
+}
+.card-row > * { flex: 1; min-width: 0; }
+
+/* ---- Icon button --------------------------------------------------------- */
+.icon-btn {
+  position: relative;
+  width: var(--memox-size-icon-btn);
+  height: var(--memox-size-icon-btn);
+  display: grid;
+  place-items: center;
+  border-radius: var(--memox-radius-full);
+  border: none;
+  background: transparent;
+  color: var(--memox-text-secondary);
+  cursor: pointer;
+  flex: none;
+}
+.icon-btn::after { /* expands hit target to >=48 without affecting layout */
+  content: "";
+  position: absolute;
+  inset: calc((var(--memox-size-icon-btn) - var(--memox-hit)) / 2);
+}
+.icon-btn:hover {
+  background: color-mix(in srgb, var(--memox-text-primary) calc(var(--memox-op-hover) * 100%), transparent);
+  color: var(--memox-text-primary);
+}
+.icon-btn svg { width: var(--memox-icon-md); height: var(--memox-icon-md); }
+
+/* ---- Icon tile (colored container) --------------------------------------- */
+.icon-tile {
+  --tile: var(--memox-primary);
+  width: var(--memox-size-icon-tile);
+  height: var(--memox-size-icon-tile);
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--memox-radius-md);
+  background: color-mix(in srgb, var(--tile) calc(var(--memox-op-hover) * 100%), transparent);
+  color: var(--tile);
+}
+.icon-tile.solid {
+  background: var(--tile);
+  color: var(--memox-surface-raised);
+}
+.icon-tile svg { width: var(--memox-icon-md); height: var(--memox-icon-md); }
+
+/* ---- Pill button --------------------------------------------------------- */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--memox-space-2);
+  height: var(--memox-size-button);
+  padding: 0 var(--memox-space-5);
+  border-radius: var(--memox-radius-button);
+  border: 1px solid transparent;
+  font-family: var(--memox-font-sans);
+  font-size: var(--memox-fs-label-large);
+  font-weight: var(--memox-weight-bold);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter .15s ease, background .12s ease;
+}
+.pill-btn svg { width: var(--memox-icon-sm); height: var(--memox-icon-sm); }
+.pill-btn.primary { background: var(--memox-primary); color: var(--memox-on-primary); }
+/* Destructive primary — flat danger fill (no shadow, like .primary). Use this
+   instead of locally overriding --memox-primary to fake a red button. */
+.pill-btn.danger { background: var(--memox-danger); color: var(--memox-true-white); }
+/* Tone-driven solid fill: set --btn to any semantic token. Used by the Banner
+   action button so a notice's retry/CTA matches the banner's tone. */
+.pill-btn.solid { background: var(--btn, var(--memox-primary)); color: var(--memox-true-white); }
+.pill-btn.secondary {
+  background: color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent);
+  color: var(--memox-primary);
+}
+.pill-btn.outline { border-color: var(--memox-outline-variant); color: var(--memox-text-primary); background: transparent; }
+.pill-btn.sm { height: var(--memox-size-chip-sm); padding: 0 var(--memox-space-3); font-size: var(--memox-fs-label-medium); }
+/* Text/link button — borderless, transparent, accent text. Use this for inline
+   section actions ("See all", "Cancel", "Library") instead of hand-overriding
+   .outline with border:none + padding:0. Tight horizontal padding keeps it
+   reading as a link while preserving a tappable height (44, or 24 with .sm).
+   `--btn` recolors it (e.g. a destructive "Remove"). Declared after .sm so a
+   `.ghost.sm` keeps the small height but the link padding. */
+.pill-btn.ghost { background: transparent; border-color: transparent; color: var(--btn, var(--memox-primary)); padding: 0 var(--memox-space-2); }
+.pill-btn:disabled, .pill-btn.disabled { opacity: var(--memox-op-disabled); cursor: not-allowed; box-shadow: none; }
+
+/* ---- Section header ------------------------------------------------------ */
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--memox-space-3);
+}
+.section-head-title {
+  font-size: var(--memox-fs-title-small);
+  font-weight: var(--memox-weight-bold);
+  color: var(--memox-text-primary);
+  letter-spacing: var(--memox-tracking-tight);
+}
+
+/* ---- Overline ------------------------------------------------------------ */
+.ov {
+  display: flex;
+  align-items: center;
+  gap: var(--memox-space-2);
+  font-size: var(--memox-fs-label-medium);
+  font-weight: var(--memox-weight-bold);
+  letter-spacing: var(--memox-ls-section);
+  text-transform: uppercase;
+  color: var(--memox-text-secondary);
+}
+.ov .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--memox-radius-full);
+  background: var(--dot, var(--memox-primary));
+}
+.ov svg { width: var(--memox-icon-sm); height: var(--memox-icon-sm); }
+
+/* ---- Status chip --------------------------------------------------------- */
+.chip {
+  --chip: var(--memox-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--memox-space-1);
+  height: var(--memox-size-chip-sm);
+  padding: 0 var(--memox-space-3);
+  border-radius: var(--memox-radius-full);
+  font-size: var(--memox-fs-label-small);
+  font-weight: var(--memox-weight-bold);
+  letter-spacing: 0.01em;
+  background: color-mix(in srgb, var(--chip) calc(var(--memox-op-selected) * 100%), transparent);
+  color: var(--chip);
+}
+.chip.solid { background: var(--chip); color: var(--memox-surface-raised); }
+.chip.new       { --chip: var(--memox-status-new); }
+.chip.learning  { --chip: var(--memox-status-learning); }
+.chip.reviewing { --chip: var(--memox-status-reviewing); }
+.chip.mastered  { --chip: var(--memox-status-mastered); }
+.chip.due       { --chip: var(--memox-primary); }
+.chip.correct   { --chip: var(--memox-rating-correct); }
+.chip.wrong     { --chip: var(--memox-rating-wrong); }
+.chip.missed    { --chip: var(--memox-self-missed); }
+.chip.partial   { --chip: var(--memox-self-partial); }
+.chip.got       { --chip: var(--memox-self-got); }
+
+/* ---- Progress bar -------------------------------------------------------- */
+.progress {
+  height: 4px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-progress-track);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-primary);
+}
+
+/* ---- List row ------------------------------------------------------------ */
+/* Horizontal padding + matching negative margin gives an inset, rounded press
+   highlight that bleeds slightly past the text column (iOS-style) while keeping
+   the icon/text/divider grid in exactly the same place. Every row is tappable,
+   so the hover/active feedback is uniform across the whole system. */
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--memox-space-3);
+  margin: 0 calc(-1 * var(--memox-space-2));
+  padding: var(--memox-space-3) var(--memox-space-2);
+  min-height: var(--memox-hit); /* guaranteed >=48 touch target, even text-only rows */
+  border-radius: var(--memox-radius-md);
+  cursor: pointer;
+  transition: background .12s ease;
+}
+/* Pointer (mouse) devices get a hover highlight; touch devices do NOT — a
+   sticky :hover background after a tap looks broken on mobile. Touch feedback is
+   the momentary :active press state below, which fires on every device. */
+@media (hover: hover) {
+  .list-row:hover {
+    background: color-mix(in srgb, var(--memox-text-primary) calc(var(--memox-op-hover) * 100%), transparent);
+  }
+}
+.list-row:active {
+  background: color-mix(in srgb, var(--memox-text-primary) calc(var(--memox-op-selected) * 100%), transparent);
+}
+.list-row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.list-row-title {
+  font-size: var(--memox-fs-title-small);
+  font-weight: var(--memox-weight-semibold);
+  color: var(--memox-text-primary);
+  /* graceful long-text handling — never collide with trailing badge/chevron */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-row-meta {
+  font-size: var(--memox-fs-body-small);
+  color: var(--memox-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Trailing area: due badge + chevron sit side by side (never overlap). */
+.list-row-trail {
+  color: var(--memox-text-secondary);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--memox-space-2);
+}
+.list-row-trail svg { width: var(--memox-icon-md); height: var(--memox-icon-md); }
+
+/* ---- Scrim / sheet / dialog ---------------------------------------------- */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--memox-overlay);
+}
+.sheet {
+  background: var(--memox-surface-raised);
+  border-top-left-radius: var(--memox-radius-xl);
+  border-top-right-radius: var(--memox-radius-xl);
+  /* bottom padding clears the home indicator so sheet actions stay reachable */
+  padding: var(--memox-space-5) var(--memox-space-screen) calc(var(--memox-space-6) + var(--memox-safe-bottom));
+  box-shadow: var(--memox-shadow-lg);
+}
+.sheet-grabber {
+  width: 40px;
+  height: 4px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-outline-variant);
+  margin: 0 auto var(--memox-space-4);
+}
+.dialog {
+  background: var(--memox-surface-raised);
+  border-radius: var(--memox-radius-xl);
+  padding: var(--memox-space-6);
+  box-shadow: var(--memox-shadow-lg);
+  border: 1px solid var(--memox-border-ghost);
+}
+
+/* ---- FAB ----------------------------------------------------------------- */
+.fab {
+  width: var(--memox-size-fab);
+  height: var(--memox-size-fab);
+  border-radius: var(--memox-radius-fab);
+  border: none;
+  background: var(--memox-primary);
+  color: var(--memox-on-primary);
+  box-shadow: var(--memox-shadow-md);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.fab svg { width: var(--memox-icon-lg); height: var(--memox-icon-lg); }
+
+/* ---- Text utilities ------------------------------------------------------ */
+.title {
+  font-size: var(--memox-fs-title-small);
+  font-weight: var(--memox-weight-bold);
+  color: var(--memox-text-primary);
+  letter-spacing: var(--memox-tracking-tight);
+}
+.muted { color: var(--memox-text-secondary); }
+/* Stacked label block: a subtitle directly under a title was butting against it
+   (no gap). Give every title→subtitle pair a small, consistent breathing gap
+   system-wide (matches the 3px rhythm of .list-row-main). */
+.title + .muted { margin-top: 6px; }
+
+/* ---- Large icon tile (hero / resume) ------------------------------------- */
+.tile-lg {
+  --tile: var(--memox-primary);
+  width: var(--memox-size-fab);
+  height: var(--memox-size-fab);
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--memox-radius-md);
+}
+.tile-lg svg { width: var(--memox-icon-lg); height: var(--memox-icon-lg); }
+.tile-lg.solid { background: var(--tile); color: var(--memox-surface-raised); }
+.tile-lg.tonal {
+  background: color-mix(in srgb, var(--tile) calc(var(--memox-op-selected) * 100%), transparent);
+  color: var(--tile);
+}
+
+/* ---- Goal ring (circular progress) --------------------------------------- */
+.goal-ring {
+  width: var(--memox-size-ring);
+  height: var(--memox-size-ring);
+  border-radius: var(--memox-radius-full);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.goal-ring-inner {
+  width: calc(var(--memox-size-ring) - 14px);
+  height: calc(var(--memox-size-ring) - 14px);
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-surface-raised);
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+/* ---- Input field --------------------------------------------------------- */
+.field {
+  width: 100%;
+  height: var(--memox-size-button);
+  padding: 0 var(--memox-space-4);
+  background: var(--memox-surface);
+  border: 1px solid var(--memox-outline-variant);
+  border-radius: var(--memox-radius-md);
+  font-family: var(--memox-font-sans);
+  font-size: var(--memox-fs-label-large);
+  font-weight: var(--memox-weight-medium);
+  color: var(--memox-text-primary);
+}
+.field::placeholder { color: var(--memox-text-3); }
+.field:focus { outline: none; border-color: var(--memox-primary); box-shadow: 0 0 0 3px var(--memox-focus-ring); }
+.field.invalid { border-color: var(--memox-rating-wrong); }
+.field.invalid:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--memox-rating-wrong) 28%, transparent); }
+
+/* ---- Study: selectable choice / answer cell ------------------------------
+   Used by Guess (A–E options), Match (pair tiles) and any tap-to-answer grid.
+   Neutral by default; `.selected` shows the in-progress pick (primary), and
+   `.correct` / `.wrong` show the graded result (rating tokens). Works as a
+   <button> or <div>. `--ch` drives border + the leading key badge so every
+   state recolors from one variable. */
+.choice {
+  --ch: var(--memox-outline-variant);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--memox-space-3);
+  width: 100%;
+  /* grow to fit multi-line answers (long meanings/definitions wrap and the cell
+     gets taller) while never dropping below a comfortable tap target. In an
+     equal-height grid the tallest cell sets its row, so a paired term stretches
+     to match its wrapped meaning. */
+  min-height: var(--memox-hit);
+  text-align: left;
+  padding: var(--memox-space-4);
+  border-radius: var(--memox-radius-md);
+  border: 1px solid var(--ch);
+  background: var(--memox-surface);
+  color: var(--memox-text-primary);
+  font-family: var(--memox-font-sans);
+  font-size: var(--memox-fs-label-large);
+  font-weight: var(--memox-weight-semibold);
+  line-height: var(--memox-leading-snug);
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+.choice.selected {
+  --ch: var(--memox-primary);
+  color: var(--memox-primary);
+  background: color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent);
+}
+.choice.correct {
+  --ch: var(--memox-rating-correct);
+  color: var(--memox-rating-correct);
+  background: color-mix(in srgb, var(--memox-rating-correct) calc(var(--memox-op-selected) * 100%), transparent);
+}
+.choice.wrong {
+  --ch: var(--memox-rating-wrong);
+  color: var(--memox-rating-wrong);
+  background: color-mix(in srgb, var(--memox-rating-wrong) calc(var(--memox-op-selected) * 100%), transparent);
+}
+.choice.dim { opacity: var(--memox-op-disabled); }
+/* Uniform-height match card: every card floors at the same comfortable height
+   and its text clamps to a fixed line count, so a single short term and a wrapped
+   meaning render at the EXACT same height — normal, selected, correct and wrong
+   differ only in color/border/icon, never size. Padding, radius, line-height and
+   max-lines all come from the match-card tokens, so the whole grid shares one
+   rhythm. Opt-in (Match) — modes whose answers should size to content (e.g.
+   Guess) leave it off. */
+.choice.clamp {
+  min-height: var(--memox-match-card-min-h);
+  align-items: center;
+  padding: var(--memox-match-card-pad-y) var(--memox-match-card-pad-x);
+  border-radius: var(--memox-match-card-radius);
+  line-height: var(--memox-match-card-line-height);
+}
+.choice.clamp .choice-text {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--memox-match-card-max-lines);
+  line-clamp: var(--memox-match-card-max-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(var(--memox-fs-label-large) * var(--memox-match-card-line-height) * var(--memox-match-card-max-lines));
+}
+/* Tap-to-read affordance: shown only on cards whose meaning is still truncated
+   after clamping, hinting the full text is one tap away (opens a bottom sheet).
+   Sits in the corner so it never shifts the text or the card height. */
+.choice-more {
+  position: absolute;
+  right: var(--memox-space-3);
+  bottom: var(--memox-space-2);
+  display: grid;
+  place-items: center;
+  color: var(--memox-text-3);
+  pointer-events: none;
+}
+.choice-more svg { width: var(--memox-icon-sm); height: var(--memox-icon-sm); }
+
+/* ---- Study: Match pair grid ----------------------------------------------
+   Two equal-width columns laid out as one grid so each row stretches to its
+   tallest cell (a wrapped meaning lifts its paired term to match). Column and
+   row gaps come from the match-card token, so horizontal and vertical rhythm
+   stay equal. Pair this with `.choice.clamp` cells for a fully uniform grid. */
+.match-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--memox-match-card-gap);
+  row-gap: var(--memox-match-card-gap);
+  align-items: stretch;
+}
+/* Long-text strategy: when a grid holds a long definition, the WHOLE grid opts
+   in — every card gets the taller floor and a 3-line clamp at once, so cards
+   stay uniform (no single tall card) while long meanings stay readable. One
+   switch on the grid, never per-card height math in a screen. */
+.match-grid.long-text .choice.clamp { min-height: var(--memox-match-card-long-h); }
+.match-grid.long-text .choice.clamp .choice-text {
+  -webkit-line-clamp: var(--memox-match-card-long-max-lines);
+  line-clamp: var(--memox-match-card-long-max-lines);
+  min-height: calc(var(--memox-fs-label-large) * var(--memox-match-card-line-height) * var(--memox-match-card-long-max-lines));
+}
+/* leading key badge (A–E) — follows the cell's --ch + text color */
+.choice-key {
+  width: var(--memox-size-chip-sm);
+  height: var(--memox-size-chip-sm);
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--memox-radius-full);
+  border: 1px solid var(--ch);
+  font-size: var(--memox-fs-label-medium);
+  font-weight: var(--memox-weight-bold);
+  color: inherit;
+}
+.choice-text { flex: 1; min-width: 0; }
+.choice-mark { flex: none; display: grid; place-items: center; color: var(--ch); }
+.choice-mark svg { width: var(--memox-icon-md); height: var(--memox-icon-md); }
+
+/* ---- Self-rate button (Recall: Missed / Partial / Got it) ----------------
+   Soft tinted, equal-width. `--rt` selects the self-* token. */
+.rate-btn {
+  --rt: var(--memox-primary);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--memox-space-1);
+  padding: var(--memox-space-3) var(--memox-space-2);
+  border-radius: var(--memox-radius-md);
+  border: 1px solid color-mix(in srgb, var(--rt) calc(var(--memox-op-border-subtle) * 100%), transparent);
+  background: color-mix(in srgb, var(--rt) calc(var(--memox-op-selected) * 100%), transparent);
+  color: var(--rt);
+  font-family: var(--memox-font-sans);
+  font-size: var(--memox-fs-label-medium);
+  font-weight: var(--memox-weight-bold);
+  cursor: pointer;
+  transition: filter .12s ease;
+}
+.rate-btn:active { filter: brightness(0.96); }
+.rate-btn svg { width: var(--memox-icon-md); height: var(--memox-icon-md); }
+
+/* ---- Answer reveal box (Recall revealed / Fill wrong) --------------------
+   Tinted panel that surfaces the correct answer. `--ab` defaults to correct. */
+.answer-box {
+  --ab: var(--memox-rating-correct);
+  border-radius: var(--memox-radius-md);
+  border: 1px solid color-mix(in srgb, var(--ab) calc(var(--memox-op-border-subtle) * 100%), transparent);
+  background: color-mix(in srgb, var(--ab) calc(var(--memox-op-selected) * 100%), transparent);
+  padding: var(--memox-space-4);
+}
+
+/* ---- Banner (non-blocking notices) --------------------------------------- */
+.banner {
+  --bn: var(--memox-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--memox-space-3);
+  padding: var(--memox-space-3) var(--memox-space-4);
+  border-radius: var(--memox-radius-md);
+  background: color-mix(in srgb, var(--bn) calc(var(--memox-op-selected) * 100%), transparent);
+  color: var(--bn);
+  font-size: var(--memox-fs-label-large);
+  font-weight: var(--memox-weight-semibold);
+}
+.banner svg { width: var(--memox-icon-md); height: var(--memox-icon-md); flex: none; }
+.banner.warn   { --bn: var(--memox-status-learning); }
+.banner.danger { --bn: var(--memox-danger); }
+.banner.info   { --bn: var(--memox-info); }
+
+/* ---- Skeleton & spinner -------------------------------------------------- */
+.skeleton {
+  background: var(--memox-surface-2);
+  border-radius: var(--memox-radius-sm);
+  animation: memox-pulse 1.4s ease-in-out infinite;
+}
+@keyframes memox-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.spinner {
+  width: var(--memox-icon-lg);
+  height: var(--memox-icon-lg);
+  border-radius: var(--memox-radius-full);
+  border: 2px solid var(--memox-outline-variant);
+  border-top-color: var(--memox-primary);
+  animation: memox-spin 0.8s linear infinite;
+}
+@keyframes memox-spin { to { transform: rotate(360deg); } }
+
+/* Hairline divider between stacked list rows. `.inset` aligns the divider to
+   the text column (past the icon tile) for a more polished, iOS-like list. */
+.hr { height: 1px; background: var(--memox-border-ghost); border: 0; margin: 0; }
+.hr.inset { margin-left: calc(var(--memox-size-icon-tile) + var(--memox-space-3)); }
+
+/* ---- Avatar -------------------------------------------------------------- */
+.avatar {
+  --av: var(--memox-primary);
+  width: var(--memox-size-icon-tile);
+  height: var(--memox-size-icon-tile);
+  flex: none;
+  border-radius: var(--memox-radius-full);
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--av) calc(var(--memox-op-selected) * 100%), transparent);
+  color: var(--av);
+  font-weight: var(--memox-weight-bold);
+  font-size: var(--memox-fs-label-large);
+  overflow: hidden;
+}
+.avatar.lg { width: 56px; height: 56px; font-size: var(--memox-size-h2); }
+.avatar svg { width: var(--memox-icon-md); height: var(--memox-icon-md); }
+
+/* ---- Switch (on / off toggle) -------------------------------------------- */
+.switch {
+  position: relative;
+  flex: none;
+  width: 46px;
+  height: 28px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-outline-variant);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-true-white);
+  box-shadow: var(--memox-shadow-sm);
+  transition: transform .15s ease;
+}
+.switch.on { background: var(--memox-primary); }
+.switch.on::after { transform: translateX(18px); }
+.switch:disabled { opacity: var(--memox-op-disabled); cursor: not-allowed; }
+
+/* ---- Slider (value track) ------------------------------------------------ */
+.slider { display: flex; align-items: center; gap: var(--memox-space-3); }
+.slider-track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-progress-track);
+}
+.slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-primary);
+}
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-surface-raised);
+  border: 2px solid var(--memox-primary);
+  box-shadow: var(--memox-shadow-sm);
+  transform: translate(-50%, -50%);
+}
+
+/* ---- Radio (single-select indicator) ------------------------------------- */
+.radio {
+  width: var(--memox-icon-lg);
+  height: var(--memox-icon-lg);
+  flex: none;
+  border-radius: var(--memox-radius-full);
+  border: 2px solid var(--memox-outline);
+  display: grid;
+  place-items: center;
+  transition: border-color .12s ease;
+}
+.radio.on { border-color: var(--memox-primary); }
+.radio.on::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-primary);
+}
+
+/* ---- Segmented control (range / mode toggle) ----------------------------
+   A pill of 2–3 mutually-exclusive options (e.g. Week | Month). The active
+   thumb is a raised surface with a NEUTRAL shadow (calm — no colored glow).
+   One owner so every range/mode toggle reads identically across screens. */
+.segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--memox-space-1);
+  padding: var(--memox-space-1);
+  background: var(--memox-surface-2);
+  border: 1px solid var(--memox-border-ghost);
+  border-radius: var(--memox-radius-full);
+}
+.segmented-item {
+  height: var(--memox-size-chip-sm);
+  padding: 0 var(--memox-space-4);
+  border: none;
+  background: transparent;
+  border-radius: var(--memox-radius-full);
+  font-family: var(--memox-font-sans);
+  font-size: var(--memox-fs-label-medium);
+  font-weight: var(--memox-weight-bold);
+  color: var(--memox-text-secondary);
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease;
+}
+.segmented-item.active {
+  background: var(--memox-surface-raised);
+  color: var(--memox-text-primary);
+  box-shadow: var(--memox-shadow-sm);
+}
+
+/* ---- Waveform (TTS playing) ---------------------------------------------- */
+.waveform { display: inline-flex; align-items: center; gap: 3px; height: var(--memox-icon-lg); }
+.waveform span {
+  width: 3px;
+  border-radius: var(--memox-radius-full);
+  background: var(--memox-primary);
+  animation: memox-wave 0.9s ease-in-out infinite;
+}
+.waveform span:nth-child(2) { animation-delay: .15s; }
+.waveform span:nth-child(3) { animation-delay: .3s; }
+.waveform span:nth-child(4) { animation-delay: .45s; }
+.waveform span:nth-child(5) { animation-delay: .6s; }
+@keyframes memox-wave { 0%, 100% { height: 6px; } 50% { height: 20px; } }

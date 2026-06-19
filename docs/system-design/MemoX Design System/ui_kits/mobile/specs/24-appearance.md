@@ -40,688 +40,455 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: System
 
 ```text
-- node: app
-  mx: MxScaffold
+- node: div
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,1 388x48]
+    rel: [1,1 388x48]
+  layout: flex:row justify:between align:center
+  flex: shrink:0
+  spacing: pad:0/26/0/30
+  - node: sb-time
+    text: 9:41
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
-      box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
-        box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
+      abs: [31,16 33x19]
+      rel: [30,15 33x19]
+    style: font:15/700 color:text
+  - node: sb-icons
     box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
+      abs: [277,13 86x24]
+      rel: [276,12 86x24]
+    layout: flex:row gap:7 align:center
+    - node: icon:signal-high
       box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
+        abs: [277,13 24x24]
+        rel: [0,0 24x24]
+      position: clip
+    - node: icon:wifi
+      box:
+        abs: [308,13 24x24]
+        rel: [31,0 24x24]
+      position: clip
+    - node: icon:battery-full
+      box:
+        abs: [339,13 24x24]
+        rel: [62,0 24x24]
+      position: clip
+- node: phone-canvas
+  box:
+    abs: [1,49 388x720]
+    rel: [1,49 388x720]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,49 388x720]
+      rel: [0,0 388x720]
+    layout: flex:col
+    size: minh:100
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
+      box:
+        abs: [1,49 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:8 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
         box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
+          abs: [21,57 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
         - node: icon:arrow-left
           box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
+            abs: [31,67 20x20]
+            rel: [10,10 20x20]
           position: clip
-    - node: title
-      text: Appearance
+      - node: appbar-title
+        text: Appearance
+        box:
+          abs: [77,62 292x30]
+          rel: [76,13 292x30]
+        flex: grow:1 basis:0 layout_hint:expanded
+        spacing: margin:0/0/0/8
+        style: font:24/700 color:text tracking:-0.5
+    - node: div
       box:
-        abs: [56,61 290x18]
-        rel: [48,9 290x18]
+        abs: [1,105 388x664]
+        rel: [0,56 388x664]
+      layout: flex:col gap:8
       flex: grow:1 basis:0 layout_hint:expanded
-      style: font:16/700 color:#000000 tracking:-0.3
-  - node: scroll
-    box:
-      abs: [8,88 390x700]
-      rel: [0,80 390x700]
-    flex: grow:1 basis:0 layout_hint:expanded
-    position: layout_hint:scroll
-    - node: ov
-      text: Theme
-      box:
-        abs: [8,88 390x20]
-        rel: [0,0 390x20]
-      spacing: pad:0/4/8/4
-      style: font:11/700 color:#000000 tracking:0.6
-    - node: div
-      box:
-        abs: [8,108 390x117]
-        rel: [0,20 390x117]
-      layout: grid cols:3 gap:10
-      spacing: margin:0/0/18/0
-      - node: div
+      spacing: pad:16/20/24/20
+      position: layout_hint:scroll
+      - node: ov
+        text: Theme
         box:
-          abs: [8,108 123x117]
-          rel: [0,0 123x117]
-        spacing: pad:8
-        style: r:16 shadow:1/2
-        - node: div
+          abs: [21,121 348x15]
+          rel: [20,16 348x15]
+        layout: flex:row gap:8 align:center
+        spacing: pad:0/0/0/4
+        style: font:12/700 color:text-2 tracking:1
+      - node: list-card
+        box:
+          abs: [21,144 348x260]
+          rel: [20,39 348x260]
+        spacing: pad:8/16
+        style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+        - node: list-row
           box:
-            abs: [16,116 107x64]
-            rel: [8,8 107x64]
-          position: pos:relative clip
-          style: bg:#f7f9fe r:10 border:1px #7c85ab@18
+            abs: [30,153 330x80]
+            rel: [9,9 330x80]
+          layout: flex:row gap:12 align:center
+          spacing: pad:12/8 margin:0/-8
+          size: minh:48
+          style: r:14
           - node: div
             box:
-              abs: [70,117 53x62]
-              rel: [54,1 53x62]
-            position: pos:absolute
-            style: bg:#0a0e27
-          - node: div
-            box:
-              abs: [25,126 20x20]
-              rel: [9,10 20x20]
-            position: pos:absolute
-            style: bg:#5265f5 r:6
-          - node: div
-            box:
-              abs: [25,152 28x5]
-              rel: [9,36 28x5]
-            position: pos:absolute
-            style: bg:#dae0ef r:999
-          - node: div
-            box:
-              abs: [25,162 18x5]
-              rel: [9,46 18x5]
-            position: pos:absolute
-            style: bg:#dae0ef r:999
-        - node: div
-          box:
-            abs: [16,188 107x16]
-            rel: [8,80 107x16]
-          layout: flex:row gap:4 justify:between align:center
-          spacing: margin:8/0/0/0
-          - node: span
-            text: System
-            box:
-              abs: [16,188 40x16]
-              rel: [0,0 40x16]
-            style: font:13/600 color:#000000
-          - node: span
-            box:
-              abs: [109,189 14x14]
-              rel: [93,1 14x14]
-            layout: flex:row
-            - node: icon:check
+              abs: [38,165 56x56]
+              rel: [8,12 56x56]
+            layout: flex:col gap:4
+            flex: shrink:0
+            spacing: pad:8
+            position: clip
+            style: bg:bg r:14 border:1px border
+            - node: div
               box:
-                abs: [109,189 14x14]
-                rel: [0,0 14x14]
-              position: clip
-        - node: div
-          text: Match phone
-          box:
-            abs: [16,205 107x12]
-            rel: [8,97 107x12]
-          spacing: margin:1/0/0/0
-          style: font:11/400 color:#000000
-      - node: div
-        box:
-          abs: [141,108 123x117]
-          rel: [133,0 123x117]
-        spacing: pad:8
-        style: r:16
-        - node: div
-          box:
-            abs: [149,116 107x64]
-            rel: [8,8 107x64]
-          position: pos:relative clip
-          style: bg:#f7f9fe r:10 border:1px #7c85ab@18
-          - node: div
-            box:
-              abs: [158,126 20x20]
-              rel: [9,10 20x20]
-            position: pos:absolute
-            style: bg:#5265f5 r:6
-          - node: div
-            box:
-              abs: [158,152 28x5]
-              rel: [9,36 28x5]
-            position: pos:absolute
-            style: bg:#dae0ef r:999
-          - node: div
-            box:
-              abs: [158,162 18x5]
-              rel: [9,46 18x5]
-            position: pos:absolute
-            style: bg:#dae0ef r:999
-        - node: div
-          box:
-            abs: [149,188 107x16]
-            rel: [8,80 107x16]
-          layout: flex:row gap:4 justify:between align:center
-          spacing: margin:8/0/0/0
-          - node: span
-            text: Light
-            box:
-              abs: [149,188 30x16]
-              rel: [0,0 30x16]
-            style: font:13/600 color:#000000
-        - node: div
-          text: Tokyo Pure
-          box:
-            abs: [149,205 107x12]
-            rel: [8,97 107x12]
-          spacing: margin:1/0/0/0
-          style: font:11/400 color:#000000
-      - node: div
-        box:
-          abs: [275,108 123x117]
-          rel: [267,0 123x117]
-        spacing: pad:8
-        style: r:16
-        - node: div
-          box:
-            abs: [283,116 107x64]
-            rel: [8,8 107x64]
-          position: pos:relative clip
-          style: bg:#0a0e27 r:10 border:1px #7c85ab@18
-          - node: div
-            box:
-              abs: [292,126 20x20]
-              rel: [9,10 20x20]
-            position: pos:absolute
-            style: bg:#5265f5 r:6
-          - node: div
-            box:
-              abs: [292,152 28x5]
-              rel: [9,36 28x5]
-            position: pos:absolute
-            style: bg:#2c356e r:999
-          - node: div
-            box:
-              abs: [292,162 18x5]
-              rel: [9,46 18x5]
-            position: pos:absolute
-            style: bg:#2c356e r:999
-        - node: div
-          box:
-            abs: [283,188 107x16]
-            rel: [8,80 107x16]
-          layout: flex:row gap:4 justify:between align:center
-          spacing: margin:8/0/0/0
-          - node: span
-            text: Dark
-            box:
-              abs: [283,188 29x16]
-              rel: [0,0 29x16]
-            style: font:13/600 color:#000000
-        - node: div
-          text: Tokyo Nebula
-          box:
-            abs: [283,205 107x12]
-            rel: [8,97 107x12]
-          spacing: margin:1/0/0/0
-          style: font:11/400 color:#000000
-    - node: ov
-      text: Accent color
-      box:
-        abs: [8,243 390x20]
-        rel: [0,155 390x20]
-      spacing: pad:0/4/8/4
-      style: font:11/700 color:#000000 tracking:0.6
-    - node: div
-      box:
-        abs: [26,281 354x56]
-        rel: [18,193 354x56]
-      layout: flex:row gap:6 justify:between
-      repeat: x6(unit=1)
-      - node: div
-        item: item[1]
-        box:
-          abs: [26,281 38x56]
-          rel: [0,0 38x56]
-        layout: flex:col gap:7 align:center
-        - node: span
-          box:
-            abs: [26,281 38x38]
-            rel: [0,0 38x38]
-          layout: flex:row justify:center align:center
-          style: bg:#5265f5 r:999
-          - node: span
-            box:
-              abs: [37,292 16x16]
-              rel: [11,11 16x16]
-            layout: flex:row
-            - node: icon:check
+                abs: [47,174 21x8]
+                rel: [9,9 21x8]
+              style: bg:accent r:6
+            - node: div
               box:
-                abs: [37,292 16x16]
-                rel: [0,0 16x16]
-              position: clip
-        - node: span
-          text: Indigo
-          box:
-            abs: [30,326 29x11]
-            rel: [4,45 29x11]
-          style: font:10.5/600 color:#000000
-      - node: div
-        item: item[2]
-        box:
-          abs: [89,281 38x56]
-          rel: [63,0 38x56]
-        layout: flex:col gap:7 align:center
-        - node: span
-          box:
-            abs: [89,281 38x38]
-            rel: [0,0 38x38]
-          layout: flex:row justify:center align:center
-          style: bg:#a78bfa r:999
-        - node: span
-          text: Violet
-          box:
-            abs: [95,326 26x11]
-            rel: [6,45 26x11]
-          style: font:10.5/500 color:#000000
-      - node: div
-        item: item[3]
-        box:
-          abs: [152,281 38x56]
-          rel: [126,0 38x56]
-        layout: flex:col gap:7 align:center
-        - node: span
-          box:
-            abs: [152,281 38x38]
-            rel: [0,0 38x38]
-          layout: flex:row justify:center align:center
-          style: bg:#4db6ac r:999
-        - node: span
-          text: Teal
-          box:
-            abs: [162,326 18x11]
-            rel: [10,45 18x11]
-          style: font:10.5/500 color:#000000
-      - node: div
-        item: item[4]
-        box:
-          abs: [216,281 38x56]
-          rel: [190,0 38x56]
-        layout: flex:col gap:7 align:center
-        - node: span
-          box:
-            abs: [216,281 38x38]
-            rel: [0,0 38x38]
-          layout: flex:row justify:center align:center
-          style: bg:#e57373 r:999
-        - node: span
-          text: Rose
-          box:
-            abs: [224,326 21x11]
-            rel: [9,45 21x11]
-          style: font:10.5/500 color:#000000
-      - node: div
-        item: item[5]
-        box:
-          abs: [279,281 38x56]
-          rel: [253,0 38x56]
-        layout: flex:col gap:7 align:center
-        - node: span
-          box:
-            abs: [279,281 38x38]
-            rel: [0,0 38x38]
-          layout: flex:row justify:center align:center
-          style: bg:#ffb74d r:999
-        - node: span
-          text: Amber
-          box:
-            abs: [283,326 29x11]
-            rel: [4,45 29x11]
-          style: font:10.5/500 color:#000000
-      - node: div
-        item: item[6]
-        box:
-          abs: [342,281 38x56]
-          rel: [316,0 38x56]
-        layout: flex:col gap:7 align:center
-        - node: span
-          box:
-            abs: [342,281 38x38]
-            rel: [0,0 38x38]
-          layout: flex:row justify:center align:center
-          style: bg:#81c784 r:999
-        - node: span
-          text: Sage
-          box:
-            abs: [351,326 20x11]
-            rel: [9,45 20x11]
-          style: font:10.5/500 color:#000000
-    - node: ov
-      text: Display
-      box:
-        abs: [8,373 390x20]
-        rel: [0,285 390x20]
-      spacing: pad:0/4/8/4
-      style: font:11/700 color:#000000 tracking:0.6
-    - node: card
-      mx: MxCard
-      box:
-        abs: [8,393 390x123]
-        rel: [0,305 390x123]
-      spacing: margin:0/0/8/0
-      position: clip
-      style: r:20
-      - node: div
-        box:
-          abs: [8,393 390x61]
-          rel: [0,0 390x61]
-        layout: grid cols:3 gap:12 align:center
-        spacing: pad:13/14
-        - node: div
-          box:
-            abs: [22,409 30x30]
-            rel: [14,16 30x30]
-          layout: flex:row justify:center align:center
-          style: r:9
-          - node: span
-            box:
-              abs: [30,416 15x15]
-              rel: [8,8 15x15]
-            layout: flex:row
-            - node: icon:contrast
+                abs: [47,186 38x8]
+                rel: [9,21 38x8]
+              style: bg:accent-contrast r:6
+            - node: div
               box:
-                abs: [30,416 15x15]
-                rel: [0,0 15x15]
-              position: clip
-        - node: div
-          box:
-            abs: [68,406 260x35]
-            rel: [60,13 260x35]
-          - node: div
-            text: High contrast
+                abs: [47,198 30x8]
+                rel: [9,33 30x8]
+              style: bg:accent-contrast r:6
+          - node: list-row-main
             box:
-              abs: [68,406 260x16]
-              rel: [0,0 260x16]
-            style: font:14/600 color:#000000 tracking:-0.1
-          - node: div
-            text: Stronger borders and text
-            box:
-              abs: [68,424 260x17]
-              rel: [0,18 260x17]
-            spacing: margin:2/0/0/0
-            style: font:12/400/17 color:#000000
-      - node: div
-        box:
-          abs: [8,454 390x61]
-          rel: [0,61 390x61]
-        layout: grid cols:3 gap:12 align:center
-        spacing: pad:13/14
-        - node: div
-          box:
-            abs: [22,470 30x30]
-            rel: [14,16 30x30]
-          layout: flex:row justify:center align:center
-          style: r:9
-          - node: span
-            box:
-              abs: [30,478 15x15]
-              rel: [8,8 15x15]
-            layout: flex:row
-            - node: icon:zap-off
+              abs: [106,173 210x40]
+              rel: [76,20 210x40]
+            layout: flex:col gap:3
+            flex: grow:1 basis:0 layout_hint:expanded
+            - node: list-row-title
+              text: Light
               box:
-                abs: [30,478 15x15]
-                rel: [0,0 15x15]
+                abs: [106,173 210x21]
+                rel: [0,0 210x21]
               position: clip
+              style: font:16/600 color:text
+            - node: list-row-meta
+              text: Always light
+              box:
+                abs: [106,197 210x16]
+                rel: [0,24 210x16]
+              position: clip
+              style: font:13/400 color:text-2
+          - node: radio
+            box:
+              abs: [328,181 24x24]
+              rel: [298,28 24x24]
+            layout: grid align:center
+            flex: shrink:0
+            style: r:999 border:2px border-strong
         - node: div
           box:
-            abs: [68,467 260x35]
-            rel: [60,13 260x35]
-          - node: div
-            text: Reduce motion
+            abs: [38,233 314x81]
+            rel: [17,89 314x81]
+          - node: hr
             box:
-              abs: [68,467 260x16]
-              rel: [0,0 260x16]
-            style: font:14/600 color:#000000 tracking:-0.1
-          - node: div
-            text: Minimize animations and transitions
+              abs: [38,233 314x1]
+              rel: [0,0 314x1]
+            style: bg:divider
+          - node: list-row
             box:
-              abs: [68,485 260x17]
-              rel: [0,18 260x17]
-            spacing: margin:2/0/0/0
-            style: font:12/400/17 color:#000000
-    - node: div
-      text: Changes apply instantly.
-      box:
-        abs: [8,524 390x38]
-        rel: [0,436 390x38]
-      spacing: pad:4/0/16/0
-      style: font:12/400/18 color:#000000 text:center
+              abs: [30,234 330x80]
+              rel: [-8,1 330x80]
+            layout: flex:row gap:12 align:center
+            spacing: pad:12/8 margin:0/-8
+            size: minh:48
+            style: r:14
+            - node: div
+              box:
+                abs: [38,246 56x56]
+                rel: [8,12 56x56]
+              layout: flex:col gap:4
+              flex: shrink:0
+              spacing: pad:8
+              position: clip
+              style: bg:#070c27 r:14 border:1px #272c48
+              - node: div
+                box:
+                  abs: [47,255 21x8]
+                  rel: [9,9 21x8]
+                style: bg:#5e72ff r:6
+              - node: div
+                box:
+                  abs: [47,267 38x8]
+                  rel: [9,21 38x8]
+                style: bg:#111633 r:6
+              - node: div
+                box:
+                  abs: [47,279 30x8]
+                  rel: [9,33 30x8]
+                style: bg:#111633 r:6
+            - node: list-row-main
+              box:
+                abs: [106,254 210x40]
+                rel: [76,20 210x40]
+              layout: flex:col gap:3
+              flex: grow:1 basis:0 layout_hint:expanded
+              - node: list-row-title
+                text: Dark
+                box:
+                  abs: [106,254 210x21]
+                  rel: [0,0 210x21]
+                position: clip
+                style: font:16/600 color:text
+              - node: list-row-meta
+                text: Always dark
+                box:
+                  abs: [106,278 210x16]
+                  rel: [0,24 210x16]
+                position: clip
+                style: font:13/400 color:text-2
+            - node: radio
+              box:
+                abs: [328,262 24x24]
+                rel: [298,28 24x24]
+              layout: grid align:center
+              flex: shrink:0
+              style: r:999 border:2px border-strong
+        - node: div
+          box:
+            abs: [38,314 314x81]
+            rel: [17,170 314x81]
+          - node: hr
+            box:
+              abs: [38,314 314x1]
+              rel: [0,0 314x1]
+            style: bg:divider
+          - node: list-row
+            box:
+              abs: [30,315 330x80]
+              rel: [-8,1 330x80]
+            layout: flex:row gap:12 align:center
+            spacing: pad:12/8 margin:0/-8
+            size: minh:48
+            style: r:14
+            - node: div
+              box:
+                abs: [38,327 56x56]
+                rel: [8,12 56x56]
+              layout: flex:row
+              flex: shrink:0
+              position: clip
+              style: r:14 border:1px border
+              - node: div
+                box:
+                  abs: [39,328 27x54]
+                  rel: [1,1 27x54]
+                layout: flex:col gap:4
+                flex: grow:1 basis:0 layout_hint:expanded
+                spacing: pad:4
+                style: bg:bg
+                - node: div
+                  box:
+                    abs: [43,332 19x8]
+                    rel: [4,4 19x8]
+                  style: bg:accent r:6
+                - node: div
+                  box:
+                    abs: [43,344 19x8]
+                    rel: [4,16 19x8]
+                  style: bg:accent-contrast r:6
+              - node: div
+                box:
+                  abs: [66,328 27x54]
+                  rel: [28,1 27x54]
+                layout: flex:col gap:4
+                flex: grow:1 basis:0 layout_hint:expanded
+                spacing: pad:4
+                style: bg:#070c27
+                - node: div
+                  box:
+                    abs: [70,332 19x8]
+                    rel: [4,4 19x8]
+                  style: bg:#5e72ff r:6
+                - node: div
+                  box:
+                    abs: [70,344 19x8]
+                    rel: [4,16 19x8]
+                  style: bg:#111633 r:6
+            - node: list-row-main
+              box:
+                abs: [106,335 210x40]
+                rel: [76,20 210x40]
+              layout: flex:col gap:3
+              flex: grow:1 basis:0 layout_hint:expanded
+              - node: list-row-title
+                text: System
+                box:
+                  abs: [106,335 210x21]
+                  rel: [0,0 210x21]
+                position: clip
+                style: font:16/600 color:text
+              - node: list-row-meta
+                text: Match device setting
+                box:
+                  abs: [106,359 210x16]
+                  rel: [0,24 210x16]
+                position: clip
+                style: font:13/400 color:text-2
+            - node: radio
+              box:
+                abs: [328,343 24x24]
+                rel: [298,28 24x24]
+              layout: grid cols:1 align:center
+              flex: shrink:0
+              style: r:999 border:2px accent
+      - node: muted
+        text: System follows your device's light/dark schedule.
+        box:
+          abs: [21,412 348x24]
+          rel: [20,307 348x24]
+        layout: flex:row gap:8 align:center
+        spacing: pad:8/4/0/4
+        style: font:13/400 color:text-2
+        - node: icon:info
+          box:
+            abs: [25,420 16x16]
+            rel: [4,8 16x16]
+          position: clip
 ```
 
 ## State: Light (ordered diff vs System)
 
 ```diff
-  - node: div
+  - node: list-row-meta
+  text: Always light
   box:
-  abs: [8,108 390x117]
-  rel: [0,20 390x117]
-  layout: grid cols:3 gap:10
-  spacing: margin:0/0/18/0
-- - node: div
+  abs: [106,197 210x16]
+  rel: [0,24 210x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
 - box:
-- abs: [8,108 123x117]
-- rel: [0,0 123x117]
-- spacing: pad:8
-- style: r:16 shadow:1/2
-+ - node: div
+- abs: [328,181 24x24]
+- rel: [298,28 24x24]
+- layout: grid align:center
+- flex: shrink:0
+- style: r:999 border:2px border-strong
++ - node: radio
 + box:
-+ abs: [8,108 123x117]
-+ rel: [0,0 123x117]
-+ spacing: pad:8
-+ style: r:16
++ abs: [328,181 24x24]
++ rel: [298,28 24x24]
++ layout: grid cols:1 align:center
++ flex: shrink:0
++ style: r:999 border:2px accent
   - node: div
   box:
-  abs: [16,116 107x64]
-  rel: [8,8 107x64]
-  position: pos:relative clip
-  style: bg:#f7f9fe r:10 border:1px #7c85ab@18
+  abs: [38,233 314x81]
+  rel: [17,89 314x81]
   ...
-  - node: span
-  text: System
+  - node: list-row-meta
+  text: Match device setting
   box:
-  abs: [16,188 40x16]
-  rel: [0,0 40x16]
-  style: font:13/600 color:#000000
-- - node: span
+  abs: [106,359 210x16]
+  rel: [0,24 210x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
 - box:
-- abs: [109,189 14x14]
-- rel: [93,1 14x14]
-- layout: flex:row
-- - node: icon:check
-- box:
-- abs: [109,189 14x14]
-- rel: [0,0 14x14]
-- position: clip
-  - node: div
-  text: Match phone
-  box:
-  abs: [16,205 107x12]
-  rel: [8,97 107x12]
-  spacing: margin:1/0/0/0
-  style: font:11/400 color:#000000
-- - node: div
-- box:
-- abs: [141,108 123x117]
-- rel: [133,0 123x117]
-- spacing: pad:8
-- style: r:16
-+ - node: div
+- abs: [328,343 24x24]
+- rel: [298,28 24x24]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- style: r:999 border:2px accent
++ - node: radio
 + box:
-+ abs: [141,108 123x117]
-+ rel: [133,0 123x117]
-+ spacing: pad:8
-+ style: r:16 shadow:1/2
-  - node: div
++ abs: [328,343 24x24]
++ rel: [298,28 24x24]
++ layout: grid align:center
++ flex: shrink:0
++ style: r:999 border:2px border-strong
+  - node: muted
+  text: System follows your device's light/dark schedule.
   box:
-  abs: [149,116 107x64]
-  rel: [8,8 107x64]
-  position: pos:relative clip
-  style: bg:#f7f9fe r:10 border:1px #7c85ab@18
-  ...
-  - node: span
-  text: Light
-  box:
-  abs: [149,188 30x16]
-  rel: [0,0 30x16]
-  style: font:13/600 color:#000000
-+ - node: span
-+ box:
-+ abs: [243,189 14x14]
-+ rel: [93,1 14x14]
-+ layout: flex:row
-+ - node: icon:check
-+ box:
-+ abs: [243,189 14x14]
-+ rel: [0,0 14x14]
-+ position: clip
-  - node: div
-  text: Tokyo Pure
-  box:
-  abs: [149,205 107x12]
-  rel: [8,97 107x12]
-  spacing: margin:1/0/0/0
-  style: font:11/400 color:#000000
+  abs: [21,412 348x24]
+  rel: [20,307 348x24]
+  layout: flex:row gap:8 align:center
+  spacing: pad:8/4/0/4
+  style: font:13/400 color:text-2
   ...
 ```
 
 ## State: Dark (ordered diff vs System)
 
 ```diff
-  - node: div
+  - node: list-row-meta
+  text: Always dark
   box:
-  abs: [8,108 390x117]
-  rel: [0,20 390x117]
-  layout: grid cols:3 gap:10
-  spacing: margin:0/0/18/0
-- - node: div
+  abs: [106,278 210x16]
+  rel: [0,24 210x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
 - box:
-- abs: [8,108 123x117]
-- rel: [0,0 123x117]
-- spacing: pad:8
-- style: r:16 shadow:1/2
-+ - node: div
+- abs: [328,262 24x24]
+- rel: [298,28 24x24]
+- layout: grid align:center
+- flex: shrink:0
+- style: r:999 border:2px border-strong
++ - node: radio
 + box:
-+ abs: [8,108 123x117]
-+ rel: [0,0 123x117]
-+ spacing: pad:8
-+ style: r:16
++ abs: [328,262 24x24]
++ rel: [298,28 24x24]
++ layout: grid cols:1 align:center
++ flex: shrink:0
++ style: r:999 border:2px accent
   - node: div
   box:
-  abs: [16,116 107x64]
-  rel: [8,8 107x64]
-  position: pos:relative clip
-  style: bg:#f7f9fe r:10 border:1px #7c85ab@18
+  abs: [38,314 314x81]
+  rel: [17,170 314x81]
   ...
-  - node: span
-  text: System
+  - node: list-row-meta
+  text: Match device setting
   box:
-  abs: [16,188 40x16]
-  rel: [0,0 40x16]
-  style: font:13/600 color:#000000
-- - node: span
+  abs: [106,359 210x16]
+  rel: [0,24 210x16]
+  position: clip
+  style: font:13/400 color:text-2
+- - node: radio
 - box:
-- abs: [109,189 14x14]
-- rel: [93,1 14x14]
-- layout: flex:row
-- - node: icon:check
-- box:
-- abs: [109,189 14x14]
-- rel: [0,0 14x14]
-- position: clip
-  - node: div
-  text: Match phone
-  box:
-  abs: [16,205 107x12]
-  rel: [8,97 107x12]
-  spacing: margin:1/0/0/0
-  style: font:11/400 color:#000000
-  ...
-  - node: div
-  text: Tokyo Pure
-  box:
-  abs: [149,205 107x12]
-  rel: [8,97 107x12]
-  spacing: margin:1/0/0/0
-  style: font:11/400 color:#000000
-- - node: div
-- box:
-- abs: [275,108 123x117]
-- rel: [267,0 123x117]
-- spacing: pad:8
-- style: r:16
-+ - node: div
+- abs: [328,343 24x24]
+- rel: [298,28 24x24]
+- layout: grid cols:1 align:center
+- flex: shrink:0
+- style: r:999 border:2px accent
++ - node: radio
 + box:
-+ abs: [275,108 123x117]
-+ rel: [267,0 123x117]
-+ spacing: pad:8
-+ style: r:16 shadow:1/2
-  - node: div
++ abs: [328,343 24x24]
++ rel: [298,28 24x24]
++ layout: grid align:center
++ flex: shrink:0
++ style: r:999 border:2px border-strong
+  - node: muted
+  text: System follows your device's light/dark schedule.
   box:
-  abs: [283,116 107x64]
-  rel: [8,8 107x64]
-  position: pos:relative clip
-  style: bg:#0a0e27 r:10 border:1px #7c85ab@18
-  ...
-  - node: span
-  text: Dark
-  box:
-  abs: [283,188 29x16]
-  rel: [0,0 29x16]
-  style: font:13/600 color:#000000
-+ - node: span
-+ box:
-+ abs: [376,189 14x14]
-+ rel: [93,1 14x14]
-+ layout: flex:row
-+ - node: icon:check
-+ box:
-+ abs: [376,189 14x14]
-+ rel: [0,0 14x14]
-+ position: clip
-  - node: div
-  text: Tokyo Nebula
-  box:
-  abs: [283,205 107x12]
-  rel: [8,97 107x12]
-  spacing: margin:1/0/0/0
-  style: font:11/400 color:#000000
+  abs: [21,412 348x24]
+  rel: [20,307 348x24]
+  layout: flex:row gap:8 align:center
+  spacing: pad:8/4/0/4
+  style: font:13/400 color:text-2
   ...
 ```

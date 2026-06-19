@@ -40,241 +40,344 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Hidden
 
 ```text
-- node: app
-  mx: MxScaffold
+- node: div
   box:
-    abs: [8,8 390x780]
-    rel: [8,8 390x780]
-  layout: flex:col
-  position: pos:relative clip
-  - node: statusbar
+    abs: [1,1 388x48]
+    rel: [1,1 388x48]
+  layout: flex:row justify:between align:center
+  flex: shrink:0
+  spacing: pad:0/26/0/30
+  - node: sb-time
+    text: 9:41
     box:
-      abs: [8,8 390x44]
-      rel: [0,0 390x44]
-    layout: flex:row justify:between align:center
-    spacing: pad:0/24
-    - node: span
-      text: 9:41
-      box:
-        abs: [32,22 26x16]
-        rel: [24,14 26x16]
-      style: font:14/600 color:#000000
-    - node: span
-      box:
-        abs: [314,24 60x12]
-        rel: [306,16 60x12]
-      layout: flex:row gap:4 align:center
-      - node: svg
-        box:
-          abs: [314,24 16x12]
-          rel: [0,0 16x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [334,24 14x12]
-          rel: [20,0 14x12]
-        position: clip
-      - node: svg
-        box:
-          abs: [352,24 22x12]
-          rel: [38,0 22x12]
-        position: clip
-  - node: appbar
-    mx: MxAppBar
+      abs: [31,16 33x19]
+      rel: [30,15 33x19]
+    style: font:15/700 color:text
+  - node: sb-icons
     box:
-      abs: [8,52 390x36]
-      rel: [0,44 390x36]
-    layout: flex:row gap:4 justify:between align:center
-    spacing: pad:0/8
-    - node: icon-btn
-      mx: MxIconButton
+      abs: [277,13 86x24]
+      rel: [276,12 86x24]
+    layout: flex:row gap:7 align:center
+    - node: icon:signal-high
       box:
-        abs: [16,52 36x36]
-        rel: [8,0 36x36]
-      layout: flex:row justify:center align:center
-      position: pos:relative
-      style: r:999
-      - node: span
+        abs: [277,13 24x24]
+        rel: [0,0 24x24]
+      position: clip
+    - node: icon:wifi
+      box:
+        abs: [308,13 24x24]
+        rel: [31,0 24x24]
+      position: clip
+    - node: icon:battery-full
+      box:
+        abs: [339,13 24x24]
+        rel: [62,0 24x24]
+      position: clip
+- node: phone-canvas
+  box:
+    abs: [1,49 388x720]
+    rel: [1,49 388x720]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,49 388x720]
+      rel: [0,0 388x720]
+    layout: flex:col
+    size: minh:100
+    position: pos:relative
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
+      box:
+        abs: [1,49 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:12 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
         box:
-          abs: [24,60 20x20]
-          rel: [8,8 20x20]
-        layout: flex:row
+          abs: [21,57 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
         - node: icon:x
           box:
-            abs: [24,60 20x20]
-            rel: [0,0 20x20]
+            abs: [31,67 20x20]
+            rel: [10,10 20x20]
           position: clip
-    - node: div
-      box:
-        abs: [62,60 291x21]
-        rel: [54,8 291x21]
-      layout: flex:row gap:8 align:center
-      flex: grow:1 basis:0 layout_hint:expanded
-      spacing: margin:0/6
+      - node: progress
+        box:
+          abs: [73,75 238x4]
+          rel: [72,26 238x4]
+        position: clip
+        style: bg:surface-2 r:999
+        - node: progress-fill
+          box:
+            abs: [73,75 131x4]
+            rel: [0,0 131x4]
+          style: bg:accent r:999
       - node: span
-        text: Recall
+        text: 11
         box:
-          abs: [62,60 73x21]
-          rel: [0,0 73x21]
-        spacing: pad:3/8
-        style: font:12/700 color:#000000 tracking:1.2 r:999
+          abs: [323,68 46x18]
+          rel: [322,19 46x18]
+        flex: shrink:0
+        style: font:14/700 color:text-2
+        - node: span
+          text: / 20
+          box:
+            abs: [340,68 29x18]
+            rel: [17,0 29x18]
+          style: font:14/700 color:text-3
     - node: div
-      text: 8 / 12
       box:
-        abs: [363,63 27x15]
-        rel: [355,11 27x15]
-      style: font:12/600 color:#000000
-  - node: div
-    box:
-      abs: [8,88 390x652]
-      rel: [0,80 390x652]
-    layout: flex:col gap:10
-    flex: grow:1 basis:0 layout_hint:expanded
-    spacing: pad:8/14/0/14
-    - node: card
-      mx: MxCard
-      box:
-        abs: [22,96 362x315]
-        rel: [14,8 362x315]
-      layout: flex:row justify:center align:center
+        abs: [1,105 388x587]
+        rel: [0,56 388x587]
+      layout: flex:col
       flex: grow:1 basis:0 layout_hint:expanded
-      spacing: pad:14
-      size: minh:160
-      position: pos:relative
-      style: r:20
-      - node: icon-btn
-        mx: MxIconButton
+      spacing: pad:16/20
+      position: layout_hint:scroll
+      - node: card
+        mx: MxCard
         box:
-          abs: [344,104 32x32]
-          rel: [322,8 32x32]
-        layout: flex:row justify:center align:center
-        position: pos:absolute
-        style: r:999
-        - node: span
+          abs: [21,121 348x139]
+          rel: [20,16 348x139]
+        spacing: pad:20
+        style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+        - node: ov
+          text: Recall the meaning
           box:
-            abs: [350,110 20x20]
-            rel: [6,6 20x20]
-          layout: flex:row
-          - node: icon:pencil
-            box:
-              abs: [350,110 20x20]
-              rel: [0,0 20x20]
-            position: clip
-      - node: div
-        text: 연구자
-        box:
-          abs: [160,235 87x37]
-          rel: [138,139 87x37]
-        style: font:32/700/37 color:#000000 text:center tracking:-0.5
-      - node: icon-btn
-        mx: MxIconButton
-        box:
-          abs: [344,371 32x32]
-          rel: [322,275 32x32]
-        layout: flex:row justify:center align:center
-        position: pos:absolute
-        style: r:999
-        - node: span
+            abs: [42,142 306x15]
+            rel: [21,21 306x15]
+          layout: flex:row gap:8 align:center
+          spacing: margin:0/0/8/0
+          style: font:12/700 color:text-3 tracking:1
+        - node: div
+          text: 水曜日
           box:
-            abs: [350,377 20x20]
-            rel: [6,6 20x20]
-          layout: flex:row
-          - node: icon:volume-2
-            box:
-              abs: [350,377 20x20]
-              rel: [0,0 20x20]
-            position: clip
-    - node: card
-      mx: MxCard
-      box:
-        abs: [22,421 362x319]
-        rel: [14,333 362x319]
-      layout: flex:row justify:center align:center
-      flex: grow:1 basis:0 layout_hint:expanded
-      spacing: pad:16
-      size: minh:160
-      style: r:20
+            abs: [42,165 306x41]
+            rel: [21,44 306x41]
+          style: font:37.4/800/41 color:text tracking:-0.7
+        - node: muted
+          text: すいようび · suiyoubi
+          box:
+            abs: [42,210 306x29]
+            rel: [21,89 306x29]
+          spacing: margin:4/0/0/0
+          style: font:18/500 color:text-2
       - node: div
         box:
-          abs: [133,574 140x14]
-          rel: [111,153 140x14]
-        style: r:999 op:0.7
-  - node: div
-    box:
-      abs: [8,740 390x48]
-      rel: [0,732 390x48]
-    layout: flex:row gap:10 justify:center
-    flex: shrink:0
-    spacing: pad:14/14/16/14
-    - node: pill-btn
-      text: Show answer
-      mx: MxPrimaryButton
+          abs: [21,260 348x416]
+          rel: [20,155 348x416]
+        layout: grid cols:1 gap:8 align:center
+        flex: grow:1 basis:0 layout_hint:expanded
+        - node: div
+          box:
+            abs: [92,441 206x54]
+            rel: [71,181 206x54]
+          - node: icon:brain
+            box:
+              abs: [183,441 24x24]
+              rel: [91,0 24x24]
+            position: clip
+          - node: div
+            text: Say it in your head, then reveal.
+            box:
+              abs: [92,477 206x18]
+              rel: [0,36 206x18]
+            spacing: margin:8/0/0/0
+            style: font:14/600 color:text-3 text:center
+    - node: div
       box:
-        abs: [121,754 163x18]
-        rel: [113,14 163x18]
-      layout: flex:row gap:6 justify:center align:center
-      spacing: pad:0/36
-      style: font:16/600 color:#000000 text:center tracking:0.1 r:999
+        abs: [1,692 388x77]
+        rel: [0,643 388x77]
+      layout: flex:col gap:8
+      flex: shrink:0
+      spacing: pad:12/20/20/20
+      style: border-t:1px divider
+      - node: pill-btn
+        text: Show answer
+        mx: MxPrimaryButton
+        box:
+          abs: [21,705 348x44]
+          rel: [20,13 348x44]
+        layout: flex:row gap:8 justify:center align:center
+        spacing: pad:0/20
+        style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+        - node: icon:eye
+          box:
+            abs: [138,719 16x16]
+            rel: [117,14 16x16]
+          position: clip
 ```
 
 ## State: Revealed (ordered diff vs Hidden)
 
 ```diff
-  - node: card
-  mx: MxCard
+  - node: progress-fill
   box:
-  abs: [22,421 362x319]
-  rel: [14,333 362x319]
-  layout: flex:row justify:center align:center
-  flex: grow:1 basis:0 layout_hint:expanded
-  spacing: pad:16
-  size: minh:160
-  style: r:20
+  abs: [73,75 143x4]
+  rel: [0,0 143x4]
+  style: bg:accent r:999
+- - node: span
+- text: 11
+- box:
+- abs: [323,68 46x18]
+- rel: [322,19 46x18]
+- flex: shrink:0
+- style: font:14/700 color:text-2
++ - node: span
++ text: 12
++ box:
++ abs: [323,68 46x18]
++ rel: [322,19 46x18]
++ flex: shrink:0
++ style: font:14/700 color:text-2
+  - node: span
+  text: / 20
+  box:
+  abs: [340,68 29x18]
+  rel: [17,0 29x18]
+  style: font:14/700 color:text-3
+  ...
+  - node: muted
+  text: すいようび · suiyoubi
+  box:
+  abs: [42,210 306x29]
+  rel: [21,89 306x29]
+  spacing: margin:4/0/0/0
+  style: font:18/500 color:text-2
 - - node: div
 - box:
-- abs: [133,574 140x14]
-- rel: [111,153 140x14]
-- style: r:999 op:0.7
-+ - node: div
-+ text: Researcher / Nhà nghiên cứu — person who conducts research. Hán-Việt: Nghiên cứu giả (硏究者). 연구 = research, 자 = person.
+- abs: [21,260 348x416]
+- rel: [20,155 348x416]
+- layout: grid cols:1 gap:8 align:center
+- flex: grow:1 basis:0 layout_hint:expanded
+- - node: div
+- box:
+- abs: [92,441 206x54]
+- rel: [71,181 206x54]
+- - node: icon:brain
+- box:
+- abs: [183,441 24x24]
+- rel: [91,0 24x24]
+- position: clip
+- - node: div
+- text: Say it in your head, then reveal.
+- box:
+- abs: [92,477 206x18]
+- rel: [0,36 206x18]
+- spacing: margin:8/0/0/0
+- style: font:14/600 color:text-3 text:center
++ - node: answer-box
 + box:
-+ abs: [38,548 330x65]
-+ rel: [16,127 330x65]
-+ style: font:14/400/22 color:#000000 text:center
++ abs: [21,276 348x76]
++ rel: [20,171 348x76]
++ spacing: pad:16
++ style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px color(srgb 0.180392 0.619608 0.356863 / 0.4)
++ - node: ov
++ text: Answer
++ box:
++ abs: [38,293 314x15]
++ rel: [17,17 314x15]
++ layout: flex:row gap:8 align:center
++ spacing: margin:0/0/4/0
++ style: font:12/700 color:success tracking:1
++ - node: div
++ text: Wednesday
++ box:
++ abs: [38,312 314x23]
++ rel: [17,36 314x23]
++ style: font:18/700 color:text tracking:-0.4
   - node: div
   box:
-  abs: [8,740 390x48]
-  rel: [0,732 390x48]
-  layout: flex:row gap:10 justify:center
+  abs: [1,648 388x121]
+  rel: [0,599 388x121]
+  layout: flex:col gap:8
   flex: shrink:0
-  spacing: pad:14/14/16/14
+  spacing: pad:12/20/20/20
+  style: border-t:1px divider
 - - node: pill-btn
 - text: Show answer
 - mx: MxPrimaryButton
 - box:
-- abs: [121,754 163x18]
-- rel: [113,14 163x18]
-- layout: flex:row gap:6 justify:center align:center
-- spacing: pad:0/36
-- style: font:16/600 color:#000000 text:center tracking:0.1 r:999
-+ - node: pill-btn
-+ text: Forgot
-+ mx: MxPrimaryButton
+- abs: [21,705 348x44]
+- rel: [20,13 348x44]
+- layout: flex:row gap:8 justify:center align:center
+- spacing: pad:0/20
+- style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+- - node: icon:eye
+- box:
+- abs: [138,719 16x16]
+- rel: [117,14 16x16]
+- position: clip
++ - node: div
 + box:
-+ abs: [38,754 160x18]
-+ rel: [30,14 160x18]
-+ layout: flex:row gap:6 justify:center align:center
++ abs: [21,661 348x88]
++ rel: [20,13 348x88]
++ - node: ov
++ text: How well did you know it?
++ box:
++ abs: [21,661 348x15]
++ rel: [0,0 348x15]
++ layout: flex:row gap:8 justify:center align:center
++ spacing: margin:0/0/8/0
++ style: font:12/700 color:text-3 tracking:1
++ - node: div
++ box:
++ abs: [21,684 348x65]
++ rel: [0,23 348x65]
++ layout: flex:row gap:8
++ - node: rate-btn
++ text: Missed
++ mx: ?
++ box:
++ abs: [21,684 111x65]
++ rel: [0,0 111x65]
++ layout: flex:col gap:4 align:center
 + flex: grow:1 basis:0 layout_hint:expanded
-+ size: maxw:160
-+ style: font:16/600 color:#000000 text:center tracking:0.1 r:999
-+ - node: pill-btn
++ spacing: pad:12/8
++ style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) font:12/700 color:danger text:center r:14 border:1px color(srgb 0.866667 0.258824 0.341176 / 0.4)
++ - node: icon:x
++ box:
++ abs: [66,697 20x20]
++ rel: [45,13 20x20]
++ position: clip
++ - node: rate-btn
++ text: Partial
++ mx: ?
++ box:
++ abs: [140,684 111x65]
++ rel: [119,0 111x65]
++ layout: flex:col gap:4 align:center
++ flex: grow:1 basis:0 layout_hint:expanded
++ spacing: pad:12/8
++ style: bg:color(srgb 1 0.639216 0.0980392 / 0.12) font:12/700 color:warn text:center r:14 border:1px color(srgb 1 0.639216 0.0980392 / 0.4)
++ - node: icon:minus
++ box:
++ abs: [185,697 20x20]
++ rel: [45,13 20x20]
++ position: clip
++ - node: rate-btn
 + text: Got it
-+ mx: MxPrimaryButton
++ mx: ?
 + box:
-+ abs: [208,754 160x18]
-+ rel: [200,14 160x18]
-+ layout: flex:row gap:6 justify:center align:center
++ abs: [258,684 111x65]
++ rel: [237,0 111x65]
++ layout: flex:col gap:4 align:center
 + flex: grow:1 basis:0 layout_hint:expanded
-+ size: maxw:160
-+ style: font:16/600 color:#000000 text:center tracking:0.1 r:999
++ spacing: pad:12/8
++ style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) font:12/700 color:success text:center r:14 border:1px color(srgb 0.180392 0.619608 0.356863 / 0.4)
++ - node: icon:check
++ box:
++ abs: [304,697 20x20]
++ rel: [45,13 20x20]
++ position: clip
 ```

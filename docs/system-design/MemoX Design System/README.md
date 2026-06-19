@@ -1,186 +1,220 @@
-# MemoX Design System
+# MemoX — Design System
 
-A design system for **MemoX** — a personal flashcard learning app built in Flutter 3.24+ / Dart 3.5+ with 5 study modes (Review, Match, Guess, Recall, Fill), SRS spaced repetition, and Google Drive backup.
+MemoX is a **mobile note-taking app** with a warm, paper-like character: capture
+a thought fast, organize it into color-coded *Spaces*, and write longer notes on
+a calm serif surface. This project is the design system + Mobile UI Kit that all
+MemoX screens are built from.
 
-This repo contains the brand foundations, tokens, and a high-fidelity UI kit for designing consistent new surfaces, marketing pages, decks, and prototypes for MemoX.
-
-## Product context
-
-MemoX is a calm, focused learning tool. It treats studying as a durable daily practice — the product shell stays quiet so the *cards* themselves can be the loudest thing on screen. The architecture mandates a strict, tokenized design language:
-
-- **Feature-first Clean Architecture** in Flutter. Presentation → Domain ← Data.
-- **Material 3** with a seeded `ColorScheme` — the default seed is a deep indigo (`#24389C`).
-- **Plus Jakarta Sans** (Google Fonts) everywhere. One family, seven sizes.
-- **Tokens are law.** No raw hex, no raw `TextField`, no raw `InkWell`, no raw `else`. Every color, size, radius, duration, and string routes through a typed token or l10n key.
-- **Collapsed type scale**: `48 / 32 / 24 / 20 / 16 / 14 / 12`. Nothing in between.
-- **Subtle, M3-tonal surfaces** — elevation is carried by surface-container tiers, not shadows.
-
-Five supported study modes and their semantic colors:
-
-| Mode | What it does | Accent |
-|---|---|---|
-| **Review** | Classic SRS — rate recall Again/Hard/Good/Easy | rating palette |
-| **Match** | Drag/tap to pair fronts and backs | primary |
-| **Guess** | Multiple choice (A/B/C/D) | primary |
-| **Recall** | Write-from-memory, then self-score | mastery green |
-| **Fill** | Type the blank in an example sentence | mastery green |
-
-## Sources
-
-Everything in this system was pulled from the MemoX monorepo:
-
-- **Repo:** `github.com/ntgptit/memox` (default branch `main`, sha `1a2d41e2567a`)
-- **Design tokens:** `lib/core/theme/tokens/` — `color_tokens.dart`, `typography_tokens.dart`, `spacing_tokens.dart`, `radius_tokens.dart`, `elevation_tokens.dart`, `duration_tokens.dart`, `easing_tokens.dart`, `opacity_tokens.dart`, `size_tokens.dart`
-- **Color schemes:** `lib/core/theme/color_schemes/{app_color_scheme,custom_colors}.dart`
-- **Text themes:** `lib/core/theme/text_themes/{app_text_theme,custom_text_styles}.dart`
-- **Shared widgets:** `lib/shared/widgets/**` (~80 files — buttons, cards, chips, inputs, dialogs, navigation, feedback, progress)
-- **Copy (l10n):** `l10n/app_en.arb` (and `app_ko.arb`, `app_vi.arb` for Korean + Vietnamese)
-- **Design rules:** `docs/memox-ui-design-rules.md`, `docs/memox-typography-usage-rules.md`, `docs/memox-guard-rules-quickref.md`, `docs/memox-reference.md`
-- **Prior web preview:** `docs/memox-design-system/src/App.tsx` + `index.css` — a Tailwind "Theme Foundation Board" that the original authors built to communicate the system. We borrowed the structure but rebuilt the card set from source tokens.
-
-No Figma was attached for this system.
+> **Sources / provenance.** This system was bootstrapped from a written brief (the
+> "MemoX — Mobile UI Kit" spec) — no Figma file or codebase was attached. The brief
+> defined the gallery engine contract and file layout; the token *values*, screens,
+> and components here are an original, coherent interpretation. **If you have the
+> canonical `:root{}` / `.memox-dark{}` token block, paste it into
+> `colors_and_type.css` (values only) — every component reads `var(--memox-*)`, so
+> the whole system re-themes from that one edit.**
+>
+> **Color sources.** The current palette is drawn (colors only — not layout,
+> type, or other theme content) from the **Tokyo Free** admin templates by
+> bloomui: light from `tokyo-free-white-react-admin-dashboard`
+> (`PureLightTheme.ts` — primary `#5569FF`, ink `#223354`, bg `#F2F5F9`), dark
+> from `tokyo-free-black-react-admin-dashboard` (`NebulaFighterTheme.ts` —
+> primary `#8C7CF0`, bg `#070C27`, surface `#111633`). Note/status tints and the
+> component contract remain MemoX's own.
 
 ---
 
-## Content fundamentals
+## Index (root manifest)
 
-**Voice.** Calm, direct, second-person ("you"), never pushy. MemoX talks like a thoughtful study coach, not a gamified app. No hype, no exclamation marks except on genuine completion.
+| Path | What |
+|---|---|
+| `styles.css` | Global entry — `@import`s only. Consumers link this. |
+| `colors_and_type.css` | All tokens: colors (light + `.memox-dark`), type, spacing, radii, shadows, fonts, **plus the contract semantic layer** (Material-style roles). |
+| `memox-components.css` | **Component contract** — class-based, 100% token-driven primitives (`.appbar`, `.card`, `.pill-btn`, `.chip`, `.fab`, …). |
+| `ui_kits/mobile/` | **Mobile UI Kit** — gallery engine (`index.html`) + `screens/*.jsx` (incl. `00 Components` showcase). |
+| `components/core/` | Button, IconButton, Badge, Chip, Avatar, Switch, SegmentedControl, Card. |
+| `components/mobile/` | NoteCard (the signature memo tile). |
+| `guidelines/` | Foundation specimen cards (Colors / Type / Spacing / Brand). |
+| `SKILL.md` | Agent-Skills front-matter for use in Claude Code. |
+| `tools/check-ui-kit.js` | **Adherence linter** — `node tools/check-ui-kit.js` checks the UI kit for hardcoded colors, undefined tokens, missing bundle guards, raw px, and shared-primitive usage. Exit 0 = clean. |
 
-- *"All caught up"* rather than *"Awesome job!!"*
-- *"You're offline. Reconnect to keep syncing…"* rather than *"⚠️ Connection lost!"*
-- *"Your progress will be saved so you can resume later."* — reassurance is the default.
+### Components
+`Button` · `IconButton` · `Badge` · `Chip` · `Avatar` · `Switch` ·
+`SegmentedControl` · `Card` (core) · `NoteCard` (mobile). Each has a `.d.ts`
+contract and `.prompt.md` usage note. Reach them at runtime via
+`window.DesignSystem_48ad9c.<Name>` after loading `_ds_bundle.js`.
 
-**Casing.** Sentence case for titles, actions, and body. Only micro-labels and overlines are ALL CAPS (with `+0.06em` letter spacing via `TypographyTokens.sectionSpacing`). Button labels are sentence-case and bold, not uppercase.
+### UI kit — the gallery engine
+`ui_kits/mobile/index.html` exposes a global:
 
-**Microcopy patterns.**
-- Greetings are time-aware: *"Good morning, learner"* / *"Good evening, Alex"*.
-- Empty states always tell you the next action: *"Add cards to start reviewing this deck."*
-- Counts are always pluralized properly via ICU (`{count, plural, =1{1 card due} other{{count} cards due}}`).
-- Section-complete strings celebrate quietly: *"Session complete"*, *"All matched!"*, *"{N} cards reviewed"*.
-- Undo is offered inline after destructive-feeling actions: *"Good selected. Undo?"*.
+```js
+window.MEMOX_KIT.register({
+  num: "02", title: "Note Editor",
+  states: [
+    { label: "Saving", render: () => <JSX inside .phone /> },
+    { label: "Saved",  render: () => <JSX /> },
+  ],
+});
+```
 
-**I vs you.** Almost always *you*. The product never says *I* or *we*. The user is the protagonist.
-
-**Emoji.** Not used. Nowhere in the codebase does MemoX use emoji in UI text. Icons carry all glyph-level meaning.
-
-**Vibe.** Studious, grown-up, a little Scandinavian — quiet surfaces, clear hierarchy, one accent color doing most of the work, and green reserved for the specific feeling of *mastery*.
-
----
-
-## Visual foundations
-
-### Color
-
-**Two themes:** *Tokyo Pure Light* (day) and *Tokyo Nebula* (night). Quizlet-mobile energy, not dashboard-web restraint.
-
-- **Tokyo Pure Light** — page is `#F7F9FE` (white with a cool blue cast), cards are pure white with a soft indigo ghost border, text is deep navy `#0F1638`, primary is vibrant indigo `#5265F5`. Outlines lean cool/blue, never warm gray.
-- **Tokyo Nebula** — page is deep navy `#0A0E27` (night sky), paper-indigo cards sit on it (`#131A3A`), primary lifts to `#8B9AFF` for AA contrast, and a violet accent `#B5A0FF` enters the system. Outlines are *faded indigo* `#2A3267`, never gray — that's the signature.
-- **Seed**: `#5265F5` indigo. The whole light `ColorScheme` is derived from this seed via `ColorScheme.fromSeed`, then primary is darkened slightly so it reads as decisive rather than Material's default bluish primary.
-- **Alternate seeds** (user-pickable in Settings): violet `#8B6FF5`, teal `#2BA88B`, rose `#E57373`, amber `#F59E0B`, sage `#81C784`.
-- **Surface ladder (Tokyo Pure Light)** — a 6-step cool-blue stack: `#FFFFFF` → `#F7F9FE` (page) → `#F1F4FB` → `#E9EDF7` → `#E2E7F3` → `#DAE0EF`.
-- **Surface ladder (Tokyo Nebula)** — `#060925` → `#0A0E27` (page) → `#0F1530` → `#131A3A` (paper) → `#1B2249` → `#232B5A`.
-- **Semantic**: success/easy teal `#2BA88B`, mastery green `#1F8A5B`, warning amber `#F59E0B`, error red `#DC2D4E`, streak orange `#F97316`. Nebula maps these to softer night-friendly values (`#6FE0BD`, `#FFC658`, `#FF8FA3`, `#FFAE6E`).
-- **Mastery gradient**: coral `#E57373` → amber `#F59E0B` → mastery green `#1F8A5B` — left to right as learning deepens.
-
-### Typography
-- **One family:** Plus Jakarta Sans (400/500/600/700/800). Loaded via `google_fonts` at runtime; the CSS in this repo loads the same family from Google Fonts CDN.
-- **Collapsed scale:** 48 / 32 / 24 / 20 / 16 / 14 / 12. Never use sizes in between.
-- **Letter spacing:** headings `-0.64` (tight), labels `+0.72`, section overlines `+1.2` (ALL CAPS).
-- **Line height:** display `1.1`, heading `1.2`, body `1.5`, caption `1.4`, relaxed body `1.6`.
-- **Tabular figures** on stat counters (`FontFeature.tabularFigures()`) so numbers don't jitter as they tick.
-
-### Spacing
-- **4dp grid.** Tokens: `xxs 2, xs 4, sm 8, md 12, lg 16, xl 24, xxl 32, xxxl 48`.
-- **Semantic:** `cardPadding 16`, `screenPadding 24`, `sectionGap 32`, `listItemGap 8`, `fieldGap 20`, `dividerIndent 56`.
-
-### Radii
-- `xs 4, sm 8, md 12, lg 16, xl 24, xxl 28, full 100`.
-- **Named:** cards & dialogs & sheets use `lg 16`. Buttons & inputs use `md 12`. Chips use `full` (pill). FAB uses `xxl 28`. Avatars are fully round.
-
-### Elevation & shadows
-- **M3 tonal elevation, not shadows.** The system prefers stacking surface-container tiers to carry hierarchy. Shadows cap at 6% opacity (`ElevationTokens.shadowOpacity = 0.06`).
-- Cards are flat (`level0` dark, `level1` light). FAB is `level2`. Dialogs and sheets get `level2–3`. Nothing pops above `level5`.
-
-### Borders — the "ghost border" rule
-- **Ghost border:** `1px` at **15% of outlineVariant**. Every card gets one. This is the defining low-contrast border MemoX uses instead of shadows.
-- **Focus border:** the focused input gets a `1px` solid `primary` border (no glow, no ring).
-- **Strong accent border:** `4px` solid primary on the left edge — used *only* on comparison/diff highlights in Recall mode and as the focused underline, never as a general card motif.
-
-### Motion & easing
-- **Core durations:** instant 50, fast 100, normal 200, slow 300, slower 500 (all ms).
-- **Semantic:** `stateChange` 100 (color flips), `contentSwitch` 200 (fades), `pageTransition` 300, `cardFlip` 350, `countUp` 400, `chartDraw` 600.
-- **Easing:** `standard = easeInOut` for most UI, `emphasized = easeInOutCubicEmphasized` for large transitions, `enter = easeOut`, `exit = easeIn`. `elasticOut` is explicitly flagged as an **anti-pattern** — do not bounce.
-
-### Hover, press, focus (state layers)
-- Hover: 8% tint of onSurface (neutral) or primary (accent).
-- Focus: 12% primary tint + primary-border underline on inputs.
-- Press: 12% press tint, plus M3 `InkSparkle.splashFactory` for ripple on surface controls.
-- Disabled: 38% opacity on content.
-- **No scale-down on press.** No shrink animations. Presses are expressed through the state layer only, except on dedicated `ScaleTap` widgets for deliberate tactile feedback on hero CTAs.
-
-### Transparency & blur
-- **Glass chrome:** app bar, bottom nav, and sticky top sheets use a page-surface color at **84% opacity** (`OpacityTokens.surfaceGlass`) with a `backdrop-filter: blur(xl)` behind. This is the only place blur is used.
-- **Scrims:** 32% black-on-background behind dialogs/sheets (`surfaceScrim`).
-- **Faded "other options":** after a wrong answer in Guess/Fill, unselected options fade to 40% opacity (`fadeOut`) to guide attention to the correct one.
-
-### Imagery
-- **None shipped.** MemoX has no hero imagery, no illustrations, no stock photos. The product is icon-and-typography only. Marketing surfaces should follow suit: calm, image-light, layout-driven.
-- When imagery is added, keep it warm-toned, low-saturation, and cropped geometrically — no bleeding gradients.
-
-### Backgrounds
-- Flat single-tone surfaces. No gradients in UI chrome. The *only* gradient anywhere is the mastery tri-stop gradient used on progress bars and charts.
-- No repeating patterns, no textures, no grain.
-
-### Layout
-- `maxBodyWidth = 720` for readable long-form content.
-- `screenPadding = 24` horizontal on mobile.
-- Bottom nav is `80dp` tall (M3 `NavigationBar`). App bar is `56dp`, large `64dp`.
-- Status dots are `8dp`, chart legend dots `12dp`. Mastery rings are `40dp × 3dp stroke` in list tiles.
-
-### Cards
-- Always white (`surfaceContainerLowest`) in light mode.
-- `RadiusTokens.lg` (16dp) corners.
-- `1px` ghost border, no shadow by default.
-- `16dp` internal padding (`cardPadding`).
+For every registered screen the engine builds a `.row` with `.row-num` / `.row-title`,
+a `.stepper` (‹ label · n/m ›, omitted when there's a single state), and **two**
+`.frame-wrap` device frames — one light, one `.memox-dark`. Next/Prev re-render
+*both* phones to the new state and `lucide.createIcons()` runs after each render.
+Add a screen by dropping `screens/NN-name.jsx` and a matching `<script type="text/babel">`
+tag. Screens are plain IIFEs so top-level names never collide across Babel files.
 
 ---
 
-## Iconography
+## CONTENT FUNDAMENTALS
 
-MemoX uses **Material Symbols** via the Flutter built-in `Icons.*` set, at two sizes: `iconSm = 20` (inline/chip) and `iconMd = 24` (standard). Large empty-state glyphs hit `iconXl = 64`.
+**Voice — calm, second-person, encouraging.** MemoX talks *to* the user ("you")
+and never about itself in the first person. Copy is short, warm, and low-drama —
+it reassures rather than hypes.
 
-For this web design system we substitute **Lucide** (loaded via CDN `lucide@latest`) because it is the closest open-source match to Material Symbols in stroke weight (`2px`) and geometry, and it is what the original `docs/memox-design-system` preview used. Documented CDN: `https://unpkg.com/lucide@latest`.
-
-- **No custom icon font.** No sprite. No iconography in PNG.
-- **No emoji anywhere in the product.**
-- **No unicode symbol icons** (★, ◉, etc.).
-- Core icons in use, mapped Material → Lucide:
-  - book-open (MemoX logomark), layers (decks), folder, graduation-cap (study), bar-chart-3 (stats), settings, search, plus, flame (streak), brain-circuit (recall/memory), arrow-right, check, x, flag, more-horizontal, chevron-right.
-
-🚩 **Substitution to confirm:** we ship Lucide here instead of Material Symbols. If you'd like pixel-for-pixel parity with the Flutter app, swap the CDN import in `colors_and_type.css` / UI kit `index.html` to the Material Symbols web font.
+- **Casing:** Sentence case everywhere — titles, buttons, menu items
+  ("New note", "Sync & backup", not "New Note" / "SYNC"). Eyebrows/section
+  labels are the one exception: UPPERCASE with wide tracking ("RECENT", "WORK").
+- **Person:** "you / your" for the reader. Greetings are personal —
+  "Good morning, An". Never "we" except in product marketing.
+- **Buttons** are verb-first and concrete: "New note", "Continue", "Export
+  notes", "Delete". Avoid "Submit", "OK", "Click here".
+- **Empty states** are gently motivating: "No memos yet" → "Capture your first
+  thought." A streak nudge reads "You've captured something every day. Keep it
+  going." — celebratory, never guilt-trippy.
+- **Numbers & metadata** are terse and tabular: "12/148", "9:24", "3 results ·
+  notes & tags".
+- **Tone words:** calm, clear, paper-like, fast, low-drama. Avoid jargon,
+  exclamation-mark spam, and growth-hack language.
+- **Emoji:** not used in the product UI. Color-coded *note tints* and Lucide
+  icons carry visual meaning instead.
+- **Locale:** bilingual-friendly — Vietnamese content (e.g. "phở gà", "Đà Lạt",
+  "An Nguyễn") sits naturally alongside English. Don't strip diacritics.
 
 ---
 
-## Index
+## VISUAL FOUNDATIONS
 
-Root files:
-- `README.md` — this file.
-- `colors_and_type.css` — CSS custom properties for every token (color, type, spacing, radius, elevation, duration, opacity) plus semantic type selectors.
-- `SKILL.md` — portable skill definition so this folder works as an Agent Skill.
-- `assets/` — logo SVG and brand marks.
-- `fonts/` — (Plus Jakarta Sans loaded via Google Fonts CDN; no self-hosted TTFs shipped).
-- `preview/` — the per-token preview cards registered to the Design System tab.
-- `ui_kits/mobile/` — the MemoX mobile UI kit: interactive click-through of the home / library / deck / study / stats screens.
+**Overall vibe:** clean, focused, and quiet. A cool near-white background
+(`--memox-bg #F2F5F9`), a confident **blue accent** (`--memox-accent #5569FF`,
+from the Tokyo Free White palette), and color only where it carries meaning.
+Roomy, calm, unhurried — the opposite of a dense productivity dashboard.
 
-Preview cards:
-- Type: display, headings, body, labels, stat-display, type-in-use.
-- Colors: seed + alternates, surface ladder, on-surface, outline, semantic (success/warning/error), mastery gradient, status palette, rating palette, self-assessment palette, streak, dark-surface.
-- Spacing: 4dp grid, semantic spacing, radius scale, elevation/shadow opacity, opacity tokens, duration tokens, easing reference.
-- Components: primary/secondary/tertiary/text buttons, app card, deck card, status chip / mode chip / tag chip, mastery ring + bar, text field + search, bottom nav, FAB, rating row, toast, segmented control.
-- Brand: MemoX logomark + wordmark, iconography sampler, content voice example, motion reference.
+- **Color.** One accent for primary actions, selection, and focus — **blue
+  `#5569FF` in light, soft violet `#8C7CF0` in dark** (Tokyo Free White /
+  Tokyo Free Black). Surfaces are cool off-whites; text is a navy-ink ramp
+  (`text` → `text-2` → `text-3`). Eight **note tints** (amber, green, teal, blue,
+  violet, pink, clay, yellow) color-code Spaces and tags — they are
+  decorative-but-meaningful, never random. Semantic colors (success/warn/danger/
+  info) each come as a solid + a soft tint. Avoid bluish-purple gradients and
+  any color not in the token set.
+- **Dark mode** is a token remap under `.memox-dark` — warm near-black surfaces
+  (`#121210` / `#1B1B18`), a slightly lighter accent (`#FF7E55`). Applying the
+  class to any container re-themes its whole subtree; descendants change nothing.
+- **Type.** Two families. **Plus Jakarta Sans** for all UI (geometric, friendly,
+  weights 400–800; display/titles at 800 with `-0.02em` tracking). **Lora**
+  (serif) for the *note body* only — it makes writing feel page-like. **JetBrains
+  Mono** for times, counts, tags, and code-ish metadata.
+- **Spacing.** 4px base scale (`--memox-space-1..12`). Screen gutters ~20px,
+  card padding 16–18px, 12px between stacked cards.
+- **Radii.** Generous and soft: cards `lg` (20px), inputs/sheets `md` (14px),
+  chips & buttons **pill**, the phone frame 36–44px. Nothing sharp.
+- **Backgrounds.** Flat cool off-white — *no* gradients, photos, or textures behind
+  content. Depth comes from elevation, not imagery. The one "filled" surface is
+  the accent streak-card and the FAB. Dark mode is a deep navy
+  (`--memox-bg #070C27`, surfaces `#111633`), from the Tokyo Free Black palette.
+- **Cards.** White (`--memox-card`) on paper, 1px `--memox-border`, `shadow-sm`,
+  20px radius. The signature **NoteCard** adds a 5px colored left tint-bar — the
+  single most recognizable MemoX motif. (This is the *intended* use of a colored
+  left bar; don't confuse it with the generic-AI "rounded card + left accent" trope —
+  here it's a deliberate, tint-coded system.)
+- **Elevation — calm & neutral.** This is a *learning app*: keep elevation quiet
+  so the eyes don't tire. Three soft, low-opacity, **neutral** shadows only:
+  `sm` (cards), `md` (floating controls — FAB, popover), `lg` (sheets/dialogs).
+  **No colored or glowing shadows anywhere** — primary buttons are **flat**
+  (fill only, no glow). Prefer a border (`border-ghost` / `outline-variant`)
+  over a shadow when either would do. Dark mode leans on borders with minimal
+  shadow (cards drop shadow entirely → `--memox-shadow-soft: none`).
+- **Buttons / press states.** Pill-shaped, **flat** — primary is an accent fill
+  with no shadow. Press shrinks slightly (`transform: scale` ~.92 on steppers/
+  icon buttons) and darkens toward `--memox-accent-press`. Hovers lift border to
+  accent or warm the surface — subtle, fast (120–180ms ease).
+- **Focus.** A 3px soft accent ring (`--memox-focus-ring`) — used on the active
+  search field, etc.
+- **Selection.** Filled accent for selected chips/segments; accent-soft tint for
+  toggled icon buttons (e.g. Bold in the editor toolbar).
+- **Animation.** Restrained. Short eases (120–200ms), gentle fades and toggle
+  slides. No bounce, no parallax, no infinite decorative loops.
+- **Transparency / blur.** Sticky bars (status header, tab bar, editor toolbar)
+  use a `color-mix` translucent surface + `backdrop-filter: blur` so content
+  scrolls softly beneath them.
+- **Imagery vibe.** Minimal — MemoX is text-first. When imagery appears it should
+  be warm and soft to match the paper palette. Avatars are solid-tint initials.
 
-🚩 **Caveats for review**
-- No Figma file was provided — everything is derived from source code. If Figma designs exist, attach them and we'll reconcile any drift.
-- Plus Jakarta Sans is loaded from Google Fonts CDN, not self-hosted `.ttf` files. If you need offline-safe self-hosted fonts, drop the TTFs into `fonts/` and update `colors_and_type.css`.
-- Iconography uses Lucide CDN as a visual stand-in for Flutter's Material Symbols. Confirm direction before production use.
-- The UI kit recreates screens from `lib/features/**` source and `l10n/app_en.arb` copy. No screen was copied from a screenshot; if any visual detail is off, it's because the corresponding widget was summarized rather than read byte-for-byte.
+---
+
+## COMPONENT CONTRACT (`memox-components.css`)
+
+A second, **class-based** component layer (alongside the inline-styled React
+primitives) implements a Material-3-flavored contract. Every rule is
+**100% token-driven** — no literal colors, and sizes/radii/spacing read tokens.
+It themes automatically: the same markup under `.memox-dark` flips via the
+semantic alias tokens in `colors_and_type.css`.
+
+> **Why two token namings?** The base palette (`--memox-accent`, `--memox-text`,
+> …) is the source of truth. The contract layer adds **semantic role aliases**
+> (`--memox-primary`, `--memox-on-primary`, `--memox-surface-raised`,
+> `--memox-text-primary/secondary`, `--memox-outline(-variant)`,
+> `--memox-status-*`, `--memox-op-*`, `--memox-fs-*`, `--memox-size-*`,
+> `--memox-radius-card/button/fab/full`) that map onto the base. Aliases are
+> declared in **both** `:root` and `.memox-dark` so their `var()` resolves in
+> the active theme.
+
+**Classes** (load `memox-components.css` after `colors_and_type.css`):
+`.app` · `.appbar` / `.appbar-lg` (`.appbar-title`, `.appbar-subtitle`) ·
+`.bottom-nav` / `.bottom-nav-item.active` (pill indicator) · `.card` /
+`.card.accent` · `.icon-btn` (40px, ≥48 hit) · `.icon-tile` / `.icon-tile.solid`
+(tint via `--tile`) · `.pill-btn.primary|secondary|outline` (+`.sm`, `:disabled`)
+· `.section-head` · `.ov` (overline, optional `.status-dot` via `--dot`) ·
+`.chip.new|learning|reviewing|mastered|due` (+`.solid`) · `.progress` /
+`.progress-fill` · `.list-row` · `.sheet` + `.scrim` · `.dialog` · `.fab`.
+
+State fills use `color-mix(... calc(var(--memox-op-*) * 100%), transparent)` so
+hover / selected / disabled / scrim opacities are tokenized too. Icon sizes are
+driven from `--memox-icon-sm|md|lg` via parent selectors (`.pill-btn svg`, etc.).
+
+The **`00 Components`** screen in the Mobile UI Kit is the live showcase, rendered
+in both light and dark frames. Status names (new / learning / reviewing /
+mastered, "N due", progress) reflect MemoX's **spaced-repetition / flashcard**
+study model.
+
+---
+
+## ICONOGRAPHY
+
+- **Lucide** is the icon system (loaded from CDN: `lucide@0.460.0`). Stroke-style,
+  ~1.75–2px weight, rounded — it matches the friendly, soft aesthetic. Render with
+  `<i data-lucide="name"></i>` then call `lucide.createIcons()` after each React
+  commit (the gallery engine does this automatically).
+- Common glyphs in use: `notebook` `search` `layout-grid` `user` (tab bar),
+  `plus` (FAB), `pin` `star` `folder` `clock` `bell` `lock` `cloud` `download`
+  `chevron-right` `check` / `check-check` `flame` (streak), and editor tools
+  `bold` `italic` `list` `list-checks` `link` `image` `mic`.
+- Sizes: 17px in tab bar / status bar, 18–21px in toolbars & rows, 24–26px for
+  the FAB. Color follows text tokens; active/selected use the accent.
+- **No emoji** as icons; **no hand-rolled SVG paths** for UI glyphs — always use a
+  Lucide name. The only non-Lucide vector is the app *mark* (the "M" in a rounded
+  accent square), drawn with a styled element, not an icon.
+- *Substitution flag:* Lucide is a deliberate, CDN-linked choice here (no bundled
+  icon font was provided). If MemoX has its own icon set, drop the SVGs into
+  `assets/` and document the swap here.
+
+---
+
+## CAVEATS
+
+- **Token values are interpretive.** No canonical token block or design file was
+  supplied; replace values in `colors_and_type.css` if you have the originals.
+- **Fonts are Google Fonts** (Plus Jakarta Sans, Lora, JetBrains Mono) loaded via
+  CDN `@import` — no font binaries are bundled. Swap to self-hosted `@font-face`
+  if you need offline/production use.
+- **Icons are CDN Lucide**, not a bundled MemoX icon set.
