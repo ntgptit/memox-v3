@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+
+import '../../../../support/golden_harness.dart';
+
+void main() {
+  group('MxEmptyState', () {
+    testWidgets('renders title, message, and the action slot', (tester) async {
+      await pumpThemed(
+        tester,
+        const MxEmptyState(
+          icon: Icons.folder_outlined,
+          title: 'No folders yet',
+          message: 'Create your first to get started.',
+          action: Text('Create folder'),
+        ),
+      );
+
+      expect(find.text('No folders yet'), findsOneWidget);
+      expect(find.text('Create your first to get started.'), findsOneWidget);
+      expect(find.text('Create folder'), findsOneWidget);
+      expect(find.byIcon(Icons.folder_outlined), findsOneWidget);
+    });
+
+    testWidgets('omits the action slot when none is given', (tester) async {
+      await pumpThemed(
+        tester,
+        const MxEmptyState(
+          icon: Icons.folder_outlined,
+          title: 'No folders yet',
+          message: 'Create your first to get started.',
+        ),
+      );
+
+      expect(find.byType(TextButton), findsNothing);
+      expect(find.text('No folders yet'), findsOneWidget);
+    });
+  });
+
+  group('MxErrorState', () {
+    testWidgets('renders failure copy and a retry action slot', (tester) async {
+      await pumpThemed(
+        tester,
+        const MxErrorState(
+          title: "Couldn't load library",
+          message: 'Check your connection and try again.',
+          action: Text('Retry'),
+        ),
+      );
+
+      expect(find.text("Couldn't load library"), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+    });
+  });
+
+  group('MxNoResultsState', () {
+    testWidgets('renders no-results copy with the default glyph', (
+      tester,
+    ) async {
+      await pumpThemed(
+        tester,
+        const MxNoResultsState(
+          title: 'No matches',
+          message: 'Try a different search.',
+        ),
+      );
+
+      expect(find.text('No matches'), findsOneWidget);
+      expect(find.byIcon(Icons.search_off), findsOneWidget);
+    });
+  });
+
+  group('MxLoadingState', () {
+    testWidgets('shows a spinner and optional caption', (tester) async {
+      await pumpThemed(tester, const MxLoadingState(message: 'Loading...'));
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Loading...'), findsOneWidget);
+    });
+
+    testWidgets('shows a bare spinner when no caption is given', (
+      tester,
+    ) async {
+      await pumpThemed(tester, const MxLoadingState());
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(Text), findsNothing);
+    });
+  });
+}
