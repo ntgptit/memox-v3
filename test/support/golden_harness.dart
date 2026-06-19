@@ -45,3 +45,21 @@ Future<void> pumpThemed(
   );
   await tester.pump();
 }
+
+/// Pumps [home] as the themed [MaterialApp.home] directly (no wrapping
+/// [Scaffold]), for widgets that ARE a scaffold or need `Scaffold.appBar` /
+/// `bottomNavigationBar` slots.
+Future<void> pumpThemedHome(
+  WidgetTester tester,
+  Widget home, {
+  Brightness brightness = Brightness.light,
+}) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: brightness == Brightness.light ? MxTheme.light : MxTheme.dark,
+      home: home,
+    ),
+  );
+  await tester.pump();
+}
