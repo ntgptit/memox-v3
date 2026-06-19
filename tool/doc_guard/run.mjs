@@ -395,13 +395,19 @@ function generate() {
   const head = execFileSync('git', ['log', '--oneline', '-10'], { cwd: repoRoot }).toString().trim();
   const shortHead = execFileSync('git', ['rev-parse', '--short=8', 'HEAD'], { cwd: repoRoot }).toString().trim();
 
-  const usecaseDirs = ['folder', 'deck', 'flashcard', 'search'].map((d) => {
-    const files = countGlob(`lib/domain/usecases/${d}`);
-    return `${d}(${files.length})`;
-  });
-  const studyUcPath = join(repoRoot, 'lib/domain/study/usecases/study_usecases.dart');
-  const studyUc = existsSync(studyUcPath) ? readFileSync(studyUcPath, 'utf8') : '';
-  const studyClasses = [...studyUc.matchAll(/^class (\w+UseCase)/gm)].map((m) => m[1]);
+  // Discover use-case entity dirs from the filesystem (don't hardcode the list —
+  // it must survive new entities and the incremental rebuild).
+  const usecaseRoot = join(repoRoot, 'lib/domain/usecases');
+  const usecaseDirs = (existsSync(usecaseRoot) ? readdirSync(usecaseRoot, { withFileTypes: true }) : [])
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .sort()
+    .map((d) => `${d}(${countGlob(`lib/domain/usecases/${d}`).length})`);
+  // Study use cases: scan the dir for *UseCase classes rather than reading one
+  // fixed file — works whether they live in an aggregated file or one-per-file.
+  const studyClasses = countGlob('lib/domain/study/usecases').flatMap((p) =>
+    [...readFileSync(join(repoRoot, p), 'utf8').matchAll(/^class (\w+UseCase)/gm)].map((m) => m[1]),
+  );
   const screens = countGlob('lib/presentation/features').filter((p) => p.includes('/screens/'));
   const repos = countGlob('lib/domain/repositories');
   const testFiles = countGlob('test').filter((p) => p.endsWith('_test.dart'));
