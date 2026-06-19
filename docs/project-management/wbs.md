@@ -106,7 +106,7 @@ widget (e.g. `MatchBoard`, `BoxStepper`, `ProgressRing`) land with their owning 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1.1.1 | Foundation | Architecture baseline | BE | Clean Architecture skeleton (`app`/`core`/`domain`/`data`/`presentation`) with DI providers | Implemented | none | `lib/app/di/**`, `lib/domain/**`, `lib/data/**` | TBD | Done — `@riverpod` DI chain (DAO→repo→use case) wired + tested |
-| 1.1.2 | Foundation | Theme tokens + design-system baseline | FE | Theme tokens (colors/type/spacing/radius), `MxTheme`, dark/light schemes from the design system | Specified | none | `lib/core/theme/**` | TBD | Implement (Phase 1) — feeds the widget kit |
+| 1.1.2 | Foundation | Theme tokens + design-system baseline | FE | Theme tokens (colors/type/spacing/radius), `MxTheme`, dark/light schemes from the design system | Implemented | none | `lib/core/theme/**` | TBD | Done — `MxColors`/`MxShadows` extensions + `MxSpacing`/`MxRadius`/`MxTypography` + `MxTheme` light/dark from `colors_and_type.css`; feeds the widget kit (1.2.x) |
 | 1.1.3 | Foundation | Routing baseline | FE | GoRouter shell, `RouteNames`/`RoutePaths` constants, placeholder discipline | Specified | none | `lib/app/router/app_router.dart` | TBD | Implement (Phase 0) |
 | 1.1.4 | Foundation | l10n baseline | FE | ARB en/vi + generated localizations pipeline | Specified | none | `lib/l10n/app_en.arb`, `lib/l10n/app_vi.arb` | TBD | Implement (Phase 0) |
 | 1.1.5 | Foundation | Drift/database baseline | BE | `.drift` schema layout, `AppDatabase`, migration infrastructure + first table | Specified | none | `lib/data/datasources/local/app_database.dart`, `lib/data/datasources/local/migrations/**`, `test/data/migrations/**` | TBD | Implement (Phase 0); later schema change follows §9 |
@@ -444,6 +444,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `TBD` | 2026-06-19 | 1.1.2 | Theme tokens + design-system baseline: `MxColors`/`MxShadows` ThemeExtensions, `MxSpacing`/`MxRadius`/`MxTypography` token classes, and `MxTheme` light/dark builders derived from `colors_and_type.css` (token-pinned `ColorScheme`, replaces seed-only theme); barrel `theme.dart`; `memox_app` wired to `MxTheme`; theme unit tests; flip 1.1.2 Specified→Implemented |
 | `f0b4060f` | 2026-06-19 | 1.1.1 | Complete DI providers: replace manual `ProviderContainer` stub with `@riverpod` codegen wiring (DAO→repository→use case) + `ExampleStubDao`; add DI chain unit test; flip 1.1.1 Specified→Implemented |
 | `60e096de` | 2026-06-19 | 1.1.1 | Implement Clean Architecture skeleton with error handling, app bootstrap, theme/router setup, domain/data layer pattern examples, and dependency injection infrastructure |
 | `7dd04e0` | 2026-06-19 | 9.18 | Add `tool/prompt_gen/run.mjs`: generates Claude Code prompts from WBS IDs embedding the 6-step dev loop; supports single/batch/phase/list/next modes; registered in `tool/README.md` (§3.6, trigger matrix, portability table) |
