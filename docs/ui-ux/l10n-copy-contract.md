@@ -125,8 +125,8 @@ Always plural-aware:
 
 | Locale | Status |
 | --- | --- |
-| en | Source (always present, all keys) |
-| vi | Planned. Translation file `app_vi.arb`. |
+| en | Source (always present, all keys). Template `lib/l10n/app_en.arb`. |
+| vi | Shipped baseline. Translation file `lib/l10n/app_vi.arb`; registered in `AppLocalizations.supportedLocales` (WBS 1.1.4). |
 | ko | Planned. Translation file `app_ko.arb`. |
 
 ## Voice examples (DO vs DON'T)

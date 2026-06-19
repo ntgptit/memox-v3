@@ -12,5 +12,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'MemoX';
 
   @override
-  String get appDescription => 'Local-first Flutter flashcard app';
+  String get appDescription => 'Local-first flashcard app';
 }

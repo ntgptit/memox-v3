@@ -1,5 +1,11 @@
 {
   "@@locale": "en",
   "appTitle": "MemoX",
-  "appDescription": "Local-first Flutter flashcard app"
+  "@appTitle": {
+    "description": "Application name shown as the OS task/window title. Brand name; keep untranslated."
+  },
+  "appDescription": "Local-first flashcard app",
+  "@appDescription": {
+    "description": "One-line description of the app for about/store contexts."
+  }
 }
