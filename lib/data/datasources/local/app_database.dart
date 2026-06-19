@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:memox/data/datasources/local/connection/database_connection.dart';
 import 'package:memox/data/datasources/local/migrations/v2_add_decks.dart';
+import 'package:memox/data/datasources/local/migrations/v3_add_flashcards.dart';
 
 part 'app_database.g.dart';
 
@@ -16,7 +17,15 @@ part 'app_database.g.dart';
 /// `migrations/v<N>_*.dart` step file (`docs/database/migration-contract.md`).
 ///
 /// v2 (WBS 2.7.1): added the `decks` table (`migrations/v2_add_decks.dart`).
-@DriftDatabase(include: <String>{'drift/folders.drift', 'drift/decks.drift'})
+/// v3 (WBS 2.11.1/2.16.1): added the `flashcards` table
+/// (`migrations/v3_add_flashcards.dart`).
+@DriftDatabase(
+  include: <String>{
+    'drift/folders.drift',
+    'drift/decks.drift',
+    'drift/flashcards.drift',
+  },
+)
 class AppDatabase extends _$AppDatabase {
   /// Production constructor — opens the platform connection (off the UI
   /// isolate on native; `WasmDatabase` on web).
@@ -27,7 +36,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 2;
+  static const int currentSchemaVersion = 3;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -47,6 +56,9 @@ class AppDatabase extends _$AppDatabase {
       // so a multi-version upgrade runs every intervening step.
       if (from < 2) {
         await migrateV1ToV2(m, this);
+      }
+      if (from < 3) {
+        await migrateV2ToV3(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

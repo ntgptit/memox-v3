@@ -1,0 +1,27 @@
+-- Flashcards: a deck-owned study card. Every flashcard belongs to exactly one
+-- deck (deck_id NOT NULL, FK→decks ON DELETE CASCADE), so deleting a deck (or a
+-- folder above it) removes its flashcards. front/back are required content;
+-- example_sentence/pronunciation/hint are optional detail text (NULL when the
+-- editor leaves them blank — never an empty string). is_flagged backs the
+-- Flagged filter; part_of_speech is optional lowercase free text. Timestamps are
+-- UTC epoch milliseconds; ids are text (UUID-like).
+--
+-- Parent-child invariant (WBS 2.16.1): a flashcard cannot exist without a deck.
+-- See docs/database/schema-contract.md §Current schema (flashcards) and
+-- docs/business/flashcard/flashcard-management.md.
+CREATE TABLE flashcards (
+  id TEXT NOT NULL PRIMARY KEY,
+  deck_id TEXT NOT NULL REFERENCES decks (id) ON DELETE CASCADE,
+  front TEXT NOT NULL,
+  back TEXT NOT NULL,
+  example_sentence TEXT,
+  pronunciation TEXT,
+  hint TEXT,
+  part_of_speech TEXT,
+  is_flagged BOOLEAN NOT NULL DEFAULT 0,
+  sort_order INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+) AS FlashcardRow;
+
+CREATE INDEX idx_flashcards_deck ON flashcards (deck_id);

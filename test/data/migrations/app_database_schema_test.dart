@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v2)', () {
+  group('AppDatabase schema (v3)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,97 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 2);
-      expect(db.schemaVersion, 2);
+      expect(AppDatabase.currentSchemaVersion, 3);
+      expect(db.schemaVersion, 3);
+    });
+
+    Future<void> insertDeckRow(String id, String folderId) async {
+      final int ts = now();
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: id,
+              folderId: folderId,
+              name: id,
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+    }
+
+    test('creates the flashcards table and round-trips a card', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('deck', 'folder');
+      final int ts = now();
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'deck',
+              front: 'apple',
+              back: '사과',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+
+      final List<FlashcardRow> rows = await db.select(db.flashcards).get();
+      expect(rows, hasLength(1));
+      expect(rows.single.front, 'apple');
+      expect(rows.single.deckId, 'deck');
+      // is_flagged defaults to false; optional fields default to null.
+      expect(rows.single.isFlagged, isFalse);
+      expect(rows.single.exampleSentence, isNull);
+    });
+
+    test('cascades flashcard delete when its deck is removed', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('deck', 'folder');
+      final int ts = now();
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'deck',
+              front: 'apple',
+              back: '사과',
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+
+      await (db.delete(db.decks)..where((t) => t.id.equals('deck'))).go();
+
+      expect(await db.select(db.flashcards).get(), isEmpty);
+    });
+
+    test('rejects a flashcard with a missing deck (parent-child FK)', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      final int ts = now();
+      expect(
+        () => db
+            .into(db.flashcards)
+            .insert(
+              FlashcardsCompanion.insert(
+                id: 'orphan',
+                deckId: 'does-not-exist',
+                front: 'apple',
+                back: '사과',
+                sortOrder: 0,
+                createdAt: ts,
+                updatedAt: ts,
+              ),
+            ),
+        throwsA(isA<Exception>()),
+      );
     });
 
     test('creates the decks table and round-trips a deck', () async {

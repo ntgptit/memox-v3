@@ -16,14 +16,14 @@ applies_to: Flashcard CRUD and Import behavior branches
 
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
-| C1 | Create card | Valid front/back + optional example/hint/pronunciation/tags | Persist card + initial progress row; save becomes enabled once required fields are present | C0+C1 | TBD |
-| C2 | Create card | Blank front | Save stays disabled until the required fields are present | C1 | TBD |
-| C3 | Create card | Blank back | Save stays disabled until the required fields are present | C1 | TBD |
+| C1 | Create card | Valid front/back + optional example/hint/pronunciation | Persist deck-owned card with appended `sort_order`; trim front/back; blank optional fields stored as `null`. (Initial `flashcard_progress` row + tags deferred until those tables ship — WBS 2.15.x/SRS) | C0+C1 | test/data/repositories/flashcard_repository_impl_test.dart::C1 |
+| C2 | Create card | Blank front | Reject after trim; repository returns `ValidationFailure(front, empty)` | C1 | test/data/repositories/flashcard_repository_impl_test.dart::C2 |
+| C3 | Create card | Blank back | Reject after trim; repository returns `ValidationFailure(back, empty)` | C1 | test/data/repositories/flashcard_repository_impl_test.dart::C3 |
 | C4 | Edit card | Existing card opens through shared editor | Load deck/card context, prefill the form, and show the danger zone | C0+C1 | TBD |
 | C5 | Edit card | Learned front/back changed on a progressed card | Show progress-policy dialog, then update with keep/reset choice | C0+C1 | TBD |
 | C6 | Delete card | Confirmed from flashcard list row/bulk action | Delete card and dependent data | C0+C1 | TBD |
 | C7 | Import CSV preview | Valid front/back rows + optional extra columns | Trim front/back and preview the valid rows without writing to DB | C0+C1 | TBD |
-| C8 | Create card | Whitespace-only front | Reject after trim; repository returns validation failure | C1 | TBD |
+| C8 | Create card | Whitespace-only front | Reject after trim; repository returns validation failure | C1 | test/data/repositories/flashcard_repository_impl_test.dart::C2 |
 | C9 | Create editor close | Blank draft | Leave without discard dialog | C1 | TBD |
 | C10 | Create editor close | Front typed but unsaved | Show discard dialog | C1 | TBD |
 | C11 | Create editor discard | User cancels discard | Stay on editor and keep typed input | C1 | TBD |
@@ -50,7 +50,8 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C37 | Flashcard list filters | Status/search composition and deterministic order | Search composes with status filter; filtered rows keep stable deck order | C0+C1 | TBD |
 | C38 | Flashcard list filters | Tag empty / single / multi / normalization / scope | Empty selected tags return all cards; single normalized tag filter stays deck-scoped; multi-tag filter uses AND semantics and keeps stable order | C0+C1 | TBD |
 | C39 | Flashcard list filters | Tag composition / no-results | Tag filter composes with search + status; no-results keeps `totalCount` at the full deck total | C0+C1 | TBD |
-| C40 | Manual duplicate check | Create/edit save with same-deck duplicate front/back | Return `hasDuplicate=true` without blocking save; edit mode ignores the current card; missing deck/card and blank fields return typed failures | C0+C1 | TBD |
+| C40 | Manual duplicate check | Create/edit save with same-deck duplicate front/back | Return `isDuplicate=true` (with matching ids) without blocking save; trimmed + case-insensitive `front`+`back` compare; deck-scoped; edit mode ignores the current card via `excludeId` | C0+C1 | test/data/repositories/flashcard_repository_impl_duplicate_behavior_test.dart, test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart |
+| C41 | Create/edit card | Parent deck (WBS 2.16.1) | Card cannot exist without a deck: non-null `deck_id` FK→decks ON DELETE CASCADE; create under a missing deck returns `NotFoundFailure(deck)`; update on a missing card returns `NotFoundFailure(flashcard)` | C0+C1 | test/data/repositories/flashcard_repository_impl_test.dart, test/data/migrations/app_database_schema_test.dart |
 
 ## Import
 

@@ -1,0 +1,31 @@
+import 'folders.drift';
+import 'decks.drift';
+import 'flashcards.drift';
+
+-- LIKE-based global search queries (WBS 3.5.1). The repository lowercases and
+-- escapes the user query (`%`, `_`, `\`) before binding :pattern, so these
+-- queries declare `ESCAPE '\'` and compare against `lower(column)`. Ranking
+-- (exact → starts-with → substring → recency) is applied in Dart from the
+-- normalized query; SQL only filters + provides a stable recency order. Each
+-- query is uncapped here — the use case caps per-section and reports the total
+-- for the "+N more" affordance. See docs/business/search/global-search.md and
+-- docs/contracts/usecase-contracts/search.md.
+
+-- Folders whose name matches :pattern (case-insensitive substring).
+searchFolders(:pattern AS TEXT):
+SELECT folders.** FROM folders
+WHERE lower(folders.name) LIKE :pattern ESCAPE '\'
+ORDER BY folders.updated_at DESC, folders.id;
+
+-- Decks whose name matches :pattern.
+searchDecks(:pattern AS TEXT):
+SELECT decks.** FROM decks
+WHERE lower(decks.name) LIKE :pattern ESCAPE '\'
+ORDER BY decks.updated_at DESC, decks.id;
+
+-- Flashcards whose front or back matches :pattern.
+searchFlashcards(:pattern AS TEXT):
+SELECT flashcards.** FROM flashcards
+WHERE lower(flashcards.front) LIKE :pattern ESCAPE '\'
+   OR lower(flashcards.back) LIKE :pattern ESCAPE '\'
+ORDER BY flashcards.updated_at DESC, flashcards.id;

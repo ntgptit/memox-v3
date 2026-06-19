@@ -40,6 +40,17 @@ Future<Either<Failure, Flashcard>> call({
 
 **Test refs:** FC1-FC3, TG9, TG10.
 
+> **Current implementation (rebuild, WBS 2.11.1 — Partial).** Shipped as the
+> `Result`-based `CreateFlashcardUseCase`
+> (`lib/domain/usecases/flashcard/create_flashcard_usecase.dart`) over
+> `FlashcardRepository.createFlashcard`. The signature adds `partOfSpeech` and
+> omits `tags` (no `flashcard_tags` table yet) and the initial
+> `flashcard_progress` row (no `flashcard_progress` table yet) — both deferred
+> until those tables ship (WBS 2.15.x / SRS). Front/back required-after-trim,
+> blank optional → null, appended `sort_order`, and the missing-deck
+> `NotFoundFailure` parent check (WBS 2.16.1) are implemented. Decision rows
+> C1-C3, C8, C41. Test: `test/data/repositories/flashcard_repository_impl_test.dart`.
+
 ## UpdateFlashcardUseCase
 
 ```dart
@@ -77,6 +88,47 @@ Future<Either<Failure, Flashcard>> call({
 **Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 
 **Test refs:** FC4-FC5, `test/domain/usecases/flashcard/update_flashcard_usecase_test.dart::normalizes tags and forwards the reset progress policy`.
+
+> **Current implementation (rebuild, WBS 2.12.1).** Shipped as the
+> `Result`-based `UpdateFlashcardUseCase`
+> (`lib/domain/usecases/flashcard/update_flashcard_usecase.dart`) over
+> `FlashcardRepository.updateFlashcard({id, front, back, exampleSentence,
+> pronunciation, hint, partOfSpeech})`. Tags and the `FlashcardProgressEditPolicy`
+> are not wired yet (no `flashcard_tags` / `flashcard_progress` tables). Front/back
+> required-after-trim, blank optional → null, deck + `sort_order` preserved, and a
+> missing-card `NotFoundFailure(flashcard)`. Test:
+> `test/data/repositories/flashcard_repository_impl_test.dart`.
+
+## CheckManualDuplicateFlashcardUseCase
+
+```dart
+Future<Result<FlashcardDuplicateCheckResult>> call({
+  required DeckId deckId,
+  required String front,
+  required String back,
+  FlashcardId? excludeId,
+});
+```
+
+> **Current implementation (rebuild, WBS 2.20.1).** Shipped as the
+> `Result`-based `CheckManualDuplicateFlashcardUseCase`
+> (`lib/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase.dart`)
+> over `FlashcardRepository.checkManualDuplicate`.
+
+**Rules:**
+
+- **Non-blocking soft-warning.** Never rejects a save; the editor uses the result
+  to show a "save anyway?" confirm. Create/update save the card regardless.
+- A card is a duplicate when its trimmed, case-insensitive `front` + `back` match
+  an existing card in the **same deck**.
+- `excludeId` skips the card itself on edit.
+- Returns `FlashcardDuplicateCheckResult { isDuplicate, matchingFlashcardIds }`
+  (`lib/domain/models/flashcard_duplicate_check_result.dart`).
+
+**Errors:** `StorageFailure(read)`.
+
+**Test refs:** C40, `test/data/repositories/flashcard_repository_impl_duplicate_behavior_test.dart`,
+`test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart`.
 
 ## MoveFlashcardUseCase
 

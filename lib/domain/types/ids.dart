@@ -11,3 +11,6 @@ typedef FolderId = String;
 
 /// Identifier of a [Deck] row (`decks.id`).
 typedef DeckId = String;
+
+/// Identifier of a [Flashcard] row (`flashcards.id`).
+typedef FlashcardId = String;
