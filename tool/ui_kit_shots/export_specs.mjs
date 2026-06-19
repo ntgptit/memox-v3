@@ -621,8 +621,9 @@ async function main() {
   page.on('pageerror', (e) => console.warn('pageerror:', e.message));
   // Serve the kit over HTTP so external `text/babel src=screens/*.jsx` scripts load
   // (browsers block fetch of local files under file://).
-  const kitServer = await startKitServer(kitDir);
-  await page.goto(`${kitServer.origin}/index.html`, { waitUntil: 'networkidle2', timeout: 120000 });
+  // Serve from the design-system root so `../../colors_and_type.css` resolves.
+  const kitServer = await startKitServer(resolve(kitDir, '..', '..'));
+  await page.goto(`${kitServer.origin}/ui_kits/mobile/index.html`, { waitUntil: 'networkidle2', timeout: 120000 });
   await page.waitForSelector('.row .row-num', { timeout: 120000 });
   await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
   await page.evaluate((m) => { window.__MX_COMPONENT_MAP = m; }, compMap);

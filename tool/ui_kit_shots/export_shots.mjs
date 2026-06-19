@@ -62,8 +62,10 @@ async function main() {
   page.on('pageerror', (e) => console.warn('pageerror:', e.message));
   // Serve the kit over HTTP so external `text/babel src=screens/*.jsx` scripts load
   // (browsers block fetch of local files under file://).
-  const kitServer = await startKitServer(kitDir);
-  await page.goto(`${kitServer.origin}/index.html`, { waitUntil: 'networkidle2', timeout: 120000 });
+  // Serve from the design-system root so the kit's `../../colors_and_type.css`
+  // + `../../memox-components.css` resolve (rooting at mobile/ 404s them).
+  const kitServer = await startKitServer(resolve(kitDir, '..', '..'));
+  await page.goto(`${kitServer.origin}/ui_kits/mobile/index.html`, { waitUntil: 'networkidle2', timeout: 120000 });
 
   // Babel-in-browser compile can take a while; wait for the rows to exist.
   await page.waitForSelector('.row .row-num', { timeout: 120000 });
