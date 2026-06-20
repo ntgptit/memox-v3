@@ -53,7 +53,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 | P1.3 | 7.5.1 / 7.5.2 | **Progress screen FE + states** (redesign **E4**) | Assemble the ready `MxGoalRing` + `MxInsight`; needs E2 below for goal/streak data. |
 | P1.4 | 5.4.1 / 5.4.2 | Engagement persistence + streak/goal (redesign **E2**) | `study_days` + daily-goal — **schema/migration, needs approval.** Feeds Progress goal/streak. |
 | P1.5 | 7.6.2 / 7.6.3 / 7.6.1 | Card history use cases + screen FE + review-history query | |
-| P1.6 | 5.1.1 / 5.1.2 · 5.6.1 / 5.6.2 · 5.7.1 · 5.5.1 | Dashboard: resume card, recent-decks, start-new-learning, refresh | Builds on the shipped `/home`. |
+| P1.6 | ~~5.1.1~~ / 5.1.2 · 5.6.1 / 5.6.2 · 5.7.1 · 5.5.1 | Dashboard: ~~resume summary BE~~ ✅ **DONE 2026-06-21** + resume card FE (5.1.2), recent-decks, start-new-learning, refresh | Builds on the shipped `/home`. |
 | P1.7 | 7.7.1 | Dashboard/Progress consistency | |
 
 ### Study modes beyond Review + study actions

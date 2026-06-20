@@ -16,4 +16,10 @@ class DashboardDao extends DatabaseAccessor<AppDatabase>
   /// (epoch ms).
   Future<DashboardDueSummaryResult> dueSummary(int now) =>
       dashboardDueSummary(now).getSingle();
+
+  /// The most recently active resumable session (any scope) whose `updated_at`
+  /// is newer than [cutoff] (epoch ms), with its progress, or `null` when none
+  /// (WBS 5.1.1).
+  Future<DashboardResumeSessionResult?> resumeSession(int cutoff) =>
+      dashboardResumeSession(cutoff).getSingleOrNull();
 }

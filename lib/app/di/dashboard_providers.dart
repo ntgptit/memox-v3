@@ -2,6 +2,7 @@ import 'package:memox/app/di/database_providers.dart';
 import 'package:memox/data/datasources/local/daos/dashboard_dao.dart';
 import 'package:memox/data/repositories/dashboard_repository_impl.dart';
 import 'package:memox/domain/repositories/dashboard_repository.dart';
+import 'package:memox/domain/usecases/dashboard/load_dashboard_resume_summary_usecase.dart';
 import 'package:memox/domain/usecases/dashboard/load_dashboard_summary_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -21,5 +22,11 @@ DashboardRepository dashboardRepository(Ref ref) =>
 @riverpod
 LoadDashboardSummaryUseCase loadDashboardSummaryUseCase(Ref ref) =>
     LoadDashboardSummaryUseCase(
+      repository: ref.watch(dashboardRepositoryProvider),
+    );
+
+@riverpod
+LoadDashboardResumeSummaryUseCase loadDashboardResumeSummaryUseCase(Ref ref) =>
+    LoadDashboardResumeSummaryUseCase(
       repository: ref.watch(dashboardRepositoryProvider),
     );
