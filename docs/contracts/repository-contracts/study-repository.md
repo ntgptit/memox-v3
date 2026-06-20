@@ -108,6 +108,11 @@ strict and must surface the corruption instead of hiding it.
 
 ## Constraints
 
+- **V1 create status (WBS 4.2.1):** `createSession` persists the new session
+  directly as `in_progress` (not `draft`), per `docs/business/study/study-flow.md`
+  §Session lifecycle. `draft` stays in the enum and is treated as resumable if
+  encountered. Item rows are inserted in one transaction with the session header
+  (`StudySessionDao.createSessionWithItems`); the whole unit rolls back on failure.
 - Session `status` transitions allowed:
     - `draft` → `in_progress` (on first attempt)
     - `draft` / `in_progress` → `completed` (on finalize)

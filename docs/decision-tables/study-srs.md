@@ -16,9 +16,9 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
-| S1 | Create session | Deck with cards | Persist session/items, capped to the first `maxSessionItems` eligible cards when the scope is larger | C0+C1 | TBD |
-| S2 | Create session | Folder with recursive cards | Persist session/items, capped to the first `maxSessionItems` eligible cards when the scope is larger | C0+C1 | TBD |
-| S3 | Create session | Today with due cards | Persist SRS session, capped to the first `maxSessionItems` due cards when the scope is larger | C0+C1 | TBD |
+| S1 | Create session | Deck with cards | Persist session/items, capped to the first `maxSessionItems` eligible cards when the scope is larger | C0+C1 | study_repository_create_session_test.dart (BE; cap→4.2.4) |
+| S2 | Create session | Folder with recursive cards | Persist session/items, capped to the first `maxSessionItems` eligible cards when the scope is larger | C0+C1 | study_repository_create_session_test.dart (BE; cap→4.2.4) |
+| S3 | Create session | Today with due cards | Persist SRS session, capped to the first `maxSessionItems` due cards when the scope is larger | C0+C1 | study_repository_create_session_test.dart (BE; cap→4.2.4) |
 | S4 | Create session | Deck with zero cards | `EmptyScopeException(deckNoCards)` → render `EmptyScopeScreen` (`studyEmpty_deck_noCards_title`) with "Add flashcards" CTA pushing `flashcardCreate`; no session persisted | C1 | study_entry_repository_impl_test.dart (BE) |
 | S4b | Create session | Folder subtree with zero descendant cards | `EmptyScopeException(folderNoCards)` → `studyEmpty_folder_noCards_title` with "Add a deck" CTA returning to folder detail; no session | C1 | study_entry_repository_impl_test.dart (BE) |
 | S4c | Create session | Today (srs_review) has cards but zero due | `EmptyScopeException(todayAllDone)` → `studyEmpty_today_allDone_title` + motivational message with "Back to dashboard" CTA; no session | C1 | study_entry_repository_impl_test.dart (BE) |

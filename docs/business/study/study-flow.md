@@ -123,7 +123,8 @@ Status notes (see `docs/business/glossary.md` §Status terms):
 - `ready_to_finalize` is a **derived UI state** ("all items answered"), not a persisted
   `study_sessions.status` value.
 - `draft` exists in the `SessionStatus` enum but V1 persists new sessions directly as
-  `in_progress` (`_persistSession`); treat `draft` as resumable if encountered.
+  `in_progress` (`StudySessionDao.createSessionWithItems`, WBS 4.2.1); treat `draft` as
+  resumable if encountered.
 - `failed_to_finalize` exists in the enum but is **never written in V1**: a failed finalize
   rolls back and the session stays `in_progress` (decision row S10).
 

@@ -70,6 +70,20 @@ Future<Either<Failure, Session>> call({
 
 **Errors:** `StorageFailure`.
 
+**V1 implementation (WBS 4.2.1):** `CreateStudySessionUseCase`
+(`lib/domain/usecases/study/create_study_session_usecase.dart`) owns the `now`
+clock and delegates to `StudyRepository.createSession({scope, flashcardIds, now})`
+(`lib/data/repositories/study_repository_impl.dart`). The repo generates the
+session + item ids (`IdGenerator`), maps the scope/status enums to storage tokens
+(`StudySessionMapper`), and inserts the `study_sessions` row + ordered
+`study_session_items` rows in one `StudySessionDao.createSessionWithItems`
+transaction (rolls back as a unit on failure → `StorageFailure(transaction)`).
+Per `docs/business/study/study-flow.md` §Session lifecycle, V1 persists the new
+session directly as `in_progress` (not `draft`). An empty `flashcardIds` list is
+a `ValidationFailure(insufficientContent)` (the eligibility gate, WBS 4.1.1, runs
+first). The `maxSessionItems` cap is applied by the caller before the list is
+passed (WBS 4.2.4); ordered-eligible-id resolution is a separate read.
+
 ## ResumeSessionUseCase
 
 ```dart

@@ -1,4 +1,7 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/study_scope.dart';
 
 /// Study session persistence port (ENABLER skeleton — WBS 4.0.1).
 ///
@@ -23,4 +26,18 @@ abstract interface class StudyRepository {
   /// hard-deleted (`docs/contracts/repository-contracts/study-repository.md`
   /// §Forbidden). Maps a read/write error to a `StorageFailure`.
   Future<Result<int>> expireOldSessions({required int now});
+
+  /// Atomically creates a new session for [scope] with one ordered
+  /// `study_session_items` row per id in [flashcardIds] (queue order preserved),
+  /// stamped at [now] (epoch ms). V1 persists the session directly as
+  /// `in_progress` (`docs/business/study/study-flow.md` §Session lifecycle).
+  /// Returns the created [StudySession]. [flashcardIds] must be non-empty — the
+  /// empty-scope gate (WBS 4.1.1) runs first; an empty list is a
+  /// `ValidationFailure`. The `maxSessionItems` cap is applied by the caller
+  /// (WBS 4.2.4). A write error maps to a `StorageFailure`.
+  Future<Result<StudySession>> createSession({
+    required StudyScope scope,
+    required List<FlashcardId> flashcardIds,
+    required int now,
+  });
 }

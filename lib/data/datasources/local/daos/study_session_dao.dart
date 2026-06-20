@@ -27,6 +27,21 @@ class StudySessionDao {
   Future<void> insertSession(StudySessionsCompanion session) =>
       _db.into(_db.studySessions).insert(session);
 
+  /// Atomically inserts a session header plus its ordered item rows in one
+  /// transaction (`docs/contracts/repository-contracts/study-repository.md`
+  /// §Transaction requirements). Either all rows land or none do.
+  Future<void> createSessionWithItems(
+    StudySessionsCompanion session,
+    List<StudySessionItemsCompanion> items,
+  ) => _db.transaction(() async {
+    await _db.into(_db.studySessions).insert(session);
+    // The batch runs inside the outer transaction; an item FK violation throws
+    // and rolls back the whole unit (session row included).
+    await _db.batch((Batch batch) {
+      batch.insertAll(_db.studySessionItems, items);
+    });
+  });
+
   /// The session header by [id], or `null` when absent.
   Future<StudySessionRow?> sessionById(String id) => (_db.select(
     _db.studySessions,
