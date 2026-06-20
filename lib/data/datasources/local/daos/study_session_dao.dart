@@ -71,6 +71,45 @@ class StudySessionDao {
   Future<void> insertAttempt(StudyAttemptsCompanion attempt) =>
       _db.into(_db.studyAttempts).insert(attempt);
 
+  /// The session item by [id], or `null` when absent.
+  Future<StudySessionItemRow?> itemById(String id) => (_db.select(
+    _db.studySessionItems,
+  )..where((t) => t.id.equals(id))).getSingleOrNull();
+
+  /// The current Leitner box of [flashcardId] from `flashcard_progress`, or
+  /// `null` when the card has no progress row yet (a new card).
+  Future<int?> flashcardProgressBox(String flashcardId) async {
+    final FlashcardProgressRow? row = await (_db.select(
+      _db.flashcardProgress,
+    )..where((t) => t.flashcardId.equals(flashcardId))).getSingleOrNull();
+    return row?.boxNumber;
+  }
+
+  /// Records one self-grade answer in a single transaction (WBS 4.4.1): insert
+  /// the [attempt], mark its session item answered at [answeredAt], and touch
+  /// the session's `updated_at` to [updatedAt]. Does NOT update
+  /// `flashcard_progress` — box changes are finalization-owned
+  /// (`docs/contracts/repository-contracts/study-repository.md`).
+  Future<void> recordAnswer({
+    required StudyAttemptsCompanion attempt,
+    required String sessionItemId,
+    required String sessionId,
+    required int answeredAt,
+    required int updatedAt,
+  }) => _db.transaction(() async {
+    await _db.into(_db.studyAttempts).insert(attempt);
+    await (_db.update(
+      _db.studySessionItems,
+    )..where((t) => t.id.equals(sessionItemId))).write(
+      StudySessionItemsCompanion(
+        answeredAt: Value<int?>(answeredAt),
+        updatedAt: Value<int>(updatedAt),
+      ),
+    );
+    await (_db.update(_db.studySessions)..where((t) => t.id.equals(sessionId)))
+        .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
+  });
+
   /// The attempts recorded against [sessionItemId], oldest first.
   Future<List<StudyAttemptRow>> attemptsForItem(String sessionItemId) =>
       (_db.select(_db.studyAttempts)

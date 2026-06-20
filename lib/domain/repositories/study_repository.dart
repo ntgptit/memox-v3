@@ -1,7 +1,9 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 
 /// Study session persistence port (ENABLER skeleton — WBS 4.0.1).
@@ -61,5 +63,21 @@ abstract interface class StudyRepository {
   /// §LoadStudySessionReviewUseCase). A read error maps to a `StorageFailure`.
   Future<Result<StudySessionReview>> loadStudySessionReview({
     required SessionId id,
+  });
+
+  /// Records one self-grade answer for [sessionItemId] in [sessionId] (WBS
+  /// 4.4.1). In one transaction: inserts a `study_attempts` row (with the
+  /// computed `box_before` → `box_after` Leitner transition for [result]),
+  /// marks the item answered, and touches `study_sessions.updated_at` at [now].
+  /// Does **not** update `flashcard_progress` — box changes are
+  /// finalization-owned. A missing session/item is a `NotFoundFailure`; a
+  /// terminal session or an already-answered item is an `UnsupportedActionFailure`;
+  /// a write error maps to a `StorageFailure`.
+  Future<Result<void>> recordStudySessionAnswer({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required AttemptResult result,
+    required StudyMode studyMode,
+    required int now,
   });
 }

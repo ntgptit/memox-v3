@@ -8,8 +8,11 @@ import 'package:memox/data/mappers/study_session_mapper.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
+import 'package:memox/domain/srs/srs_box.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 
 /// Drift-backed [StudyRepository] (WBS 4.0.1 retention sweep + WBS 4.2.1 session
@@ -206,6 +209,83 @@ class StudyRepositoryImpl implements StudyRepository {
         failure: Failure.storage(
           operation: StorageOp.read,
           table: 'study_session_items',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<void>> recordStudySessionAnswer({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required AttemptResult result,
+    required StudyMode studyMode,
+    required int now,
+  }) async {
+    try {
+      final StudySessionRow? session = await _dao.sessionById(sessionId);
+      if (session == null) {
+        return (
+          failure: const Failure.notFound(entity: 'study_session'),
+          data: null,
+        );
+      }
+      if (session.status != StudySessionDao.statusDraft &&
+          session.status != StudySessionDao.statusInProgress) {
+        return (
+          failure: Failure.unsupportedAction(
+            message: 'Cannot answer in a ${session.status} study session.',
+          ),
+          data: null,
+        );
+      }
+
+      final StudySessionItemRow? item = await _dao.itemById(sessionItemId);
+      if (item == null || item.sessionId != sessionId) {
+        return (
+          failure: const Failure.notFound(entity: 'study_session_item'),
+          data: null,
+        );
+      }
+      if (item.answeredAt != null) {
+        return (
+          failure: const Failure.unsupportedAction(
+            message: 'This card has already been answered.',
+          ),
+          data: null,
+        );
+      }
+
+      // box_before is the card's current box (a card with no progress row is a
+      // new card at box 1); box_after is the Leitner transition recorded on the
+      // attempt. flashcard_progress itself is untouched (finalization owns it).
+      final int boxBefore =
+          await _dao.flashcardProgressBox(item.flashcardId) ?? SrsBox.min;
+      final int boxAfter = SrsBox.nextBox(boxBefore, result);
+
+      await _dao.recordAnswer(
+        attempt: StudyAttemptsCompanion.insert(
+          id: _idGenerator.newId(),
+          sessionItemId: sessionItemId,
+          result: _mapper.resultToken(result),
+          studyMode: _mapper.studyModeToken(studyMode),
+          boxBefore: Value<int>(boxBefore),
+          boxAfter: Value<int>(boxAfter),
+          attemptedAt: now,
+        ),
+        sessionItemId: sessionItemId,
+        sessionId: sessionId,
+        answeredAt: now,
+        updatedAt: now,
+      );
+      return (failure: null, data: null);
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.transaction,
+          table: 'study_attempts',
           cause: error.toString(),
         ),
         data: null,

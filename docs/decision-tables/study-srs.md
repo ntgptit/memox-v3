@@ -30,7 +30,7 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S4h | Create session | `entry_type=tag` with zero matching cards | Empty state `studyEmpty_tag_noCards`, no session | C1 | TBD |
 | S4i | Create session | `entry_type=tag` matches cards but none due (srs_review) | Empty state `studyEmpty_tag_noDueCards` with "Study new instead" CTA | C1 | TBD |
 | S5 | Validate flow | Invalid type/flow pair | Reject | C1 | TBD |
-| S6 | Answer | Correct | Persist attempt and advance | C0+C1 | TBD |
+| S6 | Answer | Correct | Persist attempt and advance | C0+C1 | study_repository_record_answer_test.dart |
 | S7 | Answer | Incorrect | Persist attempt and retry when required | C0+C1 | TBD |
 | S8 | Exit | In progress | Show confirmation; cancel stays on Study Session, confirm leaves the screen without canceling or mutating the session, and falls back to Library when the route cannot pop | C0+C1 | TBD |
 | S9 | Finalize | Success | Finish Session commits all answered items transactionally, updates progress, completes the session, and navigates to the real result screen | C0+C1 | TBD |
@@ -59,8 +59,8 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S32 | Study session card | First/last item | Previous disabled on the first item; Next disabled on the last item | C1 | TBD |
 | S33 | Study session card | Any navigation | Reveal resets to hidden after moving between cards | C1 | TBD |
 | S34 | Study session grade | Reveal shown on an unanswered item | Forgot / Got it actions appear only after reveal and stay hidden before reveal | C0+C1 | TBD |
-| S35 | Study session grade | Tap Got it | Insert one attempt, mark the session item answered, advance to the next unanswered item, reset reveal, and keep `flashcard_progress` unchanged | C0+C1 | TBD |
-| S36 | Study session grade | Tap Forgot | Insert one attempt, mark the session item answered, advance to the next unanswered item, reset reveal, and keep `flashcard_progress` unchanged | C0+C1 | TBD |
+| S35 | Study session grade | Tap Got it | Insert one attempt, mark the session item answered, advance to the next unanswered item, reset reveal, and keep `flashcard_progress` unchanged | C0+C1 | study_repository_record_answer_test.dart |
+| S36 | Study session grade | Tap Forgot | Insert one attempt, mark the session item answered, advance to the next unanswered item, reset reveal, and keep `flashcard_progress` unchanged | C0+C1 | study_repository_record_answer_test.dart |
 | S37 | Study session grade | Last unanswered item answered | Show ready-to-finish copy and Finish Session CTA, stay on the session screen, and do not auto-navigate to result | C1 | TBD |
 | S38 | Study session grade | Attempt transaction fails | Keep the current card visible and show a controlled save-failed message | C1 | TBD |
 | S39 | Study session finish | All items answered; Finish Session tapped | Finalize transactionally, update SRS progress, mark the session completed, and navigate to the real result screen | C0+C1 | TBD |
@@ -100,6 +100,7 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S73 | Study session fill | Last card answered | Show the ready-to-finish callout and Finish Session CTA instead of the normal next-card flow | C1 | TBD |
 | S74 | Study session fill | Finish tapped after the final answer | Finalize the session and push-replace to the real result screen on success | C0+C1 | TBD |
 | S75 | Study session fill | Finalize fails | Keep the session open, show the controlled finalize error, and leave Finish Session available for retry | C1 | TBD |
+| S76 | Answer | Flashcard has no `flashcard_progress` row (new card) | Record `box_before = 1` (new-card default), `box_after = SrsBox.nextBox(1, result)`; keep `flashcard_progress` unchanged (no row created at answer time) | C1 | study_repository_record_answer_test.dart |
 
 ## Bury / Suspend
 

@@ -25,8 +25,9 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 - `lib/data/repositories/study_repo_impl.dart` (canonical owner of finalization in V1).
 - `lib/data/repositories/study_repo_impl_study_session.dart` (`_finalizeResultForAttempts`,
   `_boxAfterFinalization`, `_intervalForBox` — transitions and due-date calculation).
-- `lib/data/repositories/study_repo_record_answer.dart` (in-session answer recording helper; keeps
-  `flashcard_progress` unchanged until finalization).
+- `lib/data/repositories/study_repository_impl.dart` (`recordStudySessionAnswer`, WBS 4.4.1 — the
+  in-session answer recording path; records `study_attempts.box_before`/`box_after` via
+  `lib/domain/srs/srs_box.dart` and keeps `flashcard_progress` unchanged until finalization).
 - `lib/domain/study/usecases/study_usecases.dart` (session creation, empty-scope checks, and
   in-session answer orchestration; the legacy `lib/domain/srs/box_intervals.dart` and
   `lib/domain/srs/box_transition.dart` files do NOT exist).

@@ -178,6 +178,22 @@ Future<Either<Failure, Unit>> call({
 
 **Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
 
+**V1 implementation (WBS 4.4.1):** `RecordStudySessionAnswerUseCase`
+(`lib/domain/usecases/study/record_study_session_answer_usecase.dart`) owns the
+`now` clock and delegates to `StudyRepository.recordStudySessionAnswer`
+(`lib/data/repositories/study_repository_impl.dart`). It loads the session
+(missing → `NotFoundFailure`; terminal status → `UnsupportedActionFailure`),
+the item (missing / wrong session → `NotFoundFailure`; already answered →
+`UnsupportedActionFailure`), and the flashcard's current box from
+`flashcard_progress` (`box_before`; a card with no progress row is a new card at
+box 1). `box_after = SrsBox.nextBox(box_before, result)`
+(`lib/domain/srs/srs_box.dart`: perfect → +1 cap 8, recovered → stay, forgot →
+1). Then `StudySessionDao.recordAnswer` inserts the `study_attempts` row (result
++ study_mode storage tokens, box_before/box_after) + marks
+`study_session_items.answered_at` + touches `study_sessions.updated_at`, all in
+one transaction; `flashcard_progress` is **not** written (box changes are
+finalization-owned, WBS 4.6.x). A write error → `StorageFailure(transaction)`.
+
 ## RecordMatchEvaluationUseCase
 
 ```dart
@@ -362,7 +378,7 @@ row badges.
 
 ## Forbidden patterns
 
-- ❌ Update `current_box` outside `GradeAttemptUseCase` or `ResetFlashcardProgressUseCase`.
+- ❌ Update `current_box` outside `FinalizeStudySessionUseCase`, `GradeAttemptUseCase`, or `ResetFlashcardProgressUseCase`. In V1 the self-grade path (`RecordStudySessionAnswerUseCase`, WBS 4.4.1) records `study_attempts.box_after` only and leaves `flashcard_progress.box_number` for finalization.
 - ❌ Compute `due_at` outside the interval table.
 - ❌ Finalize a session with unanswered items.
 - ❌ Allow grade on a `completed`/`cancelled` session.

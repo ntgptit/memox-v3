@@ -1,8 +1,10 @@
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
+import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 
@@ -53,6 +55,40 @@ class StudySessionMapper {
     'cancelled' => SessionStatus.cancelled,
     'failed_to_finalize' => SessionStatus.failedToFinalize,
     _ => throw ArgumentError.value(token, 'status', 'unknown session status'),
+  };
+
+  // Attempt storage tokens per `docs/contracts/types-catalog.md` §AttemptResult
+  // / §StudyMode (snake_case TEXT).
+  String resultToken(AttemptResult result) => switch (result) {
+    AttemptResult.perfect => 'perfect',
+    AttemptResult.initialPassed => 'initial_passed',
+    AttemptResult.recovered => 'recovered',
+    AttemptResult.forgot => 'forgot',
+  };
+
+  AttemptResult resultFromToken(String token) => switch (token) {
+    'perfect' => AttemptResult.perfect,
+    'initial_passed' => AttemptResult.initialPassed,
+    'recovered' => AttemptResult.recovered,
+    'forgot' => AttemptResult.forgot,
+    _ => throw ArgumentError.value(token, 'result', 'unknown attempt result'),
+  };
+
+  String studyModeToken(StudyMode mode) => switch (mode) {
+    StudyMode.review => 'review',
+    StudyMode.match => 'match',
+    StudyMode.guess => 'guess',
+    StudyMode.recall => 'recall',
+    StudyMode.fill => 'fill',
+  };
+
+  StudyMode studyModeFromToken(String token) => switch (token) {
+    'review' => StudyMode.review,
+    'match' => StudyMode.match,
+    'guess' => StudyMode.guess,
+    'recall' => StudyMode.recall,
+    'fill' => StudyMode.fill,
+    _ => throw ArgumentError.value(token, 'study_mode', 'unknown study mode'),
   };
 
   /// Maps a persisted `study_sessions` row to the domain entity.
