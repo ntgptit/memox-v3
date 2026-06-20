@@ -5,8 +5,16 @@ applies_to: flashcard tags — creation, filtering, study-by-tag, management
 
 # Tag System
 
-> **Status: Partial — backend tag management (list/search/rename/merge/delete) is implemented over
-> `flashcard_tags`; FE wiring and study-by-tag remain Specified / Future.**
+> **Status: Partial — backend tag management (list/count/rename/merge/delete) is implemented over
+> `flashcard_tags` (WBS 8.3.1); FE wiring and study-by-tag remain Specified / Future.**
+>
+> Implemented (WBS 8.3.1, 2026-06-20): `TagRepository`(`Impl`) over `FlashcardTagDao` +
+> `TagValidator` (trim/lowercase, reject comma/empty/>50) + use cases
+> `WatchTagsWithCountUseCase` / `RenameTagUseCase` / `MergeTagsUseCase` / `DeleteTagUseCase`, over
+> the project `Result` contract. Rename surfaces `ConflictFailure` on a name collision (never
+> auto-merges); merge re-tags + de-dups + removes the source; delete keeps the cards. Search is the
+> screen filtering the watched list. Per-card add/remove tag stays on the flashcard editor;
+> study-by-tag (`StudyEntryType.tag`) remains Blocked / Future.
 
 ## Purpose
 
@@ -225,7 +233,7 @@ All bulk operations are transactional.
 
 **Decision table:**
 
-- `docs/decision-tables/memox-core-decision-table.md` rows TG1-TG11 (incl. TG9 comma rejection, TG10 max 50, TG11 entry_ref_id construction)
+- `docs/decision-tables/tags-bulk-export.md` rows TG1-TG11 (TG1 leading-`#` strip, TG5 rename conflict, TG6 merge dedup, TG7 delete, TG9 comma rejection, TG10 max 50, TG11 entry_ref_id construction)
 
 **Glossary terms:**
 

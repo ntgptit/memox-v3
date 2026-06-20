@@ -5,6 +5,18 @@ status: contract
 
 # Tag Use Cases Contract
 
+> **Current implementation note (2026-06-20, WBS 8.3.1):** the Tag-Management subset is implemented
+> over the project `Result<T>` contract (NOT `Either`/`fpdart` — see target note below):
+> `TagValidator` (pure; trim+lowercase, reject empty/comma/>50 via `StringUtils.normalizeTag`),
+> `WatchTagsWithCountUseCase`, `RenameTagUseCase` (validates + no-op on equal + `ConflictFailure`
+> on collision), `MergeTagsUseCase` (rejects self-merge with `ValidationFailure(duplicate)`),
+> `DeleteTagUseCase` (returns affected-card count) over `TagRepository`(`Impl`) + `FlashcardTagDao`.
+> `AddTagToCardUseCase` / `RemoveTagFromCardUseCase` are owned by the flashcard editor
+> (`FlashcardRepository`); `BuildStudyByTagRefIdUseCase` / `WatchTagsForDeckUseCase` /
+> `WatchTagsForCardUseCase` remain target/Future. Code: `lib/domain/tag/tag_validator.dart`,
+> `lib/domain/usecases/tag/**`. Tests: `test/domain/usecases/tag/tag_usecases_test.dart`,
+> `test/data/repositories/tag_repository_impl_test.dart`. Decision rows: `docs/decision-tables/tags-bulk-export.md` (TG1/TG5/TG6/TG7/TG9/TG10).
+
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
 > error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
 > ordinary feature implementation. First run an approved dependency/API migration task, or use the

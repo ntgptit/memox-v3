@@ -16,16 +16,16 @@ applies_to: Tags, Bulk operations, and Export behavior branches
 
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
-| TG1 | Tag input | Leading `#` typed | Strip before store | C1 | TBD |
-| TG2 | Tag dedup | Same tag different case | Keep one (case-insensitive) | C0+C1 | TBD |
+| TG1 | Tag input | Leading `#` typed | Strip before store (`StringUtils.normalizeTag`) | C1 | `test/domain/usecases/tag/tag_usecases_test.dart` |
+| TG2 | Tag dedup | Same tag different case | Keep one (case-insensitive) | C0+C1 | TBD (create-time dedup — WBS 2.15.1) |
 | TG3 | Tag filter | Multi-select chips | Apply AND filter | C0+C1 | TBD |
 | TG4 | Study by tag | `entry_type=tag` | Resolve cards across decks | C0+C1 | TBD |
-| TG5 | Tag rename | Collides with existing tag | Return conflict on direct rename; use explicit merge action for intentional combination | C1 | TBD |
-| TG6 | Tag merge | Source has cards target also has | Dedup tag rows on merge | C1 | TBD |
-| TG7 | Tag delete | Confirmation | Remove from all cards in transaction | C0+C1 | TBD |
+| TG5 | Tag rename | Collides with existing tag | Return conflict on direct rename; use explicit merge action for intentional combination | C1 | `test/data/repositories/tag_repository_impl_test.dart`, `test/domain/usecases/tag/tag_usecases_test.dart` |
+| TG6 | Tag merge | Source has cards target also has | Dedup tag rows on merge | C1 | `test/data/repositories/tag_repository_impl_test.dart` |
+| TG7 | Tag delete | Confirmation | Remove from all cards in transaction | C0+C1 | `test/data/repositories/tag_repository_impl_test.dart` |
 | TG8 | Bulk add tag | 1000 cards | Single transaction, dedup per card | C1 | TBD |
-| TG9 | Tag input | Contains comma `,` | Reject with inline error; do not strip silently | C0+C1 | TBD |
-| TG10 | Tag input | Exceeds 50 chars after trim | Reject with inline error | C1 | TBD |
+| TG9 | Tag input | Contains comma `,` | Reject with inline error; do not strip silently | C0+C1 | `test/domain/usecases/tag/tag_usecases_test.dart` |
+| TG10 | Tag input | Exceeds 50 chars after trim | Reject with inline error | C1 | `test/domain/usecases/tag/tag_usecases_test.dart` |
 | TG11 | Study-by-tag entry_ref_id | Constructed from selected tags | Lowercased, comma-joined, sorted alphabetically | C0+C1 | TBD |
 
 ## Bulk Operations

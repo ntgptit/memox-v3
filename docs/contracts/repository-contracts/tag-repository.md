@@ -5,6 +5,18 @@ status: contract
 
 # Tag Repository Contract
 
+> **Current implementation note (2026-06-20, WBS 8.3.1):** `TagRepositoryImpl` implements the
+> Tag-Management subset over the project `Result<T>` contract: `watchAllWithCount()` →
+> `Stream<List<TagWithCount>>` (count desc, name asc), `existsCaseInsensitive(name)`,
+> `rename({normalizedOldName, normalizedNewName})` (no-op on equal, `ConflictFailure` on collision),
+> `merge({normalizedSource, normalizedDestination})` → `Result<MergeResult>` (per-card de-dup via
+> `INSERT OR IGNORE` then delete source, in one transaction), `delete(name)` → `Result<int>`
+> (affected-card count). Backed by `FlashcardTagDao`
+> (`lib/data/datasources/local/daos/flashcard_tag_dao.dart`, query `tagsWithCount` in
+> `tag_queries.drift`). Inputs are pre-normalized by the domain layer (`TagValidator`). `addToCard`/
+> `removeFromCard`/`watchTagsForDeck`/`watchTagsForCard`/`popularTags` remain target/other-WBS.
+> Tests: `test/data/repositories/tag_repository_impl_test.dart`.
+
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended
 > error/result contract style. If the project has not yet adopted `fpdart`, do not add it during
 > ordinary feature implementation. First run an approved dependency/API migration task, or use the
