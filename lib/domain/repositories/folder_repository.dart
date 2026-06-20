@@ -112,9 +112,9 @@ abstract interface class FolderRepository {
   //
   // Decks are folder-owned, so their mutations live on the folder repository
   // (no separate `DeckRepository`) — `docs/business/deck/deck-management.md`
-  // §Source files to inspect. Deck delete (WBS 2.9.x) and due/card counts
-  // (WBS 3.7.x) are deferred until the `flashcards`/`flashcard_progress` tables
-  // ship (WBS 2.11.x); see `docs/project-management/wbs.md`.
+  // §Source files to inspect. Deck delete (WBS 2.9.1) is implemented below;
+  // due/card counts (WBS 3.7.x) remain deferred until the recursive count read
+  // model ships; see `docs/project-management/wbs.md`.
 
   /// Create a deck inside [folderId] and lock the parent to [ContentMode.decks]
   /// when it was [ContentMode.unlocked] — one transaction. The deck is appended
@@ -165,4 +165,19 @@ abstract interface class FolderRepository {
     required DeckId deckId,
     required FolderId newFolderId,
   });
+
+  /// Delete [deckId] and its dependent data in one transaction, then revert the
+  /// source folder to [ContentMode.unlocked] when it loses its last deck.
+  ///
+  /// The deck's flashcards (and, through the schema cascade chain, their
+  /// `flashcard_progress` + `flashcard_tags` rows) are removed by the
+  /// `flashcards.deck_id` ON DELETE CASCADE FK — see
+  /// `docs/database/schema-contract.md` §flashcards. Rejects a missing deck
+  /// ([NotFoundFailure]). Highly destructive: the caller MUST confirm first.
+  /// Decision row D3.
+  ///
+  /// > V1 scope: deck row + flashcards/progress/tags. Study attempt/session
+  /// > cleanup is added when those tables ship (WBS 4.x) — see
+  /// > `docs/contracts/repository-contracts/deck-repository.md`.
+  Future<Result<void>> deleteDeck({required DeckId deckId});
 }

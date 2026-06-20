@@ -16,7 +16,7 @@ applies_to: Deck behavior branches
 |----|-------|-----------|----------|----------|------|
 | D1 | Create deck | Valid folder/name | Persist deck (append `sort_order`, lock unlocked folder to decks) | C0+C1 | `folder_repository_impl_deck_test.dart` |
 | D2 | Create deck | Empty name | Reject | C1 | `folder_repository_impl_deck_test.dart` |
-| D3 | Delete deck | Confirmed | Delete deck and dependent data | C0+C1 | TBD (deferred — WBS 2.9.x, blocked on flashcards/progress tables) |
+| D3 | Delete deck | Confirmed | Delete deck and dependent data (flashcards + progress + tags via ON DELETE CASCADE); revert source folder to `unlocked` when its last deck leaves; missing deck → `NotFoundFailure` | C0+C1 | `folder_repository_impl_delete_deck_test.dart`, `test/domain/usecases/deck/delete_deck_usecase_test.dart` |
 | D4 | Reorder | Manual sort active | Persist deterministic `sort_order` transactionally | C0+C1 | `folder_repository_impl_deck_test.dart` |
 | D5 | Start study | Empty deck | Do not create session | C1 | TBD (deferred — study flow, WBS 4.x) |
 | D6 | Rename deck | Trimmed valid title | Update name only; preserve folder ownership and `sort_order` | C0+C1 | `folder_repository_impl_deck_test.dart` |

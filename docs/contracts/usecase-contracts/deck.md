@@ -25,10 +25,20 @@ status: contract
 > `test/data/repositories/folder_repository_impl_deck_test.dart` and
 > `folder_repository_impl_move_deck_test.dart`.
 >
-> **Deferred (Specified):** `DeleteDeckUseCase` (WBS 2.9.x), `UpdateDeckUseCase`,
-> `GetDeckDetailUseCase`, and `WatchDeckCountsUseCase` (WBS 3.7.x) are NOT yet implemented — their
-> cascade / due-count logic depends on the `flashcards` and `flashcard_progress` tables, which have
-> not shipped (WBS 2.11.x). Signatures below remain the target contract.
+> **Current implementation note (2026-06-20, WBS 2.9.1):** `DeleteDeckUseCase` is now implemented
+> over `FolderRepository.deleteDeck` (returning the project `Result<void>`). The deck-row delete
+> cascades to its flashcards and, through the schema chain, their `flashcard_progress` +
+> `flashcard_tags` rows (`flashcards.deck_id` ON DELETE CASCADE, schema v3); the source folder
+> reverts to `unlocked` when it loses its last deck; a missing deck returns `NotFoundFailure`.
+> Code: `lib/domain/usecases/deck/delete_deck_usecase.dart`. Tests:
+> `test/domain/usecases/deck/delete_deck_usecase_test.dart`,
+> `test/data/repositories/folder_repository_impl_delete_deck_test.dart`. Study attempt/session
+> cascade is added when those tables ship (WBS 4.x).
+>
+> **Deferred (Specified):** `UpdateDeckUseCase`, `GetDeckDetailUseCase`, and
+> `WatchDeckCountsUseCase` (WBS 3.7.x) are NOT yet implemented — their due-count logic depends on
+> the recursive folder/deck count read model (WBS 3.7.x). Signatures below remain the target
+> contract.
 
 ## RenameDeckUseCase
 
@@ -125,16 +135,23 @@ Future<Either<Failure, Deck>> call({
 Future<Either<Failure, Unit>> call({required DeckId id});
 ```
 
+> Implemented (WBS 2.9.1) over the project `Result<void>` contract — `DeleteDeckUseCase.call`
+> delegates to `FolderRepository.deleteDeck`.
+
 **Rules:**
 
-- Atomic cascade across progress, tags, attempts, flashcards, sessions, deck row + old parent mode
-  update. Full cascade list in `docs/contracts/repository-contracts/deck-repository.md`.
+- Atomic deck-row delete inside a transaction; flashcards + their `flashcard_progress` /
+  `flashcard_tags` rows go with it via the `flashcards.deck_id` ON DELETE CASCADE chain (schema v3).
+  The source folder reverts to `unlocked` when it loses its last deck. Study attempt/session
+  cascade is added when those tables ship (WBS 4.x). Full target cascade list in
+  `docs/contracts/repository-contracts/deck-repository.md`.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure` (missing deck), `StorageFailure`.
 
 **Caution:** Highly destructive. Caller MUST confirm via §delete-confirm dialog.
 
-**Test refs:** D7.
+**Test refs:** D3 — `test/domain/usecases/deck/delete_deck_usecase_test.dart`,
+`test/data/repositories/folder_repository_impl_delete_deck_test.dart`.
 
 ## ReorderDecksUseCase
 
