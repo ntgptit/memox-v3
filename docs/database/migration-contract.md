@@ -130,10 +130,11 @@ If any step is skipped, report it explicitly.
 (`onCreate`/`onUpgrade`/`beforeOpen` in `AppDatabase.migration`) and the
 platform-isolated connection. Each schema bump adds a `migrations/v<N>_*.dart`
 step file plus an `onUpgrade` step (guarded by `from`). Current code is at
-**schema v4**.
+**schema v5**.
 
 | Version | File | What changed |
 |---------|------|--------------|
+| v5 | `v5_add_folder_color_icon.dart` | Added the nullable `folders.color` + `folders.icon` columns (optional presentation tokens from the folder create/edit pickers; NULL = no custom token → theme default). Additive `addColumn` migration; existing rows need no backfill. Migration test: `test/data/migrations/v5_add_folder_color_icon_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.22.1. |
 | v4 | `v4_add_bury_suspend.dart` | Added `flashcard_progress.is_suspended` (BOOLEAN NOT NULL DEFAULT 0 → existing rows back-fill not-suspended) and `flashcard_progress.buried_until` (INTEGER NULL → existing rows back-fill not-buried). Additive, data-preserving; no behavior reads them yet (eligibility read logic lands WBS 4.11.1 / 2.17.1). Migration test: `test/data/migrations/v4_add_bury_suspend_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 4.0.2. |
 | v3 | `v3_add_flashcards.dart` | Added the `flashcards` (`id`, `deck_id` FK→decks ON DELETE CASCADE, `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, timestamps) + `idx_flashcards_deck`; `flashcard_progress` (`flashcard_id` PK = FK→flashcards ON DELETE CASCADE, `box_number` DEFAULT 1, `due_at?`, `review_count` DEFAULT 0, `lapse_count` DEFAULT 0); and `flashcard_tags` (`flashcard_id` FK→flashcards ON DELETE CASCADE, `tag`, PK `(flashcard_id, tag)`) + `idx_flashcard_tags_tag` tables. Additive. Migration test: `test/data/migrations/v3_add_flashcards_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.11.1. |
 | v2 | `v2_add_decks.dart` | Added the `decks` table (`id`, `folder_id` FK→folders ON DELETE CASCADE, `name`, `target_language` DEFAULT `'korean'`, `sort_order`, timestamps) + `idx_decks_folder`. Additive. Migration test: `test/data/migrations/v2_add_decks_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.7.1. |

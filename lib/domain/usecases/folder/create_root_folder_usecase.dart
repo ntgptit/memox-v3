@@ -12,6 +12,9 @@ class CreateRootFolderUseCase {
 
   final FolderRepository repository;
 
-  Future<Result<Folder>> call({required String name}) =>
-      repository.createRootFolder(name: name);
+  Future<Result<Folder>> call({
+    required String name,
+    String? color,
+    String? icon,
+  }) => repository.createRootFolder(name: name, color: color, icon: icon);
 }

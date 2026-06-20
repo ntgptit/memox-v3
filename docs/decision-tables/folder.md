@@ -33,3 +33,6 @@ applies_to: Folder behavior branches
 | F17 | Move folder | Folder or destination missing | Reject with `NotFound` | C1 | `test/data/repositories/folder_repository_impl_test.dart` |
 | F18 | Move targets | List destinations for a folder | Library root + every folder; folder itself and descendants blocked `cycle`; `decks`-locked folders blocked `lockedToDecks`; current parent annotated; blocked never hidden | C0+C1 | `test/data/repositories/folder_repository_impl_test.dart` |
 | F19 | Move folder | New parent equals current parent | No-op: return the unchanged folder, no `sort_order` churn | C1 | `test/data/repositories/folder_repository_impl_test.dart` |
+| F20 | Rename folder | Valid new name (trimmed), differs from current | Rename; reject empty/duplicate-sibling first; bump `updatedAt` | C0+C1 | `test/data/repositories/folder_repository_impl_test.dart` |
+| F21 | Rename folder | Name unchanged AND no color/icon token supplied | No-op: return the unchanged folder | C1 | `test/data/repositories/folder_repository_impl_test.dart` |
+| F22 | Rename folder | Optional `color`/`icon` token supplied (WBS 2.22.1) | Overwrite only the non-null token(s); a null param leaves the stored token unchanged (clearing deferred); applies even when the name is unchanged | C0+C1 | `test/data/repositories/folder_repository_impl_test.dart` |

@@ -22,6 +22,11 @@ Important fields:
 - `parent_id`
 - `name`
 - `content_mode`
+- `color` (optional) — presentation token chosen via the folder create/edit color picker. `null`
+  means no custom color, so the UI falls back to the theme default. Opaque design-system token
+  string; not validated by the backend (the allowed palette is an FE concern). WBS 2.22.1.
+- `icon` (optional) — presentation token chosen via the folder create/edit icon picker. Same
+  null/default and storage semantics as `color`. WBS 2.22.1.
 - `sort_order`
 - `created_at`
 - `updated_at`
@@ -125,7 +130,7 @@ flow.
 **Schema:**
 
 - `docs/database/schema-contract.md` → `folders` table (`id`, `parent_id`, `name`, `content_mode`,
-  `sort_order`, timestamps)
+  `color?`, `icon?`, `sort_order`, timestamps)
 
 **Decision table:**
 

@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-20
 applies_to: Drift schema, all tables, migrations
-schema_version: 4 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
+schema_version: 5 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
 ---
 
 # Database Schema Contract
@@ -13,16 +13,17 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **4** (rebuild
+**Current schema** (`AppDatabase.currentSchemaVersion`): **5** (rebuild
 baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1;
 `flashcards` + `flashcard_progress` + `flashcard_tags` added v3 2026-06-20
 WBS 2.11.1/2.16.1; `flashcard_progress.is_suspended` + `buried_until` added
-v4 2026-06-20 WBS 4.0.2). The Drift layer was reset and is being re-added per
-feature slice. Tables shipped so far:
+v4 2026-06-20 WBS 4.0.2; `folders.color` + `folders.icon` added v5 2026-06-20
+WBS 2.22.1). The Drift layer was reset and is being re-added per feature
+slice. Tables shipped so far:
 
 | Table     | Columns (current)                                                                                                |
 |-----------|------------------------------------------------------------------------------------------------------------------|
-| `folders` | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`           |
+| `folders` | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `color?`, `icon?`, `sort_order`, `created_at`, `updated_at` |
 | `decks`   | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language` (TEXT NOT NULL DEFAULT `'korean'`), `sort_order`, `created_at`, `updated_at` + index `idx_decks_folder` |
 | `flashcards` | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, `created_at`, `updated_at` + index `idx_flashcards_deck`. (Target adds `part_of_speech?`, `is_flagged` — Future, not yet shipped in the rebuild.) |
 | `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number` (DEFAULT 1), `due_at?`, `review_count` (DEFAULT 0), `lapse_count` (DEFAULT 0), `is_suspended` (BOOLEAN NOT NULL DEFAULT 0; shipped v4 WBS 4.0.2), `buried_until?` (INTEGER NULL; shipped v4 WBS 4.0.2). (Target adds `last_studied_at?`, `last_reset_at?` + `idx_flashcard_progress_eligibility` — Future; the `is_suspended`/`buried_until` *eligibility* read logic lands with 4.11.1.) |
@@ -34,7 +35,7 @@ current code per the "do not downgrade target concepts" rule:
 
 | Table                | Columns (target)                                                                                                                                                                                     |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `folders`            | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `sort_order`, `created_at`, `updated_at`                                                                                               |
+| `folders`            | `id`, `parent_id` (self-FK, restrict), `name`, `content_mode`, `color?`, `icon?`, `sort_order`, `created_at`, `updated_at`                                                                            |
 | `decks`              | `id`, `folder_id` (FK→folders, cascade), `name`, `target_language`, `sort_order`, `created_at`, `updated_at`                                                                                          |
 | `flashcards`         | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `part_of_speech?`, `is_flagged`, `sort_order`, `created_at`, `updated_at`                                                    |
 | `flashcard_tags`     | `flashcard_id` (FK→flashcards, cascade), `tag` + index `idx_flashcard_tags_tag`                                                                                                                     |
@@ -155,6 +156,7 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 
 | Change                                                                                  | Source spec                                                                   | Notes                                                                                                                                                                                                                                                                                                                 |
 |-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ✅ DONE (v5) `folders.color TEXT NULL` + `folders.icon TEXT NULL`                        | `docs/business/folder/folder-management.md`                                   | Optional presentation tokens chosen via the folder create/edit pickers (WBS 2.22.1). NULL = no custom token (UI falls back to the theme default). Opaque design-system token strings; no CHECK (allowed set is an FE concern). Additive migration `v5_add_folder_color_icon.dart`; existing rows need no backfill. |
 | ✅ DONE (current) `decks.target_language TEXT NOT NULL DEFAULT 'korean'`                 | `docs/business/deck/deck-management.md`                                       | Shipped with the initial deck table; defaults to `'korean'`.                                                                                                                                                                                                                                                          |
 | Rejected / Not Applicable: change `decks.folder_id` from `TEXT NOT NULL` to `TEXT NULL` | `docs/business/deck/deck-management.md`, `docs/wireframes/02-library.md`      | Superseded by product-owner decision. Do not make deck parent nullable; folder-owned deck invariant remains locked.                                                                                                                                                                                                   |
 | ✅ DONE (v4) `flashcard_progress.buried_until INTEGER NULL`                              | `docs/business/study-actions/bury-suspend.md`                                 | Default null. Shipped v4 (WBS 4.0.2, `v4_add_bury_suspend.dart`). Columns only — queue-exclusion / status-filter read logic lands with 4.11.1 / 2.17.1.                                                                                                                                                                                                                                                                         |

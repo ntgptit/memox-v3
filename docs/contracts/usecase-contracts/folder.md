@@ -34,7 +34,7 @@ Each section below specifies: signature, preconditions, rules, side effects, err
 ## CreateRootFolderUseCase
 
 ```dart
-Future<Either<Failure, Folder>> call({required String name});
+Future<Either<Failure, Folder>> call({required String name, String? color, String? icon});
 ```
 
 **Preconditions:** none.
@@ -45,6 +45,7 @@ Future<Either<Failure, Folder>> call({required String name});
 - Reject empty after trim → `ValidationFailure(field: 'name', code: empty)`.
 - Reject duplicate name among root folders (case-insensitive) → `ValidationFailure(code: duplicate)`.
 - Insert with `parent_id = NULL`, `content_mode = unlocked`, `sort_order = MAX(sort_order)+1` among root.
+- Persist the optional `color` / `icon` presentation tokens as-is (`null` = no custom token). WBS 2.22.1.
 
 **Side effects:**
 
@@ -57,7 +58,7 @@ Future<Either<Failure, Folder>> call({required String name});
 ## CreateSubfolderUseCase
 
 ```dart
-Future<Either<Failure, Folder>> call({required FolderId parentId, required String name});
+Future<Either<Failure, Folder>> call({required FolderId parentId, required String name, String? color, String? icon});
 ```
 
 **Preconditions:**
@@ -69,7 +70,7 @@ Future<Either<Failure, Folder>> call({required FolderId parentId, required Strin
 
 - Trim name. Reject empty.
 - Reject duplicate name among siblings.
-- INSERT child folder with `parent_id`, `content_mode=unlocked`, next `sort_order`.
+- INSERT child folder with `parent_id`, `content_mode=unlocked`, next `sort_order`, plus the optional `color` / `icon` tokens (`null` = no custom token). WBS 2.22.1.
 - UPDATE parent `content_mode` to `subfolders` if currently `unlocked`.
 - Atomic (single transaction). Detail in `docs/contracts/repository-contracts/folder-repository.md`.
 
@@ -84,14 +85,15 @@ See `docs/contracts/usecase-contracts/deck.md` §CreateDeckUseCase. The use case
 ## RenameFolderUseCase
 
 ```dart
-Future<Either<Failure, Folder>> call({required FolderId id, required String newName});
+Future<Either<Failure, Folder>> call({required FolderId id, required String newName, String? color, String? icon});
 ```
 
 **Rules:**
 
 - Trim name. Reject empty.
 - Reject duplicate among siblings (same `parent_id`).
-- No-op (return `Right(folder)`) if new name equals current after trim.
+- Optional `color` / `icon`, when non-null, overwrite the stored token (V1 carries new values only; `null` leaves the token unchanged — clearing is deferred). WBS 2.22.1.
+- No-op (return `Right(folder)`) if new name equals current after trim **and** no color/icon token is supplied.
 
 **Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 

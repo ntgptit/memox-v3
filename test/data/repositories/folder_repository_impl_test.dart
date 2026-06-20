@@ -223,6 +223,120 @@ void main() {
       expect(result.failure, isA<NotFoundFailure>());
     });
 
+    // ---- WBS 2.22.1: color/icon presentation tokens ----
+
+    test('2.22.1: createRootFolder persists the color/icon tokens', () async {
+      final result = await repo.createRootFolder(
+        name: 'Korean',
+        color: 'coral',
+        icon: 'book',
+      );
+
+      expect(result.data!.color, 'coral');
+      expect(result.data!.icon, 'book');
+      final FolderRow row = (await dao.findFolderById(result.data!.id))!;
+      expect(row.color, 'coral');
+      expect(row.icon, 'book');
+    });
+
+    test('2.22.1: color/icon default to null when omitted', () async {
+      final result = await repo.createRootFolder(name: 'Plain');
+
+      expect(result.data!.color, isNull);
+      expect(result.data!.icon, isNull);
+    });
+
+    test('2.22.1: createSubfolder carries the color/icon tokens', () async {
+      final parent = await repo.createRootFolder(name: 'Parent');
+      final child = await repo.createSubfolder(
+        parentId: parent.data!.id,
+        name: 'Child',
+        color: 'teal',
+        icon: 'star',
+      );
+
+      final FolderRow row = (await dao.findFolderById(child.data!.id))!;
+      expect(row.color, 'teal');
+      expect(row.icon, 'star');
+    });
+
+    test('2.22.1: renameFolder overwrites the color/icon tokens', () async {
+      final folder = await repo.createRootFolder(
+        name: 'Old',
+        color: 'coral',
+        icon: 'book',
+      );
+      final renamed = await repo.renameFolder(
+        id: folder.data!.id,
+        newName: 'New',
+        color: 'teal',
+        icon: 'star',
+      );
+
+      expect(renamed.data!.name, 'New');
+      expect(renamed.data!.color, 'teal');
+      expect(renamed.data!.icon, 'star');
+      final FolderRow row = (await dao.findFolderById(folder.data!.id))!;
+      expect(row.color, 'teal');
+      expect(row.icon, 'star');
+    });
+
+    test('2.22.1: renameFolder leaves tokens untouched when omitted', () async {
+      final folder = await repo.createRootFolder(
+        name: 'Keep',
+        color: 'coral',
+        icon: 'book',
+      );
+      final renamed = await repo.renameFolder(
+        id: folder.data!.id,
+        newName: 'Kept',
+      );
+
+      expect(renamed.data!.color, 'coral');
+      expect(renamed.data!.icon, 'book');
+      final FolderRow row = (await dao.findFolderById(folder.data!.id))!;
+      expect(row.color, 'coral');
+      expect(row.icon, 'book');
+    });
+
+    test('2.22.1: renameFolder updates only the supplied token', () async {
+      final folder = await repo.createRootFolder(
+        name: 'Half',
+        color: 'coral',
+        icon: 'book',
+      );
+      // Only icon is supplied; color must stay untouched (independent
+      // Value.absent() per token).
+      final renamed = await repo.renameFolder(
+        id: folder.data!.id,
+        newName: 'Half',
+        icon: 'star',
+      );
+
+      expect(renamed.data!.color, 'coral');
+      expect(renamed.data!.icon, 'star');
+      final FolderRow row = (await dao.findFolderById(folder.data!.id))!;
+      expect(row.color, 'coral');
+      expect(row.icon, 'star');
+    });
+
+    test(
+      '2.22.1: renameFolder restyles even when the name is unchanged',
+      () async {
+        final folder = await repo.createRootFolder(name: 'Same');
+        final restyled = await repo.renameFolder(
+          id: folder.data!.id,
+          newName: 'Same',
+          color: 'teal',
+        );
+
+        expect(restyled.isSuccess, isTrue);
+        expect(restyled.data!.color, 'teal');
+        final FolderRow row = (await dao.findFolderById(folder.data!.id))!;
+        expect(row.color, 'teal');
+      },
+    );
+
     test('F8: delete cascades to descendant folders', () async {
       final root = await repo.createRootFolder(name: 'Root');
       final child = await repo.createSubfolder(

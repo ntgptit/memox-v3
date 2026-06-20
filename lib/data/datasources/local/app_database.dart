@@ -3,6 +3,7 @@ import 'package:memox/data/datasources/local/connection/database_connection.dart
 import 'package:memox/data/datasources/local/migrations/v2_add_decks.dart';
 import 'package:memox/data/datasources/local/migrations/v3_add_flashcards.dart';
 import 'package:memox/data/datasources/local/migrations/v4_add_bury_suspend.dart';
+import 'package:memox/data/datasources/local/migrations/v5_add_folder_color_icon.dart';
 
 part 'app_database.g.dart';
 
@@ -23,6 +24,8 @@ part 'app_database.g.dart';
 /// v4 (WBS 4.0.2): added `flashcard_progress.is_suspended` +
 /// `flashcard_progress.buried_until` bury/suspend columns
 /// (`migrations/v4_add_bury_suspend.dart`).
+/// v5 (WBS 2.22.1): added the nullable `folders.color` + `folders.icon` columns
+/// (`migrations/v5_add_folder_color_icon.dart`).
 @DriftDatabase(
   include: <String>{
     'drift/folders.drift',
@@ -40,7 +43,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 4;
+  static const int currentSchemaVersion = 5;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -66,6 +69,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 4) {
         await migrateV3ToV4(m, this);
+      }
+      if (from < 5) {
+        await migrateV4ToV5(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {
