@@ -120,5 +120,13 @@
   "searchSectionFolders": "Thư mục",
   "searchSectionDecks": "Bộ thẻ",
   "searchSectionFlashcards": "Thẻ",
-  "searchMoreCount": "+{count} nữa"
+  "searchMoreCount": "+{count} nữa",
+  "dashboardCardsDue": "{count} thẻ đến hạn",
+  "dashboardDecksWithDue": "{count} bộ thẻ",
+  "dashboardCaughtUpTitle": "Đã xong hết",
+  "dashboardCaughtUpMessage": "Hiện không có thẻ nào đến hạn.",
+  "dashboardProgressShortcutSub": "Mục tiêu, chuỗi ngày & độ chính xác",
+  "dashboardLibraryShortcutSub": "Duyệt thư mục & bộ thẻ",
+  "dashboardLoadFailedTitle": "Không tải được trang chủ",
+  "dashboardLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt hôm nay."
 }

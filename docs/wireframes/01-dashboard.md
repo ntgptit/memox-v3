@@ -9,6 +9,16 @@ source_specs:
 
 # 01 — Dashboard
 
+> **Implementation status (design redesign, 2026-06-21).** `/home` is now a quiet "refer to work"
+> surface (WBS 5.2.1/5.2.2/5.3.1). **Current:** a due snapshot (`MxDueSummary` — cards due + decks,
+> or an all-clear caught-up state) over `LoadDashboardSummaryUseCase`, plus shortcut rows
+> (`MxShortcutRow`) to Progress and the Library; loading/error states. **Not built (Future):** the
+> Today **study CTA** (the redesign Dashboard does not push study — strong CTAs live on
+> Study/Progress), recent-decks section, Continue-Studying/resume card, and all goal/streak/reminder
+> surfaces (those move to Progress, pending the engagement BE — schema/migration/approval). There is
+> no app-bar search (Search is the top-level `/search` tab; WBS 5.8.1 Rejected). Much of the target
+> spec below therefore remains Future.
+
 ## Purpose
 
 Dashboard top-level screen. Current V1 continues paused sessions and points to the next study action. Full motivation surfaces (computed streak, daily goal, reminders, streak history, and goal sheets) remain Target/Future.

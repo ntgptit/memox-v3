@@ -405,4 +405,34 @@ class AppLocalizationsVi extends AppLocalizations {
   String searchMoreCount(int count) {
     return '+$count nữa';
   }
+
+  @override
+  String dashboardCardsDue(int count) {
+    return '$count thẻ đến hạn';
+  }
+
+  @override
+  String dashboardDecksWithDue(int count) {
+    return '$count bộ thẻ';
+  }
+
+  @override
+  String get dashboardCaughtUpTitle => 'Đã xong hết';
+
+  @override
+  String get dashboardCaughtUpMessage => 'Hiện không có thẻ nào đến hạn.';
+
+  @override
+  String get dashboardProgressShortcutSub =>
+      'Mục tiêu, chuỗi ngày & độ chính xác';
+
+  @override
+  String get dashboardLibraryShortcutSub => 'Duyệt thư mục & bộ thẻ';
+
+  @override
+  String get dashboardLoadFailedTitle => 'Không tải được trang chủ';
+
+  @override
+  String get dashboardLoadFailedMessage =>
+      'Đã xảy ra lỗi khi tải tóm tắt hôm nay.';
 }

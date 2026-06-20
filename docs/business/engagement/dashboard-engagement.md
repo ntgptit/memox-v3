@@ -12,11 +12,14 @@ daily goal, computed streaks, reminders, engagement settings, streak history,
 daily-goal sheets, notification permissions, and engagement persistence remain
 Future/Target unless explicitly called out below.
 
-Current V1 Dashboard now renders the computed streak chip and daily-goal ring
-from the Dashboard progress summary. Goal-disabled state hides the streak chip
-and keeps the goal tile visible in the disabled state; the underlying
-engagement settings, reminder rules, and streak-history sheet still remain
-Target/Future.
+Current V1 Dashboard (design redesign, 2026-06-21) renders only a quiet **due
+snapshot** (`MxDueSummary` — cards due + decks with due, or a caught-up state)
+from `LoadDashboardSummaryUseCase`, plus shortcut rows to Progress and the
+Library. It does **not** render a streak chip, daily-goal ring, or any study CTA
+— the redesign relocates goal/streak surfaces (`GoalRing`/`Insight`) to the
+**Progress** screen, and all engagement persistence (goal, computed streak,
+reminders, settings, history) remains Future/Target pending the engagement BE
+(schema/migration/approval).
 
 ## Purpose
 

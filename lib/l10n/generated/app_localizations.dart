@@ -823,6 +823,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+{count} more'**
   String searchMoreCount(int count);
+
+  /// Dashboard due-summary title — count of cards due.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card due} other{{count} cards due}}'**
+  String dashboardCardsDue(int count);
+
+  /// Dashboard due-summary subtitle — number of decks holding due cards.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 deck} other{{count} decks}}'**
+  String dashboardDecksWithDue(int count);
+
+  /// Dashboard due-summary title when nothing is due.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up'**
+  String get dashboardCaughtUpTitle;
+
+  /// Dashboard due-summary subtitle when nothing is due.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing due right now.'**
+  String get dashboardCaughtUpMessage;
+
+  /// Subtitle of the Dashboard shortcut to the Progress screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal, streak & accuracy'**
+  String get dashboardProgressShortcutSub;
+
+  /// Subtitle of the Dashboard shortcut to the Library.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse folders & decks'**
+  String get dashboardLibraryShortcutSub;
+
+  /// Dashboard error-state title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your dashboard'**
+  String get dashboardLoadFailedTitle;
+
+  /// Dashboard error-state body.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading today\'s summary.'**
+  String get dashboardLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

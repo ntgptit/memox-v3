@@ -4,6 +4,7 @@ import 'package:memox/app/router/redirect.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/search/routes/search_routes.dart';
 
@@ -27,16 +28,7 @@ GoRouter createAppRouter() => GoRouter(
       builder: (context, state, navigationShell) =>
           MxAppShell(navigationShell: navigationShell),
       branches: <StatefulShellBranch>[
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.home,
-              name: RouteNames.home,
-              builder: (context, state) =>
-                  const RoutePlaceholder(routeName: RouteNames.home),
-            ),
-          ],
-        ),
+        StatefulShellBranch(routes: dashboardBranchRoutes()),
         StatefulShellBranch(routes: libraryBranchRoutes()),
         StatefulShellBranch(routes: searchBranchRoutes()),
         StatefulShellBranch(

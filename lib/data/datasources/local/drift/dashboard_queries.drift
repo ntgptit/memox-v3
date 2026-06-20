@@ -1,0 +1,15 @@
+import 'flashcards.drift';
+
+-- Dashboard summary read model (WBS 5.x — design redesign). One row with the
+-- count of cards currently due and the number of distinct decks holding them.
+-- "Due" matches the folder_queries semantics: a scheduled card whose due_at has
+-- passed (`due_at IS NOT NULL AND due_at <= :now`); NEW cards (due_at IS NULL)
+-- are not due. Suspend/bury are not yet read anywhere, so they are not excluded
+-- here (consistent with folder_queries.drift due_count).
+dashboardDueSummary:
+SELECT
+  COUNT(*) AS cards_due,
+  COUNT(DISTINCT f.deck_id) AS decks_with_due
+FROM flashcard_progress fp
+JOIN flashcards f ON f.id = fp.flashcard_id
+WHERE fp.due_at IS NOT NULL AND fp.due_at <= :now;

@@ -274,5 +274,21 @@
   "searchSectionFlashcards": "Flashcards",
   "@searchSectionFlashcards": { "description": "Global-search results section header for flashcard matches." },
   "searchMoreCount": "+{count} more",
-  "@searchMoreCount": { "description": "Affordance shown when a section has more matches than the per-section cap.", "placeholders": { "count": { "type": "int" } } }
+  "@searchMoreCount": { "description": "Affordance shown when a section has more matches than the per-section cap.", "placeholders": { "count": { "type": "int" } } },
+  "dashboardCardsDue": "{count, plural, =1{1 card due} other{{count} cards due}}",
+  "@dashboardCardsDue": { "description": "Dashboard due-summary title — count of cards due.", "placeholders": { "count": { "type": "int" } } },
+  "dashboardDecksWithDue": "{count, plural, =1{1 deck} other{{count} decks}}",
+  "@dashboardDecksWithDue": { "description": "Dashboard due-summary subtitle — number of decks holding due cards.", "placeholders": { "count": { "type": "int" } } },
+  "dashboardCaughtUpTitle": "All caught up",
+  "@dashboardCaughtUpTitle": { "description": "Dashboard due-summary title when nothing is due." },
+  "dashboardCaughtUpMessage": "Nothing due right now.",
+  "@dashboardCaughtUpMessage": { "description": "Dashboard due-summary subtitle when nothing is due." },
+  "dashboardProgressShortcutSub": "Goal, streak & accuracy",
+  "@dashboardProgressShortcutSub": { "description": "Subtitle of the Dashboard shortcut to the Progress screen." },
+  "dashboardLibraryShortcutSub": "Browse folders & decks",
+  "@dashboardLibraryShortcutSub": { "description": "Subtitle of the Dashboard shortcut to the Library." },
+  "dashboardLoadFailedTitle": "Couldn't load your dashboard",
+  "@dashboardLoadFailedTitle": { "description": "Dashboard error-state title." },
+  "dashboardLoadFailedMessage": "Something went wrong loading today's summary.",
+  "@dashboardLoadFailedMessage": { "description": "Dashboard error-state body." }
 }

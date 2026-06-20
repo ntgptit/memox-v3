@@ -6,8 +6,10 @@ import 'package:memox/app/app_shell.dart';
 import 'package:memox/app/router/app_router.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/mx_theme.dart';
+import 'package:memox/domain/models/dashboard_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_bottom_nav.dart';
@@ -21,6 +23,11 @@ Future<void> _pumpRouter(WidgetTester tester, GoRouter router) async {
         libraryOverviewStreamProvider.overrideWith(
           (ref) =>
               Stream<LibraryOverview>.value(const LibraryOverview(folders: [])),
+        ),
+        // /home now renders the real DashboardScreen, which loads a summary from
+        // the DB; stub it so the router test stays deterministic.
+        dashboardSummaryProvider.overrideWith(
+          (ref) async => (failure: null, data: const DashboardSummary()),
         ),
       ],
       child: MaterialApp.router(

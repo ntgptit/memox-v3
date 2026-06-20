@@ -409,4 +409,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String searchMoreCount(int count) {
     return '+$count more';
   }
+
+  @override
+  String dashboardCardsDue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards due',
+      one: '1 card due',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardDecksWithDue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count decks',
+      one: '1 deck',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardCaughtUpTitle => 'All caught up';
+
+  @override
+  String get dashboardCaughtUpMessage => 'Nothing due right now.';
+
+  @override
+  String get dashboardProgressShortcutSub => 'Goal, streak & accuracy';
+
+  @override
+  String get dashboardLibraryShortcutSub => 'Browse folders & decks';
+
+  @override
+  String get dashboardLoadFailedTitle => 'Couldn\'t load your dashboard';
+
+  @override
+  String get dashboardLoadFailedMessage =>
+      'Something went wrong loading today\'s summary.';
 }
