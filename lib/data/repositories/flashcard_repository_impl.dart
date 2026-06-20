@@ -57,9 +57,14 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     DeckId deckId, {
     String? searchTerm,
+    List<TagName> tags = const <TagName>[],
     ContentSortMode sort = ContentSortMode.manual,
   }) {
     final String term = (searchTerm ?? '').trim().toLowerCase();
+    // Normalize the selected filter tags with the same rule that stored them
+    // (`_normalizeTags`: trim + lowercase + dedup, blanks dropped) so the filter
+    // matches storage; an empty/whitespace selection imposes no tag filter (C38).
+    final Set<TagName> filterTags = _normalizeTags(tags).toSet();
     return _dao.watchFlashcardsInDeck(deckId).asyncMap((
       List<FlashcardRow> rows,
     ) async {
@@ -87,15 +92,19 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
             )
             .toList(growable: false);
 
-        final List<Flashcard> filtered = term.isEmpty
-            ? all
-            : all
-                  .where(
-                    (Flashcard c) =>
-                        c.front.toLowerCase().contains(term) ||
-                        c.back.toLowerCase().contains(term),
-                  )
-                  .toList(growable: false);
+        // Search (front/back contains term) AND tag filter (card carries every
+        // selected tag) compose; an empty term/tag set skips that predicate.
+        // `totalCount` stays the full deck total regardless of either (C39).
+        final List<Flashcard> filtered = all
+            .where(
+              (Flashcard c) =>
+                  (term.isEmpty ||
+                      c.front.toLowerCase().contains(term) ||
+                      c.back.toLowerCase().contains(term)) &&
+                  (filterTags.isEmpty ||
+                      filterTags.every((TagName t) => c.tags.contains(t))),
+            )
+            .toList(growable: false);
 
         return _ok(
           FlashcardListDetail(

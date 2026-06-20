@@ -366,5 +366,100 @@ void main() {
       final result = await repo.watchFlashcardList('nope').first;
       expect(result.failure, isA<NotFoundFailure>());
     });
+
+    test(
+      'C38: empty tag filter returns all cards; multi-tag uses AND',
+      () async {
+        final String deckId = await newDeck();
+        await repo.createFlashcard(
+          deckId: deckId,
+          front: 'a',
+          back: '1',
+          tags: const <String>['grammar', 'weak'],
+        );
+        await repo.createFlashcard(
+          deckId: deckId,
+          front: 'b',
+          back: '2',
+          tags: const <String>['grammar'],
+        );
+        await repo.createFlashcard(deckId: deckId, front: 'c', back: '3');
+
+        // Empty filter → all cards.
+        final empty =
+            (await repo
+                    .watchFlashcardList(deckId, tags: const <String>[])
+                    .first)
+                .data!;
+        expect(empty.cards.length, 3);
+
+        // Single tag → deck-scoped subset.
+        final single =
+            (await repo
+                    .watchFlashcardList(deckId, tags: const <String>['grammar'])
+                    .first)
+                .data!;
+        expect(single.cards.map((c) => c.front).toSet(), <String>{'a', 'b'});
+
+        // Multi-tag AND (trim + case normalized to match storage) → only the
+        // card carrying both.
+        final both =
+            (await repo
+                    .watchFlashcardList(
+                      deckId,
+                      tags: const <String>[' Grammar ', 'WEAK'],
+                    )
+                    .first)
+                .data!;
+        expect(both.cards.map((c) => c.front).toList(), <String>['a']);
+      },
+    );
+
+    test(
+      'C39: tag filter composes with search; totalCount stays full deck',
+      () async {
+        final String deckId = await newDeck();
+        await repo.createFlashcard(
+          deckId: deckId,
+          front: 'apple',
+          back: '1',
+          tags: const <String>['fruit'],
+        );
+        await repo.createFlashcard(
+          deckId: deckId,
+          front: 'apricot',
+          back: '2',
+          tags: const <String>['fruit'],
+        );
+        await repo.createFlashcard(
+          deckId: deckId,
+          front: 'apple',
+          back: '3',
+          tags: const <String>['veg'],
+        );
+
+        final detail =
+            (await repo
+                    .watchFlashcardList(
+                      deckId,
+                      searchTerm: 'apple',
+                      tags: const <String>['fruit'],
+                    )
+                    .first)
+                .data!;
+        // front contains 'apple' AND tagged 'fruit' → only the first card.
+        expect(detail.cards.map((c) => c.back).toList(), <String>['1']);
+        expect(detail.totalCount, 3); // full deck total, filter-independent
+
+        // No-results case still reports the full deck total.
+        final none =
+            (await repo
+                    .watchFlashcardList(deckId, tags: const <String>['missing'])
+                    .first)
+                .data!;
+        expect(none.cards, isEmpty);
+        expect(none.totalCount, 3);
+      },
+    );
   });
 }
