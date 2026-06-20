@@ -1,0 +1,14 @@
+import 'flashcards.drift';
+
+-- Tag-management reads over flashcard_tags. Single-row mutations
+-- (rename/merge/delete) use the query builder in FlashcardTagDao; this file
+-- holds the aggregate read that powers the Tag-Management list.
+
+-- Distinct tags with their card counts. Tags are stored lowercased, so a plain
+-- GROUP BY is case-insensitive. Ordered by usage (count desc) then name for a
+-- stable, mock-aligned list. WBS 8.3.1.
+tagsWithCount:
+SELECT tag, COUNT(*) AS card_count
+FROM flashcard_tags
+GROUP BY tag
+ORDER BY card_count DESC, tag;

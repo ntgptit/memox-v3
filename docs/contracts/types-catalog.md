@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-20
 status: contract
 ---
 
@@ -462,6 +462,30 @@ class SessionAggregate with _$SessionAggregate {
     required double accuracy,
     required Duration duration,
   }) = _SessionAggregate;
+}
+```
+
+### LearningSettings
+
+Persisted study-default settings (SharedPreferences, outside Drift). Current
+(WBS 8.2.1). `dailyNewLimit` defaults to `20` and is valid within `5..200` on a
+step of `5` (validated by `UpdateLearningSettingsUseCase`); `goalDisabledSince`
+is a local date (midnight) persisted as `YYYY-MM-DD`, or `null` when the goal is
+active.
+
+```dart
+@freezed
+sealed class LearningSettings with _$LearningSettings {
+  const factory LearningSettings({
+    @Default(LearningSettings.defaultDailyNewLimit) int dailyNewLimit,
+    DateTime? goalDisabledSince,
+  }) = _LearningSettings;
+
+  static const int defaultDailyNewLimit = 20;
+  static const int minDailyNewLimit = 5;
+  static const int maxDailyNewLimit = 200;
+  static const int dailyNewLimitStep = 5;
+  static bool isValidDailyNewLimit(int value);
 }
 ```
 

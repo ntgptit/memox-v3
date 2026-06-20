@@ -16,6 +16,13 @@ abstract final class StringUtils {
   /// guard rule for domain/presentation code.
   static String caseFold(String value) => value.toLowerCase();
 
+  /// Normalize a tag name to its stored identity: trim, strip any leading `#`
+  /// hash(es) (`#weak` → `weak`, decision row TG1), then lowercase (no internal
+  /// whitespace collapse). The single normalization point for tags across the
+  /// validator, use cases, and repository.
+  static String normalizeTag(String value) =>
+      value.trim().replaceFirst(RegExp(r'^#+\s*'), '').toLowerCase();
+
   /// Escape the LIKE wildcards `%` and `_` plus the escape character `\` itself
   /// so a raw user query is matched literally. The caller must declare
   /// `ESCAPE '\'` on the LIKE clause. Order matters: escape the backslash first.
