@@ -21,4 +21,11 @@ abstract final class RouteNames {
 
   /// A deck's flashcard list, pushed within the Library branch.
   static const String deckFlashcards = 'deckFlashcards';
+
+  /// Folder detail / deck flashcard list reached from a **Search** result, so
+  /// the push stays inside the Search branch (Back returns to `/search`). Same
+  /// screens as the Library-branch routes, distinct names per GoRouter's
+  /// unique-name rule.
+  static const String searchFolderDetail = 'searchFolderDetail';
+  static const String searchDeckFlashcards = 'searchDeckFlashcards';
 }

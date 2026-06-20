@@ -59,7 +59,7 @@ class GlobalSearchResultsView extends ConsumerWidget {
                     color: colors.textTertiary,
                   ),
                   onTap: () => context.pushNamed(
-                    RouteNames.folderDetail,
+                    RouteNames.searchFolderDetail,
                     pathParameters: <String, String>{RouteParams.id: folder.id},
                   ),
                 ),
@@ -83,7 +83,7 @@ class GlobalSearchResultsView extends ConsumerWidget {
                     color: colors.textTertiary,
                   ),
                   onTap: () => context.pushNamed(
-                    RouteNames.deckFlashcards,
+                    RouteNames.searchDeckFlashcards,
                     pathParameters: <String, String>{
                       RouteParams.deckId: deck.id,
                     },

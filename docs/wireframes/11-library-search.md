@@ -123,10 +123,13 @@ screen shell (`GlobalSearchScreen`) stays provider-watch-free — the dock drive
 | Deck        | Navigate to `/library/deck/:deckId/flashcards`.                 |
 | Flashcard   | Navigate to the card's owning deck (`/library/deck/:deckId/flashcards`). Per-card scroll/select is a Future refinement. |
 
-V1 navigation behavior: these targets are routes under the **Library** shell branch, so tapping a
-result navigates into the Library tab (the bottom-nav active destination becomes Library, and Back
-returns to Library). Keeping the result detail inside the Search tab (so Back returns to `/search`)
-is a Future refinement (would require parallel detail routes under the Search branch).
+V1 navigation behavior: folder/deck detail are registered as child routes of **both** the Library
+branch and the Search branch (distinct route names: `RouteNames.searchFolderDetail` /
+`searchDeckFlashcards` at `/search/folder/:id` and `/search/deck/:deckId/flashcards`). Tapping a
+search result pushes the Search-branch copy, so the bottom nav **stays on Search** and Back returns
+to `/search`. Navigating deeper *inside* an opened detail (subfolder/deck taps within the detail
+screen) still uses the Library-branch routes — a documented V1 edge (full branch-aware deep nav is a
+Future refinement).
 
 ### Known gaps (missing data — not yet in the read model)
 

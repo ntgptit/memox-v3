@@ -24,6 +24,11 @@ abstract final class RoutePaths {
   /// A deck's flashcard list — child of [library]. `:deckId` is the deck id.
   static const String deckFlashcardsRelative = 'deck/:deckId/flashcards';
   static const String deckFlashcards = '$library/$deckFlashcardsRelative';
+
+  /// Search-branch variants of the detail routes (reuse the same relative
+  /// segments under [search]) so a Search result opens inside the Search branch.
+  static const String searchFolder = '$search/$folderRelative';
+  static const String searchDeckFlashcards = '$search/$deckFlashcardsRelative';
 }
 
 /// Path/query parameter keys for GoRouter — never pass a raw string literal as

@@ -207,7 +207,10 @@ When params are invalid or entity is deleted:
 ## Deep link rules
 
 - Public routes (deep linkable): `/home`, `/library`, `/search`, `/library/folder/:id`,
-  `/library/deck/:deckId/flashcards`, `/progress`, `/settings`.
+  `/library/deck/:deckId/flashcards`, `/progress`, `/settings`. Search results push the
+  Search-branch copies of the detail routes (`/search/folder/:id`,
+  `/search/deck/:deckId/flashcards` — `RouteNames.searchFolderDetail` / `searchDeckFlashcards`) so
+  the bottom nav stays on Search; deeper navigation inside a detail uses the Library-branch routes.
 - Private routes (not deep linkable): study session routes, create/edit forms, import.
 - Private routes accessed via deep link must redirect to safe public ancestor.
 
