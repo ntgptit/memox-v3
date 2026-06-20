@@ -81,7 +81,7 @@ function suppressed(lines, idx) {
 function fileIsTargetSpec(lines) {
   return lines
     .slice(0, 30)
-    .some((l) => /status.*(specified|future|target|proposal|not.*implement)/i.test(l));
+    .some((l) => /status.*(specified|future|target|proposal|blocked|not.*implement)/i.test(l));
 }
 
 // ── findings ─────────────────────────────────────────────────────────────────
