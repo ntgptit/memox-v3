@@ -65,7 +65,7 @@ class MxAppBar extends StatelessWidget implements PreferredSizeWidget {
     final MxColors colors = context.mxColors;
     final Widget? titleWidget = this.titleWidget;
     return AppBar(
-      title: titleWidget ?? Text(title!),
+      title: titleWidget ?? Text(title ?? ''),
       titleSpacing: titleSpacing,
       toolbarHeight: toolbarHeight,
       actions: actions,

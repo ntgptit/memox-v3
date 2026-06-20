@@ -63,10 +63,17 @@ class GlobalSearchUseCase {
       return (failure: flashcardResult.failure, data: null);
     }
 
-    final List<Folder> folders = _rankFolders(folderResult.data!, normalized);
-    final List<Deck> decks = _rankDecks(deckResult.data!, normalized);
+    // Each `data` is non-null after its failure guard above; defaults unreachable.
+    final List<Folder> folders = _rankFolders(
+      folderResult.data ?? const <Folder>[],
+      normalized,
+    );
+    final List<Deck> decks = _rankDecks(
+      deckResult.data ?? const <Deck>[],
+      normalized,
+    );
     final List<Flashcard> flashcards = _rankFlashcards(
-      flashcardResult.data!,
+      flashcardResult.data ?? const <Flashcard>[],
       normalized,
     );
 

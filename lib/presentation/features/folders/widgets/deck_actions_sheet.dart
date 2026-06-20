@@ -69,12 +69,12 @@ class _DeckActionsSheet extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: MxSpacing.space2),
           child: MxDivider(),
         ),
-        _Row(
+        _DeckActionRow(
           icon: Icons.edit_outlined,
           label: l10n.deckActionRename,
           onTap: () => Navigator.of(context).pop(DeckAction.rename),
         ),
-        _Row(
+        _DeckActionRow(
           icon: Icons.delete_outline,
           label: l10n.deckActionDelete,
           danger: true,
@@ -85,8 +85,8 @@ class _DeckActionsSheet extends StatelessWidget {
   }
 }
 
-class _Row extends StatelessWidget {
-  const _Row({
+class _DeckActionRow extends StatelessWidget {
+  const _DeckActionRow({
     required this.icon,
     required this.label,
     required this.onTap,

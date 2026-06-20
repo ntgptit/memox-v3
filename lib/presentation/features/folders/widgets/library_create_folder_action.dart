@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
@@ -23,13 +24,11 @@ Future<void> runCreateFolder(BuildContext context, WidgetRef ref) async {
       .create(name: draft.name, color: draft.color, icon: draft.icon);
   if (!context.mounted) return;
 
-  if (result.failure != null) {
+  final Failure? failure = result.failure;
+  if (failure != null) {
     showMxSnackbar(
       context,
-      message: folderFailureMessage(
-        AppLocalizations.of(context),
-        result.failure!,
-      ),
+      message: folderFailureMessage(AppLocalizations.of(context), failure),
       isError: true,
     );
     return;

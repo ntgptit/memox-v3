@@ -25,7 +25,8 @@ class MergeTagsUseCase {
     if (validated.isFailure) {
       return (failure: validated.failure, data: null);
     }
-    final String normalizedDestination = validated.data!;
+    // Non-null after the failure guard above; the default is unreachable.
+    final String normalizedDestination = validated.data ?? '';
     final String normalizedSource = StringUtils.normalizeTag(sourceName);
 
     if (normalizedSource == normalizedDestination) {

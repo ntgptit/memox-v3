@@ -13,7 +13,7 @@ part 'tag_providers.g.dart';
 /// Dependency-injection wiring for tag management: DAO → repository → use cases
 /// (`docs/contracts/code-style.md` §Providers).
 
-@riverpod
+@Riverpod(keepAlive: true)
 FlashcardTagDao flashcardTagDao(Ref ref) =>
     FlashcardTagDao(ref.watch(appDatabaseProvider));
 

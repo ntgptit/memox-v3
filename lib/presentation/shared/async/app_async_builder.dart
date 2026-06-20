@@ -50,10 +50,11 @@ class AppAsyncBuilder<T> extends StatelessWidget {
     if (v.hasValue) {
       return data(v.requireValue);
     }
-    if (v.hasError) {
+    final Object? err = v.error;
+    if (v.hasError && err != null) {
       final Widget Function(Object, StackTrace?) onError =
           error ?? (Object e, StackTrace? s) => const SizedBox.shrink();
-      return onError(v.error!, v.stackTrace);
+      return onError(err, v.stackTrace);
     }
     final WidgetBuilder onLoading =
         loading ?? (BuildContext _) => const MxLoadingState();

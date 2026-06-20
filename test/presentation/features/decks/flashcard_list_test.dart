@@ -143,8 +143,8 @@ void main() {
       }
     }
 
-    // Search matched nothing: the (server-side filtered) stream yields no cards
-    // while the deck still has cards (totalCount > 0).
+    // Search matched nothing: the server-side filtered stream yields no cards
+    // even though the deck still has cards, so the total stays positive.
     final FlashcardListDetail noMatch = FlashcardListDetail(
       deck: _deck,
       breadcrumb: const <Folder>[],

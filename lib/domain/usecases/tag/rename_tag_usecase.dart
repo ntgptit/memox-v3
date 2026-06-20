@@ -23,7 +23,8 @@ class RenameTagUseCase {
     if (validated.isFailure) {
       return (failure: validated.failure, data: null);
     }
-    final String normalizedNew = validated.data!;
+    // Non-null after the failure guard above; the default is unreachable.
+    final String normalizedNew = validated.data ?? '';
     final String normalizedOld = StringUtils.normalizeTag(oldName);
 
     return repository.rename(

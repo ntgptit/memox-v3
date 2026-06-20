@@ -18,11 +18,11 @@ part 'flashcard_providers.g.dart';
 /// (`docs/contracts/code-style.md` §Providers). The repository reuses the
 /// shared `deckDao` / `folderDao` providers for deck lookup and breadcrumb.
 
-@riverpod
+@Riverpod(keepAlive: true)
 FlashcardDao flashcardDao(Ref ref) =>
     FlashcardDao(ref.watch(appDatabaseProvider));
 
-@riverpod
+@Riverpod(keepAlive: true)
 FlashcardRepository flashcardRepository(Ref ref) => FlashcardRepositoryImpl(
   dao: ref.watch(flashcardDaoProvider),
   deckDao: ref.watch(deckDaoProvider),

@@ -11,7 +11,7 @@ part 'search_providers.g.dart';
 /// use case. Presentation depends only on the use-case provider
 /// (`docs/contracts/code-style.md` §Providers).
 
-@riverpod
+@Riverpod(keepAlive: true)
 SearchDao searchDao(Ref ref) => SearchDao(ref.watch(appDatabaseProvider));
 
 @riverpod

@@ -24,6 +24,10 @@ class LibraryOverviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // guard:allow-screen-watch -- reason: the app-bar swaps to search mode and
+    // the FAB depends on the loaded folder list, so the shell must react to
+    // search-active + stream state; pushing these into a body widget would split
+    // the app-bar/FAB decision away from where it is applied.
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool searching = ref.watch(librarySearchActiveProvider);
     // The FAB shows only in the loaded-with-folders state (mock `03a`): the

@@ -21,14 +21,15 @@ List<RouteBase> libraryBranchRoutes() => <RouteBase>[
       GoRoute(
         path: RoutePaths.folderRelative,
         name: RouteNames.folderDetail,
-        builder: (context, state) =>
-            FolderDetailScreen(folderId: state.pathParameters[RouteParams.id]!),
+        builder: (context, state) => FolderDetailScreen(
+          folderId: state.pathParameters[RouteParams.id] ?? '',
+        ),
       ),
       GoRoute(
         path: RoutePaths.deckFlashcardsRelative,
         name: RouteNames.deckFlashcards,
         builder: (context, state) => FlashcardListScreen(
-          deckId: state.pathParameters[RouteParams.deckId]!,
+          deckId: state.pathParameters[RouteParams.deckId] ?? '',
         ),
       ),
     ],

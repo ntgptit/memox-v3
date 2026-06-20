@@ -29,6 +29,10 @@ class FlashcardListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // guard:allow-screen-watch -- reason: the app bar swaps to search mode, the
+    // breadcrumb/title come from the deck stream, and the delete action needs the
+    // loaded detail, so the shell reacts to search-active + detail state; a body
+    // widget cannot own the app-bar/breadcrumb decisions.
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool searching = ref.watch(flashcardSearchActiveProvider(deckId));
     final AsyncValue<Result<FlashcardListDetail>> async = ref.watch(
@@ -43,7 +47,7 @@ class FlashcardListScreen extends ConsumerWidget {
         AsyncValue<Result<FlashcardListDetail>>? prev,
         AsyncValue<Result<FlashcardListDetail>> next,
       ) {
-        final bool gone = next.hasValue && next.value!.data == null;
+        final bool gone = next.hasValue && next.value?.data == null;
         if (!gone) return;
         if (!context.mounted) return;
         if (Navigator.of(context).canPop()) context.pop();

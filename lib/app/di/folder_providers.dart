@@ -25,10 +25,10 @@ part 'folder_providers.g.dart';
 /// cases. Presentation depends only on the use-case providers
 /// (`docs/contracts/code-style.md` §Providers).
 
-@riverpod
+@Riverpod(keepAlive: true)
 FolderDao folderDao(Ref ref) => FolderDao(ref.watch(appDatabaseProvider));
 
-@riverpod
+@Riverpod(keepAlive: true)
 DeckDao deckDao(Ref ref) => DeckDao(ref.watch(appDatabaseProvider));
 
 @riverpod

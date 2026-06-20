@@ -36,6 +36,10 @@ class FolderDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // guard:allow-screen-watch -- reason: the app bar swaps to search mode, the
+    // FAB is content-mode aware, and the breadcrumb/title come from the folder
+    // stream, so the shell reacts to search-active + detail state; a body widget
+    // cannot own the app-bar/FAB/breadcrumb decisions.
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool searching = ref.watch(folderSearchActiveProvider(folderId));
     final AsyncValue<FolderDetail?> detailAsync = ref.watch(
