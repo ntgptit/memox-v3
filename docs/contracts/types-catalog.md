@@ -326,6 +326,92 @@ See `docs/contracts/error-contract.md` §ValidationFailure subtypes for full enu
 
 See `docs/contracts/error-contract.md` for definitions.
 
+### ImportSourceFormat
+
+**Status:** Current (csv) / Future (excel) / Backend-only (structuredText). Pinned by the import
+type-contract enabler (WBS 6.0.1); parsing logic lands in WBS 6.2.x.
+
+The source format a deck import is parsed from.
+
+```dart
+enum ImportSourceFormat {
+  csv,             // pasted CSV text — the only Current V1 source
+  excel,           // Future, deferred (needs dependency approval)
+  structuredText,  // backend-supported, UI entry deferred
+}
+```
+
+Source: `docs/business/flashcard/flashcard-management.md` §Import sources.
+
+### ImportTextSeparator
+
+**Status:** Backend-only (used by `ImportSourceFormat.structuredText`). Pinned by WBS 6.0.1;
+parsing lands in WBS 6.9.1.
+
+```dart
+enum ImportTextSeparator {
+  auto,       // infer by frequency analysis of first non-empty line; tie = invalid
+  tab,
+  comma,
+  colon,
+  slash,
+  semicolon,
+  pipe,
+}
+```
+
+Source: `docs/business/flashcard/flashcard-management.md` §Import sources.
+
+### FlashcardImportDuplicatePolicy
+
+**Status:** Current contract (WBS 6.0.1); detection logic in WBS 6.6.1.
+
+```dart
+enum FlashcardImportDuplicatePolicy {
+  skipExactDuplicates,  // the only policy supported in V1
+}
+```
+
+Source: `docs/business/flashcard/flashcard-management.md` §Duplicate policy.
+
+### FlashcardImportDuplicateSource
+
+**Status:** Current contract (WBS 6.0.1). Where a skipped duplicate row clashed.
+
+```dart
+enum FlashcardImportDuplicateSource {
+  importFile,  // duplicate WITHIN the imported file (first occurrence kept)
+  deck,        // duplicate against an EXISTING card in the target deck
+}
+```
+
+Source: `docs/business/flashcard/flashcard-management.md` §Duplicate policy.
+
+### ImportRowIssueType
+
+**Status:** Current contract (WBS 6.0.1); the validation that raises these lands in WBS 6.2.2 / 6.9.1.
+
+The category of a per-row import validation problem (carried by `ImportValidationIssue`).
+
+```dart
+enum ImportRowIssueType {
+  missingFront,   // front empty after trim
+  missingBack,    // back empty after trim
+  frontTooLong,   // front exceeds field max length
+  backTooLong,    // back exceeds field max length
+  invalidTag,     // tag empty after trim or over max length
+  malformedRow,   // unparseable column count
+}
+```
+
+Source: `docs/business/flashcard/flashcard-management.md` §Validation issues.
+
+> **Import preview model family** (`FlashcardImportPreview`, `FlashcardImportPreparation`,
+> `FlashcardImportRow`, `ImportValidationIssue`, `FlashcardImportSkippedDuplicate`) are import-feature
+> DTOs (per the catalog rule above they live with the use case, not here): defined in
+> `lib/domain/models/flashcard_import_preview.dart` and pinned in
+> `docs/contracts/usecase-contracts/flashcard.md` §Import. They compose the enums above.
+
 ## Typedefs / value objects
 
 ### BoxNumber

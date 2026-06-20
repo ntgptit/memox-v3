@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-20
 applies_to: flashcard entity and flashcard management feature
 ---
 
@@ -67,6 +67,23 @@ SRS state is stored in `flashcard_progress`. See `docs/business/srs/srs-review.m
 - Do not silently create garbage rows.
 - Duplicate detection, skipped-duplicate reporting, and transaction commit are implemented in the
   backend pipeline (commit `44407390` + bypass guard `e84f5115`). CSV V1 does not parse tags.
+
+### Import data model (pinned contract — WBS 6.0.1)
+
+The import vocabulary is pinned ahead of the parse/commit logic so every import row shares one
+contract (`lib/domain/types/**` + `lib/domain/models/flashcard_import_preview.dart`; full table in
+`docs/contracts/usecase-contracts/flashcard.md` §Import preview model family,
+`docs/contracts/types-catalog.md`). Two stages:
+
+- **Parse + validate** → `FlashcardImportPreview` `{ rows, issues }`. Each problem is an
+  `ImportValidationIssue` (`ImportRowIssueType` + `lineNumber` + `message`). Commit is gated on a
+  clean preview (`canCommit`).
+- **Prepare (dedup)** → `FlashcardImportPreparation` `{ previewItems, skippedDuplicates }` after
+  `FlashcardImportDuplicatePolicy.skipExactDuplicates`; each `skippedDuplicates` entry carries its
+  `FlashcardImportDuplicateSource`. `previewItems` are what the commit transaction inserts.
+
+Source format is `ImportSourceFormat` (`structuredText` splits on `ImportTextSeparator`). The parse,
+dedup, and commit logic land in WBS 6.2.x–6.9.1.
 
 ## Import sources
 

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-20
 status: contract
 ---
 
@@ -213,23 +213,45 @@ Future<Either<Failure, FlashcardProgress>> call({required FlashcardId id});
 ```dart
 Future<Either<Failure, ImportResult>> call({
   required DeckId deckId,
-  required ImportSource source,  // structured-text / csv-file / xlsx-file
-  required ImportOptions options,  // separator, has-header, etc.
+  required ImportSource source,  // Target shorthand; concrete type = ImportSourceFormat
+  required ImportOptions options,  // separator (ImportTextSeparator), has-header, etc.
 });
 ```
 
-> **Current implementation (verified 2026-06-10).** The single
-`ImportFlashcardsUseCase` / `Either<Failure, …>` signature above is still the **Target** style. The
-> shipped code splits this into two `Result`-based use cases in `lib/domain/usecases/flashcard/`:
-> - `ParseDeckImportCsvUseCase.call({rawCsv}) → DeckImportPreview` — parse pasted CSV, detect an
->   optional `front,back` header, preserve quoted values / escaped quotes, skip blank rows, and
->   collect row-level front/back issues.
-> - `CommitDeckImportUseCase.call({deckId, preview}) → Future<Result<int>>` — reject empty deck id,
->   reject empty valid rows, reject previews with issues, then commit the valid rows in a single
->   repository transaction. Returns the committed count.
+> **Pinned contract (WBS 6.0.1 enabler).** The single `ImportFlashcardsUseCase` /
+> `Either<Failure, …>` signature above is the **Target** style. The rebuild splits it into three
+> `Result`-based use cases in `lib/domain/usecases/flashcard/` (code lands WBS 6.2.x–6.9.1; the
+> shared types + preview/preparation models are pinned now in `lib/domain/types/**` +
+> `lib/domain/models/flashcard_import_preview.dart`):
+> - `ParseDeckImportCsvUseCase.call({rawCsv}) → FlashcardImportPreview` — parse pasted CSV (and, via
+>   `ImportTextSeparator`, structured text), detect an optional `front,back` header, preserve quoted
+>   values / escaped quotes, skip blank rows, and collect row-level issues as `ImportValidationIssue`
+>   (categorized by `ImportRowIssueType`). (WBS 6.2.1 / 6.2.2 / 6.9.1.)
+> - `PrepareDeckImportUseCase.call({deckId, preview}) → Future<Result<FlashcardImportPreparation>>` —
+>   over a clean preview, apply `FlashcardImportDuplicatePolicy.skipExactDuplicates` against earlier
+>   file rows and existing deck cards, returning the committable `previewItems` + `skippedDuplicates`
+>   (each tagged with its `FlashcardImportDuplicateSource`). (WBS 6.6.1.)
+> - `CommitDeckImportUseCase.call({deckId, preparation}) → Future<Result<int>>` — reject empty deck
+>   id, reject empty `previewItems`, then commit the rows + default SRS progress in a single
+>   repository transaction (no silent partial import). Returns the committed count. (WBS 6.4.1.)
 >
 > Preview is in-line and clean preview rows are committed from the same screen. Migration to the
 > `Either`/single-call form is deferred to the approved `fpdart` migration.
+
+### Import preview model family (WBS 6.0.1)
+
+Pinned, behavior-free DTOs shared by the three use cases above and the preview screen — defined in
+`lib/domain/models/flashcard_import_preview.dart`, composing the enums in
+`docs/contracts/types-catalog.md` (§ImportSourceFormat, §ImportRowIssueType,
+§FlashcardImportDuplicateSource):
+
+| Type | Shape | Role |
+| --- | --- | --- |
+| `FlashcardImportRow` | `{ int lineNumber, String front, String back }` | One candidate card (V1 CSV = front/back only). |
+| `ImportValidationIssue` | `{ ImportRowIssueType kind, int lineNumber, String message }` | A per-row validation problem. |
+| `FlashcardImportPreview` | `{ List<FlashcardImportRow> rows, List<ImportValidationIssue> issues }` + `canCommit` (rows non-empty & no issues), `hasIssues` | Parse + validation output; drives the preview screen + commit gate. |
+| `FlashcardImportSkippedDuplicate` | `{ int lineNumber, String front, String back, FlashcardImportDuplicateSource source }` | A row dropped by duplicate detection. |
+| `FlashcardImportPreparation` | `{ List<FlashcardImportRow> previewItems, List<FlashcardImportSkippedDuplicate> skippedDuplicates }` + `importCount`, `skippedCount` | Dedup output; `previewItems` are committed. |
 
 **Phases:**
 
