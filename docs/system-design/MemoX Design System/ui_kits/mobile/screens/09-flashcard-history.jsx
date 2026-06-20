@@ -4,7 +4,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Chip, HeroCard, EmptyState, Banner, Sk } = window.MX;
+  const { Icon, S, PillBtn, Chip, HeroCard, EmptyState, Banner, Sk, Breadcrumb } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   // grade -> { icon, tint } maps each review outcome to a calm status color.
@@ -26,10 +26,13 @@
 
   // ---- App bar -------------------------------------------------------------
   const Bar = () => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>History</span>
-    </div>
+    <>
+      <div className="appbar">
+        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
+        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>History</span>
+      </div>
+      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: 'Japanese \u00B7 N5' }, { label: 'History', current: true }]} />
+    </>
   );
 
   // ---- Card summary header -------------------------------------------------

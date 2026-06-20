@@ -22,19 +22,24 @@ applies_to: routing, navigation, deep links
 
 ## Top-level destinations
 
-| Path        | Responsibility | Shell visible |
-|-------------|----------------|---------------|
-| `/home`     | Dashboard      | Yes           |
-| `/library`  | Library        | Yes           |
-| `/progress` | Progress       | Yes           |
-| `/settings` | Settings hub   | Yes           |
+Bottom-nav order (design redesign): **Home · Library · Search · Progress · Settings** (five tabs).
+Search is a primary, thumb-reachable destination, not a top-app-bar icon; the nav bar splits its
+items evenly (`.bottom-nav-item flex:1 1 0`).
+
+| Path        | Responsibility           | Shell visible |
+|-------------|--------------------------|---------------|
+| `/home`     | Dashboard                | Yes           |
+| `/library`  | Library                  | Yes           |
+| `/search`   | Global search (folders/decks/flashcards), bottom search dock | Yes |
+| `/progress` | Progress                 | Yes           |
+| `/settings` | Settings hub             | Yes           |
 
 Current V1 app boot redirects `/` to `RouteDefaults.initialLocation = RoutePaths.library`. This is
 the existing app entry and must not be replaced by an onboarding wizard in V1. Dashboard remains a
 top-level destination, but changing the default entry to `/home` requires a dedicated navigation
 task with route tests and doc updates.
 
-**Shell implementation (WBS 1.2.6).** The four top-level destinations are branches of a
+**Shell implementation (WBS 1.2.6).** The five top-level destinations are branches of a
 `StatefulShellRoute.indexedStack` hosted by `MxAppShell` (`lib/app/app_shell.dart`), so each tab
 keeps its own navigation stack. The shell renders the shared `MxBottomNav`; tab switches use
 `navigationShell.goBranch(index, initialLocation: reTapActiveTab)` so re-tapping the active tab
@@ -69,7 +74,7 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard edit            | `/library/deck/:deckId/flashcards/:flashcardId/edit`                                                                                                                                                                                                                                    | No            |
 | Flashcard history         | `/library/deck/:deckId/flashcards/:flashcardId/history` (Current V1 — opens `CardHistoryScreen` from a card's row action; read-only attempt timeline + reset progress)                                                                                                                    | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
-| Library search            | `/library/search` (Current — global search over folders/decks/flashcards; tags section + recent/popular are Future). Exposed as a separate route; the Dashboard app bar also routes here directly                                                                                                  | Yes           |
+| Library search            | In-place folder search inside Library Overview (search-mode app bar; `librarySearchActiveProvider`). No dedicated route in current code. A top-level global Search destination (`/search`) is introduced by the design redesign — see §Top-level destinations and `docs/business/search/global-search.md`                                                                                                  | n/a (in-place) |
 | Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped or folder-scoped due review (Current — parsed by the gate; the deck/folder screen CTAs that would link here are Future); optional `?mode=` selects a single study mode | No            |
 | Today study               | `/library/study/today` (Current V1 opens `StudyEntryScreen.today` and follows the same gate behavior as scoped study, including empty states and session redirect)                                                                                                                                                                                                    | No            |
 | Study session             | `/library/study/session/:sessionId` (Current V1 review screen; `?mode=review` opens the swipe-grade review surface, the no-mode fallback keeps the recall shell, protected exit confirmation applies, Finish Session appears only after every card is answered, and `pushReplacement`s to the real result screen on explicit finish)                                                                                                                                                          | No            |
@@ -85,12 +90,15 @@ Notes:
   `RoutePaths.flashcardHistoryTemplate`
   (`/library/deck/:deckId/flashcards/:flashcardId/history`), pushed over the shell from the
   root navigator (shell hidden), entered via the flashcard row-action sheet ("View history").
-- Library search is Current: `RouteNames.librarySearch` / `RoutePaths.librarySearchTemplate`
-  (`/library/search`), registered as a child of the Library branch (shell visible). The promoted V1
-  scope covers folders/decks/flashcards only; the Library Overview screen no longer exposes a search
-  affordance in the app bar, but the Dashboard app bar now routes to the same screen. The tags
-  result section, recent searches, and popular-tags landing remain Future Proposal pending the tag
-  subsystem + a `shared_preferences` dependency (`docs/business/search/global-search.md`).
+- Library search (current code): in-place folder search inside Library Overview, toggled by the
+  app-bar search icon (`librarySearchActiveProvider` → `LibrarySearchAppBar`). There is **no**
+  dedicated search route or `RouteNames.librarySearch` / `RoutePaths.librarySearchTemplate` constant
+  in the current codebase; the `GlobalSearchUseCase` / `SearchRepository` domain+data layer exists
+  but is not yet wired to any screen. The design redesign promotes global search to a **top-level
+  `/search` destination** with a bottom-anchored search dock; that route and screen are introduced
+  by the redesign work (see `docs/business/search/global-search.md`). The tags result section,
+  recent searches, and popular-tags landing remain Future Proposal pending the tag subsystem +
+  a `shared_preferences` dependency.
 - Folder Detail study entry points (Study folder / Today / Resume banner) are **Future — not
   built** (`folder_detail_screen.dart` documents the study layer as Future). Target behavior when
   built: Study folder and Today route through the Study Entry gate (`entry_type=folder`, with
@@ -112,6 +120,23 @@ Notes:
   sessions, render the empty-scope matrix when no eligible cards exist, and use
   `pushReplacement` for the session redirect. When a resumable session exists, the gate shows an
   explicit Resume / Start over / Back choice instead of silently creating a new session.
+
+## Breadcrumb trail (nested screens)
+
+Design redesign: nested Library screens (Folder detail, Flashcard list) show a quiet ancestry
+trail docked directly under the app bar, via the shared `MxBreadcrumb`
+(`lib/presentation/shared/widgets/navigation/mx_breadcrumb.dart`) built by `buildLibraryBreadcrumb`
+(`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`).
+
+- Order: `Library › …ancestor folders › {current leaf}`. Chevron (`›`) separators; the trail scrolls
+  horizontally on deep paths; the last crumb is the current location (bold, non-tappable).
+- Folder detail: the deepest folder (also the app-bar title) is the current leaf; the `breadcrumb`
+  read-model list (ancestors **including** the current folder) supplies the chain.
+- Flashcard list: the deck is the current leaf, so **every** folder crumb is a tappable ancestor and
+  the deck name is appended as the current leaf.
+- Navigation: `Library` taps to the branch root (`goNamed(RouteNames.library)`); each ancestor folder
+  pushes its detail (`pushNamed(RouteNames.folderDetail, …)`).
+- Hidden in search mode and until the screen's read model has loaded.
 
 ## Push vs Go rules
 
@@ -181,7 +206,7 @@ When params are invalid or entity is deleted:
 
 ## Deep link rules
 
-- Public routes (deep linkable): `/home`, `/library`, `/library/search`, `/library/folder/:id`,
+- Public routes (deep linkable): `/home`, `/library`, `/search`, `/library/folder/:id`,
   `/library/deck/:deckId/flashcards`, `/progress`, `/settings`.
 - Private routes (not deep linkable): study session routes, create/edit forms, import.
 - Private routes accessed via deep link must redirect to safe public ancestor.

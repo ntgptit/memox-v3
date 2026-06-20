@@ -212,6 +212,8 @@
   --memox-size-appbar: 56px;
   --memox-size-appbar-lg: 88px;
   --memox-size-bottom-nav: 64px;
+  /* Bottom-docked search bar (thumb-reachable search field). */
+  --memox-size-search-dock: 64px;
   --memox-size-button: 44px;
   --memox-size-chip-sm: 24px;
   --memox-size-fab: 56px;
@@ -270,6 +272,11 @@
      fixed study/action footer) adds this so primary actions never sit under
      the home bar. Theme-neutral — declared once, inherited by .memox-dark. */
   --memox-safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* Top inset for the device notch / Dynamic Island. Resolves to 0 on hardware
+     without an inset (and in the kit's mock frames), and to the real inset on
+     notch phones. The status bar adds this so the OS time/battery never sit
+     under the notch and app content never crowds the OS chrome. */
+  --memox-safe-top: env(safe-area-inset-top, 0px);
 }
 
 /* Dark: re-declare every alias that references the base palette so its

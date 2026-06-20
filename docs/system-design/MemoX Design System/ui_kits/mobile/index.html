@@ -129,15 +129,12 @@
     border: 1px solid var(--memox-divider);
     display: flex; flex-direction: column;
   }
+  /* No mock OS chrome (time/battery). Just a slim top safe-area cushion so app
+     content clears the rounded top corners and never butts the device edge. */
   .memox-statusbar {
-    flex: none; height: 48px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 26px 0 30px;
-    font-size: 15px; font-weight: 700; color: var(--memox-text);
-    font-variant-numeric: tabular-nums;
+    flex: none;
+    min-height: calc(var(--memox-space-3) + var(--memox-safe-top));
   }
-  .memox-statusbar .sb-icons { display: inline-flex; align-items: center; gap: 7px; }
-  .memox-statusbar .sb-icons i { width: 17px; height: 17px; }
   .phone-canvas {
     flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
     background: var(--memox-bg);
@@ -196,15 +193,9 @@
     }
 
     function buildStatusbar() {
+      // Slim top safe-area cushion only — no mock OS chrome (time/battery).
       const sb = document.createElement('div');
       sb.className = 'memox-statusbar';
-      sb.innerHTML =
-        '<span class="sb-time">9:41</span>' +
-        '<span class="sb-icons">' +
-          '<i data-lucide="signal-high"></i>' +
-          '<i data-lucide="wifi"></i>' +
-          '<i data-lucide="battery-full"></i>' +
-        '</span>';
       return sb;
     }
 

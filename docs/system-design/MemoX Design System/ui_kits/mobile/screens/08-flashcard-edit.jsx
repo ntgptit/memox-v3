@@ -4,22 +4,25 @@
    contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, FormField, TextArea, Chip, TileLg, HeroCard, Banner, Sk, Modal, PickerRow } = window.MX;
+  const { Icon, S, PillBtn, FormField, TextArea, Chip, TileLg, HeroCard, Banner, Sk, Modal, PickerRow, Breadcrumb } = window.MX;
 
   // ---- App bar (back + title + delete + Save) ------------------------------
   const Bar = ({ saving, showActions = true }) => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>Edit card</span>
-      {showActions && (
-        <>
-          <button className="icon-btn" aria-label="Delete card" style={{ color: 'var(--memox-danger)' }}><Icon name="trash-2" /></button>
-          <button className="pill-btn primary sm" disabled={saving} style={{ minWidth: '76px' }}>
-            {saving ? <span className="spinner" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)', borderWidth: '2px' }}></span> : <><Icon name="check" />Save</>}
-          </button>
-        </>
-      )}
-    </div>
+    <>
+      <div className="appbar">
+        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
+        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>Edit card</span>
+        {showActions && (
+          <>
+            <button className="icon-btn" aria-label="Delete card" style={{ color: 'var(--memox-danger)' }}><Icon name="trash-2" /></button>
+            <button className="pill-btn primary sm" disabled={saving} style={{ minWidth: '76px' }}>
+              {saving ? <span className="spinner" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)', borderWidth: '2px' }}></span> : <><Icon name="check" />Save</>}
+            </button>
+          </>
+        )}
+      </div>
+      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: 'Japanese \u00B7 N5' }, { label: 'Edit card', current: true }]} />
+    </>
   );
 
   const Body = ({ children }) => (

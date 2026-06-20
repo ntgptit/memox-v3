@@ -40,51 +40,18 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Goal on
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     position: pos:relative
@@ -92,7 +59,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: appbar
       mx: MxAppBar
       box:
-        abs: [1,49 388x56]
+        abs: [1,13 388x56]
         rel: [0,0 388x56]
       layout: flex:row gap:8 align:center
       spacing: pad:0/20
@@ -100,7 +67,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [21,57 40x40]
+          abs: [21,21 40x40]
           rel: [20,8 40x40]
         layout: grid cols:1 align:center
         flex: shrink:0
@@ -109,21 +76,21 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         style: r:999
         - node: icon:arrow-left
           box:
-            abs: [31,67 20x20]
+            abs: [31,31 20x20]
             rel: [10,10 20x20]
           position: clip
       - node: appbar-title
         text: Learning
         box:
-          abs: [77,62 292x30]
+          abs: [77,26 292x30]
           rel: [76,13 292x30]
         flex: grow:1 basis:0 layout_hint:expanded
         spacing: margin:0/0/0/8
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,105 388x664]
-        rel: [0,56 388x664]
+        abs: [1,69 388x700]
+        rel: [0,56 388x700]
       layout: flex:col gap:16
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:16/20/24/20
@@ -131,105 +98,105 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,121 348x206]
+          abs: [21,85 348x206]
           rel: [20,16 348x206]
         layout: flex:col gap:16
         spacing: pad:16
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: div
           box:
-            abs: [38,138 314x43]
+            abs: [38,102 314x43]
             rel: [17,17 314x43]
           layout: flex:row gap:12 align:center
           - node: icon-tile
             mx: MxIconTile
             box:
-              abs: [38,140 40x40]
+              abs: [38,104 40x40]
               rel: [0,2 40x40]
             layout: grid cols:1 align:center
             flex: shrink:0
             style: bg:color(srgb 0.2 0.760784 1 / 0.08) r:14
             - node: icon:target
               box:
-                abs: [48,150 20x20]
+                abs: [48,114 20x20]
                 rel: [10,10 20x20]
               position: clip
           - node: div
             box:
-              abs: [90,138 204x43]
+              abs: [90,102 204x43]
               rel: [52,0 204x43]
             flex: grow:1 basis:0 layout_hint:expanded
             - node: title
               text: Daily goal
               box:
-                abs: [90,138 204x21]
+                abs: [90,102 204x21]
                 rel: [0,0 204x21]
               style: font:16/700 color:text tracking:-0.3
             - node: muted
               text: Cards to study each day
               box:
-                abs: [90,165 204x16]
+                abs: [90,129 204x16]
                 rel: [0,27 204x16]
               spacing: margin:6/0/0/0
               style: font:13/400 color:text-2
           - node: switch
             mx: ?
             box:
-              abs: [306,146 46x28]
+              abs: [306,110 46x28]
               rel: [268,8 46x28]
             flex: shrink:0
             position: pos:relative
             style: bg:accent r:999
         - node: hr
           box:
-            abs: [38,197 314x1]
+            abs: [38,161 314x1]
             rel: [17,76 314x1]
           style: bg:divider
         - node: div
           box:
-            abs: [38,214 314x34]
+            abs: [38,178 314x34]
             rel: [17,93 314x34]
           layout: flex:row gap:8 align:baseline
           - node: span
             text: 20
             box:
-              abs: [38,214 43x34]
+              abs: [38,178 43x34]
               rel: [0,0 43x34]
             style: font:34/800 color:text tracking:-0.7
           - node: muted
             text: cards / day
             box:
-              abs: [89,229 75x18]
+              abs: [89,193 75x18]
               rel: [51,15 75x18]
             style: font:14/600 color:text-2
         - node: slider
           box:
-            abs: [38,264 314x6]
+            abs: [38,228 314x6]
             rel: [17,143 314x6]
           layout: flex:row gap:12 align:center
           - node: slider-track
             box:
-              abs: [38,264 314x6]
+              abs: [38,228 314x6]
               rel: [0,0 314x6]
             flex: grow:1 basis:0 layout_hint:expanded
             position: pos:relative
             style: bg:surface-2 r:999
             - node: slider-fill
               box:
-                abs: [38,264 86x6]
+                abs: [38,228 86x6]
                 rel: [0,0 86x6]
               position: pos:absolute
               style: bg:accent r:999
             - node: slider-thumb
               box:
-                abs: [113,256 22x22]
+                abs: [113,220 22x22]
                 rel: [75,-8 22x22]
               position: pos:absolute
               transform: transform:translate(-11,-11)
               style: bg:accent-contrast r:999 border:2px accent shadow:1/2
         - node: div
           box:
-            abs: [38,286 314x24]
+            abs: [38,250 314x24]
             rel: [17,165 314x24]
           layout: flex:row gap:8
           repeat: x4(unit=1)
@@ -237,7 +204,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             item: item[1]
             text: 10
             box:
-              abs: [38,286 73x24]
+              abs: [38,250 73x24]
               rel: [0,0 73x24]
             layout: flex:row gap:4 justify:center align:center
             flex: grow:1 basis:0 layout_hint:expanded
@@ -247,7 +214,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             item: item[2]
             text: 20
             box:
-              abs: [119,286 73x24]
+              abs: [119,250 73x24]
               rel: [81,0 73x24]
             layout: flex:row gap:4 justify:center align:center
             flex: grow:1 basis:0 layout_hint:expanded
@@ -257,7 +224,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             item: item[3]
             text: 30
             box:
-              abs: [199,286 73x24]
+              abs: [199,250 73x24]
               rel: [161,0 73x24]
             layout: flex:row gap:4 justify:center align:center
             flex: grow:1 basis:0 layout_hint:expanded
@@ -267,7 +234,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             item: item[4]
             text: 50
             box:
-              abs: [280,286 73x24]
+              abs: [280,250 73x24]
               rel: [242,0 73x24]
             layout: flex:row gap:4 justify:center align:center
             flex: grow:1 basis:0 layout_hint:expanded
@@ -276,51 +243,51 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,343 348x77]
+          abs: [21,307 348x77]
           rel: [20,238 348x77]
         layout: flex:col gap:16
         spacing: pad:16
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: div
           box:
-            abs: [38,360 314x43]
+            abs: [38,324 314x43]
             rel: [17,17 314x43]
           layout: flex:row gap:12 align:center
           - node: icon-tile
             mx: MxIconTile
             box:
-              abs: [38,362 40x40]
+              abs: [38,326 40x40]
               rel: [0,2 40x40]
             layout: grid cols:1 align:center
             flex: shrink:0
             style: bg:color(srgb 1 0.639216 0.0980392 / 0.08) r:14
             - node: icon:bell
               box:
-                abs: [48,372 20x20]
+                abs: [48,336 20x20]
                 rel: [10,10 20x20]
               position: clip
           - node: div
             box:
-              abs: [90,360 204x43]
+              abs: [90,324 204x43]
               rel: [52,0 204x43]
             flex: grow:1 basis:0 layout_hint:expanded
             - node: title
               text: Daily reminder
               box:
-                abs: [90,360 204x21]
+                abs: [90,324 204x21]
                 rel: [0,0 204x21]
               style: font:16/700 color:text tracking:-0.3
             - node: muted
               text: No reminder set
               box:
-                abs: [90,387 204x16]
+                abs: [90,351 204x16]
                 rel: [0,27 204x16]
               spacing: margin:6/0/0/0
               style: font:13/400 color:text-2
           - node: switch
             mx: ?
             box:
-              abs: [306,368 46x28]
+              abs: [306,332 46x28]
               rel: [268,8 46x28]
             flex: shrink:0
             position: pos:relative
@@ -333,74 +300,74 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: title
   text: Daily goal
   box:
-  abs: [90,138 204x21]
+  abs: [90,102 204x21]
   rel: [0,0 204x21]
   style: font:16/700 color:text tracking:-0.3
 - - node: muted
 - text: Cards to study each day
 - box:
-- abs: [90,165 204x16]
+- abs: [90,129 204x16]
 - rel: [0,27 204x16]
 - spacing: margin:6/0/0/0
 - style: font:13/400 color:text-2
 - - node: switch
 - mx: ?
 - box:
-- abs: [306,146 46x28]
+- abs: [306,110 46x28]
 - rel: [268,8 46x28]
 - flex: shrink:0
 - position: pos:relative
 - style: bg:accent r:999
 - - node: hr
 - box:
-- abs: [38,197 314x1]
+- abs: [38,161 314x1]
 - rel: [17,76 314x1]
 - style: bg:divider
 - - node: div
 - box:
-- abs: [38,214 314x34]
+- abs: [38,178 314x34]
 - rel: [17,93 314x34]
 - layout: flex:row gap:8 align:baseline
 - - node: span
 - text: 20
 - box:
-- abs: [38,214 43x34]
+- abs: [38,178 43x34]
 - rel: [0,0 43x34]
 - style: font:34/800 color:text tracking:-0.7
 - - node: muted
 - text: cards / day
 - box:
-- abs: [89,229 75x18]
+- abs: [89,193 75x18]
 - rel: [51,15 75x18]
 - style: font:14/600 color:text-2
 - - node: slider
 - box:
-- abs: [38,264 314x6]
+- abs: [38,228 314x6]
 - rel: [17,143 314x6]
 - layout: flex:row gap:12 align:center
 - - node: slider-track
 - box:
-- abs: [38,264 314x6]
+- abs: [38,228 314x6]
 - rel: [0,0 314x6]
 - flex: grow:1 basis:0 layout_hint:expanded
 - position: pos:relative
 - style: bg:surface-2 r:999
 - - node: slider-fill
 - box:
-- abs: [38,264 86x6]
+- abs: [38,228 86x6]
 - rel: [0,0 86x6]
 - position: pos:absolute
 - style: bg:accent r:999
 - - node: slider-thumb
 - box:
-- abs: [113,256 22x22]
+- abs: [113,220 22x22]
 - rel: [75,-8 22x22]
 - position: pos:absolute
 - transform: transform:translate(-11,-11)
 - style: bg:accent-contrast r:999 border:2px accent shadow:1/2
 - - node: div
 - box:
-- abs: [38,286 314x24]
+- abs: [38,250 314x24]
 - rel: [17,165 314x24]
 - layout: flex:row gap:8
 - repeat: x4(unit=1)
@@ -408,7 +375,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - item: item[1]
 - text: 10
 - box:
-- abs: [38,286 73x24]
+- abs: [38,250 73x24]
 - rel: [0,0 73x24]
 - layout: flex:row gap:4 justify:center align:center
 - flex: grow:1 basis:0 layout_hint:expanded
@@ -418,7 +385,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - item: item[2]
 - text: 20
 - box:
-- abs: [119,286 73x24]
+- abs: [119,250 73x24]
 - rel: [81,0 73x24]
 - layout: flex:row gap:4 justify:center align:center
 - flex: grow:1 basis:0 layout_hint:expanded
@@ -428,7 +395,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - item: item[3]
 - text: 30
 - box:
-- abs: [199,286 73x24]
+- abs: [199,250 73x24]
 - rel: [161,0 73x24]
 - layout: flex:row gap:4 justify:center align:center
 - flex: grow:1 basis:0 layout_hint:expanded
@@ -438,7 +405,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - item: item[4]
 - text: 50
 - box:
-- abs: [280,286 73x24]
+- abs: [280,250 73x24]
 - rel: [242,0 73x24]
 - layout: flex:row gap:4 justify:center align:center
 - flex: grow:1 basis:0 layout_hint:expanded
@@ -447,14 +414,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - node: muted
 + text: Turned off — study freely
 + box:
-+ abs: [90,165 204x16]
++ abs: [90,129 204x16]
 + rel: [0,27 204x16]
 + spacing: margin:6/0/0/0
 + style: font:13/400 color:text-2
 + - node: switch
 + mx: ?
 + box:
-+ abs: [306,146 46x28]
++ abs: [306,110 46x28]
 + rel: [268,8 46x28]
 + flex: shrink:0
 + position: pos:relative
@@ -462,7 +429,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: card
   mx: MxCard
   box:
-  abs: [21,214 348x77]
+  abs: [21,178 348x77]
   rel: [20,109 348x77]
   layout: flex:col gap:16
   spacing: pad:16
@@ -476,20 +443,20 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: title
   text: Daily reminder
   box:
-  abs: [90,360 204x21]
+  abs: [90,324 204x21]
   rel: [0,0 204x21]
   style: font:16/700 color:text tracking:-0.3
 - - node: muted
 - text: No reminder set
 - box:
-- abs: [90,387 204x16]
+- abs: [90,351 204x16]
 - rel: [0,27 204x16]
 - spacing: margin:6/0/0/0
 - style: font:13/400 color:text-2
 - - node: switch
 - mx: ?
 - box:
-- abs: [306,368 46x28]
+- abs: [306,332 46x28]
 - rel: [268,8 46x28]
 - flex: shrink:0
 - position: pos:relative
@@ -497,26 +464,26 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - node: muted
 + text: A nudge to keep your streak
 + box:
-+ abs: [90,387 204x16]
++ abs: [90,351 204x16]
 + rel: [0,27 204x16]
 + spacing: margin:6/0/0/0
 + style: font:13/400 color:text-2
 + - node: switch
 + mx: ?
 + box:
-+ abs: [306,368 46x28]
++ abs: [306,332 46x28]
 + rel: [268,8 46x28]
 + flex: shrink:0
 + position: pos:relative
 + style: bg:accent r:999
 + - node: hr
 + box:
-+ abs: [38,419 314x1]
++ abs: [38,383 314x1]
 + rel: [17,76 314x1]
 + style: bg:divider
 + - node: list-row
 + box:
-+ abs: [38,436 314x56]
++ abs: [38,400 314x56]
 + rel: [17,93 314x56]
 + layout: flex:row gap:12 align:center
 + spacing: pad:8/0
@@ -525,55 +492,55 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - node: icon-tile
 + mx: MxIconTile
 + box:
-+ abs: [38,444 40x40]
++ abs: [38,408 40x40]
 + rel: [0,8 40x40]
 + layout: grid cols:1 align:center
 + flex: shrink:0
 + style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.08) r:14
 + - node: icon:clock
 + box:
-+ abs: [48,454 20x20]
++ abs: [48,418 20x20]
 + rel: [10,10 20x20]
 + position: clip
 + - node: list-row-main
 + box:
-+ abs: [90,454 164x21]
++ abs: [90,418 164x21]
 + rel: [52,18 164x21]
 + layout: flex:col gap:3
 + flex: grow:1 basis:0 layout_hint:expanded
 + - node: list-row-title
 + text: Time
 + box:
-+ abs: [90,454 164x21]
++ abs: [90,418 164x21]
 + rel: [0,0 164x21]
 + position: clip
 + style: font:16/600 color:text
 + - node: list-row-trail
 + box:
-+ abs: [266,454 86x20]
++ abs: [266,418 86x20]
 + rel: [228,18 86x20]
 + layout: flex:row gap:8 align:center
 + flex: shrink:0
 + - node: span
 + text: 8:00 PM
 + box:
-+ abs: [266,455 58x18]
++ abs: [266,419 58x18]
 + rel: [0,1 58x18]
 + style: font:14/700 color:text
 + - node: icon:chevron-right
 + box:
-+ abs: [332,454 20x20]
++ abs: [332,418 20x20]
 + rel: [66,0 20x20]
 + position: clip
 + - node: hr
 + box:
-+ abs: [90,508 262x1]
++ abs: [90,472 262x1]
 + rel: [69,165 262x1]
 + spacing: margin:0/0/0/52
 + style: bg:divider
 + - node: list-row
 + box:
-+ abs: [38,525 314x56]
++ abs: [38,489 314x56]
 + rel: [17,182 314x56]
 + layout: flex:row gap:12 align:center
 + spacing: pad:8/0
@@ -582,44 +549,44 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - node: icon-tile
 + mx: MxIconTile
 + box:
-+ abs: [38,533 40x40]
++ abs: [38,497 40x40]
 + rel: [0,8 40x40]
 + layout: grid cols:1 align:center
 + flex: shrink:0
 + style: bg:color(srgb 0.352941 0.388235 0.470588 / 0.08) r:14
 + - node: icon:repeat
 + box:
-+ abs: [48,543 20x20]
++ abs: [48,507 20x20]
 + rel: [10,10 20x20]
 + position: clip
 + - node: list-row-main
 + box:
-+ abs: [90,543 157x21]
++ abs: [90,507 157x21]
 + rel: [52,18 157x21]
 + layout: flex:col gap:3
 + flex: grow:1 basis:0 layout_hint:expanded
 + - node: list-row-title
 + text: Repeat
 + box:
-+ abs: [90,543 157x21]
++ abs: [90,507 157x21]
 + rel: [0,0 157x21]
 + position: clip
 + style: font:16/600 color:text
 + - node: list-row-trail
 + box:
-+ abs: [259,543 93x20]
++ abs: [259,507 93x20]
 + rel: [221,18 93x20]
 + layout: flex:row gap:8 align:center
 + flex: shrink:0
 + - node: muted
 + text: Every day
 + box:
-+ abs: [259,544 65x18]
++ abs: [259,508 65x18]
 + rel: [0,1 65x18]
 + style: font:14/600 color:text-2
 + - node: icon:chevron-right
 + box:
-+ abs: [332,543 20x20]
++ abs: [332,507 20x20]
 + rel: [73,0 20x20]
 + position: clip
 ```
@@ -629,36 +596,36 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ```diff
   - node: div
   box:
-  abs: [1,105 388x664]
-  rel: [0,56 388x664]
+  abs: [1,69 388x700]
+  rel: [0,56 388x700]
   layout: flex:col gap:16
   flex: grow:1 basis:0 layout_hint:expanded
   spacing: pad:16/20/24/20
   position: layout_hint:scroll
 + - node: banner
 + box:
-+ abs: [21,121 348x60]
++ abs: [21,85 348x60]
 + rel: [20,16 348x60]
 + layout: flex:row gap:12 align:center
 + spacing: pad:12/16
 + style: bg:color(srgb 1 0.639216 0.0980392 / 0.12) r:14
 + - node: icon:bell-off
 + box:
-+ abs: [37,141 20x20]
++ abs: [37,105 20x20]
 + rel: [16,20 20x20]
 + flex: shrink:0
 + position: clip
 + - node: span
 + text: Notifications are blocked. Enable them in system settings to get reminders.
 + box:
-+ abs: [69,133 284x36]
++ abs: [69,97 284x36]
 + rel: [48,12 284x36]
 + flex: grow:1 basis:0 layout_hint:expanded
 + style: font:14/600 color:warn
   - node: card
   mx: MxCard
   box:
-  abs: [21,197 348x206]
+  abs: [21,161 348x206]
   rel: [20,92 348x206]
   layout: flex:col gap:16
   spacing: pad:16
@@ -668,7 +635,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   item: item[4]
   text: 50
   box:
-  abs: [280,362 73x24]
+  abs: [280,326 73x24]
   rel: [242,0 73x24]
   layout: flex:row gap:4 justify:center align:center
   flex: grow:1 basis:0 layout_hint:expanded
@@ -677,7 +644,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 - - node: card
 - mx: MxCard
 - box:
-- abs: [21,343 348x77]
+- abs: [21,307 348x77]
 - rel: [20,238 348x77]
 - layout: flex:col gap:16
 - spacing: pad:16
@@ -685,34 +652,34 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - node: card
 + mx: MxCard
 + box:
-+ abs: [21,419 348x77]
++ abs: [21,383 348x77]
 + rel: [20,314 348x77]
 + layout: flex:col gap:16
 + spacing: pad:16
 + style: bg:accent-contrast r:20 border:1px divider shadow:1/2 op:0.38
   - node: div
   box:
-  abs: [38,436 314x43]
+  abs: [38,400 314x43]
   rel: [17,17 314x43]
   layout: flex:row gap:12 align:center
   ...
   - node: title
   text: Daily reminder
   box:
-  abs: [90,436 204x21]
+  abs: [90,400 204x21]
   rel: [0,0 204x21]
   style: font:16/700 color:text tracking:-0.3
 - - node: muted
 - text: No reminder set
 - box:
-- abs: [90,387 204x16]
+- abs: [90,351 204x16]
 - rel: [0,27 204x16]
 - spacing: margin:6/0/0/0
 - style: font:13/400 color:text-2
 - - node: switch
 - mx: ?
 - box:
-- abs: [306,368 46x28]
+- abs: [306,332 46x28]
 - rel: [268,8 46x28]
 - flex: shrink:0
 - position: pos:relative
@@ -720,14 +687,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + - node: muted
 + text: A nudge to keep your streak
 + box:
-+ abs: [90,463 204x16]
++ abs: [90,427 204x16]
 + rel: [0,27 204x16]
 + spacing: margin:6/0/0/0
 + style: font:13/400 color:text-2
 + - node: switch
 + mx: ?
 + box:
-+ abs: [306,444 46x28]
++ abs: [306,408 46x28]
 + rel: [268,8 46x28]
 + flex: shrink:0
 + position: pos:relative
@@ -736,14 +703,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + text: Open system settings
 + mx: MxSecondaryButton
 + box:
-+ abs: [21,512 348x44]
++ abs: [21,476 348x44]
 + rel: [20,407 348x44]
 + layout: flex:row gap:8 justify:center align:center
 + spacing: pad:0/20
 + style: font:14/700 color:text text:center tracking:-0.1 r:999 border:1px border
 + - node: icon:settings
 + box:
-+ abs: [110,526 16x16]
++ abs: [110,490 16x16]
 + rel: [89,14 16x16]
 + position: clip
 ```
@@ -754,41 +721,41 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
   - node: switch
   mx: ?
   box:
-  abs: [306,368 46x28]
+  abs: [306,332 46x28]
   rel: [268,8 46x28]
   flex: shrink:0
   position: pos:relative
   style: bg:border r:999
 + - node: div
 + box:
-+ abs: [1,49 388x720]
-+ rel: [0,0 388x720]
++ abs: [1,13 388x756]
++ rel: [0,0 388x756]
 + layout: grid cols:1 align:center
 + spacing: pad:24
 + position: pos:absolute z:20
 + - node: scrim
 + box:
-+ abs: [1,49 388x720]
-+ rel: [0,0 388x720]
++ abs: [1,13 388x756]
++ rel: [0,0 388x756]
 + position: pos:absolute
 + style: bg:overlay
 + - node: dialog
 + box:
-+ abs: [143,357 105x104]
-+ rel: [142,308 105x104]
++ abs: [143,339 105x104]
++ rel: [142,326 105x104]
 + layout: flex:col gap:12 align:center
 + spacing: pad:24
 + position: pos:relative
 + style: bg:accent-contrast r:28 border:1px divider shadow:8/28
 + - node: spinner
 + box:
-+ abs: [183,382 24x24]
++ abs: [183,364 24x24]
 + rel: [40,25 24x24]
 + style: r:999 border-t:2px accent border-r:2px border border-b:2px border border-l:2px border
 + - node: title
 + text: Saving…
 + box:
-+ abs: [168,418 55x18]
++ abs: [168,400 55x18]
 + rel: [25,61 55x18]
 + style: font:14/700 color:text tracking:-0.3
 ```

@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":3,"namespace":"DesignSystem_48ad9c","components":[{"name":"Avatar","sourcePath":"components/core/Avatar.jsx"},{"name":"Badge","sourcePath":"components/core/Badge.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"Chip","sourcePath":"components/core/Chip.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"SegmentedControl","sourcePath":"components/core/SegmentedControl.jsx"},{"name":"Switch","sourcePath":"components/core/Switch.jsx"},{"name":"NoteCard","sourcePath":"components/mobile/NoteCard.jsx"}],"sourceHashes":{"components/core/Avatar.jsx":"6fb896786b20","components/core/Badge.jsx":"5c2c0e0189ba","components/core/Button.jsx":"db60dd3ede0f","components/core/Card.jsx":"47a7a56a082b","components/core/Chip.jsx":"25f83cc08614","components/core/IconButton.jsx":"9c68965eb8c0","components/core/SegmentedControl.jsx":"f0b9c15222b6","components/core/Switch.jsx":"6b0cd9388d4e","components/mobile/NoteCard.jsx":"e780eea25703","tools/check-ui-kit.js":"be8d53e53c4f","ui_kits/mobile/screens/00-components.jsx":"77cd197a3b0f","ui_kits/mobile/screens/01-onboarding.jsx":"c205e46e14a9","ui_kits/mobile/screens/02-dashboard.jsx":"867f75cebb66","ui_kits/mobile/screens/03-library.jsx":"6690e1c63464","ui_kits/mobile/screens/04-folder.jsx":"73af0ba1b731","ui_kits/mobile/screens/05-search.jsx":"c738c3e37cc3","ui_kits/mobile/screens/06-flashcard-list.jsx":"c581810127c4","ui_kits/mobile/screens/07-flashcard-create.jsx":"b2cc95107c0c","ui_kits/mobile/screens/08-flashcard-edit.jsx":"278e4919966a","ui_kits/mobile/screens/09-flashcard-history.jsx":"1c180eacaba6","ui_kits/mobile/screens/10-deck-import.jsx":"3c52746489f8","ui_kits/mobile/screens/11-tag-management.jsx":"e92d623a41a0","ui_kits/mobile/screens/12-study-review.jsx":"f96858d16542","ui_kits/mobile/screens/13-study-match.jsx":"389897a11003","ui_kits/mobile/screens/14-study-guess.jsx":"409ed128d205","ui_kits/mobile/screens/15-study-recall.jsx":"4cb7b102a64d","ui_kits/mobile/screens/16-study-fill.jsx":"e20517af9cd8","ui_kits/mobile/screens/17-study-result.jsx":"742b91ebb7e0","ui_kits/mobile/screens/18-stats.jsx":"c34f6912532e","ui_kits/mobile/screens/19-progress.jsx":"ba0eeecc2296","ui_kits/mobile/screens/20-settings.jsx":"e6a2b2256ca9","ui_kits/mobile/screens/21-account-sync.jsx":"29f6cc815c78","ui_kits/mobile/screens/22-learning-settings.jsx":"d6d02915ea47","ui_kits/mobile/screens/23-audio-speech.jsx":"75277876f8e4","ui_kits/mobile/screens/24-appearance.jsx":"3d3a2141bc40","ui_kits/mobile/screens/25-language.jsx":"efe935022f7b"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":3,"namespace":"DesignSystem_48ad9c","components":[{"name":"Avatar","sourcePath":"components/core/Avatar.jsx"},{"name":"Badge","sourcePath":"components/core/Badge.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"Chip","sourcePath":"components/core/Chip.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"SegmentedControl","sourcePath":"components/core/SegmentedControl.jsx"},{"name":"Switch","sourcePath":"components/core/Switch.jsx"},{"name":"NoteCard","sourcePath":"components/mobile/NoteCard.jsx"}],"sourceHashes":{"components/core/Avatar.jsx":"6fb896786b20","components/core/Badge.jsx":"5c2c0e0189ba","components/core/Button.jsx":"db60dd3ede0f","components/core/Card.jsx":"47a7a56a082b","components/core/Chip.jsx":"25f83cc08614","components/core/IconButton.jsx":"9c68965eb8c0","components/core/SegmentedControl.jsx":"f0b9c15222b6","components/core/Switch.jsx":"6b0cd9388d4e","components/mobile/NoteCard.jsx":"e780eea25703","tools/check-ui-kit.js":"be8d53e53c4f","ui_kits/mobile/screens/00-components.jsx":"77cd197a3b0f","ui_kits/mobile/screens/01-onboarding.jsx":"c205e46e14a9","ui_kits/mobile/screens/02-dashboard.jsx":"6bb9080ab361","ui_kits/mobile/screens/03-library.jsx":"00eb90fdb7a5","ui_kits/mobile/screens/04-folder.jsx":"55f2abc4c48a","ui_kits/mobile/screens/05-search.jsx":"67bfc5c0cb26","ui_kits/mobile/screens/06-flashcard-list.jsx":"a897998227e9","ui_kits/mobile/screens/07-flashcard-create.jsx":"62fe8f747708","ui_kits/mobile/screens/08-flashcard-edit.jsx":"3c11bf729981","ui_kits/mobile/screens/09-flashcard-history.jsx":"b6601af6bdb2","ui_kits/mobile/screens/10-deck-import.jsx":"3c52746489f8","ui_kits/mobile/screens/11-tag-management.jsx":"5391e163ee62","ui_kits/mobile/screens/12-study-review.jsx":"f96858d16542","ui_kits/mobile/screens/13-study-match.jsx":"389897a11003","ui_kits/mobile/screens/14-study-guess.jsx":"409ed128d205","ui_kits/mobile/screens/15-study-recall.jsx":"4cb7b102a64d","ui_kits/mobile/screens/16-study-fill.jsx":"e20517af9cd8","ui_kits/mobile/screens/17-study-result.jsx":"742b91ebb7e0","ui_kits/mobile/screens/18-stats.jsx":"c34f6912532e","ui_kits/mobile/screens/19-progress.jsx":"b8eceb4cfd96","ui_kits/mobile/screens/20-settings.jsx":"e6a2b2256ca9","ui_kits/mobile/screens/21-account-sync.jsx":"29f6cc815c78","ui_kits/mobile/screens/22-learning-settings.jsx":"d6d02915ea47","ui_kits/mobile/screens/23-audio-speech.jsx":"75277876f8e4","ui_kits/mobile/screens/24-appearance.jsx":"3d3a2141bc40","ui_kits/mobile/screens/25-language.jsx":"efe935022f7b"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 
@@ -1391,18 +1391,24 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 
 // ui_kits/mobile/screens/02-dashboard.jsx
 try { (() => {
-/* MemoX screen — 02 Dashboard (9 states). The "today" hub: resume studying,
-   streak/goal, cards due, recent decks. Token-driven; composes contract classes. */
+/* MemoX screen — 02 Dashboard (8 states). A QUIET overview hub — not the study
+   nag screen. It answers "how am I doing today, what's active, anything worth a
+   look?" with a neutral stat strip + a light due snapshot + recent decks + a
+   shortcut into Progress. The heavy lifting (goal ring, streak pressure, study
+   insights, trends) lives on Progress/Stats — the dashboard only refers to work,
+   it never pressures the user to study now. Token-driven; composes shared
+   primitives (single source of truth in screens/_shared.jsx). */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  // Shared primitives — single source of truth (screens/_shared.jsx).
   const {
     Icon,
     S,
-    IconTile,
     TileLg,
     Progress,
     ListRow,
+    StatSummary,
+    DueSummary,
+    ShortcutRow,
     HeroCard,
     Banner,
     BottomNav,
@@ -1429,17 +1435,12 @@ try { (() => {
     className: "spacer"
   }), /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
-    "aria-label": "Search"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
     "aria-label": "Settings"
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "settings"
   }))));
 
-  // ---- Resume card ---------------------------------------------------------
+  // ---- Continue studying (only when a session is paused) -------------------
   const ResumeCard = ({
     multi
   }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
@@ -1512,170 +1513,7 @@ try { (() => {
     name: "pause"
   }), "+2 sessions paused"))));
 
-  // ---- Stats row -----------------------------------------------------------
-  const StreakCard = () => /*#__PURE__*/React.createElement("div", {
-    className: "card",
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement(IconTile, {
-    icon: "flame",
-    color: "var(--memox-status-learning)",
-    style: {
-      marginBottom: S(3)
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 'var(--memox-size-title)',
-      fontWeight: 'var(--memox-weight-extrabold)',
-      color: 'var(--memox-text-primary)',
-      lineHeight: 1
-    }
-  }, "11"), /*#__PURE__*/React.createElement("div", {
-    className: "muted",
-    style: {
-      fontSize: 'var(--memox-fs-body-small)',
-      fontWeight: 'var(--memox-weight-semibold)'
-    }
-  }, "day streak"));
-  const GoalCard = ({
-    disabled
-  }) => {
-    const ringBg = disabled ? 'var(--memox-progress-track)' : 'conic-gradient(var(--memox-primary) 216deg, var(--memox-progress-track) 0)';
-    return /*#__PURE__*/React.createElement("div", {
-      className: "card",
-      style: {
-        flex: 1,
-        opacity: disabled ? 'var(--memox-op-disabled)' : 1,
-        display: 'flex',
-        alignItems: 'center',
-        gap: S(3)
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "goal-ring",
-      style: {
-        background: ringBg
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "goal-ring-inner"
-    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 'var(--memox-fs-title-small)',
-        fontWeight: 'var(--memox-weight-extrabold)',
-        color: 'var(--memox-text-primary)'
-      }
-    }, disabled ? '0' : '12'), /*#__PURE__*/React.createElement("span", {
-      className: "muted",
-      style: {
-        fontSize: 'var(--memox-fs-label-small)',
-        fontWeight: 'var(--memox-weight-bold)'
-      }
-    }, "/20")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-      className: "title",
-      style: {
-        fontSize: 'var(--memox-fs-label-large)'
-      }
-    }, "Today's goal"), /*#__PURE__*/React.createElement("div", {
-      className: "muted",
-      style: {
-        fontSize: 'var(--memox-fs-body-small)'
-      }
-    }, disabled ? 'Goal paused' : '8 to go')));
-  };
-  const StatsRow = ({
-    showStreak,
-    goalDisabled
-  }) => /*#__PURE__*/React.createElement("div", {
-    className: "card-row"
-  }, showStreak && /*#__PURE__*/React.createElement(StreakCard, null), /*#__PURE__*/React.createElement(GoalCard, {
-    disabled: goalDisabled
-  }));
-
-  // ---- Today's review ------------------------------------------------------
-  const ReviewCard = ({
-    caughtUp
-  }) => {
-    if (caughtUp) {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "card",
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          gap: S(3)
-        }
-      }, /*#__PURE__*/React.createElement(IconTile, {
-        icon: "check",
-        color: "var(--memox-status-mastered)"
-      }), /*#__PURE__*/React.createElement("div", {
-        style: {
-          flex: 1
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        className: "title"
-      }, "All caught up"), /*#__PURE__*/React.createElement("div", {
-        className: "muted",
-        style: {
-          fontSize: 'var(--memox-fs-body-small)'
-        }
-      }, "You've reviewed everything due today.")));
-    }
-    return /*#__PURE__*/React.createElement("div", {
-      className: "card accent"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "ov",
-      style: {
-        color: 'var(--memox-primary)',
-        marginBottom: S(2)
-      }
-    }, /*#__PURE__*/React.createElement(Icon, {
-      name: "zap"
-    }), "TODAY'S REVIEW"), /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 'var(--memox-size-title)',
-        fontWeight: 'var(--memox-weight-extrabold)',
-        color: 'var(--memox-text-primary)',
-        letterSpacing: 'var(--memox-tracking-tight)'
-      }
-    }, "23 cards due"), /*#__PURE__*/React.createElement("div", {
-      className: "muted",
-      style: {
-        fontSize: 'var(--memox-fs-label-large)',
-        marginBottom: S(4)
-      }
-    }, "Across 3 decks \xB7 about 14 minutes"), /*#__PURE__*/React.createElement("button", {
-      className: "pill-btn primary",
-      style: {
-        width: '100%'
-      }
-    }, /*#__PURE__*/React.createElement(Icon, {
-      name: "play"
-    }), "Start today's review"));
-  };
-
-  // ---- New learning + decks ------------------------------------------------
-  const NewLearning = () => /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: S(2),
-      padding: `${S(1)} 0`,
-      color: 'var(--memox-text-secondary)'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "sparkles",
-    style: {
-      width: 'var(--memox-icon-sm)',
-      height: 'var(--memox-icon-sm)'
-    }
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 'var(--memox-fs-label-large)',
-      fontWeight: 'var(--memox-weight-bold)'
-    }
-  }, "Start new learning"), /*#__PURE__*/React.createElement("span", {
-    className: "chip new"
-  }, "6 new"));
+  // ---- Recent decks --------------------------------------------------------
   const DECKS = [{
     icon: 'languages',
     tint: 'var(--memox-status-new)',
@@ -1720,45 +1558,64 @@ try { (() => {
     due: d.due
   })))));
 
+  // Quiet shortcut into the analysis hub.
+  const ProgressShortcut = () => /*#__PURE__*/React.createElement(ShortcutRow, {
+    icon: "trending-up",
+    label: "See learning stats",
+    sub: "Goal, streak, trends & weak decks"
+  });
+
   // ---- Assembled screen ----------------------------------------------------
+  const Body = ({
+    children
+  }) => /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: 'auto',
+      padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 'var(--memox-gap-section)'
+    }
+  }, children);
   function Dashboard({
     variant
   }) {
-    const Body = ({
-      children
-    }) => /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1,
-        overflowY: 'auto',
-        padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 'var(--memox-gap-section)'
-      }
-    }, children);
     if (variant === 'loading') {
       return /*#__PURE__*/React.createElement("div", {
         className: "app"
-      }, /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(Sk, {
-        h: "20px",
-        w: "55%",
-        r: "var(--memox-radius-sm)"
-      }), /*#__PURE__*/React.createElement("div", {
+      }, /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
         className: "card",
         style: {
           display: 'flex',
-          flexDirection: 'column',
-          gap: S(3)
+          gap: S(2)
         }
-      }, /*#__PURE__*/React.createElement("div", {
+      }, [0, 1, 2, 3].map(i => /*#__PURE__*/React.createElement("div", {
+        key: i,
         style: {
+          flex: 1,
           display: 'flex',
-          gap: S(3),
-          alignItems: 'center'
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: S(2),
+          padding: S(2)
         }
       }, /*#__PURE__*/React.createElement(Sk, {
-        h: "56px",
-        w: "56px",
+        h: "22px",
+        w: "60%"
+      }), /*#__PURE__*/React.createElement(Sk, {
+        h: "11px",
+        w: "70%"
+      })))), /*#__PURE__*/React.createElement("div", {
+        className: "card",
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: S(3)
+        }
+      }, /*#__PURE__*/React.createElement(Sk, {
+        h: "40px",
+        w: "40px",
         r: "var(--memox-radius-md)"
       }), /*#__PURE__*/React.createElement("div", {
         style: {
@@ -1769,63 +1626,43 @@ try { (() => {
         }
       }, /*#__PURE__*/React.createElement(Sk, {
         h: "14px",
-        w: "60%"
+        w: "45%"
       }), /*#__PURE__*/React.createElement(Sk, {
-        h: "12px",
-        w: "80%"
-      }))), /*#__PURE__*/React.createElement(Sk, {
-        h: "4px",
-        r: "var(--memox-radius-full)"
-      }), /*#__PURE__*/React.createElement(Sk, {
-        h: "44px",
-        r: "var(--memox-radius-full)"
-      })), /*#__PURE__*/React.createElement("div", {
-        className: "card-row"
-      }, /*#__PURE__*/React.createElement("div", {
-        className: "card",
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          gap: S(2)
-        }
-      }, /*#__PURE__*/React.createElement(Sk, {
-        h: "34px",
-        w: "34px",
-        r: "var(--memox-radius-sm)"
-      }), /*#__PURE__*/React.createElement(Sk, {
-        h: "22px",
-        w: "50%"
-      })), /*#__PURE__*/React.createElement("div", {
-        className: "card",
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          gap: S(2)
-        }
-      }, /*#__PURE__*/React.createElement(Sk, {
-        h: "34px",
-        w: "34px",
-        r: "var(--memox-radius-sm)"
-      }), /*#__PURE__*/React.createElement(Sk, {
-        h: "22px",
-        w: "50%"
+        h: "11px",
+        w: "65%"
       }))), /*#__PURE__*/React.createElement("div", {
         className: "card",
         style: {
+          padding: `${S(2)} var(--memox-space-card)`,
           display: 'flex',
           flexDirection: 'column',
+          gap: S(4)
+        }
+      }, [0, 1, 2].map(i => /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: {
+          display: 'flex',
+          alignItems: 'center',
           gap: S(3)
         }
       }, /*#__PURE__*/React.createElement(Sk, {
-        h: "12px",
+        h: "40px",
+        w: "40px",
+        r: "var(--memox-radius-md)"
+      }), /*#__PURE__*/React.createElement("div", {
+        style: {
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: S(2)
+        }
+      }, /*#__PURE__*/React.createElement(Sk, {
+        h: "14px",
+        w: "55%"
+      }), /*#__PURE__*/React.createElement(Sk, {
+        h: "11px",
         w: "40%"
-      }), /*#__PURE__*/React.createElement(Sk, {
-        h: "26px",
-        w: "60%"
-      }), /*#__PURE__*/React.createElement(Sk, {
-        h: "44px",
-        r: "var(--memox-radius-full)"
-      }))), /*#__PURE__*/React.createElement(BottomNav, null));
+      })))))), /*#__PURE__*/React.createElement(BottomNav, null));
     }
     if (variant === 'onboarding') {
       return /*#__PURE__*/React.createElement("div", {
@@ -1834,8 +1671,8 @@ try { (() => {
         solid: true,
         icon: "graduation-cap",
         tint: "var(--memox-primary)",
-        title: "Nothing due yet",
-        desc: "Create your first deck and your \"today\" hub fills up here."
+        title: "Nothing here yet",
+        desc: "Create your first deck and your overview fills up here."
       }, /*#__PURE__*/React.createElement("button", {
         className: "pill-btn primary",
         style: {
@@ -1859,7 +1696,7 @@ try { (() => {
         icon: "alert-triangle",
         tint: "var(--memox-danger)",
         title: "Couldn't load today",
-        desc: "Something went wrong fetching your dashboard."
+        desc: "Something went wrong fetching your overview."
       }, /*#__PURE__*/React.createElement("button", {
         className: "pill-btn primary",
         style: {
@@ -1870,28 +1707,30 @@ try { (() => {
       }), "Retry"))), /*#__PURE__*/React.createElement(BottomNav, null));
     }
 
-    // Data states: loaded / goal-off / resume-only / streak-broken / offline / multi-resume
-    const goalOff = variant === 'goal-off';
-    const caughtUp = variant === 'resume-only';
+    // Data states: loaded / no-session / caught-up / multi-resume / offline
+    const caughtUp = variant === 'caught-up';
+    const hasSession = variant === 'loaded' || variant === 'multi-resume' || variant === 'offline';
     const multi = variant === 'multi-resume';
+
+    // Overview stat strip — neutral snapshot, not a goal/streak nag. "Due" is the
+    // one accented metric so it reads as the notable number without pressure.
+    const stats = caughtUp ? [['0', 'Due'], ['9', 'Decks'], ['86%', 'Accuracy'], ['11', 'Streak']] : [['23', 'Due', true], ['9', 'Decks'], ['86%', 'Accuracy'], ['11', 'Streak']];
     return /*#__PURE__*/React.createElement("div", {
       className: "app"
     }, /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement(Body, null, variant === 'offline' && /*#__PURE__*/React.createElement(Banner, {
       tone: "info",
       icon: "cloud-off"
-    }, "You're offline \u2014 showing cached cards."), variant === 'streak-broken' && /*#__PURE__*/React.createElement(Banner, {
-      tone: "warn",
-      icon: "flame"
-    }, "Your 11-day streak ended. Start a new one today."), /*#__PURE__*/React.createElement(ResumeCard, {
+    }, "You're offline \u2014 showing cached cards."), /*#__PURE__*/React.createElement(StatSummary, {
+      stats: stats
+    }), hasSession && /*#__PURE__*/React.createElement(ResumeCard, {
       multi: multi
-    }), /*#__PURE__*/React.createElement(StatsRow, {
-      showStreak: !goalOff,
-      goalDisabled: goalOff
-    }), /*#__PURE__*/React.createElement(ReviewCard, {
+    }), /*#__PURE__*/React.createElement(DueSummary, {
+      count: 23,
+      decks: 3,
+      minutes: 14,
       caughtUp: caughtUp
-    }), /*#__PURE__*/React.createElement(NewLearning, null), /*#__PURE__*/React.createElement(DeckList, null)), /*#__PURE__*/React.createElement(BottomNav, null));
+    }), /*#__PURE__*/React.createElement(DeckList, null), /*#__PURE__*/React.createElement(ProgressShortcut, null)), /*#__PURE__*/React.createElement(BottomNav, null));
   }
-  if (!window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
   window.MEMOX_KIT.register({
     num: '02',
     title: 'Dashboard',
@@ -1901,9 +1740,19 @@ try { (() => {
         variant: "loaded"
       })
     }, {
-      label: 'Loading',
+      label: 'No session',
       render: () => /*#__PURE__*/React.createElement(Dashboard, {
-        variant: "loading"
+        variant: "no-session"
+      })
+    }, {
+      label: 'Caught up',
+      render: () => /*#__PURE__*/React.createElement(Dashboard, {
+        variant: "caught-up"
+      })
+    }, {
+      label: 'Multi resume',
+      render: () => /*#__PURE__*/React.createElement(Dashboard, {
+        variant: "multi-resume"
       })
     }, {
       label: 'Onboarding',
@@ -1911,24 +1760,9 @@ try { (() => {
         variant: "onboarding"
       })
     }, {
-      label: 'Goal off',
+      label: 'Loading',
       render: () => /*#__PURE__*/React.createElement(Dashboard, {
-        variant: "goal-off"
-      })
-    }, {
-      label: 'Resume only',
-      render: () => /*#__PURE__*/React.createElement(Dashboard, {
-        variant: "resume-only"
-      })
-    }, {
-      label: 'Streak broken',
-      render: () => /*#__PURE__*/React.createElement(Dashboard, {
-        variant: "streak-broken"
-      })
-    }, {
-      label: 'Error',
-      render: () => /*#__PURE__*/React.createElement(Dashboard, {
-        variant: "error"
+        variant: "loading"
       })
     }, {
       label: 'Offline',
@@ -1936,9 +1770,9 @@ try { (() => {
         variant: "offline"
       })
     }, {
-      label: 'Multi resume',
+      label: 'Error',
       render: () => /*#__PURE__*/React.createElement(Dashboard, {
-        variant: "multi-resume"
+        variant: "error"
       })
     }]
   });
@@ -1957,6 +1791,7 @@ try { (() => {
     S,
     ListRow,
     HeroCard,
+    SearchDock,
     BottomNav,
     Fab,
     Sk
@@ -1999,57 +1834,16 @@ try { (() => {
     className: "spacer"
   }), /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
-    "aria-label": "Search"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
     "aria-label": "Sort"
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "arrow-up-down"
   })));
   const SearchBar = ({
     query
-  }) => /*#__PURE__*/React.createElement("div", {
-    className: "appbar",
-    style: {
-      gap: S(2)
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: 'absolute',
-      left: S(3),
-      display: 'grid',
-      placeItems: 'center',
-      color: 'var(--memox-text-secondary)',
-      pointerEvents: 'none'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search",
-    style: {
-      width: 'var(--memox-icon-md)',
-      height: 'var(--memox-icon-md)'
-    }
-  })), /*#__PURE__*/React.createElement("input", {
-    className: "field",
-    style: {
-      paddingLeft: 'var(--memox-space-10)'
-    },
-    defaultValue: query,
+  }) => /*#__PURE__*/React.createElement(SearchDock, {
+    query: query,
     placeholder: "Search folders"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "pill-btn ghost sm",
-    style: {
-      height: 'var(--memox-size-button)'
-    }
-  }, "Cancel"));
+  });
 
   // ---- List card -----------------------------------------------------------
   const FolderCard = ({
@@ -2270,13 +2064,13 @@ try { (() => {
         style: {
           position: 'relative'
         }
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "la"
-      }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
+      }, /*#__PURE__*/React.createElement(TitleBar, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
         className: "ov"
       }, "2 folders"), /*#__PURE__*/React.createElement(FolderCard, {
         items: results
-      })), /*#__PURE__*/React.createElement(BottomNav, {
+      })), /*#__PURE__*/React.createElement(SearchBar, {
+        query: "la"
+      }), /*#__PURE__*/React.createElement(BottomNav, {
         active: "Library"
       }));
     }
@@ -2353,12 +2147,14 @@ try { (() => {
   const {
     Icon,
     S,
+    Breadcrumb,
     TileLg,
     ListRow,
     StatSummary,
     ListGroup,
     HeroCard,
     EmptyState,
+    SearchDock,
     BottomNav,
     Fab,
     Sk
@@ -2416,7 +2212,7 @@ try { (() => {
   // ---- App bar -------------------------------------------------------------
   const Bar = ({
     title
-  }) => /*#__PURE__*/React.createElement("div", {
+  }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "appbar"
   }, /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
@@ -2435,57 +2231,24 @@ try { (() => {
     }
   }, title), /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
-    "aria-label": "Search"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
     "aria-label": "More"
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "more-vertical"
-  })));
+  }))), /*#__PURE__*/React.createElement(Breadcrumb, {
+    items: [{
+      label: 'Library',
+      icon: 'library'
+    }, {
+      label: title,
+      current: true
+    }]
+  }));
   const SearchBar = ({
     query
-  }) => /*#__PURE__*/React.createElement("div", {
-    className: "appbar",
-    style: {
-      gap: S(2)
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    "aria-label": "Back"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "arrow-left"
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: 'absolute',
-      left: S(3),
-      display: 'grid',
-      placeItems: 'center',
-      color: 'var(--memox-text-secondary)',
-      pointerEvents: 'none'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search",
-    style: {
-      width: 'var(--memox-icon-md)',
-      height: 'var(--memox-icon-md)'
-    }
-  })), /*#__PURE__*/React.createElement("input", {
-    className: "field",
-    style: {
-      paddingLeft: 'var(--memox-space-10)'
-    },
-    defaultValue: query,
+  }) => /*#__PURE__*/React.createElement(SearchDock, {
+    query: query,
     placeholder: "Search this folder"
-  })));
+  });
 
   // ---- Delete confirm dialog ----------------------------------------------
   const DeleteDialog = () => /*#__PURE__*/React.createElement("div", {
@@ -2753,14 +2516,16 @@ try { (() => {
         style: {
           position: 'relative'
         }
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "kanji"
+      }, /*#__PURE__*/React.createElement(Bar, {
+        title: "Languages"
       }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(EmptyState, {
         icon: "search-x",
         pad: 10,
         title: "No matches in this folder",
         desc: 'Nothing here matches “kanji”.'
-      })), /*#__PURE__*/React.createElement(BottomNav, {
+      })), /*#__PURE__*/React.createElement(SearchBar, {
+        query: "kanji"
+      }), /*#__PURE__*/React.createElement(BottomNav, {
         active: "Library"
       }));
     }
@@ -2888,6 +2653,7 @@ try { (() => {
     SectionHead,
     HeroCard,
     EmptyState,
+    SearchDock,
     BottomNav,
     Sk
   } = window.MX;
@@ -2941,66 +2707,6 @@ try { (() => {
     meta: 'New cards this week'
   }];
 
-  // ---- App bar (large search field, auto-focus) ----------------------------
-  const SearchBar = ({
-    query
-  }) => /*#__PURE__*/React.createElement("div", {
-    className: "appbar",
-    style: {
-      gap: S(2)
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    "aria-label": "Back"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "arrow-left"
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: 'absolute',
-      left: S(3),
-      display: 'grid',
-      placeItems: 'center',
-      color: 'var(--memox-text-secondary)',
-      pointerEvents: 'none'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search",
-    style: {
-      width: 'var(--memox-icon-md)',
-      height: 'var(--memox-icon-md)'
-    }
-  })), /*#__PURE__*/React.createElement("input", {
-    className: "field",
-    autoFocus: true,
-    style: {
-      paddingLeft: 'var(--memox-space-10)',
-      paddingRight: query ? 'var(--memox-space-10)' : 'var(--memox-space-4)'
-    },
-    defaultValue: query,
-    placeholder: "Search everything"
-  }), query && /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: 'absolute',
-      right: S(2),
-      display: 'grid',
-      placeItems: 'center',
-      color: 'var(--memox-text-secondary)'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "x",
-    style: {
-      width: 'var(--memox-icon-md)',
-      height: 'var(--memox-icon-md)'
-    }
-  }))));
-
   // ---- Result group --------------------------------------------------------
   const Group = ({
     title,
@@ -3046,15 +2752,19 @@ try { (() => {
       gap: 'var(--memox-gap-section)'
     }
   }, children);
+
+  // Search is a primary bottom-nav destination, so every state renders the SAME
+  // shell — search field + BottomNav with `Search` active — and only the body
+  // content changes per variant. One source of truth keeps the tab's active
+  // state in sync no matter which state is shown. `query` seeds the field.
   function Search({
     variant
   }) {
+    let query = 'japan';
+    let content;
     if (variant === 'empty') {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "app"
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: ""
-      }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
+      query = '';
+      content = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
         style: {
           display: 'flex',
           flexDirection: 'column',
@@ -3094,14 +2804,9 @@ try { (() => {
           title: p.name,
           meta: p.meta
         })
-      })))));
-    }
-    if (variant === 'loading') {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "app"
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "japan"
-      }), /*#__PURE__*/React.createElement(Body, null, [0, 1].map(g => /*#__PURE__*/React.createElement("div", {
+      }))));
+    } else if (variant === 'loading') {
+      content = /*#__PURE__*/React.createElement(React.Fragment, null, [0, 1].map(g => /*#__PURE__*/React.createElement("div", {
         key: g,
         style: {
           display: 'flex',
@@ -3143,26 +2848,17 @@ try { (() => {
       }), /*#__PURE__*/React.createElement(Sk, {
         h: "11px",
         w: "42%"
-      })))))))));
-    }
-    if (variant === 'no-results') {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "app"
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "zxqv"
-      }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(EmptyState, {
+      }))))))));
+    } else if (variant === 'no-results') {
+      query = 'zxqv';
+      content = /*#__PURE__*/React.createElement(EmptyState, {
         icon: "search-x",
         pad: 12,
         title: "No results",
         desc: 'Nothing matches “zxqv”. Try a different word or check the spelling.'
-      })));
-    }
-    if (variant === 'error') {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "app"
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "japan"
-      }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
+      });
+    } else if (variant === 'error') {
+      content = /*#__PURE__*/React.createElement("div", {
         style: {
           flex: 1,
           display: 'grid',
@@ -3177,49 +2873,57 @@ try { (() => {
         variant: "primary",
         icon: "rotate-ccw",
         full: true
-      }, "Try again")))));
+      }, "Try again")));
+    } else {
+      // results
+      content = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Group, {
+        title: "Folders",
+        count: "1"
+      }, /*#__PURE__*/React.createElement(Rows, {
+        items: FOLDER_HITS,
+        render: f => /*#__PURE__*/React.createElement(ListRow, {
+          icon: f.icon,
+          color: f.tint,
+          title: f.name,
+          meta: f.meta
+        })
+      })), /*#__PURE__*/React.createElement(Group, {
+        title: "Decks",
+        count: "2"
+      }, /*#__PURE__*/React.createElement(Rows, {
+        items: DECK_HITS,
+        render: d => /*#__PURE__*/React.createElement(ListRow, {
+          icon: d.icon,
+          color: d.tint,
+          title: d.name,
+          meta: d.meta,
+          due: d.due
+        })
+      })), /*#__PURE__*/React.createElement(Group, {
+        title: "Flashcards",
+        count: "3"
+      }, /*#__PURE__*/React.createElement(Rows, {
+        items: CARD_HITS,
+        render: c => /*#__PURE__*/React.createElement(ListRow, {
+          icon: c.icon,
+          color: c.tint,
+          title: c.front,
+          meta: c.meta
+        })
+      })));
     }
-
-    // results
     return /*#__PURE__*/React.createElement("div", {
       className: "app"
-    }, /*#__PURE__*/React.createElement(SearchBar, {
-      query: "japan"
-    }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(Group, {
-      title: "Folders",
-      count: "1"
-    }, /*#__PURE__*/React.createElement(Rows, {
-      items: FOLDER_HITS,
-      render: f => /*#__PURE__*/React.createElement(ListRow, {
-        icon: f.icon,
-        color: f.tint,
-        title: f.name,
-        meta: f.meta
-      })
-    })), /*#__PURE__*/React.createElement(Group, {
-      title: "Decks",
-      count: "2"
-    }, /*#__PURE__*/React.createElement(Rows, {
-      items: DECK_HITS,
-      render: d => /*#__PURE__*/React.createElement(ListRow, {
-        icon: d.icon,
-        color: d.tint,
-        title: d.name,
-        meta: d.meta,
-        due: d.due
-      })
-    })), /*#__PURE__*/React.createElement(Group, {
-      title: "Flashcards",
-      count: "3"
-    }, /*#__PURE__*/React.createElement(Rows, {
-      items: CARD_HITS,
-      render: c => /*#__PURE__*/React.createElement(ListRow, {
-        icon: c.icon,
-        color: c.tint,
-        title: c.front,
-        meta: c.meta
-      })
-    }))));
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "appbar"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "appbar-title"
+    }, "Search")), /*#__PURE__*/React.createElement(Body, null, content), /*#__PURE__*/React.createElement(SearchDock, {
+      query: query,
+      placeholder: "Search everything"
+    }), /*#__PURE__*/React.createElement(BottomNav, {
+      active: "Search"
+    }));
   }
   window.MEMOX_KIT.register({
     num: '05',
@@ -3273,6 +2977,8 @@ try { (() => {
     ListRow,
     HeroCard,
     EmptyState,
+    Breadcrumb,
+    SearchDock,
     Fab,
     Sk,
     Modal,
@@ -3321,7 +3027,7 @@ try { (() => {
   // ---- App bars ------------------------------------------------------------
   const Bar = ({
     title
-  }) => /*#__PURE__*/React.createElement("div", {
+  }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "appbar"
   }, /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
@@ -3340,15 +3046,20 @@ try { (() => {
     }
   }, title), /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
-    "aria-label": "Search"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
     "aria-label": "Deck options"
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "more-vertical"
-  })));
+  }))), /*#__PURE__*/React.createElement(Breadcrumb, {
+    items: [{
+      label: 'Library',
+      icon: 'library'
+    }, {
+      label: 'Languages'
+    }, {
+      label: title,
+      current: true
+    }]
+  }));
   const ReorderBar = ({
     title
   }) => /*#__PURE__*/React.createElement("div", {
@@ -3375,46 +3086,10 @@ try { (() => {
   }), "Done"));
   const SearchBar = ({
     query
-  }) => /*#__PURE__*/React.createElement("div", {
-    className: "appbar",
-    style: {
-      gap: S(2)
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    "aria-label": "Back"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "arrow-left"
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: 'absolute',
-      left: S(3),
-      display: 'grid',
-      placeItems: 'center',
-      color: 'var(--memox-text-secondary)',
-      pointerEvents: 'none'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search",
-    style: {
-      width: 'var(--memox-icon-md)',
-      height: 'var(--memox-icon-md)'
-    }
-  })), /*#__PURE__*/React.createElement("input", {
-    className: "field",
-    defaultValue: query,
-    placeholder: "Search cards",
-    style: {
-      paddingLeft: 'var(--memox-space-10)'
-    }
-  })));
+  }) => /*#__PURE__*/React.createElement(SearchDock, {
+    query: query,
+    placeholder: "Search cards"
+  });
 
   // ---- Card row ------------------------------------------------------------
   const CardRow = ({
@@ -3447,7 +3122,7 @@ try { (() => {
     style: {
       position: 'absolute',
       right: S(5),
-      bottom: S(6),
+      bottom: `calc(var(--memox-size-search-dock) + ${S(4)})`,
       zIndex: 5
     }
   });
@@ -3578,14 +3253,16 @@ try { (() => {
         style: {
           position: 'relative'
         }
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "kanji"
+      }, /*#__PURE__*/React.createElement(Bar, {
+        title: "Japanese \xB7 N5"
       }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(EmptyState, {
         icon: "search-x",
         pad: 10,
         title: "No cards match",
         desc: 'Nothing here matches “kanji”.'
-      })));
+      })), /*#__PURE__*/React.createElement(SearchBar, {
+        query: "kanji"
+      }));
     }
     if (variant === 'reorder') {
       return /*#__PURE__*/React.createElement("div", {
@@ -3742,7 +3419,9 @@ try { (() => {
       className: "hr inset"
     }), /*#__PURE__*/React.createElement(CardRow, {
       c: c
-    }))))), !overlay && /*#__PURE__*/React.createElement(FabSlot, null), overlay);
+    }))))), !overlay && /*#__PURE__*/React.createElement(FabSlot, null), /*#__PURE__*/React.createElement(SearchBar, {
+      query: ""
+    }), overlay);
   }
   window.MEMOX_KIT.register({
     num: '06',
@@ -3808,14 +3487,15 @@ try { (() => {
     TextArea,
     Chip,
     Banner,
-    PickerRow
+    PickerRow,
+    Breadcrumb
   } = window.MX;
 
   // ---- App bar (back + title + Save) ---------------------------------------
   const Bar = ({
     canSave,
     saving
-  }) => /*#__PURE__*/React.createElement("div", {
+  }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "appbar"
   }, /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
@@ -3844,7 +3524,19 @@ try { (() => {
     }
   }) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Icon, {
     name: "check"
-  }), "Save")));
+  }), "Save"))), /*#__PURE__*/React.createElement(Breadcrumb, {
+    items: [{
+      label: 'Library',
+      icon: 'library'
+    }, {
+      label: 'Languages'
+    }, {
+      label: 'Japanese \u00B7 N5'
+    }, {
+      label: 'New card',
+      current: true
+    }]
+  }));
   const Body = ({
     children
   }) => /*#__PURE__*/React.createElement("div", {
@@ -4043,14 +3735,15 @@ try { (() => {
     Banner,
     Sk,
     Modal,
-    PickerRow
+    PickerRow,
+    Breadcrumb
   } = window.MX;
 
   // ---- App bar (back + title + delete + Save) ------------------------------
   const Bar = ({
     saving,
     showActions = true
-  }) => /*#__PURE__*/React.createElement("div", {
+  }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "appbar"
   }, /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
@@ -4087,7 +3780,19 @@ try { (() => {
     }
   }) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Icon, {
     name: "check"
-  }), "Save"))));
+  }), "Save")))), /*#__PURE__*/React.createElement(Breadcrumb, {
+    items: [{
+      label: 'Library',
+      icon: 'library'
+    }, {
+      label: 'Languages'
+    }, {
+      label: 'Japanese \u00B7 N5'
+    }, {
+      label: 'Edit card',
+      current: true
+    }]
+  }));
   const Body = ({
     children
   }) => /*#__PURE__*/React.createElement("div", {
@@ -4323,7 +4028,8 @@ try { (() => {
     HeroCard,
     EmptyState,
     Banner,
-    Sk
+    Sk,
+    Breadcrumb
   } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
@@ -4377,7 +4083,7 @@ try { (() => {
   }];
 
   // ---- App bar -------------------------------------------------------------
-  const Bar = () => /*#__PURE__*/React.createElement("div", {
+  const Bar = () => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "appbar"
   }, /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
@@ -4391,7 +4097,19 @@ try { (() => {
       minWidth: 0,
       marginLeft: S(2)
     }
-  }, "History"));
+  }, "History")), /*#__PURE__*/React.createElement(Breadcrumb, {
+    items: [{
+      label: 'Library',
+      icon: 'library'
+    }, {
+      label: 'Languages'
+    }, {
+      label: 'Japanese \u00B7 N5'
+    }, {
+      label: 'History',
+      current: true
+    }]
+  }));
 
   // ---- Card summary header -------------------------------------------------
   const SummaryHead = () => /*#__PURE__*/React.createElement("div", {
@@ -5153,6 +4871,7 @@ try { (() => {
     TileLg,
     EmptyState,
     Banner,
+    SearchDock,
     Sk,
     Modal,
     Sheet,
@@ -5212,54 +4931,13 @@ try { (() => {
       minWidth: 0,
       marginLeft: S(2)
     }
-  }, "Tags"), /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    "aria-label": "Search"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search"
-  })));
+  }, "Tags"));
   const SearchBar = ({
     query
-  }) => /*#__PURE__*/React.createElement("div", {
-    className: "appbar",
-    style: {
-      gap: S(2)
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "icon-btn",
-    "aria-label": "Back"
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "arrow-left"
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: 'absolute',
-      left: S(3),
-      display: 'grid',
-      placeItems: 'center',
-      color: 'var(--memox-text-secondary)',
-      pointerEvents: 'none'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "search",
-    style: {
-      width: 'var(--memox-icon-md)',
-      height: 'var(--memox-icon-md)'
-    }
-  })), /*#__PURE__*/React.createElement("input", {
-    className: "field",
-    defaultValue: query,
-    placeholder: "Search tags",
-    style: {
-      paddingLeft: 'var(--memox-space-10)'
-    }
-  })));
+  }) => /*#__PURE__*/React.createElement(SearchDock, {
+    query: query,
+    placeholder: "Search tags"
+  });
 
   // ---- Tag row -------------------------------------------------------------
   const TagRow = ({
@@ -5603,16 +5281,15 @@ try { (() => {
     if (variant === 'search-empty') {
       return /*#__PURE__*/React.createElement("div", {
         className: "app"
-      }, /*#__PURE__*/React.createElement(SearchBar, {
-        query: "xyz"
-      }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(EmptyState, {
+      }, /*#__PURE__*/React.createElement(Bar, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(EmptyState, {
         icon: "search-x",
         pad: 10,
         title: "No tags match",
         desc: 'Nothing here matches “xyz”.'
-      })));
+      })), /*#__PURE__*/React.createElement(SearchBar, {
+        query: "xyz"
+      }));
     }
-    const searched = variant === 'search-empty';
     const overlay = {
       'action-sheet': /*#__PURE__*/React.createElement(ActionSheet, null),
       rename: /*#__PURE__*/React.createElement(RenameDialog, null),
@@ -5631,11 +5308,11 @@ try { (() => {
       style: {
         position: 'relative'
       }
-    }, searched ? /*#__PURE__*/React.createElement(SearchBar, {
-      query: ""
-    }) : /*#__PURE__*/React.createElement(Bar, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(TagList, {
+    }, /*#__PURE__*/React.createElement(Bar, null), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement(TagList, {
       tags: TAGS
-    })), overlay);
+    })), /*#__PURE__*/React.createElement(SearchBar, {
+      query: ""
+    }), overlay);
   }
   window.MEMOX_KIT.register({
     num: '11',
@@ -6930,11 +6607,14 @@ try { (() => {
 
 // ui_kits/mobile/screens/19-progress.jsx
 try { (() => {
-/* MemoX screen — 19 Progress (7 states). A drill-in from Stats: a ranged
-   activity chart (Week | Month segmented toggle) + a KPI strip (streak /
-   accuracy / time). States: week · month · loading · empty · insufficient
-   (dimmed chart + note) · partial (chart with data gaps + note) · error.
-   Token-driven; composes the shared primitives. */
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+/* MemoX screen — 19 Progress (9 states). The analysis + gentle-nudge HOME: this
+   is where goal, streak, trend, accuracy, due load, weak decks and "what to study
+   next" live — the things the Dashboard deliberately keeps light. Layout:
+   Today status (goal ring + streak) · ranged activity chart (Week | Month) · KPI
+   strip (accuracy / time / cards) · Insights (analytic nudges). States: week ·
+   month · goal met · streak lost · loading · empty · insufficient · partial ·
+   error. Token-driven; composes the shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
   const {
@@ -6943,6 +6623,9 @@ try { (() => {
     Segmented,
     BarChart,
     StatSummary,
+    GoalRing,
+    Insight,
+    SectionHead,
     Banner,
     EmptyState,
     HeroCard,
@@ -6983,7 +6666,6 @@ try { (() => {
     label: 'Wk4',
     value: 121
   }];
-  // Week with two missing days (a partial range).
   const PARTIAL = [{
     label: 'M',
     value: 18
@@ -7006,9 +6688,67 @@ try { (() => {
     label: 'S',
     value: 14
   }];
-  const KPI_WEEK = [['11', 'Streak'], ['86%', 'Accuracy'], ['3.3h', 'Time']];
-  const KPI_MONTH = [['11', 'Streak'], ['84%', 'Accuracy'], ['14h', 'Time']];
+  // KPI strip — accuracy / time / cards (streak shown in the Today card above).
+  const KPI_WEEK = [['86%', 'Accuracy'], ['3.3h', 'Time'], ['132', 'Cards']];
+  const KPI_MONTH = [['84%', 'Accuracy'], ['14h', 'Time'], ['437', 'Cards']];
   const SK_BARS = [1.4, 2.2, 1, 2.7, 1.8, 0.8, 2];
+
+  // ---- Insight library (analytic nudges live HERE, not on the Dashboard) ----
+  const INS = {
+    closeToGoal: {
+      tone: 'good',
+      icon: 'target',
+      title: "You're close to today's goal",
+      desc: '8 more cards to reach 20.',
+      action: 'Review 8 cards'
+    },
+    goalMet: {
+      tone: 'good',
+      icon: 'check-check',
+      title: 'Daily goal reached',
+      desc: '20/20 cards today — keep the streak going.'
+    },
+    streakReset: {
+      tone: 'warn',
+      icon: 'flame',
+      title: 'Your 11-day streak reset',
+      desc: 'Study today to start a new one.',
+      action: 'Review 12 cards'
+    },
+    mostDue: {
+      tone: 'warn',
+      icon: 'layers',
+      title: 'Japanese · N5 has the most due',
+      desc: '23 of your 33 due cards are in this deck.',
+      action: 'Open deck'
+    },
+    accuracyUp: {
+      tone: 'good',
+      icon: 'trending-up',
+      title: 'Accuracy is up this week',
+      desc: '86% correct, up 4% from last week.'
+    },
+    accuracyDown: {
+      tone: 'down',
+      icon: 'trending-down',
+      title: 'Accuracy dropped this week',
+      desc: '80% correct, down 6% from last week.',
+      action: 'Review missed cards'
+    },
+    weakDeck: {
+      tone: 'warn',
+      icon: 'flask-conical',
+      title: 'Organic chemistry is your weakest deck',
+      desc: '38% mastered — the lowest of your decks.',
+      action: 'Study it'
+    },
+    needData: {
+      tone: 'info',
+      icon: 'info',
+      title: 'A few more sessions needed',
+      desc: 'Study a couple more days to unlock trends and insights.'
+    }
+  };
   const Bar = ({
     range
   }) => /*#__PURE__*/React.createElement("div", {
@@ -7040,6 +6780,51 @@ try { (() => {
       gap: 'var(--memox-gap-section)'
     }
   }, children);
+
+  // Today status — goal ring + streak. The goal/streak that USED to pressure the
+  // Dashboard now reports here as status.
+  const TodayCard = ({
+    goalValue = 12,
+    goalTotal = 20,
+    goalMet,
+    streak = 11,
+    streakLost
+  }) => /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: S(4)
+    }
+  }, /*#__PURE__*/React.createElement(GoalRing, {
+    value: goalMet ? goalTotal : goalValue,
+    total: goalTotal,
+    met: goalMet
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "title",
+    style: {
+      fontSize: 'var(--memox-fs-label-large)'
+    }
+  }, "Today's goal"), /*#__PURE__*/React.createElement("div", {
+    className: "muted",
+    style: {
+      fontSize: 'var(--memox-fs-body-small)'
+    }
+  }, goalMet ? 'Goal reached — nice work' : `${goalTotal - goalValue} cards to go`), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: S(2),
+      display: 'flex'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: `chip${streakLost ? '' : ' learning'}`
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "flame"
+  }), streakLost ? 'Streak reset' : `${streak}-day streak`))));
   const ChartCard = ({
     heading,
     total,
@@ -7055,7 +6840,7 @@ try { (() => {
   }, /*#__PURE__*/React.createElement("div", {
     className: "ov"
   }, /*#__PURE__*/React.createElement(Icon, {
-    name: "trending-up"
+    name: "bar-chart-3"
   }), heading), /*#__PURE__*/React.createElement("span", {
     className: "title",
     style: {
@@ -7066,6 +6851,20 @@ try { (() => {
     data: data,
     dim: dim
   }));
+  const Insights = ({
+    items
+  }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHead, {
+    title: "Insights"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: S(3),
+      marginTop: S(2)
+    }
+  }, items.map((k, i) => /*#__PURE__*/React.createElement(Insight, _extends({
+    key: i
+  }, INS[k])))));
   function ProgressScreen({
     variant
   }) {
@@ -7075,6 +6874,30 @@ try { (() => {
       }, /*#__PURE__*/React.createElement(Bar, {
         range: "week"
       }), /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("div", {
+        className: "card",
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: S(4)
+        }
+      }, /*#__PURE__*/React.createElement(Sk, {
+        h: "72px",
+        w: "72px",
+        r: "var(--memox-radius-full)"
+      }), /*#__PURE__*/React.createElement("div", {
+        style: {
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: S(2)
+        }
+      }, /*#__PURE__*/React.createElement(Sk, {
+        h: "14px",
+        w: "45%"
+      }), /*#__PURE__*/React.createElement(Sk, {
+        h: "11px",
+        w: "60%"
+      }))), /*#__PURE__*/React.createElement("div", {
         className: "card",
         style: {
           display: 'flex',
@@ -7176,11 +6999,16 @@ try { (() => {
       }), "Retry")))));
     }
 
-    // Data states: week / month / insufficient / partial
+    // ---- Data states ----
     const range = variant === 'month' ? 'month' : 'week';
     const data = variant === 'partial' ? PARTIAL : range === 'month' ? MONTH : WEEK;
     const heading = range === 'month' ? 'This month' : 'This week';
     const total = range === 'month' ? '437 cards' : '132 cards';
+    const dim = variant === 'insufficient';
+    const goalMet = variant === 'goal-met';
+    const streakLost = variant === 'streak-lost';
+    const insights = variant === 'goal-met' ? ['goalMet', 'weakDeck', 'accuracyUp'] : variant === 'streak-lost' ? ['streakReset', 'mostDue', 'accuracyDown'] : variant === 'insufficient' ? ['needData'] : variant === 'partial' ? ['mostDue', 'accuracyDown'] : variant === 'month' ? ['accuracyUp', 'weakDeck', 'mostDue'] : ['closeToGoal', 'mostDue', 'accuracyUp']; // week
+
     return /*#__PURE__*/React.createElement("div", {
       className: "app"
     }, /*#__PURE__*/React.createElement(Bar, {
@@ -7191,13 +7019,18 @@ try { (() => {
     }, "A few more days of study are needed to show a trend."), variant === 'partial' && /*#__PURE__*/React.createElement(Banner, {
       tone: "warn",
       icon: "alert-triangle"
-    }, "Study data is missing for some days in this range."), /*#__PURE__*/React.createElement(ChartCard, {
+    }, "Study data is missing for some days in this range."), /*#__PURE__*/React.createElement(TodayCard, {
+      goalMet: goalMet,
+      streakLost: streakLost
+    }), /*#__PURE__*/React.createElement(ChartCard, {
       heading: heading,
-      total: variant === 'insufficient' ? '—' : total,
+      total: dim ? '\u2014' : total,
       data: data,
-      dim: variant === 'insufficient'
+      dim: dim
     }), /*#__PURE__*/React.createElement(StatSummary, {
       stats: range === 'month' ? KPI_MONTH : KPI_WEEK
+    }), /*#__PURE__*/React.createElement(Insights, {
+      items: insights
     })));
   }
   window.MEMOX_KIT.register({
@@ -7212,6 +7045,16 @@ try { (() => {
       label: 'Month',
       render: () => /*#__PURE__*/React.createElement(ProgressScreen, {
         variant: "month"
+      })
+    }, {
+      label: 'Goal met',
+      render: () => /*#__PURE__*/React.createElement(ProgressScreen, {
+        variant: "goal-met"
+      })
+    }, {
+      label: 'Streak lost',
+      render: () => /*#__PURE__*/React.createElement(ProgressScreen, {
+        variant: "streak-lost"
       })
     }, {
       label: 'Loading',

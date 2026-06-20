@@ -21,8 +21,8 @@ It helps users:
 - Review due cards via spaced repetition (Leitner 8-box).
 - Bury cards until tomorrow or suspend them indefinitely.
 - Resume paused sessions from Dashboard.
-- See a simple Dashboard streak stat placeholder in V1; full daily goal/streak/reminder engagement remains Future/Target.
-- Search the whole Library (folders, decks, flashcards) from a dedicated `/library/search` screen, plus filter inside the current screen scope. Tags-in-search, recent searches, and popular tags remain Future Proposal.
+- See a simple Dashboard streak stat placeholder in V1; full daily goal/streak/reminder engagement remains Future/Target. Per the design redesign, daily goal + streak surfaces move onto the Progress screen (Dashboard stays a quiet "refer to work" surface).
+- Search the whole Library (folders, decks, flashcards) from a dedicated top-level Search destination (`/search`, bottom search dock), plus filter inside the current screen scope. Tags-in-search, recent searches, and popular tags remain Future Proposal.
 - View per-card review history (timeline of attempts, lifetime stats, reset progress with divider) from a card's row action → `/library/deck/:deckId/flashcards/:flashcardId/history`.
 - Configure audio/speech (TTS) preferences for Korean and English.
 - Optionally link a Google account for Drive AppData backup and restore with conflict protection.
@@ -59,11 +59,13 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Due-time local-midnight normalization| Specified| `docs/business/srs/srs-review.md`|
 | Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
 | Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
-| Global search screen (folders/decks/flashcards)| Specified (BE Implemented — WBS 3.5.1; FE 3.5.2 pending)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
+| Global search screen (folders/decks/flashcards)| Implemented (WBS 3.5.1 BE + 3.5.2/3.5.3 FE) — top-level `/search` with a bottom search dock (design redesign)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
+| Bottom-nav primary destinations| Redesign: 5 tabs — Home · Library · Search · Stats · Settings (was 4; Search promoted from app-bar icon to a thumb-reachable destination)| `docs/business/navigation/navigation-flow.md`|
+| Breadcrumb trail on nested screens| Redesign — Specified (Library › Folder › Deck › Card, docked under app bar)| `docs/business/navigation/navigation-flow.md`|
 | Global search: tags section + recent + popular| Future Proposal — needs tag subsystem + `shared_preferences`| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
 | Zero-content guidance / thin onboarding| V1 guideline — owner-split across current empty states and Account Settings restore| `docs/wireframes/23-onboarding.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/02-library.md`, `docs/wireframes/19-settings-account.md`|
 | Full onboarding flow| Future Proposal — no standalone route/feature/first-launch wizard in V1| `docs/wireframes/23-onboarding.md`|
-| Daily goal + streak + reminders| Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets.| `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md`|
+| Daily goal + streak + reminders| Future/Target for V1; target spec only. Current code has a simple Dashboard `0 days` visual/stat placeholder with no engagement persistence, settings, reminders, or sheets. Redesign relocates goal/streak surfaces (`GoalRing`, `Insight`) onto the Progress screen.| `docs/business/engagement/dashboard-engagement.md`, `docs/wireframes/01-dashboard.md`, `docs/wireframes/03-progress.md`|
 | Progress tracking| Specified| `docs/wireframes/03-progress.md`, `docs/business/srs/srs-review.md`|
 | TTS / audio settings| Specified| `docs/business/tts/tts-settings.md`|
 | Account linking (Google)| Specified — display-only Account screen shipped (WBS 8.5.1); interactive sign-in pending (8.6.1)| `docs/business/account-sync/account-sync.md`|

@@ -25,15 +25,26 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 /// - child: the card content.
 /// - padding: inner padding (defaults to the card spacing token).
 /// - onTap: optional tap handler; when set the card shows a shaped ink ripple.
+/// - elevated: whether the card carries the quiet `sm` shadow (default true).
+///   Pass `false` for a flat, border-only surface (a quiet "refer/navigate"
+///   affordance such as a shortcut row), per the design system's
+///   prefer-a-border-over-a-shadow guidance.
 ///
 /// States:
 /// - tappable vs static, controlled by whether [onTap] is provided.
 class MxCard extends StatelessWidget {
-  const MxCard({required this.child, this.padding, this.onTap, super.key});
+  const MxCard({
+    required this.child,
+    this.padding,
+    this.onTap,
+    this.elevated = true,
+    super.key,
+  });
 
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final VoidCallback? onTap;
+  final bool elevated;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +54,7 @@ class MxCard extends StatelessWidget {
         color: colors.surface,
         borderRadius: MxRadius.cardAll,
         border: Border.all(color: colors.border),
-        boxShadow: context.mxShadows.sm,
+        boxShadow: elevated ? context.mxShadows.sm : null,
       ),
       child: MxTappable(
         onTap: onTap,

@@ -40,51 +40,18 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     position: pos:relative
@@ -92,7 +59,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: appbar
       mx: MxAppBar
       box:
-        abs: [1,49 388x56]
+        abs: [1,13 388x56]
         rel: [0,0 388x56]
       layout: flex:row gap:12 align:center
       spacing: pad:0/20
@@ -100,7 +67,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [21,57 40x40]
+          abs: [21,21 40x40]
           rel: [20,8 40x40]
         layout: grid cols:1 align:center
         flex: shrink:0
@@ -109,66 +76,66 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         style: r:999
         - node: icon:x
           box:
-            abs: [31,67 20x20]
+            abs: [31,31 20x20]
             rel: [10,10 20x20]
           position: clip
       - node: progress
         box:
-          abs: [73,75 247x4]
+          abs: [73,39 247x4]
           rel: [72,26 247x4]
         position: clip
         style: bg:surface-2 r:999
         - node: progress-fill
           box:
-            abs: [73,75 99x4]
+            abs: [73,39 99x4]
             rel: [0,0 99x4]
           style: bg:accent r:999
       - node: span
         text: 8
         box:
-          abs: [332,68 37x18]
+          abs: [332,32 37x18]
           rel: [331,19 37x18]
         flex: shrink:0
         style: font:14/700 color:text-2
         - node: span
           text: / 20
           box:
-            abs: [340,68 29x18]
+            abs: [340,32 29x18]
             rel: [8,0 29x18]
           style: font:14/700 color:text-3
     - node: div
       box:
-        abs: [1,105 388x587]
-        rel: [0,56 388x587]
+        abs: [1,69 388x623]
+        rel: [0,56 388x623]
       layout: flex:col
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:16/20
       position: layout_hint:scroll
       - node: div
         box:
-          abs: [21,121 348x24]
+          abs: [21,85 348x24]
           rel: [20,16 348x24]
         layout: flex:row justify:center
         spacing: margin:0/0/12/0
         - node: chip
           text: Japanese · N5
           box:
-            abs: [146,121 99x24]
+            abs: [146,85 99x24]
             rel: [125,0 99x24]
           layout: flex:row gap:4 align:center
           spacing: pad:0/12
           style: bg:color(srgb 0.435294 0.827451 0.768627 / 0.12) font:11/700 color:note-teal tracking:0.1 r:999
       - node: div
         box:
-          abs: [21,157 348x519]
-          rel: [20,52 348x519]
+          abs: [21,121 348x555]
+          rel: [20,52 348x555]
         layout: flex:row
         flex: grow:1 basis:0 layout_hint:expanded
         - node: card
           mx: MxCard
           box:
-            abs: [21,157 348x519]
-            rel: [0,0 348x519]
+            abs: [21,121 348x555]
+            rel: [0,0 348x555]
           layout: flex:col gap:16 justify:center align:center
           flex: grow:1 basis:0 layout_hint:expanded
           spacing: pad:24
@@ -176,39 +143,39 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: ov
             text: Term
             box:
-              abs: [177,321 36x15]
-              rel: [156,164 36x15]
+              abs: [177,303 36x15]
+              rel: [156,182 36x15]
             layout: flex:row gap:8 align:center
             style: font:12/700 color:text-3 text:center tracking:1
           - node: div
             text: 日本
             box:
-              abs: [132,352 127x68]
-              rel: [111,195 127x68]
+              abs: [132,334 127x68]
+              rel: [111,213 127x68]
             style: font:64.6/800/68 color:text text:center tracking:-1.3
           - node: muted
             text: にほん · nihon
             box:
-              abs: [137,435 117x29]
-              rel: [116,278 117x29]
+              abs: [137,417 117x29]
+              rel: [116,296 117x29]
             style: font:18/500 color:text-2 text:center
           - node: div
             text: Tap to flip
             box:
-              abs: [144,496 102x16]
-              rel: [123,339 102x16]
+              abs: [144,478 102x16]
+              rel: [123,357 102x16]
             layout: flex:row gap:8 align:center
             spacing: margin:16/0/0/0
             style: font:12/700 color:text-3 text:center tracking:1
             - node: icon:rotate-cw
               box:
-                abs: [144,496 16x16]
+                abs: [144,478 16x16]
                 rel: [0,0 16x16]
               position: clip
     - node: div
       box:
         abs: [1,692 388x77]
-        rel: [0,643 388x77]
+        rel: [0,679 388x77]
       layout: flex:col gap:8
       flex: shrink:0
       spacing: pad:12/20/20/20

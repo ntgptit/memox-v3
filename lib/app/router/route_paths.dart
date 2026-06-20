@@ -8,6 +8,10 @@ abstract final class RoutePaths {
   static const String root = '/';
   static const String home = '/home';
   static const String library = '/library';
+
+  /// Top-level global Search destination (design redesign).
+  static const String search = '/search';
+
   static const String progress = '/progress';
   static const String settings = '/settings';
 

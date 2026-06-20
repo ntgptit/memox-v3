@@ -40,58 +40,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Welcome
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -99,19 +66,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: MemoX
         box:
-          abs: [21,69 51x18]
+          abs: [21,33 51x18]
           rel: [20,20 51x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Welcome
         box:
-          abs: [21,95 108x30]
+          abs: [21,59 108x30]
           rel: [20,46 108x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       repeat: x4(unit=1)
@@ -121,40 +88,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         item: item[1]
         mx: MxCard
         box:
-          abs: [21,145 348x312]
+          abs: [21,109 348x312]
           rel: [20,8 348x312]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,170 56x56]
+            abs: [167,134 56x56]
             rel: [146,25 56x56]
           layout: grid cols:1 align:center
           spacing: margin:0/121/16/121
           style: bg:accent r:14
           - node: icon:graduation-cap
             box:
-              abs: [183,186 24x24]
+              abs: [183,150 24x24]
               rel: [16,16 24x24]
             position: clip
         - node: div
           text: Welcome to MemoX
           box:
-            abs: [46,242 298x28]
+            abs: [46,206 298x28]
             rel: [25,97 298x28]
           spacing: margin:0/0/4/0
           style: font:22/800 color:text text:center tracking:-0.4
         - node: muted
           text: Make a deck, study a little each day, and let spaced repetition do the rest.
           box:
-            abs: [55,274 280x42]
+            abs: [55,238 280x42]
             rel: [34,129 280x42]
           spacing: margin:4/9/0/9
           size: maxw:280
           style: font:14/400/21 color:text-2 text:center
         - node: div
           box:
-            abs: [46,336 298x96]
+            abs: [46,300 298x96]
             rel: [25,191 298x96]
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
@@ -162,35 +129,35 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             text: Create first deck
             mx: MxPrimaryButton
             box:
-              abs: [46,336 298x44]
+              abs: [46,300 298x44]
               rel: [0,0 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
             style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
             - node: icon:plus
               box:
-                abs: [127,350 16x16]
+                abs: [127,314 16x16]
                 rel: [81,14 16x16]
               position: clip
           - node: pill-btn
             text: Import a deck
             mx: MxSecondaryButton
             box:
-              abs: [46,388 298x44]
+              abs: [46,352 298x44]
               rel: [0,52 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
             style: bg:color(srgb 0.333333 0.411765 1 / 0.12) font:14/700 color:accent text:center tracking:-0.1 r:999 border:1px transparent
             - node: icon:download
               box:
-                abs: [137,402 16x16]
+                abs: [137,366 16x16]
                 rel: [91,14 16x16]
               position: clip
       - node: card
         item: item[2]
         mx: MxCard
         box:
-          abs: [21,469 348x77]
+          abs: [21,433 348x77]
           rel: [20,332 348x77]
         layout: flex:row gap:12 align:center
         spacing: pad:16
@@ -198,31 +165,31 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: icon-tile
           mx: MxIconTile
           box:
-            abs: [38,488 40x40]
+            abs: [38,452 40x40]
             rel: [17,19 40x40]
           layout: grid cols:1 align:center
           flex: shrink:0
           style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.08) r:14
           - node: icon:shield-check
             box:
-              abs: [48,498 20x20]
+              abs: [48,462 20x20]
               rel: [10,10 20x20]
             position: clip
         - node: div
           box:
-            abs: [90,486 262x43]
+            abs: [90,450 262x43]
             rel: [69,17 262x43]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: title
             text: Local-first
             box:
-              abs: [90,486 262x21]
+              abs: [90,450 262x21]
               rel: [0,0 262x21]
             style: font:16/700 color:text tracking:-0.3
           - node: muted
             text: Your cards live on your device.
             box:
-              abs: [90,513 262x16]
+              abs: [90,477 262x16]
               rel: [0,27 262x16]
             spacing: margin:6/0/0/0
             style: font:13/400 color:text-2
@@ -230,7 +197,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         item: item[3]
         mx: MxCard
         box:
-          abs: [21,558 348x77]
+          abs: [21,522 348x77]
           rel: [20,421 348x77]
         layout: flex:row gap:12 align:center
         spacing: pad:16
@@ -238,31 +205,31 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: icon-tile
           mx: MxIconTile
           box:
-            abs: [38,577 40x40]
+            abs: [38,541 40x40]
             rel: [17,19 40x40]
           layout: grid cols:1 align:center
           flex: shrink:0
           style: bg:color(srgb 0.2 0.760784 1 / 0.08) r:14
           - node: icon:calendar-check
             box:
-              abs: [48,587 20x20]
+              abs: [48,551 20x20]
               rel: [10,10 20x20]
             position: clip
         - node: div
           box:
-            abs: [90,575 262x43]
+            abs: [90,539 262x43]
             rel: [69,17 262x43]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: title
             text: A gentle daily rhythm
             box:
-              abs: [90,575 262x21]
+              abs: [90,539 262x21]
               rel: [0,0 262x21]
             style: font:16/700 color:text tracking:-0.3
           - node: muted
             text: Small reviews, every day.
             box:
-              abs: [90,602 262x16]
+              abs: [90,566 262x16]
               rel: [0,27 262x16]
             spacing: margin:6/0/0/0
             style: font:13/400 color:text-2
@@ -270,7 +237,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         item: item[4]
         mx: MxCard
         box:
-          abs: [21,647 348x77]
+          abs: [21,611 348x77]
           rel: [20,510 348x77]
         layout: flex:row gap:12 align:center
         spacing: pad:16
@@ -278,382 +245,78 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: icon-tile
           mx: MxIconTile
           box:
-            abs: [38,666 40x40]
+            abs: [38,630 40x40]
             rel: [17,19 40x40]
           layout: grid cols:1 align:center
           flex: shrink:0
           style: bg:color(srgb 0.435294 0.827451 0.768627 / 0.08) r:14
           - node: icon:feather
             box:
-              abs: [48,676 20x20]
+              abs: [48,640 20x20]
               rel: [10,10 20x20]
             position: clip
         - node: div
           box:
-            abs: [90,664 262x43]
+            abs: [90,628 262x43]
             rel: [69,17 262x43]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: title
             text: No streak pressure
             box:
-              abs: [90,664 262x21]
+              abs: [90,628 262x21]
               rel: [0,0 262x21]
             style: font:16/700 color:text tracking:-0.3
           - node: muted
             text: Miss a day — nothing breaks.
             box:
-              abs: [90,691 262x16]
+              abs: [90,655 262x16]
               rel: [0,27 262x16]
             spacing: margin:6/0/0/0
             style: font:13/400 color:text-2
 ```
 
-## State: Zero state (ordered diff vs Welcome)
-
-```diff
-  - node: appbar-lg
-  mx: MxAppBar
-  box:
-  abs: [1,49 388x88]
-  rel: [0,0 388x88]
-  layout: flex:col gap:8 justify:end align:start
-  spacing: pad:0/20/12/20
-  style: bg:bg
-- - node: appbar-subtitle
-- text: MemoX
-- box:
-- abs: [21,69 51x18]
-- rel: [20,20 51x18]
-- style: font:14/500 color:text-2
-- - node: appbar-title
-- text: Welcome
-- box:
-- abs: [21,95 108x30]
-- rel: [20,46 108x30]
-- style: font:24/700 color:text tracking:-0.5
-- - node: div
-- box:
-- abs: [1,137 388x632]
-- rel: [0,88 388x632]
-- layout: flex:col gap:12
-- flex: grow:1 basis:0 layout_hint:expanded
-- repeat: x4(unit=1)
-- spacing: pad:8/20/32/20
-- position: layout_hint:scroll
-- - node: card
-- item: item[1]
-- mx: MxCard
-- box:
-- abs: [21,145 348x312]
-- rel: [20,8 348x312]
-- spacing: pad:24
-- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
-+ - node: appbar-subtitle
-+ text: No decks yet
-+ box:
-+ abs: [21,69 87x18]
-+ rel: [20,20 87x18]
-+ style: font:14/500 color:text-2
-+ - node: appbar-title
-+ text: MemoX
-+ box:
-+ abs: [21,95 87x30]
-+ rel: [20,46 87x30]
-+ style: font:24/700 color:text tracking:-0.5
-+ - node: div
-+ box:
-+ abs: [1,137 388x632]
-+ rel: [0,88 388x632]
-+ layout: flex:col gap:12
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ spacing: pad:8/20/32/20
-+ position: layout_hint:scroll
-+ - node: card
-+ mx: MxCard
-+ box:
-+ abs: [21,145 348x312]
-+ rel: [20,8 348x312]
-+ spacing: pad:24
-+ style: bg:accent-contrast r:20 border:1px divider shadow:1/2
-  - node: tile-lg
-  box:
-  abs: [167,170 56x56]
-  rel: [146,25 56x56]
-  layout: grid cols:1 align:center
-  spacing: margin:0/121/16/121
-  style: bg:accent r:14
-- - node: icon:graduation-cap
-- box:
-- abs: [183,186 24x24]
-- rel: [16,16 24x24]
-- position: clip
-- - node: div
-- text: Welcome to MemoX
-- box:
-- abs: [46,242 298x28]
-- rel: [25,97 298x28]
-- spacing: margin:0/0/4/0
-- style: font:22/800 color:text text:center tracking:-0.4
-- - node: muted
-- text: Make a deck, study a little each day, and let spaced repetition do the rest.
-- box:
-- abs: [55,274 280x42]
-- rel: [34,129 280x42]
-- spacing: margin:4/9/0/9
-- size: maxw:280
-- style: font:14/400/21 color:text-2 text:center
-+ - node: icon:layers
-+ box:
-+ abs: [183,186 24x24]
-+ rel: [16,16 24x24]
-+ position: clip
-+ - node: div
-+ text: No decks yet
-+ box:
-+ abs: [46,242 298x28]
-+ rel: [25,97 298x28]
-+ spacing: margin:0/0/4/0
-+ style: font:22/800 color:text text:center tracking:-0.4
-+ - node: muted
-+ text: Your library is empty. Create your first deck to start studying.
-+ box:
-+ abs: [55,274 280x42]
-+ rel: [34,129 280x42]
-+ spacing: margin:4/9/0/9
-+ size: maxw:280
-+ style: font:14/400/21 color:text-2 text:center
-  - node: div
-  box:
-  abs: [46,336 298x96]
-  rel: [25,191 298x96]
-  layout: flex:col gap:8
-  spacing: margin:20/0/0/0
-  ...
-  - node: icon:plus
-  box:
-  abs: [127,350 16x16]
-  rel: [81,14 16x16]
-  position: clip
-- - node: pill-btn
-- text: Import a deck
-- mx: MxSecondaryButton
-- box:
-- abs: [46,388 298x44]
-- rel: [0,52 298x44]
-- layout: flex:row gap:8 justify:center align:center
-- spacing: pad:0/20
-- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) font:14/700 color:accent text:center tracking:-0.1 r:999 border:1px transparent
-+ - node: pill-btn
-+ text: Import a deck
-+ mx: MxSecondaryButton
-+ box:
-+ abs: [46,388 298x44]
-+ rel: [0,52 298x44]
-+ layout: flex:row gap:8 justify:center align:center
-+ spacing: pad:0/20
-+ style: font:14/700 color:text text:center tracking:-0.1 r:999 border:1px border
-  - node: icon:download
-  box:
-  abs: [137,402 16x16]
-  rel: [91,14 16x16]
-  position: clip
-- - node: card
-- item: item[2]
-- mx: MxCard
-- box:
-- abs: [21,469 348x77]
-- rel: [20,332 348x77]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
-- - node: icon-tile
-- mx: MxIconTile
-- box:
-- abs: [38,488 40x40]
-- rel: [17,19 40x40]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.08) r:14
-- - node: icon:shield-check
-- box:
-- abs: [48,498 20x20]
-- rel: [10,10 20x20]
-- position: clip
-- - node: div
-- box:
-- abs: [90,486 262x43]
-- rel: [69,17 262x43]
-- flex: grow:1 basis:0 layout_hint:expanded
-- - node: title
-- text: Local-first
-- box:
-- abs: [90,486 262x21]
-- rel: [0,0 262x21]
-- style: font:16/700 color:text tracking:-0.3
-- - node: muted
-- text: Your cards live on your device.
-- box:
-- abs: [90,513 262x16]
-- rel: [0,27 262x16]
-- spacing: margin:6/0/0/0
-- style: font:13/400 color:text-2
-- - node: card
-- item: item[3]
-- mx: MxCard
-- box:
-- abs: [21,558 348x77]
-- rel: [20,421 348x77]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
-- - node: icon-tile
-- mx: MxIconTile
-- box:
-- abs: [38,577 40x40]
-- rel: [17,19 40x40]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- style: bg:color(srgb 0.2 0.760784 1 / 0.08) r:14
-- - node: icon:calendar-check
-- box:
-- abs: [48,587 20x20]
-- rel: [10,10 20x20]
-- position: clip
-- - node: div
-- box:
-- abs: [90,575 262x43]
-- rel: [69,17 262x43]
-- flex: grow:1 basis:0 layout_hint:expanded
-- - node: title
-- text: A gentle daily rhythm
-- box:
-- abs: [90,575 262x21]
-- rel: [0,0 262x21]
-- style: font:16/700 color:text tracking:-0.3
-- - node: muted
-- text: Small reviews, every day.
-- box:
-- abs: [90,602 262x16]
-- rel: [0,27 262x16]
-- spacing: margin:6/0/0/0
-- style: font:13/400 color:text-2
-- - node: card
-- item: item[4]
-- mx: MxCard
-- box:
-- abs: [21,647 348x77]
-- rel: [20,510 348x77]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- style: bg:accent-contrast r:20 border:1px divider shadow:1/2
-- - node: icon-tile
-- mx: MxIconTile
-- box:
-- abs: [38,666 40x40]
-- rel: [17,19 40x40]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- style: bg:color(srgb 0.435294 0.827451 0.768627 / 0.08) r:14
-- - node: icon:feather
-- box:
-- abs: [48,676 20x20]
-- rel: [10,10 20x20]
-- position: clip
-- - node: div
-- box:
-- abs: [90,664 262x43]
-- rel: [69,17 262x43]
-- flex: grow:1 basis:0 layout_hint:expanded
-- - node: title
-- text: No streak pressure
-- box:
-- abs: [90,664 262x21]
-- rel: [0,0 262x21]
-- style: font:16/700 color:text tracking:-0.3
-- - node: muted
-- text: Miss a day — nothing breaks.
-- box:
-- abs: [90,691 262x16]
-- rel: [0,27 262x16]
-- spacing: margin:6/0/0/0
-- style: font:13/400 color:text-2
-```
-
-## State: Create deck (full — differs too much from base)
+## State: Zero state (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
       style: bg:bg
       - node: appbar-subtitle
-        text: Step 1 of 2
+        text: No decks yet
         box:
-          abs: [21,69 68x18]
-          rel: [20,20 68x18]
+          abs: [21,33 87x18]
+          rel: [20,20 87x18]
         style: font:14/500 color:text-2
       - node: appbar-title
-        text: New deck
+        text: MemoX
         box:
-          abs: [21,95 113x30]
-          rel: [20,46 113x30]
+          abs: [21,59 87x30]
+          rel: [20,46 87x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -661,46 +324,162 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x353]
+          abs: [21,109 348x312]
+          rel: [20,8 348x312]
+        spacing: pad:24
+        style: bg:accent-contrast r:20 border:1px divider shadow:1/2
+        - node: tile-lg
+          box:
+            abs: [167,134 56x56]
+            rel: [146,25 56x56]
+          layout: grid cols:1 align:center
+          spacing: margin:0/121/16/121
+          style: bg:accent r:14
+          - node: icon:layers
+            box:
+              abs: [183,150 24x24]
+              rel: [16,16 24x24]
+            position: clip
+        - node: div
+          text: No decks yet
+          box:
+            abs: [46,206 298x28]
+            rel: [25,97 298x28]
+          spacing: margin:0/0/4/0
+          style: font:22/800 color:text text:center tracking:-0.4
+        - node: muted
+          text: Your library is empty. Create your first deck to start studying.
+          box:
+            abs: [55,238 280x42]
+            rel: [34,129 280x42]
+          spacing: margin:4/9/0/9
+          size: maxw:280
+          style: font:14/400/21 color:text-2 text:center
+        - node: div
+          box:
+            abs: [46,300 298x96]
+            rel: [25,191 298x96]
+          layout: flex:col gap:8
+          spacing: margin:20/0/0/0
+          - node: pill-btn
+            text: Create first deck
+            mx: MxPrimaryButton
+            box:
+              abs: [46,300 298x44]
+              rel: [0,0 298x44]
+            layout: flex:row gap:8 justify:center align:center
+            spacing: pad:0/20
+            style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+            - node: icon:plus
+              box:
+                abs: [127,314 16x16]
+                rel: [81,14 16x16]
+              position: clip
+          - node: pill-btn
+            text: Import a deck
+            mx: MxSecondaryButton
+            box:
+              abs: [46,352 298x44]
+              rel: [0,52 298x44]
+            layout: flex:row gap:8 justify:center align:center
+            spacing: pad:0/20
+            style: font:14/700 color:text text:center tracking:-0.1 r:999 border:1px border
+            - node: icon:download
+              box:
+                abs: [137,366 16x16]
+                rel: [91,14 16x16]
+              position: clip
+```
+
+## State: Create deck (full — differs too much from base)
+
+```text
+- node: phone-canvas
+  box:
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
+    layout: flex:col
+    size: minh:100
+    style: bg:bg
+    - node: appbar-lg
+      mx: MxAppBar
+      box:
+        abs: [1,13 388x88]
+        rel: [0,0 388x88]
+      layout: flex:col gap:8 justify:end align:start
+      spacing: pad:0/20/12/20
+      style: bg:bg
+      - node: appbar-subtitle
+        text: Step 1 of 2
+        box:
+          abs: [21,33 68x18]
+          rel: [20,20 68x18]
+        style: font:14/500 color:text-2
+      - node: appbar-title
+        text: New deck
+        box:
+          abs: [21,59 113x30]
+          rel: [20,46 113x30]
+        style: font:24/700 color:text tracking:-0.5
+    - node: div
+      box:
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
+      layout: flex:col gap:12
+      flex: grow:1 basis:0 layout_hint:expanded
+      spacing: pad:8/20/32/20
+      position: layout_hint:scroll
+      - node: card
+        mx: MxCard
+        box:
+          abs: [21,109 348x353]
           rel: [20,8 348x353]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,170 56x56]
+            abs: [167,134 56x56]
             rel: [146,25 56x56]
           layout: grid cols:1 align:center
           spacing: margin:0/121/16/121
           style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14
           - node: icon:folder-plus
             box:
-              abs: [183,186 24x24]
+              abs: [183,150 24x24]
               rel: [16,16 24x24]
             position: clip
         - node: div
           text: Name your deck
           box:
-            abs: [46,242 298x28]
+            abs: [46,206 298x28]
             rel: [25,97 298x28]
           spacing: margin:0/0/20/0
           style: font:22/800 color:text text:center
         - node: ov
           text: DECK NAME
           box:
-            abs: [46,290 298x15]
+            abs: [46,254 298x15]
             rel: [25,145 298x15]
           layout: flex:row gap:8 align:center
           spacing: margin:0/0/8/0
           style: font:12/700 color:text-2 tracking:1
         - node: field
           box:
-            abs: [46,313 298x44]
+            abs: [46,277 298x44]
             rel: [25,168 298x44]
           spacing: pad:0/16
           style: bg:accent-contrast r:14 border:1px border
         - node: div
           box:
-            abs: [46,377 298x96]
+            abs: [46,341 298x96]
             rel: [25,232 298x96]
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
@@ -708,21 +487,21 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             text: Create deck
             mx: MxPrimaryButton
             box:
-              abs: [46,377 298x44]
+              abs: [46,341 298x44]
               rel: [0,0 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
             style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
             - node: icon:check
               box:
-                abs: [142,391 16x16]
+                abs: [142,355 16x16]
                 rel: [96,14 16x16]
               position: clip
           - node: pill-btn
             text: Cancel
             mx: MxSecondaryButton
             box:
-              abs: [46,429 298x44]
+              abs: [46,393 298x44]
               rel: [0,52 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
@@ -732,58 +511,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Deck for import (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -791,19 +537,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: Choose a source
         box:
-          abs: [21,69 112x18]
+          abs: [21,33 112x18]
           rel: [20,20 112x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Import a deck
         box:
-          abs: [21,95 155x30]
+          abs: [21,59 155x30]
           rel: [20,46 155x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -811,33 +557,33 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x196]
+          abs: [21,109 348x196]
           rel: [20,8 348x196]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,170 56x56]
+            abs: [167,134 56x56]
             rel: [146,25 56x56]
           layout: grid cols:1 align:center
           spacing: margin:0/121/16/121
           style: bg:info r:14
           - node: icon:download
             box:
-              abs: [183,186 24x24]
+              abs: [183,150 24x24]
               rel: [16,16 24x24]
             position: clip
         - node: div
           text: Import a deck
           box:
-            abs: [46,242 298x28]
+            abs: [46,206 298x28]
             rel: [25,97 298x28]
           spacing: margin:0/0/4/0
           style: font:22/800 color:text text:center tracking:-0.4
         - node: muted
           text: Bring cards in from a file or straight from your clipboard.
           box:
-            abs: [55,274 280x42]
+            abs: [55,238 280x42]
             rel: [34,129 280x42]
           spacing: margin:4/9/0/9
           size: maxw:280
@@ -845,7 +591,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,353 348x77]
+          abs: [21,317 348x77]
           rel: [20,216 348x77]
         layout: flex:row gap:12 align:center
         spacing: pad:16
@@ -853,49 +599,49 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: icon-tile
           mx: MxIconTile
           box:
-            abs: [38,372 40x40]
+            abs: [38,336 40x40]
             rel: [17,19 40x40]
           layout: grid cols:1 align:center
           flex: shrink:0
           style: bg:color(srgb 0.2 0.760784 1 / 0.08) r:14
           - node: icon:file-up
             box:
-              abs: [48,382 20x20]
+              abs: [48,346 20x20]
               rel: [10,10 20x20]
             position: clip
         - node: div
           box:
-            abs: [90,370 230x43]
+            abs: [90,334 230x43]
             rel: [69,17 230x43]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: title
             text: From a file
             box:
-              abs: [90,370 230x21]
+              abs: [90,334 230x21]
               rel: [0,0 230x21]
             style: font:16/700 color:text tracking:-0.3
           - node: muted
             text: CSV, TSV or .apkg
             box:
-              abs: [90,397 230x16]
+              abs: [90,361 230x16]
               rel: [0,27 230x16]
             spacing: margin:6/0/0/0
             style: font:13/400 color:text-2
         - node: list-row-trail
           box:
-            abs: [332,382 20x20]
+            abs: [332,346 20x20]
             rel: [311,29 20x20]
           layout: flex:row gap:8 align:center
           flex: shrink:0
           - node: icon:chevron-right
             box:
-              abs: [332,382 20x20]
+              abs: [332,346 20x20]
               rel: [0,0 20x20]
             position: clip
       - node: card
         mx: MxCard
         box:
-          abs: [21,442 348x77]
+          abs: [21,406 348x77]
           rel: [20,305 348x77]
         layout: flex:row gap:12 align:center
         spacing: pad:16
@@ -903,43 +649,43 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: icon-tile
           mx: MxIconTile
           box:
-            abs: [38,461 40x40]
+            abs: [38,425 40x40]
             rel: [17,19 40x40]
           layout: grid cols:1 align:center
           flex: shrink:0
           style: bg:color(srgb 0.435294 0.827451 0.768627 / 0.08) r:14
           - node: icon:clipboard-paste
             box:
-              abs: [48,471 20x20]
+              abs: [48,435 20x20]
               rel: [10,10 20x20]
             position: clip
         - node: div
           box:
-            abs: [90,459 230x43]
+            abs: [90,423 230x43]
             rel: [69,17 230x43]
           flex: grow:1 basis:0 layout_hint:expanded
           - node: title
             text: From clipboard
             box:
-              abs: [90,459 230x21]
+              abs: [90,423 230x21]
               rel: [0,0 230x21]
             style: font:16/700 color:text tracking:-0.3
           - node: muted
             text: Paste tab-separated rows
             box:
-              abs: [90,486 230x16]
+              abs: [90,450 230x16]
               rel: [0,27 230x16]
             spacing: margin:6/0/0/0
             style: font:13/400 color:text-2
         - node: list-row-trail
           box:
-            abs: [332,471 20x20]
+            abs: [332,435 20x20]
             rel: [311,29 20x20]
           layout: flex:row gap:8 align:center
           flex: shrink:0
           - node: icon:chevron-right
             box:
-              abs: [332,471 20x20]
+              abs: [332,435 20x20]
               rel: [0,0 20x20]
             position: clip
 ```
@@ -947,58 +693,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Signing in (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -1006,19 +719,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: MemoX
         box:
-          abs: [21,69 51x18]
+          abs: [21,33 51x18]
           rel: [20,20 51x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Sign in
         box:
-          abs: [21,95 73x30]
+          abs: [21,59 73x30]
           rel: [20,46 73x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -1026,26 +739,26 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x169]
+          abs: [21,109 348x169]
           rel: [20,8 348x169]
         layout: flex:col gap:16 align:center
         spacing: pad:32
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: spinner
           box:
-            abs: [183,178 24x24]
+            abs: [183,142 24x24]
             rel: [162,33 24x24]
           style: r:999 border-t:2px accent border-r:2px border border-b:2px border border-l:2px border
         - node: title
           text: Signing in…
           box:
-            abs: [148,218 94x23]
+            abs: [148,182 94x23]
             rel: [127,73 94x23]
           style: font:18/700 color:text tracking:-0.4
         - node: muted
           text: Connecting to your Google account
           box:
-            abs: [76,263 238x18]
+            abs: [76,227 238x18]
             rel: [55,118 238x18]
           spacing: margin:6/0/0/0
           style: font:14/400 color:text-2 text:center
@@ -1054,58 +767,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Restore prompt (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -1113,19 +793,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: Google Drive
         box:
-          abs: [21,69 88x18]
+          abs: [21,33 88x18]
           rel: [20,20 88x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Backup found
         box:
-          abs: [21,95 157x30]
+          abs: [21,59 157x30]
           rel: [20,46 157x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -1133,44 +813,44 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x312]
+          abs: [21,109 348x312]
           rel: [20,8 348x312]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,170 56x56]
+            abs: [167,134 56x56]
             rel: [146,25 56x56]
           layout: grid cols:1 align:center
           spacing: margin:0/121/16/121
           style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
           - node: icon:cloud-download
             box:
-              abs: [183,186 24x24]
+              abs: [183,150 24x24]
               rel: [16,16 24x24]
             position: clip
         - node: div
           text: Restore your decks?
           box:
-            abs: [46,242 298x28]
+            abs: [46,206 298x28]
             rel: [25,97 298x28]
           spacing: margin:0/0/4/0
           style: font:22/800 color:text text:center tracking:-0.4
         - node: span
           text: We found a backup from · 4 decks · 405 cards.
           box:
-            abs: [68,275 254x39]
+            abs: [68,239 254x39]
             rel: [47,130 254x39]
           style: font:14/400/21 color:text-2 text:center
           - node: b
             text: 2 days ago
             box:
-              abs: [232,275 73x18]
+              abs: [232,239 73x18]
               rel: [164,0 73x18]
             style: font:14/700/21 color:text text:center
         - node: div
           box:
-            abs: [46,336 298x96]
+            abs: [46,300 298x96]
             rel: [25,191 298x96]
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
@@ -1178,21 +858,21 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             text: Restore backup
             mx: MxPrimaryButton
             box:
-              abs: [46,336 298x44]
+              abs: [46,300 298x44]
               rel: [0,0 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
             style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
             - node: icon:cloud-download
               box:
-                abs: [130,350 16x16]
+                abs: [130,314 16x16]
                 rel: [84,14 16x16]
               position: clip
           - node: pill-btn
             text: Start fresh
             mx: MxSecondaryButton
             box:
-              abs: [46,388 298x44]
+              abs: [46,352 298x44]
               rel: [0,52 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
@@ -1202,58 +882,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Restoring (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -1261,19 +908,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: Google Drive
         box:
-          abs: [21,69 88x18]
+          abs: [21,33 88x18]
           rel: [20,20 88x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Restoring
         box:
-          abs: [21,95 108x30]
+          abs: [21,59 108x30]
           rel: [20,46 108x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -1281,60 +928,60 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x150]
+          abs: [21,109 348x150]
           rel: [20,8 348x150]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: div
           box:
-            abs: [46,170 298x56]
+            abs: [46,134 298x56]
             rel: [25,25 298x56]
           layout: flex:row gap:12 align:center
           spacing: margin:0/0/16/0
           - node: tile-lg
             box:
-              abs: [46,170 56x56]
+              abs: [46,134 56x56]
               rel: [0,0 56x56]
             layout: grid cols:1 align:center
             flex: shrink:0
             style: bg:color(srgb 0.2 0.760784 1 / 0.12) r:14
             - node: icon:cloud-download
               box:
-                abs: [62,186 24x24]
+                abs: [62,150 24x24]
                 rel: [16,16 24x24]
               position: clip
           - node: div
             box:
-              abs: [114,176 148x45]
+              abs: [114,140 148x45]
               rel: [68,6 148x45]
             - node: title
               text: Restoring backup
               box:
-                abs: [114,176 148x23]
+                abs: [114,140 148x23]
                 rel: [0,0 148x23]
               style: font:18/700 color:text tracking:-0.4
             - node: muted
               text: 142 / 405 cards
               box:
-                abs: [114,205 148x16]
+                abs: [114,169 148x16]
                 rel: [0,29 148x16]
               spacing: margin:6/0/0/0
               style: font:13/400 color:text-2
         - node: progress
           box:
-            abs: [46,242 298x4]
+            abs: [46,206 298x4]
             rel: [25,97 298x4]
           position: clip
           style: bg:surface-2 r:999
           - node: progress-fill
             box:
-              abs: [46,242 104x4]
+              abs: [46,206 104x4]
               rel: [0,0 104x4]
             style: bg:accent r:999
         - node: muted
           text: 35%
           box:
-            abs: [46,254 298x16]
+            abs: [46,218 298x16]
             rel: [25,109 298x16]
           spacing: margin:8/0/0/0
           style: font:13/400 color:text-2 text:right
@@ -1343,58 +990,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Restore failed (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -1402,19 +1016,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: Google Drive
         box:
-          abs: [21,69 88x18]
+          abs: [21,33 88x18]
           rel: [20,20 88x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Restore failed
         box:
-          abs: [21,95 155x30]
+          abs: [21,59 155x30]
           rel: [20,46 155x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -1422,40 +1036,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x312]
+          abs: [21,109 348x312]
           rel: [20,8 348x312]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,170 56x56]
+            abs: [167,134 56x56]
             rel: [146,25 56x56]
           layout: grid cols:1 align:center
           spacing: margin:0/121/16/121
           style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14
           - node: icon:cloud-off
             box:
-              abs: [183,186 24x24]
+              abs: [183,150 24x24]
               rel: [16,16 24x24]
             position: clip
         - node: div
           text: Couldn't restore
           box:
-            abs: [46,242 298x28]
+            abs: [46,206 298x28]
             rel: [25,97 298x28]
           spacing: margin:0/0/4/0
           style: font:22/800 color:text text:center tracking:-0.4
         - node: muted
           text: The connection dropped at 35%. You can try again or skip for now.
           box:
-            abs: [55,274 280x42]
+            abs: [55,238 280x42]
             rel: [34,129 280x42]
           spacing: margin:4/9/0/9
           size: maxw:280
           style: font:14/400/21 color:text-2 text:center
         - node: div
           box:
-            abs: [46,336 298x96]
+            abs: [46,300 298x96]
             rel: [25,191 298x96]
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
@@ -1463,21 +1077,21 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             text: Try again
             mx: MxPrimaryButton
             box:
-              abs: [46,336 298x44]
+              abs: [46,300 298x44]
               rel: [0,0 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
             style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
             - node: icon:rotate-ccw
               box:
-                abs: [154,350 16x16]
+                abs: [154,314 16x16]
                 rel: [108,14 16x16]
               position: clip
           - node: pill-btn
             text: Skip
             mx: MxSecondaryButton
             box:
-              abs: [46,388 298x44]
+              abs: [46,352 298x44]
               rel: [0,52 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
@@ -1487,58 +1101,25 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## State: Import handoff (full — differs too much from base)
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     style: bg:bg
     - node: appbar-lg
       mx: MxAppBar
       box:
-        abs: [1,49 388x88]
+        abs: [1,13 388x88]
         rel: [0,0 388x88]
       layout: flex:col gap:8 justify:end align:start
       spacing: pad:0/20/12/20
@@ -1546,19 +1127,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: appbar-subtitle
         text: Handing off
         box:
-          abs: [21,69 79x18]
+          abs: [21,33 79x18]
           rel: [20,20 79x18]
         style: font:14/500 color:text-2
       - node: appbar-title
         text: Import a deck
         box:
-          abs: [21,95 155x30]
+          abs: [21,59 155x30]
           rel: [20,46 155x30]
         style: font:24/700 color:text tracking:-0.5
     - node: div
       box:
-        abs: [1,137 388x632]
-        rel: [0,88 388x632]
+        abs: [1,101 388x668]
+        rel: [0,88 388x668]
       layout: flex:col gap:12
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:8/20/32/20
@@ -1566,40 +1147,40 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,145 348x312]
+          abs: [21,109 348x312]
           rel: [20,8 348x312]
         spacing: pad:24
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: tile-lg
           box:
-            abs: [167,170 56x56]
+            abs: [167,134 56x56]
             rel: [146,25 56x56]
           layout: grid cols:1 align:center
           spacing: margin:0/121/16/121
           style: bg:note-teal r:14
           - node: icon:arrow-right-left
             box:
-              abs: [183,186 24x24]
+              abs: [183,150 24x24]
               rel: [16,16 24x24]
             position: clip
         - node: div
           text: Open the importer
           box:
-            abs: [46,242 298x28]
+            abs: [46,206 298x28]
             rel: [25,97 298x28]
           spacing: margin:0/0/4/0
           style: font:22/800 color:text text:center tracking:-0.4
         - node: muted
           text: We'll take you to the import flow to map fields and pick a deck.
           box:
-            abs: [55,274 280x42]
+            abs: [55,238 280x42]
             rel: [34,129 280x42]
           spacing: margin:4/9/0/9
           size: maxw:280
           style: font:14/400/21 color:text-2 text:center
         - node: div
           box:
-            abs: [46,336 298x96]
+            abs: [46,300 298x96]
             rel: [25,191 298x96]
           layout: flex:col gap:8
           spacing: margin:20/0/0/0
@@ -1607,21 +1188,21 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             text: Continue to import
             mx: MxPrimaryButton
             box:
-              abs: [46,336 298x44]
+              abs: [46,300 298x44]
               rel: [0,0 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20
             style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
             - node: icon:arrow-right
               box:
-                abs: [254,350 16x16]
+                abs: [254,314 16x16]
                 rel: [208,14 16x16]
               position: clip
           - node: pill-btn
             text: Back
             mx: MxSecondaryButton
             box:
-              abs: [46,388 298x44]
+              abs: [46,352 298x44]
               rel: [0,52 298x44]
             layout: flex:row gap:8 justify:center align:center
             spacing: pad:0/20

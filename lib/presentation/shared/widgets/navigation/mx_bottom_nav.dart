@@ -23,8 +23,8 @@ class MxBottomNavItem {
 /// `NavigationBar` re-themed per use.
 ///
 /// Use when:
-/// Switching between the top-level shell destinations (Home/Library/Stats/
-/// Settings).
+/// Switching between the top-level shell destinations (Home/Library/Search/
+/// Progress/Settings).
 ///
 /// Do not use when:
 /// Navigating within a feature (use routes/tabs), not the app's primary tabs.

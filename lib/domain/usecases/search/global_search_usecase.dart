@@ -25,6 +25,11 @@ class GlobalSearchUseCase {
   /// for the "+N more" affordance (SR6).
   static const int sectionCap = 5;
 
+  /// Debounce applied by the presentation layer before running a search after a
+  /// keystroke (`docs/business/search/global-search.md` §V1 query input). Lives
+  /// with the search contract so the timing has one source.
+  static const Duration inputDebounce = Duration(milliseconds: 300);
+
   Future<Result<SearchResults>> call({required String query}) async {
     final String normalized = StringUtils.normalizeQuery(query);
 

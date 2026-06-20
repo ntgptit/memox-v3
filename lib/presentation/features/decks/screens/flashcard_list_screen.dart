@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
@@ -9,9 +10,11 @@ import 'package:memox/presentation/features/decks/widgets/flashcard_list_actions
 import 'package:memox/presentation/features/decks/widgets/flashcard_list_body.dart';
 import 'package:memox/presentation/features/decks/widgets/flashcard_list_search.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
+import 'package:memox/presentation/shared/navigation/library_breadcrumb.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
+import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 
 /// Flashcard List — a deck's cards: a count overline + a grouped card list,
 /// inline search, add/edit/delete card, and deck delete. Reached by tapping a
@@ -81,7 +84,26 @@ class FlashcardListScreen extends ConsumerWidget {
               tooltip: l10n.flashcardAddCardLabel,
               onPressed: () => runAddCard(context, ref, deckId),
             ),
-      body: FlashcardListBody(deckId: deckId),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          // Ancestry trail under the app bar: Library › folders › deck (the deck
+          // is the current leaf). Hidden in search mode and until loaded.
+          if (!searching && detail != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: MxSpacing.space2),
+              child: MxBreadcrumb(
+                items: buildLibraryBreadcrumb(
+                  context,
+                  libraryLabel: l10n.libraryTitle,
+                  folders: detail.breadcrumb,
+                  currentLeafLabel: detail.deck.name,
+                ),
+              ),
+            ),
+          Expanded(child: FlashcardListBody(deckId: deckId)),
+        ],
+      ),
     );
   }
 }

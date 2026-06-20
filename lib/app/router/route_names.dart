@@ -8,6 +8,11 @@ abstract final class RouteNames {
   static const String root = 'root';
   static const String home = 'home';
   static const String library = 'library';
+
+  /// Top-level global Search destination (folders/decks/flashcards). A primary
+  /// bottom-nav tab with a bottom-anchored search dock (design redesign).
+  static const String search = 'search';
+
   static const String progress = 'progress';
   static const String settings = 'settings';
 

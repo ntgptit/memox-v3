@@ -21,12 +21,15 @@ applies_to: Navigation and UI state behavior branches
 | N5 | Push vs Go | Session → result | Use pushReplacement | C1 | TBD |
 | N6 | Deep link | Private route | Redirect to safe ancestor | C1 | TBD |
 | N7 | Settings hub → sub-screen | Tap row | Push to sub-screen, back returns to hub | C0+C1 | TBD |
-| N8 | Future route smoke lock | Direct Future/Blocked paths requested (`/onboarding`, reminder/daily-goal settings paths) | Resolve to router error state, not to a live V1 screen/action. NOTE: `/library/search` (promoted 2026-06-06) and flashcard history `/library/deck/:deckId/flashcards/:flashcardId/history` (promoted 2026-06-13) are now Current and render their real screens | C1 | TBD |
-| N9 | Future route registry lock | Route constants/navigation helpers inspected | No onboarding, daily-goal, or reminder Future route constant/action is promoted. `RouteNames.librarySearch` and `RouteNames.flashcardHistory` (with their `RoutePaths` templates) ARE intentionally promoted | C1 | TBD |
+| N8 | Future route smoke lock | Direct Future/Blocked paths requested (`/onboarding`, reminder/daily-goal settings paths) | Resolve to router error state, not to a live V1 screen/action. NOTE: top-level `/search` (design redesign — placeholder until the Search screen ships, then its real screen) and flashcard history `/library/deck/:deckId/flashcards/:flashcardId/history` (promoted 2026-06-13, Current) render their registered destinations, not the error state | C1 | TBD |
+| N9 | Future route registry lock | Route constants/navigation helpers inspected | No onboarding, daily-goal, or reminder Future route constant/action is promoted. `RouteNames.search` (top-level `/search`, design redesign) and `RouteNames.flashcardHistory` (with its `RoutePaths` template) ARE intentionally promoted. There is no `RouteNames.librarySearch` constant (search is a top-level destination, not a `/library` child) | C1 | TBD |
 | N10 | Onboarding feature lock | Feature folder inspected | No standalone onboarding presentation feature folder exists in V1 | C1 | TBD |
 | N11 | Open study session route | Valid `sessionId` | Show `StudySessionScreen`; missing session shows a controlled not-found/error state; result route opens the real result screen | C0+C1 | TBD |
 | N12 | Dashboard Today CTA | `dueToday > 0` | Tap routes to `RoutePaths.studyTodayTemplate` via the study entry gate | C1 | TBD |
 | N13 | Dashboard Today CTA | `dueToday == 0` | Show caught-up/no-due copy, disable the study CTA, and do not enter study flow | C1 | TBD |
+| N14 | Bottom-nav destinations | Shell rendered | Exactly five tabs in order Home · Library · Search · Progress · Settings; tapping a tab uses `goBranch`; re-tapping the active tab returns it to its branch root (`initialLocation: true`) | C0+C1 | TBD |
+| N15 | Breadcrumb trail | Folder detail loaded | Trail `Library › …ancestors › {currentFolder}`; last crumb (current folder) non-tappable; `Library` + each ancestor tappable; hidden in search mode | C1 | TBD |
+| N16 | Breadcrumb trail | Flashcard list loaded | Trail `Library › …folders › {deckName}`; deck is the non-tappable current leaf; every folder crumb is a tappable ancestor; hidden in search mode | C1 | TBD |
 | U1 | Load | Loading | Show shared loading/retained state | C0 | TBD |
 | U2 | Load | Empty | Show shared empty state | C0+C1 | TBD |
 | U3 | Load | Error | Show shared error state | C0+C1 | TBD |

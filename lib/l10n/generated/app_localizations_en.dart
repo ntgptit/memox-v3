@@ -366,4 +366,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardDeletedSnack => 'Card deleted';
+
+  @override
+  String get searchTitle => 'Search';
+
+  @override
+  String get searchDockHint => 'Search everything';
+
+  @override
+  String get searchIdleTitle => 'Search your library';
+
+  @override
+  String get searchIdleMessage => 'Find folders, decks, and cards.';
+
+  @override
+  String get searchNoResultsTitle => 'No results';
+
+  @override
+  String searchNoResultsMessage(String query) {
+    return 'Nothing matches “$query”. Try a different word or check the spelling.';
+  }
+
+  @override
+  String get searchFailedTitle => 'Search failed';
+
+  @override
+  String get searchFailedMessage => 'We couldn\'t run that search just now.';
+
+  @override
+  String get searchRetry => 'Try again';
+
+  @override
+  String get searchSectionFolders => 'Folders';
+
+  @override
+  String get searchSectionDecks => 'Decks';
+
+  @override
+  String get searchSectionFlashcards => 'Flashcards';
+
+  @override
+  String searchMoreCount(int count) {
+    return '+$count more';
+  }
 }

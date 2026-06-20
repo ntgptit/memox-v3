@@ -1,9 +1,13 @@
-/* MemoX screen — 02 Dashboard (9 states). The "today" hub: resume studying,
-   streak/goal, cards due, recent decks. Token-driven; composes contract classes. */
+/* MemoX screen — 02 Dashboard (8 states). A QUIET overview hub — not the study
+   nag screen. It answers "how am I doing today, what's active, anything worth a
+   look?" with a neutral stat strip + a light due snapshot + recent decks + a
+   shortcut into Progress. The heavy lifting (goal ring, streak pressure, study
+   insights, trends) lives on Progress/Stats — the dashboard only refers to work,
+   it never pressures the user to study now. Token-driven; composes shared
+   primitives (single source of truth in screens/_shared.jsx). */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  // Shared primitives — single source of truth (screens/_shared.jsx).
-  const { Icon, S, IconTile, TileLg, Progress, ListRow, HeroCard, Banner, BottomNav, Sk } = window.MX;
+  const { Icon, S, TileLg, Progress, ListRow, StatSummary, DueSummary, ShortcutRow, HeroCard, Banner, BottomNav, Sk } = window.MX;
 
   // ---- Header --------------------------------------------------------------
   const Header = () => (
@@ -14,13 +18,12 @@
           <span className="appbar-title">Good evening, An</span>
         </div>
         <span className="spacer"></span>
-        <button className="icon-btn" aria-label="Search"><Icon name="search" /></button>
         <button className="icon-btn" aria-label="Settings"><Icon name="settings" /></button>
       </div>
     </div>
   );
 
-  // ---- Resume card ---------------------------------------------------------
+  // ---- Continue studying (only when a session is paused) -------------------
   const ResumeCard = ({ multi }) => (
     <div>
       <div className="ov" style={{ marginBottom: S(2) }}>
@@ -48,78 +51,7 @@
     </div>
   );
 
-  // ---- Stats row -----------------------------------------------------------
-  const StreakCard = () => (
-    <div className="card" style={{ flex: 1 }}>
-      <IconTile icon="flame" color="var(--memox-status-learning)" style={{ marginBottom: S(3) }} />
-      <div style={{ fontSize: 'var(--memox-size-title)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', lineHeight: 1 }}>11</div>
-      <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', fontWeight: 'var(--memox-weight-semibold)' }}>day streak</div>
-    </div>
-  );
-
-  const GoalCard = ({ disabled }) => {
-    const ringBg = disabled
-      ? 'var(--memox-progress-track)'
-      : 'conic-gradient(var(--memox-primary) 216deg, var(--memox-progress-track) 0)';
-    return (
-      <div className="card" style={{ flex: 1, opacity: disabled ? 'var(--memox-op-disabled)' : 1, display: 'flex', alignItems: 'center', gap: S(3) }}>
-        <div className="goal-ring" style={{ background: ringBg }}>
-          <div className="goal-ring-inner">
-            <div>
-              <span style={{ fontSize: 'var(--memox-fs-title-small)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)' }}>{disabled ? '0' : '12'}</span>
-              <span className="muted" style={{ fontSize: 'var(--memox-fs-label-small)', fontWeight: 'var(--memox-weight-bold)' }}>/20</span>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="title" style={{ fontSize: 'var(--memox-fs-label-large)' }}>Today's goal</div>
-          <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)' }}>{disabled ? 'Goal paused' : '8 to go'}</div>
-        </div>
-      </div>
-    );
-  };
-
-  const StatsRow = ({ showStreak, goalDisabled }) => (
-    <div className="card-row">
-      {showStreak && <StreakCard />}
-      <GoalCard disabled={goalDisabled} />
-    </div>
-  );
-
-  // ---- Today's review ------------------------------------------------------
-  const ReviewCard = ({ caughtUp }) => {
-    if (caughtUp) {
-      return (
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
-          <IconTile icon="check" color="var(--memox-status-mastered)" />
-          <div style={{ flex: 1 }}>
-            <div className="title">All caught up</div>
-            <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)' }}>You've reviewed everything due today.</div>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div className="card accent">
-        <div className="ov" style={{ color: 'var(--memox-primary)', marginBottom: S(2) }}>
-          <Icon name="zap" />TODAY'S REVIEW
-        </div>
-        <div style={{ fontSize: 'var(--memox-size-title)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)', letterSpacing: 'var(--memox-tracking-tight)' }}>23 cards due</div>
-        <div className="muted" style={{ fontSize: 'var(--memox-fs-label-large)', marginBottom: S(4) }}>Across 3 decks · about 14 minutes</div>
-        <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="play" />Start today's review</button>
-      </div>
-    );
-  };
-
-  // ---- New learning + decks ------------------------------------------------
-  const NewLearning = () => (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: S(2), padding: `${S(1)} 0`, color: 'var(--memox-text-secondary)' }}>
-      <Icon name="sparkles" style={{ width: 'var(--memox-icon-sm)', height: 'var(--memox-icon-sm)' }} />
-      <span style={{ fontSize: 'var(--memox-fs-label-large)', fontWeight: 'var(--memox-weight-bold)' }}>Start new learning</span>
-      <span className="chip new">6 new</span>
-    </div>
-  );
-
+  // ---- Recent decks --------------------------------------------------------
   const DECKS = [
     { icon: 'languages', tint: 'var(--memox-status-new)', name: 'Japanese · N5', meta: '142 cards · last 2h ago', due: 23 },
     { icon: 'flask-conical', tint: 'var(--memox-status-learning)', name: 'Organic chemistry', meta: '120 cards · last 1d ago', due: 8 },
@@ -143,33 +75,43 @@
     </div>
   );
 
-  // ---- Assembled screen ----------------------------------------------------
-  function Dashboard({ variant }) {
-    const Body = ({ children }) => (
-      <div style={{ flex: 1, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
-        {children}
-      </div>
-    );
+  // Quiet shortcut into the analysis hub.
+  const ProgressShortcut = () => (
+    <ShortcutRow icon="trending-up" label="See learning stats" sub="Goal, streak, trends & weak decks" />
+  );
 
+  // ---- Assembled screen ----------------------------------------------------
+  const Body = ({ children }) => (
+    <div style={{ flex: 1, overflowY: 'auto', padding: `${S(2)} var(--memox-space-screen) var(--memox-space-6)`, display: 'flex', flexDirection: 'column', gap: 'var(--memox-gap-section)' }}>
+      {children}
+    </div>
+  );
+
+  function Dashboard({ variant }) {
     if (variant === 'loading') {
       return (
         <div className="app">
           <Header />
           <Body>
-            <Sk h="20px" w="55%" r="var(--memox-radius-sm)" />
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(3) }}>
-              <div style={{ display: 'flex', gap: S(3), alignItems: 'center' }}>
-                <Sk h="56px" w="56px" r="var(--memox-radius-md)" />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="14px" w="60%" /><Sk h="12px" w="80%" /></div>
-              </div>
-              <Sk h="4px" r="var(--memox-radius-full)" />
-              <Sk h="44px" r="var(--memox-radius-full)" />
+            <div className="card" style={{ display: 'flex', gap: S(2) }}>
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: S(2), padding: S(2) }}>
+                  <Sk h="22px" w="60%" /><Sk h="11px" w="70%" />
+                </div>
+              ))}
             </div>
-            <div className="card-row">
-              <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="34px" w="34px" r="var(--memox-radius-sm)" /><Sk h="22px" w="50%" /></div>
-              <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="34px" w="34px" r="var(--memox-radius-sm)" /><Sk h="22px" w="50%" /></div>
+            <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
+              <Sk h="40px" w="40px" r="var(--memox-radius-md)" />
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="14px" w="45%" /><Sk h="11px" w="65%" /></div>
             </div>
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: S(3) }}><Sk h="12px" w="40%" /><Sk h="26px" w="60%" /><Sk h="44px" r="var(--memox-radius-full)" /></div>
+            <div className="card" style={{ padding: `${S(2)} var(--memox-space-card)`, display: 'flex', flexDirection: 'column', gap: S(4) }}>
+              {[0, 1, 2].map((i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: S(3) }}>
+                  <Sk h="40px" w="40px" r="var(--memox-radius-md)" />
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: S(2) }}><Sk h="14px" w="55%" /><Sk h="11px" w="40%" /></div>
+                </div>
+              ))}
+            </div>
           </Body>
           <BottomNav />
         </div>
@@ -181,8 +123,8 @@
         <div className="app">
           <Header />
           <Body>
-            <HeroCard solid icon="graduation-cap" tint="var(--memox-primary)" title="Nothing due yet"
-              desc="Create your first deck and your &quot;today&quot; hub fills up here.">
+            <HeroCard solid icon="graduation-cap" tint="var(--memox-primary)" title="Nothing here yet"
+              desc="Create your first deck and your overview fills up here.">
               <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="plus" />Create first deck</button>
               <button className="pill-btn outline" style={{ width: '100%' }}><Icon name="download" />Import a deck</button>
             </HeroCard>
@@ -198,7 +140,7 @@
           <Header />
           <Body>
             <HeroCard icon="alert-triangle" tint="var(--memox-danger)" title="Couldn't load today"
-              desc="Something went wrong fetching your dashboard.">
+              desc="Something went wrong fetching your overview.">
               <button className="pill-btn primary" style={{ width: '100%' }}><Icon name="rotate-ccw" />Retry</button>
             </HeroCard>
           </Body>
@@ -207,42 +149,45 @@
       );
     }
 
-    // Data states: loaded / goal-off / resume-only / streak-broken / offline / multi-resume
-    const goalOff = variant === 'goal-off';
-    const caughtUp = variant === 'resume-only';
+    // Data states: loaded / no-session / caught-up / multi-resume / offline
+    const caughtUp = variant === 'caught-up';
+    const hasSession = variant === 'loaded' || variant === 'multi-resume' || variant === 'offline';
     const multi = variant === 'multi-resume';
+
+    // Overview stat strip — neutral snapshot, not a goal/streak nag. "Due" is the
+    // one accented metric so it reads as the notable number without pressure.
+    const stats = caughtUp
+      ? [['0', 'Due'], ['9', 'Decks'], ['86%', 'Accuracy'], ['11', 'Streak']]
+      : [['23', 'Due', true], ['9', 'Decks'], ['86%', 'Accuracy'], ['11', 'Streak']];
 
     return (
       <div className="app">
         <Header />
         <Body>
           {variant === 'offline' && <Banner tone="info" icon="cloud-off">You're offline — showing cached cards.</Banner>}
-          {variant === 'streak-broken' && <Banner tone="warn" icon="flame">Your 11-day streak ended. Start a new one today.</Banner>}
-          <ResumeCard multi={multi} />
-          <StatsRow showStreak={!goalOff} goalDisabled={goalOff} />
-          <ReviewCard caughtUp={caughtUp} />
-          <NewLearning />
+          <StatSummary stats={stats} />
+          {hasSession && <ResumeCard multi={multi} />}
+          <DueSummary count={23} decks={3} minutes={14} caughtUp={caughtUp} />
           <DeckList />
+          <ProgressShortcut />
         </Body>
         <BottomNav />
       </div>
     );
   }
 
-  if (!window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
   window.MEMOX_KIT.register({
     num: '02',
     title: 'Dashboard',
     states: [
       { label: 'Loaded', render: () => <Dashboard variant="loaded" /> },
-      { label: 'Loading', render: () => <Dashboard variant="loading" /> },
-      { label: 'Onboarding', render: () => <Dashboard variant="onboarding" /> },
-      { label: 'Goal off', render: () => <Dashboard variant="goal-off" /> },
-      { label: 'Resume only', render: () => <Dashboard variant="resume-only" /> },
-      { label: 'Streak broken', render: () => <Dashboard variant="streak-broken" /> },
-      { label: 'Error', render: () => <Dashboard variant="error" /> },
-      { label: 'Offline', render: () => <Dashboard variant="offline" /> },
+      { label: 'No session', render: () => <Dashboard variant="no-session" /> },
+      { label: 'Caught up', render: () => <Dashboard variant="caught-up" /> },
       { label: 'Multi resume', render: () => <Dashboard variant="multi-resume" /> },
+      { label: 'Onboarding', render: () => <Dashboard variant="onboarding" /> },
+      { label: 'Loading', render: () => <Dashboard variant="loading" /> },
+      { label: 'Offline', render: () => <Dashboard variant="offline" /> },
+      { label: 'Error', render: () => <Dashboard variant="error" /> },
     ],
   });
 })();

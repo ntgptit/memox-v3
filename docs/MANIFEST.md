@@ -70,7 +70,7 @@ The V1 scope guard is the Deferred / Future / Rejected register in
 | Feature                   | V1 status                | Notes                                                     |
 |---------------------------|--------------------------|-----------------------------------------------------------|
 | Flashcard history screen  | Future Proposal          | Keep docs; hide/disable entry links in V1.                |
-| Global search screen      | Implemented (folders/decks/flashcards) | `/library/search`; tags section + recent + popular remain Future. |
+| Global search screen      | Implemented (folders/decks/flashcards) | Top-level `/search` (design redesign — bottom search dock); tags section + recent + popular remain Future. |
 | Full onboarding flow      | Future Proposal          | V1 uses stronger zero-content empty states + restore CTA. |
 | Empty-scope matrix Tier 1 | Approved V1              | Safe to implement from the P0 plan.                       |
 | Bury / suspend            | Approved after migration | Must include schema migration.                            |

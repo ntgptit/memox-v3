@@ -1,7 +1,7 @@
 ---
-last_updated: 2026-06-06
-status: Current — global search screen (folders/decks/flashcards); tags section + recent/popular are Future Proposal. Inline/scope-local search guidelines also retained.
-route: /library/search
+last_updated: 2026-06-21
+status: Current — top-level global Search screen (folders/decks/flashcards) at /search with a bottom search dock; tags section + recent/popular are Future Proposal. Inline/scope-local search guidelines also retained.
+route: /search
 source_specs:
   - docs/business/search/global-search.md
 related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
@@ -11,9 +11,10 @@ related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Reject
 
 ## V1 decision (promoted 2026-06-06)
 
-V1 **implements** a dedicated global search screen at `/library/search`, opened from the Library
-Overview app-bar search action. The promoted scope covers three sections — **folders, decks, and
-flashcards** — and renders all five states (empty/hint, loading, results, no-results, error).
+V1 **implements** a dedicated global search screen. Per the design redesign it is the top-level
+**`/search`** destination (a primary bottom-nav tab) with a **bottom search dock**, not a route
+opened from a Library app-bar action. The promoted scope covers three sections — **folders, decks,
+and flashcards** — and renders all five states (empty/hint, loading, results, no-results, error).
 
 Still **Future Proposal** (not yet built, pending the tag subsystem and a `shared_preferences`
 dependency — both require their own approval):
@@ -52,8 +53,8 @@ global route or persistence model.
 - Trim surrounding whitespace and collapse repeated whitespace.
 - Escape special LIKE characters (`%`, `_`) before database search.
 - Do not persist recent searches in V1.
-- Do not show global result groups in V1.
-- Do not navigate to `/library/search` in V1.
+- These inline rules govern **scope-local** search only; cross-scope grouped results live on the
+  top-level `/search` screen (see below), not in the in-screen inline filters.
 
 ## V1 states
 
@@ -77,8 +78,8 @@ global route or persistence model.
 
 ## Still-forbidden behavior (post-promotion)
 
-The global screen now exists, so `GlobalSearchUseCase`, the `GlobalSearchScreen`, the
-`/library/search` route, and cross-scope grouped results (folders/decks/flashcards) are **Current**.
+The global screen now exists, so `GlobalSearchUseCase`, the `GlobalSearchScreen`, the top-level
+`/search` route, and cross-scope grouped results (folders/decks/flashcards) are **Current**.
 The following remain forbidden until separately approved:
 
 - Do not add a **Tags** result section (no tag subsystem yet — `docs/business/tags/tag-system.md`).
@@ -87,24 +88,24 @@ The following remain forbidden until separately approved:
 - Do not use FTS5 without a separate ADR and performance task — the implementation uses escaped
   `LIKE` queries.
 
-## Global search screen — Current
+## Global Search screen — Current (design redesign)
 
-Route: `/library/search` (`RouteNames.librarySearch`), shell visible, pushed from the Library
-Overview app-bar search action.
+Route: top-level **`/search`** (`RouteNames.search`), a primary bottom-nav destination (Home ·
+Library · Search · Progress · Settings). Search input lives in a **bottom-anchored dock**
+(`MxSearchDock`, the kit `.search-dock`) so it stays thumb-reachable; there is no app-bar search
+field. The body above the dock renders the states; the shell's bottom nav sits below the dock. The
+screen shell (`GlobalSearchScreen`) stays provider-watch-free — the dock drives the query via
+`ref.read`, and `GlobalSearchBody` owns the results watch.
 
 ### States (all implemented)
 
 | State       | Trigger                                  | UI                                                                |
 |-------------|------------------------------------------|-------------------------------------------------------------------|
-| Empty/hint  | Normalized query `< 2` chars             | `MxEmptyState` — "Search your library" + 2-character hint.        |
-| Loading     | Debounced (300ms) query in flight        | `MxLoadingState` skeleton (first load only; previous data retained otherwise). |
+| Empty/hint  | Normalized query `< 2` chars             | `MxEmptyState` — "Search your library" + "Find folders, decks, and cards." (recent searches + popular tags are Future, so not shown). |
+| Loading     | Debounced (300ms) query in flight        | `MxLoadingState` (first load only; previous data retained otherwise). |
 | Results     | One or more matches                      | Grouped sections Folders → Decks → Flashcards, each capped at 5 with a "+N more" trailing count. |
-| No results  | Query ran, matched nothing in any section| `MxEmptyState` (search-off glyph) — "No results".                 |
-| Error       | Repository `StorageFailure`              | `MxErrorState` — localized title/message + retry (re-runs query). |
-
-The app-bar search field itself uses a trailing `K` shortcut keycap in the empty state and swaps to
-the clear icon once text is present. That keycap is visual only; it does not change search
-behavior.
+| No results  | Query ran, matched nothing in any section| `MxNoResultsState` — "No results" with the query echoed.          |
+| Error       | Use-case failure (in-band `Result`)      | `MxErrorState` — localized title/message + retry (re-runs query). |
 
 ### Query rules (implemented)
 

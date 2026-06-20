@@ -40,51 +40,18 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Matching
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     position: pos:relative
@@ -92,7 +59,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: appbar
       mx: MxAppBar
       box:
-        abs: [1,49 388x56]
+        abs: [1,13 388x56]
         rel: [0,0 388x56]
       layout: flex:row gap:12 align:center
       spacing: pad:0/20
@@ -100,7 +67,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [21,57 40x40]
+          abs: [21,21 40x40]
           rel: [20,8 40x40]
         layout: grid cols:1 align:center
         flex: shrink:0
@@ -109,70 +76,70 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         style: r:999
         - node: icon:x
           box:
-            abs: [31,67 20x20]
+            abs: [31,31 20x20]
             rel: [10,10 20x20]
           position: clip
       - node: progress
         box:
-          abs: [73,75 255x4]
+          abs: [73,39 255x4]
           rel: [72,26 255x4]
         position: clip
         style: bg:surface-2 r:999
         - node: progress-fill
           box:
-            abs: [73,75 51x4]
+            abs: [73,39 51x4]
             rel: [0,0 51x4]
           style: bg:accent r:999
       - node: span
         text: 1
         box:
-          abs: [340,68 29x18]
+          abs: [340,32 29x18]
           rel: [339,19 29x18]
         flex: shrink:0
         style: font:14/700 color:text-2
         - node: span
           text: / 5
           box:
-            abs: [349,68 20x18]
+            abs: [349,32 20x18]
             rel: [8,0 20x18]
           style: font:14/700 color:text-3
     - node: div
       box:
-        abs: [1,105 388x587]
-        rel: [0,56 388x587]
+        abs: [1,69 388x623]
+        rel: [0,56 388x623]
       layout: flex:col justify:center
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:16/20
       position: layout_hint:scroll
       - node: div
         box:
-          abs: [21,132 348x50]
-          rel: [20,27 348x50]
+          abs: [21,114 348x50]
+          rel: [20,45 348x50]
         spacing: margin:0/0/20/0
         - node: title
           text: Match the pairs
           box:
-            abs: [21,132 348x28]
+            abs: [21,114 348x28]
             rel: [0,0 348x28]
           style: font:22/700 color:text text:center tracking:-0.4
         - node: muted
           text: Tap a term, then its meaning.
           box:
-            abs: [21,164 348x18]
+            abs: [21,146 348x18]
             rel: [0,32 348x18]
           spacing: margin:4/0/0/0
           style: font:14/400 color:text-2 text:center
       - node: match-grid
         box:
-          abs: [21,202 348x428]
-          rel: [20,97 348x428]
+          abs: [21,184 348x428]
+          rel: [20,115 348x428]
         layout: grid cols:2 gap:12
         repeat: x10(unit=1)
         - node: choice
           item: item[1]
           mx: ?
           box:
-            abs: [21,202 168x76]
+            abs: [21,184 168x76]
             rel: [0,0 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -182,7 +149,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: 水
             box:
-              abs: [38,221 102x38]
+              abs: [38,203 102x38]
               rel: [17,19 102x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -190,20 +157,20 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             style: font:14/600/19 color:success
           - node: choice-mark
             box:
-              abs: [152,230 20x20]
+              abs: [152,212 20x20]
               rel: [131,28 20x20]
             layout: grid cols:1 align:center
             flex: shrink:0
             - node: icon:check
               box:
-                abs: [152,230 20x20]
+                abs: [152,212 20x20]
                 rel: [0,0 20x20]
               position: clip
         - node: choice
           item: item[2]
           mx: ?
           box:
-            abs: [201,202 168x76]
+            abs: [201,184 168x76]
             rel: [180,0 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -213,7 +180,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: fire
             box:
-              abs: [218,221 102x38]
+              abs: [218,203 102x38]
               rel: [17,19 102x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -221,20 +188,20 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             style: font:14/600/19 color:danger
           - node: choice-mark
             box:
-              abs: [332,230 20x20]
+              abs: [332,212 20x20]
               rel: [131,28 20x20]
             layout: grid cols:1 align:center
             flex: shrink:0
             - node: icon:x
               box:
-                abs: [332,230 20x20]
+                abs: [332,212 20x20]
                 rel: [0,0 20x20]
               position: clip
         - node: choice
           item: item[3]
           mx: ?
           box:
-            abs: [21,290 168x76]
+            abs: [21,272 168x76]
             rel: [0,88 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -244,7 +211,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: 火
             box:
-              abs: [38,309 102x38]
+              abs: [38,291 102x38]
               rel: [17,19 102x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -252,20 +219,20 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             style: font:14/600/19 color:danger
           - node: choice-mark
             box:
-              abs: [152,318 20x20]
+              abs: [152,300 20x20]
               rel: [131,28 20x20]
             layout: grid cols:1 align:center
             flex: shrink:0
             - node: icon:x
               box:
-                abs: [152,318 20x20]
+                abs: [152,300 20x20]
                 rel: [0,0 20x20]
               position: clip
         - node: choice
           item: item[4]
           mx: ?
           box:
-            abs: [201,290 168x76]
+            abs: [201,272 168x76]
             rel: [180,88 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -275,7 +242,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: water
             box:
-              abs: [218,309 102x38]
+              abs: [218,291 102x38]
               rel: [17,19 102x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -283,20 +250,20 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             style: font:14/600/19 color:success
           - node: choice-mark
             box:
-              abs: [332,318 20x20]
+              abs: [332,300 20x20]
               rel: [131,28 20x20]
             layout: grid cols:1 align:center
             flex: shrink:0
             - node: icon:check
               box:
-                abs: [332,318 20x20]
+                abs: [332,300 20x20]
                 rel: [0,0 20x20]
               position: clip
         - node: choice
           item: item[5]
           mx: ?
           box:
-            abs: [21,378 168x76]
+            abs: [21,360 168x76]
             rel: [0,176 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -306,7 +273,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: 日本
             box:
-              abs: [38,397 134x38]
+              abs: [38,379 134x38]
               rel: [17,19 134x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -316,7 +283,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[6]
           mx: ?
           box:
-            abs: [201,378 168x76]
+            abs: [201,360 168x76]
             rel: [180,176 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -326,7 +293,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: book
             box:
-              abs: [218,397 134x38]
+              abs: [218,379 134x38]
               rel: [17,19 134x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -336,7 +303,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[7]
           mx: ?
           box:
-            abs: [21,466 168x76]
+            abs: [21,448 168x76]
             rel: [0,264 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -346,7 +313,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: 山
             box:
-              abs: [38,485 134x38]
+              abs: [38,467 134x38]
               rel: [17,19 134x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -356,7 +323,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[8]
           mx: ?
           box:
-            abs: [201,466 168x76]
+            abs: [201,448 168x76]
             rel: [180,264 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -366,7 +333,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: a tall landform rising above its surroundings
             box:
-              abs: [218,485 134x38]
+              abs: [218,467 134x38]
               rel: [17,19 134x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -376,7 +343,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[9]
           mx: ?
           box:
-            abs: [21,554 168x76]
+            abs: [21,536 168x76]
             rel: [0,352 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -386,7 +353,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: 本
             box:
-              abs: [38,573 134x38]
+              abs: [38,555 134x38]
               rel: [17,19 134x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -396,7 +363,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[10]
           mx: ?
           box:
-            abs: [201,554 168x76]
+            abs: [201,536 168x76]
             rel: [180,352 168x76]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -406,7 +373,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: Japan
             box:
-              abs: [218,573 134x38]
+              abs: [218,555 134x38]
               rel: [17,19 134x38]
             flex: grow:1 basis:0 layout_hint:expanded
             size: minh:38
@@ -414,28 +381,28 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
             style: font:14/600/19 color:text
       - node: div
         box:
-          abs: [21,650 348x16]
-          rel: [20,545 348x16]
+          abs: [21,632 348x16]
+          rel: [20,563 348x16]
         layout: flex:row gap:16 justify:center
         spacing: margin:20/0/0/0
         - node: span
           text: 1 matched
           box:
-            abs: [134,650 69x16]
+            abs: [134,632 69x16]
             rel: [113,0 69x16]
           layout: flex:row gap:4 align:center
           style: font:13/700 color:text-2
         - node: span
           text: 4 left
           box:
-            abs: [219,650 37x16]
+            abs: [219,632 37x16]
             rel: [198,0 37x16]
           layout: flex:row gap:4 align:center
           style: font:13/700 color:text-2
     - node: div
       box:
         abs: [1,692 388x77]
-        rel: [0,643 388x77]
+        rel: [0,679 388x77]
       layout: flex:col gap:8
       flex: shrink:0
       spacing: pad:12/20/20/20
@@ -456,1030 +423,614 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           position: clip
 ```
 
-## State: Long meanings (ordered diff vs Matching)
+## State: Long meanings (full — differs too much from base)
 
-```diff
-  - node: progress-fill
+```text
+- node: phone-canvas
   box:
-  abs: [73,75 102x4]
-  rel: [0,0 102x4]
-  style: bg:accent r:999
-- - node: span
-- text: 1
-- box:
-- abs: [340,68 29x18]
-- rel: [339,19 29x18]
-- flex: shrink:0
-- style: font:14/700 color:text-2
-+ - node: span
-+ text: 2
-+ box:
-+ abs: [340,68 29x18]
-+ rel: [339,19 29x18]
-+ flex: shrink:0
-+ style: font:14/700 color:text-2
-  - node: span
-  text: / 5
-  box:
-  abs: [349,68 20x18]
-  rel: [8,0 20x18]
-  style: font:14/700 color:text-3
-  ...
-  - node: title
-  text: Match the pairs
-  box:
-  abs: [21,184 348x28]
-  rel: [0,0 348x28]
-  style: font:22/700 color:text text:center tracking:-0.4
-- - node: muted
-- text: Tap a term, then its meaning.
-- box:
-- abs: [21,164 348x18]
-- rel: [0,32 348x18]
-- spacing: margin:4/0/0/0
-- style: font:14/400 color:text-2 text:center
-- - node: match-grid
-- box:
-- abs: [21,202 348x428]
-- rel: [20,97 348x428]
-- layout: grid cols:2 gap:12
-- repeat: x10(unit=1)
-- - node: choice
-- item: item[1]
-- mx: ?
-- box:
-- abs: [21,202 168x76]
-- rel: [0,0 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
-- - node: choice-text
-- text: 水
-- box:
-- abs: [38,221 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:success
-- - node: choice-mark
-- box:
-- abs: [152,230 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:check
-- box:
-- abs: [152,230 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[2]
-- mx: ?
-- box:
-- abs: [201,202 168x76]
-- rel: [180,0 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
-- - node: choice-text
-- text: fire
-- box:
-- abs: [218,221 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:danger
-- - node: choice-mark
-- box:
-- abs: [332,230 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:x
-- box:
-- abs: [332,230 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[3]
-- mx: ?
-- box:
-- abs: [21,290 168x76]
-- rel: [0,88 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
-- - node: choice-text
-- text: 火
-- box:
-- abs: [38,309 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:danger
-- - node: choice-mark
-- box:
-- abs: [152,318 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:x
-- box:
-- abs: [152,318 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[4]
-- mx: ?
-- box:
-- abs: [201,290 168x76]
-- rel: [180,88 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
-- - node: choice-text
-- text: water
-- box:
-- abs: [218,309 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:success
-- - node: choice-mark
-- box:
-- abs: [332,318 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:check
-- box:
-- abs: [332,318 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[5]
-- mx: ?
-- box:
-- abs: [21,378 168x76]
-- rel: [0,176 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14 border:1px accent
-- - node: choice-text
-- text: 日本
-- box:
-- abs: [38,397 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:accent
-- - node: choice
-- item: item[6]
-- mx: ?
-- box:
-- abs: [201,378 168x76]
-- rel: [180,176 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: book
-- box:
-- abs: [218,397 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[7]
-- mx: ?
-- box:
-- abs: [21,466 168x76]
-- rel: [0,264 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: 山
-- box:
-- abs: [38,485 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[8]
-- mx: ?
-- box:
-- abs: [201,466 168x76]
-- rel: [180,264 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: a tall landform rising above its surroundings
-- box:
-- abs: [218,485 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[9]
-- mx: ?
-- box:
-- abs: [21,554 168x76]
-- rel: [0,352 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: 本
-- box:
-- abs: [38,573 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[10]
-- mx: ?
-- box:
-- abs: [201,554 168x76]
-- rel: [180,352 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: Japan
-- box:
-- abs: [218,573 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-+ - node: muted
-+ text: Longer meanings show up to three lines.
-+ box:
-+ abs: [21,216 348x18]
-+ rel: [0,32 348x18]
-+ spacing: margin:4/0/0/0
-+ style: font:14/400 color:text-2 text:center
-+ - node: match-grid
-+ box:
-+ abs: [21,254 348x324]
-+ rel: [20,149 348x324]
-+ layout: grid cols:2 gap:12
-+ repeat: x6(unit=1)
-+ - node: choice
-+ item: item[1]
-+ mx: ?
-+ box:
-+ abs: [21,254 168x100]
-+ rel: [0,0 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: 山
-+ box:
-+ abs: [38,275 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[2]
-+ mx: ?
-+ box:
-+ abs: [201,254 168x100]
-+ rel: [180,0 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: a tall landform rising high above the surrounding land
-+ box:
-+ abs: [218,275 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[3]
-+ mx: ?
-+ box:
-+ abs: [21,366 168x100]
-+ rel: [0,112 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: 勉強
-+ box:
-+ abs: [38,387 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[4]
-+ mx: ?
-+ box:
-+ abs: [201,366 168x100]
-+ rel: [180,112 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: the act of studying or learning something with focused effort over time
-+ box:
-+ abs: [218,387 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[5]
-+ mx: ?
-+ box:
-+ abs: [21,478 168x100]
-+ rel: [0,224 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: 図書館
-+ box:
-+ abs: [38,499 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[6]
-+ mx: ?
-+ box:
-+ abs: [201,478 168x100]
-+ rel: [180,224 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
-+ box:
-+ abs: [218,499 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice-more
-+ box:
-+ abs: [340,553 16x16]
-+ rel: [139,75 16x16]
-+ layout: grid cols:1 align:center
-+ position: pos:absolute
-+ - node: icon:ellipsis
-+ box:
-+ abs: [340,553 16x16]
-+ rel: [0,0 16x16]
-+ position: clip
-  - node: div
-  box:
-  abs: [21,598 348x16]
-  rel: [20,493 348x16]
-  layout: flex:row gap:16 justify:center
-  spacing: margin:20/0/0/0
-- - node: span
-- text: 1 matched
-- box:
-- abs: [134,650 69x16]
-- rel: [113,0 69x16]
-- layout: flex:row gap:4 align:center
-- style: font:13/700 color:text-2
-- - node: span
-- text: 4 left
-- box:
-- abs: [219,650 37x16]
-- rel: [198,0 37x16]
-- layout: flex:row gap:4 align:center
-- style: font:13/700 color:text-2
-+ - node: span
-+ text: 0 matched
-+ box:
-+ abs: [132,598 73x16]
-+ rel: [111,0 73x16]
-+ layout: flex:row gap:4 align:center
-+ style: font:13/700 color:text-2
-+ - node: span
-+ text: 3 left
-+ box:
-+ abs: [221,598 36x16]
-+ rel: [200,0 36x16]
-+ layout: flex:row gap:4 align:center
-+ style: font:13/700 color:text-2
-  - node: div
-  box:
-  abs: [1,692 388x77]
-  rel: [0,643 388x77]
-  layout: flex:col gap:8
-  flex: shrink:0
-  spacing: pad:12/20/20/20
-  style: border-t:1px divider
-  ...
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
+    layout: flex:col
+    size: minh:100
+    position: pos:relative
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
+      box:
+        abs: [1,13 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:12 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
+        box:
+          abs: [21,21 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
+        - node: icon:x
+          box:
+            abs: [31,31 20x20]
+            rel: [10,10 20x20]
+          position: clip
+      - node: progress
+        box:
+          abs: [73,39 255x4]
+          rel: [72,26 255x4]
+        position: clip
+        style: bg:surface-2 r:999
+        - node: progress-fill
+          box:
+            abs: [73,39 102x4]
+            rel: [0,0 102x4]
+          style: bg:accent r:999
+      - node: span
+        text: 2
+        box:
+          abs: [340,32 29x18]
+          rel: [339,19 29x18]
+        flex: shrink:0
+        style: font:14/700 color:text-2
+        - node: span
+          text: / 5
+          box:
+            abs: [349,32 20x18]
+            rel: [8,0 20x18]
+          style: font:14/700 color:text-3
+    - node: div
+      box:
+        abs: [1,69 388x623]
+        rel: [0,56 388x623]
+      layout: flex:col justify:center
+      flex: grow:1 basis:0 layout_hint:expanded
+      spacing: pad:16/20
+      position: layout_hint:scroll
+      - node: div
+        box:
+          abs: [21,166 348x50]
+          rel: [20,97 348x50]
+        spacing: margin:0/0/20/0
+        - node: title
+          text: Match the pairs
+          box:
+            abs: [21,166 348x28]
+            rel: [0,0 348x28]
+          style: font:22/700 color:text text:center tracking:-0.4
+        - node: muted
+          text: Longer meanings show up to three lines.
+          box:
+            abs: [21,198 348x18]
+            rel: [0,32 348x18]
+          spacing: margin:4/0/0/0
+          style: font:14/400 color:text-2 text:center
+      - node: match-grid
+        box:
+          abs: [21,236 348x324]
+          rel: [20,167 348x324]
+        layout: grid cols:2 gap:12
+        repeat: x6(unit=1)
+        - node: choice
+          item: item[1]
+          mx: ?
+          box:
+            abs: [21,236 168x100]
+            rel: [0,0 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 山
+            box:
+              abs: [38,257 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[2]
+          mx: ?
+          box:
+            abs: [201,236 168x100]
+            rel: [180,0 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: a tall landform rising high above the surrounding land
+            box:
+              abs: [218,257 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[3]
+          mx: ?
+          box:
+            abs: [21,348 168x100]
+            rel: [0,112 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 勉強
+            box:
+              abs: [38,369 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[4]
+          mx: ?
+          box:
+            abs: [201,348 168x100]
+            rel: [180,112 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: the act of studying or learning something with focused effort over time
+            box:
+              abs: [218,369 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[5]
+          mx: ?
+          box:
+            abs: [21,460 168x100]
+            rel: [0,224 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 図書館
+            box:
+              abs: [38,481 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[6]
+          mx: ?
+          box:
+            abs: [201,460 168x100]
+            rel: [180,224 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
+            box:
+              abs: [218,481 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+          - node: choice-more
+            box:
+              abs: [340,535 16x16]
+              rel: [139,75 16x16]
+            layout: grid cols:1 align:center
+            position: pos:absolute
+            - node: icon:ellipsis
+              box:
+                abs: [340,535 16x16]
+                rel: [0,0 16x16]
+              position: clip
+      - node: div
+        box:
+          abs: [21,580 348x16]
+          rel: [20,511 348x16]
+        layout: flex:row gap:16 justify:center
+        spacing: margin:20/0/0/0
+        - node: span
+          text: 0 matched
+          box:
+            abs: [132,580 73x16]
+            rel: [111,0 73x16]
+          layout: flex:row gap:4 align:center
+          style: font:13/700 color:text-2
+        - node: span
+          text: 3 left
+          box:
+            abs: [221,580 36x16]
+            rel: [200,0 36x16]
+          layout: flex:row gap:4 align:center
+          style: font:13/700 color:text-2
+    - node: div
+      box:
+        abs: [1,692 388x77]
+        rel: [0,679 388x77]
+      layout: flex:col gap:8
+      flex: shrink:0
+      spacing: pad:12/20/20/20
+      style: border-t:1px divider
+      - node: pill-btn
+        text: Shuffle & restart
+        mx: MxSecondaryButton
+        box:
+          abs: [21,705 348x44]
+          rel: [20,13 348x44]
+        layout: flex:row gap:8 justify:center align:center
+        spacing: pad:0/20
+        style: font:14/700 color:text text:center tracking:-0.1 r:999 border:1px border
+        - node: icon:rotate-ccw
+          box:
+            abs: [129,719 16x16]
+            rel: [108,14 16x16]
+          position: clip
 ```
 
-## State: Read full meaning (ordered diff vs Matching)
+## State: Read full meaning (full — differs too much from base)
 
-```diff
-  - node: progress-fill
+```text
+- node: phone-canvas
   box:
-  abs: [73,75 102x4]
-  rel: [0,0 102x4]
-  style: bg:accent r:999
-- - node: span
-- text: 1
-- box:
-- abs: [340,68 29x18]
-- rel: [339,19 29x18]
-- flex: shrink:0
-- style: font:14/700 color:text-2
-+ - node: span
-+ text: 2
-+ box:
-+ abs: [340,68 29x18]
-+ rel: [339,19 29x18]
-+ flex: shrink:0
-+ style: font:14/700 color:text-2
-  - node: span
-  text: / 5
-  box:
-  abs: [349,68 20x18]
-  rel: [8,0 20x18]
-  style: font:14/700 color:text-3
-  ...
-  - node: title
-  text: Match the pairs
-  box:
-  abs: [21,184 348x28]
-  rel: [0,0 348x28]
-  style: font:22/700 color:text text:center tracking:-0.4
-- - node: muted
-- text: Tap a term, then its meaning.
-- box:
-- abs: [21,164 348x18]
-- rel: [0,32 348x18]
-- spacing: margin:4/0/0/0
-- style: font:14/400 color:text-2 text:center
-- - node: match-grid
-- box:
-- abs: [21,202 348x428]
-- rel: [20,97 348x428]
-- layout: grid cols:2 gap:12
-- repeat: x10(unit=1)
-- - node: choice
-- item: item[1]
-- mx: ?
-- box:
-- abs: [21,202 168x76]
-- rel: [0,0 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
-- - node: choice-text
-- text: 水
-- box:
-- abs: [38,221 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:success
-- - node: choice-mark
-- box:
-- abs: [152,230 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:check
-- box:
-- abs: [152,230 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[2]
-- mx: ?
-- box:
-- abs: [201,202 168x76]
-- rel: [180,0 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
-- - node: choice-text
-- text: fire
-- box:
-- abs: [218,221 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:danger
-- - node: choice-mark
-- box:
-- abs: [332,230 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:x
-- box:
-- abs: [332,230 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[3]
-- mx: ?
-- box:
-- abs: [21,290 168x76]
-- rel: [0,88 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.866667 0.258824 0.341176 / 0.12) r:14 border:1px danger
-- - node: choice-text
-- text: 火
-- box:
-- abs: [38,309 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:danger
-- - node: choice-mark
-- box:
-- abs: [152,318 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:x
-- box:
-- abs: [152,318 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[4]
-- mx: ?
-- box:
-- abs: [201,290 168x76]
-- rel: [180,88 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.180392 0.619608 0.356863 / 0.12) r:14 border:1px success op:0.38
-- - node: choice-text
-- text: water
-- box:
-- abs: [218,309 102x38]
-- rel: [17,19 102x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:success
-- - node: choice-mark
-- box:
-- abs: [332,318 20x20]
-- rel: [131,28 20x20]
-- layout: grid cols:1 align:center
-- flex: shrink:0
-- - node: icon:check
-- box:
-- abs: [332,318 20x20]
-- rel: [0,0 20x20]
-- position: clip
-- - node: choice
-- item: item[5]
-- mx: ?
-- box:
-- abs: [21,378 168x76]
-- rel: [0,176 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:color(srgb 0.333333 0.411765 1 / 0.12) r:14 border:1px accent
-- - node: choice-text
-- text: 日本
-- box:
-- abs: [38,397 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:accent
-- - node: choice
-- item: item[6]
-- mx: ?
-- box:
-- abs: [201,378 168x76]
-- rel: [180,176 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: book
-- box:
-- abs: [218,397 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[7]
-- mx: ?
-- box:
-- abs: [21,466 168x76]
-- rel: [0,264 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: 山
-- box:
-- abs: [38,485 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[8]
-- mx: ?
-- box:
-- abs: [201,466 168x76]
-- rel: [180,264 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: a tall landform rising above its surroundings
-- box:
-- abs: [218,485 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[9]
-- mx: ?
-- box:
-- abs: [21,554 168x76]
-- rel: [0,352 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: 本
-- box:
-- abs: [38,573 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-- - node: choice
-- item: item[10]
-- mx: ?
-- box:
-- abs: [201,554 168x76]
-- rel: [180,352 168x76]
-- layout: flex:row gap:12 align:center
-- spacing: pad:16
-- size: minh:76
-- position: pos:relative
-- style: bg:accent-contrast r:14 border:1px border
-- - node: choice-text
-- text: Japan
-- box:
-- abs: [218,573 134x38]
-- rel: [17,19 134x38]
-- flex: grow:1 basis:0 layout_hint:expanded
-- size: minh:38
-- position: clip
-- style: font:14/600/19 color:text
-+ - node: muted
-+ text: Tap a clipped meaning to read it in full.
-+ box:
-+ abs: [21,216 348x18]
-+ rel: [0,32 348x18]
-+ spacing: margin:4/0/0/0
-+ style: font:14/400 color:text-2 text:center
-+ - node: match-grid
-+ box:
-+ abs: [21,254 348x324]
-+ rel: [20,149 348x324]
-+ layout: grid cols:2 gap:12
-+ repeat: x6(unit=1)
-+ - node: choice
-+ item: item[1]
-+ mx: ?
-+ box:
-+ abs: [21,254 168x100]
-+ rel: [0,0 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: 山
-+ box:
-+ abs: [38,275 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[2]
-+ mx: ?
-+ box:
-+ abs: [201,254 168x100]
-+ rel: [180,0 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: a tall landform rising high above the surrounding land
-+ box:
-+ abs: [218,275 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[3]
-+ mx: ?
-+ box:
-+ abs: [21,366 168x100]
-+ rel: [0,112 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: 勉強
-+ box:
-+ abs: [38,387 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[4]
-+ mx: ?
-+ box:
-+ abs: [201,366 168x100]
-+ rel: [180,112 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: the act of studying or learning something with focused effort over time
-+ box:
-+ abs: [218,387 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[5]
-+ mx: ?
-+ box:
-+ abs: [21,478 168x100]
-+ rel: [0,224 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: 図書館
-+ box:
-+ abs: [38,499 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice
-+ item: item[6]
-+ mx: ?
-+ box:
-+ abs: [201,478 168x100]
-+ rel: [180,224 168x100]
-+ layout: flex:row gap:12 align:center
-+ spacing: pad:16
-+ size: minh:100
-+ position: pos:relative
-+ style: bg:accent-contrast r:14 border:1px border
-+ - node: choice-text
-+ text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
-+ box:
-+ abs: [218,499 134x57]
-+ rel: [17,22 134x57]
-+ flex: grow:1 basis:0 layout_hint:expanded
-+ size: minh:57
-+ position: clip
-+ style: font:14/600/19 color:text
-+ - node: choice-more
-+ box:
-+ abs: [340,553 16x16]
-+ rel: [139,75 16x16]
-+ layout: grid cols:1 align:center
-+ position: pos:absolute
-+ - node: icon:ellipsis
-+ box:
-+ abs: [340,553 16x16]
-+ rel: [0,0 16x16]
-+ position: clip
-  - node: div
-  box:
-  abs: [21,598 348x16]
-  rel: [20,493 348x16]
-  layout: flex:row gap:16 justify:center
-  spacing: margin:20/0/0/0
-- - node: span
-- text: 1 matched
-- box:
-- abs: [134,650 69x16]
-- rel: [113,0 69x16]
-- layout: flex:row gap:4 align:center
-- style: font:13/700 color:text-2
-- - node: span
-- text: 4 left
-- box:
-- abs: [219,650 37x16]
-- rel: [198,0 37x16]
-- layout: flex:row gap:4 align:center
-- style: font:13/700 color:text-2
-+ - node: span
-+ text: 0 matched
-+ box:
-+ abs: [132,598 73x16]
-+ rel: [111,0 73x16]
-+ layout: flex:row gap:4 align:center
-+ style: font:13/700 color:text-2
-+ - node: span
-+ text: 3 left
-+ box:
-+ abs: [221,598 36x16]
-+ rel: [200,0 36x16]
-+ layout: flex:row gap:4 align:center
-+ style: font:13/700 color:text-2
-+ - node: div
-+ box:
-+ abs: [1,49 388x720]
-+ rel: [0,-56 388x720]
-+ layout: flex:col justify:end
-+ position: pos:absolute z:20
-+ - node: scrim
-+ box:
-+ abs: [1,49 388x720]
-+ rel: [0,0 388x720]
-+ position: pos:absolute
-+ style: bg:overlay
-+ - node: sheet
-+ box:
-+ abs: [1,488 388x281]
-+ rel: [0,439 388x281]
-+ spacing: pad:20/20/24/20
-+ position: pos:relative
-+ style: bg:accent-contrast r:28 shadow:8/28
-+ - node: sheet-grabber
-+ box:
-+ abs: [175,508 40x4]
-+ rel: [174,20 40x4]
-+ spacing: margin:0/154/16/154
-+ style: bg:border r:999
-+ - node: section-head
-+ mx: MxSectionHeader
-+ box:
-+ abs: [21,528 348x21]
-+ rel: [20,40 348x21]
-+ layout: flex:row gap:12 justify:between align:center
-+ spacing: margin:0/0/12/0
-+ - node: section-head-title
-+ text: Full meaning
-+ box:
-+ abs: [21,528 93x21]
-+ rel: [0,0 93x21]
-+ style: font:16/700 color:text tracking:-0.3
-+ - node: div
-+ text: Meaning
-+ box:
-+ abs: [21,561 348x16]
-+ rel: [20,73 348x16]
-+ layout: flex:row gap:8 align:center
-+ spacing: margin:0/0/8/0
-+ style: font:12/700 color:text-2 tracking:1
-+ - node: icon:book-open
-+ box:
-+ abs: [21,561 16x16]
-+ rel: [0,0 16x16]
-+ position: clip
-+ - node: div
-+ text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
-+ box:
-+ abs: [21,585 348x96]
-+ rel: [20,97 348x96]
-+ style: font:16/600/24 color:text
-+ - node: pill-btn
-+ text: Got it
-+ mx: MxPrimaryButton
-+ box:
-+ abs: [21,701 348x44]
-+ rel: [20,213 348x44]
-+ layout: flex:row gap:8 justify:center align:center
-+ spacing: pad:0/20
-+ style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
-  - node: div
-  box:
-  abs: [1,692 388x77]
-  rel: [0,643 388x77]
-  layout: flex:col gap:8
-  flex: shrink:0
-  spacing: pad:12/20/20/20
-  style: border-t:1px divider
-  ...
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
+  flex: grow:1 basis:0 layout_hint:expanded
+  position: layout_hint:scroll clip
+  style: bg:bg
+  - node: app
+    mx: MxScaffold
+    box:
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
+    layout: flex:col
+    size: minh:100
+    position: pos:relative
+    style: bg:bg
+    - node: appbar
+      mx: MxAppBar
+      box:
+        abs: [1,13 388x56]
+        rel: [0,0 388x56]
+      layout: flex:row gap:12 align:center
+      spacing: pad:0/20
+      style: bg:bg
+      - node: icon-btn
+        mx: MxIconButton
+        box:
+          abs: [21,21 40x40]
+          rel: [20,8 40x40]
+        layout: grid cols:1 align:center
+        flex: shrink:0
+        spacing: pad:1/6
+        position: pos:relative
+        style: r:999
+        - node: icon:x
+          box:
+            abs: [31,31 20x20]
+            rel: [10,10 20x20]
+          position: clip
+      - node: progress
+        box:
+          abs: [73,39 255x4]
+          rel: [72,26 255x4]
+        position: clip
+        style: bg:surface-2 r:999
+        - node: progress-fill
+          box:
+            abs: [73,39 102x4]
+            rel: [0,0 102x4]
+          style: bg:accent r:999
+      - node: span
+        text: 2
+        box:
+          abs: [340,32 29x18]
+          rel: [339,19 29x18]
+        flex: shrink:0
+        style: font:14/700 color:text-2
+        - node: span
+          text: / 5
+          box:
+            abs: [349,32 20x18]
+            rel: [8,0 20x18]
+          style: font:14/700 color:text-3
+    - node: div
+      box:
+        abs: [1,69 388x623]
+        rel: [0,56 388x623]
+      layout: flex:col justify:center
+      flex: grow:1 basis:0 layout_hint:expanded
+      spacing: pad:16/20
+      position: layout_hint:scroll
+      - node: div
+        box:
+          abs: [21,166 348x50]
+          rel: [20,97 348x50]
+        spacing: margin:0/0/20/0
+        - node: title
+          text: Match the pairs
+          box:
+            abs: [21,166 348x28]
+            rel: [0,0 348x28]
+          style: font:22/700 color:text text:center tracking:-0.4
+        - node: muted
+          text: Tap a clipped meaning to read it in full.
+          box:
+            abs: [21,198 348x18]
+            rel: [0,32 348x18]
+          spacing: margin:4/0/0/0
+          style: font:14/400 color:text-2 text:center
+      - node: match-grid
+        box:
+          abs: [21,236 348x324]
+          rel: [20,167 348x324]
+        layout: grid cols:2 gap:12
+        repeat: x6(unit=1)
+        - node: choice
+          item: item[1]
+          mx: ?
+          box:
+            abs: [21,236 168x100]
+            rel: [0,0 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 山
+            box:
+              abs: [38,257 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[2]
+          mx: ?
+          box:
+            abs: [201,236 168x100]
+            rel: [180,0 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: a tall landform rising high above the surrounding land
+            box:
+              abs: [218,257 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[3]
+          mx: ?
+          box:
+            abs: [21,348 168x100]
+            rel: [0,112 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 勉強
+            box:
+              abs: [38,369 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[4]
+          mx: ?
+          box:
+            abs: [201,348 168x100]
+            rel: [180,112 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: the act of studying or learning something with focused effort over time
+            box:
+              abs: [218,369 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[5]
+          mx: ?
+          box:
+            abs: [21,460 168x100]
+            rel: [0,224 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: 図書館
+            box:
+              abs: [38,481 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+        - node: choice
+          item: item[6]
+          mx: ?
+          box:
+            abs: [201,460 168x100]
+            rel: [180,224 168x100]
+          layout: flex:row gap:12 align:center
+          spacing: pad:16
+          size: minh:100
+          position: pos:relative
+          style: bg:accent-contrast r:14 border:1px border
+          - node: choice-text
+            text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
+            box:
+              abs: [218,481 134x57]
+              rel: [17,22 134x57]
+            flex: grow:1 basis:0 layout_hint:expanded
+            size: minh:57
+            position: clip
+            style: font:14/600/19 color:text
+          - node: choice-more
+            box:
+              abs: [340,535 16x16]
+              rel: [139,75 16x16]
+            layout: grid cols:1 align:center
+            position: pos:absolute
+            - node: icon:ellipsis
+              box:
+                abs: [340,535 16x16]
+                rel: [0,0 16x16]
+              position: clip
+      - node: div
+        box:
+          abs: [21,580 348x16]
+          rel: [20,511 348x16]
+        layout: flex:row gap:16 justify:center
+        spacing: margin:20/0/0/0
+        - node: span
+          text: 0 matched
+          box:
+            abs: [132,580 73x16]
+            rel: [111,0 73x16]
+          layout: flex:row gap:4 align:center
+          style: font:13/700 color:text-2
+        - node: span
+          text: 3 left
+          box:
+            abs: [221,580 36x16]
+            rel: [200,0 36x16]
+          layout: flex:row gap:4 align:center
+          style: font:13/700 color:text-2
+      - node: div
+        box:
+          abs: [1,13 388x756]
+          rel: [0,-56 388x756]
+        layout: flex:col justify:end
+        position: pos:absolute z:20
+        - node: scrim
+          box:
+            abs: [1,13 388x756]
+            rel: [0,0 388x756]
+          position: pos:absolute
+          style: bg:overlay
+        - node: sheet
+          box:
+            abs: [1,488 388x281]
+            rel: [0,475 388x281]
+          spacing: pad:20/20/24/20
+          position: pos:relative
+          style: bg:accent-contrast r:28 shadow:8/28
+          - node: sheet-grabber
+            box:
+              abs: [175,508 40x4]
+              rel: [174,20 40x4]
+            spacing: margin:0/154/16/154
+            style: bg:border r:999
+          - node: section-head
+            mx: MxSectionHeader
+            box:
+              abs: [21,528 348x21]
+              rel: [20,40 348x21]
+            layout: flex:row gap:12 justify:between align:center
+            spacing: margin:0/0/12/0
+            - node: section-head-title
+              text: Full meaning
+              box:
+                abs: [21,528 93x21]
+                rel: [0,0 93x21]
+              style: font:16/700 color:text tracking:-0.3
+          - node: div
+            text: Meaning
+            box:
+              abs: [21,561 348x16]
+              rel: [20,73 348x16]
+            layout: flex:row gap:8 align:center
+            spacing: margin:0/0/8/0
+            style: font:12/700 color:text-2 tracking:1
+            - node: icon:book-open
+              box:
+                abs: [21,561 16x16]
+                rel: [0,0 16x16]
+              position: clip
+          - node: div
+            text: a very long definition that requires three or more lines to read fully, with extra clauses and examples the learner needs before choosing the right pair
+            box:
+              abs: [21,585 348x96]
+              rel: [20,97 348x96]
+            style: font:16/600/24 color:text
+          - node: pill-btn
+            text: Got it
+            mx: MxPrimaryButton
+            box:
+              abs: [21,701 348x44]
+              rel: [20,213 348x44]
+            layout: flex:row gap:8 justify:center align:center
+            spacing: pad:0/20
+            style: bg:accent font:14/700 color:accent-contrast text:center tracking:-0.1 r:999 border:1px transparent
+    - node: div
+      box:
+        abs: [1,692 388x77]
+        rel: [0,679 388x77]
+      layout: flex:col gap:8
+      flex: shrink:0
+      spacing: pad:12/20/20/20
+      style: border-t:1px divider
+      - node: pill-btn
+        text: Shuffle & restart
+        mx: MxSecondaryButton
+        box:
+          abs: [21,705 348x44]
+          rel: [20,13 348x44]
+        layout: flex:row gap:8 justify:center align:center
+        spacing: pad:0/20
+        style: font:14/700 color:text text:center tracking:-0.1 r:999 border:1px border
+        - node: icon:rotate-ccw
+          box:
+            abs: [129,719 16x16]
+            rel: [108,14 16x16]
+          position: clip
 ```

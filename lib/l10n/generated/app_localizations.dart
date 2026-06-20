@@ -745,6 +745,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Card deleted'**
   String get cardDeletedSnack;
+
+  /// Title/label for the top-level global Search destination (bottom-nav tab).
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchTitle;
+
+  /// Placeholder in the bottom global-search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search everything'**
+  String get searchDockHint;
+
+  /// Title of the global-search idle/empty prompt before a query is entered.
+  ///
+  /// In en, this message translates to:
+  /// **'Search your library'**
+  String get searchIdleTitle;
+
+  /// Body of the global-search idle/empty prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Find folders, decks, and cards.'**
+  String get searchIdleMessage;
+
+  /// Title when a global search returns nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get searchNoResultsTitle;
+
+  /// Body when a global search returns nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches “{query}”. Try a different word or check the spelling.'**
+  String searchNoResultsMessage(String query);
+
+  /// Title of the global-search error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed'**
+  String get searchFailedTitle;
+
+  /// Body of the global-search error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t run that search just now.'**
+  String get searchFailedMessage;
+
+  /// Retry action on the global-search error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get searchRetry;
+
+  /// Global-search results section header for folder matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Folders'**
+  String get searchSectionFolders;
+
+  /// Global-search results section header for deck matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Decks'**
+  String get searchSectionDecks;
+
+  /// Global-search results section header for flashcard matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Flashcards'**
+  String get searchSectionFlashcards;
+
+  /// Affordance shown when a section has more matches than the per-section cap.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String searchMoreCount(int count);
 }
 
 class _AppLocalizationsDelegate

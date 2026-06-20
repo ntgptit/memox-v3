@@ -4,7 +4,7 @@
    primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, EmptyState, Banner, Sk, Modal, Sheet, BusyOverlay } = window.MX;
+  const { Icon, S, TileLg, EmptyState, Banner, SearchDock, Sk, Modal, Sheet, BusyOverlay } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const TAGS = [
@@ -27,20 +27,11 @@
     <div className="appbar">
       <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
       <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2) }}>Tags</span>
-      <button className="icon-btn" aria-label="Search"><Icon name="search" /></button>
     </div>
   );
 
   const SearchBar = ({ query }) => (
-    <div className="appbar" style={{ gap: S(2) }}>
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-        <span style={{ position: 'absolute', left: S(3), display: 'grid', placeItems: 'center', color: 'var(--memox-text-secondary)', pointerEvents: 'none' }}>
-          <Icon name="search" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)' }} />
-        </span>
-        <input className="field" defaultValue={query} placeholder="Search tags" style={{ paddingLeft: 'var(--memox-space-10)' }} />
-      </div>
-    </div>
+    <SearchDock query={query} placeholder="Search tags" />
   );
 
   // ---- Tag row -------------------------------------------------------------
@@ -206,16 +197,16 @@
     if (variant === 'search-empty') {
       return (
         <div className="app">
-          <SearchBar query="xyz" />
+          <Bar />
           <Body>
             <EmptyState icon="search-x" pad={10} title="No tags match"
               desc={'Nothing here matches “xyz”.'} />
           </Body>
+          <SearchBar query="xyz" />
         </div>
       );
     }
 
-    const searched = variant === 'search-empty';
     const overlay = {
       'action-sheet': <ActionSheet />,
       rename: <RenameDialog />,
@@ -228,10 +219,11 @@
 
     return (
       <div className="app" style={{ position: 'relative' }}>
-        {searched ? <SearchBar query="" /> : <Bar />}
+        <Bar />
         <Body>
           <TagList tags={TAGS} />
         </Body>
+        <SearchBar query="" />
         {overlay}
       </div>
     );

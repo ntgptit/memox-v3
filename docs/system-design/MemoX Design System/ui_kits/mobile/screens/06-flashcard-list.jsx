@@ -5,7 +5,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, PillBtn, Chip, IconTile, TileLg, ListRow, HeroCard, EmptyState, Fab, Sk, Modal, Sheet } = window.MX;
+  const { Icon, S, PillBtn, Chip, IconTile, TileLg, ListRow, HeroCard, EmptyState, Breadcrumb, SearchDock, Fab, Sk, Modal, Sheet } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const STATUS_TINT = {
@@ -26,12 +26,14 @@
 
   // ---- App bars ------------------------------------------------------------
   const Bar = ({ title }) => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
-      <button className="icon-btn" aria-label="Search"><Icon name="search" /></button>
-      <button className="icon-btn" aria-label="Deck options"><Icon name="more-vertical" /></button>
-    </div>
+    <>
+      <div className="appbar">
+        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
+        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
+        <button className="icon-btn" aria-label="Deck options"><Icon name="more-vertical" /></button>
+      </div>
+      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: 'Languages' }, { label: title, current: true }]} />
+    </>
   );
 
   const ReorderBar = ({ title }) => (
@@ -43,15 +45,7 @@
   );
 
   const SearchBar = ({ query }) => (
-    <div className="appbar" style={{ gap: S(2) }}>
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-        <span style={{ position: 'absolute', left: S(3), display: 'grid', placeItems: 'center', color: 'var(--memox-text-secondary)', pointerEvents: 'none' }}>
-          <Icon name="search" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)' }} />
-        </span>
-        <input className="field" defaultValue={query} placeholder="Search cards" style={{ paddingLeft: 'var(--memox-space-10)' }} />
-      </div>
-    </div>
+    <SearchDock query={query} placeholder="Search cards" />
   );
 
   // ---- Card row ------------------------------------------------------------
@@ -68,7 +62,7 @@
 
   const FabSlot = () => (
     <Fab icon="plus" label="Add card"
-      style={{ position: 'absolute', right: S(5), bottom: S(6), zIndex: 5 }} />
+      style={{ position: 'absolute', right: S(5), bottom: `calc(var(--memox-size-search-dock) + ${S(4)})`, zIndex: 5 }} />
   );
 
   // count summary strip above the list
@@ -137,11 +131,12 @@
     if (variant === 'search-empty') {
       return (
         <div className="app" style={{ position: 'relative' }}>
-          <SearchBar query="kanji" />
+          <Bar title="Japanese · N5" />
           <Body>
             <EmptyState icon="search-x" pad={10} title="No cards match"
               desc={'Nothing here matches “kanji”.'} />
           </Body>
+          <SearchBar query="kanji" />
         </div>
       );
     }
@@ -215,6 +210,7 @@
           </div>
         </Body>
         {!overlay && <FabSlot />}
+        <SearchBar query="" />
         {overlay}
       </div>
     );

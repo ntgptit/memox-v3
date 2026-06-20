@@ -19,6 +19,25 @@
     <button className="icon-btn" aria-label={label} {...rest}><Icon name={icon} /></button>
   );
 
+  // Breadcrumb trail for nested sub-screens (Library › Folder › Deck › Card).
+  // Docks directly under the .appbar. Pass `items` = [{ label, icon?, current? }]
+  // in root→leaf order; mark the deepest you want non-tappable with current.
+  // Typically the ANCESTOR path (the current screen stays the big appbar title),
+  // but a leaf crumb is supported for generic titles. One owner so every nested
+  // screen shows the same quiet trail.
+  const Breadcrumb = ({ items = [] }) => (
+    <nav className="breadcrumb" aria-label="Breadcrumb">
+      {items.map((it, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && <span className="crumb-sep"><Icon name="chevron-right" /></span>}
+          <button className={`crumb${it.current ? ' current' : ''}`} aria-current={it.current ? 'page' : undefined}>
+            {it.icon && <Icon name={it.icon} />}{it.label}
+          </button>
+        </React.Fragment>
+      ))}
+    </nav>
+  );
+
   const IconTile = ({ icon, color, solid, style }) => (
     <span className={`icon-tile${solid ? ' solid' : ''}`} style={{ '--tile': color, ...style }}><Icon name={icon} /></span>
   );
@@ -132,6 +151,74 @@
     </div>
   );
 
+  // Tappable entry-point row (a flat .card): icon tile + label/sub + chevron. The
+  // single owner for cross-screen "shortcut" links (Dashboard → Progress / Study).
+  // Quiet by design — flat, no accent fill — so it reads as a refer/navigate
+  // affordance, not a study CTA.
+  const ShortcutRow = ({ icon = 'bar-chart-3', tint = 'var(--memox-primary)', label, sub, ...rest }) => (
+    <button className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(3), boxShadow: 'none', width: '100%', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', color: 'inherit' }} {...rest}>
+      <IconTile icon={icon} color={tint} />
+      <span style={{ flex: 1, minWidth: 0 }}>
+        <span className="title" style={{ display: 'block', fontSize: 'var(--memox-fs-label-large)' }}>{label}</span>
+        {sub && <span className="muted" style={{ display: 'block', fontSize: 'var(--memox-fs-body-small)', marginTop: '2px' }}>{sub}</span>}
+      </span>
+      <Icon name="chevron-right" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)', color: 'var(--memox-text-secondary)' }} />
+    </button>
+  );
+
+  // Light "today snapshot" due card (Dashboard). Deliberately quiet — a single
+  // soft tile + count + a SECONDARY/small action (never the big accent hero) so
+  // the dashboard refers to work without pressuring the user to study now. The
+  // strong study CTAs live in Study / Progress. `caughtUp` shows the all-clear.
+  const DueSummary = ({ count, decks, minutes, action = 'Review', caughtUp }) => (
+    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: S(3), padding: S(4) }}>
+      <IconTile icon={caughtUp ? 'check' : 'layers'} color={caughtUp ? 'var(--memox-status-mastered)' : 'var(--memox-primary)'} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="title" style={{ fontSize: 'var(--memox-fs-label-large)' }}>{caughtUp ? 'All caught up' : `${count} cards due`}</div>
+        <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)' }}>{caughtUp ? 'Nothing due right now.' : `${decks} decks · about ${minutes} min`}</div>
+      </div>
+      {!caughtUp && <button className="pill-btn secondary sm">{action}</button>}
+    </div>
+  );
+
+  // Insight card (Progress) — an analytic nudge: tone-tinted icon tile + headline
+  // + short body + optional inline link action. `tone`: info | good | warn | down
+  // | accent (drives the tile tint only — never a colored shadow). This is where
+  // goal / streak / accuracy / due nudges live, framed as insight rather than
+  // pressure ("You're close to today's goal", "Japanese · N5 has the most due").
+  const INSIGHT_TINT = { info: 'var(--memox-info)', good: 'var(--memox-status-mastered)', warn: 'var(--memox-status-learning)', down: 'var(--memox-danger)', accent: 'var(--memox-primary)' };
+  const Insight = ({ tone = 'info', icon, title, desc, action, ...rest }) => (
+    <div className="card" style={{ display: 'flex', alignItems: 'flex-start', gap: S(3), padding: S(4) }}>
+      <IconTile icon={icon} color={INSIGHT_TINT[tone] || INSIGHT_TINT.info} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="title" style={{ fontSize: 'var(--memox-fs-label-large)' }}>{title}</div>
+        {desc && <div className="muted" style={{ fontSize: 'var(--memox-fs-body-small)', marginTop: '3px', lineHeight: 1.45 }}>{desc}</div>}
+        {action && <div style={{ marginTop: S(2) }}><button className="pill-btn ghost sm" style={{ paddingLeft: 0 }} {...rest}>{action}<Icon name="chevron-right" /></button></div>}
+      </div>
+    </div>
+  );
+
+  // Circular daily-goal ring (done / total). Promoted from a hand-rolled block so
+  // Progress (and anywhere a goal lives) shares one source. The arc sweep is
+  // derived from the value (no magic number); turns mastered-green when met and
+  // flattens to the track when paused. Goal lives on Progress, not the Dashboard.
+  const GoalRing = ({ value = 0, total = 1, met, paused }) => {
+    const pct = total ? Math.min(100, Math.max(0, Math.round((value / total) * 100))) : 0;
+    const deg = Math.round(pct * 3.6);
+    const arc = met ? 'var(--memox-status-mastered)' : 'var(--memox-primary)';
+    const bg = paused ? 'var(--memox-progress-track)' : `conic-gradient(${arc} ${deg}deg, var(--memox-progress-track) 0)`;
+    return (
+      <div className="goal-ring" style={{ background: bg }}>
+        <div className="goal-ring-inner">
+          <div>
+            <span style={{ fontSize: 'var(--memox-fs-title-small)', fontWeight: 'var(--memox-weight-extrabold)', color: 'var(--memox-text-primary)' }}>{value}</span>
+            <span className="muted" style={{ fontSize: 'var(--memox-fs-label-small)', fontWeight: 'var(--memox-weight-bold)' }}>/{total}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // Lightweight, mobile-native stat row (NOT a desktop dashboard widget): evenly
   // spaced centered metrics, sentence-case labels, no table dividers. Pass each
   // stat as [value, label, accent?]; the `accent` one sits in a soft tinted
@@ -174,9 +261,40 @@
     </div>
   );
 
+  // Search field (leading glyph + clearable input). Shared so every search
+  // surface is identical. ALWAYS docked at the BOTTOM via SearchDock — never the
+  // top app bar — so the field stays within thumb reach on tall phones.
+  const SearchField = ({ query = '', placeholder = 'Search' }) => (
+    <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
+      <span style={{ position: 'absolute', left: S(3), display: 'grid', placeItems: 'center', color: 'var(--memox-text-secondary)', pointerEvents: 'none' }}>
+        <Icon name="search" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)' }} />
+      </span>
+      <input className="field"
+        style={{ paddingLeft: 'var(--memox-space-10)', paddingRight: query ? 'var(--memox-space-10)' : 'var(--memox-space-4)' }}
+        defaultValue={query} placeholder={placeholder} />
+      {query ? (
+        <span aria-label="Clear" style={{ position: 'absolute', right: S(2), display: 'grid', placeItems: 'center', color: 'var(--memox-text-secondary)', cursor: 'pointer' }}>
+          <Icon name="x" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)' }} />
+        </span>
+      ) : null}
+    </div>
+  );
+
+  // Bottom-anchored search bar. Sits at the foot of the screen (above the bottom
+  // nav when one is present, otherwise owning the home-indicator safe area) so
+  // the input is always thumb-reachable. `trailing` for an optional action.
+  const SearchDock = ({ query, placeholder, trailing }) => (
+    <div className="search-dock">
+      <SearchField query={query} placeholder={placeholder} />
+      {trailing}
+    </div>
+  );
+
   // Bottom tab bar. `active` = label of the current tab. One source of truth so
-  // every screen ships the same four destinations in the same order.
-  const NAV_ITEMS = [['Home', 'house'], ['Library', 'library'], ['Stats', 'bar-chart-3'], ['Settings', 'settings']];
+  // every screen ships the same five destinations in the same order. Search is a
+  // primary destination here (thumb-reachable) rather than a top-app-bar icon,
+  // so it stays usable on tall phones.
+  const NAV_ITEMS = [['Home', 'house'], ['Library', 'library'], ['Search', 'search'], ['Stats', 'bar-chart-3'], ['Settings', 'settings']];
   const BottomNav = ({ active = 'Home' }) => (
     <div className="bottom-nav">
       {NAV_ITEMS.map(([label, icon]) => (
@@ -429,5 +547,5 @@
     </div>
   );
 
-  window.MX = { Icon, S, PillBtn, IconBtn, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListGroup, HeroCard, InfoRow, PickerRow, EmptyState, Banner, BottomNav, Fab, Sk, FormField, TextArea, Modal, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
+  window.MX = { Icon, S, PillBtn, IconBtn, Breadcrumb, IconTile, TileLg, Chip, Overline, Progress, SectionHead, ListRow, StatSummary, ListGroup, HeroCard, InfoRow, PickerRow, ShortcutRow, DueSummary, Insight, GoalRing, EmptyState, Banner, SearchField, SearchDock, BottomNav, Fab, Sk, FormField, TextArea, Modal, Sheet, BusyOverlay, StudyTopBar, StudyShell, StudyOption, RateBtn, AnswerReveal, Avatar, Toggle, Slider, RadioRow, Segmented, BarChart, MasteryBar };
 })();

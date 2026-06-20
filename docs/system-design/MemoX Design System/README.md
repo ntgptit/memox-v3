@@ -171,12 +171,22 @@ semantic alias tokens in `colors_and_type.css`.
 
 **Classes** (load `memox-components.css` after `colors_and_type.css`):
 `.app` · `.appbar` / `.appbar-lg` (`.appbar-title`, `.appbar-subtitle`) ·
-`.bottom-nav` / `.bottom-nav-item.active` (pill indicator) · `.card` /
+`.breadcrumb` / `.crumb` (`.current`) / `.crumb-sep` (nested-screen trail) ·
+`.bottom-nav` / `.bottom-nav-item.active` (pill indicator; items `flex:1 1 0`
+so the five destinations split evenly) · `.search-dock` (bottom-anchored,
+thumb-reachable search bar, `--memox-size-search-dock`) · `.card` /
 `.card.accent` · `.icon-btn` (40px, ≥48 hit) · `.icon-tile` / `.icon-tile.solid`
 (tint via `--tile`) · `.pill-btn.primary|secondary|outline` (+`.sm`, `:disabled`)
 · `.section-head` · `.ov` (overline, optional `.status-dot` via `--dot`) ·
 `.chip.new|learning|reviewing|mastered|due` (+`.solid`) · `.progress` /
 `.progress-fill` · `.list-row` · `.sheet` + `.scrim` · `.dialog` · `.fab`.
+
+New `window.MX` primitives in `screens/_shared.jsx` (redesign): `Breadcrumb`,
+`SearchField`/`SearchDock` (search docks at the FOOT, not the app bar),
+`ShortcutRow`, `DueSummary` (quiet Dashboard due card), `Insight` + `GoalRing`
+(Progress). The bottom nav now ships **five** destinations — Home · Library ·
+Search · Stats · Settings. New tokens: `--memox-size-search-dock`,
+`--memox-safe-top`.
 
 State fills use `color-mix(... calc(var(--memox-op-*) * 100%), transparent)` so
 hover / selected / disabled / scrim opacities are tokenized too. Icon sizes are

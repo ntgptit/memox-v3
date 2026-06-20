@@ -1,17 +1,25 @@
 ---
-last_updated: 2026-06-06
-applies_to: V1 global search (folders/decks/flashcards) + inline/scope-local search
-status: Current — global search screen for folders/decks/flashcards; tags + recent + popular are Future Proposal
+last_updated: 2026-06-20
+applies_to: global search (folders/decks/flashcards) + inline/scope-local search
+status: In-place folder search is Current; the dedicated global Search screen is being (re)built as a top-level /search destination by the design redesign — domain+data ready, UI not yet wired
 related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # Search
 
-## V1 decision (promoted 2026-06-06)
+## Current state & redesign decision
 
-MemoX V1 **implements** a dedicated global search screen at `/library/search` covering three
-sections — **folders, decks, and flashcards** — with all five states (empty/hint, loading, results,
-no-results, error). See `docs/wireframes/11-library-search.md`.
+Current code ships **in-place folder search** inside Library Overview (search-mode app bar,
+`librarySearchActiveProvider`). The `GlobalSearchUseCase` / `SearchRepository` domain+data layer
+(folders/decks/flashcards) **exists and is tested but is not wired to any screen**, and there is no
+search route in the current router.
+
+The design redesign promotes global search to a **top-level `/search` destination** — a primary
+bottom-nav tab with a **bottom-anchored search dock** (`SearchDock`/`SearchField`, thumb-reachable),
+not a top-app-bar field. It covers three sections — **folders, decks, and flashcards** — with all
+five states (empty/hint, loading, results, no-results, error). See
+`docs/wireframes/11-library-search.md`. When that screen ships it wires the existing
+`GlobalSearchUseCase`.
 
 Still **Future Proposal** (each needs its own approval before implementation):
 
@@ -57,7 +65,7 @@ These rules govern the **inline** filters on existing screens (not the global sc
 - No recent-search persistence yet (needs `shared_preferences`).
 - No popular-tags landing section yet (needs the tag subsystem).
 - Inline filters do not group cross-scope results; cross-scope grouping lives in the global
-  `/library/search` screen.
+  `/search` screen (redesign).
 - Use existing route constants for any result navigation.
 
 ## V1 result behavior
@@ -69,9 +77,9 @@ These rules govern the **inline** filters on existing screens (not the global sc
 | Flashcard   | Open/select card inside current deck.                          |
 | Tag         | Open/select tag management action depending on current screen. |
 
-## Global Library search — Current
+## Global Search screen — target (redesign)
 
-Implemented at `/library/search` (`GlobalSearchUseCase` over `SearchRepository`):
+Built at top-level `/search` (`GlobalSearchUseCase` over `SearchRepository`), bottom search dock:
 
 - Grouped results by Folders / Decks / Flashcards (Tags section is Future).
 - Cross-scope navigation: folder → folder detail, deck → flashcard list, flashcard → owning deck.
@@ -98,6 +106,8 @@ Each needs its own approval before implementation:
 
 ## Agent rule
 
-The global search screen is Current for folders/decks/flashcards. Treat the Tags section, recent
-searches, and popular-tags landing as Future Proposal until the tag subsystem and a
-`shared_preferences` dependency are approved.
+The dedicated global Search screen is being (re)built as a top-level `/search` destination by the
+design redesign; its domain+data layer (`GlobalSearchUseCase`/`SearchRepository`) is ready. Until
+that screen is wired, the only Current search UI is in-place folder search in Library Overview.
+Treat the Tags section, recent searches, and popular-tags landing as Future Proposal until the tag
+subsystem and a `shared_preferences` dependency are approved.

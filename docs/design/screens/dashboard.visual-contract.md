@@ -28,7 +28,8 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 - **Daily-goal ring** is current V1 — reads the same use case; hidden when the goal is disabled/unknown, but the goal tile still stays visible in the disabled state.
 - **Recent decks** and the **never-studied "new" count** are current V1 — read `LoadDashboardDeckHighlightsUseCase`.
 - **Start new learning** is current V1 — routes to the global new-cards study entry (deck/folder scope picker still deferred).
-- **Dashboard global search** is current V1 — app-bar shortcut to `/library/search`.
+- **Dashboard has no search shortcut** (design redesign): global search is the top-level `/search`
+  bottom-nav destination, so the former Dashboard app-bar search action is removed (WBS 5.8.1 Rejected).
 - Loading, error, onboarding, resume-only, offline, streak-broken, and multi-resume visual chrome states are part of the current fidelity pass.
 - The paused-session chip is currently visual chrome only; the source-backed paused-session list sheet remains deferred.
 - App launch still defaults to Library; `/home` renders Dashboard V1 but is not the boot route.
@@ -138,7 +139,7 @@ For onboarding, render the zero-content hero only.
 | Today CTA | `RoutePaths.studyToday` / `RouteNames.studyToday` via `go` | The study entry gate then `pushReplacement`s into the session route. |
 | Start new learning | Deferred | No source-backed scope picker exists yet. |
 | Settings icon | `RoutePaths.settings` / `RouteNames.settings` via `go` | Shell-visible and current V1. |
-| Search icon | Future `/library/search` action | Keep excluded from Dashboard V1. |
+| Search icon | Removed (redesign) — search is the top-level `/search` tab | No Dashboard search affordance (WBS 5.8.1 Rejected). |
 | Recent deck row | `RoutePaths.flashcardList(deckId)` / `RouteNames.flashcardList` via `push` | Open the deck-specific flashcard list. |
 | Bottom-nav Home | `RoutePaths.home` / `RouteNames.home` via `go` | The route exists and now renders Dashboard V1. |
 | Bottom-nav Library / Progress / Settings | `go` to the matching shell route | Shell navigation resets tab stack. |

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/types/content_mode.dart';
@@ -10,9 +11,11 @@ import 'package:memox/presentation/features/folders/widgets/folder_detail_action
 import 'package:memox/presentation/features/folders/widgets/folder_detail_body.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_search.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
+import 'package:memox/presentation/shared/navigation/library_breadcrumb.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
+import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 
 /// Folder Detail — the content browser one level down: a folder's subfolders or
 /// decks, with a stats summary, search, folder/deck management, and a
@@ -79,7 +82,25 @@ class FolderDetailScreen extends ConsumerWidget {
               ],
             ),
       floatingActionButton: fab,
-      body: FolderDetailBody(folderId: folderId),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          // Ancestry trail docked under the app bar (design redesign). Hidden in
+          // search mode and until the folder (with its breadcrumb) has loaded.
+          if (!searching && detail != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: MxSpacing.space2),
+              child: MxBreadcrumb(
+                items: buildLibraryBreadcrumb(
+                  context,
+                  libraryLabel: l10n.libraryTitle,
+                  folders: detail.breadcrumb,
+                ),
+              ),
+            ),
+          Expanded(child: FolderDetailBody(folderId: folderId)),
+        ],
+      ),
     );
   }
 

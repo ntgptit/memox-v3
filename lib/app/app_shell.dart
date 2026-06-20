@@ -3,12 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_bottom_nav.dart';
 
-/// Bottom-navigation shell hosting the four top-level destinations.
+/// Bottom-navigation shell hosting the five top-level destinations
+/// (Home · Library · Search · Progress · Settings).
 ///
 /// Backed by `StatefulShellRoute.indexedStack`, so each tab keeps its own
 /// navigation stack. Tab switches use `goBranch` (reset semantics), matching
 /// `docs/business/navigation/navigation-flow.md` §Top-level destinations.
-/// WBS 1.2.6.
+/// Search is a primary destination (thumb-reachable) rather than a top-app-bar
+/// icon, per the design redesign. WBS 1.2.6.
 class MxAppShell extends StatelessWidget {
   const MxAppShell({required this.navigationShell, super.key});
 
@@ -41,6 +43,11 @@ class MxAppShell extends StatelessWidget {
             icon: Icons.folder_outlined,
             selectedIcon: Icons.folder,
             label: l10n.libraryTitle,
+          ),
+          MxBottomNavItem(
+            icon: Icons.search_outlined,
+            selectedIcon: Icons.search,
+            label: l10n.searchTitle,
           ),
           MxBottomNavItem(
             icon: Icons.insights_outlined,

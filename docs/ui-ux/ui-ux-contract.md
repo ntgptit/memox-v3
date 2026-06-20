@@ -162,7 +162,26 @@ Device chrome (status bar / safe area):
   `SystemUiOverlayStyle` per screen.
 - Use a real app bar (`MxAppBar`) or `MxScaffold`'s `SafeArea` for the top inset —
   never a hand-rolled fixed-height top bar with manual `SafeArea` padding (it
-  overflows once the device adds status-bar padding).
+  overflows once the device adds status-bar padding). The kit's `--memox-safe-top`
+  (`env(safe-area-inset-top)`) corresponds to this top inset — in Flutter it is the
+  `SafeArea`/`MediaQuery.padding.top`, not a Dart constant (mirrors how
+  `--memox-safe-bottom` is the home-indicator inset).
+
+Redesign tokens & components (design redesign):
+
+- New kit size token `--memox-size-search-dock` (64) sizes the bottom-anchored
+  search dock; it lands as a documented min-height on the `MxSearchDock` widget
+  (no nav/appbar size token class exists — those follow Material defaults).
+- New kit shared components are built as MemoX shared widgets (token-driven, golden
+  tested light + dark): `SearchField`/`SearchDock` → `MxSearchField` + `MxSearchDock`
+  (wired into global Search `/search`); `Breadcrumb` → `MxBreadcrumb` (wired into
+  nested screens); `ShortcutRow`/`DueSummary` → `MxShortcutRow`/`MxDueSummary`;
+  `Insight`/`GoalRing` → `MxInsight`/`MxGoalRing`; the kit `IconTile` → `MxIconTile`.
+  The `MxShortcutRow`/`MxDueSummary`/`MxInsight`/`MxGoalRing` widgets exist and are
+  golden-tested, but their consuming **Dashboard (`/home`) and Progress (`/progress`)
+  screens are deferred** — they need read-model BE and (for goal/streak) the
+  engagement persistence subsystem, which is Future/Target pending approval. Shared
+  widgets that show counts/labels accept caller-localized strings (own no copy).
 
 Avoid:
 

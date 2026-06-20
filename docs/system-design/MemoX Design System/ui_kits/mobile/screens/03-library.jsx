@@ -3,7 +3,7 @@
    classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, ListRow, HeroCard, BottomNav, Fab, Sk } = window.MX;
+  const { Icon, S, ListRow, HeroCard, SearchDock, BottomNav, Fab, Sk } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const FOLDERS = [
@@ -19,21 +19,12 @@
     <div className="appbar">
       <span className="appbar-title">Library</span>
       <span className="spacer"></span>
-      <button className="icon-btn" aria-label="Search"><Icon name="search" /></button>
       <button className="icon-btn" aria-label="Sort"><Icon name="arrow-up-down" /></button>
     </div>
   );
 
   const SearchBar = ({ query }) => (
-    <div className="appbar" style={{ gap: S(2) }}>
-      <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-        <span style={{ position: 'absolute', left: S(3), display: 'grid', placeItems: 'center', color: 'var(--memox-text-secondary)', pointerEvents: 'none' }}>
-          <Icon name="search" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)' }} />
-        </span>
-        <input className="field" style={{ paddingLeft: 'var(--memox-space-10)' }} defaultValue={query} placeholder="Search folders" />
-      </div>
-      <button className="pill-btn ghost sm" style={{ height: 'var(--memox-size-button)' }}>Cancel</button>
-    </div>
+    <SearchDock query={query} placeholder="Search folders" />
   );
 
   // ---- List card -----------------------------------------------------------
@@ -146,11 +137,12 @@
       const results = FOLDERS.filter((f) => /lang|sci/i.test(f.name));
       return (
         <div className="app" style={{ position: 'relative' }}>
-          <SearchBar query="la" />
+          <TitleBar />
           <Body>
             <div className="ov">2 folders</div>
             <FolderCard items={results} />
           </Body>
+          <SearchBar query="la" />
           <BottomNav active="Library" />
         </div>
       );

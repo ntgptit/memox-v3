@@ -107,5 +107,18 @@
   "cardDeleteTitle": "Xóa thẻ này?",
   "cardDeleteMessage": "Thao tác này xóa vĩnh viễn thẻ này và tiến độ học của nó. Không thể hoàn tác.",
   "cardDeleteConfirm": "Xóa",
-  "cardDeletedSnack": "Đã xóa thẻ"
+  "cardDeletedSnack": "Đã xóa thẻ",
+  "searchTitle": "Tìm kiếm",
+  "searchDockHint": "Tìm mọi thứ",
+  "searchIdleTitle": "Tìm trong thư viện",
+  "searchIdleMessage": "Tìm thư mục, bộ thẻ và thẻ.",
+  "searchNoResultsTitle": "Không có kết quả",
+  "searchNoResultsMessage": "Không có gì khớp với “{query}”. Hãy thử từ khác hoặc kiểm tra chính tả.",
+  "searchFailedTitle": "Tìm kiếm thất bại",
+  "searchFailedMessage": "Hiện chưa thể chạy tìm kiếm.",
+  "searchRetry": "Thử lại",
+  "searchSectionFolders": "Thư mục",
+  "searchSectionDecks": "Bộ thẻ",
+  "searchSectionFlashcards": "Thẻ",
+  "searchMoreCount": "+{count} nữa"
 }

@@ -3,7 +3,7 @@
    and overflow. Token-driven; composes contract classes + shared primitives. */
 (function () {
   if (!window.MX || !window.MEMOX_KIT || !window.MEMOX_KIT.register) return;
-  const { Icon, S, TileLg, ListRow, StatSummary, ListGroup, HeroCard, EmptyState, BottomNav, Fab, Sk } = window.MX;
+  const { Icon, S, Breadcrumb, TileLg, ListRow, StatSummary, ListGroup, HeroCard, EmptyState, SearchDock, BottomNav, Fab, Sk } = window.MX;
 
   // ---- Data ----------------------------------------------------------------
   const DECKS = [
@@ -24,24 +24,18 @@
 
   // ---- App bar -------------------------------------------------------------
   const Bar = ({ title }) => (
-    <div className="appbar">
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
-      <button className="icon-btn" aria-label="Search"><Icon name="search" /></button>
-      <button className="icon-btn" aria-label="More"><Icon name="more-vertical" /></button>
-    </div>
+    <>
+      <div className="appbar">
+        <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
+        <span className="appbar-title" style={{ flex: 1, minWidth: 0, marginLeft: S(2), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
+        <button className="icon-btn" aria-label="More"><Icon name="more-vertical" /></button>
+      </div>
+      <Breadcrumb items={[{ label: 'Library', icon: 'library' }, { label: title, current: true }]} />
+    </>
   );
 
   const SearchBar = ({ query }) => (
-    <div className="appbar" style={{ gap: S(2) }}>
-      <button className="icon-btn" aria-label="Back"><Icon name="arrow-left" /></button>
-      <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-        <span style={{ position: 'absolute', left: S(3), display: 'grid', placeItems: 'center', color: 'var(--memox-text-secondary)', pointerEvents: 'none' }}>
-          <Icon name="search" style={{ width: 'var(--memox-icon-md)', height: 'var(--memox-icon-md)' }} />
-        </span>
-        <input className="field" style={{ paddingLeft: 'var(--memox-space-10)' }} defaultValue={query} placeholder="Search this folder" />
-      </div>
-    </div>
+    <SearchDock query={query} placeholder="Search this folder" />
   );
 
   // ---- Delete confirm dialog ----------------------------------------------
@@ -159,11 +153,12 @@
     if (variant === 'search-empty') {
       return (
         <div className="app" style={{ position: 'relative' }}>
-          <SearchBar query="kanji" />
+          <Bar title="Languages" />
           <Body>
             <EmptyState icon="search-x" pad={10} title="No matches in this folder"
               desc={'Nothing here matches “kanji”.'} />
           </Body>
+          <SearchBar query="kanji" />
           <BottomNav active="Library" />
         </div>
       );

@@ -49,6 +49,57 @@
 }
 .appbar .spacer, .appbar-lg .spacer { flex: 1; }
 
+/* ---- Breadcrumb ---------------------------------------------------------- */
+/* Thin "you are here" trail that docks directly under the .appbar on nested
+   sub-screens (Library › Folder › Deck › Card). Quiet by design: small
+   secondary-weight crumbs, a chevron separator, the last crumb bold + non-tap.
+   Scrolls horizontally (no wrap) so a deep path never breaks the bar height. */
+.breadcrumb {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--memox-space-1);
+  padding: 0 var(--memox-space-screen) var(--memox-space-2);
+  background: var(--memox-bg);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.breadcrumb::-webkit-scrollbar { width: 0; height: 0; }
+.crumb {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--memox-space-1);
+  max-width: 16ch;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--memox-fs-label-large);
+  font-weight: var(--memox-weight-semibold);
+  color: var(--memox-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color .12s ease;
+}
+.crumb:hover { color: var(--memox-text-primary); }
+.crumb i, .crumb svg { width: var(--memox-icon-sm); height: var(--memox-icon-sm); flex: none; }
+.crumb.current {
+  color: var(--memox-text-primary);
+  font-weight: var(--memox-weight-bold);
+  cursor: default;
+}
+.crumb-sep {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--memox-text-3);
+}
+.crumb-sep i, .crumb-sep svg { width: var(--memox-icon-sm); height: var(--memox-icon-sm); }
+
 /* ---- Bottom navigation --------------------------------------------------- */
 .bottom-nav {
   /* min-height (not height) so the home-indicator safe area can grow the bar
@@ -63,6 +114,8 @@
   border-top: 1px solid var(--memox-border-ghost);
 }
 .bottom-nav-item {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,6 +139,27 @@
 .bottom-nav-item.active { color: var(--memox-primary); font-weight: var(--memox-weight-bold); }
 .bottom-nav-item.active .nav-ind {
   background: color-mix(in srgb, var(--memox-primary) calc(var(--memox-op-selected) * 100%), transparent);
+}
+
+/* ---- Search dock (thumb-reachable search field, bottom-anchored) ---------- */
+/* The search input lives at the FOOT of the screen, not the top app bar, so it
+   stays within thumb reach on tall phones. */
+.search-dock {
+  flex: none;
+  box-sizing: border-box;
+  min-height: var(--memox-size-search-dock);
+  display: flex;
+  align-items: center;
+  gap: var(--memox-space-2);
+  padding: var(--memox-space-3) var(--memox-space-screen);
+  background: color-mix(in srgb, var(--memox-surface-raised) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--memox-border-ghost);
+}
+/* When it is the last element (no bottom nav below) it owns the home-indicator
+   safe area; sitting above a bottom nav, the nav handles that inset. */
+.search-dock:last-child {
+  padding-bottom: calc(var(--memox-space-3) + var(--memox-safe-bottom));
 }
 
 /* ---- Card ---------------------------------------------------------------- */

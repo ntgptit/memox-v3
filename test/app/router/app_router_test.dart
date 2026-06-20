@@ -80,6 +80,7 @@ void main() {
       for (final String path in <String>[
         RoutePaths.home,
         RoutePaths.library,
+        RoutePaths.search,
         RoutePaths.progress,
         RoutePaths.settings,
       ]) {

@@ -40,51 +40,18 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 ## Base state: Default
 
 ```text
-- node: div
-  box:
-    abs: [1,1 388x48]
-    rel: [1,1 388x48]
-  layout: flex:row justify:between align:center
-  flex: shrink:0
-  spacing: pad:0/26/0/30
-  - node: sb-time
-    text: 9:41
-    box:
-      abs: [31,16 33x19]
-      rel: [30,15 33x19]
-    style: font:15/700 color:text
-  - node: sb-icons
-    box:
-      abs: [277,13 86x24]
-      rel: [276,12 86x24]
-    layout: flex:row gap:7 align:center
-    - node: icon:signal-high
-      box:
-        abs: [277,13 24x24]
-        rel: [0,0 24x24]
-      position: clip
-    - node: icon:wifi
-      box:
-        abs: [308,13 24x24]
-        rel: [31,0 24x24]
-      position: clip
-    - node: icon:battery-full
-      box:
-        abs: [339,13 24x24]
-        rel: [62,0 24x24]
-      position: clip
 - node: phone-canvas
   box:
-    abs: [1,49 388x720]
-    rel: [1,49 388x720]
+    abs: [1,13 388x756]
+    rel: [1,13 388x756]
   flex: grow:1 basis:0 layout_hint:expanded
   position: layout_hint:scroll clip
   style: bg:bg
   - node: app
     mx: MxScaffold
     box:
-      abs: [1,49 388x720]
-      rel: [0,0 388x720]
+      abs: [1,13 388x756]
+      rel: [0,0 388x756]
     layout: flex:col
     size: minh:100
     position: pos:relative
@@ -92,7 +59,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
     - node: appbar
       mx: MxAppBar
       box:
-        abs: [1,49 388x56]
+        abs: [1,13 388x56]
         rel: [0,0 388x56]
       layout: flex:row gap:12 align:center
       spacing: pad:0/20
@@ -100,7 +67,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: icon-btn
         mx: MxIconButton
         box:
-          abs: [21,57 40x40]
+          abs: [21,21 40x40]
           rel: [20,8 40x40]
         layout: grid cols:1 align:center
         flex: shrink:0
@@ -109,37 +76,37 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         style: r:999
         - node: icon:x
           box:
-            abs: [31,67 20x20]
+            abs: [31,31 20x20]
             rel: [10,10 20x20]
           position: clip
       - node: progress
         box:
-          abs: [73,75 247x4]
+          abs: [73,39 247x4]
           rel: [72,26 247x4]
         position: clip
         style: bg:surface-2 r:999
         - node: progress-fill
           box:
-            abs: [73,75 62x4]
+            abs: [73,39 62x4]
             rel: [0,0 62x4]
           style: bg:accent r:999
       - node: span
         text: 5
         box:
-          abs: [332,68 37x18]
+          abs: [332,32 37x18]
           rel: [331,19 37x18]
         flex: shrink:0
         style: font:14/700 color:text-2
         - node: span
           text: / 20
           box:
-            abs: [340,68 29x18]
+            abs: [340,32 29x18]
             rel: [8,0 29x18]
           style: font:14/700 color:text-3
     - node: div
       box:
-        abs: [1,105 388x587]
-        rel: [0,56 388x587]
+        abs: [1,69 388x623]
+        rel: [0,56 388x623]
       layout: flex:col
       flex: grow:1 basis:0 layout_hint:expanded
       spacing: pad:16/20
@@ -147,14 +114,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
       - node: card
         mx: MxCard
         box:
-          abs: [21,121 348x139]
+          abs: [21,85 348x139]
           rel: [20,16 348x139]
         spacing: pad:20 margin:0/0/20/0
         style: bg:accent-contrast r:20 border:1px divider shadow:1/2
         - node: ov
           text: What does this mean?
           box:
-            abs: [42,142 306x15]
+            abs: [42,106 306x15]
             rel: [21,21 306x15]
           layout: flex:row gap:8 align:center
           spacing: margin:0/0/8/0
@@ -162,19 +129,19 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
         - node: div
           text: 火曜日
           box:
-            abs: [42,165 306x41]
+            abs: [42,129 306x41]
             rel: [21,44 306x41]
           style: font:37.4/800/41 color:text tracking:-0.7
         - node: muted
           text: かようび · kayoubi
           box:
-            abs: [42,210 306x29]
+            abs: [42,174 306x29]
             rel: [21,89 306x29]
           spacing: margin:4/0/0/0
           style: font:18/500 color:text-2
       - node: div
         box:
-          abs: [21,280 348x322]
+          abs: [21,244 348x322]
           rel: [20,175 348x322]
         layout: flex:col gap:8
         repeat: x5(unit=1)
@@ -182,7 +149,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[1]
           mx: ?
           box:
-            abs: [21,280 348x58]
+            abs: [21,244 348x58]
             rel: [0,0 348x58]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -192,7 +159,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-key
             text: A
             box:
-              abs: [38,297 24x24]
+              abs: [38,261 24x24]
               rel: [17,17 24x24]
             layout: grid cols:1 align:center
             flex: shrink:0
@@ -200,7 +167,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: Sunday
             box:
-              abs: [74,300 278x19]
+              abs: [74,264 278x19]
               rel: [53,20 278x19]
             flex: grow:1 basis:0 layout_hint:expanded
             style: font:14/600/19 color:text
@@ -208,7 +175,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[2]
           mx: ?
           box:
-            abs: [21,346 348x58]
+            abs: [21,310 348x58]
             rel: [0,66 348x58]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -218,7 +185,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-key
             text: B
             box:
-              abs: [38,363 24x24]
+              abs: [38,327 24x24]
               rel: [17,17 24x24]
             layout: grid cols:1 align:center
             flex: shrink:0
@@ -226,26 +193,26 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: Tuesday
             box:
-              abs: [74,366 246x19]
+              abs: [74,330 246x19]
               rel: [53,20 246x19]
             flex: grow:1 basis:0 layout_hint:expanded
             style: font:14/600/19 color:success
           - node: choice-mark
             box:
-              abs: [332,365 20x20]
+              abs: [332,329 20x20]
               rel: [311,19 20x20]
             layout: grid cols:1 align:center
             flex: shrink:0
             - node: icon:check
               box:
-                abs: [332,365 20x20]
+                abs: [332,329 20x20]
                 rel: [0,0 20x20]
               position: clip
         - node: choice
           item: item[3]
           mx: ?
           box:
-            abs: [21,412 348x58]
+            abs: [21,376 348x58]
             rel: [0,132 348x58]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -255,7 +222,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-key
             text: C
             box:
-              abs: [38,429 24x24]
+              abs: [38,393 24x24]
               rel: [17,17 24x24]
             layout: grid cols:1 align:center
             flex: shrink:0
@@ -263,26 +230,26 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: Thursday
             box:
-              abs: [74,432 246x19]
+              abs: [74,396 246x19]
               rel: [53,20 246x19]
             flex: grow:1 basis:0 layout_hint:expanded
             style: font:14/600/19 color:danger
           - node: choice-mark
             box:
-              abs: [332,431 20x20]
+              abs: [332,395 20x20]
               rel: [311,19 20x20]
             layout: grid cols:1 align:center
             flex: shrink:0
             - node: icon:x
               box:
-                abs: [332,431 20x20]
+                abs: [332,395 20x20]
                 rel: [0,0 20x20]
               position: clip
         - node: choice
           item: item[4]
           mx: ?
           box:
-            abs: [21,478 348x58]
+            abs: [21,442 348x58]
             rel: [0,198 348x58]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -292,7 +259,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-key
             text: D
             box:
-              abs: [38,495 24x24]
+              abs: [38,459 24x24]
               rel: [17,17 24x24]
             layout: grid cols:1 align:center
             flex: shrink:0
@@ -300,7 +267,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: Saturday
             box:
-              abs: [74,498 278x19]
+              abs: [74,462 278x19]
               rel: [53,20 278x19]
             flex: grow:1 basis:0 layout_hint:expanded
             style: font:14/600/19 color:text
@@ -308,7 +275,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           item: item[5]
           mx: ?
           box:
-            abs: [21,544 348x58]
+            abs: [21,508 348x58]
             rel: [0,264 348x58]
           layout: flex:row gap:12 align:center
           spacing: pad:16
@@ -318,7 +285,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-key
             text: E
             box:
-              abs: [38,561 24x24]
+              abs: [38,525 24x24]
               rel: [17,17 24x24]
             layout: grid cols:1 align:center
             flex: shrink:0
@@ -326,14 +293,14 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
           - node: choice-text
             text: Monday
             box:
-              abs: [74,564 278x19]
+              abs: [74,528 278x19]
               rel: [53,20 278x19]
             flex: grow:1 basis:0 layout_hint:expanded
             style: font:14/600/19 color:text
     - node: div
       box:
         abs: [1,692 388x77]
-        rel: [0,643 388x77]
+        rel: [0,679 388x77]
       layout: flex:col gap:8
       flex: shrink:0
       spacing: pad:12/20/20/20

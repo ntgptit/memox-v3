@@ -32,14 +32,13 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | State | Light | Dark |
 | --- | --- | --- |
 | Loaded | `02-dashboard--loaded--light.png` | `02-dashboard--loaded--dark.png` |
-| Loading | `02-dashboard--loading--light.png` | `02-dashboard--loading--dark.png` |
-| Onboarding | `02-dashboard--onboarding--light.png` | `02-dashboard--onboarding--dark.png` |
-| Goal off | `02-dashboard--goal-off--light.png` | `02-dashboard--goal-off--dark.png` |
-| Resume only | `02-dashboard--resume-only--light.png` | `02-dashboard--resume-only--dark.png` |
-| Streak broken | `02-dashboard--streak-broken--light.png` | `02-dashboard--streak-broken--dark.png` |
-| Error | `02-dashboard--error--light.png` | `02-dashboard--error--dark.png` |
-| Offline | `02-dashboard--offline--light.png` | `02-dashboard--offline--dark.png` |
+| No session | `02-dashboard--no-session--light.png` | `02-dashboard--no-session--dark.png` |
+| Caught up | `02-dashboard--caught-up--light.png` | `02-dashboard--caught-up--dark.png` |
 | Multi resume | `02-dashboard--multi-resume--light.png` | `02-dashboard--multi-resume--dark.png` |
+| Onboarding | `02-dashboard--onboarding--light.png` | `02-dashboard--onboarding--dark.png` |
+| Loading | `02-dashboard--loading--light.png` | `02-dashboard--loading--dark.png` |
+| Offline | `02-dashboard--offline--light.png` | `02-dashboard--offline--dark.png` |
+| Error | `02-dashboard--error--light.png` | `02-dashboard--error--dark.png` |
 
 ## 03 — Library overview
 
@@ -208,6 +207,8 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | --- | --- | --- |
 | Week | `19-progress--week--light.png` | `19-progress--week--dark.png` |
 | Month | `19-progress--month--light.png` | `19-progress--month--dark.png` |
+| Goal met | `19-progress--goal-met--light.png` | `19-progress--goal-met--dark.png` |
+| Streak lost | `19-progress--streak-lost--light.png` | `19-progress--streak-lost--dark.png` |
 | Loading | `19-progress--loading--light.png` | `19-progress--loading--dark.png` |
 | Empty | `19-progress--empty--light.png` | `19-progress--empty--dark.png` |
 | Insufficient | `19-progress--insufficient--light.png` | `19-progress--insufficient--dark.png` |
@@ -276,4 +277,4 @@ are the canonical visual mock reference for UI tasks — read the PNG, not the
 | English | `25-language--english--light.png` | `25-language--english--dark.png` |
 | Vietnamese | `25-language--vietnamese--light.png` | `25-language--vietnamese--dark.png` |
 
-Total: 26 screens · 139 states · 278 PNGs.
+Total: 26 screens · 140 states · 280 PNGs.

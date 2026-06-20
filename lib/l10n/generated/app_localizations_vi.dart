@@ -362,4 +362,47 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardDeletedSnack => 'Đã xóa thẻ';
+
+  @override
+  String get searchTitle => 'Tìm kiếm';
+
+  @override
+  String get searchDockHint => 'Tìm mọi thứ';
+
+  @override
+  String get searchIdleTitle => 'Tìm trong thư viện';
+
+  @override
+  String get searchIdleMessage => 'Tìm thư mục, bộ thẻ và thẻ.';
+
+  @override
+  String get searchNoResultsTitle => 'Không có kết quả';
+
+  @override
+  String searchNoResultsMessage(String query) {
+    return 'Không có gì khớp với “$query”. Hãy thử từ khác hoặc kiểm tra chính tả.';
+  }
+
+  @override
+  String get searchFailedTitle => 'Tìm kiếm thất bại';
+
+  @override
+  String get searchFailedMessage => 'Hiện chưa thể chạy tìm kiếm.';
+
+  @override
+  String get searchRetry => 'Thử lại';
+
+  @override
+  String get searchSectionFolders => 'Thư mục';
+
+  @override
+  String get searchSectionDecks => 'Bộ thẻ';
+
+  @override
+  String get searchSectionFlashcards => 'Thẻ';
+
+  @override
+  String searchMoreCount(int count) {
+    return '+$count nữa';
+  }
 }
