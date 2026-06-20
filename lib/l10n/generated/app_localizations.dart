@@ -109,6 +109,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Local-first flashcard app'**
   String get appDescription;
+
+  /// Bottom-navigation label and title for the Home/dashboard tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeTitle;
+
+  /// Bottom-navigation label and title for the Library tab (folders/decks).
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get libraryTitle;
+
+  /// Bottom-navigation label and title for the Progress/stats tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progressTitle;
+
+  /// Bottom-navigation label and title for the Settings tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
 }
 
 class _AppLocalizationsDelegate

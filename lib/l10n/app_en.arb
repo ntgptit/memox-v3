@@ -7,5 +7,21 @@
   "appDescription": "Local-first flashcard app",
   "@appDescription": {
     "description": "One-line description of the app for about/store contexts."
+  },
+  "homeTitle": "Home",
+  "@homeTitle": {
+    "description": "Bottom-navigation label and title for the Home/dashboard tab."
+  },
+  "libraryTitle": "Library",
+  "@libraryTitle": {
+    "description": "Bottom-navigation label and title for the Library tab (folders/decks)."
+  },
+  "progressTitle": "Progress",
+  "@progressTitle": {
+    "description": "Bottom-navigation label and title for the Progress/stats tab."
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Bottom-navigation label and title for the Settings tab."
   }
 }

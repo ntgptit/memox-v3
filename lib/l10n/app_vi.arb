@@ -1,5 +1,9 @@
 {
   "@@locale": "vi",
   "appTitle": "MemoX",
-  "appDescription": "Ứng dụng thẻ ghi nhớ ưu tiên ngoại tuyến"
+  "appDescription": "Ứng dụng thẻ ghi nhớ ưu tiên ngoại tuyến",
+  "homeTitle": "Trang chủ",
+  "libraryTitle": "Thư viện",
+  "progressTitle": "Tiến độ",
+  "settingsTitle": "Cài đặt"
 }
