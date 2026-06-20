@@ -5,10 +5,6 @@ Last reviewed: 2026-06-19 (rebuild reset)
 Repository: `ntgptit/memox-v3`
 Baseline reviewed: rebuilt from scratch on 2026-06-19; all Implemented/Partial rows reset to Specified; commit anchors cleared.
 
-> **Prioritized backlog (2026-06-21):** for a priority-ordered view of all outstanding (not-yet-
-> Implemented) work, see `docs/project-management/wbs-backlog.md`. This file remains the canonical
-> full breakdown; a snapshot is archived at `docs/project-management/wbs.backup-2026-06-21.md`.
-
 ## 0. Purpose
 
 This WBS is the delivery plan for the whole MemoX project. It decomposes every user-facing flow into function-level work packages so that each row is independently deliverable, testable, and reviewable by an AI agent in a single narrow prompt.
