@@ -28,6 +28,18 @@ if `buried_until > now`), and the empty-scope variant code if list is empty.
 **Errors:** `NotFoundFailure` (deck/folder doesn't exist), `ValidationFailure` (invalid entry_ref_id
 for tag type), `StorageFailure`.
 
+**V1 implementation (WBS 4.1.1 — eligibility slice):** the entry gate first resolves *eligibility*
+(counts, not the card list) via `ResolveStudyEntryEligibilityUseCase`
+(`lib/domain/usecases/study/resolve_study_entry_eligibility_usecase.dart` → `StudyEntryRepository`
+→ `StudyEntryDao` over `study_entry_queries.drift`). It returns a `StudyEntryEligibility`
+(`lib/domain/models/study_entry_eligibility.dart`): either `eligibleCount > 0` (proceed to session
+creation, WBS 4.2.1) or a `StudyScopeEmptyReason` (the empty-scope matrix branch, decision rows
+`S4`/`S4b`/`S4c`/`S4d`/`S4e`/`S4j`/`S4f`/`S4g`). New study counts every active non-buried card; SRS
+review counts only due cards. The use case owns the `now` clock and follows the `Result<T>` pattern
+(not `Either`, per the header note). A `deck`/`folder` scope with a missing `entryRefId` is a
+`ValidationFailure(field: entryRefId)`. The candidate-list load + `maxSessionItems` batching land
+with session creation (WBS 4.2.1); `EntryType.tag` is deferred (not in the core enum).
+
 ## FindResumableSessionUseCase
 
 ```dart

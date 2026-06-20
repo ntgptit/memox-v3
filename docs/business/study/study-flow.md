@@ -242,18 +242,25 @@ rejection message and CTA depend on the case.
 Rejection MUST NOT be a generic toast or error dialog. Always render dedicated empty state with
 actionable CTA where possible.
 
-### Implementation status (P0-1)
+### Implementation status
 
-| Case                                                   | Status                                                                                           | Source                                                                                                                                                                                           |
-|--------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `studyEmpty_deck_noCards`                              | ✅ Implemented (Tier 1)                                                                           | `lib/data/repositories/study_repo_impl.dart` (`_resolveEmptyState`) + `lib/presentation/features/study/widgets/study_entry_body.dart`                                                            |
-| `studyEmpty_deck_noDueCards`                           | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`, `nextDueAt`) + `study_entry_body.dart`                                                                                                             |
-| `studyEmpty_folder_noCards`                            | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`) + `study_entry_body.dart`                                                                                                                          |
-| `studyEmpty_folder_noDueCards`                         | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`, `nextDueAt`) + `study_entry_body.dart`                                                                                                             |
-| `studyEmpty_today_allDone`                             | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`) + `study_entry_body.dart`. Streak inset still pending (engagement use cases are `Target`).                                                         |
-| `studyEmpty_today_noContent`                           | ✅ Implemented (Tier 1)                                                                           | `study_repo_impl.dart` (`_resolveEmptyState`) + `study_entry_body.dart`                                                                                                                          |
-| `studyEmpty_tag_noCards` / `studyEmpty_tag_noDueCards` | 🔴 Blocked (Tier 2) — `StudyEntryType.tag` not yet defined; needs tag-scope queries + tag picker | `docs/business/tags/tag-system.md`                                                                                                                                                               |
-| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ Implemented (Tier 3, P0-2)                                                                     | `lib/data/repositories/study_repo_impl.dart` (`_resolveEmptyState`) + `lib/presentation/features/study/widgets/study_entry_body.dart`. Decision rows S4f/S4g.                                    |
+> The rebuild re-adds this feature per slice. **BE classification** (which empty
+> reason a scope resolves to) ships with **WBS 4.1.1** in
+> `lib/data/repositories/study_entry_repository_impl.dart` (`_classify`) over the
+> `study_entry_queries.drift` scope counts, returning a `StudyScopeEmptyReason`
+> (`lib/domain/models/study_entry_eligibility.dart`). **FE rendering** of each
+> empty state + CTA is pending (WBS 4.1.2 entry gate).
+
+| Case                                                   | BE classification (WBS 4.1.1) | FE empty state (WBS 4.1.2) | Decision row |
+|--------------------------------------------------------|-------------------------------|----------------------------|--------------|
+| `studyEmpty_deck_noCards`                              | ✅ `deckNoCards`              | ⏳ pending                  | S4           |
+| `studyEmpty_deck_noDueCards`                           | ✅ `deckNoDueCards` (+nextDue)| ⏳ pending                  | S4e          |
+| `studyEmpty_folder_noCards`                            | ✅ `folderNoCards`           | ⏳ pending                  | S4b          |
+| `studyEmpty_folder_noDueCards`                         | ✅ `folderNoDueCards` (+nextDue)| ⏳ pending                | S4j          |
+| `studyEmpty_today_allDone`                             | ✅ `todayAllDone`            | ⏳ pending (streak inset Target) | S4c    |
+| `studyEmpty_today_noContent`                           | ✅ `todayNoContent`          | ⏳ pending                  | S4d          |
+| `studyEmpty_tag_noCards` / `studyEmpty_tag_noDueCards` | 🔴 Blocked — `EntryType.tag` not in the core enum; needs tag-scope queries + tag picker | 🔴 Blocked | S4h/S4i |
+| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ `allBuried` / `allSuspended`| ⏳ pending                  | S4f/S4g      |
 
 ## "Next due" calculation
 

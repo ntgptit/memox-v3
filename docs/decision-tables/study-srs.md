@@ -19,14 +19,14 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S1 | Create session | Deck with cards | Persist session/items, capped to the first `maxSessionItems` eligible cards when the scope is larger | C0+C1 | TBD |
 | S2 | Create session | Folder with recursive cards | Persist session/items, capped to the first `maxSessionItems` eligible cards when the scope is larger | C0+C1 | TBD |
 | S3 | Create session | Today with due cards | Persist SRS session, capped to the first `maxSessionItems` due cards when the scope is larger | C0+C1 | TBD |
-| S4 | Create session | Deck with zero cards | `EmptyScopeException(deckNoCards)` → render `EmptyScopeScreen` (`studyEmpty_deck_noCards_title`) with "Add flashcards" CTA pushing `flashcardCreate`; no session persisted | C1 | TBD |
-| S4b | Create session | Folder subtree with zero descendant cards | `EmptyScopeException(folderNoCards)` → `studyEmpty_folder_noCards_title` with "Add a deck" CTA returning to folder detail; no session | C1 | TBD |
-| S4c | Create session | Today (srs_review) has cards but zero due | `EmptyScopeException(todayAllDone)` → `studyEmpty_today_allDone_title` + motivational message with "Back to dashboard" CTA; no session | C1 | TBD |
-| S4d | Create session | Today (srs_review) with zero cards in DB | `EmptyScopeException(todayNoContent)` → `studyEmpty_today_noContent_title` with "Create your first deck" CTA opening library | C1 | TBD |
-| S4e | Create session | Deck (srs_review) has cards but none due | `EmptyScopeException(deckNoDueCards, nextDueAt)` → `studyEmpty_deck_noDueCards_title` (+ "Next due in {relativeTime}" when a future due exists) with "Study new instead" CTA re-entering New Study | C1 | TBD |
-| S4j | Create session | Folder (srs_review) subtree has cards but none due | `EmptyScopeException(folderNoDueCards, nextDueAt)` → `studyEmpty_folder_noDueCards_title` (+ next-due hint) with "Study new instead" CTA re-entering New Study | C1 | TBD |
-| S4f | Create session | All cards buried for today | Empty state `studyEmpty_allBuried` | C1 | TBD |
-| S4g | Create session | All cards suspended | Empty state `studyEmpty_allSuspended` | C1 | TBD |
+| S4 | Create session | Deck with zero cards | `EmptyScopeException(deckNoCards)` → render `EmptyScopeScreen` (`studyEmpty_deck_noCards_title`) with "Add flashcards" CTA pushing `flashcardCreate`; no session persisted | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4b | Create session | Folder subtree with zero descendant cards | `EmptyScopeException(folderNoCards)` → `studyEmpty_folder_noCards_title` with "Add a deck" CTA returning to folder detail; no session | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4c | Create session | Today (srs_review) has cards but zero due | `EmptyScopeException(todayAllDone)` → `studyEmpty_today_allDone_title` + motivational message with "Back to dashboard" CTA; no session | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4d | Create session | Today (srs_review) with zero cards in DB | `EmptyScopeException(todayNoContent)` → `studyEmpty_today_noContent_title` with "Create your first deck" CTA opening library | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4e | Create session | Deck (srs_review) has cards but none due | `EmptyScopeException(deckNoDueCards, nextDueAt)` → `studyEmpty_deck_noDueCards_title` (+ "Next due in {relativeTime}" when a future due exists) with "Study new instead" CTA re-entering New Study | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4j | Create session | Folder (srs_review) subtree has cards but none due | `EmptyScopeException(folderNoDueCards, nextDueAt)` → `studyEmpty_folder_noDueCards_title` (+ next-due hint) with "Study new instead" CTA re-entering New Study | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4f | Create session | All cards buried for today | Empty state `studyEmpty_allBuried` | C1 | study_entry_repository_impl_test.dart (BE) |
+| S4g | Create session | All cards suspended | Empty state `studyEmpty_allSuspended` | C1 | study_entry_repository_impl_test.dart (BE) |
 | S4h | Create session | `entry_type=tag` with zero matching cards | Empty state `studyEmpty_tag_noCards`, no session | C1 | TBD |
 | S4i | Create session | `entry_type=tag` matches cards but none due (srs_review) | Empty state `studyEmpty_tag_noDueCards` with "Study new instead" CTA | C1 | TBD |
 | S5 | Validate flow | Invalid type/flow pair | Reject | C1 | TBD |
@@ -46,8 +46,8 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S19 | Attempt result mapper | result=`recovered` | Storage codec accepts `recovered`; result is passing but not perfect-eligible | C0+C1 | TBD |
 | S20 | SRS Review finalize | Persisted attempts contain a `forgot` followed by a passing attempt | Finalized result `recovered`, current box unchanged, no lapse | C0+C1 | TBD |
 | S21 | Schema migration | (Not Applicable in this repo) legacy v12 CHECK rebuild for `recovered` | Current v4 `study_attempts` accepts `recovered` from the start; no CHECK migration exists or is needed | C1 | N/A — see `docs/database/schema-contract.md` §V1 migration gate |
-| S22 | Start study | Invalid entryType or malformed study query | Show the gate's controlled error state; do not call the repository | C1 | TBD |
-| S23 | Start study | Flashcards exist in scope but some `flashcard_progress` rows are missing | Treat missing-progress cards as new active cards for New Study and create a session instead of failing Study Entry with an empty eligible batch | C1 | TBD |
+| S22 | Start study | Invalid entryType or malformed study query | Show the gate's controlled error state; do not call the repository | C1 | study_entry_repository_impl_test.dart (BE) |
+| S23 | Start study | Flashcards exist in scope but some `flashcard_progress` rows are missing | Treat missing-progress cards as new active cards for New Study and create a session instead of failing Study Entry with an empty eligible batch | C1 | study_entry_repository_impl_test.dart (BE) |
 | S24 | Start study | Deck scope has eligible cards | Create a session and redirect with `pushReplacement` to the session route | C0+C1 | TBD |
 | S25 | Start study | Folder scope has eligible cards | Create a session and redirect with `pushReplacement` to the session route | C0+C1 | TBD |
 | S26 | Start study | Today scope has zero due cards | Render today all-done empty state and do not create a session | C1 | TBD |

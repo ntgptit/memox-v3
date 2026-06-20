@@ -1,0 +1,81 @@
+import 'folders.drift';
+import 'decks.drift';
+import 'flashcards.drift';
+
+-- Study entry eligibility counts (WBS 4.1.1). Each query returns ONE row with
+-- the counts needed to classify a scope against the empty-scope matrix
+-- (`docs/business/study/study-flow.md` §Empty scope matrix). Semantics, shared
+-- across all three scopes:
+--   total_cards        : all flashcards in scope.
+--   suspended_count    : cards with is_suspended = 1.
+--   active_non_buried  : cards NOT suspended and NOT buried now
+--                        (buried = buried_until IS NOT NULL AND buried_until > :now).
+--   due_eligible       : active-non-buried cards whose due_at has passed
+--                        (due_at IS NOT NULL AND due_at <= :now).
+--   next_due_at        : MIN future due_at among active-non-buried cards
+--                        (due_at > :now), or NULL when none — powers the
+--                        "Next due in {relativeTime}" hint.
+-- A missing flashcard_progress row (LEFT JOIN → NULLs) counts as a new, active,
+-- not-suspended, not-buried card (decision row S23), so COALESCE(is_suspended,0).
+
+deckScopeCounts(:now AS INT, :deckId AS TEXT):
+SELECT
+  COUNT(fc.id) AS total_cards,
+  COUNT(CASE WHEN fp.is_suspended = 1 THEN 1 END) AS suspended_count,
+  COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+              AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+             THEN 1 END) AS active_non_buried,
+  COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+              AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+              AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+             THEN 1 END) AS due_eligible,
+  MIN(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+            AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+            AND fp.due_at IS NOT NULL AND fp.due_at > :now
+           THEN fp.due_at END) AS next_due_at
+FROM flashcards fc
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE fc.deck_id = :deckId;
+
+folderScopeCounts(:now AS INT, :folderId AS TEXT):
+WITH RECURSIVE subtree(node_id) AS (
+  SELECT :folderId
+  UNION ALL
+  SELECT child.id FROM folders child JOIN subtree ON child.parent_id = subtree.node_id
+)
+SELECT
+  COUNT(fc.id) AS total_cards,
+  COUNT(CASE WHEN fp.is_suspended = 1 THEN 1 END) AS suspended_count,
+  COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+              AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+             THEN 1 END) AS active_non_buried,
+  COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+              AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+              AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+             THEN 1 END) AS due_eligible,
+  MIN(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+            AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+            AND fp.due_at IS NOT NULL AND fp.due_at > :now
+           THEN fp.due_at END) AS next_due_at
+FROM subtree
+JOIN decks d ON d.folder_id = subtree.node_id
+JOIN flashcards fc ON fc.deck_id = d.id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id;
+
+todayScopeCounts(:now AS INT):
+SELECT
+  COUNT(fc.id) AS total_cards,
+  COUNT(CASE WHEN fp.is_suspended = 1 THEN 1 END) AS suspended_count,
+  COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+              AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+             THEN 1 END) AS active_non_buried,
+  COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+              AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+              AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+             THEN 1 END) AS due_eligible,
+  MIN(CASE WHEN COALESCE(fp.is_suspended, 0) = 0
+            AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+            AND fp.due_at IS NOT NULL AND fp.due_at > :now
+           THEN fp.due_at END) AS next_due_at
+FROM flashcards fc
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id;

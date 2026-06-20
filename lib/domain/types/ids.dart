@@ -18,6 +18,10 @@ typedef FlashcardId = String;
 /// Identifier of a study session row (`study_sessions.id`).
 typedef SessionId = String;
 
+/// The `entry_ref_id` of a study scope: a deck/folder id, or `null` for the
+/// global `today` entry (`docs/contracts/types-catalog.md` §EntryRefId).
+typedef EntryRefId = String?;
+
 /// A normalized tag name (lowercased, trimmed) stored in `flashcard_tags.tag`.
 ///
 /// Unlike the other ids this is the value itself, not a UUID
