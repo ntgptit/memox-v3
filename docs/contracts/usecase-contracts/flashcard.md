@@ -250,25 +250,30 @@ row-level validation issues in the preview model.
 Stream<Either<Failure, FlashcardListDetail>> call(
   DeckId deckId, {
   String? searchTerm,
+  List<TagName> tags = const [],
   ContentSortMode sort = ContentSortMode.manual,
 });
 ```
 
-> **Current implementation (verified 2026-06-10).** Shipped as the `Result`-based
-> `WatchFlashcardListUseCase` (`lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`)
-> over `FlashcardRepository.watchFlashcardList`. The shipped V1 list-watch now supports
-> deck-scoped search + status + tag filters (`all` / `active` / `due` / `suspended` / `buried`),
-> with multi-select AND tag filtering and a test-controlled `now` override for due/buried
-> predicates. `totalCount` still reflects the full deck total so the UI can distinguish empty-deck
-> from no-results states. The computed `CardState`/`WatchFlashcardsByFilterUseCase` target remains
-> Future.
+> **Current implementation (search verified 2026-06-10; tag filter WBS 2.18.1, 2026-06-20).** Shipped
+> as the `Result`-based `WatchFlashcardListUseCase`
+> (`lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`) over
+> `FlashcardRepository.watchFlashcardList`. The V1 list-watch supports a deck-scoped front/back
+> **search** term and a **multi-select AND `tags` filter** (each selected tag normalized with the
+> storage rule — trim + lowercase + dedup — so it matches stored tags; empty selection = no filter).
+> Search and tag filters compose, and `totalCount` reflects the full deck total regardless of either,
+> so the UI can distinguish empty-deck from no-results. **Status filters** (`active` / `due` /
+> `suspended` / `buried`) and the computed `CardState` / `WatchFlashcardsByFilterUseCase` remain
+> **Specified / Future** (WBS 2.17.1) — blocked on the suspend/bury columns, which have not shipped.
 
 **Rules:**
 
-- `FlashcardListDetail` = deck + folder breadcrumb + (search-filtered) cards + `totalCount`.
-- `totalCount` is the deck's full card count, independent of `searchTerm` — it lets the UI
-  tell empty-deck (`totalCount == 0`) apart from no-results-on-search (`cards.isEmpty &&
-  totalCount > 0`).
+- `FlashcardListDetail` = deck + folder breadcrumb + (search/tag-filtered) cards + `totalCount`.
+- A non-blank `searchTerm` keeps cards whose front or back contains the trimmed, case-insensitive
+  term. A non-empty `tags` keeps cards carrying **every** selected tag (AND); the two compose.
+  Decision rows C38, C39.
+- `totalCount` is the deck's full card count, independent of `searchTerm` and `tags` — it lets the
+  UI tell empty-deck (`totalCount == 0`) apart from no-results (`cards.isEmpty && totalCount > 0`).
 - A missing/deleted deck yields `NotFoundFailure`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.

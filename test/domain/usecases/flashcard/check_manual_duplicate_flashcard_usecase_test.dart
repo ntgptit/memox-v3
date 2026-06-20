@@ -35,6 +35,7 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     DeckId deckId, {
     String? searchTerm,
+    List<TagName> tags = const <TagName>[],
     ContentSortMode sort = ContentSortMode.manual,
   }) => throw UnimplementedError();
 

@@ -108,6 +108,7 @@ class _FakeFlashcardRepository implements FlashcardRepository {
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     String deckId, {
     String? searchTerm,
+    List<String> tags = const <String>[],
     ContentSortMode sort = ContentSortMode.manual,
   }) {
     watchedDeckId = deckId;

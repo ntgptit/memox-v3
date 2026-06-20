@@ -30,14 +30,19 @@ abstract interface class FlashcardRepository {
   /// + cards (in `sort_order`) + the deck's full [FlashcardListDetail.totalCount].
   ///
   /// When [searchTerm] is non-blank, [FlashcardListDetail.cards] is filtered to
-  /// cards whose front or back contains the trimmed, case-insensitive term;
-  /// `totalCount` always reflects the full deck total. Emits a
-  /// [NotFoundFailure] result when the deck does not exist (e.g. just deleted).
-  /// [sort] is reserved for the Future sort control; V1 only honors
-  /// [ContentSortMode.manual].
+  /// cards whose front or back contains the trimmed, case-insensitive term.
+  ///
+  /// When [tags] is non-empty, cards are further filtered to those carrying
+  /// **every** selected tag (AND semantics, case-insensitive after
+  /// normalization); an empty [tags] list imposes no tag filter. Tag and search
+  /// filters compose; `totalCount` always reflects the full deck total
+  /// regardless of either filter. Emits a [NotFoundFailure] result when the deck
+  /// does not exist (e.g. just deleted). [sort] is reserved for the Future sort
+  /// control; V1 only honors [ContentSortMode.manual]. Decision rows C38, C39.
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     DeckId deckId, {
     String? searchTerm,
+    List<TagName> tags = const <TagName>[],
     ContentSortMode sort = ContentSortMode.manual,
   });
 
