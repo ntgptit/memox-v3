@@ -13,4 +13,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appDescription => 'Local-first flashcard app';
+
+  @override
+  String get homeTitle => 'Home';
+
+  @override
+  String get libraryTitle => 'Library';
+
+  @override
+  String get progressTitle => 'Progress';
+
+  @override
+  String get settingsTitle => 'Settings';
 }

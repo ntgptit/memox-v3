@@ -13,4 +13,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get appDescription => 'Ứng dụng thẻ ghi nhớ ưu tiên ngoại tuyến';
+
+  @override
+  String get homeTitle => 'Trang chủ';
+
+  @override
+  String get libraryTitle => 'Thư viện';
+
+  @override
+  String get progressTitle => 'Tiến độ';
+
+  @override
+  String get settingsTitle => 'Cài đặt';
 }

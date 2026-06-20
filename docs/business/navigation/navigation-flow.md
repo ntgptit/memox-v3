@@ -34,6 +34,15 @@ the existing app entry and must not be replaced by an onboarding wizard in V1. D
 top-level destination, but changing the default entry to `/home` requires a dedicated navigation
 task with route tests and doc updates.
 
+**Shell implementation (WBS 1.2.6).** The four top-level destinations are branches of a
+`StatefulShellRoute.indexedStack` hosted by `MxAppShell` (`lib/app/app_shell.dart`), so each tab
+keeps its own navigation stack. The shell renders the shared `MxBottomNav`; tab switches use
+`navigationShell.goBranch(index, initialLocation: reTapActiveTab)` so re-tapping the active tab
+returns it to its branch root. Each destination renders a `RoutePlaceholder` until its real screen
+ships; feature route registries compose into the matching branch as screens land. Routes whose
+"Shell visible" is **No** (e.g. detail/study/search pushed over the root navigator) sit outside the
+branches.
+
 ## Settings routes
 
 | Path                      | Responsibility                                                                                                             | Shell visible |

@@ -29,6 +29,28 @@ Future<void> pumpForGolden(
   await tester.pump();
 }
 
+/// Golden capture for widgets that ARE a scaffold (e.g. `MxScaffold`): pumps
+/// [home] as the themed [MaterialApp.home] directly (no wrapping [Scaffold]) on
+/// the fixed [kGoldenSurface]. Single frame, like [pumpForGolden].
+Future<void> pumpHomeForGolden(
+  WidgetTester tester,
+  Widget home, {
+  required Brightness brightness,
+}) async {
+  tester.view.physicalSize = kGoldenSurface;
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.reset);
+
+  await tester.pumpWidget(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: brightness == Brightness.light ? MxTheme.light : MxTheme.dark,
+      home: home,
+    ),
+  );
+  await tester.pump();
+}
+
 /// Pumps [child] in a themed [MaterialApp] for behaviour/semantics tests
 /// (settles animations). Defaults to the light theme.
 Future<void> pumpThemed(
