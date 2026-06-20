@@ -12,8 +12,9 @@ import 'package:memox/domain/models/library_overview.dart';
 
 void main() {
   // Folder read models: WBS 3.1.1 (library overview) + 3.2.1 (folder detail).
-  // Deck/card counts are 0 until those tables ship (WBS 2.7.x / 2.11.x), so
-  // decision rows F12/F13 (non-zero counts) are deferred.
+  // Non-zero deck/card/due counts (F12/F13) are covered in
+  // folder_deck_due_counts_test.dart (WBS 3.7.1); the empty-folder cases here
+  // assert the zero baseline.
   group('FolderRepositoryImpl read models', () {
     late AppDatabase db;
     late FolderDao dao;

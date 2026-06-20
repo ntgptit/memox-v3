@@ -1,13 +1,13 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-20
 applies_to: deck entity and deck management feature
 ---
 
 # Deck Management
 
-> **Status: Partial — `decks` table + create/rename/reorder/move/**delete** backend Current
-> (schema v2/v3, 2026-06-20); folder/deck due+card counts Specified (WBS 3.7.x); FE wiring and
-> language picker UI Specified; root-level decks Rejected / Out of Scope.**
+> **Status: Partial — `decks` table + create/rename/reorder/move/**delete** backend + folder/deck
+> due+card counts Current (schema v2/v3, 2026-06-20); FE wiring and language picker UI Specified;
+> root-level decks Rejected / Out of Scope.**
 >
 > The `decks` table shipped in **schema v2** (`lib/data/datasources/local/drift/decks.drift`,
 > migration `v2_add_decks.dart`) with `folder_id` (FK→folders ON DELETE CASCADE) and
@@ -20,8 +20,10 @@ applies_to: deck entity and deck management feature
 > row delete cascades to its flashcards and, through the schema chain, their `flashcard_progress` +
 > `flashcard_tags` rows (`flashcards.deck_id` ON DELETE CASCADE, schema v3); the source folder
 > reverts to `unlocked` when it loses its last deck. Study attempt/session cascade is added when
-> those tables ship (WBS 4.x). **Folder/deck due+card counts (WBS 3.7.x)** remain Specified. What
-> also remains Specified: wiring create/rename/reorder/move/delete into the
+> those tables ship (WBS 4.x). **Folder/deck due+card counts (WBS 3.7.1)** are now Current: the
+> folder read models (`FolderSummary`/`FolderDetail`) carry direct `deckCount` and recursive
+> subtree `cardCount`/`dueCount` (`due_at <= now`, NEW excluded) via the `folder_queries.drift`
+> count queries. What remains Specified: wiring create/rename/reorder/move/delete into the
 > deck actions UI, the target-language picker in deck create/edit UI, and TTS gating (blocked on the
 > TTS service, WBS 8.4.x — not on schema).
 >

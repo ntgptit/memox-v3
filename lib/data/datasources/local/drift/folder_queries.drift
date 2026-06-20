@@ -1,32 +1,111 @@
 import 'folders.drift';
+import 'decks.drift';
+import 'flashcards.drift';
 
 -- Read queries for the Library overview and Folder detail screens, plus the
 -- recursive helpers used by delete-cascade and breadcrumb resolution. Single
 -- table mutations (insert/update/delete) use Drift's query builder in
 -- FolderDao instead — see docs/database/drift-guide.md.
 
--- Root folders (Library root), each with its direct subfolder count. Stable
--- order: manual sort_order, then created_at, then id as a deterministic
--- tie-breaker. WBS 3.1.1.
-rootFolderSummaries:
+-- Root folders (Library root), each with its counts. `subfolder_count` and
+-- `deck_count` are direct children; `card_count` and `due_count` are recursive
+-- over the folder subtree (the folder plus every descendant folder's decks'
+-- cards). `due_count` counts scheduled cards that have come due
+-- (`due_at IS NOT NULL AND due_at <= :now`) — NEW cards (`due_at IS NULL`) are
+-- not due. Suspend/bury columns do not exist yet, so the F13 "exclude
+-- suspended/buried" rule is trivially satisfied; add the exclusion here when
+-- those columns ship. The whole-forest `subtree_counts` CTE computes every
+-- folder's subtree totals once, then the outer SELECT joins by id. Stable
+-- order: manual sort_order, then created_at, then id. WBS 3.1.1 / 3.7.1.
+rootFolderSummaries(:now AS INT):
+WITH RECURSIVE subtree(root_id, node_id) AS (
+  SELECT folders.id, folders.id FROM folders
+  UNION ALL
+  SELECT subtree.root_id, child.id
+  FROM folders child JOIN subtree ON child.parent_id = subtree.node_id
+),
+subtree_counts AS (
+  -- COUNT(fc.id) needs no DISTINCT: each card belongs to exactly one deck and
+  -- each deck to exactly one folder, so a (root_id, card) pair is unique.
+  SELECT
+    subtree.root_id AS fid,
+    COUNT(fc.id) AS card_count,
+    COUNT(CASE WHEN fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
+      AS due_count
+  FROM subtree
+  LEFT JOIN decks d ON d.folder_id = subtree.node_id
+  LEFT JOIN flashcards fc ON fc.deck_id = d.id
+  LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+  GROUP BY subtree.root_id
+)
 SELECT
   folders.**,
   (SELECT COUNT(*) FROM folders sub WHERE sub.parent_id = folders.id)
-    AS subfolder_count
+    AS subfolder_count,
+  (SELECT COUNT(*) FROM decks dd WHERE dd.folder_id = folders.id)
+    AS deck_count,
+  COALESCE(sc.card_count, 0) AS card_count,
+  COALESCE(sc.due_count, 0) AS due_count
 FROM folders
+LEFT JOIN subtree_counts sc ON sc.fid = folders.id
 WHERE folders.parent_id IS NULL
 ORDER BY folders.sort_order, folders.created_at, folders.id;
 
--- Direct child folders of :parentId with their own subfolder counts, same
--- stable order. WBS 3.2.1.
-childFolderSummaries(:parentId AS TEXT):
+-- Direct child folders of :parentId with their own counts, same stable order
+-- and the same count semantics as rootFolderSummaries. WBS 3.2.1 / 3.7.1.
+childFolderSummaries(:parentId AS TEXT, :now AS INT):
+WITH RECURSIVE subtree(root_id, node_id) AS (
+  SELECT folders.id, folders.id FROM folders
+  UNION ALL
+  SELECT subtree.root_id, child.id
+  FROM folders child JOIN subtree ON child.parent_id = subtree.node_id
+),
+subtree_counts AS (
+  -- COUNT(fc.id) needs no DISTINCT: each card belongs to exactly one deck and
+  -- each deck to exactly one folder, so a (root_id, card) pair is unique.
+  SELECT
+    subtree.root_id AS fid,
+    COUNT(fc.id) AS card_count,
+    COUNT(CASE WHEN fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
+      AS due_count
+  FROM subtree
+  LEFT JOIN decks d ON d.folder_id = subtree.node_id
+  LEFT JOIN flashcards fc ON fc.deck_id = d.id
+  LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+  GROUP BY subtree.root_id
+)
 SELECT
   folders.**,
   (SELECT COUNT(*) FROM folders sub WHERE sub.parent_id = folders.id)
-    AS subfolder_count
+    AS subfolder_count,
+  (SELECT COUNT(*) FROM decks dd WHERE dd.folder_id = folders.id)
+    AS deck_count,
+  COALESCE(sc.card_count, 0) AS card_count,
+  COALESCE(sc.due_count, 0) AS due_count
 FROM folders
+LEFT JOIN subtree_counts sc ON sc.fid = folders.id
 WHERE folders.parent_id = :parentId
 ORDER BY folders.sort_order, folders.created_at, folders.id;
+
+-- Aggregate counts for the viewed folder :id itself: `deck_count` is its direct
+-- decks; `card_count` / `due_count` are recursive over its subtree (same
+-- semantics as the summaries above). Single-row result. WBS 3.2.1 / 3.7.1.
+folderSubtreeCounts(:id AS TEXT, :now AS INT):
+WITH RECURSIVE subtree(node_id) AS (
+  SELECT :id
+  UNION ALL
+  SELECT child.id
+  FROM folders child JOIN subtree ON child.parent_id = subtree.node_id
+)
+SELECT
+  (SELECT COUNT(*) FROM decks WHERE folder_id = :id) AS deck_count,
+  COUNT(fc.id) AS card_count,
+  COUNT(CASE WHEN fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
+    AS due_count
+FROM subtree
+LEFT JOIN decks d ON d.folder_id = subtree.node_id
+LEFT JOIN flashcards fc ON fc.deck_id = d.id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id;
 
 -- Ancestor chain for :id, ordered root -> leaf (inclusive of :id) for the
 -- folder-detail breadcrumb header. WBS 3.2.1.

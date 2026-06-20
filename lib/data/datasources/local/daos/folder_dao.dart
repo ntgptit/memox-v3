@@ -16,14 +16,27 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
 
   // ---- Reads (streams power the Library / Folder-detail screens) ----
 
-  /// Root folders + counts, as a live stream. WBS 3.1.1.
-  Stream<List<RootFolderSummariesResult>> watchRootFolderSummaries() =>
-      rootFolderSummaries().watch();
+  /// Root folders + counts, as a live stream. [nowMs] is the UTC epoch-ms
+  /// reference used to decide which scheduled cards count as due. WBS 3.1.1 /
+  /// 3.7.1.
+  Stream<List<RootFolderSummariesResult>> watchRootFolderSummaries(int nowMs) =>
+      rootFolderSummaries(nowMs).watch();
 
-  /// Direct child folders of [parentId] + counts, as a live stream. WBS 3.2.1.
+  /// Direct child folders of [parentId] + counts, as a live stream. [nowMs] is
+  /// the due-reference epoch-ms. WBS 3.2.1 / 3.7.1.
   Stream<List<ChildFolderSummariesResult>> watchChildFolderSummaries(
     String parentId,
-  ) => childFolderSummaries(parentId).watch();
+    int nowMs,
+    // Drift orders generated params by first appearance in the SQL text, so
+    // `:now` (in the counts CTE) precedes `:parentId` — pass nowMs first.
+  ) => childFolderSummaries(nowMs, parentId).watch();
+
+  /// Aggregate counts for [id] itself (direct deck count + recursive subtree
+  /// card/due counts). [nowMs] is the due-reference epoch-ms. WBS 3.7.1.
+  Future<FolderSubtreeCountsResult> folderSubtreeCountsFor(
+    String id,
+    int nowMs,
+  ) => folderSubtreeCounts(id, nowMs).getSingle();
 
   /// Ancestor chain root -> leaf (inclusive) for the breadcrumb header.
   Future<List<FolderRow>> getBreadcrumb(String id) async {
