@@ -62,7 +62,7 @@ study mode.
 | `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. Per-pair persistence; one board per 5 cards.                               |
 | `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit.                                                             |
 | `recall` | front → back             | Show front, tap "Show answer" to reveal back, self-grade with Forgot / Got it. **No text input in v1**; typed-answer recall is a Future Proposal.                                   |
-| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match; "Mark correct" override path. Optional Hint button taints result to max `recovered`. |
+| `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match (V1: case-sensitive, trim-only — `TypedAnswerStudyModeStrategy.evaluate`); "Mark correct" override path + Hint taint to max `recovered` land with WBS 4.5.8. |
 
 Direction notes:
 

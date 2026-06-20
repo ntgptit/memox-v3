@@ -51,7 +51,8 @@ Do not implement `Migration Required` concepts unless the task explicitly includ
 
 ### AttemptResult
 
-**Status:** Target domain type.
+**Status:** Current domain type (`lib/domain/types/attempt_result.dart`, WBS 4.5.1).
+Storage codec lands with attempt persistence (WBS 4.4.1).
 
 The 4 SRS grading outcomes. **Pass/fail only** (no Hard/Easy variants).
 
@@ -98,7 +99,8 @@ Source: `docs/business/srs/srs-review.md`.
 
 ### StudyMode
 
-**Status:** Target domain type.
+**Status:** Current domain type (`lib/domain/types/study_mode.dart`, WBS 4.5.1).
+Storage codec lands with attempt persistence (WBS 4.4.1).
 
 The 5 modes of card interaction.
 
