@@ -124,7 +124,11 @@ class FolderRepositoryImpl implements FolderRepository {
   // ---- Mutations ----
 
   @override
-  Future<Result<Folder>> createRootFolder({required String name}) async {
+  Future<Result<Folder>> createRootFolder({
+    required String name,
+    String? color,
+    String? icon,
+  }) async {
     final String trimmed = name.trim();
     final Failure? invalid = _validateName(trimmed);
     if (invalid != null) return _fail<Folder>(invalid);
@@ -139,6 +143,8 @@ class FolderRepositoryImpl implements FolderRepository {
           parentId: null,
           name: trimmed,
           siblings: siblings,
+          color: color,
+          icon: icon,
         );
         await _dao.insertFolder(_insertCompanion(folder));
         return _ok(folder);
@@ -152,6 +158,8 @@ class FolderRepositoryImpl implements FolderRepository {
   Future<Result<Folder>> createSubfolder({
     required FolderId parentId,
     required String name,
+    String? color,
+    String? icon,
   }) async {
     final String trimmed = name.trim();
     final Failure? invalid = _validateName(trimmed);
@@ -177,6 +185,8 @@ class FolderRepositoryImpl implements FolderRepository {
           parentId: parentId,
           name: trimmed,
           siblings: siblings,
+          color: color,
+          icon: icon,
         );
         await _dao.insertFolder(_insertCompanion(child));
 
@@ -202,6 +212,8 @@ class FolderRepositoryImpl implements FolderRepository {
   Future<Result<Folder>> renameFolder({
     required FolderId id,
     required String newName,
+    String? color,
+    String? icon,
   }) async {
     final String trimmed = newName.trim();
     final Failure? invalid = _validateName(trimmed);
@@ -213,27 +225,41 @@ class FolderRepositoryImpl implements FolderRepository {
         if (row == null) {
           return _fail<Folder>(const Failure.notFound(entity: 'folder'));
         }
-        // No-op when the trimmed name is unchanged.
-        if (row.name == trimmed) return _ok(FolderMapper.fromRow(row));
+        final bool nameChanged = row.name != trimmed;
+        // No-op when neither the name nor any style token changes.
+        if (!nameChanged && color == null && icon == null) {
+          return _ok(FolderMapper.fromRow(row));
+        }
 
-        final List<FolderRow> siblings = await _dao.siblingFolders(
-          row.parentId,
-        );
-        final Failure? duplicate = _duplicateAmong(
-          siblings,
-          trimmed,
-          excludeId: id,
-        );
-        if (duplicate != null) return _fail<Folder>(duplicate);
+        if (nameChanged) {
+          final List<FolderRow> siblings = await _dao.siblingFolders(
+            row.parentId,
+          );
+          final Failure? duplicate = _duplicateAmong(
+            siblings,
+            trimmed,
+            excludeId: id,
+          );
+          if (duplicate != null) return _fail<Folder>(duplicate);
+        }
 
         final int now = _nowMs();
         await _dao.updateFolderColumns(
           id,
-          FoldersCompanion(name: Value(trimmed), updatedAt: Value(now)),
+          FoldersCompanion(
+            name: Value(trimmed),
+            // V1 carries new tokens only; a null param leaves the stored token
+            // untouched (clearing a token is deferred — WBS 2.22.1).
+            color: color == null ? const Value.absent() : Value(color),
+            icon: icon == null ? const Value.absent() : Value(icon),
+            updatedAt: Value(now),
+          ),
         );
         return _ok(
           FolderMapper.fromRow(row).copyWith(
             name: trimmed,
+            color: color ?? row.color,
+            icon: icon ?? row.icon,
             updatedAt: DateTime.fromMillisecondsSinceEpoch(now, isUtc: true),
           ),
         );

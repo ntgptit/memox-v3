@@ -11,8 +11,8 @@ status: contract
 > `Result<T>` contract (not `Either`/`fpdart`) and these **folders-only** members:
 > `watchLibraryOverview()` → `Stream<LibraryOverview>`,
 > `watchFolderDetail(id)` → `Stream<FolderDetail?>`,
-> `createRootFolder({name})`, `createSubfolder({parentId, name})`,
-> `renameFolder({id, newName})` → `Result<Folder>`, `deleteFolder({id})` → `Result<void>`,
+> `createRootFolder({name, color?, icon?})`, `createSubfolder({parentId, name, color?, icon?})`,
+> `renameFolder({id, newName, color?, icon?})` → `Result<Folder>`, `deleteFolder({id})` → `Result<void>`,
 > `moveFolder({id, newParentId})` → `Result<Folder>`,
 > `getFolderMoveTargets({folderId})` → `Result<List<FolderMoveTarget>>`, and
 > `reorderFolders({parentId, orderedIds})` → `Result<void>`.

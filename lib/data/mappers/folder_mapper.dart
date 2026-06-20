@@ -16,6 +16,8 @@ abstract final class FolderMapper {
     parentId: row.parentId,
     name: row.name,
     contentMode: contentModeFromStorage(row.contentMode),
+    color: row.color,
+    icon: row.icon,
     sortOrder: row.sortOrder,
     createdAt: DateTime.fromMillisecondsSinceEpoch(row.createdAt, isUtc: true),
     updatedAt: DateTime.fromMillisecondsSinceEpoch(row.updatedAt, isUtc: true),

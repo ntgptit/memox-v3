@@ -23,5 +23,11 @@ sealed class Folder with _$Folder {
     required int sortOrder,
     required DateTime createdAt,
     required DateTime updatedAt,
+
+    /// Optional presentation tokens chosen via the folder create/edit pickers
+    /// (WBS 2.22.1). `null` means "no custom token" — the UI falls back to the
+    /// theme default. Stored as opaque design-system token strings.
+    String? color,
+    String? icon,
   }) = _Folder;
 }

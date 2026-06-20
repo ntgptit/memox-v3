@@ -7,7 +7,7 @@ import 'package:memox/domain/types/ids.dart';
 /// [FolderRepository.renameFolder].
 ///
 /// Contract: `docs/contracts/usecase-contracts/folder.md` §RenameFolderUseCase.
-/// Decision row F8.
+/// Decision rows F20-F22.
 class RenameFolderUseCase {
   const RenameFolderUseCase({required this.repository});
 
@@ -16,5 +16,12 @@ class RenameFolderUseCase {
   Future<Result<Folder>> call({
     required FolderId id,
     required String newName,
-  }) => repository.renameFolder(id: id, newName: newName);
+    String? color,
+    String? icon,
+  }) => repository.renameFolder(
+    id: id,
+    newName: newName,
+    color: color,
+    icon: icon,
+  );
 }

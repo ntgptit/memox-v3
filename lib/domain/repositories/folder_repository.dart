@@ -29,14 +29,24 @@ abstract interface class FolderRepository {
 
   /// Create a root folder (`parent_id = NULL`, `content_mode = unlocked`).
   ///
+  /// Optional [color] / [icon] presentation tokens are stored as-is (`null` =
+  /// no custom token; WBS 2.22.1).
+  ///
   /// Rejects empty-after-trim ([ValidationCode.empty]) and case-insensitive
   /// duplicate among root folders ([ValidationCode.duplicate]). Decision rows
   /// F1, F2.
-  Future<Result<Folder>> createRootFolder({required String name});
+  Future<Result<Folder>> createRootFolder({
+    required String name,
+    String? color,
+    String? icon,
+  });
 
   /// Create a subfolder under [parentId] and lock the parent to
   /// [ContentMode.subfolders] when it was [ContentMode.unlocked] — one
   /// transaction.
+  ///
+  /// Optional [color] / [icon] presentation tokens are stored as-is (`null` =
+  /// no custom token; WBS 2.22.1).
   ///
   /// Rejects: missing parent ([NotFoundFailure]); parent locked to decks
   /// ([UnsupportedActionFailure] `folder_contains_decks`); empty-after-trim;
@@ -44,16 +54,23 @@ abstract interface class FolderRepository {
   Future<Result<Folder>> createSubfolder({
     required FolderId parentId,
     required String name,
+    String? color,
+    String? icon,
   });
 
-  /// Rename [id] to [newName].
+  /// Rename [id] to [newName], optionally re-styling its [color] / [icon].
   ///
-  /// Trims; rejects empty and case-insensitive duplicate among siblings; no-op
-  /// (returns the unchanged folder) when the trimmed name equals the current
-  /// name. Decision row F8.
+  /// Trims; rejects empty and case-insensitive duplicate among siblings.
+  /// Optional [color] / [icon] presentation tokens, when non-null, overwrite the
+  /// stored token (V1 carries new values only; `null` leaves the token
+  /// unchanged — clearing a token is deferred; WBS 2.22.1). No-op (returns the
+  /// unchanged folder) when the trimmed name equals the current name and no
+  /// color/icon token is supplied. Decision rows F20-F22.
   Future<Result<Folder>> renameFolder({
     required FolderId id,
     required String newName,
+    String? color,
+    String? icon,
   });
 
   /// Recursively delete [id] and its descendant folders in one transaction,

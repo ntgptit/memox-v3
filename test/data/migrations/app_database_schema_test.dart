@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v4)', () {
+  group('AppDatabase schema (v5)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,8 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 4);
-      expect(db.schemaVersion, 4);
+      expect(AppDatabase.currentSchemaVersion, 5);
+      expect(db.schemaVersion, 5);
     });
 
     Future<void> insertDeckRow(String id, String folderId) async {
@@ -242,6 +242,31 @@ void main() {
       expect(rows, hasLength(1));
       expect(rows.single.name, 'Root');
       expect(rows.single.parentId, isNull);
+      // color/icon default to NULL when not supplied (WBS 2.22.1).
+      expect(rows.single.color, isNull);
+      expect(rows.single.icon, isNull);
+    });
+
+    test('round-trips the optional folder color + icon tokens', () async {
+      final int ts = now();
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'styled',
+              name: 'Styled',
+              contentMode: 'unlocked',
+              color: const Value('coral'),
+              icon: const Value('book'),
+              sortOrder: 0,
+              createdAt: ts,
+              updatedAt: ts,
+            ),
+          );
+
+      final FolderRow row = await db.select(db.folders).getSingle();
+      expect(row.color, 'coral');
+      expect(row.icon, 'book');
     });
 
     test('persists a subfolder self-reference', () async {

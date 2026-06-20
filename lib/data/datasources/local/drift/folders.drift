@@ -5,11 +5,18 @@
 -- parent_id uses ON DELETE RESTRICT: no orphan is created via the direct FK;
 -- cascade cleanup is handled inside a transaction by the repository layer.
 -- Timestamps are UTC epoch milliseconds; ids are text (UUID-like).
+-- `color` / `icon` are optional presentation tokens chosen via the folder
+-- create/edit pickers (WBS 2.22.1). Both are nullable TEXT: NULL means "no
+-- custom token", so the UI falls back to the theme default. Stored as opaque
+-- design-system token strings (e.g. a colour/icon key); the allowed set is an
+-- FE concern, so the schema imposes no CHECK.
 CREATE TABLE folders (
   id TEXT NOT NULL PRIMARY KEY,
   parent_id TEXT REFERENCES folders (id) ON DELETE RESTRICT,
   name TEXT NOT NULL,
   content_mode TEXT NOT NULL,
+  color TEXT,
+  icon TEXT,
   sort_order INTEGER NOT NULL,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL

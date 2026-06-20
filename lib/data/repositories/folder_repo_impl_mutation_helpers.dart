@@ -54,11 +54,14 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
         1;
   }
 
-  /// Build a fresh unlocked [Folder] with a generated id and current timestamps.
+  /// Build a fresh unlocked [Folder] with a generated id and current timestamps,
+  /// carrying the optional [color] / [icon] presentation tokens (WBS 2.22.1).
   Folder _buildNewFolder({
     required FolderId? parentId,
     required String name,
     required List<FolderRow> siblings,
+    String? color,
+    String? icon,
   }) {
     final int now = _nowMs();
     final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(
@@ -70,6 +73,8 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
       parentId: parentId,
       name: name,
       contentMode: ContentMode.unlocked,
+      color: color,
+      icon: icon,
       sortOrder: _nextSortOrder(siblings),
       createdAt: timestamp,
       updatedAt: timestamp,
@@ -81,6 +86,8 @@ extension FolderRepositoryMutationHelpers on FolderRepositoryImpl {
     parentId: Value(folder.parentId),
     name: folder.name,
     contentMode: FolderMapper.contentModeToStorage(folder.contentMode),
+    color: Value(folder.color),
+    icon: Value(folder.icon),
     sortOrder: folder.sortOrder,
     createdAt: folder.createdAt.toUtc().millisecondsSinceEpoch,
     updatedAt: folder.updatedAt.toUtc().millisecondsSinceEpoch,

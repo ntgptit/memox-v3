@@ -16,5 +16,12 @@ class CreateSubfolderUseCase {
   Future<Result<Folder>> call({
     required FolderId parentId,
     required String name,
-  }) => repository.createSubfolder(parentId: parentId, name: name);
+    String? color,
+    String? icon,
+  }) => repository.createSubfolder(
+    parentId: parentId,
+    name: name,
+    color: color,
+    icon: icon,
+  );
 }
