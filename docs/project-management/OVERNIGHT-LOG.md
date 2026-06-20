@@ -12,3 +12,34 @@ Append-only, newest-last. One line per task: `[time] commit-hash · WBS ID · su
 - [loop-8] 237160c · 4.4.1 · Submit self-grade BE: SrsBox.nextBox box transition (perfect+1cap8/recovered-stay/forgot-1); StudyRepository.recordStudySessionAnswer (transactional attempt insert + answered_at + updated_at, progress untouched=finalization-owned; terminal/already-answered→UnsupportedAction; new-card→box1); mapper result/study_mode tokens; RecordStudySessionAnswerUseCase + DI; 7+5 tests; study.md/srs-review/decision S6/S35/S36/S76 synced · **DONE**
 - [loop-9] 7ee272b · 4.2.2 · No-silent-resume gate BE: StudyRepository.findResumable + StudySessionDao.findResumableSession (NULL-safe scope match, draft/in_progress, 30d window strict>, most-recent; study_type NOT in conflict key per contract); StudyEntryStartResult sealed (resumeRequired/canStart/blocked) + ResolveStudyEntryStartUseCase gate composing eligibility 4.1.1; DI; 7+3 tests; study.md/decision S28 synced · **DONE**
 - [loop-10] a36f632 · 5.1.1 · Dashboard Continue-Studying summary BE: DashboardResumeSessionSummary model (scope/answered/total/lastActive + progress); dashboardResumeSession .drift query (most-recent resumable any-scope, 30d window, COUNT items + COUNT(answered_at)); DashboardRepository.loadResumeSessionSummary (null=no session, not error); LoadDashboardResumeSummaryUseCase + DI; 5 tests; engagement contract note · **DONE**
+
+---
+
+## TỔNG KẾT phiên xuyên đêm (2026-06-21, loop-1…loop-10) — PAUSED at loop-11
+
+**10 commits feature đã push lên `main` (mỗi cái lật ≥1 WBS ID Specified→Implemented; verify XANH + dual-review + doc-parity):**
+
+| # | WBS | Commit | Tóm tắt |
+|---|-----|--------|---------|
+| 1 | 4.0.1 | ce978d1 | Study persistence schema v6 (study_sessions/items/attempts) + StudyRepository skeleton + DAO + DI |
+| 2 | 4.1.1 | 640ef46 | Study entry eligibility BE (EntryType/StudyType/StudyScope + empty-scope matrix classification) |
+| 3 | 4.2.1 | 201fe72 | Session creation BE (transactional session+ordered items, StudySession entity + mapper) |
+| 4 | 4.2.4 | 15a4d74 | Session batch limit (maxSessionItems cap in use case) |
+| 5 | 4.10.1 | 793e542 | Cancel/discard session BE (guarded status→cancelled, terminal→UnsupportedAction) |
+| 6 | 4.3.1 | 275f6d7 | Session item loading BE (StudySessionReview header+ordered flashcard-joined items) |
+| 7 | 4.5.1 | d238c9d | Study mode strategy V1 BE (AttemptResult/StudyMode enums + sealed families + factory) |
+| 8 | 4.4.1 | 237160c | Submit self-grade BE (SrsBox box transition + recordStudySessionAnswer transactional) |
+| 9 | 4.2.2 | 7ee272b | No-silent-resume gate BE (findResumable + StudyEntryStartResult + gate use case) |
+| 10 | 5.1.1 | a36f632 | Dashboard Continue-Studying summary BE (resumable read model + progress) |
+
+**BE study chain hiện chạy được tới mức data-layer:** resume-gate → eligibility → create → load → answer → cancel. SRS box transition đã ghi per-attempt; flashcard_progress chờ finalization.
+
+**TASK CÒN LẠI eligible nhưng PAUSED (lý do — KHÔNG phải blocked thật):**
+- **4.6.1 Finish session BE (finalization)** — keystone lớn nhất + nhạy cảm SRS (transaction + interval table + due_at=localMidnight + progress upsert + lapse + rollback; biên 4.6.1/4.6.2/4.6.4 đan nhau). Spec rõ (srs-review §transition+interval tables) nhưng task nặng & dễ sai semantic → để dành 1 run context-tươi để tránh "để dở"/sai semantic đã commit. KHÔNG cần quyết định sản phẩm.
+- **4.5.2 Review mode BE** — delta BE so với 4.5.1 mỏng/không rõ ("both-sides + attempt semantics" hầu hết đã có ở BinaryGrade); cần làm chung với FE 4.5.3 hoặc làm rõ scope.
+- **4.10.2 Resume expiry anchor** — hành vi anchor-on-updated_at ĐÃ thoả mãn bởi 4.0.1/4.2.2/4.3.1/4.4.1/5.1.1 (findResumable + dashboard filter updated_at; answer bump updated_at; read-only load không bump). Chỉ còn test khoá hành vi — không phải feature code-mới.
+
+## DANH SÁCH QUYẾT ĐỊNH CẦN USER (sáng dậy trả lời)
+1. **today + newCards** (đã nêu nhiều lần): `study-flow.md` nói `today` luôn `srs_review`, nhưng `docs/wireframes/01-dashboard.md` + dashboard visual-contract tham chiếu CTA `goStudyEntry(today, newCards)`. Code hiện xử lý phòng thủ (today+new → đếm active cards) + có test khoá. **Hỏi:** today+new có phải entry hợp lệ không, hay reject? (Khuyến nghị: hợp lệ — "học bài mới hôm nay" — giữ hành vi hiện tại; nếu KHÔNG, đổi sang reject + sửa wireframe.)
+2. **4.6.1 next:** xác nhận làm finalization gộp box-transition(4.6.2)+due_at-midnight(4.6.4) trong 1 slice, hay tách 4.6.1 (chỉ transaction+mark-complete) trước rồi 4.6.2/4.6.4 sau. (Khuyến nghị: gộp — chúng đan nhau, tách ra tạo trạng thái nửa vời.)
+3. **4.5.2 scope:** xác nhận review-mode BE = tách `ReviewStudyModeStrategy` ra file riêng + trait "both-sides/no-reveal", hay gộp luôn với FE 4.5.3.
