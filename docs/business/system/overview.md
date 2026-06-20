@@ -52,7 +52,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Tag filter + study-by-tag + management| Specified (tag management BE Current — WBS 8.3.1: list/count/rename/merge/delete; FE wiring + filter + study-by-tag Future)| `docs/business/tags/tag-system.md`|
 | Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
 | Deck move between folders| Specified (BE Current — WBS 2.19.1)| `docs/business/deck/deck-management.md`|
-| Session batch limit (`maxSessionItems`)| Specified| `docs/business/study/study-flow.md`|
+| Session batch limit (`maxSessionItems`)| Implemented (BE — WBS 4.2.4, cap in `CreateStudySessionUseCase`)| `docs/business/study/study-flow.md`|
 | Daily new-card limit| Specified| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
 | Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|

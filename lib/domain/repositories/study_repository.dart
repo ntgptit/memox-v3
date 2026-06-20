@@ -33,8 +33,9 @@ abstract interface class StudyRepository {
   /// `in_progress` (`docs/business/study/study-flow.md` §Session lifecycle).
   /// Returns the created [StudySession]. [flashcardIds] must be non-empty — the
   /// empty-scope gate (WBS 4.1.1) runs first; an empty list is a
-  /// `ValidationFailure`. The `maxSessionItems` cap is applied by the caller
-  /// (WBS 4.2.4). A write error maps to a `StorageFailure`.
+  /// `ValidationFailure`. The `maxSessionItems` cap is applied by
+  /// `CreateStudySessionUseCase` (WBS 4.2.4) before the list reaches this method.
+  /// A write error maps to a `StorageFailure`.
   Future<Result<StudySession>> createSession({
     required StudyScope scope,
     required List<FlashcardId> flashcardIds,

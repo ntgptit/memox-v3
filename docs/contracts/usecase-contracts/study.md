@@ -81,8 +81,11 @@ transaction (rolls back as a unit on failure → `StorageFailure(transaction)`).
 Per `docs/business/study/study-flow.md` §Session lifecycle, V1 persists the new
 session directly as `in_progress` (not `draft`). An empty `flashcardIds` list is
 a `ValidationFailure(insufficientContent)` (the eligibility gate, WBS 4.1.1, runs
-first). The `maxSessionItems` cap is applied by the caller before the list is
-passed (WBS 4.2.4); ordered-eligible-id resolution is a separate read.
+first). The `maxSessionItems` cap (default 20, `CreateStudySessionUseCase.maxSessionItems`)
+is applied **inside the use case** (WBS 4.2.4): when the resolved list is larger,
+only the first `maxSessionItems` (in the caller's resolved order — due-date for
+review, sort order for new) become session items. Ordered-eligible-id resolution
+is a separate read.
 
 ## ResumeSessionUseCase
 

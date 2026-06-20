@@ -13,6 +13,7 @@ import 'package:memox/domain/usecases/study/create_study_session_usecase.dart';
 class _FakeStudyRepository implements StudyRepository {
   int createCalls = 0;
   int? now;
+  List<FlashcardId>? lastFlashcardIds;
 
   @override
   Future<Result<StudySession>> createSession({
@@ -22,6 +23,7 @@ class _FakeStudyRepository implements StudyRepository {
   }) async {
     createCalls++;
     this.now = now;
+    lastFlashcardIds = flashcardIds;
     return (
       failure: null,
       data: StudySession(
@@ -74,5 +76,41 @@ void main() {
     expect(result.data?.id, 's1');
     expect(repo.createCalls, 1);
     expect(repo.now, inInclusiveRange(before, after));
+  });
+
+  test(
+    'caps the batch at maxSessionItems, keeping the first N in order (S1)',
+    () async {
+      final repo = _FakeStudyRepository();
+      final useCase = CreateStudySessionUseCase(repository: repo);
+      final ids = <String>[
+        for (int i = 0; i < CreateStudySessionUseCase.maxSessionItems + 5; i++)
+          'c$i',
+      ];
+
+      await useCase.call(scope: scope, flashcardIds: ids);
+
+      expect(
+        repo.lastFlashcardIds,
+        hasLength(CreateStudySessionUseCase.maxSessionItems),
+      );
+      expect(
+        repo.lastFlashcardIds,
+        ids.sublist(0, CreateStudySessionUseCase.maxSessionItems),
+        reason: 'first N in resolved order',
+      );
+    },
+  );
+
+  test('passes a list at the cap through unchanged', () async {
+    final repo = _FakeStudyRepository();
+    final useCase = CreateStudySessionUseCase(repository: repo);
+    final ids = <String>[
+      for (int i = 0; i < CreateStudySessionUseCase.maxSessionItems; i++) 'c$i',
+    ];
+
+    await useCase.call(scope: scope, flashcardIds: ids);
+
+    expect(repo.lastFlashcardIds, ids, reason: 'at-cap list passes unchanged');
   });
 }
