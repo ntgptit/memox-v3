@@ -190,4 +190,176 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get folderCreatedSnack => 'Đã tạo thư mục';
+
+  @override
+  String get folderDetailSearchTooltip => 'Tìm trong thư mục này';
+
+  @override
+  String get folderDetailSearchHint => 'Tìm trong thư mục này';
+
+  @override
+  String get folderDetailLoadFailedTitle => 'Không tải được thư mục';
+
+  @override
+  String get folderDetailLoadFailedMessage =>
+      'Không thể truy cập thư mục này. Kiểm tra kết nối và thử lại.';
+
+  @override
+  String get folderDetailEmptyTitle => 'Thư mục trống';
+
+  @override
+  String get folderDetailEmptyMessage =>
+      'Thêm một bộ thẻ, hoặc tạo thư mục con để sắp xếp gọn gàng.';
+
+  @override
+  String get folderDetailCreateDeck => 'Tạo bộ thẻ';
+
+  @override
+  String get folderDetailCreateSubfolder => 'Tạo thư mục con';
+
+  @override
+  String folderDetailDecksHeader(int count) {
+    return '$count bộ thẻ';
+  }
+
+  @override
+  String folderDetailFoldersHeader(int count) {
+    return '$count thư mục';
+  }
+
+  @override
+  String get folderStatDecks => 'Bộ thẻ';
+
+  @override
+  String get folderStatCards => 'Thẻ';
+
+  @override
+  String get folderStatDue => 'Đến hạn';
+
+  @override
+  String get folderStatSubfolders => 'Thư mục con';
+
+  @override
+  String get deckCreateTitle => 'Bộ thẻ mới';
+
+  @override
+  String get deckCreateNameLabel => 'Tên bộ thẻ';
+
+  @override
+  String get deckCreateLanguageLabel => 'Ngôn ngữ';
+
+  @override
+  String get deckCreateConfirm => 'Tạo';
+
+  @override
+  String get deckLanguageKorean => 'Tiếng Hàn';
+
+  @override
+  String get deckLanguageEnglish => 'Tiếng Anh';
+
+  @override
+  String get deckActionRename => 'Đổi tên';
+
+  @override
+  String get deckActionDelete => 'Xóa bộ thẻ';
+
+  @override
+  String get deckOverflowTooltip => 'Tùy chọn bộ thẻ';
+
+  @override
+  String get deckCreatedSnack => 'Đã tạo bộ thẻ';
+
+  @override
+  String get deckRenamedSnack => 'Đã đổi tên bộ thẻ';
+
+  @override
+  String get deckDeletedSnack => 'Đã xóa bộ thẻ';
+
+  @override
+  String get deckDeleteTitle => 'Xóa bộ thẻ này?';
+
+  @override
+  String deckDeleteMessage(int count) {
+    return 'Thao tác này xóa vĩnh viễn bộ thẻ này và $count thẻ, cùng toàn bộ tiến độ học. Không thể hoàn tác.';
+  }
+
+  @override
+  String get deckDeleteConfirm => 'Xóa';
+
+  @override
+  String get flashcardSearchTooltip => 'Tìm thẻ';
+
+  @override
+  String get flashcardSearchHint => 'Tìm thẻ';
+
+  @override
+  String get flashcardLoadFailedTitle => 'Không tải được thẻ';
+
+  @override
+  String get flashcardLoadFailedMessage =>
+      'Không thể truy cập bộ thẻ này. Kiểm tra kết nối và thử lại.';
+
+  @override
+  String get flashcardEmptyTitle => 'Chưa có thẻ nào';
+
+  @override
+  String get flashcardEmptyMessage => 'Thêm thẻ đầu tiên để bắt đầu học.';
+
+  @override
+  String get flashcardAddCardLabel => 'Thêm thẻ';
+
+  @override
+  String flashcardCountHeader(int count) {
+    return '$count thẻ';
+  }
+
+  @override
+  String get flashcardErrorEmpty => 'Mặt trước và mặt sau đều bắt buộc.';
+
+  @override
+  String get flashcardErrorDuplicate => 'Đã có thẻ trùng mặt trước và mặt sau.';
+
+  @override
+  String get flashcardErrorNotFound => 'Thẻ này không còn tồn tại.';
+
+  @override
+  String get flashcardActionGenericError =>
+      'Đã có lỗi xảy ra. Vui lòng thử lại.';
+
+  @override
+  String get cardCreateTitle => 'Thêm thẻ';
+
+  @override
+  String get cardEditTitle => 'Sửa thẻ';
+
+  @override
+  String get cardFrontLabel => 'Mặt trước';
+
+  @override
+  String get cardBackLabel => 'Mặt sau';
+
+  @override
+  String get cardCreateConfirm => 'Thêm';
+
+  @override
+  String get cardEditConfirm => 'Lưu';
+
+  @override
+  String get cardCreatedSnack => 'Đã thêm thẻ';
+
+  @override
+  String get cardSavedSnack => 'Đã lưu thẻ';
+
+  @override
+  String get cardDeleteTitle => 'Xóa thẻ này?';
+
+  @override
+  String get cardDeleteMessage =>
+      'Thao tác này xóa vĩnh viễn thẻ này và tiến độ học của nó. Không thể hoàn tác.';
+
+  @override
+  String get cardDeleteConfirm => 'Xóa';
+
+  @override
+  String get cardDeletedSnack => 'Đã xóa thẻ';
 }

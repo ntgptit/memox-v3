@@ -427,6 +427,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Folder created'**
   String get folderCreatedSnack;
+
+  /// Tooltip for the folder-detail search icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Search this folder'**
+  String get folderDetailSearchTooltip;
+
+  /// Hint for the folder-detail search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search this folder'**
+  String get folderDetailSearchHint;
+
+  /// Folder-detail error title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load folder'**
+  String get folderDetailLoadFailedTitle;
+
+  /// Folder-detail error body.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t reach this folder. Check your connection and try again.'**
+  String get folderDetailLoadFailedMessage;
+
+  /// Title of the empty (unlocked) folder state.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty folder'**
+  String get folderDetailEmptyTitle;
+
+  /// Body of the empty folder state.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a deck of cards, or nest a subfolder to keep things organized.'**
+  String get folderDetailEmptyMessage;
+
+  /// Create-deck CTA / FAB tooltip on folder detail.
+  ///
+  /// In en, this message translates to:
+  /// **'Create deck'**
+  String get folderDetailCreateDeck;
+
+  /// Create-subfolder CTA / FAB tooltip on folder detail.
+  ///
+  /// In en, this message translates to:
+  /// **'Create subfolder'**
+  String get folderDetailCreateSubfolder;
+
+  /// Folder-detail section header counting decks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} decks'**
+  String folderDetailDecksHeader(int count);
+
+  /// Folder-detail section header counting subfolders.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} folders'**
+  String folderDetailFoldersHeader(int count);
+
+  /// Folder-detail stat label: decks.
+  ///
+  /// In en, this message translates to:
+  /// **'Decks'**
+  String get folderStatDecks;
+
+  /// Folder-detail stat label: cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards'**
+  String get folderStatCards;
+
+  /// Folder-detail stat label: due cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get folderStatDue;
+
+  /// Folder-detail stat label: subfolders.
+  ///
+  /// In en, this message translates to:
+  /// **'Subfolders'**
+  String get folderStatSubfolders;
+
+  /// Title of the create-deck dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'New deck'**
+  String get deckCreateTitle;
+
+  /// Name field label in the create-deck dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck name'**
+  String get deckCreateNameLabel;
+
+  /// Language picker label in the create-deck dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get deckCreateLanguageLabel;
+
+  /// Confirm action in the create-deck dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get deckCreateConfirm;
+
+  /// Deck target-language choice: Korean.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get deckLanguageKorean;
+
+  /// Deck target-language choice: English.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get deckLanguageEnglish;
+
+  /// Deck action-sheet row: rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get deckActionRename;
+
+  /// Deck action-sheet row: delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete deck'**
+  String get deckActionDelete;
+
+  /// Tooltip for the deck overflow action.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck options'**
+  String get deckOverflowTooltip;
+
+  /// Snackbar after a successful deck create.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck created'**
+  String get deckCreatedSnack;
+
+  /// Snackbar after a successful deck rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck renamed'**
+  String get deckRenamedSnack;
+
+  /// Snackbar after a successful deck delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck deleted'**
+  String get deckDeletedSnack;
+
+  /// Delete-deck confirm title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this deck?'**
+  String get deckDeleteTitle;
+
+  /// Delete-deck confirm body.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes this deck and its {count} cards, plus all study progress. This can\'t be undone.'**
+  String deckDeleteMessage(int count);
+
+  /// Confirm action in the delete-deck dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deckDeleteConfirm;
+
+  /// Tooltip for the flashcard-list search icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Search cards'**
+  String get flashcardSearchTooltip;
+
+  /// Hint for the flashcard-list search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search cards'**
+  String get flashcardSearchHint;
+
+  /// Flashcard-list error title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load cards'**
+  String get flashcardLoadFailedTitle;
+
+  /// Flashcard-list error body.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t reach this deck. Check your connection and try again.'**
+  String get flashcardLoadFailedMessage;
+
+  /// Title of the empty-deck state.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards yet'**
+  String get flashcardEmptyTitle;
+
+  /// Body of the empty-deck state.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first flashcard to start studying.'**
+  String get flashcardEmptyMessage;
+
+  /// Add-card CTA / FAB tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add card'**
+  String get flashcardAddCardLabel;
+
+  /// Flashcard-list section header counting cards.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cards'**
+  String flashcardCountHeader(int count);
+
+  /// Validation error: empty front/back.
+  ///
+  /// In en, this message translates to:
+  /// **'Front and back are both required.'**
+  String get flashcardErrorEmpty;
+
+  /// Validation error: duplicate card.
+  ///
+  /// In en, this message translates to:
+  /// **'A card with this front and back already exists.'**
+  String get flashcardErrorDuplicate;
+
+  /// Error: card/deck not found.
+  ///
+  /// In en, this message translates to:
+  /// **'That card no longer exists.'**
+  String get flashcardErrorNotFound;
+
+  /// Generic fallback error for a flashcard action.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get flashcardActionGenericError;
+
+  /// Title of the add-card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Add card'**
+  String get cardCreateTitle;
+
+  /// Title of the edit-card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit card'**
+  String get cardEditTitle;
+
+  /// Front field label in the card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get cardFrontLabel;
+
+  /// Back field label in the card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get cardBackLabel;
+
+  /// Confirm action in the add-card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get cardCreateConfirm;
+
+  /// Confirm action in the edit-card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get cardEditConfirm;
+
+  /// Snackbar after a successful card create.
+  ///
+  /// In en, this message translates to:
+  /// **'Card added'**
+  String get cardCreatedSnack;
+
+  /// Snackbar after a successful card edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Card saved'**
+  String get cardSavedSnack;
+
+  /// Delete-card confirm title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this card?'**
+  String get cardDeleteTitle;
+
+  /// Delete-card confirm body.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes this card and its study progress. This can\'t be undone.'**
+  String get cardDeleteMessage;
+
+  /// Confirm action in the delete-card dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get cardDeleteConfirm;
+
+  /// Snackbar after a successful card delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Card deleted'**
+  String get cardDeletedSnack;
 }
 
 class _AppLocalizationsDelegate

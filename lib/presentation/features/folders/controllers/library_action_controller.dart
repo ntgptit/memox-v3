@@ -1,8 +1,10 @@
 import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/types/ids.dart';
+import 'package:memox/domain/types/target_language.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'library_action_controller.g.dart';
@@ -28,6 +30,41 @@ class LibraryActionController extends _$LibraryActionController {
   }) => ref
       .read(createRootFolderUseCaseProvider)
       .call(name: name, color: color, icon: icon);
+
+  /// Create a subfolder of [parentId] with optional color/icon tokens. The
+  /// content-mode lock (parent must not hold decks) lives in the use case.
+  Future<Result<Folder>> createSubfolder({
+    required FolderId parentId,
+    required String name,
+    String? color,
+    String? icon,
+  }) => ref
+      .read(createSubfolderUseCaseProvider)
+      .call(parentId: parentId, name: name, color: color, icon: icon);
+
+  /// Create a deck in [folderId] (the folder must allow decks — enforced in the
+  /// use case).
+  Future<Result<Deck>> createDeck({
+    required FolderId folderId,
+    required String name,
+    required TargetLanguage targetLanguage,
+  }) => ref
+      .read(createDeckUseCaseProvider)
+      .call(
+        parentFolderId: folderId,
+        name: name,
+        targetLanguage: targetLanguage,
+      );
+
+  /// Rename deck [deckId] (trim / empty / duplicate rules in the use case).
+  Future<Result<Deck>> renameDeck({
+    required DeckId deckId,
+    required String newName,
+  }) => ref.read(renameDeckUseCaseProvider).call(deckId: deckId, name: newName);
+
+  /// Delete deck [deckId] and its cards (cascade). Caller MUST confirm first.
+  Future<Result<void>> deleteDeck({required DeckId deckId}) =>
+      ref.read(deleteDeckUseCaseProvider).call(id: deckId);
 
   /// Rename [id] to [newName] (trim / empty / duplicate rules live in the use
   /// case; no-op when unchanged). Decision rows F20-F22.

@@ -9,6 +9,7 @@ import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/folder_summary.dart';
@@ -84,6 +85,8 @@ class FolderRepositoryImpl implements FolderRepository {
       final List<FolderRow> breadcrumb = await _dao.getBreadcrumb(id);
       final FolderSubtreeCountsResult counts = await _dao
           .folderSubtreeCountsFor(id, now);
+      final List<FolderDeckSummariesResult> deckRows = await _dao
+          .folderDeckSummariesFor(id, now);
       return FolderDetail(
         folder: FolderMapper.fromRow(row),
         breadcrumb: breadcrumb
@@ -100,7 +103,17 @@ class FolderRepositoryImpl implements FolderRepository {
               ),
             )
             .toList(growable: false),
+        decks: deckRows
+            .map(
+              (FolderDeckSummariesResult r) => DeckSummary(
+                deck: DeckMapper.fromRow(r.decks),
+                cardCount: r.cardCount,
+                dueCount: r.dueCount,
+              ),
+            )
+            .toList(growable: false),
         deckCount: counts.deckCount,
+        subtreeDeckCount: counts.subtreeDeckCount,
         cardCount: counts.cardCount,
         dueCount: counts.dueCount,
       );

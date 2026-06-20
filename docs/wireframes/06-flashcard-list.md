@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-20
 route: /library/deck/:deckId/flashcards
 source_specs:
   - docs/business/flashcard/flashcard-management.md
@@ -11,6 +11,26 @@ source_specs:
 ---
 
 # 06 — Flashcard List
+
+> ## ⚠️ As-built banner (2026-06-20, WBS 3.4.2 — Flashcard List FE built, V1)
+>
+> The screen is implemented (`lib/presentation/features/decks/screens/flashcard_list_screen.dart`),
+> reached by tapping a deck on Folder Detail (`/library/deck/:deckId/flashcards`, child of the
+> Library branch). As-built V1 (authoritative over older prose below where they differ):
+>
+> - **Layout**: app bar (back + deck name + search + kebab=delete deck) · `{n} CARDS` overline ·
+>   grouped card of `FlashcardTile` rows (accent tile + **front** title + **back** subtitle +
+>   chevron) · `Add card` FAB.
+> - **States**: loaded · empty (hero + `Add card` CTA) · loading (skeleton) · error ·
+>   search (mode toggle) · search-no-results. Backed by the existing
+>   `watchFlashcardList` read model (`FlashcardListDetail`, server-side front/back search).
+>   Goldens: `test/presentation/features/decks/flashcard_list_test.dart`.
+> - **Card CRUD (V1, front/back only)**: FAB / empty-CTA → add-card dialog; row tap → edit-card
+>   dialog; long-press → delete-card confirm. Backed by `create/update/deleteFlashcard`.
+> - **Deferred (Future)**: the SRS **box / status chip / due** text on each row (the list read
+>   model carries no `flashcard_progress`); optional notes / pronunciation / example / **tags**
+>   in the editor; **reorder**; **import**; bulk/status filters; study entry. The full card
+>   editor is WBS 2.11.2 / 2.12.2; this V1 ships a minimal front/back dialog so a deck is usable.
 
 ## V1 verification status (2026-06-06)
 

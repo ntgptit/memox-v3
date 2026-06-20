@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-19
+last_updated: 2026-06-20
 applies_to: product scope
 note: Rebuild reset — all implementation statuses reset to Specified on 2026-06-19.
 ---
@@ -33,7 +33,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 
 | Capability| Status| Spec location|
 | ---| ---| ---|
-| Folder CRUD + move| Specified| `docs/business/folder/folder-management.md`|
+| Folder CRUD + move| FE Current (WBS 2.1.2/2.2.2/2.3.2/2.4.2 + 3.1.2/3.2.2 — create/rename/move/delete from Library + Folder Detail; reorder Future)| `docs/business/folder/folder-management.md`|
 | Folder reorder| Specified| `docs/business/folder/folder-management.md`|
 | Deck create + target language column| Specified (BE Current — WBS 2.7.1)| `docs/business/deck/deck-management.md`|
 | Deck delete| Specified (deferred — WBS 2.9.x, blocked on flashcards/progress)| `docs/business/deck/deck-management.md`|

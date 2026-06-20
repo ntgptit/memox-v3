@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-14
+last_updated: 2026-06-20
 applies_to: routing, navigation, deep links
 ---
 

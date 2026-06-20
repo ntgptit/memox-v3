@@ -215,19 +215,9 @@ void main() {
       );
     });
 
-    testWidgets('row tap opens the folder action sheet', (tester) async {
-      await _pump(tester, _value(_loaded));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('English'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Rename'), findsOneWidget);
-      expect(find.text('Move to folder'), findsOneWidget);
-      expect(find.text('Delete folder'), findsOneWidget);
-    });
-
     testWidgets('row long-press opens the folder action sheet', (tester) async {
+      // A row TAP navigates to folder detail (covered by router tests); the
+      // long-press opens the overflow sheet.
       await _pump(tester, _value(_loaded));
       await tester.pumpAndSettle();
 
@@ -235,6 +225,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Rename'), findsOneWidget);
+      expect(find.text('Move to folder'), findsOneWidget);
       expect(find.text('Delete folder'), findsOneWidget);
     });
 

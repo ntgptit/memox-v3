@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_colors.dart';
@@ -49,6 +52,11 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
   static const double _dividerInset = MxSpacing.space10 + MxSpacing.space3;
 
   void _clearSearch() => ref.read(librarySearchQueryProvider.notifier).clear();
+
+  void _openFolder(FolderSummary summary) => context.pushNamed(
+    RouteNames.folderDetail,
+    pathParameters: <String, String>{RouteParams.id: summary.folder.id},
+  );
 
   void _reportResult(Failure? failure, String successMessage) {
     if (failure != null) {
@@ -230,7 +238,7 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
       rows.add(
         LibraryFolderTile(
           summary: summary,
-          onTap: () => _onFolderActions(summary),
+          onTap: () => _openFolder(summary),
           onActions: () => _onFolderActions(summary),
         ),
       );

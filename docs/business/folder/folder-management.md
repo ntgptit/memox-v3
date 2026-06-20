@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-20
 applies_to: folder entity and folder management feature
 ---
 

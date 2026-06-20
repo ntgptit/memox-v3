@@ -192,4 +192,178 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get folderCreatedSnack => 'Folder created';
+
+  @override
+  String get folderDetailSearchTooltip => 'Search this folder';
+
+  @override
+  String get folderDetailSearchHint => 'Search this folder';
+
+  @override
+  String get folderDetailLoadFailedTitle => 'Couldn\'t load folder';
+
+  @override
+  String get folderDetailLoadFailedMessage =>
+      'We couldn\'t reach this folder. Check your connection and try again.';
+
+  @override
+  String get folderDetailEmptyTitle => 'Empty folder';
+
+  @override
+  String get folderDetailEmptyMessage =>
+      'Add a deck of cards, or nest a subfolder to keep things organized.';
+
+  @override
+  String get folderDetailCreateDeck => 'Create deck';
+
+  @override
+  String get folderDetailCreateSubfolder => 'Create subfolder';
+
+  @override
+  String folderDetailDecksHeader(int count) {
+    return '$count decks';
+  }
+
+  @override
+  String folderDetailFoldersHeader(int count) {
+    return '$count folders';
+  }
+
+  @override
+  String get folderStatDecks => 'Decks';
+
+  @override
+  String get folderStatCards => 'Cards';
+
+  @override
+  String get folderStatDue => 'Due';
+
+  @override
+  String get folderStatSubfolders => 'Subfolders';
+
+  @override
+  String get deckCreateTitle => 'New deck';
+
+  @override
+  String get deckCreateNameLabel => 'Deck name';
+
+  @override
+  String get deckCreateLanguageLabel => 'Language';
+
+  @override
+  String get deckCreateConfirm => 'Create';
+
+  @override
+  String get deckLanguageKorean => 'Korean';
+
+  @override
+  String get deckLanguageEnglish => 'English';
+
+  @override
+  String get deckActionRename => 'Rename';
+
+  @override
+  String get deckActionDelete => 'Delete deck';
+
+  @override
+  String get deckOverflowTooltip => 'Deck options';
+
+  @override
+  String get deckCreatedSnack => 'Deck created';
+
+  @override
+  String get deckRenamedSnack => 'Deck renamed';
+
+  @override
+  String get deckDeletedSnack => 'Deck deleted';
+
+  @override
+  String get deckDeleteTitle => 'Delete this deck?';
+
+  @override
+  String deckDeleteMessage(int count) {
+    return 'This permanently deletes this deck and its $count cards, plus all study progress. This can\'t be undone.';
+  }
+
+  @override
+  String get deckDeleteConfirm => 'Delete';
+
+  @override
+  String get flashcardSearchTooltip => 'Search cards';
+
+  @override
+  String get flashcardSearchHint => 'Search cards';
+
+  @override
+  String get flashcardLoadFailedTitle => 'Couldn\'t load cards';
+
+  @override
+  String get flashcardLoadFailedMessage =>
+      'We couldn\'t reach this deck. Check your connection and try again.';
+
+  @override
+  String get flashcardEmptyTitle => 'No cards yet';
+
+  @override
+  String get flashcardEmptyMessage =>
+      'Add your first flashcard to start studying.';
+
+  @override
+  String get flashcardAddCardLabel => 'Add card';
+
+  @override
+  String flashcardCountHeader(int count) {
+    return '$count cards';
+  }
+
+  @override
+  String get flashcardErrorEmpty => 'Front and back are both required.';
+
+  @override
+  String get flashcardErrorDuplicate =>
+      'A card with this front and back already exists.';
+
+  @override
+  String get flashcardErrorNotFound => 'That card no longer exists.';
+
+  @override
+  String get flashcardActionGenericError =>
+      'Something went wrong. Please try again.';
+
+  @override
+  String get cardCreateTitle => 'Add card';
+
+  @override
+  String get cardEditTitle => 'Edit card';
+
+  @override
+  String get cardFrontLabel => 'Front';
+
+  @override
+  String get cardBackLabel => 'Back';
+
+  @override
+  String get cardCreateConfirm => 'Add';
+
+  @override
+  String get cardEditConfirm => 'Save';
+
+  @override
+  String get cardCreatedSnack => 'Card added';
+
+  @override
+  String get cardSavedSnack => 'Card saved';
+
+  @override
+  String get cardDeleteTitle => 'Delete this card?';
+
+  @override
+  String get cardDeleteMessage =>
+      'This permanently deletes this card and its study progress. This can\'t be undone.';
+
+  @override
+  String get cardDeleteConfirm => 'Delete';
+
+  @override
+  String get cardDeletedSnack => 'Card deleted';
 }

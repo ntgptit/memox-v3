@@ -31,6 +31,15 @@ class FolderDao extends DatabaseAccessor<AppDatabase> with _$FolderDaoMixin {
     // `:now` (in the counts CTE) precedes `:parentId` — pass nowMs first.
   ) => childFolderSummaries(nowMs, parentId).watch();
 
+  /// Direct decks of [folderId] + per-deck card/due counts (one-shot). The
+  /// Folder-detail stream re-reads this whenever its child-folder summaries
+  /// stream re-emits (that query joins decks/flashcards, so deck/card writes
+  /// trigger it). [nowMs] is the due-reference epoch-ms. WBS 3.2.1.
+  Future<List<FolderDeckSummariesResult>> folderDeckSummariesFor(
+    String folderId,
+    int nowMs,
+  ) => folderDeckSummaries(nowMs, folderId).get();
+
   /// Aggregate counts for [id] itself (direct deck count + recursive subtree
   /// card/due counts). [nowMs] is the due-reference epoch-ms. WBS 3.7.1.
   Future<FolderSubtreeCountsResult> folderSubtreeCountsFor(

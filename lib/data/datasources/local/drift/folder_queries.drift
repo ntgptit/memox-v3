@@ -99,6 +99,7 @@ WITH RECURSIVE subtree(node_id) AS (
 )
 SELECT
   (SELECT COUNT(*) FROM decks WHERE folder_id = :id) AS deck_count,
+  COUNT(DISTINCT d.id) AS subtree_deck_count,
   COUNT(fc.id) AS card_count,
   COUNT(CASE WHEN fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
     AS due_count
@@ -106,6 +107,24 @@ FROM subtree
 LEFT JOIN decks d ON d.folder_id = subtree.node_id
 LEFT JOIN flashcards fc ON fc.deck_id = d.id
 LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id;
+
+-- Direct decks of :folderId with per-deck counts: `card_count` is the deck's
+-- flashcards; `due_count` is its scheduled-and-due cards
+-- (`due_at IS NOT NULL AND due_at <= :now`) — NEW cards (`due_at IS NULL`) are
+-- not due, same semantics as the folder summaries. Stable order: sort_order,
+-- then created_at, then id. Powers the Folder-detail deck tiles. WBS 3.2.1.
+folderDeckSummaries(:now AS INT, :folderId AS TEXT):
+SELECT
+  decks.**,
+  COUNT(fc.id) AS card_count,
+  COUNT(CASE WHEN fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
+    AS due_count
+FROM decks
+LEFT JOIN flashcards fc ON fc.deck_id = decks.id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE decks.folder_id = :folderId
+GROUP BY decks.id
+ORDER BY decks.sort_order, decks.created_at, decks.id;
 
 -- Ancestor chain for :id, ordered root -> leaf (inclusive of :id) for the
 -- folder-detail breadcrumb header. WBS 3.2.1.

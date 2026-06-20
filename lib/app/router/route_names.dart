@@ -10,4 +10,10 @@ abstract final class RouteNames {
   static const String library = 'library';
   static const String progress = 'progress';
   static const String settings = 'settings';
+
+  /// Folder detail (subfolders + decks), pushed within the Library branch.
+  static const String folderDetail = 'folderDetail';
+
+  /// A deck's flashcard list, pushed within the Library branch.
+  static const String deckFlashcards = 'deckFlashcards';
 }

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-20
 route: /library/folder/:id
 source_specs:
   - docs/business/folder/folder-management.md
@@ -9,6 +9,30 @@ source_specs:
 ---
 
 # 05 — Folder Detail
+
+> ## ⚠️ As-built banner (2026-06-20, WBS 3.2.2 — Folder Detail FE built)
+>
+> The screen is now implemented (`lib/presentation/features/folders/screens/folder_detail_screen.dart`).
+> As-built behavior (authoritative over older prose below where they differ):
+>
+> - **Reached from Library**: a folder-row tap pushes `/library/folder/:id` (child of the
+>   Library branch — bottom nav stays). A subfolder tap pushes a nested Folder Detail; a deck
+>   tap pushes `/library/deck/:deckId/flashcards`.
+> - **Read model** (`FolderDetail`) now carries **child decks** (`DeckSummary` + card/due counts)
+>   plus `subtreeDeckCount`, via the `folderDeckSummaries` query and the `subtree_deck_count`
+>   column on `folderSubtreeCounts`.
+> - **Layout**: app bar (back + folder name + search + kebab) · 3-stat summary card
+>   (decks-mode `Decks/Cards/Due`; subfolders-mode `Subfolders/Decks/Due`; Due highlighted) ·
+>   section overline (`{n} DECKS` / `{n} FOLDERS`) · grouped card of `DeckTile` /
+>   `LibraryFolderTile` rows with `MxDivider` hairlines · content-aware FAB (`Create deck` in
+>   decks-mode, `Create subfolder` in subfolders-mode, none when unlocked/empty).
+> - **States**: decks · subfolders · empty-unlocked (hero with both create CTAs) · loading
+>   (skeleton) · error · search (mode toggle) · search-no-results. Goldens:
+>   `test/presentation/features/folders/folder_detail_test.dart`.
+> - **Actions**: create subfolder/deck; folder rename/move/delete (shared `runFolderActions`,
+>   kebab opens the viewed folder's sheet); deck rename/delete (`runDeckActions`). Deck **move**
+>   and folder/deck **reorder** are deferred (WBS 2.19.2 / 2.5.2 / 2.10.2).
+> - **Study entry points (Study folder / Today / Resume)** remain **Future — not built**.
 
 ## V1 verification status (2026-06-06)
 

@@ -10,6 +10,27 @@ abstract final class RoutePaths {
   static const String library = '/library';
   static const String progress = '/progress';
   static const String settings = '/settings';
+
+  /// Folder detail — child of [library]. `:id` is the folder id. Relative
+  /// segment (`folderRelative`) is used when registering it as a child route;
+  /// the absolute form is for reference.
+  static const String folderRelative = 'folder/:id';
+  static const String folder = '$library/$folderRelative';
+
+  /// A deck's flashcard list — child of [library]. `:deckId` is the deck id.
+  static const String deckFlashcardsRelative = 'deck/:deckId/flashcards';
+  static const String deckFlashcards = '$library/$deckFlashcardsRelative';
+}
+
+/// Path/query parameter keys for GoRouter — never pass a raw string literal as
+/// a parameter key (`memox.routing.no_raw_route_param_key`).
+abstract final class RouteParams {
+  /// The `:id` path segment for the folder-detail route.
+  static const String id = 'id';
+
+  /// The `:deckId` path segment for the deck flashcard-list route (matches
+  /// `docs/business/navigation/navigation-flow.md` §Library routes).
+  static const String deckId = 'deckId';
 }
 
 /// Router-level defaults.
