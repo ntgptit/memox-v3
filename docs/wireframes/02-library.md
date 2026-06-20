@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-20
 route: /library
 source_specs:
   - docs/business/folder/folder-management.md
@@ -8,6 +8,37 @@ source_specs:
 ---
 
 # 02 — Library
+
+> ## ⚠️ As-built banner (2026-06-20, rev. 2 — full mock parity, WBS 3.1.2 + 2.1.2)
+>
+> The rebuilt + full-parity screen behaves as follows; this banner and
+> `docs/design/screens/library-overview.visual-contract.md` §V1 status (rev. 2) are
+> **authoritative** over the prompt-era prose below where they differ:
+>
+> - **Search is a mode toggle**, not an always-visible inline field: the app bar shows
+>   `Icons.search` (→ `LibrarySearchAppBar` with an autofocused field + Cancel) and a
+>   visual-only `Icons.swap_vert` sort icon. (Supersedes "always-visible inline (no toggle)".)
+> - **Folder rows use a chevron** (`Icons.chevron_right`), **no kebab**; a row tap opens the
+>   action sheet (interim, until folder-detail nav lands — WBS 3.2.2) and a long-press also
+>   opens it. (Supersedes all "kebab" / `Icons.more_vert` references.)
+> - Loaded state is a **single grouped card** of rows (tinted `FolderIconTile`) separated by
+>   `MxDivider` inset hairlines, with **no count overline and no sort pill**; the `{n} FOLDERS`
+>   overline appears **only in the search state**.
+> - **Loading** is a skeleton card (`LibraryLoadingSkeleton`); **empty** is `MxEmptyState` +
+>   `Create folder` CTA; **error** is `MxErrorState` + full-width Retry.
+> - **`New folder` FAB + create dialog with color + icon pickers are Current** (WBS 2.1.2):
+>   `MxFab` (shown only in loaded-with-folders) and the empty-CTA both call `runCreateFolder`
+>   → `folder_create_dialog.dart`. Color/icon use the OQ-2 palette via `folder_visual_tokens.dart`.
+> - **Not built:** due-summary card, sort sheet, mastery bar, new-card badge, deck-digest
+>   subtitle (read-model fields absent). The per-row **due badge** *is* built (shows when `dueCount > 0`).
+> - As-built file map: `library_overview_screen.dart` · `library_overview_body.dart` ·
+>   `library_folder_tile.dart` · `folder_icon_tile.dart` · `library_loading_skeleton.dart` ·
+>   `library_search_app_bar.dart` · `library_folder_actions_sheet.dart` ·
+>   `folder_create_dialog.dart` · `library_create_folder_action.dart` ·
+>   `library_overview_viewmodel.dart` (`libraryOverviewStreamProvider` /
+>   `librarySearchQueryProvider` / `librarySearchActiveProvider`). The old
+>   `library_sections.dart` / `library_skeleton.dart` / `content_query_usecases.dart` /
+>   `libraryOverviewQueryProvider` names below are **ghost refs** from the prior iteration.
 
 ## V1 verification status (2026-05-31, Prompt 18/18B; root-deck decision updated 2026-06-03, Prompt 43A; 6-state visual parity 2026-06-04, Prompt 49; loaded-state visual fix 2026-06-04, Prompt 49B; mock mapping docs 2026-06-05; overflow sheet implemented + 6 states Current 2026-06-06, Prompt 49D)
 

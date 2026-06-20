@@ -18,6 +18,17 @@ class LibraryActionController extends _$LibraryActionController {
   @override
   void build() {}
 
+  /// Create a root folder with [name] and optional opaque color/icon tokens
+  /// (trim / empty / duplicate rules live in the use case). Decision rows F1,
+  /// F2, F20-F22.
+  Future<Result<Folder>> create({
+    required String name,
+    String? color,
+    String? icon,
+  }) => ref
+      .read(createRootFolderUseCaseProvider)
+      .call(name: name, color: color, icon: icon);
+
   /// Rename [id] to [newName] (trim / empty / duplicate rules live in the use
   /// case; no-op when unchanged). Decision rows F20-F22.
   Future<Result<Folder>> rename({

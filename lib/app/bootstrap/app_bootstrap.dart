@@ -24,10 +24,16 @@ abstract final class AppBootstrap {
         true;
   }
 
-  static void _setupSystemChrome() => unawaited(
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]),
-  );
+  static void _setupSystemChrome() {
+    // Draw under the system bars so the app background fills behind the
+    // (transparent) status bar — no color seam at the top edge. Icon
+    // brightness is set per-theme via `AppBarTheme.systemOverlayStyle`.
+    unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
+    unawaited(
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]),
+    );
+  }
 }

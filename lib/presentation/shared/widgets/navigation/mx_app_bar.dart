@@ -20,33 +20,54 @@ import 'package:memox/core/theme/mx_colors.dart';
 /// navigation
 ///
 /// Public API:
-/// - title: the screen title; pass already-localized copy.
+/// - title: the screen title; pass already-localized copy. Optional when
+///   [titleWidget] is supplied.
+/// - titleWidget: a custom title slot (e.g. an inline search field) that
+///   replaces the [title] text — for app-bar modes that aren't a plain title.
 /// - actions: optional trailing widgets (typically `MxIconButton`s).
 /// - leading: optional leading widget (defaults to the platform back button).
 /// - automaticallyImplyLeading: show the back button when a route can pop.
+/// - titleSpacing: horizontal gap before the title (defaults to the AppBar
+///   default); set to the screen gutter for a full-bleed title widget.
 class MxAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MxAppBar({
-    required this.title,
+    this.title,
+    this.titleWidget,
     this.actions,
     this.leading,
     this.automaticallyImplyLeading = true,
+    this.titleSpacing,
+    this.toolbarHeight,
     super.key,
-  });
+  }) : assert(
+         title != null || titleWidget != null,
+         'Provide a title or a titleWidget.',
+       );
 
-  final String title;
+  final String? title;
+  final Widget? titleWidget;
   final List<Widget>? actions;
   final Widget? leading;
   final bool automaticallyImplyLeading;
+  final double? titleSpacing;
+
+  /// Toolbar height below the status-bar inset; defaults to [kToolbarHeight].
+  /// Give a boxed title widget (e.g. a search field) extra room so it does not
+  /// crowd the status bar.
+  final double? toolbarHeight;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(toolbarHeight ?? kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MxColors colors = context.mxColors;
+    final Widget? titleWidget = this.titleWidget;
     return AppBar(
-      title: Text(title),
+      title: titleWidget ?? Text(title!),
+      titleSpacing: titleSpacing,
+      toolbarHeight: toolbarHeight,
       actions: actions,
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,

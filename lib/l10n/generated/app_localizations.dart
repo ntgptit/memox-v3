@@ -373,6 +373,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Empty'**
   String get folderMetaEmpty;
+
+  /// Tooltip for the Library app-bar search icon that opens search mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Search folders'**
+  String get librarySearchTooltip;
+
+  /// Tooltip for the Library create-folder FAB.
+  ///
+  /// In en, this message translates to:
+  /// **'New folder'**
+  String get libraryCreateFolderTooltip;
+
+  /// Label of the create-folder CTA on the true-empty Library state.
+  ///
+  /// In en, this message translates to:
+  /// **'Create folder'**
+  String get libraryCreateFolderLabel;
+
+  /// Title of the create-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'New folder'**
+  String get folderCreateTitle;
+
+  /// Name field label in the create-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder name'**
+  String get folderCreateNameLabel;
+
+  /// Color picker label in the create-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get folderCreateColorLabel;
+
+  /// Icon picker label in the create-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get folderCreateIconLabel;
+
+  /// Confirm action in the create-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get folderCreateConfirm;
+
+  /// Snackbar after a successful folder create.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder created'**
+  String get folderCreatedSnack;
 }
 
 class _AppLocalizationsDelegate

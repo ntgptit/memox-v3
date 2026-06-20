@@ -165,4 +165,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get folderMetaEmpty => 'Empty';
+
+  @override
+  String get librarySearchTooltip => 'Search folders';
+
+  @override
+  String get libraryCreateFolderTooltip => 'New folder';
+
+  @override
+  String get libraryCreateFolderLabel => 'Create folder';
+
+  @override
+  String get folderCreateTitle => 'New folder';
+
+  @override
+  String get folderCreateNameLabel => 'Folder name';
+
+  @override
+  String get folderCreateColorLabel => 'Color';
+
+  @override
+  String get folderCreateIconLabel => 'Icon';
+
+  @override
+  String get folderCreateConfirm => 'Create';
+
+  @override
+  String get folderCreatedSnack => 'Folder created';
 }

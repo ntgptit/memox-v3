@@ -5,89 +5,103 @@ import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/features/folders/folder_visual_tokens.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_icon_tile.dart';
+import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
-/// A Library folder card: folder icon, name, a metadata digest, an optional due
-/// badge, and a trailing kebab that opens the folder action sheet. No chevron
-/// (`docs/design/screens/library-overview.visual-contract.md` §Folder Card
-/// Contract). WBS 3.1.2.
+/// A Library folder row inside the grouped list-card: a tinted icon tile, the
+/// folder name, a metadata digest, an optional due badge, and a trailing
+/// chevron (`docs/design/screens/library-overview.visual-contract.md` §Folder
+/// Card Contract — mock parity revision).
+///
+/// Interaction: a tap routes to the folder (folder-detail navigation lands with
+/// WBS 3.2.2; until then [onTap] opens the action sheet so the row is never a
+/// dead tap), and a long-press always opens the action sheet via [onActions].
+/// The tile renders no own card — the body wraps the whole list in one
+/// `MxCard`, rows separated by inset hairlines, matching the kit. WBS 3.1.2.
 class LibraryFolderTile extends StatelessWidget {
   const LibraryFolderTile({
     required this.summary,
+    required this.onTap,
     required this.onActions,
-    this.onTap,
     super.key,
   });
 
   /// The folder + its recursive counts.
   final FolderSummary summary;
 
-  /// Opens the folder action sheet (kebab tap / row long-press).
+  /// Row tap — opens the folder (interim: the action sheet, until WBS 3.2.2).
+  final VoidCallback onTap;
+
+  /// Long-press — opens the folder overflow action sheet.
   final VoidCallback onActions;
-
-  /// Row tap (folder detail navigation lands with WBS 3.2.2; may be null).
-  final VoidCallback? onTap;
-
-  String _meta(AppLocalizations l10n) {
-    final ContentMode mode = summary.folder.contentMode;
-    if (mode == ContentMode.subfolders) {
-      return l10n.folderMetaSubfolders(summary.subfolderCount);
-    }
-    if (mode == ContentMode.decks) {
-      return '${l10n.folderMetaDecks(summary.deckCount)} · '
-          '${l10n.folderMetaCards(summary.cardCount)}';
-    }
-    return l10n.folderMetaEmpty;
-  }
 
   @override
   Widget build(BuildContext context) {
     final MxColors colors = context.mxColors;
     final AppLocalizations l10n = AppLocalizations.of(context);
 
-    return MxCard(
+    return MxTappable(
       onTap: onTap,
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.folder_outlined, color: colors.accent),
-          const SizedBox(width: MxSpacing.space3),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                MxText(
-                  summary.folder.name,
-                  role: MxTextRole.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: MxSpacing.space1),
-                MxText(
-                  _meta(l10n),
-                  role: MxTextRole.bodySmall,
-                  color: colors.textSecondary,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+      onLongPress: onActions,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
+        child: Row(
+          children: <Widget>[
+            FolderIconTile(
+              color: folderTint(colors, summary.folder.color),
+              icon: folderGlyph(summary.folder.icon),
             ),
-          ),
-          if (summary.dueCount > 0) ...<Widget>[
+            const SizedBox(width: MxSpacing.space3),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  MxText(
+                    summary.folder.name,
+                    role: MxTextRole.titleMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: MxSpacing.space1),
+                  MxText(
+                    folderMetaLine(l10n, summary),
+                    role: MxTextRole.bodySmall,
+                    color: colors.textSecondary,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            if (summary.dueCount > 0) ...<Widget>[
+              const SizedBox(width: MxSpacing.space2),
+              _DueBadge(count: summary.dueCount),
+            ],
             const SizedBox(width: MxSpacing.space2),
-            _DueBadge(count: summary.dueCount),
+            Icon(Icons.chevron_right, color: colors.textTertiary),
           ],
-          MxIconButton(
-            icon: Icons.more_vert,
-            tooltip: l10n.libraryOverflowTooltip,
-            onPressed: onActions,
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+/// The folder metadata digest line — subfolder count, or `{n} decks · {m}
+/// cards`, or `Empty` — keyed off the folder's [ContentMode]. Shared by the
+/// Library row and the overflow action-sheet header.
+String folderMetaLine(AppLocalizations l10n, FolderSummary summary) {
+  final ContentMode mode = summary.folder.contentMode;
+  if (mode == ContentMode.subfolders) {
+    return l10n.folderMetaSubfolders(summary.subfolderCount);
+  }
+  if (mode == ContentMode.decks) {
+    return '${l10n.folderMetaDecks(summary.deckCount)} · '
+        '${l10n.folderMetaCards(summary.cardCount)}';
+  }
+  return l10n.folderMetaEmpty;
 }
 
 class _DueBadge extends StatelessWidget {

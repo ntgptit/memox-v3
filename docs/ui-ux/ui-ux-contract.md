@@ -139,8 +139,30 @@ Use:
 - Theme color scheme.
 - Theme extensions.
 - Text theme.
-- App spacing/radius/motion tokens.
+- App spacing/radius/motion tokens. The Dart token classes under `lib/core/theme/`
+  mirror the `--memox-*` scales in
+  `docs/system-design/MemoX Design System/colors_and_type.css`: `MxSpacing`
+  (`--memox-space-*`), `MxRadius` (`--memox-radius-*`), `MxColors` (color roles),
+  `MxOpacity` (`--memox-op-hover`/`-selected`/`-disabled` — derived tints, e.g. a
+  soft icon-tile background), `MxIconSize` (`--memox-icon-sm`/`-md`/`-lg` — every
+  `Icon(size:)` must use these), and `MxStroke` (`hairline`/`emphasis` — divider /
+  border widths). Add to the matching token class (never hardcode) when a new
+  weight/size is needed.
 - ARB localization for every user-facing string.
+
+Device chrome (status bar / safe area):
+
+- The OS status bar (clock, signal, battery) is **not** app content — the mock's
+  `9:41` + battery row is the device's. Never reproduce it; design the app's top
+  to sit *below* it.
+- Status-bar icon brightness is **theme-driven**: `AppBarTheme.systemOverlayStyle`
+  in `MxTheme` sets dark icons on the light theme / light icons on dark, with a
+  transparent status bar + edge-to-edge (`SystemUiMode.edgeToEdge` in
+  `AppBootstrap`) so the app background fills behind it (no seam). Do not set
+  `SystemUiOverlayStyle` per screen.
+- Use a real app bar (`MxAppBar`) or `MxScaffold`'s `SafeArea` for the top inset —
+  never a hand-rolled fixed-height top bar with manual `SafeArea` padding (it
+  overflows once the device adds status-bar padding).
 
 Avoid:
 
