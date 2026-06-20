@@ -101,6 +101,36 @@ Phases 2/4/6 are **BE-by-subsystem** (allowed under the 7-row coupling rule); ph
 screens on the Phase-1 widget kit + that group's BE contracts. Phase 8 and any feature-specific
 widget (e.g. `MatchBoard`, `BoxStepper`, `ProgressRing`) land with their owning feature, not upfront.
 
+### 4.2 Phase 3 (Content/Library FE) — delivery waves (2026-06-20)
+
+Phase 3 is large (~28 §2/§3 FE rows). Because FE is **screen-centric** — most `x.2` rows are
+*actions* (dialog/sheet) hosted on a §3 screen — it is sliced into **4 waves**, each a vertical
+slice (one core screen + the shared dialogs/sheets it introduces, reused by later waves). All BE
+these waves consume is already Implemented. One screen + its actions = a few PRs (1 work-package
+per PR).
+
+| Wave | Core screen(s) | Action rows hosted | New shared primitives (reused later) | ~PRs |
+| --- | --- | --- | --- | --- |
+| **W1 — Library overview** | `3.1.2` (+ `3.6.1` error/retry) | `2.1.2` create, `2.2.2` rename, `2.3.2`+`2.21.1` delete, `2.4.2` move, `2.5.2` reorder | folder-form dialog (name+color+icon), delete-confirm + blast-radius variant, move-target picker sheet, reorder-drag | ~4 |
+| **W2 — Folder detail** | `3.2.2` (+ `3.3.1` nav→list) | `2.7.2` deck create, `2.8.2` rename, `2.9.2` delete, `2.19.2` move, `2.10.2` reorder, `2.16.2` parent-child guard UX | deck-create sheet (reuses dialogs/sheets from W1) | ~3 |
+| **W3 — Flashcard list + editor** | `3.4.2` (+ `2.18.2` tag-filter UI) | `2.11.2`/`2.12.2` editor (create/edit), `2.15.2` tags, `2.20.2` dup soft-warning, `2.13.2` delete, `2.14.2` reorder | flashcard editor screen, tag-input chips | ~3 |
+| **W4 — Global search** | `3.5.2` (+ `3.5.3` result nav) | — | search field already in kit | ~2 |
+
+**Prerequisite (Wave 1, build first):** `2.22.1` — add `folders.color` + `folders.icon` columns
+(migration) + entity/create-use-case wiring. Product chose full color/icon pickers, so the model
+must store them before `2.1.2`.
+
+**Resolved gating decisions (2026-06-20, product owner):**
+- **Folder color/icon:** real + schema-backed (not preview-only / not deferred) → row `2.22.1`.
+- **Folder-create/rename dialog contract:** the dialog **owns submit** (calls the create/rename use
+  case, shows duplicate/empty errors **inline**, returns `Future<Folder?>`), not return-name-only.
+  Reused by `2.1.2` and `2.2.2`.
+
+**Blocked / out of this plan:** `2.17.2` (status filter/badges FE) waits on `2.17.1` (suspend/bury
+schema); `3.8.1` (tags/recent/popular search sections) is Future. `3.2.3` (new-vs-due study split
+on folder detail) waits on the Study epic (Phase 4) — render the deck rows now, add the study split
+when §4 lands.
+
 ### Group 1 — Project foundation
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
@@ -123,7 +153,7 @@ widget (e.g. `MatchBoard`, `BoxStepper`, `ProgressRing`) land with their owning 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2.1.1 | Content management | Folder Create BE V1 | BE | Validated root/subfolder create use cases + repo + DAO + tests | Implemented | 1.1.5 | `lib/domain/usecases/folder/create_root_folder_usecase.dart`, `lib/domain/usecases/folder/create_subfolder_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart` | TBD | Done — `CreateRootFolderUseCase`/`CreateSubfolderUseCase` over `FolderRepository`(`Impl`)+`FolderDao`+`FolderMapper`; trim/empty/dup + parent-mode lock; rows F1-F4 tested |
-| 2.1.2 | Content management | Folder Create FE V1 | FE | Create-folder dialog, form state, submit, error/loading | Specified | 2.1.1 | `lib/presentation/shared/dialogs/`, `test/presentation/shared/dialogs/mx_folder_form_dialog_test.dart` | TBD | Implement |
+| 2.1.2 | Content management | Folder Create FE V1 | FE | Create-folder dialog (name + color + icon pickers), form state, submit, error/loading | Specified | 2.1.1, 2.22.1 | `lib/presentation/shared/dialogs/`, `test/presentation/shared/dialogs/mx_folder_form_dialog_test.dart` | TBD | **Contract resolved (2026-06-20):** (1) color/icon are real, schema-backed via 2.22.1; (2) the dialog **owns submit** — it calls `CreateRootFolderUseCase`/`CreateSubfolderUseCase`, shows the duplicate/empty error **inline** (per `docs/wireframes/24-shared-dialogs.md` §name-form), and returns `Future<Folder?>` (`null` = cancel). Reusable folder-form dialog also backs 2.2.2 rename. |
 | 2.2.1 | Content management | Folder Rename BE V1 | BE | Validated rename use case + repo + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/rename_folder_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart` | TBD | Done — `RenameFolderUseCase`/`FolderRepository.renameFolder`; trim/empty/sibling-dup + unchanged-name no-op; row F8 tested |
 | 2.2.2 | Content management | Folder Rename FE V1 | FE | Rename dialog via folder actions sheet | Specified | 2.2.1 | `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart`, `test/presentation/features/folders/library_folder_actions_sheet_test.dart` | TBD | Implement |
 | 2.3.1 | Content management | Folder Delete BE V1 | BE | Transactional cascade delete per persistence rules + tests | Implemented | 2.1.1 | `lib/domain/usecases/folder/delete_folder_usecase.dart`, `lib/data/repositories/folder_repo_impl_mutation_helpers.dart`, `test/data/repositories/folder_repository_impl_test.dart` | TBD | Done — `DeleteFolderUseCase`/`FolderRepository.deleteFolder`; recursive deepest-first folder cascade + revert-emptied-parent-to-unlocked, one transaction; rows F8/F9 tested. Deck/card/session cascade deferred to WBS 2.7.x+ (tables not in schema yet) |
@@ -162,6 +192,7 @@ widget (e.g. `MatchBoard`, `BoxStepper`, `ProgressRing`) land with their owning 
 | 2.20.1 | Content management | Manual duplicate soft-warning BE V1 | BE | Case-insensitive front+back duplicate check on create/edit save | Implemented | 2.11.1 | `lib/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase.dart`, `lib/domain/models/flashcard_duplicate_check_result.dart`, `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart`, `test/data/repositories/flashcard_repository_impl_duplicate_behavior_test.dart` | TBD | Done — `CheckManualDuplicateFlashcardUseCase` over `FlashcardRepository.checkManualDuplicate`; trimmed + case-insensitive `front`+`back`, deck-scoped, `excludeId` on edit; non-blocking (create/update never reject); `FlashcardDuplicateCheckResult`; row C40 |
 | 2.20.2 | Content management | Manual duplicate soft-warning FE V1 | FE | Non-blocking "save anyway?" confirm in editor | Specified | 2.20.1 | `docs/business/flashcard/flashcard-management.md` §Rules | TBD | Wire to BE; widget tests |
 | 2.21.1 | Content management | Folder delete blast-radius confirm FE V1 | FE | Delete dialog shows subtree counts; stronger confirm above threshold | Specified | 2.3.2 | `docs/business/folder/folder-management.md` §Rules | TBD | Extend delete dialog + tests |
+| 2.22.1 | Content management | Folder color/icon schema + BE | BE | Add `folders.color` + `folders.icon` columns (migration v+1), extend `Folder` entity/mapper + `createRootFolder`/`createSubfolder`/`renameFolder` to carry them; defaults + schema/migration tests | Specified | 1.1.5 | `lib/data/datasources/local/drift/folders.drift`, `lib/data/datasources/local/migrations/**`, `lib/domain/entities/folder.dart`, `lib/data/mappers/folder_mapper.dart`, `lib/domain/repositories/folder_repository.dart`, `lib/data/repositories/folder_repository_impl.dart`, `docs/database/schema-contract.md`, `docs/database/migration-contract.md`, `test/data/migrations/**` | TBD | **Prerequisite for 2.1.2 (Wave 1)** — product chose full color/icon pickers (2026-06-20), so the folder model must store them before the create dialog. Build first in Wave 1. |
 
 ### Group 3 — Library flow
 
@@ -444,6 +475,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `TBD` | 2026-06-20 | §4.2, 2.1.2, 2.22.1 | Plan-only: decompose Phase 3 (Content/Library FE, ~28 rows) into 4 screen-centric delivery waves (new §4.2); add prerequisite row 2.22.1 (folder color/icon schema + BE); record resolved gating decisions for 2.1.2 (folder color/icon → schema-backed; folder-create/rename dialog owns submit + inline errors, returns `Future<Folder?>`). No code — planning/WBS restructure for product-owner review. |
 | `TBD` | 2026-06-20 | 2.18.1 | Flashcard tag filter BE V1: `watchFlashcardList` (use case + repo interface + impl) gains a `List<TagName> tags` param — multi-select AND filter keeping only cards that carry every selected tag, each normalized with the storage rule (`_normalizeTags`) to match stored tags; empty selection imposes no filter. Composes with the existing front/back search; `totalCount` stays the full deck total (filter-independent) so no-results stays distinguishable. In-Dart filter over the already-built `tagsByCard` map (no new query). Updated the two existing flashcard-repo test fakes for the new param. Tests: repo C38 (empty/single/multi AND) + C39 (compose-with-search, no-results totalCount) + use-case delegation. Docs: flashcard `WatchFlashcardListUseCase` contract (signature + reconciled the stale status-filter over-claim → 2.17.1 Future), decision rows C38/C39. Status filter blocked on suspend/bury columns. Stacked on feat/wbs-2.9.1. Flip 2.18.1 Specified→Implemented. |
 | `TBD` | 2026-06-20 | 8.3.1 | Tag management BE V1 over `flashcard_tags`: `TagValidator` (trim/lowercase via `StringUtils.normalizeTag`, reject empty/comma/>50) + `TagWithCount`/`MergeResult` models + `TagRepository`(`Impl`) over new `FlashcardTagDao` (`tag_queries.drift` `tagsWithCount`) + 4 use cases (watch-with-count, rename, merge, delete) + DI `tag_providers.dart`. Rename no-ops on equal and returns `ConflictFailure` on a name collision (never auto-merges); merge re-tags source→dest with per-card `INSERT OR IGNORE` de-dup then deletes source rows in one transaction (returns affected count); delete strips the tag from all cards, keeping the cards. Tests: repo/DAO integration (watch order, rename/conflict/no-op, merge dedup, delete) + use-case validation/delegation. Docs: tag-system status + impl pointer, tag use-case/repository contract impl notes, filled `decision-tables/tags-bulk-export.md` rows TG1/TG5/TG6/TG7/TG9/TG10 (incl. leading-`#` strip in `StringUtils.normalizeTag` per TG1), overview status. Stacked on feat/wbs-2.9.1. Flip 8.3.1 Specified→Implemented. |
 | `TBD` | 2026-06-20 | 8.2.1 | Learning settings BE persistence (SharedPreferences, outside Drift): `LearningSettings` entity (dailyNewLimit default 20 / 5..200 step 5; goalDisabledSince nullable local date) + `LearningSettingsRepository`(`Impl`) over a thin `LearningSettingsStore` (keys `learning.dailyNewLimit`/`learning.goalDisabledSince` per storage-boundaries) + `Load`/`UpdateLearningSettingsUseCase` (range/step validation → `outOfRange`, local-date normalization). Defaults + corrupt/out-of-range recovery on load; `YYYY-MM-DD` round-trip. New centralized `sharedPreferencesProvider` in `app_providers.dart` (only allowed `getInstance()` caller per guard); async DI chain in `learning_settings_providers.dart`. Tests: use-case validation/delegation + repo/store persistence (defaults, recovery, round-trip, clear). Docs: types-catalog `LearningSettings`, use-case + repo contracts impl notes. Stacked on feat/wbs-2.9.1. Flip 8.2.1 Specified→Implemented. |
