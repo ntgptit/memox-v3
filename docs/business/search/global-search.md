@@ -106,8 +106,8 @@ Each needs its own approval before implementation:
 
 ## Agent rule
 
-The dedicated global Search screen is being (re)built as a top-level `/search` destination by the
-design redesign; its domain+data layer (`GlobalSearchUseCase`/`SearchRepository`) is ready. Until
-that screen is wired, the only Current search UI is in-place folder search in Library Overview.
-Treat the Tags section, recent searches, and popular-tags landing as Future Proposal until the tag
-subsystem and a `shared_preferences` dependency are approved.
+The dedicated global Search screen is **Current**: a top-level `/search` destination (design
+redesign) with a bottom search dock, wiring `GlobalSearchUseCase`/`SearchRepository` over
+folders/decks/flashcards. In-place folder search in Library Overview also remains. Treat the Tags
+section, recent searches, and popular-tags landing as Future Proposal until the tag subsystem and a
+`shared_preferences` dependency are approved.

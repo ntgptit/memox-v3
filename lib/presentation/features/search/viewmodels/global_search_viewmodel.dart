@@ -30,7 +30,7 @@ class GlobalSearchQuery extends _$GlobalSearchQuery {
 /// The failure stays in-band in the [Result] (matching the flashcard-list view
 /// model) rather than thrown, so the screen interprets it. Debounce: a re-keyed
 /// query rebuilds this provider, so the in-flight wait is abandoned; the use case
-/// only runs once typing settles for [globalSearchDebounceMs]. WBS 3.5.2.
+/// only runs once typing settles for [GlobalSearchUseCase.inputDebounce]. WBS 3.5.2.
 @riverpod
 Future<Result<SearchResults>?> globalSearchResults(Ref ref) async {
   final String query = ref.watch(globalSearchQueryProvider);
@@ -39,9 +39,10 @@ Future<Result<SearchResults>?> globalSearchResults(Ref ref) async {
     return null;
   }
 
-  // Read (not watch) the use case before the async gap; the query is the only
-  // reactive input.
-  final GlobalSearchUseCase useCase = ref.read(globalSearchUseCaseProvider);
+  // Watch the use case so it (and its repository/DAO chain) stays alive for this
+  // provider's lifetime — reading it across the debounce gap could otherwise use
+  // a disposed instance if the chain were auto-disposed mid-flight.
+  final GlobalSearchUseCase useCase = ref.watch(globalSearchUseCaseProvider);
 
   // Debounce: if the query changes during the wait this provider is disposed and
   // rebuilt, so skip the now-stale use-case call.

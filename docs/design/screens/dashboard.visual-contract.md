@@ -62,7 +62,7 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | Mock element | Mock state(s) | Product status | Flutter mapping | Data source | Action | Notes |
 | ------------ | ------------- | -------------- | --------------- | ----------- | ------ | ----- |
 | App bar greeting + subtitle | loaded, loading, onboarding | Current V1 | `MxAppBar` + `MxText` | Local time and localized dashboard copy | None | Use localized greeting copy; the sample name/date in the HTML are visual-only. |
-| Search icon | loaded, offline, error | Current V1 | `MxIconButton` | None yet | `pushLibrarySearch` | Dashboard routes to global search from the app bar. |
+| Search icon | — | Rejected (redesign) | — | — | — | Removed: Search is the top-level `/search` tab; no Dashboard app-bar search (WBS 5.8.1 Rejected). |
 | Settings icon | loaded, offline, error | Current V1 | `MxIconButton` | Route shell | `go` to `RoutePaths.settings` | Shell-visible settings shortcut is allowed. |
 | Offline banner | offline | Current V1 | `MxCard` + inline warning surface | Connectivity state if a shared app-level signal exists later | None | Non-blocking feedback; the Dashboard stays visible behind the banner. |
 | Error card + retry | error | Current V1 | `MxErrorState` or `MxCard` + `MxActionButton` | Dashboard query failure | Retry | Keep the error localized. The mock’s `Open Library` secondary action is excluded because the business docs only require retry. |

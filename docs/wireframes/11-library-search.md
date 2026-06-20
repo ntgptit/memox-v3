@@ -123,6 +123,23 @@ screen shell (`GlobalSearchScreen`) stays provider-watch-free — the dock drive
 | Deck        | Navigate to `/library/deck/:deckId/flashcards`.                 |
 | Flashcard   | Navigate to the card's owning deck (`/library/deck/:deckId/flashcards`). Per-card scroll/select is a Future refinement. |
 
+V1 navigation behavior: these targets are routes under the **Library** shell branch, so tapping a
+result navigates into the Library tab (the bottom-nav active destination becomes Library, and Back
+returns to Library). Keeping the result detail inside the Search tab (so Back returns to `/search`)
+is a Future refinement (would require parallel detail routes under the Search branch).
+
+### Known gaps (missing data — not yet in the read model)
+
+The `SearchResults` projection carries entity identity + name only, so result rows are intentionally
+minimal vs. the kit sample rows. Each needs a read-model/DAO extension before it can render:
+
+- **Folder rows**: name only — no `{n} decks · {m} cards` meta line.
+- **Deck rows**: name only — no parent-folder/`{n} cards` meta and no `{m} due` trailing badge.
+- **Flashcard rows**: front + back only — no owning deck/path meta.
+
+These are not parity failures of the current scope; they are data gaps to close when the search
+projection grows.
+
 ## Future Proposal — remaining global-search scope
 
 Not yet built; each needs its own approval:

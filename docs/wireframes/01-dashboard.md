@@ -39,7 +39,7 @@ Dashboard top-level screen. Current V1 continues paused sessions and points to t
 ┌───────────────────────────────────────┐
 │ STATUS BAR                            │
 ├───────────────────────────────────────┤
-│  Good evening, Giap          🔍  ⚙️    │  ← Target app bar; Global Search routes to /library/search
+│  Good evening, Giap              ⚙️    │  ← Target app bar; no search icon (redesign: Search is the top-level /search tab)
 ├───────────────────────────────────────┤
 │                                       │
 │ ┌───────────────────────────────────┐ │
@@ -187,7 +187,8 @@ All queries fire in parallel via separate providers; UI shows skeletons per card
   `dashboardDeckHighlightsQueryProvider` (top 3 decks by `updated_at`). Each row shows card count,
   last-studied relative time, and a due badge; tapping opens the deck flashcard list.
 - **Onboarding (zero-content) layout** replaces the whole body when zero decks AND zero flashcards exist; it is not a dedicated route.
-- **Global Search** is reachable from the Dashboard app bar (`pushLibrarySearch` → `/library/search`).
+- **Global Search** is the top-level `/search` bottom-nav destination (design redesign); the
+  Dashboard has no app-bar search shortcut (WBS 5.8.1 Rejected).
 
 ## States
 
@@ -213,7 +214,7 @@ All queries fire in parallel via separate providers; UI shows skeletons per card
 | Tap "Start today's review" | Tap | Navigate to `/library/study/today` → routes through study entry gate. |
 | Tap "Start new learning" | Tap | Open scope picker bottom-sheet. |
 | Tap recent deck row | Tap | Navigate to `/library/deck/:deckId/flashcards`. |
-| Tap search icon | Tap | Navigate to `/library/search` via `pushLibrarySearch`. Now a Current V1 Dashboard action. |
+| ~~Tap search icon~~ | — | Removed (redesign): no Dashboard search icon; Search is the top-level `/search` tab (WBS 5.8.1 Rejected). |
 | Tap settings icon | Tap | Navigate to `/settings`. |
 | Pull to refresh | Pull down | Re-run all queries; replace skeletons in place. |
 
