@@ -2,6 +2,7 @@ import 'package:memox/app/di/database_providers.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/repositories/study_repository_impl.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
+import 'package:memox/domain/usecases/study/cancel_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/create_study_session_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -21,3 +22,7 @@ StudyRepository studyRepository(Ref ref) =>
 @riverpod
 CreateStudySessionUseCase createStudySessionUseCase(Ref ref) =>
     CreateStudySessionUseCase(repository: ref.watch(studyRepositoryProvider));
+
+@riverpod
+CancelStudySessionUseCase cancelStudySessionUseCase(Ref ref) =>
+    CancelStudySessionUseCase(repository: ref.watch(studyRepositoryProvider));

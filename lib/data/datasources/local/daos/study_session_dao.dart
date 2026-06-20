@@ -83,4 +83,18 @@ class StudySessionDao {
                 t.status.isIn(<String>[statusDraft, statusInProgress]),
           ))
           .write(const StudySessionsCompanion(status: Value(statusCancelled)));
+
+  /// Marks the resumable session [id] `cancelled` (never deletes the row — see
+  /// `docs/contracts/repository-contracts/study-repository.md` §Forbidden).
+  /// Only `draft`/`in_progress` sessions transition (the allowed transitions per
+  /// §Constraints); terminal sessions are left untouched. Recorded
+  /// `study_attempts` / `study_session_items` are untouched. Returns the number
+  /// of rows updated (0 when no such resumable session exists).
+  Future<int> markCancelled(String id) =>
+      (_db.update(_db.studySessions)..where(
+            (t) =>
+                t.id.equals(id) &
+                t.status.isIn(<String>[statusDraft, statusInProgress]),
+          ))
+          .write(const StudySessionsCompanion(status: Value(statusCancelled)));
 }

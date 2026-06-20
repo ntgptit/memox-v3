@@ -203,10 +203,26 @@ Future<Either<Failure, Unit>> call({required SessionId id});
 
 **Rules:**
 
-- UPDATE `study_sessions.status = cancelled`.
+- UPDATE `study_sessions.status = cancelled` for a resumable (`draft`/
+  `in_progress`) session only — terminal sessions are a forbidden transition
+  (§Constraints in `docs/contracts/repository-contracts/study-repository.md`).
 - Already-recorded `study_attempts` preserved.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `UnsupportedActionFailure` (session in a terminal
+state), `StorageFailure`.
+
+**V1 implementation (WBS 4.10.1):** `CancelStudySessionUseCase`
+(`lib/domain/usecases/study/cancel_study_session_usecase.dart`) delegates to
+`StudyRepository.cancelSession({id})` → `StudySessionDao.markCancelled(id)` (a
+single `study_sessions` UPDATE to `cancelled` guarded by
+`status IN (draft, in_progress)`; the row is never deleted and
+`study_session_items` / `study_attempts` are untouched). The UPDATE's
+affected-row count drives the result: `1` row → success; `0` rows → a follow-up
+`sessionById` read distinguishes `NotFoundFailure(study_session)` (no such
+session) from `UnsupportedActionFailure` (session exists but is terminal —
+`completed`/`cancelled`/`failed_to_finalize`). A write error maps to
+`StorageFailure(write)`. Used by the transactional start-over flow (WBS 4.2.3),
+which only ever cancels a resumable session.
 
 ## GradeAttemptUseCase
 

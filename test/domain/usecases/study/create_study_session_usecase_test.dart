@@ -39,6 +39,10 @@ class _FakeStudyRepository implements StudyRepository {
   @override
   Future<Result<int>> expireOldSessions({required int now}) async =>
       (failure: null, data: 0);
+
+  @override
+  Future<Result<void>> cancelSession({required SessionId id}) async =>
+      (failure: null, data: null);
 }
 
 void main() {

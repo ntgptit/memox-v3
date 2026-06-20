@@ -12,12 +12,12 @@ import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_scope.dart';
 
 /// Drift-backed [StudyRepository] (WBS 4.0.1 retention sweep + WBS 4.2.1 session
-/// creation).
+/// creation + WBS 4.10.1 cancel).
 ///
-/// Owns the stale-session retention sweep and the transactional session+items
-/// insert, delegating row mutation to [StudySessionDao] and mapping a storage
-/// error to `StorageFailure(write)`. Grading / finalization / SRS transitions
-/// land with later study use cases (WBS 4.4.x+).
+/// Owns the stale-session retention sweep, the transactional session+items
+/// insert, and the cancel (status→`cancelled`, never delete) operation,
+/// delegating row mutation to [StudySessionDao]. Grading / finalization / SRS
+/// transitions land with later study use cases (WBS 4.4.x+).
 class StudyRepositoryImpl implements StudyRepository {
   StudyRepositoryImpl({
     required StudySessionDao dao,
@@ -111,6 +111,41 @@ class StudyRepositoryImpl implements StudyRepository {
       return (
         failure: Failure.storage(
           operation: StorageOp.transaction,
+          table: 'study_sessions',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<void>> cancelSession({required SessionId id}) async {
+    try {
+      final int updated = await _dao.markCancelled(id);
+      if (updated > 0) {
+        return (failure: null, data: null);
+      }
+      // No resumable row updated: distinguish a missing session from one in a
+      // terminal state (completed / cancelled / failed_to_finalize), which is a
+      // forbidden transition (study-repository.md §Constraints).
+      final StudySessionRow? row = await _dao.sessionById(id);
+      if (row == null) {
+        return (
+          failure: const Failure.notFound(entity: 'study_session'),
+          data: null,
+        );
+      }
+      return (
+        failure: Failure.unsupportedAction(
+          message: 'Cannot cancel a ${row.status} study session.',
+        ),
+        data: null,
+      );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.write,
           table: 'study_sessions',
           cause: error.toString(),
         ),

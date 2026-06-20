@@ -41,4 +41,14 @@ abstract interface class StudyRepository {
     required List<FlashcardId> flashcardIds,
     required int now,
   });
+
+  /// Cancels the resumable session [id] by moving its status to `cancelled` (the
+  /// session row is never deleted; recorded `study_attempts` are preserved —
+  /// `docs/contracts/repository-contracts/study-repository.md` §Forbidden). Only
+  /// `draft`/`in_progress` sessions may transition; a missing session is a
+  /// `NotFoundFailure`, a terminal session (`completed`/`cancelled`/
+  /// `failed_to_finalize`) is an `UnsupportedActionFailure`, and a write error
+  /// maps to a `StorageFailure`. Used by the transactional start-over flow
+  /// (WBS 4.2.3), which only cancels a resumable session.
+  Future<Result<void>> cancelSession({required SessionId id});
 }
