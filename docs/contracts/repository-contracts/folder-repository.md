@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-20
 status: contract
 ---
 
@@ -18,8 +18,9 @@ status: contract
 > `reorderFolders({parentId, orderedIds})` → `Result<void>`.
 > Backed by `FolderDao` (recursive/aggregate reads in
 > `lib/data/datasources/local/drift/folder_queries.drift`: `rootFolderSummaries`,
-> `childFolderSummaries`, `breadcrumb`, `descendantFolderIdsDeepestFirst`; `listAllFolders` +
-> single-table mutations via the query builder) + `FolderMapper` + injectable `IdGenerator`/clock.
+> `childFolderSummaries`, `folderSubtreeCounts`, `breadcrumb`, `descendantFolderIdsDeepestFirst`;
+> `listAllFolders` + single-table mutations via the query builder) + `FolderMapper` + injectable
+> `IdGenerator`/clock.
 > Create-subfolder locks an `unlocked` parent to `subfolders`; delete cascades descendant **folders**
 > deepest-first and reverts an emptied parent to `unlocked`; move recomputes `sort_order`, locks an
 > `unlocked` destination, reverts the emptied old parent, and rejects cycle/decks-lock/dup/missing;
@@ -28,12 +29,20 @@ status: contract
 > `test/data/repositories/folder_read_queries_test.dart` (reads),
 > `test/domain/usecases/folder/{move_folder,reorder_folders}_usecase_test.dart`.
 >
-> **Deferred until the decks/flashcards tables ship (WBS 2.7.x/2.11.x):** `updateContentMode`
-> member; deck/flashcard/progress/session delete cascade and deck-subtree relocation on move; child
-> **decks** + the non-zero `deckCount`/`cardCount`/`dueCount` on the read models (F12/F13); the
-> deck-side content guard (`folder_contains_subfolders`, F6). The remaining `Either`/`Unit`
-> signatures and methods below are the **target** style/surface, intentionally ahead of the current
-> code.
+> **Live counts (WBS 3.7.1, 2026-06-20):** the read models carry real counts —
+> `subfolderCount`/`deckCount` are direct children, `cardCount`/`dueCount` aggregate recursively
+> over the folder subtree (whole-forest recursive CTE joined to folder rows; `folderSubtreeCounts`
+> backs `FolderDetail`'s own aggregate). `dueCount` counts scheduled cards (`due_at IS NOT NULL AND
+> due_at <= now`); NEW cards are excluded. The suspend/bury exclusion (F13) is trivially satisfied
+> until those columns ship, then added to the count CTEs. Tests:
+> `test/data/repositories/folder_deck_due_counts_test.dart`.
+>
+> **Deferred until the relevant tables ship:** `updateContentMode` member;
+> flashcard/progress/session delete cascade and deck-subtree relocation on move (deck row + its
+> flashcards/progress/tags already cascade — WBS 2.9.1); the deck-side content guard
+> (`folder_contains_subfolders`, F6) is live; child **deck** tiles on `FolderDetail` land with the
+> Folder-detail FE work. The remaining `Either`/`Unit` signatures and methods below are the
+> **target** style/surface, intentionally ahead of the current code.
 
 > Target architecture note: `Either<Failure, T>` / `fpdart` references describe MemoX's intended error/result contract style. If the project has not yet adopted `fpdart`, do not add it during ordinary feature implementation. First run an approved dependency/API migration task, or use the existing repository error/result pattern until that migration is approved.
 
