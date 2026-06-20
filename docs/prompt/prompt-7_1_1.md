@@ -1,13 +1,14 @@
 # Claude Code Task Prompt — WBS 7.1.1: Due summary query BE V1
 
-**Generated:** 2026-06-19
-**Flow:** Progress | **Layer:** BE | **Status:** Specified
+**Generated:** 2026-06-20
+**Flow:** Progress | **Layer:** BE | **Status:** Blocked
 
 **Deliverable:**
 > Aggregate due-card counts (global/per-deck) excluding buried/suspended + tests
 
 ## ⚠️ Dependency warnings
 
+⚠️  Dependency `4.0.2` (**Bury/suspend progress columns + migration (ENABLER — B2)**) is **Specified** — build it first.
 ⚠️  Dependency `4.11.1` (Bury/suspend queue exclusion BE) is **Specified** — build it first.
 
 Resolve dependencies before this task or document why they can be skipped.
@@ -120,7 +121,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 7.1.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 7.1.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

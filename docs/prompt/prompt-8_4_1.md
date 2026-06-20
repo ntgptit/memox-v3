@@ -1,16 +1,10 @@
 # Claude Code Task Prompt — WBS 8.4.1: TTS service BE
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Settings | **Layer:** BE | **Status:** Specified
 
 **Deliverable:**
 > `TtsService` abstraction + platform implementation + settings storage + tests
-
-## ⚠️ Dependency warnings
-
-⚠️  Dependency `1.1.5` (Drift/database baseline) is **Specified** — build it first.
-
-Resolve dependencies before this task or document why they can be skipped.
 
 ---
 
@@ -117,7 +111,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 8.4.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 8.4.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

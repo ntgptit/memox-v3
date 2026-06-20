@@ -1,14 +1,15 @@
 # Claude Code Task Prompt — WBS 2.17.1: Flashcard status filter BE V1
 
-**Generated:** 2026-06-19
-**Flow:** Content management | **Layer:** BE | **Status:** Specified
+**Generated:** 2026-06-20
+**Flow:** Content management | **Layer:** BE | **Status:** Blocked
 
 **Deliverable:**
 > List query filters for active/suspended/buried/due + tests
 
 ## ⚠️ Dependency warnings
 
-⚠️  Dependency `2.15.1` (Flashcard Tags BE V1) is **Specified** — build it first.
+⚠️  Dependency `2.15.1` (Flashcard Tags BE V1) is **Implemented (BE create-time tags landed in 2.11.1)** — build it first.
+⚠️  Dependency `4.0.2` (**Bury/suspend progress columns + migration (ENABLER — B2)**) is **Specified** — build it first.
 
 Resolve dependencies before this task or document why they can be skipped.
 
@@ -121,7 +122,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 2.17.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 2.17.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

@@ -1,16 +1,10 @@
 # Claude Code Task Prompt — WBS 9.6: l10n coverage gate
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Quality | **Layer:** Test | **Status:** Ongoing
 
 **Deliverable:**
 > No hardcoded user-facing strings; ARB keys per copy change
-
-## ⚠️ Dependency warnings
-
-⚠️  Dependency `1.1.4` (l10n baseline) is **Specified** — build it first.
-
-Resolve dependencies before this task or document why they can be skipped.
 
 ---
 
@@ -102,7 +96,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 9.6 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 9.6 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

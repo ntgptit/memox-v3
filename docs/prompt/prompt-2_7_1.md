@@ -1,16 +1,10 @@
 # Claude Code Task Prompt — WBS 2.7.1: Deck Create BE V1
 
-**Generated:** 2026-06-19
-**Flow:** Content management | **Layer:** BE | **Status:** Specified
+**Generated:** 2026-06-20
+**Flow:** Content management | **Layer:** BE | **Status:** Implemented (2026-06-20)
 
 **Deliverable:**
 > Validated deck create (folder-owned, mode lock) + tests
-
-## ⚠️ Dependency warnings
-
-⚠️  Dependency `2.6.1` (Folder content-mode guard BE) is **Specified** — build it first.
-
-Resolve dependencies before this task or document why they can be skipped.
 
 ---
 
@@ -51,7 +45,7 @@ Do NOT continue the task until user confirms resolution.
 ## Step 2 — Scope
 
 **WBS ID:** `2.7.1`
-**Evidence / Source:** `lib/domain/usecases/deck/create_deck_usecase.dart`, `test/data/repositories/folder_repository_impl_test.dart`
+**Evidence / Source:** `lib/data/datasources/local/drift/decks.drift`, `lib/data/datasources/local/migrations/v2_add_decks.dart`, `lib/domain/entities/deck.dart`, `lib/domain/types/target_language.dart`, `lib/data/datasources/local/daos/deck_dao.dart`, `lib/data/mappers/deck_mapper.dart`, `lib/domain/usecases/deck/create_deck_usecase.dart`, `test/data/repositories/folder_repository_impl_deck_test.dart`, `test/domain/usecases/deck/create_deck_usecase_test.dart`
 
 **Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
 
@@ -120,7 +114,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 2.7.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 2.7.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

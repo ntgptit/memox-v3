@@ -1,14 +1,14 @@
 # Claude Code Task Prompt — WBS 5.2.1: Due-today summary BE
 
-**Generated:** 2026-06-19
-**Flow:** Dashboard | **Layer:** BE | **Status:** Specified
+**Generated:** 2026-06-20
+**Flow:** Dashboard | **Layer:** BE | **Status:** Blocked
 
 **Deliverable:**
 > `dueToday` from library overview read model (excludes buried/suspended)
 
 ## ⚠️ Dependency warnings
 
-⚠️  Dependency `3.1.1` (Library overview load BE) is **Specified** — build it first.
+⚠️  Dependency `4.0.2` (**Bury/suspend progress columns + migration (ENABLER — B2)**) is **Specified** — build it first.
 
 Resolve dependencies before this task or document why they can be skipped.
 
@@ -118,7 +118,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 5.2.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 5.2.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

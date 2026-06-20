@@ -1,6 +1,6 @@
 # Claude Code Task Prompt — WBS 7.2.1: Box distribution query BE V1
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Progress | **Layer:** BE | **Status:** Specified
 
 **Deliverable:**
@@ -8,7 +8,7 @@
 
 ## ⚠️ Dependency warnings
 
-⚠️  Dependency `7.1.1` (Due summary query BE V1) is **Specified** — build it first.
+⚠️  Dependency `7.1.1` (Due summary query BE V1) is **Blocked** — build it first.
 
 Resolve dependencies before this task or document why they can be skipped.
 
@@ -121,7 +121,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 7.2.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 7.2.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

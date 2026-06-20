@@ -1,14 +1,15 @@
 # Claude Code Task Prompt — WBS 7.6.1: Review history query BE
 
-**Generated:** 2026-06-19
-**Flow:** Progress | **Layer:** BE | **Status:** Specified
+**Generated:** 2026-06-20
+**Flow:** Progress | **Layer:** BE | **Status:** Blocked
 
 **Deliverable:**
-> Per-card header (preview + SRS + cumulative counters + last_reset_at + correct streak + deck/breadcrumb) and the unified activity feed merging `study_attempts` (+ `duration_ms`, v7) with `card_events` (created/edited/reset, v7); reset writes a `card_events` row; `last_reset_at` v6
+> Per-card header (preview + SRS + cumulative counters + last_reset_at + correct streak + deck/breadcrumb) and the unified activity feed merging `study_attempts` (+ `duration_ms`) with `card_events` (created/edited/reset); reset writes a `card_events` row
 
 ## ⚠️ Dependency warnings
 
-⚠️  Dependency `7.3.1` (Study statistics BE V1) is **Specified** — build it first.
+⚠️  Dependency `7.0.1` (**Card-history schema (ENABLER — B4)**) is **Blocked** — build it first.
+⚠️  Dependency `4.0.1` (**Study persistence schema + repo skeleton (ENABLER — B1)**) is **Specified** — build it first.
 
 Resolve dependencies before this task or document why they can be skipped.
 
@@ -51,7 +52,7 @@ Do NOT continue the task until user confirms resolution.
 ## Step 2 — Scope
 
 **WBS ID:** `7.6.1`
-**Evidence / Source:** `lib/data/datasources/local/drift/history_queries.drift`, `lib/data/datasources/local/daos/card_history_dao.dart`, `lib/data/repositories/card_history_repository_impl.dart`, `lib/domain/repositories/card_history_repository.dart`, `lib/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart`, `test/data/repositories/card_history_repository_impl_test.dart`, `test/data/migrations/flashcard_progress_last_reset_at_migration_test.dart`
+**Evidence / Source:** `lib/data/datasources/local/drift/history_queries.drift`, `lib/data/datasources/local/daos/card_history_dao.dart`, `lib/data/repositories/card_history_repository_impl.dart`, `lib/domain/repositories/card_history_repository.dart`, `test/data/repositories/card_history_repository_impl_test.dart`
 
 **Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
 
@@ -120,7 +121,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 7.6.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 7.6.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

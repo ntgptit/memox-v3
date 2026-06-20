@@ -1,16 +1,10 @@
 # Claude Code Task Prompt — WBS 2.15.1: Flashcard Tags BE V1
 
-**Generated:** 2026-06-19
-**Flow:** Content management | **Layer:** BE | **Status:** Specified
+**Generated:** 2026-06-20
+**Flow:** Content management | **Layer:** BE | **Status:** Implemented (BE create-time tags landed in 2.11.1)
 
 **Deliverable:**
-> Tag validation (trim/lowercase/dedupe), `flashcard_tags` table + migration
-
-## ⚠️ Dependency warnings
-
-⚠️  Dependency `1.1.5` (Drift/database baseline) is **Specified** — build it first.
-
-Resolve dependencies before this task or document why they can be skipped.
+> Create-time tag validation (trim/lowercase/dedupe) + `flashcard_tags` table + migration shipped inside 2.11.1 (schema v3); standalone tag editing/management (rename/delete/study-by-tag) remains Future per `docs/business/tags/tag-system.md`
 
 ---
 
@@ -52,7 +46,7 @@ Do NOT continue the task until user confirms resolution.
 ## Step 2 — Scope
 
 **WBS ID:** `2.15.1`
-**Evidence / Source:** `lib/domain/tag/tag_validator.dart`, `lib/data/datasources/local/migrations/v3_add_flashcard_tags.dart`
+**Evidence / Source:** `lib/data/datasources/local/drift/flashcards.drift` (`flashcard_tags`), `lib/data/datasources/local/migrations/v3_add_flashcards.dart`, `lib/data/repositories/flashcard_repository_impl.dart` (`_normalizeTags`), `test/data/repositories/flashcard_repository_impl_test.dart`
 
 **Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
 
@@ -121,7 +115,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 2.15.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 2.15.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

@@ -1,6 +1,6 @@
 # Claude Code Task Prompt — WBS 8.4.3: Auto-play on reveal
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Settings | **Layer:** Integration | **Status:** Specified
 
 **Deliverable:**
@@ -73,7 +73,7 @@ Do NOT continue the task until user confirms resolution.
 ## Step 2 — Scope
 
 **WBS ID:** `8.4.3`
-**Evidence / Source:** `lib/presentation/features/study/widgets/study_session_recall_mode_view.dart` (`_maybeAutoPlay`, `_autoPlayIfEnabled`); fill mode has speak-front only (no auto-play per spec)
+**Evidence / Source:** `docs/business/tts/tts-settings.md` (study-mode views do not exist yet)
 
 **Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
 
@@ -168,7 +168,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 8.4.3 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 8.4.3 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

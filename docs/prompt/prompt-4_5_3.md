@@ -1,6 +1,6 @@
 # Claude Code Task Prompt — WBS 4.5.3: Review mode FE V1
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Study/SRS | **Layer:** FE | **Status:** Specified
 
 **Deliverable:**
@@ -165,7 +165,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 4.5.3 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 4.5.3 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

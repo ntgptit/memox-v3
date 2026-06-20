@@ -1,6 +1,6 @@
 # Claude Code Task Prompt — WBS 4.1.1: Study entry eligibility BE
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Study/SRS | **Layer:** BE | **Status:** Specified
 
 **Deliverable:**
@@ -8,7 +8,8 @@
 
 ## ⚠️ Dependency warnings
 
-⚠️  Dependency `1.1.5` (Drift/database baseline) is **Specified** — build it first.
+⚠️  Dependency `4.0.1` (**Study persistence schema + repo skeleton (ENABLER — B1)**) is **Specified** — build it first.
+⚠️  Dependency `4.0.2` (**Bury/suspend progress columns + migration (ENABLER — B2)**) is **Specified** — build it first.
 
 Resolve dependencies before this task or document why they can be skipped.
 
@@ -120,7 +121,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 4.1.1 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 4.1.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

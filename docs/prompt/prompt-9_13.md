@@ -1,6 +1,6 @@
 # Claude Code Task Prompt — WBS 9.13: Repo-map cold-start snapshot
 
-**Generated:** 2026-06-19
+**Generated:** 2026-06-20
 **Flow:** Quality | **Layer:** Docs | **Status:** Specified
 
 **Deliverable:**
@@ -102,7 +102,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-19 | 9.13 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 9.13 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 

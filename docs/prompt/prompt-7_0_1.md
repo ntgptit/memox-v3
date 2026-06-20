@@ -1,10 +1,16 @@
-# Claude Code Task Prompt — WBS 2.18.2: Flashcard tag filter FE V1
+# Claude Code Task Prompt — WBS 7.0.1: **Card-history schema (ENABLER — B4)**
 
 **Generated:** 2026-06-20
-**Flow:** Content management | **Layer:** FE | **Status:** Specified
+**Flow:** Progress | **Layer:** BE | **Status:** Blocked
 
 **Deliverable:**
-> Tag filter chips + clear-filters empty state
+> `card_events` table (created/edited/reset events, FK→flashcards) + `flashcard_progress.last_reset_at` column + `study_attempts.duration_ms` column; migration v+1 + schema/migration tests; no read logic yet (lands in 7.6.1)
+
+## ⚠️ Dependency warnings
+
+⚠️  Dependency `4.0.1` (**Study persistence schema + repo skeleton (ENABLER — B1)**) is **Specified** — build it first.
+
+Resolve dependencies before this task or document why they can be skipped.
 
 ---
 
@@ -20,26 +26,15 @@
 - `docs/contracts/code-style.md`
 
 ### Task-specific
-- `docs/design/mock-to-ui-playbook.md`
-- `docs/design/design-language.md`
-- `docs/ui-ux/ui-ux-contract.md`
-- `docs/ui-ux/action-hierarchy-contract.md`
-- `docs/ui-ux/l10n-copy-contract.md`
-- `docs/system-design/MemoX Design System/README.md`
-- `docs/system-design/MemoX Design System/CLAUDE.md`
-- `docs/wireframes/07-library-deck-cards.md`
-- `docs/wireframes/08-library-deck-card-detail.md`
-- `docs/wireframes/10-deck-import.md`
+- `docs/contracts/usecase-contracts/flashcard.md`
+- `docs/contracts/repository-contracts/flashcard-repository.md`
 - `docs/business/flashcard/flashcard-management.md`
 - `docs/business/export/export.md`
+- `docs/state/state-management-contract.md`
 - `docs/decision-tables/memox-core-decision-table.md`
 - `docs/testing/test-strategy.md`
-### Mock shots (FE/Integration tasks — before any code)
-1. Locate PNG set for each wireframe via `shots/INDEX.md` → find all states (light + dark)
-2. Create mapping table: mock element → existing component → implementation plan → scope (Current/Future/Rejected)
-3. Check `docs/design/screens/{screen}.visual-contract.md` if it exists
-4. For exact measurements (without vision): `docs/system-design/MemoX Design System/ui_kits/mobile/specs/INDEX.md` → `specs/NN-{screen}.md`
-5. **Do not code until every visible mock element is mapped** — silent gaps are parity failures
+- `docs/database/schema-contract.md`
+- `docs/database/drift-guide.md`
 
 ### Drift check protocol
 If any doc does not match current code, **stop immediately** and report:
@@ -56,8 +51,8 @@ Do NOT continue the task until user confirms resolution.
 
 ## Step 2 — Scope
 
-**WBS ID:** `2.18.2`
-**Evidence / Source:** `docs/business/tags/tag-system.md`
+**WBS ID:** `7.0.1`
+**Evidence / Source:** `lib/data/datasources/local/drift/**`, `lib/data/datasources/local/migrations/**`, `docs/database/schema-contract.md`, `docs/database/migration-contract.md`, `test/data/migrations/**`
 
 **Tech stack:** State management uses **Riverpod Annotation v3** (`@riverpod`, `@freezed`, code-generated; after any change, run `dart run build_runner build --delete-conflicting-outputs`).
 
@@ -75,15 +70,19 @@ Do NOT continue the task until user confirms resolution.
 
 ## Step 3 — Implement
 
-**Presentation order:**
-1. Read ALL `shots/` PNGs for this screen (light + dark, EVERY state)
-2. Build mapping table: mock element → component/token → scope (Current/Future/Rejected)
-3. Wire screen to existing **Riverpod Annotation provider** (`@riverpod` for state, `@freezed` for models; do NOT bypass UseCase → Repository flow)
-4. Add ARB keys for new copy (`lib/l10n/app_en.arb` + `lib/l10n/app_vi.arb`)
-5. Widget tests: loaded, empty, loading, error, navigation
-6. Golden per state: light + dark at 390×780 (`matchesGoldenFile`)
+**Clean Architecture order:**
+1. Domain entity / value objects (if new)
+2. Repository port (interface in domain layer)
+3. Use case(s)
+4. Drift DAO / query (if persistence needed)
+5. Repository implementation (data layer)
+6. Riverpod provider wiring (`@riverpod`)
+7. Unit tests (use case + SRS transitions if relevant)
 
-After `@riverpod`, `@freezed`, or ARB changes: `node tool/verify/run.mjs --quick` triggers `build_runner` + `gen-l10n` automatically.
+After any `@riverpod` / `@freezed` / `JsonSerializable` change:
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
 
 ---
 
@@ -96,39 +95,6 @@ node tool/verify/run.mjs --quick --test <test-paths>
 - Fast feedback; does **not** write a pass-marker (cannot commit from --quick alone)
 - Fix all analyzer warnings before continuing
 - Replace `<test-paths>` with the specific test files being worked on
-
-## Step 5 — Design parity (FE / Integration tasks)
-
-1. Render golden for each state and compare with mock shot:
-   ```bash
-   python tool/golden_diff/diff.py <golden.png> <shot.png> [--out heatmap.png]
-   ```
-2. Generate goldens **intentionally** (only after visual review):
-   ```bash
-   node tool/verify/run.mjs --update-goldens --test <golden-test-paths>
-   ```
-3. Prove the gate is real — re-run **without** `--update` (must pass):
-   ```bash
-   node tool/verify/run.mjs --test <golden-test-paths>
-   ```
-4. Visual parity checklist (from CLAUDE.md §Visual Parity Gate):
-   - [ ] Spec read — ALL `shots/` PNGs + measured DOM spec `specs/NN-*.md`
-   - [ ] Golden per state — light + dark 390×780; regenerated + re-proved
-   - [ ] Tokens, not kit px — `Mx*` components + spacing/radius/typography tokens
-   - [ ] Invariant in shared widget — layout detail fixed at `Mx*` level
-   - [ ] Visual gaps listed — each unmatched element: Current / Future / Rejected / Missing-data / Token-missing / Mock-doc-conflict
-5. UI Density Gate (CLAUDE.md §UI Density Gate):
-   - [ ] Compact mobile review at 360dp — no overflow
-   - [ ] Exactly one visually dominant primary action per screen
-   - [ ] Full-width / large buttons: each one justified or guard-commented
-   - [ ] No card-level large/fullWidth violation
-   - [ ] `MxActionButton` / `MxCardActions` preferred over raw buttons
-6. Design System compliance (MemoX Design System/CLAUDE.md):
-   - [ ] All shadows: neutral only, no colored/glowing shadows (use `--memox-shadow-sm/md/lg`)
-   - [ ] Spacing/radius/colors: token-driven via `--memox-*` only, no hardcoded px/hex
-   - [ ] Shared primitives used: `window.MX` (Icon, S, PillBtn, Chip, ListRow, etc.) + contract classes (.card, .card-row, .list-row)
-   - [ ] Side-by-side cards: use `.card-row` wrapper (equal-height stretch), not hand-rolled flex
-   - [ ] If UI-kit screen: pass `node tools/check-ui-kit.js` (0 errors required)
 
 ---
 
@@ -155,7 +121,7 @@ After it runs `dart fix` / `dart format`, inspect the diff and revert changes ou
 ### 6.3 WBS §10 Traceability Log
 Append **one line** to `docs/project-management/wbs.md` §10 (newest first):
 ```
-| `<8-char-hash>` | 2026-06-20 | 2.18.2 | {one-line summary of what was implemented} |
+| `<8-char-hash>` | 2026-06-20 | 7.0.1 | {one-line summary of what was implemented} |
 ```
 (The short hash is known after commit; amend the WBS log in the next commit if needed.)
 
@@ -181,7 +147,7 @@ git push -u origin <branch>
 Follow `docs/checklist/implementation-checklist.md` §Final report template. Include at minimum:
 
 - **Summary** — 1-3 sentences
-- **WBS:** 2.18.2
+- **WBS:** 7.0.1
 - **Changed code files** — paths
 - **Changed doc files** — paths (or "no docs needed because: …")
 - **Doc-code parity check** — 8 ticks
