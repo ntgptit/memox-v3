@@ -50,50 +50,75 @@ class FolderRepositoryImpl implements FolderRepository {
   // ---- Reads ----
 
   @override
-  Stream<LibraryOverview> watchLibraryOverview() =>
-      _dao.watchRootFolderSummaries().map(
+  Stream<LibraryOverview> watchLibraryOverview() => _dao
+      .watchRootFolderSummaries(_nowMs())
+      .map(
         (List<RootFolderSummariesResult> rows) => LibraryOverview(
           folders: rows
               .map(
-                (RootFolderSummariesResult r) =>
-                    _summary(r.folders, r.subfolderCount),
+                (RootFolderSummariesResult r) => _summary(
+                  r.folders,
+                  r.subfolderCount,
+                  r.deckCount,
+                  r.cardCount,
+                  r.dueCount,
+                ),
               )
               .toList(growable: false),
         ),
       );
 
   @override
-  Stream<FolderDetail?> watchFolderDetail(FolderId id) => _dao
-      .watchChildFolderSummaries(id)
-      .asyncMap((List<ChildFolderSummariesResult> children) async {
-        final FolderRow? row = await _dao.findFolderById(id);
-        if (row == null) return null;
-        final List<FolderRow> breadcrumb = await _dao.getBreadcrumb(id);
-        return FolderDetail(
-          folder: FolderMapper.fromRow(row),
-          breadcrumb: breadcrumb
-              .map(FolderMapper.fromRow)
-              .toList(growable: false),
-          subfolders: children
-              .map(
-                (ChildFolderSummariesResult r) =>
-                    _summary(r.folders, r.subfolderCount),
-              )
-              .toList(growable: false),
-          // Deck/card tables not in the schema yet (WBS 2.7.x / 2.11.x).
-          deckCount: 0,
-          cardCount: 0,
-          dueCount: 0,
-        );
-      });
+  Stream<FolderDetail?> watchFolderDetail(FolderId id) {
+    // Bind a single due-reference `now` for the whole subscription so the
+    // folder's own aggregate counts and its child-folder summaries share the
+    // same boundary. Counts still refresh on any folders/decks/flashcards/
+    // flashcard_progress write (the dominant trigger); the boundary itself is
+    // fixed until the stream is re-subscribed (V1 scope).
+    final int now = _nowMs();
+    return _dao.watchChildFolderSummaries(id, now).asyncMap((
+      List<ChildFolderSummariesResult> children,
+    ) async {
+      final FolderRow? row = await _dao.findFolderById(id);
+      if (row == null) return null;
+      final List<FolderRow> breadcrumb = await _dao.getBreadcrumb(id);
+      final FolderSubtreeCountsResult counts = await _dao
+          .folderSubtreeCountsFor(id, now);
+      return FolderDetail(
+        folder: FolderMapper.fromRow(row),
+        breadcrumb: breadcrumb
+            .map(FolderMapper.fromRow)
+            .toList(growable: false),
+        subfolders: children
+            .map(
+              (ChildFolderSummariesResult r) => _summary(
+                r.folders,
+                r.subfolderCount,
+                r.deckCount,
+                r.cardCount,
+                r.dueCount,
+              ),
+            )
+            .toList(growable: false),
+        deckCount: counts.deckCount,
+        cardCount: counts.cardCount,
+        dueCount: counts.dueCount,
+      );
+    });
+  }
 
-  FolderSummary _summary(FolderRow row, int subfolderCount) => FolderSummary(
+  FolderSummary _summary(
+    FolderRow row,
+    int subfolderCount,
+    int deckCount,
+    int cardCount,
+    int dueCount,
+  ) => FolderSummary(
     folder: FolderMapper.fromRow(row),
     subfolderCount: subfolderCount,
-    // Deck/card tables not in the schema yet (WBS 2.7.x / 2.11.x).
-    deckCount: 0,
-    cardCount: 0,
-    dueCount: 0,
+    deckCount: deckCount,
+    cardCount: cardCount,
+    dueCount: dueCount,
   );
 
   // ---- Mutations ----
