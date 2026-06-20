@@ -130,17 +130,26 @@ If any step is skipped, report it explicitly.
 (`onCreate`/`onUpgrade`/`beforeOpen` in `AppDatabase.migration`) and the
 platform-isolated connection. Each schema bump adds a `migrations/v<N>_*.dart`
 step file plus an `onUpgrade` step (guarded by `from`). Current code is at
-**schema v3**.
+**schema v4**.
 
 | Version | File | What changed |
 |---------|------|--------------|
+| v4 | `v4_add_bury_suspend.dart` | Added `flashcard_progress.is_suspended` (BOOLEAN NOT NULL DEFAULT 0 → existing rows back-fill not-suspended) and `flashcard_progress.buried_until` (INTEGER NULL → existing rows back-fill not-buried). Additive, data-preserving; no behavior reads them yet (eligibility read logic lands WBS 4.11.1 / 2.17.1). Migration test: `test/data/migrations/v4_add_bury_suspend_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 4.0.2. |
 | v3 | `v3_add_flashcards.dart` | Added the `flashcards` (`id`, `deck_id` FK→decks ON DELETE CASCADE, `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, timestamps) + `idx_flashcards_deck`; `flashcard_progress` (`flashcard_id` PK = FK→flashcards ON DELETE CASCADE, `box_number` DEFAULT 1, `due_at?`, `review_count` DEFAULT 0, `lapse_count` DEFAULT 0); and `flashcard_tags` (`flashcard_id` FK→flashcards ON DELETE CASCADE, `tag`, PK `(flashcard_id, tag)`) + `idx_flashcard_tags_tag` tables. Additive. Migration test: `test/data/migrations/v3_add_flashcards_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.11.1. |
 | v2 | `v2_add_decks.dart` | Added the `decks` table (`id`, `folder_id` FK→folders ON DELETE CASCADE, `name`, `target_language` DEFAULT `'korean'`, `sort_order`, timestamps) + `idx_decks_folder`. Additive. Migration test: `test/data/migrations/v2_add_decks_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.7.1. |
 | v1 | `app_database.dart` (onCreate) | Rebuild baseline: `folders` table + `idx_folders_parent`; foreign keys + WAL enabled. Schema test: `test/data/migrations/app_database_schema_test.dart`. |
 
 The rows below describe the **prior iteration's** migration sequence (the target
 history the rebuild migrates toward); their step files are not present in the
-current tree until each table is re-added:
+current tree until each table is re-added.
+
+> **Numbering note:** the rebuild assigns version numbers in its own build order,
+> which diverges from the prior iteration's. The version labels below are the
+> *prior* sequence and will be **renumbered** as each table is re-added — e.g.
+> the prior `v4_add_study_tables.dart` is NOT the live v4 (the live v4 is
+> `v4_add_bury_suspend.dart`, shipped above); study tables will land at a later
+> rebuild version. Treat the labels below as relative ordering, not as the
+> rebuild's final version numbers.
 
 | Version | File | What changed |
 |---------|------|--------------|
