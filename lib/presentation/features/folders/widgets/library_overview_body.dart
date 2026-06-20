@@ -38,27 +38,27 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 /// card, with its loading / loaded / true-empty / search-no-results / error
 /// states, plus the folder overflow actions. The search field + Cancel live in
 /// the app bar (`LibrarySearchAppBar`), not here. WBS 3.1.2.
-class LibraryOverviewBody extends ConsumerStatefulWidget {
+class LibraryOverviewBody extends ConsumerWidget {
   const LibraryOverviewBody({super.key});
 
-  @override
-  ConsumerState<LibraryOverviewBody> createState() =>
-      _LibraryOverviewBodyState();
-}
-
-class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
   /// Inset for the inter-row hairline: tile width + the row's leading gap, so
   /// the divider starts under the text (mirrors the kit `.hr.inset`).
   static const double _dividerInset = MxSpacing.space10 + MxSpacing.space3;
 
-  void _clearSearch() => ref.read(librarySearchQueryProvider.notifier).clear();
+  void _clearSearch(WidgetRef ref) =>
+      ref.read(librarySearchQueryProvider.notifier).clear();
 
-  void _openFolder(FolderSummary summary) => context.pushNamed(
-    RouteNames.folderDetail,
-    pathParameters: <String, String>{RouteParams.id: summary.folder.id},
-  );
+  void _openFolder(BuildContext context, FolderSummary summary) =>
+      context.pushNamed(
+        RouteNames.folderDetail,
+        pathParameters: <String, String>{RouteParams.id: summary.folder.id},
+      );
 
-  void _reportResult(Failure? failure, String successMessage) {
+  void _reportResult(
+    BuildContext context,
+    Failure? failure,
+    String successMessage,
+  ) {
     if (failure != null) {
       showMxSnackbar(
         context,
@@ -70,41 +70,53 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
     showMxSnackbar(context, message: successMessage);
   }
 
-  Future<void> _onFolderActions(FolderSummary summary) async {
+  Future<void> _onFolderActions(
+    BuildContext context,
+    WidgetRef ref,
+    FolderSummary summary,
+  ) async {
     final FolderAction? action = await showFolderActionsSheet(
       context,
       summary: summary,
     );
     if (action == null) return;
-    if (!mounted) return;
+    if (!context.mounted) return;
     switch (action) {
       case FolderAction.rename:
-        await _rename(summary);
+        await _rename(context, ref, summary);
       case FolderAction.move:
-        await _move(summary);
+        await _move(context, ref, summary);
       case FolderAction.delete:
-        await _delete(summary);
+        await _delete(context, ref, summary);
     }
   }
 
-  Future<void> _rename(FolderSummary summary) async {
+  Future<void> _rename(
+    BuildContext context,
+    WidgetRef ref,
+    FolderSummary summary,
+  ) async {
     final String? newName = await showFolderRenameDialog(
       context,
       currentName: summary.folder.name,
     );
     if (newName == null) return;
-    if (!mounted) return;
+    if (!context.mounted) return;
     final String successMessage = AppLocalizations.of(
       context,
     ).folderRenamedSnack;
     final Result<Folder> result = await ref
         .read(libraryActionControllerProvider.notifier)
         .rename(id: summary.folder.id, newName: newName);
-    if (!mounted) return;
-    _reportResult(result.failure, successMessage);
+    if (!context.mounted) return;
+    _reportResult(context, result.failure, successMessage);
   }
 
-  Future<void> _delete(FolderSummary summary) async {
+  Future<void> _delete(
+    BuildContext context,
+    WidgetRef ref,
+    FolderSummary summary,
+  ) async {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool confirmed = await MxConfirmDialog.show(
       context,
@@ -118,16 +130,20 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
       destructive: true,
     );
     if (!confirmed) return;
-    if (!mounted) return;
+    if (!context.mounted) return;
     final String successMessage = l10n.folderDeletedSnack;
     final Result<void> result = await ref
         .read(libraryActionControllerProvider.notifier)
         .delete(id: summary.folder.id);
-    if (!mounted) return;
-    _reportResult(result.failure, successMessage);
+    if (!context.mounted) return;
+    _reportResult(context, result.failure, successMessage);
   }
 
-  Future<void> _move(FolderSummary summary) async {
+  Future<void> _move(
+    BuildContext context,
+    WidgetRef ref,
+    FolderSummary summary,
+  ) async {
     final String successMessage = AppLocalizations.of(context).folderMovedSnack;
     final LibraryActionController controller = ref.read(
       libraryActionControllerProvider.notifier,
@@ -135,10 +151,10 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
     final Result<List<FolderMoveTarget>> targets = await controller.moveTargets(
       folderId: summary.folder.id,
     );
-    if (!mounted) return;
+    if (!context.mounted) return;
     final List<FolderMoveTarget>? candidates = targets.data;
     if (candidates == null) {
-      _reportResult(targets.failure, successMessage);
+      _reportResult(context, targets.failure, successMessage);
       return;
     }
     final FolderMoveTarget? destination = await showFolderMovePicker(
@@ -146,17 +162,17 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
       targets: candidates,
     );
     if (destination == null) return;
-    if (!mounted) return;
+    if (!context.mounted) return;
     final Result<Folder> result = await controller.move(
       id: summary.folder.id,
       newParentId: destination.id,
     );
-    if (!mounted) return;
-    _reportResult(result.failure, successMessage);
+    if (!context.mounted) return;
+    _reportResult(context, result.failure, successMessage);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final AsyncValue<LibraryOverview> overview = ref.watch(
       libraryOverviewStreamProvider,
@@ -181,11 +197,11 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
         ),
       ),
       data: (LibraryOverview data) =>
-          _content(context, filterLibrary(data, term)),
+          _content(context, ref, filterLibrary(data, term)),
     );
   }
 
-  Widget _content(BuildContext context, LibraryListView view) {
+  Widget _content(BuildContext context, WidgetRef ref, LibraryListView view) {
     final AppLocalizations l10n = AppLocalizations.of(context);
 
     if (view.totalFolderCount == 0) {
@@ -208,7 +224,7 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
         message: l10n.librarySearchNoResultsMessage(view.searchTerm),
         action: MxSecondaryButton(
           label: l10n.librarySearchClearLabel,
-          onPressed: _clearSearch,
+          onPressed: () => _clearSearch(ref),
         ),
       );
     }
@@ -223,12 +239,16 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
           _CountOverline(count: view.folders.length),
           const SizedBox(height: MxSpacing.space3),
         ],
-        _groupedCard(view.folders),
+        _groupedCard(context, ref, view.folders),
       ],
     );
   }
 
-  Widget _groupedCard(List<FolderSummary> folders) {
+  Widget _groupedCard(
+    BuildContext context,
+    WidgetRef ref,
+    List<FolderSummary> folders,
+  ) {
     final List<Widget> rows = <Widget>[];
     for (int i = 0; i < folders.length; i++) {
       if (i > 0) {
@@ -238,8 +258,8 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
       rows.add(
         LibraryFolderTile(
           summary: summary,
-          onTap: () => _openFolder(summary),
-          onActions: () => _onFolderActions(summary),
+          onTap: () => _openFolder(context, summary),
+          onActions: () => _onFolderActions(context, ref, summary),
         ),
       );
     }
