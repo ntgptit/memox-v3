@@ -88,9 +88,9 @@ inside a phase, follow the per-row `Depends on`.
 | --- | --- | --- | --- |
 | **0 — Foundation** | `tool/verify` runs on code; app boots | 1.1.1, 1.1.3, 1.1.4, 1.1.5 | `node tool/verify/run.mjs` runs code chain; empty app boots; doc_guard re-baselined; `docs/_generated/` regenerated |
 | **1 — Core widget kit** | ~10–12 `Mx*` widgets, golden-tested | 1.1.2, 1.2.1–1.2.5 | Every core widget has light+dark goldens; no feature screen needs a new shared surface |
-| **2 — BE Group A: content** | Folder/Deck/Flashcard/Tag CRUD + import/export/bulk BE | 2.1.1–2.21.1 (BE rows), 3.1.1/3.2.1/3.4.1/3.5.1/3.7.1 (read models), 6.x BE, 8.7.1, 8.9.1 | Content + search + import/export use cases pass unit tests; FK chain `folders→decks→flashcards` solid |
+| **2 — BE Group A: content** | Folder/Deck/Flashcard/Tag CRUD + import/export/bulk BE | 2.1.1–2.21.1 (BE rows), 3.1.1/3.2.1/3.4.1/3.5.1/3.7.1 (read models), **6.0.1 enabler (§4.3) then 6.x BE**, 8.7.1, 8.9.1 | Content + search + import/export use cases pass unit tests; FK chain `folders→decks→flashcards` solid |
 | **3 — Library + Import screens** | Assemble content/library/import FE | 2.x FE rows, 3.1.2/3.2.2/3.4.2/3.5.2, 6.1.1/6.3.1/6.5.1 | Create→browse→import content works end-to-end |
-| **4 — BE Group B: study/SRS** | Study session + SRS + mode strategies BE | 4.1.1–4.11.2 (BE rows), 4.5.x strategies | Session create→answer→finalize→SRS transition pass table-driven tests |
+| **4 — BE Group B: study/SRS** | Study session + SRS + mode strategies BE | **4.0.1/4.0.2 enablers first (§4.3)**, then 4.1.1–4.11.2 (BE rows), 4.5.x strategies | Enablers shipped; session create→answer→finalize→SRS transition pass table-driven tests |
 | **5 — Study screens (5 modes)** | Assemble study/result FE | 4.1.2/4.1.3/4.1.4, 4.3.2, 4.4.2, 4.5.3/4.5.5/4.5.7/4.5.9/4.5.11, 4.7.2, 4.9.1 | Full study loop playable in all implemented modes |
 | **6 — BE Group C: reporting** | Progress/history/dashboard read models | 7.1.1–7.6.2, 5.1.1/5.2.1/5.4.1/5.6.1 | Read models composed + tested |
 | **7 — Dashboard + Progress + History screens** | Assemble "look back" FE | 5.x FE, 7.5.x, 7.6.3 | Dashboard + Progress + Card history render all states |
@@ -130,6 +130,35 @@ must store them before `2.1.2`.
 schema); `3.8.1` (tags/recent/popular search sections) is Future. `3.2.3` (new-vs-due study split
 on folder detail) waits on the Study epic (Phase 4) — render the deck rows now, add the study split
 when §4 lands.
+
+### 4.3 Critical Path & Blocker Register (2026-06-20)
+
+As of 2026-06-20 the merged baseline is **content + tag + counts + learning/tag-settings BE**
+(PRs #4–#8). Three latent blockers gate the rest of the roadmap. Each is now promoted to an
+explicit **enabler work package on the critical path** so the project stops discovering them
+mid-task. **Rule: do not start a dependent row until its enabler row is `Implemented`.** An enabler
+is a normal WBS row (schema/contract only, narrow, testable) — not a research spike.
+
+| # | Blocker (was implicit) | Enabler WP | Unblocks | Definition of Ready for dependents (enabler acceptance) | Risk if slipped |
+| --- | --- | --- | --- | --- | --- |
+| B1 | No study persistence: `study_sessions` / `study_session_items` / `study_attempts` tables + study repo do not exist | **4.0.1** | All of Group 4 (4.1.x–4.11.x), 5.1.x (resume), 7.3.x (study stats) | Three tables shipped (migration + schema test); `StudyRepo` port + impl skeleton compiles + DI wired; schema/migration contracts updated | **Critical path.** The core loop *study → finish → progress* is dead until this lands. Highest-priority unblock. |
+| B2 | `flashcard_progress` has no `is_suspended` / `buried_until` columns | **4.0.2** | 2.17.1 status filter, 4.11.1/4.11.2 bury-suspend, 5.2.1 due-today, 7.1.1 due counts | Both columns shipped (migration v+1 + test); default values defined; eligibility/aggregate queries can filter on them | Medium. Blocks accurate due counts on dashboard/progress and the status-filter UX. Several rows silently 0-out today. |
+| B3 | Import type-contract undefined after the pre-rebuild pipeline was deleted | **6.0.1** | 6.2.1–6.9.1 (entire import subsystem) | `FlashcardImportPreview`, row-issue enum, `ImportSourceFormat` pinned in `docs/contracts/types-catalog.md`; repo/use-case signatures agreed | Medium. Without it each import row re-invents the contract → rework + inconsistent preview model. |
+
+**Critical-path sequence (recommended build order to keep flow unblocked):**
+
+1. **4.0.2** (smallest; unblocks 4 rows incl. dashboard/progress accuracy) — can land immediately.
+2. **6.0.1** (contract-only; unblocks the whole low-risk import subsystem for parallel work).
+3. **4.0.1** (largest; gates the study epic) — schema-design review **before** coding (it is a
+   multi-table backbone the ~20 Group-4 rows build on). Pair with the existing
+   `4.5.12` mode-chain backbone so the two schema efforts converge, not collide.
+
+**Already-resolved blocker (kept for traceability):** Folder color/icon + folder-dialog contract —
+resolved 2026-06-20 (see §4.2). Enabler `2.22.1` is on Wave 1 of Phase 3.
+
+**Discipline going forward (to prevent the next latent blocker):** every BE row whose `Depends on`
+names a *table or column that is not yet shipped* must list the **enabler row** (not just `1.1.5`)
+in its `Depends on`. A row that needs un-shipped schema is **Blocked**, not **Specified**.
 
 ### Group 1 — Project foundation
 
@@ -183,7 +212,7 @@ when §4 lands.
 | 2.15.2 | Content management | Flashcard Tags FE V1 | FE | Tag input section in editor | Specified | 2.15.1 | `lib/presentation/features/flashcards/widgets/flashcard_editor_tags_section.dart` | TBD | Implement |
 | 2.16.1 | Content management | Parent-child validation BE | BE | Deck must belong to folder; flashcard must belong to deck (non-null FK + repo checks) | Implemented | 1.1.5 | `lib/data/datasources/local/drift/decks.drift` (non-null `folder_id`), `lib/data/datasources/local/drift/flashcards.drift` (non-null `deck_id`), `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/migrations/app_database_schema_test.dart` | TBD | Done — non-null `folder_id` (decks→folders cascade) + non-null `deck_id` (flashcards→decks cascade) FKs; repo checks: `FolderRepositoryImpl.createDeck` rejects missing folder (`NotFoundFailure`), `FlashcardRepositoryImpl.createFlashcard` rejects missing deck (`NotFoundFailure`); FK-reject + cascade tests; row C41 |
 | 2.16.2 | Content management | Parent-child guard FE | Integration | Invalid actions prevented in UI with controlled error, not crash | Specified | 2.16.1 | feature screens use `Result`/failure mapping | TBD | Audit controlled-error coverage for invalid parent actions |
-| 2.17.1 | Content management | Flashcard status filter BE V1 | BE | List query filters for active/suspended/buried/due + tests | Specified | 2.15.1 | `lib/domain/types/flashcard_status_filter.dart`, `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart` | TBD | Implement |
+| 2.17.1 | Content management | Flashcard status filter BE V1 | BE | List query filters for active/suspended/buried/due + tests | Blocked | 2.15.1, 4.0.2 | `lib/domain/types/flashcard_status_filter.dart`, `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart` | TBD | Implement |
 | 2.17.2 | Content management | Flashcard status filter/badges FE V1 | FE | Filter chips + suspended/buried badges in flashcard list | Specified | 2.17.1 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire chips/badges to BE; widget tests |
 | 2.18.1 | Content management | Flashcard tag filter BE V1 | BE | Multi-select AND tag filter inside deck + tests | Implemented | 2.15.1 | `lib/domain/repositories/flashcard_repository.dart`, `lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`, `lib/data/repositories/flashcard_repository_impl.dart`, `test/data/repositories/flashcard_repository_impl_test.dart`, `test/domain/usecases/flashcard/watch_flashcard_list_usecase_test.dart` | C38, C39 | Done (2026-06-20) — `watchFlashcardList` gains a `List<TagName> tags` param: cards filtered to those carrying **every** selected tag (AND), each normalized with the storage rule (`_normalizeTags`: trim+lowercase+dedup) so it matches stored tags; empty selection = no filter. Composes with the front/back search; `totalCount` stays the full deck total (filter-independent). In-Dart filter over the already-loaded `tagsByCard` map (no new query). Status filter (active/suspended/buried/due) remains 2.17.1 — blocked on suspend/bury columns. |
 | 2.18.2 | Content management | Flashcard tag filter FE V1 | FE | Tag filter chips + clear-filters empty state | Specified | 2.18.1 | `docs/business/tags/tag-system.md` | TBD | Wire to BE; widget tests |
@@ -217,7 +246,9 @@ when §4 lands.
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 4.1.1 | Study/SRS | Study entry eligibility BE | BE | Scope queries (deck/folder/today), empty/all-suspended outcomes + tests | Specified | 1.1.5 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/domain/study/start_study_session_usecase_test.dart` | TBD | Implement |
+| 4.0.1 | Study/SRS | **Study persistence schema + repo skeleton (ENABLER — B1)** | BE | `study_sessions` + `study_session_items` + `study_attempts` Drift tables (FK chain, indexes) + migration v+1 + schema test; `StudyRepo` domain port + impl skeleton (no business logic yet) + DI wiring; schema/migration contracts updated | Specified | 1.1.5 | `lib/data/datasources/local/drift/**`, `lib/data/datasources/local/migrations/**`, `lib/domain/study/ports/study_repo.dart`, `docs/database/schema-contract.md`, `docs/database/migration-contract.md`, `test/data/migrations/**` | TBD | **Critical-path enabler.** Gates ALL Group 4 + 5.1.x + 7.3.x. Schema-design review before coding; converge with 4.5.12 mode-chain backbone. Build 3rd in the §4.3 sequence. |
+| 4.0.2 | Study/SRS | **Bury/suspend progress columns + migration (ENABLER — B2)** | BE | Add `flashcard_progress.is_suspended` + `flashcard_progress.buried_until` columns (migration v+1, defaults: not-suspended / null), schema + migration tests; no behavior yet (eligibility logic lands in 4.11.1) | Specified | 1.1.5 | `lib/data/datasources/local/drift/**`, `lib/data/datasources/local/migrations/**`, `docs/database/schema-contract.md`, `docs/database/migration-contract.md`, `test/data/migrations/**` | TBD | **Enabler.** Unblocks 2.17.1 / 4.11.x / 5.2.1 / 7.1.1. Smallest unblock — build 1st in the §4.3 sequence. |
+| 4.1.1 | Study/SRS | Study entry eligibility BE | BE | Scope queries (deck/folder/today), empty/all-suspended outcomes + tests | Specified | 4.0.1, 4.0.2 | `lib/data/repositories/study_repo_impl_study_session.dart`, `test/domain/study/start_study_session_usecase_test.dart` | TBD | Implement (after enablers 4.0.1/4.0.2) |
 | 4.1.2 | Study/SRS | Study entry FE | FE | Entry gate screen with empty/error/resume-required states | Specified | 4.1.1 | `lib/presentation/features/study/screens/study_entry_screen.dart`, `test/presentation/features/study/study_entry_screen_test.dart` | TBD | Implement |
 | 4.1.3 | Study/SRS | Deck study CTA FE V1 | FE | Study-entry section on Flashcard List: Study deck + Today CTAs routing through the gate | Specified | 4.1.1 | `docs/wireframes/06-flashcard-list.md` (component row 4 target) | TBD | **Top priority** — the only study entry today is the Dashboard Today CTA; the study button must live next to the content |
 | 4.1.4 | Study/SRS | Folder study CTA FE V1 | FE | Study folder + Today CTAs on Folder Detail routing through the gate | Specified | 4.1.1 | `docs/wireframes/05-folder-detail.md` | TBD | Wire CTAs to gate routes; widget tests |
@@ -253,8 +284,8 @@ when §4 lands.
 | 4.9.1 | Study/SRS | Protected active-session exit FE | FE | Exit confirmation; confirmed exit keeps session resumable | Specified | 4.3.2 | `lib/presentation/features/study/screens/study_session_screen.dart` | TBD | Implement |
 | 4.10.1 | Study/SRS | Cancel/discard session BE | BE | `cancelStudySession` used by transactional start-over | Specified | 4.2.1 | `lib/domain/study/ports/study_repo.dart` | TBD | Implement |
 | 4.10.2 | Study/SRS | Resume expiry anchor `updated_at` | BE | 30-day resumable filter anchors on `updated_at` (activity), not `started_at` | Specified | 4.2.1 | `docs/business/resume/resume-session.md` §Auto-expiry, `lib/data/datasources/local/daos/study_session_dao.dart`, `lib/data/repositories/study_repo_record_answer.dart`, `test/data/repositories/study_repository_test.dart` | TBD | Read-only resume/open remains non-mutating |
-| 4.11.1 | Study/SRS | Bury/suspend queue exclusion BE | BE | Due/new queries exclude suspended and currently-buried cards | Specified | 4.1.1 | `lib/data/datasources/local/drift/study_scope_queries.drift`, `test/data/repositories/study_eligibility_bury_suspend_test.dart`, `test/data/repositories/study_session_card_action_test.dart` | TBD | Implement |
-| 4.11.2 | Study/SRS | In-session bury/suspend action BE | BE | Bury/suspend current card: set fields, no attempt, preserve SRS + tests | Specified | 4.4.1 | `lib/domain/study/ports/study_repo.dart`, `lib/domain/study/usecases/study_usecases.dart`, `lib/data/repositories/study_repo_impl.dart`, `lib/data/repositories/study_repo_impl_study_actions.dart`, `lib/data/datasources/local/daos/study_session_dao.dart`, `test/data/repositories/study_session_card_action_test.dart`, `test/data/repositories/study_eligibility_bury_suspend_test.dart` | TBD | Implement |
+| 4.11.1 | Study/SRS | Bury/suspend queue exclusion BE | BE | Due/new queries exclude suspended and currently-buried cards | Specified | 4.1.1, 4.0.2 | `lib/data/datasources/local/drift/study_scope_queries.drift`, `test/data/repositories/study_eligibility_bury_suspend_test.dart`, `test/data/repositories/study_session_card_action_test.dart` | TBD | Implement |
+| 4.11.2 | Study/SRS | In-session bury/suspend action BE | BE | Bury/suspend current card: set fields, no attempt, preserve SRS + tests | Specified | 4.4.1, 4.0.2 | `lib/domain/study/ports/study_repo.dart`, `lib/domain/study/usecases/study_usecases.dart`, `lib/data/repositories/study_repo_impl.dart`, `lib/data/repositories/study_repo_impl_study_actions.dart`, `lib/data/datasources/local/daos/study_session_dao.dart`, `test/data/repositories/study_session_card_action_test.dart`, `test/data/repositories/study_eligibility_bury_suspend_test.dart` | TBD | Implement |
 | 4.11.3 | Study/SRS | In-session bury/suspend action FE | FE | Action UI, queue removal, undo affordance | Specified | 4.11.2 | `docs/business/study-actions/bury-suspend.md` | TBD | Wire UI to BE; widget tests |
 | 4.12.1 | Study/SRS | Study by tag | BE | `StudyEntryType.tag` scope queries + routes + tests | Blocked | 8.5.1 | `docs/business/tags/tag-system.md` | TBD | Requires tag subsystem promotion |
 
@@ -264,7 +295,7 @@ when §4 lands.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5.1.1 | Dashboard | Continue Studying summary BE | BE | `loadDashboardResumeSessionSummary` (scope, progress, last active) | Specified | 4.2.1 | `lib/domain/models/dashboard_resume_session_summary.dart` | TBD | Implement |
 | 5.1.2 | Dashboard | Continue Studying card FE | FE | Resume card with Continue CTA; hidden when none | Specified | 5.1.1 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart`, `test/presentation/features/dashboard/dashboard_screen_test.dart` | TBD | Implement |
-| 5.2.1 | Dashboard | Due-today summary BE | BE | `dueToday` from library overview read model (excludes buried/suspended) | Specified | 3.1.1 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart` (consumes `libraryOverviewQueryProvider`) | TBD | Implement |
+| 5.2.1 | Dashboard | Due-today summary BE | BE | `dueToday` from library overview read model (excludes buried/suspended) | Blocked | 3.1.1, 4.0.2 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart` (consumes `libraryOverviewQueryProvider`) | TBD | Implement |
 | 5.2.2 | Dashboard | Today study CTA FE | FE | Today's-review card: due count title + due-deck count + estimated minutes; `dueToday > 0` routes to today study, zero state disables CTA | Specified | 5.2.1, 5.6.1 | `lib/presentation/features/dashboard/screens/dashboard_screen.dart` (`_DashboardTodayCard`, `dashboardDueSummaryQueryProvider`), `test/presentation/features/dashboard/dashboard_screen_test.dart` | TBD | Implement |
 | 5.3.1 | Dashboard | New-user empty dashboard FE | FE | Controlled empty/caught-up states | Specified | 5.2.2 | `test/presentation/features/dashboard/dashboard_screen_test.dart` | TBD | Implement |
 | 5.4.1 | Dashboard | Progress summary on dashboard | BE | Dashboard progress summary read model + provider wiring (due today, goal, streak) | Specified | 7.4.1 | `lib/domain/models/dashboard_progress_summary.dart`, `lib/domain/usecases/progress/load_dashboard_progress_summary_usecase.dart`, `lib/data/repositories/progress_repository_impl.dart`, `lib/app/di/progress_providers.dart`, `test/domain/usecases/progress/load_dashboard_progress_summary_usecase_test.dart`, `test/data/repositories/progress_repository_impl_test.dart`, `docs/business/engagement/dashboard-engagement.md` | TBD | Implement |
@@ -279,8 +310,9 @@ when §4 lands.
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 6.0.1 | Import | **Import type-contract & preview model (ENABLER — B3)** | BE | Pin `FlashcardImportPreview`, row-issue enum, `ImportSourceFormat` value objects + repo/use-case signatures in domain + `docs/contracts/types-catalog.md`; no parsing logic yet (lands in 6.2.x) | Specified | 2.11.1 | `lib/domain/models/flashcard_import_preview.dart`, `lib/domain/types/**`, `docs/contracts/types-catalog.md`, `docs/business/flashcard/flashcard-management.md` (import section) | TBD | **Enabler.** Gates 6.2.1–6.9.1; build before any import row so they share one contract. Build 2nd in the §4.3 sequence (contract-only, low risk, parallelizable). |
 | 6.1.1 | Import | Import route + screen shell | FE | `/library/deck/:deckId/import` opens `DeckImportScreen` | Specified | 3.3.1 | `lib/presentation/features/flashcards/screens/deck_import_screen.dart` | TBD | Implement |
-| 6.2.1 | Import | CSV parse BE | BE | Pasted-CSV parse use case + tests | Specified | 2.11.1 | `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`, `test/domain/usecases/flashcard/deck_import_usecases_test.dart` | TBD | Implement |
+| 6.2.1 | Import | CSV parse BE | BE | Pasted-CSV parse use case + tests | Specified | 2.11.1, 6.0.1 | `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`, `test/domain/usecases/flashcard/deck_import_usecases_test.dart` | TBD | Implement |
 | 6.2.2 | Import | Row validation BE | BE | Per-row validation issues in preview model | Specified | 6.2.1 | `lib/domain/models/flashcard_import_preview.dart` | TBD | Implement |
 | 6.3.1 | Import | Preview FE (valid/invalid rows) | FE | In-screen preview: rows + issues + summary; clean preview enables CTA | Specified | 6.2.2 | `test/presentation/features/flashcards/deck_import_screen_test.dart` | TBD | Implement |
 | 6.4.1 | Import | Transactional commit BE | BE | Insert valid rows + default SRS progress in one transaction; rollback tests | Specified | 6.2.2 | `lib/domain/usecases/flashcard/commit_deck_import_usecase.dart`, `test/presentation/features/flashcards/deck_import_screen_test.dart` | TBD | Implement |
@@ -296,7 +328,7 @@ when §4 lands.
 
 | WBS ID | Flow | Function | Layer | Deliverable | Status | Depends on | Evidence/Source | Commit ID | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 7.1.1 | Progress | Due summary query BE V1 | BE | Aggregate due-card counts (global/per-deck) excluding buried/suspended + tests | Specified | 4.11.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | TBD | Implement |
+| 7.1.1 | Progress | Due summary query BE V1 | BE | Aggregate due-card counts (global/per-deck) excluding buried/suspended + tests | Blocked | 4.0.2, 4.11.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | TBD | Implement |
 | 7.2.1 | Progress | Box distribution query BE V1 | BE | Card counts per Leitner box from current progress table + tests | Specified | 7.1.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | TBD | Implement |
 | 7.3.1 | Progress | Study statistics BE V1 | BE | Session/attempt-based stats (sessions finished, answers recorded) + tests | Specified | 4.6.1 | `lib/data/datasources/local/drift/progress_queries.drift`, `lib/data/datasources/local/daos/progress_dao.dart`, `lib/data/repositories/progress_repository_impl.dart`, `test/data/repositories/progress_repository_impl_test.dart` | TBD | Implement |
 | 7.4.1 | Progress | Progress read model BE V1 | BE | Combined progress read model + provider wiring | Specified | 7.1.1, 7.2.1, 7.3.1 | `lib/domain/models/progress_read_model.dart`, `lib/domain/repositories/progress_repository.dart`, `lib/domain/usecases/progress/load_progress_read_model_usecase.dart`, `lib/app/di/progress_providers.dart`, `test/domain/usecases/progress/load_progress_read_model_usecase_test.dart` | TBD | Implement |
@@ -383,6 +415,20 @@ when §4 lands.
 9. **Phase 2A · 3.1.1 + 3.2.1 + ~~3.4.1~~ (done — flashcard list-load BE) + 3.5.1** — remaining Library/folder-detail/search read models BE.
 10. **Phase 3 · 3.1.2 + 3.2.2 + 2.1.2** — first assembled screens (Library overview, Folder detail, Create-folder dialog) on the widget kit + Phase-2A BE.
 
+### Current frontier (2026-06-20, post overnight PRs #4–#8)
+
+Items 1–9 above are landed (Phase 0/1 + content/tag/counts BE). The real queue now is **the three
+§4.3 critical-path enablers first**, then two parallel tracks:
+
+1. **`4.0.2`** — bury/suspend columns (smallest unblock; frees 2.17.1 / 5.2.1 / 7.1.1).
+2. **`6.0.1`** — import type-contract (contract-only; opens the whole import subsystem).
+3. **`2.22.1`** — folder color/icon schema (Wave-1 prerequisite for the Phase-3 FE screens).
+4. **`4.0.1`** — study persistence schema + repo skeleton (largest; schema-design review first; gates
+   the entire study/SRS epic). Converge with `4.5.12`.
+5. Then parallelize: **Phase-3 FE waves** (§4.2, on `2.22.1`) ‖ **import BE** `6.2.1→6.9.1` (on `6.0.1`)
+   ‖ **study epic** `4.1.1→…` (on `4.0.1/4.0.2`).
+6. Low-risk standalone any time: **`8.7.1`** deck export CSV BE.
+
 ## 6. Deferred / Future / Rejected Register
 
 | Item | Status | Reason / unblock condition |
@@ -410,6 +456,10 @@ when §4 lands.
 | Schema changes are high risk | Missing migration breaks existing DBs | 9.5 gate: version bump + onUpgrade + migration test + docs per change. |
 | CI not visible | Cannot claim full pass from GitHub checks | 9.10 Specified; report source-level verification until CI exists. |
 | Commit anchors for docs-baseline rows | History spans many commits; no single anchor | Rows 1.1.7/9.x use `TBD` by design; §10 log carries per-commit history. |
+| Study epic has no persistence backbone (B1) | ~20 Group-4 rows + resume + study stats are all gated; agents may start mid-epic and stall | Promoted to explicit enabler **4.0.1** on the critical path (§4.3); all Group-4 rows now depend on it; schema-design review required before coding. |
+| Bury/suspend columns missing (B2) | Status filter, due-today, due counts silently 0-out or can't be built | Promoted to enabler **4.0.2** (§4.3); consumers 2.17.1/5.2.1/7.1.1 moved to `Blocked` until columns ship. |
+| Import contract deleted in rebuild (B3) | Each import row would re-invent the preview/issue contract → rework | Promoted to enabler **6.0.1** (§4.3); 6.2.1 depends on it; contract pinned in `docs/contracts/types-catalog.md` before parsing logic. |
+| Latent blockers discovered mid-task (general) | Velocity loss when a row hits un-shipped schema/contract | Discipline rule (§4.3): any BE row needing un-shipped schema lists the **enabler** in `Depends on` and is `Blocked`, not `Specified`. |
 
 ## 8. Legacy WBS ID Mapping
 
@@ -475,6 +525,7 @@ Append-only, newest first. Each row links a landed commit to the WBS work packag
 
 | Commit | Date | WBS IDs | Summary |
 | --- | --- | --- | --- |
+| `TBD` | 2026-06-20 | §4.3, 4.0.1, 4.0.2, 6.0.1, 2.17.1, 4.11.1, 4.11.2, 5.2.1, 7.1.1, 6.2.1 | Plan-only (PM critical-path hardening): promote the three latent blockers surfaced by the overnight run into explicit enabler work packages — new §4.3 Critical Path & Blocker Register (B1/B2/B3 + build sequence + discipline rule), new rows **4.0.1** (study persistence schema + repo skeleton), **4.0.2** (bury/suspend `flashcard_progress` columns), **6.0.1** (import type-contract & preview model). Repoint dependents' `Depends on` to the enablers (4.1.1→4.0.1/4.0.2; 4.11.1/4.11.2→+4.0.2; 6.2.1→+6.0.1) and move schema-gated consumers 2.17.1/5.2.1/7.1.1 to `Blocked`. Update §4.1 phase map (enablers first), §5 current-frontier queue, §7 risk register (B1/B2/B3 + latent-blocker discipline). No code. |
 | `TBD` | 2026-06-20 | §4.2, 2.1.2, 2.22.1 | Plan-only: decompose Phase 3 (Content/Library FE, ~28 rows) into 4 screen-centric delivery waves (new §4.2); add prerequisite row 2.22.1 (folder color/icon schema + BE); record resolved gating decisions for 2.1.2 (folder color/icon → schema-backed; folder-create/rename dialog owns submit + inline errors, returns `Future<Folder?>`). No code — planning/WBS restructure for product-owner review. |
 | `TBD` | 2026-06-20 | 2.18.1 | Flashcard tag filter BE V1: `watchFlashcardList` (use case + repo interface + impl) gains a `List<TagName> tags` param — multi-select AND filter keeping only cards that carry every selected tag, each normalized with the storage rule (`_normalizeTags`) to match stored tags; empty selection imposes no filter. Composes with the existing front/back search; `totalCount` stays the full deck total (filter-independent) so no-results stays distinguishable. In-Dart filter over the already-built `tagsByCard` map (no new query). Updated the two existing flashcard-repo test fakes for the new param. Tests: repo C38 (empty/single/multi AND) + C39 (compose-with-search, no-results totalCount) + use-case delegation. Docs: flashcard `WatchFlashcardListUseCase` contract (signature + reconciled the stale status-filter over-claim → 2.17.1 Future), decision rows C38/C39. Status filter blocked on suspend/bury columns. Stacked on feat/wbs-2.9.1. Flip 2.18.1 Specified→Implemented. |
 | `TBD` | 2026-06-20 | 8.3.1 | Tag management BE V1 over `flashcard_tags`: `TagValidator` (trim/lowercase via `StringUtils.normalizeTag`, reject empty/comma/>50) + `TagWithCount`/`MergeResult` models + `TagRepository`(`Impl`) over new `FlashcardTagDao` (`tag_queries.drift` `tagsWithCount`) + 4 use cases (watch-with-count, rename, merge, delete) + DI `tag_providers.dart`. Rename no-ops on equal and returns `ConflictFailure` on a name collision (never auto-merges); merge re-tags source→dest with per-card `INSERT OR IGNORE` de-dup then deletes source rows in one transaction (returns affected count); delete strips the tag from all cards, keeping the cards. Tests: repo/DAO integration (watch order, rename/conflict/no-op, merge dedup, delete) + use-case validation/delegation. Docs: tag-system status + impl pointer, tag use-case/repository contract impl notes, filled `decision-tables/tags-bulk-export.md` rows TG1/TG5/TG6/TG7/TG9/TG10 (incl. leading-`#` strip in `StringUtils.normalizeTag` per TG1), overview status. Stacked on feat/wbs-2.9.1. Flip 8.3.1 Specified→Implemented. |
