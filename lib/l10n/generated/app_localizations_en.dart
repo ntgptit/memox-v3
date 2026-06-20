@@ -25,4 +25,144 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTitle => 'Settings';
+
+  @override
+  String get librarySearchHint => 'Search folders';
+
+  @override
+  String libraryFolderCountHeader(int count) {
+    return '$count folders';
+  }
+
+  @override
+  String get libraryLoadingLabel => 'Loading folders';
+
+  @override
+  String get libraryEmptyTitle => 'Start your library';
+
+  @override
+  String get libraryEmptyMessage =>
+      'Folders keep related decks together. Add one to organize your decks.';
+
+  @override
+  String get libraryLoadFailedTitle => 'Couldn\'t load your library';
+
+  @override
+  String get libraryLoadFailedMessage =>
+      'Something went wrong loading your folders.';
+
+  @override
+  String get libraryRetryLabel => 'Retry';
+
+  @override
+  String get librarySearchNoResultsTitle => 'No folders found';
+
+  @override
+  String librarySearchNoResultsMessage(String term) {
+    return 'No folders match \"$term\".';
+  }
+
+  @override
+  String get librarySearchClearLabel => 'Clear';
+
+  @override
+  String get libraryOverflowTooltip => 'Folder actions';
+
+  @override
+  String folderMetaDecks(int count) {
+    return '$count decks';
+  }
+
+  @override
+  String folderMetaSubfolders(int count) {
+    return '$count subfolders';
+  }
+
+  @override
+  String folderMetaCards(int count) {
+    return '$count cards';
+  }
+
+  @override
+  String folderDueBadge(int count) {
+    return '$count due';
+  }
+
+  @override
+  String get folderActionRename => 'Rename';
+
+  @override
+  String get folderActionMove => 'Move to folder';
+
+  @override
+  String get folderActionDelete => 'Delete folder';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get folderRenameTitle => 'Rename folder';
+
+  @override
+  String get folderRenameFieldLabel => 'Folder name';
+
+  @override
+  String get folderRenameConfirm => 'Rename';
+
+  @override
+  String get folderRenamedSnack => 'Folder renamed';
+
+  @override
+  String get folderDeleteTitle => 'Delete this folder?';
+
+  @override
+  String folderDeleteBlastRadius(int decks, int cards) {
+    return 'This permanently deletes this folder, $decks decks and $cards cards, plus all study progress. This can\'t be undone.';
+  }
+
+  @override
+  String get folderDeleteConfirm => 'Delete';
+
+  @override
+  String get folderDeletedSnack => 'Folder deleted';
+
+  @override
+  String get folderMoveTitle => 'Move folder';
+
+  @override
+  String get folderMoveRootLabel => 'Library (root)';
+
+  @override
+  String get folderMoveBlockCycle => 'Can\'t move into itself or a subfolder';
+
+  @override
+  String get folderMoveBlockLockedDecks => 'This folder holds decks';
+
+  @override
+  String get folderMovedSnack => 'Folder moved';
+
+  @override
+  String get folderErrorNameEmpty => 'Enter a folder name.';
+
+  @override
+  String get folderErrorNameDuplicate =>
+      'A folder with this name already exists here.';
+
+  @override
+  String get folderErrorNotFound => 'That folder no longer exists.';
+
+  @override
+  String get folderErrorMoveCycle =>
+      'You can\'t move a folder into itself or one of its subfolders.';
+
+  @override
+  String get folderErrorMoveLockedDecks =>
+      'That folder holds decks, so it can\'t take a subfolder.';
+
+  @override
+  String get folderActionGenericError =>
+      'Something went wrong. Please try again.';
+
+  @override
+  String get folderMetaEmpty => 'Empty';
 }

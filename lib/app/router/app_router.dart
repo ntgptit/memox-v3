@@ -4,6 +4,7 @@ import 'package:memox/app/router/redirect.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/app/router/route_placeholder.dart';
+import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 
 /// Builds the application [GoRouter].
 ///
@@ -34,16 +35,7 @@ GoRouter createAppRouter() => GoRouter(
             ),
           ],
         ),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.library,
-              name: RouteNames.library,
-              builder: (context, state) =>
-                  const RoutePlaceholder(routeName: RouteNames.library),
-            ),
-          ],
-        ),
+        StatefulShellBranch(routes: libraryBranchRoutes()),
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(

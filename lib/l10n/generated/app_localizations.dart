@@ -133,6 +133,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsTitle;
+
+  /// Hint text for the Library inline folder search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search folders'**
+  String get librarySearchHint;
+
+  /// Section header counting the top-level folders.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} folders'**
+  String libraryFolderCountHeader(int count);
+
+  /// Shown while the Library folders are loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading folders'**
+  String get libraryLoadingLabel;
+
+  /// Title of the true-empty Library state.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your library'**
+  String get libraryEmptyTitle;
+
+  /// Body of the true-empty Library state.
+  ///
+  /// In en, this message translates to:
+  /// **'Folders keep related decks together. Add one to organize your decks.'**
+  String get libraryEmptyMessage;
+
+  /// Title of the Library error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your library'**
+  String get libraryLoadFailedTitle;
+
+  /// Body of the Library error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading your folders.'**
+  String get libraryLoadFailedMessage;
+
+  /// Retry action on the Library error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get libraryRetryLabel;
+
+  /// Title when a search matches no folders.
+  ///
+  /// In en, this message translates to:
+  /// **'No folders found'**
+  String get librarySearchNoResultsTitle;
+
+  /// Body when a search matches no folders.
+  ///
+  /// In en, this message translates to:
+  /// **'No folders match \"{term}\".'**
+  String librarySearchNoResultsMessage(String term);
+
+  /// Clears the active Library search.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get librarySearchClearLabel;
+
+  /// Tooltip for the folder-row kebab button.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder actions'**
+  String get libraryOverflowTooltip;
+
+  /// Folder metadata: direct deck count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} decks'**
+  String folderMetaDecks(int count);
+
+  /// Folder metadata: direct subfolder count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} subfolders'**
+  String folderMetaSubfolders(int count);
+
+  /// Folder metadata: recursive card count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cards'**
+  String folderMetaCards(int count);
+
+  /// Folder due-card badge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} due'**
+  String folderDueBadge(int count);
+
+  /// Folder action-sheet row: rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get folderActionRename;
+
+  /// Folder action-sheet row: move.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to folder'**
+  String get folderActionMove;
+
+  /// Folder action-sheet row: delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete folder'**
+  String get folderActionDelete;
+
+  /// Generic cancel action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// Title of the rename-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename folder'**
+  String get folderRenameTitle;
+
+  /// Name field label in the rename-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder name'**
+  String get folderRenameFieldLabel;
+
+  /// Confirm action in the rename-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get folderRenameConfirm;
+
+  /// Snackbar after a successful rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder renamed'**
+  String get folderRenamedSnack;
+
+  /// Title of the delete-folder confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this folder?'**
+  String get folderDeleteTitle;
+
+  /// Delete-folder confirm body stating the blast radius.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes this folder, {decks} decks and {cards} cards, plus all study progress. This can\'t be undone.'**
+  String folderDeleteBlastRadius(int decks, int cards);
+
+  /// Confirm action in the delete-folder dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get folderDeleteConfirm;
+
+  /// Snackbar after a successful delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder deleted'**
+  String get folderDeletedSnack;
+
+  /// Title of the move-folder destination picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Move folder'**
+  String get folderMoveTitle;
+
+  /// The Library root row in the move picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Library (root)'**
+  String get folderMoveRootLabel;
+
+  /// Move picker: blocked because it would create a cycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t move into itself or a subfolder'**
+  String get folderMoveBlockCycle;
+
+  /// Move picker: blocked because the destination is decks-locked.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder holds decks'**
+  String get folderMoveBlockLockedDecks;
+
+  /// Snackbar after a successful move.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder moved'**
+  String get folderMovedSnack;
+
+  /// Validation error: empty folder name.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a folder name.'**
+  String get folderErrorNameEmpty;
+
+  /// Validation error: duplicate sibling name.
+  ///
+  /// In en, this message translates to:
+  /// **'A folder with this name already exists here.'**
+  String get folderErrorNameDuplicate;
+
+  /// Error: the folder was not found.
+  ///
+  /// In en, this message translates to:
+  /// **'That folder no longer exists.'**
+  String get folderErrorNotFound;
+
+  /// Error: move would create a cycle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t move a folder into itself or one of its subfolders.'**
+  String get folderErrorMoveCycle;
+
+  /// Error: destination is decks-locked.
+  ///
+  /// In en, this message translates to:
+  /// **'That folder holds decks, so it can\'t take a subfolder.'**
+  String get folderErrorMoveLockedDecks;
+
+  /// Generic fallback error for a folder action.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get folderActionGenericError;
+
+  /// Folder metadata when the folder has no decks or subfolders yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get folderMetaEmpty;
 }
 
 class _AppLocalizationsDelegate

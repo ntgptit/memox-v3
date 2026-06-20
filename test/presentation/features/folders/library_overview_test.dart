@@ -1,0 +1,204 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/core/theme/mx_theme.dart';
+import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/folder_summary.dart';
+import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
+import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+
+import '../../../support/golden_harness.dart';
+
+Folder _folder(String id, String name, ContentMode mode) {
+  final DateTime t = DateTime.utc(2026);
+  return Folder(
+    id: id,
+    parentId: null,
+    name: name,
+    contentMode: mode,
+    sortOrder: 0,
+    createdAt: t,
+    updatedAt: t,
+  );
+}
+
+FolderSummary _summary(
+  String id,
+  String name, {
+  ContentMode mode = ContentMode.decks,
+  int decks = 3,
+  int cards = 42,
+  int due = 0,
+}) => FolderSummary(
+  folder: _folder(id, name, mode),
+  subfolderCount: mode == ContentMode.subfolders ? 2 : 0,
+  deckCount: decks,
+  cardCount: cards,
+  dueCount: due,
+);
+
+final LibraryOverview _loaded = LibraryOverview(
+  folders: <FolderSummary>[
+    _summary('a', 'Korean', decks: 5, cards: 412, due: 12),
+    _summary('b', 'English', decks: 3, cards: 286),
+    _summary('c', 'Misc', mode: ContentMode.subfolders),
+  ],
+);
+
+/// Overrides the overview stream with [stream] and pumps the screen.
+Future<void> _pump(
+  WidgetTester tester,
+  Stream<LibraryOverview> stream, {
+  Brightness brightness = Brightness.light,
+  bool golden = false,
+}) async {
+  if (golden) {
+    tester.view.physicalSize = kGoldenSurface;
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+  }
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [libraryOverviewStreamProvider.overrideWith((ref) => stream)],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: brightness == Brightness.light ? MxTheme.light : MxTheme.dark,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const LibraryOverviewScreen(),
+      ),
+    ),
+  );
+}
+
+Stream<LibraryOverview> _value(LibraryOverview v) =>
+    Stream<LibraryOverview>.value(v);
+Stream<LibraryOverview> _never() =>
+    Stream<LibraryOverview>.fromFuture(Completer<LibraryOverview>().future);
+Stream<LibraryOverview> _error() =>
+    Stream<LibraryOverview>.error(Exception('boom'));
+
+void main() {
+  group('LibraryOverviewScreen states', () {
+    testWidgets('loaded renders folder rows + count header', (tester) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Korean'), findsOneWidget);
+      expect(find.text('English'), findsOneWidget);
+      expect(find.text('3 folders'), findsOneWidget);
+      // Due badge only on the folder with dueCount > 0.
+      expect(find.text('12 due'), findsOneWidget);
+    });
+
+    testWidgets('true-empty renders the empty state', (tester) async {
+      await _pump(tester, _value(const LibraryOverview(folders: [])));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(MxEmptyState), findsOneWidget);
+    });
+
+    testWidgets('error renders the error state', (tester) async {
+      await _pump(tester, _error());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(MxErrorState), findsOneWidget);
+    });
+
+    testWidgets('search filters the list and shows no-results', (tester) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(MxSearchField), 'kor');
+      await tester.pumpAndSettle();
+      expect(find.text('Korean'), findsOneWidget);
+      expect(find.text('English'), findsNothing);
+
+      await tester.enterText(find.byType(MxSearchField), 'zzz');
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('library_search_no_results')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('kebab opens the folder action sheet', (tester) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.more_vert).first);
+      await tester.pumpAndSettle();
+
+      // Sheet rows.
+      expect(find.text('Rename'), findsOneWidget);
+      expect(find.text('Move to folder'), findsOneWidget);
+      expect(find.text('Delete folder'), findsOneWidget);
+    });
+
+    testWidgets('no-results is distinct from true-empty', (tester) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(MxSearchField), 'zzz');
+      await tester.pumpAndSettle();
+      expect(find.byType(MxNoResultsState), findsOneWidget);
+      expect(find.byType(MxEmptyState), findsNothing);
+    });
+  });
+
+  group('LibraryOverviewScreen goldens', () {
+    final Map<String, Stream<LibraryOverview> Function()> cases =
+        <String, Stream<LibraryOverview> Function()>{
+          'loaded': () => _value(_loaded),
+          'empty': () => _value(const LibraryOverview(folders: [])),
+          'loading': _never,
+          'error': _error,
+        };
+
+    for (final MapEntry<String, Stream<LibraryOverview> Function()> c
+        in cases.entries) {
+      for (final Brightness brightness in Brightness.values) {
+        testWidgets('${c.key} — ${brightness.name}', (tester) async {
+          await _pump(tester, c.value(), brightness: brightness, golden: true);
+          await tester.pump(const Duration(milliseconds: 50));
+          await expectLater(
+            find.byType(LibraryOverviewScreen),
+            matchesGoldenFile(
+              'goldens/library_overview_${c.key}__${brightness.name}.png',
+            ),
+          );
+        });
+      }
+    }
+
+    // The search-no-results derived state is distinct from true-empty and gets
+    // its own golden (entered via a non-matching search term).
+    for (final Brightness brightness in Brightness.values) {
+      testWidgets('search-no-results — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          _value(_loaded),
+          brightness: brightness,
+          golden: true,
+        );
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(MxSearchField), 'zzz');
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(LibraryOverviewScreen),
+          matchesGoldenFile(
+            'goldens/library_overview_search-no-results__${brightness.name}.png',
+          ),
+        );
+      });
+    }
+  });
+}

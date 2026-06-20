@@ -55,3 +55,17 @@ class MxDialog extends StatelessWidget {
     );
   }
 }
+
+/// The sanctioned way to present a custom [MxDialog] from feature code, which
+/// must not call `showDialog` directly (`memox.design_system.no_direct_show_dialog`).
+/// Returns the value the dialog pops with, or `null` on barrier dismiss.
+/// WBS 1.2.7.
+Future<T?> showMxDialog<T>(
+  BuildContext context, {
+  required WidgetBuilder builder,
+  bool barrierDismissible = true,
+}) => showDialog<T>(
+  context: context,
+  barrierDismissible: barrierDismissible,
+  builder: builder,
+);
