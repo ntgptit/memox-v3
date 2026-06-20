@@ -9,6 +9,10 @@ abstract final class StringUtils {
   static String normalizeQuery(String raw) =>
       raw.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
 
+  /// Trim leading/trailing whitespace. The single sanctioned trim entry point
+  /// for domain/presentation code (`memox.coding.string_normalization_via_string_utils`).
+  static String trimmed(String value) => value.trim();
+
   /// Case-fold a value for case-insensitive comparison/matching (lowercase
   /// only, no trimming or whitespace collapse). Centralizes case normalization
   /// so comparison semantics stay consistent across search, dedupe, and

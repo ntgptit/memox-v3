@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-15
+last_updated: 2026-06-20
 status: contract
 route: /library
 screen: Library Overview
@@ -10,6 +10,44 @@ screen: Library Overview
 This is the source of truth for mapping the approved Library Overview mock to
 Flutter implementation. It narrows mock visuals through current MemoX product
 scope, wireframes, shared components, and design tokens.
+
+> **Note (2026-06-20):** the §Implementation Files / §Visual Mapping / §State
+> Matrix tables below were authored against the **prior (mature) iteration** and
+> still name components/files from it (`MxIconTile`, `MxLinearProgress`,
+> `MxSkeleton`, `MxSectionHeader`, `LibrarySkeleton`, `LibraryDueSummaryCard`,
+> `showMxFolderRenameDialog`, `libraryOverviewQueryProvider`, …). They describe
+> the **target** shape. The **as-built V1** status (what the rebuild actually
+> ships) is in the section immediately below; where the two differ, the V1
+> section is authoritative for current code.
+
+## V1 implementation status (2026-06-20 — WBS 3.1.2 + folder actions)
+
+**Built (`Current`):** Library Overview screen + folder management.
+
+| Concern | As-built file/symbol |
+|---|---|
+| Screen shell + app bar + disabled filter icon | `lib/presentation/features/folders/screens/library_overview_screen.dart` (`MxScaffold` + `MxAppBar` + disabled `MxIconButton(Icons.tune_rounded)`) |
+| Search + states (loading/loaded/true-empty/search-no-results/error) body | `lib/presentation/features/folders/widgets/library_overview_body.dart` (renders via `AppAsyncBuilder`, not `MxRetainedAsyncState`) |
+| Stream + search query | `lib/presentation/features/folders/viewmodels/library_overview_viewmodel.dart` (`libraryOverviewStreamProvider`, `librarySearchQueryProvider`, pure `filterLibrary`) |
+| Inline search field (`useMxSearchController`) | `lib/presentation/features/folders/widgets/library_search_field.dart` |
+| Folder card row | `lib/presentation/features/folders/widgets/library_folder_tile.dart` |
+| Overflow action sheet | `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart` (`showFolderActionsSheet`) |
+| Rename dialog | `lib/presentation/features/folders/widgets/folder_rename_dialog.dart` (`showFolderRenameDialog`) |
+| Delete + blast-radius confirm | `MxConfirmDialog.show` with subtree deck/card counts (no dedicated `mx_folder_delete_dialog.dart`) |
+| Move destination picker | `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart` (`showFolderMovePicker`) |
+| Mutations | `lib/presentation/features/folders/controllers/library_action_controller.dart` (returns `Result`; failures → `folder_failure_message.dart` snackbar) |
+| Route registry | `lib/presentation/features/folders/routes/folder_routes.dart` → app-shell Library branch |
+| Goldens (loaded/empty/loading/error/search-no-results × light+dark) | `test/presentation/features/folders/library_overview_test.dart` |
+
+**Deferred in V1 (with reasons — do not re-flag as parity failures):**
+
+- **Create-folder FAB + empty-state CTA + `showMxFolderCreateDialog`** → WBS 2.1.2, itself blocked on an undefined design color/icon palette. The true-empty state shows guidance without a wired CTA until the create flow lands.
+- **Folder-row tap → folder detail** → WBS 3.2.2 (folder detail screen + route not built yet); `LibraryFolderTile.onTap` is currently unwired.
+- **Loading skeleton (`LibrarySkeleton`/`MxSkeleton`)** → V1 uses `MxLoadingState`; skeleton-card pattern Future (no `MxSkeleton` in the rebuilt kit).
+- **Tinted `MxIconTile`, `MxSectionHeader` overline + non-interactive `Recent` pill, `K` search keycap, due-summary card, mastery bar, new-card badge, deck-digest subtitle** → component or read-model not available in the rebuild (`MxIconTile`/`MxSectionHeader`/`MxLinearProgress`/`MxSkeleton` don't exist; `FolderSummary` lacks `mastery`/`newCount`/`subtitle`/`dueToday`). The contract rule "render only when the field is set / omit when absent" applies — these surface when their component/field ships.
+- **Row long-press → action sheet** → only the kebab is wired (`MxCard` has no `onLongPress` slot yet).
+
+**Mock-vs-contract conflict (resolved):** the loaded-state PNGs (`03a`) show a trailing **chevron** on folder rows, but this contract mandates a **kebab** (`Icons.more_vert`, "No chevron") because folder-detail navigation is deferred and a chevron would imply it. The implementation follows the contract (kebab). This conflict is intentional and recorded here so it is not re-flagged.
 
 ## Source Priority
 

@@ -48,6 +48,9 @@ abstract final class MxRadius {
   /// Floating action button border radius (`--memox-radius-fab`).
   static const BorderRadius fabAll = BorderRadius.all(Radius.circular(fab));
 
+  /// Fully-rounded pill/chip/badge border radius (`--memox-radius-pill`).
+  static const BorderRadius pillAll = BorderRadius.all(Radius.circular(pill));
+
   /// Top-only rounding for bottom sheets / modal hosts.
   static const BorderRadius topSheet = BorderRadius.vertical(
     top: Radius.circular(xl),
