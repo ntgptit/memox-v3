@@ -15,6 +15,9 @@ typedef DeckId = String;
 /// Identifier of a flashcard row (`flashcards.id`).
 typedef FlashcardId = String;
 
+/// Identifier of a study session row (`study_sessions.id`).
+typedef SessionId = String;
+
 /// A normalized tag name (lowercased, trimmed) stored in `flashcard_tags.tag`.
 ///
 /// Unlike the other ids this is the value itself, not a UUID

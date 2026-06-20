@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-20
 applies_to: Drift schema, all tables, migrations
-schema_version: 5 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
+schema_version: 6 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
 ---
 
 # Database Schema Contract
@@ -13,13 +13,14 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **5** (rebuild
+**Current schema** (`AppDatabase.currentSchemaVersion`): **6** (rebuild
 baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1;
 `flashcards` + `flashcard_progress` + `flashcard_tags` added v3 2026-06-20
 WBS 2.11.1/2.16.1; `flashcard_progress.is_suspended` + `buried_until` added
 v4 2026-06-20 WBS 4.0.2; `folders.color` + `folders.icon` added v5 2026-06-20
-WBS 2.22.1). The Drift layer was reset and is being re-added per feature
-slice. Tables shipped so far:
+WBS 2.22.1; `study_sessions` + `study_session_items` + `study_attempts` added
+v6 2026-06-21 WBS 4.0.1). The Drift layer was reset and is being re-added per
+feature slice. Tables shipped so far:
 
 | Table     | Columns (current)                                                                                                |
 |-----------|------------------------------------------------------------------------------------------------------------------|
@@ -28,6 +29,9 @@ slice. Tables shipped so far:
 | `flashcards` | `id`, `deck_id` (FK→decks, cascade), `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, `created_at`, `updated_at` + index `idx_flashcards_deck`. (Target adds `part_of_speech?`, `is_flagged` — Future, not yet shipped in the rebuild.) |
 | `flashcard_progress` | `flashcard_id` (PK, FK→flashcards, cascade), `box_number` (DEFAULT 1), `due_at?`, `review_count` (DEFAULT 0), `lapse_count` (DEFAULT 0), `is_suspended` (BOOLEAN NOT NULL DEFAULT 0; shipped v4 WBS 4.0.2), `buried_until?` (INTEGER NULL; shipped v4 WBS 4.0.2). (Target adds `last_studied_at?`, `last_reset_at?` + `idx_flashcard_progress_eligibility` — Future; the `is_suspended`/`buried_until` *eligibility* read logic lands with 4.11.1.) |
 | `flashcard_tags` | `flashcard_id` (FK→flashcards, cascade), `tag` (lowercased), PK `(flashcard_id, tag)` + index `idx_flashcard_tags_tag` |
+| `study_sessions` | `id` (PK), `entry_type`, `entry_ref_id?`, `study_type`, `status`, `started_at`, `updated_at` + index `idx_study_sessions_resumable` (shipped v6 WBS 4.0.1). (Target adds `study_flow` + `current_mode` mode-chain columns — Future, land with the mode-chain rows WBS 4.5.x.) |
+| `study_session_items` | `id` (PK), `session_id` (FK→study_sessions, cascade), `flashcard_id` (FK→flashcards, cascade), `sort_order`, `answered_at?`, `created_at`, `updated_at` + index `idx_study_session_items_session_sort` (shipped v6 WBS 4.0.1) |
+| `study_attempts` | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before` (DEFAULT 0), `box_after` (DEFAULT 0), `user_input?`, `attempted_at` + index `idx_study_attempts_session_item` (shipped v6 WBS 4.0.1). (Target adds `duration_ms?` — Future, lands with the card-history enabler WBS 7.0.1.) |
 
 The table below is the **target table shape** the rebuild migrates toward (the
 mature schema from the prior iteration); it is intentionally ahead of the
@@ -141,14 +145,15 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 - `flashcards.pronunciation` and `flashcards.hint` — ✅ implemented in schema v2 (flashcard create
   optional detail fields).
 - `flashcard_tags.tag` — ✅ implemented in schema v3 (create-time tags on flashcards).
-- `study_attempts.result = 'recovered'` — ✅ accepted by the current schema (v4 study tables have
-  no restrictive CHECK; the v12→v13 CHECK-rebuild migration described in earlier revisions belongs
-  to a previous project iteration and is Not Applicable here).
-- `study_attempts.box_before` / `box_after` — ✅ shipped with the v4 study tables and populated on
-  every attempt insert. `flashcard_progress.last_reset_at` is now ✅ shipped (v6) for the promoted
-  Card History feature.
-- `study_match_evaluations` — ✅ shipped with the v5 study tables; append-only Match evaluation
-  history used to derive terminal attempts during finalization.
+- `study_attempts.result = 'recovered'` — ✅ accepted by the current schema (the v6 study tables
+  have no restrictive CHECK; the v12→v13 CHECK-rebuild migration described in earlier revisions
+  belongs to a previous project iteration and is Not Applicable here).
+- `study_attempts.box_before` / `box_after` — ✅ shipped with the v6 study tables (WBS 4.0.1),
+  ready to populate on every attempt insert (default 0 = "unknown"). `flashcard_progress.last_reset_at`
+  is **not yet shipped** — it lands with the card-history enabler (WBS 7.0.1).
+- `study_match_evaluations` — **not yet shipped**; the append-only Match evaluation table lands with
+  the Match study mode (WBS 4.5.x). The v6 study tables (4.0.1) ship `study_sessions` /
+  `study_session_items` / `study_attempts` only.
 - `decks.target_language` — ✅ shipped in the current schema (initial deck table); no migration
   pending.
 - `decks.folder_id` nullable is Rejected / Not Applicable.
@@ -161,18 +166,19 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 | Rejected / Not Applicable: change `decks.folder_id` from `TEXT NOT NULL` to `TEXT NULL` | `docs/business/deck/deck-management.md`, `docs/wireframes/02-library.md`      | Superseded by product-owner decision. Do not make deck parent nullable; folder-owned deck invariant remains locked.                                                                                                                                                                                                   |
 | ✅ DONE (v4) `flashcard_progress.buried_until INTEGER NULL`                              | `docs/business/study-actions/bury-suspend.md`                                 | Default null. Shipped v4 (WBS 4.0.2, `v4_add_bury_suspend.dart`). Columns only — queue-exclusion / status-filter read logic lands with 4.11.1 / 2.17.1.                                                                                                                                                                                                                                                                         |
 | ✅ DONE (v4) `flashcard_progress.is_suspended BOOLEAN NOT NULL DEFAULT 0`                | `docs/business/study-actions/bury-suspend.md`                                 | Default false. Shipped v4 (WBS 4.0.2, `v4_add_bury_suspend.dart`). Columns only — eligibility read logic lands with 4.11.1 / 2.17.1.                                                                                                                                                                                                                                                                         |
-| ✅ DONE (v6) `flashcard_progress.last_reset_at INTEGER NULL`                             | `docs/business/history/card-history.md`                                       | Default null. Set to `now` when the user resets a card's progress; positions the Card History reset divider. Lifetime counters stay cumulative.                                                                                                                                                                        |
-| ✅ DONE (v4) `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`                      | `docs/business/history/card-history.md`                                       | Shipped with the v4 study tables; populated on every attempt insert. Default 0 = "unknown"; history view displays "—" for 0.                                                                                                                                                                                          |
-| ✅ DONE (v4) `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`                       | `docs/business/history/card-history.md`                                       | Same semantics as `box_before`.                                                                                                                                                                                                                                                                                       |
-| ✅ DONE (v5) `study_match_evaluations` append-only Match evaluation table                 | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. |
-| ✅ DONE (v7) `study_attempts.duration_ms INTEGER NULL`                                    | `docs/business/history/card-history.md`                                       | Time-on-card in ms, measured by the study review viewmodel. NULL = not measured → Card History shows "duration not logged".                                                                                                                                                                                            |
-| ✅ DONE (v7) `card_events` lifecycle table + `idx_card_events_flashcard`                  | `docs/business/history/card-history.md`                                       | Per-card created/edited/audio/reset events for the Card History activity feed (merged with `study_attempts` in the timeline). `created`/`edited` logged on flashcard create/update; `reset` on progress reset; `audio_added` reserved (no audio feature yet).                                                            |
-| ✅ DONE (v8) `flashcards.part_of_speech TEXT NULL`                                        | `docs/business/flashcard/flashcard-management.md`, `docs/wireframes/06-flashcard-list.md` | Optional grammatical POS chip on the list + editor. Free text, lowercase.                                                                                                                                                                                                                                            |
-| ✅ DONE (v8) `flashcards.is_flagged BOOLEAN NOT NULL DEFAULT FALSE`                       | `docs/wireframes/06-flashcard-list.md`                                        | User flag for the Flagged filter pill + per-row flag icon.                                                                                                                                                                                                                                                           |
+| ✅ DONE (v6) `study_sessions` + `study_session_items` + `study_attempts` tables           | `docs/business/study/study-flow.md`, `docs/contracts/repository-contracts/study-repository.md` | Study persistence enabler (WBS 4.0.1). FK chain `study_sessions → study_session_items → study_attempts` (+ `study_session_items.flashcard_id → flashcards`), with `idx_study_sessions_resumable` / `idx_study_session_items_session_sort` / `idx_study_attempts_session_item`. Additive `v6_add_study_tables.dart`; no data back-fill (fresh tables). |
+| Pending `flashcard_progress.last_reset_at INTEGER NULL`                                  | `docs/business/history/card-history.md`                                       | Default null. Set to `now` when the user resets a card's progress; positions the Card History reset divider. Lifetime counters stay cumulative. Lands with the card-history enabler (WBS 7.0.1).                                                                                                                       |
+| ✅ DONE (v6) `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`                      | `docs/business/history/card-history.md`                                       | Shipped with the v6 study tables (WBS 4.0.1); populated on every attempt insert once grading lands. Default 0 = "unknown"; history view displays "—" for 0.                                                                                                                                                            |
+| ✅ DONE (v6) `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`                       | `docs/business/history/card-history.md`                                       | Same semantics as `box_before`.                                                                                                                                                                                                                                                                                       |
+| Pending `study_match_evaluations` append-only Match evaluation table                     | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. Lands with the Match study mode (WBS 4.5.x). |
+| Pending `study_attempts.duration_ms INTEGER NULL`                                        | `docs/business/history/card-history.md`                                       | Time-on-card in ms, measured by the study review viewmodel. NULL = not measured → Card History shows "duration not logged". Lands with the card-history enabler (WBS 7.0.1).                                                                                                                                           |
+| Pending `card_events` lifecycle table + `idx_card_events_flashcard`                      | `docs/business/history/card-history.md`                                       | Per-card created/edited/audio/reset events for the Card History activity feed (merged with `study_attempts` in the timeline). Lands with the card-history enabler (WBS 7.0.1).                                                                                                                                         |
+| Pending `flashcards.part_of_speech TEXT NULL`                                            | `docs/business/flashcard/flashcard-management.md`, `docs/wireframes/06-flashcard-list.md` | Optional grammatical POS chip on the list + editor. Free text, lowercase. Lands with the full flashcard editor (WBS 2.11.2 / 2.12.2).                                                                                                                                                                                 |
+| Pending `flashcards.is_flagged BOOLEAN NOT NULL DEFAULT FALSE`                           | `docs/wireframes/06-flashcard-list.md`                                        | User flag for the Flagged filter pill + per-row flag icon. Lands with the full flashcard editor (WBS 2.11.2 / 2.12.2).                                                                                                                                                                                                |
 | Future (4.11.1) compound index `flashcard_progress(is_suspended, buried_until, due_at)` | `docs/business/study-actions/bury-suspend.md`                                 | Planned as `idx_flashcard_progress_eligibility`; ships with the eligibility read logic (4.11.1), not with the v4 columns (4.0.2).                                                                                                                                                                                                                                                                        |
 | ✅ DONE (v3) index `flashcard_tags(tag)`                                                 | `docs/business/tags/tag-system.md`                                            | Added as `idx_flashcard_tags_tag` with the v3 tags migration. Tags are stored lowercased, so a plain index on `tag` supports lowercased-input lookups.                                                                                                                                                                |
 | ✅ DONE (v3) lowercase `flashcard_tags.tag` storage                                      | `docs/business/tags/tag-system.md`                                            | Tags are stored lowercased (case-insensitive identity); the validator + DAO normalize on insert. (The "schema v11 backfill" in earlier revisions belongs to a previous project iteration — this repo's tags shipped lowercased from v3.)                                                                              |
-| ✅ N/A `study_attempts.result = 'recovered'` CHECK rebuild                               | `docs/wireframes/17-study-session-fill.md`, `docs/business/srs/srs-review.md` | The current v4 `study_attempts` table accepts `recovered` from the start; no restrictive CHECK ever shipped in this repo. The v12→v13 CHECK-rebuild migration from earlier revisions is Not Applicable.                                                                                                               |
+| ✅ N/A `study_attempts.result = 'recovered'` CHECK rebuild                               | `docs/wireframes/17-study-session-fill.md`, `docs/business/srs/srs-review.md` | The v6 `study_attempts` table accepts `recovered` from the start; no restrictive CHECK ever shipped in this repo. The v12→v13 CHECK-rebuild migration from earlier revisions is Not Applicable.                                                                                                                       |
 | Consider index on `study_attempts(box_after)`                                           | `docs/business/history/card-history.md`                                       | Only if box-progression analytics need it; profile first.                                                                                                                                                                                                                                                             |
 
 When implementing, bump `AppDatabase.currentSchemaVersion` accordingly and update this doc's
@@ -180,9 +186,9 @@ frontmatter `schema_version`.
 
 ### Migration ordering note
 
-`box_before` / `box_after` shipped with the v4 study tables, so every attempt insert already
-includes them — no ordering concern remains. The default `0` represents "unknown"; UI must render
-`0` as "—" not as "Box 0".
+`box_before` / `box_after` shipped with the v6 study tables (WBS 4.0.1), so every attempt insert
+already carries them once grading lands — no ordering concern remains. The default `0` represents
+"unknown"; UI must render `0` as "—" not as "Box 0".
 
 ## Entity relationship overview
 
@@ -254,7 +260,7 @@ This schema is referenced by every business spec that touches persistent state.
 | `folders`                                                                                       | `docs/business/folder/folder-management.md`                                                                               |
 | `decks` (incl. `target_language` pending migration)                                             | `docs/business/deck/deck-management.md`, `docs/business/tts/tts-settings.md`                                              |
 | `flashcards`                                                                                    | `docs/business/flashcard/flashcard-management.md`                                                                         |
-| `flashcard_progress` (incl. `last_reset_at`, shipped v6)                                  | `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`                                                             |
+| `flashcard_progress` (`last_reset_at` pending — WBS 7.0.1)                                | `docs/business/srs/srs-review.md`, `docs/business/history/card-history.md`                                                             |
 | `flashcard_tags`                                                                                | `docs/business/tags/tag-system.md`, `docs/business/flashcard/flashcard-management.md`                                     |
 | `study_sessions`                                                                                | `docs/business/study/study-flow.md`, `docs/business/resume/resume-session.md`                                             |
 | `study_session_items`                                                                           | `docs/business/study/study-flow.md`                                                                                       |

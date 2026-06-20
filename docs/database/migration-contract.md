@@ -97,10 +97,10 @@ If any step is skipped, report it explicitly.
 - `docs/business/flashcard/flashcard-management.md` → `flashcards.pronunciation`, `flashcards.hint`
 - `docs/business/deck/deck-management.md` → `decks.target_language`
 - `docs/business/study-actions/bury-suspend.md` → `flashcard_progress.buried_until`, `is_suspended`
-- `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at` (shipped v6,
-  `v6_add_flashcard_progress_last_reset_at.dart`), `study_attempts.box_before`, `box_after`,
-  `study_attempts.duration_ms` + `card_events` table (shipped v7,
-  `v7_add_card_events_and_attempt_duration.dart`)
+- `docs/business/study/study-flow.md` → `study_sessions`, `study_session_items`, `study_attempts`
+  (incl. `study_attempts.box_before`, `box_after`) — shipped v6 (`v6_add_study_tables.dart`, WBS 4.0.1)
+- `docs/business/history/card-history.md` → `flashcard_progress.last_reset_at`,
+  `study_attempts.duration_ms`, `card_events` table — **pending** (card-history enabler, WBS 7.0.1)
 - `docs/business/study/study-flow.md` + `docs/business/srs/srs-review.md` →
   `study_match_evaluations`
 - `docs/wireframes/17-study-session-fill.md` + `docs/business/srs/srs-review.md` → enum/constraint
@@ -113,15 +113,15 @@ If any step is skipped, report it explicitly.
 
 **Source files to inspect:**
 
-- `lib/data/datasources/local/migrations/**`
+- `lib/data/datasources/local/migrations/**` (live steps: `v2_add_decks.dart`,
+  `v3_add_flashcards.dart`, `v4_add_bury_suspend.dart`, `v5_add_folder_color_icon.dart`,
+  `v6_add_study_tables.dart`)
 - `lib/data/datasources/local/app_database.dart` (schemaVersion)
-- `lib/data/datasources/local/migrations/v4_add_study_tables.dart`
-- `lib/data/datasources/local/migrations/v6_add_flashcard_progress_last_reset_at.dart`
-- `lib/data/datasources/local/migrations/v7_add_card_events_and_attempt_duration.dart`
-- `lib/data/datasources/local/migrations/v8_add_flashcard_pos_and_flag.dart`
-- `lib/data/datasources/local/migrations/v9_add_tts_settings.dart`
-- `lib/data/datasources/local/migrations/v10_add_study_flow_and_current_mode.dart`
-- `lib/data/datasources/local/migrations/v11_clear_new_card_due_at.dart`
+- The prior-iteration step files (`v*_add_flashcard_progress_last_reset_at.dart`,
+  `v*_add_card_events_and_attempt_duration.dart`, `v*_add_flashcard_pos_and_flag.dart`,
+  `v*_add_tts_settings.dart`, `v*_add_study_flow_and_current_mode.dart`,
+  `v*_clear_new_card_due_at.dart`) are **not present** in the current tree — they are re-added at
+  their own rebuild version as each feature lands (see the prior-iteration table below).
 
 ## Shipped migrations
 
@@ -130,10 +130,11 @@ If any step is skipped, report it explicitly.
 (`onCreate`/`onUpgrade`/`beforeOpen` in `AppDatabase.migration`) and the
 platform-isolated connection. Each schema bump adds a `migrations/v<N>_*.dart`
 step file plus an `onUpgrade` step (guarded by `from`). Current code is at
-**schema v5**.
+**schema v6**.
 
 | Version | File | What changed |
 |---------|------|--------------|
+| v6 | `v6_add_study_tables.dart` | Added the study-persistence tables `study_sessions` (`id`, `entry_type`, `entry_ref_id?`, `study_type`, `status`, `started_at`, `updated_at`) + `idx_study_sessions_resumable`; `study_session_items` (`id`, `session_id` FK→study_sessions ON DELETE CASCADE, `flashcard_id` FK→flashcards ON DELETE CASCADE, `sort_order`, `answered_at?`, timestamps) + `idx_study_session_items_session_sort`; `study_attempts` (`id`, `session_item_id` FK→study_session_items ON DELETE CASCADE, `result`, `study_mode`, `box_before` DEFAULT 0, `box_after` DEFAULT 0, `user_input?`, `attempted_at`) + `idx_study_attempts_session_item`. Additive — no existing table touched, no data back-fill. Migration test: `test/data/migrations/v6_add_study_tables_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 4.0.1. |
 | v5 | `v5_add_folder_color_icon.dart` | Added the nullable `folders.color` + `folders.icon` columns (optional presentation tokens from the folder create/edit pickers; NULL = no custom token → theme default). Additive `addColumn` migration; existing rows need no backfill. Migration test: `test/data/migrations/v5_add_folder_color_icon_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.22.1. |
 | v4 | `v4_add_bury_suspend.dart` | Added `flashcard_progress.is_suspended` (BOOLEAN NOT NULL DEFAULT 0 → existing rows back-fill not-suspended) and `flashcard_progress.buried_until` (INTEGER NULL → existing rows back-fill not-buried). Additive, data-preserving; no behavior reads them yet (eligibility read logic lands WBS 4.11.1 / 2.17.1). Migration test: `test/data/migrations/v4_add_bury_suspend_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 4.0.2. |
 | v3 | `v3_add_flashcards.dart` | Added the `flashcards` (`id`, `deck_id` FK→decks ON DELETE CASCADE, `front`, `back`, `example_sentence?`, `pronunciation?`, `hint?`, `sort_order`, timestamps) + `idx_flashcards_deck`; `flashcard_progress` (`flashcard_id` PK = FK→flashcards ON DELETE CASCADE, `box_number` DEFAULT 1, `due_at?`, `review_count` DEFAULT 0, `lapse_count` DEFAULT 0); and `flashcard_tags` (`flashcard_id` FK→flashcards ON DELETE CASCADE, `tag`, PK `(flashcard_id, tag)`) + `idx_flashcard_tags_tag` tables. Additive. Migration test: `test/data/migrations/v3_add_flashcards_migration_test.dart`; schema test: `test/data/migrations/app_database_schema_test.dart`. WBS 2.11.1. |

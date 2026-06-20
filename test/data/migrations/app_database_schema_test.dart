@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v5)', () {
+  group('AppDatabase schema (v6)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,8 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 5);
-      expect(db.schemaVersion, 5);
+      expect(AppDatabase.currentSchemaVersion, 6);
+      expect(db.schemaVersion, 6);
     });
 
     Future<void> insertDeckRow(String id, String folderId) async {
@@ -318,5 +318,130 @@ void main() {
         );
       },
     );
+
+    // --- Study persistence tables (v6, WBS 4.0.1) ---
+
+    Future<void> insertSessionRow(
+      String id, {
+      String entryType = 'deck',
+      String? entryRefId = 'd1',
+      String status = 'draft',
+    }) async {
+      final int ts = now();
+      await db
+          .into(db.studySessions)
+          .insert(
+            StudySessionsCompanion.insert(
+              id: id,
+              entryType: entryType,
+              studyType: 'srs_review',
+              status: status,
+              startedAt: ts,
+              updatedAt: ts,
+              entryRefId: Value<String?>(entryRefId),
+            ),
+          );
+    }
+
+    Future<void> insertItemRow(String id, String sessionId, String cardId) => db
+        .into(db.studySessionItems)
+        .insert(
+          StudySessionItemsCompanion.insert(
+            id: id,
+            sessionId: sessionId,
+            flashcardId: cardId,
+            sortOrder: 0,
+            createdAt: now(),
+            updatedAt: now(),
+          ),
+        );
+
+    test('creates the study tables and round-trips the FK chain', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await insertSessionRow('s1');
+      await insertItemRow('i1', 's1', 'c1');
+      await db
+          .into(db.studyAttempts)
+          .insert(
+            StudyAttemptsCompanion.insert(
+              id: 'a1',
+              sessionItemId: 'i1',
+              result: 'perfect',
+              studyMode: 'review',
+              attemptedAt: now(),
+            ),
+          );
+
+      final StudySessionRow session = await db
+          .select(db.studySessions)
+          .getSingle();
+      expect(session.entryRefId, 'd1');
+      expect(session.status, 'draft');
+      // box_before / box_after default to 0 (unknown); user_input NULL.
+      final StudyAttemptRow attempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      expect(attempt.boxBefore, 0);
+      expect(attempt.boxAfter, 0);
+      expect(attempt.userInput, isNull);
+    });
+
+    test('allows a NULL entry_ref_id for a today-scope session', () async {
+      await insertSessionRow('s-today', entryType: 'today', entryRefId: null);
+      final StudySessionRow row = await db.select(db.studySessions).getSingle();
+      expect(row.entryRefId, isNull);
+    });
+
+    test('cancelling a session cascades its items and attempts', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await insertSessionRow('s1');
+      await insertItemRow('i1', 's1', 'c1');
+      await db
+          .into(db.studyAttempts)
+          .insert(
+            StudyAttemptsCompanion.insert(
+              id: 'a1',
+              sessionItemId: 'i1',
+              result: 'perfect',
+              studyMode: 'review',
+              attemptedAt: now(),
+            ),
+          );
+
+      await (db.delete(db.studySessions)..where((t) => t.id.equals('s1'))).go();
+
+      expect(await db.select(db.studySessionItems).get(), isEmpty);
+      expect(await db.select(db.studyAttempts).get(), isEmpty);
+    });
+
+    test('deleting a flashcard cascades its session items', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await insertSessionRow('s1');
+      await insertItemRow('i1', 's1', 'c1');
+
+      await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
+
+      expect(await db.select(db.studySessionItems).get(), isEmpty);
+    });
+
+    test('rejects a session item with a missing session (FK)', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      expect(
+        () => insertItemRow('orphan', 'no-session', 'c1'),
+        throwsA(isA<Exception>()),
+      );
+    });
   });
 }

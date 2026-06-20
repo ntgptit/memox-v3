@@ -1,0 +1,72 @@
+import 'flashcards.drift';
+
+-- A study/review session: the persisted unit of "study these cards now". One
+-- session is started from a scope (deck / folder / today) and owns an ordered
+-- queue of item rows. entry_type / study_type / status are storage enum tokens
+-- (snake_case; see docs/contracts/types-catalog.md §EntryType/§StudyType/
+-- §SessionStatus). entry_ref_id is the deck/folder id, or NULL for a `today`
+-- (global) scope. Sessions are NEVER hard-deleted — a discarded or expired
+-- session moves to status `cancelled` (see
+-- docs/contracts/repository-contracts/study-repository.md §Forbidden).
+-- Timestamps are UTC epoch milliseconds; ids are text (UUID-like). The
+-- study_flow / current_mode mode-chain columns and the study_match_evaluations
+-- table are target shape that lands with the mode-chain rows (WBS 4.5.x), not
+-- this enabler. See docs/database/schema-contract.md §study_sessions and
+-- docs/business/study/study-flow.md.
+CREATE TABLE study_sessions (
+  id TEXT NOT NULL PRIMARY KEY,
+  entry_type TEXT NOT NULL,
+  entry_ref_id TEXT,
+  study_type TEXT NOT NULL,
+  status TEXT NOT NULL,
+  started_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+) AS StudySessionRow;
+
+-- Resume lookup: findResumable(scope) filters by entry_type + entry_ref_id +
+-- status and orders by updated_at within the 30-day window
+-- (docs/contracts/repository-contracts/study-repository.md §Resumable matching).
+CREATE INDEX idx_study_sessions_resumable
+  ON study_sessions (entry_type, entry_ref_id, status, updated_at);
+
+-- One queued card task inside a session. session_id and flashcard_id both use
+-- ON DELETE CASCADE: cancelling/clearing a session removes its items, and
+-- deleting a flashcard removes the item rows that referenced it. sort_order is
+-- the queue position; answered_at is set when the item receives a terminal
+-- attempt (NULL = unanswered). See docs/database/schema-contract.md
+-- §study_session_items.
+CREATE TABLE study_session_items (
+  id TEXT NOT NULL PRIMARY KEY,
+  session_id TEXT NOT NULL REFERENCES study_sessions (id) ON DELETE CASCADE,
+  flashcard_id TEXT NOT NULL REFERENCES flashcards (id) ON DELETE CASCADE,
+  sort_order INTEGER NOT NULL,
+  answered_at INTEGER,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+) AS StudySessionItemRow;
+
+CREATE INDEX idx_study_session_items_session_sort
+  ON study_session_items (session_id, sort_order);
+
+-- One answer attempt against a session item. session_item_id uses ON DELETE
+-- CASCADE. result / study_mode are storage enum tokens (snake_case; see
+-- docs/contracts/types-catalog.md §AttemptResult/§StudyMode). box_before /
+-- box_after record the Leitner box transition the attempt produced (default 0 =
+-- "unknown" → history renders "—"). user_input holds the typed answer for
+-- recall/fill modes (NULL otherwise). The duration_ms column is target shape
+-- for Card History and lands with the card-history enabler (WBS 7.0.1), not
+-- this row. See docs/database/schema-contract.md §study_attempts.
+CREATE TABLE study_attempts (
+  id TEXT NOT NULL PRIMARY KEY,
+  session_item_id TEXT NOT NULL
+    REFERENCES study_session_items (id) ON DELETE CASCADE,
+  result TEXT NOT NULL,
+  study_mode TEXT NOT NULL,
+  box_before INTEGER NOT NULL DEFAULT 0,
+  box_after INTEGER NOT NULL DEFAULT 0,
+  user_input TEXT,
+  attempted_at INTEGER NOT NULL
+) AS StudyAttemptRow;
+
+CREATE INDEX idx_study_attempts_session_item
+  ON study_attempts (session_item_id);

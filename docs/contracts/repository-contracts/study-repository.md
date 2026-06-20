@@ -67,6 +67,9 @@ Future<Either<Failure, Unit>> markCancelled(SessionId id);
 Future<Either<Failure, Unit>> markFailedToFinalize(SessionId id);
 Future<Either<Failure, Unit>> markItemAnswered(SessionId id, FlashcardId flashcardId);
 Future<Either<Failure, int>> expireOldSessions();  // cancel sessions > 30 days old
+// Implemented (4.0.1 skeleton) as `Future<Result<int>> expireOldSessions({required int now})`:
+// the project `Result<T>` record (not `Either`, per the header parity note) with the clock
+// injected by the caller. `resumeWindow` (30 days) is a static const on `StudyRepository`.
 ```
 
 ## Transaction requirements

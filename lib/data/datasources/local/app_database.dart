@@ -4,6 +4,7 @@ import 'package:memox/data/datasources/local/migrations/v2_add_decks.dart';
 import 'package:memox/data/datasources/local/migrations/v3_add_flashcards.dart';
 import 'package:memox/data/datasources/local/migrations/v4_add_bury_suspend.dart';
 import 'package:memox/data/datasources/local/migrations/v5_add_folder_color_icon.dart';
+import 'package:memox/data/datasources/local/migrations/v6_add_study_tables.dart';
 
 part 'app_database.g.dart';
 
@@ -26,11 +27,15 @@ part 'app_database.g.dart';
 /// (`migrations/v4_add_bury_suspend.dart`).
 /// v5 (WBS 2.22.1): added the nullable `folders.color` + `folders.icon` columns
 /// (`migrations/v5_add_folder_color_icon.dart`).
+/// v6 (WBS 4.0.1): added the study-persistence tables `study_sessions`,
+/// `study_session_items`, and `study_attempts` (the FK chain + resume/queue/
+/// attempt indexes; `migrations/v6_add_study_tables.dart`).
 @DriftDatabase(
   include: <String>{
     'drift/folders.drift',
     'drift/decks.drift',
     'drift/flashcards.drift',
+    'drift/study_tables.drift',
   },
 )
 class AppDatabase extends _$AppDatabase {
@@ -43,7 +48,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 5;
+  static const int currentSchemaVersion = 6;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -72,6 +77,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 5) {
         await migrateV4ToV5(m, this);
+      }
+      if (from < 6) {
+        await migrateV5ToV6(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {
