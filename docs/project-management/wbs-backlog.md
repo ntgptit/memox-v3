@@ -32,7 +32,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 |---|---|---|---|
 | ~~P0.1~~ | ~~**4.0.1**~~ | ~~Study persistence schema + repo skeleton (ENABLER B1)~~ | ✅ **DONE 2026-06-21** (schema v6: `study_sessions`/`study_session_items`/`study_attempts` + `StudyRepository` skeleton). B1 resolved — §4 persistence unblocked. |
 | P0.2 | ~~4.1.1~~ / 4.1.2 | ~~Study entry eligibility BE~~ ✅ **DONE 2026-06-21** (count-based classification, empty-scope matrix) + entry FE (4.1.2 pending) | Resolve scope, empty-state matrix. |
-| P0.3 | ~~4.2.1~~ / 4.2.2 / 4.2.3 / ~~4.2.4~~ | ~~Session creation BE~~ ✅ **DONE** + no-silent-resume gate (4.2.2) + resume/start-over FE (4.2.3) + ~~batch limit~~ ✅ **DONE 2026-06-21** (maxSessionItems cap in use case) | |
+| P0.3 | ~~4.2.1~~ / ~~4.2.2~~ / 4.2.3 / ~~4.2.4~~ | ~~Session creation BE~~ ✅ **DONE** + ~~no-silent-resume gate~~ ✅ **DONE 2026-06-21** (findResumable + StudyEntryStartResult gate) + resume/start-over FE (4.2.3) + ~~batch limit~~ ✅ **DONE** | |
 | P0.4 | ~~4.3.1~~ / 4.3.2 | ~~Session item loading BE~~ ✅ **DONE 2026-06-21** (`StudySessionReview` load) + review shell FE (4.3.2) | |
 | P0.5 | ~~4.4.1~~ / 4.4.2 / 4.4.3 | ~~Submit self-grade BE~~ ✅ **DONE 2026-06-21** (recordStudySessionAnswer + SrsBox transition) + Forgot/Got-it FE + re-grade before finalize | |
 | P0.6 | ~~4.5.1~~ / 4.5.2 / 4.5.3 | ~~Study mode strategy BE~~ ✅ **DONE 2026-06-21** (sealed families + factory) + Review mode BE + Review mode FE | Review is the core mode; other modes are P1. |

@@ -54,6 +54,19 @@ Future<Either<Failure, ResumableSession?>> call({required StudyScope scope});
 
 **Errors:** `StorageFailure`.
 
+**V1 implementation (WBS 4.2.2):** `StudyRepository.findResumable({scope, now})`
+(`lib/data/repositories/study_repository_impl.dart` → `StudySessionDao
+.findResumableSession`, a NULL-safe `entry_ref_id` match ordered by `updated_at`
+DESC, limit 1, within `resumeWindow`) returns the resumable `StudySession` header
+or `null`. The **no-silent-resume gate** `ResolveStudyEntryStartUseCase`
+(`lib/domain/usecases/study/resolve_study_entry_start_usecase.dart`) owns the
+clock and composes it with eligibility (WBS 4.1.1) into a controlled
+`StudyEntryStartResult` (`lib/domain/study/study_entry_start_result.dart`):
+`resumeRequired(session)` when a resumable session exists (decision row S28 —
+never resumed silently), else `canStart(eligibility)` or `blocked(reason,
+nextDueAt)`. The richer `ResumableSession` projection (progress, last-active) is
+deferred to the Dashboard Continue-Studying summary (WBS 5.1.1).
+
 ## CreateSessionUseCase
 
 ```dart

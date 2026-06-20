@@ -60,6 +60,12 @@ class _FakeStudyRepository implements StudyRepository {
     required StudyMode studyMode,
     required int now,
   }) async => throw UnimplementedError();
+
+  @override
+  Future<Result<StudySession?>> findResumable({
+    required StudyScope scope,
+    required int now,
+  }) async => throw UnimplementedError();
 }
 
 void main() {

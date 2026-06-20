@@ -292,4 +292,29 @@ class StudyRepositoryImpl implements StudyRepository {
       );
     }
   }
+
+  @override
+  Future<Result<StudySession?>> findResumable({
+    required StudyScope scope,
+    required int now,
+  }) async {
+    try {
+      final int cutoff = now - StudyRepository.resumeWindow.inMilliseconds;
+      final StudySessionRow? row = await _dao.findResumableSession(
+        entryType: _mapper.entryTypeToken(scope.entryType),
+        entryRefId: scope.entryRefId,
+        cutoff: cutoff,
+      );
+      return (failure: null, data: row == null ? null : _mapper.toEntity(row));
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_sessions',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
 }

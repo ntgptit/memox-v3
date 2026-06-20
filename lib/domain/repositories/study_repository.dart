@@ -80,4 +80,14 @@ abstract interface class StudyRepository {
     required StudyMode studyMode,
     required int now,
   });
+
+  /// The most recent resumable (`draft`/`in_progress`) session for [scope] whose
+  /// `updated_at` is within the 30-day [resumeWindow] from [now] (epoch ms), or
+  /// `null` when none (WBS 4.2.2). Backs the no-silent-resume gate
+  /// (`docs/business/resume/resume-session.md`). A read error maps to a
+  /// `StorageFailure`.
+  Future<Result<StudySession?>> findResumable({
+    required StudyScope scope,
+    required int now,
+  });
 }

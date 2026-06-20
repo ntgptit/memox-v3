@@ -47,6 +47,33 @@ class StudySessionDao {
     _db.studySessions,
   )..where((t) => t.id.equals(id))).getSingleOrNull();
 
+  /// The most recent resumable (`draft`/`in_progress`) session matching the
+  /// scope [entryType] + [entryRefId] (NULL-safe) whose `updated_at` is newer
+  /// than [cutoff] (epoch ms), or `null` when none — the no-silent-resume match
+  /// (`docs/contracts/repository-contracts/study-repository.md` §Resumable
+  /// matching). Ordered by `updated_at` DESC.
+  Future<StudySessionRow?> findResumableSession({
+    required String entryType,
+    required String? entryRefId,
+    required int cutoff,
+  }) {
+    final query = _db.select(_db.studySessions)
+      ..where((t) {
+        final Expression<bool> base =
+            t.entryType.equals(entryType) &
+            t.status.isIn(<String>[statusDraft, statusInProgress]) &
+            t.updatedAt.isBiggerThanValue(cutoff);
+        return entryRefId == null
+            ? base & t.entryRefId.isNull()
+            : base & t.entryRefId.equals(entryRefId);
+      })
+      ..orderBy(<OrderClauseGenerator<StudySessions>>[
+        (t) => OrderingTerm(expression: t.updatedAt, mode: OrderingMode.desc),
+      ])
+      ..limit(1);
+    return query.getSingleOrNull();
+  }
+
   /// Inserts a queued item row.
   Future<void> insertItem(StudySessionItemsCompanion item) =>
       _db.into(_db.studySessionItems).insert(item);

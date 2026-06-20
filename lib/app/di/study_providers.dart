@@ -1,4 +1,5 @@
 import 'package:memox/app/di/database_providers.dart';
+import 'package:memox/app/di/study_entry_providers.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/repositories/study_repository_impl.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
@@ -6,6 +7,7 @@ import 'package:memox/domain/usecases/study/cancel_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/create_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/load_study_session_review_usecase.dart';
 import 'package:memox/domain/usecases/study/record_study_session_answer_usecase.dart';
+import 'package:memox/domain/usecases/study/resolve_study_entry_start_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_providers.g.dart';
@@ -39,4 +41,11 @@ LoadStudySessionReviewUseCase loadStudySessionReviewUseCase(Ref ref) =>
 RecordStudySessionAnswerUseCase recordStudySessionAnswerUseCase(Ref ref) =>
     RecordStudySessionAnswerUseCase(
       repository: ref.watch(studyRepositoryProvider),
+    );
+
+@riverpod
+ResolveStudyEntryStartUseCase resolveStudyEntryStartUseCase(Ref ref) =>
+    ResolveStudyEntryStartUseCase(
+      studyRepository: ref.watch(studyRepositoryProvider),
+      entryRepository: ref.watch(studyEntryRepositoryProvider),
     );
