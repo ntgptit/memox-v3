@@ -118,9 +118,9 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | --- | --- |
 | **Mục đích** | Biến một WBS row thành **prompt hoàn chỉnh theo 6-bước dev loop** (Read → Drift check → Implement → Inner loop → Design parity → Full verify+commit) mà không cần agent tự nhớ reading list, hard rules, hay parity checklist mỗi lần. Giảm variance giữa các phiên agent. |
 | **Cách hoạt động** | Parse `docs/project-management/wbs.md` §4 lấy row theo WBS ID → phát hiện entity (Folder/Deck/Study/…) từ Flow+Function+Deliverable → tra bảng entity→docs để build reading list → phát hiện Layer (BE/FE/Integration) để chọn đúng implementation order và có hay không Design Parity block (Step 5) → in prompt markdown hoàn chỉnh ra stdout. Có thể sinh prompt cho 1 row, nhiều row cùng lúc (batch), hoặc xem overview 1 phase. Zero npm dependency. |
-| **Cách chạy** | `node tool/prompt_gen/run.mjs <WBS_ID>` — prompt 1 task. `node tool/prompt_gen/run.mjs <ID1> <ID2> …` — prompt batch (≤7 row). `node tool/prompt_gen/run.mjs --phase <N>` — tổng quan phase + danh sách row ready. `node tool/prompt_gen/run.mjs --list [--status <S>]` — liệt kê WBS rows. `node tool/prompt_gen/run.mjs --next` — xem §5 Next tasks. |
-| **Khi nào dùng** | Trước mỗi task implement: chạy tool → copy prompt → paste vào Claude Code session mới. Khi bắt đầu một phase mới: `--phase N` để thấy gì ready. |
-| **Dependency check** | Tự động kiểm tra `Depends on` column — in ⚠️ warning nếu dep chưa `Implemented`. |
+| **Cách chạy** | `node tool/prompt_gen/run.mjs <WBS_ID>` — prompt 1 task. `node tool/prompt_gen/run.mjs <ID1> <ID2> …` — prompt batch (≤7 row). `node tool/prompt_gen/run.mjs --phase <N>` — tổng quan phase + danh sách row ready. `node tool/prompt_gen/run.mjs --ready [--gen [N]]` — task next **status-driven** trên toàn WBS (mọi row `Specified` có đủ dep `Implemented`); `--gen` sinh luôn prompt cho row đầu (hoặc N row đầu). `node tool/prompt_gen/run.mjs --list [--status <S>]` — liệt kê WBS rows. `node tool/prompt_gen/run.mjs --next` — xem §5 Next tasks (prose **curated thủ công**; có thể drift — dùng `--ready` để lấy task chính xác). |
+| **Khi nào dùng** | Trước mỗi task implement: chạy tool → copy prompt → paste vào Claude Code session mới. Muốn "task tiếp theo chính xác bây giờ": `--ready` (hoặc `--ready --gen`). Khi bắt đầu một phase mới: `--phase N` để thấy gì ready trong phase đó. |
+| **Dependency check** | Tự động kiểm tra `Depends on` column — in ⚠️ warning nếu dep chưa `Implemented`. So khớp status theo **token đầu** nên cell dạng `Implemented (2026-06-20; …)` vẫn được tính là done (không còn báo nhầm "build it first"). |
 | **Output** | Markdown prompt ra stdout — pipe sang file nếu muốn lưu: `node tool/prompt_gen/run.mjs 1.2.1 > /tmp/task-1.2.1.md`. |
 
 ## 4. Artifacts sinh ra — tra cứu nhanh
@@ -192,7 +192,7 @@ chỗ cần đụng:
 | `doc_guard generate` — where-is | 🔶 Engine generic, registry theo dự án | Engine resolve-pattern giữ nguyên. Viết lại mảng `WHERE_IS` (~40 entries): feature + doc paths + source-name patterns của dự án mới. Đây là phần tốn công nhất (~1-2 giờ) nhưng chỉ làm một lần. |
 | `ui_kit_shots/*` | 🔴 Gắn với DOM của kit này | Selectors (`.row`, `.stepper`, `.phone`, `.frame-wrap`, `.st-label`) + cơ chế stepper/lazy-render là của kit MemoX. Kit HTML khác: sửa selectors + vòng lặp state cho khớp cấu trúc gallery mới. Ý tưởng (headless render → chụp per-state + walk DOM → spec) tái dùng nguyên vẹn. |
 | `.githooks/pre-commit` | ✅ Generic | Chỉ cần `tool/doc_guard` tồn tại; nhớ chạy lại `git config core.hooksPath .githooks` ở clone mới. |
-| `prompt_gen/run.mjs` | 🔴 MemoX-specific | Bảng `ENTITY_DOCS` (~15 entries) và `ENTITY_PATTERNS` gắn với domain MemoX. Dự án khác: viết lại 2 bảng này + hàm `implOrder` (nếu stack khác). Khung 6-bước loop + CLI (`--list`, `--phase`, `--next`) giữ nguyên. |
+| `prompt_gen/run.mjs` | 🔴 MemoX-specific | Bảng `ENTITY_DOCS` (~15 entries) và `ENTITY_PATTERNS` gắn với domain MemoX. Dự án khác: viết lại 2 bảng này + hàm `implOrder` (nếu stack khác). Khung 6-bước loop + CLI (`--list`, `--phase`, `--ready`, `--next`) giữ nguyên. |
 
 **Quy trình copy đề xuất (cho một dự án mới):**
 

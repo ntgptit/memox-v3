@@ -5,7 +5,8 @@
 //   node tool/prompt_gen/run.mjs --phase <N>                 # phase overview + ready rows
 //   node tool/prompt_gen/run.mjs --all-prompts               # gen prompts for all non-done rows
 //   node tool/prompt_gen/run.mjs --list [--status <S>]       # list all WBS rows
-//   node tool/prompt_gen/run.mjs --next                      # show §5 Next tasks from WBS
+//   node tool/prompt_gen/run.mjs --ready [--gen [N]]         # status-driven next tasks (all phases); --gen emits prompt(s)
+//   node tool/prompt_gen/run.mjs --next                      # show §5 Next tasks prose (curated, may drift)
 //
 // Add --out-dir <path> to any command to write one file per WBS ID instead of stdout:
 //   node tool/prompt_gen/run.mjs 1.2.1 --out-dir /tmp
@@ -22,6 +23,42 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const wbsPath = join(repoRoot, 'docs', 'project-management', 'wbs.md');
 const today = new Date().toISOString().slice(0, 10);
+
+// ── status normalization ───────────────────────────────────────────────────────
+// WBS status cells often carry a parenthetical suffix, e.g.
+//   "Implemented (2026-06-20; nav extended …)"
+// Always compare the leading token, never the raw cell, or done rows are mis-read
+// as still-pending (and done deps are wrongly flagged "build it first").
+const DONE_STATUSES = ['Implemented', 'Rejected', 'Future'];
+
+function statusToken(status) {
+  return String(status ?? '').split('(')[0].trim();
+}
+function isImplemented(status) {
+  return statusToken(status) === 'Implemented';
+}
+function isDone(status) {
+  return DONE_STATUSES.includes(statusToken(status));
+}
+// Numeric-aware sort for WBS ids like "2.10.1" vs "2.2.1".
+function compareWbsId(a, b) {
+  const pa = a.split('.').map(Number);
+  const pb = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (d) return d;
+  }
+  return 0;
+}
+// A row is startable now: not yet done, not blocked, and every dependency Implemented.
+function depsAllImplemented(row, allRows) {
+  if (!row.dependsOn || row.dependsOn === 'none' || row.dependsOn === '-') return true;
+  return row.dependsOn.split(/[,;\/]/).map((d) => d.trim()).filter(Boolean)
+    .every((dep) => isImplemented(allRows.get(dep)?.status));
+}
+function isReady(row, allRows) {
+  return statusToken(row.status) === 'Specified' && depsAllImplemented(row, allRows);
+}
 
 // ── WBS parsing ───────────────────────────────────────────────────────────────
 
@@ -294,7 +331,7 @@ function depWarnings(row, allRows) {
     const depRow = allRows.get(dep);
     if (!depRow) {
       warnings.push(`⚠️  Dependency \`${dep}\` not found in WBS — verify ID.`);
-    } else if (depRow.status !== 'Implemented') {
+    } else if (!isImplemented(depRow.status)) {
       warnings.push(`⚠️  Dependency \`${dep}\` (${depRow.function}) is **${depRow.status}** — build it first.`);
     }
   }
@@ -541,11 +578,11 @@ function resolvePhaseRows(phaseKey, phases, allRows) {
     phase,
     todo: [...allRows.values()].filter((r) => {
       const inScope = mentionedIds.has(r.id) || groupPrefixes.has(r.id.split('.')[0]);
-      return inScope && !['Implemented', 'Rejected', 'Future'].includes(r.status);
+      return inScope && !isDone(r.status);
     }),
     done: [...allRows.values()].filter((r) => {
       const inScope = mentionedIds.has(r.id) || groupPrefixes.has(r.id.split('.')[0]);
-      return inScope && r.status === 'Implemented';
+      return inScope && isImplemented(r.status);
     }),
   };
 }
@@ -554,11 +591,7 @@ function resolvePhaseRows(phaseKey, phases, allRows) {
 
 function generatePhaseOverview(phaseKey, phases, allRows) {
   const { phase, todo, done } = resolvePhaseRows(phaseKey, phases, allRows);
-  const ready = todo.filter((r) => {
-    if (!r.dependsOn || r.dependsOn === 'none' || r.dependsOn === '-') return true;
-    return r.dependsOn.split(/[,;\/]/).map((d) => d.trim()).filter(Boolean)
-      .every((dep) => allRows.get(dep)?.status === 'Implemented');
-  });
+  const ready = todo.filter((r) => depsAllImplemented(r, allRows));
 
   return `# Phase ${phaseKey} Overview — ${phase.goal}
 
@@ -598,9 +631,45 @@ ${ready[0] ? `node tool/prompt_gen/run.mjs ${ready[0].id}` : 'node tool/prompt_g
 
 function generateList(allRows, filterStatus) {
   let rows = [...allRows.values()];
-  if (filterStatus) rows = rows.filter((r) => r.status.toLowerCase() === filterStatus.toLowerCase());
+  if (filterStatus) rows = rows.filter((r) => statusToken(r.status).toLowerCase() === filterStatus.toLowerCase());
   const lines = rows.map((r) => `| \`${r.id}\` | ${r.flow} | ${r.function} | ${r.layer} | ${r.status} |`);
   return `# WBS Row List${filterStatus ? ` (status: ${filterStatus})` : ''}\n\nGenerated: ${today}\n\n| WBS ID | Flow | Function | Layer | Status |\n| --- | --- | --- | --- | --- |\n${lines.join('\n')}\n`;
+}
+
+// ── ready (status-driven next tasks, all phases) ──────────────────────────────
+
+// Every `Specified` row whose deps are all `Implemented`, across the whole WBS —
+// the accurate "what can I start now" view (unlike §5 prose, which drifts).
+function readyRows(allRows) {
+  return [...allRows.values()]
+    .filter((r) => isReady(r, allRows))
+    .sort((a, b) => compareWbsId(a.id, b.id));
+}
+
+function generateReadyList(allRows) {
+  const ready = readyRows(allRows);
+  if (ready.length === 0) {
+    return `# Ready WBS Rows\n\nGenerated: ${today}\n\n_(none ready — every \`Specified\` row has an unmet dependency. Check \`--phase <N>\`.)_\n`;
+  }
+  const lines = ready.map((r) => `| \`${r.id}\` | ${r.flow} | ${r.function} | ${r.layer} | ${r.dependsOn || '-'} |`);
+  return `# Ready WBS Rows (status-driven, all phases)
+
+Generated: ${today}
+
+${ready.length} row(s) are \`Specified\` with all dependencies \`Implemented\`:
+
+| WBS ID | Flow | Function | Layer | Depends on |
+| --- | --- | --- | --- | --- |
+${lines.join('\n')}
+
+## Generate the prompt for the next task
+
+\`\`\`bash
+node tool/prompt_gen/run.mjs ${ready[0].id}
+\`\`\`
+
+Or generate the prompt directly: \`node tool/prompt_gen/run.mjs --ready --gen [N]\` (first N ready rows).
+`;
 }
 
 // ── combined multi-row prompt (stdout mode) ───────────────────────────────────
@@ -710,17 +779,21 @@ function main() {
   node tool/prompt_gen/run.mjs --phase <N>                       # phase overview → stdout
   node tool/prompt_gen/run.mjs --all-prompts [--status <S>]      # gen all rows → stdout (stream)
   node tool/prompt_gen/run.mjs --list [--status <S>]             # list rows → stdout
-  node tool/prompt_gen/run.mjs --next                            # §5 Next tasks → stdout
+  node tool/prompt_gen/run.mjs --ready [--gen [N]]               # status-driven next tasks (all phases)
+  node tool/prompt_gen/run.mjs --next                            # §5 Next tasks prose (curated) → stdout
 
 Add --out-dir <path> to write one file per WBS ID instead of stdout:
   node tool/prompt_gen/run.mjs 1.2.1 --out-dir /tmp
   node tool/prompt_gen/run.mjs --phase 0 --out-dir /tmp          # all todo rows in phase
+  node tool/prompt_gen/run.mjs --ready --out-dir /tmp            # one file per ready row
   node tool/prompt_gen/run.mjs --all-prompts --status Specified --out-dir /tmp
 
 Examples:
   node tool/prompt_gen/run.mjs 1.2.1
   node tool/prompt_gen/run.mjs 1.1.1 1.1.3 1.1.4               # batch prompt
   node tool/prompt_gen/run.mjs --phase 0
+  node tool/prompt_gen/run.mjs --ready                          # what can I start now?
+  node tool/prompt_gen/run.mjs --ready --gen                    # + emit the next prompt
   node tool/prompt_gen/run.mjs --all-prompts --status Specified --out-dir /tmp/prompts`);
     process.exit(0);
   }
@@ -765,9 +838,8 @@ Examples:
 
   // --all-prompts [--status <S>] [--out-dir <path>]
   if (args[0] === '--all-prompts') {
-    const SKIP = ['Implemented', 'Rejected', 'Future'];
-    let rows = [...allRows.values()].filter((r) => !SKIP.includes(r.status));
-    if (filterStatus) rows = rows.filter((r) => r.status.toLowerCase() === filterStatus.toLowerCase());
+    let rows = [...allRows.values()].filter((r) => !isDone(r.status));
+    if (filterStatus) rows = rows.filter((r) => statusToken(r.status).toLowerCase() === filterStatus.toLowerCase());
     if (rows.length === 0) {
       console.log(`No rows match${filterStatus ? ` status="${filterStatus}"` : ''}.`);
       return;
@@ -792,6 +864,36 @@ Examples:
   // --list [--status S]
   if (args[0] === '--list') {
     console.log(generateList(allRows, filterStatus));
+    return;
+  }
+
+  // --ready [--gen [N]] [--out-dir <path>]
+  if (args[0] === '--ready') {
+    const ready = readyRows(allRows);
+    const genIdx = args.indexOf('--gen');
+    const wantGen = genIdx >= 0;
+    const genCount = wantGen ? Math.max(1, parseInt(args[genIdx + 1], 10) || 1) : 0;
+
+    if (outDir) {
+      if (ready.length === 0) { console.log('No ready rows to generate prompts for.'); return; }
+      const written = writeToDir(outDir, ready, allRows);
+      console.log(`Written ${written.length} ready-row prompt file(s) to ${outDir}:\n`);
+      for (const { id, file, status, fn } of written) {
+        console.log(`  [${status}] ${id} — ${fn}\n           → ${file}`);
+      }
+      return;
+    }
+
+    if (wantGen) {
+      if (ready.length === 0) { console.error('No ready rows — nothing to generate.'); process.exit(1); }
+      const picked = ready.slice(0, genCount);
+      console.log(picked.length === 1
+        ? generatePrompt(picked[0], allRows)
+        : generateMultiPrompt(picked, allRows));
+      return;
+    }
+
+    console.log(generateReadyList(allRows));
     return;
   }
 
