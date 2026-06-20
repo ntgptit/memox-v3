@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v3)', () {
+  group('AppDatabase schema (v4)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,8 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 3);
-      expect(db.schemaVersion, 3);
+      expect(AppDatabase.currentSchemaVersion, 4);
+      expect(db.schemaVersion, 4);
     });
 
     Future<void> insertDeckRow(String id, String folderId) async {
@@ -90,6 +90,22 @@ void main() {
       await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
 
       expect(await db.select(db.flashcardProgress).get(), isEmpty);
+    });
+
+    test('flashcard_progress defaults to not-suspended / not-buried', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await db
+          .into(db.flashcardProgress)
+          .insert(FlashcardProgressCompanion.insert(flashcardId: 'c1'));
+
+      final FlashcardProgressRow row = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+      expect(row.isSuspended, isFalse, reason: 'v4 default: not suspended');
+      expect(row.buriedUntil, isNull, reason: 'v4 default: not buried');
     });
 
     test('flashcard_tags cascade when their card is deleted', () async {

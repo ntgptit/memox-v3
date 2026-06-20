@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-20
 applies_to: bury (skip card today), suspend (hide card indefinitely)
 ---
 
@@ -9,8 +9,8 @@ applies_to: bury (skip card today), suspend (hide card indefinitely)
 > / bulk / undo surfaces Specified (verified 2026-06-10).**
 >
 > **Current:** the schema fields `flashcard_progress.buried_until INTEGER NULL` and
-> `flashcard_progress.is_suspended BOOL NOT NULL DEFAULT 0` exist
-> (`lib/data/datasources/local/drift/flashcard_progress.drift`); study scope queries and due
+> `flashcard_progress.is_suspended BOOLEAN NOT NULL DEFAULT 0` exist — shipped schema v4
+> (WBS 4.0.2, `lib/data/datasources/local/drift/flashcards.drift`, columns only); study scope queries and due
 > counting exclude suspended and currently-buried cards and an expired bury re-enters
 > (`lib/data/datasources/local/drift/study_scope_queries.drift`); the empty-scope variants
 > `studyEmpty_allBuried` / `studyEmpty_allSuspended` render on the Study Entry gate.
@@ -36,16 +36,18 @@ punish the user for normal human behavior. This document specs two escape hatche
 
 ## Data model
 
-Two fields on `flashcard_progress` (already present in the current schema):
+Two fields on `flashcard_progress` (shipped schema v4 — WBS 4.0.2, columns only):
 
-| Field          | Type         | Default | Meaning                                                                         |
-|----------------|--------------|---------|---------------------------------------------------------------------------------|
-| `buried_until` | INTEGER NULL | NULL    | UTC epoch ms; card is hidden from study queues while `buried_until > now`.      |
-| `is_suspended` | BOOL         | `false` | When true, card is hidden from all study queues regardless of due/buried state. |
+| Field          | Type                     | Default | Meaning                                                                         |
+|----------------|--------------------------|---------|---------------------------------------------------------------------------------|
+| `buried_until` | INTEGER NULL             | NULL    | UTC epoch ms; card is hidden from study queues while `buried_until > now`.      |
+| `is_suspended` | BOOLEAN NOT NULL         | `false` | When true, card is hidden from all study queues regardless of due/buried state. |
 
-No migration is pending: both columns and the eligibility index
-(`idx_flashcard_progress_eligibility` covering `is_suspended`, `buried_until`, `due_at`) are in
-the current schema (`lib/data/datasources/local/drift/flashcard_progress.drift`).
+The two columns shipped in schema v4 (`lib/data/datasources/local/drift/flashcards.drift`,
+migration `v4_add_bury_suspend.dart`). The eligibility index
+(`idx_flashcard_progress_eligibility` covering `is_suspended`, `buried_until`, `due_at`) is still
+**Future** — it ships with the queue-exclusion / status-filter read logic (WBS 4.11.1 / 2.17.1),
+not with the v4 columns.
 
 ## Bury
 
