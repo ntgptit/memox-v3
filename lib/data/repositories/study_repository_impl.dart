@@ -6,6 +6,7 @@ import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_session_mapper.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -147,6 +148,64 @@ class StudyRepositoryImpl implements StudyRepository {
         failure: Failure.storage(
           operation: StorageOp.write,
           table: 'study_sessions',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<StudySessionReview>> loadStudySessionReview({
+    required SessionId id,
+  }) async {
+    try {
+      final StudySessionRow? sessionRow = await _dao.sessionById(id);
+      if (sessionRow == null) {
+        return (
+          failure: const Failure.notFound(entity: 'study_session'),
+          data: null,
+        );
+      }
+
+      final List<StudySessionItemRow> items = await _dao.itemsForSession(id);
+      if (items.isEmpty) {
+        // A persisted session must always have items; an empty list is an
+        // integrity error, surfaced as a controlled failure.
+        return (
+          failure: Failure.validation(
+            field: 'sessionItems',
+            code: ValidationCode.insufficientContent,
+            message: 'Study session $id has no items.',
+          ),
+          data: null,
+        );
+      }
+
+      // Pair each ordered item with its flashcard (loaded in one IN query). FK
+      // cascade guarantees every item's flashcard still exists.
+      final List<FlashcardRow> cards = await _dao.flashcardsByIds(
+        items.map((StudySessionItemRow i) => i.flashcardId),
+      );
+      final Map<String, FlashcardRow> cardById = <String, FlashcardRow>{
+        for (final FlashcardRow card in cards) card.id: card,
+      };
+
+      return (
+        failure: null,
+        data: StudySessionReview(
+          session: _mapper.toEntity(sessionRow),
+          items: <StudySessionReviewItem>[
+            for (final StudySessionItemRow item in items)
+              _mapper.toReviewItem(item, cardById[item.flashcardId]!),
+          ],
+        ),
+      );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_session_items',
           cause: error.toString(),
         ),
         data: null,

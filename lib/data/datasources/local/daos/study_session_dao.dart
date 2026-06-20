@@ -51,6 +51,13 @@ class StudySessionDao {
   Future<void> insertItem(StudySessionItemsCompanion item) =>
       _db.into(_db.studySessionItems).insert(item);
 
+  /// The flashcards whose ids are in [ids] (single-table read; the repository
+  /// pairs them back with the session items by id for the review screen,
+  /// WBS 4.3.1). A single-table IN query rather than a builder join, which keeps
+  /// the loosely-typed drift join API out of the data layer.
+  Future<List<FlashcardRow>> flashcardsByIds(Iterable<String> ids) =>
+      (_db.select(_db.flashcards)..where((t) => t.id.isIn(ids.toList()))).get();
+
   /// The items of [sessionId] in queue order.
   Future<List<StudySessionItemRow>> itemsForSession(String sessionId) =>
       (_db.select(_db.studySessionItems)

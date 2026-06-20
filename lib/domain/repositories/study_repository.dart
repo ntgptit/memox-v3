@@ -1,5 +1,6 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_scope.dart';
 
@@ -51,4 +52,14 @@ abstract interface class StudyRepository {
   /// maps to a `StorageFailure`. Used by the transactional start-over flow
   /// (WBS 4.2.3), which only cancels a resumable session.
   Future<Result<void>> cancelSession({required SessionId id});
+
+  /// Loads the persisted session [id] plus its ordered `study_session_items`
+  /// joined with their flashcards, for the review screen (WBS 4.3.1). A missing
+  /// session is a `NotFoundFailure`; a session with no items is a controlled
+  /// integrity error (`ValidationFailure`) — a persisted session must always
+  /// have items (`docs/contracts/usecase-contracts/study.md`
+  /// §LoadStudySessionReviewUseCase). A read error maps to a `StorageFailure`.
+  Future<Result<StudySessionReview>> loadStudySessionReview({
+    required SessionId id,
+  });
 }

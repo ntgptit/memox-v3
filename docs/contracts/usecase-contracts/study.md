@@ -116,6 +116,21 @@ Future<Either<Failure, StudySessionReview>> call({required SessionId sessionId})
 
 **Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 
+**V1 implementation (WBS 4.3.1):** `LoadStudySessionReviewUseCase`
+(`lib/domain/usecases/study/load_study_session_review_usecase.dart`) delegates to
+`StudyRepository.loadStudySessionReview({id})`, which composes three single-table
+reads: `StudySessionDao.sessionById` (missing → `NotFoundFailure`),
+`StudySessionDao.itemsForSession` (ordered by `sort_order`), and
+`StudySessionDao.flashcardsByIds` (one `IN` query); the repository pairs the
+ordered items with their flashcards via a `cardById` map (avoiding the
+loosely-typed drift builder join). An empty item list →
+`ValidationFailure(insufficientContent)`; a read error → `StorageFailure(read)`.
+Returns `StudySessionReview` (`lib/domain/entities/study_session_review.dart`):
+the `StudySession` header + ordered `StudySessionReviewItem`s (flashcard content +
+`answeredAt`), with `total` / `answeredCount` / `isComplete` /
+`firstUnansweredIndex` convenience getters the review controller (WBS 4.3.2) uses
+to resume at the first unanswered item.
+
 ## LoadStudySessionResultUseCase
 
 ```dart

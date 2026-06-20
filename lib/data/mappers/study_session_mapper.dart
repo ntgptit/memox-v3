@@ -1,5 +1,6 @@
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_scope.dart';
@@ -65,5 +66,24 @@ class StudySessionMapper {
     status: statusFromToken(row.status),
     startedAt: DateTime.fromMillisecondsSinceEpoch(row.startedAt, isUtc: true),
     updatedAt: DateTime.fromMillisecondsSinceEpoch(row.updatedAt, isUtc: true),
+  );
+
+  /// Maps a joined `study_session_items` + `flashcards` row pair to a review
+  /// item (WBS 4.3.1).
+  StudySessionReviewItem toReviewItem(
+    StudySessionItemRow item,
+    FlashcardRow card,
+  ) => StudySessionReviewItem(
+    sessionItemId: item.id,
+    flashcardId: card.id,
+    front: card.front,
+    back: card.back,
+    exampleSentence: card.exampleSentence,
+    pronunciation: card.pronunciation,
+    hint: card.hint,
+    sortOrder: item.sortOrder,
+    answeredAt: item.answeredAt == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(item.answeredAt!, isUtc: true),
   );
 }

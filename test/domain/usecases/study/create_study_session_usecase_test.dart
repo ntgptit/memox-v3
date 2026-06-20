@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -43,6 +44,11 @@ class _FakeStudyRepository implements StudyRepository {
   @override
   Future<Result<void>> cancelSession({required SessionId id}) async =>
       (failure: null, data: null);
+
+  @override
+  Future<Result<StudySessionReview>> loadStudySessionReview({
+    required SessionId id,
+  }) async => throw UnimplementedError();
 }
 
 void main() {
