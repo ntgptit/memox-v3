@@ -23,17 +23,20 @@ import 'package:memox/core/theme/mx_radius.dart';
 /// Public API:
 /// - child: the content the ink is drawn over.
 /// - onTap: optional tap handler; null renders a non-interactive surface.
+/// - onLongPress: optional long-press handler (e.g. a row's overflow actions).
 /// - borderRadius: shape of the ripple and clip (defaults to the small radius).
 class MxTappable extends StatelessWidget {
   const MxTappable({
     required this.child,
     this.onTap,
+    this.onLongPress,
     this.borderRadius = MxRadius.smAll,
     super.key,
   });
 
   final Widget child;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final BorderRadius borderRadius;
 
   @override
@@ -41,6 +44,11 @@ class MxTappable extends StatelessWidget {
     type: MaterialType.transparency,
     borderRadius: borderRadius,
     clipBehavior: Clip.antiAlias,
-    child: InkWell(onTap: onTap, borderRadius: borderRadius, child: child),
+    child: InkWell(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      borderRadius: borderRadius,
+      child: child,
+    ),
   );
 }

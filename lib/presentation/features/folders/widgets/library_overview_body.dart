@@ -4,6 +4,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
+import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/folder_summary.dart';
@@ -14,22 +15,26 @@ import 'package:memox/presentation/features/folders/folder_failure_message.dart'
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_move_picker_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_rename_dialog.dart';
+import 'package:memox/presentation/features/folders/widgets/library_create_folder_action.dart';
 import 'package:memox/presentation/features/folders/widgets/library_folder_actions_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
-import 'package:memox/presentation/features/folders/widgets/library_search_field.dart';
+import 'package:memox/presentation/features/folders/widgets/library_loading_skeleton.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
+import 'package:memox/presentation/shared/widgets/mx_divider.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
-import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
-/// Library Overview body: inline search + the streamed folder list with its
-/// loading / loaded / true-empty / search-no-results / error states, plus the
-/// folder overflow actions. WBS 3.1.2 (+ 2.2.2 / 2.3.2 / 2.4.2 / 2.21.1).
+/// Library Overview body: the streamed folder list rendered as one grouped
+/// card, with its loading / loaded / true-empty / search-no-results / error
+/// states, plus the folder overflow actions. The search field + Cancel live in
+/// the app bar (`LibrarySearchAppBar`), not here. WBS 3.1.2.
 class LibraryOverviewBody extends ConsumerStatefulWidget {
   const LibraryOverviewBody({super.key});
 
@@ -39,6 +44,10 @@ class LibraryOverviewBody extends ConsumerStatefulWidget {
 }
 
 class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
+  /// Inset for the inter-row hairline: tile width + the row's leading gap, so
+  /// the divider starts under the text (mirrors the kit `.hr.inset`).
+  static const double _dividerInset = MxSpacing.space10 + MxSpacing.space3;
+
   void _clearSearch() => ref.read(librarySearchQueryProvider.notifier).clear();
 
   void _reportResult(Failure? failure, String successMessage) {
@@ -56,7 +65,7 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
   Future<void> _onFolderActions(FolderSummary summary) async {
     final FolderAction? action = await showFolderActionsSheet(
       context,
-      folderName: summary.folder.name,
+      summary: summary,
     );
     if (action == null) return;
     if (!mounted) return;
@@ -146,31 +155,25 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
     );
     final String term = ref.watch(librarySearchQueryProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: MxSpacing.space3),
-          child: LibrarySearchField(),
+    return AppAsyncBuilder<LibraryOverview>(
+      value: overview,
+      loading: (_) => ListView(
+        padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
+        children: const <Widget>[LibraryLoadingSkeleton()],
+      ),
+      error: (_, _) => MxErrorState(
+        title: l10n.libraryLoadFailedTitle,
+        message: l10n.libraryLoadFailedMessage,
+        icon: Icons.cloud_off_outlined,
+        action: MxPrimaryButton(
+          label: l10n.libraryRetryLabel,
+          icon: Icons.refresh,
+          fullWidth: true,
+          onPressed: () => ref.invalidate(libraryOverviewStreamProvider),
         ),
-        Expanded(
-          child: AppAsyncBuilder<LibraryOverview>(
-            value: overview,
-            loading: (_) => MxLoadingState(message: l10n.libraryLoadingLabel),
-            error: (_, _) => MxErrorState(
-              title: l10n.libraryLoadFailedTitle,
-              message: l10n.libraryLoadFailedMessage,
-              icon: Icons.cloud_off_outlined,
-              action: MxSecondaryButton(
-                label: l10n.libraryRetryLabel,
-                onPressed: () => ref.invalidate(libraryOverviewStreamProvider),
-              ),
-            ),
-            data: (LibraryOverview data) =>
-                _content(context, filterLibrary(data, term)),
-          ),
-        ),
-      ],
+      ),
+      data: (LibraryOverview data) =>
+          _content(context, filterLibrary(data, term)),
     );
   }
 
@@ -182,6 +185,12 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
         icon: Icons.folder_outlined,
         title: l10n.libraryEmptyTitle,
         message: l10n.libraryEmptyMessage,
+        action: MxPrimaryButton(
+          label: l10n.libraryCreateFolderLabel,
+          icon: Icons.create_new_folder_outlined,
+          fullWidth: true,
+          onPressed: () => runCreateFolder(context, ref),
+        ),
       );
     }
     if (view.folders.isEmpty && view.searchTerm.isNotEmpty) {
@@ -196,28 +205,61 @@ class _LibraryOverviewBodyState extends ConsumerState<LibraryOverviewBody> {
       );
     }
 
-    final MxColors colors = context.mxColors;
-    return ListView.separated(
-      padding: const EdgeInsets.only(bottom: MxSpacing.space12),
-      itemCount: view.folders.length + 1,
-      separatorBuilder: (_, _) => const SizedBox(height: MxSpacing.space3),
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: MxSpacing.space2),
-            child: MxText(
-              l10n.libraryFolderCountHeader(view.totalFolderCount),
-              role: MxTextRole.labelMedium,
-              color: colors.textSecondary,
-            ),
-          );
-        }
-        final FolderSummary summary = view.folders[index - 1];
-        return LibraryFolderTile(
+    final bool searching = view.searchTerm.isNotEmpty;
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
+      children: <Widget>[
+        // Loaded shows the bare card (mock `03a`); search adds the count overline
+        // (mock `03e`).
+        if (searching) ...<Widget>[
+          _CountOverline(count: view.folders.length),
+          const SizedBox(height: MxSpacing.space3),
+        ],
+        _groupedCard(view.folders),
+      ],
+    );
+  }
+
+  Widget _groupedCard(List<FolderSummary> folders) {
+    final List<Widget> rows = <Widget>[];
+    for (int i = 0; i < folders.length; i++) {
+      if (i > 0) {
+        rows.add(const MxDivider(indent: _dividerInset));
+      }
+      final FolderSummary summary = folders[i];
+      rows.add(
+        LibraryFolderTile(
           summary: summary,
+          onTap: () => _onFolderActions(summary),
           onActions: () => _onFolderActions(summary),
-        );
-      },
+        ),
+      );
+    }
+    return MxCard(
+      padding: const EdgeInsets.symmetric(
+        horizontal: MxSpacing.card,
+        vertical: MxSpacing.space2,
+      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: rows),
+    );
+  }
+}
+
+/// The `{n} FOLDERS` count overline shown above search results (mock `03e`).
+class _CountOverline extends StatelessWidget {
+  const _CountOverline({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    return MxText(
+      StringUtils.upperFold(
+        AppLocalizations.of(context).libraryFolderCountHeader(count),
+      ),
+      role: MxTextRole.labelMedium,
+      color: colors.textSecondary,
     );
   }
 }

@@ -163,4 +163,31 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get folderMetaEmpty => 'Trống';
+
+  @override
+  String get librarySearchTooltip => 'Tìm thư mục';
+
+  @override
+  String get libraryCreateFolderTooltip => 'Thư mục mới';
+
+  @override
+  String get libraryCreateFolderLabel => 'Tạo thư mục';
+
+  @override
+  String get folderCreateTitle => 'Thư mục mới';
+
+  @override
+  String get folderCreateNameLabel => 'Tên thư mục';
+
+  @override
+  String get folderCreateColorLabel => 'Màu sắc';
+
+  @override
+  String get folderCreateIconLabel => 'Biểu tượng';
+
+  @override
+  String get folderCreateConfirm => 'Tạo';
+
+  @override
+  String get folderCreatedSnack => 'Đã tạo thư mục';
 }

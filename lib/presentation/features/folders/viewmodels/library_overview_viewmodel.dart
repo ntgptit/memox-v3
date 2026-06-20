@@ -25,6 +25,20 @@ class LibrarySearchQuery extends _$LibrarySearchQuery {
   void clear() => state = '';
 }
 
+/// Whether the Library is in search mode — the app bar shows the search field +
+/// Cancel instead of the title + search/sort icons (mock `03e`). Activating it
+/// (search icon) reveals the field; Cancel deactivates and clears the term.
+/// WBS 3.1.2.
+@riverpod
+class LibrarySearchActive extends _$LibrarySearchActive {
+  @override
+  bool build() => false;
+
+  void activate() => state = true;
+
+  void deactivate() => state = false;
+}
+
 /// Derived Library list state: the filtered + unfiltered folder sets plus the
 /// active term, so the screen can tell true-empty from search-no-results
 /// (`docs/wireframes/02-library.md` §States).

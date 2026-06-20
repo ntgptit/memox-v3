@@ -45,5 +45,14 @@
   "folderErrorMoveCycle": "Bạn không thể chuyển một thư mục vào chính nó hoặc thư mục con của nó.",
   "folderErrorMoveLockedDecks": "Thư mục đó đang chứa bộ thẻ nên không thể nhận thư mục con.",
   "folderActionGenericError": "Đã có lỗi xảy ra. Vui lòng thử lại.",
-  "folderMetaEmpty": "Trống"
+  "folderMetaEmpty": "Trống",
+  "librarySearchTooltip": "Tìm thư mục",
+  "libraryCreateFolderTooltip": "Thư mục mới",
+  "libraryCreateFolderLabel": "Tạo thư mục",
+  "folderCreateTitle": "Thư mục mới",
+  "folderCreateNameLabel": "Tên thư mục",
+  "folderCreateColorLabel": "Màu sắc",
+  "folderCreateIconLabel": "Biểu tượng",
+  "folderCreateConfirm": "Tạo",
+  "folderCreatedSnack": "Đã tạo thư mục"
 }

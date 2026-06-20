@@ -19,35 +19,65 @@ scope, wireframes, shared components, and design tokens.
 > the **target** shape. The **as-built V1** status (what the rebuild actually
 > ships) is in the section immediately below; where the two differ, the V1
 > section is authoritative for current code.
+>
+> **Rev. 2 supersession (2026-06-20, full mock parity):** every reference below to a
+> **kebab** / `Icons.more_vert` / "No chevron" on a folder row, to an **always-visible
+> inline search field**, and to a **deferred / unwired create-folder FAB** is **superseded**
+> by the §V1 status (rev. 2) above: rows render a **chevron** (`Icons.chevron_right`, no
+> kebab; tap → action sheet until WBS 3.2.2, long-press → action sheet); search is a
+> **mode toggle** in the app bar (`Icons.search` → field + Cancel); and the **`New folder`
+> FAB + empty-CTA create dialog (with color/icon pickers) are Current**. Do not re-flag
+> these as failures. Ghost symbols (`MxIconTile`/`library_sections.dart`/`library_skeleton.dart`/
+> `showMxFolderRenameDialog`/`libraryOverviewQueryProvider`) map to the as-built files in the
+> §V1 status table.
 
-## V1 implementation status (2026-06-20 — WBS 3.1.2 + folder actions)
+## V1 implementation status (2026-06-20 rev. 2 — WBS 3.1.2 + 2.1.2, full mock parity)
 
-**Built (`Current`):** Library Overview screen + folder management.
+**Built (`Current`):** Library Overview screen + folder management + folder create.
+Revision 2 (full mock parity) supersedes the rev. 1 deferrals below: the now-landed
+folder color/icon schema (WBS 2.22.1) and screen-shell/`MxFab` foundation (WBS 1.2.6)
+unblocked the tinted tiles, the FAB + create dialog, and the app-bar search/sort
+treatment, bringing the screen to the kit `03a–03f` visuals.
 
 | Concern | As-built file/symbol |
 |---|---|
-| Screen shell + app bar + disabled filter icon | `lib/presentation/features/folders/screens/library_overview_screen.dart` (`MxScaffold` + `MxAppBar` + disabled `MxIconButton(Icons.tune_rounded)`) |
-| Search + states (loading/loaded/true-empty/search-no-results/error) body | `lib/presentation/features/folders/widgets/library_overview_body.dart` (renders via `AppAsyncBuilder`, not `MxRetainedAsyncState`) |
-| Stream + search query | `lib/presentation/features/folders/viewmodels/library_overview_viewmodel.dart` (`libraryOverviewStreamProvider`, `librarySearchQueryProvider`, pure `filterLibrary`) |
-| Inline search field (`useMxSearchController`) | `lib/presentation/features/folders/widgets/library_search_field.dart` |
-| Folder card row | `lib/presentation/features/folders/widgets/library_folder_tile.dart` |
-| Overflow action sheet | `lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart` (`showFolderActionsSheet`) |
-| Rename dialog | `lib/presentation/features/folders/widgets/folder_rename_dialog.dart` (`showFolderRenameDialog`) |
-| Delete + blast-radius confirm | `MxConfirmDialog.show` with subtree deck/card counts (no dedicated `mx_folder_delete_dialog.dart`) |
-| Move destination picker | `lib/presentation/features/folders/widgets/folder_move_picker_sheet.dart` (`showFolderMovePicker`) |
-| Mutations | `lib/presentation/features/folders/controllers/library_action_controller.dart` (returns `Result`; failures → `folder_failure_message.dart` snackbar) |
-| Route registry | `lib/presentation/features/folders/routes/folder_routes.dart` → app-shell Library branch |
-| Goldens (loaded/empty/loading/error/search-no-results × light+dark) | `test/presentation/features/folders/library_overview_test.dart` |
+| Screen shell + app-bar mode toggle | `library_overview_screen.dart` (`ConsumerWidget`: title bar with `Icons.search` (→ search mode) + visual-only `Icons.swap_vert`, OR `LibrarySearchAppBar` while searching; `MxFab(Icons.create_new_folder_outlined)` hidden in search) |
+| Search-mode app bar (field + Cancel) | `library_search_app_bar.dart` (`LibrarySearchAppBar`) + `library_search_field.dart` (`autofocus`) |
+| Search-active toggle | `library_overview_viewmodel.dart` (`librarySearchActiveProvider`, `librarySearchQueryProvider`, pure `filterLibrary`) |
+| States body (loading skeleton / grouped loaded / true-empty + CTA / search overline+results / search-no-results / error) | `library_overview_body.dart` (via `AppAsyncBuilder`) |
+| Loading skeleton | `library_loading_skeleton.dart` (`LibraryLoadingSkeleton`, grouped placeholder rows) |
+| Folder row (tinted tile + title + meta + chevron, no kebab) | `library_folder_tile.dart` — tap & long-press → action sheet |
+| Tinted icon tile | `folder_icon_tile.dart` (`FolderIconTile`) + `folder_visual_tokens.dart` (`FolderColorToken`/`FolderIconToken`, `folderTint`/`folderGlyph`) |
+| Grouped list-card + inset hairlines | `library_overview_body._groupedCard` + `mx_divider.dart` (`MxDivider`) |
+| Create folder (FAB + empty CTA → dialog w/ color+icon pickers) | `folder_create_dialog.dart` (`showFolderCreateDialog`, `FolderDraft`) + `library_create_folder_action.dart` (`runCreateFolder`) + `LibraryActionController.create` |
+| Overflow action sheet (tile+name+meta header, neutral tiles, danger delete) | `library_folder_actions_sheet.dart` (`showFolderActionsSheet({required summary})`) |
+| Rename dialog / Delete+blast-radius / Move picker | `folder_rename_dialog.dart` · `MxConfirmDialog.show` · `folder_move_picker_sheet.dart` |
+| Mutations | `library_action_controller.dart` (returns `Result`; failures → `folder_failure_message.dart` snackbar) |
+| New design tokens (mirror existing css) | `lib/core/theme/{mx_opacity,mx_icon_size,mx_stroke}.dart` (`--memox-op-*` / `--memox-icon-*` / 1px line); `MxTappable.onLongPress` added |
+| Goldens (loaded/empty/loading/error/search/search-no-results × light+dark) | `test/presentation/features/folders/library_overview_test.dart` |
 
-**Deferred in V1 (with reasons — do not re-flag as parity failures):**
+**Folder color/icon palette (OQ-2, approved 2026-06-20):** 8 tint tokens = the `note-*`
+palette (`yellow amber green teal blue violet pink clay`; `null` → accent); 12 icon tokens
+= `folder translate science account_balance work menu_book public calculate music_note
+palette sports_esports favorite` (`null` → `folder_outlined`). Stored as opaque strings in
+`folders.color`/`folders.icon`; resolved only via `folder_visual_tokens.dart`.
 
-- **Create-folder FAB + empty-state CTA + `showMxFolderCreateDialog`** → WBS 2.1.2, itself blocked on an undefined design color/icon palette. The true-empty state shows guidance without a wired CTA until the create flow lands.
-- **Folder-row tap → folder detail** → WBS 3.2.2 (folder detail screen + route not built yet); `LibraryFolderTile.onTap` is currently unwired.
-- **Loading skeleton (`LibrarySkeleton`/`MxSkeleton`)** → V1 uses `MxLoadingState`; skeleton-card pattern Future (no `MxSkeleton` in the rebuilt kit).
-- **Tinted `MxIconTile`, `MxSectionHeader` overline + non-interactive `Recent` pill, `K` search keycap, due-summary card, mastery bar, new-card badge, deck-digest subtitle** → component or read-model not available in the rebuild (`MxIconTile`/`MxSectionHeader`/`MxLinearProgress`/`MxSkeleton` don't exist; `FolderSummary` lacks `mastery`/`newCount`/`subtitle`/`dueToday`). The contract rule "render only when the field is set / omit when absent" applies — these surface when their component/field ships.
-- **Row long-press → action sheet** → only the kebab is wired (`MxCard` has no `onLongPress` slot yet).
+**Still deferred in V1 (with reasons — do not re-flag as parity failures):**
 
-**Mock-vs-contract conflict (resolved):** the loaded-state PNGs (`03a`) show a trailing **chevron** on folder rows, but this contract mandates a **kebab** (`Icons.more_vert`, "No chevron") because folder-detail navigation is deferred and a chevron would imply it. The implementation follows the contract (kebab). This conflict is intentional and recorded here so it is not re-flagged.
+- **Folder-row tap → folder detail** → WBS 3.2.2 (folder-detail screen + route not built).
+  Interim: a row tap opens the action sheet (so the chevron is never a dead tap); a
+  long-press also opens it. When 3.2.2 lands, tap → detail and long-press → actions.
+- **App-bar sort control** → no approved sort sheet; `Icons.swap_vert` renders disabled
+  (visual-only).
+- **Mastery bar, new-card badge, deck-digest subtitle, due-summary card** → `FolderSummary`
+  lacks `mastery`/`newCount`/`subtitle`/`dueToday`; surface when the read model ships. (The
+  due **badge** on a row is built and shows when `dueCount > 0`.)
+- **Overflow `Study due cards` / `Archive folder`** → no backend (out of scope).
+
+**Mock-vs-contract conflict (resolved → mock parity):** rev. 1 mandated a **kebab** instead of
+the mock's **chevron** because folder-detail navigation was deferred. With full mock parity
+approved (2026-06-20), the row now renders the **chevron** (`Icons.chevron_right`, no kebab) and
+routes a tap to the action sheet until 3.2.2 lands. This supersedes the rev. 1 "No chevron" rule.
 
 ## Source Priority
 
@@ -199,15 +229,16 @@ Required structure:
       query (`FolderWithCount` fields); render each only when its field is set.
       Never synthesize these client-side.
 
-4. Trailing action.
-    - Use `Icons.more_vert`.
-    - Tooltip from l10n.
-    - Visible as the row action affordance.
-    - Tap (and a row long-press) open the folder action sheet (Rename / Move / Import / Delete).
+4. Trailing affordance.
+    - Use `Icons.chevron_right` (mock parity revision, 2026-06-20).
+    - Muted color (`textTertiary`).
+    - A row **tap** opens the folder (interim: the action sheet, until WBS 3.2.2);
+      a row **long-press** always opens the action sheet (Rename / Move / Delete).
+    - No kebab.
 
 Forbidden:
 
-- Do not show a chevron on Library folder cards.
+- Do not show a kebab (`Icons.more_vert`) on Library folder cards (superseded — use the chevron).
 - Do not show a root-level deck row.
 - Do not expose root New deck or Import.
 - Do not expose an interactive sort sheet/control; the non-interactive
@@ -230,7 +261,7 @@ The screen is accepted only when:
 - Header, inline search, loaded list, FAB, and bottom nav visually resemble the approved mock within
   current design-system tokens.
 - Folder cards look like card rows, not simple list items.
-- Folder rows use a visible kebab, not a chevron.
+- Folder rows use a visible chevron, not a kebab (rev. 2; tap → action sheet until WBS 3.2.2).
 - Due badge appears only when `dueCount > 0`.
 - Due summary appears only when `dueToday > 0`.
 - Empty, search no-results, error, and loading states remain distinct.

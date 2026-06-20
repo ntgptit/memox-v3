@@ -20,6 +20,11 @@ abstract final class StringUtils {
   /// guard rule for domain/presentation code.
   static String caseFold(String value) => value.toLowerCase();
 
+  /// Upper-case a value for display (e.g. an overline label). The sanctioned
+  /// upper-case entry point so presentation code does not call `toUpperCase`
+  /// inline (`memox.coding.string_normalization_via_string_utils`).
+  static String upperFold(String value) => value.toUpperCase();
+
   /// Normalize a tag name to its stored identity: trim, strip any leading `#`
   /// hash(es) (`#weak` → `weak`, decision row TG1), then lowercase (no internal
   /// whitespace collapse). The single normalization point for tags across the

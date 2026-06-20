@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_shadows.dart';
 import 'package:memox/core/theme/mx_typography.dart';
@@ -24,6 +25,21 @@ abstract final class MxTheme {
 
   static ThemeData _build(Brightness brightness, MxColors c, MxShadows s) {
     final ColorScheme scheme = _scheme(brightness, c);
+    final bool isLight = brightness == Brightness.light;
+    // The OS status-bar icons (clock, signal, battery) are drawn by the system
+    // over the app's top edge — not part of the app. Keep them legible against
+    // the app background: dark icons on the light theme, light icons on dark,
+    // with a transparent status bar so the (matching) app bg shows through and
+    // there is no color seam. Applied to every `MxAppBar`/`AppBar` via the theme.
+    final SystemUiOverlayStyle overlay =
+        (isLight ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light)
+            .copyWith(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: c.bg,
+              systemNavigationBarIconBrightness: isLight
+                  ? Brightness.dark
+                  : Brightness.light,
+            );
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
@@ -36,6 +52,7 @@ abstract final class MxTheme {
         bodyColor: c.text,
         displayColor: c.text,
       ),
+      appBarTheme: AppBarTheme(systemOverlayStyle: overlay),
       extensions: <ThemeExtension<Object?>>[c, s],
     );
   }
