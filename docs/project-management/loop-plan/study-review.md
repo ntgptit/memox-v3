@@ -63,7 +63,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
 
 ## GAP-CHECKLIST (CHẺ — smallest runnable slices, depends-on order; 1 per iteration)
 
-- [x] **WP-SR1a — study route scaffold + entry gate (core).** `ddca661`→`<this commit>`: top-level
+- [x] **WP-SR1a — study route scaffold + entry gate (core).** `c5b2a25`: top-level
       immersive study routes (`RouteNames`/`RoutePaths` `studyEntry`+`studySession`, `study_routes.dart`
       composed into `app_router.dart`); `StudyEntryController` (family on `StudyScope`) +
       `StudyEntryOutcome` (blocked/resumeRequired/ready); `StudyEntryScreen` rendering preparing /

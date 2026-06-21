@@ -19,7 +19,7 @@ last_updated: 2026-06-22
   WP-SR3 swipe-grade → WP-SR4 exit/actions → WP-SR5 finalize→result(17, 6 states). BE all Implemented.
 - **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
   after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
-- **Branch:** `feat/loop-library`; latest code commit `<WP-SR1a>` (prior `ddca661` Study plan,
+- **Branch:** `feat/loop-library`; latest code commit `c5b2a25` (WP-SR1a; prior `ddca661` Study plan,
   `d3aa162` WP-FL2b3b).
 - **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-SR1a tree. 7 gate
   tests + 4 goldens; nav-flow / wireframe-12 / decision S27 drift corrected on build.
