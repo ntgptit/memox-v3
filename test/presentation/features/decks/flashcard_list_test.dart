@@ -134,6 +134,24 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(MxErrorState), findsOneWidget);
     });
+
+    testWidgets('long-press a card opens the delete confirm (WBS 2.13.2)', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.text('日本'));
+      await tester.pumpAndSettle();
+      // The destructive confirm dialog is shown before any deletion.
+      expect(find.text('Delete this card?'), findsOneWidget);
+
+      // Cancelling dismisses it without deleting (the card stays).
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete this card?'), findsNothing);
+      expect(find.text('日本'), findsOneWidget);
+    });
   });
 
   group('FlashcardListScreen goldens', () {

@@ -46,9 +46,11 @@ WBS 2.11.2 / 2.12.2 / 2.13.2 / 2.14.2 (all `Specified`), `docs/wireframes/06-fla
       reorder mode (entered from the deck overflow or a control) with a `ReorderableListView` of the
       card rows + drag handles → `ReorderFlashcardsUseCase` on Done; persist `sort_order`. Widget test
       + golden. **NEXT (after verifying delete).**
-- [ ] **WP-FL4 — Card delete FE (WBS 2.13.2)** — verify. `runDeleteCard` + the `06` delete-card
-      confirm appear built; confirm coverage (confirm dialog + snackbar + test) and flip 2.13.2 to
-      Implemented if real + tested, else complete it.
+- [x] **WP-FL4 — Card delete FE (WBS 2.13.2)** — **Implemented (2026-06-21).** `runDeleteCard`
+      (card long-press → `MxConfirmDialog` destructive → `FlashcardActionController.delete` →
+      `cardDeletedSnack`) was already built; added the missing FE affordance widget test (long-press
+      → confirm shown → cancel keeps the card) and flipped 2.13.2 Specified→Implemented (BE cascade
+      tested by C6). Corrected the phantom `features/flashcards/...` WBS source paths → `features/decks/`.
 
 ## Conclusion
 
