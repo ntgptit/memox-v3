@@ -71,7 +71,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       `pushReplacement` to the `StudySessionScreen` **placeholder**. `MxIconButton.toolbar` added
       (guard `header_actions`). ARB ×13 (en+vi). Rows S84/S27/S28; WBS 4.1.2 Implemented, 4.2.3 Partial.
       7 gate tests + 4 goldens. **Launch CTA stays Future** (reachable by route/deep-link/test).
-- [x] **WP-SR1b-1 — today route + `study_type` override.** `<this commit>`: the `today` literal route
+- [x] **WP-SR1b-1 — today route + `study_type` override.** `08dcb50`: the `today` literal route
       (`/library/study/today` → `StudyScope(today, null, srsReview)`) + the `?study_type=` query
       override parsed via a new canonical `StudyType.storageValue`/`fromStorage` (consolidated with the
       data mapper; `new_cards`/`srs_review`); unrecognized `study_type` → error. Rows S85; 11 gate tests.
