@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-21
 status: contract
 ---
 
@@ -70,14 +70,19 @@ Future<Either<Failure, ImportCommitResult>> importChunked(
 >   CSV payload using `front,back` columns only. Empty decks return a valid header-only CSV. The
 >   repository also returns a safe file name derived from the deck name with a deterministic
 >   deck-id fallback.
-> - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, tags, sort})`
->   — deck + folder breadcrumb + search/tag-filtered cards (search matches front/back, case-insensitive
->   contains; `tags` is a multi-select **AND** filter, each tag normalized with the storage rule
->   `_normalizeTags` so it matches stored tags; empty `tags` = no filter) + filter-independent
->   `totalCount` (composes `FlashcardDao` with `FolderDao` for the breadcrumb + content-revision
->   stream). Tag filter is Current (WBS 2.18.1); a **status** filter (`active` / `due` / `suspended`
->   / `buried`) and a `now` clock override remain Future (WBS 2.17.1) — blocked on the suspend/bury
->   columns, which have not shipped.
+> - `Stream<Result<FlashcardListDetail>> watchFlashcardList(deckId, {searchTerm, tags, status, sort})`
+>   — deck + folder breadcrumb + search/tag/status-filtered cards (search matches front/back,
+>   case-insensitive contains; `tags` is a multi-select **AND** filter, each tag normalized with the
+>   storage rule `_normalizeTags` so it matches stored tags; empty `tags` = no filter) +
+>   filter-independent `totalCount` (composes `FlashcardDao` with `FolderDao` for the breadcrumb +
+>   content-revision stream). Tag filter is Current (WBS 2.18.1). The **status** filter
+>   (`FlashcardStatusFilter`: `all` / `active` / `due` / `suspended` / `buried`) is Current
+>   (WBS 2.17.1) — each card's state is derived from its `flashcard_progress` row at read time (no
+>   row = new, active card), with `now` read once per emission from the repository's injected clock;
+>   `active` excludes suspended + currently-buried (expired bury counts active), `due` keeps active
+>   cards with `due_at <= now`. The list stream watches the `flashcards` table only, so a FE consumer
+>   must invalidate the list after a bury/suspend (which writes to `flashcard_progress`) — see
+>   WBS 2.17.2 / `docs/business/study-actions/bury-suspend.md` §Filters.
 > - `Future<Result<void>> deleteFlashcard({flashcardId})` — single-card delete (progress
 >   cascades via FK).
 > - `Future<Result<void>> reorderFlashcards({deckId, orderedIds})` — writes `sort_order` by

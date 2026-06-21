@@ -120,8 +120,8 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | BS5 | Suspend current session card | Progress row missing | Create progress with is_suspended/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | `test/data/repositories/study_session_card_action_test.dart` |
 | BS6 | Unsuspend | Past `due_at` | Card immediately due | C0+C1 | TBD |
 | BS7 | Toast undo | Within 5s | Revert state | C1 | TBD |
-| BS8 | Filter | "Suspended" | Show only suspended cards | C0+C1 | TBD |
-| BS9 | Filter | "Active" | Hide suspended and buried | C0+C1 | TBD |
+| BS8 | Filter | "Suspended" | Show only suspended cards | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C36; status filter BE WBS 2.17.1) |
+| BS9 | Filter | "Active" | Hide suspended and currently-buried (expired bury counts as active) | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C36; status filter BE WBS 2.17.1) |
 | BS10 | Bury exclusion | Fresh deck new entry | Suspended deck card excluded from study entry | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
 | BS11 | Bury exclusion | Fresh deck new entry | Currently buried deck card excluded from study entry | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
 | BS12 | Bury exclusion | `buried_until` past | Card becomes eligible again | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |

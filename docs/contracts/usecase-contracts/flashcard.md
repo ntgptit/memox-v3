@@ -298,29 +298,37 @@ Stream<Either<Failure, FlashcardListDetail>> call(
   DeckId deckId, {
   String? searchTerm,
   List<TagName> tags = const [],
+  FlashcardStatusFilter status = FlashcardStatusFilter.all,
   ContentSortMode sort = ContentSortMode.manual,
 });
 ```
 
-> **Current implementation (search verified 2026-06-10; tag filter WBS 2.18.1, 2026-06-20).** Shipped
-> as the `Result`-based `WatchFlashcardListUseCase`
+> **Current implementation (search verified 2026-06-10; tag filter WBS 2.18.1, 2026-06-20;
+> status filter WBS 2.17.1, 2026-06-21).** Shipped as the `Result`-based `WatchFlashcardListUseCase`
 > (`lib/domain/usecases/flashcard/watch_flashcard_list_usecase.dart`) over
 > `FlashcardRepository.watchFlashcardList`. The V1 list-watch supports a deck-scoped front/back
-> **search** term and a **multi-select AND `tags` filter** (each selected tag normalized with the
-> storage rule — trim + lowercase + dedup — so it matches stored tags; empty selection = no filter).
-> Search and tag filters compose, and `totalCount` reflects the full deck total regardless of either,
-> so the UI can distinguish empty-deck from no-results. **Status filters** (`active` / `due` /
-> `suspended` / `buried`) and the computed `CardState` / `WatchFlashcardsByFilterUseCase` remain
-> **Specified / Future** (WBS 2.17.1) — blocked on the suspend/bury columns, which have not shipped.
+> **search** term, a **multi-select AND `tags` filter** (each selected tag normalized with the
+> storage rule — trim + lowercase + dedup — so it matches stored tags; empty selection = no filter),
+> and a **status filter** (`all` / `active` / `due` / `suspended` / `buried` — see
+> `FlashcardStatusFilter`). Search, tag, and status filters compose, and `totalCount` reflects the
+> full deck total regardless of any of them, so the UI can distinguish empty-deck from no-results.
+> The computed `CardState` / `WatchFlashcardsByFilterUseCase` remain **Future** — V1 uses the status
+> selector above. Filter chips + state badges are FE (WBS 2.17.2).
 
 **Rules:**
 
-- `FlashcardListDetail` = deck + folder breadcrumb + (search/tag-filtered) cards + `totalCount`.
+- `FlashcardListDetail` = deck + folder breadcrumb + (search/tag/status-filtered) cards + `totalCount`.
 - A non-blank `searchTerm` keeps cards whose front or back contains the trimmed, case-insensitive
   term. A non-empty `tags` keeps cards carrying **every** selected tag (AND); the two compose.
   Decision rows C38, C39.
-- `totalCount` is the deck's full card count, independent of `searchTerm` and `tags` — it lets the
-  UI tell empty-deck (`totalCount == 0`) apart from no-results (`cards.isEmpty && totalCount > 0`).
+- `status` filters by a card's derived state from its `flashcard_progress` row at read time (a card
+  with no progress row is a new, active card): `active` excludes suspended + currently-buried (an
+  expired bury counts as active); `due` keeps active cards whose `due_at <= now`; `suspended` /
+  `buried` return only that state; `all` imposes no filter. `now` is read once per emission.
+  Decision rows C36, C37 (BS8/BS9).
+- `totalCount` is the deck's full card count, independent of `searchTerm`, `tags`, and `status` — it
+  lets the UI tell empty-deck (`totalCount == 0`) apart from no-results
+  (`cards.isEmpty && totalCount > 0`).
 - A missing/deleted deck yields `NotFoundFailure`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.

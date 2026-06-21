@@ -20,9 +20,16 @@ applies_to: bury (skip card today), suspend (hide card indefinitely)
 > `study_attempts` row, preserve SRS fields (`current_box`, `due_at`, `review_count`,
 > `lapse_count`), and touch `study_sessions.updated_at`.
 >
-> **Specified (NOT implemented):** flashcard-list state badges + status filter chips; bulk
-> suspend/unsuspend; unsuspend from the flashcard list; undo toast/reinsert behavior. WBS rows
-> 4.11.3 and 2.17.x track the remaining surfaces (`docs/project-management/wbs.md`).
+> **Implemented (BE V1, status filter):** the flashcard-list **status filter** (`all` / `active` /
+> `due` / `suspended` / `buried`) is wired into the list read path (WBS 2.17.1,
+> `FlashcardRepository.watchFlashcardList` + `FlashcardStatusFilter`); `active` excludes suspended +
+> currently-buried (an expired bury counts as active), `due` keeps active cards with `due_at <= now`,
+> and `totalCount` stays the full deck total. See §Filters in flashcard list.
+>
+> **Specified (NOT implemented):** flashcard-list state badges + status filter **chips** (FE,
+> WBS 2.17.2); bulk suspend/unsuspend; unsuspend from the flashcard list; undo toast/reinsert
+> behavior. WBS rows 4.11.3 and 2.17.2 track the remaining surfaces
+> (`docs/project-management/wbs.md`).
 
 ## Purpose
 
@@ -153,7 +160,19 @@ Add filter chips to flashcard list:
 | Buried    | Only currently-buried (where `buried_until > now`) |
 | Due       | Only currently due (and active)                    |
 
-Filters multiplex with tag filter (see `docs/business/tags/tag-system.md`). Default: All.
+Filters multiplex with tag filter (see `docs/business/tags/tag-system.md`) and front/back search.
+Default: All. The BE selector is implemented (WBS 2.17.1) as `FlashcardStatusFilter` on
+`FlashcardRepository.watchFlashcardList`; a card's state is derived from its `flashcard_progress`
+row at read time (no progress row = new, active card), `now` is read once per stream emission, and
+`totalCount` stays the full deck total regardless of the filter. The filter chips are FE
+(WBS 2.17.2). Decision rows C36/C37 (`docs/decision-tables/flashcard.md`), BS8/BS9
+(`docs/decision-tables/study-srs.md`).
+
+> **FE reactivity note (WBS 2.17.2):** `watchFlashcardList` streams off the `flashcards` table
+> only, but bury/suspend write to `flashcard_progress`. So a bury/suspend completed elsewhere does
+> not by itself re-emit the filtered list — the FE consumer must invalidate / re-read the flashcard
+> list provider after a bury/suspend (or unsuspend) action so the status filter reflects the new
+> state.
 
 ## Bulk operations
 

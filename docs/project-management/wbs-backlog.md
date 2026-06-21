@@ -75,8 +75,8 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 
 ### Content management (remaining FE / schema)
 2.5.2 folder reorder · 2.7.2 / 2.8.2 / 2.9.2 deck create/rename/delete FE (some advanced at V1) ·
-2.10.2 deck reorder · 2.16.2 parent-child guard FE · 2.17.1 (Blocked) / 2.17.2 status filter +
-badges · 2.18.2 tag filter FE · 2.19.2 deck move FE · 2.20.2 duplicate soft-warning ·
+2.10.2 deck reorder · 2.16.2 parent-child guard FE · 2.17.1 status filter BE ✅ DONE / 2.17.2 status
+filter chips + badges FE · 2.18.2 tag filter FE · 2.19.2 deck move FE · 2.20.2 duplicate soft-warning ·
 2.21.1 folder-delete blast-radius confirm · 2.22.1 folder color/icon schema + BE ·
 3.2.3 folder-detail new-vs-due split · 3.6.1 error retry state.
 

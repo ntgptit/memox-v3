@@ -5,6 +5,7 @@ import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/reorder_flashcards_usecase.dart';
@@ -109,6 +110,7 @@ class _FakeFlashcardRepository implements FlashcardRepository {
     String deckId, {
     String? searchTerm,
     List<String> tags = const <String>[],
+    FlashcardStatusFilter status = FlashcardStatusFilter.all,
     ContentSortMode sort = ContentSortMode.manual,
   }) {
     watchedDeckId = deckId;

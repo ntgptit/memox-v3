@@ -15,6 +15,7 @@ import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/types/target_language.dart';
 
 void main() {
@@ -459,6 +460,135 @@ void main() {
                 .data!;
         expect(none.cards, isEmpty);
         expect(none.totalCount, 3);
+      },
+    );
+
+    // ---- Status filter (WBS 2.17.1, decision rows C36/C37, BS8/BS9) ----
+    //
+    // A fixed `now` so the time-relative `due`/`buried` predicates are
+    // deterministic; cards are created with the shared `repo`, then their
+    // progress state is set directly and read back through a fixed-clock repo
+    // (both share the same db).
+    const int now = 5000;
+    FlashcardRepositoryImpl repoAtNow() => FlashcardRepositoryImpl(
+      dao: flashcardDao,
+      deckDao: deckDao,
+      folderDao: folderDao,
+      idGenerator: IdGenerator(Random(7)),
+      nowMs: () => now,
+    );
+    Future<void> setProgress(
+      String cardId, {
+      bool suspended = false,
+      int? buriedUntil,
+      int? dueAt,
+    }) => flashcardDao.updateProgressColumns(
+      cardId,
+      FlashcardProgressCompanion(
+        isSuspended: Value<bool>(suspended),
+        buriedUntil: Value<int?>(buriedUntil),
+        dueAt: Value<int?>(dueAt),
+      ),
+    );
+
+    test(
+      'C36: status filter buckets cards by derived state; totalCount stays full',
+      () async {
+        final String deckId = await newDeck();
+        Future<String> card(String front) async => (await repo.createFlashcard(
+          deckId: deckId,
+          front: front,
+          back: front,
+        )).data!.id;
+        // newCard: no progress change → box 1, due_at NULL, active, not due.
+        await card('new');
+        final String suspended = await card('suspended');
+        final String buried = await card('buried');
+        final String expiredBuried = await card('expiredBuried');
+        final String due = await card('due');
+        final String futureDue = await card('futureDue');
+        await setProgress(suspended, suspended: true);
+        await setProgress(buried, buriedUntil: now + 4000); // > now → buried
+        await setProgress(expiredBuried, buriedUntil: now - 4000); // <= now
+        await setProgress(due, dueAt: now - 4000); // <= now → due
+        await setProgress(futureDue, dueAt: now + 4000); // > now → not due
+
+        final FlashcardRepositoryImpl r = repoAtNow();
+        Future<Set<String>> fronts(FlashcardStatusFilter s) async =>
+            (await r.watchFlashcardList(deckId, status: s).first).data!.cards
+                .map((Flashcard c) => c.front)
+                .toSet();
+
+        expect(await fronts(FlashcardStatusFilter.all), <String>{
+          'new',
+          'suspended',
+          'buried',
+          'expiredBuried',
+          'due',
+          'futureDue',
+        });
+        expect(
+          await fronts(FlashcardStatusFilter.active),
+          <String>{'new', 'expiredBuried', 'due', 'futureDue'},
+          reason: 'active excludes suspended + currently-buried, keeps expired',
+        );
+        expect(
+          await fronts(FlashcardStatusFilter.due),
+          <String>{'due'},
+          reason:
+              'due = active AND due_at <= now (new/expired due_at NULL '
+              'excluded, future-due excluded)',
+        );
+        expect(await fronts(FlashcardStatusFilter.suspended), <String>{
+          'suspended',
+        });
+        expect(await fronts(FlashcardStatusFilter.buried), <String>{'buried'});
+
+        final FlashcardListDetail buriedDetail =
+            (await r
+                    .watchFlashcardList(
+                      deckId,
+                      status: FlashcardStatusFilter.buried,
+                    )
+                    .first)
+                .data!;
+        expect(
+          buriedDetail.totalCount,
+          6,
+          reason: 'totalCount independent of the status filter',
+        );
+      },
+    );
+
+    test(
+      'C37: status filter composes with search and keeps stable deck order',
+      () async {
+        final String deckId = await newDeck();
+        Future<String> card(String front) async => (await repo.createFlashcard(
+          deckId: deckId,
+          front: front,
+          back: front,
+        )).data!.id;
+        await card('apple-active');
+        final String appleSuspended = await card('apple-suspended');
+        await card('banana-active');
+        await setProgress(appleSuspended, suspended: true);
+
+        final FlashcardRepositoryImpl r = repoAtNow();
+        final FlashcardListDetail detail =
+            (await r
+                    .watchFlashcardList(
+                      deckId,
+                      searchTerm: 'apple',
+                      status: FlashcardStatusFilter.active,
+                    )
+                    .first)
+                .data!;
+        // 'apple' search AND active status → only the non-suspended apple.
+        expect(detail.cards.map((Flashcard c) => c.front).toList(), <String>[
+          'apple-active',
+        ]);
+        expect(detail.totalCount, 3);
       },
     );
 

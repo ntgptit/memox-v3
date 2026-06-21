@@ -5,6 +5,7 @@ import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/types/ids.dart';
 
 /// Port for flashcard persistence. Use cases depend on this interface;
@@ -37,13 +38,23 @@ abstract interface class FlashcardRepository {
   /// **every** selected tag (AND semantics, case-insensitive after
   /// normalization); an empty [tags] list imposes no tag filter. Tag and search
   /// filters compose; `totalCount` always reflects the full deck total
-  /// regardless of either filter. Emits a [NotFoundFailure] result when the deck
-  /// does not exist (e.g. just deleted). [sort] is reserved for the Future sort
-  /// control; V1 only honors [ContentSortMode.manual]. Decision rows C38, C39.
+  /// regardless of either filter.
+  ///
+  /// [status] further filters the cards by their derived state (a card with no
+  /// `flashcard_progress` row is a new, active card): [FlashcardStatusFilter.all]
+  /// keeps everything; `active` excludes suspended + currently-buried (an expired
+  /// bury counts as active); `due` keeps active cards whose `due_at <= now`;
+  /// `suspended` and `buried` return only that state. Status composes with the
+  /// search and tag filters, and `totalCount` stays the full deck total.
+  ///
+  /// Emits a [NotFoundFailure] result when the deck does not exist (e.g. just
+  /// deleted). [sort] is reserved for the Future sort control; V1 only honors
+  /// [ContentSortMode.manual]. Decision rows C36, C37, C38, C39 (BS8/BS9).
   Stream<Result<FlashcardListDetail>> watchFlashcardList(
     DeckId deckId, {
     String? searchTerm,
     List<TagName> tags = const <TagName>[],
+    FlashcardStatusFilter status = FlashcardStatusFilter.all,
     ContentSortMode sort = ContentSortMode.manual,
   });
 

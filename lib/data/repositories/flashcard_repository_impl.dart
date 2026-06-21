@@ -19,6 +19,7 @@ import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
+import 'package:memox/domain/types/flashcard_status_filter.dart';
 import 'package:memox/domain/types/ids.dart';
 
 /// Drift-backed [FlashcardRepository].
@@ -63,6 +64,7 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     DeckId deckId, {
     String? searchTerm,
     List<TagName> tags = const <TagName>[],
+    FlashcardStatusFilter status = FlashcardStatusFilter.all,
     ContentSortMode sort = ContentSortMode.manual,
   }) {
     final String term = (searchTerm ?? '').trim().toLowerCase();
@@ -97,9 +99,22 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
             )
             .toList(growable: false);
 
+        // `now` is read once per emission so every card is graded against the
+        // same instant (the `due`/`buried` predicates are time-relative).
+        final int now = _nowMs();
+        // The status filter is state-derived (suspended/buried/due), so it needs
+        // each card's progress row; only loaded when a non-`all` filter is set.
+        final Map<String, FlashcardProgressRow> progressById =
+            status == FlashcardStatusFilter.all
+            ? const <String, FlashcardProgressRow>{}
+            : await _progressByCard(
+                rows.map((FlashcardRow r) => r.id).toList(growable: false),
+              );
+
         // Search (front/back contains term) AND tag filter (card carries every
-        // selected tag) compose; an empty term/tag set skips that predicate.
-        // `totalCount` stays the full deck total regardless of either (C39).
+        // selected tag) AND status filter compose; an empty term/tag set or an
+        // `all` status skips that predicate. `totalCount` stays the full deck
+        // total regardless of any filter (C36/C37/C39).
         final List<Flashcard> filtered = all
             .where(
               (Flashcard c) =>
@@ -107,7 +122,8 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
                       c.front.toLowerCase().contains(term) ||
                       c.back.toLowerCase().contains(term)) &&
                   (filterTags.isEmpty ||
-                      filterTags.every((TagName t) => c.tags.contains(t))),
+                      filterTags.every((TagName t) => c.tags.contains(t))) &&
+                  _matchesStatus(status, progressById[c.id], now),
             )
             .toList(growable: false);
 
@@ -441,6 +457,44 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
       byCard.putIfAbsent(row.flashcardId, () => <TagName>[]).add(row.tag);
     }
     return byCard;
+  }
+
+  /// Progress rows keyed by flashcard id, for the status filter (WBS 2.17.1).
+  /// A card absent from the map is a new card (no progress row): box 1, due_at
+  /// NULL, not suspended, not buried.
+  Future<Map<String, FlashcardProgressRow>> _progressByCard(
+    List<String> flashcardIds,
+  ) async {
+    final List<FlashcardProgressRow> rows = await _dao.progressForFlashcards(
+      flashcardIds,
+    );
+    return <String, FlashcardProgressRow>{
+      for (final FlashcardProgressRow row in rows) row.flashcardId: row,
+    };
+  }
+
+  /// Whether a card with the given [progress] (`null` for a new card) matches
+  /// the [status] filter at [now] (`docs/business/study-actions/bury-suspend.md`
+  /// §Filters; decision rows C36/C37, BS8/BS9). An expired bury
+  /// (`buried_until <= now`) counts as active; a new card (no progress / due_at
+  /// NULL) is active but never `due`.
+  bool _matchesStatus(
+    FlashcardStatusFilter status,
+    FlashcardProgressRow? progress,
+    int now,
+  ) {
+    final bool suspended = progress?.isSuspended ?? false;
+    final int? buriedUntil = progress?.buriedUntil;
+    final bool currentlyBuried = buriedUntil != null && buriedUntil > now;
+    final int? dueAt = progress?.dueAt;
+    return switch (status) {
+      FlashcardStatusFilter.all => true,
+      FlashcardStatusFilter.suspended => suspended,
+      FlashcardStatusFilter.buried => currentlyBuried,
+      FlashcardStatusFilter.active => !suspended && !currentlyBuried,
+      FlashcardStatusFilter.due =>
+        !suspended && !currentlyBuried && dueAt != null && dueAt <= now,
+    };
   }
 
   // ---- Result + failure builders ----

@@ -70,6 +70,22 @@ class FlashcardDao extends DatabaseAccessor<AppDatabase>
             ..where((FlashcardProgress t) => t.flashcardId.equals(flashcardId)))
           .write(changes);
 
+  /// Progress rows for the given [flashcardIds] in one query (deck-scoped read
+  /// for the status filter, WBS 2.17.1). A card without a row is a new card
+  /// (box 1, due_at NULL, not suspended, not buried).
+  Future<List<FlashcardProgressRow>> progressForFlashcards(
+    List<String> flashcardIds,
+  ) {
+    if (flashcardIds.isEmpty) {
+      return Future<List<FlashcardProgressRow>>.value(
+        const <FlashcardProgressRow>[],
+      );
+    }
+    return (select(
+      flashcardProgress,
+    )..where((FlashcardProgress t) => t.flashcardId.isIn(flashcardIds))).get();
+  }
+
   // ---- flashcard_tags ----
 
   /// All tag rows for the given [flashcardIds] in one query (deck-scoped read).
