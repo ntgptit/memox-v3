@@ -52,10 +52,18 @@ NOTE: the audit also found a real gap (NOT deferred) — deck rows show `· last
 - 2026-06-21 · (no WBS) · shared widgets · refactor · **Shared `MxDueBadge`** — the due-badge pill is now in 3 places (`deck_tile`, `library_folder_tile`, `flashcard_list_body`); the overline one is solid, the row ones soft. Extract a shared `MxDueBadge(emphasis: soft|solid)` in a dedicated refactor once the solid/soft rule is decided — out of WP-D1 scope.
 - 2026-06-22 · 2.19.2 · Folder detail / Library · mock-doc-conflict (bundled restyle) · **Move-picker row restyle** (surfaced by WP-FD11 ui-parity) — the deck/folder move pickers render plain `Icons.folder_outlined` rows with tap-to-select; the kit `04` move-sheet shows per-destination semantic icons in tinted `MxIconTile` tiles + a radio + "Move here" confirm button. These are ONE bundled deferred picker restyle applying to both pickers together. **G1** split? the radio/confirm/icon-tile are a single cohesive restyle, not independently shippable without inventing partial designs. **G2** PRECEDENCE? visual restyle is design-owned, no rule to self-arbitrate the confirm-vs-tap interaction change. **G3** real blocker? the current tap-select design is shipped + goldened (state coverage closed) — this is a refinement, not missing function. **G4** narrow node? the whole picker row+footer restyle. Also needs folder/deck color+icon propagated into `DeckMoveTarget`/`FolderMoveTarget` (deck side needs the deferred deck color/icon schema — see line above). Suggestion: do the radio + "Move here" + icon-tile restyle as one task once the deck color/icon schema lands.
 
-## OBJECT 5 (Flashcard list + editor) audit DEFERs (2026-06-21)
+## OBJECT 5 (Flashcard list + editor) audit DEFERs (2026-06-21) — both OVERTURNED 2026-06-22
 
-- 2026-06-21 · (read-model) · Flashcard list · spec-unclear · **Card-row SRS state (subtitle + status chip)** (WP-FL1) — mock `06` rows show `Box N · due in Xd` / `New · not studied` / `Box 6 · mastered` + a New/Learning/Review/Mastered chip, but the **box→state mapping is undocumented** (no thresholds in business/decision docs). It drives both the subtitle text and the chip → can't split. Needs a documented state-mapping decision + a per-card progress read model (repo already loads `progressById`; `relativeTimeFrom` exists). Don't guess the thresholds.
-- 2026-06-21 · 2.11.2/2.12.2 · Flashcard editor · needs-decision · **Card editor dialog → full screen (`07`/`08`)** (WP-FL2) — shipped V1 is a front/back `flashcard_card_dialog`; the mock is a full screen with breadcrumb + a Details expander (deck selector + tags + note; BE already supports tags/note/example/hint). Rebuilding dialog→screen + the `07`/`08` state matrix is a large multi-slice effort and a pattern decision (accept the dialog V1 or rebuild?). Flag for owner before rebuilding a shipped surface.
+- ~~2026-06-21 · spec-unclear · **Card-row SRS state** (WP-FL1)~~ **RE-OPENED 2026-06-22 (re-audit):**
+  `spec-unclear` is invalid (no two-business-doc conflict — the mapping is merely undocumented). The
+  status **chip** (New/Learning/Review/Mastered) is not in the business card-state model (`srs-review.md`
+  defines New/Due only) → **PRECEDENCE #1 mock visual gap** (not built, not a blocker). The **subtitle**
+  (`New · not studied` / `Box N · due in Xd`) is fully derivable → BUILDABLE. See
+  `loop-plan/flashcard-list-editor.md` WP-FL1.
+- ~~2026-06-21 · needs-decision · **Card editor dialog → screen** (WP-FL2)~~ **RE-OPENED 2026-06-22:**
+  `needs-decision` is not a valid defer reason; PRECEDENCE #2 (mock → screen is the contract) + G1 split
+  → WP-FL2a (editor screen shell: routes + X/Save app bar + breadcrumb + FRONT/BACK + save; BE ready).
+  BUILDABLE. See `loop-plan/flashcard-list-editor.md` WP-FL2a/WP-FL2b.
 
 ## OBJECTS 6-10 (Study) — DEFERred, loop stopping point (2026-06-21)
 

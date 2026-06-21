@@ -7,10 +7,14 @@ last_updated: 2026-06-22
 
 ## Cursor
 
-- **Active object:** 5 — Flashcard (list + editor) (RE-AUDIT-PENDING; advance here next iteration).
-- **Current work-package:** none in flight (objects 1–4 DONE).
-- **Branch:** `feat/loop-library`; latest commits `db3d948` (WP-FD11), `c16ea0a` (WP-D2).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-D2 tree.
+- **Active object:** 5 — Flashcard (list + editor) (RE-AUDIT IN PROGRESS; both prior DEFERs
+  OVERTURNED → **WP-FL1 (card-row SRS subtitle) build next**, then WP-FL2a editor screen shell).
+- **Current work-package:** WP-FL1 — see `loop-plan/flashcard-list-editor.md` for the locked scope
+  (read-model `progressById` + `{front} — {back}` title + `Box N · due in Xd`/`New · not studied`
+  meta + ARB; chip = PRECEDENCE-resolved mock visual gap; isolated tile golden for the now-dependent
+  due-in, screen golden uses New cards).
+- **Branch:** `feat/loop-library`; latest code commits `c16ea0a` (WP-D2); plan commit pending.
+- **Last verify:** PASS (docs chain) — object-5 re-audit plan locked; no code shipped this iteration.
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -42,18 +46,20 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 2 | Folder detail | **DONE (re-audit-confirmed 2026-06-22)** — code+25 tests+goldens verified; search-state app-bar-swap → bottom dock (WP-FD10); move-sheet golden gap closed (WP-FD11); ui-parity PASS. DEFERred: reorder (no mock), new-vs-due (not in mock), picker restyle (bundled). |
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
-| 5 | Flashcard (list + editor) | RE-AUDIT-PENDING (next) |
+| 5 | Flashcard (list + editor) | RE-AUDIT IN PROGRESS — WP-FL3 (reorder) + WP-FL4 (delete) verified; both prior DEFERs OVERTURNED (re-audit: chip = mock visual gap per PRECEDENCE #1; editor screen mock-specified + BE-ready). **WP-FL1 (subtitle) + WP-FL2a (editor shell) to BUILD.** |
 | 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
 
 ## Next action
 
-Re-audit object 5 (Flashcard list + editor) — read `loop-plan/flashcard-list-editor.md`,
-`specs/06-09` (06 card rows + 07 create + 08 edit + 09 history) + shots, audit BE+FE via `Explore`.
-Object 5 is the **card-level** surface on the `06` screen (object 4 was the deck container): card
-rows' SRS enrichment (`Box N · due in Xd` + status chip), the card create/edit editor (`07`/`08`),
-card delete/reorder, card history (`09`). Note prior audit DEFERs: card-row SRS state mapping
-(spec-unclear, undocumented box→state thresholds) + dialog-vs-fullscreen editor (needs-decision) —
-re-audit whether these are still valid blockers or now buildable. Run `tool/verify` +
-`ui-parity-checker`. Build the first eligible gap; advance only when object 5 is evidence-confirmed
-DONE — then objects 6–10 (greenfield Study build, BE ready).
+**Build WP-FL1 (card-row SRS subtitle)** — scope is locked in `loop-plan/flashcard-list-editor.md`:
+1. `FlashcardListDetail` += `progressById: Map<id, FlashcardProgress>`; repo
+   (`flashcard_repository_impl.dart:108`) maps the already-loaded `FlashcardProgressRow`s → domain
+   `FlashcardProgress` (`due_at` int-ms → UTC DateTime) and passes them through (no schema).
+2. ARB en+vi: `flashcardStateNew`, `flashcardStateBoxDueIn(box,days)`, `flashcardStateBoxDueToday(box)`.
+3. `flashcard_tile.dart`: title `{front} — {back}`, meta = SRS subtitle (inject `now`); NO chip
+   (PRECEDENCE #1 mock visual gap — business model is New/Due only).
+4. `flashcard_list_body.dart`: pass `detail.progressById[card.id]` + now to the tile.
+5. Tests: BE (read-model carries progress), FE isolated `flashcard_tile` golden (due-in variants, fixed
+   now) + update screen loaded golden (New cards → deterministic `New · not studied`).
+Then WP-FL2a (editor screen shell). Advance to object 6 (Study) only when object 5 is DONE.
