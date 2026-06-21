@@ -6,6 +6,9 @@ part 'progress_dao.g.dart';
 /// One due-deck row from the progress due-summary query (WBS 7.1.1).
 typedef DeckDueCountRow = ({String deckId, String deckName, int dueCount});
 
+/// One box row from the box-distribution query (WBS 7.2.1).
+typedef BoxCountRow = ({int boxNumber, int cardCount});
+
 /// Thin Drift accessor for the progress due-summary query (WBS 7.1.1).
 ///
 /// No business logic here (`docs/database/drift-guide.md`): runs the single
@@ -25,6 +28,16 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
     return <DeckDueCountRow>[
       for (final DueCountsByDeckResult row in rows)
         (deckId: row.deckId, deckName: row.deckName, dueCount: row.dueCount),
+    ];
+  }
+
+  /// Card counts grouped by Leitner box from `flashcard_progress` (raw rows; the
+  /// repository validates the range and zero-fills 1..8).
+  Future<List<BoxCountRow>> boxCounts() async {
+    final List<BoxDistributionResult> rows = await boxDistribution().get();
+    return <BoxCountRow>[
+      for (final BoxDistributionResult row in rows)
+        (boxNumber: row.boxNumber, cardCount: row.cardCount),
     ];
   }
 }

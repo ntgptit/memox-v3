@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
 
 /// Read port for SRS progress aggregates (WBS 7.1.1 slice).
@@ -15,4 +16,11 @@ abstract interface class ProgressRepository {
   /// currently-buried cards (`docs/business/study-actions/bury-suspend.md`). A
   /// read error maps to a `StorageFailure`.
   Future<Result<DueSummary>> loadDueSummary({required int now});
+
+  /// Card counts per Leitner box from `flashcard_progress` (WBS 7.2.1), zero-
+  /// filled across boxes `SrsBox.min..SrsBox.max` (1..8). Fails fast with a
+  /// `ValidationFailure` if any persisted `box_number` is out of range
+  /// (`docs/decision-tables/progress-history.md` P9); a read error maps to a
+  /// `StorageFailure`.
+  Future<Result<BoxDistribution>> loadBoxDistribution();
 }

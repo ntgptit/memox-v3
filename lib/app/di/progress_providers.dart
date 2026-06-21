@@ -2,6 +2,7 @@ import 'package:memox/app/di/database_providers.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/data/repositories/progress_repository_impl.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
+import 'package:memox/domain/usecases/progress/load_box_distribution_usecase.dart';
 import 'package:memox/domain/usecases/progress/load_due_summary_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -20,3 +21,9 @@ ProgressRepository progressRepository(Ref ref) =>
 @riverpod
 LoadDueSummaryUseCase loadDueSummaryUseCase(Ref ref) =>
     LoadDueSummaryUseCase(repository: ref.watch(progressRepositoryProvider));
+
+@riverpod
+LoadBoxDistributionUseCase loadBoxDistributionUseCase(Ref ref) =>
+    LoadBoxDistributionUseCase(
+      repository: ref.watch(progressRepositoryProvider),
+    );

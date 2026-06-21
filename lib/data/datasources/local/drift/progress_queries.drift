@@ -28,3 +28,14 @@ WHERE COALESCE(fp.is_suspended, 0) = 0
   AND fp.due_at IS NOT NULL AND fp.due_at <= :now
 GROUP BY d.id, d.name
 ORDER BY due_count DESC, d.name ASC, d.id ASC;
+
+-- Box distribution (WBS 7.2.1): card counts per Leitner box from the current
+-- `flashcard_progress` table. Every flashcard has a progress row from creation
+-- (flashcard.md C1), so a brand-new card counts in box 1. The repository
+-- zero-fills boxes 1..8 and fails fast on any out-of-range `box_number`
+-- (decision row P9).
+boxDistribution:
+SELECT box_number, COUNT(*) AS card_count
+FROM flashcard_progress
+GROUP BY box_number
+ORDER BY box_number ASC;

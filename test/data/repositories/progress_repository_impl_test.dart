@@ -1,9 +1,11 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/core/error/failure.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/data/repositories/progress_repository_impl.dart';
+import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
 
 void main() {
@@ -146,6 +148,118 @@ void main() {
       expect(summary.totalDueCount, 0);
       expect(summary.decksWithDue, isEmpty);
       expect(summary.hasDue, isFalse);
+    });
+  });
+
+  // ProgressRepositoryImpl.loadBoxDistribution (WBS 7.2.1): card counts per
+  // Leitner box 1..8 from flashcard_progress, zero-filled, fail-fast on an
+  // out-of-range box (decision row P9).
+  group('ProgressRepositoryImpl.loadBoxDistribution', () {
+    late AppDatabase db;
+    late ProgressRepositoryImpl repository;
+    const int now = 1000 * 60 * 60 * 24 * 100;
+
+    setUp(() {
+      db = AppDatabase.forExecutor(NativeDatabase.memory());
+      repository = ProgressRepositoryImpl(dao: ProgressDao(db));
+    });
+    tearDown(() => db.close());
+
+    Future<void> seedDeck() async {
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'f1',
+              name: 'f1',
+              contentMode: 'decks',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'f1',
+              name: 'd1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+    }
+
+    Future<void> insertCardInBox(String id, int box) async {
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: id,
+              deckId: 'd1',
+              front: id,
+              back: id,
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.flashcardProgress)
+          .insert(
+            FlashcardProgressCompanion.insert(
+              flashcardId: id,
+              boxNumber: Value<int>(box),
+            ),
+          );
+    }
+
+    test('counts per box, zero-filled across 1..8', () async {
+      await seedDeck();
+      await insertCardInBox('a', 1);
+      await insertCardInBox('b', 1);
+      await insertCardInBox('c', 3);
+      await insertCardInBox('d', 8);
+
+      final result = await repository.loadBoxDistribution();
+
+      expect(result.failure, isNull);
+      final BoxDistribution dist = result.data!;
+      expect(dist.countsByBox.keys.toList()..sort(), <int>[
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+      ]);
+      expect(dist.countFor(1), 2);
+      expect(dist.countFor(3), 1);
+      expect(dist.countFor(8), 1);
+      expect(dist.countFor(2), 0, reason: 'empty box zero-filled');
+      expect(dist.total, 4);
+    });
+
+    test('empty db → all boxes zero', () async {
+      final result = await repository.loadBoxDistribution();
+      expect(result.failure, isNull);
+      expect(result.data!.total, 0);
+      expect(result.data!.countsByBox.length, 8);
+    });
+
+    test('an out-of-range box fails fast (P9)', () async {
+      await seedDeck();
+      await insertCardInBox('a', 1);
+      await insertCardInBox('bad', 9); // invalid box
+
+      final result = await repository.loadBoxDistribution();
+
+      expect(result.data, isNull);
+      expect(result.failure, isA<IntegrityFailure>());
     });
   });
 }

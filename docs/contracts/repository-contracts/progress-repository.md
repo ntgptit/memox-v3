@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-12
+last_updated: 2026-06-21
 status: contract
 ---
 
@@ -72,6 +72,14 @@ deck). Query: `lib/data/datasources/local/drift/progress_queries.drift`
 (`dueCountsByDeck`); DAO `ProgressDao`; use case `LoadDueSummaryUseCase`. The
 remaining methods below are the target surface for later Progress slices
 (WBS 7.2.x+).
+
+**WBS 7.2.1 (box distribution)** adds
+`Future<Result<BoxDistribution>> loadBoxDistribution()`
+(`lib/domain/models/box_distribution.dart`): card counts per Leitner box from
+`flashcard_progress` (`boxDistribution` query), zero-filled across
+`SrsBox.min..SrsBox.max` (1..8), failing fast with an `IntegrityFailure` on any
+persisted `box_number` outside 1..8 (a data-invariant violation, not user input —
+decision row P9). Use case `LoadBoxDistributionUseCase`.
 
 ## Transaction requirements
 

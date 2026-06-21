@@ -1,8 +1,10 @@
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
+import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
+import 'package:memox/domain/srs/srs_box.dart';
 
 /// Drift-backed [ProgressRepository] (WBS 7.1.1 due-summary slice).
 ///
@@ -32,6 +34,44 @@ class ProgressRepositoryImpl implements ProgressRepository {
         failure: null,
         data: DueSummary(totalDueCount: total, decksWithDue: decks),
       );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'flashcard_progress',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<BoxDistribution>> loadBoxDistribution() async {
+    try {
+      final List<BoxCountRow> rows = await _dao.boxCounts();
+      // Zero-fill the full ladder so the chart axis is stable.
+      final Map<int, int> counts = <int, int>{
+        for (int box = SrsBox.min; box <= SrsBox.max; box++) box: 0,
+      };
+      for (final BoxCountRow row in rows) {
+        if (row.boxNumber < SrsBox.min || row.boxNumber > SrsBox.max) {
+          // Fail fast: a persisted box outside 1..8 is a data-invariant
+          // violation (decision row P9), not user input — surface it as an
+          // IntegrityFailure (logged severe / blocking) rather than silently
+          // bucketing it (`docs/contracts/error-contract.md` §IntegrityFailure).
+          return (
+            failure: Failure.integrity(
+              message:
+                  'Persisted box_number ${row.boxNumber} is outside '
+                  'SrsBox.min..SrsBox.max (1..8) in flashcard_progress.',
+            ),
+            data: null,
+          );
+        }
+        counts[row.boxNumber] = row.cardCount;
+      }
+      return (failure: null, data: BoxDistribution(countsByBox: counts));
     } catch (error) {
       return (
         failure: Failure.storage(

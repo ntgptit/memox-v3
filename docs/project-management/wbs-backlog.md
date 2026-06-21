@@ -49,7 +49,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 | Priority | WBS | Item | Note |
 |---|---|---|---|
 | P1.1 | **7.0.1** | Card-history schema (ENABLER B4) | Blocked — **needs schema approval.** |
-| P1.2 | 7.4.1 / 7.4.2 / ~~7.1.1~~ / 7.2.1 / 7.3.1 | Progress read models + ~~due~~/box/stats queries | ~~7.1.1 Due summary BE~~ ✅ **DONE 2026-06-21** (`loadDueSummary`: global + per-deck, excl. suspended/buried). Box/stats remain. |
+| P1.2 | 7.4.1 / 7.4.2 / ~~7.1.1~~ / ~~7.2.1~~ / 7.3.1 | Progress read models + ~~due~~/~~box~~/stats queries | ~~7.1.1 Due summary~~ + ~~7.2.1 Box distribution~~ ✅ **DONE 2026-06-21** (`loadDueSummary`, `loadBoxDistribution`). Stats (7.3.1) + combined read model (7.4.x) remain. |
 | P1.3 | 7.5.1 / 7.5.2 | **Progress screen FE + states** (redesign **E4**) | Assemble the ready `MxGoalRing` + `MxInsight`; needs E2 below for goal/streak data. |
 | P1.4 | 5.4.1 / 5.4.2 | Engagement persistence + streak/goal (redesign **E2**) | `study_days` + daily-goal — **schema/migration, needs approval.** Feeds Progress goal/streak. |
 | P1.5 | 7.6.2 / 7.6.3 / 7.6.1 | Card history use cases + screen FE + review-history query | |
