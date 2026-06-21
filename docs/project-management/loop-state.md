@@ -7,14 +7,15 @@ last_updated: 2026-06-22
 
 ## Cursor
 
-- **Active object:** 5 — Flashcard (list + editor) (IN PROGRESS; WP-FL1 + WP-FL2a + WP-FL2b1 SHIPPED
-  → **WP-FL2b2 (editor Details expander) build next**).
-- **Current work-package:** WP-FL2b2 — Details expander (see `loop-plan/flashcard-list-editor.md`):
-  a collapsed `Details · Optional` row under the Back field; expand → tags / note (hint) / example /
-  pronunciation `MxTextField`s (BE `Create/UpdateFlashcardUseCase` already accept them). Goldens
-  `07`/`08` details-open. Then WP-FL2b3 (save/load state surfaces).
-- **Branch:** `feat/loop-library`; latest code commits `ce07ee1` (WP-FL2a), `583d347` (WP-FL2b1).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b1 tree.
+- **Active object:** 5 — Flashcard (list + editor) (IN PROGRESS; WP-FL1 + WP-FL2a + WP-FL2b1 +
+  WP-FL2b2 SHIPPED → **WP-FL2b3 (editor save/load state surfaces) build next**, then WP-FL2b2b Tags).
+- **Current work-package:** WP-FL2b3 (see `loop-plan/flashcard-list-editor.md`): the `07` saving
+  (disabled + spinner) + save-failed (inline banner vs the current snackbar) states; the `08` loading
+  + full load-error surfaces (the editor currently reuses `flashcardListStreamProvider` — a single-card
+  read path lets a deep-link edit show loading/load-error). Then WP-FL2b2b (Tags chip input) as the
+  last object-5 node.
+- **Branch:** `feat/loop-library`; latest code commits `583d347` (WP-FL2b1), `23a4193` (WP-FL2b2).
+- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b2 tree.
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -46,21 +47,22 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 2 | Folder detail | **DONE (re-audit-confirmed 2026-06-22)** — code+25 tests+goldens verified; search-state app-bar-swap → bottom dock (WP-FD10); move-sheet golden gap closed (WP-FD11); ui-parity PASS. DEFERred: reorder (no mock), new-vs-due (not in mock), picker restyle (bundled). |
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
-| 5 | Flashcard (list + editor) | IN PROGRESS — FL3 (reorder) + FL4 (delete) + **FL1 (SRS subtitle `94de1f4`)** + **FL2a (editor shell `ce07ee1`)** + **FL2b1 (edit delete `583d347`)** SHIPPED (ui-parity PASS). **WP-FL2b2 (Details expander) + WP-FL2b3 (save/load states) remain** before DONE. |
+| 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1 SRS subtitle** + **FL2a editor shell** + **FL2b1 edit-delete** + **FL2b2 Details expander (`23a4193`)** SHIPPED (ui-parity PASS). **WP-FL2b3 (save/load states) + WP-FL2b2b (Tags input) remain** before DONE. |
 | 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
 
 ## Next action
 
-**Build WP-FL2b2 (editor Details expander)** in `flashcard_editor_body.dart`:
-1. Under the Back field, add a collapsed `Details · Optional` row (chevron + label) — a tap toggles
-   the expander open/closed (local hook state).
-2. Expanded → `MxTextField`s for example / pronunciation / hint (note) + a tag input. BE:
-   `CreateFlashcardUseCase`/`UpdateFlashcardUseCase` already accept `exampleSentence` / `pronunciation`
-   / `hint` / `tags`; wire them into `save()` (and prefill from `card` in edit).
-3. Tests: expander toggles; fields prefill in edit; save passes the Details fields. Goldens `07`/`08`
-   details-open (light+dark). Check spec `07`/`08` for the exact field set + tag-chip pattern.
-Then **WP-FL2b3** (save/load state surfaces: saving spinner, save-failed banner, `08` loading + full
-load-error via a single-card read path). After object 5 is evidence-confirmed DONE → **object 6
-(Study — Review, greenfield, BE ready)**: CHẺ route → entry gate → session create/resume → review
-shell → grade → result. Do NOT defer for greenfield.
+**Build WP-FL2b3 (editor save/load state surfaces)** — the non-base `07`/`08` states. Read spec
+`07`/`08` for the exact saving/save-failed/load-error layout first (PRECEDENCE #2):
+1. **Saving:** while `save()` awaits, disable Save + show a spinner/`Saving…` (the controller is
+   stateless — use a local `useState<bool>` saving flag in `flashcard_editor_body.dart`, set around
+   the await). Golden `07`/`08` saving.
+2. **Save-failed:** the spec shows an inline error banner above the fields (currently a snackbar). Add
+   the banner on failure (keep the draft). Golden `07`/`08` save-failed.
+3. **`08` loading + full load-error:** the editor reuses `flashcardListStreamProvider`; for a
+   deep-link edit a single-card read path (or the existing stream's loading/error) should drive the
+   `08` loading skeleton + full load-error surface (the bare shell exists; flesh it to the mock).
+Then **WP-FL2b2b** (Tags chip input — the `07`/`08` Tags section, the last object-5 node). After
+object 5 is evidence-confirmed DONE → **object 6 (Study — Review, greenfield, BE ready)**: CHẺ
+route → entry gate → session create/resume → review shell → grade → result. Do NOT defer for greenfield.
