@@ -403,4 +403,143 @@ void main() {
       expect(stats.hasActivity, isFalse);
     });
   });
+
+  // ProgressRepositoryImpl.loadProgressReadModel (WBS 7.4.1): composes due
+  // summary + box distribution + study statistics in one call; empty DB returns
+  // zero-safe parts (decision row P11).
+  group('ProgressRepositoryImpl.loadProgressReadModel', () {
+    late AppDatabase db;
+    late ProgressRepositoryImpl repository;
+    const int now = 1000 * 60 * 60 * 24 * 100;
+
+    setUp(() {
+      db = AppDatabase.forExecutor(NativeDatabase.memory());
+      repository = ProgressRepositoryImpl(dao: ProgressDao(db));
+    });
+    tearDown(() => db.close());
+
+    test('empty db composes zero-safe parts', () async {
+      final result = await repository.loadProgressReadModel(now: now);
+
+      expect(result.failure, isNull);
+      final model = result.data!;
+      expect(model.dueSummary.totalDueCount, 0);
+      expect(model.boxDistribution.total, 0);
+      expect(model.boxDistribution.countsByBox.length, 8);
+      expect(model.statistics.totalAttempts, 0);
+      expect(model.statistics.lastStudiedAt, isNull);
+    });
+
+    test('composes the three parts from persisted data', () async {
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'f1',
+              name: 'f1',
+              contentMode: 'decks',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'f1',
+              name: 'Alpha',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'd1',
+              front: 'c1',
+              back: 'c1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.flashcardProgress)
+          .insert(
+            FlashcardProgressCompanion.insert(
+              flashcardId: 'c1',
+              boxNumber: const Value<int>(2),
+              dueAt: const Value<int?>(now - 100),
+            ),
+          );
+
+      final result = await repository.loadProgressReadModel(now: now);
+
+      expect(result.failure, isNull);
+      final model = result.data!;
+      expect(model.dueSummary.totalDueCount, 1);
+      expect(model.boxDistribution.countFor(2), 1);
+      expect(model.statistics.completedSessions, 0);
+    });
+
+    test('a failing part short-circuits and propagates its failure', () async {
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'f1',
+              name: 'f1',
+              contentMode: 'decks',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'f1',
+              name: 'd1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'd1',
+              front: 'c1',
+              back: 'c1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      // An out-of-range box makes loadBoxDistribution fail; the composite must
+      // propagate that IntegrityFailure rather than returning a partial model.
+      await db
+          .into(db.flashcardProgress)
+          .insert(
+            FlashcardProgressCompanion.insert(
+              flashcardId: 'c1',
+              boxNumber: const Value<int>(9),
+            ),
+          );
+
+      final result = await repository.loadProgressReadModel(now: now);
+
+      expect(result.data, isNull);
+      expect(result.failure, isA<IntegrityFailure>());
+    });
+  });
 }

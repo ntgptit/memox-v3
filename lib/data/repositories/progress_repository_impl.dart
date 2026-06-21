@@ -3,11 +3,13 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/models/study_statistics.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
 import 'package:memox/domain/srs/srs_box.dart';
 
-/// Drift-backed [ProgressRepository] (WBS 7.1.1 due-summary slice).
+/// Drift-backed [ProgressRepository] (WBS 7.1.1–7.4.1: due summary, box
+/// distribution, study statistics, and the composed progress read model).
 ///
 /// Runs the per-deck due-count query and derives the global total as the sum of
 /// the per-deck counts (every flashcard belongs to exactly one deck), keeping the
@@ -112,5 +114,32 @@ class ProgressRepositoryImpl implements ProgressRepository {
         data: null,
       );
     }
+  }
+
+  @override
+  Future<Result<ProgressReadModel>> loadProgressReadModel({
+    required int now,
+  }) async {
+    // Compose the three Progress reads; the first failure short-circuits.
+    final Result<DueSummary> due = await loadDueSummary(now: now);
+    if (due.failure != null) {
+      return (failure: due.failure, data: null);
+    }
+    final Result<BoxDistribution> boxes = await loadBoxDistribution();
+    if (boxes.failure != null) {
+      return (failure: boxes.failure, data: null);
+    }
+    final Result<StudyStatistics> stats = await loadStudyStatistics();
+    if (stats.failure != null) {
+      return (failure: stats.failure, data: null);
+    }
+    return (
+      failure: null,
+      data: ProgressReadModel(
+        dueSummary: due.data!,
+        boxDistribution: boxes.data!,
+        statistics: stats.data!,
+      ),
+    );
   }
 }

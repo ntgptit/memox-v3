@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/progress_read_model.dart';
 import 'package:memox/domain/models/study_statistics.dart';
 
 /// Read port for SRS progress aggregates (WBS 7.1.1 slice).
@@ -30,4 +31,10 @@ abstract interface class ProgressRepository {
   /// pure read, no mutation (`docs/decision-tables/progress-history.md` P10). A
   /// read error maps to a `StorageFailure`.
   Future<Result<StudyStatistics>> loadStudyStatistics();
+
+  /// Composes the full Progress read model as of [now] (epoch ms): due summary +
+  /// box distribution + study statistics in one call (WBS 7.4.1; decision row
+  /// P11). The first failing part short-circuits and propagates its failure; an
+  /// empty database yields zero-safe parts.
+  Future<Result<ProgressReadModel>> loadProgressReadModel({required int now});
 }

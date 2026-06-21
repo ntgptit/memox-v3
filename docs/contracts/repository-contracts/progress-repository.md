@@ -89,6 +89,13 @@ rollup (`totalAttempts`, `forgotCount`, `correctCount = total − forgot`,
 `completedSessionCount` / `attemptStatistics` / `lastAttemptTime`; use case
 `LoadStudyStatisticsUseCase`.
 
+**WBS 7.4.1 (combined read model)** adds
+`Future<Result<ProgressReadModel>> loadProgressReadModel({required int now})`
+(`lib/domain/models/progress_read_model.dart`): composes the due summary, box
+distribution, and study statistics in one call — the first failing part
+short-circuits and propagates; an empty database yields zero-safe parts
+(decision row P11). Use case `LoadProgressReadModelUseCase`.
+
 ## Transaction requirements
 
 | Operation                        | Tables touched                                                                                                                                     |
