@@ -60,7 +60,7 @@ study mode.
 |----------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `review` | both sides shown         | Front and back rendered together on one card; user swipes (right = perfect, left = forgot). No reveal step.                                                                         |
 | `match`  | both sides shown (board) | A 5-pair board (10 cells: 5 fronts + 5 backs of the same 5 cards). User taps a cell, then taps its pair. Per-pair persistence; one board per 5 cards.                               |
-| `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit.                                                             |
+| `guess`  | front → back             | Show front; pick correct back from 5 rich option cards (title + description snippet). Auto-advance countdown on commit. Option set built by `GuessStudyModeStrategy.buildOptions` (WBS 4.5.6: the correct back + up to 4 distinct distractors from the session's other cards, seed-deterministic). |
 | `recall` | front → back             | Show front, tap "Show answer" to reveal back, self-grade with Forgot / Got it. **No text input in v1**; typed-answer recall is a Future Proposal.                                   |
 | `fill`   | front production         | Show back as definition / hint; type front in a plain free-text input. Strict character match (V1: case-sensitive, trim-only — `TypedAnswerStudyModeStrategy.evaluate`); "Mark correct" override path + Hint taint to max `recovered` land with WBS 4.5.8. |
 
@@ -200,7 +200,8 @@ Status notes (see `docs/business/glossary.md` §Status terms):
   (`lib/domain/study/modes/study_mode_strategy.dart`) with three interaction
   families declared in the same file: `BinaryGradeStudyModeStrategy`
   (recall / review / guess — one card collapses to a binary pass/fail mapped
-  to an `AttemptResult` via `mapGotItAction` / `mapForgotAction`),
+  to an `AttemptResult` via `mapGotItAction` / `mapForgotAction`; `guess` adds
+  `buildOptions` to assemble its multiple-choice set, WBS 4.5.6),
   `TypedAnswerStudyModeStrategy` (fill — terminal result computed by the
   strict typed-answer evaluator), and `BoardStudyModeStrategy` (match —
   append-only pair evaluations, terminal attempts derived at finalization,

@@ -298,13 +298,13 @@ Same as Review mode.
   `lib/presentation/features/study/widgets/study_session/guess/guess_option_tile.dart` +
   `guess_option_models.dart`. The tile now binds to `GuessOption` (domain) rather than
   `StudyFlashcardRef`.
-- Distractor sampling: domain `lib/domain/study/guess/guess_option_builder.dart` (
-  `GuessOptionBuilder.build`, `kGuessDecoyLimit = 4`). Deterministic seeded shuffle (
-  `Random(stableSeed(seed))`); correct option included exactly once; dedup by id and normalized
-  `back`; blank/whitespace backs filtered; up to 4 valid decoys → 5 options when available.
-  Presentation (`guess_mode_session_view.dart::_options`) and the notifier helper
-  `studyGuessAnswerOptions` both delegate to the builder; no `dart:math` or `shuffle()` remains in
-  the view.
+- Distractor sampling: domain `GuessStudyModeStrategy.buildOptions` in
+  `lib/domain/study/modes/study_mode_strategy.dart` (WBS 4.5.6; `optionCount = 5` → the correct
+  back + up to 4 distractors). Deterministic seeded shuffle (injected `Random`); correct option
+  included exactly once; dedup by id and normalized (trimmed) `back`; blank/whitespace backs
+  filtered; up to 4 valid distractors → 5 options when available; every emitted `back` is trimmed.
+  The Guess FE (4.5.7) delegates to this builder instead of sampling in the view; the
+  presentation wiring (`guess_mode_session_view.dart`, notifier helper) lands with that FE row.
 - Description fallback chain (note → example → back-truncate): no dedicated
   `option_description_builder.dart` file. Construction happens inline within
   `guess_option_models.dart`; if the chain becomes more complex, extract to domain.
@@ -318,8 +318,9 @@ Same as Review mode.
   `lib/core/theme/tokens/app_motion.dart` (`AppDurations.guessCorrectAdvanceDelay` /
   `AppDurations.guessWrongFeedbackDelay`). The footer countdown progress bar and the staged-grade
   delay both consume the per-grade duration (0.8s on correct selection, 1.5s on wrong selection).
-- Tests: `test/domain/study/guess/guess_option_builder_test.dart` (11 cases — correctness, decoy
-  limit, dedup, blank filter, determinism, fewer-decoy fallback);
+- Tests: `test/domain/study/modes/guess_option_builder_test.dart` (6 cases — full-pool 5 options,
+  small/empty-pool degrade, target/blank/duplicate exclusion, trimmed emit, determinism;
+  WBS 4.5.6);
   `test/presentation/guess_mode_session_view_test.dart` (option count, no duplicates, 799/800ms
   correct boundary, 1499/1500ms wrong boundary, stable order, fewer-decoy no crash);
   `test_support/presentation/study_session_screen_contract.dart` DT8/DT9/DT10/DT27 updated to

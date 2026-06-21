@@ -482,6 +482,26 @@ sealed class CardState with _$CardState {
 
 **Priority** (per `docs/wireframes/06-flashcard-list.md`): Suspended > Buried > Due > Active.
 
+### GuessOption
+
+**Status:** Current domain type (`lib/domain/models/guess_option.dart`, WBS 4.5.6).
+
+One multiple-choice option card in Guess mode. A built set (via
+`GuessStudyModeStrategy.buildOptions`) holds exactly one option with
+`isCorrect: true` (the target card's own back) plus up to 4 distinct distractor
+backs. Transient — built per card, consumed by the FE, never persisted.
+
+```dart
+@freezed
+sealed class GuessOption with _$GuessOption {
+  const factory GuessOption({
+    required FlashcardId flashcardId,
+    required String back,
+    required bool isCorrect,
+  }) = _GuessOption;
+}
+```
+
 ### StudyScope
 
 Resolved scope of a study session.

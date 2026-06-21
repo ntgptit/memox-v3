@@ -59,7 +59,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 ### Study modes beyond Review + study actions
 | Priority | WBS | Item |
 |---|---|---|
-| P1.8 | 4.5.4–4.5.9 | Match / Guess / Fill modes (BE + FE) |
+| P1.8 | 4.5.4–4.5.9 | Match / Guess / Fill modes (BE + FE) — ~~4.5.6 Guess BE~~ ✅ **DONE 2026-06-21** (`GuessStudyModeStrategy.buildOptions` 5-option selection); Match BE (4.5.4) + Fill BE (4.5.8) + all mode FE remain |
 | P1.9 | ~~4.5.10~~ / 4.5.11–4.5.13 | ~~Daily new limit BE~~ ✅ **DONE 2026-06-21** (`dailyNewLimit` cap in `resolveEligibleCardIds`) + Recall mode FE + mode-chain persistence + per-phase chain runtime |
 | P1.10 | ~~4.10.1~~ / 4.10.2 · ~~4.11.1~~ / ~~4.11.2~~ / 4.11.3 | ~~Cancel/discard session~~ ✅ **DONE 2026-06-21** + resume-expiry anchor + ~~bury/suspend queue exclusion BE~~ ✅ **DONE 2026-06-21** (`resolveEligibleCardIds`) + ~~in-session bury/suspend BE~~ ✅ **DONE 2026-06-21** (`bury/suspendStudySessionCard`) + in-session FE (4.11.3) |
 
