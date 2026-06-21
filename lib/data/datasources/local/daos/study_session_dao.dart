@@ -172,6 +172,44 @@ class StudySessionDao {
         .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
   });
 
+  /// The session item for [flashcardId] within [sessionId], or `null` when the
+  /// card is not (or no longer) in that session's queue.
+  Future<StudySessionItemRow?> itemBySessionAndFlashcard(
+    String sessionId,
+    String flashcardId,
+  ) =>
+      (_db.select(_db.studySessionItems)..where(
+            (t) =>
+                t.sessionId.equals(sessionId) &
+                t.flashcardId.equals(flashcardId),
+          ))
+          .getSingleOrNull();
+
+  /// Applies an in-session bury/suspend in one transaction (WBS 4.11.2): upserts
+  /// the card's `flashcard_progress` ([progress]), removes its
+  /// `study_session_items` row from the active queue ([sessionItemId]), and
+  /// touches the session's `updated_at` ([updatedAt]). Rolls back as a unit.
+  ///
+  /// As with [finalizeSession], `insertOnConflictUpdate` only writes the
+  /// companion's PRESENT columns, so [progress] MUST carry every preserved column
+  /// (box/due/counters) plus the single mutated field (`buried_until` or
+  /// `is_suspended`); the caller reads the current row and sets them explicitly.
+  /// No `study_attempts` row is inserted — SRS state is otherwise unchanged
+  /// (`docs/contracts/usecase-contracts/study.md` §BuryStudySessionCardUseCase).
+  Future<void> removeCardFromSession({
+    required FlashcardProgressCompanion progress,
+    required String sessionItemId,
+    required String sessionId,
+    required int updatedAt,
+  }) => _db.transaction(() async {
+    await _db.into(_db.flashcardProgress).insertOnConflictUpdate(progress);
+    await (_db.delete(
+      _db.studySessionItems,
+    )..where((t) => t.id.equals(sessionItemId))).go();
+    await (_db.update(_db.studySessions)..where((t) => t.id.equals(sessionId)))
+        .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
+  });
+
   /// The attempts recorded against [sessionItemId], oldest first.
   Future<List<StudyAttemptRow>> attemptsForItem(String sessionItemId) =>
       (_db.select(_db.studyAttempts)

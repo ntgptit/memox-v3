@@ -380,9 +380,20 @@ Future<Either<Failure, Unit>> call({
 - Keep `current_box`, `due_at`, `review_count`, and `lapse_count` unchanged.
 - Touch `study_sessions.updated_at`.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
 
 **Test refs:** BS1, BS2, BS10, BS12, BS15.
+
+**Implemented (WBS 4.11.2)** as
+`StudyRepository.buryStudySessionCard({sessionId, flashcardId, now})` /
+`BuryStudySessionCardUseCase` (project `Result<T>`). The repo guards
+`status = in_progress` (else `UnsupportedActionFailure`) and an unanswered queued
+card (missing card → `NotFoundFailure`, answered card →
+`UnsupportedActionFailure`), then runs one transaction
+(`StudySessionDao.removeCardFromSession`): upsert `flashcard_progress` with only
+`buried_until` mutated (box/due/counters preserved; a new card is created with
+SRS-safe defaults — box 1, no due, zero counters), delete the queue item, touch
+`study_sessions.updated_at`. No `study_attempts` row is written.
 
 ## SuspendStudySessionCardUseCase
 
@@ -403,9 +414,15 @@ Future<Either<Failure, Unit>> call({
 - Keep `current_box`, `due_at`, `review_count`, and `lapse_count` unchanged.
 - Touch `study_sessions.updated_at`.
 
-**Errors:** `NotFoundFailure`, `StorageFailure`.
+**Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
 
 **Test refs:** BS4, BS5, BS11, BS12, BS13, BS16.
+
+**Implemented (WBS 4.11.2)** as
+`StudyRepository.suspendStudySessionCard({sessionId, flashcardId, now})` /
+`SuspendStudySessionCardUseCase` — identical to bury but mutates only
+`is_suspended = true` (no `buried_until`); same guards, transactional queue
+removal, SRS preservation, and no-attempt behavior.
 
 ## GetSessionStateUseCase
 

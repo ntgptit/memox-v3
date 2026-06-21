@@ -107,6 +107,35 @@ abstract interface class StudyRepository {
     required int now,
   });
 
+  /// Buries the card [flashcardId] in the active session [sessionId] (WBS
+  /// 4.11.2): in one transaction sets `flashcard_progress.buried_until` to
+  /// tomorrow's local midnight + 1 second (computed in Dart), removes the card's
+  /// `study_session_items` row from the queue, and touches
+  /// `study_sessions.updated_at` at [now] (epoch ms). No `study_attempts` row is
+  /// inserted and box/due/counters are preserved (a new card without progress is
+  /// created with SRS-safe defaults). The session must be `in_progress` and the
+  /// card must still be in the session and unanswered; otherwise a
+  /// `NotFoundFailure` / `UnsupportedActionFailure`. A write error rolls back to a
+  /// `StorageFailure` (`docs/contracts/usecase-contracts/study.md`
+  /// §BuryStudySessionCardUseCase).
+  Future<Result<void>> buryStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+    required int now,
+  });
+
+  /// Suspends the card [flashcardId] in the active session [sessionId] (WBS
+  /// 4.11.2): like [buryStudySessionCard] but sets
+  /// `flashcard_progress.is_suspended = true` (no time component) instead of
+  /// `buried_until`. Same guards, queue removal, preservation, and error mapping
+  /// (`docs/contracts/usecase-contracts/study.md`
+  /// §SuspendStudySessionCardUseCase).
+  Future<Result<void>> suspendStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+    required int now,
+  });
+
   /// Loads the result summary for session [id] (WBS 4.7.1): the persisted
   /// session header plus its ordered `study_session_items` joined with their
   /// flashcards, each paired with the terminal `AttemptResult` derived from its

@@ -3,6 +3,7 @@ import 'package:memox/app/di/study_entry_providers.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/repositories/study_repository_impl.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
+import 'package:memox/domain/usecases/study/bury_study_session_card_usecase.dart';
 import 'package:memox/domain/usecases/study/cancel_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/create_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/finalize_study_session_usecase.dart';
@@ -10,6 +11,7 @@ import 'package:memox/domain/usecases/study/load_study_session_result_usecase.da
 import 'package:memox/domain/usecases/study/load_study_session_review_usecase.dart';
 import 'package:memox/domain/usecases/study/record_study_session_answer_usecase.dart';
 import 'package:memox/domain/usecases/study/resolve_study_entry_start_usecase.dart';
+import 'package:memox/domain/usecases/study/suspend_study_session_card_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_providers.g.dart';
@@ -61,3 +63,13 @@ ResolveStudyEntryStartUseCase resolveStudyEntryStartUseCase(Ref ref) =>
 @riverpod
 FinalizeStudySessionUseCase finalizeStudySessionUseCase(Ref ref) =>
     FinalizeStudySessionUseCase(repository: ref.watch(studyRepositoryProvider));
+
+@riverpod
+BuryStudySessionCardUseCase buryStudySessionCardUseCase(Ref ref) =>
+    BuryStudySessionCardUseCase(repository: ref.watch(studyRepositoryProvider));
+
+@riverpod
+SuspendStudySessionCardUseCase suspendStudySessionCardUseCase(Ref ref) =>
+    SuspendStudySessionCardUseCase(
+      repository: ref.watch(studyRepositoryProvider),
+    );

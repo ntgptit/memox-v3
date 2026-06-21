@@ -48,7 +48,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Resume / continue session| Specified| `docs/business/resume/resume-session.md`|
 | Empty scope handling| Specified| `docs/business/study/study-flow.md` (empty scope matrix)|
 | SRS review (Leitner 8-box)| Specified (BE box transition + interval + finalization Implemented — WBS 4.6.1/4.6.2/4.6.4; study FE pending)| `docs/business/srs/srs-review.md`|
-| Bury / suspend cards| Specified| `docs/business/study-actions/bury-suspend.md`|
+| Bury / suspend cards| Partial (BE Current — queue exclusion WBS 4.11.1 + in-session bury/suspend WBS 4.11.2; flashcard-list / bulk / undo FE Specified)| `docs/business/study-actions/bury-suspend.md`|
 | Tag filter + study-by-tag + management| Specified (tag management BE Current — WBS 8.3.1: list/count/rename/merge/delete; FE wiring + filter + study-by-tag Future)| `docs/business/tags/tag-system.md`|
 | Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
 | Deck move between folders| Specified (BE Current — WBS 2.19.1)| `docs/business/deck/deck-management.md`|

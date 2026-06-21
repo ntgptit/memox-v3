@@ -61,7 +61,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 |---|---|---|
 | P1.8 | 4.5.4–4.5.9 | Match / Guess / Fill modes (BE + FE) |
 | P1.9 | 4.5.10–4.5.13, 4.5.11 | Daily new limit + Recall mode FE + mode-chain persistence + per-phase chain runtime |
-| P1.10 | ~~4.10.1~~ / 4.10.2 · ~~4.11.1~~ / 4.11.2 / 4.11.3 | ~~Cancel/discard session~~ ✅ **DONE 2026-06-21** + resume-expiry anchor + ~~bury/suspend queue exclusion BE~~ ✅ **DONE 2026-06-21** (`resolveEligibleCardIds`) + in-session BE/FE (4.11.2/4.11.3) |
+| P1.10 | ~~4.10.1~~ / 4.10.2 · ~~4.11.1~~ / ~~4.11.2~~ / 4.11.3 | ~~Cancel/discard session~~ ✅ **DONE 2026-06-21** + resume-expiry anchor + ~~bury/suspend queue exclusion BE~~ ✅ **DONE 2026-06-21** (`resolveEligibleCardIds`) + ~~in-session bury/suspend BE~~ ✅ **DONE 2026-06-21** (`bury/suspendStudySessionCard`) + in-session FE (4.11.3) |
 
 ### Full flashcard editor (current editor is front/back-only)
 | Priority | WBS | Item |

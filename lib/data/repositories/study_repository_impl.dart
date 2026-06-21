@@ -5,6 +5,7 @@ import 'package:memox/core/util/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_session_mapper.dart';
+import 'package:memox/data/repositories/study_session_card_actions.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
@@ -31,11 +32,16 @@ class StudyRepositoryImpl implements StudyRepository {
     StudySessionMapper mapper = const StudySessionMapper(),
   }) : _dao = dao,
        _idGenerator = idGenerator ?? IdGenerator(),
-       _mapper = mapper;
+       _mapper = mapper,
+       _cardActions = StudySessionCardActions(dao);
 
   final StudySessionDao _dao;
   final IdGenerator _idGenerator;
   final StudySessionMapper _mapper;
+
+  /// In-session bury/suspend actions (WBS 4.11.2), extracted as a data-layer
+  /// collaborator to keep this file cohesive and within the line budget.
+  final StudySessionCardActions _cardActions;
 
   @override
   Future<Result<int>> expireOldSessions({required int now}) async {
@@ -412,6 +418,30 @@ class StudyRepositoryImpl implements StudyRepository {
       );
     }
   }
+
+  @override
+  Future<Result<void>> buryStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+    required int now,
+  }) => _cardActions.apply(
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+    now: now,
+    suspend: false,
+  );
+
+  @override
+  Future<Result<void>> suspendStudySessionCard({
+    required SessionId sessionId,
+    required FlashcardId flashcardId,
+    required int now,
+  }) => _cardActions.apply(
+    sessionId: sessionId,
+    flashcardId: flashcardId,
+    now: now,
+    suspend: true,
+  );
 
   @override
   Future<Result<StudySessionResult>> loadStudySessionResult({

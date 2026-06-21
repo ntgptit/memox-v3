@@ -106,11 +106,11 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
-| BS1 | Bury current session card | During study session | Set `buried_until` to tomorrow local midnight + 1 second, remove current session item, touch session updated_at | C0+C1 | TBD |
-| BS2 | Bury current session card | Progress row missing | Create progress with buried_until/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | TBD |
+| BS1 | Bury current session card | During study session | Set `buried_until` to tomorrow local midnight + 1 second, remove current session item, touch session updated_at | C0+C1 | `test/data/repositories/study_session_card_action_test.dart` |
+| BS2 | Bury current session card | Progress row missing | Create progress with buried_until/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | `test/data/repositories/study_session_card_action_test.dart` |
 | BS3 | Auto-unbury | `buried_until <= now` | Card returns to due queue | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
-| BS4 | Suspend current session card | During study session | Set `is_suspended=true`, remove current session item, touch session updated_at | C0+C1 | TBD |
-| BS5 | Suspend current session card | Progress row missing | Create progress with is_suspended/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | TBD |
+| BS4 | Suspend current session card | During study session | Set `is_suspended=true`, remove current session item, touch session updated_at | C0+C1 | `test/data/repositories/study_session_card_action_test.dart` |
+| BS5 | Suspend current session card | Progress row missing | Create progress with is_suspended/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | `test/data/repositories/study_session_card_action_test.dart` |
 | BS6 | Unsuspend | Past `due_at` | Card immediately due | C0+C1 | TBD |
 | BS7 | Toast undo | Within 5s | Revert state | C1 | TBD |
 | BS8 | Filter | "Suspended" | Show only suspended cards | C0+C1 | TBD |
