@@ -1093,6 +1093,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn\'t fetch this card to edit.'**
   String get cardLoadFailedMessage;
+
+  /// Generic back navigation action.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get commonBack;
+
+  /// App-bar title of the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get studyEntryTitle;
+
+  /// App-bar title of the active study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get studySessionTitle;
+
+  /// Placeholder body of the study session shell (WP-SR1a).
+  ///
+  /// In en, this message translates to:
+  /// **'Review session — coming soon.'**
+  String get studySessionPlaceholder;
+
+  /// Loading caption while the study entry gate resolves the scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing study…'**
+  String get studyPreparing;
+
+  /// Title of the study entry gate error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start study'**
+  String get studyEntryErrorTitle;
+
+  /// Body of the study entry gate error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t prepare this study session. Please try again.'**
+  String get studyEntryErrorMessage;
+
+  /// Generic empty-scope title at the study entry gate (WP-SR1a; per-reason matrix is WP-SR1b).
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to study right now'**
+  String get studyEmptyGenericTitle;
+
+  /// Generic empty-scope body at the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no cards to study in this scope yet.'**
+  String get studyEmptyGenericMessage;
+
+  /// Title of the resume-or-start-over choice at the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume your session?'**
+  String get studyResumeTitle;
+
+  /// Body of the resume-or-start-over choice.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an unfinished study session for this scope.'**
+  String get studyResumeMessage;
+
+  /// Resume the existing study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get studyResumeAction;
+
+  /// Discard the resumable session and start a fresh one.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get studyStartOverAction;
 }
 
 class _AppLocalizationsDelegate

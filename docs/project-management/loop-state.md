@@ -11,17 +11,18 @@ last_updated: 2026-06-22
   loop here (2026-06-22) ahead of object-5's last node WP-FL2b2b (Tags), which is parked.** Entered
   via BƯỚC 2 (re-audit + plan): the prior DEFER is **overturned** (greenfield→split, flip-vs-swipe→
   PRECEDENCE #1 swipe wins, "shipped" drift→fixed). See `loop-plan/study-review.md`.
-- **Current work-package:** **WP-SR1 (study route scaffold + entry gate)** builds next — add `study`
-  route constants + GoRouter wiring + a "Study" launch from the deck that resolves
-  `ResolveStudyEntryStartUseCase` → renders the 3 outcomes (blocked / resumeRequired / canStart),
-  Start → `CreateStudySessionUseCase` → `pushReplacement` to the session route (placeholder shell
-  until WP-SR2). Then WP-SR2 shell+card → WP-SR3 swipe-grade → WP-SR4 exit/actions → WP-SR5
-  finalize→result(17, 6 states). BE all Implemented (audited 2026-06-22).
+- **Current work-package:** **WP-SR1a SHIPPED** (study routes + entry-gate controller/screen +
+  session placeholder; gate resolves `ResolveStudyEntryStartUseCase` → preparing/generic-empty/
+  resume-start-over/error + auto-create→navigate; WBS 4.1.2 Implemented). **WP-SR1b builds next:**
+  the `today` route + `?study_type=` query override + the **8-variant per-reason empty matrix**
+  (replacing the generic empty surface) + a start-over confirm dialog. Then WP-SR2 shell+card →
+  WP-SR3 swipe-grade → WP-SR4 exit/actions → WP-SR5 finalize→result(17, 6 states). BE all Implemented.
 - **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
   after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
-- **Branch:** `feat/loop-library`; latest code commit `d3aa162` (WP-FL2b3b; prior `6437f66`,
-  `34ae424`). This iteration is **docs-only** (BƯỚC 2 plan + wireframe-13 drift fix).
-- **Last verify:** (this turn) docs chain pending — see below.
+- **Branch:** `feat/loop-library`; latest code commit `<WP-SR1a>` (prior `ddca661` Study plan,
+  `d3aa162` WP-FL2b3b).
+- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-SR1a tree. 7 gate
+  tests + 4 goldens; nav-flow / wireframe-12 / decision S27 drift corrected on build.
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -54,23 +55,21 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
 | 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1** + **FL2a shell** + **FL2b1 delete** + **FL2b2 Details** + **FL2b3a saving+save-failed** + **FL2b3b loading+load-error (`d3aa162`)** SHIPPED (ui-parity PASS). **Only WP-FL2b2b (Tags input) remains** before DONE. |
-| 6 | Study — Review | **ACTIVE — BUILD (greenfield FE; BE ready).** Plan CHẺ into WP-SR1..SR5 (`loop-plan/study-review.md`); DEFER overturned, swipe-grade per PRECEDENCE #1 (mock-12 flip = visual gap). WP-SR1 (route+entry gate) next. |
+| 6 | Study — Review | **ACTIVE — BUILD (greenfield FE; BE ready).** WP-SR1a SHIPPED (study routes + entry gate + session placeholder; WBS 4.1.2 Implemented). Next: WP-SR1b (today route + study_type + 8-variant empty matrix), then WP-SR2..SR5. Swipe-grade per PRECEDENCE #1 (mock-12 flip = visual gap). |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6; reuse SR2 shell + SR5 result) |
 
 ## Next action
 
-**Build WP-SR1 (study route scaffold + entry gate)** — object 6 slice 1. Read
-`docs/wireframes/12-study-entry-gate.md` + `docs/business/study/study-flow.md` (entry/eligibility) +
-`docs/business/navigation/navigation-flow.md` first:
-- Add `study` route(s) to `RouteNames`/`RoutePaths` + GoRouter wiring + `navigation-flow.md` (one
-  entry-gate route launched from the deck; the session route `/library/study/session/:sessionId` as a
-  placeholder shell until WP-SR2).
-- A "Study" launch affordance on the deck (flashcard-list) → resolve `ResolveStudyEntryStartUseCase`
-  (`scope` = the deck) → render `StudyEntryStartResult`: `blocked(reason)` → empty-reason surface
-  (map each `StudyScopeEmptyReason` → ARB copy); `resumeRequired(session)` → Resume / Start-over /
-  Back; `canStart(eligibility)` → Start → `CreateStudySessionUseCase({scope, flashcardIds via
-  resolveEligibleCardIds})` → `pushReplacement` to the session route.
-- Tokens + `Mx*`; copy → ARB (en+vi). Tests: the 3 outcomes + navigation; golden of the gate. Decision
-  rows for the start-gate branches.
+**Build WP-SR1b (entry gate completion)** — object 6 slice 1b (WP-SR1a shipped the gate core). Read
+`docs/wireframes/12-study-entry-gate.md` (the empty-state matrix) + `docs/business/study/study-flow.md`:
+- The `today` literal route (`/library/study/today` → `StudyScope(today, null, srsReview)`) — a second
+  GoRoute, no `:entryRefId`.
+- The `?study_type=` query override: parse `study_type` (`StudyType.storageValue`) on the entry route
+  → `StudyScope.studyType` (deck/folder default `new`, today `srs_review`); unknown → error.
+- The **8-variant per-reason empty matrix**: replace `_blockedBody`'s generic surface with a switch
+  over the 8 `StudyScopeEmptyReason` → dedicated icon/title/message/CTA per wireframe `12` (deck-no-cards
+  → Add flashcards; all-done → streak + Done; all-buried; all-suspended → View suspended; etc.). ARB per
+  variant (en+vi). Tests per reason + goldens.
+- A start-over **confirm dialog** before cancel+create (decision S28 "confirms then restarts").
 Then WP-SR2 (shell+card) → WP-SR3 (swipe-grade) → WP-SR4 (exit/actions) → WP-SR5 (finalize→result 17,
 6 states). Parked: object-5 WP-FL2b2b (Tags) — resume after Study per owner. Do NOT defer for greenfield.

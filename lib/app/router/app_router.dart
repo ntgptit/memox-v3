@@ -7,6 +7,7 @@ import 'package:memox/app/router/route_placeholder.dart';
 import 'package:memox/presentation/features/dashboard/routes/dashboard_routes.dart';
 import 'package:memox/presentation/features/folders/routes/folder_routes.dart';
 import 'package:memox/presentation/features/search/routes/search_routes.dart';
+import 'package:memox/presentation/features/study/routes/study_routes.dart';
 
 /// Builds the application [GoRouter].
 ///
@@ -24,6 +25,8 @@ GoRouter createAppRouter() => GoRouter(
   initialLocation: RoutePaths.root,
   redirect: rootRedirect,
   routes: <RouteBase>[
+    // Study is immersive (no bottom nav) → top-level routes, outside the shell.
+    ...studyRoutes(),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
           MxAppShell(navigationShell: navigationShell),

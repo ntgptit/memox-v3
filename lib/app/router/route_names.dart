@@ -33,4 +33,10 @@ abstract final class RouteNames {
   /// unique-name rule.
   static const String searchFolderDetail = 'searchFolderDetail';
   static const String searchDeckFlashcards = 'searchDeckFlashcards';
+
+  /// Study entry gate (`/library/study/:entryType/:entryRefId`) and the active
+  /// session (`/library/study/session/:sessionId`) — top-level immersive routes.
+  /// WBS 4.1.2 / 4.2.2 / 4.5.3.
+  static const String studyEntry = 'studyEntry';
+  static const String studySession = 'studySession';
 }

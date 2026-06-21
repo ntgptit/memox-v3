@@ -563,4 +563,46 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardLoadFailedMessage => 'Không thể tải thẻ này để chỉnh sửa.';
+
+  @override
+  String get commonBack => 'Quay lại';
+
+  @override
+  String get studyEntryTitle => 'Học';
+
+  @override
+  String get studySessionTitle => 'Học';
+
+  @override
+  String get studySessionPlaceholder => 'Phiên ôn tập — sắp ra mắt.';
+
+  @override
+  String get studyPreparing => 'Đang chuẩn bị phiên học…';
+
+  @override
+  String get studyEntryErrorTitle => 'Không thể bắt đầu học';
+
+  @override
+  String get studyEntryErrorMessage =>
+      'Không thể chuẩn bị phiên học này. Vui lòng thử lại.';
+
+  @override
+  String get studyEmptyGenericTitle => 'Hiện chưa có gì để học';
+
+  @override
+  String get studyEmptyGenericMessage =>
+      'Chưa có thẻ nào để học trong phạm vi này.';
+
+  @override
+  String get studyResumeTitle => 'Tiếp tục phiên học?';
+
+  @override
+  String get studyResumeMessage =>
+      'Bạn có một phiên học chưa hoàn thành cho phạm vi này.';
+
+  @override
+  String get studyResumeAction => 'Tiếp tục';
+
+  @override
+  String get studyStartOverAction => 'Bắt đầu lại';
 }

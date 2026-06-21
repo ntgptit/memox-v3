@@ -63,13 +63,18 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
 
 ## GAP-CHECKLIST (CHẺ — smallest runnable slices, depends-on order; 1 per iteration)
 
-- [ ] **WP-SR1 — study route scaffold + entry gate.** Add `study` route constants
-      (`RouteNames`/`RoutePaths` + GoRouter wiring + `navigation-flow.md`); a "Study" launch from the
-      deck/flashcard-list that resolves `ResolveStudyEntryStartUseCase` and renders the 3 outcomes:
-      `blocked` → empty-reason surface (`StudyScopeEmptyReason` → ARB copy); `resumeRequired` →
-      Resume / Start-over / Back; `canStart` → Start → `CreateStudySessionUseCase` →
-      `pushReplacement` to the session route (placeholder shell until WP-SR2). BE all exists. Tests +
-      golden of the gate outcomes.
+- [x] **WP-SR1a — study route scaffold + entry gate (core).** `ddca661`→`<this commit>`: top-level
+      immersive study routes (`RouteNames`/`RoutePaths` `studyEntry`+`studySession`, `study_routes.dart`
+      composed into `app_router.dart`); `StudyEntryController` (family on `StudyScope`) +
+      `StudyEntryOutcome` (blocked/resumeRequired/ready); `StudyEntryScreen` rendering preparing /
+      generic empty (blocks zero-card) / Resume-Start-over-Back / error, auto-create →
+      `pushReplacement` to the `StudySessionScreen` **placeholder**. `MxIconButton.toolbar` added
+      (guard `header_actions`). ARB ×13 (en+vi). Rows S32/S27/S28; WBS 4.1.2 Implemented, 4.2.3 Partial.
+      7 gate tests + 4 goldens. **Launch CTA stays Future** (reachable by route/deep-link/test).
+- [ ] **WP-SR1b — entry gate completion.** The `today` literal route + `?study_type=` query override
+      (parse → `StudyScope.studyType`) + the **per-reason empty matrix** (8 `StudyScopeEmptyReason`
+      variants → dedicated icon/title/message/CTA per wireframe `12`, replacing the generic surface) +
+      a start-over confirm dialog. ARB per variant. Tests per reason.
 - [ ] **WP-SR2 — review session shell + card.** `study_session_screen.dart`: app bar (`✕` +
       **blue** progress bar + `{answered}/{total}`), and the card (front-side label from
       `deck.target_language`, front large-centered, divider, back-side label, back, example pill when

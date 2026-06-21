@@ -578,4 +578,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardLoadFailedMessage => 'We couldn\'t fetch this card to edit.';
+
+  @override
+  String get commonBack => 'Back';
+
+  @override
+  String get studyEntryTitle => 'Study';
+
+  @override
+  String get studySessionTitle => 'Study';
+
+  @override
+  String get studySessionPlaceholder => 'Review session — coming soon.';
+
+  @override
+  String get studyPreparing => 'Preparing study…';
+
+  @override
+  String get studyEntryErrorTitle => 'Couldn\'t start study';
+
+  @override
+  String get studyEntryErrorMessage =>
+      'We couldn\'t prepare this study session. Please try again.';
+
+  @override
+  String get studyEmptyGenericTitle => 'Nothing to study right now';
+
+  @override
+  String get studyEmptyGenericMessage =>
+      'There are no cards to study in this scope yet.';
+
+  @override
+  String get studyResumeTitle => 'Resume your session?';
+
+  @override
+  String get studyResumeMessage =>
+      'You have an unfinished study session for this scope.';
+
+  @override
+  String get studyResumeAction => 'Resume';
+
+  @override
+  String get studyStartOverAction => 'Start over';
 }

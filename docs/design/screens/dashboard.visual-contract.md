@@ -72,7 +72,7 @@ This is the source of truth for mapping the approved Dashboard mock to Flutter i
 | Static streak placeholder | loaded, goalOff | Current V1 | `MxStatDisplay` or `MxCard` | None; goal-disabled placeholder only | None | Render the disabled goal state without a streak count. |
 | Goal ring / daily-goal card | loaded, goalOff | Current V1 | `MxMasteryRing` / `MxCard` | Engagement prefs + study_attempts aggregate | None | The disabled goal state stays visible, but the streak chip stays hidden when streak is 0. |
 | Streak-broken banner | streakBroken | Visual chrome | `MxCard` | Computed broken-streak signal | None | The fidelity pass shows the banner inline; dismiss behavior remains future. |
-| Today CTA / caught-up card | loaded, resumeOnly | Current V1 | `MxCard` + `MxActionButton` | Today due-count provider | `go` to `RoutePaths.studyToday` only when `dueToday > 0`; otherwise render the caught-up/disabled state and keep the user out of study flow | The caught-up variant replaces the primary due card when no cards are due, and the primary action must be disabled or replaced with a non-study action. |
+| Today CTA / caught-up card | loaded, resumeOnly | Future (WP-SR1b) | `MxCard` + `MxActionButton` | Today due-count provider | `go` to the `today` study entry gate (`/library/study/today`) only when `dueToday > 0`; otherwise render the caught-up/disabled state and keep the user out of study flow. The `today` route constant is WP-SR1b (not yet defined) | The caught-up variant replaces the primary due card when no cards are due, and the primary action must be disabled or replaced with a non-study action. |
 | Start new learning CTA | loaded, onboarding, resumeOnly | Current V1 | `MxPrimaryButton` / `MxSecondaryButton` | No scope picker source yet | `goStudyEntry(entryType: today, studyType: newCards)` | The prompt routes straight to the global new-cards entry; the scope picker remains deferred. |
 | Recent decks section header | loaded, resumeOnly | Current V1 | `MxSectionHeader` | None | None | The section title is part of the screen chrome. |
 | Recent decks header shortcut | loaded, resumeOnly | Visual-only | `MxTextButton` or `MxIconButton` | None | Optional library navigation | Bottom nav already covers `/library`; this shortcut is not a product requirement. |
@@ -136,7 +136,7 @@ For onboarding, render the zero-content hero only.
 | More paused sessions | `showMxBottomSheet` | Opens the paused-sessions list when the list query exists. |
 | Offline banner | visual chrome | Non-blocking warning surface on top of the dashboard body. |
 | Streak-broken banner | visual chrome | One-time inline banner above the resume card when the chrome bridge marks it broken. |
-| Today CTA | `RoutePaths.studyToday` / `RouteNames.studyToday` via `go` | The study entry gate then `pushReplacement`s into the session route. |
+| Today CTA | the `today` study entry gate (`/library/study/today`) via `go` — **WP-SR1b** (route constant not yet defined) | The study entry gate then `pushReplacement`s into the session route. |
 | Start new learning | Deferred | No source-backed scope picker exists yet. |
 | Settings icon | `RoutePaths.settings` / `RouteNames.settings` via `go` | Shell-visible and current V1. |
 | Search icon | Removed (redesign) — search is the top-level `/search` tab | No Dashboard search affordance (WBS 5.8.1 Rejected). |

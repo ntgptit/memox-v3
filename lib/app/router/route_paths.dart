@@ -39,6 +39,19 @@ abstract final class RoutePaths {
   /// segments under [search]) so a Search result opens inside the Search branch.
   static const String searchFolder = '$search/$folderRelative';
   static const String searchDeckFlashcards = '$search/$deckFlashcardsRelative';
+
+  /// Study — an immersive flow registered as **top-level** routes (outside the
+  /// bottom-nav shell) so the session has no bottom nav, per
+  /// `docs/wireframes/12-study-entry-gate.md` + `13-study-session-review.md`.
+  static const String study = '$library/study';
+
+  /// The study entry gate. `:entryType` ∈ `deck`/`folder`/`today`; `:entryRefId`
+  /// is the deck/folder id. WBS 4.1.2 / 4.2.2.
+  static const String studyEntry = '$study/:entryType/:entryRefId';
+
+  /// The active study session. `:sessionId` is the persisted session id. Listed
+  /// before [studyEntry] so the literal `session` segment wins over `:entryType`.
+  static const String studySession = '$study/session/:sessionId';
 }
 
 /// Path/query parameter keys for GoRouter — never pass a raw string literal as
@@ -54,6 +67,22 @@ abstract final class RouteParams {
   /// The `:flashcardId` path segment for the card edit route (mock `08`;
   /// matches `docs/business/navigation/navigation-flow.md` §Library routes).
   static const String flashcardId = 'flashcardId';
+
+  /// The `:entryType` path segment for the study entry gate (`deck`/`folder`/
+  /// `today`).
+  static const String entryType = 'entryType';
+
+  /// The `:entryRefId` path segment for the study entry gate (deck/folder id).
+  static const String entryRefId = 'entryRefId';
+
+  /// The `:sessionId` path segment for the active study session route.
+  static const String sessionId = 'sessionId';
+
+  /// Optional `study_type` query param (`StudyType.storageValue`) on the entry
+  /// gate; absent → the entry default (`deck`/`folder` → new, `today` → review).
+  /// The key is defined now; the gate parses/honors it in **WP-SR1b** (WP-SR1a
+  /// applies only the entry default).
+  static const String studyTypeQueryParam = 'study_type';
 }
 
 /// Router-level defaults.

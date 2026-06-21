@@ -165,5 +165,18 @@
   "cardHintLabel": "Gợi ý",
   "cardSaveFailedMessage": "Không thể lưu thay đổi.",
   "cardLoadFailedTitle": "Không tải được thẻ",
-  "cardLoadFailedMessage": "Không thể tải thẻ này để chỉnh sửa."
+  "cardLoadFailedMessage": "Không thể tải thẻ này để chỉnh sửa.",
+  "commonBack": "Quay lại",
+  "studyEntryTitle": "Học",
+  "studySessionTitle": "Học",
+  "studySessionPlaceholder": "Phiên ôn tập — sắp ra mắt.",
+  "studyPreparing": "Đang chuẩn bị phiên học…",
+  "studyEntryErrorTitle": "Không thể bắt đầu học",
+  "studyEntryErrorMessage": "Không thể chuẩn bị phiên học này. Vui lòng thử lại.",
+  "studyEmptyGenericTitle": "Hiện chưa có gì để học",
+  "studyEmptyGenericMessage": "Chưa có thẻ nào để học trong phạm vi này.",
+  "studyResumeTitle": "Tiếp tục phiên học?",
+  "studyResumeMessage": "Bạn có một phiên học chưa hoàn thành cho phạm vi này.",
+  "studyResumeAction": "Tiếp tục",
+  "studyStartOverAction": "Bắt đầu lại"
 }

@@ -522,9 +522,9 @@ When fingerprints match, this dialog still appears but the warning is softer and
 - Implemented so far: `mx_confirm_dialog.dart` (`MxConfirmDialog`), `mx_folder_delete_dialog.dart`,
   `mx_folder_form_dialog.dart` (+ parts), `mx_name_dialog.dart`, `mx_bottom_sheet.dart`.
 - The resume/start-over choice is NOT a shared dialog: the Study Entry gate renders inline
-  Resume / Start over / Back actions
-  (`lib/presentation/features/study/widgets/study_entry_resume_required_state.dart`); the
-  start-over confirmation composes the shared confirm dialog.
+  Resume / Start over / Back actions (`study_entry_screen.dart` `_resumeBody`, WP-SR1a); the
+  start-over confirmation will compose the shared confirm dialog (WP-SR1b — not yet wired; WP-SR1a
+  starts over without a confirm).
 - The naming set `MxDialogResumeOrStartOver`, `MxDialogDiscardSession`, `MxDialogExitSession`,
   `MxDialogBulkDelete`, `MxDialogResetProgress`, `MxDialogRestoreWarning` and the
   `confirmAndDiscardResumeSession` flow are **target names from a previous iteration** — none of

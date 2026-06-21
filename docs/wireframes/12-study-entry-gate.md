@@ -17,15 +17,16 @@ either redirects to existing session or creates a new one and navigates to it.
 
 Most users never see this screen for more than a moment — it's a gate.
 
-> Current V1 implementation note: the app now ships a real Study Entry screen for
-> `/library/study/today` and `/library/study/:entryType/:entryRefId`. It parses
-> `entryType`, `entryRefId`, `study_type`, and `mode`, shows a preparing state,
-> surfaces invalid parameters as an error state, renders the empty-scope matrix
-> for zero-eligible-card scopes, and redirects with `pushReplacement` to a
-> persisted session when eligible cards exist. The destination
-> `/library/study/session/:sessionId` now opens a real Study Session Review Screen V1 and
-> `/library/study/session/:sessionId/result` opens the real result screen. If a resumable
-> session already exists, V1 shows an explicit Resume / Start over / Back choice.
+> **Status (2026-06-22, WP-SR1a):** `StudyEntryScreen` ships for
+> `/library/study/:entryType/:entryRefId` (`deck` / `folder`). It resolves the scope via
+> `ResolveStudyEntryStartUseCase`, shows a **preparing** state, surfaces an unparseable
+> `entryType` as an **error** state, renders a **generic empty surface** for any
+> zero-eligible-card scope (the per-reason matrix below is **WP-SR1b**), auto-creates a session
+> for an eligible scope and `pushReplacement`s to `/library/study/session/:sessionId`, and shows
+> an explicit **Resume / Start over / Back** choice when a resumable session exists (no silent
+> resume). **Not yet built:** the `today` literal route, the `?study_type=` / `?mode=` query
+> parsing (WP-SR1b), the 8-variant empty matrix (WP-SR1b), and the real session/result screens —
+> `/library/study/session/:sessionId` is a **placeholder shell** (WP-SR2..SR5).
 
 ## Behavior tree
 
@@ -187,7 +188,7 @@ When scope is empty, this screen renders the appropriate empty state from
 |----------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `entryType` (path param)   | URL    | one of `deck`, `folder`, `today`, `tag`. `today` is a literal route segment with no `entryRefId`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `entryRefId` (path param)  | URL    | required when entryType ∈ (`deck`, `folder`, `tag`); absent for `today`. For `tag`: sorted lowercased comma-joined names.                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `study_type` (query param) | URL    | optional; values are `StudyType.storageValue` (`new` / `srs_review`). When absent the entry default applies (`deck`/`folder` → `new`, `today` → `srs_review`). Parsing/honoring this param is Current; the Folder Detail and Flashcard List **Today** CTAs that would set it are Future (those screens have no study CTAs yet). Parsed in `study_entry_screen.dart` (`_resolveStudyType`); routed via `RoutePaths.studyTypeQueryParam`. An unrecognized value fails fast (`ArgumentError`) and surfaces through the gate's existing error handling. |
+| `study_type` (query param) | URL    | optional; values are `StudyType.storageValue` (`new` / `srs_review`). When absent the entry default applies (`deck`/`folder` → `new`, `today` → `srs_review`). **WP-SR1b (not yet parsed):** WP-SR1a applies only the entry default; honoring the query override (via `RoutePaths.studyTypeQueryParam`, the key constant which already exists) + the Folder/Flashcard **Today** CTAs that would set it remain Future. |
 | `mode` (query param)       | URL    | optional single `StudyMode.storageValue`; selects a single-mode flow.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ## Data to load
@@ -315,22 +316,20 @@ When scope is empty, this screen renders the appropriate empty state from
 **Contracts:** `docs/contracts/usecase-contracts/study.md` §ResolveScopeUseCase,
 §FindResumableSessionUseCase, §CreateSessionUseCase
 
-**Code paths:**
+**Code paths (WP-SR1a):**
 
-- Screen: `lib/presentation/features/study/screens/study_entry_screen.dart` +
-  `lib/presentation/features/study/providers/study_entry_notifier.dart`
-  (`studyEntryProvider`), wired through
-  `lib/presentation/features/study/routes/study_routes.dart`. There is no
-  `study_entry_gate_screen.dart`.
-- Current V1 behavior: parse and validate route params, show preparing/error
-  states, and render an unsupported-gap empty state for valid routes until the
-  session lifecycle layer lands. No session creation, resume dialog, or
-  start-over dialog is wired in code yet.
-- Target session lifecycle remains specified in
-  `docs/business/study/study-flow.md` and
-  `docs/business/resume/resume-session.md`.
-- Route constants: `lib/app/router/route_names.dart` → `RouteNames.studyEntry`,
-  `RouteNames.studyToday`.
+- Screen: `lib/presentation/features/study/screens/study_entry_screen.dart`, driven by
+  `lib/presentation/features/study/controllers/study_entry_controller.dart`
+  (`studyEntryControllerProvider`, family on `StudyScope`) →
+  `study_entry_outcome.dart` (`blocked` / `resumeRequired` / `ready`). Registered via
+  `lib/presentation/features/study/routes/study_routes.dart` (top-level, outside the shell).
+- Session creation + resume + start-over ARE wired: the controller composes
+  `ResolveStudyEntryStartUseCase` + `ResolveEligibleStudyCardsUseCase` +
+  `CreateStudySessionUseCase` (+ `CancelStudySessionUseCase` for start-over).
+- Route constants: `RouteNames.studyEntry` / `RouteNames.studySession`;
+  `RoutePaths.studyEntry` (`/library/study/:entryType/:entryRefId`) /
+  `RoutePaths.studySession` (`/library/study/session/:sessionId`). The `today` route +
+  `study_type` query helper are WP-SR1b.
 
 **Related wireframes:**
 
