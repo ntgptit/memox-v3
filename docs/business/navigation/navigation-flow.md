@@ -128,14 +128,17 @@ trail docked directly under the app bar, via the shared `MxBreadcrumb`
 (`lib/presentation/shared/widgets/navigation/mx_breadcrumb.dart`) built by `buildLibraryBreadcrumb`
 (`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`).
 
-- Order: `Library › …ancestor folders › {current leaf}`. Chevron (`›`) separators; the trail scrolls
-  horizontally on deep paths; the last crumb is the current location (bold, non-tappable).
+- Order: `🏠 Root › …ancestor folders › {current leaf}`. The first crumb is the **Root** anchor (home
+  glyph `Icons.home_outlined` + `libraryRootLabel`) — the same marker the Library Overview root anchor
+  shows, so the hierarchy reads consistently from the top (it is NOT labelled "Library"). Chevron
+  (`›`) separators; the trail scrolls horizontally on deep paths; the last crumb is the current
+  location (bold, non-tappable).
 - Folder detail: the deepest folder (also the app-bar title) is the current leaf; the `breadcrumb`
   read-model list (ancestors **including** the current folder) supplies the chain.
 - Flashcard list: the deck is the current leaf, so **every** folder crumb is a tappable ancestor and
   the deck name is appended as the current leaf.
-- Navigation: `Library` taps to the branch root (`goNamed(RouteNames.library)`); each ancestor folder
-  pushes its detail (`pushNamed(RouteNames.folderDetail, …)`).
+- Navigation: the `Root` crumb taps to the branch root (`goNamed(RouteNames.library)`); each ancestor
+  folder pushes its detail (`pushNamed(RouteNames.folderDetail, …)`).
 - Hidden in search mode and until the screen's read model has loaded.
 
 ## Push vs Go rules

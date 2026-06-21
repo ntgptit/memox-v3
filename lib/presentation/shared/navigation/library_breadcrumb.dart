@@ -1,17 +1,19 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/entities/folder.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 
-/// Builds the `Library › Folder › … › leaf` trail for a nested Library screen
+/// Builds the `🏠 Root › Folder › … › leaf` trail for a nested Library screen
 /// (Folder detail, Flashcard list) as a list of [MxBreadcrumbItem]s.
 ///
 /// One owner so every nested Library screen shows the same quiet trail and the
 /// same navigation semantics (design redesign — breadcrumb docks under the app
-/// bar). The first crumb is always **Library** (taps back to the branch root via
-/// `goNamed`); each ancestor folder taps into its own detail (`pushNamed`).
+/// bar). The first crumb is always the **Root** anchor (home glyph + [rootLabel];
+/// taps back to the branch root via `goNamed`) — the same marker the Library
+/// Overview root anchor shows, so the hierarchy reads consistently from the top.
+/// Each ancestor folder taps into its own detail (`pushNamed`).
 ///
 /// Leaf handling:
 /// - When [currentLeafLabel] is `null` (Folder detail), the last item in
@@ -22,13 +24,14 @@ import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart'
 ///   the deck name is appended as the non-tappable current crumb.
 List<MxBreadcrumbItem> buildLibraryBreadcrumb(
   BuildContext context, {
-  required String libraryLabel,
+  required String rootLabel,
   required List<Folder> folders,
   String? currentLeafLabel,
 }) {
   final List<MxBreadcrumbItem> items = <MxBreadcrumbItem>[
     MxBreadcrumbItem(
-      label: libraryLabel,
+      label: rootLabel,
+      icon: Icons.home_outlined,
       onTap: () => context.goNamed(RouteNames.library),
     ),
   ];

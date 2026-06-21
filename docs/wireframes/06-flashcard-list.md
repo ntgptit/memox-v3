@@ -71,7 +71,7 @@ verified by tests (`test/presentation/features/flashcards/flashcard_list_test.da
   emptied parent folder to `unlocked`, then pops back).
 - FAB + empty-state CTAs: **Add flashcard** → `flashcardCreate` route; **Import** →
   `deckImport` route.
-- Breadcrumb: `Library / {folder chain}` + subtitle `{n} cards · {target language}`.
+- Breadcrumb: `🏠 Root / {folder chain}` + subtitle `{n} cards · {target language}`.
 - **Count header (mock 06 loaded/reorder):** the list opens with a localized
   `{n} CARDS` header (`flashcard_list_count_header`); reorder mode shows
   `{n} CARDS · DRAG TO REORDER`. The mock's `Due first` sort control is **Future**
@@ -266,7 +266,7 @@ not treat a filename here as proof the widget exists; check `lib/presentation/fe
 | --- | --- | --- | --- |
 | 1 | App bar | (inline in screen scaffold) | Title = deck name. Back. Search (in-deck). Overflow ⋮. |
 | 2 | Header section | `flashcard_header_section.dart` | Renders title + overflow + search. Replaces app bar inline when needed (responsive). |
-| 3 | Breadcrumb | shared `MxBreadcrumb` + `buildLibraryBreadcrumb` (`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`), docked under the app bar | **Current (design redesign).** `Library › {folderPath} › {deckName}` with chevron (`›`) separators; every folder crumb is a tappable ancestor (pushes its detail), `Library` taps to the branch root, the deck name is the bold non-tappable current leaf. Scrolls horizontally on deep paths; hidden in search mode and until loaded. (The card-count overline / target-language subtitle is a separate element, not part of this trail.) |
+| 3 | Breadcrumb | shared `MxBreadcrumb` + `buildLibraryBreadcrumb` (`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`), docked under the app bar | **Current (design redesign).** `🏠 Root › {folderPath} › {deckName}` with chevron (`›`) separators; the first crumb is the **Root** anchor (home glyph + `libraryRootLabel`, not "Library"); every folder crumb is a tappable ancestor (pushes its detail), the `Root` crumb taps to the branch root, the deck name is the bold non-tappable current leaf. Scrolls horizontally on deep paths; hidden in search mode and until loaded. (The card-count overline / target-language subtitle is a separate element, not part of this trail.) |
 | 4 | Deck study-entry section | `flashcard_study_entry_section.dart` (target) | **Future — not built.** Target: Resume banner + deck-level study card with Today (`study_type=srs_review`) and Study-deck (default new study) CTAs. Today hidden at 0 due; whole section hidden when no cards and no resume. Renders above the deck summary. Never starts a session directly. |
 | 5 | Deck summary | `flashcard_deck_summary_section.dart` | Total cards · due-today badge · mastery progress chip. Single row above the study CTAs. |
 | 6 | Study modes | `flashcard_study_modes_section.dart` | Per-mode study tiles (Review / Match / Guess / Recall / Fill) + the Mix card; all route through the Study Entry Gate (`entry_type=deck`, default new study). Disabled on empty deck. The deck-level "Study deck" / "Today" CTA pair lives in the study-entry section (order 4). |

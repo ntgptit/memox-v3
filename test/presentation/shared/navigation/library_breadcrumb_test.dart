@@ -42,7 +42,7 @@ void main() {
         await _withContext(tester, (BuildContext context) {
           items = buildLibraryBreadcrumb(
             context,
-            libraryLabel: 'Library',
+            rootLabel: 'Root',
             folders: <Folder>[
               _folder('a', 'Languages'),
               _folder('b', 'Korean'),
@@ -51,11 +51,14 @@ void main() {
         });
 
         expect(items.map((MxBreadcrumbItem i) => i.label).toList(), <String>[
-          'Library',
+          'Root',
           'Languages',
           'Korean',
         ]);
-        // Library + each ancestor are tappable; the current folder (last) is not.
+        // The root crumb carries the home glyph; ancestors carry none.
+        expect(items[0].icon, Icons.home_outlined);
+        expect(items[1].icon, isNull);
+        // Root + each ancestor are tappable; the current folder (last) is not.
         expect(items[0].onTap, isNotNull);
         expect(items[1].onTap, isNotNull);
         expect(items.last.onTap, isNull);
@@ -69,14 +72,14 @@ void main() {
         await _withContext(tester, (BuildContext context) {
           items = buildLibraryBreadcrumb(
             context,
-            libraryLabel: 'Library',
+            rootLabel: 'Root',
             folders: <Folder>[_folder('a', 'Languages')],
             currentLeafLabel: 'N5 Vocab',
           );
         });
 
         expect(items.map((MxBreadcrumbItem i) => i.label).toList(), <String>[
-          'Library',
+          'Root',
           'Languages',
           'N5 Vocab',
         ]);
@@ -88,20 +91,21 @@ void main() {
       },
     );
 
-    testWidgets('top-level folder: trail is Library › currentFolder', (
+    testWidgets('top-level folder: trail is Root › currentFolder', (
       tester,
     ) async {
       late List<MxBreadcrumbItem> items;
       await _withContext(tester, (BuildContext context) {
         items = buildLibraryBreadcrumb(
           context,
-          libraryLabel: 'Library',
+          rootLabel: 'Root',
           folders: <Folder>[_folder('a', 'Inbox')],
         );
       });
 
       expect(items.length, 2);
-      expect(items[0].onTap, isNotNull); // Library tappable
+      expect(items[0].icon, Icons.home_outlined); // root crumb glyph
+      expect(items[0].onTap, isNotNull); // Root tappable
       expect(items[1].onTap, isNull); // current folder leaf
     });
   });

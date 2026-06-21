@@ -99,7 +99,7 @@ class FlashcardListScreen extends ConsumerWidget {
               child: MxBreadcrumb(
                 items: buildLibraryBreadcrumb(
                   context,
-                  libraryLabel: l10n.libraryTitle,
+                  rootLabel: l10n.libraryRootLabel,
                   folders: detail.breadcrumb,
                   currentLeafLabel: detail.deck.name,
                 ),
