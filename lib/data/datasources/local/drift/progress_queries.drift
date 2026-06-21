@@ -1,0 +1,30 @@
+import 'decks.drift';
+import 'flashcards.drift';
+
+-- Progress due-summary aggregate (WBS 7.1.1). Counts due cards per deck,
+-- EXCLUDING suspended and currently-buried cards, mirroring the study-queue
+-- exclusion (WBS 4.11.1, study_scope_queries.drift) and the eligibility counts
+-- (WBS 4.1.1) so every "due" surface agrees:
+--   due            : due_at IS NOT NULL AND due_at <= :now
+--   suspended      : COALESCE(is_suspended, 0) = 1            → excluded
+--   currently buried: buried_until IS NOT NULL AND buried_until > :now → excluded
+-- A missing flashcard_progress row (LEFT JOIN → NULLs) is a NEW card with no
+-- due_at, so it is never counted as due. The INNER JOIN on flashcards + the WHERE
+-- due filter mean only decks with at least one due card form a group, so every
+-- returned row already has due_count >= 1 (no HAVING needed). The global total is
+-- the sum of the per-deck counts (every flashcard belongs to exactly one deck via
+-- a NOT NULL FK).
+
+dueCountsByDeck(:now AS INT):
+SELECT
+  d.id AS deck_id,
+  d.name AS deck_name,
+  COUNT(fc.id) AS due_count
+FROM decks d
+JOIN flashcards fc ON fc.deck_id = d.id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+  AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+GROUP BY d.id, d.name
+ORDER BY due_count DESC, d.name ASC, d.id ASC;

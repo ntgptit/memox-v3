@@ -23,7 +23,7 @@ applies_to: Progress Overview, Card history, and Daily engagement behavior branc
 | P5 | Display overview | Week range with study data | Render cards-studied total + bar chart, accuracy + delta + sparkline, box distribution, streak, card states, footer | C0+C1 | TBD |
 | P6 | Switch range tab | Tap Month (or All time) | Reload the overview for the selected range and update range-dependent captions/footer | C1 | TBD |
 | P7 | Display overview | All-time range selected | Show whole-history totals; hide the bar chart, previous-range delta, and sparkline (no day buckets) | C1 | TBD |
-| P8 | Load due summary | Progress data present or empty | Return zero-safe global due counts plus deterministic per-deck rows; exclude suspended, buried, and future-due cards | C1 | TBD |
+| P8 | Load due summary | Progress data present or empty | Return zero-safe global due counts plus deterministic per-deck rows; exclude suspended, buried, and future-due cards | C1 | `test/data/repositories/progress_repository_impl_test.dart` |
 | P9 | Load box distribution | Invalid or valid box rows | Fail fast on invalid `box_number`; otherwise return boxes 1..8 with deterministic zero-fill | C1 | TBD |
 | P10 | Load study statistics | Sessions and attempts present or empty | Count completed sessions, all attempts, correct/forgot outcomes, and last studied timestamp without mutation | C1 | TBD |
 | P11 | Load combined progress read model | Progress screen backend requested | Compose due summary, box distribution, and study statistics in one call; empty DB returns safe zero values | C1 | TBD |

@@ -52,6 +52,27 @@ Future<Either<Failure, FlashcardProgress>> resetProgress(FlashcardId id);
 Future<Either<Failure, int>> bulkResetProgress(List<FlashcardId> ids);
 ```
 
+## Implemented (WBS 7.1.1 — due-summary slice)
+
+The first Progress slice ships a focused `ProgressRepository`
+(`lib/domain/repositories/progress_repository.dart`) exposing only:
+
+```dart
+Future<Result<DueSummary>> loadDueSummary({required int now});
+```
+
+(the project `Result<T>` record, not `Either` — see the header parity note). It
+returns `DueSummary` (`lib/domain/models/due_summary.dart`): the global
+`totalDueCount` plus per-deck `DeckDueCount` rows (only decks with due cards). A
+card is "due" when `due_at IS NOT NULL AND due_at <= now`, with suspended and
+currently-buried cards excluded — the **same predicate** as the study queue (WBS
+4.11.1) and eligibility counts (WBS 4.1.1) so every due surface agrees. The
+global total is the sum of the per-deck counts (every flashcard has exactly one
+deck). Query: `lib/data/datasources/local/drift/progress_queries.drift`
+(`dueCountsByDeck`); DAO `ProgressDao`; use case `LoadDueSummaryUseCase`. The
+remaining methods below are the target surface for later Progress slices
+(WBS 7.2.x+).
+
 ## Transaction requirements
 
 | Operation                        | Tables touched                                                                                                                                     |
