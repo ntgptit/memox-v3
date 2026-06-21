@@ -85,9 +85,21 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
       approved reorder-state mock + an `MxReorderableList` design decision.
 - [ ] WP-FD7 — Folder (subfolder) reorder FE (WBS 2.5.2) — **DEFER (spec-unclear: no UI design).**
       Same blocker as WP-FD6.
-- [ ] WP-FD8 — Folder detail new-vs-due study split (WBS 3.2.3) — eligible under vertical-slice
-      rule **but large** (migration v11 + `new_count` read model + data fix + folder summary CTAs);
-      sequence AFTER FD5a/FD5b. Tentatively a later slice; re-audit when reached.
+- [ ] WP-FD8 — Folder detail new-vs-due study split (WBS 3.2.3) — **DEFER (mock-doc-conflict).**
+      Audited against `shots/04-folder-detail--decks--{light,dark}.png` (2026-06-21): the rebuilt
+      calm-app mock shows a **Decks / Cards / Due** stats card and deck rows with `{n} cards · last
+      {time} ago` + due badge — **no `{n} new` count, no new badge, no Study-new / Review-due CTAs.**
+      3.2.3's new-vs-due UI is the prior iteration the rebuild dropped (same pattern as the Library
+      mastery/newCount enrichments). The `FolderSummary.newCount` field already shipped (WP-L6b) but
+      stays read-model-only. Building the badges/CTAs = inventing UI not in the mock.
+- [ ] **WP-FD9 — Deck-row "last studied" line (new gap)** — eligible vertical slice. The mock deck
+      rows show `{n} cards · last {time} ago`, but `deck_tile.dart` renders only `{n} cards` →
+      the last-studied timestamp is a **missing visible mock element**. Build: extend
+      `folderDeckSummaries` with `last_studied_at` = `MAX(study_session_items.answered_at)` over the
+      deck's cards; `DeckSummary.lastStudiedAt`; a localized relative-time formatter (no helper
+      exists yet — needs ARB plural keys for minutes/hours/days/weeks) + ARB; `deck_tile` shows
+      `{n} cards · {rel}` when non-null. BE query + helper + tile tests + golden (fixed `now`).
+      **NEXT.**
 
 ## Notes
 

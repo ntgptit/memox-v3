@@ -35,3 +35,10 @@ Verified the Library folder tile against the actual kit mock `shots/03-library-o
 - 2026-06-21 · (read-model) · Library overview · mock-doc-conflict · Due-summary card + `dueToday` total (WP-L6d/L7) — no due-summary card in kit `03a`.
 
 Lesson: check the mock IMAGE before building enrichment BE/FE. Object 1 (Library) is DONE per the current mock.
+
+## MOCK-PARITY AUDIT 2026-06-21 — Folder detail new-vs-due (3.2.3) not in mock
+
+Audited `shots/04-folder-detail--decks--{light,dark}.png`: the rebuilt mock shows a Decks/Cards/Due stats card + deck rows (`{n} cards · last {time} ago` + due badge). No `{n} new` count, new badge, or Study-new/Review-due CTAs.
+- 2026-06-21 · 3.2.3 · Folder detail · mock-doc-conflict · New-vs-due split UI (WP-FD8) — new badges + Study-new/Review-due CTAs are prior-iteration design the rebuild dropped; `FolderSummary.newCount` shipped (WP-L6b) but stays read-model-only. Building the badges/CTAs = inventing UI not in the mock.
+
+NOTE: the audit also found a real gap (NOT deferred) — deck rows show `· last {time} ago` in the mock but `deck_tile.dart` omits it → tracked as WP-FD9 (eligible vertical slice, build next) in `loop-plan/folder-detail.md`.
