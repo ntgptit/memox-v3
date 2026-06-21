@@ -9,6 +9,9 @@ typedef DeckDueCountRow = ({String deckId, String deckName, int dueCount});
 /// One box row from the box-distribution query (WBS 7.2.1).
 typedef BoxCountRow = ({int boxNumber, int cardCount});
 
+/// The attempt rollup from the study-statistics query (WBS 7.3.1).
+typedef AttemptStatsRow = ({int total, int forgot, int? lastStudiedAt});
+
 /// Thin Drift accessor for the progress due-summary query (WBS 7.1.1).
 ///
 /// No business logic here (`docs/database/drift-guide.md`): runs the single
@@ -39,5 +42,16 @@ class ProgressDao extends DatabaseAccessor<AppDatabase>
       for (final BoxDistributionResult row in rows)
         (boxNumber: row.boxNumber, cardCount: row.cardCount),
     ];
+  }
+
+  /// Count of `completed` study sessions.
+  Future<int> completedSessions() => completedSessionCount().getSingle();
+
+  /// Attempt rollup: total, forgot count, and most recent attempt time
+  /// (`last_studied_at` is the latest `attempted_at`, or null when none).
+  Future<AttemptStatsRow> attemptStats() async {
+    final AttemptStatisticsResult row = await attemptStatistics().getSingle();
+    final int? last = await lastAttemptTime().getSingleOrNull();
+    return (total: row.total, forgot: row.forgot, lastStudiedAt: last);
   }
 }

@@ -7,6 +7,7 @@ import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/data/repositories/progress_repository_impl.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/study_statistics.dart';
 
 void main() {
   // ProgressRepositoryImpl.loadDueSummary (WBS 7.1.1): aggregate due-card counts
@@ -260,6 +261,146 @@ void main() {
 
       expect(result.data, isNull);
       expect(result.failure, isA<IntegrityFailure>());
+    });
+  });
+
+  // ProgressRepositoryImpl.loadStudyStatistics (WBS 7.3.1): completed sessions,
+  // total attempts, correct/forgot outcomes, last-studied timestamp — pure read
+  // (decision row P10).
+  group('ProgressRepositoryImpl.loadStudyStatistics', () {
+    late AppDatabase db;
+    late ProgressRepositoryImpl repository;
+    const int now = 1000 * 60 * 60 * 24 * 100;
+
+    setUp(() {
+      db = AppDatabase.forExecutor(NativeDatabase.memory());
+      repository = ProgressRepositoryImpl(dao: ProgressDao(db));
+    });
+    tearDown(() => db.close());
+
+    Future<void> insertSession(String id, String status) => db
+        .into(db.studySessions)
+        .insert(
+          StudySessionsCompanion.insert(
+            id: id,
+            entryType: 'deck',
+            studyType: 'srs_review',
+            status: status,
+            startedAt: now,
+            updatedAt: now,
+          ),
+        );
+
+    Future<void> seed() async {
+      await db
+          .into(db.folders)
+          .insert(
+            FoldersCompanion.insert(
+              id: 'f1',
+              name: 'f1',
+              contentMode: 'decks',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.decks)
+          .insert(
+            DecksCompanion.insert(
+              id: 'd1',
+              folderId: 'f1',
+              name: 'd1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await db
+          .into(db.flashcards)
+          .insert(
+            FlashcardsCompanion.insert(
+              id: 'c1',
+              deckId: 'd1',
+              front: 'c1',
+              back: 'c1',
+              sortOrder: 0,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+    }
+
+    Future<void> insertItem(String id, String sessionId) => db
+        .into(db.studySessionItems)
+        .insert(
+          StudySessionItemsCompanion.insert(
+            id: id,
+            sessionId: sessionId,
+            flashcardId: 'c1',
+            sortOrder: 0,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
+
+    Future<void> insertAttempt(
+      String id,
+      String itemId,
+      String result,
+      int attemptedAt,
+    ) => db
+        .into(db.studyAttempts)
+        .insert(
+          StudyAttemptsCompanion.insert(
+            id: id,
+            sessionItemId: itemId,
+            result: result,
+            studyMode: 'review',
+            attemptedAt: attemptedAt,
+          ),
+        );
+
+    test('counts completed sessions, attempts, correct/forgot, last', () async {
+      await seed();
+      await insertSession('s1', 'completed');
+      await insertSession('s2', 'completed');
+      await insertSession('s3', 'in_progress'); // not counted
+      await insertItem('i1', 's1');
+      await insertItem('i2', 's2');
+      await insertAttempt('a1', 'i1', 'perfect', now + 1);
+      await insertAttempt('a2', 'i1', 'forgot', now + 2);
+      await insertAttempt('a3', 'i2', 'recovered', now + 5);
+      // initial_passed (compatibility token) counts as correct, not a lapse.
+      await insertAttempt('a4', 'i2', 'initial_passed', now + 3);
+
+      final result = await repository.loadStudyStatistics();
+
+      expect(result.failure, isNull);
+      final StudyStatistics stats = result.data!;
+      expect(stats.completedSessions, 2);
+      expect(stats.totalAttempts, 4);
+      expect(stats.forgotCount, 1);
+      expect(
+        stats.correctCount,
+        3,
+        reason: 'perfect + recovered + initial_passed',
+      );
+      expect(stats.lastStudiedAt, now + 5);
+      expect(stats.hasActivity, isTrue);
+    });
+
+    test('empty db → zero-safe stats with null last-studied', () async {
+      final result = await repository.loadStudyStatistics();
+
+      expect(result.failure, isNull);
+      final StudyStatistics stats = result.data!;
+      expect(stats.completedSessions, 0);
+      expect(stats.totalAttempts, 0);
+      expect(stats.correctCount, 0);
+      expect(stats.forgotCount, 0);
+      expect(stats.lastStudiedAt, isNull);
+      expect(stats.hasActivity, isFalse);
     });
   });
 }

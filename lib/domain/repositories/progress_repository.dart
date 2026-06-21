@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/study_statistics.dart';
 
 /// Read port for SRS progress aggregates (WBS 7.1.1 slice).
 ///
@@ -23,4 +24,10 @@ abstract interface class ProgressRepository {
   /// (`docs/decision-tables/progress-history.md` P9); a read error maps to a
   /// `StorageFailure`.
   Future<Result<BoxDistribution>> loadBoxDistribution();
+
+  /// Session/attempt-based study statistics (WBS 7.3.1): completed-session count,
+  /// total attempts, correct/forgot outcomes, and the last-studied timestamp — a
+  /// pure read, no mutation (`docs/decision-tables/progress-history.md` P10). A
+  /// read error maps to a `StorageFailure`.
+  Future<Result<StudyStatistics>> loadStudyStatistics();
 }

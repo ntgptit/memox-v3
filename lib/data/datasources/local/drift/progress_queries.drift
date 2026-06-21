@@ -1,5 +1,6 @@
 import 'decks.drift';
 import 'flashcards.drift';
+import 'study_tables.drift';
 
 -- Progress due-summary aggregate (WBS 7.1.1). Counts due cards per deck,
 -- EXCLUDING suspended and currently-buried cards, mirroring the study-queue
@@ -39,3 +40,22 @@ SELECT box_number, COUNT(*) AS card_count
 FROM flashcard_progress
 GROUP BY box_number
 ORDER BY box_number ASC;
+
+-- Study statistics (WBS 7.3.1; decision row P10). Pure read aggregates, no
+-- mutation. Completed-session count and the attempt rollup are separate reads.
+completedSessionCount:
+SELECT COUNT(*) AS c FROM study_sessions WHERE status = 'completed';
+
+-- total attempts, forgot (lapse) outcomes, and the most recent attempt time.
+-- correct = total - forgot is derived in the repository. last_studied_at is
+-- NULL when no attempts exist (MAX over an empty set).
+attemptStatistics:
+SELECT
+  COUNT(*) AS total,
+  COALESCE(SUM(CASE WHEN result = 'forgot' THEN 1 ELSE 0 END), 0) AS forgot
+FROM study_attempts;
+
+-- Most recent attempt time; a direct column select so drift infers `int`. Empty
+-- table → no row → null in the repository.
+lastAttemptTime:
+SELECT attempted_at FROM study_attempts ORDER BY attempted_at DESC LIMIT 1;

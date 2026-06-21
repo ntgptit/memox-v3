@@ -25,7 +25,7 @@ applies_to: Progress Overview, Card history, and Daily engagement behavior branc
 | P7 | Display overview | All-time range selected | Show whole-history totals; hide the bar chart, previous-range delta, and sparkline (no day buckets) | C1 | TBD |
 | P8 | Load due summary | Progress data present or empty | Return zero-safe global due counts plus deterministic per-deck rows; exclude suspended, buried, and future-due cards | C1 | `test/data/repositories/progress_repository_impl_test.dart` |
 | P9 | Load box distribution | Invalid or valid box rows | Fail fast on invalid `box_number`; otherwise return boxes 1..8 with deterministic zero-fill | C1 | `test/data/repositories/progress_repository_impl_test.dart` |
-| P10 | Load study statistics | Sessions and attempts present or empty | Count completed sessions, all attempts, correct/forgot outcomes, and last studied timestamp without mutation | C1 | TBD |
+| P10 | Load study statistics | Sessions and attempts present or empty | Count completed sessions, all attempts, correct/forgot outcomes, and last studied timestamp without mutation | C1 | `test/data/repositories/progress_repository_impl_test.dart` |
 | P11 | Load combined progress read model | Progress screen backend requested | Compose due summary, box distribution, and study statistics in one call; empty DB returns safe zero values | C1 | TBD |
 | P12 | Display overview | Fewer than 3 distinct study days in a week/month range | Replace the bar chart with an insufficient-data hint plus a "trend appears after 3 days" banner; accuracy still renders from existing attempts | C1 | TBD |
 | P13 | Display overview | Some sections have data, others are empty | Populated sections render fully; each empty section shows its own hint box independently | C1 | TBD |

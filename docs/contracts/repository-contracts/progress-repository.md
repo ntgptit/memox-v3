@@ -81,6 +81,14 @@ remaining methods below are the target surface for later Progress slices
 persisted `box_number` outside 1..8 (a data-invariant violation, not user input —
 decision row P9). Use case `LoadBoxDistributionUseCase`.
 
+**WBS 7.3.1 (study statistics)** adds
+`Future<Result<StudyStatistics>> loadStudyStatistics()`
+(`lib/domain/models/study_statistics.dart`): completed-session count + attempt
+rollup (`totalAttempts`, `forgotCount`, `correctCount = total − forgot`,
+`lastStudiedAt`) — a pure read, no mutation (decision row P10). Queries
+`completedSessionCount` / `attemptStatistics` / `lastAttemptTime`; use case
+`LoadStudyStatisticsUseCase`.
+
 ## Transaction requirements
 
 | Operation                        | Tables touched                                                                                                                                     |

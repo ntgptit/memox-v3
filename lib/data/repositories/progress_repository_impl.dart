@@ -3,6 +3,7 @@ import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/progress_dao.dart';
 import 'package:memox/domain/models/box_distribution.dart';
 import 'package:memox/domain/models/due_summary.dart';
+import 'package:memox/domain/models/study_statistics.dart';
 import 'package:memox/domain/repositories/progress_repository.dart';
 import 'package:memox/domain/srs/srs_box.dart';
 
@@ -77,6 +78,35 @@ class ProgressRepositoryImpl implements ProgressRepository {
         failure: Failure.storage(
           operation: StorageOp.read,
           table: 'flashcard_progress',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<StudyStatistics>> loadStudyStatistics() async {
+    try {
+      final int completed = await _dao.completedSessions();
+      final AttemptStatsRow attempts = await _dao.attemptStats();
+      return (
+        failure: null,
+        data: StudyStatistics(
+          completedSessions: completed,
+          totalAttempts: attempts.total,
+          // correct = every non-forgot outcome (perfect / recovered / the
+          // compatibility-only initial_passed); only `forgot` is a lapse.
+          correctCount: attempts.total - attempts.forgot,
+          forgotCount: attempts.forgot,
+          lastStudiedAt: attempts.lastStudiedAt,
+        ),
+      );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_attempts',
           cause: error.toString(),
         ),
         data: null,
