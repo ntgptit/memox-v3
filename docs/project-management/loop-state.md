@@ -7,10 +7,11 @@ last_updated: 2026-06-22
 
 ## Cursor
 
-- **Active object:** 3 — Sub-folder (nested) (RE-AUDIT-PENDING; advance here next iteration).
-- **Current work-package:** none in flight (object 2 DONE).
+- **Active object:** 4 — Deck detail (RE-AUDIT-PENDING; advance here next iteration).
+- **Current work-package:** none in flight (objects 1–3 DONE).
 - **Branch:** `feat/loop-library`; commits `5c16d05` (WP-L10), `ecbd6cd` (WP-FD10), `db3d948` (WP-FD11).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FD11 tree.
+- **Last verify:** PASS — object-3 re-audit (folder_detail + breadcrumb tests, 21 pass) needed no
+  code change; object 3 evidence-confirmed DONE (docs-only commit).
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -35,17 +36,18 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 |---|---|---|
 | 1 | Library overview | **DONE (re-audit-confirmed 2026-06-22)** — code+test+golden verified; re-audit found the Search state diverged (app-bar swap vs kit bottom dock) → fixed in WP-L10 (`LibrarySearchDock`); ui-parity PASS. |
 | 2 | Folder detail | **DONE (re-audit-confirmed 2026-06-22)** — code+25 tests+goldens verified; search-state app-bar-swap → bottom dock (WP-FD10); move-sheet golden gap closed (WP-FD11); ui-parity PASS. DEFERred: reorder (no mock), new-vs-due (not in mock), picker restyle (bundled). |
-| 3 | Sub-folder (nested) | RE-AUDIT-PENDING (next) |
-| 4 | Deck detail | RE-AUDIT-PENDING |
+| 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
+| 4 | Deck detail | RE-AUDIT-PENDING (next) |
 | 5 | Flashcard (list + editor) | RE-AUDIT-PENDING |
 | 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
 
 ## Next action
 
-Re-audit object 3 (Sub-folder / nested) — read `loop-plan/sub-folder-nested.md`, the nested rows of
-`specs/04-folder-detail.md` (+ shots), audit BE+FE via `Explore`. Object 3 shares the Folder Detail
-screen (`/library/folder/:id` with a parent) — the distinguishing surface is the multi-level
-ancestry **breadcrumb** + nested create/move semantics. Confirm by evidence (the nested breadcrumb
-test already exists in `folder_detail_test.dart`); run `tool/verify` + `ui-parity-checker` on the
-nested state; build the first eligible gap; advance only when object 3 is evidence-confirmed DONE.
+Re-audit object 4 (Deck detail) — read `loop-plan/deck-detail.md`, `specs/06-*.md` (8 states; deck
+actions also host in `04`) + shots, audit BE+FE via `Explore`. The deck-detail surface is the
+flashcard list screen (`lib/presentation/features/decks/**`) — header/stats, card rows with SRS
+state, deck overflow (rename/move/delete/reorder), 8 states. Run `tool/verify` on deck/flashcard
+tests + `ui-parity-checker` (golden↔`06` shots). Watch for the same app-bar-swap-vs-dock search
+class already fixed in objects 1–2. Confirm or find gaps; build the first eligible gap; advance only
+when object 4 is evidence-confirmed DONE.
