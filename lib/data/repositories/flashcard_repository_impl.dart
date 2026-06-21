@@ -9,9 +9,11 @@ import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/flashcard_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
+import 'package:memox/data/repositories/flashcard_export_writer.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_csv_export.dart';
 import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
@@ -37,15 +39,18 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     required FolderDao folderDao,
     IdGenerator? idGenerator,
     int Function()? nowMs,
+    FlashcardExportWriter exportWriter = const FlashcardExportWriter(),
   }) : _dao = dao,
        _deckDao = deckDao,
        _folderDao = folderDao,
        _idGenerator = idGenerator ?? IdGenerator(),
-       _nowMs = nowMs ?? _defaultNowMs;
+       _nowMs = nowMs ?? _defaultNowMs,
+       _exportWriter = exportWriter;
 
   final FlashcardDao _dao;
   final DeckDao _deckDao;
   final FolderDao _folderDao;
+  final FlashcardExportWriter _exportWriter;
   final IdGenerator _idGenerator;
   final int Function() _nowMs;
 
@@ -439,6 +444,38 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   }
 
   // ---- Result + failure builders ----
+
+  @override
+  Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId}) async {
+    try {
+      final DeckRow? deck = await _deckDao.findDeckById(deckId);
+      if (deck == null) {
+        return _fail(const Failure.notFound(entity: 'deck'));
+      }
+      final List<FlashcardRow> cards = await _dao.flashcardsInDeck(deckId);
+      final List<({String front, String back})> rows =
+          <({String front, String back})>[
+            for (final FlashcardRow card in cards)
+              (front: card.front, back: card.back),
+          ];
+      final String csv = _exportWriter.buildCsv(rows);
+      final String baseName = _exportWriter.sanitizeFileName(
+        deck.name,
+        fallbackId: deck.id,
+      );
+      return _ok(
+        DeckCsvExport(
+          deckId: deck.id,
+          deckName: deck.name,
+          fileName: '$baseName.csv',
+          csvText: csv,
+          exportedRowCount: rows.length,
+        ),
+      );
+    } catch (error) {
+      return _fail(_storageRead(error));
+    }
+  }
 
   Result<T> _ok<T>(T data) => (failure: null, data: data);
 

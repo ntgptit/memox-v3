@@ -1,5 +1,6 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/deck_csv_export.dart';
 import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/content_sort_mode.dart';
@@ -110,4 +111,11 @@ abstract interface class FlashcardRepository {
     required String back,
     FlashcardId? excludeId,
   });
+
+  /// Exports the deck [deckId] as a CSV payload (WBS 8.7.1): the `front,back`
+  /// header plus one row per card in deck order, with a sanitized `{name}.csv`
+  /// file name (`docs/business/export/export.md`). Read-only — never mutates
+  /// data. An empty deck still produces a valid header-only CSV. A missing deck
+  /// is a `NotFoundFailure`; a read error maps to a `StorageFailure`.
+  Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId});
 }

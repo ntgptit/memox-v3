@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-19
+last_updated: 2026-06-21
 source: split from memox-core-decision-table.md
 applies_to: Tags, Bulk operations, and Export behavior branches
 ---
@@ -46,9 +46,9 @@ applies_to: Tags, Bulk operations, and Export behavior branches
 | ID | Event | Condition | Expected | Coverage | Test |
 |----|-------|-----------|----------|----------|------|
 | EX1 | Pick format | User dismisses sheet | No-op, no error | C1 | TBD |
-| EX2 | Export deck | Format=csv | CSV text with `front,back` only + `.csv` filename = sanitized deck name | C0+C1 | TBD |
-| EX3 | Export deck | Format=excel | XLSX bytes + `.xlsx` filename = sanitized deck name | C0+C1 | TBD |
-| EX4 | Export selection | Non-empty IDs | Bytes + filename `flashcards_export.{csv\|xlsx}` | C0+C1 | TBD |
-| EX5 | Export | Always | Columns are `front,back` only (header row first) | C0+C1 | TBD |
-| EX6 | Export delivery | Build success | Hand off via `shareFlashcardExport` → platform share sheet | C0 | TBD |
-| EX7 | Export filename | Deck has unsafe chars | Filename sanitized via `sanitizeFileName` | C1 | TBD |
+| EX2 | Export deck | Format=csv | CSV text with `front,back` only + `.csv` filename = sanitized deck name | C0+C1 | `test/data/repositories/deck_export_test.dart` |
+| EX3 | Export deck | Format=excel | XLSX bytes + `.xlsx` filename = sanitized deck name | C0+C1 | TBD (Excel Future) |
+| EX4 | Export selection | Non-empty IDs | Bytes + filename `flashcards_export.{csv\|xlsx}` | C0+C1 | TBD (selection Future) |
+| EX5 | Export | Always | Columns are `front,back` only (header row first) | C0+C1 | `test/data/repositories/flashcard_export_writer_test.dart` |
+| EX6 | Export delivery | Build success | Hand off via `shareFlashcardExport` → platform share sheet | C0 | TBD (FE 8.7.2) |
+| EX7 | Export filename | Deck has unsafe chars | Filename sanitized via `sanitizeFileName` | C1 | `test/data/repositories/flashcard_export_writer_test.dart` |

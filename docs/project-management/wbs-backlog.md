@@ -89,7 +89,7 @@ preview · 6.7.1 file picker · 6.9.1 structured-text import.
 8.1.1 / 8.1.2 hub shell + hide-fabricated-state · 8.2.2 learning settings wiring ·
 8.3.2 tag management FE wiring · 8.4.1 / 8.4.2 / 8.4.3 TTS service + settings + auto-play ·
 8.5.1 account settings · 8.6.1 / 8.6.2 Google linking + Drive backup/restore ·
-8.7.1 / 8.7.2 deck export CSV BE/FE · 8.9.1 / 8.9.2 bulk operations + selection mode.
+~~8.7.1~~ ✅ **DONE 2026-06-21** (deck export CSV BE) / 8.7.2 deck export FE · 8.9.1 / 8.9.2 bulk operations + selection mode.
 
 ---
 

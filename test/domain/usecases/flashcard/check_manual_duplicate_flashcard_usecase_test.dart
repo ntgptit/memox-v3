@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/models/deck_csv_export.dart';
 import 'package:memox/domain/models/flashcard_duplicate_check_result.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
@@ -72,6 +73,10 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
     required DeckId deckId,
     required List<FlashcardId> orderedIds,
   }) => throw UnimplementedError();
+
+  @override
+  Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId}) =>
+      throw UnimplementedError();
 }
 
 void main() {

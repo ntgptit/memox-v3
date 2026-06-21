@@ -1,13 +1,14 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-21
 applies_to: deck export, flashcard selection export, CSV/Excel formats
 ---
 
 # Export
 
-> **Status: BE V1 partially implemented (verified 2026-06-10).** Deck CSV export is now present in
-> the backend slice; FE share/save wiring remains deferred and still requires approval for
-> `share_plus`.
+> **Status: BE V1 implemented (WBS 8.7.1, 2026-06-21 — rebuilt after the 2026-06-19 reset).** Deck
+> CSV export is present in the backend slice (`FlashcardRepository.exportDeckCsv` +
+> `FlashcardExportWriter` + `ExportDeckCsvUseCase`); FE share/save wiring (8.7.2) remains deferred and
+> still requires approval for `share_plus`. Excel format and selection-scope export are Future.
 >
 > **Priority note (BA review 2026-06-10):** MemoX is local-first with NO working backup path —
 > export CSV is currently the only cheap way for users to get their content out, and the data-loss
@@ -29,7 +30,7 @@ Two export entry points exist:
 
 | Entry | Scope | Source repository |
 | --- | --- | --- |
-| Deck export | All flashcards in one deck | `DeckRepository.exportDeck` |
+| Deck export | All flashcards in one deck | `FlashcardRepository.exportDeckCsv` |
 | Flashcard selection export | Selected flashcard IDs | `FlashcardRepository.exportFlashcards` |
 
 Both produce the same file format. The difference is only the source scope and file name.
@@ -176,5 +177,7 @@ flowchart TD
 
 **Source files to inspect:**
 
-- `lib/data/repositories/flashcard_export_*.dart`
-- `lib/domain/usecases/export/**`
+- `lib/data/repositories/flashcard_export_writer.dart`
+- `lib/data/repositories/flashcard_repository_impl.dart` (`exportDeckCsv`)
+- `lib/domain/usecases/flashcard/export_deck_csv_usecase.dart`
+- `lib/domain/models/deck_csv_export.dart`
