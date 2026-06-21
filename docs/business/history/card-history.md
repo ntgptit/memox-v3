@@ -1,21 +1,23 @@
 ---
-last_updated: 2026-06-13
+last_updated: 2026-06-21
 applies_to: per-card study history view, attempt timeline
-status: Implemented (promoted 2026-06-13; `last_reset_at` shipped v6)
+status: Schema enabler shipped (WBS 7.0.1, schema v7); read query + screen pending (WBS 7.6.x)
 related_decision: docs/project-management/wbs.md (§6 Deferred / Future / Rejected register)
 ---
 
 # Card History
 
-> **Status: Implemented (V1, promoted 2026-06-13).** Per-card history is live: route
-> `/library/deck/:deckId/flashcards/:flashcardId/history`, entered from the flashcard row-action
-> sheet ("View history"). `flashcard_progress.last_reset_at` shipped with schema v6; the timeline,
-> lifetime stats, and the activity feed (attempts + created/edited/reset events) are all implemented.
+> **Status: Schema enabler shipped (WBS 7.0.1, schema v7); feature read/UI pending.**
+> The 2026-06-19 rebuild reset the Drift layer, so the prior "Implemented" claim no longer holds.
+> The card-history **schema** is now in place: `card_events` table (+ `idx_card_events_flashcard`),
+> `flashcard_progress.last_reset_at`, and `study_attempts.duration_ms` shipped with schema v7
+> (WBS 7.0.1). There is **no read logic yet** — the review-history query lands in WBS 7.6.1 and the
+> use cases + screen in WBS 7.6.2 / 7.6.3.
 >
-> **Data dependencies:** `study_attempts.box_before` / `box_after` (v4) and
-> `flashcard_progress.last_reset_at` (v6) all exist and are populated. Suspend/unsuspend from the
-> overflow remains deferred with the Bury/Suspend feature (WBS 4.11.x); the V1 overflow exposes
-> Edit / Reset progress / Delete only.
+> **Data dependencies:** `study_attempts.box_before` / `box_after` (v6) and
+> `flashcard_progress.last_reset_at` + `study_attempts.duration_ms` + `card_events` (v7) all exist;
+> they are not yet populated/read. Suspend/unsuspend from the overflow remains deferred with the
+> Bury/Suspend feature (WBS 4.11.x).
 
 ## V1 decision
 
@@ -201,9 +203,11 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
 
 ## Agent rule
 
-- Card History is Implemented (V1). Keep this doc in sync with
-  `lib/presentation/features/history/**`, `lib/domain/usecases/history/**`,
-  `lib/data/repositories/card_history_repository_impl.dart`, and the wireframe on any change.
+- Card History **schema enabler is shipped** (WBS 7.0.1, schema v7); the feature read/UI is **not
+  yet implemented** (review-history query lands WBS 7.6.1; use cases + screen WBS 7.6.2 / 7.6.3). The
+  target source paths `lib/data/repositories/card_history_repository_impl.dart`,
+  `lib/domain/usecases/history/**`, and `lib/presentation/features/history/**` do **not** exist yet —
+  do not treat them as present. Keep this doc + the wireframe in sync as those slices land.
 - Do NOT delete from `study_attempts` for any reason except cascade from session/item deletion.
 - "Reset progress" updates `flashcard_progress` (box=1/due=now/`last_reset_at`) and appends a
   `card_events` `reset` row. It does not touch `study_attempts`.
@@ -226,9 +230,10 @@ must clarify this so the user understands why box=1 can coexist with reviewCount
 
 **Schema:**
 
-- `docs/database/schema-contract.md` → `study_attempts` with NEW columns `box_before` and
-  `box_after` (both in 6 pending migrations)
-- `flashcard_progress.last_reset_at INTEGER NULL` (in 6 pending migrations)
+- `docs/database/schema-contract.md` → `study_attempts.box_before` / `box_after` (shipped v6,
+  WBS 4.0.1) and `study_attempts.duration_ms` (shipped v7, WBS 7.0.1)
+- `flashcard_progress.last_reset_at INTEGER NULL` (shipped v7, WBS 7.0.1)
+- `card_events` table + `idx_card_events_flashcard` (shipped v7, WBS 7.0.1)
 - Recommended index: `study_attempts(box_after)` (after profiling)
 
 **Decision table:**

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 
 void main() {
-  group('AppDatabase schema (v6)', () {
+  group('AppDatabase schema (v7)', () {
     late AppDatabase db;
 
     setUp(() => db = AppDatabase.forExecutor(NativeDatabase.memory()));
@@ -29,8 +29,8 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 6);
-      expect(db.schemaVersion, 6);
+      expect(AppDatabase.currentSchemaVersion, 7);
+      expect(db.schemaVersion, 7);
     });
 
     Future<void> insertDeckRow(String id, String folderId) async {
@@ -440,6 +440,93 @@ void main() {
       await insertFlashcardRow('c1', 'd1');
       expect(
         () => insertItemRow('orphan', 'no-session', 'c1'),
+        throwsA(isA<Exception>()),
+      );
+    });
+
+    // --- Card-history enabler (v7, WBS 7.0.1) ---
+
+    test(
+      'study_attempts.duration_ms defaults to NULL and round-trips',
+      () async {
+        await db.customStatement('PRAGMA foreign_keys = ON');
+        await insertFolderRow('folder');
+        await insertDeckRow('d1', 'folder');
+        await insertFlashcardRow('c1', 'd1');
+        await insertSessionRow('s1');
+        await insertItemRow('i1', 's1', 'c1');
+        await db
+            .into(db.studyAttempts)
+            .insert(
+              StudyAttemptsCompanion.insert(
+                id: 'a1',
+                sessionItemId: 'i1',
+                result: 'perfect',
+                studyMode: 'review',
+                attemptedAt: now(),
+              ),
+            );
+
+        final StudyAttemptRow attempt = await db
+            .select(db.studyAttempts)
+            .getSingle();
+        expect(attempt.durationMs, isNull, reason: 'v7 default: not measured');
+      },
+    );
+
+    test('flashcard_progress.last_reset_at defaults to NULL', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await db
+          .into(db.flashcardProgress)
+          .insert(FlashcardProgressCompanion.insert(flashcardId: 'c1'));
+
+      final FlashcardProgressRow row = await db
+          .select(db.flashcardProgress)
+          .getSingle();
+      expect(row.lastResetAt, isNull, reason: 'v7 default: never reset');
+    });
+
+    test('card_events round-trips and cascades on card delete', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await insertFolderRow('folder');
+      await insertDeckRow('d1', 'folder');
+      await insertFlashcardRow('c1', 'd1');
+      await db
+          .into(db.cardEvents)
+          .insert(
+            CardEventsCompanion.insert(
+              id: 'e1',
+              flashcardId: 'c1',
+              type: 'reset',
+              occurredAt: now(),
+              detail: const Value<String?>('box reset to 1'),
+            ),
+          );
+
+      final CardEventRow event = await db.select(db.cardEvents).getSingle();
+      expect(event.type, 'reset');
+      expect(event.detail, 'box reset to 1');
+
+      await (db.delete(db.flashcards)..where((t) => t.id.equals('c1'))).go();
+      expect(await db.select(db.cardEvents).get(), isEmpty);
+    });
+
+    test('rejects a card event with a missing flashcard (FK)', () async {
+      await db.customStatement('PRAGMA foreign_keys = ON');
+      await expectLater(
+        db
+            .into(db.cardEvents)
+            .insert(
+              CardEventsCompanion.insert(
+                id: 'orphan',
+                flashcardId: 'does-not-exist',
+                type: 'created',
+                occurredAt: now(),
+              ),
+            ),
         throwsA(isA<Exception>()),
       );
     });

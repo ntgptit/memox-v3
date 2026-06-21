@@ -31,6 +31,10 @@ CREATE INDEX idx_flashcards_deck ON flashcards (deck_id);
 -- timestamp. The queue-exclusion eligibility read logic landed with WBS 4.11.1
 -- (`study_scope_queries.drift`); the status-filter read logic (WBS 2.17.1) and the
 -- `idx_flashcard_progress_eligibility` perf index are still pending.
+-- last_reset_at (NULL until first reset) is set to `now` when the user resets a
+-- card's progress; it positions the Card History reset divider while the
+-- lifetime counters stay cumulative. Shipped v7 with the card-history enabler
+-- (WBS 7.0.1).
 CREATE TABLE flashcard_progress (
   flashcard_id TEXT NOT NULL PRIMARY KEY REFERENCES flashcards (id) ON DELETE CASCADE,
   box_number INTEGER NOT NULL DEFAULT 1,
@@ -38,7 +42,8 @@ CREATE TABLE flashcard_progress (
   review_count INTEGER NOT NULL DEFAULT 0,
   lapse_count INTEGER NOT NULL DEFAULT 0,
   is_suspended BOOLEAN NOT NULL DEFAULT 0,
-  buried_until INTEGER
+  buried_until INTEGER,
+  last_reset_at INTEGER
 ) AS FlashcardProgressRow;
 
 -- Per-card tags (0..N), stored lowercased + trimmed (case-insensitive identity).

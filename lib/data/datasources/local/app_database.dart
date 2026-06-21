@@ -5,6 +5,7 @@ import 'package:memox/data/datasources/local/migrations/v3_add_flashcards.dart';
 import 'package:memox/data/datasources/local/migrations/v4_add_bury_suspend.dart';
 import 'package:memox/data/datasources/local/migrations/v5_add_folder_color_icon.dart';
 import 'package:memox/data/datasources/local/migrations/v6_add_study_tables.dart';
+import 'package:memox/data/datasources/local/migrations/v7_add_card_history.dart';
 
 part 'app_database.g.dart';
 
@@ -30,12 +31,16 @@ part 'app_database.g.dart';
 /// v6 (WBS 4.0.1): added the study-persistence tables `study_sessions`,
 /// `study_session_items`, and `study_attempts` (the FK chain + resume/queue/
 /// attempt indexes; `migrations/v6_add_study_tables.dart`).
+/// v7 (WBS 7.0.1): card-history enabler — added the `card_events` table (+
+/// `idx_card_events_flashcard`), `flashcard_progress.last_reset_at`, and
+/// `study_attempts.duration_ms` (`migrations/v7_add_card_history.dart`).
 @DriftDatabase(
   include: <String>{
     'drift/folders.drift',
     'drift/decks.drift',
     'drift/flashcards.drift',
     'drift/study_tables.drift',
+    'drift/card_events.drift',
   },
 )
 class AppDatabase extends _$AppDatabase {
@@ -48,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 6;
+  static const int currentSchemaVersion = 7;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -80,6 +85,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 6) {
         await migrateV5ToV6(m, this);
+      }
+      if (from < 7) {
+        await migrateV6ToV7(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

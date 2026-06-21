@@ -48,7 +48,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 ### Progress + engagement (the redesign Dashboard's natural pair — `/progress` is still a placeholder)
 | Priority | WBS | Item | Note |
 |---|---|---|---|
-| P1.1 | **7.0.1** | Card-history schema (ENABLER B4) | Blocked — **needs schema approval.** |
+| P1.1 | ~~**7.0.1**~~ | Card-history schema (ENABLER B4) | ✅ **DONE 2026-06-21** (schema v7: `card_events` + `flashcard_progress.last_reset_at` + `study_attempts.duration_ms`). Unblocks 7.6.1 (review-history query). |
 | P1.2 | ~~7.4.1~~ / 7.4.2 / ~~7.1.1~~ / ~~7.2.1~~ / ~~7.3.1~~ | Progress read models + ~~due~~/~~box~~/~~stats~~ queries | ~~7.1.1 Due~~ + ~~7.2.1 Box~~ + ~~7.3.1 Stats~~ + ~~7.4.1 Combined read model~~ ✅ **DONE 2026-06-21** (`loadDueSummary`, `loadBoxDistribution`, `loadStudyStatistics`, `loadProgressReadModel`). 7.4.2 (read-model variants/range) remains. |
 | P1.3 | 7.5.1 / 7.5.2 | **Progress screen FE + states** (redesign **E4**) | Assemble the ready `MxGoalRing` + `MxInsight`; needs E2 below for goal/streak data. |
 | P1.4 | 5.4.1 / 5.4.2 | Engagement persistence + streak/goal (redesign **E2**) | `study_days` + daily-goal — **schema/migration, needs approval.** Feeds Progress goal/streak. |

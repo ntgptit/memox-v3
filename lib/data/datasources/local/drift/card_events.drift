@@ -1,0 +1,19 @@
+import 'flashcards.drift';
+
+-- Per-card lifecycle events for the Card History activity feed (WBS 7.0.1),
+-- merged with `study_attempts` in the timeline. flashcard_id uses ON DELETE
+-- CASCADE so events disappear with their card. `type` is a storage enum token
+-- (`created` / `edited` / `audio_added` / `reset`; see
+-- docs/business/history/card-history.md). occurred_at is epoch ms. detail holds
+-- an optional human-readable note (NULL otherwise). No read logic yet — the
+-- review-history query lands in WBS 7.6.1. See
+-- docs/database/schema-contract.md §card_events.
+CREATE TABLE card_events (
+  id TEXT NOT NULL PRIMARY KEY,
+  flashcard_id TEXT NOT NULL REFERENCES flashcards (id) ON DELETE CASCADE,
+  type TEXT NOT NULL,
+  occurred_at INTEGER NOT NULL,
+  detail TEXT
+) AS CardEventRow;
+
+CREATE INDEX idx_card_events_flashcard ON card_events (flashcard_id);

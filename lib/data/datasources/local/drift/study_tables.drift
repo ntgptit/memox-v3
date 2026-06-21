@@ -53,9 +53,10 @@ CREATE INDEX idx_study_session_items_session_sort
 -- docs/contracts/types-catalog.md §AttemptResult/§StudyMode). box_before /
 -- box_after record the Leitner box transition the attempt produced (default 0 =
 -- "unknown" → history renders "—"). user_input holds the typed answer for
--- recall/fill modes (NULL otherwise). The duration_ms column is target shape
--- for Card History and lands with the card-history enabler (WBS 7.0.1), not
--- this row. See docs/database/schema-contract.md §study_attempts.
+-- recall/fill modes (NULL otherwise). duration_ms is the time-on-card in ms
+-- measured by the review viewmodel (NULL = not measured → Card History shows
+-- "duration not logged"); shipped v7 with the card-history enabler (WBS 7.0.1).
+-- See docs/database/schema-contract.md §study_attempts.
 CREATE TABLE study_attempts (
   id TEXT NOT NULL PRIMARY KEY,
   session_item_id TEXT NOT NULL
@@ -65,7 +66,8 @@ CREATE TABLE study_attempts (
   box_before INTEGER NOT NULL DEFAULT 0,
   box_after INTEGER NOT NULL DEFAULT 0,
   user_input TEXT,
-  attempted_at INTEGER NOT NULL
+  attempted_at INTEGER NOT NULL,
+  duration_ms INTEGER
 ) AS StudyAttemptRow;
 
 CREATE INDEX idx_study_attempts_session_item
