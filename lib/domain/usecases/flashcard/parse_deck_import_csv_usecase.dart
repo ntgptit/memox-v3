@@ -2,6 +2,7 @@ import 'package:memox/core/util/csv_tokenizer.dart';
 import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/models/flashcard_import_preview.dart';
 import 'package:memox/domain/types/import_row_issue_type.dart';
+import 'package:memox/domain/types/import_text_separator.dart';
 
 /// Parses pasted CSV text into a [FlashcardImportPreview] (WBS 6.2.1 + 6.2.2).
 ///
@@ -18,8 +19,11 @@ import 'package:memox/domain/types/import_row_issue_type.dart';
 ///
 /// `lineNumber` is the 1-based index of the record in the source (equals the
 /// physical line for files without embedded newlines; a quoted field spanning
-/// lines counts as one record). The `separator` option (tab/colon/…) lands in
-/// WBS 6.9.1; V1 default is comma. See
+/// lines counts as one record). [separator] selects the column delimiter for
+/// structured-text import (WBS 6.9.1): `comma` (default), `tab`, `colon`,
+/// `slash`, `semicolon`, `pipe`, or `auto` — which infers it by frequency
+/// analysis of the first non-empty line and **fails closed** on a tie (decision
+/// row I8): the preview surfaces a single `malformedRow` issue and no rows. See
 /// `docs/business/flashcard/flashcard-management.md` §Import,
 /// `docs/contracts/usecase-contracts/flashcard.md` §Import.
 class ParseDeckImportCsvUseCase {
@@ -30,11 +34,31 @@ class ParseDeckImportCsvUseCase {
 
   FlashcardImportPreview call({
     required String rawCsv,
-    String separator = ',',
+    ImportTextSeparator separator = ImportTextSeparator.comma,
   }) {
+    if (StringUtils.trimmed(rawCsv).isEmpty) {
+      return FlashcardImportPreview.empty;
+    }
+
+    // Resolve the column delimiter; `auto` returns null on an ambiguous tie.
+    final String? delimiter = _delimiterFor(separator, rawCsv);
+    if (delimiter == null) {
+      return const FlashcardImportPreview(
+        issues: <ImportValidationIssue>[
+          ImportValidationIssue(
+            kind: ImportRowIssueType.malformedRow,
+            lineNumber: 1,
+            message:
+                'Could not determine the column separator (ambiguous); choose '
+                'one explicitly.',
+          ),
+        ],
+      );
+    }
+
     final List<List<String>> records = CsvTokenizer.tokenize(
       rawCsv,
-      fieldDelimiter: separator,
+      fieldDelimiter: delimiter,
     );
 
     final List<FlashcardImportRow> rows = <FlashcardImportRow>[];
@@ -107,6 +131,55 @@ class ParseDeckImportCsvUseCase {
     }
 
     return FlashcardImportPreview(rows: rows, issues: issues);
+  }
+
+  /// The single delimiter character for [separator], or `null` when `auto` can't
+  /// decide (ambiguous tie → fail closed, decision row I8).
+  String? _delimiterFor(ImportTextSeparator separator, String rawCsv) =>
+      switch (separator) {
+        ImportTextSeparator.tab => '\t',
+        ImportTextSeparator.comma => ',',
+        ImportTextSeparator.colon => ':',
+        ImportTextSeparator.slash => '/',
+        ImportTextSeparator.semicolon => ';',
+        ImportTextSeparator.pipe => '|',
+        ImportTextSeparator.auto => _autoDetect(rawCsv),
+      };
+
+  /// Infers the delimiter by frequency analysis of the first non-empty line: the
+  /// candidate with the strictly-highest count wins; no candidate present or a
+  /// tie at the top → `null` (ambiguous; the caller fails closed).
+  String? _autoDetect(String rawCsv) {
+    const List<String> candidates = <String>['\t', ',', ':', '/', ';', '|'];
+    final String firstLine = rawCsv
+        .split(RegExp(r'\r\n|\r|\n'))
+        .firstWhere(
+          (String line) => StringUtils.trimmed(line).isNotEmpty,
+          orElse: () => '',
+        );
+
+    int maxCount = 0;
+    String? best;
+    bool tie = false;
+    for (final String candidate in candidates) {
+      final int count = candidate.allMatches(firstLine).length;
+      if (count == 0) {
+        continue;
+      }
+      if (count > maxCount) {
+        maxCount = count;
+        best = candidate;
+        tie = false;
+        continue;
+      }
+      if (count == maxCount) {
+        tie = true;
+      }
+    }
+    if (best == null || tie) {
+      return null;
+    }
+    return best;
   }
 
   /// A leading `front,back` header (case-insensitive). Tolerates extra trailing

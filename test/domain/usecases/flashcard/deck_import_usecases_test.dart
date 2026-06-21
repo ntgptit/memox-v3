@@ -6,6 +6,7 @@ import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/flashcard_import_duplicate.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/import_row_issue_type.dart';
+import 'package:memox/domain/types/import_text_separator.dart';
 import 'package:memox/domain/usecases/flashcard/commit_deck_import_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/prepare_deck_import_usecase.dart';
@@ -214,6 +215,87 @@ void main() {
       final FlashcardImportPreview preview = parse.call(rawCsv: '');
       expect(preview.rows, isEmpty);
       expect(preview.issues, isEmpty);
+      expect(preview.canCommit, isFalse);
+    });
+
+    // WBS 6.9.1 — structured-text separators (decision row I8).
+    test('parses an explicit tab separator', () {
+      final preview = parse.call(
+        rawCsv: 'eat\t먹다\ndrink\t마시다',
+        separator: ImportTextSeparator.tab,
+      );
+      expect(preview.issues, isEmpty);
+      expect(preview.rows.map((r) => r.front), <String>['eat', 'drink']);
+    });
+
+    test('parses an explicit semicolon / pipe separator', () {
+      expect(
+        parse
+            .call(rawCsv: 'a;1', separator: ImportTextSeparator.semicolon)
+            .rows
+            .single
+            .back,
+        '1',
+      );
+      expect(
+        parse
+            .call(rawCsv: 'a|1', separator: ImportTextSeparator.pipe)
+            .rows
+            .single
+            .back,
+        '1',
+      );
+    });
+
+    test('auto detects the comma separator', () {
+      final preview = parse.call(
+        rawCsv: 'a,1\nb,2',
+        separator: ImportTextSeparator.auto,
+      );
+      expect(preview.issues, isEmpty);
+      expect(preview.rows, hasLength(2));
+      expect(preview.rows[0].back, '1');
+    });
+
+    test('auto picks the higher-frequency separator (strict win)', () {
+      // First line: 2 semicolons vs 1 pipe → semicolon wins; split on ';' gives
+      // 3 columns → first two kept (C7).
+      final preview = parse.call(
+        rawCsv: 'a;b;c|d',
+        separator: ImportTextSeparator.auto,
+      );
+      expect(preview.issues, isEmpty);
+      expect(preview.rows.single.front, 'a');
+      expect(preview.rows.single.back, 'b');
+    });
+
+    test('auto fails closed on an ambiguous tie (I8)', () {
+      // One comma and one pipe on the first line → tie → invalid input.
+      final preview = parse.call(
+        rawCsv: 'a,b|c',
+        separator: ImportTextSeparator.auto,
+      );
+      expect(preview.rows, isEmpty);
+      expect(preview.issues.single.kind, ImportRowIssueType.malformedRow);
+      expect(preview.canCommit, isFalse);
+    });
+
+    test('auto fails closed when no known separator is present', () {
+      final preview = parse.call(
+        rawCsv: 'justonecolumn',
+        separator: ImportTextSeparator.auto,
+      );
+      expect(preview.rows, isEmpty);
+      expect(preview.issues.single.kind, ImportRowIssueType.malformedRow);
+    });
+
+    test('auto on blank-lines-only input is empty (guard precedes detect)', () {
+      final preview = parse.call(
+        rawCsv: '\n  \n',
+        separator: ImportTextSeparator.auto,
+      );
+      expect(preview.rows, isEmpty);
+      expect(preview.issues, isEmpty, reason: 'empty input, not ambiguous');
       expect(preview.canCommit, isFalse);
     });
   });

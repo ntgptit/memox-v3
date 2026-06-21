@@ -348,7 +348,9 @@ Source: `docs/business/flashcard/flashcard-management.md` §Import sources.
 ### ImportTextSeparator
 
 **Status:** Backend-only (used by `ImportSourceFormat.structuredText`). Pinned by WBS 6.0.1;
-parsing lands in WBS 6.9.1.
+parsing implemented in WBS 6.9.1 (`ParseDeckImportCsvUseCase` maps each value to a delimiter char;
+`auto` infers it by frequency analysis of the first non-empty line, failing closed on a tie — see
+decision row I8).
 
 ```dart
 enum ImportTextSeparator {

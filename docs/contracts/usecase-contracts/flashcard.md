@@ -236,8 +236,11 @@ Future<Either<Failure, ImportResult>> call({
 >   maps to the first two (extra columns ignored — decision row C7), a record with <2 columns becomes
 >   a `malformedRow` issue. CONTENT validation (WBS 6.2.2): front/back required-after-trim →
 >   `missingFront`/`missingBack` line-numbered issue, that row excluded from committable `rows`
->   (decision C30); no max-length is enforced anywhere so `*TooLong` stays reserved. The
->   `ImportTextSeparator` option is WBS 6.9.1 (V1 default comma).
+>   (decision C30); no max-length is enforced anywhere so `*TooLong` stays reserved.
+>   **Structured-text separators (WBS 6.9.1):** `call` takes an `ImportTextSeparator` (default
+>   `comma`) mapped to the delimiter char; `auto` infers it by frequency analysis of the first
+>   non-empty line — the strictly-highest candidate wins, and a tie (or none present) fails closed,
+>   yielding a `malformedRow` issue and no rows (decision I8). Same validate/dedup/commit pipeline.
 > - `PrepareDeckImportUseCase.call({deckId, preview}) → Future<Result<FlashcardImportPreparation>>` —
 >   over a clean preview, apply `FlashcardImportDuplicatePolicy.skipExactDuplicates` against earlier
 >   file rows and existing deck cards, returning the committable `previewItems` + `skippedDuplicates`
