@@ -139,6 +139,25 @@ void main() {
       expect(find.text('Discard changes?'), findsOneWidget);
     });
 
+    testWidgets('create mode has no trash/delete action (mock `07`)', (
+      tester,
+    ) async {
+      await _pump(tester);
+      expect(find.byIcon(Icons.delete_outline), findsNothing);
+    });
+
+    testWidgets('edit: trash action opens the delete confirm (mock `08`)', (
+      tester,
+    ) async {
+      await _pump(tester, cardId: 'c1', cards: <Flashcard>[_card()]);
+      expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+      // Tapping the trash opens the destructive delete confirm, reusing the
+      // shared card-delete copy.
+      await tester.tap(find.byIcon(Icons.delete_outline));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete this card?'), findsOneWidget);
+    });
+
     testWidgets('edit: a missing card id shows the load-error surface', (
       tester,
     ) async {

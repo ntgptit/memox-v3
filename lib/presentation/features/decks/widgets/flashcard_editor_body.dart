@@ -105,6 +105,38 @@ class FlashcardEditorForm extends HookConsumerWidget {
       context.pop();
     }
 
+    // Edit-mode danger zone (mock `08`): confirm → delete → leave the editor
+    // (the card no longer exists).
+    Future<void> delete() async {
+      final Flashcard? existing = card;
+      if (existing == null) return;
+      final bool confirmed = await MxConfirmDialog.show(
+        context,
+        title: l10n.cardDeleteTitle,
+        message: l10n.cardDeleteMessage,
+        confirmLabel: l10n.cardDeleteConfirm,
+        cancelLabel: l10n.commonCancel,
+        destructive: true,
+      );
+      if (!confirmed) return;
+      if (!context.mounted) return;
+      final Result<void> result = await ref
+          .read(flashcardActionControllerProvider.notifier)
+          .delete(flashcardId: existing.id);
+      if (!context.mounted) return;
+      final Failure? failure = result.failure;
+      if (failure != null) {
+        showMxSnackbar(
+          context,
+          message: flashcardFailureMessage(l10n, failure),
+          isError: true,
+        );
+        return;
+      }
+      showMxSnackbar(context, message: l10n.cardDeletedSnack);
+      context.pop();
+    }
+
     // A dirty draft requires a discard confirm on close / system back (mock
     // `07`/`08` Rules). `PopScope` guards the system back; the leading button
     // routes through `Navigator.maybePop` so it hits the same guard.
@@ -128,6 +160,13 @@ class FlashcardEditorForm extends HookConsumerWidget {
           ),
           title: _isEdit ? l10n.cardEditTitle : l10n.cardCreateTitle,
           actions: <Widget>[
+            // Edit-mode danger zone: a trash action before Save (mock `08`).
+            if (_isEdit)
+              MxIconButton(
+                icon: Icons.delete_outline,
+                tooltip: l10n.cardDeleteTooltip,
+                onPressed: delete,
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: MxSpacing.space3,

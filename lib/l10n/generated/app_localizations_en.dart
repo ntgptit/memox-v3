@@ -548,4 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardDiscardConfirm => 'Discard';
+
+  @override
+  String get cardDeleteTooltip => 'Delete card';
 }

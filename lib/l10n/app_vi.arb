@@ -155,5 +155,6 @@
   "flashcardStateBoxDueToday": "Hộp {box} · đến hạn hôm nay",
   "cardDiscardTitle": "Bỏ thay đổi?",
   "cardDiscardMessage": "Các chỉnh sửa cho thẻ này chưa được lưu.",
-  "cardDiscardConfirm": "Bỏ"
+  "cardDiscardConfirm": "Bỏ",
+  "cardDeleteTooltip": "Xoá thẻ"
 }

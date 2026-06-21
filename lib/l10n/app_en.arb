@@ -344,5 +344,7 @@
   "cardDiscardMessage": "Your edits to this card haven't been saved.",
   "@cardDiscardMessage": { "description": "Message of the card-editor discard-changes confirm." },
   "cardDiscardConfirm": "Discard",
-  "@cardDiscardConfirm": { "description": "Destructive confirm action of the card-editor discard-changes dialog." }
+  "@cardDiscardConfirm": { "description": "Destructive confirm action of the card-editor discard-changes dialog." },
+  "cardDeleteTooltip": "Delete card",
+  "@cardDeleteTooltip": { "description": "Tooltip for the trash/delete icon in the edit-mode card editor app bar." }
 }

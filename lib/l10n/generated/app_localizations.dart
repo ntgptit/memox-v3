@@ -1033,6 +1033,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Discard'**
   String get cardDiscardConfirm;
+
+  /// Tooltip for the trash/delete icon in the edit-mode card editor app bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete card'**
+  String get cardDeleteTooltip;
 }
 
 class _AppLocalizationsDelegate

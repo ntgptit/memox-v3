@@ -67,12 +67,18 @@ conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
       `flashcard_card_dialog`. Editor widget tests (create-empty/validation, edit-prefill,
       load-error) + goldens (`07` create-empty + `08` edit-loaded, light+dark). navigation-flow +
       wireframe 06 updated. verify PASS. **WP-FL2b** (below) = Details expander + full state matrix.
-- [ ] **WP-FL2b — Editor Details expander + full `07`/`08` state matrix — DEFER (node-split, build
-      next).** Out of the WP-FL2a shell: the Details expander (tags / note / example / pronunciation /
-      hint — BE already supports them), the `07` (details-open / saving / save-failed) and `08`
-      (loading / load-error full / saving / save-failed / delete-from-editor) states, and a
-      single-card read path for deep-link edit-load. **G1** the shell shipped; this is the next slice.
-      Not a blocker for object 5 (the editor is usable for front/back create+edit).
+- WP-FL2b — Editor Details + delete + full `07`/`08` state matrix (node-split, build in slices):
+  - [x] **WP-FL2b1 — Edit trash/delete-from-editor — Implemented (2026-06-22).** Edit app bar gains
+        an `Icons.delete_outline` `MxIconButton` before Save (mock `08`); tap → shared destructive
+        `MxConfirmDialog` (`cardDelete*`) → `FlashcardActionController.delete` → `cardDeletedSnack` +
+        pop. Create mode shows no trash. Widget tests (create-none / edit-trash → confirm) + `08`
+        edit-loaded golden regenerated (trash icon). verify PASS.
+  - [ ] **WP-FL2b2 — Details expander** (collapsed `Details · Optional` row → tags / note / example /
+        pronunciation / hint fields; BE `Create/UpdateFlashcardUseCase` already accept them). Goldens
+        `07`/`08` details-open.
+  - [ ] **WP-FL2b3 — save/load state surfaces** (`07` saving/save-failed inline banner; `08`
+        loading + full load-error via a single-card read path). The editor is usable for front/back
+        create+edit+delete without these; they complete the kit state coverage.
 - [ ] **WP-FL2a (original analysis).** Current editor is a
       front/back **dialog** (`flashcard_card_dialog.dart`); the mock `07`/`08` is a full **screen**.
       PRECEDENCE #2 (visual → mock) makes the screen the contract; "rebuild a shipped surface" is not a

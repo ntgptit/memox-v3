@@ -14,9 +14,10 @@ source_specs:
 > `lib/presentation/features/decks/screens/flashcard_editor_screen.dart` +
 > `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`).
 > Edit mode is selected by the presence of `:flashcardId` (back-arrow leading icon). The **shell**
-> supports prefilled front/back + the dirty-discard confirm. The danger-zone **delete-from-editor**
-> action + the non-base `08` states (loading/load-error-full/saving/save-failed/delete) are
-> **WP-FL2b**. The current mock for
+> supports prefilled front/back + the dirty-discard confirm + the danger-zone **delete-from-editor**
+> trash action (WP-FL2b1, 2026-06-22: `Icons.delete_outline` before Save → shared destructive
+> confirm → delete → pop). The Details expander (WP-FL2b2) + the non-base `08` states
+> (loading / load-error-full / saving / save-failed) = **WP-FL2b3**. The current mock for
 > screen 08 includes a danger-zone delete action in the editor, while
 > move/export remain on the flashcard list row/bulk surfaces and bury/suspend
 > stay on the study-session card-actions sheet.

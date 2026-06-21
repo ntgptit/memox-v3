@@ -533,4 +533,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardDiscardConfirm => 'Bỏ';
+
+  @override
+  String get cardDeleteTooltip => 'Xoá thẻ';
 }
