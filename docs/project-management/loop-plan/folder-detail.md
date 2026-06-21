@@ -3,7 +3,7 @@ last_updated: 2026-06-21
 object: Folder (detail)
 loop_order: 2 of 10 (outer→inner)
 route: /library/folder/:id
-status: DONE (FD1–FD5, FD9 Implemented; FD6/FD7/FD8 DEFERred — not in rebuilt mock)
+status: DONE — re-audit-confirmed 2026-06-22 (FD1–FD5, FD9, FD10 search-dock, FD11 move-goldens Implemented; FD6/FD7/FD8 DEFERred — not in rebuilt mock)
 ---
 
 # Loop plan — Object 2: Folder (detail)
@@ -48,8 +48,8 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 | Search empty | `folder_detail_search` no-results | Current |
 | Loading | skeleton | Current |
 | Error | `MxErrorState` + Retry | Current |
-| Delete confirm | `MxConfirmDialog` destructive | Current |
-| Move sheet | folder move picker (`folder_move_picker_sheet.dart`) | Current (folder); **deck move missing** |
+| Delete confirm | `MxConfirmDialog` destructive (shared-dialog golden) | Current |
+| Move sheet | deck + folder move picker (`deck_move_picker_sheet.dart`, `folder_move_picker_sheet.dart`); goldened (WP-FD11) | Current |
 
 ## Gap-checklist (work-package queue, Depends-on order)
 
@@ -117,6 +117,20 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
       the search-toggle + `swap_vert` sort (WBS 2.23.1, owner-approved, shown app-wide) are kept as
       post-redesign affordances — same documented variance as Library.
 
+- [x] **WP-FD11 — Move-sheet picker goldens (kit `04` move-sheet) — Implemented (2026-06-22).**
+      **RE-AUDIT finding (ui-parity Gap #1):** the move-sheet state (`04-folder-detail--move-sheet`,
+      the deck-move context per WP-FD5a) had NO golden — `deck_move_picker_sheet.dart` and
+      `folder_move_picker_sheet.dart` were behavior-tested only. Added `move_picker_golden_test.dart`
+      goldening both pickers (deck + folder) light+dark at 390×780, each covering the four row
+      variants: selectable, nested (path subtitle), current-parent (check, not selectable), and
+      blocked (disabled, reason subtitle). Closes the state-coverage gap. **Variance (documented,
+      bundled DEFER):** the goldens capture the current **tap-to-select + plain-folder-icon** design;
+      the kit's picker restyle — radio + "Move here" confirm button + per-destination semantic icons
+      in tinted `MxIconTile` tiles — stays one deferred refinement applying to both pickers together
+      (WBS 2.19.2). The icon-tile part needs the folder/deck color+icon propagated into
+      `DeckMoveTarget`/`FolderMoveTarget` (deck color/icon also needs the deferred deck-schema). verify
+      PASS; ui-parity-checker PASS (state-coverage closed; icon-tile divergence is the bundled DEFER).
+
 ## Notes
 
 - WBS rows 2.7.2 / 2.8.2 / 2.9.2 are still marked `Specified` though the code + tests are
@@ -130,8 +144,10 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 
 ## Conclusion
 
-Object 2 is **DONE** (2026-06-21). Implemented: FD1–FD4 (screen + create/rename/delete), FD5a/FD5b
-(deck move BE+FE, WBS 2.19.2), FD9 (deck "last studied" line, WBS 3.2.2/3.7.1) + WP-L6a (F13
+Object 2 is **DONE** — re-audit-confirmed 2026-06-22 (evidence: code + 25 folder tests + goldens
+PASS via `tool/verify`; ui-parity-checker PASS). Implemented: FD1–FD4 (screen + create/rename/
+delete), FD5a/FD5b (deck move BE+FE, WBS 2.19.2), FD9 (deck "last studied" line, WBS 3.2.2/3.7.1),
+**FD10 (search bottom-dock, WBS 3.2.2)**, **FD11 (move-sheet picker goldens)** + WP-L6a (F13
 due-count fix). DEFERred: FD6/FD7 (reorder — no UI mock), FD8 (new-vs-due — not in rebuilt mock).
 Pre-existing cross-cutting gaps logged in `loop-deferred.md` (deck color/icon schema, due-badge
 fill, SRS persistent-`last_studied_at` drift). Next object (outer→inner): **Sub-folder (nested)**
