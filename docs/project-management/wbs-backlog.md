@@ -81,7 +81,7 @@ badges · 2.18.2 tag filter FE · 2.19.2 deck move FE · 2.20.2 duplicate soft-w
 3.2.3 folder-detail new-vs-due split · 3.6.1 error retry state.
 
 ### Import (§6) — none built
-6.1.1 route/shell · 6.2.1 / 6.2.2 CSV parse + validation · 6.3.1 preview · 6.4.1 / 6.4.2
+6.1.1 route/shell · ~~6.2.1~~ ✅ **DONE 2026-06-21** (CSV parse) / 6.2.2 validation · 6.3.1 preview · 6.4.1 / 6.4.2
 transactional commit (no silent partial) · 6.5.1 result · 6.6.1 / 6.6.2 duplicate detection +
 preview · 6.7.1 file picker · 6.9.1 structured-text import.
 

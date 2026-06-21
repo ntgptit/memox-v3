@@ -227,6 +227,11 @@ Future<Either<Failure, ImportResult>> call({
 >   `ImportTextSeparator`, structured text), detect an optional `front,back` header, preserve quoted
 >   values / escaped quotes, skip blank rows, and collect row-level issues as `ImportValidationIssue`
 >   (categorized by `ImportRowIssueType`). (WBS 6.2.1 / 6.2.2 / 6.9.1.)
+>   **Implemented (WBS 6.2.1):** pure synchronous transform; RFC-4180 quoting (quoted comma/newline/
+>   `""`-escape), header drop, blank-line skip, trims front/back; a record with ≥2 columns maps to the
+>   first two (extra columns ignored — decision row C7), a record with <2 columns becomes a
+>   `malformedRow` issue. Per-row CONTENT validation (`missingFront`/`missingBack`/too-long) is WBS
+>   6.2.2; the `ImportTextSeparator` option is WBS 6.9.1 (V1 default comma).
 > - `PrepareDeckImportUseCase.call({deckId, preview}) → Future<Result<FlashcardImportPreparation>>` —
 >   over a clean preview, apply `FlashcardImportDuplicatePolicy.skipExactDuplicates` against earlier
 >   file rows and existing deck cards, returning the committable `previewItems` + `skippedDuplicates`

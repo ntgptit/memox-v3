@@ -22,7 +22,7 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C4 | Edit card | Existing card opens through shared editor | Load deck/card context, prefill the form, and show the danger zone | C0+C1 | TBD |
 | C5 | Edit card | Learned front/back changed on a progressed card | Update content + replace tags; `keepProgress` (default) preserves the progress row, `resetProgress` returns it to box 1 / unscheduled / zero counters | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C5) |
 | C6 | Delete card | Confirmed from flashcard list row/bulk action | Delete the card; its `flashcard_progress` + `flashcard_tags` rows cascade via FK; missing card → `NotFoundFailure` | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C6) |
-| C7 | Import CSV preview | Valid front/back rows + optional extra columns | Trim front/back and preview the valid rows without writing to DB | C0+C1 | TBD |
+| C7 | Import CSV preview | Valid front/back rows + optional extra columns | Trim front/back and preview the valid rows (extra columns ignored — take first two) without writing to DB | C0+C1 | `test/domain/usecases/flashcard/deck_import_usecases_test.dart` |
 | C8 | Create card | Target deck missing | Repository returns `NotFoundFailure(deck)`; nothing persisted | C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C8) |
 | C9 | Create editor close | Blank draft | Leave without discard dialog | C1 | TBD |
 | C10 | Create editor close | Front typed but unsaved | Show discard dialog | C1 | TBD |
@@ -42,7 +42,7 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C29 | Edit save failure | Update repository returns failure | Keep the draft open and show a save-failed banner | C1 | TBD |
 | C30 | Import CSV preview | Empty front or empty back | Surface a row-level validation message with the line number | C1 | TBD |
 | C31 | Import CSV preview | Preview action on CSV text | Do not call repository create/insert/commit logic; keep deferred CTA disabled | C0+C1 | TBD |
-| C32 | Import CSV preview | Quoted CSV values | Parse quoted commas and escaped quotes correctly | C0+C1 | TBD |
+| C32 | Import CSV preview | Quoted CSV values | Parse quoted commas and escaped quotes correctly | C0+C1 | `test/domain/usecases/flashcard/deck_import_usecases_test.dart` |
 | C33 | Reorder cards | Full sibling list in same deck | Persist deterministic `sort_order` (list position) transactionally | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C33) |
 | C34 | Reorder cards | Duplicate/missing/cross-deck/partial list | Reject with `ValidationFailure(orderedIds, invalidFormat)` and preserve the previous order | C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C34) |
 | C35 | Flashcard list load | No filter / front-back search / unknown deck | Default list returns all cards in `sort_order`; non-blank search filters cards by front/back (case-insensitive) while `totalCount` stays the full deck total; missing deck yields `NotFoundFailure` | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C35) |
