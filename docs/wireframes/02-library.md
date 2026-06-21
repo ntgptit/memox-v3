@@ -16,8 +16,9 @@ source_specs:
 > **authoritative** over the prompt-era prose below where they differ:
 >
 > - **Search is a mode toggle**, not an always-visible inline field: the app bar shows
->   `Icons.search` (→ `LibrarySearchAppBar` with an autofocused field + Cancel) and a
->   visual-only `Icons.swap_vert` sort icon. (Supersedes "always-visible inline (no toggle)".)
+>   `Icons.search` (→ `LibrarySearchAppBar` with an autofocused field + Cancel) and an
+>   `Icons.swap_vert` sort icon that opens the shared content-sort sheet (WBS 2.23.1 — was
+>   visual-only/disabled). (Supersedes "always-visible inline (no toggle)".)
 > - **Folder rows use a chevron** (`Icons.chevron_right`), **no kebab**; a row tap opens the
 >   action sheet (interim, until folder-detail nav lands — WBS 3.2.2) and a long-press also
 >   opens it. (Supersedes all "kebab" / `Icons.more_vert` references.)
@@ -34,8 +35,11 @@ source_specs:
 > - **`New folder` FAB + create dialog with color + icon pickers are Current** (WBS 2.1.2):
 >   `MxFab` (shown only in loaded-with-folders) and the empty-CTA both call `runCreateFolder`
 >   → `folder_create_dialog.dart`. Color/icon use the OQ-2 palette via `folder_visual_tokens.dart`.
-> - **Not built:** due-summary card, sort sheet, mastery bar, new-card badge, deck-digest
->   subtitle (read-model fields absent). The per-row **due badge** *is* built (shows when `dueCount > 0`).
+> - **Sort sheet is built (WBS 2.23.1):** the `swap_vert` icon opens `showContentSortSheet`
+>   (Manual / Name / Newest; `lastStudied` deferred), one global pref `library.sort` applied
+>   presentation-side via `sortLibraryFolders`.
+> - **Not built:** due-summary card, mastery bar, new-card badge, deck-digest subtitle (read-model
+>   fields absent). The per-row **due badge** *is* built (shows when `dueCount > 0`).
 > - As-built file map: `library_overview_screen.dart` · `library_overview_body.dart` ·
 >   `library_folder_tile.dart` · `folder_icon_tile.dart` · `library_loading_skeleton.dart` ·
 >   `library_search_app_bar.dart` · `library_folder_actions_sheet.dart` ·
@@ -320,17 +324,24 @@ point for study.
 | Error       | Query failure                     | Inline error card with retry.                          |
 | Sort active | User picked a sort                | Items reordered; chip in app bar showing current sort. |
 
-## Sort options (from overflow)
+## Sort options (sort sheet — WBS 2.23.1)
 
-| Sort             | Stored as               |
-|------------------|-------------------------|
-| Manual (default) | `sort_order`            |
-| Name A→Z         | `name` ascending        |
-| Name Z→A         | `name` descending       |
-| Recently updated | `updated_at` descending |
-| Most cards       | computed                |
+The header sort icon opens the shared content-sort bottom sheet
+(`showContentSortSheet`, `docs/wireframes/25-shared-bottom-sheets.md`), one global preference shared
+by Library / Folder detail / Deck / Flashcard. As-built offers the three `ContentSortMode` modes that
+have backing data:
 
-Sort preference persists per user via SharedPreferences (key `library.sort`).
+| Sort             | `ContentSortMode` | Applied as (presentation-side)        | Status      |
+|------------------|-------------------|----------------------------------------|-------------|
+| Manual (default) | `manual`          | DB `sort_order` (unchanged)            | **Current** |
+| Name (A–Z)       | `name`            | case-folded name ascending             | **Current** |
+| Newest           | `newest`          | `created_at` descending                | **Current** |
+| Last studied     | `lastStudied`     | —                                      | **Deferred** — needs a last-studied aggregate read model (subtree join over study attempts). Not shown in the sheet. |
+
+The earlier `Name Z→A` / `Recently updated` (`updated_at`) / `Most cards` options are **not in scope**
+(not in the `ContentSortMode` enum); add an enum value + a decision row before surfacing any of them.
+Sort preference persists globally via SharedPreferences (key `library.sort`,
+`docs/database/storage-boundaries.md` §Content sort).
 
 ## Actions
 

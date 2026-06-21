@@ -2,6 +2,7 @@ import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'library_overview_viewmodel.g.dart';
@@ -66,4 +67,31 @@ LibraryListView filterLibrary(LibraryOverview overview, String term) {
       )
       .toList(growable: false);
   return (folders: filtered, totalFolderCount: all.length, searchTerm: trimmed);
+}
+
+/// Orders [folders] by [mode] for display (presentation-only — the read model
+/// arrives in DB `sort_order`). `manual` keeps that order; `name` is a
+/// case-folded A→Z; `newest` is most-recently-created first. `lastStudied` is
+/// deferred (no last-studied read model yet) and falls back to manual order.
+/// WBS 2.23.1.
+List<FolderSummary> sortLibraryFolders(
+  List<FolderSummary> folders,
+  ContentSortMode mode,
+) {
+  switch (mode) {
+    case ContentSortMode.manual:
+    case ContentSortMode.lastStudied:
+      return folders;
+    case ContentSortMode.name:
+      return <FolderSummary>[...folders]..sort(
+        (FolderSummary a, FolderSummary b) => StringUtils.caseFold(
+          a.folder.name,
+        ).compareTo(StringUtils.caseFold(b.folder.name)),
+      );
+    case ContentSortMode.newest:
+      return <FolderSummary>[...folders]..sort(
+        (FolderSummary a, FolderSummary b) =>
+            b.folder.createdAt.compareTo(a.folder.createdAt),
+      );
+  }
 }

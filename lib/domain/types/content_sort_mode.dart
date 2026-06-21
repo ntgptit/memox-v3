@@ -20,3 +20,14 @@ enum ContentSortMode {
   /// Most recently studied subtree first.
   lastStudied,
 }
+
+/// Parses a persisted sort token (`enum.name`) into a [ContentSortMode].
+///
+/// Only the modes the sort sheet offers are valid stored tokens; an unknown,
+/// `null`, or deferred (`lastStudied`) token falls back to
+/// [ContentSortMode.manual].
+ContentSortMode contentSortModeFromToken(String? token) => switch (token) {
+  'name' => ContentSortMode.name,
+  'newest' => ContentSortMode.newest,
+  _ => ContentSortMode.manual,
+};

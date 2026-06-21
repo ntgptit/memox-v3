@@ -251,24 +251,30 @@ Source: `docs/business/folder/folder-management.md`.
 
 ### ContentSortMode
 
-**Status:** Current (read/use-case layer; no V1 sort UI control).
+**Status:** Current. The sort sheet (WBS 2.23.1) offers `manual` / `name` / `newest`; `lastStudied`
+is **deferred** (no last-studied aggregate read model yet — a subtree join over study attempts) and
+is not a valid stored token.
 
-How Library / Folder-detail content rows are ordered.
+How Library / Folder-detail / Deck / Flashcard content rows are ordered.
 
 ```dart
 enum ContentSortMode {
   manual,       // User-controlled order via sort_order (default)
   name,         // Name A→Z
   newest,       // Most recently created first
-  lastStudied,  // Most recently studied subtree first
+  lastStudied,  // Most recently studied subtree first — DEFERRED (not offered)
 }
 ```
 
-**Storage:** sort preference persists per user in SharedPreferences (key
-`library.sort`); the enum itself is not stored on a row.
+**Application:** sort is applied **presentation-side** over the already-loaded read-model list
+(`sortLibraryFolders` etc.) — `manual` keeps DB `sort_order`, `name` is case-folded A→Z, `newest`
+is `created_at` descending. No `.drift`/repository ordering change.
 
-Source: `docs/wireframes/02-library.md` §Sort options. Used by
-`FolderRepository.watchLibraryOverview` + `WatchLibraryOverviewUseCase`.
+**Storage:** the chosen mode persists globally in SharedPreferences (key `library.sort`) via
+`ContentSortRepository`; `contentSortModeFromToken` maps the stored token back (unknown/deferred →
+`manual`). The enum is never stored on a row. See `docs/database/storage-boundaries.md` §Content sort.
+
+Source: `docs/wireframes/02-library.md` §Sort options.
 
 ### FlashcardStatusFilter
 

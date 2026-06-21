@@ -41,7 +41,7 @@ treatment, bringing the screen to the kit `03a–03f` visuals.
 
 | Concern | As-built file/symbol |
 |---|---|
-| Screen shell + app-bar mode toggle | `library_overview_screen.dart` (`ConsumerWidget`: title bar with `Icons.search` (→ search mode) + visual-only `Icons.swap_vert`, OR `LibrarySearchAppBar` while searching; `MxFab(Icons.create_new_folder_outlined)` hidden in search) |
+| Screen shell + app-bar mode toggle | `library_overview_screen.dart` (`ConsumerWidget`: title bar with `Icons.search` (→ search mode) + `Icons.swap_vert` (→ content-sort sheet, WBS 2.23.1), OR `LibrarySearchAppBar` while searching; `MxFab(Icons.create_new_folder_outlined)` hidden in search) |
 | Search-mode app bar (field + Cancel) | `library_search_app_bar.dart` (`LibrarySearchAppBar`) + `library_search_field.dart` (`autofocus`) |
 | Search-active toggle | `library_overview_viewmodel.dart` (`librarySearchActiveProvider`, `librarySearchQueryProvider`, pure `filterLibrary`) |
 | States body (loading skeleton / grouped loaded / true-empty + CTA / search overline+results / search-no-results / error) | `library_overview_body.dart` (via `AppAsyncBuilder`) |
@@ -67,8 +67,9 @@ palette sports_esports favorite` (`null` → `folder_outlined`). Stored as opaqu
 - **Folder-row tap → folder detail** → WBS 3.2.2 (folder-detail screen + route not built).
   Interim: a row tap opens the action sheet (so the chevron is never a dead tap); a
   long-press also opens it. When 3.2.2 lands, tap → detail and long-press → actions.
-- **App-bar sort control** → no approved sort sheet; `Icons.swap_vert` renders disabled
-  (visual-only).
+- **App-bar sort control** → **Current (WBS 2.23.1, supersedes "disabled/visual-only"):**
+  `Icons.swap_vert` opens the shared `showContentSortSheet` (Manual / Name / Newest; `lastStudied`
+  deferred), one global pref applied presentation-side via `sortLibraryFolders`.
 - **Mastery bar, new-card badge, deck-digest subtitle, due-summary card** → `FolderSummary`
   lacks `mastery`/`newCount`/`subtitle`/`dueToday`; surface when the read model ships. (The
   due **badge** on a row is built and shows when `dueCount > 0`.)
@@ -242,8 +243,9 @@ Forbidden:
 - Do not show a kebab (`Icons.more_vert`) on Library folder cards (superseded — use the chevron).
 - Do not show a root-level deck row.
 - Do not expose root New deck or Import.
-- Do not expose an interactive sort sheet/control; the non-interactive
-  `Recent` pill is allowed as current visual parity.
+- The interactive sort sheet (`swap_vert` → `showContentSortSheet`) is **Current** (WBS 2.23.1);
+  it offers Manual / Name / Newest only (`lastStudied` deferred). Do not surface unimplemented sort
+  options (Name Z→A / Recently-updated / Most-cards) without an enum value + decision row.
 - Do not keep the overview summary card or folder-count header visible while
   a search term is active and matching rows are shown.
 - Do not claim deck/card/tag search in Library Overview V1; that scope is Future.

@@ -438,4 +438,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get libraryRootLabel => 'Gốc';
+
+  @override
+  String get sortTooltip => 'Sắp xếp';
+
+  @override
+  String get sortSheetTitle => 'Sắp xếp theo';
+
+  @override
+  String get sortModeManual => 'Thủ công';
+
+  @override
+  String get sortModeName => 'Tên (A–Z)';
+
+  @override
+  String get sortModeNewest => 'Mới nhất';
 }

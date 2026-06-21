@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/library_overview.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/library_create_folder_action.dart';
@@ -9,6 +10,8 @@ import 'package:memox/presentation/features/folders/widgets/library_overview_bod
 import 'package:memox/presentation/features/folders/widgets/library_root_anchor.dart';
 import 'package:memox/presentation/features/folders/widgets/library_search_app_bar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
+import 'package:memox/presentation/shared/sort/content_sort_sheet.dart';
+import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
@@ -19,8 +22,9 @@ import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 /// [LibraryOverviewBody].
 ///
 /// V1 scope (`docs/design/screens/library-overview.visual-contract.md`): the
-/// header sort affordance is visual-only (disabled — no approved sort sheet);
-/// a folder-row tap opens the action sheet until folder-detail navigation lands
+/// header sort icon opens the shared content-sort sheet (Manual / Name / Newest;
+/// `lastStudied` deferred) and persists the choice globally (WBS 2.23.1). A
+/// folder-row tap opens the action sheet until folder-detail navigation lands
 /// (WBS 3.2.2). WBS 3.1.2 / 2.1.2.
 class LibraryOverviewScreen extends ConsumerWidget {
   const LibraryOverviewScreen({super.key});
@@ -56,8 +60,11 @@ class LibraryOverviewScreen extends ConsumerWidget {
                   onPressed: () =>
                       ref.read(librarySearchActiveProvider.notifier).activate(),
                 ),
-                // Visual-only sort affordance (no approved sort sheet yet).
-                const MxIconButton(icon: Icons.swap_vert, onPressed: null),
+                MxIconButton(
+                  icon: Icons.swap_vert,
+                  tooltip: l10n.sortTooltip,
+                  onPressed: () => _openSort(context, ref),
+                ),
               ],
             ),
       floatingActionButton: showFab
@@ -67,20 +74,33 @@ class LibraryOverviewScreen extends ConsumerWidget {
               onPressed: () => runCreateFolder(context, ref),
             )
           : null,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          // Root orientation anchor docked under the app bar — the root of the
-          // same breadcrumb trail nested Library screens show. Hidden in search
-          // and until the loaded list has folders (matches the FAB gating).
-          if (!searching && hasFolders)
-            Padding(
-              padding: const EdgeInsets.only(bottom: MxSpacing.space2),
-              child: LibraryRootAnchor(folderCount: folderCount),
-            ),
-          const Expanded(child: LibraryOverviewBody()),
-        ],
-      ),
+      body: _buildBody(searching, hasFolders, folderCount),
     );
   }
+
+  /// Opens the shared sort sheet and persists the chosen mode (global pref).
+  Future<void> _openSort(BuildContext context, WidgetRef ref) async {
+    final ContentSortMode current = ref.read(librarySortModeProvider);
+    final ContentSortMode? selected = await showContentSortSheet(
+      context,
+      current: current,
+    );
+    if (selected == null) return;
+    await ref.read(librarySortProvider.notifier).setSort(selected);
+  }
+
+  Widget _buildBody(bool searching, bool hasFolders, int folderCount) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      // Root orientation anchor docked under the app bar — the root of the same
+      // breadcrumb trail nested Library screens show. Hidden in search and until
+      // the loaded list has folders (matches the FAB gating).
+      if (!searching && hasFolders)
+        Padding(
+          padding: const EdgeInsets.only(bottom: MxSpacing.space2),
+          child: LibraryRootAnchor(folderCount: folderCount),
+        ),
+      const Expanded(child: LibraryOverviewBody()),
+    ],
+  );
 }

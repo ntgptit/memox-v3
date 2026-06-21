@@ -25,6 +25,7 @@ import 'package:memox/presentation/features/folders/widgets/library_loading_skel
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
+import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_divider.dart';
@@ -203,6 +204,10 @@ class LibraryOverviewBody extends ConsumerWidget {
 
   Widget _content(BuildContext context, WidgetRef ref, LibraryListView view) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    final List<FolderSummary> folders = sortLibraryFolders(
+      view.folders,
+      ref.watch(librarySortModeProvider),
+    );
 
     if (view.totalFolderCount == 0) {
       return MxEmptyState(
@@ -217,7 +222,7 @@ class LibraryOverviewBody extends ConsumerWidget {
         ),
       );
     }
-    if (view.folders.isEmpty && view.searchTerm.isNotEmpty) {
+    if (folders.isEmpty && view.searchTerm.isNotEmpty) {
       return MxNoResultsState(
         key: const ValueKey<String>('library_search_no_results'),
         title: l10n.librarySearchNoResultsTitle,
@@ -236,10 +241,10 @@ class LibraryOverviewBody extends ConsumerWidget {
         // Loaded shows the bare card (mock `03a`); search adds the count overline
         // (mock `03e`).
         if (searching) ...<Widget>[
-          _CountOverline(count: view.folders.length),
+          _CountOverline(count: folders.length),
           const SizedBox(height: MxSpacing.space3),
         ],
-        _groupedCard(context, ref, view.folders),
+        _groupedCard(context, ref, folders),
       ],
     );
   }

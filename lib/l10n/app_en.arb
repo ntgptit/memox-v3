@@ -292,5 +292,15 @@
   "dashboardLoadFailedMessage": "Something went wrong loading today's summary.",
   "@dashboardLoadFailedMessage": { "description": "Dashboard error-state body." },
   "libraryRootLabel": "Root",
-  "@libraryRootLabel": { "description": "Label of the Library Overview root anchor (the top of the folder hierarchy), shown with a home icon under the app bar." }
+  "@libraryRootLabel": { "description": "Label of the Library Overview root anchor (the top of the folder hierarchy), shown with a home icon under the app bar." },
+  "sortTooltip": "Sort",
+  "@sortTooltip": { "description": "Tooltip for the sort icon that opens the sort sheet on content screens." },
+  "sortSheetTitle": "Sort by",
+  "@sortSheetTitle": { "description": "Title of the content sort bottom sheet." },
+  "sortModeManual": "Manual",
+  "@sortModeManual": { "description": "Sort option: the user-controlled manual order (sort_order)." },
+  "sortModeName": "Name (A–Z)",
+  "@sortModeName": { "description": "Sort option: by name, ascending." },
+  "sortModeNewest": "Newest",
+  "@sortModeNewest": { "description": "Sort option: most recently created first." }
 }

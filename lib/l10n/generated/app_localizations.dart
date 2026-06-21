@@ -877,6 +877,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Root'**
   String get libraryRootLabel;
+
+  /// Tooltip for the sort icon that opens the sort sheet on content screens.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sortTooltip;
+
+  /// Title of the content sort bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get sortSheetTitle;
+
+  /// Sort option: the user-controlled manual order (sort_order).
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get sortModeManual;
+
+  /// Sort option: by name, ascending.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (A–Z)'**
+  String get sortModeName;
+
+  /// Sort option: most recently created first.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get sortModeNewest;
 }
 
 class _AppLocalizationsDelegate

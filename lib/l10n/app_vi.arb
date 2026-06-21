@@ -129,5 +129,10 @@
   "dashboardLibraryShortcutSub": "Duyệt thư mục & bộ thẻ",
   "dashboardLoadFailedTitle": "Không tải được trang chủ",
   "dashboardLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt hôm nay.",
-  "libraryRootLabel": "Gốc"
+  "libraryRootLabel": "Gốc",
+  "sortTooltip": "Sắp xếp",
+  "sortSheetTitle": "Sắp xếp theo",
+  "sortModeManual": "Thủ công",
+  "sortModeName": "Tên (A–Z)",
+  "sortModeNewest": "Mới nhất"
 }

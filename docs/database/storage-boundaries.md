@@ -27,6 +27,14 @@ This is NOT a substitute for migrations: real schema evolution still goes throug
 `onUpgrade` step. Bump the generation only to discard incoherent pre-release stores, never to skip
 writing a migration.
 
+## Content sort
+
+The global content-sort preference (shared by Library, Folder detail, Deck, and Flashcard screens)
+persists in SharedPreferences under one key, **`library.sort`**, storing a `ContentSortMode`
+`enum.name` token (`manual` / `name` / `newest`). Access goes through `ContentSortRepository`
+(`ContentSortStore` → SharedPreferences); an unset/unknown/deferred token reads back as `manual`.
+It is a UI ordering choice, not entity data — so it lives in prefs, never in Drift. WBS 2.23.1.
+
 ## Source of truth
 
 Local Drift database is the source of truth for persistent app data.

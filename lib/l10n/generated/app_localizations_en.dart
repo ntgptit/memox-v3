@@ -453,4 +453,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get libraryRootLabel => 'Root';
+
+  @override
+  String get sortTooltip => 'Sort';
+
+  @override
+  String get sortSheetTitle => 'Sort by';
+
+  @override
+  String get sortModeManual => 'Manual';
+
+  @override
+  String get sortModeName => 'Name (A–Z)';
+
+  @override
+  String get sortModeNewest => 'Newest';
 }
