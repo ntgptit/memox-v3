@@ -11,13 +11,14 @@ source_specs:
 
 # 13 — Study Session: Review Mode
 
-> **Drift correction (2026-06-14):** `?mode=review` now renders the swipe-grade review surface in
-> `lib/presentation/features/study/screens/study_session_screen.dart`; the no-mode fallback still
-> keeps the shared recall shell. Any
-> `lib/presentation/features/study/widgets/study_session/**` file paths referenced below are the
-> **target structure** from a previous iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Status correction (2026-06-22): GREENFIELD — not yet built.** `lib/presentation/features/study/`
+> does **not exist**; there are no study routes and no `study_session_screen.dart`. The previous
+> iteration's "shipped (verified 2026-05-28)" claims below describe a surface that was wiped in the
+> 2026-06-19 reset and never rebuilt — treat **all** `lib/presentation/features/study/**` paths in
+> this file as the **target structure** to build, not as-built code. The BE is ready
+> (`ResolveStudyEntryStartUseCase`, `LoadStudySessionReviewUseCase`, `RecordStudySessionAnswerUseCase`,
+> `FinalizeStudySessionUseCase`, `LoadStudySessionResultUseCase`). The rebuild is planned, CHẺ into
+> slices WP-SR1..WP-SR5, in `docs/project-management/loop-plan/study-review.md`; WBS 4.5.3 = Specified.
 
 ## Purpose
 
@@ -26,14 +27,14 @@ advances by swipe. Lightest mode in the 5-mode cycle; serves as the **anchor scr
 establishes the visual grammar reused by modes 14-17 (top app bar, progress bar, mode pill
 convention).
 
-> **Current V1 implementation note.** The shipped screen at
-> `/library/study/session/:sessionId?mode=review` is the swipe-grade review
-> surface: it loads the persisted session and ordered session items, renders
-> both sides on one card, grades by swipe, shows the current-card progress bar
-> and exit confirmation, and exposes the long-press card-actions sheet for Edit
-> / Bury until tomorrow / Suspend card. The no-mode path still renders the
-> recall reveal/self-grade shell, and `flashcard_progress` is not updated until
-> Finish Session succeeds.
+> **Target V1 behaviour (greenfield — to build).** The review surface at
+> `/library/study/session/:sessionId` loads the persisted session + ordered
+> session items, renders **both sides on one card**, grades by **swipe** (right =
+> `perfect`, left = `forgot`), shows the blue progress bar + exit confirmation,
+> and exposes the long-press card-actions sheet (Edit / Bury until tomorrow /
+> Suspend). `flashcard_progress` is not updated until Finish Session (finalize)
+> succeeds. The mock `12-study-review--default` flip card is a documented visual
+> gap — behaviour follows §Rules (swipe, no reveal) per PRECEDENCE #1.
 
 > **Mode pill / progress-bar color convention (applies to wireframes 13-17).** Modes split into two
 > visual families:
@@ -151,12 +152,12 @@ swiping (gesture is the primary input).
 | Long-press card | Long-press                | Open card actions bottom-sheet (Edit / Bury until tomorrow / Suspend card). |
 | Tap ✕           | Tap                       | Show exit confirm dialog.                                                   |
 
-## Current V1 controls
+## Target V1 controls
 
-- Swipe is the current review-mode interaction.
+- Swipe is the review-mode interaction (both sides shown; right = perfect, left = forgot).
 - Long-press opens the card-actions sheet.
 - Review state refreshes after a buried or suspended card is removed from the queue.
-- The swipe-based grading table below remains the shipped interaction contract for the review surface.
+- The swipe-based grading table below is the interaction contract for the review surface.
 
 ## Dialogs and bottom-sheets used
 
@@ -166,7 +167,8 @@ swiping (gesture is the primary input).
 
 ## SRS handling on answer
 
-Current V1 self-grade uses Forgot / Got it after reveal and records the attempt in-session. The swipe rows below remain the forward target for the full review-mode design.
+Review grades by swipe (no reveal step); the attempt is recorded in-session and the SRS box
+transition is applied at finalize (Finish Session), not per-answer.
 
 Per `docs/business/srs/srs-review.md`:
 

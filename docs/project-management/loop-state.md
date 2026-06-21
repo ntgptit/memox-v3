@@ -7,20 +7,21 @@ last_updated: 2026-06-22
 
 ## Cursor
 
-- **Active object:** 5 — Flashcard (list + editor) (IN PROGRESS; WP-FL1 + WP-FL2a + WP-FL2b1 +
-  WP-FL2b2 + WP-FL2b3a (saving + save-failed) + **WP-FL2b3b (loading skeleton + load-error/Retry)**
-  SHIPPED → **WP-FL2b2b (Tags chip input) build next — the LAST object-5 node**).
-- **Current work-package:** WP-FL2b2b (see `loop-plan/flashcard-list-editor.md`): the `07`/`08` Tags
-  section — a chip row of the card's tags + an "Add tag" affordance (add/remove). Business model has
-  tags (`flashcard-management.md` §238); edit currently **preserves** tags untouched. The editor's
-  create/update already forward `tags`; wire a tag-editing UX (chip display + add-tag input/validate
-  via `TagValidator`) into `FlashcardEditorForm`. After this → object 5 evidence-DONE → object 6
-  (Study — Review, greenfield, BE ready): CHẺ route → entry gate → session create/resume → review
-  shell → grade → result.
-- **Branch:** `feat/loop-library`; latest code commit `d3aa162` (WP-FL2b3b; prior `6437f66` WP-FL2b3a,
-  `34ae424` l10n rename).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b3b tree. 3-reviewer
-  fan-out folded (code-reviewer APPROVE; ui-parity blocker breadcrumb-during-loading fixed; drift = §10 logged here).
+- **Active object:** 6 — Study — Review (greenfield FE; BE fully ready) — **owner redirected the
+  loop here (2026-06-22) ahead of object-5's last node WP-FL2b2b (Tags), which is parked.** Entered
+  via BƯỚC 2 (re-audit + plan): the prior DEFER is **overturned** (greenfield→split, flip-vs-swipe→
+  PRECEDENCE #1 swipe wins, "shipped" drift→fixed). See `loop-plan/study-review.md`.
+- **Current work-package:** **WP-SR1 (study route scaffold + entry gate)** builds next — add `study`
+  route constants + GoRouter wiring + a "Study" launch from the deck that resolves
+  `ResolveStudyEntryStartUseCase` → renders the 3 outcomes (blocked / resumeRequired / canStart),
+  Start → `CreateStudySessionUseCase` → `pushReplacement` to the session route (placeholder shell
+  until WP-SR2). Then WP-SR2 shell+card → WP-SR3 swipe-grade → WP-SR4 exit/actions → WP-SR5
+  finalize→result(17, 6 states). BE all Implemented (audited 2026-06-22).
+- **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
+  after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
+- **Branch:** `feat/loop-library`; latest code commit `d3aa162` (WP-FL2b3b; prior `6437f66`,
+  `34ae424`). This iteration is **docs-only** (BƯỚC 2 plan + wireframe-13 drift fix).
+- **Last verify:** (this turn) docs chain pending — see below.
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -53,20 +54,23 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
 | 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1** + **FL2a shell** + **FL2b1 delete** + **FL2b2 Details** + **FL2b3a saving+save-failed** + **FL2b3b loading+load-error (`d3aa162`)** SHIPPED (ui-parity PASS). **Only WP-FL2b2b (Tags input) remains** before DONE. |
-| 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
-| 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
+| 6 | Study — Review | **ACTIVE — BUILD (greenfield FE; BE ready).** Plan CHẺ into WP-SR1..SR5 (`loop-plan/study-review.md`); DEFER overturned, swipe-grade per PRECEDENCE #1 (mock-12 flip = visual gap). WP-SR1 (route+entry gate) next. |
+| 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6; reuse SR2 shell + SR5 result) |
 
 ## Next action
 
-**Build WP-FL2b2b (editor Tags chip input)** — the LAST object-5 node. Read the `07`/`08` Tags
-section in the specs + `docs/business/tags/tag-system.md` + `docs/business/flashcard/flashcard-management.md` §238 first (PRECEDENCE #2 for visual; #1 for validation):
-- The editor's create/update **already forward `tags`** (BE done; edit currently preserves them
-  untouched). Wire a tag-editing UX into `FlashcardEditorForm`: a chip row of the card's current
-  tags (each removable) + an "Add tag" affordance that validates via `TagValidator` (rows C20/C21 —
-  add appends + normalizes on save, tapping a chip removes it).
-- Use the existing `Mx*` chip/input components (check `component-visual-contract.md` for the chip
-  primitive; do NOT invent a new shared chip if one exists). Dirty-tracking must include the tag set
-  (it already does for the discard-confirm). Tests: add/remove chip, save persists tags, golden of
-  the Tags section (light+dark). Decision rows C20/C21 (currently TBD) get their tests.
-After object 5 is evidence-confirmed DONE → **object 6 (Study — Review, greenfield, BE ready)**: CHẺ
-route → entry gate → session create/resume → review shell → grade → result. Do NOT defer for greenfield.
+**Build WP-SR1 (study route scaffold + entry gate)** — object 6 slice 1. Read
+`docs/wireframes/12-study-entry-gate.md` + `docs/business/study/study-flow.md` (entry/eligibility) +
+`docs/business/navigation/navigation-flow.md` first:
+- Add `study` route(s) to `RouteNames`/`RoutePaths` + GoRouter wiring + `navigation-flow.md` (one
+  entry-gate route launched from the deck; the session route `/library/study/session/:sessionId` as a
+  placeholder shell until WP-SR2).
+- A "Study" launch affordance on the deck (flashcard-list) → resolve `ResolveStudyEntryStartUseCase`
+  (`scope` = the deck) → render `StudyEntryStartResult`: `blocked(reason)` → empty-reason surface
+  (map each `StudyScopeEmptyReason` → ARB copy); `resumeRequired(session)` → Resume / Start-over /
+  Back; `canStart(eligibility)` → Start → `CreateStudySessionUseCase({scope, flashcardIds via
+  resolveEligibleCardIds})` → `pushReplacement` to the session route.
+- Tokens + `Mx*`; copy → ARB (en+vi). Tests: the 3 outcomes + navigation; golden of the gate. Decision
+  rows for the start-gate branches.
+Then WP-SR2 (shell+card) → WP-SR3 (swipe-grade) → WP-SR4 (exit/actions) → WP-SR5 (finalize→result 17,
+6 states). Parked: object-5 WP-FL2b2b (Tags) — resume after Study per owner. Do NOT defer for greenfield.
