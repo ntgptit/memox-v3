@@ -82,7 +82,7 @@ badges · 2.18.2 tag filter FE · 2.19.2 deck move FE · 2.20.2 duplicate soft-w
 
 ### Import (§6) — none built
 6.1.1 route/shell · ~~6.2.1~~ ✅ (CSV parse) / ~~6.2.2~~ ✅ **DONE 2026-06-21** (row validation) · 6.3.1 preview · 6.4.1 / 6.4.2
-transactional commit (no silent partial) · 6.5.1 result · 6.6.1 / 6.6.2 duplicate detection +
+transactional commit (no silent partial) · 6.5.1 result · ~~6.6.1~~ ✅ **DONE 2026-06-21** (dup detection BE) / 6.6.2
 preview · 6.7.1 file picker · 6.9.1 structured-text import.
 
 ### Settings (§8)

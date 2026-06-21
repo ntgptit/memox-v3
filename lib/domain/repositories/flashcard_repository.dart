@@ -118,4 +118,11 @@ abstract interface class FlashcardRepository {
   /// data. An empty deck still produces a valid header-only CSV. A missing deck
   /// is a `NotFoundFailure`; a read error maps to a `StorageFailure`.
   Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId});
+
+  /// Loads the `front`/`back` content of every card currently in [deckId] (WBS
+  /// 6.6.1), used by the import duplicate check to detect rows that clash with an
+  /// existing deck card. A read error maps to a `StorageFailure`.
+  Future<Result<List<({String front, String back})>>> loadDeckCardContents({
+    required DeckId deckId,
+  });
 }

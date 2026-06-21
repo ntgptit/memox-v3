@@ -242,6 +242,11 @@ Future<Either<Failure, ImportResult>> call({
 >   over a clean preview, apply `FlashcardImportDuplicatePolicy.skipExactDuplicates` against earlier
 >   file rows and existing deck cards, returning the committable `previewItems` + `skippedDuplicates`
 >   (each tagged with its `FlashcardImportDuplicateSource`). (WBS 6.6.1.)
+>   **Implemented (WBS 6.6.1):** dedup key = trimmed, case-insensitive `front`+`back` (matches the
+>   manual-duplicate check). A row matching an existing deck card → skipped `source: deck`; a row
+>   repeating an earlier kept file row → skipped `source: importFile` (first kept); existing-deck
+>   clashes take precedence. Reads existing cards via `FlashcardRepository.loadDeckCardContents`; a
+>   read error propagates as `StorageFailure`. Decision row I7.
 > - `CommitDeckImportUseCase.call({deckId, preparation}) → Future<Result<int>>` — reject empty deck
 >   id, reject empty `previewItems`, then commit the rows + default SRS progress in a single
 >   repository transaction (no silent partial import). Returns the committed count. (WBS 6.4.1.)

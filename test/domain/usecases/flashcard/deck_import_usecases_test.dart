@@ -1,7 +1,36 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/core/error/failure.dart';
+import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/flashcard_import_preview.dart';
+import 'package:memox/domain/repositories/flashcard_repository.dart';
+import 'package:memox/domain/types/flashcard_import_duplicate.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/import_row_issue_type.dart';
 import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/prepare_deck_import_usecase.dart';
+
+/// Fake returning canned existing-deck card contents for the prepare stage.
+class _FakeFlashcardRepository implements FlashcardRepository {
+  _FakeFlashcardRepository(this._existing);
+  final List<({String front, String back})> _existing;
+
+  @override
+  Future<Result<List<({String front, String back})>>> loadDeckCardContents({
+    required DeckId deckId,
+  }) async => (failure: null, data: _existing);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName}');
+}
+
+FlashcardImportPreview _previewOf(List<({String front, String back})> rows) =>
+    FlashcardImportPreview(
+      rows: <FlashcardImportRow>[
+        for (final (int i, ({String front, String back}) r) in rows.indexed)
+          FlashcardImportRow(lineNumber: i + 1, front: r.front, back: r.back),
+      ],
+    );
 
 void main() {
   // ParseDeckImportCsvUseCase (WBS 6.2.1 parse + 6.2.2 row validation): RFC-4180
@@ -173,4 +202,155 @@ void main() {
       expect(preview.canCommit, isFalse);
     });
   });
+
+  // PrepareDeckImportUseCase (WBS 6.6.1): skipExactDuplicates over a clean
+  // preview vs earlier file rows + existing deck cards (decision row I7).
+  group('PrepareDeckImportUseCase', () {
+    test('keeps all rows when there are no duplicates', () async {
+      final useCase = PrepareDeckImportUseCase(
+        repository: _FakeFlashcardRepository(const []),
+      );
+      final result = await useCase.call(
+        deckId: 'd1',
+        preview: _previewOf(const [
+          (front: 'a', back: '1'),
+          (front: 'b', back: '2'),
+        ]),
+      );
+
+      expect(result.failure, isNull);
+      expect(result.data!.previewItems, hasLength(2));
+      expect(result.data!.skippedDuplicates, isEmpty);
+      expect(result.data!.importCount, 2);
+    });
+
+    test(
+      'skips an in-file repeat (case-insensitive), keeping the first',
+      () async {
+        final useCase = PrepareDeckImportUseCase(
+          repository: _FakeFlashcardRepository(const []),
+        );
+        final result = await useCase.call(
+          deckId: 'd1',
+          preview: _previewOf(const [
+            (front: 'Eat', back: '먹다'),
+            (front: ' eat ', back: '먹다'), // dup of row 1 after trim+casefold
+            (front: 'drink', back: '마시다'),
+          ]),
+        );
+
+        expect(result.data!.previewItems.map((r) => r.front), <String>[
+          'Eat',
+          'drink',
+        ]);
+        expect(result.data!.skippedDuplicates, hasLength(1));
+        expect(
+          result.data!.skippedDuplicates.single.source,
+          FlashcardImportDuplicateSource.importFile,
+        );
+      },
+    );
+
+    test('skips a row matching an existing deck card', () async {
+      final useCase = PrepareDeckImportUseCase(
+        repository: _FakeFlashcardRepository(const [
+          (front: 'eat', back: '먹다'),
+        ]),
+      );
+      final result = await useCase.call(
+        deckId: 'd1',
+        preview: _previewOf(const [
+          (front: 'EAT', back: ' 먹다 '), // matches existing deck card
+          (front: 'new', back: 'card'),
+        ]),
+      );
+
+      expect(result.data!.previewItems.map((r) => r.front), <String>['new']);
+      expect(
+        result.data!.skippedDuplicates.single.source,
+        FlashcardImportDuplicateSource.deck,
+      );
+    });
+
+    test(
+      'existing-deck clash takes precedence over an in-file repeat',
+      () async {
+        final useCase = PrepareDeckImportUseCase(
+          repository: _FakeFlashcardRepository(const [(front: 'a', back: 'b')]),
+        );
+        final result = await useCase.call(
+          deckId: 'd1',
+          preview: _previewOf(const [
+            (front: 'a', back: 'b'),
+            (front: 'a', back: 'b'),
+          ]),
+        );
+
+        expect(result.data!.previewItems, isEmpty);
+        expect(result.data!.skippedDuplicates, hasLength(2));
+        expect(
+          result.data!.skippedDuplicates.every(
+            (d) => d.source == FlashcardImportDuplicateSource.deck,
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('seenInFile only tracks kept rows (deck-skip vs file-repeat)', () async {
+      // existing deck has a/b. Rows: a/b (deck-skip), c/d (kept), c/d (file-repeat).
+      final useCase = PrepareDeckImportUseCase(
+        repository: _FakeFlashcardRepository(const [(front: 'a', back: 'b')]),
+      );
+      final result = await useCase.call(
+        deckId: 'd1',
+        preview: _previewOf(const [
+          (front: 'a', back: 'b'),
+          (front: 'c', back: 'd'),
+          (front: 'c', back: 'd'),
+        ]),
+      );
+
+      expect(result.data!.previewItems.map((r) => r.front), <String>['c']);
+      final sources = result.data!.skippedDuplicates
+          .map((d) => d.source)
+          .toList();
+      expect(sources, <FlashcardImportDuplicateSource>[
+        FlashcardImportDuplicateSource.deck, // row 1 vs deck
+        FlashcardImportDuplicateSource.importFile, // row 3 repeats kept row 2
+      ]);
+    });
+
+    test('propagates a repository read failure', () async {
+      final useCase = PrepareDeckImportUseCase(
+        repository: _FailingFlashcardRepository(),
+      );
+      final result = await useCase.call(
+        deckId: 'd1',
+        preview: _previewOf(const [(front: 'a', back: 'b')]),
+      );
+
+      expect(result.data, isNull);
+      expect(result.failure, isNotNull);
+    });
+  });
+}
+
+/// Fake whose deck-content read fails, to verify failure propagation.
+class _FailingFlashcardRepository implements FlashcardRepository {
+  @override
+  Future<Result<List<({String front, String back})>>> loadDeckCardContents({
+    required DeckId deckId,
+  }) async => (
+    failure: const Failure.storage(
+      operation: StorageOp.read,
+      table: 'flashcards',
+      cause: 'boom',
+    ),
+    data: null,
+  );
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName}');
 }

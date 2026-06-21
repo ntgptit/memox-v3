@@ -461,5 +461,29 @@ void main() {
         expect(none.totalCount, 3);
       },
     );
+
+    test(
+      'loadDeckCardContents returns front/back of every deck card (6.6.1)',
+      () async {
+        final String deckId = await newDeck();
+        await repo.createFlashcard(deckId: deckId, front: 'eat', back: '먹다');
+        await repo.createFlashcard(deckId: deckId, front: 'drink', back: '마시다');
+
+        final result = await repo.loadDeckCardContents(deckId: deckId);
+
+        expect(result.failure, isNull);
+        expect(
+          result.data!.map((c) => '${c.front}/${c.back}').toSet(),
+          <String>{'eat/먹다', 'drink/마시다'},
+        );
+      },
+    );
+
+    test('loadDeckCardContents is empty for a deck with no cards', () async {
+      final String deckId = await newDeck();
+      final result = await repo.loadDeckCardContents(deckId: deckId);
+      expect(result.failure, isNull);
+      expect(result.data, isEmpty);
+    });
   });
 }

@@ -477,6 +477,21 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
     }
   }
 
+  @override
+  Future<Result<List<({String front, String back})>>> loadDeckCardContents({
+    required DeckId deckId,
+  }) async {
+    try {
+      final List<FlashcardRow> cards = await _dao.flashcardsInDeck(deckId);
+      return _ok(<({String front, String back})>[
+        for (final FlashcardRow card in cards)
+          (front: card.front, back: card.back),
+      ]);
+    } catch (error) {
+      return _fail(_storageRead(error));
+    }
+  }
+
   Result<T> _ok<T>(T data) => (failure: null, data: data);
 
   Result<T> _fail<T>(Failure failure) => (failure: failure, data: null);

@@ -8,6 +8,7 @@ import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/export_deck_csv_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/prepare_deck_import_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/reorder_flashcards_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/update_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/watch_flashcard_list_usecase.dart';
@@ -62,6 +63,12 @@ ExportDeckCsvUseCase exportDeckCsvUseCase(Ref ref) =>
 @riverpod
 ParseDeckImportCsvUseCase parseDeckImportCsvUseCase(Ref ref) =>
     const ParseDeckImportCsvUseCase();
+
+@riverpod
+PrepareDeckImportUseCase prepareDeckImportUseCase(Ref ref) =>
+    PrepareDeckImportUseCase(
+      repository: ref.watch(flashcardRepositoryProvider),
+    );
 
 @riverpod
 CheckManualDuplicateFlashcardUseCase checkManualDuplicateFlashcardUseCase(

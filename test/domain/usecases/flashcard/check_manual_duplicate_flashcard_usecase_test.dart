@@ -77,6 +77,11 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   @override
   Future<Result<DeckCsvExport>> exportDeckCsv({required DeckId deckId}) =>
       throw UnimplementedError();
+
+  @override
+  Future<Result<List<({String front, String back})>>> loadDeckCardContents({
+    required DeckId deckId,
+  }) => throw UnimplementedError();
 }
 
 void main() {

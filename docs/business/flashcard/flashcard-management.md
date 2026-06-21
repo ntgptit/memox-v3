@@ -324,7 +324,9 @@ files.
 - `test/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase_test.dart`
 - `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`,
   `prepare_deck_import_usecase.dart`, `commit_deck_import_usecase.dart` (import pipeline)
-- `lib/data/repositories/flashcard_repository_impl_imports.dart`
+- `lib/data/repositories/flashcard_repository_impl.dart` (`loadDeckCardContents` import read)
+- `lib/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart`, `lib/domain/usecases/flashcard/prepare_deck_import_usecase.dart`
+- `lib/core/util/csv_tokenizer.dart`
 - `lib/domain/entities/flashcard.dart`
 - `lib/domain/usecases/flashcard/**`
 - `lib/presentation/features/flashcards/**`
