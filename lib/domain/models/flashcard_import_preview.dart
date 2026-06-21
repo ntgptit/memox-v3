@@ -26,8 +26,9 @@ part 'flashcard_import_preview.freezed.dart';
 @freezed
 sealed class FlashcardImportRow with _$FlashcardImportRow {
   const factory FlashcardImportRow({
-    /// 1-based line number in the source the row came from (for issue/skip
-    /// reporting).
+    /// 1-based index of the record in the source (for issue/skip reporting).
+    /// Equals the physical line for files without embedded newlines; a quoted
+    /// field spanning lines counts as one record.
     required int lineNumber,
     required String front,
     required String back,

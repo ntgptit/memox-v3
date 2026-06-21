@@ -227,8 +227,12 @@ Future<Either<Failure, ImportResult>> call({
 >   `ImportTextSeparator`, structured text), detect an optional `front,back` header, preserve quoted
 >   values / escaped quotes, skip blank rows, and collect row-level issues as `ImportValidationIssue`
 >   (categorized by `ImportRowIssueType`). (WBS 6.2.1 / 6.2.2 / 6.9.1.)
->   **Implemented (WBS 6.2.1 + 6.2.2):** pure synchronous transform; RFC-4180 quoting (quoted comma/
->   newline/`""`-escape), header drop, blank-line skip, trims front/back; a record with ≥2 columns
+>   **Implemented (WBS 6.2.1 + 6.2.2):** pure synchronous transform; field tokenizing is delegated to
+>   `CsvTokenizer` (`lib/core/util/csv_tokenizer.dart`, a wrapper over the `csv` package — RFC-4180:
+>   quoted comma/newline/`""`-escape) rather than hand-rolled, keeping the parser out of the domain
+>   layer. Header
+>   drop, blank-line skip, trims front/back; `lineNumber` is the 1-based record index. A record with
+>   ≥2 columns
 >   maps to the first two (extra columns ignored — decision row C7), a record with <2 columns becomes
 >   a `malformedRow` issue. CONTENT validation (WBS 6.2.2): front/back required-after-trim →
 >   `missingFront`/`missingBack` line-numbered issue, that row excluded from committable `rows`

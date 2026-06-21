@@ -66,8 +66,10 @@ void main() {
         expect(preview.rows[0].front, 'line1\nline2', reason: 'CRLF → LF');
         expect(
           preview.rows[1].lineNumber,
-          3,
-          reason: 'embedded CRLF advances the source line counter',
+          2,
+          reason:
+              'lineNumber is the logical record index (quoted multi-line '
+              'field counts as one record)',
         );
       },
     );
