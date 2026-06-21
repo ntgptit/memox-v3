@@ -483,4 +483,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deckMoveNoTargets => 'No other folder can hold this deck yet.';
+
+  @override
+  String get deckLastStudiedJustNow => 'just now';
+
+  @override
+  String deckLastStudiedMinutes(int count) {
+    return 'last ${count}m ago';
+  }
+
+  @override
+  String deckLastStudiedHours(int count) {
+    return 'last ${count}h ago';
+  }
+
+  @override
+  String deckLastStudiedDays(int count) {
+    return 'last ${count}d ago';
+  }
+
+  @override
+  String deckLastStudiedWeeks(int count) {
+    return 'last ${count}w ago';
+  }
 }

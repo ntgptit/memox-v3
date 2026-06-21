@@ -469,4 +469,27 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get deckMoveNoTargets =>
       'Chưa có thư mục nào khác có thể chứa bộ thẻ này.';
+
+  @override
+  String get deckLastStudiedJustNow => 'vừa xong';
+
+  @override
+  String deckLastStudiedMinutes(int count) {
+    return '$count phút trước';
+  }
+
+  @override
+  String deckLastStudiedHours(int count) {
+    return '$count giờ trước';
+  }
+
+  @override
+  String deckLastStudiedDays(int count) {
+    return '$count ngày trước';
+  }
+
+  @override
+  String deckLastStudiedWeeks(int count) {
+    return '$count tuần trước';
+  }
 }

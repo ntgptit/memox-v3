@@ -115,6 +115,12 @@ class FolderRepositoryImpl implements FolderRepository {
                 deck: DeckMapper.fromRow(r.decks),
                 cardCount: r.cardCount,
                 dueCount: r.dueCount,
+                lastStudiedAt: r.lastStudiedAt == null
+                    ? null
+                    : DateTime.fromMillisecondsSinceEpoch(
+                        r.lastStudiedAt!,
+                        isUtc: true,
+                      ),
               ),
             )
             .toList(growable: false),

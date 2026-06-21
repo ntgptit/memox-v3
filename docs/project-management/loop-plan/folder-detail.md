@@ -92,14 +92,14 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
       3.2.3's new-vs-due UI is the prior iteration the rebuild dropped (same pattern as the Library
       mastery/newCount enrichments). The `FolderSummary.newCount` field already shipped (WP-L6b) but
       stays read-model-only. Building the badges/CTAs = inventing UI not in the mock.
-- [ ] **WP-FD9 — Deck-row "last studied" line (new gap)** — eligible vertical slice. The mock deck
-      rows show `{n} cards · last {time} ago`, but `deck_tile.dart` renders only `{n} cards` →
-      the last-studied timestamp is a **missing visible mock element**. Build: extend
-      `folderDeckSummaries` with `last_studied_at` = `MAX(study_session_items.answered_at)` over the
-      deck's cards; `DeckSummary.lastStudiedAt`; a localized relative-time formatter (no helper
-      exists yet — needs ARB plural keys for minutes/hours/days/weeks) + ARB; `deck_tile` shows
-      `{n} cards · {rel}` when non-null. BE query + helper + tile tests + golden (fixed `now`).
-      **NEXT.**
+- [x] **WP-FD9 — Deck-row "last studied" line** — **Implemented (2026-06-21).** `folderDeckSummaries`
+      gains `last_studied_at` = `MAX(study_session_items.answered_at)` over the deck's cards (a
+      correlated subquery so the card/due COUNTs don't fan out); `DeckSummary.lastStudiedAt`
+      (DateTime?). New pure `relativeTimeFrom` bucket (`lib/core/util/relative_time.dart`,
+      justNow/minutes/hours/days/weeks) + 5 ARB keys (en+vi); `deck_tile` renders
+      `{n} cards · last {time} ago` when studied (injectable `now` for golden determinism). BE
+      query test (max + null + no count inflation), bucket boundary tests, tile widget tests + a
+      studied-state golden (light+dark). verify PASS.
 
 ## Notes
 

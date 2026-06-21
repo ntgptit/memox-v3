@@ -312,5 +312,15 @@
   "deckMovedSnack": "Deck moved",
   "@deckMovedSnack": { "description": "Snackbar after a successful deck move." },
   "deckMoveNoTargets": "No other folder can hold this deck yet.",
-  "@deckMoveNoTargets": { "description": "Snackbar when there is no other folder a deck can move into." }
+  "@deckMoveNoTargets": { "description": "Snackbar when there is no other folder a deck can move into." },
+  "deckLastStudiedJustNow": "just now",
+  "@deckLastStudiedJustNow": { "description": "Deck row: studied less than a minute ago (reads as '{n} cards · just now')." },
+  "deckLastStudiedMinutes": "last {count}m ago",
+  "@deckLastStudiedMinutes": { "description": "Deck row: last studied n minutes ago (compact).", "placeholders": { "count": { "type": "int" } } },
+  "deckLastStudiedHours": "last {count}h ago",
+  "@deckLastStudiedHours": { "description": "Deck row: last studied n hours ago (compact).", "placeholders": { "count": { "type": "int" } } },
+  "deckLastStudiedDays": "last {count}d ago",
+  "@deckLastStudiedDays": { "description": "Deck row: last studied n days ago (compact).", "placeholders": { "count": { "type": "int" } } },
+  "deckLastStudiedWeeks": "last {count}w ago",
+  "@deckLastStudiedWeeks": { "description": "Deck row: last studied n weeks ago (compact).", "placeholders": { "count": { "type": "int" } } }
 }

@@ -937,6 +937,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No other folder can hold this deck yet.'**
   String get deckMoveNoTargets;
+
+  /// Deck row: studied less than a minute ago (reads as '{n} cards · just now').
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get deckLastStudiedJustNow;
+
+  /// Deck row: last studied n minutes ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}m ago'**
+  String deckLastStudiedMinutes(int count);
+
+  /// Deck row: last studied n hours ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}h ago'**
+  String deckLastStudiedHours(int count);
+
+  /// Deck row: last studied n days ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}d ago'**
+  String deckLastStudiedDays(int count);
+
+  /// Deck row: last studied n weeks ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}w ago'**
+  String deckLastStudiedWeeks(int count);
 }
 
 class _AppLocalizationsDelegate

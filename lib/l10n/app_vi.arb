@@ -139,5 +139,10 @@
   "deckMoveTitle": "Chuyển tới thư mục",
   "deckMoveBlockSubfolders": "Thư mục này đang chứa thư mục con",
   "deckMovedSnack": "Đã chuyển bộ thẻ",
-  "deckMoveNoTargets": "Chưa có thư mục nào khác có thể chứa bộ thẻ này."
+  "deckMoveNoTargets": "Chưa có thư mục nào khác có thể chứa bộ thẻ này.",
+  "deckLastStudiedJustNow": "vừa xong",
+  "deckLastStudiedMinutes": "{count} phút trước",
+  "deckLastStudiedHours": "{count} giờ trước",
+  "deckLastStudiedDays": "{count} ngày trước",
+  "deckLastStudiedWeeks": "{count} tuần trước"
 }

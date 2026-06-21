@@ -1,6 +1,7 @@
 import 'folders.drift';
 import 'decks.drift';
 import 'flashcards.drift';
+import 'study_tables.drift';
 
 -- Read queries for the Library overview and Folder detail screens, plus the
 -- recursive helpers used by delete-cascade and breadcrumb resolution. Single
@@ -149,7 +150,15 @@ SELECT
   decks.**,
   COUNT(fc.id) AS card_count,
   COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0 AND (fp.buried_until IS NULL OR fp.buried_until <= :now) AND fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
-    AS due_count
+    AS due_count,
+  -- Last-studied = the most recent terminal answer across the deck's cards
+  -- (mock `04` deck row `· last {time} ago`); NULL when the deck was never
+  -- studied. A correlated subquery (not a join) keeps the card/due COUNTs from
+  -- fanning out over a card's many session items.
+  (SELECT MAX(si.answered_at)
+   FROM study_session_items si
+   JOIN flashcards f2 ON f2.id = si.flashcard_id
+   WHERE f2.deck_id = decks.id) AS last_studied_at
 FROM decks
 LEFT JOIN flashcards fc ON fc.deck_id = decks.id
 LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id

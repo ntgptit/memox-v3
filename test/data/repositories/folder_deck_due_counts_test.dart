@@ -9,6 +9,7 @@ import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
+import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
@@ -250,6 +251,59 @@ void main() {
     expect(summary.newCount, 1); // only the active box-4 NEW card
     // mean box over all 5 cards = (2 + 6 + 4 + 8 + 3) / 5 = 4.6 → mastery 4.6/8.
     expect(summary.mastery, closeTo(4.6 / 8, 1e-9));
+  });
+
+  test('deck lastStudiedAt = MAX(answered_at) over the deck cards; null when '
+      'never studied', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Lang',
+    )).data!.id;
+    final String studied = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Studied',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+    final String fresh = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Fresh',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+    final String cardA = await addCard(studied);
+    final String cardB = await addCard(studied);
+    await addCard(fresh); // never studied
+
+    // One completed session; two answered items on the studied deck's cards.
+    await db.customStatement(
+      'INSERT INTO study_sessions (id, entry_type, study_type, status, '
+      'started_at, updated_at) VALUES '
+      "('s1', 'deck', 'new_cards', 'completed', 0, 0)",
+    );
+    Future<void> answer(String id, String flashcardId, int at) =>
+        db.customStatement(
+          'INSERT INTO study_session_items (id, session_id, flashcard_id, '
+          'sort_order, answered_at, created_at, updated_at) VALUES '
+          "(?, 's1', ?, 0, ?, 0, 0)",
+          <Object>[id, flashcardId, at],
+        );
+    await answer('i1', cardA, fixedNow - 5000);
+    await answer('i2', cardB, fixedNow - 1000); // the most recent
+    await answer('i3', cardA, fixedNow - 9000);
+
+    final FolderDetail detail = (await repo.watchFolderDetail(folderId).first)!;
+    final DeckSummary studiedDeck = detail.decks.firstWhere(
+      (DeckSummary d) => d.deck.id == studied,
+    );
+    final DeckSummary freshDeck = detail.decks.firstWhere(
+      (DeckSummary d) => d.deck.id == fresh,
+    );
+
+    expect(
+      studiedDeck.lastStudiedAt!.millisecondsSinceEpoch,
+      fixedNow - 1000, // MAX over the deck's answered items
+    );
+    expect(freshDeck.lastStudiedAt, isNull);
+    // The correlated subquery must not inflate the card count.
+    expect(studiedDeck.cardCount, 2);
   });
 
   test('mastery is null and newCount 0 for a folder with no cards', () async {
