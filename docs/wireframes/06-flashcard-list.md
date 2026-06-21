@@ -18,14 +18,19 @@ source_specs:
 > reached by tapping a deck on Folder Detail (`/library/deck/:deckId/flashcards`, child of the
 > Library branch). As-built V1 (authoritative over older prose below where they differ):
 >
-> - **Layout**: app bar (back + deck name + search + kebab → overflow sheet: Reorder cards / Delete
->   deck) · `{n} CARDS` overline
+> - **Layout**: app bar (back + deck name + `swap_vert` sort + kebab → overflow sheet: Reorder
+>   cards / Delete deck) · `{n} CARDS` overline
 >   with a trailing **`{m} due` badge** (WP-D1, 2026-06-21 — `FlashcardListDetail.dueCount`,
 >   full-deck active due, F13 exclusion; shown only when `> 0`) ·
 >   grouped card of `FlashcardTile` rows (accent tile + **front** title + **back** subtitle +
->   chevron) · `Add card` FAB.
+>   chevron) · `Add card` FAB · **persistent bottom search dock**.
+> - **Search (WP-D2, 2026-06-22)**: a **persistent** bottom `FlashcardListSearchDock` (kit `06`
+>   `search-dock`, in the Loaded base tree) — always present while the deck has cards; hidden in
+>   empty / loading / error / reorder. Supersedes the old app-bar swap (`FlashcardListSearchAppBar`
+>   + the `FlashcardSearchActive` toggle, both deleted). Filtering keys on the query alone
+>   (`flashcardSearchQueryProvider`); the regular deck app bar (sort + overflow) stays in place.
 > - **States**: loaded · empty (hero + `Add card` CTA) · loading (skeleton) · error ·
->   search (mode toggle) · search-no-results. Backed by the existing
+>   search-no-results. Backed by the existing
 >   `watchFlashcardList` read model (`FlashcardListDetail`, server-side front/back search).
 >   Goldens: `test/presentation/features/decks/flashcard_list_test.dart`.
 > - **Card CRUD (V1, front/back only)**: FAB / empty-CTA → add-card dialog; row tap → edit-card
@@ -42,14 +47,14 @@ source_specs:
 ## V1 verification status (2026-06-06)
 
 This screen is **partially Current**. The aspects below are implemented in code and
-verified by tests (`test/presentation/features/flashcards/flashcard_list_test.dart`,
+verified by tests (`test/presentation/features/decks/flashcard_list_test.dart`,
 `test/data/repositories/flashcard_repository_impl_test.dart`); everything else is
 **Future** and intentionally not exposed in V1. Do NOT mark the whole screen Current.
 
 > **Drift correction (2026-06-06):** prior versions of this section described the
 > deck-level study-entry section (Prompt 46), the Resume-Discard flow (Prompt 47),
 > bulk/selection, state badges, and a §Components 1-1 widget mapping as Current. **None
-> of that existed in code** — the entire `lib/presentation/features/flashcards/**`,
+> of that existed in code** — the entire `lib/presentation/features/decks/**` (flashcard-list),
 > `FlashcardRepository`, `FlashcardDao`, and the flashcard use cases were unbuilt; the
 > route was a `RoutePlaceholder`. The list below replaces those over-claims with the
 > behaviour actually shipped.
@@ -276,13 +281,13 @@ exist in code today (`flashcard_list_body.dart`, `flashcard_detail_card_row.dart
 `flashcard_empty_state_section.dart`, `flashcard_list_skeleton.dart`,
 `flashcard_row_actions_sheet.dart`, `deck_actions_sheet.dart`). Rows pointing at other
 `*_section.dart` filenames are the **target structure** for when those sections are built — do
-not treat a filename here as proof the widget exists; check `lib/presentation/features/flashcards/widgets/`.
+not treat a filename here as proof the widget exists; check `lib/presentation/features/decks/widgets/`.
 
 | Order | Component | Code widget | Spec |
 | --- | --- | --- | --- |
-| 1 | App bar | (inline in screen scaffold) | Title = deck name. Back. Search (in-deck). `swap_vert` sort (→ shared content-sort sheet, WBS 2.23.1). Overflow ⋮. |
+| 1 | App bar | (inline in screen scaffold) | Title = deck name. Back. `swap_vert` sort (→ shared content-sort sheet, WBS 2.23.1). Overflow ⋮. (In-deck search lives in the **persistent bottom `FlashcardListSearchDock`**, WP-D2, not the app bar.) |
 | 2 | Header section | `flashcard_header_section.dart` | Renders title + overflow + search. Replaces app bar inline when needed (responsive). |
-| 3 | Breadcrumb | shared `MxBreadcrumb` + `buildLibraryBreadcrumb` (`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`), docked under the app bar | **Current (design redesign).** `🏠 Root › {folderPath} › {deckName}` with chevron (`›`) separators; the first crumb is the **Root** anchor (home glyph + `libraryRootLabel`, not "Library"); every folder crumb is a tappable ancestor (pushes its detail), the `Root` crumb taps to the branch root, the deck name is the bold non-tappable current leaf. Scrolls horizontally on deep paths; hidden in search mode and until loaded. (The card-count overline / target-language subtitle is a separate element, not part of this trail.) |
+| 3 | Breadcrumb | shared `MxBreadcrumb` + `buildLibraryBreadcrumb` (`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`), docked under the app bar | **Current (design redesign).** `🏠 Root › {folderPath} › {deckName}` with chevron (`›`) separators; the first crumb is the **Root** anchor (home glyph + `libraryRootLabel`, not "Library"); every folder crumb is a tappable ancestor (pushes its detail), the `Root` crumb taps to the branch root, the deck name is the bold non-tappable current leaf. Scrolls horizontally on deep paths; hidden in reorder mode and until loaded. (The card-count overline / target-language subtitle is a separate element, not part of this trail.) |
 | 4 | Deck study-entry section | `flashcard_study_entry_section.dart` (target) | **Future — not built.** Target: Resume banner + deck-level study card with Today (`study_type=srs_review`) and Study-deck (default new study) CTAs. Today hidden at 0 due; whole section hidden when no cards and no resume. Renders above the deck summary. Never starts a session directly. |
 | 5 | Deck summary | `flashcard_deck_summary_section.dart` | Total cards · due-today badge · mastery progress chip. Single row above the study CTAs. |
 | 6 | Study modes | `flashcard_study_modes_section.dart` | Per-mode study tiles (Review / Match / Guess / Recall / Fill) + the Mix card; all route through the Study Entry Gate (`entry_type=deck`, default new study). Disabled on empty deck. The deck-level "Study deck" / "Today" CTA pair lives in the study-entry section (order 4). |
@@ -453,8 +458,8 @@ Render order is enforced by reviewer checklist — see "Pre-commit parity check"
 
 **Code paths (verified 2026-06-06):**
 
-- Screen: `lib/presentation/features/flashcards/screens/flashcard_list_screen.dart`.
-- Viewmodel: `lib/presentation/features/flashcards/viewmodels/flashcard_list_viewmodel.dart` (Riverpod annotation) — `FlashcardListToolbar` (search / sort / reorder state), `flashcardListQuery`, `FlashcardListController` (delete card, reorder, delete deck).
+- Screen: `lib/presentation/features/decks/screens/flashcard_list_screen.dart`.
+- Viewmodel: `lib/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart` (Riverpod annotation) — `flashcardListStreamProvider` (read model), `FlashcardSearchQuery` (`flashcardSearchQueryProvider`, term), `FlashcardReorderActive` (reorder state). Card/deck mutations go through `FlashcardActionController` (`lib/presentation/features/decks/controllers/flashcard_action_controller.dart`: delete card, reorder, delete deck).
 - Widgets actually built (V1 reduced set; the §Components 1-1 table describes the full Future target): `flashcard_list_body.dart`, `flashcard_detail_card_row.dart`, `flashcard_empty_state_section.dart`, `flashcard_list_skeleton.dart`, `deck_actions_sheet.dart`, `flashcard_row_actions_sheet.dart`. The study-entry / deck-summary / study-modes / progress / bulk / toolbar-filter / preview section widgets are **not built** (Future).
 - Domain: entity `lib/domain/entities/flashcard.dart`; read model `lib/domain/models/flashcard_list_detail.dart`; contract `lib/domain/repositories/flashcard_repository.dart`; use cases `lib/domain/usecases/flashcard/{watch_flashcard_list,delete_flashcard,reorder_flashcards}_usecase.dart` and `lib/domain/usecases/deck/delete_deck_usecase.dart`.
 - Data: `lib/data/datasources/local/drift/flashcard_queries.drift`, `lib/data/datasources/local/daos/flashcard_dao.dart`, `lib/data/mappers/flashcard_mapper.dart`, `lib/data/repositories/flashcard_repository_impl.dart`. Deck delete lives on `FolderRepository.deleteDeck` (`folder_repo_impl_mutation_helpers.dart::deleteDeckTxn`, reverts an emptied parent folder to `unlocked`).

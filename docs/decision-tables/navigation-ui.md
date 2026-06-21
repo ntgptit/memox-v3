@@ -29,7 +29,7 @@ applies_to: Navigation and UI state behavior branches
 | N13 | Dashboard Today CTA | `dueToday == 0` | Show caught-up/no-due copy, disable the study CTA, and do not enter study flow | C1 | TBD |
 | N14 | Bottom-nav destinations | Shell rendered | Exactly five tabs in order Home · Library · Search · Progress · Settings; tapping a tab uses `goBranch`; re-tapping the active tab returns it to its branch root (`initialLocation: true`) | C0+C1 | TBD |
 | N15 | Breadcrumb trail | Folder detail loaded | Trail `Library › …ancestors › {currentFolder}`; last crumb (current folder) non-tappable; `Library` + each ancestor tappable; hidden in search mode | C1 | TBD |
-| N16 | Breadcrumb trail | Flashcard list loaded | Trail `Library › …folders › {deckName}`; deck is the non-tappable current leaf; every folder crumb is a tappable ancestor; hidden in search mode | C1 | TBD |
+| N16 | Breadcrumb trail | Flashcard list loaded | Trail `Library › …folders › {deckName}`; deck is the non-tappable current leaf; every folder crumb is a tappable ancestor; hidden in reorder mode and until loaded (flashcard-list search is a persistent bottom dock, WP-D2, so the trail stays during search) | C1 | TBD |
 | U1 | Load | Loading | Show shared loading/retained state | C0 | TBD |
 | U2 | Load | Empty | Show shared empty state | C0+C1 | TBD |
 | U3 | Load | Error | Show shared error state | C0+C1 | TBD |

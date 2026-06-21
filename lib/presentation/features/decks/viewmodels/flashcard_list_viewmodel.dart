@@ -35,17 +35,6 @@ class FlashcardSearchQuery extends _$FlashcardSearchQuery {
   void clear() => state = '';
 }
 
-/// Whether one flashcard-list screen is in search mode. Keyed by [deckId].
-@riverpod
-class FlashcardSearchActive extends _$FlashcardSearchActive {
-  @override
-  bool build(String deckId) => false;
-
-  void activate() => state = true;
-
-  void deactivate() => state = false;
-}
-
 /// Whether one flashcard-list screen is in **reorder mode** (deck overflow →
 /// Reorder cards). Keyed by [deckId]. WBS 2.14.2.
 @riverpod

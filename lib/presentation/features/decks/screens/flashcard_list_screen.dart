@@ -34,12 +34,12 @@ class FlashcardListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // guard:allow-screen-watch -- reason: the app bar swaps to search mode, the
-    // breadcrumb/title come from the deck stream, and the delete action needs the
-    // loaded detail, so the shell reacts to search-active + detail state; a body
-    // widget cannot own the app-bar/breadcrumb decisions.
+    // guard:allow-screen-watch -- reason: reorder mode swaps the app bar, the
+    // breadcrumb/title come from the deck stream, the persistent search dock
+    // mounts only when the deck has cards, and the delete action needs the loaded
+    // detail, so the shell reacts to reorder + detail state; a body widget cannot
+    // own the app-bar/breadcrumb/dock decisions.
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final bool searching = ref.watch(flashcardSearchActiveProvider(deckId));
     final bool reordering = ref.watch(flashcardReorderActiveProvider(deckId));
     final AsyncValue<Result<FlashcardListDetail>> async = ref.watch(
       flashcardListStreamProvider(deckId),
@@ -91,18 +91,11 @@ class FlashcardListScreen extends ConsumerWidget {
                 ),
               ],
             )
-          : searching
-          ? FlashcardListSearchAppBar(deckId: deckId)
+          // The regular deck app bar stays in place; the search field lives in
+          // the persistent bottom dock (kit `06`), not an app-bar swap.
           : MxAppBar(
               title: detail?.deck.name ?? '',
               actions: <Widget>[
-                MxIconButton(
-                  icon: Icons.search,
-                  tooltip: l10n.flashcardSearchTooltip,
-                  onPressed: () => ref
-                      .read(flashcardSearchActiveProvider(deckId).notifier)
-                      .activate(),
-                ),
                 MxIconButton(
                   icon: Icons.swap_vert,
                   tooltip: l10n.sortTooltip,
@@ -121,19 +114,25 @@ class FlashcardListScreen extends ConsumerWidget {
                   ),
               ],
             ),
-      floatingActionButton: searching || reordering
+      floatingActionButton: reordering
           ? null
           : MxFab(
               icon: Icons.add,
               tooltip: l10n.flashcardAddCardLabel,
               onPressed: () => runAddCard(context, ref, deckId),
             ),
+      // Persistent bottom search dock (kit `06` `search-dock`) — present only
+      // when the deck has cards; hidden in empty / loading / error / reorder.
+      bottomNavigationBar:
+          (detail != null && detail.totalCount > 0 && !reordering)
+          ? FlashcardListSearchDock(deckId: deckId)
+          : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           // Ancestry trail under the app bar: Library › folders › deck (the deck
-          // is the current leaf). Hidden in search/reorder mode and until loaded.
-          if (!searching && !reordering && detail != null)
+          // is the current leaf). Hidden in reorder mode and until loaded.
+          if (!reordering && detail != null)
             Padding(
               padding: const EdgeInsets.only(bottom: MxSpacing.space2),
               child: MxBreadcrumb(
