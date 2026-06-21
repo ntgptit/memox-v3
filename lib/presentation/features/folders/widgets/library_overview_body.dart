@@ -37,8 +37,8 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// Library Overview body: the streamed folder list rendered as one grouped
 /// card, with its loading / loaded / true-empty / search-no-results / error
-/// states, plus the folder overflow actions. The search field + Cancel live in
-/// the app bar (`LibrarySearchAppBar`), not here. WBS 3.1.2.
+/// states, plus the folder overflow actions. The search field lives in the
+/// bottom dock (`LibrarySearchDock`), not here. WBS 3.1.2.
 class LibraryOverviewBody extends ConsumerWidget {
   const LibraryOverviewBody({super.key});
 

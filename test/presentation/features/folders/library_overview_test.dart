@@ -12,6 +12,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/library_root_anchor.dart';
+import 'package:memox/presentation/features/folders/widgets/library_search_dock.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
@@ -174,8 +175,9 @@ void main() {
       expect(find.text('3 FOLDERS'), findsNothing);
       // Due badge only on the folder with dueCount > 0.
       expect(find.text('12 due'), findsOneWidget);
-      // FAB present in the loaded (non-search) state.
+      // FAB present, search dock absent in the loaded (non-search) state.
       expect(find.byType(MxFab), findsOneWidget);
+      expect(find.byType(LibrarySearchDock), findsNothing);
       // Root anchor present: home icon + `Root` label + live folder count.
       expect(find.byType(LibraryRootAnchor), findsOneWidget);
       expect(
@@ -236,7 +238,8 @@ void main() {
       expect(find.text('Korean'), findsOneWidget);
       expect(find.text('English'), findsNothing);
       expect(find.text('1 FOLDERS'), findsOneWidget);
-      // FAB hidden while searching.
+      // Search mounts the bottom dock; FAB hidden while searching.
+      expect(find.byType(LibrarySearchDock), findsOneWidget);
       expect(find.byType(MxFab), findsNothing);
 
       await tester.enterText(find.byType(MxSearchField), 'zzz');
@@ -245,6 +248,25 @@ void main() {
         find.byKey(const ValueKey<String>('library_search_no_results')),
         findsOneWidget,
       );
+    });
+
+    testWidgets('search icon toggles the dock off and restores the FAB', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      // Enter search: dock up, FAB hidden.
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pumpAndSettle();
+      expect(find.byType(LibrarySearchDock), findsOneWidget);
+      expect(find.byType(MxFab), findsNothing);
+
+      // Tap the app-bar search icon again to exit search.
+      await tester.tap(find.byIcon(Icons.search).first);
+      await tester.pumpAndSettle();
+      expect(find.byType(LibrarySearchDock), findsNothing);
+      expect(find.byType(MxFab), findsOneWidget);
     });
 
     testWidgets('row long-press opens the folder action sheet', (tester) async {
@@ -307,7 +329,8 @@ void main() {
       }
     }
 
-    // Search-with-results state (mock 03e): the search app bar + count overline.
+    // Search-with-results state (mock `03` Search): the bottom search dock +
+    // count overline, regular Library app bar retained.
     for (final Brightness brightness in Brightness.values) {
       testWidgets('search — ${brightness.name}', (tester) async {
         await _pump(

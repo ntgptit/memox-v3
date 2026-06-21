@@ -25,7 +25,8 @@ scope, wireframes, shared components, and design tokens.
 > inline search field**, and to a **deferred / unwired create-folder FAB** is **superseded**
 > by the §V1 status (rev. 2) above: rows render a **chevron** (`Icons.chevron_right`, no
 > kebab; tap → action sheet until WBS 3.2.2, long-press → action sheet); search is a
-> **mode toggle** in the app bar (`Icons.search` → field + Cancel); and the **`New folder`
+> **mode toggle** in the app bar (`Icons.search`) that mounts a **bottom search dock**
+> (rev. 3, see below); and the **`New folder`
 > FAB + empty-CTA create dialog (with color/icon pickers) are Current**. Do not re-flag
 > these as failures. Ghost symbols (`MxIconTile`/`library_sections.dart`/`library_skeleton.dart`/
 > `showMxFolderRenameDialog`/`libraryOverviewQueryProvider`) map to the as-built files in the
@@ -41,8 +42,8 @@ treatment, bringing the screen to the kit `03a–03f` visuals.
 
 | Concern | As-built file/symbol |
 |---|---|
-| Screen shell + app-bar mode toggle | `library_overview_screen.dart` (`ConsumerWidget`: title bar with `Icons.search` (→ search mode) + `Icons.swap_vert` (→ content-sort sheet, WBS 2.23.1), OR `LibrarySearchAppBar` while searching; `MxFab(Icons.create_new_folder_outlined)` hidden in search) |
-| Search-mode app bar (field + Cancel) | `library_search_app_bar.dart` (`LibrarySearchAppBar`) + `library_search_field.dart` (`autofocus`) |
+| Screen shell + app-bar mode toggle | `library_overview_screen.dart` (`ConsumerWidget`: title bar with `Icons.search` (toggles search mode) + `Icons.swap_vert` (→ content-sort sheet, WBS 2.23.1); the regular Library app bar stays while searching; `MxFab(Icons.create_new_folder_outlined)` hidden in search) |
+| Search-mode bottom dock (rev. 3, 2026-06-22 — kit `03` Search `search-dock`) | `library_search_dock.dart` (`LibrarySearchDock`, mounted in the `bottomNavigationBar` slot while searching) + `library_search_field.dart` (`autofocus`). Supersedes the rev. 2 `LibrarySearchAppBar` app-bar swap (deleted): the kit `03` Search state keeps the title + sort app bar and drops the field into a flat full-bleed dock pinned at the foot. |
 | Search-active toggle | `library_overview_viewmodel.dart` (`librarySearchActiveProvider`, `librarySearchQueryProvider`, pure `filterLibrary`) |
 | States body (loading skeleton / grouped loaded / true-empty + CTA / search overline+results / search-no-results / error) | `library_overview_body.dart` (via `AppAsyncBuilder`) |
 | Loading skeleton | `library_loading_skeleton.dart` (`LibraryLoadingSkeleton`, grouped placeholder rows) |
@@ -167,7 +168,7 @@ is regenerated.
 | Screen background | Full-screen themed surface                                 | `MxScaffold`                           | Theme surface role only                          | No raw hex in feature widgets.                  |
 | Header            | Large `Library` title, left aligned                        | `MxAppBar`                             | App bar theme                                    | Use l10n title.                                 |
 | Header action     | Sliders/tune icon on right                                 | `MxIconButton(Icons.tune_rounded)`     | Disabled while visual-only                       | No fake filter behavior.                        |
-| Search field      | Rounded full-width field below title                       | `LibrarySearchField` + `MxSearchField` | Shared input component                           | Hint must say `Search folders`; PNG/spec text is stale for V1. |
+| Search field      | Rounded full-width field in the bottom search dock (kit `03` Search) | `LibrarySearchDock` → `LibrarySearchField` + `MxSearchField` | Shared input component, docked at the foot | Hint must say `Search folders`; PNG/spec text is stale for V1. |
 | Search shortcut   | Right-side `K` keycap when the field is empty              | `LibrarySearchField`                  | Local keycap surface                             | Visual parity only; it disappears once the user types. |
 | Due summary       | Card with bolt icon and due count                          | `LibraryDueSummaryCard`                | `MxCard`, `MxIconTile`, `MxText`                 | Non-interactive; show subtitle `Across {n} folders · ~{m} min` and chevron when due summary is present. |
 | Section header    | `{n} folders` overline/count                               | `LibraryFolderCountHeader`             | `MxSectionHeader`                                | Render the mock-aligned `Recent` pill as current visual parity, but keep it non-interactive. |

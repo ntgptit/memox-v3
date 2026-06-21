@@ -91,7 +91,8 @@ Notes:
   (`/library/deck/:deckId/flashcards/:flashcardId/history`), pushed over the shell from the
   root navigator (shell hidden), entered via the flashcard row-action sheet ("View history").
 - Library search (current code): in-place folder search inside Library Overview, toggled by the
-  app-bar search icon (`librarySearchActiveProvider` → `LibrarySearchAppBar`). There is **no**
+  app-bar search icon (`librarySearchActiveProvider` → bottom `LibrarySearchDock` mounted in the
+  `bottomNavigationBar` slot). There is **no**
   dedicated search route or `RouteNames.librarySearch` / `RoutePaths.librarySearchTemplate` constant
   in the current codebase; the `GlobalSearchUseCase` / `SearchRepository` domain+data layer exists
   but is not yet wired to any screen. The design redesign promotes global search to a **top-level
