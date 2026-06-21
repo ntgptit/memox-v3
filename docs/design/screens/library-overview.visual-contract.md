@@ -70,12 +70,17 @@ palette sports_esports favorite` (`null` → `folder_outlined`). Stored as opaqu
 - **App-bar sort control** → **Current (WBS 2.23.1, supersedes "disabled/visual-only"):**
   `Icons.swap_vert` opens the shared `showContentSortSheet` (Manual / Name / Newest; `lastStudied`
   deferred), a per-scope pref (`library.sort.library`) applied presentation-side via `sortLibraryFolders`.
-- **Mastery bar, new-card badge** → the read model now ships these (2026-06-21): `FolderSummary`
-  carries `mastery` (`AVG(COALESCE(box_number,1)) / SrsBox.max` over the subtree, null when empty)
-  and `newCount` (active NEW cards, F13 exclusion). FE rendering is the next slice (WBS 3.7.1 /
-  WP-L8). The due **badge** on a row is already built and shows when `dueCount > 0`.
-- **Deck-digest subtitle, due-summary card** → `FolderSummary` still lacks `subtitle`; the
-  library-level `dueToday` total for the summary card is not yet computed; surface when those ship.
+- **Mastery bar, new-card badge, deck-digest subtitle, due-summary card** → **NOT in the current
+  kit mock (verified against `shots/03-library-overview--loaded--{light,dark}.png`, 2026-06-21).**
+  The rebuilt (calm-app) mock renders **minimal** folder rows — tinted icon + name + a single
+  `{n} decks · {m} cards` digest + chevron — and **no** mastery bar, new badge, deck-name subtitle,
+  or top due-summary card. `library_folder_tile.dart` already matches this. The §Scope Decision /
+  §Visual Mapping rows below that mark these "Current" describe the **prior (mature) iteration** the
+  rebuild dropped; treat them as **Future**, not built. The per-row due **badge** is built and
+  shows only when `dueCount > 0` (the loaded fixture has none due). NOTE: the `FolderSummary.mastery`
+  / `newCount` read-model fields shipped (WP-L6b, WBS 3.7.1) but have **no current FE consumer** —
+  they are read-model-only, available if a later design (e.g. WBS 3.2.3 new-vs-due, or a Progress
+  screen) renders them. `subtitle` / library-level `dueToday` were not built.
 - **Overflow `Study due cards` / `Archive folder`** → no backend (out of scope).
 
 **Mock-vs-contract conflict (resolved → mock parity):** rev. 1 mandated a **kebab** instead of

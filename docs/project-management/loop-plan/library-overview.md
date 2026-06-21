@@ -82,16 +82,21 @@ remains → object is **DONE** for the FE loop.
       (int, default 0) + `mastery` (double?, `avg_box / SrsBox.max`, null when empty). Repo
       `_summary` mapper computes mastery; both call sites pass the new columns. BE tests
       (newCount-excludes-suspended, mastery = mean box / 8, null when empty). No schema. verify PASS.
-- [ ] WP-L6c — Deck-digest `subtitle` read model (BE) — `GROUP_CONCAT` of ≤3 direct deck names per
-      folder → `FolderSummary.subtitle` (String?). Query-only; FE shows it under the folder name.
-- [ ] WP-L6d — Library `dueToday` due-summary total (BE) — a library-level aggregate (total active
-      due cards + folder count + est. minutes) for the due-summary card; `LibraryOverview.dueToday`.
-- [ ] WP-L7 — Due-summary card FE (`dueToday`) — depends on WP-L6. Render the non-interactive
-      due-summary `MxCard` (title + `Across {n} folders · ~{m} min` subtitle + chevron) when
-      `dueToday > 0`. Widget + golden.
-- [ ] WP-L8 — Folder-tile enrichment FE (`mastery` bar / `newCount` badge / `subtitle`) — depends
-      on WP-L6. Wire `MxLinearProgress` mastery bar, new-card badge, and deck-digest subtitle into
-      `library_folder_tile.dart`, each rendered only when its field is set. Widget + golden.
+- [ ] WP-L6c — Deck-digest `subtitle` read model (BE) — **DEFER (mock-doc-conflict).** The current
+      kit mock `03a` renders a single `{n} decks · {m} cards` digest, **not** a deck-name subtitle;
+      building `subtitle` adds a read-model field with no FE consumer in the current design.
+- [ ] WP-L6d — Library `dueToday` due-summary total (BE) — **DEFER (mock-doc-conflict).** The
+      current kit mock `03a` shows **no** top due-summary card; not in scope.
+- [ ] WP-L7 — Due-summary card FE — **DEFER (mock-doc-conflict).** Not in the current kit mock `03a`
+      (the loaded shot has no due-summary card). The §Scope Decision "Current" row is stale
+      prior-iteration design.
+- [ ] WP-L8 — Folder-tile enrichment FE (mastery bar / new badge / subtitle) — **DEFER
+      (mock-doc-conflict).** Verified against `shots/03-library-overview--loaded--{light,dark}.png`
+      (2026-06-21): the rebuilt calm-app mock renders **minimal** folder rows (icon + name +
+      `{n} decks · {m} cards` + chevron) with **no** mastery bar, new badge, or subtitle.
+      `library_folder_tile.dart` already matches the mock. Building these = inventing UI the redesign
+      dropped. The WP-L6b `mastery`/`newCount` read-model fields are correct + tested but have no
+      current FE consumer (available for a future WBS 3.2.3 / Progress design).
 - [ ] WP-L9 — `03j` Archive folder action + dialog — **DEFER (Future / needs-approval).** The
       Library visual contract marks archive **Future / out-of-scope** (no archive use case / repo /
       DAO / schema column; product scope decision, not just missing BE). Building it = inventing
@@ -100,15 +105,27 @@ remains → object is **DONE** for the FE loop.
 Note: Folder-row tap → folder detail navigation is **object 2 (Folder detail, WBS 3.2.2)**,
 not Library; the interim tap→action-sheet keeps the chevron live and is correct for this object.
 
-**Rules updated 2026-06-21 (vertical-slice loop):** BE may now be added to unblock FE, so the
-former needs-BE DEFERs (WP-L6…L8) are re-opened as buildable read-model slices. Only WP-L9
-(archive) stays DEFER — it is a Future product-scope decision, not a missing-BE gap.
+**Rules updated 2026-06-21 (vertical-slice loop):** BE may be added to unblock FE.
+
+**Mock-parity correction 2026-06-21:** verified the Library tile against the actual kit mock `03a`
+(not just the prose tables). The rebuilt calm-app mock dropped the prior iteration's folder-row
+enrichments (mastery bar / new badge / deck-name subtitle / top due-summary card). The current
+`library_folder_tile.dart` ALREADY matches `03a`, so WP-L6c/L6d/L7/L8 are DEFERred
+(mock-doc-conflict) and **object 1 is DONE per the current mock**. Lesson: check the mock image
+before building enrichment BE — WP-L6a (F13 correctness) + WP-L6b (read-model fields) are correct
+and kept, but L6b's fields are currently unrendered.
+
+## Status: DONE (per current kit mock 03a)
+
+All in-mock Library FE is Implemented + verified; the tile matches `03a`. Remaining items are
+DEFERred (mock-doc-conflict: enrichments not in the rebuilt mock; or Future archive). Next object
+(outer→inner): **Folder (detail)** — WP-FD5a deck-move-targets BE.
 
 ## Conclusion
 
-Object 1 (Library overview) was DONE under the FE-only rules, but the **vertical-slice rules
-(2026-06-21)** re-open WP-L6…L8 (read-model enrichment — `dueToday`/`mastery`/`newCount`/
-`subtitle`), which the mock + visual contract already specify and which were only blocked on the
-read model. Object 1 is therefore **IN PROGRESS** again. Next work-package: **WP-L6 Library
-read-model enrichment (BE)**. Only WP-L9 (archive) stays DEFER (Future product scope). Per the
-outer→inner rule, object 1 must complete these before object 2 advances.
+Object 1 (Library overview) is **DONE** per the current kit mock `03a`: the screen + all 11 states
++ the minimal folder tile match the rebuilt calm-app mock. The prior-iteration enrichments
+(mastery bar / new badge / deck-name subtitle / due-summary card) are **not in the current mock**
+and are DEFERred (mock-doc-conflict); WP-L6a (F13 fix) + WP-L6b (read-model fields) shipped as
+correct BE. Next object (outer→inner): **Folder (detail)** — first work-package WP-FD5a
+deck-move-targets BE.

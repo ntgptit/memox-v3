@@ -26,3 +26,12 @@ STILL DEFERRED (valid reasons under the new rules):
 - Library `03j` Archive → Future / needs-approval (product-scope decision, not just missing BE).
 - 3.2.3 Folder new-vs-due split → larger slice, sequenced after deck-move; re-audit when reached.
 - 2.10.2 / 2.5.2 reorder FE → mock-doc-conflict (no reorder-state mock; would invent drag design).
+
+## MOCK-PARITY CORRECTION 2026-06-21 — Library enrichments NOT in the rebuilt mock
+
+Verified the Library folder tile against the actual kit mock `shots/03-library-overview--loaded--{light,dark}.png` (not just the prose §Scope Decision table, which is stale prior-iteration target shape). The rebuilt calm-app mock renders minimal folder rows (icon + name + `{n} decks · {m} cards` + chevron). `library_folder_tile.dart` already matches it. So the following RE-OPENED items are now DEFERred (the redesign dropped them):
+- 2026-06-21 · (read-model) · Library overview · mock-doc-conflict · Folder mastery bar / new-card badge FE (WP-L8) — not in kit `03a`; the `FolderSummary.mastery`/`newCount` fields shipped (WP-L6b, correct + tested) but have no current FE consumer (kept for a future WBS 3.2.3 / Progress design).
+- 2026-06-21 · (read-model) · Library overview · mock-doc-conflict · Deck-digest subtitle (WP-L6c) — kit `03a` shows a `{n} decks · {m} cards` digest, not deck names.
+- 2026-06-21 · (read-model) · Library overview · mock-doc-conflict · Due-summary card + `dueToday` total (WP-L6d/L7) — no due-summary card in kit `03a`.
+
+Lesson: check the mock IMAGE before building enrichment BE/FE. Object 1 (Library) is DONE per the current mock.
