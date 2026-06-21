@@ -57,40 +57,46 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 - [x] WP-FD2 — Deck create FE (FAB → dialog) (WBS 2.7.2) — **Implemented**
 - [x] WP-FD3 — Deck rename FE (sheet → dialog → BE) (WBS 2.8.2) — **Implemented**
 - [x] WP-FD4 — Deck delete FE (sheet → confirm → BE) (WBS 2.9.2) — **Implemented**
-- [ ] **WP-FD5 — Deck move FE (WBS 2.19.2)** — **DEFER (needs-BE + spec-unclear).** The deck
-      action sheet exposes only rename/delete (move deferred in code). A move picker must, per
-      `docs/wireframes/25-shared-bottom-sheets.md` §folder-picker §Forbidden, *disable* (not hide)
-      destinations the deck can't move into, annotated up front. That annotation is move-eligibility
-      business logic (content-mode rules: a deck may go to `unlocked`/`decks` folders, blocked from
-      `subfolders`-mode + its current parent). The folder-move path computes targets in the
-      **repository** (`getFolderMoveTargets` → `FolderMoveTarget`/`FolderMoveBlock`), but those types
-      are folder-specific (`cycle` / `lockedToDecks` — inverted lock; no deck-move block type). The
-      `deck.md` §MoveDeckUseCase contract defines **no** deck-move-targets read use case/model.
-      Doing the eligibility in the widget would put business logic in the UI layer (CLAUDE.md
-      violation). → needs a BE `GetDeckMoveTargetsUseCase` + `DeckMoveTarget` model + repo/DAO read +
-      a contract spec; out of FE-only loop scope. Suggested: spec + build the BE read path, then the
-      FE wiring becomes a clean reuse of the picker pattern.
-- [ ] **WP-FD6 — Deck reorder FE (WBS 2.10.2)** — eligible (BE `2.10.1` Implemented;
-      `reorderDecksUseCaseProvider` wired in DI). Manual-sort drag reorder of deck rows → reorder
-      use case with the new ordered ids; persist `sort_order`; Drift stream refreshes. Active only
-      when the folder's sort mode = manual. Widget test for the reorder gesture + disabled-when-sorted.
-      **Depends-on: none open. NEXT.**
-- [ ] WP-FD7 — Folder (subfolder) reorder FE (WBS 2.5.2) — eligible (BE `2.5.1` Implemented;
-      `reorderFoldersUseCaseProvider` wired). Manual-sort drag reorder of subfolder rows → reorder
-      use case. Widget test. (Same pattern as WP-FD6; do after it.)
-- [ ] WP-FD8 — Folder detail new-vs-due study split (WBS 3.2.3) — **DEFER (needs-schema:
-      migration v11 + `new_count` read model + data fix; BE+FE row, BE not shipped).**
+- [ ] **WP-FD5a — Deck move-targets BE (WBS 2.19.2, vertical slice)** — eligible under the
+      vertical-slice rule (BE may be added in dev). Build the read path the deck-move picker needs:
+      `DeckMoveTarget` model + `DeckMoveBlock` enum (`lockedToSubfolders` — a `subfolders`-mode
+      folder cannot hold decks; no `cycle`, decks have no descendants), `FolderRepository
+      .getDeckMoveTargets(deckId)` (every folder annotated: `isCurrentParent`, `block` when
+      content_mode == subfolders), `GetDeckMoveTargetsUseCase` + DI, mirroring the folder-move-targets
+      pattern. Rules are unambiguous (deck.md §MoveDeckUseCase precondition: new parent content_mode
+      ∈ {unlocked, decks}; decision D9/D10). BE unit tests (use case + repo). Contract: add
+      `deck.md` §GetDeckMoveTargetsUseCase. **NEXT.**
+- [ ] **WP-FD5b — Deck move FE (WBS 2.19.2)** — depends on FD5a. Add `DeckAction.move` to
+      `deck_actions_sheet.dart` → load targets via the new use case → a decks picker (reuse the
+      `folder_move_picker_sheet` pattern, blocked rows disabled/annotated) → `MoveDeckUseCase` →
+      snackbar. Widget tests + goldens (sheet w/ move row, picker).
+- [ ] WP-FD6 — Deck reorder FE (WBS 2.10.2) — **DEFER (spec-unclear: no UI design).** Reorder
+      *behavior* is specified (`reorderDecksUseCaseProvider` wired), but the kit ships only the 8
+      folder-detail states (no reorder/drag shot), the wireframe as-built banner explicitly defers
+      reorder, the business docs give no drag-handle/affordance spec, and the app has no reorderable-
+      list pattern. Building it means inventing the drag affordance + restructuring the approved
+      grouped-card loaded state (regressing its goldens) with no mock/golden to validate against —
+      mock-doc-conflict, a standing DEFER exception even under the vertical-slice rule. Needs an
+      approved reorder-state mock + an `MxReorderableList` design decision.
+- [ ] WP-FD7 — Folder (subfolder) reorder FE (WBS 2.5.2) — **DEFER (spec-unclear: no UI design).**
+      Same blocker as WP-FD6.
+- [ ] WP-FD8 — Folder detail new-vs-due study split (WBS 3.2.3) — eligible under vertical-slice
+      rule **but large** (migration v11 + `new_count` read model + data fix + folder summary CTAs);
+      sequence AFTER FD5a/FD5b. Tentatively a later slice; re-audit when reached.
 
 ## Notes
 
 - WBS rows 2.7.2 / 2.8.2 / 2.9.2 are still marked `Specified` though the code + tests are
   screen-hosted and live; flip them to Implemented when the next code work-package verifies
   (avoid a status-only flip without re-running the targeted tests).
-- Object 2 leaves for object 3 (Sub-folder / nested) only after WP-FD5…FD7 are Implemented or
-  DEFERred. WP-FD8 is already DEFER.
+- Object 2 leaves for object 3 (Sub-folder / nested) only after every gap-checklist item is
+  Implemented or DEFERred.
+- **Rules updated 2026-06-21 (vertical-slice loop):** BE (incl. schema/migration) may now be added
+  to unblock FE. WP-FD5 un-DEFERred (was needs-BE) and split into BE (FD5a) + FE (FD5b). FD6/FD7
+  stay DEFER — their blocker is mock-doc-conflict (no reorder design), still an exception.
 
 ## Conclusion
 
-Object 2 is **IN PROGRESS**. WP-FD5 (Deck move) is DEFERred (needs a BE deck-move-targets read
-path the contract does not define). Next work-package: **WP-FD6 Deck reorder FE (2.10.2)** —
-fully-unblocked, reorder use case wired. Then WP-FD7 (subfolder reorder).
+Object 2 is **IN PROGRESS**. Next work-package: **WP-FD5a Deck move-targets BE** (vertical slice
+— new read model/use case mirroring folder-move-targets), then **WP-FD5b** FE wiring. FD6/FD7
+(reorder) DEFERred for missing UI design; FD8 (new-vs-due) is a larger later slice.

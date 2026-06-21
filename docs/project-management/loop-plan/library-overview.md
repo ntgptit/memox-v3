@@ -66,18 +66,37 @@ remains → object is **DONE** for the FE loop.
 - [x] WP-L3 — Per-scope content sort sheet wired to Library scope (WBS 2.23.1) — **Implemented**
 - [x] WP-L4 — Root anchor dock (WBS 3.1.3) — **Implemented**
 - [x] WP-L5 — Overflow action sheet + rename/move/delete modals — **Implemented**
-- [ ] WP-L6 — Due-summary card (`dueToday`) — **DEFER (needs-BE: read-model field absent)**
-- [ ] WP-L7 — Folder mastery bar (`mastery`) — **DEFER (needs-BE)**
-- [ ] WP-L8 — Folder new-card badge (`newCount`) — **DEFER (needs-BE)**
-- [ ] WP-L9 — Deck-digest subtitle (`subtitle`) — **DEFER (needs-BE)**
-- [ ] WP-L10 — `03j` Archive folder action + dialog — **DEFER (needs-schema/needs-BE: no archive column/use case)**
+- [ ] **WP-L6 — Library read-model enrichment (BE) — `dueToday` / `mastery` / `newCount` /
+      `subtitle`** — eligible under the **vertical-slice rule** (BE may be added in dev). Extend the
+      `watchLibraryOverview` Drift query + `LibraryOverview`/`FolderSummary` model to carry the four
+      per-folder subtree aggregates the mock (shot `03a`) + visual-contract §Folder Card Contract
+      already specify: `dueToday` (active, non-suspended/non-buried, `due_at <= now`), `mastery`
+      (`AVG(COALESCE(box_number,1))/8` over subtree), `newCount` (cards with no progress / `due_at`
+      NULL), `subtitle` (`GROUP_CONCAT` of ≤3 deck names). Pure read-model query extension — **no
+      schema** (dev DB has no data to migrate). BE query/repo unit tests. **NEXT.**
+- [ ] WP-L7 — Due-summary card FE (`dueToday`) — depends on WP-L6. Render the non-interactive
+      due-summary `MxCard` (title + `Across {n} folders · ~{m} min` subtitle + chevron) when
+      `dueToday > 0`. Widget + golden.
+- [ ] WP-L8 — Folder-tile enrichment FE (`mastery` bar / `newCount` badge / `subtitle`) — depends
+      on WP-L6. Wire `MxLinearProgress` mastery bar, new-card badge, and deck-digest subtitle into
+      `library_folder_tile.dart`, each rendered only when its field is set. Widget + golden.
+- [ ] WP-L9 — `03j` Archive folder action + dialog — **DEFER (Future / needs-approval).** The
+      Library visual contract marks archive **Future / out-of-scope** (no archive use case / repo /
+      DAO / schema column; product scope decision, not just missing BE). Building it = inventing
+      product scope; needs an approved task.
 
 Note: Folder-row tap → folder detail navigation is **object 2 (Folder detail, WBS 3.2.2)**,
 not Library; the interim tap→action-sheet keeps the chevron live and is correct for this object.
 
+**Rules updated 2026-06-21 (vertical-slice loop):** BE may now be added to unblock FE, so the
+former needs-BE DEFERs (WP-L6…L8) are re-opened as buildable read-model slices. Only WP-L9
+(archive) stays DEFER — it is a Future product-scope decision, not a missing-BE gap.
+
 ## Conclusion
 
-Object 1 (Library overview) is **DONE** for the FE-completion loop: all eligible FE
-work-packages Implemented + verified + docs-synced; the 5 remaining gaps (WP-L6…L10) are
-BE/schema-blocked and recorded in `docs/project-management/loop-deferred.md`. Next object
-(outer→inner): **Folder (detail)**.
+Object 1 (Library overview) was DONE under the FE-only rules, but the **vertical-slice rules
+(2026-06-21)** re-open WP-L6…L8 (read-model enrichment — `dueToday`/`mastery`/`newCount`/
+`subtitle`), which the mock + visual contract already specify and which were only blocked on the
+read model. Object 1 is therefore **IN PROGRESS** again. Next work-package: **WP-L6 Library
+read-model enrichment (BE)**. Only WP-L9 (archive) stays DEFER (Future product scope). Per the
+outer→inner rule, object 1 must complete these before object 2 advances.
