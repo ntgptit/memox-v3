@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_move_target.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/library_overview.dart';
@@ -181,6 +182,15 @@ abstract interface class FolderRepository {
   Future<Result<Deck>> moveDeck({
     required DeckId deckId,
     required FolderId newFolderId,
+  });
+
+  /// List every move destination for [deckId]: all folders (no Library root — a
+  /// deck always belongs to a folder), each annotated with `isCurrentParent` and
+  /// a non-null `block` reason when it cannot accept the deck (a
+  /// subfolders-locked folder is [DeckMoveBlock.lockedToSubfolders]). Pure read.
+  /// Rejects a missing deck ([NotFoundFailure]). Decision rows D9, D10.
+  Future<Result<List<DeckMoveTarget>>> getDeckMoveTargets({
+    required DeckId deckId,
   });
 
   /// Delete [deckId] and its dependent data in one transaction, then revert the

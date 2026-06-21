@@ -31,7 +31,9 @@ source_specs:
 >   `test/presentation/features/folders/folder_detail_test.dart`.
 > - **Actions**: create subfolder/deck; folder rename/move/delete (shared `runFolderActions`,
 >   kebab opens the viewed folder's sheet); deck rename/delete (`runDeckActions`). Deck **move**
->   and folder/deck **reorder** are deferred (WBS 2.19.2 / 2.5.2 / 2.10.2).
+>   BE read path is built (`GetDeckMoveTargetsUseCase`, WBS 2.19.2, 2026-06-21); the deck-sheet
+>   **move action + picker FE** (WP-FD5b) and folder/deck **reorder** remain deferred (WBS 2.19.2
+>   FE / 2.5.2 / 2.10.2).
 > - **Study entry points (Study folder / Today / Resume)** remain **Future — not built**.
 
 ## V1 verification status (2026-06-06)

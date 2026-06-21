@@ -57,15 +57,15 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 - [x] WP-FD2 — Deck create FE (FAB → dialog) (WBS 2.7.2) — **Implemented**
 - [x] WP-FD3 — Deck rename FE (sheet → dialog → BE) (WBS 2.8.2) — **Implemented**
 - [x] WP-FD4 — Deck delete FE (sheet → confirm → BE) (WBS 2.9.2) — **Implemented**
-- [ ] **WP-FD5a — Deck move-targets BE (WBS 2.19.2, vertical slice)** — eligible under the
-      vertical-slice rule (BE may be added in dev). Build the read path the deck-move picker needs:
-      `DeckMoveTarget` model + `DeckMoveBlock` enum (`lockedToSubfolders` — a `subfolders`-mode
-      folder cannot hold decks; no `cycle`, decks have no descendants), `FolderRepository
-      .getDeckMoveTargets(deckId)` (every folder annotated: `isCurrentParent`, `block` when
-      content_mode == subfolders), `GetDeckMoveTargetsUseCase` + DI, mirroring the folder-move-targets
-      pattern. Rules are unambiguous (deck.md §MoveDeckUseCase precondition: new parent content_mode
-      ∈ {unlocked, decks}; decision D9/D10). BE unit tests (use case + repo). Contract: add
-      `deck.md` §GetDeckMoveTargetsUseCase. **NEXT.**
+- [x] **WP-FD5a — Deck move-targets BE (WBS 2.19.2, vertical slice)** — **Implemented (2026-06-21).**
+      Verified deck move IS in the kit mock (`04-folder-detail--move-sheet` lists the deck's current
+      parent as a selectable destination → it's a deck move, not a folder move). Built the read path:
+      `DeckMoveTarget` model + `DeckMoveBlock.lockedToSubfolders` enum, `FolderRepository
+      .getDeckMoveTargets(deckId)` (all folders, no Library-root; annotated `isCurrentParent` +
+      `block` when content_mode == subfolders, mirroring `_deckParentGuard` / `getFolderMoveTargets`),
+      `GetDeckMoveTargetsUseCase` + DI. BE tests (repo: not-found + current-parent/decks/unlocked/
+      subfolders-locked annotation; use case forwarding). Contract `deck.md` §GetDeckMoveTargetsUseCase.
+      verify PASS.
 - [ ] **WP-FD5b — Deck move FE (WBS 2.19.2)** — depends on FD5a. Add `DeckAction.move` to
       `deck_actions_sheet.dart` → load targets via the new use case → a decks picker (reuse the
       `folder_move_picker_sheet` pattern, blocked rows disabled/annotated) → `MoveDeckUseCase` →

@@ -9,6 +9,7 @@ import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_move_target.dart';
 import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
@@ -451,6 +452,55 @@ class FolderRepositoryImpl implements FolderRepository {
       return _ok(<FolderMoveTarget>[root, ...folderTargets]);
     } catch (error) {
       return _fail<List<FolderMoveTarget>>(_storageRead(error));
+    }
+  }
+
+  @override
+  Future<Result<List<DeckMoveTarget>>> getDeckMoveTargets({
+    required DeckId deckId,
+  }) async {
+    try {
+      final DeckRow? deck = await _deckDao.findDeckById(deckId);
+      if (deck == null) {
+        return _fail<List<DeckMoveTarget>>(
+          const Failure.notFound(entity: 'deck'),
+        );
+      }
+      final FolderId currentParentId = deck.folderId;
+      final List<FolderRow> all = await _dao.listAllFolders();
+      final Map<String, FolderRow> byId = <String, FolderRow>{
+        for (final FolderRow r in all) r.id: r,
+      };
+
+      final List<DeckMoveTarget> targets =
+          all.map((FolderRow r) {
+            final ContentMode mode = FolderMapper.contentModeFromStorage(
+              r.contentMode,
+            );
+            // A deck can move to an unlocked or decks-mode folder; a
+            // subfolders-locked folder cannot hold a deck (mirrors
+            // `_deckParentGuard`). The current parent is always selectable.
+            final DeckMoveBlock? block =
+                (mode == ContentMode.subfolders && r.id != currentParentId)
+                ? DeckMoveBlock.lockedToSubfolders
+                : null;
+            return DeckMoveTarget(
+              id: r.id,
+              name: r.name,
+              breadcrumb: _breadcrumbNames(r, byId),
+              isCurrentParent: r.id == currentParentId,
+              block: block,
+            );
+          }).toList()..sort(
+            (DeckMoveTarget a, DeckMoveTarget b) => a.breadcrumb
+                .join(' ')
+                .toLowerCase()
+                .compareTo(b.breadcrumb.join(' ').toLowerCase()),
+          );
+
+      return _ok(targets);
+    } catch (error) {
+      return _fail<List<DeckMoveTarget>>(_storageRead(error));
     }
   }
 

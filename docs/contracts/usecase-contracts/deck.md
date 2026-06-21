@@ -129,6 +129,31 @@ Future<Either<Failure, Deck>> call({
 
 **Test refs:** D6.
 
+## GetDeckMoveTargetsUseCase
+
+```dart
+Future<Either<Failure, List<DeckMoveTarget>>> call({required DeckId deckId});
+```
+
+Read path backing the deck §folder-picker sheet (kit `04-folder-detail--move-sheet`).
+
+**Rules:**
+
+- Returns **every folder** (no Library-root option — a deck always belongs to a folder,
+  `decks.folder_id` non-null), each annotated: `isCurrentParent` (the deck's current folder,
+  always selectable — re-selecting it is a same-folder **no-op** in `MoveDeckUseCase` that bypasses
+  the content-mode guard, so it is safe even though `_deckParentGuard` would otherwise reject a
+  `subfolders`-mode folder), and a non-null `block` = `DeckMoveBlock.lockedToSubfolders` when the
+  folder is `content_mode = subfolders` (cannot hold a deck — mirrors the `MoveDeckUseCase`
+  precondition / `_deckParentGuard`). Unlocked + decks-mode folders are selectable. Blocked rows are
+  **disabled, never hidden** (`docs/wireframes/25-shared-bottom-sheets.md` §folder-picker). Sorted by
+  breadcrumb path. Pure read — see `docs/contracts/repository-contracts/deck-repository.md`.
+
+**Errors:** `NotFoundFailure` (missing deck), `StorageFailure`.
+
+**Test refs:** D11, D12 — `test/data/repositories/get_deck_move_targets_test.dart`,
+`test/domain/usecases/deck/get_deck_move_targets_usecase_test.dart`.
+
 ## DeleteDeckUseCase
 
 ```dart
