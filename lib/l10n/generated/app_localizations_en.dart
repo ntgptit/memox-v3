@@ -506,4 +506,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String deckLastStudiedWeeks(int count) {
     return 'last ${count}w ago';
   }
+
+  @override
+  String get commonDone => 'Done';
+
+  @override
+  String get flashcardReorderCardsAction => 'Reorder cards';
+
+  @override
+  String flashcardReorderTitle(String deck) {
+    return 'Reorder · $deck';
+  }
+
+  @override
+  String get flashcardReorderHint => 'Drag the handles to reorder cards.';
+
+  @override
+  String flashcardReorderCountHeader(int count) {
+    return '$count cards · drag to reorder';
+  }
 }

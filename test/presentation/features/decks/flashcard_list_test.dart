@@ -122,6 +122,62 @@ void main() {
       expect(find.textContaining(' due'), findsNothing);
     });
 
+    testWidgets('deck overflow → Reorder cards enters reorder mode (2.14.2)', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      // Kebab opens the overflow sheet with Reorder cards + Delete deck.
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      expect(find.text('Reorder cards'), findsOneWidget);
+      expect(find.text('Delete deck'), findsOneWidget);
+
+      // Entering reorder mode swaps to the reorder list with drag handles + Done.
+      await tester.tap(find.text('Reorder cards'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsOneWidget,
+      );
+      expect(find.byIcon(Icons.drag_indicator), findsNWidgets(3));
+      expect(find.byIcon(Icons.close), findsOneWidget); // X (cancel)
+      expect(find.text('Done'), findsOneWidget); // primary pill
+      expect(find.text('Drag the handles to reorder cards.'), findsOneWidget);
+
+      // Done exits reorder mode back to the normal list.
+      await tester.tap(find.text('Done'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('reorder mode X cancels back to the normal list', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Reorder cards'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsNothing,
+      );
+      expect(find.byType(MxFab), findsOneWidget); // FAB restored
+    });
+
     testWidgets('empty deck shows the add-card CTA', (tester) async {
       await _pump(tester, _value(_detail(const <Flashcard>[])));
       await tester.pumpAndSettle();
@@ -205,6 +261,29 @@ void main() {
           find.byType(FlashcardListScreen),
           matchesGoldenFile(
             'goldens/flashcard_list_search-no-results__${brightness.name}.png',
+          ),
+        );
+      });
+    }
+
+    // Reorder mode (WBS 2.14.2): entered via the deck overflow → Reorder cards.
+    for (final Brightness brightness in Brightness.values) {
+      testWidgets('reorder — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          _value(_loaded),
+          brightness: brightness,
+          golden: true,
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.more_vert));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Reorder cards'));
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(FlashcardListScreen),
+          matchesGoldenFile(
+            'goldens/flashcard_list_reorder__${brightness.name}.png',
           ),
         );
       });

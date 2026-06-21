@@ -967,6 +967,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'last {count}w ago'**
   String deckLastStudiedWeeks(int count);
+
+  /// Generic done/confirm action that exits a mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get commonDone;
+
+  /// Deck overflow sheet: enter card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder cards'**
+  String get flashcardReorderCardsAction;
+
+  /// App-bar title in card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder · {deck}'**
+  String flashcardReorderTitle(String deck);
+
+  /// Instruction shown above the list in card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the handles to reorder cards.'**
+  String get flashcardReorderHint;
+
+  /// Count overline in card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cards · drag to reorder'**
+  String flashcardReorderCountHeader(int count);
 }
 
 class _AppLocalizationsDelegate

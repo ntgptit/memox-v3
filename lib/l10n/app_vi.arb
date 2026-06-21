@@ -144,5 +144,10 @@
   "deckLastStudiedMinutes": "{count} phút trước",
   "deckLastStudiedHours": "{count} giờ trước",
   "deckLastStudiedDays": "{count} ngày trước",
-  "deckLastStudiedWeeks": "{count} tuần trước"
+  "deckLastStudiedWeeks": "{count} tuần trước",
+  "commonDone": "Xong",
+  "flashcardReorderCardsAction": "Sắp xếp lại thẻ",
+  "flashcardReorderTitle": "Sắp xếp · {deck}",
+  "flashcardReorderHint": "Kéo tay cầm để sắp xếp lại thẻ.",
+  "flashcardReorderCountHeader": "{count} thẻ · kéo để sắp xếp"
 }

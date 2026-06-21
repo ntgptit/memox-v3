@@ -322,5 +322,15 @@
   "deckLastStudiedDays": "last {count}d ago",
   "@deckLastStudiedDays": { "description": "Deck row: last studied n days ago (compact).", "placeholders": { "count": { "type": "int" } } },
   "deckLastStudiedWeeks": "last {count}w ago",
-  "@deckLastStudiedWeeks": { "description": "Deck row: last studied n weeks ago (compact).", "placeholders": { "count": { "type": "int" } } }
+  "@deckLastStudiedWeeks": { "description": "Deck row: last studied n weeks ago (compact).", "placeholders": { "count": { "type": "int" } } },
+  "commonDone": "Done",
+  "@commonDone": { "description": "Generic done/confirm action that exits a mode." },
+  "flashcardReorderCardsAction": "Reorder cards",
+  "@flashcardReorderCardsAction": { "description": "Deck overflow sheet: enter card reorder mode." },
+  "flashcardReorderTitle": "Reorder · {deck}",
+  "@flashcardReorderTitle": { "description": "App-bar title in card reorder mode.", "placeholders": { "deck": { "type": "String" } } },
+  "flashcardReorderHint": "Drag the handles to reorder cards.",
+  "@flashcardReorderHint": { "description": "Instruction shown above the list in card reorder mode." },
+  "flashcardReorderCountHeader": "{count} cards · drag to reorder",
+  "@flashcardReorderCountHeader": { "description": "Count overline in card reorder mode.", "placeholders": { "count": { "type": "int" } } }
 }

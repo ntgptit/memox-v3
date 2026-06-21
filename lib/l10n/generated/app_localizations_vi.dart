@@ -492,4 +492,23 @@ class AppLocalizationsVi extends AppLocalizations {
   String deckLastStudiedWeeks(int count) {
     return '$count tuần trước';
   }
+
+  @override
+  String get commonDone => 'Xong';
+
+  @override
+  String get flashcardReorderCardsAction => 'Sắp xếp lại thẻ';
+
+  @override
+  String flashcardReorderTitle(String deck) {
+    return 'Sắp xếp · $deck';
+  }
+
+  @override
+  String get flashcardReorderHint => 'Kéo tay cầm để sắp xếp lại thẻ.';
+
+  @override
+  String flashcardReorderCountHeader(int count) {
+    return '$count thẻ · kéo để sắp xếp';
+  }
 }

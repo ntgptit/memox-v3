@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/error/result.dart';
@@ -11,6 +13,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
 import 'package:memox/presentation/features/decks/widgets/flashcard_list_actions.dart';
 import 'package:memox/presentation/features/decks/widgets/flashcard_tile.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_icon_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/library_loading_skeleton.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/sort/content_sort.dart';
@@ -41,6 +44,7 @@ class FlashcardListBody extends ConsumerWidget {
       flashcardListStreamProvider(deckId),
     );
     final String term = ref.watch(flashcardSearchQueryProvider(deckId));
+    final bool reordering = ref.watch(flashcardReorderActiveProvider(deckId));
 
     return AppAsyncBuilder<Result<FlashcardListDetail>>(
       value: async,
@@ -54,8 +58,67 @@ class FlashcardListBody extends ConsumerWidget {
         if (result.failure != null || detail == null) {
           return _error(context, ref, l10n);
         }
+        if (reordering) return _reorderContent(context, ref, detail);
         return _content(context, ref, detail, StringUtils.trimmed(term));
       },
+    );
+  }
+
+  /// Reorder mode (mock `06` reorder): a `{n} CARDS · DRAG TO REORDER` overline +
+  /// hint, then a `ReorderableListView` of the cards in manual (`sort_order`)
+  /// order with a trailing drag handle per row; a drop persists the new order.
+  Widget _reorderContent(
+    BuildContext context,
+    WidgetRef ref,
+    FlashcardListDetail detail,
+  ) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    final List<Flashcard> cards =
+        detail.cards; // sort_order from the read model
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: MxSpacing.space3),
+          child: _Overline(
+            label: l10n.flashcardReorderCountHeader(detail.totalCount),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: MxSpacing.space2),
+          child: MxText(
+            l10n.flashcardReorderHint,
+            role: MxTextRole.bodySmall,
+            color: context.mxColors.textSecondary,
+          ),
+        ),
+        Expanded(
+          child: ReorderableListView.builder(
+            key: const ValueKey<String>('flashcard_reorder_list'),
+            buildDefaultDragHandles: false,
+            padding: const EdgeInsets.only(bottom: MxSpacing.space3),
+            itemCount: cards.length,
+            itemBuilder: (BuildContext context, int i) => _ReorderRow(
+              key: ValueKey<String>(cards[i].id),
+              card: cards[i],
+              index: i,
+            ),
+            onReorder: (int oldIndex, int newIndex) {
+              final List<Flashcard> next = List<Flashcard>.of(cards);
+              final int target = newIndex > oldIndex ? newIndex - 1 : newIndex;
+              next.insert(target, next.removeAt(oldIndex));
+              unawaited(
+                runReorderCards(
+                  context,
+                  ref,
+                  deckId,
+                  next.map((Flashcard c) => c.id).toList(growable: false),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -174,6 +237,59 @@ class _Overline extends StatelessWidget {
       StringUtils.upperFold(label),
       role: MxTextRole.labelMedium,
       color: colors.textSecondary,
+    );
+  }
+}
+
+/// A non-tappable card row in reorder mode: icon tile + front/back + a trailing
+/// drag handle (`Icons.drag_indicator`) that starts the drag (mock `06` reorder).
+class _ReorderRow extends StatelessWidget {
+  const _ReorderRow({required this.card, required this.index, super.key});
+
+  final Flashcard card;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: MxSpacing.card,
+        vertical: MxSpacing.space2,
+      ),
+      child: Row(
+        children: <Widget>[
+          FolderIconTile(color: colors.accent, icon: Icons.copy_all_outlined),
+          const SizedBox(width: MxSpacing.space3),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                MxText(
+                  card.front,
+                  role: MxTextRole.titleMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: MxSpacing.space1),
+                MxText(
+                  card.back,
+                  role: MxTextRole.bodySmall,
+                  color: colors.textSecondary,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: MxSpacing.space2),
+          ReorderableDragStartListener(
+            index: index,
+            child: Icon(Icons.drag_indicator, color: colors.textTertiary),
+          ),
+        ],
+      ),
     );
   }
 }

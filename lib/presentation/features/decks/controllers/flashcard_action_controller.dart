@@ -36,6 +36,15 @@ class FlashcardActionController extends _$FlashcardActionController {
   Future<Result<void>> delete({required FlashcardId flashcardId}) =>
       ref.read(deleteFlashcardUseCaseProvider).call(flashcardId: flashcardId);
 
+  /// Persist a manual card order for [deckId]. [orderedIds] must be the full
+  /// post-drag card set. Decision rows C33, C34. WBS 2.14.2.
+  Future<Result<void>> reorder({
+    required DeckId deckId,
+    required List<FlashcardId> orderedIds,
+  }) => ref
+      .read(reorderFlashcardsUseCaseProvider)
+      .call(deckId: deckId, orderedIds: orderedIds);
+
   /// Delete the whole deck (and its cards, via cascade). Caller MUST confirm.
   Future<Result<void>> deleteDeck({required DeckId deckId}) =>
       ref.read(deleteDeckUseCaseProvider).call(id: deckId);

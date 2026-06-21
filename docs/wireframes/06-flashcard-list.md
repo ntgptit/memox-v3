@@ -18,7 +18,8 @@ source_specs:
 > reached by tapping a deck on Folder Detail (`/library/deck/:deckId/flashcards`, child of the
 > Library branch). As-built V1 (authoritative over older prose below where they differ):
 >
-> - **Layout**: app bar (back + deck name + search + kebab=delete deck) · `{n} CARDS` overline
+> - **Layout**: app bar (back + deck name + search + kebab → overflow sheet: Reorder cards / Delete
+>   deck) · `{n} CARDS` overline
 >   with a trailing **`{m} due` badge** (WP-D1, 2026-06-21 — `FlashcardListDetail.dueCount`,
 >   full-deck active due, F13 exclusion; shown only when `> 0`) ·
 >   grouped card of `FlashcardTile` rows (accent tile + **front** title + **back** subtitle +
@@ -29,9 +30,13 @@ source_specs:
 >   Goldens: `test/presentation/features/decks/flashcard_list_test.dart`.
 > - **Card CRUD (V1, front/back only)**: FAB / empty-CTA → add-card dialog; row tap → edit-card
 >   dialog; long-press → delete-card confirm. Backed by `create/update/deleteFlashcard`.
+> - **Card reorder (WBS 2.14.2, 2026-06-21):** deck overflow (kebab) → sheet → **Reorder cards**
+>   enters reorder mode (X/Done app bar, `{n} CARDS · DRAG TO REORDER` overline,
+>   `ReorderableListView` `ValueKey('flashcard_reorder_list')` with trailing drag handles); a drop
+>   persists `sort_order` via `ReorderFlashcardsUseCase`.
 > - **Deferred (Future)**: the SRS **box / status chip / due** text on each row (the list read
 >   model carries no `flashcard_progress`); optional notes / pronunciation / example / **tags**
->   in the editor; **reorder**; **import**; bulk/status filters; study entry. The full card
+>   in the editor; **import**; bulk/status filters; study entry. The full card
 >   editor is WBS 2.11.2 / 2.12.2; this V1 ships a minimal front/back dialog so a deck is usable.
 
 ## V1 verification status (2026-06-06)
@@ -84,8 +89,11 @@ verified by tests (`test/presentation/features/flashcards/flashcard_list_test.da
   (`sortByContentMode` over `cards`) using this deck's own per-scope pref
   (`library.sort.deck:<id>`), independent of other decks / folders / Library.
   Distinct from the Future `Due first` SRS sort.
-- **Reorder handles (mock 06 reorder):** drag handles render **leading**
-  (`Icons.drag_indicator`); per-row badges/tags/due/flag in the mock are Future.
+- **Reorder handles (mock 06 reorder):** drag handles render **trailing**
+  (`Icons.drag_indicator`, matching the mock; `ReorderableListView` with
+  `buildDefaultDragHandles: false` + a per-row `ReorderableDragStartListener`).
+  Reorder rows show front/back only — per-row Box/due/status enrichment is the
+  same Future as the loaded rows.
 - **Empty state (mock 06 empty):** framed `MxCard` (glyph + headline + hint) above
   full-width `Add first flashcard` (primary) and `Import cards (CSV, TSV, Anki)`
   (tonal) CTAs. The mock's "Start study is available once you have at least one
