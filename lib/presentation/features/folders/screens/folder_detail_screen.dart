@@ -5,6 +5,7 @@ import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_detail_actions.dart';
@@ -12,6 +13,8 @@ import 'package:memox/presentation/features/folders/widgets/folder_detail_body.d
 import 'package:memox/presentation/features/folders/widgets/folder_detail_search.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/navigation/library_breadcrumb.dart';
+import 'package:memox/presentation/shared/sort/content_sort_sheet.dart';
+import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
@@ -76,6 +79,11 @@ class FolderDetailScreen extends ConsumerWidget {
                       .read(folderSearchActiveProvider(folderId).notifier)
                       .activate(),
                 ),
+                MxIconButton(
+                  icon: Icons.swap_vert,
+                  tooltip: l10n.sortTooltip,
+                  onPressed: () => _openSort(context, ref),
+                ),
                 if (detail != null)
                   MxIconButton(
                     icon: Icons.more_vert,
@@ -106,6 +114,18 @@ class FolderDetailScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Opens the shared content-sort sheet and persists the chosen mode (the same
+  /// global pref the Library uses). WBS 2.23.1.
+  Future<void> _openSort(BuildContext context, WidgetRef ref) async {
+    final ContentSortMode current = ref.read(librarySortModeProvider);
+    final ContentSortMode? selected = await showContentSortSheet(
+      context,
+      current: current,
+    );
+    if (selected == null) return;
+    await ref.read(librarySortProvider.notifier).setSort(selected);
   }
 
   /// The create FAB matches the folder's content mode (mock `04`): a decks-mode

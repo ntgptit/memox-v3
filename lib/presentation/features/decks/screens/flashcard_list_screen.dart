@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
 import 'package:memox/presentation/features/decks/widgets/flashcard_list_actions.dart';
@@ -11,6 +12,8 @@ import 'package:memox/presentation/features/decks/widgets/flashcard_list_body.da
 import 'package:memox/presentation/features/decks/widgets/flashcard_list_search.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/navigation/library_breadcrumb.dart';
+import 'package:memox/presentation/shared/sort/content_sort_sheet.dart';
+import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
@@ -73,6 +76,11 @@ class FlashcardListScreen extends ConsumerWidget {
                       .read(flashcardSearchActiveProvider(deckId).notifier)
                       .activate(),
                 ),
+                MxIconButton(
+                  icon: Icons.swap_vert,
+                  tooltip: l10n.sortTooltip,
+                  onPressed: () => _openSort(context, ref),
+                ),
                 if (detail != null)
                   MxIconButton(
                     icon: Icons.more_vert,
@@ -109,5 +117,17 @@ class FlashcardListScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Opens the shared content-sort sheet and persists the chosen mode (the same
+  /// global pref the Library uses). WBS 2.23.1.
+  Future<void> _openSort(BuildContext context, WidgetRef ref) async {
+    final ContentSortMode current = ref.read(librarySortModeProvider);
+    final ContentSortMode? selected = await showContentSortSheet(
+      context,
+      current: current,
+    );
+    if (selected == null) return;
+    await ref.read(librarySortProvider.notifier).setSort(selected);
   }
 }

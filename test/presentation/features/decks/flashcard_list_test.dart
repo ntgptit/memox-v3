@@ -102,6 +102,8 @@ void main() {
       expect(find.text('日本'), findsOneWidget);
       expect(find.text('Japan'), findsOneWidget);
       expect(find.byType(MxFab), findsOneWidget);
+      // The sort control is exposed so the user can reorder (WBS 2.23.1).
+      expect(find.byIcon(Icons.swap_vert), findsOneWidget);
     });
 
     testWidgets('empty deck shows the add-card CTA', (tester) async {

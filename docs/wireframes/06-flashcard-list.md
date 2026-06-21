@@ -76,6 +76,11 @@ verified by tests (`test/presentation/features/flashcards/flashcard_list_test.da
   `{n} CARDS` header (`flashcard_list_count_header`); reorder mode shows
   `{n} CARDS · DRAG TO REORDER`. The mock's `Due first` sort control is **Future**
   (no due/SRS ordering in the read model) and is not rendered.
+- **Sort (WBS 2.23.1):** the app bar carries a `swap_vert` sort icon opening the
+  shared `showContentSortSheet` — `manual` / `name` (card `front` A→Z) / `newest`
+  (`created_at` desc); `lastStudied` deferred. Applied presentation-side
+  (`sortByContentMode` over `cards`) using the global `library.sort` pref shared
+  with Library / Folder detail. Distinct from the Future `Due first` SRS sort.
 - **Reorder handles (mock 06 reorder):** drag handles render **leading**
   (`Icons.drag_indicator`); per-row badges/tags/due/flag in the mock are Future.
 - **Empty state (mock 06 empty):** framed `MxCard` (glyph + headline + hint) above
@@ -264,7 +269,7 @@ not treat a filename here as proof the widget exists; check `lib/presentation/fe
 
 | Order | Component | Code widget | Spec |
 | --- | --- | --- | --- |
-| 1 | App bar | (inline in screen scaffold) | Title = deck name. Back. Search (in-deck). Overflow ⋮. |
+| 1 | App bar | (inline in screen scaffold) | Title = deck name. Back. Search (in-deck). `swap_vert` sort (→ shared content-sort sheet, WBS 2.23.1). Overflow ⋮. |
 | 2 | Header section | `flashcard_header_section.dart` | Renders title + overflow + search. Replaces app bar inline when needed (responsive). |
 | 3 | Breadcrumb | shared `MxBreadcrumb` + `buildLibraryBreadcrumb` (`lib/presentation/shared/widgets/navigation/library_breadcrumb.dart`), docked under the app bar | **Current (design redesign).** `🏠 Root › {folderPath} › {deckName}` with chevron (`›`) separators; the first crumb is the **Root** anchor (home glyph + `libraryRootLabel`, not "Library"); every folder crumb is a tappable ancestor (pushes its detail), the `Root` crumb taps to the branch root, the deck name is the bold non-tappable current leaf. Scrolls horizontally on deep paths; hidden in search mode and until loaded. (The card-count overline / target-language subtitle is a separate element, not part of this trail.) |
 | 4 | Deck study-entry section | `flashcard_study_entry_section.dart` (target) | **Future — not built.** Target: Resume banner + deck-level study card with Today (`study_type=srs_review`) and Study-deck (default new study) CTAs. Today hidden at 0 due; whole section hidden when no cards and no resume. Renders above the deck summary. Never starts a session directly. |

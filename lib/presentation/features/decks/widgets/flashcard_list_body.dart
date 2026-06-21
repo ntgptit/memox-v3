@@ -12,6 +12,8 @@ import 'package:memox/presentation/features/decks/widgets/flashcard_list_actions
 import 'package:memox/presentation/features/decks/widgets/flashcard_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/library_loading_skeleton.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
+import 'package:memox/presentation/shared/sort/content_sort.dart';
+import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_divider.dart';
@@ -108,7 +110,16 @@ class FlashcardListBody extends ConsumerWidget {
       children: <Widget>[
         _Overline(label: l10n.flashcardCountHeader(detail.totalCount)),
         const SizedBox(height: MxSpacing.space3),
-        _groupedCard(context, ref, detail.cards),
+        _groupedCard(
+          context,
+          ref,
+          sortByContentMode<Flashcard>(
+            detail.cards,
+            ref.watch(librarySortModeProvider),
+            name: (Flashcard c) => c.front,
+            createdAt: (Flashcard c) => c.createdAt,
+          ),
+        ),
       ],
     );
   }

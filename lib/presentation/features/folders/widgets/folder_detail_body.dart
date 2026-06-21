@@ -10,6 +10,7 @@ import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/types/content_mode.dart';
+import 'package:memox/domain/types/content_sort_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/deck_tile.dart';
@@ -18,6 +19,8 @@ import 'package:memox/presentation/features/folders/widgets/folder_stats_card.da
 import 'package:memox/presentation/features/folders/widgets/library_folder_tile.dart';
 import 'package:memox/presentation/features/folders/widgets/library_loading_skeleton.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
+import 'package:memox/presentation/shared/sort/content_sort.dart';
+import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/mx_divider.dart';
@@ -170,6 +173,19 @@ class FolderDetailBody extends ConsumerWidget {
   }
 
   Widget _groupedCard(BuildContext context, WidgetRef ref, FolderDetailView v) {
+    final ContentSortMode sort = ref.watch(librarySortModeProvider);
+    final List<FolderSummary> subfolders = sortByContentMode<FolderSummary>(
+      v.subfolders,
+      sort,
+      name: (FolderSummary s) => s.folder.name,
+      createdAt: (FolderSummary s) => s.folder.createdAt,
+    );
+    final List<DeckSummary> decks = sortByContentMode<DeckSummary>(
+      v.decks,
+      sort,
+      name: (DeckSummary d) => d.deck.name,
+      createdAt: (DeckSummary d) => d.deck.createdAt,
+    );
     final List<Widget> rows = <Widget>[];
     void addDivider() {
       if (rows.isNotEmpty) {
@@ -177,7 +193,7 @@ class FolderDetailBody extends ConsumerWidget {
       }
     }
 
-    for (final FolderSummary s in v.subfolders) {
+    for (final FolderSummary s in subfolders) {
       addDivider();
       rows.add(
         LibraryFolderTile(
@@ -187,7 +203,7 @@ class FolderDetailBody extends ConsumerWidget {
         ),
       );
     }
-    for (final DeckSummary d in v.decks) {
+    for (final DeckSummary d in decks) {
       addDivider();
       rows.add(
         DeckTile(

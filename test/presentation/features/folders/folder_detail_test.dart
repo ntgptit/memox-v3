@@ -134,6 +134,8 @@ void main() {
       expect(find.text('Japanese · N5'), findsOneWidget);
       expect(find.text('Languages'), findsWidgets); // app-bar title
       expect(find.byType(MxFab), findsOneWidget);
+      // The sort control is exposed so the user can reorder (WBS 2.23.1).
+      expect(find.byIcon(Icons.swap_vert), findsOneWidget);
     });
 
     testWidgets('subfolders mode lists subfolders', (tester) async {

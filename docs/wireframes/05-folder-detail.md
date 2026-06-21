@@ -79,10 +79,12 @@ study UI.
       (`FolderWithCount.cardCount` / `dueCount`).
 - Section-header overline (`{n} subfolders` / `{n} decks`) via `MxSectionHeader`
   above the children list.
-- Search affordance and sort pill are visible in the header and open controlled
-  sheets. The Folder Detail sort sheet only exposes `manual`, `name`, and
-  `newest`; `lastStudied` is hidden here because the current query path does
-  not support truthful last-studied ordering. True-empty vs search no-results
+- Search affordance and a `swap_vert` **sort icon** are visible in the header and
+  open controlled sheets (WBS 2.23.1). The sort icon opens the shared
+  `showContentSortSheet`, which only exposes `manual`, `name`, and `newest`;
+  `lastStudied` is hidden because no last-studied aggregate read model exists.
+  Sort is applied presentation-side (`sortByContentMode` over subfolders +
+  decks). True-empty vs search no-results
   is Current (true empty = no unfiltered direct children; no-results = active
   search hides existing children).
 - The PNG/spec values in `docs/system-design/MemoX Design System/ui_kits/mobile/shots/04-folder-detail--*.png`
@@ -91,8 +93,9 @@ study UI.
   artifacts remain mock-only and are not V1 source of truth. The `{n} new`
   count is now **Current** (real `new_count` read model). Study new / Review
   due are Current in decks mode when real new/due data exists.
-- Per-folder sort state exists on the toolbar (`ContentSortMode`) but this
-  screen normalizes unsupported values back to `manual`.
+- Sort state is **global**, not per-folder: one `library.sort` preference
+  (`ContentSortRepository`) shared with Library / Deck / Flashcard; unsupported
+  stored values normalize back to `manual`.
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
   Current.
 - **App-bar overflow ⋮ is Current**: opens the folder action sheet
