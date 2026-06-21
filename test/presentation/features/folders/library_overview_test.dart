@@ -176,8 +176,16 @@ void main() {
       expect(find.text('12 due'), findsOneWidget);
       // FAB present in the loaded (non-search) state.
       expect(find.byType(MxFab), findsOneWidget);
-      // Root anchor present with the live folder count (3 root folders).
+      // Root anchor present: home icon + `Root` label + live folder count.
       expect(find.byType(LibraryRootAnchor), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(LibraryRootAnchor),
+          matching: find.byIcon(Icons.home_outlined),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Root'), findsOneWidget);
       expect(find.text('3 folders'), findsOneWidget);
     });
 

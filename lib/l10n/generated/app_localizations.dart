@@ -871,6 +871,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading today\'s summary.'**
   String get dashboardLoadFailedMessage;
+
+  /// Label of the Library Overview root anchor (the top of the folder hierarchy), shown with a home icon under the app bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Root'**
+  String get libraryRootLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -435,4 +435,7 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get dashboardLoadFailedMessage =>
       'Đã xảy ra lỗi khi tải tóm tắt hôm nay.';
+
+  @override
+  String get libraryRootLabel => 'Gốc';
 }

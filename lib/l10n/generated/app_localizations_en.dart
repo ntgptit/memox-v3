@@ -450,4 +450,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dashboardLoadFailedMessage =>
       'Something went wrong loading today\'s summary.';
+
+  @override
+  String get libraryRootLabel => 'Root';
 }

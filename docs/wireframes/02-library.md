@@ -25,11 +25,10 @@ source_specs:
 >   `MxDivider` inset hairlines, with **no count overline and no sort pill**; the `{n} FOLDERS`
 >   overline appears **only in the search state**.
 > - **Root anchor (owner-requested, 2026-06-21):** the loaded-with-folders state docks a
->   `LibraryRootAnchor` under the app bar — a single non-tappable `Library` breadcrumb crumb (the
->   root of the same trail nested screens show) plus a `{n} folders` count — so the root carries the
->   same "you are here" dock as Folder Detail. Hidden in search / loading / empty / error (matches
->   the FAB gating). Not part of the kit `03a` mock; see
->   `docs/design/screens/library-overview.visual-contract.md` §Scope Decision.
+>   `LibraryRootAnchor` under the app bar — a home glyph (`Icons.home_outlined`) + the localized
+>   `Root` label (`libraryRootLabel`) + a trailing `{n} folders` count — marking the top of the
+>   folder hierarchy. Hidden in search / loading / empty / error (matches the FAB gating). Not part
+>   of the kit `03a` mock; see `docs/design/screens/library-overview.visual-contract.md` §Scope Decision.
 > - **Loading** is a skeleton card (`LibraryLoadingSkeleton`); **empty** is `MxEmptyState` +
 >   `Create folder` CTA; **error** is `MxErrorState` + full-width Retry.
 > - **`New folder` FAB + create dialog with color + icon pickers are Current** (WBS 2.1.2):

@@ -290,5 +290,7 @@
   "dashboardLoadFailedTitle": "Couldn't load your dashboard",
   "@dashboardLoadFailedTitle": { "description": "Dashboard error-state title." },
   "dashboardLoadFailedMessage": "Something went wrong loading today's summary.",
-  "@dashboardLoadFailedMessage": { "description": "Dashboard error-state body." }
+  "@dashboardLoadFailedMessage": { "description": "Dashboard error-state body." },
+  "libraryRootLabel": "Root",
+  "@libraryRootLabel": { "description": "Label of the Library Overview root anchor (the top of the folder hierarchy), shown with a home icon under the app bar." }
 }

@@ -128,5 +128,6 @@
   "dashboardProgressShortcutSub": "Mục tiêu, chuỗi ngày & độ chính xác",
   "dashboardLibraryShortcutSub": "Duyệt thư mục & bộ thẻ",
   "dashboardLoadFailedTitle": "Không tải được trang chủ",
-  "dashboardLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt hôm nay."
+  "dashboardLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt hôm nay.",
+  "libraryRootLabel": "Gốc"
 }
