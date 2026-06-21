@@ -149,5 +149,8 @@
   "flashcardReorderCardsAction": "Sắp xếp lại thẻ",
   "flashcardReorderTitle": "Sắp xếp · {deck}",
   "flashcardReorderHint": "Kéo tay cầm để sắp xếp lại thẻ.",
-  "flashcardReorderCountHeader": "{count} thẻ · kéo để sắp xếp"
+  "flashcardReorderCountHeader": "{count} thẻ · kéo để sắp xếp",
+  "flashcardStateNew": "Thẻ mới · chưa học",
+  "flashcardStateBoxDueIn": "Hộp {box} · đến hạn sau {days} ngày",
+  "flashcardStateBoxDueToday": "Hộp {box} · đến hạn hôm nay"
 }

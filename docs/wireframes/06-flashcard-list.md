@@ -39,10 +39,15 @@ source_specs:
 >   enters reorder mode (X/Done app bar, `{n} CARDS · DRAG TO REORDER` overline,
 >   `ReorderableListView` `ValueKey('flashcard_reorder_list')` with trailing drag handles); a drop
 >   persists `sort_order` via `ReorderFlashcardsUseCase`.
-> - **Deferred (Future)**: the SRS **box / status chip / due** text on each row (the list read
->   model carries no `flashcard_progress`); optional notes / pronunciation / example / **tags**
->   in the editor; **import**; bulk/status filters; study entry. The full card
->   editor is WBS 2.11.2 / 2.12.2; this V1 ships a minimal front/back dialog so a deck is usable.
+> - **Card-row SRS subtitle (WP-FL1, 2026-06-22)**: each `FlashcardTile` now shows a `{front} — {back}`
+>   title + the SRS state subtitle (`New · not studied` / `Box N · due in Xd` / `Box N · due today`)
+>   from `FlashcardListDetail.progressById` (the read model now carries per-card `FlashcardProgress`).
+>   The mock's 4-state status **chip** beside it is a **mock visual gap** — `docs/business/srs/srs-review.md`
+>   §Rules defines the card-state model as **New/Due only** (no Learning/Review/Mastered taxonomy to
+>   back a chip); building one would invent product semantics (PRECEDENCE #1).
+> - **Deferred (Future)**: the status **chip** (see above — mock visual gap); optional notes /
+>   pronunciation / example / **tags** in the editor; **import**; bulk/status filters; study entry.
+>   The full card editor is WBS 2.11.2 / 2.12.2 (WP-FL2a screen shell next); V1 ships a front/back dialog.
 
 ## V1 verification status (2026-06-06)
 

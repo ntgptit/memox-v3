@@ -318,7 +318,7 @@ Stream<Either<Failure, FlashcardListDetail>> call(
 **Rules:**
 
 - `FlashcardListDetail` = deck + folder breadcrumb + (search/tag/status-filtered) cards + `totalCount`
-  + `dueCount`.
+  + `dueCount` + `progressById`.
 - A non-blank `searchTerm` keeps cards whose front or back contains the trimmed, case-insensitive
   term. A non-empty `tags` keeps cards carrying **every** selected tag (AND); the two compose.
   Decision rows C38, C39.
@@ -334,6 +334,11 @@ Stream<Either<Failure, FlashcardListDetail>> call(
   `searchTerm`/`tags`/`status`), using the same `due` predicate as `status` (active, F13
   suspended/buried exclusion, `due_at <= now`). Rendered as the `{m} due` overline badge. Decision
   row C42.
+- `progressById` (WP-FL1) maps each **listed** card's id → its `FlashcardProgress` (box + `dueAt`),
+  for the per-row SRS subtitle (`New · not studied` when no entry / `dueAt == null`, else
+  `Box N · due in Xd` / `· due today`). The mock's status **chip** is a documented mock visual gap —
+  the business card-state model is New/Due only (`docs/business/srs/srs-review.md` §Rules). Decision
+  row C43.
 - A missing/deleted deck yields `NotFoundFailure`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.

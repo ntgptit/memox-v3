@@ -525,4 +525,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String flashcardReorderCountHeader(int count) {
     return '$count cards · drag to reorder';
   }
+
+  @override
+  String get flashcardStateNew => 'New · not studied';
+
+  @override
+  String flashcardStateBoxDueIn(int box, int days) {
+    return 'Box $box · due in ${days}d';
+  }
+
+  @override
+  String flashcardStateBoxDueToday(int box) {
+    return 'Box $box · due today';
+  }
 }

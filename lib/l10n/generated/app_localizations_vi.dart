@@ -511,4 +511,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String flashcardReorderCountHeader(int count) {
     return '$count thẻ · kéo để sắp xếp';
   }
+
+  @override
+  String get flashcardStateNew => 'Thẻ mới · chưa học';
+
+  @override
+  String flashcardStateBoxDueIn(int box, int days) {
+    return 'Hộp $box · đến hạn sau $days ngày';
+  }
+
+  @override
+  String flashcardStateBoxDueToday(int box) {
+    return 'Hộp $box · đến hạn hôm nay';
+  }
 }

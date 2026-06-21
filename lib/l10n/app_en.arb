@@ -332,5 +332,11 @@
   "flashcardReorderHint": "Drag the handles to reorder cards.",
   "@flashcardReorderHint": { "description": "Instruction shown above the list in card reorder mode." },
   "flashcardReorderCountHeader": "{count} cards · drag to reorder",
-  "@flashcardReorderCountHeader": { "description": "Count overline in card reorder mode.", "placeholders": { "count": { "type": "int" } } }
+  "@flashcardReorderCountHeader": { "description": "Count overline in card reorder mode.", "placeholders": { "count": { "type": "int" } } },
+  "flashcardStateNew": "New · not studied",
+  "@flashcardStateNew": { "description": "Flashcard-row SRS subtitle for a never-studied (NEW) card." },
+  "flashcardStateBoxDueIn": "Box {box} · due in {days}d",
+  "@flashcardStateBoxDueIn": { "description": "Flashcard-row SRS subtitle: SRS box + days until the card is next due.", "placeholders": { "box": { "type": "int" }, "days": { "type": "int" } } },
+  "flashcardStateBoxDueToday": "Box {box} · due today",
+  "@flashcardStateBoxDueToday": { "description": "Flashcard-row SRS subtitle: SRS box, card due today or overdue.", "placeholders": { "box": { "type": "int" } } }
 }

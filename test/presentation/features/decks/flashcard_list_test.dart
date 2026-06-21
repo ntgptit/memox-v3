@@ -102,8 +102,10 @@ void main() {
     testWidgets('loaded lists cards + add-card FAB', (tester) async {
       await _pump(tester, _value(_loaded));
       await tester.pumpAndSettle();
-      expect(find.text('日本'), findsOneWidget);
-      expect(find.text('Japan'), findsOneWidget);
+      // The row title combines front — back (mock `06` `list-row-title`).
+      expect(find.text('日本 — Japan'), findsOneWidget);
+      // Cards have no progress → the NEW SRS subtitle (mock `06` `list-row-meta`).
+      expect(find.text('New · not studied'), findsWidgets);
       expect(find.byType(MxFab), findsOneWidget);
       // The sort control is exposed so the user can reorder (WBS 2.23.1).
       expect(find.byIcon(Icons.swap_vert), findsOneWidget);
@@ -219,7 +221,7 @@ void main() {
       await _pump(tester, _value(_loaded));
       await tester.pumpAndSettle();
 
-      await tester.longPress(find.text('日本'));
+      await tester.longPress(find.text('日本 — Japan'));
       await tester.pumpAndSettle();
       // The destructive confirm dialog is shown before any deletion.
       expect(find.text('Delete this card?'), findsOneWidget);
@@ -228,7 +230,7 @@ void main() {
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       expect(find.text('Delete this card?'), findsNothing);
-      expect(find.text('日本'), findsOneWidget);
+      expect(find.text('日本 — Japan'), findsOneWidget);
     });
   });
 

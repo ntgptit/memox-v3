@@ -29,7 +29,16 @@ WBS 2.11.2 / 2.12.2 / 2.13.2 / 2.14.2 (all `Specified`), `docs/wireframes/06-fla
 Neither prior DEFER is valid under the current loop rules (`spec-unclear` needs a TWO-business-doc
 conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
 
-- [ ] **WP-FL1 — Card-row SRS subtitle (BUILDABLE — build next).** The mock `06` `list-row`
+- [x] **WP-FL1 — Card-row SRS subtitle — Implemented (2026-06-22).** `FlashcardListDetail` now carries
+      `progressById: Map<id, FlashcardProgress>` (repo reuses `FlashcardMapper.progressFromRow`,
+      `due_at` int-ms → UTC DateTime; no schema). `flashcard_tile.dart` renders title `{front} — {back}`
+      + SRS meta (`New · not studied` / `Box N · due in Xd` / `Box N · due today`, injected `now`); the
+      status chip stays a documented mock visual gap (PRECEDENCE #1 — business model New/Due only). ARB
+      `flashcardStateNew`/`flashcardStateBoxDueIn`/`flashcardStateBoxDueToday` (en+vi). BE test
+      (read-model carries box+dueAt), isolated `flashcard_tile` golden (new + due-in, light+dark) +
+      subtitle-variant widget tests, screen loaded golden regenerated (New cards → deterministic).
+      Decision row C43. verify PASS (guard 0 errors). Original analysis below.
+- [ ] WP-FL1 (original analysis) — The mock `06` `list-row`
       (spec lines 214–273) is: `icon-tile` + `list-row-main` (title `{front} — {back}` font:16/600 +
       meta `Box 4 · due in 3d` font:13/400 color:text-2) + `list-row-trail` (a **chip** `Review` +
       chevron). **PRECEDENCE #1 resolves the chip:** `srs-review.md` §Rules defines the card-state

@@ -997,6 +997,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} cards · drag to reorder'**
   String flashcardReorderCountHeader(int count);
+
+  /// Flashcard-row SRS subtitle for a never-studied (NEW) card.
+  ///
+  /// In en, this message translates to:
+  /// **'New · not studied'**
+  String get flashcardStateNew;
+
+  /// Flashcard-row SRS subtitle: SRS box + days until the card is next due.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box} · due in {days}d'**
+  String flashcardStateBoxDueIn(int box, int days);
+
+  /// Flashcard-row SRS subtitle: SRS box, card due today or overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box} · due today'**
+  String flashcardStateBoxDueToday(int box);
 }
 
 class _AppLocalizationsDelegate
