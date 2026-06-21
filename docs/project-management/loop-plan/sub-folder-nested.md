@@ -3,7 +3,7 @@ last_updated: 2026-06-21
 object: Sub-folder (nested)
 loop_order: 3 of 10 (outer→inner)
 route: /library/folder/:id (at nested depth)
-status: IN PROGRESS (covered by object 2; one nested-breadcrumb test gap)
+status: DONE (covered by object 2; nested-breadcrumb screen test added — WP-N1)
 ---
 
 # Loop plan — Object 3: Sub-folder (nested)
@@ -33,17 +33,17 @@ any depth. No nested-specific mock state exists in `shots/INDEX.md`.
 
 ## Gap-checklist (work-package queue)
 
-- [ ] **WP-N1 — Nested breadcrumb FE test (coverage gap)** — eligible. `folder_detail_test`
-      fixtures use a **single-level** breadcrumb (`breadcrumb: [Languages]`), so the multi-level
-      nested trail (Root › Languages › East Asian) + ancestor tappability + current-crumb
-      non-tappability are FE-untested (the BE ancestor query is tested in `folder_read_queries`).
-      Add a widget test pumping `FolderDetailScreen` for a nested folder (≥3 crumbs) asserting:
-      Root + ancestor crumbs render and are tappable, the deepest crumb is the current location,
-      and the trail matches `buildLibraryBreadcrumb` semantics. **NEXT.**
+- [x] **WP-N1 — Nested breadcrumb FE test** — **Implemented (2026-06-21).** Audit found
+      `buildLibraryBreadcrumb` **structure** (multi-level Root › ancestors › current, tappability,
+      leaf handling) is **already** fully covered by `test/presentation/shared/navigation/
+      library_breadcrumb_test.dart`. The only gap was the **screen-level** render at depth (the
+      `folder_detail_test` fixtures used a single crumb). Added a `_nested` fixture (East Asian under
+      Languages) + a test asserting `FolderDetailScreen` docks the trail `Root › Languages › East
+      Asian` (root + ancestor crumbs render; current folder is the leaf + app-bar title). verify PASS.
 
 ## Conclusion
 
-Object 3 has **no missing feature** — nested sub-folders are fully handled by object 2's
-`FolderDetailScreen` (breadcrumb nav + scroll, nested create/navigate/mode-lock/delete). The only
-gap is a nested-breadcrumb **FE test** (WP-N1); once it lands, object 3 is DONE → object 4 (Deck
-detail).
+Object 3 is **DONE** (2026-06-21). No missing feature — nested sub-folders are fully handled by
+object 2's `FolderDetailScreen` (breadcrumb nav + scroll, nested create/navigate/mode-lock/delete);
+the breadcrumb structure was already unit-tested and WP-N1 added the screen-level render-at-depth
+test. Next object (outer→inner): **Deck (detail)** — object 4.
