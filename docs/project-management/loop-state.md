@@ -1,52 +1,39 @@
 # Loop state — FE-completion vertical-slice loop
 
 > Cold-read pointer. One small file the next loop iteration reads FIRST (cheap) before anything else.
-> Keep terse. Update at the end of every iteration.
+> Keep terse. Update at the end of every iteration. Tick/status here is a HINT, not proof (TRUST POLICY).
 
 last_updated: 2026-06-22
 
 ## Cursor
 
-- **Active object:** none — loop is at its **TERMINAL stopping point**.
-- **Current work-package:** none eligible.
-- **Branch:** `main` (last loop work merged via `feat/fe-loop-library`, commit `f2863aa`).
-- **Last verify:** PASS (docs-only marker; last code-chain work-package was WP-FL3 `e6e6024`).
+- **Active object:** 2 — Folder detail (RE-AUDIT-PENDING; advance here next iteration).
+- **Current work-package:** none in flight (WP-L10 committed).
+- **Branch:** `feat/loop-library` (off `chore/loop-state-terminal`); commit `5c16d05` (WP-L10).
+- **Last verify:** PASS (code chain, guard 0 errors, 21 tests) — marker bound to `5c16d05` tree.
 
-## Object status (outer → inner)
+## Loop is NOT terminal — prior "terminal" stop was invalidated
+
+The previous iteration declared terminal on three reasons now disallowed by the loop rules:
+greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PRECEDENCE: business
+`study-flow.md` wins), wireframe "shipped" drift (→ stale doc-status, fix one line on build). Study
+(object 6) BE is ready → it is a BUILD case, not a stop. Re-auditing 1→5 by evidence first.
+
+## Object status (outer → inner) — TRUST POLICY: confirm by evidence on the current tree
 
 | # | Object | Status |
 |---|---|---|
-| 1 | Library overview | **DONE** (mock-parity verified; enrichments not in rebuilt mock → DEFERred) |
-| 2 | Folder detail | **DONE** (deck move + last-studied shipped; new-vs-due not in mock → DEFERred) |
-| 3 | Sub-folder (nested) | **DONE** (breadcrumb render) |
-| 4 | Deck detail | **DONE** (overline due badge) |
-| 5 | Flashcard (list + editor) | **DONE** (reorder + delete shipped; SRS-state + editor screen → DEFERred owner decisions) |
-| 6 | Study — Review | **DEFER** (mock↔docs conflict + wireframe drift + greenfield) |
-| 7 | Study — Match | **DEFER** (blocked on object 6 anchor) |
-| 8 | Study — Guess | **DEFER** (blocked on object 6 anchor) |
-| 9 | Study — Recall | **DEFER** (blocked on object 6 anchor) |
-| 10 | Study — Fill | **DEFER** (blocked on object 6 anchor) |
-
-## Why the loop is stopped (not idle — blocked)
-
-Objects 1-5 are DONE; every remaining object (6-10) is the **Study session FE**, which is DEFERred on
-owner decisions that cannot be auto-resolved or retried the same night:
-
-1. **mock-doc-conflict** — `shots/12-study-review` shows a **flip card** (TAP TO FLIP → Flip/Next),
-   but wireframe 13 + `docs/business/study/study-flow.md` specify **both-sides + swipe-to-grade**.
-   Review is the anchor whose grammar modes 7-10 reuse → blocks all five.
-2. **drift** — wireframes 13-18 falsely claim the study screens are "shipped/Current" while
-   `lib/presentation/features/study/` does not exist (wiped in the 2026-06 reset). Needs an
-   owner docs-correction pass before any rebuild.
-3. **greenfield** — rebuilding routes + entry gate + shared session shell + 5 mode surfaces +
-   result is a large multi-slice feature, not a safe unattended overnight slice.
-
-Study **BE** (entry/create/load/answer/finalize/resume/mode-strategies/result) is built and ready.
-
-See `docs/project-management/loop-deferred.md` (objects 6-10 entry) and
-`docs/project-management/loop-plan/study-review.md` for the full decision list.
+| 1 | Library overview | **DONE (re-audit-confirmed 2026-06-22)** — code+test+golden verified; re-audit found the Search state diverged (app-bar swap vs kit bottom dock) → fixed in WP-L10 (`LibrarySearchDock`); ui-parity PASS. |
+| 2 | Folder detail | RE-AUDIT-PENDING (next) |
+| 3 | Sub-folder (nested) | RE-AUDIT-PENDING |
+| 4 | Deck detail | RE-AUDIT-PENDING |
+| 5 | Flashcard (list + editor) | RE-AUDIT-PENDING |
+| 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
+| 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
 
 ## Next action
 
-Loop is terminal until an owner resolves the Study DEFER (decision 1 + docs pass 2). When unblocked,
-re-enter at object 6 (`loop-plan/study-review.md`) for the greenfield study FE build.
+Re-audit object 2 (Folder detail) — read `loop-plan/folder-detail.md`, `specs/04-folder-detail.md`
+(+ shots), audit BE+FE via `Explore`, run `tool/verify` on folder tests + `ui-parity-checker`
+(golden↔`04` shots, 8 states). Confirm or find gaps; build the first eligible gap; advance only when
+object 2 is evidence-confirmed DONE.
