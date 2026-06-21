@@ -3,7 +3,7 @@ last_updated: 2026-06-21
 object: Deck (detail)
 loop_order: 4 of 10 (outer→inner)
 route: /library/deck/:deckId/flashcards
-status: IN PROGRESS (deck-container FE mostly built; count-overline due badge gap)
+status: DONE (deck container Implemented WBS 3.4.2 + WP-D1 overline due badge)
 ---
 
 # Loop plan — Object 4: Deck (detail)
@@ -52,16 +52,17 @@ kebab maps to delete-deck only, which the impl matches.
 
 ## Gap-checklist (work-package queue)
 
-- [ ] **WP-D1 — Count-overline `{m} due` badge (BE+FE)** — eligible vertical slice. The mock `06`
-      overline reads `142 CARDS · 23 due`; the read model has no due count. Extend the
-      flashcard-list query / `FlashcardListDetail` with `dueCount` (active, F13 suspended/buried
-      exclusion — same predicate as `folderDeckSummaries`), render a `{m} due` badge beside the
-      `{n} CARDS` overline (reuse the `_DueBadge` pill style; show only when `> 0`). BE query test +
-      overline widget test + golden. **NEXT.**
+- [x] **WP-D1 — Count-overline `{m} due` badge (BE+FE)** — **Implemented (2026-06-21).**
+      `FlashcardListDetail.dueCount` (full-deck active due, computed in `watchFlashcardList` via the
+      existing `_matchesStatus(due)` over each card's progress — F13-consistent with
+      `folderDeckSummaries`; progress now loaded whenever the deck has cards). `flashcard_list_body`
+      renders a `{m} due` pill (reused `_DueBadge` style) beside the `{n} CARDS` overline when
+      `> 0`, independent of search. BE test (active-due only, suspended excluded, search-invariant)
+      + overline widget tests (badge present / absent) + `loaded-due` golden (light+dark). verify PASS.
 
 ## Conclusion
 
-Object 4 (Deck detail = the deck container on the Flashcard-list screen) is mostly Implemented
-(WBS 3.4.2); the one deck-level mock gap is the overline due badge (**WP-D1**). All card-level
-work (SRS row enrichment, the `07`/`08` editor, card CRUD/reorder) is **object 5**. Once WP-D1
-lands, object 4 is DONE → object 5.
+Object 4 (Deck detail = the deck container on the Flashcard-list screen) is **DONE** (2026-06-21):
+WBS 3.4.2 container + WP-D1 overline due badge. All card-level work (SRS row enrichment, the
+`07`/`08` editor, card CRUD/reorder) is **object 5**. Next object (outer→inner): **Flashcard
+(list + editor)**.

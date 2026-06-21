@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
@@ -108,7 +109,17 @@ class FlashcardListBody extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
       children: <Widget>[
-        _Overline(label: l10n.flashcardCountHeader(detail.totalCount)),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: _Overline(
+                label: l10n.flashcardCountHeader(detail.totalCount),
+              ),
+            ),
+            // Deck due total beside the `{n} CARDS` overline (mock `06`).
+            if (detail.dueCount > 0) _DueBadge(count: detail.dueCount),
+          ],
+        ),
         const SizedBox(height: MxSpacing.space3),
         _groupedCard(
           context,
@@ -163,6 +174,35 @@ class _Overline extends StatelessWidget {
       StringUtils.upperFold(label),
       role: MxTextRole.labelMedium,
       color: colors.textSecondary,
+    );
+  }
+}
+
+/// The deck due-total pill shown beside the `{n} CARDS` overline (mock `06`).
+class _DueBadge extends StatelessWidget {
+  const _DueBadge({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: MxSpacing.space2,
+        vertical: MxSpacing.space1,
+      ),
+      // Solid accent fill (kit `06` spec): the deck-level overline due total is a
+      // high-emphasis badge, distinct from the soft per-row due pills.
+      decoration: BoxDecoration(
+        color: colors.accent,
+        borderRadius: MxRadius.pillAll,
+      ),
+      child: MxText(
+        AppLocalizations.of(context).folderDueBadge(count),
+        role: MxTextRole.labelSmall,
+        color: colors.accentContrast,
+      ),
     );
   }
 }

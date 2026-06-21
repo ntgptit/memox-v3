@@ -15,6 +15,9 @@ part 'flashcard_list_detail.freezed.dart';
 /// - [totalCount] — the deck's full card count, **independent of the search
 ///   term**, so the UI can tell empty-deck (`totalCount == 0`) apart from
 ///   no-results-on-search (`cards.isEmpty && totalCount > 0`).
+/// - [dueCount] — the deck's due cards over the **full deck** (active, F13
+///   suspended/buried exclusion; `due_at <= now`), shown as a `{m} due` badge on
+///   the `{n} CARDS` overline (mock `06`). Independent of search/filter.
 ///
 /// See `docs/contracts/usecase-contracts/flashcard.md` §WatchFlashcardListUseCase
 /// and `docs/wireframes/06-flashcard-list.md`.
@@ -25,5 +28,6 @@ sealed class FlashcardListDetail with _$FlashcardListDetail {
     required List<Folder> breadcrumb,
     required List<Flashcard> cards,
     required int totalCount,
+    @Default(0) int dueCount,
   }) = _FlashcardListDetail;
 }

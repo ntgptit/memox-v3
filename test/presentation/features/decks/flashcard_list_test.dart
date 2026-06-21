@@ -55,6 +55,8 @@ final FlashcardListDetail _loaded = _detail(<Flashcard>[
   _card('c3', '本', 'book'),
 ]);
 
+final FlashcardListDetail _loadedDue = _loaded.copyWith(dueCount: 23);
+
 Result<FlashcardListDetail> _ok(FlashcardListDetail d) =>
     (failure: null, data: d);
 
@@ -106,6 +108,20 @@ void main() {
       expect(find.byIcon(Icons.swap_vert), findsOneWidget);
     });
 
+    testWidgets('overline shows the deck due badge when dueCount > 0', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loadedDue));
+      await tester.pumpAndSettle();
+      expect(find.text('23 due'), findsOneWidget); // beside the count overline
+    });
+
+    testWidgets('no due badge when nothing is due', (tester) async {
+      await _pump(tester, _value(_loaded)); // dueCount defaults to 0
+      await tester.pumpAndSettle();
+      expect(find.textContaining(' due'), findsNothing);
+    });
+
     testWidgets('empty deck shows the add-card CTA', (tester) async {
       await _pump(tester, _value(_detail(const <Flashcard>[])));
       await tester.pumpAndSettle();
@@ -124,6 +140,7 @@ void main() {
     final Map<String, Stream<Result<FlashcardListDetail>> Function()> cases =
         <String, Stream<Result<FlashcardListDetail>> Function()>{
           'loaded': () => _value(_loaded),
+          'loaded-due': () => _value(_loadedDue),
           'empty': () => _value(_detail(const <Flashcard>[])),
           'loading': _never,
           'error': _error,

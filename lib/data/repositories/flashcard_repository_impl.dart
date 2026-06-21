@@ -102,10 +102,10 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
         // `now` is read once per emission so every card is graded against the
         // same instant (the `due`/`buried` predicates are time-relative).
         final int now = _nowMs();
-        // The status filter is state-derived (suspended/buried/due), so it needs
-        // each card's progress row; only loaded when a non-`all` filter is set.
-        final Map<String, FlashcardProgressRow> progressById =
-            status == FlashcardStatusFilter.all
+        // Each card's progress row is needed for the state-derived status filter
+        // (suspended/buried/due) AND for the deck `dueCount` shown on the overline,
+        // so it is loaded whenever the deck has cards.
+        final Map<String, FlashcardProgressRow> progressById = rows.isEmpty
             ? const <String, FlashcardProgressRow>{}
             : await _progressByCard(
                 rows.map((FlashcardRow r) => r.id).toList(growable: false),
@@ -127,12 +127,25 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
             )
             .toList(growable: false);
 
+        // Deck due total for the overline badge — over the FULL deck (not the
+        // search/filter result), F13-consistent with `folderDeckSummaries`.
+        final int dueCount = all
+            .where(
+              (Flashcard c) => _matchesStatus(
+                FlashcardStatusFilter.due,
+                progressById[c.id],
+                now,
+              ),
+            )
+            .length;
+
         return _ok(
           FlashcardListDetail(
             deck: deck,
             breadcrumb: breadcrumb,
             cards: filtered,
             totalCount: all.length,
+            dueCount: dueCount,
           ),
         );
       } catch (error) {

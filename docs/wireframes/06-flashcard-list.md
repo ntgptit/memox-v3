@@ -18,7 +18,9 @@ source_specs:
 > reached by tapping a deck on Folder Detail (`/library/deck/:deckId/flashcards`, child of the
 > Library branch). As-built V1 (authoritative over older prose below where they differ):
 >
-> - **Layout**: app bar (back + deck name + search + kebab=delete deck) · `{n} CARDS` overline ·
+> - **Layout**: app bar (back + deck name + search + kebab=delete deck) · `{n} CARDS` overline
+>   with a trailing **`{m} due` badge** (WP-D1, 2026-06-21 — `FlashcardListDetail.dueCount`,
+>   full-deck active due, F13 exclusion; shown only when `> 0`) ·
 >   grouped card of `FlashcardTile` rows (accent tile + **front** title + **back** subtitle +
 >   chevron) · `Add card` FAB.
 > - **States**: loaded · empty (hero + `Add card` CTA) · loading (skeleton) · error ·
