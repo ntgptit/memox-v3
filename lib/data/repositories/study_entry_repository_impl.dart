@@ -1,9 +1,11 @@
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/data/datasources/local/daos/study_entry_dao.dart';
+import 'package:memox/data/datasources/local/daos/study_scope_dao.dart';
 import 'package:memox/domain/models/study_entry_eligibility.dart';
 import 'package:memox/domain/repositories/study_entry_repository.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 
@@ -15,9 +17,14 @@ import 'package:memox/domain/types/study_type.dart';
 /// card; SRS review draws only from due cards. Missing `flashcard_progress` rows
 /// already count as new active cards in the query (decision row S23).
 class StudyEntryRepositoryImpl implements StudyEntryRepository {
-  const StudyEntryRepositoryImpl({required StudyEntryDao dao}) : _dao = dao;
+  const StudyEntryRepositoryImpl({
+    required StudyEntryDao dao,
+    required StudyScopeDao scopeDao,
+  }) : _dao = dao,
+       _scopeDao = scopeDao;
 
   final StudyEntryDao _dao;
+  final StudyScopeDao _scopeDao;
 
   @override
   Future<Result<StudyEntryEligibility>> resolveEligibility({
@@ -45,6 +52,54 @@ class StudyEntryRepositoryImpl implements StudyEntryRepository {
         EntryType.today => await _dao.todayCounts(now),
       };
       return (failure: null, data: _classify(scope, counts));
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'flashcard_progress',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<List<FlashcardId>>> resolveEligibleCardIds({
+    required StudyScope scope,
+    required int now,
+  }) async {
+    final String? refId = scope.entryRefId;
+    if (scope.entryType != EntryType.today &&
+        (refId == null || refId.isEmpty)) {
+      return (
+        failure: Failure.validation(
+          field: 'entryRefId',
+          code: ValidationCode.empty,
+          message:
+              'A ${scope.entryType.name} study scope requires an entry id.',
+        ),
+        data: null,
+      );
+    }
+
+    final bool isNew = scope.studyType == StudyType.newCards;
+    try {
+      final List<String> ids = switch (scope.entryType) {
+        EntryType.deck =>
+          isNew
+              ? await _scopeDao.deckNewCardIds(deckId: refId!, now: now)
+              : await _scopeDao.deckDueCardIds(deckId: refId!, now: now),
+        EntryType.folder =>
+          isNew
+              ? await _scopeDao.folderNewCardIds(folderId: refId!, now: now)
+              : await _scopeDao.folderDueCardIds(folderId: refId!, now: now),
+        EntryType.today =>
+          isNew
+              ? await _scopeDao.todayNewCardIds(now: now)
+              : await _scopeDao.todayDueCardIds(now: now),
+      };
+      return (failure: null, data: ids);
     } catch (error) {
       return (
         failure: Failure.storage(

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_entry_dao.dart';
+import 'package:memox/data/datasources/local/daos/study_scope_dao.dart';
 import 'package:memox/data/repositories/study_entry_repository_impl.dart';
 import 'package:memox/domain/models/study_entry_eligibility.dart';
 import 'package:memox/domain/types/entry_type.dart';
@@ -25,7 +26,10 @@ void main() {
 
     setUp(() {
       db = AppDatabase.forExecutor(NativeDatabase.memory());
-      repository = StudyEntryRepositoryImpl(dao: StudyEntryDao(db));
+      repository = StudyEntryRepositoryImpl(
+        dao: StudyEntryDao(db),
+        scopeDao: StudyScopeDao(db),
+      );
     });
     tearDown(() => db.close());
 

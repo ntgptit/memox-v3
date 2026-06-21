@@ -108,18 +108,18 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 |----|-------|-----------|----------|----------|------|
 | BS1 | Bury current session card | During study session | Set `buried_until` to tomorrow local midnight + 1 second, remove current session item, touch session updated_at | C0+C1 | TBD |
 | BS2 | Bury current session card | Progress row missing | Create progress with buried_until/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | TBD |
-| BS3 | Auto-unbury | `buried_until <= now` | Card returns to due queue | C0+C1 | TBD |
+| BS3 | Auto-unbury | `buried_until <= now` | Card returns to due queue | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
 | BS4 | Suspend current session card | During study session | Set `is_suspended=true`, remove current session item, touch session updated_at | C0+C1 | TBD |
 | BS5 | Suspend current session card | Progress row missing | Create progress with is_suspended/default SRS-safe fields; do not mutate current_box/due_at/counters | C1 | TBD |
 | BS6 | Unsuspend | Past `due_at` | Card immediately due | C0+C1 | TBD |
 | BS7 | Toast undo | Within 5s | Revert state | C1 | TBD |
 | BS8 | Filter | "Suspended" | Show only suspended cards | C0+C1 | TBD |
 | BS9 | Filter | "Active" | Hide suspended and buried | C0+C1 | TBD |
-| BS10 | Bury exclusion | Fresh deck new entry | Suspended deck card excluded from study entry | C0+C1 | TBD |
-| BS11 | Bury exclusion | Fresh deck new entry | Currently buried deck card excluded from study entry | C0+C1 | TBD |
-| BS12 | Bury exclusion | `buried_until` past | Card becomes eligible again | C0+C1 | TBD |
-| BS13 | Suspend exclusion | Fresh today entry | Suspended due card excluded from today study | C0+C1 | TBD |
-| BS14 | Suspend exclusion | Fresh today entry | Currently buried due card excluded from today study | C0+C1 | TBD |
+| BS10 | Bury exclusion | Fresh deck new entry | Suspended deck card excluded from study entry | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
+| BS11 | Bury exclusion | Fresh deck new entry | Currently buried deck card excluded from study entry | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
+| BS12 | Bury exclusion | `buried_until` past | Card becomes eligible again | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
+| BS13 | Suspend exclusion | Fresh today entry | Suspended due card excluded from today study | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
+| BS14 | Suspend exclusion | Fresh today entry | Currently buried due card excluded from today study | C0+C1 | `test/data/repositories/study_eligibility_bury_suspend_test.dart` |
 | BS15 | Fresh entry after bury | Session cancelled | In-session buried card stays excluded from fresh deck study entry | C0+C1 | TBD |
 | BS16 | Fresh entry after suspend | Session cancelled | In-session suspended card stays excluded from fresh deck study entry | C0+C1 | TBD |
 

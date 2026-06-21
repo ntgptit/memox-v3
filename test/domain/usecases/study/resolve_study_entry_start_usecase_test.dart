@@ -6,6 +6,7 @@ import 'package:memox/domain/repositories/study_entry_repository.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/study/study_entry_start_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -37,6 +38,12 @@ class _FakeStudyEntryRepository implements StudyEntryRepository {
     required StudyScope scope,
     required int now,
   }) async => (failure: null, data: _eligibility);
+
+  @override
+  Future<Result<List<FlashcardId>>> resolveEligibleCardIds({
+    required StudyScope scope,
+    required int now,
+  }) async => throw UnimplementedError();
 }
 
 void main() {

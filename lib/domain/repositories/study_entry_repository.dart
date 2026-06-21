@@ -1,5 +1,6 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/models/study_entry_eligibility.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_scope.dart';
 
 /// Read port for study entry eligibility (WBS 4.1.1).
@@ -14,6 +15,21 @@ abstract interface class StudyEntryRepository {
   /// `folder` scope with a `null` `entryRefId` is a `ValidationFailure`; a read
   /// error maps to a `StorageFailure`.
   Future<Result<StudyEntryEligibility>> resolveEligibility({
+    required StudyScope scope,
+    required int now,
+  });
+
+  /// Resolves the ordered eligible flashcard ids for [scope] as of [now] (epoch
+  /// ms) — the queue the session-creation flow draws from (WBS 4.11.1). Suspended
+  /// and currently-buried cards are excluded, mirroring [resolveEligibility]'s
+  /// counts so the count and the resolved queue agree
+  /// (`docs/business/study-actions/bury-suspend.md`). Ordering: due-date for
+  /// `srs_review`, sort-order for `new_cards`
+  /// (`docs/business/study/study-flow.md` §Rules). The `maxSessionItems` cap is
+  /// applied by the caller (WBS 4.2.4). A `deck`/`folder` scope with a `null`
+  /// `entryRefId` is a `ValidationFailure`; a read error maps to a
+  /// `StorageFailure`.
+  Future<Result<List<FlashcardId>>> resolveEligibleCardIds({
     required StudyScope scope,
     required int now,
   });

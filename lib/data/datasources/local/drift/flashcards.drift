@@ -28,8 +28,9 @@ CREATE INDEX idx_flashcards_deck ON flashcards (deck_id);
 -- is_suspended (default false) and buried_until (default NULL) hold the bury/
 -- suspend state added in schema v4 (WBS 4.0.2). A card is suspended when
 -- is_suspended is true; currently buried when buried_until is a future epoch-ms
--- timestamp. No behavior reads them yet — the queue-exclusion / status-filter
--- eligibility logic lands later (WBS 4.11.1 / 2.17.1).
+-- timestamp. The queue-exclusion eligibility read logic landed with WBS 4.11.1
+-- (`study_scope_queries.drift`); the status-filter read logic (WBS 2.17.1) and the
+-- `idx_flashcard_progress_eligibility` perf index are still pending.
 CREATE TABLE flashcard_progress (
   flashcard_id TEXT NOT NULL PRIMARY KEY REFERENCES flashcards (id) ON DELETE CASCADE,
   box_number INTEGER NOT NULL DEFAULT 1,

@@ -98,7 +98,13 @@ first). The `maxSessionItems` cap (default 20, `CreateStudySessionUseCase.maxSes
 is applied **inside the use case** (WBS 4.2.4): when the resolved list is larger,
 only the first `maxSessionItems` (in the caller's resolved order — due-date for
 review, sort order for new) become session items. Ordered-eligible-id resolution
-is a separate read.
+is a separate read, **implemented (WBS 4.11.1)** as
+`StudyEntryRepository.resolveEligibleCardIds({scope, now})` /
+`ResolveEligibleStudyCardsUseCase`
+(`lib/data/datasources/local/drift/study_scope_queries.drift`): it returns the
+ordered eligible flashcard ids — `srs_review` → due cards by `due_at`, `new_cards`
+→ every active card by `sort_order` — with suspended and currently-buried cards
+excluded, mirroring the eligibility counts (WBS 4.1.1).
 
 ## ResumeSessionUseCase
 

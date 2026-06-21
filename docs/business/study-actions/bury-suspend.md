@@ -44,10 +44,12 @@ Two fields on `flashcard_progress` (shipped schema v4 — WBS 4.0.2, columns onl
 | `is_suspended` | BOOLEAN NOT NULL         | `false` | When true, card is hidden from all study queues regardless of due/buried state. |
 
 The two columns shipped in schema v4 (`lib/data/datasources/local/drift/flashcards.drift`,
-migration `v4_add_bury_suspend.dart`). The eligibility index
+migration `v4_add_bury_suspend.dart`). The queue-exclusion read logic landed with WBS 4.11.1
+(`lib/data/datasources/local/drift/study_scope_queries.drift` +
+`StudyEntryRepository.resolveEligibleCardIds`). The eligibility index
 (`idx_flashcard_progress_eligibility` covering `is_suspended`, `buried_until`, `due_at`) is still
-**Future** — it ships with the queue-exclusion / status-filter read logic (WBS 4.11.1 / 2.17.1),
-not with the v4 columns.
+**Future** — it is a pure performance optimization deferred to a perf-tuning pass (and the status
+filter, WBS 2.17.1), not required by the v4 columns or the 4.11.1 query logic.
 
 ## Bury
 
@@ -232,7 +234,8 @@ Both bury and suspend support bulk operations from flashcard list multi-select (
 - `docs/database/schema-contract.md` → `flashcard_progress.buried_until INTEGER NULL`,
   `flashcard_progress.is_suspended BOOL` (both shipped in the current schema)
 - Index: `idx_flashcard_progress_eligibility` on
-  `flashcard_progress(is_suspended, buried_until, due_at)` (shipped)
+  `flashcard_progress(is_suspended, buried_until, due_at)` (Future — not yet created;
+  a perf optimization deferred to a perf-tuning pass, not required by the 4.11.1 query logic)
 
 **Decision table:**
 

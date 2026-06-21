@@ -1,0 +1,86 @@
+import 'folders.drift';
+import 'decks.drift';
+import 'flashcards.drift';
+
+-- Ordered eligible flashcard-id resolution for the study queue (WBS 4.11.1).
+-- These are the "separate read" the session-creation flow consumes to pick which
+-- cards enter a session (`docs/contracts/usecase-contracts/study.md`
+-- §CreateStudySessionUseCase). Every query EXCLUDES suspended and currently-buried
+-- cards, mirroring the eligibility counts (WBS 4.1.1, study_entry_queries.drift)
+-- so the count and the resolved queue always agree:
+--   suspended      : COALESCE(is_suspended, 0) = 1            → excluded
+--   currently buried: buried_until IS NOT NULL AND buried_until > :now → excluded
+-- A missing flashcard_progress row (LEFT JOIN → NULLs) is a new, active,
+-- not-suspended, not-buried card (decision row S23), so COALESCE(is_suspended, 0).
+--
+-- Two intents, matching the eligibility split:
+--   *DueQueue : SRS review — active, non-buried cards whose due_at has passed
+--               (due_at IS NOT NULL AND due_at <= :now), ordered by due_at ASC.
+--   *NewQueue : new study — every active, non-buried card (WBS 4.1.1 draws New
+--               from all active cards, not only due_at IS NULL; the new-vs-due
+--               split is WBS 3.2.3, Future), ordered by sort_order ASC.
+-- Each query returns only `flashcards.id`; the use case applies the
+-- `maxSessionItems` batch cap (WBS 4.2.4) to the head of the ordered list.
+
+deckDueQueue(:deckId AS TEXT, :now AS INT):
+SELECT fc.id FROM flashcards fc
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE fc.deck_id = :deckId
+  AND COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+  AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+ORDER BY fp.due_at ASC, fc.sort_order ASC, fc.id ASC;
+
+deckNewQueue(:deckId AS TEXT, :now AS INT):
+SELECT fc.id FROM flashcards fc
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE fc.deck_id = :deckId
+  AND COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+ORDER BY fc.sort_order ASC, fc.id ASC;
+
+folderDueQueue(:folderId AS TEXT, :now AS INT):
+WITH RECURSIVE subtree(node_id) AS (
+  SELECT :folderId
+  UNION ALL
+  SELECT child.id FROM folders child JOIN subtree ON child.parent_id = subtree.node_id
+)
+SELECT fc.id
+FROM subtree
+JOIN decks d ON d.folder_id = subtree.node_id
+JOIN flashcards fc ON fc.deck_id = d.id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+  AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+ORDER BY fp.due_at ASC, fc.sort_order ASC, fc.id ASC;
+
+folderNewQueue(:folderId AS TEXT, :now AS INT):
+WITH RECURSIVE subtree(node_id) AS (
+  SELECT :folderId
+  UNION ALL
+  SELECT child.id FROM folders child JOIN subtree ON child.parent_id = subtree.node_id
+)
+SELECT fc.id
+FROM subtree
+JOIN decks d ON d.folder_id = subtree.node_id
+JOIN flashcards fc ON fc.deck_id = d.id
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+ORDER BY fc.sort_order ASC, fc.id ASC;
+
+todayDueQueue(:now AS INT):
+SELECT fc.id FROM flashcards fc
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+  AND fp.due_at IS NOT NULL AND fp.due_at <= :now
+ORDER BY fp.due_at ASC, fc.sort_order ASC, fc.id ASC;
+
+todayNewQueue(:now AS INT):
+SELECT fc.id FROM flashcards fc
+LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
+WHERE COALESCE(fp.is_suspended, 0) = 0
+  AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
+ORDER BY fc.sort_order ASC, fc.id ASC;
