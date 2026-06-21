@@ -1,6 +1,7 @@
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_mode.dart';
@@ -104,5 +105,19 @@ abstract interface class StudyRepository {
   Future<Result<void>> finalizeStudySession({
     required SessionId sessionId,
     required int now,
+  });
+
+  /// Loads the result summary for session [id] (WBS 4.7.1): the persisted
+  /// session header plus its ordered `study_session_items` joined with their
+  /// flashcards, each paired with the terminal `AttemptResult` derived from its
+  /// attempts (the V1 last-attempt classifier; `null` when unanswered). The
+  /// aggregate total / answered / forgot / passed counts are getters on the
+  /// returned [StudySessionResult]. A missing session is a `NotFoundFailure`; a
+  /// session with no items is a controlled integrity error (`ValidationFailure`);
+  /// a read error maps to a `StorageFailure`
+  /// (`docs/contracts/usecase-contracts/study.md`
+  /// §LoadStudySessionResultUseCase).
+  Future<Result<StudySessionResult>> loadStudySessionResult({
+    required SessionId id,
   });
 }

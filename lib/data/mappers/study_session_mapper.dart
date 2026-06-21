@@ -1,6 +1,7 @@
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -121,5 +122,21 @@ class StudySessionMapper {
     answeredAt: item.answeredAt == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(item.answeredAt!, isUtc: true),
+  );
+
+  /// Maps a joined `study_session_items` + `flashcards` row pair plus its
+  /// derived [terminalResult] (or `null` when unanswered) to a result item
+  /// (WBS 4.7.1).
+  StudySessionResultItem toResultItem(
+    StudySessionItemRow item,
+    FlashcardRow card,
+    AttemptResult? terminalResult,
+  ) => StudySessionResultItem(
+    sessionItemId: item.id,
+    flashcardId: card.id,
+    front: card.front,
+    back: card.back,
+    sortOrder: item.sortOrder,
+    result: terminalResult,
   );
 }

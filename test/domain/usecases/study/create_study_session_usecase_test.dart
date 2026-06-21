@@ -3,6 +3,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
@@ -71,6 +72,11 @@ class _FakeStudyRepository implements StudyRepository {
   Future<Result<void>> finalizeStudySession({
     required SessionId sessionId,
     required int now,
+  }) async => throw UnimplementedError();
+
+  @override
+  Future<Result<StudySessionResult>> loadStudySessionResult({
+    required SessionId id,
   }) async => throw UnimplementedError();
 }
 

@@ -7,6 +7,7 @@ import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_session_mapper.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/srs/box_intervals.dart';
 import 'package:memox/domain/srs/srs_box.dart';
@@ -405,6 +406,81 @@ class StudyRepositoryImpl implements StudyRepository {
         failure: Failure.storage(
           operation: StorageOp.transaction,
           table: 'flashcard_progress',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  @override
+  Future<Result<StudySessionResult>> loadStudySessionResult({
+    required SessionId id,
+  }) async {
+    try {
+      final StudySessionRow? sessionRow = await _dao.sessionById(id);
+      if (sessionRow == null) {
+        return (
+          failure: const Failure.notFound(entity: 'study_session'),
+          data: null,
+        );
+      }
+
+      final List<StudySessionItemRow> items = await _dao.itemsForSession(id);
+      if (items.isEmpty) {
+        // A persisted session must always have items; an empty list is an
+        // integrity error, surfaced as a controlled failure (study.md
+        // §LoadStudySessionResultUseCase).
+        return (
+          failure: Failure.validation(
+            field: 'sessionItems',
+            code: ValidationCode.insufficientContent,
+            message: 'Study session $id has no items.',
+          ),
+          data: null,
+        );
+      }
+
+      final List<FlashcardRow> cards = await _dao.flashcardsByIds(
+        items.map((StudySessionItemRow i) => i.flashcardId),
+      );
+      final Map<String, FlashcardRow> cardById = <String, FlashcardRow>{
+        for (final FlashcardRow card in cards) card.id: card,
+      };
+
+      final List<StudySessionResultItem> resultItems =
+          <StudySessionResultItem>[];
+      for (final StudySessionItemRow item in items) {
+        final List<StudyAttemptRow> attempts = await _dao.attemptsForItem(
+          item.id,
+        );
+        // Unanswered items have no attempts → null terminal result (defensive:
+        // a completed session always has every item answered per the
+        // finalizeStudySession guard, but this read path stays valid mid-session
+        // too); otherwise reuse the same last-attempt classifier finalization
+        // uses so the result screen and the persisted SRS outcome never disagree.
+        final AttemptResult? terminal = attempts.isEmpty
+            ? null
+            : _terminalResult(
+                attempts.map((a) => _mapper.resultFromToken(a.result)).toList(),
+              );
+        resultItems.add(
+          _mapper.toResultItem(item, cardById[item.flashcardId]!, terminal),
+        );
+      }
+
+      return (
+        failure: null,
+        data: StudySessionResult(
+          session: _mapper.toEntity(sessionRow),
+          items: resultItems,
+        ),
+      );
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.read,
+          table: 'study_attempts',
           cause: error.toString(),
         ),
         data: null,

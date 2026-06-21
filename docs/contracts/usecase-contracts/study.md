@@ -162,6 +162,17 @@ Future<Either<Failure, StudySessionResult>> call({required SessionId sessionId})
 
 **Errors:** `NotFoundFailure`, `ValidationFailure`, `StorageFailure`.
 
+**Implemented (WBS 4.7.1)** as `Future<Result<StudySessionResult>> call({required SessionId sessionId})`
+(the project `Result<T>` record, not `Either` — see the header parity note). Returns
+`StudySessionResult` (`lib/domain/models/study_session_result.dart`): the `StudySession` header plus
+ordered, flashcard-joined `StudySessionResultItem`s, each carrying the terminal `AttemptResult?`
+derived from its `study_attempts` via the **same V1 last-attempt classifier finalization uses**
+(`_terminalResult`), so the result screen and the persisted SRS outcome never disagree; an
+unanswered item carries a `null` result. The aggregate `total` / `answeredCount` / `forgotCount` /
+`passedCount` are getters on the model. A missing session is a `NotFoundFailure`; an item-less
+session is a controlled `ValidationFailure(insufficientContent)`; a read error is a
+`StorageFailure(read)`.
+
 ## RecordStudySessionAnswerUseCase
 
 ```dart

@@ -37,7 +37,7 @@ Card history, Dashboard streak/goal, and the dashboard due CTA.
 | P0.5 | ~~4.4.1~~ / 4.4.2 / 4.4.3 | ~~Submit self-grade BE~~ ✅ **DONE 2026-06-21** (recordStudySessionAnswer + SrsBox transition) + Forgot/Got-it FE + re-grade before finalize | |
 | P0.6 | ~~4.5.1~~ / 4.5.2 / 4.5.3 | ~~Study mode strategy BE~~ ✅ **DONE 2026-06-21** (sealed families + factory) + Review mode BE + Review mode FE | Review is the core mode; other modes are P1. |
 | P0.7 | ~~4.6.1~~ / ~~4.6.2~~ / 4.6.3 / ~~4.6.4~~ | ✅ **DONE 2026-06-21** Finish session + SRS progress update + due-time local-midnight (finalization keystone, 1 slice) · 4.6.3 finalization-recovery FE still open | The Leitner box transition. |
-| P0.8 | 4.7.1 / 4.7.2 | Result summary BE + result screen FE | |
+| P0.8 | ~~4.7.1~~ / 4.7.2 | ~~Result summary BE~~ ✅ **DONE 2026-06-21** (`loadStudySessionResult` + `StudySessionResult` model: terminal result per item + total/answered/forgot/passed counts) + result screen FE (4.7.2) | |
 | P0.9 | 4.8.1 / 4.9.1 | Session persistence recovery + protected active-session exit FE | |
 | P0.10 | 4.1.3 / 4.1.4 | Deck study CTA FE + Folder study CTA FE | Wires Library/detail screens into the new loop. |
 

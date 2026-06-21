@@ -158,3 +158,11 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | RES3 | Open result route | Session not found | Render controlled not-found state with localized message and safe return to Library | C1 | TBD |
 | RES4 | Open result route | Session not completed / finalized yet | Render controlled not-completed state, not fake success, and do not show completion summary | C1 | TBD |
 | RES5 | Result CTA | Tap Back to Library / Home | Navigate through existing route constants (`RouteNames.library` / `RouteNames.home`), no raw route strings | C0+C1 | TBD |
+
+### Result summary BE — `loadStudySessionResult` (WBS 4.7.1)
+
+| ID | Event | Condition | Expected | Coverage | Test |
+|----|-------|-----------|----------|----------|------|
+| RES6 | `loadStudySessionResult` | Session has answered items | Return header + ordered flashcard-joined items; each item's terminal `AttemptResult` via the V1 last-attempt classifier shared with finalization; `total`/`answeredCount`/`forgotCount`/`passedCount` getters reflect terminal results (`forgot`→forgotCount; answered non-forgot→passedCount) | C0+C1 | `test/data/repositories/study_repository_load_result_test.dart` |
+| RES7 | `loadStudySessionResult` | Item never answered (no attempts) | Item's terminal result is `null`; `isAnswered=false`; excluded from `forgotCount`/`passedCount` | C1 | `test/data/repositories/study_repository_load_result_test.dart` |
+| RES8 | `loadStudySessionResult` | Session missing / item-less | Missing session → `NotFoundFailure`; persisted session with no items → controlled `ValidationFailure(insufficientContent)` | C1 | `test/data/repositories/study_repository_load_result_test.dart` |
