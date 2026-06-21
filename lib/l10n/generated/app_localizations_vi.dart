@@ -51,7 +51,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get libraryLoadFailedMessage => 'Đã có lỗi khi tải thư mục của bạn.';
 
   @override
-  String get libraryRetryLabel => 'Thử lại';
+  String get commonRetryLabel => 'Thử lại';
 
   @override
   String get librarySearchNoResultsTitle => 'Không tìm thấy thư mục';

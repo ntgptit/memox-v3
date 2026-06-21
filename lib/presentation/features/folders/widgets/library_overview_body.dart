@@ -191,7 +191,7 @@ class LibraryOverviewBody extends ConsumerWidget {
         message: l10n.libraryLoadFailedMessage,
         icon: Icons.cloud_off_outlined,
         action: MxPrimaryButton(
-          label: l10n.libraryRetryLabel,
+          label: l10n.commonRetryLabel,
           icon: Icons.refresh,
           fullWidth: true,
           onPressed: () => ref.invalidate(libraryOverviewStreamProvider),

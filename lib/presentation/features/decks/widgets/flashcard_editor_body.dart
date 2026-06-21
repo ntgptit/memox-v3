@@ -362,7 +362,7 @@ class _SaveErrorBanner extends StatelessWidget {
             ),
             const SizedBox(width: MxSpacing.space2),
             MxPrimaryButton(
-              label: l10n.libraryRetryLabel,
+              label: l10n.commonRetryLabel,
               destructive: true,
               size: MxButtonSize.xsmall,
               onPressed: onRetry,

@@ -13,7 +13,7 @@
   "libraryEmptyMessage": "Thư mục giúp gom các bộ thẻ liên quan lại với nhau. Thêm một thư mục để sắp xếp các bộ thẻ.",
   "libraryLoadFailedTitle": "Không tải được thư viện",
   "libraryLoadFailedMessage": "Đã có lỗi khi tải thư mục của bạn.",
-  "libraryRetryLabel": "Thử lại",
+  "commonRetryLabel": "Thử lại",
   "librarySearchNoResultsTitle": "Không tìm thấy thư mục",
   "librarySearchNoResultsMessage": "Không có thư mục nào khớp \"{term}\".",
   "librarySearchClearLabel": "Xóa",

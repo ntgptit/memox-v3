@@ -176,11 +176,11 @@ abstract class AppLocalizations {
   /// **'Something went wrong loading your folders.'**
   String get libraryLoadFailedMessage;
 
-  /// Retry action on the Library error state.
+  /// Shared Retry action across error / failure surfaces (library, lists, editor save-failed).
   ///
   /// In en, this message translates to:
   /// **'Retry'**
-  String get libraryRetryLabel;
+  String get commonRetryLabel;
 
   /// Title when a search matches no folders.
   ///

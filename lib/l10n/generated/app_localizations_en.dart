@@ -52,7 +52,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong loading your folders.';
 
   @override
-  String get libraryRetryLabel => 'Retry';
+  String get commonRetryLabel => 'Retry';
 
   @override
   String get librarySearchNoResultsTitle => 'No folders found';
