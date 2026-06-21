@@ -8,14 +8,16 @@ last_updated: 2026-06-22
 ## Cursor
 
 - **Active object:** 5 — Flashcard (list + editor) (IN PROGRESS; WP-FL1 + WP-FL2a + WP-FL2b1 +
-  WP-FL2b2 SHIPPED → **WP-FL2b3 (editor save/load state surfaces) build next**, then WP-FL2b2b Tags).
-- **Current work-package:** WP-FL2b3 (see `loop-plan/flashcard-list-editor.md`): the `07` saving
-  (disabled + spinner) + save-failed (inline banner vs the current snackbar) states; the `08` loading
-  + full load-error surfaces (the editor currently reuses `flashcardListStreamProvider` — a single-card
-  read path lets a deep-link edit show loading/load-error). Then WP-FL2b2b (Tags chip input) as the
-  last object-5 node.
-- **Branch:** `feat/loop-library`; latest code commits `583d347` (WP-FL2b1), `23a4193` (WP-FL2b2).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b2 tree.
+  WP-FL2b2 + **WP-FL2b3a (saving spinner + save-failed banner)** SHIPPED → **WP-FL2b3b (load-state
+  surfaces) build next**, then WP-FL2b2b Tags — the last two object-5 nodes).
+- **Current work-package:** WP-FL2b3b (see `loop-plan/flashcard-list-editor.md`): the `07`/`08`
+  loading skeleton + full load-error. The editor currently reuses `flashcardListStreamProvider`; a
+  **single-card read path** (find one card by id) lets a deep-link edit (`/…/:id/edit`) show a real
+  loading skeleton + load-error surface instead of the list stream's bare shell. Then WP-FL2b2b
+  (Tags chip input) → object 5 evidence-DONE → object 6 (Study — Review, greenfield, BE ready).
+- **Branch:** `feat/loop-library`; latest code commit `6437f66` (WP-FL2b3a; prior `23a4193` WP-FL2b2).
+- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b3a tree. 3-reviewer
+  fan-out clean (ui-parity PASS, drift none, code-reviewer fixes folded).
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -47,22 +49,19 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 2 | Folder detail | **DONE (re-audit-confirmed 2026-06-22)** — code+25 tests+goldens verified; search-state app-bar-swap → bottom dock (WP-FD10); move-sheet golden gap closed (WP-FD11); ui-parity PASS. DEFERred: reorder (no mock), new-vs-due (not in mock), picker restyle (bundled). |
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
-| 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1 SRS subtitle** + **FL2a editor shell** + **FL2b1 edit-delete** + **FL2b2 Details expander (`23a4193`)** SHIPPED (ui-parity PASS). **WP-FL2b3 (save/load states) + WP-FL2b2b (Tags input) remain** before DONE. |
+| 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1 SRS subtitle** + **FL2a editor shell** + **FL2b1 edit-delete** + **FL2b2 Details expander** + **FL2b3a saving+save-failed (`6437f66`)** SHIPPED (ui-parity PASS). **WP-FL2b3b (load states) + WP-FL2b2b (Tags input) remain** before DONE. |
 | 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
 
 ## Next action
 
-**Build WP-FL2b3 (editor save/load state surfaces)** — the non-base `07`/`08` states. Read spec
-`07`/`08` for the exact saving/save-failed/load-error layout first (PRECEDENCE #2):
-1. **Saving:** while `save()` awaits, disable Save + show a spinner/`Saving…` (the controller is
-   stateless — use a local `useState<bool>` saving flag in `flashcard_editor_body.dart`, set around
-   the await). Golden `07`/`08` saving.
-2. **Save-failed:** the spec shows an inline error banner above the fields (currently a snackbar). Add
-   the banner on failure (keep the draft). Golden `07`/`08` save-failed.
-3. **`08` loading + full load-error:** the editor reuses `flashcardListStreamProvider`; for a
-   deep-link edit a single-card read path (or the existing stream's loading/error) should drive the
-   `08` loading skeleton + full load-error surface (the bare shell exists; flesh it to the mock).
+**Build WP-FL2b3b (editor load-state surfaces)** — the last non-base `07`/`08` states (saving +
+save-failed shipped in `6437f66`). Read spec `07`/`08` loading + load-error layout first (PRECEDENCE #2):
+- The editor reuses `flashcardListStreamProvider(deckId)` and finds the card by id in the list; for a
+  **deep-link edit** (`/…/:flashcardId/edit`) this yields no loading skeleton / proper load-error.
+- Add a **single-card read path** (find one flashcard by id — repo method + use case + provider) so the
+  editor screen drives the `08` loading skeleton + full load-error surface (the bare async shells in
+  `flashcard_editor_screen.dart` exist; flesh them to the mock). G1-split: BE read path first, then FE.
 Then **WP-FL2b2b** (Tags chip input — the `07`/`08` Tags section, the last object-5 node). After
 object 5 is evidence-confirmed DONE → **object 6 (Study — Review, greenfield, BE ready)**: CHẺ
 route → entry gate → session create/resume → review shell → grade → result. Do NOT defer for greenfield.

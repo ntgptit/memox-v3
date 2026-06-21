@@ -85,9 +85,13 @@ conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
   - [ ] **WP-FL2b2b — Tags input** (the mock `07`/`08` Tags chips + "Add tag" affordance; business
         model includes tags — `flashcard-management.md` §238). Needs a chip-display + add/remove-tag
         UX; edit currently preserves tags untouched. Build after WP-FL2b3 or as the last object-5 node.
-  - [ ] **WP-FL2b3 — save/load state surfaces** (`07` saving/save-failed inline banner; `08`
-        loading + full load-error via a single-card read path). The editor is usable for front/back
-        create+edit+delete without these; they complete the kit state coverage.
+  - [x] **WP-FL2b3a — saving + save-failed** (`6437f66`): `MxPrimaryButton.loading` spinner at the
+        disabled accent fill (op:0.38) + `saving` double-submit guard; inline `_SaveErrorBanner`
+        (dangerSoft, above the fields per kit `abs:[21,95]`) **replaces** the failure snackbar, keeping
+        the draft. Rows C29 (reworded) + C45. Tests + saving/save-failed goldens (light+dark). ✓ verify.
+  - [ ] **WP-FL2b3b — load state surfaces** (`07`/`08` loading skeleton + full load-error via a
+        single-card read path, so a deep-link edit shows loading/load-error instead of the list stream's
+        bare shell). The editor is usable for front/back create+edit+delete without these.
 - [ ] **WP-FL2a (original analysis).** Current editor is a
       front/back **dialog** (`flashcard_card_dialog.dart`); the mock `07`/`08` is a full **screen**.
       PRECEDENCE #2 (visual → mock) makes the screen the contract; "rebuild a shipped surface" is not a
