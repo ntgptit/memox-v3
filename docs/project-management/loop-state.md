@@ -8,16 +8,19 @@ last_updated: 2026-06-22
 ## Cursor
 
 - **Active object:** 5 — Flashcard (list + editor) (IN PROGRESS; WP-FL1 + WP-FL2a + WP-FL2b1 +
-  WP-FL2b2 + **WP-FL2b3a (saving spinner + save-failed banner)** SHIPPED → **WP-FL2b3b (load-state
-  surfaces) build next**, then WP-FL2b2b Tags — the last two object-5 nodes).
-- **Current work-package:** WP-FL2b3b (see `loop-plan/flashcard-list-editor.md`): the `07`/`08`
-  loading skeleton + full load-error. The editor currently reuses `flashcardListStreamProvider`; a
-  **single-card read path** (find one card by id) lets a deep-link edit (`/…/:id/edit`) show a real
-  loading skeleton + load-error surface instead of the list stream's bare shell. Then WP-FL2b2b
-  (Tags chip input) → object 5 evidence-DONE → object 6 (Study — Review, greenfield, BE ready).
-- **Branch:** `feat/loop-library`; latest code commit `6437f66` (WP-FL2b3a; prior `23a4193` WP-FL2b2).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b3a tree. 3-reviewer
-  fan-out clean (ui-parity PASS, drift none, code-reviewer fixes folded).
+  WP-FL2b2 + WP-FL2b3a (saving + save-failed) + **WP-FL2b3b (loading skeleton + load-error/Retry)**
+  SHIPPED → **WP-FL2b2b (Tags chip input) build next — the LAST object-5 node**).
+- **Current work-package:** WP-FL2b2b (see `loop-plan/flashcard-list-editor.md`): the `07`/`08` Tags
+  section — a chip row of the card's tags + an "Add tag" affordance (add/remove). Business model has
+  tags (`flashcard-management.md` §238); edit currently **preserves** tags untouched. The editor's
+  create/update already forward `tags`; wire a tag-editing UX (chip display + add-tag input/validate
+  via `TagValidator`) into `FlashcardEditorForm`. After this → object 5 evidence-DONE → object 6
+  (Study — Review, greenfield, BE ready): CHẺ route → entry gate → session create/resume → review
+  shell → grade → result.
+- **Branch:** `feat/loop-library`; latest code commit `d3aa162` (WP-FL2b3b; prior `6437f66` WP-FL2b3a,
+  `34ae424` l10n rename).
+- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-FL2b3b tree. 3-reviewer
+  fan-out folded (code-reviewer APPROVE; ui-parity blocker breadcrumb-during-loading fixed; drift = §10 logged here).
 
 ## Follow-up cleanups (logged, not blocking)
 
@@ -49,19 +52,21 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 2 | Folder detail | **DONE (re-audit-confirmed 2026-06-22)** — code+25 tests+goldens verified; search-state app-bar-swap → bottom dock (WP-FD10); move-sheet golden gap closed (WP-FD11); ui-parity PASS. DEFERred: reorder (no mock), new-vs-due (not in mock), picker restyle (bundled). |
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
-| 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1 SRS subtitle** + **FL2a editor shell** + **FL2b1 edit-delete** + **FL2b2 Details expander** + **FL2b3a saving+save-failed (`6437f66`)** SHIPPED (ui-parity PASS). **WP-FL2b3b (load states) + WP-FL2b2b (Tags input) remain** before DONE. |
+| 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1** + **FL2a shell** + **FL2b1 delete** + **FL2b2 Details** + **FL2b3a saving+save-failed** + **FL2b3b loading+load-error (`d3aa162`)** SHIPPED (ui-parity PASS). **Only WP-FL2b2b (Tags input) remains** before DONE. |
 | 6 | Study — Review | BUILD (greenfield FE; BE ready; split route→gate→shell→grade→result) |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6) |
 
 ## Next action
 
-**Build WP-FL2b3b (editor load-state surfaces)** — the last non-base `07`/`08` states (saving +
-save-failed shipped in `6437f66`). Read spec `07`/`08` loading + load-error layout first (PRECEDENCE #2):
-- The editor reuses `flashcardListStreamProvider(deckId)` and finds the card by id in the list; for a
-  **deep-link edit** (`/…/:flashcardId/edit`) this yields no loading skeleton / proper load-error.
-- Add a **single-card read path** (find one flashcard by id — repo method + use case + provider) so the
-  editor screen drives the `08` loading skeleton + full load-error surface (the bare async shells in
-  `flashcard_editor_screen.dart` exist; flesh them to the mock). G1-split: BE read path first, then FE.
-Then **WP-FL2b2b** (Tags chip input — the `07`/`08` Tags section, the last object-5 node). After
-object 5 is evidence-confirmed DONE → **object 6 (Study — Review, greenfield, BE ready)**: CHẺ
+**Build WP-FL2b2b (editor Tags chip input)** — the LAST object-5 node. Read the `07`/`08` Tags
+section in the specs + `docs/business/tags/tag-system.md` + `docs/business/flashcard/flashcard-management.md` §238 first (PRECEDENCE #2 for visual; #1 for validation):
+- The editor's create/update **already forward `tags`** (BE done; edit currently preserves them
+  untouched). Wire a tag-editing UX into `FlashcardEditorForm`: a chip row of the card's current
+  tags (each removable) + an "Add tag" affordance that validates via `TagValidator` (rows C20/C21 —
+  add appends + normalizes on save, tapping a chip removes it).
+- Use the existing `Mx*` chip/input components (check `component-visual-contract.md` for the chip
+  primitive; do NOT invent a new shared chip if one exists). Dirty-tracking must include the tag set
+  (it already does for the discard-confirm). Tests: add/remove chip, save persists tags, golden of
+  the Tags section (light+dark). Decision rows C20/C21 (currently TBD) get their tests.
+After object 5 is evidence-confirmed DONE → **object 6 (Study — Review, greenfield, BE ready)**: CHẺ
 route → entry gate → session create/resume → review shell → grade → result. Do NOT defer for greenfield.

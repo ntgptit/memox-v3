@@ -89,9 +89,12 @@ conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
         disabled accent fill (op:0.38) + `saving` double-submit guard; inline `_SaveErrorBanner`
         (dangerSoft, above the fields per kit `abs:[21,95]`) **replaces** the failure snackbar, keeping
         the draft. Rows C29 (reworded) + C45. Tests + saving/save-failed goldens (light+dark). ✓ verify.
-  - [ ] **WP-FL2b3b — load state surfaces** (`07`/`08` loading skeleton + full load-error via a
-        single-card read path, so a deep-link edit shows loading/load-error instead of the list stream's
-        bare shell). The editor is usable for front/back create+edit+delete without these.
+  - [x] **WP-FL2b3b — load state surfaces** (`d3aa162`): loading renders `_EditorLoadingSkeleton`
+        (skeleton breadcrumb + label/field blocks, hairline divider, Details chips) instead of a bare
+        shell; the deck/card stream erroring / returning no detail / the edited card being gone all
+        route to `MxErrorState` (cloud-off, `cardLoadFailed*`) with a **Retry** = `ref.invalidate`.
+        Used the **existing deck list stream** (already drives loading/error) — no single-card read
+        path added (CLAUDE.md: don't invent a layer the surface doesn't need). Rows C28/C46 + goldens.
 - [ ] **WP-FL2a (original analysis).** Current editor is a
       front/back **dialog** (`flashcard_card_dialog.dart`); the mock `07`/`08` is a full **screen**.
       PRECEDENCE #2 (visual → mock) makes the screen the contract; "rebuild a shipped surface" is not a
