@@ -101,6 +101,9 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S74 | Study session fill | Finish tapped after the final answer | Finalize the session and push-replace to the real result screen on success | C0+C1 | TBD |
 | S75 | Study session fill | Finalize fails | Keep the session open, show the controlled finalize error, and leave Finish Session available for retry | C1 | TBD |
 | S76 | Answer | Flashcard has no `flashcard_progress` row (new card) | Record `box_before = 1` (new-card default), `box_after = SrsBox.nextBox(1, result)`; keep `flashcard_progress` unchanged (no row created at answer time) | C1 | study_repository_record_answer_test.dart |
+| S77 | New-card eligibility | New-card scope, quota partly used today | Resolve at most `dailyNewLimit` (20) − new-card session items started in the local day; return the head of the ordered new queue | C0+C1 | `test/data/repositories/study_repository_daily_new_limit_test.dart` |
+| S78 | New-card eligibility | Daily new quota already exhausted (incl. cancelled new-card sessions) | Resolve zero new cards; a prior local day's usage does not count | C1 | `test/data/repositories/study_repository_daily_new_limit_test.dart` |
+| S79 | New-card eligibility | `srs_review` scope | Daily new limit does not reduce review eligibility | C0+C1 | `test/data/repositories/study_repository_daily_new_limit_test.dart` |
 
 ## Bury / Suspend
 

@@ -53,7 +53,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
 | Deck move between folders| Specified (BE Current — WBS 2.19.1)| `docs/business/deck/deck-management.md`|
 | Session batch limit (`maxSessionItems`)| Implemented (BE — WBS 4.2.4, cap in `CreateStudySessionUseCase`)| `docs/business/study/study-flow.md`|
-| Daily new-card limit| Specified| `docs/business/srs/srs-review.md`|
+| Daily new-card limit| Implemented (BE — WBS 4.5.10; new-card eligibility cap per local day)| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
 | Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|
 | Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `_dueAtFor`)| `docs/business/srs/srs-review.md`|

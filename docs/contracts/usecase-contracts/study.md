@@ -104,7 +104,13 @@ is a separate read, **implemented (WBS 4.11.1)** as
 (`lib/data/datasources/local/drift/study_scope_queries.drift`): it returns the
 ordered eligible flashcard ids — `srs_review` → due cards by `due_at`, `new_cards`
 → every active card by `sort_order` — with suspended and currently-buried cards
-excluded, mirroring the eligibility counts (WBS 4.1.1).
+excluded, mirroring the eligibility counts (WBS 4.1.1). For `new_cards` the list is
+additionally trimmed to the **remaining daily new-card quota**
+(`StudyEntryRepository.dailyNewLimit` minus the new-card session items started in
+the local day; WBS 4.5.10). Note: `resolveEligibility`'s count is **not** yet
+cap-aware, so for a near-exhausted quota the count gate may report eligible while
+this resolves an empty list; a dedicated entry-gate "quota reached" state is
+deferred (tracked separately).
 
 ## ResumeSessionUseCase
 

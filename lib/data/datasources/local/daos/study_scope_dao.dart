@@ -50,4 +50,10 @@ class StudyScopeDao extends DatabaseAccessor<AppDatabase>
   /// New-study cards across every deck (the `today` scope), by sort order.
   Future<List<String>> todayNewCardIds({required int now}) =>
       todayNewQueue(now).get();
+
+  /// New-card quota already used in the local-day window `[start, end)`
+  /// (WBS 4.5.10): the count of `study_session_items` from `new_cards` sessions
+  /// started in the window (cancelled sessions included).
+  Future<int> newCardsUsedInWindow({required int start, required int end}) =>
+      newCardItemsUsedInWindow(start, end).getSingle();
 }

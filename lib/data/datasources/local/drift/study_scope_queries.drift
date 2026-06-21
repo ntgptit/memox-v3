@@ -1,6 +1,7 @@
 import 'folders.drift';
 import 'decks.drift';
 import 'flashcards.drift';
+import 'study_tables.drift';
 
 -- Ordered eligible flashcard-id resolution for the study queue (WBS 4.11.1).
 -- These are the "separate read" the session-creation flow consumes to pick which
@@ -84,3 +85,15 @@ LEFT JOIN flashcard_progress fp ON fp.flashcard_id = fc.id
 WHERE COALESCE(fp.is_suspended, 0) = 0
   AND (fp.buried_until IS NULL OR fp.buried_until <= :now)
 ORDER BY fc.sort_order ASC, fc.id ASC;
+
+-- New-card quota used in the local day (WBS 4.5.10): count the session items of
+-- every `new_cards` session started within [:start, :end) (the device-local day,
+-- computed in Dart). Cancelled new-card sessions still consume quota in V1, so no
+-- status filter (`docs/business/study/study-flow.md` §Rules). `srs_review`
+-- sessions are excluded.
+newCardItemsUsedInWindow(:start AS INT, :end AS INT):
+SELECT COUNT(*) AS used
+FROM study_session_items i
+JOIN study_sessions s ON s.id = i.session_id
+WHERE s.study_type = 'new_cards'
+  AND s.started_at >= :start AND s.started_at < :end;

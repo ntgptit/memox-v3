@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/learning_settings.dart';
 import 'package:memox/domain/models/study_entry_eligibility.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_scope.dart';
@@ -10,6 +11,13 @@ import 'package:memox/domain/types/study_scope.dart';
 /// §Empty scope matrix). Card-list loading + batching live in session creation
 /// (WBS 4.2.1); this port only classifies the scope's counts.
 abstract interface class StudyEntryRepository {
+  /// The per-local-day new-card study cap (WBS 4.5.10). New-card eligibility is
+  /// reduced by the quota already consumed today; `srs_review` is unaffected.
+  /// Aliases [LearningSettings.defaultDailyNewLimit] (the single source of truth
+  /// for the default) so the two cannot diverge; the settings-backed per-user
+  /// override is deferred (`docs/business/study/study-flow.md` §Rules).
+  static const int dailyNewLimit = LearningSettings.defaultDailyNewLimit;
+
   /// Classifies [scope] as of [now] (epoch ms). Returns a
   /// [StudyEntryEligibility] (eligible count or an empty reason). A `deck`/
   /// `folder` scope with a `null` `entryRefId` is a `ValidationFailure`; a read

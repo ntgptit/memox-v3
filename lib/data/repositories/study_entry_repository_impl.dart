@@ -99,6 +99,11 @@ class StudyEntryRepositoryImpl implements StudyEntryRepository {
               ? await _scopeDao.todayNewCardIds(now: now)
               : await _scopeDao.todayDueCardIds(now: now),
       };
+      // New study is trimmed to the remaining daily quota (WBS 4.5.10); review
+      // study is returned in full.
+      if (isNew) {
+        return (failure: null, data: await _capByDailyNewLimit(ids, now));
+      }
       return (failure: null, data: ids);
     } catch (error) {
       return (
@@ -110,6 +115,31 @@ class StudyEntryRepositoryImpl implements StudyEntryRepository {
         data: null,
       );
     }
+  }
+
+  /// Trims the ordered new-card [ids] to the remaining daily quota
+  /// (`StudyEntryRepository.dailyNewLimit` minus what has been consumed in the
+  /// local day containing [now], WBS 4.5.10). The local-day window is computed in
+  /// Dart (never a SQLite modifier) so the cap is timezone-stable.
+  Future<List<FlashcardId>> _capByDailyNewLimit(
+    List<FlashcardId> ids,
+    int now,
+  ) async {
+    final DateTime local = DateTime.fromMillisecondsSinceEpoch(now).toLocal();
+    final DateTime dayStart = DateTime(local.year, local.month, local.day);
+    final int start = dayStart.millisecondsSinceEpoch;
+    final int end = dayStart
+        .add(const Duration(days: 1))
+        .millisecondsSinceEpoch;
+    final int used = await _scopeDao.newCardsUsedInWindow(
+      start: start,
+      end: end,
+    );
+    final int remaining = (StudyEntryRepository.dailyNewLimit - used).clamp(
+      0,
+      ids.length,
+    );
+    return ids.take(remaining).toList();
   }
 
   /// Maps the scope counts to an eligibility outcome. Precedence: no cards →
