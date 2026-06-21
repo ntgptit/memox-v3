@@ -20,7 +20,10 @@ source_specs:
 > pronunciation / hint, auto-opened when the card has any; edit **preserves** existing tags on save).
 > Per PRECEDENCE #1 the mock's deck-selector is Future (deck retargeting) and the single "Note" maps
 > to the business example/pronunciation/hint fields (see `07`). The **Tags** input (WP-FL2b2b) + the
-> non-base `08` states (loading / load-error-full / saving / save-failed) = **WP-FL2b3**. The current
+> non-base `08` saving + save-failed states are **built** (WP-FL2b3a: Save shows a spinner at the
+> disabled accent fill while the write is in flight; failure shows the inline danger banner below);
+> the loading / load-error-full surfaces remain **WP-FL2b3b**, and the **Tags** input is **WP-FL2b2b**.
+> The current
 > mock for screen 08 includes a danger-zone delete action in the editor, while
 > move/export remain on the flashcard list row/bulk surfaces and bury/suspend
 > stay on the study-session card-actions sheet.
@@ -33,7 +36,8 @@ source_specs:
 > from `updated_at` + `flashcard_progress.review_count`. The mock's **recall %** and
 > **History ›** link are **Future/unavailable** (no recall read model; card history
 > screen 09 is a Future Proposal) and are omitted, not faked. **Save failed** uses
-> the same bottom-anchored banner + `Retry save` CTA as create (preserving edits);
+> the same inline danger banner + `Retry` CTA as create — per the kit spec it sits
+> just below the app bar, above the fields (`abs:[21,95]`), preserving edits;
 > **delete** uses the shared confirm dialog with a front/back preview
 > (`flashcard_delete_preview`) and the real `… N reviews of history …` warning.
 
@@ -130,10 +134,10 @@ front/back content changes.
 | Loading                 | Fetching deck/card context                             | Retained async loading shell.                            |
 | Loaded                  | Fetch success                                          | Form pre-populated.                                      |
 | Dirty                   | User edits any field or tag list                       | Save can run when front/back are non-empty after trim.   |
-| Saving                  | Save tapped                                            | Action state prevents double submit.                     |
+| Saving                  | Save tapped                                            | Save shows a spinner at the disabled accent fill; double submit is ignored. |
 | Learned content changed | User edits front/back on a card with learning progress | Save asks Keep vs Reset before repository update.        |
 | Saved                   | Success                                                | Toast "Flashcard updated." and return to flashcard list. |
-| Save error              | Repository/use case failure                            | Error snackbar; form content remains intact.             |
+| Save error              | Repository/use case failure                            | Inline danger banner below the app bar (above the fields) + `Retry`; the draft remains intact. |
 | Not found               | Card deleted by another flow                           | Shared error state; back goes to a safe ancestor.        |
 
 ## Actions

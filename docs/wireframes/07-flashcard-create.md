@@ -24,11 +24,12 @@ source_specs:
 > `docs/wireframes/08-flashcard-edit.md`.
 
 > **Mock-first refinement (2026-06-13).** Create mode keeps the collapsible
-> "Details" expander (optional example/pronunciation/hint). **Saving:** both the
-> app-bar and bottom CTAs read `Saving…` (disabled) and the bottom helper switches
-> to `Saving to this device…`. **Save failed:** a text-only failure banner
-> (`flashcard_editor_save_failed_banner`) is anchored just above the bottom bar and
-> the bottom primary CTA becomes `Retry save` (re-invokes the create use case);
+> "Details" expander (optional example/pronunciation/hint). **Saving:** per the kit
+> spec the app-bar Save pill drops its label and shows a spinner at the disabled
+> accent fill (`op:0.38`) while the create write is in flight; double submit is
+> ignored. **Save failed:** an inline danger banner
+> (`flashcard_editor_save_failed_banner`) sits just below the app bar, above the
+> fields (`abs:[21,95]`), with a `Retry` CTA that re-invokes the create use case;
 > typed input is preserved. The mock's mic / pronunciation-speaker glyphs are
 > decorative (no capture/TTS behavior wired) and the deck-selector dropdown does
 > not change the owning deck in V1 — both are visual-only, not faked behavior.

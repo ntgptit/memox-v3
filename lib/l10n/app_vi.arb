@@ -162,5 +162,6 @@
   "cardDetailsSummary": "ví dụ · phát âm · gợi ý",
   "cardExampleLabel": "Ví dụ",
   "cardPronunciationLabel": "Phát âm",
-  "cardHintLabel": "Gợi ý"
+  "cardHintLabel": "Gợi ý",
+  "cardSaveFailedMessage": "Không thể lưu thay đổi."
 }

@@ -1075,6 +1075,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hint'**
   String get cardHintLabel;
+
+  /// Inline banner message when saving a card fails in the editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes couldn\'t be saved.'**
+  String get cardSaveFailedMessage;
 }
 
 class _AppLocalizationsDelegate

@@ -569,4 +569,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardHintLabel => 'Hint';
+
+  @override
+  String get cardSaveFailedMessage => 'Changes couldn\'t be saved.';
 }

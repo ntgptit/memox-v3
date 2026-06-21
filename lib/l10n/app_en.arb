@@ -358,5 +358,7 @@
   "cardPronunciationLabel": "Pronunciation",
   "@cardPronunciationLabel": { "description": "Optional pronunciation field label in the card editor." },
   "cardHintLabel": "Hint",
-  "@cardHintLabel": { "description": "Optional hint field label in the card editor." }
+  "@cardHintLabel": { "description": "Optional hint field label in the card editor." },
+  "cardSaveFailedMessage": "Changes couldn't be saved.",
+  "@cardSaveFailedMessage": { "description": "Inline banner message when saving a card fails in the editor." }
 }

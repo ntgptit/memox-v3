@@ -554,4 +554,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardHintLabel => 'Gợi ý';
+
+  @override
+  String get cardSaveFailedMessage => 'Không thể lưu thay đổi.';
 }

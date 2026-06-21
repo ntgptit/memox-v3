@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
+import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
@@ -76,6 +78,10 @@ class FlashcardEditorForm extends HookConsumerWidget {
         (card?.pronunciation ?? '').isNotEmpty ||
         (card?.hint ?? '').isNotEmpty;
     final ValueNotifier<bool> detailsOpen = useState<bool>(hasDetails);
+    // Save in-flight (Save spinner, mock `07`/`08` Saving) + last-save-failed
+    // (inline danger banner, mock Save-failed — replaces the snackbar).
+    final ValueNotifier<bool> saving = useState<bool>(false);
+    final ValueNotifier<bool> saveFailed = useState<bool>(false);
 
     final bool canSubmit = front.canSubmit && back.canSubmit;
     // Dirty = any field differs from the loaded card (empty for create).
@@ -98,7 +104,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
     String? orNull(String text) => text.isEmpty ? null : text;
 
     Future<void> save() async {
-      if (!canSubmit) return;
+      if (!canSubmit || saving.value) return;
+      saving.value = true;
+      saveFailed.value = false;
       final Flashcard? existing = card;
       final Result<Flashcard> result = existing == null
           ? await ref
@@ -125,13 +133,11 @@ class FlashcardEditorForm extends HookConsumerWidget {
                   tags: existing.tags,
                 );
       if (!context.mounted) return;
-      final Failure? failure = result.failure;
-      if (failure != null) {
-        showMxSnackbar(
-          context,
-          message: flashcardFailureMessage(l10n, failure),
-          isError: true,
-        );
+      saving.value = false;
+      if (result.failure != null) {
+        // Inline danger banner (mock `07`/`08` Save-failed) keeps the draft;
+        // it replaces the failure snackbar.
+        saveFailed.value = true;
         return;
       }
       // The app-level messenger keeps the snackbar visible after the pop.
@@ -213,6 +219,7 @@ class FlashcardEditorForm extends HookConsumerWidget {
                 label: _isEdit ? l10n.cardEditConfirm : l10n.cardCreateConfirm,
                 icon: Icons.check,
                 size: MxButtonSize.xsmall,
+                loading: saving.value,
                 onPressed: canSubmit ? save : null,
               ),
             ),
@@ -231,6 +238,10 @@ class FlashcardEditorForm extends HookConsumerWidget {
                 ),
               ),
             ),
+            if (saveFailed.value) ...<Widget>[
+              _SaveErrorBanner(onRetry: save),
+              const SizedBox(height: MxSpacing.space4),
+            ],
             MxTextField(
               controller: front.controller,
               labelText: l10n.cardFrontLabel,
@@ -305,6 +316,57 @@ class FlashcardEditorForm extends HookConsumerWidget {
                 onSubmitted: (_) => save(),
               ),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The inline save-failed banner (mock `07`/`08` Save-failed): a danger-tinted
+/// strip with an alert glyph, message, and a Retry action. The draft is kept so
+/// the user can resubmit. Replaces the failure snackbar.
+class _SaveErrorBanner extends StatelessWidget {
+  const _SaveErrorBanner({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.dangerSoft,
+        borderRadius: MxRadius.mdAll,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: MxSpacing.card,
+          vertical: MxSpacing.space3,
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.warning_amber_rounded,
+              size: MxIconSize.md,
+              color: colors.danger,
+            ),
+            const SizedBox(width: MxSpacing.space3),
+            Expanded(
+              child: MxText(
+                l10n.cardSaveFailedMessage,
+                role: MxTextRole.bodyMedium,
+                color: colors.danger,
+              ),
+            ),
+            const SizedBox(width: MxSpacing.space2),
+            MxPrimaryButton(
+              label: l10n.libraryRetryLabel,
+              destructive: true,
+              size: MxButtonSize.xsmall,
+              onPressed: onRetry,
+            ),
           ],
         ),
       ),
