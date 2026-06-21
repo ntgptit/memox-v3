@@ -3,7 +3,7 @@ last_updated: 2026-06-21
 object: Folder (detail)
 loop_order: 2 of 10 (outer→inner)
 route: /library/folder/:id
-status: IN PROGRESS (core FE Implemented; 3 deck/folder-management FE work-packages eligible)
+status: DONE (FD1–FD5, FD9 Implemented; FD6/FD7/FD8 DEFERred — not in rebuilt mock)
 ---
 
 # Loop plan — Object 2: Folder (detail)
@@ -114,6 +114,9 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 
 ## Conclusion
 
-Object 2 is **IN PROGRESS**. Next work-package: **WP-FD5a Deck move-targets BE** (vertical slice
-— new read model/use case mirroring folder-move-targets), then **WP-FD5b** FE wiring. FD6/FD7
-(reorder) DEFERred for missing UI design; FD8 (new-vs-due) is a larger later slice.
+Object 2 is **DONE** (2026-06-21). Implemented: FD1–FD4 (screen + create/rename/delete), FD5a/FD5b
+(deck move BE+FE, WBS 2.19.2), FD9 (deck "last studied" line, WBS 3.2.2/3.7.1) + WP-L6a (F13
+due-count fix). DEFERred: FD6/FD7 (reorder — no UI mock), FD8 (new-vs-due — not in rebuilt mock).
+Pre-existing cross-cutting gaps logged in `loop-deferred.md` (deck color/icon schema, due-badge
+fill, SRS persistent-`last_studied_at` drift). Next object (outer→inner): **Sub-folder (nested)**
+— see `loop-plan/sub-folder-nested.md`.
