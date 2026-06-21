@@ -8,11 +8,13 @@ source_specs:
 
 # 07 - Flashcard Create
 
-> **Shared implementation note (V1).** This route is implemented by the shared
-> Flashcard Editor surface at
-> `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`.
-> Create mode is selected by `deckId` and currently supports front, back, plus
-> optional example, pronunciation, hint, and tags fields. Edit mode is documented
+> **Shared implementation note (V1 shell, WP-FL2a 2026-06-22).** This route is implemented by the
+> shared Flashcard Editor surface at
+> `lib/presentation/features/decks/screens/flashcard_editor_screen.dart` (async dispatcher) +
+> `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`).
+> Create mode is selected by the absence of `:flashcardId`; the **shell** supports front/back +
+> the dirty-discard confirm. The Details expander (example/pronunciation/hint/tags) + the non-base
+> `07` states (details-open/saving/save-failed) are **WP-FL2b**. Edit mode is documented
 > separately in `docs/wireframes/08-flashcard-edit.md`.
 
 > **Mock-first refinement (2026-06-13).** Create mode keeps the collapsible
@@ -212,6 +214,6 @@ fast manual entry and keeps the surface intentionally small.
 
 **Code paths:**
 
-- `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`
-- `lib/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart`
-- `lib/presentation/features/flashcards/widgets/flashcard_editor_view.dart`
+- `lib/presentation/features/decks/screens/flashcard_editor_screen.dart`
+- `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`)
+- `test/presentation/features/decks/flashcard_editor_test.dart`

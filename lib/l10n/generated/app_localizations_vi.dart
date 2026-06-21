@@ -524,4 +524,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String flashcardStateBoxDueToday(int box) {
     return 'Hộp $box · đến hạn hôm nay';
   }
+
+  @override
+  String get cardDiscardTitle => 'Bỏ thay đổi?';
+
+  @override
+  String get cardDiscardMessage => 'Các chỉnh sửa cho thẻ này chưa được lưu.';
+
+  @override
+  String get cardDiscardConfirm => 'Bỏ';
 }

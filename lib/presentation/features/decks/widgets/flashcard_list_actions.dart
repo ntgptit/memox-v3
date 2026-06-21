@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/flashcard.dart';
@@ -8,7 +11,6 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/controllers/flashcard_action_controller.dart';
 import 'package:memox/presentation/features/decks/flashcard_failure_message.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
-import 'package:memox/presentation/features/decks/widgets/flashcard_card_dialog.dart';
 import 'package:memox/presentation/features/decks/widgets/flashcard_deck_overflow_sheet.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
@@ -25,39 +27,22 @@ void _report(BuildContext context, Failure? failure, String success) {
   showMxSnackbar(context, message: success);
 }
 
-/// Add-card flow in [deckId]: open the card dialog, create the card, report.
-Future<void> runAddCard(
-  BuildContext context,
-  WidgetRef ref,
-  DeckId deckId,
-) async {
-  final CardDraft? draft = await showCardDialog(context);
-  if (draft == null) return;
-  if (!context.mounted) return;
-  final String success = AppLocalizations.of(context).cardCreatedSnack;
-  final Result<Flashcard> result = await ref
-      .read(flashcardActionControllerProvider.notifier)
-      .create(deckId: deckId, front: draft.front, back: draft.back);
-  if (!context.mounted) return;
-  _report(context, result.failure, success);
-}
+/// Add-card flow in [deckId]: push the card editor screen (mock `07`). The
+/// editor owns the create + snackbar on save. WBS 2.11.2.
+void runAddCard(BuildContext context, DeckId deckId) => context.pushNamed(
+  RouteNames.flashcardCreate,
+  pathParameters: <String, String>{RouteParams.deckId: deckId},
+);
 
-/// Edit-card flow: open the dialog pre-filled, update, report.
-Future<void> runEditCard(
-  BuildContext context,
-  WidgetRef ref,
-  Flashcard card,
-) async {
-  final CardDraft? draft = await showCardDialog(context, existing: card);
-  if (draft == null) return;
-  if (!context.mounted) return;
-  final String success = AppLocalizations.of(context).cardSavedSnack;
-  final Result<Flashcard> result = await ref
-      .read(flashcardActionControllerProvider.notifier)
-      .update(flashcardId: card.id, front: draft.front, back: draft.back);
-  if (!context.mounted) return;
-  _report(context, result.failure, success);
-}
+/// Edit-card flow: push the card editor pre-filled (mock `08`). The editor owns
+/// the update + snackbar on save. WBS 2.12.2.
+void runEditCard(BuildContext context, Flashcard card) => context.pushNamed(
+  RouteNames.flashcardEdit,
+  pathParameters: <String, String>{
+    RouteParams.deckId: card.deckId,
+    RouteParams.flashcardId: card.id,
+  },
+);
 
 /// Deck overflow (kebab) sheet: Reorder cards → enter reorder mode; Delete deck
 /// → confirm + delete + pop. Returns `true` only when the deck was deleted (so

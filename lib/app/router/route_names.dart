@@ -22,6 +22,11 @@ abstract final class RouteNames {
   /// A deck's flashcard list, pushed within the Library branch.
   static const String deckFlashcards = 'deckFlashcards';
 
+  /// Card create / edit editor screen, pushed over a deck's flashcard list
+  /// (mock `07` / `08`). WBS 2.11.2 / 2.12.2.
+  static const String flashcardCreate = 'flashcardCreate';
+  static const String flashcardEdit = 'flashcardEdit';
+
   /// Folder detail / deck flashcard list reached from a **Search** result, so
   /// the push stays inside the Search branch (Back returns to `/search`). Same
   /// screens as the Library-branch routes, distinct names per GoRouter's

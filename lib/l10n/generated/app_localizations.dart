@@ -1015,6 +1015,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Box {box} · due today'**
   String flashcardStateBoxDueToday(int box);
+
+  /// Title of the discard-changes confirm when closing the card editor with unsaved edits.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get cardDiscardTitle;
+
+  /// Message of the card-editor discard-changes confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Your edits to this card haven\'t been saved.'**
+  String get cardDiscardMessage;
+
+  /// Destructive confirm action of the card-editor discard-changes dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get cardDiscardConfirm;
 }
 
 class _AppLocalizationsDelegate

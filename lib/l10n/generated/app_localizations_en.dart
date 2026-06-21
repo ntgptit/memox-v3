@@ -538,4 +538,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String flashcardStateBoxDueToday(int box) {
     return 'Box $box · due today';
   }
+
+  @override
+  String get cardDiscardTitle => 'Discard changes?';
+
+  @override
+  String get cardDiscardMessage =>
+      'Your edits to this card haven\'t been saved.';
+
+  @override
+  String get cardDiscardConfirm => 'Discard';
 }

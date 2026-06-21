@@ -9,10 +9,14 @@ source_specs:
 
 # 08 — Flashcard Edit
 
-> **Shared implementation note (V1).** This route is implemented by the shared
-> Flashcard Editor surface at
-> `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`.
-> Edit mode is selected by the presence of `flashcardId`. The current mock for
+> **Shared implementation note (V1 shell, WP-FL2a 2026-06-22).** This route is implemented by the
+> shared Flashcard Editor surface at
+> `lib/presentation/features/decks/screens/flashcard_editor_screen.dart` +
+> `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`).
+> Edit mode is selected by the presence of `:flashcardId` (back-arrow leading icon). The **shell**
+> supports prefilled front/back + the dirty-discard confirm. The danger-zone **delete-from-editor**
+> action + the non-base `08` states (loading/load-error-full/saving/save-failed/delete) are
+> **WP-FL2b**. The current mock for
 > screen 08 includes a danger-zone delete action in the editor, while
 > move/export remain on the flashcard list row/bulk surfaces and bury/suspend
 > stay on the study-session card-actions sheet.
@@ -230,10 +234,10 @@ repository boundary.
 
 **Code paths:**
 
-- `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`
-- `lib/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart`
-- `lib/presentation/features/flashcards/widgets/flashcard_editor_view.dart`
-- `lib/domain/usecases/flashcard_usecases.dart` → `UpdateFlashcardUseCase`
+- `lib/presentation/features/decks/screens/flashcard_editor_screen.dart`
+- `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`)
+- `test/presentation/features/decks/flashcard_editor_test.dart`
+- `lib/domain/usecases/flashcard/update_flashcard_usecase.dart` → `UpdateFlashcardUseCase`
 - `lib/app/router/route_names.dart` → `RouteNames.flashcardEdit`
 
 **Related wireframes:**

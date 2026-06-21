@@ -56,7 +56,24 @@ conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
       now-dependency: mirror WP-FD9 — inject `now` into the tile + an **isolated `flashcard_tile`
       golden** for the due-in variants; the **screen** loaded golden uses New cards (deterministic).
       No schema. **mock visual gap (documented):** status chip (business model is New/Due only).
-- [ ] **WP-FL2a — Card editor screen shell (BUILDABLE — build after FL1).** Current editor is a
+- [x] **WP-FL2a — Card editor screen shell — Implemented (2026-06-22).** New routes
+      `flashcardCreate` (`new`) + `flashcardEdit` (`:flashcardId/edit`, matches navigation-flow's
+      planned paths) registered as children of the deck flashcard-list route (`folder_routes.dart`).
+      New `flashcard_editor_screen.dart` (async dispatcher: loading/load-error shells) +
+      `flashcard_editor_body.dart` (`FlashcardEditorForm`: X/Cancel + Save app bar, deck breadcrumb,
+      FRONT/BACK `MxTextField`, front+back-required Save gating, create vs edit by `cardId`; reads
+      deck/card from the existing `flashcardListStreamProvider`, saves via `FlashcardActionController`
+      → snackbar + pop). `runAddCard`/`runEditCard` now `pushNamed` the route; deleted the
+      `flashcard_card_dialog`. Editor widget tests (create-empty/validation, edit-prefill,
+      load-error) + goldens (`07` create-empty + `08` edit-loaded, light+dark). navigation-flow +
+      wireframe 06 updated. verify PASS. **WP-FL2b** (below) = Details expander + full state matrix.
+- [ ] **WP-FL2b — Editor Details expander + full `07`/`08` state matrix — DEFER (node-split, build
+      next).** Out of the WP-FL2a shell: the Details expander (tags / note / example / pronunciation /
+      hint — BE already supports them), the `07` (details-open / saving / save-failed) and `08`
+      (loading / load-error full / saving / save-failed / delete-from-editor) states, and a
+      single-card read path for deep-link edit-load. **G1** the shell shipped; this is the next slice.
+      Not a blocker for object 5 (the editor is usable for front/back create+edit).
+- [ ] **WP-FL2a (original analysis).** Current editor is a
       front/back **dialog** (`flashcard_card_dialog.dart`); the mock `07`/`08` is a full **screen**.
       PRECEDENCE #2 (visual → mock) makes the screen the contract; "rebuild a shipped surface" is not a
       valid defer. G1 split → minimal shell: new routes `flashcardCreate`/`flashcardEdit`

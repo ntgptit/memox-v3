@@ -25,6 +25,16 @@ abstract final class RoutePaths {
   static const String deckFlashcardsRelative = 'deck/:deckId/flashcards';
   static const String deckFlashcards = '$library/$deckFlashcardsRelative';
 
+  /// Card editor — child of the deck flashcard list (mock `07`/`08`). Relative
+  /// segments are registered as children of [deckFlashcardsRelative]; the
+  /// absolute forms are for reference. `:flashcardId` is the edited card
+  /// (matches `docs/business/navigation/navigation-flow.md` §Library routes).
+  static const String flashcardCreateRelative = 'new';
+  static const String flashcardCreate =
+      '$deckFlashcards/$flashcardCreateRelative';
+  static const String flashcardEditRelative = ':flashcardId/edit';
+  static const String flashcardEdit = '$deckFlashcards/$flashcardEditRelative';
+
   /// Search-branch variants of the detail routes (reuse the same relative
   /// segments under [search]) so a Search result opens inside the Search branch.
   static const String searchFolder = '$search/$folderRelative';
@@ -40,6 +50,10 @@ abstract final class RouteParams {
   /// The `:deckId` path segment for the deck flashcard-list route (matches
   /// `docs/business/navigation/navigation-flow.md` §Library routes).
   static const String deckId = 'deckId';
+
+  /// The `:flashcardId` path segment for the card edit route (mock `08`;
+  /// matches `docs/business/navigation/navigation-flow.md` §Library routes).
+  static const String flashcardId = 'flashcardId';
 }
 
 /// Router-level defaults.

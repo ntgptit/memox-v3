@@ -33,8 +33,10 @@ source_specs:
 >   search-no-results. Backed by the existing
 >   `watchFlashcardList` read model (`FlashcardListDetail`, server-side front/back search).
 >   Goldens: `test/presentation/features/decks/flashcard_list_test.dart`.
-> - **Card CRUD (V1, front/back only)**: FAB / empty-CTA → add-card dialog; row tap → edit-card
->   dialog; long-press → delete-card confirm. Backed by `create/update/deleteFlashcard`.
+> - **Card CRUD (V1, front/back only)**: FAB / empty-CTA → **card editor screen** (`07` create);
+>   row tap → **card editor screen** (`08` edit); long-press → delete-card confirm. Backed by
+>   `create/update/deleteFlashcard`. (WP-FL2a, 2026-06-22: the add/edit dialog was replaced by
+>   `FlashcardEditorScreen` pushed via `flashcardCreate`/`flashcardEdit`.)
 > - **Card reorder (WBS 2.14.2, 2026-06-21):** deck overflow (kebab) → sheet → **Reorder cards**
 >   enters reorder mode (X/Done app bar, `{n} CARDS · DRAG TO REORDER` overline,
 >   `ReorderableListView` `ValueKey('flashcard_reorder_list')` with trailing drag handles); a drop
@@ -46,8 +48,9 @@ source_specs:
 >   §Rules defines the card-state model as **New/Due only** (no Learning/Review/Mastered taxonomy to
 >   back a chip); building one would invent product semantics (PRECEDENCE #1).
 > - **Deferred (Future)**: the status **chip** (see above — mock visual gap); optional notes /
->   pronunciation / example / **tags** in the editor; **import**; bulk/status filters; study entry.
->   The full card editor is WBS 2.11.2 / 2.12.2 (WP-FL2a screen shell next); V1 ships a front/back dialog.
+>   pronunciation / example / **tags** in the editor (Details expander = WP-FL2b); **import**;
+>   bulk/status filters; study entry. The card editor **screen shell** (front/back, `07`/`08`) shipped
+>   WP-FL2a (2026-06-22); the Details expander + full `07`/`08` state matrix + delete-from-editor = WP-FL2b.
 
 ## V1 verification status (2026-06-06)
 

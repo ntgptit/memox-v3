@@ -119,7 +119,7 @@ class FlashcardListScreen extends ConsumerWidget {
           : MxFab(
               icon: Icons.add,
               tooltip: l10n.flashcardAddCardLabel,
-              onPressed: () => runAddCard(context, ref, deckId),
+              onPressed: () => runAddCard(context, deckId),
             ),
       // Persistent bottom search dock (kit `06` `search-dock`) — present only
       // when the deck has cards; hidden in empty / loading / error / reorder.

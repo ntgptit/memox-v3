@@ -153,7 +153,7 @@ class FlashcardListBody extends ConsumerWidget {
           label: l10n.flashcardAddCardLabel,
           icon: Icons.add,
           fullWidth: true,
-          onPressed: () => runAddCard(context, ref, deckId),
+          onPressed: () => runAddCard(context, deckId),
         ),
       );
     }
@@ -221,7 +221,7 @@ class FlashcardListBody extends ConsumerWidget {
           card: card,
           progress: progressById[card.id],
           now: now,
-          onTap: () => runEditCard(context, ref, card),
+          onTap: () => runEditCard(context, card),
           onActions: () => runDeleteCard(context, ref, card),
         ),
       );

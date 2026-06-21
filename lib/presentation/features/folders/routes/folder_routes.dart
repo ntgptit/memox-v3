@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/presentation/features/decks/screens/flashcard_editor_screen.dart';
 import 'package:memox/presentation/features/decks/screens/flashcard_list_screen.dart';
 import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
@@ -31,6 +32,25 @@ List<RouteBase> libraryBranchRoutes() => <RouteBase>[
         builder: (context, state) => FlashcardListScreen(
           deckId: state.pathParameters[RouteParams.deckId] ?? '',
         ),
+        routes: <RouteBase>[
+          // Card editor (mock `07`/`08`), pushed over the flashcard list so it
+          // stays in the Library branch. `create` has no `:cardId`; `edit` does.
+          GoRoute(
+            path: RoutePaths.flashcardCreateRelative,
+            name: RouteNames.flashcardCreate,
+            builder: (context, state) => FlashcardEditorScreen(
+              deckId: state.pathParameters[RouteParams.deckId] ?? '',
+            ),
+          ),
+          GoRoute(
+            path: RoutePaths.flashcardEditRelative,
+            name: RouteNames.flashcardEdit,
+            builder: (context, state) => FlashcardEditorScreen(
+              deckId: state.pathParameters[RouteParams.deckId] ?? '',
+              cardId: state.pathParameters[RouteParams.flashcardId],
+            ),
+          ),
+        ],
       ),
     ],
   ),
