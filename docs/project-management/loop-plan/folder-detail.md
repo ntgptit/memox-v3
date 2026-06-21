@@ -57,16 +57,27 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 - [x] WP-FD2 — Deck create FE (FAB → dialog) (WBS 2.7.2) — **Implemented**
 - [x] WP-FD3 — Deck rename FE (sheet → dialog → BE) (WBS 2.8.2) — **Implemented**
 - [x] WP-FD4 — Deck delete FE (sheet → confirm → BE) (WBS 2.9.2) — **Implemented**
-- [ ] **WP-FD5 — Deck move FE (WBS 2.19.2)** — eligible (BE `move_deck_usecase.dart` Implemented).
-      Add a `Move` action to `deck_actions_sheet.dart` (`DeckAction.move`) → a decks-allowing
-      folder picker (reuse `folder_move_picker_sheet` pattern / move-targets use case) →
-      `MoveDeckUseCase`. Snackbar on success/failure. Widget tests + goldens (sheet w/ move row,
-      picker). **Depends-on: none open. NEXT.**
-- [ ] WP-FD6 — Deck reorder FE (WBS 2.10.2) — eligible (BE `2.10.1` Implemented). Manual-sort
-      drag reorder of deck rows → reorder use case; persist `sort_order`. Only active when sort
-      mode = manual. Widget test for reorder gesture.
-- [ ] WP-FD7 — Folder (subfolder) reorder FE (WBS 2.5.2) — eligible (BE `2.5.1` Implemented).
-      Manual-sort drag reorder of subfolder rows → reorder use case. Widget test.
+- [ ] **WP-FD5 — Deck move FE (WBS 2.19.2)** — **DEFER (needs-BE + spec-unclear).** The deck
+      action sheet exposes only rename/delete (move deferred in code). A move picker must, per
+      `docs/wireframes/25-shared-bottom-sheets.md` §folder-picker §Forbidden, *disable* (not hide)
+      destinations the deck can't move into, annotated up front. That annotation is move-eligibility
+      business logic (content-mode rules: a deck may go to `unlocked`/`decks` folders, blocked from
+      `subfolders`-mode + its current parent). The folder-move path computes targets in the
+      **repository** (`getFolderMoveTargets` → `FolderMoveTarget`/`FolderMoveBlock`), but those types
+      are folder-specific (`cycle` / `lockedToDecks` — inverted lock; no deck-move block type). The
+      `deck.md` §MoveDeckUseCase contract defines **no** deck-move-targets read use case/model.
+      Doing the eligibility in the widget would put business logic in the UI layer (CLAUDE.md
+      violation). → needs a BE `GetDeckMoveTargetsUseCase` + `DeckMoveTarget` model + repo/DAO read +
+      a contract spec; out of FE-only loop scope. Suggested: spec + build the BE read path, then the
+      FE wiring becomes a clean reuse of the picker pattern.
+- [ ] **WP-FD6 — Deck reorder FE (WBS 2.10.2)** — eligible (BE `2.10.1` Implemented;
+      `reorderDecksUseCaseProvider` wired in DI). Manual-sort drag reorder of deck rows → reorder
+      use case with the new ordered ids; persist `sort_order`; Drift stream refreshes. Active only
+      when the folder's sort mode = manual. Widget test for the reorder gesture + disabled-when-sorted.
+      **Depends-on: none open. NEXT.**
+- [ ] WP-FD7 — Folder (subfolder) reorder FE (WBS 2.5.2) — eligible (BE `2.5.1` Implemented;
+      `reorderFoldersUseCaseProvider` wired). Manual-sort drag reorder of subfolder rows → reorder
+      use case. Widget test. (Same pattern as WP-FD6; do after it.)
 - [ ] WP-FD8 — Folder detail new-vs-due study split (WBS 3.2.3) — **DEFER (needs-schema:
       migration v11 + `new_count` read model + data fix; BE+FE row, BE not shipped).**
 
@@ -80,5 +91,6 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
 
 ## Conclusion
 
-Object 2 is **IN PROGRESS**. Next work-package: **WP-FD5 Deck move FE (2.19.2)** — smallest,
-fully-unblocked, reuses the move-picker pattern. Then WP-FD6 / WP-FD7 (reorder).
+Object 2 is **IN PROGRESS**. WP-FD5 (Deck move) is DEFERred (needs a BE deck-move-targets read
+path the contract does not define). Next work-package: **WP-FD6 Deck reorder FE (2.10.2)** —
+fully-unblocked, reorder use case wired. Then WP-FD7 (subfolder reorder).
