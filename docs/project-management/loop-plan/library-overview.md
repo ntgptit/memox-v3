@@ -66,14 +66,22 @@ remains → object is **DONE** for the FE loop.
 - [x] WP-L3 — Per-scope content sort sheet wired to Library scope (WBS 2.23.1) — **Implemented**
 - [x] WP-L4 — Root anchor dock (WBS 3.1.3) — **Implemented**
 - [x] WP-L5 — Overflow action sheet + rename/move/delete modals — **Implemented**
-- [ ] **WP-L6 — Library read-model enrichment (BE) — `dueToday` / `mastery` / `newCount` /
-      `subtitle`** — eligible under the **vertical-slice rule** (BE may be added in dev). Extend the
-      `watchLibraryOverview` Drift query + `LibraryOverview`/`FolderSummary` model to carry the four
-      per-folder subtree aggregates the mock (shot `03a`) + visual-contract §Folder Card Contract
-      already specify: `dueToday` (active, non-suspended/non-buried, `due_at <= now`), `mastery`
+- [x] **WP-L6a — Folder due-count F13 correctness fix (BE)** — **Implemented (2026-06-21).**
+      Drift-check during this object found `folder_queries.drift` due-count predicates did NOT apply
+      the F13 suspended/currently-buried exclusion even though the `is_suspended`/`buried_until`
+      columns shipped (WBS 4.0.2) — `bury-suspend.md` §238 mandates due-count badges exclude them.
+      Fixed all four queries (root/child folder summaries, folder subtree counts, deck summaries) to
+      `COALESCE(is_suspended,0)=0 AND (buried_until IS NULL OR buried_until <= now)`, mirroring
+      `study_scope_queries.drift`. Updated drift comment + `folder_summary.dart` doc + F12/F13
+      decision rows + added the exclusion test. verify PASS.
+- [ ] **WP-L6b — Library read-model enrichment (BE) — `dueToday` / `mastery` / `newCount` /
+      `subtitle`** — eligible under the **vertical-slice rule**. Extend the `watchLibraryOverview`
+      Drift query + `LibraryOverview`/`FolderSummary` model to carry the per-folder subtree
+      aggregates the mock (shot `03a`) + visual-contract §Folder Card Contract specify: `mastery`
       (`AVG(COALESCE(box_number,1))/8` over subtree), `newCount` (cards with no progress / `due_at`
-      NULL), `subtitle` (`GROUP_CONCAT` of ≤3 deck names). Pure read-model query extension — **no
-      schema** (dev DB has no data to migrate). BE query/repo unit tests. **NEXT.**
+      NULL), `subtitle` (`GROUP_CONCAT` of ≤3 deck names), and a library-level `dueToday` total for
+      the due-summary card. Pure read-model query extension — **no schema**. BE query/repo unit
+      tests. **NEXT.**
 - [ ] WP-L7 — Due-summary card FE (`dueToday`) — depends on WP-L6. Render the non-interactive
       due-summary `MxCard` (title + `Across {n} folders · ~{m} min` subtitle + chevron) when
       `dueToday > 0`. Widget + golden.

@@ -12,13 +12,15 @@ part 'folder_summary.freezed.dart';
 /// - [cardCount] — recursive flashcards in the subtree; **includes** suspended
 ///   and buried cards (decision row F13).
 /// - [dueCount] — recursive due flashcards (`due_at IS NOT NULL AND
-///   due_at <= now`); NEW cards (`due_at IS NULL`) are not due (F13).
+///   due_at <= now`); NEW cards (`due_at IS NULL`) are not due, and **suspended
+///   or currently-buried cards are excluded** (decision row F13).
 ///
 /// > Counts are live (WBS 3.7.1): [deckCount] is the folder's direct decks;
-/// > [cardCount] / [dueCount] aggregate over the folder subtree. The
-/// > suspend/bury columns do not exist yet, so the F13 "exclude
-/// > suspended/buried" clause is trivially satisfied; it is added to the count
-/// > queries when those columns ship.
+/// > [cardCount] / [dueCount] aggregate over the folder subtree. [dueCount]
+/// > applies the F13 active-eligibility exclusion (`COALESCE(is_suspended,0)=0
+/// > AND (buried_until IS NULL OR buried_until <= now)`), mirroring the
+/// > `study_scope_queries.drift` queue predicate so count ↔ queue cannot
+/// > diverge. [cardCount] still includes suspended/buried cards (F13).
 @freezed
 sealed class FolderSummary with _$FolderSummary {
   const factory FolderSummary({

@@ -33,8 +33,10 @@ status: contract
 > `subfolderCount`/`deckCount` are direct children, `cardCount`/`dueCount` aggregate recursively
 > over the folder subtree (whole-forest recursive CTE joined to folder rows; `folderSubtreeCounts`
 > backs `FolderDetail`'s own aggregate). `dueCount` counts scheduled cards (`due_at IS NOT NULL AND
-> due_at <= now`); NEW cards are excluded. The suspend/bury exclusion (F13) is trivially satisfied
-> until those columns ship, then added to the count CTEs. Tests:
+> due_at <= now`); NEW cards are excluded. **The F13 active-eligibility exclusion is implemented
+> (2026-06-21):** `dueCount` also excludes suspended (`COALESCE(is_suspended,0)=1`) and
+> currently-buried (`buried_until > now`) cards, mirroring `study_scope_queries.drift`; an expired
+> bury counts as due, and `cardCount` still includes suspended/buried cards. Tests:
 > `test/data/repositories/folder_deck_due_counts_test.dart`.
 >
 > **Deferred until the relevant tables ship:** `updateContentMode` member;
