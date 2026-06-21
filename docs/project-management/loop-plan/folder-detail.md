@@ -66,10 +66,15 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
       `GetDeckMoveTargetsUseCase` + DI. BE tests (repo: not-found + current-parent/decks/unlocked/
       subfolders-locked annotation; use case forwarding). Contract `deck.md` §GetDeckMoveTargetsUseCase.
       verify PASS.
-- [ ] **WP-FD5b — Deck move FE (WBS 2.19.2)** — depends on FD5a. Add `DeckAction.move` to
-      `deck_actions_sheet.dart` → load targets via the new use case → a decks picker (reuse the
-      `folder_move_picker_sheet` pattern, blocked rows disabled/annotated) → `MoveDeckUseCase` →
-      snackbar. Widget tests + goldens (sheet w/ move row, picker).
+- [x] **WP-FD5b — Deck move FE (WBS 2.19.2)** — **Implemented (2026-06-21).** Added
+      `DeckAction.move` + a Move row to `deck_actions_sheet.dart`; `runDeckActions` loads targets via
+      `LibraryActionController.deckMoveTargets` → `showDeckMovePicker` (new
+      `deck_move_picker_sheet.dart`, blocked/current rows disabled with reason) → `moveDeck` →
+      localized snackbar. 4 ARB keys (en+vi). Behavior widget tests (sheet Move row + picker
+      selectable/blocked/current/move). verify PASS. **Variance:** the picker reuses the established
+      **tap-to-select** `folder_move_picker_sheet` pattern, not the kit's radio + "Move here" confirm
+      styling — keeping one picker paradigm app-wide; the radio+confirm restyle is a deferred
+      refinement that should apply to BOTH pickers together (documented in wireframe 25).
 - [ ] WP-FD6 — Deck reorder FE (WBS 2.10.2) — **DEFER (spec-unclear: no UI design).** Reorder
       *behavior* is specified (`reorderDecksUseCaseProvider` wired), but the kit ships only the 8
       folder-detail states (no reorder/drag shot), the wireframe as-built banner explicitly defers

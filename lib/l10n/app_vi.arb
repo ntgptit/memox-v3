@@ -134,5 +134,10 @@
   "sortSheetTitle": "Sắp xếp theo",
   "sortModeManual": "Thủ công",
   "sortModeName": "Tên (A–Z)",
-  "sortModeNewest": "Mới nhất"
+  "sortModeNewest": "Mới nhất",
+  "deckActionMove": "Chuyển tới thư mục",
+  "deckMoveTitle": "Chuyển tới thư mục",
+  "deckMoveBlockSubfolders": "Thư mục này đang chứa thư mục con",
+  "deckMovedSnack": "Đã chuyển bộ thẻ",
+  "deckMoveNoTargets": "Chưa có thư mục nào khác có thể chứa bộ thẻ này."
 }

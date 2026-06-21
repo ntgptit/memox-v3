@@ -468,4 +468,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortModeNewest => 'Newest';
+
+  @override
+  String get deckActionMove => 'Move to folder';
+
+  @override
+  String get deckMoveTitle => 'Move to folder';
+
+  @override
+  String get deckMoveBlockSubfolders => 'This folder holds subfolders';
+
+  @override
+  String get deckMovedSnack => 'Deck moved';
+
+  @override
+  String get deckMoveNoTargets => 'No other folder can hold this deck yet.';
 }

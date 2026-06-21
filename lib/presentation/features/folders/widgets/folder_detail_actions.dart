@@ -4,6 +4,7 @@ import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_move_target.dart';
 import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/folder_summary.dart';
@@ -13,6 +14,7 @@ import 'package:memox/presentation/features/folders/controllers/library_action_c
 import 'package:memox/presentation/features/folders/folder_failure_message.dart';
 import 'package:memox/presentation/features/folders/widgets/deck_actions_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/deck_create_dialog.dart';
+import 'package:memox/presentation/features/folders/widgets/deck_move_picker_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_create_dialog.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_move_picker_sheet.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_rename_dialog.dart';
@@ -153,7 +155,8 @@ Future<void> runFolderActions(
   }
 }
 
-/// Opens the deck overflow sheet for [summary] and dispatches rename / delete.
+/// Opens the deck overflow sheet for [summary] and dispatches rename / move /
+/// delete.
 Future<void> runDeckActions(
   BuildContext context,
   WidgetRef ref,
@@ -185,6 +188,37 @@ Future<void> runDeckActions(
       );
       if (!context.mounted) return;
       _report(context, r.failure, l10n.deckRenamedSnack);
+    case DeckAction.move:
+      final Result<List<DeckMoveTarget>> targets = await controller
+          .deckMoveTargets(deckId: id);
+      if (!context.mounted) return;
+      final List<DeckMoveTarget>? candidates = targets.data;
+      if (candidates == null) {
+        _report(context, targets.failure, l10n.deckMovedSnack);
+        return;
+      }
+      // Dead-end guard: if no folder other than the current parent can take the
+      // deck, there is nothing to pick — tell the user instead of opening an
+      // all-disabled sheet.
+      final bool hasDestination = candidates.any(
+        (DeckMoveTarget t) => t.isSelectable && !t.isCurrentParent,
+      );
+      if (!hasDestination) {
+        showMxSnackbar(context, message: l10n.deckMoveNoTargets);
+        return;
+      }
+      final DeckMoveTarget? dest = await showDeckMovePicker(
+        context,
+        targets: candidates,
+      );
+      if (dest == null) return;
+      if (!context.mounted) return;
+      final Result<Deck> r = await controller.moveDeck(
+        deckId: id,
+        newFolderId: dest.id,
+      );
+      if (!context.mounted) return;
+      _report(context, r.failure, l10n.deckMovedSnack);
     case DeckAction.delete:
       final bool confirmed = await MxConfirmDialog.show(
         context,

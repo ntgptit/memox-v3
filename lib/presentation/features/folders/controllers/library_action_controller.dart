@@ -2,6 +2,7 @@ import 'package:memox/app/di/folder_providers.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_move_target.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
@@ -65,6 +66,20 @@ class LibraryActionController extends _$LibraryActionController {
   /// Delete deck [deckId] and its cards (cascade). Caller MUST confirm first.
   Future<Result<void>> deleteDeck({required DeckId deckId}) =>
       ref.read(deleteDeckUseCaseProvider).call(id: deckId);
+
+  /// Candidate destinations for moving deck [deckId] (every folder, annotated;
+  /// no Library root). Decision rows D11, D12.
+  Future<Result<List<DeckMoveTarget>>> deckMoveTargets({
+    required DeckId deckId,
+  }) => ref.read(getDeckMoveTargetsUseCaseProvider).call(deckId: deckId);
+
+  /// Move deck [deckId] into [newFolderId]. Decision rows D9, D10.
+  Future<Result<Deck>> moveDeck({
+    required DeckId deckId,
+    required FolderId newFolderId,
+  }) => ref
+      .read(moveDeckUseCaseProvider)
+      .call(id: deckId, newParentId: newFolderId);
 
   /// Rename [id] to [newName] (trim / empty / duplicate rules live in the use
   /// case; no-op when unchanged). Decision rows F20-F22.

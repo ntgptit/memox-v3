@@ -907,6 +907,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Newest'**
   String get sortModeNewest;
+
+  /// Deck action-sheet row: move the deck to another folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to folder'**
+  String get deckActionMove;
+
+  /// Title of the move-deck destination picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to folder'**
+  String get deckMoveTitle;
+
+  /// Deck move picker: blocked because the destination holds subfolders and cannot take a deck.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder holds subfolders'**
+  String get deckMoveBlockSubfolders;
+
+  /// Snackbar after a successful deck move.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck moved'**
+  String get deckMovedSnack;
+
+  /// Snackbar when there is no other folder a deck can move into.
+  ///
+  /// In en, this message translates to:
+  /// **'No other folder can hold this deck yet.'**
+  String get deckMoveNoTargets;
 }
 
 class _AppLocalizationsDelegate

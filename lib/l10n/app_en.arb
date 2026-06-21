@@ -302,5 +302,15 @@
   "sortModeName": "Name (A–Z)",
   "@sortModeName": { "description": "Sort option: by name, ascending." },
   "sortModeNewest": "Newest",
-  "@sortModeNewest": { "description": "Sort option: most recently created first." }
+  "@sortModeNewest": { "description": "Sort option: most recently created first." },
+  "deckActionMove": "Move to folder",
+  "@deckActionMove": { "description": "Deck action-sheet row: move the deck to another folder." },
+  "deckMoveTitle": "Move to folder",
+  "@deckMoveTitle": { "description": "Title of the move-deck destination picker." },
+  "deckMoveBlockSubfolders": "This folder holds subfolders",
+  "@deckMoveBlockSubfolders": { "description": "Deck move picker: blocked because the destination holds subfolders and cannot take a deck." },
+  "deckMovedSnack": "Deck moved",
+  "@deckMovedSnack": { "description": "Snackbar after a successful deck move." },
+  "deckMoveNoTargets": "No other folder can hold this deck yet.",
+  "@deckMoveNoTargets": { "description": "Snackbar when there is no other folder a deck can move into." }
 }

@@ -453,4 +453,20 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get sortModeNewest => 'Mới nhất';
+
+  @override
+  String get deckActionMove => 'Chuyển tới thư mục';
+
+  @override
+  String get deckMoveTitle => 'Chuyển tới thư mục';
+
+  @override
+  String get deckMoveBlockSubfolders => 'Thư mục này đang chứa thư mục con';
+
+  @override
+  String get deckMovedSnack => 'Đã chuyển bộ thẻ';
+
+  @override
+  String get deckMoveNoTargets =>
+      'Chưa có thư mục nào khác có thể chứa bộ thẻ này.';
 }

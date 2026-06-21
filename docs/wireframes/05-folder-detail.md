@@ -30,10 +30,11 @@ source_specs:
 >   (skeleton) · error · search (mode toggle) · search-no-results. Goldens:
 >   `test/presentation/features/folders/folder_detail_test.dart`.
 > - **Actions**: create subfolder/deck; folder rename/move/delete (shared `runFolderActions`,
->   kebab opens the viewed folder's sheet); deck rename/delete (`runDeckActions`). Deck **move**
->   BE read path is built (`GetDeckMoveTargetsUseCase`, WBS 2.19.2, 2026-06-21); the deck-sheet
->   **move action + picker FE** (WP-FD5b) and folder/deck **reorder** remain deferred (WBS 2.19.2
->   FE / 2.5.2 / 2.10.2).
+>   kebab opens the viewed folder's sheet); deck rename/**move**/delete (`runDeckActions`). Deck
+>   move is built (WBS 2.19.2, 2026-06-21): the deck sheet's Move row → `showDeckMovePicker`
+>   (decks-allowing folders, blocked rows disabled) → `MoveDeckUseCase`. Folder/deck **reorder**
+>   remain deferred (WBS 2.5.2 / 2.10.2). The deck picker reuses the tap-to-select folder-picker
+>   pattern (the kit's radio + "Move here" styling is a deferred refinement for both pickers).
 > - **Study entry points (Study folder / Today / Resume)** remain **Future — not built**.
 
 ## V1 verification status (2026-06-06)

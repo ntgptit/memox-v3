@@ -19,5 +19,8 @@ String folderFailureMessage(AppLocalizations l10n, Failure failure) =>
       UnsupportedActionFailure(:final String message)
           when message == 'folder_contains_decks' =>
         l10n.folderErrorMoveLockedDecks,
+      UnsupportedActionFailure(:final String message)
+          when message == 'folder_contains_subfolders' =>
+        l10n.deckMoveBlockSubfolders,
       _ => l10n.folderActionGenericError,
     };

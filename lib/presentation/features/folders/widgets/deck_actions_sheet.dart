@@ -10,9 +10,9 @@ import 'package:memox/presentation/shared/widgets/mx_divider.dart';
 import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 
-/// A deck action chosen from the overflow sheet. Move-deck is deferred (needs a
-/// decks-allowing folder picker — WBS 2.19.2), so V1 exposes rename + delete.
-enum DeckAction { rename, delete }
+/// A deck action chosen from the overflow sheet: rename, move to another folder
+/// (WBS 2.19.2), or delete.
+enum DeckAction { rename, move, delete }
 
 /// Shows the deck overflow action sheet for [summary] (header with the deck +
 /// its card count, then Rename / Delete deck) and resolves to the chosen
@@ -73,6 +73,11 @@ class _DeckActionsSheet extends StatelessWidget {
           icon: Icons.edit_outlined,
           label: l10n.deckActionRename,
           onTap: () => Navigator.of(context).pop(DeckAction.rename),
+        ),
+        _DeckActionRow(
+          icon: Icons.drive_file_move_outlined,
+          label: l10n.deckActionMove,
+          onTap: () => Navigator.of(context).pop(DeckAction.move),
         ),
         _DeckActionRow(
           icon: Icons.delete_outline,
