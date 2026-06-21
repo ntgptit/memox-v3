@@ -11,6 +11,7 @@ import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/library_overview_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
+import 'package:memox/presentation/features/folders/widgets/library_root_anchor.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
@@ -175,6 +176,29 @@ void main() {
       expect(find.text('12 due'), findsOneWidget);
       // FAB present in the loaded (non-search) state.
       expect(find.byType(MxFab), findsOneWidget);
+      // Root anchor present with the live folder count (3 root folders).
+      expect(find.byType(LibraryRootAnchor), findsOneWidget);
+      expect(find.text('3 folders'), findsOneWidget);
+    });
+
+    testWidgets('root anchor hidden in empty / loading / search', (
+      tester,
+    ) async {
+      // True-empty: no anchor (the empty state orients the user instead).
+      await _pump(tester, _value(const LibraryOverview(folders: [])));
+      await tester.pumpAndSettle();
+      expect(find.byType(LibraryRootAnchor), findsNothing);
+
+      // Loading: no anchor while data is absent.
+      await _pump(tester, _never());
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(find.byType(LibraryRootAnchor), findsNothing);
+
+      // Search: the dock is suppressed, matching the FAB.
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+      await _search(tester, 'kor');
+      expect(find.byType(LibraryRootAnchor), findsNothing);
     });
 
     testWidgets('true-empty renders the empty state + create CTA', (

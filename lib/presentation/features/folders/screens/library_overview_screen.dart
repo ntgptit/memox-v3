@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:memox/core/theme/mx_spacing.dart';
+import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/library_overview_viewmodel.dart';
 import 'package:memox/presentation/features/folders/widgets/library_create_folder_action.dart';
 import 'package:memox/presentation/features/folders/widgets/library_overview_body.dart';
+import 'package:memox/presentation/features/folders/widgets/library_root_anchor.dart';
 import 'package:memox/presentation/features/folders/widgets/library_search_app_bar.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
@@ -30,12 +33,15 @@ class LibraryOverviewScreen extends ConsumerWidget {
     // the app-bar/FAB decision away from where it is applied.
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool searching = ref.watch(librarySearchActiveProvider);
-    // The FAB shows only in the loaded-with-folders state (mock `03a`): the
-    // true-empty state offers its own inline CTA, and loading / error / search
-    // suppress it (mocks `03b` / `03c` / `03d` / `03e`).
-    final bool hasFolders =
-        ref.watch(libraryOverviewStreamProvider).value?.folders.isNotEmpty ??
-        false;
+    // The FAB and the root anchor both show only in the loaded-with-folders
+    // state (mock `03a`): the true-empty state offers its own inline CTA, and
+    // loading / error / search suppress them (mocks `03b` / `03c` / `03d` /
+    // `03e`).
+    final LibraryOverview? overview = ref
+        .watch(libraryOverviewStreamProvider)
+        .value;
+    final int folderCount = overview?.folders.length ?? 0;
+    final bool hasFolders = folderCount > 0;
     final bool showFab = !searching && hasFolders;
 
     return MxScaffold(
@@ -61,7 +67,20 @@ class LibraryOverviewScreen extends ConsumerWidget {
               onPressed: () => runCreateFolder(context, ref),
             )
           : null,
-      body: const LibraryOverviewBody(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          // Root orientation anchor docked under the app bar — the root of the
+          // same breadcrumb trail nested Library screens show. Hidden in search
+          // and until the loaded list has folders (matches the FAB gating).
+          if (!searching && hasFolders)
+            Padding(
+              padding: const EdgeInsets.only(bottom: MxSpacing.space2),
+              child: LibraryRootAnchor(folderCount: folderCount),
+            ),
+          const Expanded(child: LibraryOverviewBody()),
+        ],
+      ),
     );
   }
 }
