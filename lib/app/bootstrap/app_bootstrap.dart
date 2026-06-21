@@ -18,6 +18,10 @@ abstract final class AppBootstrap {
   static void run() {
     runZonedGuarded(
       () {
+        // Must run before any platform-channel call (SystemChrome below) AND in
+        // the same zone as runApp — otherwise the binding's `instance` getter
+        // throws "Binding has not yet been initialized".
+        WidgetsFlutterBinding.ensureInitialized();
         MxLog.init();
         _setupErrorHandlers();
         _setupSystemChrome();
