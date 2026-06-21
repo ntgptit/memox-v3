@@ -31,8 +31,12 @@ source_specs:
 >   badge + progress bar in the §Components target row below are **Future** (not in the rebuilt
 >   mock — see `loop-deferred.md` 3.2.3 audit).
 > - **States**: decks · subfolders · empty-unlocked (hero with both create CTAs) · loading
->   (skeleton) · error · search (mode toggle) · search-no-results. Goldens:
+>   (skeleton) · error · search · search-no-results. Goldens:
 >   `test/presentation/features/folders/folder_detail_test.dart`.
+> - **Search (WP-FD10, 2026-06-22)**: the app-bar `Icons.search` toggles search mode, which mounts
+>   a flat **bottom search-dock** (`FolderDetailSearchDock`, kit `04` Search `search-dock`) — the
+>   regular title + sort + overflow app bar stays, FAB hidden. Supersedes the old app-bar swap
+>   (`FolderDetailSearchAppBar`, deleted). Mirrors Library `LibrarySearchDock` (WP-L10).
 > - **Actions**: create subfolder/deck; folder rename/move/delete (shared `runFolderActions`,
 >   kebab opens the viewed folder's sheet); deck rename/**move**/delete (`runDeckActions`). Deck
 >   move is built (WBS 2.19.2, 2026-06-21): the deck sheet's Move row → `showDeckMovePicker`

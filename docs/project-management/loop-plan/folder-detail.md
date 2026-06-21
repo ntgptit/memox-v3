@@ -101,6 +101,22 @@ the open FE work is **deck move** and **manual reorder** (both have Implemented 
       query test (max + null + no count inflation), bucket boundary tests, tile widget tests + a
       studied-state golden (light+dark). verify PASS.
 
+- [x] **WP-FD10 — Folder-detail search bottom-dock (kit `04` Search) — Implemented (2026-06-22).**
+      **RE-AUDIT finding (TRUST POLICY):** like Library before WP-L10, folder-detail search shipped
+      as an **app-bar swap** (`FolderDetailSearchAppBar` + Cancel), but the kit `04` Search-empty
+      state renders the field as a flat **bottom `search-dock`** with the regular title + sort +
+      overflow app bar retained (ui-parity-checker Gap #2). Per PRECEDENCE #2 (visual → mock) +
+      consistency with WP-L10, rebuilt: `FolderDetailSearchDock` (surface fill + top hairline,
+      hosts the provider-synced `FolderDetailSearchField`) mounted in the `bottomNavigationBar`
+      slot; app-bar `Icons.search` now toggles search on/off (`_toggleSearch`, early-return);
+      deleted `FolderDetailSearchAppBar`. Regenerated the 2 search-no-results goldens; added dock
+      present/absent + toggle-exit widget tests. verify PASS. **Note:** kept the provider-synced
+      `FolderDetailSearchField` (not the shared `MxSearchDock`, whose onChanged-only API can't host
+      the external controller the body's no-results Clear CTA needs).
+      **App-bar variance (documented):** the kit Decks-state app bar shows only the overflow icon;
+      the search-toggle + `swap_vert` sort (WBS 2.23.1, owner-approved, shown app-wide) are kept as
+      post-redesign affordances — same documented variance as Library.
+
 ## Notes
 
 - WBS rows 2.7.2 / 2.8.2 / 2.9.2 are still marked `Specified` though the code + tests are
