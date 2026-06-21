@@ -1039,6 +1039,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete card'**
   String get cardDeleteTooltip;
+
+  /// Header of the optional-fields expander in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get cardDetailsLabel;
+
+  /// Muted hint beside the card-editor Details expander header when collapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get cardDetailsOptional;
+
+  /// Muted field summary beside the card-editor Details expander header when expanded.
+  ///
+  /// In en, this message translates to:
+  /// **'example · pronunciation · hint'**
+  String get cardDetailsSummary;
+
+  /// Optional example-sentence field label in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get cardExampleLabel;
+
+  /// Optional pronunciation field label in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronunciation'**
+  String get cardPronunciationLabel;
+
+  /// Optional hint field label in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get cardHintLabel;
 }
 
 class _AppLocalizationsDelegate

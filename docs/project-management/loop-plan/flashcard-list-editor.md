@@ -73,9 +73,18 @@ conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
         `MxConfirmDialog` (`cardDelete*`) → `FlashcardActionController.delete` → `cardDeletedSnack` +
         pop. Create mode shows no trash. Widget tests (create-none / edit-trash → confirm) + `08`
         edit-loaded golden regenerated (trash icon). verify PASS.
-  - [ ] **WP-FL2b2 — Details expander** (collapsed `Details · Optional` row → tags / note / example /
-        pronunciation / hint fields; BE `Create/UpdateFlashcardUseCase` already accept them). Goldens
-        `07`/`08` details-open.
+  - [x] **WP-FL2b2 — Details expander (example/pronunciation/hint) — Implemented (2026-06-22).** A
+        `Details · Optional` row (`MxTappable` + chevron) toggles the optional **example /
+        pronunciation / hint** `MxTextField`s (auto-opens in edit when the card has any). Extended
+        `FlashcardActionController.create/update` to forward example/pronunciation/hint + tags;
+        `save()` passes them (blank→null) and **preserves** existing tags on edit (the use case
+        replaces tags wholesale). ARB ×5 (en+vi). Widget tests (toggle / edit-prefill) + `07`
+        details-open golden (light+dark). Decision row C44. **PRECEDENCE #1:** the mock's deck-selector
+        is Future (deck retargeting) + its single "Note" → the business example/pronunciation/hint
+        fields; built business fields, not the mock layout. verify PASS.
+  - [ ] **WP-FL2b2b — Tags input** (the mock `07`/`08` Tags chips + "Add tag" affordance; business
+        model includes tags — `flashcard-management.md` §238). Needs a chip-display + add/remove-tag
+        UX; edit currently preserves tags untouched. Build after WP-FL2b3 or as the last object-5 node.
   - [ ] **WP-FL2b3 — save/load state surfaces** (`07` saving/save-failed inline banner; `08`
         loading + full load-error via a single-card read path). The editor is usable for front/back
         create+edit+delete without these; they complete the kit state coverage.

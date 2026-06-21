@@ -16,9 +16,12 @@ source_specs:
 > Edit mode is selected by the presence of `:flashcardId` (back-arrow leading icon). The **shell**
 > supports prefilled front/back + the dirty-discard confirm + the danger-zone **delete-from-editor**
 > trash action (WP-FL2b1, 2026-06-22: `Icons.delete_outline` before Save → shared destructive
-> confirm → delete → pop). The Details expander (WP-FL2b2) + the non-base `08` states
-> (loading / load-error-full / saving / save-failed) = **WP-FL2b3**. The current mock for
-> screen 08 includes a danger-zone delete action in the editor, while
+> confirm → delete → pop) + the **Details expander** (WP-FL2b2, 2026-06-22: optional example /
+> pronunciation / hint, auto-opened when the card has any; edit **preserves** existing tags on save).
+> Per PRECEDENCE #1 the mock's deck-selector is Future (deck retargeting) and the single "Note" maps
+> to the business example/pronunciation/hint fields (see `07`). The **Tags** input (WP-FL2b2b) + the
+> non-base `08` states (loading / load-error-full / saving / save-failed) = **WP-FL2b3**. The current
+> mock for screen 08 includes a danger-zone delete action in the editor, while
 > move/export remain on the flashcard list row/bulk surfaces and bury/suspend
 > stay on the study-session card-actions sheet.
 
@@ -61,10 +64,10 @@ front/back content changes.
 │ │  Hello                            │ │
 │ └───────────────────────────────────┘ │
 │                                       │
-│ Example sentence · optional           │
-│ Tags · optional                       │
-│ ▾ Show advanced fields                │
-│   Pronunciation / Hint / Note         │
+│ ▾ Details   example·pronunciation·hint│
+│   Example / Pronunciation / Hint      │
+│   (auto-opens when the card has any)  │
+│   Tags input = WP-FL2b2b · Deck=Future│
 │                                       │
 └───────────────────────────────────────┘
 ```

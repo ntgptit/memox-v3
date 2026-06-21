@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
@@ -19,6 +21,8 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
+import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
+import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 
@@ -54,11 +58,33 @@ class FlashcardEditorForm extends HookConsumerWidget {
     final MxTextSubmitState back = useMxTextSubmitState(
       initialText: card?.back ?? '',
     );
+    // Optional Details fields (business model: example / pronunciation / hint —
+    // `flashcard-management.md` §V1 create/edit). The mock `07`/`08` deck-selector
+    // is Future (deck retargeting) and its single "Note" maps to these.
+    final MxTextSubmitState example = useMxTextSubmitState(
+      initialText: card?.exampleSentence ?? '',
+    );
+    final MxTextSubmitState pronunciation = useMxTextSubmitState(
+      initialText: card?.pronunciation ?? '',
+    );
+    final MxTextSubmitState hint = useMxTextSubmitState(
+      initialText: card?.hint ?? '',
+    );
+    // Auto-open the Details expander when editing a card that already has any.
+    final bool hasDetails =
+        (card?.exampleSentence ?? '').isNotEmpty ||
+        (card?.pronunciation ?? '').isNotEmpty ||
+        (card?.hint ?? '').isNotEmpty;
+    final ValueNotifier<bool> detailsOpen = useState<bool>(hasDetails);
+
     final bool canSubmit = front.canSubmit && back.canSubmit;
-    // Dirty = either field differs from the loaded card (empty for create).
+    // Dirty = any field differs from the loaded card (empty for create).
     final bool dirty =
         front.trimmedText != (card?.front ?? '') ||
-        back.trimmedText != (card?.back ?? '');
+        back.trimmedText != (card?.back ?? '') ||
+        example.trimmedText != (card?.exampleSentence ?? '') ||
+        pronunciation.trimmedText != (card?.pronunciation ?? '') ||
+        hint.trimmedText != (card?.hint ?? '');
 
     Future<bool> confirmDiscard() => MxConfirmDialog.show(
       context,
@@ -68,6 +94,8 @@ class FlashcardEditorForm extends HookConsumerWidget {
       cancelLabel: l10n.commonCancel,
       destructive: true,
     );
+
+    String? orNull(String text) => text.isEmpty ? null : text;
 
     Future<void> save() async {
       if (!canSubmit) return;
@@ -79,6 +107,9 @@ class FlashcardEditorForm extends HookConsumerWidget {
                   deckId: deckId,
                   front: front.trimmedText,
                   back: back.trimmedText,
+                  exampleSentence: orNull(example.trimmedText),
+                  pronunciation: orNull(pronunciation.trimmedText),
+                  hint: orNull(hint.trimmedText),
                 )
           : await ref
                 .read(flashcardActionControllerProvider.notifier)
@@ -86,6 +117,12 @@ class FlashcardEditorForm extends HookConsumerWidget {
                   flashcardId: existing.id,
                   front: front.trimmedText,
                   back: back.trimmedText,
+                  exampleSentence: orNull(example.trimmedText),
+                  pronunciation: orNull(pronunciation.trimmedText),
+                  hint: orNull(hint.trimmedText),
+                  // Preserve existing tags until the tag editor lands (the use
+                  // case replaces tags wholesale).
+                  tags: existing.tags,
                 );
       if (!context.mounted) return;
       final Failure? failure = result.failure;
@@ -204,9 +241,70 @@ class FlashcardEditorForm extends HookConsumerWidget {
             MxTextField(
               controller: back.controller,
               labelText: l10n.cardBackLabel,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => save(),
+              textInputAction: detailsOpen.value
+                  ? TextInputAction.next
+                  : TextInputAction.done,
+              onSubmitted: detailsOpen.value ? null : (_) => save(),
             ),
+            const SizedBox(height: MxSpacing.space4),
+            // Details expander (mock `07`/`08`): the optional content fields.
+            // The mock's deck-selector is Future (deck retargeting,
+            // `flashcard-management.md` §V1); the single "Note" maps to the
+            // business model's example / pronunciation / hint fields.
+            MxTappable(
+              onTap: () => detailsOpen.value = !detailsOpen.value,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: MxSpacing.space2),
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      detailsOpen.value
+                          ? Icons.expand_more
+                          : Icons.chevron_right,
+                      color: context.mxColors.textSecondary,
+                    ),
+                    const SizedBox(width: MxSpacing.space2),
+                    MxText(l10n.cardDetailsLabel, role: MxTextRole.titleMedium),
+                    const Spacer(),
+                    // Collapsed shows "Optional"; expanded summarises the fields
+                    // (mock `07` swaps the trailing label on open). Flexible +
+                    // ellipsis so the longer open summary never overflows.
+                    Flexible(
+                      child: MxText(
+                        detailsOpen.value
+                            ? l10n.cardDetailsSummary
+                            : l10n.cardDetailsOptional,
+                        role: MxTextRole.bodySmall,
+                        color: context.mxColors.textTertiary,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (detailsOpen.value) ...<Widget>[
+              const SizedBox(height: MxSpacing.space2),
+              MxTextField(
+                controller: example.controller,
+                labelText: l10n.cardExampleLabel,
+                textInputAction: TextInputAction.next,
+              ),
+              const SizedBox(height: MxSpacing.space4),
+              MxTextField(
+                controller: pronunciation.controller,
+                labelText: l10n.cardPronunciationLabel,
+                textInputAction: TextInputAction.next,
+              ),
+              const SizedBox(height: MxSpacing.space4),
+              MxTextField(
+                controller: hint.controller,
+                labelText: l10n.cardHintLabel,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => save(),
+              ),
+            ],
           ],
         ),
       ),

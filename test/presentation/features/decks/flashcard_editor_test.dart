@@ -30,11 +30,18 @@ final Deck _deck = Deck(
   updatedAt: _t,
 );
 
-Flashcard _card() => Flashcard(
+Flashcard _card({
+  String? exampleSentence,
+  String? pronunciation,
+  String? hint,
+}) => Flashcard(
   id: 'c1',
   deckId: _deckId,
   front: '日本',
   back: 'Japan',
+  exampleSentence: exampleSentence,
+  pronunciation: pronunciation,
+  hint: hint,
   sortOrder: 0,
   createdAt: _t,
   updatedAt: _t,
@@ -103,7 +110,10 @@ void main() {
     ) async {
       await _pump(tester);
       expect(find.text('Add card'), findsOneWidget); // app-bar title
-      expect(find.byType(MxTextField), findsNWidgets(2)); // front + back
+      // Front + Back present; Details collapsed so the optional fields are not.
+      expect(find.widgetWithText(MxTextField, 'Front'), findsOneWidget);
+      expect(find.widgetWithText(MxTextField, 'Back'), findsOneWidget);
+      expect(find.text('Example'), findsNothing);
       expect(_saveEnabled(tester), isFalse); // front+back empty
 
       // Front alone is not enough — back is also required.
@@ -137,6 +147,37 @@ void main() {
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
       expect(find.text('Discard changes?'), findsOneWidget);
+    });
+
+    testWidgets(
+      'create: Details collapsed by default; tap expands the fields',
+      (tester) async {
+        await _pump(tester);
+        expect(find.text('Details'), findsOneWidget);
+        // Collapsed: the optional fields are not built.
+        expect(find.text('Example'), findsNothing);
+        expect(find.text('Hint'), findsNothing);
+
+        await tester.tap(find.text('Details'));
+        await tester.pumpAndSettle();
+        // Expanded: example / pronunciation / hint fields appear.
+        expect(find.text('Example'), findsOneWidget);
+        expect(find.text('Pronunciation'), findsOneWidget);
+        expect(find.text('Hint'), findsOneWidget);
+      },
+    );
+
+    testWidgets('edit: a card with details auto-opens the expander prefilled', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        cardId: 'c1',
+        cards: <Flashcard>[_card(exampleSentence: '日本へ行く', hint: 'country')],
+      );
+      // Auto-opened (the card has details) with the values prefilled.
+      expect(find.text('日本へ行く'), findsOneWidget);
+      expect(find.text('country'), findsOneWidget);
     });
 
     testWidgets('create mode has no trash/delete action (mock `07`)', (
@@ -197,6 +238,18 @@ void main() {
           find.byType(FlashcardEditorScreen),
           matchesGoldenFile(
             'goldens/flashcard_editor_edit-loaded__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('details-open — ${brightness.name}', (tester) async {
+        await _pump(tester, brightness: brightness, golden: true);
+        await tester.tap(find.text('Details'));
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(FlashcardEditorScreen),
+          matchesGoldenFile(
+            'goldens/flashcard_editor_details-open__${brightness.name}.png',
           ),
         );
       });

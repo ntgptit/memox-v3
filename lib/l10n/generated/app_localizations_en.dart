@@ -551,4 +551,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardDeleteTooltip => 'Delete card';
+
+  @override
+  String get cardDetailsLabel => 'Details';
+
+  @override
+  String get cardDetailsOptional => 'Optional';
+
+  @override
+  String get cardDetailsSummary => 'example · pronunciation · hint';
+
+  @override
+  String get cardExampleLabel => 'Example';
+
+  @override
+  String get cardPronunciationLabel => 'Pronunciation';
+
+  @override
+  String get cardHintLabel => 'Hint';
 }

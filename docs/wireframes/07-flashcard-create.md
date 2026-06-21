@@ -13,12 +13,18 @@ source_specs:
 > `lib/presentation/features/decks/screens/flashcard_editor_screen.dart` (async dispatcher) +
 > `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`).
 > Create mode is selected by the absence of `:flashcardId`; the **shell** supports front/back +
-> the dirty-discard confirm. The Details expander (example/pronunciation/hint/tags) + the non-base
-> `07` states (details-open/saving/save-failed) are **WP-FL2b**. Edit mode is documented
-> separately in `docs/wireframes/08-flashcard-edit.md`.
+> the dirty-discard confirm + delete-from-editor (edit). The **Details expander** (WP-FL2b2,
+> 2026-06-22) toggles the optional **example / pronunciation / hint** fields (auto-opens in edit when
+> the card has any). **PRECEDENCE #1 note:** the mock `07` Details draws a **deck-selector** (Future —
+> `flashcard-management.md` §V1 "Destination-deck retargeting remains future work") + Tags + a single
+> "Note"; the business model defines the optional content as example/pronunciation/hint + tags, so
+> those fields are built instead of the mock's single Note, and the deck-selector is not built. The
+> **Tags** input (chip + add-tag) = WP-FL2b2b (edit currently **preserves** existing tags on save). The
+> non-base `07` states (saving / save-failed) = WP-FL2b3. Edit mode is documented separately in
+> `docs/wireframes/08-flashcard-edit.md`.
 
 > **Mock-first refinement (2026-06-13).** Create mode keeps the collapsible
-> "Add details" toggle (optional example/hint/pronunciation). **Saving:** both the
+> "Details" expander (optional example/pronunciation/hint). **Saving:** both the
 > app-bar and bottom CTAs read `Saving…` (disabled) and the bottom helper switches
 > to `Saving to this device…`. **Save failed:** a text-only failure banner
 > (`flashcard_editor_save_failed_banner`) is anchored just above the bottom bar and
@@ -51,9 +57,9 @@ fast manual entry and keeps the surface intentionally small.
 │ │ Add the meaning or translation.           │  │
 │ └────────────────────────────────────────────┘  │
 │                                                │
-│ Add details   example · hint · pronunciation    │
+│ ▾ Details        example · pronunciation · hint │
 │                                                │
-│ (collapsed by default; expands to three fields) │
+│ (collapsed → "Details   Optional"; tap to expand)│
 │ Example                                         │
 │ ┌────────────────────────────────────────────┐   │
 │ │ Add an example sentence.                  │   │

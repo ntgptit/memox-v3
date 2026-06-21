@@ -156,5 +156,11 @@
   "cardDiscardTitle": "Bỏ thay đổi?",
   "cardDiscardMessage": "Các chỉnh sửa cho thẻ này chưa được lưu.",
   "cardDiscardConfirm": "Bỏ",
-  "cardDeleteTooltip": "Xoá thẻ"
+  "cardDeleteTooltip": "Xoá thẻ",
+  "cardDetailsLabel": "Chi tiết",
+  "cardDetailsOptional": "Tuỳ chọn",
+  "cardDetailsSummary": "ví dụ · phát âm · gợi ý",
+  "cardExampleLabel": "Ví dụ",
+  "cardPronunciationLabel": "Phát âm",
+  "cardHintLabel": "Gợi ý"
 }

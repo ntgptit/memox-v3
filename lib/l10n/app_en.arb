@@ -346,5 +346,17 @@
   "cardDiscardConfirm": "Discard",
   "@cardDiscardConfirm": { "description": "Destructive confirm action of the card-editor discard-changes dialog." },
   "cardDeleteTooltip": "Delete card",
-  "@cardDeleteTooltip": { "description": "Tooltip for the trash/delete icon in the edit-mode card editor app bar." }
+  "@cardDeleteTooltip": { "description": "Tooltip for the trash/delete icon in the edit-mode card editor app bar." },
+  "cardDetailsLabel": "Details",
+  "@cardDetailsLabel": { "description": "Header of the optional-fields expander in the card editor." },
+  "cardDetailsOptional": "Optional",
+  "@cardDetailsOptional": { "description": "Muted hint beside the card-editor Details expander header when collapsed." },
+  "cardDetailsSummary": "example · pronunciation · hint",
+  "@cardDetailsSummary": { "description": "Muted field summary beside the card-editor Details expander header when expanded." },
+  "cardExampleLabel": "Example",
+  "@cardExampleLabel": { "description": "Optional example-sentence field label in the card editor." },
+  "cardPronunciationLabel": "Pronunciation",
+  "@cardPronunciationLabel": { "description": "Optional pronunciation field label in the card editor." },
+  "cardHintLabel": "Hint",
+  "@cardHintLabel": { "description": "Optional hint field label in the card editor." }
 }

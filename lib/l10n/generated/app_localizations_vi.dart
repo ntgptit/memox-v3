@@ -536,4 +536,22 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardDeleteTooltip => 'Xoá thẻ';
+
+  @override
+  String get cardDetailsLabel => 'Chi tiết';
+
+  @override
+  String get cardDetailsOptional => 'Tuỳ chọn';
+
+  @override
+  String get cardDetailsSummary => 'ví dụ · phát âm · gợi ý';
+
+  @override
+  String get cardExampleLabel => 'Ví dụ';
+
+  @override
+  String get cardPronunciationLabel => 'Phát âm';
+
+  @override
+  String get cardHintLabel => 'Gợi ý';
 }
