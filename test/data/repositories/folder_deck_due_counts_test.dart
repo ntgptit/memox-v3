@@ -9,6 +9,7 @@ import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
 import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
+import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
@@ -16,9 +17,9 @@ import 'package:memox/domain/types/target_language.dart';
 
 void main() {
   // Folder/deck due+card counts: WBS 3.7.1. Decision rows F12 (deck count) and
-  // F13 (recursive card count incl. all cards; due count excludes NEW cards and
-  // future-scheduled cards). Suspend/bury columns do not exist yet, so their
-  // exclusion is trivially satisfied.
+  // F13 (recursive card count incl. all cards; due count excludes NEW cards,
+  // future-scheduled cards, and suspended / currently-buried cards — mirroring
+  // the `study_scope_queries.drift` eligibility predicate).
   const int fixedNow = 1000000;
 
   late AppDatabase db;
@@ -50,19 +51,24 @@ void main() {
   tearDown(() => db.close());
 
   int cardSeq = 0;
-  Future<String> addCard(String deckId, {int? dueAt}) async {
+  Future<String> addCard(
+    String deckId, {
+    int? dueAt,
+    bool suspended = false,
+    int? buriedUntil,
+    int box = 1,
+  }) async {
     final card = await flashcardRepo.createFlashcard(
       deckId: deckId,
       front: 'F${cardSeq++}',
       back: 'B',
     );
     final String id = card.data!.id;
-    if (dueAt != null) {
-      await db.customStatement(
-        'UPDATE flashcard_progress SET due_at = ? WHERE flashcard_id = ?',
-        <Object>[dueAt, id],
-      );
-    }
+    await db.customStatement(
+      'UPDATE flashcard_progress SET due_at = ?, is_suspended = ?, '
+      'buried_until = ?, box_number = ? WHERE flashcard_id = ?',
+      <Object?>[dueAt, suspended ? 1 : 0, buriedUntil, box, id],
+    );
     return id;
   }
 
@@ -121,6 +127,85 @@ void main() {
     },
   );
 
+  test('F13: due count excludes suspended and currently-buried cards but '
+      'card count still includes them', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Lang',
+    )).data!.id;
+    final String deckId = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Vocab',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+
+    await addCard(deckId, dueAt: fixedNow - 1); // due + active
+    await addCard(
+      deckId,
+      dueAt: fixedNow - 1,
+      suspended: true,
+    ); // due but suspended
+    await addCard(
+      deckId,
+      dueAt: fixedNow - 1,
+      buriedUntil: fixedNow + 5000,
+    ); // due but currently buried (buried_until > now)
+    await addCard(
+      deckId,
+      dueAt: fixedNow - 1,
+      buriedUntil: fixedNow - 1,
+    ); // due, bury expired (buried_until <= now) → still due
+
+    final FolderDetail detail = (await repo.watchFolderDetail(folderId).first)!;
+    expect(detail.cardCount, 4); // F13: card count includes suspended/buried
+    expect(detail.dueCount, 2); // active due + expired-bury due only
+
+    final LibraryOverview overview = await repo.watchLibraryOverview().first;
+    final FolderSummary summary = overview.folders.firstWhere(
+      (FolderSummary f) => f.folder.id == folderId,
+    );
+    expect(summary.cardCount, 4);
+    expect(summary.dueCount, 2); // root summary applies the same exclusion
+
+    // folderDeckSummaries (deck tile due count) applies the exclusion too.
+    final FolderDetail detailWithDecks = (await repo
+        .watchFolderDetail(folderId)
+        .first)!;
+    expect(detailWithDecks.decks.single.dueCount, 2);
+  });
+
+  test('F13: childFolderSummaries (subfolder rows) exclude suspended/buried '
+      'from due count', () async {
+    // Parent → subfolder → deck. The parent-detail child-row summary is driven
+    // by childFolderSummaries; assert its recursive due count applies F13.
+    final String parentId = (await repo.createRootFolder(
+      name: 'Parent',
+    )).data!.id;
+    final String subId = (await repo.createSubfolder(
+      parentId: parentId,
+      name: 'Sub',
+    )).data!.id;
+    final String deckId = (await repo.createDeck(
+      folderId: subId,
+      name: 'Deck',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+    await addCard(deckId, dueAt: fixedNow - 1); // active due
+    await addCard(deckId, dueAt: fixedNow - 1, suspended: true); // excluded
+    await addCard(
+      deckId,
+      dueAt: fixedNow - 1,
+      buriedUntil: fixedNow + 5000,
+    ); // currently buried → excluded
+
+    final FolderDetail parentDetail = (await repo
+        .watchFolderDetail(parentId)
+        .first)!;
+    final FolderSummary childRow = parentDetail.subfolders.single;
+    expect(childRow.folder.id, subId);
+    expect(childRow.cardCount, 3); // all cards incl. suspended/buried
+    expect(childRow.dueCount, 1); // only the active due card
+  });
+
   test('counts are zero for an empty folder', () async {
     final String folderId = (await repo.createRootFolder(
       name: 'Empty',
@@ -131,5 +216,112 @@ void main() {
     expect(detail.deckCount, 0);
     expect(detail.cardCount, 0);
     expect(detail.dueCount, 0);
+  });
+
+  test('newCount = active NEW cards (due_at NULL) excluding suspended; '
+      'mastery = mean box / 8', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Lang',
+    )).data!.id;
+    final String deckId = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Vocab',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+
+    await addCard(deckId, dueAt: fixedNow - 1, box: 2); // studied/due
+    await addCard(deckId, dueAt: fixedNow + 5000, box: 6); // scheduled future
+    await addCard(deckId, box: 4); // NEW (due_at NULL), active
+    await addCard(
+      deckId,
+      box: 8,
+      suspended: true,
+    ); // NEW but suspended → not new
+    await addCard(
+      deckId,
+      box: 3,
+      buriedUntil: fixedNow + 5000,
+    ); // NEW but currently buried → not new
+
+    final LibraryOverview overview = await repo.watchLibraryOverview().first;
+    final FolderSummary summary = overview.folders.firstWhere(
+      (FolderSummary f) => f.folder.id == folderId,
+    );
+
+    expect(summary.newCount, 1); // only the active box-4 NEW card
+    // mean box over all 5 cards = (2 + 6 + 4 + 8 + 3) / 5 = 4.6 → mastery 4.6/8.
+    expect(summary.mastery, closeTo(4.6 / 8, 1e-9));
+  });
+
+  test('deck lastStudiedAt = MAX(answered_at) over the deck cards; null when '
+      'never studied', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Lang',
+    )).data!.id;
+    final String studied = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Studied',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+    final String fresh = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Fresh',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+    final String cardA = await addCard(studied);
+    final String cardB = await addCard(studied);
+    await addCard(fresh); // never studied
+
+    // One completed session; two answered items on the studied deck's cards.
+    await db.customStatement(
+      'INSERT INTO study_sessions (id, entry_type, study_type, status, '
+      'started_at, updated_at) VALUES '
+      "('s1', 'deck', 'new_cards', 'completed', 0, 0)",
+    );
+    Future<void> answer(String id, String flashcardId, int at) =>
+        db.customStatement(
+          'INSERT INTO study_session_items (id, session_id, flashcard_id, '
+          'sort_order, answered_at, created_at, updated_at) VALUES '
+          "(?, 's1', ?, 0, ?, 0, 0)",
+          <Object>[id, flashcardId, at],
+        );
+    await answer('i1', cardA, fixedNow - 5000);
+    await answer('i2', cardB, fixedNow - 1000); // the most recent
+    await answer('i3', cardA, fixedNow - 9000);
+
+    final FolderDetail detail = (await repo.watchFolderDetail(folderId).first)!;
+    final DeckSummary studiedDeck = detail.decks.firstWhere(
+      (DeckSummary d) => d.deck.id == studied,
+    );
+    final DeckSummary freshDeck = detail.decks.firstWhere(
+      (DeckSummary d) => d.deck.id == fresh,
+    );
+
+    expect(
+      studiedDeck.lastStudiedAt!.millisecondsSinceEpoch,
+      fixedNow - 1000, // MAX over the deck's answered items
+    );
+    expect(freshDeck.lastStudiedAt, isNull);
+    // The correlated subquery must not inflate the card count.
+    expect(studiedDeck.cardCount, 2);
+  });
+
+  test('mastery is null and newCount 0 for a folder with no cards', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Empty',
+    )).data!.id;
+    await repo.createDeck(
+      folderId: folderId,
+      name: 'EmptyDeck',
+      targetLanguage: TargetLanguage.korean,
+    );
+
+    final LibraryOverview overview = await repo.watchLibraryOverview().first;
+    final FolderSummary summary = overview.folders.firstWhere(
+      (FolderSummary f) => f.folder.id == folderId,
+    );
+
+    expect(summary.newCount, 0);
+    expect(summary.mastery, isNull);
   });
 }

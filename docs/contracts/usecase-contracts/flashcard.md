@@ -317,7 +317,8 @@ Stream<Either<Failure, FlashcardListDetail>> call(
 
 **Rules:**
 
-- `FlashcardListDetail` = deck + folder breadcrumb + (search/tag/status-filtered) cards + `totalCount`.
+- `FlashcardListDetail` = deck + folder breadcrumb + (search/tag/status-filtered) cards + `totalCount`
+  + `dueCount`.
 - A non-blank `searchTerm` keeps cards whose front or back contains the trimmed, case-insensitive
   term. A non-empty `tags` keeps cards carrying **every** selected tag (AND); the two compose.
   Decision rows C38, C39.
@@ -329,6 +330,10 @@ Stream<Either<Failure, FlashcardListDetail>> call(
 - `totalCount` is the deck's full card count, independent of `searchTerm`, `tags`, and `status` — it
   lets the UI tell empty-deck (`totalCount == 0`) apart from no-results
   (`cards.isEmpty && totalCount > 0`).
+- `dueCount` (WP-D1) is the deck's **due** card total over the **full deck** (independent of
+  `searchTerm`/`tags`/`status`), using the same `due` predicate as `status` (active, F13
+  suspended/buried exclusion, `due_at <= now`). Rendered as the `{m} due` overline badge. Decision
+  row C42.
 - A missing/deleted deck yields `NotFoundFailure`.
 
 **Errors:** `NotFoundFailure`, `StorageFailure`.

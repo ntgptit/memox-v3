@@ -29,7 +29,9 @@ status: contract
 > `deck_repository_impl.dart`. Implemented: `createDeck`, `renameDeck`, `reorderDecks`, `moveDeck`,
 > `deleteDeck` (WBS 2.9.1 — deck-row delete cascades to flashcards + `flashcard_progress` +
 > `flashcard_tags` via the schema FK chain, schema v3; reverts the source folder to `unlocked` when
-> it loses its last deck; study attempt/session cascade is added with WBS 4.x), backed by `DeckDao`
+> it loses its last deck; study attempt/session cascade is added with WBS 4.x), and the read path
+> `getDeckMoveTargets` (WBS 2.19.2 — every folder annotated for the deck §folder-picker; see
+> `docs/contracts/usecase-contracts/deck.md` §GetDeckMoveTargetsUseCase), backed by `DeckDao`
 > (`lib/data/datasources/local/daos/deck_dao.dart`) and `DeckMapper`. The abstract `DeckRepository`
 > surface below is the **target** read/write contract; the read streams and counts
 > (`watchDeckCounts`) are deferred until the recursive count read model ships (WBS 3.7.x).

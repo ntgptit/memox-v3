@@ -45,3 +45,15 @@ class FlashcardSearchActive extends _$FlashcardSearchActive {
 
   void deactivate() => state = false;
 }
+
+/// Whether one flashcard-list screen is in **reorder mode** (deck overflow →
+/// Reorder cards). Keyed by [deckId]. WBS 2.14.2.
+@riverpod
+class FlashcardReorderActive extends _$FlashcardReorderActive {
+  @override
+  bool build(String deckId) => false;
+
+  void enter() => state = true;
+
+  void exit() => state = false;
+}

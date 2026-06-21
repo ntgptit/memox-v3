@@ -27,8 +27,11 @@ update the files `mx_bottom_sheet.dart`, `mx_action_sheet_list.dart`,
   the binary/destructive confirm used by §delete-confirm callers.
 - §item-context and §folder-picker are realized for Library folder rows as feature-local sheets
   (`lib/presentation/features/folders/widgets/library_folder_actions_sheet.dart`,
-  `folder_move_picker_sheet.dart`) composed over `showMxBottomSheet`. A shared `MxActionSheetList` /
-  `MxDestinationPickerSheet` extraction remains **Target** (promote when a second caller needs it).
+  `folder_move_picker_sheet.dart`, `deck_actions_sheet.dart`, `deck_move_picker_sheet.dart`) and for
+  the Flashcard-list deck kebab (`lib/presentation/features/decks/widgets/flashcard_deck_overflow_sheet.dart`
+  — Reorder cards / Delete deck, WBS 2.14.2) composed over `showMxBottomSheet`. A shared
+  `MxActionSheetList` / `MxDestinationPickerSheet` extraction remains **Target** (promote when the
+  pattern stabilises across these callers).
 
 ## V1 implementation status (Prompt 28, 2026-06-01) — superseded by the drift correction above
 
@@ -477,6 +480,19 @@ picker.
 
 - Disabled rows greyed with reason.
 - Default selection = current parent.
+
+> **As-built (2026-06-21):** both the folder picker (`folder_move_picker_sheet.dart`,
+> `showFolderMovePicker`, WBS 2.4.2) and the deck picker (`deck_move_picker_sheet.dart`,
+> `showDeckMovePicker`, WBS 2.19.2) are feature-local `showMxBottomSheet` lists that are
+> **tap-to-select** (tapping a row performs the move), not the radio + Cancel/Move confirm
+> shown above. Blocked rows are disabled with a reason; the current parent shows a check and is
+> not selectable (a same-folder move is a no-op). The deck picker has **no Library-root row**
+> (a deck always belongs to a folder), and guards the dead-end case (no folder other than the
+> current parent can take the deck → a `deckMoveNoTargets` snackbar instead of an all-disabled
+> sheet). Two **deferred visual refinements** apply to **both** pickers together (neither carries
+> per-folder visual data today): (1) the radio + "Move here" confirm styling; (2) per-folder
+> tinted `FolderIconTile` icons instead of the generic `Icons.folder_outlined` leading — this
+> needs `icon`/`color` on `FolderMoveTarget`/`DeckMoveTarget` (and their read models).
 
 ---
 

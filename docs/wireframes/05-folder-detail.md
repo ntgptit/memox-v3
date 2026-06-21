@@ -26,12 +26,19 @@ source_specs:
 >   section overline (`{n} DECKS` / `{n} FOLDERS`) · grouped card of `DeckTile` /
 >   `LibraryFolderTile` rows with `MxDivider` hairlines · content-aware FAB (`Create deck` in
 >   decks-mode, `Create subfolder` in subfolders-mode, none when unlocked/empty).
+>   `DeckTile` shows `{n} cards · last {time} ago` (WBS 3.2.2/3.7.1, 2026-06-21 — `lastStudiedAt`
+>   = `MAX(study_session_items.answered_at)`, `relativeTimeFrom` compact buckets); the `{n} new`
+>   badge + progress bar in the §Components target row below are **Future** (not in the rebuilt
+>   mock — see `loop-deferred.md` 3.2.3 audit).
 > - **States**: decks · subfolders · empty-unlocked (hero with both create CTAs) · loading
 >   (skeleton) · error · search (mode toggle) · search-no-results. Goldens:
 >   `test/presentation/features/folders/folder_detail_test.dart`.
 > - **Actions**: create subfolder/deck; folder rename/move/delete (shared `runFolderActions`,
->   kebab opens the viewed folder's sheet); deck rename/delete (`runDeckActions`). Deck **move**
->   and folder/deck **reorder** are deferred (WBS 2.19.2 / 2.5.2 / 2.10.2).
+>   kebab opens the viewed folder's sheet); deck rename/**move**/delete (`runDeckActions`). Deck
+>   move is built (WBS 2.19.2, 2026-06-21): the deck sheet's Move row → `showDeckMovePicker`
+>   (decks-allowing folders, blocked rows disabled) → `MoveDeckUseCase`. Folder/deck **reorder**
+>   remain deferred (WBS 2.5.2 / 2.10.2). The deck picker reuses the tap-to-select folder-picker
+>   pattern (the kit's radio + "Move here" styling is a deferred refinement for both pickers).
 > - **Study entry points (Study folder / Today / Resume)** remain **Future — not built**.
 
 ## V1 verification status (2026-06-06)
@@ -43,9 +50,9 @@ overflow rename/move/delete actions) is Current. **Study routing is Current**:
 the summary's **Study new** / **Review due** CTAs route to the folder-scoped
 Study Entry gate (`EntryType.folder`, `StudyType.new`/`srs_review`). The
 remaining **study layer** (mastery source of truth, resume banner) is **not
-built** and is Future here. Per-deck last-studied metadata and compact progress bars are
-Current because they are derived from the existing deck read model, not the
-study UI.
+built** and is Future here. Per-deck **last-studied** metadata is **Current (WP-FD9** —
+`MAX(study_session_items.answered_at)` read-time per deck). The compact **progress bar** /
+`{n} new` badge are **Future** (not in the rebuilt mock — see `loop-deferred.md` 3.2.3 audit).
 
 > Drift correction (2026-06-06): earlier revisions of this file described a
 > `FolderHeroCard` (`folder_hero_card.dart`), `FolderSectionTitle`
@@ -235,7 +242,7 @@ overflow actions (rename / move / delete). Folder-level Today routing and the Re
 | Breadcrumb path                                                 | derived from parent chain                                                                                            | follows folder detail                                     |
 | Child folders (when mode=subfolders)                            | `folders WHERE parent_id = :folderId ORDER BY sort_order`                                                            | stream                                                    |
 | Child decks (when mode=decks)                                   | `decks WHERE folder_id = :folderId ORDER BY sort_order`                                                              | stream                                                    |
-| Deck last-studied aggregate                                     | `MAX(flashcard_progress.last_studied_at)` per deck                                                                    | follows the children stream                               |
+| Deck last-studied aggregate                                     | **Current (WP-FD9).** `MAX(study_session_items.answered_at)` per deck (correlated subquery in `folderDeckSummaries`) → `DeckSummary.lastStudiedAt`, shown as `· last {time} ago`. (Read-time computation — no persistent `flashcard_progress.last_studied_at` column.) | follows the children stream                               |
 | Folder-scope card total (summary line)                          | **Current.** Summed from the loaded `decks[]` / `subfolders[]` (`cardCount`)                                         | follows the children stream                               |
 | Folder-scope due total (summary line)                           | **Current.** Summed from the loaded `decks[]` / `subfolders[]` (`dueCount`)                                          | follows the children stream                               |
 | Recursive count / resumable session for folder-level study CTAs | **Future.** Study layer not built; no `GetFolderStudyEntryUseCase` exists                                            | n/a                                                       |

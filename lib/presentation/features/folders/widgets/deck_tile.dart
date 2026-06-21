@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
+import 'package:memox/core/util/relative_time.dart';
 import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/widgets/folder_icon_tile.dart';
@@ -9,14 +10,15 @@ import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 
 /// A deck row inside the Folder-detail grouped list (mock `04 · decks`): an
-/// accent-tinted deck tile, the deck name, a `{n} cards` digest, an optional due
-/// badge, and a trailing chevron. A tap opens the deck's flashcard list; a
-/// long-press opens the deck action sheet. WBS 3.2.2.
+/// accent-tinted deck tile, the deck name, a `{n} cards · last {time} ago`
+/// digest, an optional due badge, and a trailing chevron. A tap opens the deck's
+/// flashcard list; a long-press opens the deck action sheet. WBS 3.2.2.
 class DeckTile extends StatelessWidget {
   const DeckTile({
     required this.summary,
     required this.onTap,
     required this.onActions,
+    this.now,
     super.key,
   });
 
@@ -28,6 +30,29 @@ class DeckTile extends StatelessWidget {
 
   /// Long-press — opens the deck overflow action sheet.
   final VoidCallback onActions;
+
+  /// Reference time for the relative `last studied` label. Defaults to
+  /// `DateTime.now()`; injected by tests/goldens for determinism.
+  final DateTime? now;
+
+  /// `{n} cards`, plus `· {last studied}` when the deck has been studied.
+  String _metaLine(AppLocalizations l10n) {
+    final String cards = l10n.folderMetaCards(summary.cardCount);
+    final DateTime? last = summary.lastStudiedAt;
+    if (last == null) return cards;
+    return '$cards · ${_lastStudiedLabel(l10n, last, now ?? DateTime.now())}';
+  }
+
+  String _lastStudiedLabel(AppLocalizations l10n, DateTime last, DateTime ref) {
+    final RelativeTime rel = relativeTimeFrom(last, ref);
+    return switch (rel.unit) {
+      RelativeTimeUnit.justNow => l10n.deckLastStudiedJustNow,
+      RelativeTimeUnit.minutes => l10n.deckLastStudiedMinutes(rel.count),
+      RelativeTimeUnit.hours => l10n.deckLastStudiedHours(rel.count),
+      RelativeTimeUnit.days => l10n.deckLastStudiedDays(rel.count),
+      RelativeTimeUnit.weeks => l10n.deckLastStudiedWeeks(rel.count),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +81,7 @@ class DeckTile extends StatelessWidget {
                   ),
                   const SizedBox(height: MxSpacing.space1),
                   MxText(
-                    l10n.folderMetaCards(summary.cardCount),
+                    _metaLine(l10n),
                     role: MxTextRole.bodySmall,
                     color: colors.textSecondary,
                     maxLines: 1,

@@ -468,4 +468,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortModeNewest => 'Newest';
+
+  @override
+  String get deckActionMove => 'Move to folder';
+
+  @override
+  String get deckMoveTitle => 'Move to folder';
+
+  @override
+  String get deckMoveBlockSubfolders => 'This folder holds subfolders';
+
+  @override
+  String get deckMovedSnack => 'Deck moved';
+
+  @override
+  String get deckMoveNoTargets => 'No other folder can hold this deck yet.';
+
+  @override
+  String get deckLastStudiedJustNow => 'just now';
+
+  @override
+  String deckLastStudiedMinutes(int count) {
+    return 'last ${count}m ago';
+  }
+
+  @override
+  String deckLastStudiedHours(int count) {
+    return 'last ${count}h ago';
+  }
+
+  @override
+  String deckLastStudiedDays(int count) {
+    return 'last ${count}d ago';
+  }
+
+  @override
+  String deckLastStudiedWeeks(int count) {
+    return 'last ${count}w ago';
+  }
+
+  @override
+  String get commonDone => 'Done';
+
+  @override
+  String get flashcardReorderCardsAction => 'Reorder cards';
+
+  @override
+  String flashcardReorderTitle(String deck) {
+    return 'Reorder · $deck';
+  }
+
+  @override
+  String get flashcardReorderHint => 'Drag the handles to reorder cards.';
+
+  @override
+  String flashcardReorderCountHeader(int count) {
+    return '$count cards · drag to reorder';
+  }
 }

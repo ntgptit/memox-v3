@@ -7,15 +7,21 @@ part 'deck_summary.freezed.dart';
 ///
 /// Counts come from the database source of truth, never the widget
 /// (`docs/business/deck/deck-management.md`):
-/// - [cardCount] — flashcards in the deck (includes suspended/buried until those
-///   exclusions ship — same trivially-satisfied F13 note as `FolderSummary`).
+/// - [cardCount] — flashcards in the deck; **includes** suspended and buried
+///   cards (decision row F13), same as `FolderSummary`.
 /// - [dueCount] — scheduled-and-due cards (`due_at IS NOT NULL AND due_at <=
-///   now`); NEW cards (`due_at IS NULL`) are not due.
+///   now`); NEW cards (`due_at IS NULL`) are not due, and **suspended or
+///   currently-buried cards are excluded** (F13) via `folderDeckSummaries`.
+/// - [lastStudiedAt] — the most recent terminal answer across the deck's cards
+///   (`MAX(study_session_items.answered_at)`); `null` when the deck was never
+///   studied. The Folder-detail deck row shows it as `· last {time} ago` (mock
+///   `04`).
 @freezed
 sealed class DeckSummary with _$DeckSummary {
   const factory DeckSummary({
     required Deck deck,
     required int cardCount,
     required int dueCount,
+    DateTime? lastStudiedAt,
   }) = _DeckSummary;
 }

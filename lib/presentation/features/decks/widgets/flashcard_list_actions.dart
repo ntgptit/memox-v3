@@ -7,7 +7,9 @@ import 'package:memox/domain/types/ids.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/controllers/flashcard_action_controller.dart';
 import 'package:memox/presentation/features/decks/flashcard_failure_message.dart';
+import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
 import 'package:memox/presentation/features/decks/widgets/flashcard_card_dialog.dart';
+import 'package:memox/presentation/features/decks/widgets/flashcard_deck_overflow_sheet.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/feedback/mx_snackbar.dart';
 
@@ -55,6 +57,48 @@ Future<void> runEditCard(
       .update(flashcardId: card.id, front: draft.front, back: draft.back);
   if (!context.mounted) return;
   _report(context, result.failure, success);
+}
+
+/// Deck overflow (kebab) sheet: Reorder cards → enter reorder mode; Delete deck
+/// → confirm + delete + pop. Returns `true` only when the deck was deleted (so
+/// the caller can pop). WBS 2.14.2.
+Future<bool> runDeckOverflow(
+  BuildContext context,
+  WidgetRef ref,
+  DeckId deckId,
+  int cardCount,
+) async {
+  final DeckOverflowAction? action = await showDeckOverflowSheet(context);
+  if (action == null) return false;
+  if (!context.mounted) return false;
+  switch (action) {
+    case DeckOverflowAction.reorder:
+      ref.read(flashcardReorderActiveProvider(deckId).notifier).enter();
+      return false;
+    case DeckOverflowAction.deleteDeck:
+      return runDeleteDeck(context, ref, deckId, cardCount);
+  }
+}
+
+/// Persist a card reorder after a drag in reorder mode (full post-drag id list).
+Future<void> runReorderCards(
+  BuildContext context,
+  WidgetRef ref,
+  DeckId deckId,
+  List<FlashcardId> orderedIds,
+) async {
+  final Result<void> result = await ref
+      .read(flashcardActionControllerProvider.notifier)
+      .reorder(deckId: deckId, orderedIds: orderedIds);
+  if (!context.mounted) return;
+  final Failure? failure = result.failure;
+  if (failure != null) {
+    showMxSnackbar(
+      context,
+      message: flashcardFailureMessage(AppLocalizations.of(context), failure),
+      isError: true,
+    );
+  }
 }
 
 /// Delete-card flow: confirm, delete, report.

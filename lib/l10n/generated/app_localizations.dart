@@ -907,6 +907,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Newest'**
   String get sortModeNewest;
+
+  /// Deck action-sheet row: move the deck to another folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to folder'**
+  String get deckActionMove;
+
+  /// Title of the move-deck destination picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to folder'**
+  String get deckMoveTitle;
+
+  /// Deck move picker: blocked because the destination holds subfolders and cannot take a deck.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder holds subfolders'**
+  String get deckMoveBlockSubfolders;
+
+  /// Snackbar after a successful deck move.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck moved'**
+  String get deckMovedSnack;
+
+  /// Snackbar when there is no other folder a deck can move into.
+  ///
+  /// In en, this message translates to:
+  /// **'No other folder can hold this deck yet.'**
+  String get deckMoveNoTargets;
+
+  /// Deck row: studied less than a minute ago (reads as '{n} cards · just now').
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get deckLastStudiedJustNow;
+
+  /// Deck row: last studied n minutes ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}m ago'**
+  String deckLastStudiedMinutes(int count);
+
+  /// Deck row: last studied n hours ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}h ago'**
+  String deckLastStudiedHours(int count);
+
+  /// Deck row: last studied n days ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}d ago'**
+  String deckLastStudiedDays(int count);
+
+  /// Deck row: last studied n weeks ago (compact).
+  ///
+  /// In en, this message translates to:
+  /// **'last {count}w ago'**
+  String deckLastStudiedWeeks(int count);
+
+  /// Generic done/confirm action that exits a mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get commonDone;
+
+  /// Deck overflow sheet: enter card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder cards'**
+  String get flashcardReorderCardsAction;
+
+  /// App-bar title in card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder · {deck}'**
+  String flashcardReorderTitle(String deck);
+
+  /// Instruction shown above the list in card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the handles to reorder cards.'**
+  String get flashcardReorderHint;
+
+  /// Count overline in card reorder mode.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cards · drag to reorder'**
+  String flashcardReorderCountHeader(int count);
 }
 
 class _AppLocalizationsDelegate

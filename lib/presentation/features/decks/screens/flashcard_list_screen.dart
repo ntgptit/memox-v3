@@ -14,8 +14,10 @@ import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/navigation/library_breadcrumb.dart';
 import 'package:memox/presentation/shared/sort/content_sort_sheet.dart';
 import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
+import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_breadcrumb.dart';
 
@@ -38,6 +40,7 @@ class FlashcardListScreen extends ConsumerWidget {
     // widget cannot own the app-bar/breadcrumb decisions.
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool searching = ref.watch(flashcardSearchActiveProvider(deckId));
+    final bool reordering = ref.watch(flashcardReorderActiveProvider(deckId));
     final AsyncValue<Result<FlashcardListDetail>> async = ref.watch(
       flashcardListStreamProvider(deckId),
     );
@@ -60,11 +63,35 @@ class FlashcardListScreen extends ConsumerWidget {
     // On a successful deck delete the watch stream emits a NotFound result; the
     // `ref.listen` above performs the single pop. We do not pop here too (that
     // would be a redundant second pop for the same event).
-    Future<void> deleteDeck() =>
-        runDeleteDeck(context, ref, deckId, detail?.totalCount ?? 0);
+    void exitReorder() =>
+        ref.read(flashcardReorderActiveProvider(deckId).notifier).exit();
 
     return MxScaffold(
-      appBar: searching
+      appBar: reordering
+          ? MxAppBar(
+              automaticallyImplyLeading: false,
+              leading: MxIconButton(
+                icon: Icons.close,
+                tooltip: l10n.commonCancel,
+                onPressed: exitReorder,
+              ),
+              title: l10n.flashcardReorderTitle(detail?.deck.name ?? ''),
+              actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: MxSpacing.space3,
+                    vertical: MxSpacing.space2,
+                  ),
+                  child: MxPrimaryButton(
+                    label: l10n.commonDone,
+                    icon: Icons.check,
+                    size: MxButtonSize.xsmall,
+                    onPressed: exitReorder,
+                  ),
+                ),
+              ],
+            )
+          : searching
           ? FlashcardListSearchAppBar(deckId: deckId)
           : MxAppBar(
               title: detail?.deck.name ?? '',
@@ -85,11 +112,16 @@ class FlashcardListScreen extends ConsumerWidget {
                   MxIconButton(
                     icon: Icons.more_vert,
                     tooltip: l10n.deckOverflowTooltip,
-                    onPressed: deleteDeck,
+                    onPressed: () => runDeckOverflow(
+                      context,
+                      ref,
+                      deckId,
+                      detail.totalCount,
+                    ),
                   ),
               ],
             ),
-      floatingActionButton: searching
+      floatingActionButton: searching || reordering
           ? null
           : MxFab(
               icon: Icons.add,
@@ -100,8 +132,8 @@ class FlashcardListScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           // Ancestry trail under the app bar: Library › folders › deck (the deck
-          // is the current leaf). Hidden in search mode and until loaded.
-          if (!searching && detail != null)
+          // is the current leaf). Hidden in search/reorder mode and until loaded.
+          if (!searching && !reordering && detail != null)
             Padding(
               padding: const EdgeInsets.only(bottom: MxSpacing.space2),
               child: MxBreadcrumb(

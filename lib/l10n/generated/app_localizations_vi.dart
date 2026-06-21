@@ -453,4 +453,62 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get sortModeNewest => 'Mới nhất';
+
+  @override
+  String get deckActionMove => 'Chuyển tới thư mục';
+
+  @override
+  String get deckMoveTitle => 'Chuyển tới thư mục';
+
+  @override
+  String get deckMoveBlockSubfolders => 'Thư mục này đang chứa thư mục con';
+
+  @override
+  String get deckMovedSnack => 'Đã chuyển bộ thẻ';
+
+  @override
+  String get deckMoveNoTargets =>
+      'Chưa có thư mục nào khác có thể chứa bộ thẻ này.';
+
+  @override
+  String get deckLastStudiedJustNow => 'vừa xong';
+
+  @override
+  String deckLastStudiedMinutes(int count) {
+    return '$count phút trước';
+  }
+
+  @override
+  String deckLastStudiedHours(int count) {
+    return '$count giờ trước';
+  }
+
+  @override
+  String deckLastStudiedDays(int count) {
+    return '$count ngày trước';
+  }
+
+  @override
+  String deckLastStudiedWeeks(int count) {
+    return '$count tuần trước';
+  }
+
+  @override
+  String get commonDone => 'Xong';
+
+  @override
+  String get flashcardReorderCardsAction => 'Sắp xếp lại thẻ';
+
+  @override
+  String flashcardReorderTitle(String deck) {
+    return 'Sắp xếp · $deck';
+  }
+
+  @override
+  String get flashcardReorderHint => 'Kéo tay cầm để sắp xếp lại thẻ.';
+
+  @override
+  String flashcardReorderCountHeader(int count) {
+    return '$count thẻ · kéo để sắp xếp';
+  }
 }

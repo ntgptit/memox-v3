@@ -55,6 +55,8 @@ final FlashcardListDetail _loaded = _detail(<Flashcard>[
   _card('c3', '本', 'book'),
 ]);
 
+final FlashcardListDetail _loadedDue = _loaded.copyWith(dueCount: 23);
+
 Result<FlashcardListDetail> _ok(FlashcardListDetail d) =>
     (failure: null, data: d);
 
@@ -106,6 +108,76 @@ void main() {
       expect(find.byIcon(Icons.swap_vert), findsOneWidget);
     });
 
+    testWidgets('overline shows the deck due badge when dueCount > 0', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loadedDue));
+      await tester.pumpAndSettle();
+      expect(find.text('23 due'), findsOneWidget); // beside the count overline
+    });
+
+    testWidgets('no due badge when nothing is due', (tester) async {
+      await _pump(tester, _value(_loaded)); // dueCount defaults to 0
+      await tester.pumpAndSettle();
+      expect(find.textContaining(' due'), findsNothing);
+    });
+
+    testWidgets('deck overflow → Reorder cards enters reorder mode (2.14.2)', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      // Kebab opens the overflow sheet with Reorder cards + Delete deck.
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      expect(find.text('Reorder cards'), findsOneWidget);
+      expect(find.text('Delete deck'), findsOneWidget);
+
+      // Entering reorder mode swaps to the reorder list with drag handles + Done.
+      await tester.tap(find.text('Reorder cards'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsOneWidget,
+      );
+      expect(find.byIcon(Icons.drag_indicator), findsNWidgets(3));
+      expect(find.byIcon(Icons.close), findsOneWidget); // X (cancel)
+      expect(find.text('Done'), findsOneWidget); // primary pill
+      expect(find.text('Drag the handles to reorder cards.'), findsOneWidget);
+
+      // Done exits reorder mode back to the normal list.
+      await tester.tap(find.text('Done'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('reorder mode X cancels back to the normal list', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Reorder cards'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_reorder_list')),
+        findsNothing,
+      );
+      expect(find.byType(MxFab), findsOneWidget); // FAB restored
+    });
+
     testWidgets('empty deck shows the add-card CTA', (tester) async {
       await _pump(tester, _value(_detail(const <Flashcard>[])));
       await tester.pumpAndSettle();
@@ -118,12 +190,31 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(MxErrorState), findsOneWidget);
     });
+
+    testWidgets('long-press a card opens the delete confirm (WBS 2.13.2)', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.text('日本'));
+      await tester.pumpAndSettle();
+      // The destructive confirm dialog is shown before any deletion.
+      expect(find.text('Delete this card?'), findsOneWidget);
+
+      // Cancelling dismisses it without deleting (the card stays).
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete this card?'), findsNothing);
+      expect(find.text('日本'), findsOneWidget);
+    });
   });
 
   group('FlashcardListScreen goldens', () {
     final Map<String, Stream<Result<FlashcardListDetail>> Function()> cases =
         <String, Stream<Result<FlashcardListDetail>> Function()>{
           'loaded': () => _value(_loaded),
+          'loaded-due': () => _value(_loadedDue),
           'empty': () => _value(_detail(const <Flashcard>[])),
           'loading': _never,
           'error': _error,
@@ -170,6 +261,29 @@ void main() {
           find.byType(FlashcardListScreen),
           matchesGoldenFile(
             'goldens/flashcard_list_search-no-results__${brightness.name}.png',
+          ),
+        );
+      });
+    }
+
+    // Reorder mode (WBS 2.14.2): entered via the deck overflow → Reorder cards.
+    for (final Brightness brightness in Brightness.values) {
+      testWidgets('reorder — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          _value(_loaded),
+          brightness: brightness,
+          golden: true,
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.more_vert));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Reorder cards'));
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(FlashcardListScreen),
+          matchesGoldenFile(
+            'goldens/flashcard_list_reorder__${brightness.name}.png',
           ),
         );
       });

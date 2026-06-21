@@ -9,12 +9,14 @@ import 'package:memox/data/mappers/deck_mapper.dart';
 import 'package:memox/data/mappers/folder_mapper.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/models/deck_move_target.dart';
 import 'package:memox/domain/models/deck_summary.dart';
 import 'package:memox/domain/models/folder_detail.dart';
 import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
+import 'package:memox/domain/srs/srs_box.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
@@ -63,6 +65,8 @@ class FolderRepositoryImpl implements FolderRepository {
                   r.deckCount,
                   r.cardCount,
                   r.dueCount,
+                  r.newCount,
+                  r.avgBox,
                 ),
               )
               .toList(growable: false),
@@ -100,6 +104,8 @@ class FolderRepositoryImpl implements FolderRepository {
                 r.deckCount,
                 r.cardCount,
                 r.dueCount,
+                r.newCount,
+                r.avgBox,
               ),
             )
             .toList(growable: false),
@@ -109,6 +115,12 @@ class FolderRepositoryImpl implements FolderRepository {
                 deck: DeckMapper.fromRow(r.decks),
                 cardCount: r.cardCount,
                 dueCount: r.dueCount,
+                lastStudiedAt: r.lastStudiedAt == null
+                    ? null
+                    : DateTime.fromMillisecondsSinceEpoch(
+                        r.lastStudiedAt!,
+                        isUtc: true,
+                      ),
               ),
             )
             .toList(growable: false),
@@ -126,12 +138,17 @@ class FolderRepositoryImpl implements FolderRepository {
     int deckCount,
     int cardCount,
     int dueCount,
+    int newCount,
+    double? avgBox,
   ) => FolderSummary(
     folder: FolderMapper.fromRow(row),
     subfolderCount: subfolderCount,
     deckCount: deckCount,
     cardCount: cardCount,
     dueCount: dueCount,
+    newCount: newCount,
+    // Normalise the mean SRS box to 0..1; null when the subtree has no cards.
+    mastery: avgBox == null ? null : avgBox / SrsBox.max,
   );
 
   // ---- Mutations ----
@@ -441,6 +458,55 @@ class FolderRepositoryImpl implements FolderRepository {
       return _ok(<FolderMoveTarget>[root, ...folderTargets]);
     } catch (error) {
       return _fail<List<FolderMoveTarget>>(_storageRead(error));
+    }
+  }
+
+  @override
+  Future<Result<List<DeckMoveTarget>>> getDeckMoveTargets({
+    required DeckId deckId,
+  }) async {
+    try {
+      final DeckRow? deck = await _deckDao.findDeckById(deckId);
+      if (deck == null) {
+        return _fail<List<DeckMoveTarget>>(
+          const Failure.notFound(entity: 'deck'),
+        );
+      }
+      final FolderId currentParentId = deck.folderId;
+      final List<FolderRow> all = await _dao.listAllFolders();
+      final Map<String, FolderRow> byId = <String, FolderRow>{
+        for (final FolderRow r in all) r.id: r,
+      };
+
+      final List<DeckMoveTarget> targets =
+          all.map((FolderRow r) {
+            final ContentMode mode = FolderMapper.contentModeFromStorage(
+              r.contentMode,
+            );
+            // A deck can move to an unlocked or decks-mode folder; a
+            // subfolders-locked folder cannot hold a deck (mirrors
+            // `_deckParentGuard`). The current parent is always selectable.
+            final DeckMoveBlock? block =
+                (mode == ContentMode.subfolders && r.id != currentParentId)
+                ? DeckMoveBlock.lockedToSubfolders
+                : null;
+            return DeckMoveTarget(
+              id: r.id,
+              name: r.name,
+              breadcrumb: _breadcrumbNames(r, byId),
+              isCurrentParent: r.id == currentParentId,
+              block: block,
+            );
+          }).toList()..sort(
+            (DeckMoveTarget a, DeckMoveTarget b) => a.breadcrumb
+                .join(' ')
+                .toLowerCase()
+                .compareTo(b.breadcrumb.join(' ').toLowerCase()),
+          );
+
+      return _ok(targets);
+    } catch (error) {
+      return _fail<List<DeckMoveTarget>>(_storageRead(error));
     }
   }
 

@@ -335,6 +335,53 @@ void main() {
       expect(detail.breadcrumb, isNotEmpty);
       expect(detail.cards.length, 2);
       expect(detail.totalCount, 2);
+      expect(detail.dueCount, 0); // brand-new cards (due_at NULL) are not due
+    });
+
+    test('WP-D1: dueCount = active due cards (F13 exclusion), full-deck', () async {
+      final String deckId = await newDeck();
+      Future<String> card(String front) async => (await repo.createFlashcard(
+        deckId: deckId,
+        front: front,
+        back: 'b',
+      )).data!.id;
+      final String due = await card('due');
+      final String future = await card('future');
+      await card('new'); // due_at NULL → not due
+      final String suspended = await card('suspended');
+      final String buried = await card('buried');
+
+      // due_at=1 is always <= the incrementing clock → due; a far-future due_at
+      // is not due; the suspended card is excluded even though it is due.
+      await db.customStatement(
+        'UPDATE flashcard_progress SET due_at = 1 WHERE flashcard_id = ?',
+        <Object>[due],
+      );
+      await db.customStatement(
+        'UPDATE flashcard_progress SET due_at = 9999999999 WHERE flashcard_id = ?',
+        <Object>[future],
+      );
+      await db.customStatement(
+        'UPDATE flashcard_progress SET due_at = 1, is_suspended = 1 '
+        'WHERE flashcard_id = ?',
+        <Object>[suspended],
+      );
+      // Past-due but currently buried (buried_until far in the future) → excluded.
+      await db.customStatement(
+        'UPDATE flashcard_progress SET due_at = 1, buried_until = 9999999999 '
+        'WHERE flashcard_id = ?',
+        <Object>[buried],
+      );
+
+      final FlashcardListDetail detail =
+          (await repo.watchFlashcardList(deckId).first).data!;
+      expect(detail.totalCount, 5);
+      expect(detail.dueCount, 1); // only the active, past-due card
+      // Search must not change the full-deck due total.
+      final FlashcardListDetail searched =
+          (await repo.watchFlashcardList(deckId, searchTerm: 'due').first)
+              .data!;
+      expect(searched.dueCount, 1);
     });
 
     test(

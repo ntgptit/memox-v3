@@ -82,6 +82,21 @@ final FolderDetail _subfoldersMode = FolderDetail(
   dueCount: 31,
 );
 
+// A nested folder: East Asian (current, _id) sits under Languages (ancestor).
+final FolderDetail _nested = FolderDetail(
+  folder: _folder(_id, 'East Asian', ContentMode.decks),
+  breadcrumb: <Folder>[
+    _folder('parent', 'Languages', ContentMode.subfolders),
+    _folder(_id, 'East Asian', ContentMode.decks),
+  ],
+  subfolders: const <FolderSummary>[],
+  decks: <DeckSummary>[_deck('d1', 'Mandarin')],
+  deckCount: 1,
+  subtreeDeckCount: 1,
+  cardCount: 40,
+  dueCount: 0,
+);
+
 final FolderDetail _empty = FolderDetail(
   folder: _folder(_id, 'Languages', ContentMode.unlocked),
   breadcrumb: <Folder>[_folder(_id, 'Languages', ContentMode.unlocked)],
@@ -143,6 +158,19 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('East Asian'), findsOneWidget);
       expect(find.text('Romance'), findsOneWidget);
+    });
+
+    testWidgets('nested folder shows the multi-level ancestry breadcrumb', (
+      tester,
+    ) async {
+      // A nested folder (East Asian under Languages) → the docked trail must
+      // render Root › Languages › East Asian (WP-N1, object 3).
+      await _pump(tester, _value(_nested));
+      await tester.pumpAndSettle();
+      expect(find.text('Root'), findsOneWidget); // root crumb
+      expect(find.text('Languages'), findsOneWidget); // ancestor crumb
+      // The current folder appears both as the breadcrumb leaf and app-bar title.
+      expect(find.text('East Asian'), findsWidgets);
     });
 
     testWidgets('empty unlocked shows both create CTAs', (tester) async {
