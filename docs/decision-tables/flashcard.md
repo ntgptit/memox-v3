@@ -40,7 +40,7 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C27 | Edit editor delete | Delete confirmed from danger zone | Delete the card and pop to the deck list | C1 | TBD |
 | C28 | Edit load error | Flashcard detail fails to load | Show load error state with Back to deck / Retry | C1 | TBD |
 | C29 | Edit save failure | Update repository returns failure | Keep the draft open and show a save-failed banner | C1 | TBD |
-| C30 | Import CSV preview | Empty front or empty back | Surface a row-level validation message with the line number | C1 | TBD |
+| C30 | Import CSV preview | Empty front or empty back | Surface a row-level validation message with the line number (`missingFront`/`missingBack`); the row is excluded from committable rows | C1 | `test/domain/usecases/flashcard/deck_import_usecases_test.dart` |
 | C31 | Import CSV preview | Preview action on CSV text | Do not call repository create/insert/commit logic; keep deferred CTA disabled | C0+C1 | TBD |
 | C32 | Import CSV preview | Quoted CSV values | Parse quoted commas and escaped quotes correctly | C0+C1 | `test/domain/usecases/flashcard/deck_import_usecases_test.dart` |
 | C33 | Reorder cards | Full sibling list in same deck | Persist deterministic `sort_order` (list position) transactionally | C0+C1 | `test/data/repositories/flashcard_repository_impl_test.dart` (C33) |

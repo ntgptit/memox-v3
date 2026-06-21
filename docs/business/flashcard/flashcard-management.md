@@ -147,10 +147,13 @@ flowchart TD
 
 Triggered by:
 
-- Empty `front` after trim → "Line {n}: front is required."
-- Empty `back` after trim → "Line {n}: back is required."
-- Front length exceeds field max → "Line {n}: front exceeds {N} chars."
-- Back length exceeds field max → "Line {n}: back exceeds {N} chars."
+- Empty `front` after trim → "Line {n}: front is required." (`missingFront`, WBS 6.2.2)
+- Empty `back` after trim → "Line {n}: back is required." (`missingBack`, WBS 6.2.2)
+- Front length exceeds field max → "Line {n}: front exceeds {N} chars." (Future — no front/back field
+  maximum is defined or enforced anywhere in V1, including manual create; `frontTooLong` stays
+  reserved until a limit is introduced.)
+- Back length exceeds field max → "Line {n}: back exceeds {N} chars." (Future — see above;
+  `backTooLong` reserved.)
 - Tag invalid (empty after trim, or exceeds max length) → "Line {n}: invalid tag '{tag}'."
 - CSV format error (e.g., unparseable column count) → "Line {n}: row has {x} columns, expected
   {y}."

@@ -11,8 +11,10 @@ import 'package:memox/domain/types/import_row_issue_type.dart';
 /// maps to a trimmed [FlashcardImportRow] using the first two columns as
 /// front/back (extra columns are ignored — decision row C7); a record with fewer
 /// than two columns becomes a `malformedRow` [ImportValidationIssue] (excluded
-/// from `rows`). Per-row CONTENT validation (missing/too-long front/back) lands
-/// in WBS 6.2.2; the separator option (tab/colon/…) in WBS 6.9.1.
+/// from `rows`). Per-row CONTENT validation (WBS 6.2.2): front/back are required
+/// after trim — a row missing either is reported as `missingFront`/`missingBack`
+/// and excluded from `rows` (no max-length is enforced anywhere, so `*TooLong`
+/// stays reserved). The separator option (tab/colon/…) lands in WBS 6.9.1.
 /// See `docs/business/flashcard/flashcard-management.md` §Import,
 /// `docs/contracts/usecase-contracts/flashcard.md` §Import.
 class ParseDeckImportCsvUseCase {
@@ -64,11 +66,41 @@ class ParseDeckImportCsvUseCase {
         continue;
       }
 
+      // Per-row content validation (WBS 6.2.2): front/back are required after
+      // trim, mirroring manual card creation (no max-length is enforced anywhere,
+      // so `*TooLong` stays reserved). A row with any content issue is reported
+      // and excluded from the committable `rows` (decision row C30).
+      final String front = fields[0];
+      final String back = fields[1];
+      final List<ImportValidationIssue> rowIssues = <ImportValidationIssue>[];
+      if (front.isEmpty) {
+        rowIssues.add(
+          ImportValidationIssue(
+            kind: ImportRowIssueType.missingFront,
+            lineNumber: record.lineNumber,
+            message: 'Line ${record.lineNumber}: front is required.',
+          ),
+        );
+      }
+      if (back.isEmpty) {
+        rowIssues.add(
+          ImportValidationIssue(
+            kind: ImportRowIssueType.missingBack,
+            lineNumber: record.lineNumber,
+            message: 'Line ${record.lineNumber}: back is required.',
+          ),
+        );
+      }
+      if (rowIssues.isNotEmpty) {
+        issues.addAll(rowIssues);
+        continue;
+      }
+
       rows.add(
         FlashcardImportRow(
           lineNumber: record.lineNumber,
-          front: fields[0],
-          back: fields[1],
+          front: front,
+          back: back,
         ),
       );
     }

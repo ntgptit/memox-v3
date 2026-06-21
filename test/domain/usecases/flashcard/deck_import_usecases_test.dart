@@ -4,8 +4,9 @@ import 'package:memox/domain/types/import_row_issue_type.dart';
 import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
 
 void main() {
-  // ParseDeckImportCsvUseCase (WBS 6.2.1): RFC-4180 CSV parse → preview rows +
-  // malformedRow issues. Content validation (missing/too-long) is WBS 6.2.2.
+  // ParseDeckImportCsvUseCase (WBS 6.2.1 parse + 6.2.2 row validation): RFC-4180
+  // CSV parse → preview rows + malformedRow (structural) + missingFront/
+  // missingBack (content) issues.
   group('ParseDeckImportCsvUseCase', () {
     const ParseDeckImportCsvUseCase parse = ParseDeckImportCsvUseCase();
 
@@ -125,6 +126,42 @@ void main() {
       expect(preview.issues.single.kind, ImportRowIssueType.malformedRow);
       expect(preview.issues.single.lineNumber, 2);
       expect(preview.canCommit, isFalse, reason: 'issue blocks commit');
+    });
+
+    test(
+      'an empty front is a missingFront issue, row excluded (6.2.2/C30)',
+      () {
+        final FlashcardImportPreview preview = parse.call(rawCsv: 'a,b\n,back');
+
+        expect(preview.rows, hasLength(1), reason: 'only the valid row');
+        expect(preview.rows.single.front, 'a');
+        expect(preview.issues, hasLength(1));
+        expect(preview.issues.single.kind, ImportRowIssueType.missingFront);
+        expect(preview.issues.single.lineNumber, 2);
+        expect(preview.canCommit, isFalse);
+      },
+    );
+
+    test('an empty back is a missingBack issue (6.2.2/C30)', () {
+      final FlashcardImportPreview preview = parse.call(rawCsv: 'front,   ');
+
+      expect(preview.rows, isEmpty);
+      expect(preview.issues.single.kind, ImportRowIssueType.missingBack);
+      expect(preview.issues.single.lineNumber, 1);
+      expect(preview.canCommit, isFalse);
+    });
+
+    test('a row empty on both sides reports both issues', () {
+      // A bare separator → two empty columns (not a blank line) → both issues.
+      final FlashcardImportPreview preview = parse.call(rawCsv: ',');
+
+      expect(preview.rows, isEmpty);
+      expect(preview.issues, hasLength(2));
+      expect(preview.issues.map((i) => i.kind).toSet(), <ImportRowIssueType>{
+        ImportRowIssueType.missingFront,
+        ImportRowIssueType.missingBack,
+      });
+      expect(preview.issues.every((i) => i.lineNumber == 1), isTrue);
     });
 
     test('empty input yields an empty preview', () {
