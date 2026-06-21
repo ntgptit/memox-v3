@@ -31,17 +31,28 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 /// `pushReplacement`s to it ([StudyEntryOutcome.ready]) so the gate never stays
 /// in the back stack. WBS 4.1.2 / 4.2.2.
 ///
-/// WP-SR1a scope: `deck` / `folder` scopes (the `today` literal route + the
-/// `study_type` query param + the per-reason empty matrix are WP-SR1b). An
-/// unparseable `entryType` falls through to the error surface.
+/// Scope: `deck` / `folder` (via `:entryType/:entryRefId`) + `today` (the
+/// literal `today` route, null ref id) — WP-SR1b-1. The `?study_type=` query
+/// overrides the entry default (WP-SR1b-1); an unparseable `entryType` or an
+/// unrecognized `study_type` falls through to the error surface. The per-reason
+/// empty matrix (replacing the generic empty surface) is WP-SR1b-2.
 class StudyEntryScreen extends ConsumerWidget {
-  const StudyEntryScreen({required this.entryType, this.entryRefId, super.key});
+  const StudyEntryScreen({
+    required this.entryType,
+    this.entryRefId,
+    this.studyTypeRaw,
+    super.key,
+  });
 
   /// Raw `:entryType` path segment (`deck` / `folder` / `today`).
   final String entryType;
 
   /// Raw `:entryRefId` path segment (deck/folder id); `null` for `today`.
   final String? entryRefId;
+
+  /// Raw `?study_type=` query value (`StudyType.storageValue`); `null` → the
+  /// entry default, an unrecognized value → the error surface.
+  final String? studyTypeRaw;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -99,12 +110,20 @@ class StudyEntryScreen extends ConsumerWidget {
     // `today` must not carry a ref id; `deck`/`folder` require one.
     if (isToday && refId != null) return null;
     if (!isToday && (refId == null || refId.isEmpty)) return null;
-    // WP-SR1a default: deck/folder → new learning, today → due review (the
-    // `study_type` query override is WP-SR1b).
-    final StudyType studyType = isToday
-        ? StudyType.srsReview
-        : StudyType.newCards;
+    final StudyType? studyType = _resolveStudyType(isToday: isToday);
+    if (studyType == null) return null; // unrecognized `study_type` → error
     return StudyScope(entryType: type, entryRefId: refId, studyType: studyType);
+  }
+
+  /// The `?study_type=` override when present and valid, else the entry default
+  /// (`deck`/`folder` → new, `today` → due review). Returns `null` for an
+  /// unrecognized token so the gate fails fast into the error surface.
+  StudyType? _resolveStudyType({required bool isToday}) {
+    final String? raw = studyTypeRaw;
+    if (raw == null || raw.isEmpty) {
+      return isToday ? StudyType.srsReview : StudyType.newCards;
+    }
+    return StudyType.fromStorage(raw);
   }
 
   void _openSession(BuildContext context, String sessionId) =>
@@ -143,7 +162,7 @@ class StudyEntryScreen extends ConsumerWidget {
 
   /// WP-SR1a renders a single generic empty surface for every
   /// `StudyScopeEmptyReason`; the per-reason matrix (deck-no-cards, all-done,
-  /// all-buried, …) with its dedicated CTAs is WP-SR1b. The gate still **blocks**
+  /// all-buried, …) with its dedicated CTAs is WP-SR1b-2. The gate still **blocks**
   /// the zero-card session here — only the copy is generic for now.
   Widget _blockedBody(BuildContext context, AppLocalizations l10n) =>
       MxEmptyState(

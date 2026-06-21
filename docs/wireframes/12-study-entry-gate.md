@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-30
+last_updated: 2026-06-22
 route:
   - /library/study/:entryType/:entryRefId
   - /library/study/today
@@ -24,9 +24,11 @@ Most users never see this screen for more than a moment — it's a gate.
 > zero-eligible-card scope (the per-reason matrix below is **WP-SR1b**), auto-creates a session
 > for an eligible scope and `pushReplacement`s to `/library/study/session/:sessionId`, and shows
 > an explicit **Resume / Start over / Back** choice when a resumable session exists (no silent
-> resume). **Not yet built:** the `today` literal route, the `?study_type=` / `?mode=` query
-> parsing (WP-SR1b), the 8-variant empty matrix (WP-SR1b), and the real session/result screens —
-> `/library/study/session/:sessionId` is a **placeholder shell** (WP-SR2..SR5).
+> resume). **WP-SR1b-1 adds** the `today` literal route (`/library/study/today`) and the
+> `?study_type=` override (`StudyType.fromStorage`; unrecognized → error). **Not yet built:** the
+> `?mode=` query, the 8-variant empty matrix (WP-SR1b-2), the start-over confirm dialog, and the
+> real session/result screens — `/library/study/session/:sessionId` is a **placeholder shell**
+> (WP-SR2..SR5).
 
 ## Behavior tree
 
@@ -188,7 +190,7 @@ When scope is empty, this screen renders the appropriate empty state from
 |----------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `entryType` (path param)   | URL    | one of `deck`, `folder`, `today`, `tag`. `today` is a literal route segment with no `entryRefId`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `entryRefId` (path param)  | URL    | required when entryType ∈ (`deck`, `folder`, `tag`); absent for `today`. For `tag`: sorted lowercased comma-joined names.                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `study_type` (query param) | URL    | optional; values are `StudyType.storageValue` (`new` / `srs_review`). When absent the entry default applies (`deck`/`folder` → `new`, `today` → `srs_review`). **WP-SR1b (not yet parsed):** WP-SR1a applies only the entry default; honoring the query override (via `RoutePaths.studyTypeQueryParam`, the key constant which already exists) + the Folder/Flashcard **Today** CTAs that would set it remain Future. |
+| `study_type` (query param) | URL    | optional; values are `StudyType.storageValue` (`new_cards` / `srs_review` — the canonical persisted tokens, `docs/contracts/types-catalog.md` §StudyType). When absent the entry default applies (`deck`/`folder` → `new_cards`, `today` → `srs_review`). **WP-SR1b-1 (Current):** the gate parses the override via `RouteParams.studyTypeQueryParam` → `StudyType.fromStorage`; an unrecognized value surfaces the gate error state. The Folder/Flashcard **Today** CTAs that would set it remain Future. |
 | `mode` (query param)       | URL    | optional single `StudyMode.storageValue`; selects a single-mode flow.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ## Data to load
@@ -227,7 +229,7 @@ When scope is empty, this screen renders the appropriate empty state from
 |------------------------------|---------|--------------------------------------------------------------------|
 | Back from any state          | Back    | Pop.                                                               |
 | Tap "Add flashcards"         | Tap     | Push flashcard create.                                             |
-| Tap "Study new instead"      | Tap     | Re-enter gate with `study_type = new` (route param flag or query). |
+| Tap "Study new instead"      | Tap     | Re-enter gate with `?study_type=new_cards` (the canonical token). |
 | Tap "Create your first deck" | Tap     | Push deck create from Library FAB sheet.                           |
 | Tap "View suspended cards"   | Tap     | Push flashcard list filtered to suspended.                         |
 | Tap "Adjust tags"            | Tap     | Open tag picker bottom-sheet pre-filled with current selection.    |

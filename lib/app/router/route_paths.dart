@@ -45,9 +45,13 @@ abstract final class RoutePaths {
   /// `docs/wireframes/12-study-entry-gate.md` + `13-study-session-review.md`.
   static const String study = '$library/study';
 
-  /// The study entry gate. `:entryType` ∈ `deck`/`folder`/`today`; `:entryRefId`
+  /// The study entry gate. `:entryType` ∈ `deck`/`folder`; `:entryRefId`
   /// is the deck/folder id. WBS 4.1.2 / 4.2.2.
   static const String studyEntry = '$study/:entryType/:entryRefId';
+
+  /// The global `today` study entry — a literal route (no `:entryRefId`); a
+  /// `today` scope studies due cards across all decks. WBS 4.1.2.
+  static const String studyToday = '$study/today';
 
   /// The active study session. `:sessionId` is the persisted session id. Listed
   /// before [studyEntry] so the literal `session` segment wins over `:entryType`.
@@ -80,8 +84,9 @@ abstract final class RouteParams {
 
   /// Optional `study_type` query param (`StudyType.storageValue`) on the entry
   /// gate; absent → the entry default (`deck`/`folder` → new, `today` → review).
-  /// The key is defined now; the gate parses/honors it in **WP-SR1b** (WP-SR1a
-  /// applies only the entry default).
+  /// Parsed by the gate via `StudyType.fromStorage` (WP-SR1b-1); an unrecognized
+  /// value surfaces the gate error state. The CTA surfaces that emit it stay
+  /// Future.
   static const String studyTypeQueryParam = 'study_type';
 }
 

@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
@@ -21,12 +22,24 @@ List<RouteBase> studyRoutes() => <RouteBase>[
       sessionId: state.pathParameters[RouteParams.sessionId] ?? '',
     ),
   ),
+  // Global `today` entry — literal route, no `:entryRefId` (a `today` scope has
+  // a null ref id). Distinct segment count from the `:entryType/:entryRefId`
+  // gate, so there is no ambiguity.
+  GoRoute(
+    path: RoutePaths.studyToday,
+    name: RouteNames.studyToday,
+    builder: (context, state) => StudyEntryScreen(
+      entryType: EntryType.today.name,
+      studyTypeRaw: state.uri.queryParameters[RouteParams.studyTypeQueryParam],
+    ),
+  ),
   GoRoute(
     path: RoutePaths.studyEntry,
     name: RouteNames.studyEntry,
     builder: (context, state) => StudyEntryScreen(
       entryType: state.pathParameters[RouteParams.entryType] ?? '',
       entryRefId: state.pathParameters[RouteParams.entryRefId],
+      studyTypeRaw: state.uri.queryParameters[RouteParams.studyTypeQueryParam],
     ),
   ),
 ];

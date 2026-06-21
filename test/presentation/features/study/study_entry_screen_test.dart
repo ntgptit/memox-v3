@@ -28,6 +28,20 @@ const StudyScope _deckScope = StudyScope(
   studyType: StudyType.newCards,
 );
 
+/// Deck scope with the `?study_type=srs_review` override applied.
+const StudyScope _deckReviewScope = StudyScope(
+  entryType: EntryType.deck,
+  entryRefId: _deckId,
+  studyType: StudyType.srsReview,
+);
+
+/// Global `today` scope (no ref id, due review).
+const StudyScope _todayScope = StudyScope(
+  entryType: EntryType.today,
+  entryRefId: null,
+  studyType: StudyType.srsReview,
+);
+
 StudySession _session() => StudySession(
   id: 's1',
   scope: _deckScope,
@@ -59,6 +73,8 @@ Future<void> _pumpScreen(
   required Future<StudyEntryOutcome> Function() outcome,
   String entryType = 'deck',
   String? entryRefId = _deckId,
+  String? studyTypeRaw,
+  StudyScope overrideScope = _deckScope,
   Brightness brightness = Brightness.light,
   bool golden = false,
   VoidCallback? onStartOver,
@@ -71,7 +87,7 @@ Future<void> _pumpScreen(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        studyEntryControllerProvider(_deckScope).overrideWith(
+        studyEntryControllerProvider(overrideScope).overrideWith(
           () => _FakeController(outcome, onStartOver: onStartOver),
         ),
       ],
@@ -80,7 +96,11 @@ Future<void> _pumpScreen(
         theme: brightness == Brightness.light ? MxTheme.light : MxTheme.dark,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: StudyEntryScreen(entryType: entryType, entryRefId: entryRefId),
+        home: StudyEntryScreen(
+          entryType: entryType,
+          entryRefId: entryRefId,
+          studyTypeRaw: studyTypeRaw,
+        ),
       ),
     ),
   );
@@ -137,6 +157,48 @@ void main() {
     testWidgets('a resolve failure shows the error surface', (tester) async {
       await _pumpScreen(tester, outcome: () async => throw Exception('boom'));
       await tester.pump();
+      expect(find.text("Couldn't start study"), findsOneWidget);
+    });
+
+    testWidgets('the today route resolves a today scope', (tester) async {
+      // entryType `today`, no ref id → `_todayScope`; the gate renders its
+      // outcome (here blocked) rather than erroring.
+      await _pumpScreen(
+        tester,
+        entryType: 'today',
+        entryRefId: null,
+        overrideScope: _todayScope,
+        outcome: () async =>
+            const StudyEntryOutcome.blocked(StudyScopeEmptyReason.todayAllDone),
+      );
+      expect(find.text('Nothing to study right now'), findsOneWidget);
+    });
+
+    testWidgets('a study_type=srs_review query overrides the deck default', (
+      tester,
+    ) async {
+      // The override changes the resolved scope to `_deckReviewScope`; pumping
+      // with that scope overridden proves the screen built the review scope.
+      await _pumpScreen(
+        tester,
+        studyTypeRaw: 'srs_review',
+        overrideScope: _deckReviewScope,
+        outcome: () async => const StudyEntryOutcome.blocked(
+          StudyScopeEmptyReason.deckNoDueCards,
+        ),
+      );
+      expect(find.text('Nothing to study right now'), findsOneWidget);
+    });
+
+    testWidgets('an unrecognized study_type shows the error surface', (
+      tester,
+    ) async {
+      await _pumpScreen(
+        tester,
+        studyTypeRaw: 'bogus',
+        outcome: () async =>
+            const StudyEntryOutcome.blocked(StudyScopeEmptyReason.deckNoCards),
+      );
       expect(find.text("Couldn't start study"), findsOneWidget);
     });
 

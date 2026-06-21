@@ -380,7 +380,7 @@
   "studyEntryErrorMessage": "We couldn't prepare this study session. Please try again.",
   "@studyEntryErrorMessage": { "description": "Body of the study entry gate error state." },
   "studyEmptyGenericTitle": "Nothing to study right now",
-  "@studyEmptyGenericTitle": { "description": "Generic empty-scope title at the study entry gate (WP-SR1a; per-reason matrix is WP-SR1b)." },
+  "@studyEmptyGenericTitle": { "description": "Generic empty-scope title at the study entry gate (WP-SR1a; per-reason matrix is WP-SR1b-2)." },
   "studyEmptyGenericMessage": "There are no cards to study in this scope yet.",
   "@studyEmptyGenericMessage": { "description": "Generic empty-scope body at the study entry gate." },
   "studyResumeTitle": "Resume your session?",

@@ -1136,7 +1136,7 @@ abstract class AppLocalizations {
   /// **'We couldn\'t prepare this study session. Please try again.'**
   String get studyEntryErrorMessage;
 
-  /// Generic empty-scope title at the study entry gate (WP-SR1a; per-reason matrix is WP-SR1b).
+  /// Generic empty-scope title at the study entry gate (WP-SR1a; per-reason matrix is WP-SR1b-2).
   ///
   /// In en, this message translates to:
   /// **'Nothing to study right now'**

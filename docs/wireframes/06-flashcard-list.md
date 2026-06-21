@@ -271,7 +271,7 @@ Manage flashcards in one deck: browse, filter, edit, multi-select for bulk opera
 
 - ❌ Show note/example/pronunciation/hint inline in row.
 - ❌ Display "Today (0)" — hide the Today CTA when 0 due (target rule; the Today CTA itself is Future).
-- ❌ Use `?type=srs_review` — the query param is `study_type` (`RoutePaths.studyTypeQueryParam`).
+- ❌ Use `?type=srs_review` — the query param is `study_type` (`RouteParams.studyTypeQueryParam`).
 - ❌ Use global `entry_type=today` for the deck Today CTA — it is `entry_type=deck` filtered to due via `study_type=srs_review`.
 - ❌ Start a session directly from Flashcard List — Study deck / Today / Resume must go through the Study Entry Gate (or resume the existing session); the gate owns empty-scope validation and session creation (target rule; these CTAs are Future on this screen).
 - ❌ Remove the resume banner after one view. It persists until session resumed or discarded.

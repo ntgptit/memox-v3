@@ -38,5 +38,6 @@ abstract final class RouteNames {
   /// session (`/library/study/session/:sessionId`) — top-level immersive routes.
   /// WBS 4.1.2 / 4.2.2 / 4.5.3.
   static const String studyEntry = 'studyEntry';
+  static const String studyToday = 'studyToday';
   static const String studySession = 'studySession';
 }

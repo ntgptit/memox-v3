@@ -69,12 +69,17 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       `StudyEntryOutcome` (blocked/resumeRequired/ready); `StudyEntryScreen` rendering preparing /
       generic empty (blocks zero-card) / Resume-Start-over-Back / error, auto-create →
       `pushReplacement` to the `StudySessionScreen` **placeholder**. `MxIconButton.toolbar` added
-      (guard `header_actions`). ARB ×13 (en+vi). Rows S32/S27/S28; WBS 4.1.2 Implemented, 4.2.3 Partial.
+      (guard `header_actions`). ARB ×13 (en+vi). Rows S84/S27/S28; WBS 4.1.2 Implemented, 4.2.3 Partial.
       7 gate tests + 4 goldens. **Launch CTA stays Future** (reachable by route/deep-link/test).
-- [ ] **WP-SR1b — entry gate completion.** The `today` literal route + `?study_type=` query override
-      (parse → `StudyScope.studyType`) + the **per-reason empty matrix** (8 `StudyScopeEmptyReason`
-      variants → dedicated icon/title/message/CTA per wireframe `12`, replacing the generic surface) +
-      a start-over confirm dialog. ARB per variant. Tests per reason.
+- [x] **WP-SR1b-1 — today route + `study_type` override.** `<this commit>`: the `today` literal route
+      (`/library/study/today` → `StudyScope(today, null, srsReview)`) + the `?study_type=` query
+      override parsed via a new canonical `StudyType.storageValue`/`fromStorage` (consolidated with the
+      data mapper; `new_cards`/`srs_review`); unrecognized `study_type` → error. Rows S85; 11 gate tests.
+- [ ] **WP-SR1b-2 — per-reason empty matrix.** Replace `_blockedBody`'s generic surface with a switch
+      over the 8 `StudyScopeEmptyReason` → dedicated icon/title/message/CTA per wireframe `12`
+      (deck-no-cards → Add flashcards; *-no-due → Study new instead + "Next due in …"; today-all-done →
+      streak + Done; all-buried; all-suspended → View suspended; today-no-content → Create deck). ARB
+      per variant (en+vi). A start-over confirm dialog (S28). Tests + goldens per reason.
 - [ ] **WP-SR2 — review session shell + card.** `study_session_screen.dart`: app bar (`✕` +
       **blue** progress bar + `{answered}/{total}`), and the card (front-side label from
       `deck.target_language`, front large-centered, divider, back-side label, back, example pill when
