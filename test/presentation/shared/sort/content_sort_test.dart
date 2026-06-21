@@ -129,7 +129,11 @@ void main() {
       expect(find.text('Manual'), findsOneWidget);
       expect(find.text('Name (A–Z)'), findsOneWidget);
       expect(find.text('Newest'), findsOneWidget);
-      // The active mode (manual) carries the check.
+      // Each row has a leading mode glyph (no more bare text rows).
+      expect(find.byIcon(Icons.format_list_numbered), findsOneWidget);
+      expect(find.byIcon(Icons.sort_by_alpha), findsOneWidget);
+      expect(find.byIcon(Icons.schedule), findsOneWidget);
+      // The active mode (manual) carries the trailing check.
       expect(find.byIcon(Icons.check), findsOneWidget);
 
       await tester.tap(find.text('Newest'));

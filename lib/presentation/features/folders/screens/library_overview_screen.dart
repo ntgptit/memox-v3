@@ -78,15 +78,20 @@ class LibraryOverviewScreen extends ConsumerWidget {
     );
   }
 
-  /// Opens the shared sort sheet and persists the chosen mode (global pref).
+  /// Opens the shared sort sheet and persists the chosen mode for the Library
+  /// scope (each object keeps its own sort).
   Future<void> _openSort(BuildContext context, WidgetRef ref) async {
-    final ContentSortMode current = ref.read(librarySortModeProvider);
+    final ContentSortMode current = ref.read(
+      librarySortModeProvider(sortScopeLibrary),
+    );
     final ContentSortMode? selected = await showContentSortSheet(
       context,
       current: current,
     );
     if (selected == null) return;
-    await ref.read(librarySortProvider.notifier).setSort(selected);
+    await ref
+        .read(librarySortProvider(sortScopeLibrary).notifier)
+        .setSort(selected);
   }
 
   Widget _buildBody(bool searching, bool hasFolders, int folderCount) => Column(

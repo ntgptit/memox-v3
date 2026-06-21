@@ -115,7 +115,7 @@ class FlashcardListBody extends ConsumerWidget {
           ref,
           sortByContentMode<Flashcard>(
             detail.cards,
-            ref.watch(librarySortModeProvider),
+            ref.watch(librarySortModeProvider(sortScopeDeck(deckId))),
             name: (Flashcard c) => c.front,
             createdAt: (Flashcard c) => c.createdAt,
           ),

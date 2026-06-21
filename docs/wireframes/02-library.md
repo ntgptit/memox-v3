@@ -36,7 +36,7 @@ source_specs:
 >   `MxFab` (shown only in loaded-with-folders) and the empty-CTA both call `runCreateFolder`
 >   → `folder_create_dialog.dart`. Color/icon use the OQ-2 palette via `folder_visual_tokens.dart`.
 > - **Sort sheet is built (WBS 2.23.1):** the `swap_vert` icon opens `showContentSortSheet`
->   (Manual / Name / Newest; `lastStudied` deferred), one global pref `library.sort` applied
+>   (Manual / Name / Newest; `lastStudied` deferred), per-scope pref `library.sort.library` applied
 >   presentation-side via `sortLibraryFolders`.
 > - **Not built:** due-summary card, mastery bar, new-card badge, deck-digest subtitle (read-model
 >   fields absent). The per-row **due badge** *is* built (shows when `dueCount > 0`).
@@ -281,7 +281,7 @@ point for study.
 | Top-level decks (`folder_id IS NULL`)   | Rejected / Out of Scope              | do not query; decks must belong to exactly one folder |
 | Per-row card count (decks)              | `flashcards` aggregate cached        | invalidated on flashcard change                       |
 | Per-row subfolder/deck count (folders)  | aggregates cached                    | invalidated on folder/deck change                     |
-| Sort preference                         | SharedPreferences key `library.sort` | watch                                                 |
+| Sort preference                         | SharedPreferences key `library.sort.<scope>` | watch                                                 |
 
 ## Forbidden
 
@@ -327,9 +327,9 @@ point for study.
 ## Sort options (sort sheet — WBS 2.23.1)
 
 The header sort icon opens the shared content-sort bottom sheet
-(`showContentSortSheet`, `docs/wireframes/25-shared-bottom-sheets.md`), one global preference shared
-by Library / Folder detail / Deck / Flashcard. As-built offers the three `ContentSortMode` modes that
-have backing data:
+(`showContentSortSheet`, `docs/wireframes/25-shared-bottom-sheets.md`). The preference is **per
+scope** — Library / each folder / each deck remember their own sort independently (no cross-bleed).
+As-built offers the three `ContentSortMode` modes that have backing data:
 
 | Sort             | `ContentSortMode` | Applied as (presentation-side)        | Status      |
 |------------------|-------------------|----------------------------------------|-------------|
@@ -340,7 +340,7 @@ have backing data:
 
 The earlier `Name Z→A` / `Recently updated` (`updated_at`) / `Most cards` options are **not in scope**
 (not in the `ContentSortMode` enum); add an enum value + a decision row before surfacing any of them.
-Sort preference persists globally via SharedPreferences (key `library.sort`,
+Sort preference persists **per scope** via SharedPreferences (key `library.sort.<scope>`,
 `docs/database/storage-boundaries.md` §Content sort).
 
 ## Actions
@@ -424,7 +424,7 @@ Sort preference persists globally via SharedPreferences (key `library.sort`,
 **Schema / storage:**
 
 - `folders` (parent_id = null = root), `decks` (folder_id = null = root)
-- SharedPreferences: `library.sort`
+- SharedPreferences: `library.sort.<scope>` (per scope)
 
 **Contracts:** `docs/contracts/usecase-contracts/folder.md`,
 `docs/contracts/usecase-contracts/deck.md`,

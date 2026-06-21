@@ -29,8 +29,9 @@ writing a migration.
 
 ## Content sort
 
-The global content-sort preference (shared by Library, Folder detail, Deck, and Flashcard screens)
-persists in SharedPreferences under one key, **`library.sort`**, storing a `ContentSortMode`
+The content-sort preference is **per scope** — each sortable object remembers its own sort, so a
+choice on a folder never bleeds into a deck. Scopes: `library` (root), `folder:<id>`, `deck:<id>`.
+Each persists in SharedPreferences under **`library.sort.<scope>`**, storing a `ContentSortMode`
 `enum.name` token (`manual` / `name` / `newest`). Access goes through `ContentSortRepository`
 (`ContentSortStore` → SharedPreferences); an unset/unknown/deferred token reads back as `manual`.
 It is a UI ordering choice, not entity data — so it lives in prefs, never in Drift. WBS 2.23.1.

@@ -64,10 +64,12 @@ update the files `mx_bottom_sheet.dart`, `mx_action_sheet_list.dart`,
 
 - **Content sort sheet — Current (WBS 2.23.1, 2026-06-21).** `showContentSortSheet`
   (`lib/presentation/shared/sort/content_sort_sheet.dart`) over `showMxBottomSheet`: one row per
-  offered `ContentSortMode` (Manual / Name / Newest; `lastStudied` deferred) with a check on the
-  active mode, returning the tapped mode. Shared by Library / Folder detail / Deck / Flashcard; the
-  choice persists globally (`library.sort`). Supersedes the prior "chip/menu based" / `MxSortMenuChip`
-  target (those symbols never existed).
+  offered `ContentSortMode` (Manual / Name / Newest; `lastStudied` deferred), each with a **leading
+  mode glyph** (`format_list_numbered` / `sort_by_alpha` / `schedule`, via `contentSortModeIcon`) and
+  a trailing check on the active mode; returns the tapped mode. Shared by Library / Folder detail /
+  Deck / Flashcard, but the choice persists **per scope** (`library.sort.<scope>`) so each object
+  keeps its own sort. Supersedes the prior "chip/menu based" / `MxSortMenuChip` target (those symbols
+  never existed).
 - `DailyGoalSheet`, `StreakHistorySheet`, reminder/notification sheets, engagement dashboard sheets,
   tag-scoped study, Global Search, and Flashcard History remain Target/Future/Blocked. Do not mark
   them Current without code + tests + docs.

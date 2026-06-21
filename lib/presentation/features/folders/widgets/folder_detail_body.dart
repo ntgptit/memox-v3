@@ -173,7 +173,9 @@ class FolderDetailBody extends ConsumerWidget {
   }
 
   Widget _groupedCard(BuildContext context, WidgetRef ref, FolderDetailView v) {
-    final ContentSortMode sort = ref.watch(librarySortModeProvider);
+    final ContentSortMode sort = ref.watch(
+      librarySortModeProvider(sortScopeFolder(folderId)),
+    );
     final List<FolderSummary> subfolders = sortByContentMode<FolderSummary>(
       v.subfolders,
       sort,

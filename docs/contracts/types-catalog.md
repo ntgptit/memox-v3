@@ -270,8 +270,9 @@ enum ContentSortMode {
 (`sortLibraryFolders` etc.) — `manual` keeps DB `sort_order`, `name` is case-folded A→Z, `newest`
 is `created_at` descending. No `.drift`/repository ordering change.
 
-**Storage:** the chosen mode persists globally in SharedPreferences (key `library.sort`) via
-`ContentSortRepository`; `contentSortModeFromToken` maps the stored token back (unknown/deferred →
+**Storage:** the chosen mode persists **per scope** in SharedPreferences (key `library.sort.<scope>`,
+where scope is `library` / `folder:<id>` / `deck:<id>`) via `ContentSortRepository` — each object
+keeps its own sort. `contentSortModeFromToken` maps the stored token back (unknown/deferred →
 `manual`). The enum is never stored on a row. See `docs/database/storage-boundaries.md` §Content sort.
 
 Source: `docs/wireframes/02-library.md` §Sort options.

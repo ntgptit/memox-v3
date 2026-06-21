@@ -206,7 +206,7 @@ class LibraryOverviewBody extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
     final List<FolderSummary> folders = sortLibraryFolders(
       view.folders,
-      ref.watch(librarySortModeProvider),
+      ref.watch(librarySortModeProvider(sortScopeLibrary)),
     );
 
     if (view.totalFolderCount == 0) {

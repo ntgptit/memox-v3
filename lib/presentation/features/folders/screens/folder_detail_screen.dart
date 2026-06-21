@@ -116,16 +116,17 @@ class FolderDetailScreen extends ConsumerWidget {
     );
   }
 
-  /// Opens the shared content-sort sheet and persists the chosen mode (the same
-  /// global pref the Library uses). WBS 2.23.1.
+  /// Opens the shared content-sort sheet and persists the chosen mode for this
+  /// folder's scope (each folder keeps its own sort). WBS 2.23.1.
   Future<void> _openSort(BuildContext context, WidgetRef ref) async {
-    final ContentSortMode current = ref.read(librarySortModeProvider);
+    final String scope = sortScopeFolder(folderId);
+    final ContentSortMode current = ref.read(librarySortModeProvider(scope));
     final ContentSortMode? selected = await showContentSortSheet(
       context,
       current: current,
     );
     if (selected == null) return;
-    await ref.read(librarySortProvider.notifier).setSort(selected);
+    await ref.read(librarySortProvider(scope).notifier).setSort(selected);
   }
 
   /// The create FAB matches the folder's content mode (mock `04`): a decks-mode

@@ -19,6 +19,15 @@ String contentSortModeLabel(AppLocalizations l10n, ContentSortMode mode) =>
       ContentSortMode.lastStudied => l10n.sortModeNewest,
     };
 
+/// Leading glyph for a sort [mode] — manual (custom order), name (alphabetical),
+/// newest (recency).
+IconData contentSortModeIcon(ContentSortMode mode) => switch (mode) {
+  ContentSortMode.manual => Icons.format_list_numbered,
+  ContentSortMode.name => Icons.sort_by_alpha,
+  ContentSortMode.newest => Icons.schedule,
+  ContentSortMode.lastStudied => Icons.history,
+};
+
 /// Shows the shared content-sort bottom sheet — one row per [kSortSheetModes]
 /// entry with a check on [current] — and resolves to the chosen
 /// [ContentSortMode] (or `null` when dismissed). Used by Library, Folder detail,
@@ -55,6 +64,14 @@ class _ContentSortSheet extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
+                  Icon(
+                    contentSortModeIcon(mode),
+                    size: MxIconSize.md,
+                    color: mode == current
+                        ? colors.accent
+                        : colors.textSecondary,
+                  ),
+                  const SizedBox(width: MxSpacing.space3),
                   Expanded(
                     child: MxText(
                       contentSortModeLabel(l10n, mode),

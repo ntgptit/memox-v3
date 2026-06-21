@@ -79,8 +79,9 @@ verified by tests (`test/presentation/features/flashcards/flashcard_list_test.da
 - **Sort (WBS 2.23.1):** the app bar carries a `swap_vert` sort icon opening the
   shared `showContentSortSheet` — `manual` / `name` (card `front` A→Z) / `newest`
   (`created_at` desc); `lastStudied` deferred. Applied presentation-side
-  (`sortByContentMode` over `cards`) using the global `library.sort` pref shared
-  with Library / Folder detail. Distinct from the Future `Due first` SRS sort.
+  (`sortByContentMode` over `cards`) using this deck's own per-scope pref
+  (`library.sort.deck:<id>`), independent of other decks / folders / Library.
+  Distinct from the Future `Due first` SRS sort.
 - **Reorder handles (mock 06 reorder):** drag handles render **leading**
   (`Icons.drag_indicator`); per-row badges/tags/due/flag in the mock are Future.
 - **Empty state (mock 06 empty):** framed `MxCard` (glyph + headline + hint) above

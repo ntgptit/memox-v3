@@ -93,9 +93,10 @@ study UI.
   artifacts remain mock-only and are not V1 source of truth. The `{n} new`
   count is now **Current** (real `new_count` read model). Study new / Review
   due are Current in decks mode when real new/due data exists.
-- Sort state is **global**, not per-folder: one `library.sort` preference
-  (`ContentSortRepository`) shared with Library / Deck / Flashcard; unsupported
-  stored values normalize back to `manual`.
+- Sort state is **per folder**: each folder remembers its own sort under
+  `library.sort.folder:<id>` (`ContentSortRepository`), independent of the
+  Library root and of decks — so picking a sort here never bleeds elsewhere.
+  Unsupported stored values normalize back to `manual`.
 - Create subfolder/deck by content mode is Current. Typed lock-mode snackbar is
   Current.
 - **App-bar overflow ⋮ is Current**: opens the folder action sheet

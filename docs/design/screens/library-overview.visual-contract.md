@@ -69,7 +69,7 @@ palette sports_esports favorite` (`null` → `folder_outlined`). Stored as opaqu
   long-press also opens it. When 3.2.2 lands, tap → detail and long-press → actions.
 - **App-bar sort control** → **Current (WBS 2.23.1, supersedes "disabled/visual-only"):**
   `Icons.swap_vert` opens the shared `showContentSortSheet` (Manual / Name / Newest; `lastStudied`
-  deferred), one global pref applied presentation-side via `sortLibraryFolders`.
+  deferred), a per-scope pref (`library.sort.library`) applied presentation-side via `sortLibraryFolders`.
 - **Mastery bar, new-card badge, deck-digest subtitle, due-summary card** → `FolderSummary`
   lacks `mastery`/`newCount`/`subtitle`/`dueToday`; surface when the read model ships. (The
   due **badge** on a row is built and shows when `dueCount > 0`.)
