@@ -163,5 +163,7 @@
   "cardExampleLabel": "Ví dụ",
   "cardPronunciationLabel": "Phát âm",
   "cardHintLabel": "Gợi ý",
-  "cardSaveFailedMessage": "Không thể lưu thay đổi."
+  "cardSaveFailedMessage": "Không thể lưu thay đổi.",
+  "cardLoadFailedTitle": "Không tải được thẻ",
+  "cardLoadFailedMessage": "Không thể tải thẻ này để chỉnh sửa."
 }

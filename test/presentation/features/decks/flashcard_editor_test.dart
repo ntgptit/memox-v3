@@ -122,6 +122,8 @@ Future<void> _pump(
   List<Flashcard> cards = const <Flashcard>[],
   Brightness brightness = Brightness.light,
   bool golden = false,
+  bool loading = false,
+  bool loadError = false,
   FlashcardActionController Function()? controller,
 }) async {
   if (golden) {
@@ -129,15 +131,33 @@ Future<void> _pump(
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
   }
+  // A never-completing stream holds the editor in its loading state; a failure
+  // record (`data == null`) drives the load-error surface.
+  Stream<Result<FlashcardListDetail>> source() {
+    if (loading) {
+      return Stream<Result<FlashcardListDetail>>.fromFuture(
+        Completer<Result<FlashcardListDetail>>().future,
+      );
+    }
+    if (loadError) {
+      return Stream<Result<FlashcardListDetail>>.value((
+        failure: const Failure.storage(
+          operation: StorageOp.read,
+          cause: 'offline',
+        ),
+        data: null,
+      ));
+    }
+    return Stream<Result<FlashcardListDetail>>.value((
+      failure: null,
+      data: _detail(cards: cards),
+    ));
+  }
+
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        flashcardListStreamProvider(_deckId).overrideWith(
-          (ref) => Stream<Result<FlashcardListDetail>>.value((
-            failure: null,
-            data: _detail(cards: cards),
-          )),
-        ),
+        flashcardListStreamProvider(_deckId).overrideWith((ref) => source()),
         if (controller != null)
           flashcardActionControllerProvider.overrideWith(controller),
       ],
@@ -259,6 +279,32 @@ void main() {
       await _pump(tester, cardId: 'gone'); // not in (empty) cards
       expect(find.byType(MxTextField), findsNothing);
       expect(find.text('Edit card'), findsOneWidget); // shell app bar title
+      // The mock `08` load-error copy + a Retry action (C28).
+      expect(find.text("Couldn't load card"), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+    });
+
+    testWidgets('loading: a field-shaped skeleton, no fields yet', (
+      tester,
+    ) async {
+      await _pump(tester, cardId: 'c1', loading: true);
+      // The deck/card stream has not resolved: the skeleton stands in for the
+      // fields (mock `07`/`08` Loading), and no real inputs are built.
+      expect(
+        find.byKey(const ValueKey<String>('flashcard_editor_skeleton')),
+        findsOneWidget,
+      );
+      expect(find.byType(MxTextField), findsNothing);
+      expect(find.text('Edit card'), findsOneWidget); // shell app bar title
+    });
+
+    testWidgets('load error: Retry re-subscribes the stream', (tester) async {
+      await _pump(tester, cardId: 'c1', loadError: true);
+      expect(find.text("Couldn't load card"), findsOneWidget);
+      expect(find.byType(MxTextField), findsNothing);
+      // Retry re-runs the fetch (ref.invalidate); tapping must not throw.
+      await tester.tap(find.text('Retry'));
+      await tester.pumpAndSettle();
     });
 
     testWidgets('save in-flight: Save shows a spinner and is disabled', (
@@ -435,6 +481,38 @@ void main() {
           find.byType(FlashcardEditorScreen),
           matchesGoldenFile(
             'goldens/flashcard_editor_save-failed__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('loading — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          cardId: 'c1',
+          brightness: brightness,
+          golden: true,
+          loading: true,
+        );
+        await expectLater(
+          find.byType(FlashcardEditorScreen),
+          matchesGoldenFile(
+            'goldens/flashcard_editor_loading__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('load-error — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          cardId: 'c1',
+          brightness: brightness,
+          golden: true,
+          loadError: true,
+        );
+        await expectLater(
+          find.byType(FlashcardEditorScreen),
+          matchesGoldenFile(
+            'goldens/flashcard_editor_load-error__${brightness.name}.png',
           ),
         );
       });

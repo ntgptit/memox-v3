@@ -360,5 +360,9 @@
   "cardHintLabel": "Hint",
   "@cardHintLabel": { "description": "Optional hint field label in the card editor." },
   "cardSaveFailedMessage": "Changes couldn't be saved.",
-  "@cardSaveFailedMessage": { "description": "Inline banner message when saving a card fails in the editor." }
+  "@cardSaveFailedMessage": { "description": "Inline banner message when saving a card fails in the editor." },
+  "cardLoadFailedTitle": "Couldn't load card",
+  "@cardLoadFailedTitle": { "description": "Title of the card editor load-error state when the card can't be fetched." },
+  "cardLoadFailedMessage": "We couldn't fetch this card to edit.",
+  "@cardLoadFailedMessage": { "description": "Body of the card editor load-error state." }
 }

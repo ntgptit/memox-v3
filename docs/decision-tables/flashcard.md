@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-19
+last_updated: 2026-06-22
 source: split from memox-core-decision-table.md
 applies_to: Flashcard CRUD and Import behavior branches
 ---
@@ -38,7 +38,8 @@ applies_to: Flashcard CRUD and Import behavior branches
 | C25 | Edit editor close | Tag list changed | Same dirty-close discard flow as front/back edits | C0+C1 | TBD |
 | C26 | Edit editor close | Existing optional note/tags loaded but unchanged | Pop immediately without a discard dialog | C0+C1 | TBD |
 | C27 | Edit editor delete | Delete confirmed from danger zone | Delete the card and pop to the deck list | C1 | TBD |
-| C28 | Edit load error | Flashcard detail fails to load | Show load error state with Back to deck / Retry | C1 | TBD |
+| C28 | Editor load error | Deck/card stream errors, returns `data == null`, or the edited card id is not in the loaded list (deleted elsewhere) | Show the load-error surface (`MxErrorState`, cloud-off, `cardLoadFailedTitle`/`cardLoadFailedMessage`, mock `07`/`08` Load error) with a **Retry** that re-subscribes the stream (`ref.invalidate(flashcardListStreamProvider)`); the app-bar leading (X/back) is the escape back to the deck | C1 | `test/presentation/features/decks/flashcard_editor_test.dart` (missing-id + load-error + Retry + load-error golden) |
+| C46 | Editor loading | Deck/card stream unresolved (first frame / deep-link) | Show a field-shaped **skeleton** (`flashcard_editor_skeleton`: FRONT/BACK label + field blocks, divider, Details chips, mock `07`/`08` Loading), not a bare shell or a spinner; no real inputs are built | C1 | `test/presentation/features/decks/flashcard_editor_test.dart` (loading skeleton + loading golden) |
 | C29 | Edit/create save failure | Create or update use case returns failure (`result.failure != null`) | Keep the draft open and show an inline **danger banner** below the app bar (above the fields) with a `Retry` CTA (mock `07`/`08` Save-failed, `abs:[21,95]`); **replaces** the prior failure snackbar. Per **PRECEDENCE #2** the banner sits above the fields, not bottom-anchored (kit spec) | C1 | `test/presentation/features/decks/flashcard_editor_test.dart` (save-failed banner + draft kept + golden) |
 | C45 | Editor save in-flight | Save tapped, create/update awaiting | Disable Save and render a spinner at the disabled accent fill (`MxPrimaryButton.loading`, mock `07`/`08` Saving `op:0.38`); a second tap mid-flight is ignored (`saving` guard); on completion the flag clears (then banner on failure, snackbar+pop on success) | C1 | `test/presentation/features/decks/flashcard_editor_test.dart` (save in-flight spinner + saving golden) |
 | C30 | Import CSV preview | Empty front or empty back | Surface a row-level validation message with the line number (`missingFront`/`missingBack`); the row is excluded from committable rows | C1 | `test/domain/usecases/flashcard/deck_import_usecases_test.dart` |

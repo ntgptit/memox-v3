@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-22
 route: /library/deck/:deckId/flashcards/new
 source_specs:
   - docs/business/flashcard/flashcard-management.md
@@ -20,7 +20,10 @@ source_specs:
 > "Note"; the business model defines the optional content as example/pronunciation/hint + tags, so
 > those fields are built instead of the mock's single Note, and the deck-selector is not built. The
 > **Tags** input (chip + add-tag) = WP-FL2b2b (edit currently **preserves** existing tags on save). The
-> non-base `07` states (saving / save-failed) = WP-FL2b3. Edit mode is documented separately in
+> non-base `07` states (saving / save-failed = WP-FL2b3a; loading skeleton + load-error surface with
+> Retry = WP-FL2b3b — the create screen watches the same deck stream, so it shows the
+> `flashcard_editor_skeleton` while the deck context loads and the `MxErrorState` on failure) are
+> **built**; only the **Tags** input (**WP-FL2b2b**) remains. Edit mode is documented separately in
 > `docs/wireframes/08-flashcard-edit.md`.
 
 > **Mock-first refinement (2026-06-13).** Create mode keeps the collapsible
@@ -148,6 +151,8 @@ fast manual entry and keeps the surface intentionally small.
 | Saved | Success | Return to the deck's flashcard list with a success snackbar. |
 | Save error | Repository failure | Error banner appears; form contents remain. |
 | Dirty close confirm | Close/back with unsaved changes | Show discard confirmation dialog. |
+| Loading | Deck context still fetching | Field-shaped skeleton (`flashcard_editor_skeleton`) under the app-bar shell; row C46. |
+| Load error | Deck stream errors / returns no detail | Load-error surface (`MxErrorState`, cloud-off, `cardLoadFailedTitle`/`cardLoadFailedMessage`) with Retry; app-bar leading escapes back. Row C28. |
 
 ## Actions
 

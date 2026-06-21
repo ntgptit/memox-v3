@@ -1081,6 +1081,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Changes couldn\'t be saved.'**
   String get cardSaveFailedMessage;
+
+  /// Title of the card editor load-error state when the card can't be fetched.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load card'**
+  String get cardLoadFailedTitle;
+
+  /// Body of the card editor load-error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t fetch this card to edit.'**
+  String get cardLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

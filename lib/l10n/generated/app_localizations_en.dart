@@ -572,4 +572,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cardSaveFailedMessage => 'Changes couldn\'t be saved.';
+
+  @override
+  String get cardLoadFailedTitle => 'Couldn\'t load card';
+
+  @override
+  String get cardLoadFailedMessage => 'We couldn\'t fetch this card to edit.';
 }

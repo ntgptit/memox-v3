@@ -557,4 +557,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get cardSaveFailedMessage => 'Không thể lưu thay đổi.';
+
+  @override
+  String get cardLoadFailedTitle => 'Không tải được thẻ';
+
+  @override
+  String get cardLoadFailedMessage => 'Không thể tải thẻ này để chỉnh sửa.';
 }
