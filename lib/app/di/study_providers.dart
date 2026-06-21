@@ -5,6 +5,7 @@ import 'package:memox/data/repositories/study_repository_impl.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/usecases/study/cancel_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/create_study_session_usecase.dart';
+import 'package:memox/domain/usecases/study/finalize_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/load_study_session_review_usecase.dart';
 import 'package:memox/domain/usecases/study/record_study_session_answer_usecase.dart';
 import 'package:memox/domain/usecases/study/resolve_study_entry_start_usecase.dart';
@@ -49,3 +50,7 @@ ResolveStudyEntryStartUseCase resolveStudyEntryStartUseCase(Ref ref) =>
       studyRepository: ref.watch(studyRepositoryProvider),
       entryRepository: ref.watch(studyEntryRepositoryProvider),
     );
+
+@riverpod
+FinalizeStudySessionUseCase finalizeStudySessionUseCase(Ref ref) =>
+    FinalizeStudySessionUseCase(repository: ref.watch(studyRepositoryProvider));

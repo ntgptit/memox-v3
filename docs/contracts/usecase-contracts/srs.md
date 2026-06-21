@@ -12,29 +12,19 @@ Pure SRS transition and due-date contracts. The target architecture is determini
 ## BoxIntervals
 
 ```dart
-class BoxIntervals {
-  static const Map<int, Duration> daysPerBox = {
-    1: Duration(days: 1),
-    2: Duration(days: 2),
-    3: Duration(days: 3),
-    4: Duration(days: 4),
-    5: Duration(days: 5),
-    6: Duration(days: 12),
-    7: Duration(days: 30),
-    8: Duration(days: 60),
-  };
-
-  static Duration forBox(BoxNumber box);
+abstract final class BoxIntervals {
+  /// Interval in days for [box] (1..8): 1,2,3,4,5,12,30,60.
+  static int daysFor(int box);
 }
 ```
 
 **Rules:**
 
-- Returns Duration for a given box (1-8 inclusive).
-- Asserts box in 1..8. Out-of-range = programmer error.
+- Returns the interval in **days** for a given box (1-8 inclusive).
+- Asserts box in 1..8 (programmer error); also clamps so release builds never
+  crash.
 
-**Source (target/future extraction):** a future extracted domain helper if approved; no current `lib/domain/srs/box_intervals.dart` file exists.
-**Source (current):** `_intervalForBox` in `lib/data/repositories/study_repo_impl_mapping_helpers.dart`. Prompt 12/13 identified a P2 product/docs mismatch between this table and runtime values; code owns runtime behavior until the canonical interval ladder is chosen.
+**Source (current — WBS 4.6.2):** `BoxIntervals.daysFor(box)` in `lib/domain/srs/box_intervals.dart` (the single owner of the ladder; values match this table 1:1, pinned by `test/data/repositories/study_srs_transition_test.dart`).
 
 ## BoxTransition
 
@@ -53,8 +43,7 @@ class BoxTransition {
 | 1..8 | recovered | current (no change) |
 | 1..8 | forgot | 1 |
 
-**Source (target/future extraction):** a future extracted domain helper if approved; no current `lib/domain/srs/box_transition.dart` file exists.
-**Source (current):** `_reviewOutcome` in `lib/data/repositories/study_repo_impl_helpers.dart`, reached through `FinalizeStudySessionUseCase` -> `StudyRepository.finalizeSession` -> `_commitSrs`. The `Answer*UseCase` family records attempts and re-queues failed cards; it does not own final box transitions.
+**Source (current — WBS 4.4.1/4.6.2):** `SrsBox.nextBox(current, result)` in `lib/domain/srs/srs_box.dart`, applied at finalization by `StudyRepositoryImpl.finalizeStudySession` (`lib/data/repositories/study_repository_impl.dart`). The `RecordStudySessionAnswerUseCase` family records attempts only; final box transitions on `flashcard_progress` are finalization-owned.
 
 ## DueDateComputer
 
@@ -69,11 +58,12 @@ class DueDateComputer {
 
 **Rules:**
 
-- `computeFromBox(box) = clock.now() + BoxIntervals.forBox(box)`.
-- Uses injected `Clock` for testability.
+- V1 (WBS 4.6.4): `due_at = localMidnight(studyDay + BoxIntervals.daysFor(box))` —
+  normalized to the local midnight of the target day (not `finalize_instant +
+  interval`) so "due today" counts stay stable across the day. Computed in Dart
+  local time; never via a SQLite `localtime` modifier.
 
-**Source (target/future extraction):** a future extracted domain helper if approved.
-**Source (current):** no dedicated `DueDateComputer` implementation exists. Runtime due dates are computed during study finalization by `_reviewOutcome` in `lib/data/repositories/study_repo_impl_helpers.dart`, using `_intervalForBox` in `lib/data/repositories/study_repo_impl_mapping_helpers.dart`.
+**Source (current — WBS 4.6.4):** `StudyRepositoryImpl._dueAtFor(now, box)` in `lib/data/repositories/study_repository_impl.dart`, using `BoxIntervals.daysFor` and the injected `now` (epoch ms); pinned by `test/data/repositories/study_srs_transition_test.dart`.
 
 ## NextCardSelector
 
@@ -110,7 +100,7 @@ class LifetimeStatsComputer {
 
 ## Forbidden patterns
 
-- ❌ Hardcode interval days outside the current runtime owner (`_intervalForBox`) or a future approved `BoxIntervals` extraction.
+- ❌ Hardcode interval days outside the single owner `BoxIntervals.daysFor` (`lib/domain/srs/box_intervals.dart`).
 - ❌ Box transition computed inline in a notifier or widget.
 - ❌ Different transition rules per study mode (mode does NOT affect transition).
 - ❌ Use `DateTime.now()` directly. Always via injected `Clock`.
@@ -125,4 +115,4 @@ class LifetimeStatsComputer {
 **Caller:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase
 **Wireframes:** `docs/wireframes/13-study-session-review.md` through `docs/wireframes/17-study-session-fill.md`
 **Decision table:** rows under "SRS"
-**Code paths:** current SRS finalization lives in `lib/data/repositories/study_repo_impl_helpers.dart`, interval mapping lives in `lib/data/repositories/study_repo_impl_mapping_helpers.dart`, and due/new selection lives in `lib/data/repositories/study_repo_impl.dart` plus `lib/data/repositories/study_repo_impl_helpers.dart`. Target extracted domain paths may be added by a future refactor.
+**Code paths (current — WBS 4.6.x):** SRS finalization lives in `StudyRepositoryImpl.finalizeStudySession` (`lib/data/repositories/study_repository_impl.dart`); box transition in `SrsBox.nextBox` (`lib/domain/srs/srs_box.dart`); interval ladder in `BoxIntervals.daysFor` (`lib/domain/srs/box_intervals.dart`); due-date normalization in `StudyRepositoryImpl._dueAtFor`. Due/new-card SELECTION (`NextCardSelector` above) is not yet implemented (eligibility counts land via WBS 4.1.1; ordered-card selection is a later slice).

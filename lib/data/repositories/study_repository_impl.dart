@@ -8,6 +8,7 @@ import 'package:memox/data/mappers/study_session_mapper.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
+import 'package:memox/domain/srs/box_intervals.dart';
 import 'package:memox/domain/srs/srs_box.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
@@ -316,5 +317,141 @@ class StudyRepositoryImpl implements StudyRepository {
         data: null,
       );
     }
+  }
+
+  @override
+  Future<Result<void>> finalizeStudySession({
+    required SessionId sessionId,
+    required int now,
+  }) async {
+    try {
+      final StudySessionRow? session = await _dao.sessionById(sessionId);
+      if (session == null) {
+        return (
+          failure: const Failure.notFound(entity: 'study_session'),
+          data: null,
+        );
+      }
+      if (session.status != StudySessionDao.statusDraft &&
+          session.status != StudySessionDao.statusInProgress) {
+        return (
+          failure: Failure.unsupportedAction(
+            message: 'Cannot finish a ${session.status} study session.',
+          ),
+          data: null,
+        );
+      }
+
+      final List<StudySessionItemRow> items = await _dao.itemsForSession(
+        sessionId,
+      );
+      if (items.isEmpty) {
+        // A persisted session should always have items (createSession guards
+        // this); an empty one is an integrity error, not a normal finalize.
+        return (
+          failure: const Failure.finalization(
+            message: 'Study session has no items to finalize.',
+          ),
+          data: null,
+        );
+      }
+      if (items.any((i) => i.answeredAt == null)) {
+        // Every card must be answered before finishing — keep the session open.
+        return (
+          failure: const Failure.finalization(
+            message: 'All cards must be answered before finishing the session.',
+          ),
+          data: null,
+        );
+      }
+
+      // Compute each card's new SRS state from its attempts + current progress.
+      // flashcard_progress is written ONLY here (box changes are finalization-
+      // owned); suspend/bury state is preserved across the upsert.
+      final List<FlashcardProgressCompanion> upserts =
+          <FlashcardProgressCompanion>[];
+      for (final StudySessionItemRow item in items) {
+        final List<StudyAttemptRow> attempts = await _dao.attemptsForItem(
+          item.id,
+        );
+        final AttemptResult terminal = _terminalResult(
+          attempts.map((a) => _mapper.resultFromToken(a.result)).toList(),
+        );
+        final FlashcardProgressRow? progress = await _dao.progressById(
+          item.flashcardId,
+        );
+        final int boxBefore = progress?.boxNumber ?? SrsBox.min;
+        final int boxAfter = SrsBox.nextBox(boxBefore, terminal);
+        upserts.add(
+          FlashcardProgressCompanion.insert(
+            flashcardId: item.flashcardId,
+            boxNumber: Value<int>(boxAfter),
+            dueAt: Value<int?>(_dueAtFor(now, boxAfter)),
+            reviewCount: Value<int>((progress?.reviewCount ?? 0) + 1),
+            lapseCount: Value<int>(
+              (progress?.lapseCount ?? 0) +
+                  (terminal == AttemptResult.forgot ? 1 : 0),
+            ),
+            isSuspended: Value<bool>(progress?.isSuspended ?? false),
+            buriedUntil: Value<int?>(progress?.buriedUntil),
+          ),
+        );
+      }
+
+      await _dao.finalizeSession(sessionId, upserts, now);
+      return (failure: null, data: null);
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.transaction,
+          table: 'flashcard_progress',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  /// The terminal SRS result for an item from its ordered [attempts] — the V1
+  /// last-attempt classifier (`docs/business/srs/srs-review.md` §Box transition
+  /// table): a last `forgot` finalizes `forgot`; an earlier `forgot` with a
+  /// passing last attempt finalizes `recovered`; otherwise the last result.
+  /// (V1 records one attempt per item, so this is that attempt's result.)
+  AttemptResult _terminalResult(List<AttemptResult> attempts) {
+    if (attempts.isEmpty) {
+      // Unreachable in V1 (an answered item always has one recorded attempt);
+      // defensive so a malformed row never throws inside the transaction.
+      return AttemptResult.forgot;
+    }
+    // TODO(retry-modes): when retry/re-queue modes land, switch this to the
+    // FIRST-attempt classifier (a first `forgot` finalizes `forgot` even after a
+    // re-queued pass) — see srs-review.md §C1 adopted decision (2026-06-10).
+    final AttemptResult last = attempts.last;
+    if (last == AttemptResult.forgot) {
+      return AttemptResult.forgot;
+    }
+    if (attempts.contains(AttemptResult.forgot)) {
+      return AttemptResult.recovered;
+    }
+    return last;
+  }
+
+  /// The due time for a card entering [box] when finalized at [nowMs]:
+  /// `localMidnight(studyDay + interval[box])` (WBS 4.6.4). Computed in Dart
+  /// (local time), never via a SQLite `localtime` modifier, so "due today"
+  /// counts stay stable across the day.
+  int _dueAtFor(int nowMs, int box) {
+    final DateTime nowLocal = DateTime.fromMillisecondsSinceEpoch(
+      nowMs,
+    ).toLocal();
+    final DateTime studyDayMidnight = DateTime(
+      nowLocal.year,
+      nowLocal.month,
+      nowLocal.day,
+    );
+    final DateTime due = studyDayMidnight.add(
+      Duration(days: BoxIntervals.daysFor(box)),
+    );
+    return due.millisecondsSinceEpoch;
   }
 }

@@ -33,16 +33,16 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S6 | Answer | Correct | Persist attempt and advance | C0+C1 | study_repository_record_answer_test.dart |
 | S7 | Answer | Incorrect | Persist attempt and retry when required | C0+C1 | TBD |
 | S8 | Exit | In progress | Show confirmation; cancel stays on Study Session, confirm leaves the screen without canceling or mutating the session, and falls back to Library when the route cannot pop | C0+C1 | TBD |
-| S9 | Finalize | Success | Finish Session commits all answered items transactionally, updates progress, completes the session, and navigates to the real result screen | C0+C1 | TBD |
-| S10 | Finalize | Failure | Keep the user on Study Session, preserve progress, and show a controlled finalize error | C1 | TBD |
-| S11 | Box transition | result=perfect, box<8 | Next box = current+1; due_at = localMidnight(studyDay + interval[next]) | C0+C1 | TBD |
-| S12 | Box transition | result=forgot | Next box = 1; due_at = localMidnight(studyDay + interval[1]) | C0+C1 | TBD |
-| S13 | Box transition | result=recovered | Next box = current (stay); due_at = localMidnight(studyDay + interval[current]) | C0+C1 | TBD |
-| S14 | Box transition | result=perfect, box=8 | Next box = 8 (stay); due_at = localMidnight(studyDay + interval[8]) | C1 | TBD |
-| S15 | Lapse counter | result=forgot | Increment lapse_count | C1 | TBD |
+| S9 | Finalize | Success | Finish Session commits all answered items transactionally, updates progress, completes the session, and navigates to the real result screen | C0+C1 | study_repository_finalize_test.dart |
+| S10 | Finalize | Failure | Keep the user on Study Session, preserve progress, and show a controlled finalize error | C1 | study_repository_finalize_test.dart |
+| S11 | Box transition | result=perfect, box<8 | Next box = current+1; due_at = localMidnight(studyDay + interval[next]) | C0+C1 | study_srs_transition_test.dart |
+| S12 | Box transition | result=forgot | Next box = 1; due_at = localMidnight(studyDay + interval[1]) | C0+C1 | study_srs_transition_test.dart |
+| S13 | Box transition | result=recovered | Next box = current (stay); due_at = localMidnight(studyDay + interval[current]) | C0+C1 | study_srs_transition_test.dart |
+| S14 | Box transition | result=perfect, box=8 | Next box = 8 (stay); due_at = localMidnight(studyDay + interval[8]) | C1 | study_srs_transition_test.dart |
+| S15 | Lapse counter | result=forgot | Increment lapse_count | C1 | study_srs_transition_test.dart |
 | S16 | Due query | Filter due_at <= now AND not suspended/buried | Return only due active cards | C0+C1 | TBD |
-| S17 | Interval table | Box 1..5 | Linear 1..5 day intervals | C0 | TBD |
-| S18 | Interval table | Box 6, 7, 8 | 12, 30, 60 days | C0 | TBD |
+| S17 | Interval table | Box 1..5 | Linear 1..5 day intervals | C0 | study_srs_transition_test.dart |
+| S18 | Interval table | Box 6, 7, 8 | 12, 30, 60 days | C0 | study_srs_transition_test.dart |
 | S19 | Attempt result mapper | result=`recovered` | Storage codec accepts `recovered`; result is passing but not perfect-eligible | C0+C1 | TBD |
 | S20 | SRS Review finalize | Persisted attempts contain a `forgot` followed by a passing attempt | Finalized result `recovered`, current box unchanged, no lapse | C0+C1 | TBD |
 | S21 | Schema migration | (Not Applicable in this repo) legacy v12 CHECK rebuild for `recovered` | Current v4 `study_attempts` accepts `recovered` from the start; no CHECK migration exists or is needed | C1 | N/A — see `docs/database/schema-contract.md` §V1 migration gate |

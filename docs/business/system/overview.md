@@ -47,7 +47,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Study session| Specified| `docs/business/study/study-flow.md`|
 | Resume / continue session| Specified| `docs/business/resume/resume-session.md`|
 | Empty scope handling| Specified| `docs/business/study/study-flow.md` (empty scope matrix)|
-| SRS review (Leitner 8-box)| Specified| `docs/business/srs/srs-review.md`|
+| SRS review (Leitner 8-box)| Specified (BE box transition + interval + finalization Implemented — WBS 4.6.1/4.6.2/4.6.4; study FE pending)| `docs/business/srs/srs-review.md`|
 | Bury / suspend cards| Specified| `docs/business/study-actions/bury-suspend.md`|
 | Tag filter + study-by-tag + management| Specified (tag management BE Current — WBS 8.3.1: list/count/rename/merge/delete; FE wiring + filter + study-by-tag Future)| `docs/business/tags/tag-system.md`|
 | Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
@@ -56,7 +56,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Daily new-card limit| Specified| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
 | Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|
-| Due-time local-midnight normalization| Specified| `docs/business/srs/srs-review.md`|
+| Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `_dueAtFor`)| `docs/business/srs/srs-review.md`|
 | Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
 | Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
 | Global search screen (folders/decks/flashcards)| Implemented (WBS 3.5.1 BE + 3.5.2/3.5.3 FE) — top-level `/search` with a bottom search dock (design redesign)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|

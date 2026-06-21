@@ -66,6 +66,12 @@ class _FakeStudyRepository implements StudyRepository {
     required StudyScope scope,
     required int now,
   }) async => throw UnimplementedError();
+
+  @override
+  Future<Result<void>> finalizeStudySession({
+    required SessionId sessionId,
+    required int now,
+  }) async => throw UnimplementedError();
 }
 
 void main() {

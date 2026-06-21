@@ -90,4 +90,19 @@ abstract interface class StudyRepository {
     required StudyScope scope,
     required int now,
   });
+
+  /// Finalizes the session [sessionId] (WBS 4.6.1/4.6.2/4.6.4): in one
+  /// transaction, applies the Leitner SRS outcome (box transition + interval
+  /// due-date + counters) to each card's `flashcard_progress` and marks the
+  /// session `completed`, stamped at [now] (epoch ms). All `study_session_items`
+  /// must be answered first — otherwise a `FinalizationFailure` keeps the session
+  /// open. A missing session is a `NotFoundFailure`; a terminal session is an
+  /// `UnsupportedActionFailure`; a write error rolls back and maps to a
+  /// `StorageFailure`. `flashcard_progress` box changes are owned here, not at
+  /// answer time (`docs/contracts/usecase-contracts/study.md`
+  /// §FinalizeStudySessionUseCase).
+  Future<Result<void>> finalizeStudySession({
+    required SessionId sessionId,
+    required int now,
+  });
 }

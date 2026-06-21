@@ -322,6 +322,24 @@ Future<Either<Failure, Unit>> call({required SessionId sessionId});
 
 **Errors:** `NotFoundFailure`, `FinalizationFailure`, `StorageFailure`.
 
+**V1 implementation (WBS 4.6.1/4.6.2/4.6.4):** `FinalizeStudySessionUseCase`
+(`lib/domain/usecases/study/finalize_study_session_usecase.dart`) owns the `now`
+clock and delegates to `StudyRepository.finalizeStudySession`
+(`lib/data/repositories/study_repository_impl.dart`). It loads the session
+(missing → `NotFoundFailure`; terminal status → `UnsupportedActionFailure` per the
+allowed-transition constraint), validates every `study_session_items.answered_at`
+is set (any unanswered → `FinalizationFailure`, session stays `in_progress`), then
+for each item derives the terminal result (`_terminalResult`, the V1
+last-attempt classifier), computes `box_after = SrsBox.nextBox(box_before, result)`
+(`lib/domain/srs/srs_box.dart`), `due_at = localMidnight(studyDay + BoxIntervals.daysFor(box_after))`
+(`lib/domain/srs/box_intervals.dart`, computed in Dart local time — never SQL
+`localtime`), and the new `review_count` (+1) / `lapse_count` (+1 on `forgot`).
+A new card with no `flashcard_progress` row finalizes from box 1 (the row is
+created); existing rows preserve their suspend/bury state. `StudySessionDao
+.finalizeSession` upserts all progress rows + marks the session `completed` in one
+transaction (rolls back as a unit on failure). Match-derived terminal attempts are
+deferred to the Match mode BE (WBS 4.5.x).
+
 ## RetryFinalizationUseCase
 
 Future proposal; no live V1 implementation in this slice.

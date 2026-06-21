@@ -22,15 +22,14 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 - `lib/data/**study**`
 - `lib/data/datasources/local/drift/flashcard_progress.drift`
 - `lib/data/datasources/local/drift/study_attempts.drift`
-- `lib/data/repositories/study_repo_impl.dart` (canonical owner of finalization in V1).
-- `lib/data/repositories/study_repo_impl_study_session.dart` (`_finalizeResultForAttempts`,
-  `_boxAfterFinalization`, `_intervalForBox` — transitions and due-date calculation).
-- `lib/data/repositories/study_repository_impl.dart` (`recordStudySessionAnswer`, WBS 4.4.1 — the
-  in-session answer recording path; records `study_attempts.box_before`/`box_after` via
-  `lib/domain/srs/srs_box.dart` and keeps `flashcard_progress` unchanged until finalization).
-- `lib/domain/study/usecases/study_usecases.dart` (session creation, empty-scope checks, and
-  in-session answer orchestration; the legacy `lib/domain/srs/box_intervals.dart` and
-  `lib/domain/srs/box_transition.dart` files do NOT exist).
+- `lib/data/repositories/study_repository_impl.dart` (canonical owner of finalization in V1:
+  `finalizeStudySession` + `_terminalResult` classifier + `_dueAtFor`; also `recordStudySessionAnswer`,
+  WBS 4.4.1 — the in-session answer path, which records `study_attempts.box_before`/`box_after`
+  and keeps `flashcard_progress` unchanged until finalization).
+- `lib/domain/srs/srs_box.dart` (`SrsBox.nextBox` box transition) +
+  `lib/domain/srs/box_intervals.dart` (`BoxIntervals.daysFor` interval ladder) — the SRS math owners.
+- `lib/domain/usecases/study/finalize_study_session_usecase.dart` (and the sibling
+  `lib/domain/usecases/study/*` files) — the study use cases.
 
 ## Data
 
@@ -92,13 +91,13 @@ See `docs/business/glossary.md` for result definitions.
 
 This is the authoritative transition contract for one-terminal-attempt flows. The box transition
 is computed at session finalization by `StudyRepositoryImpl.finalizeStudySession` in
-`lib/data/repositories/study_repo_impl.dart`; the in-session `Answer*UseCase` family in
-`lib/domain/study/usecases/study_usecases.dart` only records attempts and re-queues failed cards.
-Implementation must match this table. There is no standalone `box_transition.dart` file at
-present.
+`lib/data/repositories/study_repository_impl.dart` (via `SrsBox.nextBox` in
+`lib/domain/srs/srs_box.dart` + `BoxIntervals` in `lib/domain/srs/box_intervals.dart`, WBS
+4.6.1/4.6.2/4.6.4); the in-session `RecordStudySessionAnswerUseCase` only records attempts.
+Implementation must match this table (pinned by `test/data/repositories/study_srs_transition_test.dart`).
 
 Per-card result classification at finalization (implemented in
-`_finalizeResultForAttempts`, `lib/data/repositories/study_repo_impl_study_session.dart`) for the
+`StudyRepositoryImpl._terminalResult`, `lib/data/repositories/study_repository_impl.dart`) for the
 current one-terminal-attempt flows: the **last** attempt decides — last attempt `forgot` →
 `forgot` (box → 1, lapse +1); any earlier `forgot` but last attempt passing → `recovered` (box
 stays, no lapse); all attempts passing → the last attempt's result (`perfect` / compatibility-only
@@ -118,7 +117,7 @@ or never-correct path to `forgot`.
 >
 > Consequences for the implementation when the first retry mode is built (do these together):
 >
-> - `_finalizeResultForAttempts` must switch from last-attempt to **first-attempt** classification
+> - `StudyRepositoryImpl._terminalResult` must switch from last-attempt to **first-attempt** classification
 >   for the forgot path; update `test/data/repositories/study_srs_transition_test.dart` (S13
 >   changes meaning) and decision rows S13/S20 in the same change.
 > - `recovered` is **redefined**: it no longer means "forgot then passed" (that is now `forgot`);
@@ -138,8 +137,8 @@ or never-correct path to `forgot`.
 
 ## Interval table
 
-Intervals are defined in `_intervalForBox`
-(`lib/data/repositories/study_repo_impl_study_session.dart`). Verified 2026-06-10: the runtime
+Intervals are defined in `BoxIntervals.daysFor`
+(`lib/domain/srs/box_intervals.dart`, WBS 4.6.2). Verified: the runtime
 ladder **matches this table exactly** and is pinned by table-driven tests
 (`test/data/repositories/study_srs_transition_test.dart`). Any change to either side must update
 both in the same commit.
@@ -219,8 +218,9 @@ The due query must:
 
 Any SRS behavior change must update:
 
-- `lib/data/repositories/study_repo_impl.dart` and
-  `lib/data/repositories/study_repo_impl_study_session.dart` (finalization and interval helpers)
+- `lib/data/repositories/study_repository_impl.dart` (finalization: `finalizeStudySession` /
+  `_terminalResult` / `_dueAtFor`) and `lib/domain/srs/{srs_box,box_intervals}.dart` (transition +
+  interval owners)
 - This doc (transition table and/or interval table)
 - `docs/business/study/study-flow.md` if flow changes
 - Decision table rows S6-S15
@@ -274,15 +274,8 @@ Any SRS behavior change must update:
   `box_before`, `box_after`, `result`, `study_mode`, `user_input`, `attempted_at`.
 - `lib/data/datasources/local/drift/flashcard_progress.drift` — per-card SRS state
   (`box_number`, `lapse_count`, `due_at`, `last_studied_at`, `buried_until`, `is_suspended`).
-- `lib/data/repositories/study_repo_impl.dart` +
-  `lib/data/repositories/study_repo_impl_study_session.dart` — finalization write path; computes
-  the final per-card result from persisted attempts, applies the box transition, and computes
-  runtime due intervals through `_intervalForBox`.
-
-> **Drift note**: earlier revisions of this doc referenced `lib/domain/srs/box_intervals.dart`,
-`lib/domain/srs/box_transition.dart`, `lib/domain/srs/srs_service.dart`,
-`lib/data/repositories/srs_repository.dart`, and
-`lib/domain/usecases/study/grade_attempt_usecase.dart`. **None of those paths exist** in the current
-> codebase (verified by `find lib/domain -name "box_*"` returning empty). The current finalization
-> path lives in `lib/data/repositories/study_repo_impl.dart`. If a future refactor extracts
-> transitions into dedicated domain files, update this list and `CLAUDE.md` in the same commit.
+- `lib/data/repositories/study_repository_impl.dart` — finalization write path
+  (`finalizeStudySession`): computes the final per-card result from persisted attempts
+  (`_terminalResult`), applies the box transition (`SrsBox.nextBox`), and computes the
+  local-midnight due date (`_dueAtFor` via `BoxIntervals.daysFor`), all in one transaction
+  (`StudySessionDao.finalizeSession`), WBS 4.6.1/4.6.2/4.6.4.

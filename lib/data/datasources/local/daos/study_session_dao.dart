@@ -22,6 +22,7 @@ class StudySessionDao {
   static const String statusDraft = 'draft';
   static const String statusInProgress = 'in_progress';
   static const String statusCancelled = 'cancelled';
+  static const String statusCompleted = 'completed';
 
   /// Inserts a session header row.
   Future<void> insertSession(StudySessionsCompanion session) =>
@@ -102,6 +103,40 @@ class StudySessionDao {
   Future<StudySessionItemRow?> itemById(String id) => (_db.select(
     _db.studySessionItems,
   )..where((t) => t.id.equals(id))).getSingleOrNull();
+
+  /// The full `flashcard_progress` row for [flashcardId], or `null` when the
+  /// card has no progress row yet (a new card).
+  Future<FlashcardProgressRow?> progressById(String flashcardId) => (_db.select(
+    _db.flashcardProgress,
+  )..where((t) => t.flashcardId.equals(flashcardId))).getSingleOrNull();
+
+  /// Finalizes [sessionId] in one transaction (WBS 4.6.1): upserts each card's
+  /// new `flashcard_progress` ([progressUpserts]) and marks the session
+  /// `completed` at [now]. Rolls back as a unit on any failure, leaving the
+  /// session open. See `docs/contracts/repository-contracts/study-repository.md`.
+  ///
+  /// `insertOnConflictUpdate` only writes the companion's PRESENT columns, so
+  /// each companion MUST supply every column (box/due/counters AND the preserved
+  /// `is_suspended`/`buried_until`) — the caller reads the current row and sets
+  /// them explicitly; omitting them would silently keep stale values, not the
+  /// intended preserved ones.
+  Future<void> finalizeSession(
+    String sessionId,
+    List<FlashcardProgressCompanion> progressUpserts,
+    int now,
+  ) => _db.transaction(() async {
+    for (final FlashcardProgressCompanion upsert in progressUpserts) {
+      await _db.into(_db.flashcardProgress).insertOnConflictUpdate(upsert);
+    }
+    await (_db.update(
+      _db.studySessions,
+    )..where((t) => t.id.equals(sessionId))).write(
+      StudySessionsCompanion(
+        status: const Value(statusCompleted),
+        updatedAt: Value<int>(now),
+      ),
+    );
+  });
 
   /// The current Leitner box of [flashcardId] from `flashcard_progress`, or
   /// `null` when the card has no progress row yet (a new card).
