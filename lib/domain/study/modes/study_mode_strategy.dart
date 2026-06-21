@@ -49,13 +49,34 @@ sealed class BinaryGradeStudyModeStrategy extends StudyModeStrategy {
 sealed class TypedAnswerStudyModeStrategy extends StudyModeStrategy {
   const TypedAnswerStudyModeStrategy(super.mode);
 
-  /// Strict trim-only comparison of the typed [input] against [expected]
-  /// (V1: exact after trimming → [perfect], else [forgot]). The mark-correct
-  /// override and hint-taint refinements land with the Fill mode BE (WBS 4.5.8).
-  AttemptResult evaluate({required String input, required String expected}) =>
-      StringUtils.trimmed(input) == StringUtils.trimmed(expected)
-      ? AttemptResult.perfect
-      : AttemptResult.forgot;
+  /// Grades a typed Fill answer (WBS 4.5.8). V1 strict comparison: trim-only,
+  /// case-sensitive ([input] equals [expected] after trimming).
+  ///
+  /// - On a **wrong** answer (strict comparison fails), [markCorrect] is the
+  ///   user's "Mark correct" override: it yields [recovered] (passing but
+  ///   imperfect — never [perfect]) so a self-marked answer still counts as
+  ///   in-session relearning; without the override a wrong answer is [forgot].
+  /// - A clean strict match yields [perfect] **unless** [hintUsed] taints it down
+  ///   to [recovered] (revealing the hint caps the best result at recovered).
+  ///
+  /// [markCorrect] only applies to a wrong answer (its FE affordance is shown
+  /// only on wrong feedback), so a correct input is graded on its own merit and
+  /// is never demoted by a stray override. `recovered` keeps the card in its
+  /// current box at finalization; `perfect` advances it
+  /// (`docs/business/srs/srs-review.md` §Box transition; decision rows
+  /// S68/S69/S72). The caller records the returned result through the
+  /// one-terminal-attempt path (`RecordStudySessionAnswerUseCase`, WBS 4.4.1).
+  AttemptResult evaluate({
+    required String input,
+    required String expected,
+    bool hintUsed = false,
+    bool markCorrect = false,
+  }) {
+    if (StringUtils.trimmed(input) != StringUtils.trimmed(expected)) {
+      return markCorrect ? AttemptResult.recovered : AttemptResult.forgot;
+    }
+    return hintUsed ? AttemptResult.recovered : AttemptResult.perfect;
+  }
 }
 
 /// Board family (match): no per-card grading API. Match persists append-only

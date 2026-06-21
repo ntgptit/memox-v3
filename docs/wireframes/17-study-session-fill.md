@@ -321,8 +321,9 @@ Same as Recall mode:
   `lib/presentation/features/study/widgets/study_session_fill_mode_view.dart`
 - Viewmodel:
   `lib/presentation/features/study/viewmodels/study_session_fill_viewmodel.dart`
-- Strict matcher and availability rule:
-  `lib/domain/study/fill/fill_answer_evaluator.dart` + `lib/domain/study/modes/fill_study_mode_strategy.dart`
+- Strict matcher (+ mark-correct override / hint taint):
+  `lib/domain/study/modes/study_mode_strategy.dart` (`TypedAnswerStudyModeStrategy.evaluate(input, expected, hintUsed, markCorrect)`, WBS 4.5.8;
+  tested by `test/domain/study/modes/fill_evaluator_test.dart`)
 - Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
 - Shared shell / route entry:
   `lib/presentation/features/study/screens/study_session_screen.dart`

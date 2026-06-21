@@ -92,11 +92,11 @@ applies_to: Study modes, SRS transitions, Bury/Suspend, Resume session, and Stud
 | S65 | Study session recall | Edit pause / resume | Tapping edit pauses the countdown while the edit route is open, refreshes the current card on return, and resumes from the remaining seconds instead of restarting the timer | C1 | TBD |
 | S66 | Study session recall | Manual grade / finalize | Reveal before timeout or grade after timeout records `forgot` or `perfect`, advances to the next unanswered card, and auto-finalizes to the real result screen after the last grade | C1 | TBD |
 | S67 | Study session fill | Typing state on open with an eligible front | Render the green fill chrome with the hint card, centered raw text input, Hint / Check actions, and no TTS button before feedback | C0+C1 | TBD |
-| S68 | Study session fill | Exact match without hint | Persist `perfect`, show correct feedback with the TTS button, and auto-advance after the 0.8s countdown | C1 | TBD |
-| S69 | Study session fill | Exact match after hint | Persist `recovered`, keep the TTS button visible after feedback, and auto-advance after the countdown | C1 | TBD |
+| S68 | Study session fill | Exact match without hint | Persist `perfect`, show correct feedback with the TTS button, and auto-advance after the 0.8s countdown | C1 | `test/domain/study/modes/fill_evaluator_test.dart` (BE grade); FE TBD |
+| S69 | Study session fill | Exact match after hint | Persist `recovered`, keep the TTS button visible after feedback, and auto-advance after the countdown | C1 | `test/domain/study/modes/fill_evaluator_test.dart` (BE grade); FE TBD |
 | S70 | Study session fill | Wrong answer on first check | Show local wrong feedback, keep the attempt unpersisted, show Mark correct / Try again, and do not auto-advance | C1 | TBD |
 | S71 | Study session fill | Retry tapped from wrong feedback | Clear the typed input, retain the hint-taint, return to typing, and keep the retry budget local only | C0+C1 | TBD |
-| S72 | Study session fill | Mark correct tapped from wrong feedback | Persist `recovered` from the wrong branch, show the correct feedback state, and expose the TTS button afterward | C1 | TBD |
+| S72 | Study session fill | Mark correct tapped from wrong feedback | Persist `recovered` from the wrong branch, show the correct feedback state, and expose the TTS button afterward | C1 | `test/domain/study/modes/fill_evaluator_test.dart` (BE grade); FE TBD |
 | S73 | Study session fill | Last card answered | Show the ready-to-finish callout and Finish Session CTA instead of the normal next-card flow | C1 | TBD |
 | S74 | Study session fill | Finish tapped after the final answer | Finalize the session and push-replace to the real result screen on success | C0+C1 | TBD |
 | S75 | Study session fill | Finalize fails | Keep the session open, show the controlled finalize error, and leave Finish Session available for retry | C1 | TBD |
