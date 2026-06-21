@@ -74,14 +74,18 @@ remains → object is **DONE** for the FE loop.
       `COALESCE(is_suspended,0)=0 AND (buried_until IS NULL OR buried_until <= now)`, mirroring
       `study_scope_queries.drift`. Updated drift comment + `folder_summary.dart` doc + F12/F13
       decision rows + added the exclusion test. verify PASS.
-- [ ] **WP-L6b — Library read-model enrichment (BE) — `dueToday` / `mastery` / `newCount` /
-      `subtitle`** — eligible under the **vertical-slice rule**. Extend the `watchLibraryOverview`
-      Drift query + `LibraryOverview`/`FolderSummary` model to carry the per-folder subtree
-      aggregates the mock (shot `03a`) + visual-contract §Folder Card Contract specify: `mastery`
-      (`AVG(COALESCE(box_number,1))/8` over subtree), `newCount` (cards with no progress / `due_at`
-      NULL), `subtitle` (`GROUP_CONCAT` of ≤3 deck names), and a library-level `dueToday` total for
-      the due-summary card. Pure read-model query extension — **no schema**. BE query/repo unit
-      tests. **NEXT.**
+- [x] **WP-L6b — Folder `mastery` + `newCount` read model (BE)** — **Implemented (2026-06-21).**
+      Extended the `rootFolderSummaries` + `childFolderSummaries` `subtree_counts` CTE with
+      `new_count` (active cards never yet studied: `due_at IS NULL` + F13 exclusion — a stricter
+      set than the study new-queue, surfaces unseen cards) and
+      `avg_box` (`AVG(COALESCE(box_number,1))` over subtree cards). Added `FolderSummary.newCount`
+      (int, default 0) + `mastery` (double?, `avg_box / SrsBox.max`, null when empty). Repo
+      `_summary` mapper computes mastery; both call sites pass the new columns. BE tests
+      (newCount-excludes-suspended, mastery = mean box / 8, null when empty). No schema. verify PASS.
+- [ ] WP-L6c — Deck-digest `subtitle` read model (BE) — `GROUP_CONCAT` of ≤3 direct deck names per
+      folder → `FolderSummary.subtitle` (String?). Query-only; FE shows it under the folder name.
+- [ ] WP-L6d — Library `dueToday` due-summary total (BE) — a library-level aggregate (total active
+      due cards + folder count + est. minutes) for the due-summary card; `LibraryOverview.dueToday`.
 - [ ] WP-L7 — Due-summary card FE (`dueToday`) — depends on WP-L6. Render the non-interactive
       due-summary `MxCard` (title + `Across {n} folders · ~{m} min` subtitle + chevron) when
       `dueToday > 0`. Widget + golden.

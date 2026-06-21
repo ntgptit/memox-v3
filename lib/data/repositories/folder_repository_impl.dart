@@ -15,6 +15,7 @@ import 'package:memox/domain/models/folder_move_target.dart';
 import 'package:memox/domain/models/folder_summary.dart';
 import 'package:memox/domain/models/library_overview.dart';
 import 'package:memox/domain/repositories/folder_repository.dart';
+import 'package:memox/domain/srs/srs_box.dart';
 import 'package:memox/domain/types/content_mode.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/target_language.dart';
@@ -63,6 +64,8 @@ class FolderRepositoryImpl implements FolderRepository {
                   r.deckCount,
                   r.cardCount,
                   r.dueCount,
+                  r.newCount,
+                  r.avgBox,
                 ),
               )
               .toList(growable: false),
@@ -100,6 +103,8 @@ class FolderRepositoryImpl implements FolderRepository {
                 r.deckCount,
                 r.cardCount,
                 r.dueCount,
+                r.newCount,
+                r.avgBox,
               ),
             )
             .toList(growable: false),
@@ -126,12 +131,17 @@ class FolderRepositoryImpl implements FolderRepository {
     int deckCount,
     int cardCount,
     int dueCount,
+    int newCount,
+    double? avgBox,
   ) => FolderSummary(
     folder: FolderMapper.fromRow(row),
     subfolderCount: subfolderCount,
     deckCount: deckCount,
     cardCount: cardCount,
     dueCount: dueCount,
+    newCount: newCount,
+    // Normalise the mean SRS box to 0..1; null when the subtree has no cards.
+    mastery: avgBox == null ? null : avgBox / SrsBox.max,
   );
 
   // ---- Mutations ----

@@ -21,6 +21,19 @@ part 'folder_summary.freezed.dart';
 /// > AND (buried_until IS NULL OR buried_until <= now)`), mirroring the
 /// > `study_scope_queries.drift` queue predicate so count ↔ queue cannot
 /// > diverge. [cardCount] still includes suspended/buried cards (F13).
+///
+/// Tile-enrichment fields (mock shot `03a`, library-overview visual contract
+/// §Folder Card Contract):
+/// - [newCount] — active cards never yet studied in the subtree (`due_at IS
+///   NULL`, with the F13 suspended/buried exclusion). This is a STRICTER set than
+///   the study new-queue (which draws New from all active cards; the new-vs-due
+///   split is WBS 3.2.3, Future) — the badge surfaces unseen cards. The folder
+///   tile shows a `{n} new` badge only when `> 0`.
+/// - [mastery] — mean SRS box over the subtree normalised to `0..1`
+///   (`AVG(COALESCE(box_number,1)) / SrsBox.max`); **includes suspended/buried
+///   cards** (mastery is over the full corpus, not the active queue); `null`
+///   when the subtree has no cards. Rendered as a thin progress bar only when
+///   non-null.
 @freezed
 sealed class FolderSummary with _$FolderSummary {
   const factory FolderSummary({
@@ -29,5 +42,7 @@ sealed class FolderSummary with _$FolderSummary {
     required int deckCount,
     required int cardCount,
     required int dueCount,
+    @Default(0) int newCount,
+    double? mastery,
   }) = _FolderSummary;
 }

@@ -55,6 +55,7 @@ void main() {
     int? dueAt,
     bool suspended = false,
     int? buriedUntil,
+    int box = 1,
   }) async {
     final card = await flashcardRepo.createFlashcard(
       deckId: deckId,
@@ -64,8 +65,8 @@ void main() {
     final String id = card.data!.id;
     await db.customStatement(
       'UPDATE flashcard_progress SET due_at = ?, is_suspended = ?, '
-      'buried_until = ? WHERE flashcard_id = ?',
-      <Object?>[dueAt, suspended ? 1 : 0, buriedUntil, id],
+      'buried_until = ?, box_number = ? WHERE flashcard_id = ?',
+      <Object?>[dueAt, suspended ? 1 : 0, buriedUntil, box, id],
     );
     return id;
   }
@@ -214,5 +215,59 @@ void main() {
     expect(detail.deckCount, 0);
     expect(detail.cardCount, 0);
     expect(detail.dueCount, 0);
+  });
+
+  test('newCount = active NEW cards (due_at NULL) excluding suspended; '
+      'mastery = mean box / 8', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Lang',
+    )).data!.id;
+    final String deckId = (await repo.createDeck(
+      folderId: folderId,
+      name: 'Vocab',
+      targetLanguage: TargetLanguage.korean,
+    )).data!.id;
+
+    await addCard(deckId, dueAt: fixedNow - 1, box: 2); // studied/due
+    await addCard(deckId, dueAt: fixedNow + 5000, box: 6); // scheduled future
+    await addCard(deckId, box: 4); // NEW (due_at NULL), active
+    await addCard(
+      deckId,
+      box: 8,
+      suspended: true,
+    ); // NEW but suspended → not new
+    await addCard(
+      deckId,
+      box: 3,
+      buriedUntil: fixedNow + 5000,
+    ); // NEW but currently buried → not new
+
+    final LibraryOverview overview = await repo.watchLibraryOverview().first;
+    final FolderSummary summary = overview.folders.firstWhere(
+      (FolderSummary f) => f.folder.id == folderId,
+    );
+
+    expect(summary.newCount, 1); // only the active box-4 NEW card
+    // mean box over all 5 cards = (2 + 6 + 4 + 8 + 3) / 5 = 4.6 → mastery 4.6/8.
+    expect(summary.mastery, closeTo(4.6 / 8, 1e-9));
+  });
+
+  test('mastery is null and newCount 0 for a folder with no cards', () async {
+    final String folderId = (await repo.createRootFolder(
+      name: 'Empty',
+    )).data!.id;
+    await repo.createDeck(
+      folderId: folderId,
+      name: 'EmptyDeck',
+      targetLanguage: TargetLanguage.korean,
+    );
+
+    final LibraryOverview overview = await repo.watchLibraryOverview().first;
+    final FolderSummary summary = overview.folders.firstWhere(
+      (FolderSummary f) => f.folder.id == folderId,
+    );
+
+    expect(summary.newCount, 0);
+    expect(summary.mastery, isNull);
   });
 }

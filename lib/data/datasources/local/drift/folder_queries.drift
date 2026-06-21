@@ -33,7 +33,19 @@ subtree_counts AS (
     subtree.root_id AS fid,
     COUNT(fc.id) AS card_count,
     COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0 AND (fp.buried_until IS NULL OR fp.buried_until <= :now) AND fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
-      AS due_count
+      AS due_count,
+    -- "New" badge count = active cards never yet studied (`due_at IS NULL`),
+    -- with the F13 suspended/currently-buried exclusion. NOTE: this is a STRICTER
+    -- set than the study new-queue (which draws New from ALL active cards, not
+    -- only `due_at IS NULL` — the new-vs-due split is WBS 3.2.3, Future); the
+    -- badge surfaces unseen cards, not the full new-queue.
+    COUNT(CASE WHEN fc.id IS NOT NULL AND COALESCE(fp.is_suspended, 0) = 0 AND (fp.buried_until IS NULL OR fp.buried_until <= :now) AND fp.due_at IS NULL THEN 1 END)
+      AS new_count,
+    -- Mean SRS box over every subtree card INCLUDING suspended/buried (mastery is
+    -- over the full corpus, not the active queue; no progress row → box 1); NULL
+    -- when the subtree has no cards. Normalised to 0..1 in the repo (÷ SrsBox.max).
+    AVG(CASE WHEN fc.id IS NOT NULL THEN COALESCE(fp.box_number, 1) END)
+      AS avg_box
   FROM subtree
   LEFT JOIN decks d ON d.folder_id = subtree.node_id
   LEFT JOIN flashcards fc ON fc.deck_id = d.id
@@ -47,7 +59,9 @@ SELECT
   (SELECT COUNT(*) FROM decks dd WHERE dd.folder_id = folders.id)
     AS deck_count,
   COALESCE(sc.card_count, 0) AS card_count,
-  COALESCE(sc.due_count, 0) AS due_count
+  COALESCE(sc.due_count, 0) AS due_count,
+  COALESCE(sc.new_count, 0) AS new_count,
+  sc.avg_box AS avg_box
 FROM folders
 LEFT JOIN subtree_counts sc ON sc.fid = folders.id
 WHERE folders.parent_id IS NULL
@@ -69,7 +83,19 @@ subtree_counts AS (
     subtree.root_id AS fid,
     COUNT(fc.id) AS card_count,
     COUNT(CASE WHEN COALESCE(fp.is_suspended, 0) = 0 AND (fp.buried_until IS NULL OR fp.buried_until <= :now) AND fp.due_at IS NOT NULL AND fp.due_at <= :now THEN 1 END)
-      AS due_count
+      AS due_count,
+    -- "New" badge count = active cards never yet studied (`due_at IS NULL`),
+    -- with the F13 suspended/currently-buried exclusion. NOTE: this is a STRICTER
+    -- set than the study new-queue (which draws New from ALL active cards, not
+    -- only `due_at IS NULL` — the new-vs-due split is WBS 3.2.3, Future); the
+    -- badge surfaces unseen cards, not the full new-queue.
+    COUNT(CASE WHEN fc.id IS NOT NULL AND COALESCE(fp.is_suspended, 0) = 0 AND (fp.buried_until IS NULL OR fp.buried_until <= :now) AND fp.due_at IS NULL THEN 1 END)
+      AS new_count,
+    -- Mean SRS box over every subtree card INCLUDING suspended/buried (mastery is
+    -- over the full corpus, not the active queue; no progress row → box 1); NULL
+    -- when the subtree has no cards. Normalised to 0..1 in the repo (÷ SrsBox.max).
+    AVG(CASE WHEN fc.id IS NOT NULL THEN COALESCE(fp.box_number, 1) END)
+      AS avg_box
   FROM subtree
   LEFT JOIN decks d ON d.folder_id = subtree.node_id
   LEFT JOIN flashcards fc ON fc.deck_id = d.id
@@ -83,7 +109,9 @@ SELECT
   (SELECT COUNT(*) FROM decks dd WHERE dd.folder_id = folders.id)
     AS deck_count,
   COALESCE(sc.card_count, 0) AS card_count,
-  COALESCE(sc.due_count, 0) AS due_count
+  COALESCE(sc.due_count, 0) AS due_count,
+  COALESCE(sc.new_count, 0) AS new_count,
+  sc.avg_box AS avg_box
 FROM folders
 LEFT JOIN subtree_counts sc ON sc.fid = folders.id
 WHERE folders.parent_id = :parentId
