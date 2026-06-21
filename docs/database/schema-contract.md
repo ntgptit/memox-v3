@@ -85,10 +85,14 @@ When a new table/column ships, bump `AppDatabase.currentSchemaVersion`, add an
 The Drift database file name is parameterized by the active account (see
 `docs/business/account-sync/account-sync.md`):
 
-| Account context | Database file name                                       |
-|-----------------|----------------------------------------------------------|
-| Guest (no link) | `{AppConstants.localDatabaseName}_guest`                 |
-| Google account  | `{AppConstants.localDatabaseName}_{normalizedSubjectId}` |
+| Account context | Database store name                                                  |
+|-----------------|---------------------------------------------------------------------|
+| Guest (no link) | `AppConstants.guestDatabaseStore` = `{localDatabaseName}_guest_g{localStoreGeneration}` |
+| Google account  | `{AppConstants.localDatabaseName}_{normalizedSubjectId}_g{localStoreGeneration}` (target) |
+
+The `_g{localStoreGeneration}` suffix is the **local store generation** — bumping it abandons all
+existing on-device stores in one move (a deliberate pre-release reset, no migration). See
+`docs/database/storage-boundaries.md` §Local store generation. Current generation: `2`.
 
 Implications:
 

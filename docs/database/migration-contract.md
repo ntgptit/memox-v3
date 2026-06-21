@@ -44,6 +44,19 @@ Each migration:
 - Renaming enum values without data backfill.
 - Removing foreign keys.
 - Changing timestamp unit.
+- Making a step idempotent (`CREATE … IF NOT EXISTS`, swallowing "already exists") to paper over a
+  store whose `user_version` disagrees with its contents. That skew is a pre-release artifact, not a
+  migration concern — see below.
+
+## Pre-release store skew (generation bump, not a migration)
+
+A stale **pre-release** local store can carry objects from a newer version while its `user_version`
+still reads an older one — typically after a schema renumber. `onUpgrade` then re-runs an already-
+applied create step and fails (e.g. `index idx_study_sessions_resumable already exists`). This is NOT
+fixed with a migration: the chain is correct for any coherent store. Instead bump
+`AppConstants.localStoreGeneration` to abandon the incoherent store and open a fresh one
+(`docs/database/storage-boundaries.md` §Local store generation). Allowed only pre-release (no
+production data); never use it to skip writing a real migration for an actual schema change.
 
 ## Verification
 

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-26
+last_updated: 2026-06-21
 applies_to: persistence boundary, data access patterns
 ---
 
@@ -8,6 +8,24 @@ applies_to: persistence boundary, data access patterns
 ## Purpose
 
 Define where data belongs and how layers access it.
+
+## Local store generation
+
+Every on-device store name embeds a **generation** tag — `AppConstants.guestDatabaseStore` resolves
+to `memox_guest_g{AppConstants.localStoreGeneration}` (web: the IndexedDB/OPFS database name; native:
+the `.sqlite` file stem). Bumping `localStoreGeneration` makes drift open a brand-new store, so the
+previous one is simply **abandoned** (a deliberate, destructive reset with no migration).
+
+Use it only for a pre-release reset, when an old local store is inconsistent with the current
+migration chain and `onUpgrade` cannot recover. Concretely: the 2026-06 rebuild renumbered schema
+versions, so a stale dev store can hold v6 study objects while its `user_version` is ≤ 5 — `onUpgrade`
+then re-runs `migrateV5ToV6` and fails on an existing object (`index idx_study_sessions_resumable
+already exists`). MemoX is local-first with no remote telemetry and no production data, so abandoning
+the stale store is safe. **Current generation: `2`** (bumped 2026-06-21 to clear pre-rebuild stores).
+
+This is NOT a substitute for migrations: real schema evolution still goes through a versioned
+`onUpgrade` step. Bump the generation only to discard incoherent pre-release stores, never to skip
+writing a migration.
 
 ## Source of truth
 

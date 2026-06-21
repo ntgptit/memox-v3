@@ -15,7 +15,7 @@ import 'package:path_provider/path_provider.dart';
 QueryExecutor openConnection() => LazyDatabase(() async {
   final Directory dir = await getApplicationDocumentsDirectory();
   final File file = File(
-    p.join(dir.path, '${AppConstants.localDatabaseName}_guest.sqlite'),
+    p.join(dir.path, '${AppConstants.guestDatabaseStore}.sqlite'),
   );
   return NativeDatabase.createInBackground(
     file,

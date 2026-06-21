@@ -8,7 +8,7 @@ import 'package:memox/core/constants/app_constants.dart';
 /// See `docs/database/drift-guide.md` §Layout.
 QueryExecutor openConnection() => LazyDatabase(() async {
   final WasmDatabaseResult result = await WasmDatabase.open(
-    databaseName: '${AppConstants.localDatabaseName}_guest',
+    databaseName: AppConstants.guestDatabaseStore,
     sqlite3Uri: Uri.parse('sqlite3.wasm'),
     driftWorkerUri: Uri.parse('drift_worker.js'),
   );
