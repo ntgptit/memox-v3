@@ -82,6 +82,12 @@ class _RecordingFlashcardRepository implements FlashcardRepository {
   Future<Result<List<({String front, String back})>>> loadDeckCardContents({
     required DeckId deckId,
   }) => throw UnimplementedError();
+
+  @override
+  Future<Result<int>> commitDeckImport({
+    required DeckId deckId,
+    required List<({String front, String back})> rows,
+  }) => throw UnimplementedError();
 }
 
 void main() {

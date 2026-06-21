@@ -6,18 +6,33 @@ import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/types/flashcard_import_duplicate.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/import_row_issue_type.dart';
+import 'package:memox/domain/usecases/flashcard/commit_deck_import_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/parse_deck_import_csv_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/prepare_deck_import_usecase.dart';
 
-/// Fake returning canned existing-deck card contents for the prepare stage.
+/// Fake returning canned existing-deck card contents for the prepare stage and
+/// recording the commit call for the commit stage.
 class _FakeFlashcardRepository implements FlashcardRepository {
-  _FakeFlashcardRepository(this._existing);
+  _FakeFlashcardRepository([this._existing = const []]);
   final List<({String front, String back})> _existing;
+
+  List<({String front, String back})>? committedRows;
+  String? committedDeckId;
 
   @override
   Future<Result<List<({String front, String back})>>> loadDeckCardContents({
     required DeckId deckId,
   }) async => (failure: null, data: _existing);
+
+  @override
+  Future<Result<int>> commitDeckImport({
+    required DeckId deckId,
+    required List<({String front, String back})> rows,
+  }) async {
+    committedDeckId = deckId;
+    committedRows = rows;
+    return (failure: null, data: rows.length);
+  }
 
   @override
   dynamic noSuchMethod(Invocation invocation) =>
@@ -332,6 +347,68 @@ void main() {
 
       expect(result.data, isNull);
       expect(result.failure, isNotNull);
+    });
+  });
+
+  // CommitDeckImportUseCase (WBS 6.4.1): reject blank deck id / empty items,
+  // then delegate a single transactional commit.
+  group('CommitDeckImportUseCase', () {
+    FlashcardImportPreparation prep(List<({String front, String back})> rows) =>
+        FlashcardImportPreparation(
+          previewItems: <FlashcardImportRow>[
+            for (final (int i, ({String front, String back}) r) in rows.indexed)
+              FlashcardImportRow(
+                lineNumber: i + 1,
+                front: r.front,
+                back: r.back,
+              ),
+          ],
+        );
+
+    test('commits the prepared rows and returns the count', () async {
+      final repo = _FakeFlashcardRepository();
+      final useCase = CommitDeckImportUseCase(repository: repo);
+
+      final result = await useCase.call(
+        deckId: 'd1',
+        preparation: prep(const [
+          (front: 'a', back: '1'),
+          (front: 'b', back: '2'),
+        ]),
+      );
+
+      expect(result.failure, isNull);
+      expect(result.data, 2);
+      expect(repo.committedDeckId, 'd1');
+      expect(repo.committedRows!.map((r) => r.front), <String>['a', 'b']);
+    });
+
+    test('rejects a blank deck id without touching the repository', () async {
+      final repo = _FakeFlashcardRepository();
+      final useCase = CommitDeckImportUseCase(repository: repo);
+
+      final result = await useCase.call(
+        deckId: '  ',
+        preparation: prep(const [(front: 'a', back: '1')]),
+      );
+
+      expect(result.data, isNull);
+      expect(result.failure, isA<ValidationFailure>());
+      expect(repo.committedRows, isNull);
+    });
+
+    test('rejects an empty preparation', () async {
+      final repo = _FakeFlashcardRepository();
+      final useCase = CommitDeckImportUseCase(repository: repo);
+
+      final result = await useCase.call(
+        deckId: 'd1',
+        preparation: FlashcardImportPreparation.empty,
+      );
+
+      expect(result.data, isNull);
+      expect(result.failure, isA<ValidationFailure>());
+      expect(repo.committedRows, isNull);
     });
   });
 }

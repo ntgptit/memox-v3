@@ -485,5 +485,103 @@ void main() {
       expect(result.failure, isNull);
       expect(result.data, isEmpty);
     });
+
+    test(
+      'commitDeckImport inserts rows + progress, appended in order (6.4.1)',
+      () async {
+        final String deckId = await newDeck();
+        await repo.createFlashcard(
+          deckId: deckId,
+          front: 'existing',
+          back: 'x',
+        );
+
+        final result = await repo.commitDeckImport(
+          deckId: deckId,
+          rows: const [
+            (front: 'eat', back: '먹다'),
+            (front: 'drink', back: '마시다'),
+          ],
+        );
+
+        expect(result.failure, isNull);
+        expect(result.data, 2);
+        final detail = (await repo.watchFlashcardList(deckId).first).data!;
+        expect(
+          detail.cards.map((c) => c.front),
+          <String>['existing', 'eat', 'drink'],
+          reason: 'imported rows appended after existing in order',
+        );
+        // Each imported card has a default NEW progress row.
+        for (final card in detail.cards) {
+          final p = await flashcardDao.findProgress(card.id);
+          expect(p!.boxNumber, 1);
+          expect(p.dueAt, isNull);
+        }
+      },
+    );
+
+    test(
+      'commitDeckImport on a missing deck is NotFound, writes nothing',
+      () async {
+        final result = await repo.commitDeckImport(
+          deckId: 'nope',
+          rows: const [(front: 'a', back: 'b')],
+        );
+        expect(result.failure, isA<NotFoundFailure>());
+        expect(
+          await flashcardDao.flashcardsInDeck('nope'),
+          isEmpty,
+          reason: 'deck check precedes any insert',
+        );
+      },
+    );
+
+    test('commitDeckImport with no rows is a no-op count 0', () async {
+      final String deckId = await newDeck();
+      final result = await repo.commitDeckImport(
+        deckId: deckId,
+        rows: const [],
+      );
+      expect(result.failure, isNull);
+      expect(result.data, 0);
+    });
+
+    test(
+      'commitDeckImport rolls the whole batch back on mid-batch failure',
+      () async {
+        final String deckId = await newDeck();
+        // A generator returning the same id for every card forces a PRIMARY KEY
+        // collision on the SECOND row — the first row's writes must roll back
+        // (all-or-nothing; no silent partial import — WBS 6.4.1/6.4.2).
+        final collidingRepo = FlashcardRepositoryImpl(
+          dao: flashcardDao,
+          deckDao: deckDao,
+          folderDao: folderDao,
+          idGenerator: _ConstantIdGenerator('dup'),
+          nowMs: () => clock++,
+        );
+
+        final result = await collidingRepo.commitDeckImport(
+          deckId: deckId,
+          rows: const [(front: 'a', back: '1'), (front: 'b', back: '2')],
+        );
+
+        expect(result.failure, isA<StorageFailure>());
+        expect(
+          await flashcardDao.flashcardsInDeck(deckId),
+          isEmpty,
+          reason: 'first row rolled back — no silent partial import',
+        );
+      },
+    );
   });
+}
+
+/// Test IdGenerator that always returns the same id, to force a PK collision.
+class _ConstantIdGenerator extends IdGenerator {
+  _ConstantIdGenerator(this._id);
+  final String _id;
+  @override
+  String newId() => _id;
 }

@@ -250,6 +250,12 @@ Future<Either<Failure, ImportResult>> call({
 > - `CommitDeckImportUseCase.call({deckId, preparation}) → Future<Result<int>>` — reject empty deck
 >   id, reject empty `previewItems`, then commit the rows + default SRS progress in a single
 >   repository transaction (no silent partial import). Returns the committed count. (WBS 6.4.1.)
+>   **Implemented (WBS 6.4.1):** blank `deckId` → `ValidationFailure(deckId, empty)`; empty
+>   `previewItems` → `ValidationFailure(previewItems, insufficientContent)`; otherwise delegates to
+>   `FlashcardRepository.commitDeckImport`, which inserts every row as a flashcard + default SRS
+>   progress (box 1, due NULL, zero counters) appended after existing cards, all-or-nothing as one DB
+>   unit (a missing deck → `NotFoundFailure`; a write error rolls back → `StorageFailure`). Returns
+>   the committed count.
 >
 > Preview is in-line and clean preview rows are committed from the same screen. Migration to the
 > `Either`/single-call form is deferred to the approved `fpdart` migration.

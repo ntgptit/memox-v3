@@ -125,4 +125,15 @@ abstract interface class FlashcardRepository {
   Future<Result<List<({String front, String back})>>> loadDeckCardContents({
     required DeckId deckId,
   });
+
+  /// Commits imported [rows] into [deckId] atomically as one DB unit (WBS
+  /// 6.4.1): each row becomes a flashcard + its default SRS progress (box 1, due
+  /// NULL, zero counters), appended after existing cards in order. All-or-nothing
+  /// — any failure rolls the whole batch back (no silent partial import). A missing
+  /// deck is a `NotFoundFailure`; a write error maps to a `StorageFailure`.
+  /// Returns the number of cards committed.
+  Future<Result<int>> commitDeckImport({
+    required DeckId deckId,
+    required List<({String front, String back})> rows,
+  });
 }

@@ -478,6 +478,48 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   }
 
   @override
+  Future<Result<int>> commitDeckImport({
+    required DeckId deckId,
+    required List<({String front, String back})> rows,
+  }) async {
+    if (rows.isEmpty) {
+      return _ok(0);
+    }
+    try {
+      return await _dao.runInTransaction(() async {
+        final DeckRow? deck = await _deckDao.findDeckById(deckId);
+        if (deck == null) {
+          return _fail<int>(const Failure.notFound(entity: 'deck'));
+        }
+
+        final List<FlashcardRow> siblings = await _dao.flashcardsInDeck(deckId);
+        final int baseOrder = _nextSortOrder(siblings);
+        final int now = _nowMs();
+
+        for (final (int i, ({String front, String back}) row) in rows.indexed) {
+          final Flashcard card = Flashcard(
+            id: _idGenerator.newId(),
+            deckId: deckId,
+            front: row.front,
+            back: row.back,
+            tags: const <TagName>[],
+            sortOrder: baseOrder + i,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(now, isUtc: true),
+            updatedAt: DateTime.fromMillisecondsSinceEpoch(now, isUtc: true),
+          );
+          await _dao.insertFlashcard(_insertCompanion(card, now));
+          await _dao.insertProgress(
+            FlashcardProgressCompanion.insert(flashcardId: card.id),
+          );
+        }
+        return _ok(rows.length);
+      });
+    } catch (error) {
+      return _fail<int>(_storageWrite(error));
+    }
+  }
+
+  @override
   Future<Result<List<({String front, String back})>>> loadDeckCardContents({
     required DeckId deckId,
   }) async {

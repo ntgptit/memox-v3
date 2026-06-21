@@ -4,6 +4,7 @@ import 'package:memox/data/datasources/local/daos/flashcard_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/domain/repositories/flashcard_repository.dart';
 import 'package:memox/domain/usecases/flashcard/check_manual_duplicate_flashcard_usecase.dart';
+import 'package:memox/domain/usecases/flashcard/commit_deck_import_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/create_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/delete_flashcard_usecase.dart';
 import 'package:memox/domain/usecases/flashcard/export_deck_csv_usecase.dart';
@@ -69,6 +70,10 @@ PrepareDeckImportUseCase prepareDeckImportUseCase(Ref ref) =>
     PrepareDeckImportUseCase(
       repository: ref.watch(flashcardRepositoryProvider),
     );
+
+@riverpod
+CommitDeckImportUseCase commitDeckImportUseCase(Ref ref) =>
+    CommitDeckImportUseCase(repository: ref.watch(flashcardRepositoryProvider));
 
 @riverpod
 CheckManualDuplicateFlashcardUseCase checkManualDuplicateFlashcardUseCase(
