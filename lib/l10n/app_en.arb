@@ -474,5 +474,13 @@
   "studyResultLoadFailedTitle": "Couldn't load your results",
   "@studyResultLoadFailedTitle": { "description": "Error title when the result summary fails to load." },
   "studyResultLoadFailedMessage": "Something went wrong loading this session's summary.",
-  "@studyResultLoadFailedMessage": { "description": "Error body when the result summary fails to load." }
+  "@studyResultLoadFailedMessage": { "description": "Error body when the result summary fails to load." },
+  "studyResultSaveFailedBanner": "Couldn't save your results. Your progress is kept locally.",
+  "@studyResultSaveFailedBanner": { "description": "Banner shown when the session summary failed to finalize." },
+  "studyResultRetry": "Retry save",
+  "@studyResultRetry": { "description": "Action that re-runs finalize on the save-failed result." },
+  "studyResultDefensiveTitle": "No cards answered",
+  "@studyResultDefensiveTitle": { "description": "Title of the defensive zero-answers result state." },
+  "studyResultDefensiveMessage": "This session has no recorded answers.",
+  "@studyResultDefensiveMessage": { "description": "Body of the defensive zero-answers result state." }
 }

@@ -32,21 +32,23 @@ StudySessionResultItem _item(AttemptResult? result, int sortOrder) =>
       result: result,
     );
 
-StudySessionResult _result({required List<StudySessionResultItem> items}) =>
-    StudySessionResult(
-      session: StudySession(
-        id: _sid,
-        scope: const StudyScope(
-          entryType: EntryType.deck,
-          entryRefId: 'd1',
-          studyType: StudyType.srsReview,
-        ),
-        status: SessionStatus.completed,
-        startedAt: _t,
-        updatedAt: _t,
-      ),
-      items: items,
-    );
+StudySessionResult _result({
+  required List<StudySessionResultItem> items,
+  SessionStatus status = SessionStatus.completed,
+}) => StudySessionResult(
+  session: StudySession(
+    id: _sid,
+    scope: const StudyScope(
+      entryType: EntryType.deck,
+      entryRefId: 'd1',
+      studyType: StudyType.srsReview,
+    ),
+    status: status,
+    startedAt: _t,
+    updatedAt: _t,
+  ),
+  items: items,
+);
 
 Future<void> _pump(
   WidgetTester tester, {
@@ -109,6 +111,42 @@ void main() {
       expect(find.text('Wrong'), findsOneWidget);
       expect(find.text('1'), findsOneWidget); // forgot
       expect(find.text('3 / 3'), findsOneWidget); // answered / total
+    });
+
+    testWidgets('save-failed: shows the banner + Retry (Done stays)', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        result: () async => _result(
+          status: SessionStatus.failedToFinalize,
+          items: <StudySessionResultItem>[
+            _item(AttemptResult.perfect, 0),
+            _item(AttemptResult.forgot, 1),
+          ],
+        ),
+      );
+      expect(find.textContaining("Couldn't save your results"), findsOneWidget);
+      expect(find.text('Retry save'), findsOneWidget);
+      expect(find.text('Done'), findsOneWidget); // still leaveable
+      expect(find.text('Correct'), findsOneWidget); // counts still shown
+    });
+
+    testWidgets('defensive: zero answered shows the no-answers notice', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        result: () async => _result(
+          items: <StudySessionResultItem>[_item(null, 0), _item(null, 1)],
+        ),
+      );
+      expect(find.text('No cards answered'), findsOneWidget);
+      expect(find.text('Done'), findsOneWidget);
+      expect(
+        find.text('Correct'),
+        findsNothing,
+      ); // no counts in the defensive state
     });
 
     testWidgets('loading shows a spinner', (tester) async {
@@ -176,6 +214,45 @@ void main() {
           find.byType(StudyResultScreen),
           matchesGoldenFile(
             'goldens/study_result_loaded__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('result-save-failed — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          golden: true,
+          result: () async => _result(
+            status: SessionStatus.failedToFinalize,
+            items: <StudySessionResultItem>[
+              _item(AttemptResult.perfect, 0),
+              _item(AttemptResult.perfect, 1),
+              _item(AttemptResult.forgot, 2),
+            ],
+          ),
+        );
+        await expectLater(
+          find.byType(StudyResultScreen),
+          matchesGoldenFile(
+            'goldens/study_result_save-failed__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('result-defensive — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          golden: true,
+          result: () async => _result(
+            items: <StudySessionResultItem>[_item(null, 0), _item(null, 1)],
+          ),
+        );
+        await expectLater(
+          find.byType(StudyResultScreen),
+          matchesGoldenFile(
+            'goldens/study_result_defensive__${brightness.name}.png',
           ),
         );
       });

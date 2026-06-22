@@ -221,5 +221,9 @@
   "studyResultAnswered": "Đã trả lời",
   "studyResultDone": "Xong",
   "studyResultLoadFailedTitle": "Không tải được kết quả",
-  "studyResultLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt phiên học này."
+  "studyResultLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt phiên học này.",
+  "studyResultSaveFailedBanner": "Không lưu được kết quả. Tiến độ của bạn đã được giữ trên máy.",
+  "studyResultRetry": "Thử lưu lại",
+  "studyResultDefensiveTitle": "Chưa trả lời thẻ nào",
+  "studyResultDefensiveMessage": "Phiên học này chưa có câu trả lời nào được ghi lại."
 }

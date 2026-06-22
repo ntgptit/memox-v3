@@ -748,4 +748,18 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get studyResultLoadFailedMessage =>
       'Đã xảy ra lỗi khi tải tóm tắt phiên học này.';
+
+  @override
+  String get studyResultSaveFailedBanner =>
+      'Không lưu được kết quả. Tiến độ của bạn đã được giữ trên máy.';
+
+  @override
+  String get studyResultRetry => 'Thử lưu lại';
+
+  @override
+  String get studyResultDefensiveTitle => 'Chưa trả lời thẻ nào';
+
+  @override
+  String get studyResultDefensiveMessage =>
+      'Phiên học này chưa có câu trả lời nào được ghi lại.';
 }

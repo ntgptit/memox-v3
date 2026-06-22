@@ -766,4 +766,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get studyResultLoadFailedMessage =>
       'Something went wrong loading this session\'s summary.';
+
+  @override
+  String get studyResultSaveFailedBanner =>
+      'Couldn\'t save your results. Your progress is kept locally.';
+
+  @override
+  String get studyResultRetry => 'Retry save';
+
+  @override
+  String get studyResultDefensiveTitle => 'No cards answered';
+
+  @override
+  String get studyResultDefensiveMessage =>
+      'This session has no recorded answers.';
 }

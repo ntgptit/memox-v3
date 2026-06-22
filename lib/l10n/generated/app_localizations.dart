@@ -1423,6 +1423,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong loading this session\'s summary.'**
   String get studyResultLoadFailedMessage;
+
+  /// Banner shown when the session summary failed to finalize.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your results. Your progress is kept locally.'**
+  String get studyResultSaveFailedBanner;
+
+  /// Action that re-runs finalize on the save-failed result.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry save'**
+  String get studyResultRetry;
+
+  /// Title of the defensive zero-answers result state.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards answered'**
+  String get studyResultDefensiveTitle;
+
+  /// Body of the defensive zero-answers result state.
+  ///
+  /// In en, this message translates to:
+  /// **'This session has no recorded answers.'**
+  String get studyResultDefensiveMessage;
 }
 
 class _AppLocalizationsDelegate
