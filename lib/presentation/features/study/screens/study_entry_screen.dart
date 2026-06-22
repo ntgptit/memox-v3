@@ -14,6 +14,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_entry_controller.dart';
 import 'package:memox/presentation/features/study/controllers/study_entry_outcome.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
+import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
@@ -37,7 +38,8 @@ import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
 /// literal `today` route, null ref id) — WP-SR1b-1. The `?study_type=` query
 /// overrides the entry default (WP-SR1b-1); an unparseable `entryType` or an
 /// unrecognized `study_type` falls through to the error surface. The per-reason
-/// empty matrix (replacing the generic empty surface) is WP-SR1b-2.
+/// empty matrix (icon/copy = WP-SR1b-2a; Study-new/Done CTAs + start-over confirm
+/// = WP-SR1b-2b; the scope-specific CTAs + "Next due in {X}" = WP-SR1b-2c).
 class StudyEntryScreen extends ConsumerWidget {
   const StudyEntryScreen({
     required this.entryType,
@@ -91,7 +93,7 @@ class StudyEntryScreen extends ConsumerWidget {
           // preparing placeholder visible until the replacement lands.
           StudyEntryOutcomeReady() => _preparingBody(l10n),
           StudyEntryOutcomeBlocked(:final StudyScopeEmptyReason reason) =>
-            _blockedBody(context, l10n, reason),
+            _blockedBody(context, l10n, reason, scope),
           StudyEntryOutcomeResumeRequired(:final StudySession session) =>
             _resumeBody(context, ref, l10n, scope, session),
         },
@@ -165,14 +167,16 @@ class StudyEntryScreen extends ConsumerWidget {
 
   /// The per-reason empty-scope matrix (`study-flow.md` §Empty scope matrix,
   /// wireframe `12`). WP-SR1b-2a renders the tailored icon / title / message for
-  /// each of the 8 `StudyScopeEmptyReason`s with a Back action; the dedicated
-  /// CTAs (Add flashcards / Study new instead / View suspended) + the streak
-  /// inset + the "Next due in {relativeTime}" line are **WP-SR1b-2b**. The gate
-  /// always **blocks** the zero-card session here.
+  /// each of the 8 `StudyScopeEmptyReason`s; WP-SR1b-2b adds the Study-new /
+  /// Done CTAs (see `_blockedAction`). The scope-specific CTAs (Add flashcards /
+  /// View suspended / Open folder / Create deck) + the streak inset + the "Next
+  /// due in {relativeTime}" line are **WP-SR1b-2c**. The gate always **blocks**
+  /// the zero-card session here.
   Widget _blockedBody(
     BuildContext context,
     AppLocalizations l10n,
     StudyScopeEmptyReason reason,
+    StudyScope scope,
   ) {
     final (IconData icon, String title, String message) = switch (reason) {
       StudyScopeEmptyReason.deckNoCards => (
@@ -220,10 +224,71 @@ class StudyEntryScreen extends ConsumerWidget {
       icon: icon,
       title: title,
       message: message,
-      action: MxSecondaryButton(
+      action: _blockedAction(context, l10n, reason, scope),
+    );
+  }
+
+  /// The per-reason CTA (WP-SR1b-2b): **Study new instead** (re-enter the gate
+  /// with `?study_type=new_cards`) for the *no-due* + all-buried reasons,
+  /// **Done** (pop) for the all-done / all-buried reasons, else **Back**. The
+  /// scope-specific CTAs (Add flashcards / View suspended / Open folder / Create
+  /// deck) + the "Next due in {relativeTime}" line are WP-SR1b-2c.
+  Widget _blockedAction(
+    BuildContext context,
+    AppLocalizations l10n,
+    StudyScopeEmptyReason reason,
+    StudyScope scope,
+  ) {
+    final Widget studyNew = MxPrimaryButton(
+      label: l10n.studyActionStudyNew,
+      fullWidth: true,
+      onPressed: () => _reenterWithNewCards(context, scope),
+    );
+    final Widget done = MxSecondaryButton(
+      label: l10n.commonDone,
+      fullWidth: true,
+      onPressed: () => context.pop(),
+    );
+    return switch (reason) {
+      StudyScopeEmptyReason.deckNoDueCards ||
+      StudyScopeEmptyReason.folderNoDueCards => studyNew,
+      StudyScopeEmptyReason.allBuried => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          studyNew,
+          const SizedBox(height: MxSpacing.space3),
+          done,
+        ],
+      ),
+      StudyScopeEmptyReason.todayAllDone => done,
+      _ => MxSecondaryButton(
         label: l10n.commonBack,
         onPressed: () => context.pop(),
       ),
+    };
+  }
+
+  /// Re-enter the gate for the same scope with `?study_type=new_cards` so a
+  /// caught-up / all-buried scope can fall back to new learning (mock `12`
+  /// "Study new instead"). `pushReplacement` keeps the gate transient.
+  void _reenterWithNewCards(BuildContext context, StudyScope scope) {
+    final Map<String, String> query = <String, String>{
+      RouteParams.studyTypeQueryParam: StudyType.newCards.storageValue,
+    };
+    if (scope.entryType == EntryType.today) {
+      context.pushReplacementNamed(
+        RouteNames.studyToday,
+        queryParameters: query,
+      );
+      return;
+    }
+    context.pushReplacementNamed(
+      RouteNames.studyEntry,
+      pathParameters: <String, String>{
+        RouteParams.entryType: scope.entryType.name,
+        RouteParams.entryRefId: scope.entryRefId ?? '',
+      },
+      queryParameters: query,
     );
   }
 
@@ -252,9 +317,8 @@ class StudyEntryScreen extends ConsumerWidget {
           MxSecondaryButton(
             label: l10n.studyStartOverAction,
             fullWidth: true,
-            onPressed: () => ref
-                .read(studyEntryControllerProvider(scope).notifier)
-                .startOver(session),
+            onPressed: () =>
+                _confirmStartOver(context, ref, l10n, scope, session),
           ),
           const SizedBox(height: MxSpacing.space3),
           MxSecondaryButton(
@@ -266,4 +330,28 @@ class StudyEntryScreen extends ConsumerWidget {
       ),
     ),
   );
+
+  /// Start over discards the resumable session — confirm first (decision S87,
+  /// the FE of S28 "Start over confirms then restarts"), then cancel + create.
+  Future<void> _confirmStartOver(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    StudyScope scope,
+    StudySession session,
+  ) async {
+    final bool confirmed = await MxConfirmDialog.show(
+      context,
+      title: l10n.studyStartOverTitle,
+      message: l10n.studyStartOverMessage,
+      confirmLabel: l10n.studyStartOverAction,
+      cancelLabel: l10n.commonCancel,
+      destructive: true,
+    );
+    if (!confirmed) return;
+    if (!context.mounted) return;
+    await ref
+        .read(studyEntryControllerProvider(scope).notifier)
+        .startOver(session);
+  }
 }

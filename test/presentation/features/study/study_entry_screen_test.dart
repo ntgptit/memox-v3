@@ -160,7 +160,28 @@ void main() {
       },
     );
 
-    testWidgets('tapping Start over invokes the controller startOver', (
+    testWidgets('Start over confirms before invoking startOver (S87)', (
+      tester,
+    ) async {
+      bool started = false;
+      await _pumpScreen(
+        tester,
+        outcome: () async => StudyEntryOutcome.resumeRequired(_session()),
+        onStartOver: () => started = true,
+      );
+      // Tapping the button opens the confirm dialog, NOT startOver directly.
+      await tester.tap(find.text('Start over'));
+      await tester.pumpAndSettle();
+      expect(find.text('Start over?'), findsOneWidget);
+      expect(started, isFalse);
+      // Confirm — the dialog's confirm action also reads "Start over" (the last
+      // one on screen); tapping it runs startOver.
+      await tester.tap(find.text('Start over').last);
+      await tester.pumpAndSettle();
+      expect(started, isTrue);
+    });
+
+    testWidgets('Start over can be cancelled (startOver not invoked)', (
       tester,
     ) async {
       bool started = false;
@@ -170,8 +191,46 @@ void main() {
         onStartOver: () => started = true,
       );
       await tester.tap(find.text('Start over'));
-      await tester.pump();
-      expect(started, isTrue);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(started, isFalse);
+    });
+
+    testWidgets('caught-up reasons offer a Study new instead CTA', (
+      tester,
+    ) async {
+      await _pumpScreen(
+        tester,
+        outcome: () async => const StudyEntryOutcome.blocked(
+          StudyScopeEmptyReason.deckNoDueCards,
+        ),
+      );
+      expect(find.text('Study new instead'), findsOneWidget);
+    });
+
+    testWidgets('all-buried offers both Study new instead and Done', (
+      tester,
+    ) async {
+      await _pumpScreen(
+        tester,
+        outcome: () async =>
+            const StudyEntryOutcome.blocked(StudyScopeEmptyReason.allBuried),
+      );
+      expect(find.text('Study new instead'), findsOneWidget);
+      expect(find.text('Done'), findsOneWidget);
+    });
+
+    testWidgets('today-all-done offers a Done action', (tester) async {
+      await _pumpScreen(
+        tester,
+        entryType: 'today',
+        entryRefId: null,
+        overrideScope: _todayScope,
+        outcome: () async =>
+            const StudyEntryOutcome.blocked(StudyScopeEmptyReason.todayAllDone),
+      );
+      expect(find.text('Done'), findsOneWidget);
     });
 
     testWidgets('preparing shows a loading indicator', (tester) async {
@@ -285,7 +344,9 @@ void main() {
       for (final (String name, StudyScopeEmptyReason reason) variant
           in <(String, StudyScopeEmptyReason)>[
             ('deck-no-cards', StudyScopeEmptyReason.deckNoCards),
+            ('deck-no-due', StudyScopeEmptyReason.deckNoDueCards),
             ('today-all-done', StudyScopeEmptyReason.todayAllDone),
+            ('all-buried', StudyScopeEmptyReason.allBuried),
             ('all-suspended', StudyScopeEmptyReason.allSuspended),
           ]) {
         testWidgets('empty ${variant.$1} — ${brightness.name}', (tester) async {

@@ -649,4 +649,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyStartOverAction => 'Bắt đầu lại';
+
+  @override
+  String get studyStartOverTitle => 'Bắt đầu lại?';
+
+  @override
+  String get studyStartOverMessage =>
+      'Thao tác này xoá tiến độ hiện tại của phiên này và bắt đầu lại từ đầu.';
+
+  @override
+  String get studyActionStudyNew => 'Học thẻ mới';
 }

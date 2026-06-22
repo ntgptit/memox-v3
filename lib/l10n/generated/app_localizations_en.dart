@@ -665,4 +665,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyStartOverAction => 'Start over';
+
+  @override
+  String get studyStartOverTitle => 'Start over?';
+
+  @override
+  String get studyStartOverMessage =>
+      'This discards your current progress for this session and starts fresh.';
+
+  @override
+  String get studyActionStudyNew => 'Study new instead';
 }

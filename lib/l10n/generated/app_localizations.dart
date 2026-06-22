@@ -1249,6 +1249,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start over'**
   String get studyStartOverAction;
+
+  /// Title of the start-over confirm dialog at the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over?'**
+  String get studyStartOverTitle;
+
+  /// Body of the start-over confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'This discards your current progress for this session and starts fresh.'**
+  String get studyStartOverMessage;
+
+  /// Empty-scope CTA that re-enters the gate as a new-learning session.
+  ///
+  /// In en, this message translates to:
+  /// **'Study new instead'**
+  String get studyActionStudyNew;
 }
 
 class _AppLocalizationsDelegate

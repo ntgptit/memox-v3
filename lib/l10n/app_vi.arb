@@ -191,5 +191,8 @@
   "studyResumeTitle": "Tiếp tục phiên học?",
   "studyResumeMessage": "Bạn có một phiên học chưa hoàn thành cho phạm vi này.",
   "studyResumeAction": "Tiếp tục",
-  "studyStartOverAction": "Bắt đầu lại"
+  "studyStartOverAction": "Bắt đầu lại",
+  "studyStartOverTitle": "Bắt đầu lại?",
+  "studyStartOverMessage": "Thao tác này xoá tiến độ hiện tại của phiên này và bắt đầu lại từ đầu.",
+  "studyActionStudyNew": "Học thẻ mới"
 }

@@ -416,5 +416,11 @@
   "studyResumeAction": "Resume",
   "@studyResumeAction": { "description": "Resume the existing study session." },
   "studyStartOverAction": "Start over",
-  "@studyStartOverAction": { "description": "Discard the resumable session and start a fresh one." }
+  "@studyStartOverAction": { "description": "Discard the resumable session and start a fresh one." },
+  "studyStartOverTitle": "Start over?",
+  "@studyStartOverTitle": { "description": "Title of the start-over confirm dialog at the study entry gate." },
+  "studyStartOverMessage": "This discards your current progress for this session and starts fresh.",
+  "@studyStartOverMessage": { "description": "Body of the start-over confirm dialog." },
+  "studyActionStudyNew": "Study new instead",
+  "@studyActionStudyNew": { "description": "Empty-scope CTA that re-enters the gate as a new-learning session." }
 }

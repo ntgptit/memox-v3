@@ -21,16 +21,16 @@ Most users never see this screen for more than a moment — it's a gate.
 > `/library/study/:entryType/:entryRefId` (`deck` / `folder`). It resolves the scope via
 > `ResolveStudyEntryStartUseCase`, shows a **preparing** state, surfaces an unparseable
 > `entryType` as an **error** state, renders the **per-reason empty matrix** below (icon + title +
-> message per `StudyScopeEmptyReason`, **WP-SR1b-2a**; the dedicated CTAs + the "Next due in {X}"
-> line + the streak inset are **WP-SR1b-2b**), auto-creates a session for an eligible scope and
-> `pushReplacement`s to `/library/study/session/:sessionId`, and shows
+> message + CTA per `StudyScopeEmptyReason` — see the WP breakdown two lines down), auto-creates a
+> session for an eligible scope and `pushReplacement`s to `/library/study/session/:sessionId`, and shows
 > an explicit **Resume / Start over / Back** choice when a resumable session exists (no silent
 > resume). **WP-SR1b-1 adds** the `today` literal route (`/library/study/today`) and the
-> `?study_type=` override (`StudyType.fromStorage`; unrecognized → error). **WP-SR1b-2a adds** the
-> per-reason empty matrix (icon+title+message per `StudyScopeEmptyReason`). **Not yet built:** the
-> `?mode=` query, the empty-matrix **CTAs** + "Next due in {X}" + streak inset (WP-SR1b-2b), the
-> start-over confirm dialog, and the real session/result screens —
-> `/library/study/session/:sessionId` is a **placeholder shell** (WP-SR2..SR5).
+> `?study_type=` override (`StudyType.fromStorage`; unrecognized → error). **WP-SR1b-2a** adds the
+> per-reason empty matrix (icon+title+message per `StudyScopeEmptyReason`); **WP-SR1b-2b** adds the
+> **Study new instead / Done** empty-matrix CTAs + the **start-over confirm dialog** (S28). **Not yet
+> built (WP-SR1b-2c):** the scope-specific CTAs (Add flashcards / View suspended / Open folder /
+> Create deck), the "Next due in {X}" line, the streak inset, and the `?mode=` query. The real
+> session/result screens are WP-SR2..SR5 — `/library/study/session/:sessionId` is a **placeholder shell**.
 
 ## Behavior tree
 

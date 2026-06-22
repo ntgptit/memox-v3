@@ -79,11 +79,16 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       the 8 `StudyScopeEmptyReason` → tailored icon + title + message (`studyEmpty*` ARB ×15, en+vi;
       cards/check/celebration/bedtime/pause glyphs) + Back, replacing the generic surface. Row S86; per-
       reason tests + 6 representative goldens (deck-no-cards / today-all-done / all-suspended ×2).
-- [ ] **WP-SR1b-2b — empty-matrix CTAs + confirm.** The dedicated per-variant CTAs (deckNoCards → Add
-      flashcards (push `flashcardCreate`, deck scope); *NoDue/allBuried → Study new instead (re-enter
-      gate `?study_type=new_cards`) + the "Next due in {relativeTime}" line from `nextDueAt`; today-all-
-      done → streak inset (needs engagement read model); todayNoContent → Create deck; allSuspended →
-      View suspended (deck flashcard list `?filter=suspended`)) + the start-over confirm dialog (S28).
+- [x] **WP-SR1b-2b — core empty-matrix CTAs + start-over confirm.** `<this commit>`: **Study new
+      instead** (re-enter the gate `?study_type=new_cards`) for deck/folderNoDueCards + allBuried;
+      **Done** (pop) for todayAllDone + allBuried; the start-over **confirm dialog** (`MxConfirmDialog`,
+      S28) before cancel+create. Rows S86 (CTA) + S87 (confirm). ARB ×3; CTA + confirm + cancel tests +
+      2 new goldens (deck-no-due, all-buried). **Gate functionally complete.**
+- [ ] **WP-SR1b-2c — scope-specific CTA polish (deferred).** deckNoCards → Add flashcards (push
+      `flashcardCreate`, deck scope); folderNoCards → Open folder; todayNoContent → Create deck;
+      allSuspended → View suspended (`?filter=suspended`, deck scope); the "Next due in {relativeTime}"
+      line from `nextDueAt`; the todayAllDone streak inset (needs engagement read model); the `?mode=`
+      query. Lower-value polish — **deprioritized below WP-SR2** (the review session) per build-value.
 - [ ] **WP-SR2 — review session shell + card.** `study_session_screen.dart`: app bar (`✕` +
       **blue** progress bar + `{answered}/{total}`), and the card (front-side label from
       `deck.target_language`, front large-centered, divider, back-side label, back, example pill when
