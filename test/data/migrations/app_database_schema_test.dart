@@ -29,8 +29,8 @@ void main() {
     }
 
     test('reports the current schema version', () {
-      expect(AppDatabase.currentSchemaVersion, 7);
-      expect(db.schemaVersion, 7);
+      expect(AppDatabase.currentSchemaVersion, 8);
+      expect(db.schemaVersion, 8);
     });
 
     Future<void> insertDeckRow(String id, String folderId) async {
