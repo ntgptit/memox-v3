@@ -1579,6 +1579,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mark correct'**
   String get studyFillMarkCorrect;
+
+  /// Button on the Fill screen that reveals one more leading character of the answer (caps the grade at recovered).
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get studyFillHint;
 }
 
 class _AppLocalizationsDelegate

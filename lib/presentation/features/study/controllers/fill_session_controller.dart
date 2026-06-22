@@ -28,6 +28,7 @@ class FillView {
     required this.currentIndex,
     this.phase = FillPhase.typing,
     this.result,
+    this.hintRevealed = 0,
     this.finished = false,
   });
 
@@ -37,9 +38,14 @@ class FillView {
 
   /// The grade computed by the last check — held until the card advances, then
   /// persisted. Null while typing. `perfect` on a clean match, otherwise `forgot`;
-  /// `recovered` once **Mark correct** overrides a wrong answer (WP-FI2a). The
-  /// Hint-taint `recovered` remains deferred (WP-FI2).
+  /// `recovered` once **Mark correct** overrides a wrong answer (WP-FI2a) or a
+  /// **Hint** taints a clean match (WP-FI2b).
   final AttemptResult? result;
+
+  /// How many leading characters of the front the Hint has revealed for the
+  /// current card (WP-FI2b). Any reveal taints the grade — a clean match caps at
+  /// `recovered` instead of `perfect` (decision S69). Resets per card.
+  final int hintRevealed;
 
   /// True once the last card is graded + advanced — the screen finalizes +
   /// routes to the result.
@@ -48,6 +54,7 @@ class FillView {
   int get total => review.total;
   int get answeredCount => currentIndex.clamp(0, total);
   bool get isFinished => currentIndex >= total;
+  bool get hintUsed => hintRevealed > 0;
   StudySessionReviewItem? get currentItem =>
       isFinished ? null : review.items[currentIndex];
 }
@@ -77,10 +84,10 @@ class FillSessionController extends _$FillSessionController {
 
   /// Grade the typed [input] against the current card's front (the documented
   /// strict trim-only match — `docs/wireframes/17-study-session-fill.md`). A
-  /// clean match → `perfect` feedback, otherwise `forgot` (the answer is shown).
-  /// `check` passes `evaluate` its defaults; the `recovered` outcome comes from
-  /// [markCorrect] (WP-FI2a) or the deferred Hint-taint (WP-FI2). Empty input /
-  /// non-typing phase is ignored.
+  /// clean match → `perfect` (or `recovered` when a Hint tainted the card,
+  /// WP-FI2b), otherwise `forgot` (the answer is shown). The `recovered`-via-
+  /// override also comes from [markCorrect] (WP-FI2a). Empty input / non-typing
+  /// phase is ignored.
   void check(String input) {
     final FillView? view = state.asData?.value;
     if (view == null || view.isFinished || view.phase != FillPhase.typing) {
@@ -91,28 +98,55 @@ class FillSessionController extends _$FillSessionController {
     final AttemptResult result = _strategy.evaluate(
       input: input,
       expected: item.front,
+      hintUsed: view.hintUsed,
     );
     state = AsyncData<FillView>(
       FillView(
         review: view.review,
         currentIndex: view.currentIndex,
-        phase: result == AttemptResult.perfect
-            ? FillPhase.correct
-            : FillPhase.wrong,
+        phase: result == AttemptResult.forgot
+            ? FillPhase.wrong
+            : FillPhase.correct,
         result: result,
+        hintRevealed: view.hintRevealed,
+      ),
+    );
+  }
+
+  /// Reveal one more leading character of the front as a Hint (WP-FI2b, S69):
+  /// up to half the front length. Any reveal taints the grade — a subsequent
+  /// clean match caps at `recovered` (`evaluate(hintUsed: true)`). A no-op once
+  /// the cap is reached or outside the typing phase.
+  void hint() {
+    final FillView? view = state.asData?.value;
+    if (view == null || view.phase != FillPhase.typing) return;
+    final StudySessionReviewItem? item = view.currentItem;
+    if (item == null) return;
+    final int maxHint = StringUtils.trimmed(item.front).length ~/ 2;
+    if (view.hintRevealed >= maxHint) return;
+    state = AsyncData<FillView>(
+      FillView(
+        review: view.review,
+        currentIndex: view.currentIndex,
+        hintRevealed: view.hintRevealed + 1,
       ),
     );
   }
 
   /// Return to typing from the wrong-feedback state (the Retry affordance):
-  /// clear the held result so the user re-types. One retry per card is enforced
-  /// by the screen clearing its input; the BE still persists one terminal
-  /// attempt on advance.
+  /// clear the held result so the user re-types. The **Hint taint is retained**
+  /// (wireframe `17` §States — a re-type after a hint still caps at `recovered`).
+  /// One retry per card is enforced by the screen clearing its input; the BE
+  /// still persists one terminal attempt on advance.
   void retry() {
     final FillView? view = state.asData?.value;
     if (view == null || view.phase != FillPhase.wrong) return;
     state = AsyncData<FillView>(
-      FillView(review: view.review, currentIndex: view.currentIndex),
+      FillView(
+        review: view.review,
+        currentIndex: view.currentIndex,
+        hintRevealed: view.hintRevealed,
+      ),
     );
   }
 

@@ -830,4 +830,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyFillMarkCorrect => 'Tôi đã đúng';
+
+  @override
+  String get studyFillHint => 'Gợi ý';
 }

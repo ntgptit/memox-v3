@@ -248,5 +248,6 @@
   "studyFillCorrectLabel": "Đáp án đúng",
   "studyFillRetry": "Thử lại",
   "studyFillNext": "Tiếp",
-  "studyFillMarkCorrect": "Tôi đã đúng"
+  "studyFillMarkCorrect": "Tôi đã đúng",
+  "studyFillHint": "Gợi ý"
 }

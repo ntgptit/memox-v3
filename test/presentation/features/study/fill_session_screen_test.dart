@@ -209,6 +209,60 @@ void main() {
       expect(find.text('1 / 2'), findsOneWidget);
     });
 
+    testWidgets(
+      'Hint taints the grade → a correct answer records recovered (S69)',
+      (tester) async {
+        final _FakeRecordAnswer record = _FakeRecordAnswer();
+        await _pump(
+          tester,
+          review: () async => _review(_cards()),
+          record: record,
+        );
+        await tester.tap(find.text('Hint')); // reveal the first front char
+        await tester.pump();
+        expect(
+          find.text('y···'),
+          findsOneWidget,
+        ); // front 'yama' → "y" + 3 dots
+        await tester.enterText(find.byType(TextField), 'yama'); // exact match
+        await tester.pump();
+        await tester.tap(find.text('Check answer'));
+        await tester.pump();
+        await tester.tap(find.text('Next'));
+        await tester.pump();
+        // A clean match after a hint is capped at recovered, never perfect (S69).
+        expect(record.recorded, <AttemptResult>[AttemptResult.recovered]);
+      },
+    );
+
+    testWidgets(
+      'Hint taint survives Retry → re-typed correct records recovered',
+      (tester) async {
+        final _FakeRecordAnswer record = _FakeRecordAnswer();
+        await _pump(
+          tester,
+          review: () async => _review(_cards()),
+          record: record,
+        );
+        await tester.tap(find.text('Hint')); // taint the card
+        await tester.pump();
+        await tester.enterText(find.byType(TextField), 'wrong');
+        await tester.pump();
+        await tester.tap(find.text('Check answer'));
+        await tester.pump();
+        await tester.tap(find.text('Retry')); // re-type; taint must persist
+        await tester.pump();
+        await tester.enterText(find.byType(TextField), 'yama');
+        await tester.pump();
+        await tester.tap(find.text('Check answer'));
+        await tester.pump();
+        await tester.tap(find.text('Next'));
+        await tester.pump();
+        // The retained hint taint caps the re-typed clean match at recovered.
+        expect(record.recorded, <AttemptResult>[AttemptResult.recovered]);
+      },
+    );
+
     testWidgets('wrong → Mark correct → records recovered (S72)', (
       tester,
     ) async {
@@ -350,6 +404,22 @@ void main() {
           find.byType(FillSessionScreen),
           matchesGoldenFile(
             'goldens/fill_session_correct__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('fill-hint-revealed — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          review: () async => _review(_cards()),
+        );
+        await tester.tap(find.text('Hint')); // reveal the ·-masked prefix
+        await tester.pump();
+        await expectLater(
+          find.byType(FillSessionScreen),
+          matchesGoldenFile(
+            'goldens/fill_session_hint_revealed__${brightness.name}.png',
           ),
         );
       });

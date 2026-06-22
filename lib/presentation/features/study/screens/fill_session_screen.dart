@@ -91,6 +91,8 @@ class FillSessionScreen extends HookConsumerWidget {
 
     void markCorrect() => controller.markCorrect();
 
+    void hint() => controller.hint();
+
     final AsyncValue<FillView> async = ref.watch(
       fillSessionControllerProvider(sessionId),
     );
@@ -124,6 +126,7 @@ class FillSessionScreen extends HookConsumerWidget {
             onRetry: retry,
             onNext: next,
             onMarkCorrect: markCorrect,
+            onHint: hint,
           ),
         );
       },
@@ -201,6 +204,7 @@ class FillSessionScreen extends HookConsumerWidget {
     required VoidCallback onRetry,
     required VoidCallback onNext,
     required VoidCallback onMarkCorrect,
+    required VoidCallback onHint,
   }) => Padding(
     padding: const EdgeInsets.all(MxSpacing.space5),
     child: Column(
@@ -226,6 +230,7 @@ class FillSessionScreen extends HookConsumerWidget {
           onRetry: onRetry,
           onNext: onNext,
           onMarkCorrect: onMarkCorrect,
+          onHint: onHint,
         ),
       ],
     ),
@@ -243,6 +248,10 @@ class FillSessionScreen extends HookConsumerWidget {
         return _TypingArea(
           label: l10n.studyFillAnswerLabel,
           controller: field.controller,
+          // The Hint reveals leading characters of the front (WP-FI2b, S69).
+          revealedHint: view.hintRevealed > 0
+              ? _hintMask(item.front, view.hintRevealed)
+              : null,
         );
       case FillPhase.correct:
         return _CorrectArea(answer: submitted);
@@ -256,6 +265,14 @@ class FillSessionScreen extends HookConsumerWidget {
     }
   }
 
+  /// The Hint mask: the first [revealed] characters of [front] + a `·` per
+  /// hidden character (e.g. front "yama", revealed 2 → "ya··").
+  String _hintMask(String front, int revealed) {
+    final String trimmed = StringUtils.trimmed(front);
+    final int shown = revealed.clamp(0, trimmed.length);
+    return trimmed.substring(0, shown) + ('·' * (trimmed.length - shown));
+  }
+
   Widget _actions(
     AppLocalizations l10n,
     FillView view, {
@@ -264,15 +281,25 @@ class FillSessionScreen extends HookConsumerWidget {
     required VoidCallback onRetry,
     required VoidCallback onNext,
     required VoidCallback onMarkCorrect,
+    required VoidCallback onHint,
   }) {
     switch (view.phase) {
       case FillPhase.typing:
-        return MxPrimaryButton(
-          label: l10n.studyFillCheck,
-          icon: Icons.check,
-          fullWidth: true,
-          // Disabled until the answer is non-empty (wireframe `17` §Components).
-          onPressed: canCheck ? onCheck : null,
+        // Full-width Check (mock); the Hint affordance (→ taint, S69) is a discreet
+        // link below it — the mock has no Hint button (variance, PRECEDENCE #1).
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            MxPrimaryButton(
+              label: l10n.studyFillCheck,
+              icon: Icons.check,
+              fullWidth: true,
+              // Disabled until the answer is non-empty (wireframe `17`).
+              onPressed: canCheck ? onCheck : null,
+            ),
+            const SizedBox(height: MxSpacing.space2),
+            _FillActionLink(label: l10n.studyFillHint, onTap: onHint),
+          ],
         );
       case FillPhase.correct:
         return MxPrimaryButton(
@@ -307,7 +334,7 @@ class FillSessionScreen extends HookConsumerWidget {
               ],
             ),
             const SizedBox(height: MxSpacing.space2),
-            _MarkCorrectLink(
+            _FillActionLink(
               label: l10n.studyFillMarkCorrect,
               onTap: onMarkCorrect,
             ),
@@ -346,10 +373,11 @@ class FillSessionScreen extends HookConsumerWidget {
   );
 }
 
-/// The "Mark correct" override link under the wrong-feedback actions (→ `recovered`,
-/// decision S72). A discreet accent text button, not in the mock's Retry/Next row.
-class _MarkCorrectLink extends StatelessWidget {
-  const _MarkCorrectLink({required this.label, required this.onTap});
+/// A discreet accent text link for the Fill secondary actions the redesign mock
+/// dropped — **Hint** (typing, WP-FI2b) and **Mark correct** (wrong, WP-FI2a) —
+/// kept off the primary button row so it never crowds Check / Retry / Next.
+class _FillActionLink extends StatelessWidget {
+  const _FillActionLink({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;
@@ -400,14 +428,23 @@ class _HintCard extends StatelessWidget {
 
 /// The typing state: an overline label + the free-text answer field.
 class _TypingArea extends StatelessWidget {
-  const _TypingArea({required this.label, required this.controller});
+  const _TypingArea({
+    required this.label,
+    required this.controller,
+    this.revealedHint,
+  });
 
   final String label;
   final TextEditingController controller;
 
+  /// The Hint mask (revealed prefix + `·` per hidden char), or null when no hint
+  /// has been revealed for the current card (WP-FI2b).
+  final String? revealedHint;
+
   @override
   Widget build(BuildContext context) {
     final MxColors colors = context.mxColors;
+    final String? hint = revealedHint;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -418,6 +455,14 @@ class _TypingArea extends StatelessWidget {
         ),
         const SizedBox(height: MxSpacing.space2),
         MxTextField(controller: controller, autofocus: true),
+        if (hint != null) ...<Widget>[
+          const SizedBox(height: MxSpacing.space2),
+          MxText(
+            hint,
+            role: MxTextRole.titleMedium,
+            color: colors.textSecondary,
+          ),
+        ],
       ],
     );
   }
