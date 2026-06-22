@@ -18,10 +18,12 @@ source_specs:
 > `studyMode: fill`) → `perfect` (✓ + Next) or `forgot` (CORRECT ANSWER card + Retry / Next) → record +
 > advance → the last card finalizes → the result (S67/S68/S70/S71/S74, S94).
 >
-> **Deferred (WP-FI2):** the **Hint** char-reveal + **Mark correct** override (both → `recovered`,
-> S69/S72), the auto-advance countdown (S68/S69), the last-card Finish callout (S73) + finalize-fail
-> surface (S75), and the Edit ✎ / TTS 🔊 affordances. The earlier `study_session_fill_mode_view.dart` /
-> `study_session_fill_viewmodel.dart` paths were target structure that never existed.
+> **Built (WP-FI2a):** the **Mark correct** override (→ `recovered`, S72) — a discreet accent link under
+> the wrong-feedback Retry/Next row (the mock shows Retry/Next only; the link is the documented behavior
+> the redesign mock dropped — variance per PRECEDENCE #1). **Deferred (WP-FI2):** the **Hint** char-reveal
+> (→ `recovered`, S69), the auto-advance countdown (S68/S69), the last-card Finish callout (S73) +
+> finalize-fail surface (S75), and the Edit ✎ / TTS 🔊 affordances. The earlier
+> `study_session_fill_mode_view.dart` / `study_session_fill_viewmodel.dart` paths never existed.
 >
 > **Mock conflict (flagged for owner):** the mock (`shots/16-study-fill`) frames the prompt as "TYPE THE
 > READING" + grades the romaji/reading (showing the front + an "English: …" gloss), whereas study-flow +

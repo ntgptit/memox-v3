@@ -209,6 +209,28 @@ void main() {
       expect(find.text('1 / 2'), findsOneWidget);
     });
 
+    testWidgets('wrong → Mark correct → records recovered (S72)', (
+      tester,
+    ) async {
+      final _FakeRecordAnswer record = _FakeRecordAnswer();
+      await _pump(
+        tester,
+        review: () async => _review(_cards()),
+        record: record,
+      );
+      await tester.enterText(find.byType(TextField), 'nope');
+      await tester.pump();
+      await tester.tap(find.text('Check answer'));
+      await tester.pump();
+      await tester.tap(find.text('Mark correct')); // override the wrong answer
+      await tester.pump();
+      // The view flips to the correct-feedback state (✓ + Next).
+      expect(find.byIcon(Icons.check), findsWidgets);
+      await tester.tap(find.text('Next'));
+      await tester.pump();
+      expect(record.recorded, <AttemptResult>[AttemptResult.recovered]);
+    });
+
     testWidgets('grading the last card finalizes + routes to result', (
       tester,
     ) async {

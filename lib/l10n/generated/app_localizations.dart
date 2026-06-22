@@ -1573,6 +1573,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get studyFillNext;
+
+  /// Link on Fill wrong-feedback that overrides the answer to a recovered grade.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark correct'**
+  String get studyFillMarkCorrect;
 }
 
 class _AppLocalizationsDelegate

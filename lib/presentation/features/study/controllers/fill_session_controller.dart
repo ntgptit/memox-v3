@@ -36,9 +36,9 @@ class FillView {
   final FillPhase phase;
 
   /// The grade computed by the last check — held until the card advances, then
-  /// persisted. Null while typing. V1 (defaults): `perfect` on a clean match,
-  /// otherwise `forgot`; WP-FI2 will also emit `recovered` once the Hint taint +
-  /// Mark-correct override pass `hintUsed` / `markCorrect` to `evaluate`.
+  /// persisted. Null while typing. `perfect` on a clean match, otherwise `forgot`;
+  /// `recovered` once **Mark correct** overrides a wrong answer (WP-FI2a). The
+  /// Hint-taint `recovered` remains deferred (WP-FI2).
   final AttemptResult? result;
 
   /// True once the last card is graded + advanced — the screen finalizes +
@@ -57,8 +57,9 @@ class FillView {
 /// `FillStudyModeStrategy.evaluate` (`studyMode: fill`) → `perfect` (clean match)
 /// or `forgot` (mismatch). Correct → advance; wrong → show the answer + Retry
 /// (re-type) / Next (advance). The last card finalizes → the result. The Hint
-/// char-reveal + Mark-correct override (both → `recovered`), the auto-advance
-/// countdown, and the edit / TTS affordances are deferred (WP-FI2). WBS 4.5.10.
+/// char-reveal (→ `recovered`), the auto-advance countdown, and the edit / TTS
+/// affordances are deferred (WP-FI2); **Mark correct → `recovered` is built
+/// (WP-FI2a, see [markCorrect]).** WBS 4.5.9.
 @riverpod
 class FillSessionController extends _$FillSessionController {
   static const FillStudyModeStrategy _strategy = FillStudyModeStrategy();
@@ -76,9 +77,10 @@ class FillSessionController extends _$FillSessionController {
 
   /// Grade the typed [input] against the current card's front (the documented
   /// strict trim-only match — `docs/wireframes/17-study-session-fill.md`). A
-  /// clean match → `perfect` feedback, otherwise `forgot` (the answer is shown). The
-  /// Hint taint + Mark-correct override (→ `recovered`) are WP-FI2, so this V1
-  /// passes `evaluate` its defaults. Empty input / non-typing phase is ignored.
+  /// clean match → `perfect` feedback, otherwise `forgot` (the answer is shown).
+  /// `check` passes `evaluate` its defaults; the `recovered` outcome comes from
+  /// [markCorrect] (WP-FI2a) or the deferred Hint-taint (WP-FI2). Empty input /
+  /// non-typing phase is ignored.
   void check(String input) {
     final FillView? view = state.asData?.value;
     if (view == null || view.isFinished || view.phase != FillPhase.typing) {
@@ -111,6 +113,23 @@ class FillSessionController extends _$FillSessionController {
     if (view == null || view.phase != FillPhase.wrong) return;
     state = AsyncData<FillView>(
       FillView(review: view.review, currentIndex: view.currentIndex),
+    );
+  }
+
+  /// Override a wrong answer to `recovered` (the **Mark correct** affordance —
+  /// decision S72 / WP-FI2a): the documented `evaluate(markCorrect: true)`
+  /// outcome on a mismatch. Transition to the correct-feedback state holding
+  /// `recovered`; the card records it on advance (never demoted to `forgot`).
+  void markCorrect() {
+    final FillView? view = state.asData?.value;
+    if (view == null || view.phase != FillPhase.wrong) return;
+    state = AsyncData<FillView>(
+      FillView(
+        review: view.review,
+        currentIndex: view.currentIndex,
+        phase: FillPhase.correct,
+        result: AttemptResult.recovered,
+      ),
     );
   }
 

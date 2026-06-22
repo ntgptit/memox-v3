@@ -524,5 +524,7 @@
   "studyFillRetry": "Retry",
   "@studyFillRetry": { "description": "Button on Fill wrong-feedback that clears the input and returns to typing." },
   "studyFillNext": "Next",
-  "@studyFillNext": { "description": "Button on the Fill screen that records the grade and advances to the next card." }
+  "@studyFillNext": { "description": "Button on the Fill screen that records the grade and advances to the next card." },
+  "studyFillMarkCorrect": "Mark correct",
+  "@studyFillMarkCorrect": { "description": "Link on Fill wrong-feedback that overrides the answer to a recovered grade." }
 }

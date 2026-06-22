@@ -25,6 +25,7 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/feedback/mx_linear_progress.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
+import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
@@ -39,9 +40,9 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 /// card (the back / definition), a free-text answer field, **Check** → a strict
 /// trim-only match of the typed front (`perfect` / `forgot`); correct → ✓ + Next,
 /// wrong → the CORRECT ANSWER card + Retry / Next → record + advance → the last
-/// card finalizes → the result. The Hint char-reveal + Mark-correct override
-/// (both → `recovered`), the auto-advance countdown, and the edit / TTS
-/// affordances are deferred (WP-FI2).
+/// card finalizes → the result. **Mark correct → `recovered` is built (WP-FI2a)**;
+/// the Hint char-reveal, the auto-advance countdown, and the edit / TTS
+/// affordances remain deferred (WP-FI2).
 class FillSessionScreen extends HookConsumerWidget {
   const FillSessionScreen({required this.sessionId, super.key});
 
@@ -88,6 +89,8 @@ class FillSessionScreen extends HookConsumerWidget {
       unawaited(controller.next());
     }
 
+    void markCorrect() => controller.markCorrect();
+
     final AsyncValue<FillView> async = ref.watch(
       fillSessionControllerProvider(sessionId),
     );
@@ -120,6 +123,7 @@ class FillSessionScreen extends HookConsumerWidget {
             onCheck: check,
             onRetry: retry,
             onNext: next,
+            onMarkCorrect: markCorrect,
           ),
         );
       },
@@ -196,6 +200,7 @@ class FillSessionScreen extends HookConsumerWidget {
     required VoidCallback onCheck,
     required VoidCallback onRetry,
     required VoidCallback onNext,
+    required VoidCallback onMarkCorrect,
   }) => Padding(
     padding: const EdgeInsets.all(MxSpacing.space5),
     child: Column(
@@ -220,6 +225,7 @@ class FillSessionScreen extends HookConsumerWidget {
           onCheck: onCheck,
           onRetry: onRetry,
           onNext: onNext,
+          onMarkCorrect: onMarkCorrect,
         ),
       ],
     ),
@@ -257,6 +263,7 @@ class FillSessionScreen extends HookConsumerWidget {
     required VoidCallback onCheck,
     required VoidCallback onRetry,
     required VoidCallback onNext,
+    required VoidCallback onMarkCorrect,
   }) {
     switch (view.phase) {
       case FillPhase.typing:
@@ -274,22 +281,35 @@ class FillSessionScreen extends HookConsumerWidget {
           onPressed: onNext,
         );
       case FillPhase.wrong:
-        return Row(
+        // Mock `16-study-fill--wrong` shows Retry / Next; the **Mark correct**
+        // override (→ `recovered`, decision S72) is added as a discreet link
+        // below the row (wireframe `17`; not in the mock — documented variance).
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(
-              child: MxSecondaryButton(
-                label: l10n.studyFillRetry,
-                icon: Icons.refresh,
-                onPressed: onRetry,
-              ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: MxSecondaryButton(
+                    label: l10n.studyFillRetry,
+                    icon: Icons.refresh,
+                    onPressed: onRetry,
+                  ),
+                ),
+                const SizedBox(width: MxSpacing.space3),
+                Expanded(
+                  child: MxPrimaryButton(
+                    label: l10n.studyFillNext,
+                    fullWidth: true,
+                    onPressed: onNext,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: MxSpacing.space3),
-            Expanded(
-              child: MxPrimaryButton(
-                label: l10n.studyFillNext,
-                fullWidth: true,
-                onPressed: onNext,
-              ),
+            const SizedBox(height: MxSpacing.space2),
+            _MarkCorrectLink(
+              label: l10n.studyFillMarkCorrect,
+              onTap: onMarkCorrect,
             ),
           ],
         );
@@ -322,6 +342,27 @@ class FillSessionScreen extends HookConsumerWidget {
     action: MxSecondaryButton(
       label: l10n.commonRetryLabel,
       onPressed: () => ref.invalidate(fillSessionControllerProvider(sessionId)),
+    ),
+  );
+}
+
+/// The "Mark correct" override link under the wrong-feedback actions (→ `recovered`,
+/// decision S72). A discreet accent text button, not in the mock's Retry/Next row.
+class _MarkCorrectLink extends StatelessWidget {
+  const _MarkCorrectLink({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: MxTappable(
+      onTap: onTap,
+      child: MxText(
+        label,
+        role: MxTextRole.labelMedium,
+        color: context.mxColors.accent,
+      ),
     ),
   );
 }

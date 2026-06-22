@@ -845,4 +845,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyFillNext => 'Next';
+
+  @override
+  String get studyFillMarkCorrect => 'Mark correct';
 }
