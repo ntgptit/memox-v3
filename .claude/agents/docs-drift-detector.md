@@ -19,7 +19,10 @@ can prove.
 
 ## Then apply the trigger map (judgment part)
 
-For each changed code path in your task, look up the required docs in `CLAUDE.md`
+Get the changed paths from the **working-tree diff**, not by guessing: run `git add -N .`
+(so new files show up) then `git diff --name-only` (or `git diff HEAD --name-only`). Do not
+expect a commit first — drift is checked on uncommitted changes, before commit. For each
+changed code path, look up the required docs in `CLAUDE.md`
 §"Code change → required docs (trigger map)" and confirm those docs actually reflect
 the new behavior. Also check:
 
