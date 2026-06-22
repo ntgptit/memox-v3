@@ -176,11 +176,11 @@ abstract class AppLocalizations {
   /// **'Something went wrong loading your folders.'**
   String get libraryLoadFailedMessage;
 
-  /// Retry action on the Library error state.
+  /// Shared Retry action across error / failure surfaces (library, lists, editor save-failed).
   ///
   /// In en, this message translates to:
   /// **'Retry'**
-  String get libraryRetryLabel;
+  String get commonRetryLabel;
 
   /// Title when a search matches no folders.
   ///
@@ -997,6 +997,594 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} cards · drag to reorder'**
   String flashcardReorderCountHeader(int count);
+
+  /// Flashcard-row SRS subtitle for a never-studied (NEW) card.
+  ///
+  /// In en, this message translates to:
+  /// **'New · not studied'**
+  String get flashcardStateNew;
+
+  /// Flashcard-row SRS subtitle: SRS box + days until the card is next due.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box} · due in {days}d'**
+  String flashcardStateBoxDueIn(int box, int days);
+
+  /// Flashcard-row SRS subtitle: SRS box, card due today or overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Box {box} · due today'**
+  String flashcardStateBoxDueToday(int box);
+
+  /// Title of the discard-changes confirm when closing the card editor with unsaved edits.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get cardDiscardTitle;
+
+  /// Message of the card-editor discard-changes confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Your edits to this card haven\'t been saved.'**
+  String get cardDiscardMessage;
+
+  /// Destructive confirm action of the card-editor discard-changes dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get cardDiscardConfirm;
+
+  /// Tooltip for the trash/delete icon in the edit-mode card editor app bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete card'**
+  String get cardDeleteTooltip;
+
+  /// Header of the optional-fields expander in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get cardDetailsLabel;
+
+  /// Muted hint beside the card-editor Details expander header when collapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get cardDetailsOptional;
+
+  /// Muted field summary beside the card-editor Details expander header when expanded.
+  ///
+  /// In en, this message translates to:
+  /// **'example · pronunciation · hint'**
+  String get cardDetailsSummary;
+
+  /// Optional example-sentence field label in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get cardExampleLabel;
+
+  /// Optional pronunciation field label in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronunciation'**
+  String get cardPronunciationLabel;
+
+  /// Optional hint field label in the card editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get cardHintLabel;
+
+  /// Label above the tag chips in the card editor Details section.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get cardTagsLabel;
+
+  /// The card-editor chip / field that adds a new tag to the card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add tag'**
+  String get cardAddTagLabel;
+
+  /// Inline banner message when saving a card fails in the editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes couldn\'t be saved.'**
+  String get cardSaveFailedMessage;
+
+  /// Title of the card editor load-error state when the card can't be fetched.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load card'**
+  String get cardLoadFailedTitle;
+
+  /// Body of the card editor load-error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t fetch this card to edit.'**
+  String get cardLoadFailedMessage;
+
+  /// Generic back navigation action.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get commonBack;
+
+  /// App-bar title of the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get studyEntryTitle;
+
+  /// App-bar title of the active study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get studySessionTitle;
+
+  /// Placeholder body of the study session shell (WP-SR1a).
+  ///
+  /// In en, this message translates to:
+  /// **'Review session — coming soon.'**
+  String get studySessionPlaceholder;
+
+  /// Loading caption while the study entry gate resolves the scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing study…'**
+  String get studyPreparing;
+
+  /// Title of the study entry gate error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start study'**
+  String get studyEntryErrorTitle;
+
+  /// Body of the study entry gate error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t prepare this study session. Please try again.'**
+  String get studyEntryErrorMessage;
+
+  /// Title of the study entry gate empty state when a scope has cards but none are due (deck/folder, srs_review).
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up!'**
+  String get studyEmptyCaughtUpTitle;
+
+  /// Empty-scope title — the deck has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards in this deck'**
+  String get studyEmptyDeckNoCardsTitle;
+
+  /// Empty-scope body — the deck has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Add flashcards to start studying.'**
+  String get studyEmptyDeckNoCardsMessage;
+
+  /// Empty-scope body — the deck has cards but none due.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards are due in this deck right now.'**
+  String get studyEmptyDeckNoDueMessage;
+
+  /// Empty-scope title — the folder subtree has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards in this folder'**
+  String get studyEmptyFolderNoCardsTitle;
+
+  /// Empty-scope body — the folder subtree has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a deck and some cards to start studying.'**
+  String get studyEmptyFolderNoCardsMessage;
+
+  /// Empty-scope body — the folder subtree has cards but none due.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards are due in this folder right now.'**
+  String get studyEmptyFolderNoDueMessage;
+
+  /// Empty-scope title — today's due cards are all reviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'All done for today!'**
+  String get studyEmptyTodayAllDoneTitle;
+
+  /// Empty-scope body — today's review is complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Come back tomorrow to keep your streak going.'**
+  String get studyEmptyTodayAllDoneMessage;
+
+  /// Empty-scope title — the user has no flashcards at all.
+  ///
+  /// In en, this message translates to:
+  /// **'No flashcards yet'**
+  String get studyEmptyTodayNoContentTitle;
+
+  /// Empty-scope body — the user has no flashcards at all.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a deck and add cards to start studying.'**
+  String get studyEmptyTodayNoContentMessage;
+
+  /// Empty-scope title — every eligible card in scope is buried.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards buried for today'**
+  String get studyEmptyAllBuriedTitle;
+
+  /// Empty-scope body — buried cards return next day.
+  ///
+  /// In en, this message translates to:
+  /// **'They\'ll return tomorrow.'**
+  String get studyEmptyAllBuriedMessage;
+
+  /// Empty-scope title — every card in scope is suspended.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards are suspended'**
+  String get studyEmptyAllSuspendedTitle;
+
+  /// Empty-scope body — all cards suspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume some cards to start studying.'**
+  String get studyEmptyAllSuspendedMessage;
+
+  /// Title of the resume-or-start-over choice at the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume your session?'**
+  String get studyResumeTitle;
+
+  /// Body of the resume-or-start-over choice.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an unfinished study session for this scope.'**
+  String get studyResumeMessage;
+
+  /// Resume the existing study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get studyResumeAction;
+
+  /// Discard the resumable session and start a fresh one.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get studyStartOverAction;
+
+  /// Title of the start-over confirm dialog at the study entry gate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over?'**
+  String get studyStartOverTitle;
+
+  /// Body of the start-over confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'This discards your current progress for this session and starts fresh.'**
+  String get studyStartOverMessage;
+
+  /// Empty-scope CTA that re-enters the gate as a new-learning session.
+  ///
+  /// In en, this message translates to:
+  /// **'Study new instead'**
+  String get studyActionStudyNew;
+
+  /// Caption above the front side of a review card (fallback when the deck language is unknown).
+  ///
+  /// In en, this message translates to:
+  /// **'FRONT'**
+  String get studyReviewFrontLabel;
+
+  /// Caption above the back side of a review card.
+  ///
+  /// In en, this message translates to:
+  /// **'BACK'**
+  String get studyReviewBackLabel;
+
+  /// Title shown when a study session has no cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to review'**
+  String get studyReviewEmptyTitle;
+
+  /// Body shown when a study session has no cards.
+  ///
+  /// In en, this message translates to:
+  /// **'This session has no cards.'**
+  String get studyReviewEmptyMessage;
+
+  /// Title of the study session load-error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the session'**
+  String get studyReviewLoadFailedTitle;
+
+  /// Body of the study session load-error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load this study session.'**
+  String get studyReviewLoadFailedMessage;
+
+  /// Hint under the review card explaining the swipe-grade gesture (shown for the first few cards).
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe right if you knew it, left if you didn\'t'**
+  String get studyReviewSwipeHint;
+
+  /// Title of the end-of-session surface when every card is graded.
+  ///
+  /// In en, this message translates to:
+  /// **'Review complete'**
+  String get studyReviewFinishTitle;
+
+  /// Body of the end-of-session surface.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve gone through every card in this session.'**
+  String get studyReviewFinishMessage;
+
+  /// Action that finalizes the session and shows the result.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish session'**
+  String get studyReviewFinishAction;
+
+  /// Title of the mid-session exit-confirm dialog (§exit-session).
+  ///
+  /// In en, this message translates to:
+  /// **'Exit study session?'**
+  String get studyExitTitle;
+
+  /// Body of the exit-confirm dialog reassuring the user progress is kept.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress is saved and you can resume later. Leave this session?'**
+  String get studyExitMessage;
+
+  /// Confirm action that leaves the study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get studyExitConfirm;
+
+  /// Cancel action that stays in the study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep studying'**
+  String get studyExitCancel;
+
+  /// Card-actions sheet: bury the current card until tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Bury until tomorrow'**
+  String get studyActionBury;
+
+  /// Card-actions sheet: suspend the current card.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspend card'**
+  String get studyActionSuspend;
+
+  /// App-bar title of the study result screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete'**
+  String get studyResultTitle;
+
+  /// Loading message while the result summary loads.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving your results…'**
+  String get studyResultLoading;
+
+  /// Celebratory headline on the result screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice work!'**
+  String get studyResultHeroTitle;
+
+  /// Reviewed-count subtitle on the result hero.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card reviewed} other{{count} cards reviewed}}'**
+  String studyResultCardsReviewed(int count);
+
+  /// Label for the passed-count stat.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get studyResultCorrect;
+
+  /// Label for the forgot-count stat.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get studyResultWrong;
+
+  /// Label for the answered/total stat.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered'**
+  String get studyResultAnswered;
+
+  /// Primary action that leaves the result screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get studyResultDone;
+
+  /// Error title when the result summary fails to load.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your results'**
+  String get studyResultLoadFailedTitle;
+
+  /// Error body when the result summary fails to load.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading this session\'s summary.'**
+  String get studyResultLoadFailedMessage;
+
+  /// Banner shown when the session summary failed to finalize.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your results. Your progress is kept locally.'**
+  String get studyResultSaveFailedBanner;
+
+  /// Action that re-runs finalize on the save-failed result.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry save'**
+  String get studyResultRetry;
+
+  /// Title of the defensive zero-answers result state.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards answered'**
+  String get studyResultDefensiveTitle;
+
+  /// Body of the defensive zero-answers result state.
+  ///
+  /// In en, this message translates to:
+  /// **'This session has no recorded answers.'**
+  String get studyResultDefensiveMessage;
+
+  /// Headline on the Match board surface.
+  ///
+  /// In en, this message translates to:
+  /// **'Match the pairs'**
+  String get studyMatchTitle;
+
+  /// Prompt subtitle under the Match title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a term, then its meaning.'**
+  String get studyMatchSubtitle;
+
+  /// Match board status line below the grid.
+  ///
+  /// In en, this message translates to:
+  /// **'{matched} matched · {left} left'**
+  String studyMatchProgress(int matched, int left);
+
+  /// Overline prompt above the term on the Guess screen.
+  ///
+  /// In en, this message translates to:
+  /// **'What does this mean?'**
+  String get studyGuessPrompt;
+
+  /// Hint under the auto-advance countdown bar on the Guess screen — tap to skip the wait.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to continue'**
+  String get studyGuessTapToContinue;
+
+  /// Overline prompt above the term on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Recall the meaning'**
+  String get studyRecallPrompt;
+
+  /// Calm hint shown before the back is revealed on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Say it in your head, then reveal.'**
+  String get studyRecallHint;
+
+  /// Primary CTA on the Recall screen that reveals the back.
+  ///
+  /// In en, this message translates to:
+  /// **'Show answer'**
+  String get studyRecallShowAnswer;
+
+  /// Overline on the revealed answer card on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer'**
+  String get studyRecallAnswerLabel;
+
+  /// Caption above the self-grade row on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'How well did you know it?'**
+  String get studyRecallGradePrompt;
+
+  /// Self-grade button on the Recall screen — the learner did not recall the card (records forgot).
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get studyRecallMissed;
+
+  /// Self-grade button on the Recall screen — the learner recalled the card (records perfect).
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get studyRecallGotIt;
+
+  /// Overline prompt above the hint on the Fill screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the answer'**
+  String get studyFillPrompt;
+
+  /// Overline above the answer field on the Fill screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer'**
+  String get studyFillAnswerLabel;
+
+  /// Primary CTA on the Fill screen that grades the typed answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Check answer'**
+  String get studyFillCheck;
+
+  /// Wrong-answer feedback line on the Fill screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite — see the answer below.'**
+  String get studyFillWrongMessage;
+
+  /// Overline on the revealed correct-answer card after a wrong Fill answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct answer'**
+  String get studyFillCorrectLabel;
+
+  /// Button on Fill wrong-feedback that clears the input and returns to typing.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get studyFillRetry;
+
+  /// Button on the Fill screen that records the grade and advances to the next card.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get studyFillNext;
+
+  /// Link on Fill wrong-feedback that overrides the answer to a recovered grade.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark correct'**
+  String get studyFillMarkCorrect;
+
+  /// Button on the Fill screen that reveals one more leading character of the answer (caps the grade at recovered).
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get studyFillHint;
 }
 
 class _AppLocalizationsDelegate

@@ -1,7 +1,7 @@
 ---
 last_updated: 2026-06-21
 applies_to: Drift schema, all tables, migrations
-schema_version: 7 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
+schema_version: 8 (see lib/data/datasources/local/app_database.dart `currentSchemaVersion`. Target shape documented below.)
 ---
 
 # Database Schema Contract
@@ -13,14 +13,15 @@ table-area and migration sections below describe the **target** schema (the
 mature shape to migrate toward); they are intentionally ahead of the current
 code per the "do not downgrade target concepts" rule.
 
-**Current schema** (`AppDatabase.currentSchemaVersion`): **7** (rebuild
+**Current schema** (`AppDatabase.currentSchemaVersion`): **8** (rebuild
 baseline v1 2026-06-19 WBS 1.1.5; `decks` added v2 2026-06-20 WBS 2.7.1;
 `flashcards` + `flashcard_progress` + `flashcard_tags` added v3 2026-06-20
 WBS 2.11.1/2.16.1; `flashcard_progress.is_suspended` + `buried_until` added
 v4 2026-06-20 WBS 4.0.2; `folders.color` + `folders.icon` added v5 2026-06-20
 WBS 2.22.1; `study_sessions` + `study_session_items` + `study_attempts` added
 v6 2026-06-21 WBS 4.0.1; `card_events` table + `flashcard_progress.last_reset_at`
-+ `study_attempts.duration_ms` added v7 2026-06-21 WBS 7.0.1). The Drift layer was
++ `study_attempts.duration_ms` added v7 2026-06-21 WBS 7.0.1; `study_match_evaluations`
+table added v8 2026-06-22 WBS 4.5.4 / WP-SM1a). The Drift layer was
 reset and is being re-added per feature slice. Tables shipped so far:
 
 | Table     | Columns (current)                                                                                                |
@@ -34,6 +35,7 @@ reset and is being re-added per feature slice. Tables shipped so far:
 | `study_session_items` | `id` (PK), `session_id` (FK→study_sessions, cascade), `flashcard_id` (FK→flashcards, cascade), `sort_order`, `answered_at?`, `created_at`, `updated_at` + index `idx_study_session_items_session_sort` (shipped v6 WBS 4.0.1) |
 | `study_attempts` | `id` (PK), `session_item_id` (FK→study_session_items, cascade), `result`, `study_mode`, `box_before` (DEFAULT 0), `box_after` (DEFAULT 0), `user_input?`, `attempted_at`, `duration_ms?` (INTEGER NULL; shipped v7 WBS 7.0.1) + index `idx_study_attempts_session_item` (shipped v6 WBS 4.0.1). |
 | `card_events` | `id` (PK), `flashcard_id` (FK→flashcards, cascade), `type` (`created`/`edited`/`audio_added`/`reset`), `occurred_at`, `detail?` + index `idx_card_events_flashcard` (shipped v7 WBS 7.0.1; Card History activity feed — no read logic yet, lands WBS 7.6.1). |
+| `study_match_evaluations` | `id` (PK), `session_id` (FK→study_sessions, cascade), `session_item_id` (FK→study_session_items, cascade), `flashcard_id` (FK→flashcards, cascade), `board_index`, `pair_id`, `selected_front_cell_id`, `selected_back_cell_id`, `expected_front_flashcard_id`, `expected_back_flashcard_id`, `is_correct` (BOOLEAN), `attempt_order`, `evaluated_at`, `created_at` + indexes `idx_study_match_evaluations_session` (`session_id`, `attempt_order`), `idx_study_match_evaluations_session_item` (append-only; shipped v8 WBS 4.5.4 / WP-SM1a — no read/write logic yet, lands WP-SM1b). |
 
 The table below is the **target table shape** the rebuild migrates toward (the
 mature schema from the prior iteration); it is intentionally ahead of the
@@ -159,9 +161,10 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
   ready to populate on every attempt insert (default 0 = "unknown"). `flashcard_progress.last_reset_at`,
   `study_attempts.duration_ms`, and the `card_events` table — ✅ shipped v7 (card-history enabler,
   WBS 7.0.1); columns/table only, read logic lands WBS 7.6.1.
-- `study_match_evaluations` — **not yet shipped**; the append-only Match evaluation table lands with
-  the Match study mode (WBS 4.5.x). The v6 study tables (4.0.1) ship `study_sessions` /
-  `study_session_items` / `study_attempts` only.
+- `study_match_evaluations` — ✅ **shipped v8** (Match-evaluation enabler, WBS 4.5.4 / WP-SM1a,
+  `v8_add_match_evaluations.dart`); the append-only table lands schema-only — the repository/use-case
+  persistence (WP-SM1b) and the finalization derivation (WP-SM2) read/write it next. The v6 study
+  tables (4.0.1) shipped `study_sessions` / `study_session_items` / `study_attempts`.
 - `decks.target_language` — ✅ shipped in the current schema (initial deck table); no migration
   pending.
 - `decks.folder_id` nullable is Rejected / Not Applicable.
@@ -178,7 +181,7 @@ check `docs/MANIFEST.md`, `docs/business/system/overview.md`, and
 | ✅ DONE (v7) `flashcard_progress.last_reset_at INTEGER NULL`                             | `docs/business/history/card-history.md`                                       | Default null. Set to `now` when the user resets a card's progress; positions the Card History reset divider. Lifetime counters stay cumulative. Shipped v7 (WBS 7.0.1, `v7_add_card_history.dart`) — column only, read logic lands WBS 7.6.1.                                                                                                                       |
 | ✅ DONE (v6) `study_attempts.box_before INTEGER NOT NULL DEFAULT 0`                      | `docs/business/history/card-history.md`                                       | Shipped with the v6 study tables (WBS 4.0.1); populated on every attempt insert once grading lands. Default 0 = "unknown"; history view displays "—" for 0.                                                                                                                                                            |
 | ✅ DONE (v6) `study_attempts.box_after INTEGER NOT NULL DEFAULT 0`                       | `docs/business/history/card-history.md`                                       | Same semantics as `box_before`.                                                                                                                                                                                                                                                                                       |
-| Pending `study_match_evaluations` append-only Match evaluation table                     | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. Lands with the Match study mode (WBS 4.5.x). |
+| ✅ DONE (v8) `study_match_evaluations` append-only Match evaluation table                 | `docs/business/study/study-flow.md`, `docs/business/srs/srs-review.md`, `docs/wireframes/14-study-session-match.md` | Match evaluation persistence is separate from terminal attempt history; Match finalization derives `study_attempts` rows from this table. Shipped v8 (`v8_add_match_evaluations.dart`, WBS 4.5.4 / WP-SM1a) — table only; repo/use-case persistence (WP-SM1b) + finalization (WP-SM2) follow. |
 | ✅ DONE (v7) `study_attempts.duration_ms INTEGER NULL`                                   | `docs/business/history/card-history.md`                                       | Time-on-card in ms, measured by the study review viewmodel. NULL = not measured → Card History shows "duration not logged". Shipped v7 (WBS 7.0.1, `v7_add_card_history.dart`) — column only, write/read logic lands later.                                                                                                                                           |
 | ✅ DONE (v7) `card_events` lifecycle table + `idx_card_events_flashcard`                  | `docs/business/history/card-history.md`                                       | Per-card created/edited/audio/reset events for the Card History activity feed (merged with `study_attempts` in the timeline). Shipped v7 (WBS 7.0.1, `v7_add_card_history.dart`) — table only, the review-history read query lands WBS 7.6.1.                                                                                                                                         |
 | Pending `flashcards.part_of_speech TEXT NULL`                                            | `docs/business/flashcard/flashcard-management.md`, `docs/wireframes/06-flashcard-list.md` | Optional grammatical POS chip on the list + editor. Free text, lowercase. Lands with the full flashcard editor (WBS 2.11.2 / 2.12.2).                                                                                                                                                                                 |
@@ -214,6 +217,7 @@ erDiagram
     study_sessions ||--o{ study_match_evaluations : records
     study_session_items ||--o{ study_attempts : has
     study_session_items ||--o{ study_match_evaluations : evaluates
+    flashcards ||--o{ study_match_evaluations : denormalizes
     flashcards ||--o{ study_session_items : references
 ```
 

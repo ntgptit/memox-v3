@@ -8,7 +8,7 @@ import 'package:memox/presentation/features/folders/viewmodels/library_overview_
 import 'package:memox/presentation/features/folders/widgets/library_create_folder_action.dart';
 import 'package:memox/presentation/features/folders/widgets/library_overview_body.dart';
 import 'package:memox/presentation/features/folders/widgets/library_root_anchor.dart';
-import 'package:memox/presentation/features/folders/widgets/library_search_app_bar.dart';
+import 'package:memox/presentation/features/folders/widgets/library_search_dock.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/sort/content_sort_sheet.dart';
 import 'package:memox/presentation/shared/sort/library_sort_provider.dart';
@@ -31,10 +31,10 @@ class LibraryOverviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // guard:allow-screen-watch -- reason: the app-bar swaps to search mode and
+    // guard:allow-screen-watch -- reason: search mode mounts the bottom dock and
     // the FAB depends on the loaded folder list, so the shell must react to
     // search-active + stream state; pushing these into a body widget would split
-    // the app-bar/FAB decision away from where it is applied.
+    // the dock/FAB decision away from where it is applied.
     final AppLocalizations l10n = AppLocalizations.of(context);
     final bool searching = ref.watch(librarySearchActiveProvider);
     // The FAB and the root anchor both show only in the loaded-with-folders
@@ -49,24 +49,24 @@ class LibraryOverviewScreen extends ConsumerWidget {
     final bool showFab = !searching && hasFolders;
 
     return MxScaffold(
-      appBar: searching
-          ? const LibrarySearchAppBar()
-          : MxAppBar(
-              title: l10n.libraryTitle,
-              actions: <Widget>[
-                MxIconButton(
-                  icon: Icons.search,
-                  tooltip: l10n.librarySearchTooltip,
-                  onPressed: () =>
-                      ref.read(librarySearchActiveProvider.notifier).activate(),
-                ),
-                MxIconButton(
-                  icon: Icons.swap_vert,
-                  tooltip: l10n.sortTooltip,
-                  onPressed: () => _openSort(context, ref),
-                ),
-              ],
-            ),
+      // The regular Library app bar stays in place while searching (mock `03`
+      // Search state keeps the title + sort); the search field drops into the
+      // bottom dock instead of swapping the app bar.
+      appBar: MxAppBar(
+        title: l10n.libraryTitle,
+        actions: <Widget>[
+          MxIconButton(
+            icon: Icons.search,
+            tooltip: l10n.librarySearchTooltip,
+            onPressed: () => _toggleSearch(ref, searching),
+          ),
+          MxIconButton(
+            icon: Icons.swap_vert,
+            tooltip: l10n.sortTooltip,
+            onPressed: () => _openSort(context, ref),
+          ),
+        ],
+      ),
       floatingActionButton: showFab
           ? MxFab(
               icon: Icons.create_new_folder_outlined,
@@ -74,8 +74,23 @@ class LibraryOverviewScreen extends ConsumerWidget {
               onPressed: () => runCreateFolder(context, ref),
             )
           : null,
+      // The search dock is a flat, full-bleed bar pinned under the content
+      // (kit `03` Search `search-dock`); the bottom-nav slot renders it without
+      // the rounded/elevated BottomSheet chrome and reserves its own foot room.
+      bottomNavigationBar: searching ? const LibrarySearchDock() : null,
       body: _buildBody(searching, hasFolders, folderCount),
     );
+  }
+
+  /// Toggles search mode from the app-bar icon: entering mounts the bottom dock;
+  /// exiting clears the term so the next entry starts fresh.
+  void _toggleSearch(WidgetRef ref, bool searching) {
+    if (!searching) {
+      ref.read(librarySearchActiveProvider.notifier).activate();
+      return;
+    }
+    ref.read(librarySearchQueryProvider.notifier).clear();
+    ref.read(librarySearchActiveProvider.notifier).deactivate();
   }
 
   /// Opens the shared sort sheet and persists the chosen mode for the Library

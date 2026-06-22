@@ -1,4 +1,5 @@
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/domain/entities/match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
@@ -29,17 +30,12 @@ class StudySessionMapper {
   };
 
   // Storage tokens per `docs/contracts/types-catalog.md` §StudyType:
-  // snake_case `new_cards` / `srs_review`.
-  String studyTypeToken(StudyType type) => switch (type) {
-    StudyType.newCards => 'new_cards',
-    StudyType.srsReview => 'srs_review',
-  };
+  // snake_case `new_cards` / `srs_review` — single source on the enum.
+  String studyTypeToken(StudyType type) => type.storageValue;
 
-  StudyType studyTypeFromToken(String token) => switch (token) {
-    'new_cards' => StudyType.newCards,
-    'srs_review' => StudyType.srsReview,
-    _ => throw ArgumentError.value(token, 'study_type', 'unknown study type'),
-  };
+  StudyType studyTypeFromToken(String token) =>
+      StudyType.fromStorage(token) ??
+      (throw ArgumentError.value(token, 'study_type', 'unknown study type'));
 
   String statusToken(SessionStatus status) => switch (status) {
     SessionStatus.draft => 'draft',
@@ -139,4 +135,29 @@ class StudySessionMapper {
     sortOrder: item.sortOrder,
     result: terminalResult,
   );
+
+  /// Maps a `study_match_evaluations` row to its domain entity (WBS 4.5.4).
+  MatchEvaluation toMatchEvaluation(StudyMatchEvaluationRow row) =>
+      MatchEvaluation(
+        id: row.id,
+        sessionId: row.sessionId,
+        sessionItemId: row.sessionItemId,
+        flashcardId: row.flashcardId,
+        boardIndex: row.boardIndex,
+        pairId: row.pairId,
+        selectedFrontCellId: row.selectedFrontCellId,
+        selectedBackCellId: row.selectedBackCellId,
+        expectedFrontFlashcardId: row.expectedFrontFlashcardId,
+        expectedBackFlashcardId: row.expectedBackFlashcardId,
+        isCorrect: row.isCorrect,
+        attemptOrder: row.attemptOrder,
+        evaluatedAt: DateTime.fromMillisecondsSinceEpoch(
+          row.evaluatedAt,
+          isUtc: true,
+        ),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(
+          row.createdAt,
+          isUtc: true,
+        ),
+      );
 }

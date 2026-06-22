@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-22
 route: /library/deck/:deckId/flashcards/:flashcardId/edit
 source_specs:
   - docs/business/flashcard/flashcard-management.md
@@ -9,11 +9,25 @@ source_specs:
 
 # 08 — Flashcard Edit
 
-> **Shared implementation note (V1).** This route is implemented by the shared
-> Flashcard Editor surface at
-> `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`.
-> Edit mode is selected by the presence of `flashcardId`. The current mock for
-> screen 08 includes a danger-zone delete action in the editor, while
+> **Shared implementation note (V1 shell, WP-FL2a 2026-06-22).** This route is implemented by the
+> shared Flashcard Editor surface at
+> `lib/presentation/features/decks/screens/flashcard_editor_screen.dart` +
+> `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`).
+> Edit mode is selected by the presence of `:flashcardId` (back-arrow leading icon). The **shell**
+> supports prefilled front/back + the dirty-discard confirm + the danger-zone **delete-from-editor**
+> trash action (WP-FL2b1, 2026-06-22: `Icons.delete_outline` before Save → shared destructive
+> confirm → delete → pop) + the **Details expander** (WP-FL2b2, 2026-06-22: optional example /
+> pronunciation / hint, auto-opened when the card has any; edit **preserves** existing tags on save).
+> Per PRECEDENCE #1 the mock's deck-selector is Future (deck retargeting) and the single "Note" maps
+> to the business example/pronunciation/hint fields (see `07`). The **Tags** input (WP-FL2b2b) + the
+> non-base `08` saving + save-failed (WP-FL2b3a) and the loading skeleton + load-error surface
+> (WP-FL2b3b: a field-shaped `flashcard_editor_skeleton` while the deck/card stream resolves; an
+> `MxErrorState` with Retry on fetch failure / deleted-card) are **built**. Only the **Tags** input
+> (**WP-FL2b2b**) remains. **Documented load-error visual variances** (PRECEDENCE: app-wide shared
+> error surface wins over this one mock): the shared `MxErrorState` renders the content directly on
+> the page (no bespoke bordered `MxCard` wrapper) with its standard 48px icon tile, vs the kit's
+> card-wrapped 56px tile — kept for consistency with every other screen's load-error. The current
+> mock for screen 08 includes a danger-zone delete action in the editor, while
 > move/export remain on the flashcard list row/bulk surfaces and bury/suspend
 > stay on the study-session card-actions sheet.
 
@@ -25,7 +39,8 @@ source_specs:
 > from `updated_at` + `flashcard_progress.review_count`. The mock's **recall %** and
 > **History ›** link are **Future/unavailable** (no recall read model; card history
 > screen 09 is a Future Proposal) and are omitted, not faked. **Save failed** uses
-> the same bottom-anchored banner + `Retry save` CTA as create (preserving edits);
+> the same inline danger banner + `Retry` CTA as create — per the kit spec it sits
+> just below the app bar, above the fields (`abs:[21,95]`), preserving edits;
 > **delete** uses the shared confirm dialog with a front/back preview
 > (`flashcard_delete_preview`) and the real `… N reviews of history …` warning.
 
@@ -56,10 +71,10 @@ front/back content changes.
 │ │  Hello                            │ │
 │ └───────────────────────────────────┘ │
 │                                       │
-│ Example sentence · optional           │
-│ Tags · optional                       │
-│ ▾ Show advanced fields                │
-│   Pronunciation / Hint / Note         │
+│ ▾ Details   example·pronunciation·hint│
+│   Example / Pronunciation / Hint      │
+│   (auto-opens when the card has any)  │
+│   Tags input = WP-FL2b2b · Deck=Future│
 │                                       │
 └───────────────────────────────────────┘
 ```
@@ -119,14 +134,14 @@ front/back content changes.
 
 | State                   | Trigger                                                | Behavior                                                 |
 |-------------------------|--------------------------------------------------------|----------------------------------------------------------|
-| Loading                 | Fetching deck/card context                             | Retained async loading shell.                            |
+| Loading                 | Fetching deck/card context                             | Field-shaped skeleton (`flashcard_editor_skeleton`: FRONT/BACK label + field blocks, divider, Details chips) under the app-bar shell; row C46. |
 | Loaded                  | Fetch success                                          | Form pre-populated.                                      |
 | Dirty                   | User edits any field or tag list                       | Save can run when front/back are non-empty after trim.   |
-| Saving                  | Save tapped                                            | Action state prevents double submit.                     |
+| Saving                  | Save tapped                                            | Save shows a spinner at the disabled accent fill; double submit is ignored. |
 | Learned content changed | User edits front/back on a card with learning progress | Save asks Keep vs Reset before repository update.        |
 | Saved                   | Success                                                | Toast "Flashcard updated." and return to flashcard list. |
-| Save error              | Repository/use case failure                            | Error snackbar; form content remains intact.             |
-| Not found               | Card deleted by another flow                           | Shared error state; back goes to a safe ancestor.        |
+| Save error              | Repository/use case failure                            | Inline danger banner below the app bar (above the fields) + `Retry`; the draft remains intact. |
+| Load error / Not found  | Deck/card stream errors, returns no detail, or the edited card was deleted elsewhere | Load-error surface (`MxErrorState`, cloud-off, `cardLoadFailedTitle`/`cardLoadFailedMessage`) with a **Retry** that re-subscribes the stream; the app-bar leading is the escape back to the deck. Row C28. |
 
 ## Actions
 
@@ -230,10 +245,10 @@ repository boundary.
 
 **Code paths:**
 
-- `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`
-- `lib/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart`
-- `lib/presentation/features/flashcards/widgets/flashcard_editor_view.dart`
-- `lib/domain/usecases/flashcard_usecases.dart` → `UpdateFlashcardUseCase`
+- `lib/presentation/features/decks/screens/flashcard_editor_screen.dart`
+- `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`)
+- `test/presentation/features/decks/flashcard_editor_test.dart`
+- `lib/domain/usecases/flashcard/update_flashcard_usecase.dart` → `UpdateFlashcardUseCase`
 - `lib/app/router/route_names.dart` → `RouteNames.flashcardEdit`
 
 **Related wireframes:**

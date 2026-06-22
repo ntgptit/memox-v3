@@ -3,7 +3,7 @@ last_updated: 2026-06-21
 object: Sub-folder (nested)
 loop_order: 3 of 10 (outer→inner)
 route: /library/folder/:id (at nested depth)
-status: DONE (covered by object 2; nested-breadcrumb screen test added — WP-N1)
+status: DONE — re-audit-confirmed 2026-06-22 (covered by object 2; nested-breadcrumb screen test — WP-N1)
 ---
 
 # Loop plan — Object 3: Sub-folder (nested)
@@ -43,7 +43,21 @@ any depth. No nested-specific mock state exists in `shots/INDEX.md`.
 
 ## Conclusion
 
-Object 3 is **DONE** (2026-06-21). No missing feature — nested sub-folders are fully handled by
-object 2's `FolderDetailScreen` (breadcrumb nav + scroll, nested create/navigate/mode-lock/delete);
-the breadcrumb structure was already unit-tested and WP-N1 added the screen-level render-at-depth
-test. Next object (outer→inner): **Deck (detail)** — object 4.
+Object 3 is **DONE — re-audit-confirmed 2026-06-22** (evidence on the current tree). No missing
+feature — nested sub-folders are fully handled by object 2's `FolderDetailScreen`. Re-audit
+(`Explore` + `tool/verify`) verified every nested behavior has code + passing test backing:
+
+- Subfolder-tap → nested push: `folder_detail_body.dart` `_openSubfolder` (`pushNamed(folderDetail)`)
+  + screen test `folder_detail_test.dart` 'nested folder shows the multi-level ancestry breadcrumb'.
+- Multi-level breadcrumb tappability: `library_breadcrumb.dart` `buildLibraryBreadcrumb` (root→
+  `goNamed(library)`, ancestors→`pushNamed(folderDetail)`, current=non-tappable leaf) +
+  `library_breadcrumb_test.dart` (root/ancestor tappable, current non-tappable) — PASS.
+- Content-aware create-at-depth + parent mode-lock: `_fab` switch + `folder_repository`
+  create-subfolder/create-deck mode guards (`UnsupportedActionFailure`) + FAB tests.
+- Folder actions at depth (rename/move/delete-cascade): `runFolderActions` + recursive delete;
+  move picker shows nested breadcrumb-path subtitles (`move_picker_golden_test` `_folderTargets`).
+- Kit `04 subfolders` state goldened (`folder_detail_subfolders` light+dark) + parity-confirmed in
+  object 2's ui-parity pass. No nested-specific kit state exists to add.
+
+`folder_detail_test.dart` + `library_breadcrumb_test.dart` PASS (21 tests, analyze clean). Next
+object (outer→inner): **Deck (detail)** — object 4.

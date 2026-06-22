@@ -148,6 +148,10 @@ Use:
   `Icon(size:)` must use these), and `MxStroke` (`hairline`/`emphasis` — divider /
   border widths). Add to the matching token class (never hardcode) when a new
   weight/size is needed.
+- `AppMotion` (`lib/core/theme/app_motion.dart`) — animation / transition / flash
+  **durations** (e.g. `matchWrongFlash`). Presentation surfaces must source
+  durations here, never raw `Duration(...)` literals (guard
+  `memox.design_token.no_raw_duration_value`).
 - ARB localization for every user-facing string.
 
 Device chrome (status bar / safe area):
@@ -177,6 +181,11 @@ Redesign tokens & components (design redesign):
   (wired into global Search `/search`); `Breadcrumb` → `MxBreadcrumb` (wired into
   nested screens); `ShortcutRow`/`DueSummary` → `MxShortcutRow`/`MxDueSummary`;
   `Insight`/`GoalRing` → `MxInsight`/`MxGoalRing`; the kit `IconTile` → `MxIconTile`.
+- `MxScopedSearchDock({child})` — the scoped-list variant of the `.search-dock` chrome
+  (surface + top hairline + safe area) hosting a **caller-provided, provider-synced**
+  search field; shared by the Library / Folder-detail / Flashcard-list search docks.
+  Distinct from `MxSearchDock` (onChanged-only, owns its field — can't host a synced
+  controller).
   The `MxShortcutRow`/`MxDueSummary`/`MxInsight`/`MxGoalRing` widgets exist and are
   golden-tested, but their consuming **Dashboard (`/home`) and Progress (`/progress`)
   screens are deferred** — they need read-model BE and (for goal/streak) the

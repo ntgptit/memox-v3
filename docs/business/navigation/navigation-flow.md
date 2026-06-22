@@ -74,14 +74,21 @@ Route name constants (from `lib/app/router/route_names.dart`): `RouteNames.setti
 | Flashcard edit            | `/library/deck/:deckId/flashcards/:flashcardId/edit`                                                                                                                                                                                                                                    | No            |
 | Flashcard history         | `/library/deck/:deckId/flashcards/:flashcardId/history` (Current V1 — opens `CardHistoryScreen` from a card's row action; read-only attempt timeline + reset progress)                                                                                                                    | No            |
 | Deck import               | `/library/deck/:deckId/import`                                                                                                                                                                                                                                                          | No            |
-| Library search            | In-place folder search inside Library Overview (search-mode app bar; `librarySearchActiveProvider`). No dedicated route in current code. A top-level global Search destination (`/search`) is introduced by the design redesign — see §Top-level destinations and `docs/business/search/global-search.md`                                                                                                  | n/a (in-place) |
-| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). Current V1 opens `StudyEntryScreen`, validates params, resolves the scope, renders empty states for zero eligible cards, and `pushReplacement`s to `/library/study/session/:sessionId` when eligible cards exist. Optional `?study_type=srs_review` requests a deck-scoped or folder-scoped due review (Current — parsed by the gate; the deck/folder screen CTAs that would link here are Future); optional `?mode=` selects a single study mode | No            |
-| Today study               | `/library/study/today` (Current V1 opens `StudyEntryScreen.today` and follows the same gate behavior as scoped study, including empty states and session redirect)                                                                                                                                                                                                    | No            |
-| Study session             | `/library/study/session/:sessionId` (Current V1 review screen; `?mode=review` opens the swipe-grade review surface, the no-mode fallback keeps the recall shell, protected exit confirmation applies, Finish Session appears only after every card is answered, and `pushReplacement`s to the real result screen on explicit finish)                                                                                                                                                          | No            |
-| Study result              | `/library/study/session/:sessionId/result` (Current V1 result screen; opens `StudyResultScreen` with a localized completion summary for completed/finalized sessions and controlled fallback states for invalid/missing and incomplete sessions)                                                                                                                                                              | No            |
+| Library search            | In-place folder search inside Library Overview (bottom search-dock toggled by the app-bar `Icons.search`; `librarySearchActiveProvider` → `LibrarySearchDock`). No dedicated route in current code. A top-level global Search destination (`/search`) is introduced by the design redesign — see §Top-level destinations and `docs/business/search/global-search.md`                                                                                                  | n/a (in-place) |
+| Study entry               | `/library/study/:entryType/:entryRefId` (Current entryType: `deck` \| `folder`; `tag` is Blocked/Future). **WP-SR1a:** `StudyEntryScreen` resolves the scope via `ResolveStudyEntryStartUseCase` (no silent resume) and renders preparing / a generic empty surface (per-reason matrix = WP-SR1b) / Resume-or-Start-over / error, and `pushReplacement`s to `/library/study/session/:sessionId` after auto-creating a session for an eligible scope. The `?study_type=` override + the `today` route are built (**WP-SR1b-1**); the per-reason empty matrix is **WP-SR1b-2**; the deck/folder screen CTAs that link here stay **Future** | No            |
+| Today study               | `/library/study/today` (**WP-SR1b-1**) — the literal `today` route opens `StudyEntryScreen` with a global `today` scope (due review across all decks, null ref id); same gate behavior as scoped study                                                                                                                                                                                                    | No            |
+| Study session             | `/library/study/session/:sessionId` — **built (WP-SR2..SR4b):** `StudySessionScreen` loads the review queue and renders the immersive ✕ shell + the both-sides **swipe-grade review surface** (right → `perfect`, left → `forgot`), the mid-session **exit-confirm** (WP-SR4a), and the long-press **card-actions** sheet (Bury / Suspend, WP-SR4b). Finish finalizes then `pushReplacement`s to the result route (WP-SR5a). **`?mode=match` (WP-SM3)** dispatches to the `MatchSessionScreen` board surface; **`?mode=guess` (WP-SG1)** dispatches to the `GuessSessionScreen` multiple-choice surface (prompt + lettered option cards); **`?mode=recall` (WP-RC1)** dispatches to the `RecallSessionScreen` flip-card self-grade surface (front → Show answer → Missed / Got it); **`?mode=fill` (WP-FI1)** dispatches to the `FillSessionScreen` typed-production surface (hint → type the front → Check → Retry / Next); any other / absent `mode` → the default Review surface                                                                                                                                                          | No            |
+| Study result              | `/library/study/session/:sessionId/result` — **built V1 (WP-SR5a):** `StudyResultScreen` reads `LoadStudySessionResultUseCase` and renders the completion hero + the Correct / Wrong / Answered counts + **Done → origin via `go`** (deck scope → that deck's flashcard list, else Dashboard; never `pop`, so the result is not kept in the back stack). The mock-`17` accuracy ring, Goal & streak, "Due next", and "Keep studying" are Future; the status-driven **save-failed / defensive** states are WP-SR5b                                                                                                                                                              | No            |
 
 Notes:
 
+- **Flashcard create / edit are Current (WP-FL2a, 2026-06-22):** `RouteNames.flashcardCreate`
+  (`new`) and `RouteNames.flashcardEdit` (`:flashcardId/edit`) are registered as children of the
+  deck flashcard-list route (`folder_routes.dart`) and open `FlashcardEditorScreen` (mock `07`/`08`
+  shell: X/Save app bar + breadcrumb + FRONT/BACK + validation). A card-row tap → edit, the add-card
+  FAB / empty CTA → create (`runAddCard`/`runEditCard` `pushNamed`). V1 shell is front/back only; the
+  Details expander + full state matrix = WP-FL2b. The "Shell visible: No" intent is honored once an
+  app-shell bottom-nav exists (move the editor to the root navigator then); no bottom-nav is built yet.
 - Query-string filters on the flashcard list are application conventions; verify GoRouter
   declarations in `lib/presentation/features/**/routes/*.dart`.
 - The `tag` entry type is Blocked/Future until `StudyEntryType.tag` and tag-scope queries are
@@ -91,7 +98,8 @@ Notes:
   (`/library/deck/:deckId/flashcards/:flashcardId/history`), pushed over the shell from the
   root navigator (shell hidden), entered via the flashcard row-action sheet ("View history").
 - Library search (current code): in-place folder search inside Library Overview, toggled by the
-  app-bar search icon (`librarySearchActiveProvider` → `LibrarySearchAppBar`). There is **no**
+  app-bar search icon (`librarySearchActiveProvider` → bottom `LibrarySearchDock` mounted in the
+  `bottomNavigationBar` slot). There is **no**
   dedicated search route or `RouteNames.librarySearch` / `RoutePaths.librarySearchTemplate` constant
   in the current codebase; the `GlobalSearchUseCase` / `SearchRepository` domain+data layer exists
   but is not yet wired to any screen. The design redesign promotes global search to a **top-level
@@ -110,12 +118,13 @@ Notes:
   (`entry_type=deck`, with `study_type=srs_review` for Today — never global `entry_type=today`);
   the Resume banner opens the existing `study/session/:id` directly without re-entering the gate
   or creating a session. Flashcard List never creates a session itself.
-- The `?study_type=srs_review` query parameter itself IS Current — the gate parses and honors it
-  (`lib/domain/study/study_entry_parser.dart`); only the in-screen CTA surfaces above are Future.
-- Study Session is a real review screen in V1: it loads a persisted session and ordered session
-  items, shows the current card with a reveal toggle, supports Previous/Next navigation with
-  reveal reset on move, and now routes to the real `/library/study/session/:sessionId/result`
-  screen after explicit finish.
+- The `?study_type=` query parameter is **Current (WP-SR1b-1)** — the gate parses it via
+  `StudyType.fromStorage` (canonical `new_cards` / `srs_review`) to override the entry default
+  (`deck`/`folder` → new, `today` → review); an unrecognized value surfaces the gate error state.
+  The in-screen CTA surfaces that would set it stay Future.
+- Study Session is a **placeholder shell (WP-SR1a)** — `StudySessionScreen` renders the immersive ✕
+  shell over a placeholder. The both-sides swipe-grade review surface, Previous/Next, exit-confirm,
+  Finish Session, and the finalize→result redirect are **not built** (WP-SR2..WP-SR5).
 - Current V1 note: the Study Entry routes are now real screens that start or resume persisted
   sessions, render the empty-scope matrix when no eligible cards exist, and use
   `pushReplacement` for the session redirect. When a resumable session exists, the gate shows an
@@ -194,7 +203,7 @@ stateDiagram-v2
 - Flashcard create/edit returns to flashcard list.
 - Import returns to deck/folder context.
 - Study entry creates or resumes persisted session.
-- Study session route protects accidental exit and waits for explicit Finish Session before leaving the review screen. `?mode=review` uses the swipe-grade surface; no-mode deep links keep the recall shell.
+- Study session route protects accidental exit and waits for explicit Finish Session before leaving the session screen. `?mode=match` → the Match board surface (`MatchSessionScreen`); `?mode=guess` → the Guess multiple-choice surface (`GuessSessionScreen`); `?mode=recall` → the Recall flip-card self-grade surface (`RecallSessionScreen`); `?mode=fill` → the Fill typed-production surface (`FillSessionScreen`); any other or absent `mode` → the default Review swipe-grade surface (`StudySessionScreen`). The per-phase `current_mode` chain (WBS 4.5.12+) supersedes this query later.
 - Study session exit confirmation leaves the session resumable; it does not cancel the session in V1. Confirmed exit pops when the stack can pop and otherwise routes to Library through the shared helper.
 - Study result returns to Library or Home through existing route constants.
 

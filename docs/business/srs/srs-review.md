@@ -23,7 +23,7 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 - `lib/data/datasources/local/drift/flashcard_progress.drift`
 - `lib/data/datasources/local/drift/study_attempts.drift`
 - `lib/data/repositories/study_repository_impl.dart` (canonical owner of finalization in V1:
-  `finalizeStudySession` + `_terminalResult` classifier + `_dueAtFor`; also `recordStudySessionAnswer`,
+  `finalizeStudySession` + `_terminalResult` classifier + `dueAtFor`; also `recordStudySessionAnswer`,
   WBS 4.4.1 — the in-session answer path, which records `study_attempts.box_before`/`box_after`
   and keeps `flashcard_progress` unchanged until finalization).
 - `lib/domain/srs/srs_box.dart` (`SrsBox.nextBox` box transition) +
@@ -83,7 +83,7 @@ See `docs/business/glossary.md` for result definitions.
 | Result           | When it applies (adopted contract 2026-06-10)                                                      |
 |------------------|------------------------------------------------------------------------------------------------------|
 | `perfect`        | Correct, clean attempt (V1 "Got it")                                                                  |
-| `recovered`      | Single passing-but-imperfect attempt: fill hint-taint or Mark-correct override (Target; redefined — no longer "forgot then passed", which now finalizes as `forgot`) |
+| `recovered`      | Single passing-but-imperfect attempt: fill hint-taint (WP-FI2b) or Mark-correct override (WP-FI2a) — **now emitted by the Fill FE**; redefined — no longer "forgot then passed", which now finalizes as `forgot` (decision row S20 reconciled 2026-06-22 to this redefined meaning) |
 | `forgot`         | First attempt failed (V1 "Forgot"); under retry modes, a first-attempt fail stays `forgot` even after a same-session re-queue pass |
 | `initial_passed` | Compatibility-only legacy storage codec value; never emitted by current modes. Reviving it requires a new product decision. |
 
@@ -219,7 +219,7 @@ The due query must:
 Any SRS behavior change must update:
 
 - `lib/data/repositories/study_repository_impl.dart` (finalization: `finalizeStudySession` /
-  `_terminalResult` / `_dueAtFor`) and `lib/domain/srs/{srs_box,box_intervals}.dart` (transition +
+  `_terminalResult` / `dueAtFor`) and `lib/domain/srs/{srs_box,box_intervals}.dart` (transition +
   interval owners)
 - This doc (transition table and/or interval table)
 - `docs/business/study/study-flow.md` if flow changes
@@ -277,5 +277,5 @@ Any SRS behavior change must update:
 - `lib/data/repositories/study_repository_impl.dart` — finalization write path
   (`finalizeStudySession`): computes the final per-card result from persisted attempts
   (`_terminalResult`), applies the box transition (`SrsBox.nextBox`), and computes the
-  local-midnight due date (`_dueAtFor` via `BoxIntervals.daysFor`), all in one transaction
+  local-midnight due date (`dueAtFor` via `BoxIntervals.daysFor`), all in one transaction
   (`StudySessionDao.finalizeSession`), WBS 4.6.1/4.6.2/4.6.4.

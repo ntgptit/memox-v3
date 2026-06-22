@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/shared/hooks/mx_search_controller_hooks.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_scoped_search_dock.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
-import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 
 /// Inline folder-detail search field, bound to `folderSearchQueryProvider`
-/// keyed by [folderId] (scope-local). WBS 3.2.2.
+/// keyed by [folderId] (scope-local). Provider-synced via [useMxSearchController]
+/// so the body's no-results `Clear` CTA can reset the field. WBS 3.2.2.
 class FolderDetailSearchField extends HookConsumerWidget {
   const FolderDetailSearchField({
     required this.folderId,
@@ -38,43 +37,18 @@ class FolderDetailSearchField extends HookConsumerWidget {
   }
 }
 
-/// Folder-detail search-mode app bar (field + Cancel), keyed by [folderId].
-/// WBS 3.2.2.
-class FolderDetailSearchAppBar extends ConsumerWidget
-    implements PreferredSizeWidget {
-  const FolderDetailSearchAppBar({required this.folderId, super.key});
+/// The folder-detail search-mode bottom dock (kit `04` Search state `search-dock`):
+/// the shared [MxScopedSearchDock] chrome hosting the autofocused
+/// [FolderDetailSearchField]. The regular folder app bar (title + sort +
+/// overflow) stays above it and the FAB is suppressed while searching, matching
+/// the mock. Mirrors `LibrarySearchDock`. WBS 3.2.2.
+class FolderDetailSearchDock extends StatelessWidget {
+  const FolderDetailSearchDock({required this.folderId, super.key});
 
   final String folderId;
 
-  static const double _toolbarHeight = kToolbarHeight + MxSpacing.space4;
-
   @override
-  Size get preferredSize => const Size.fromHeight(_toolbarHeight);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations l10n = AppLocalizations.of(context);
-
-    void cancel() {
-      ref.read(folderSearchQueryProvider(folderId).notifier).clear();
-      ref.read(folderSearchActiveProvider(folderId).notifier).deactivate();
-    }
-
-    return MxAppBar(
-      automaticallyImplyLeading: false,
-      titleSpacing: MxSpacing.screen,
-      toolbarHeight: _toolbarHeight,
-      titleWidget: FolderDetailSearchField(folderId: folderId, autofocus: true),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: MxSpacing.space2),
-          child: MxSecondaryButton(
-            label: l10n.commonCancel,
-            variant: MxSecondaryVariant.text,
-            onPressed: cancel,
-          ),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => MxScopedSearchDock(
+    child: FolderDetailSearchField(folderId: folderId, autofocus: true),
+  );
 }

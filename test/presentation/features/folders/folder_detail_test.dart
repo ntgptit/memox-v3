@@ -14,6 +14,7 @@ import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/screens/folder_detail_screen.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
+import 'package:memox/presentation/features/folders/widgets/folder_detail_search.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
@@ -151,6 +152,27 @@ void main() {
       expect(find.byType(MxFab), findsOneWidget);
       // The sort control is exposed so the user can reorder (WBS 2.23.1).
       expect(find.byIcon(Icons.swap_vert), findsOneWidget);
+      // Search dock absent until search mode is entered.
+      expect(find.byType(FolderDetailSearchDock), findsNothing);
+    });
+
+    testWidgets('search icon toggles the dock on and off, hiding the FAB', (
+      tester,
+    ) async {
+      await _pump(tester, _value(_decksMode));
+      await tester.pumpAndSettle();
+
+      // Enter search: dock mounts, FAB hidden.
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pumpAndSettle();
+      expect(find.byType(FolderDetailSearchDock), findsOneWidget);
+      expect(find.byType(MxFab), findsNothing);
+
+      // Tap the app-bar search icon again to exit search.
+      await tester.tap(find.byIcon(Icons.search).first);
+      await tester.pumpAndSettle();
+      expect(find.byType(FolderDetailSearchDock), findsNothing);
+      expect(find.byType(MxFab), findsOneWidget);
     });
 
     testWidgets('subfolders mode lists subfolders', (tester) async {

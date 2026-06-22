@@ -10,12 +10,17 @@ source_specs:
 
 # 15 — Study Session: Guess Mode
 
-> **Implementation note (2026-06-14):** Guess mode is now implemented in the current codebase.
-> The active presentation files are
-> `lib/presentation/features/study/widgets/study_session_guess_mode_view.dart` and
-> `lib/presentation/features/study/viewmodels/study_session_guess_viewmodel.dart`, wired from
-> `lib/presentation/features/study/screens/study_session_screen.dart`. This wireframe remains the
-> behavioral reference for the implemented screen.
+> **Status (2026-06-22):** Guess is built end-to-end (WBS 4.5.6 BE + 4.5.7 FE V1):
+> `lib/presentation/features/study/screens/guess_session_screen.dart` +
+> `lib/presentation/features/study/controllers/guess_session_controller.dart`, reached via the session
+> route `?mode=guess` dispatch (`study_routes.dart`). **WP-SG1 (shell):** ✕ + blue progress + count, the
+> prompt card (front + reading), the lettered option grid. **WP-SG2 (select-to-grade):** tapping an option
+> records the binary grade (correct → `perfect`, wrong → `forgot`), reveals correct (green ✓) / wrong
+> (red ✗) + dims the other options, then the **auto-advance countdown footer** (0.8s correct / 1.5s wrong,
+> `AppMotion.guessReveal*`; tap to skip) advances; the last card finalizes (`FinalizeStudySessionUseCase`)
+> → the result (S60–S62, S94). **Deferred (WP-SG3):** long-press card-actions on an option (Bury/Suspend).
+> The earlier `study_session_guess_mode_view.dart` / `..._viewmodel.dart` paths were target structure that
+> never existed. This wireframe is the behavioral reference.
 
 ## Purpose
 
@@ -315,8 +320,8 @@ Same as Review mode.
   `lib/presentation/features/study/widgets/study_session/guess/guess_motion.dart` re-exports
   `MxDurations.guessCorrectAdvanceDelay` (800ms) as `guessCorrectAdvanceDelay` and
   `MxDurations.guessWrongFeedbackDelay` (1500ms) as `guessWrongFeedbackDelay`. Source tokens live in
-  `lib/core/theme/tokens/app_motion.dart` (`AppDurations.guessCorrectAdvanceDelay` /
-  `AppDurations.guessWrongFeedbackDelay`). The footer countdown progress bar and the staged-grade
+  `lib/core/theme/app_motion.dart` (`AppMotion.guessCorrectAdvanceDelay` /
+  `AppMotion.guessWrongFeedbackDelay`). The footer countdown progress bar and the staged-grade
   delay both consume the per-grade duration (0.8s on correct selection, 1.5s on wrong selection).
 - Tests: `test/domain/study/modes/guess_option_builder_test.dart` (6 cases — full-pool 5 options,
   small/empty-pool degrade, target/blank/duplicate exclusion, trimmed emit, determinism;

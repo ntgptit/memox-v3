@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/entities/flashcard_progress.dart';
 import 'package:memox/domain/entities/folder.dart';
 
 part 'flashcard_list_detail.freezed.dart';
@@ -18,6 +19,13 @@ part 'flashcard_list_detail.freezed.dart';
 /// - [dueCount] — the deck's due cards over the **full deck** (active, F13
 ///   suspended/buried exclusion; `due_at <= now`), shown as a `{m} due` badge on
 ///   the `{n} CARDS` overline (mock `06`). Independent of search/filter.
+/// - [progressById] — each listed card's SRS scheduling state (box + `dueAt`),
+///   keyed by flashcard id, for the per-row SRS subtitle (`New · not studied` /
+///   `Box N · due in Xd`, mock `06` `list-row-meta`). A card with no entry (or a
+///   null `dueAt`) is NEW. The status **chip** the mock draws beside it is a
+///   documented mock visual gap — the business card-state model is New/Due only
+///   (`docs/business/srs/srs-review.md` §Rules), with no Learning/Review/Mastered
+///   taxonomy to back a chip.
 ///
 /// See `docs/contracts/usecase-contracts/flashcard.md` §WatchFlashcardListUseCase
 /// and `docs/wireframes/06-flashcard-list.md`.
@@ -29,5 +37,7 @@ sealed class FlashcardListDetail with _$FlashcardListDetail {
     required List<Flashcard> cards,
     required int totalCount,
     @Default(0) int dueCount,
+    @Default(<String, FlashcardProgress>{})
+    Map<String, FlashcardProgress> progressById,
   }) = _FlashcardListDetail;
 }

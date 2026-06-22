@@ -10,12 +10,29 @@ source_specs:
 
 # 17 — Study Session: Fill Mode
 
-> **Status update (2026-06-14):** Fill mode FE is now implemented in
-> `lib/presentation/features/study/screens/study_session_screen.dart` +
-> `lib/presentation/features/study/widgets/study_session_fill_mode_view.dart` +
-> `lib/presentation/features/study/viewmodels/study_session_fill_viewmodel.dart`. This spec now
-> documents the live implementation, not a target-only mock. Work remains tracked in
-> `docs/project-management/wbs.md`.
+> **Status (2026-06-22, WP-FI1):** Fill is built as a typed-production loop in
+> `lib/presentation/features/study/screens/fill_session_screen.dart` +
+> `lib/presentation/features/study/controllers/fill_session_controller.dart`, reached via the session
+> route `?mode=fill` dispatch (`study_routes.dart`). Show the back as a hint → type the front in a
+> free-text field → **Check** grades a strict trim-only match (`FillStudyModeStrategy.evaluate`,
+> `studyMode: fill`) → `perfect` (✓ + Next) or `forgot` (CORRECT ANSWER card + Retry / Next) → record +
+> advance → the last card finalizes → the result (S67/S68/S70/S71/S74, S94).
+>
+> **Built (WP-FI2a + WP-FI2b):** the **Mark correct** override (→ `recovered`, S72; a discreet accent link
+> under the wrong-feedback Retry/Next row) and the **Hint** affordance (→ `recovered`, S69; a discreet
+> accent link below the full-width Check, reveals one leading front char at a time up to half the length
+> as a `·`-masked prefix, tainting the grade — retained across Retry). The mock shows neither affordance
+> (Retry/Next + full-width Check only) — documented variance per PRECEDENCE #1. **Built (WP-FI2c):** a
+> correct answer **auto-advances after a 0.8s countdown** (`AppMotion.fillAutoAdvance`; a depleting bar
+> over the Next button which taps to skip, S68). **Deferred (WP-FI2):** the last-card Finish callout
+> (S73) + finalize-fail surface (S75), and the Edit ✎ / TTS 🔊 affordances. The earlier
+> `study_session_fill_mode_view.dart` / `study_session_fill_viewmodel.dart` paths never existed.
+>
+> **Mock conflict (flagged for owner):** the mock (`shots/16-study-fill`) frames the prompt as "TYPE THE
+> READING" + grades the romaji/reading (showing the front + an "English: …" gloss), whereas study-flow +
+> the matching-rules below + decision S68 define the answer as the **front** (graded strict vs front).
+> Built front-graded per PRECEDENCE (docs/decision win on behavior), with a neutral "Type the answer"
+> prompt; the reading-based variant + the two-tier hint card would need a decision update.
 
 ## Purpose
 
@@ -315,18 +332,19 @@ Same as Recall mode:
 **Contracts:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase,
 `docs/contracts/usecase-contracts/srs.md`, `docs/contracts/usecase-contracts/tts.md`
 
-**Code paths (verified 2026-05-28):**
+**Code paths (WP-FI1 — actual, 2026-06-22):**
 
-- Mode view:
-  `lib/presentation/features/study/widgets/study_session_fill_mode_view.dart`
-- Viewmodel:
-  `lib/presentation/features/study/viewmodels/study_session_fill_viewmodel.dart`
-- Strict matcher (+ mark-correct override / hint taint):
+- Screen: `lib/presentation/features/study/screens/fill_session_screen.dart` (a `HookConsumerWidget`
+  using `useMxTextSubmitState`; the hint card, the typed answer field, the correct ✓ / wrong CORRECT
+  ANSWER feedback areas, the Check / Retry / Next actions)
+- Controller: `lib/presentation/features/study/controllers/fill_session_controller.dart` (`@riverpod`
+  `FillSessionController` — `FillView` + `FillPhase` + `check()` / `retry()` / `next()`)
+- Route: `lib/presentation/features/study/routes/study_routes.dart` (`?mode=fill` → `FillSessionScreen`)
+- Strict matcher (+ mark-correct override / hint taint, WP-FI2):
   `lib/domain/study/modes/study_mode_strategy.dart` (`TypedAnswerStudyModeStrategy.evaluate(input, expected, hintUsed, markCorrect)`, WBS 4.5.8;
   tested by `test/domain/study/modes/fill_evaluator_test.dart`)
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
-- Shared shell / route entry:
-  `lib/presentation/features/study/screens/study_session_screen.dart`
+- Grading: `RecordStudySessionAnswerUseCase` + `FinalizeStudySessionUseCase` (via `study_providers.dart`)
+- Tests: `test/presentation/features/study/fill_session_screen_test.dart`
 
 **Related wireframes:**
 

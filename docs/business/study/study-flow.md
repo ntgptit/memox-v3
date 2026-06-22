@@ -257,14 +257,14 @@ actionable CTA where possible.
 
 | Case                                                   | BE classification (WBS 4.1.1) | FE empty state (WBS 4.1.2) | Decision row |
 |--------------------------------------------------------|-------------------------------|----------------------------|--------------|
-| `studyEmpty_deck_noCards`                              | ✅ `deckNoCards`              | ⏳ pending                  | S4           |
-| `studyEmpty_deck_noDueCards`                           | ✅ `deckNoDueCards` (+nextDue)| ⏳ pending                  | S4e          |
-| `studyEmpty_folder_noCards`                            | ✅ `folderNoCards`           | ⏳ pending                  | S4b          |
-| `studyEmpty_folder_noDueCards`                         | ✅ `folderNoDueCards` (+nextDue)| ⏳ pending                | S4j          |
-| `studyEmpty_today_allDone`                             | ✅ `todayAllDone`            | ⏳ pending (streak inset Target) | S4c    |
-| `studyEmpty_today_noContent`                           | ✅ `todayNoContent`          | ⏳ pending                  | S4d          |
+| `studyEmpty_deck_noCards`                              | ✅ `deckNoCards`              | ✅ icon+copy (2a); Add-flashcards CTA WP-SR1b-2c | S4           |
+| `studyEmpty_deck_noDueCards`                           | ✅ `deckNoDueCards` (+nextDue)| ✅ icon+copy + **Study-new CTA** (2b); "Next due in {X}" WP-SR1b-2c | S4e          |
+| `studyEmpty_folder_noCards`                            | ✅ `folderNoCards`           | ✅ icon+copy (2a); Open-folder CTA WP-SR1b-2c | S4b          |
+| `studyEmpty_folder_noDueCards`                         | ✅ `folderNoDueCards` (+nextDue)| ✅ icon+copy + **Study-new CTA** (2b); "Next due in {X}" WP-SR1b-2c | S4j          |
+| `studyEmpty_today_allDone`                             | ✅ `todayAllDone`            | ✅ icon+copy + **Done CTA** (2b); streak inset Target/Future | S4c    |
+| `studyEmpty_today_noContent`                           | ✅ `todayNoContent`          | ✅ icon+copy (2a); Create-deck CTA WP-SR1b-2c | S4d          |
 | `studyEmpty_tag_noCards` / `studyEmpty_tag_noDueCards` | 🔴 Blocked — `EntryType.tag` not in the core enum; needs tag-scope queries + tag picker | 🔴 Blocked | S4h/S4i |
-| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ `allBuried` / `allSuspended`| ⏳ pending                  | S4f/S4g      |
+| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ `allBuried` / `allSuspended`| ✅ icon+copy (2a); allBuried **Study-new+Done CTA** (2b); allSuspended View-suspended CTA WP-SR1b-2c | S4f/S4g      |
 
 ## "Next due" calculation
 
@@ -293,7 +293,12 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
   relaxing the current "reject second answer" rule in `recordStudySessionAnswer` together with
   the C1 classifier change — ship the two together.
 - Match uses the same local-evaluation principle, but it persists append-only board evaluations
-  rather than terminal attempts until finalization derives the SRS history.
+  rather than terminal attempts until finalization derives the SRS history. **Finalize routing
+  (WP-SM2):** `finalizeStudySession` detects a Match session by the presence of any
+  `study_match_evaluations` rows — if present it runs the Match branch (derive one terminal
+  `study_attempts` per item from the evaluations: first-eval-correct → `perfect`, else `forgot`;
+  an un-evaluated item → `forgot`); otherwise the one-terminal-attempt path applies. (V1: one
+  session = one mode, so the heuristic is unambiguous.)
 - Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 

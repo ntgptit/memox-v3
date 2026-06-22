@@ -13,6 +13,9 @@ import 'package:memox/data/datasources/local/daos/folder_dao.dart';
 import 'package:memox/data/repositories/flashcard_repository_impl.dart';
 import 'package:memox/data/repositories/folder_repository_impl.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+// Aliased: the Drift table class `FlashcardProgress` (app_database) collides with
+// the domain entity.
+import 'package:memox/domain/entities/flashcard_progress.dart' as srs;
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/domain/types/flashcard_progress_edit_policy.dart';
 import 'package:memox/domain/types/flashcard_status_filter.dart';
@@ -536,6 +539,47 @@ void main() {
         buriedUntil: Value<int?>(buriedUntil),
         dueAt: Value<int?>(dueAt),
       ),
+    );
+
+    test(
+      'read model carries each card\'s SRS progress (box + dueAt) for the row '
+      'subtitle (WP-FL1)',
+      () async {
+        final String deckId = await newDeck();
+        final String studied = (await repo.createFlashcard(
+          deckId: deckId,
+          front: 'studied',
+          back: 'studied',
+        )).data!.id;
+        final String fresh = (await repo.createFlashcard(
+          deckId: deckId,
+          front: 'fresh',
+          back: 'fresh',
+        )).data!.id;
+        // Schedule `studied` into box 4 due in the future; `fresh` stays NEW.
+        await flashcardDao.updateProgressColumns(
+          studied,
+          const FlashcardProgressCompanion(
+            boxNumber: Value<int>(4),
+            dueAt: Value<int>(now + 4000),
+          ),
+        );
+
+        final FlashcardListDetail detail =
+            (await repoAtNow().watchFlashcardList(deckId).first).data!;
+
+        final srs.FlashcardProgress? studiedProgress =
+            detail.progressById[studied];
+        expect(studiedProgress, isNotNull);
+        expect(studiedProgress!.currentBox, 4);
+        expect(
+          studiedProgress.dueAt,
+          DateTime.fromMillisecondsSinceEpoch(now + 4000, isUtc: true),
+        );
+        // A fresh card maps to an unscheduled progress (box 1, dueAt null) → the
+        // tile renders it as NEW.
+        expect(detail.progressById[fresh]?.dueAt, isNull);
+      },
     );
 
     test(

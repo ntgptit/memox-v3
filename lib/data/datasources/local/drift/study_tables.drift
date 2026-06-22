@@ -9,10 +9,10 @@ import 'flashcards.drift';
 -- session moves to status `cancelled` (see
 -- docs/contracts/repository-contracts/study-repository.md §Forbidden).
 -- Timestamps are UTC epoch milliseconds; ids are text (UUID-like). The
--- study_flow / current_mode mode-chain columns and the study_match_evaluations
--- table are target shape that lands with the mode-chain rows (WBS 4.5.x), not
--- this enabler. See docs/database/schema-contract.md §study_sessions and
--- docs/business/study/study-flow.md.
+-- study_flow / current_mode mode-chain columns remain target shape that lands
+-- with the mode-chain rows (WBS 4.5.12+); the `study_match_evaluations` table
+-- below SHIPPED v8 (WBS 4.5.4, WP-SM1a). See docs/database/schema-contract.md
+-- §study_sessions and docs/business/study/study-flow.md.
 CREATE TABLE study_sessions (
   id TEXT NOT NULL PRIMARY KEY,
   entry_type TEXT NOT NULL,
@@ -72,3 +72,37 @@ CREATE TABLE study_attempts (
 
 CREATE INDEX idx_study_attempts_session_item
   ON study_attempts (session_item_id);
+
+-- One append-only Match-mode pair-evaluation event (WBS 4.5.4). Each row records
+-- one pair-tap on a board: the two selected cells, the expected front/back cards
+-- of the tapped pair, and whether they formed a valid pair (is_correct). Rows are
+-- append-only — never updated, and removed only via the session/item/flashcard
+-- CASCADE — and they do NOT mark study_session_items answered; Match finalization
+-- derives one terminal study_attempts row per session item from these (WP-SM2).
+-- See docs/contracts/repository-contracts/study-repository.md §Match and
+-- docs/business/study/study-flow.md. flashcard_id denormalizes the front cell's
+-- card (= expected_front_flashcard_id) for per-card grouping; attempt_order is the
+-- per-session append sequence; timestamps are UTC epoch milliseconds.
+CREATE TABLE study_match_evaluations (
+  id TEXT NOT NULL PRIMARY KEY,
+  session_id TEXT NOT NULL REFERENCES study_sessions (id) ON DELETE CASCADE,
+  session_item_id TEXT NOT NULL
+    REFERENCES study_session_items (id) ON DELETE CASCADE,
+  flashcard_id TEXT NOT NULL REFERENCES flashcards (id) ON DELETE CASCADE,
+  board_index INTEGER NOT NULL,
+  pair_id TEXT NOT NULL,
+  selected_front_cell_id TEXT NOT NULL,
+  selected_back_cell_id TEXT NOT NULL,
+  expected_front_flashcard_id TEXT NOT NULL,
+  expected_back_flashcard_id TEXT NOT NULL,
+  is_correct BOOLEAN NOT NULL,
+  attempt_order INTEGER NOT NULL,
+  evaluated_at INTEGER NOT NULL,
+  created_at INTEGER NOT NULL
+) AS StudyMatchEvaluationRow;
+
+CREATE INDEX idx_study_match_evaluations_session
+  ON study_match_evaluations (session_id, attempt_order);
+
+CREATE INDEX idx_study_match_evaluations_session_item
+  ON study_match_evaluations (session_item_id);

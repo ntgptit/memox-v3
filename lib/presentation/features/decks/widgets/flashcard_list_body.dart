@@ -8,6 +8,7 @@ import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/entities/flashcard.dart';
+import 'package:memox/domain/entities/flashcard_progress.dart';
 import 'package:memox/domain/models/flashcard_list_detail.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
@@ -128,7 +129,7 @@ class FlashcardListBody extends ConsumerWidget {
         message: l10n.flashcardLoadFailedMessage,
         icon: Icons.cloud_off_outlined,
         action: MxPrimaryButton(
-          label: l10n.libraryRetryLabel,
+          label: l10n.commonRetryLabel,
           icon: Icons.refresh,
           fullWidth: true,
           onPressed: () => ref.invalidate(flashcardListStreamProvider(deckId)),
@@ -152,7 +153,7 @@ class FlashcardListBody extends ConsumerWidget {
           label: l10n.flashcardAddCardLabel,
           icon: Icons.add,
           fullWidth: true,
-          onPressed: () => runAddCard(context, ref, deckId),
+          onPressed: () => runAddCard(context, deckId),
         ),
       );
     }
@@ -193,6 +194,7 @@ class FlashcardListBody extends ConsumerWidget {
             name: (Flashcard c) => c.front,
             createdAt: (Flashcard c) => c.createdAt,
           ),
+          detail.progressById,
         ),
       ],
     );
@@ -202,7 +204,14 @@ class FlashcardListBody extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     List<Flashcard> cards,
+    Map<String, FlashcardProgress> progressById,
   ) {
+    // One `now` for every row's `due in {n}d` countdown, so they grade against
+    // the same instant. (Screen goldens seed New cards only — `progressById`
+    // empty — so this wall-clock read never branches there and stays
+    // deterministic; the due-in render is golden-covered by the isolated
+    // `flashcard_tile` test with an injected `now`.)
+    final DateTime now = DateTime.now();
     final List<Widget> rows = <Widget>[];
     for (int i = 0; i < cards.length; i++) {
       if (i > 0) rows.add(const MxDivider(indent: _dividerInset));
@@ -210,7 +219,9 @@ class FlashcardListBody extends ConsumerWidget {
       rows.add(
         FlashcardTile(
           card: card,
-          onTap: () => runEditCard(context, ref, card),
+          progress: progressById[card.id],
+          now: now,
+          onTap: () => runEditCard(context, card),
           onActions: () => runDeleteCard(context, ref, card),
         ),
       );

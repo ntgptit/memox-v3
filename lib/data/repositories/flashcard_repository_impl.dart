@@ -146,6 +146,16 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
             cards: filtered,
             totalCount: all.length,
             dueCount: dueCount,
+            // Per-card SRS state for the row subtitle (mock `06` list-row-meta),
+            // over the filtered cards only. A card with no progress row stays
+            // absent and reads as NEW. The bare literal takes its domain element
+            // type from the constructor param, sidestepping the same-named
+            // app_database table class.
+            progressById: {
+              for (final Flashcard c in filtered)
+                if (progressById[c.id] case final FlashcardProgressRow row)
+                  c.id: FlashcardMapper.progressFromRow(row),
+            },
           ),
         );
       } catch (error) {

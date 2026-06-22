@@ -39,7 +39,7 @@ class FolderDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // guard:allow-screen-watch -- reason: the app bar swaps to search mode, the
+    // guard:allow-screen-watch -- reason: search mode mounts the bottom dock, the
     // FAB is content-mode aware, and the breadcrumb/title come from the folder
     // stream, so the shell reacts to search-active + detail state; a body widget
     // cannot own the app-bar/FAB/breadcrumb decisions.
@@ -67,33 +67,38 @@ class FolderDetailScreen extends ConsumerWidget {
     final Widget? fab = _fab(context, ref, l10n, searching, mode);
 
     return MxScaffold(
-      appBar: searching
-          ? FolderDetailSearchAppBar(folderId: folderId)
-          : MxAppBar(
-              title: detail?.folder.name ?? '',
-              actions: <Widget>[
-                MxIconButton(
-                  icon: Icons.search,
-                  tooltip: l10n.folderDetailSearchTooltip,
-                  onPressed: () => ref
-                      .read(folderSearchActiveProvider(folderId).notifier)
-                      .activate(),
-                ),
-                MxIconButton(
-                  icon: Icons.swap_vert,
-                  tooltip: l10n.sortTooltip,
-                  onPressed: () => _openSort(context, ref),
-                ),
-                if (detail != null)
-                  MxIconButton(
-                    icon: Icons.more_vert,
-                    tooltip: l10n.libraryOverflowTooltip,
-                    onPressed: () =>
-                        runFolderActions(context, ref, _viewedSummary(detail)),
-                  ),
-              ],
+      // The regular folder app bar stays in place while searching (kit `04`
+      // Search keeps the title + sort + overflow); the search field drops into
+      // the bottom dock instead of swapping the app bar.
+      appBar: MxAppBar(
+        title: detail?.folder.name ?? '',
+        actions: <Widget>[
+          MxIconButton(
+            icon: Icons.search,
+            tooltip: l10n.folderDetailSearchTooltip,
+            onPressed: () => _toggleSearch(ref, searching),
+          ),
+          MxIconButton(
+            icon: Icons.swap_vert,
+            tooltip: l10n.sortTooltip,
+            onPressed: () => _openSort(context, ref),
+          ),
+          if (detail != null)
+            MxIconButton(
+              icon: Icons.more_vert,
+              tooltip: l10n.libraryOverflowTooltip,
+              onPressed: () =>
+                  runFolderActions(context, ref, _viewedSummary(detail)),
             ),
+        ],
+      ),
       floatingActionButton: fab,
+      // The search dock is a flat, full-bleed bar pinned under the content (kit
+      // `04` Search `search-dock`); the bottom-nav slot renders it without the
+      // rounded/elevated BottomSheet chrome and reserves its own foot room.
+      bottomNavigationBar: searching
+          ? FolderDetailSearchDock(folderId: folderId)
+          : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -114,6 +119,17 @@ class FolderDetailScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Toggles search mode from the app-bar icon: entering mounts the bottom dock;
+  /// exiting clears the term so the next entry starts fresh.
+  void _toggleSearch(WidgetRef ref, bool searching) {
+    if (!searching) {
+      ref.read(folderSearchActiveProvider(folderId).notifier).activate();
+      return;
+    }
+    ref.read(folderSearchQueryProvider(folderId).notifier).clear();
+    ref.read(folderSearchActiveProvider(folderId).notifier).deactivate();
   }
 
   /// Opens the shared content-sort sheet and persists the chosen mode for this

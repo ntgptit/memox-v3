@@ -40,7 +40,7 @@ class DashboardBody extends ConsumerWidget {
             title: l10n.dashboardLoadFailedTitle,
             message: l10n.dashboardLoadFailedMessage,
             action: MxPrimaryButton(
-              label: l10n.libraryRetryLabel,
+              label: l10n.commonRetryLabel,
               icon: Icons.refresh,
               onPressed: () => ref.invalidate(dashboardSummaryProvider),
             ),

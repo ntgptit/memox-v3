@@ -138,6 +138,43 @@ class StudySessionDao {
     );
   });
 
+  /// Finalizes a Match session in one transaction (WBS 4.5.4 / WP-SM2): inserts
+  /// the derived terminal [attempts], marks every [answeredItemIds] item answered
+  /// at [now], upserts the [progressUpserts] (each companion MUST carry every
+  /// preserved column, see [finalizeSession]), and marks the session completed.
+  Future<void> finalizeMatchSession({
+    required String sessionId,
+    required List<StudyAttemptsCompanion> attempts,
+    required List<String> answeredItemIds,
+    required List<FlashcardProgressCompanion> progressUpserts,
+    required int now,
+  }) => _db.transaction(() async {
+    for (final StudyAttemptsCompanion attempt in attempts) {
+      await _db.into(_db.studyAttempts).insert(attempt);
+    }
+    for (final String itemId in answeredItemIds) {
+      await (_db.update(
+        _db.studySessionItems,
+      )..where((t) => t.id.equals(itemId))).write(
+        StudySessionItemsCompanion(
+          answeredAt: Value<int>(now),
+          updatedAt: Value<int>(now),
+        ),
+      );
+    }
+    for (final FlashcardProgressCompanion upsert in progressUpserts) {
+      await _db.into(_db.flashcardProgress).insertOnConflictUpdate(upsert);
+    }
+    await (_db.update(
+      _db.studySessions,
+    )..where((t) => t.id.equals(sessionId))).write(
+      StudySessionsCompanion(
+        status: const Value(statusCompleted),
+        updatedAt: Value<int>(now),
+      ),
+    );
+  });
+
   /// The current Leitner box of [flashcardId] from `flashcard_progress`, or
   /// `null` when the card has no progress row yet (a new card).
   Future<int?> flashcardProgressBox(String flashcardId) async {
@@ -171,6 +208,41 @@ class StudySessionDao {
     await (_db.update(_db.studySessions)..where((t) => t.id.equals(sessionId)))
         .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
   });
+
+  /// Appends one Match-mode pair evaluation and touches the session (WBS 4.5.4):
+  /// inserts the append-only [evaluation] row and refreshes
+  /// `study_sessions.updated_at` so the active session stays resumable. The row
+  /// does NOT mark any item answered (finalization derives that).
+  Future<void> recordMatchEvaluation({
+    required StudyMatchEvaluationsCompanion evaluation,
+    required String sessionId,
+    required int updatedAt,
+  }) => _db.transaction(() async {
+    await _db.into(_db.studyMatchEvaluations).insert(evaluation);
+    await (_db.update(_db.studySessions)..where((t) => t.id.equals(sessionId)))
+        .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
+  });
+
+  /// All Match evaluations for [sessionId], ordered by their append sequence.
+  Future<List<StudyMatchEvaluationRow>> matchEvaluationsBySession(
+    String sessionId,
+  ) =>
+      (_db.select(_db.studyMatchEvaluations)
+            ..where((t) => t.sessionId.equals(sessionId))
+            ..orderBy(<OrderClauseGenerator<StudyMatchEvaluations>>[
+              (t) => OrderingTerm(expression: t.attemptOrder),
+            ]))
+          .get();
+
+  /// The next append-sequence index for [sessionId] (= the current row count),
+  /// via a SQL `COUNT` (no row materialization).
+  Future<int> matchEvaluationCount(String sessionId) {
+    final Expression<int> count = _db.studyMatchEvaluations.id.count();
+    final query = _db.selectOnly(_db.studyMatchEvaluations)
+      ..addColumns(<Expression<Object>>[count])
+      ..where(_db.studyMatchEvaluations.sessionId.equals(sessionId));
+    return query.map((row) => row.read(count) ?? 0).getSingle();
+  }
 
   /// The session item for [flashcardId] within [sessionId], or `null` when the
   /// card is not (or no longer) in that session's queue.

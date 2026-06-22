@@ -233,32 +233,35 @@ finalization-owned, WBS 4.6.x). A write error → `StorageFailure(transaction)`.
 ## RecordMatchEvaluationUseCase
 
 ```dart
-Future<Either<Failure, Unit>> call({
+// The use case is Match-only — it owns `now` and fixes `studyMode = StudyMode.match`,
+// delegating to StudyRepository.recordMatchEvaluation (which validates the mode +
+// session). Return shape follows the repository `Result<T>` pattern in code
+// (`Either<Failure, Unit>` is the target style).
+Future<Result<void>> call({
   required SessionId sessionId,
   required String sessionItemId,
   required int boardIndex,
   required String pairId,
   required String selectedFrontCellId,
   required String selectedBackCellId,
-  required String expectedFrontFlashcardId,
-  required String expectedBackFlashcardId,
+  required FlashcardId expectedFrontFlashcardId,
+  required FlashcardId expectedBackFlashcardId,
   required bool isCorrect,
-  required StudyMode studyMode,
 });
 ```
 
-**Rules:**
+**Rules** (enforced in `recordMatchEvaluation` at the repository layer):
 
-- LOAD session. Validate status=`draft` or `in_progress`.
-- LOAD the target session item and verify it belongs to the session.
-- Validate the session is in Match mode.
-- Atomic: insert a single append-only `study_match_evaluations` row with a per-session-item
-  attempt order and touch `study_sessions.updated_at`.
+- LOAD session. Validate status=`in_progress`.
+- Verify the target session item belongs to the session.
+- The mode is fixed to `StudyMode.match`; a non-match mode returns `UnsupportedActionFailure`.
+- Atomic: insert a single append-only `study_match_evaluations` row with a per-session
+  attempt order (`flashcard_id` denormalizes `expectedFrontFlashcardId`) and touch
+  `study_sessions.updated_at`.
 - Do **not** update `study_session_items.answered_at`.
 - Do **not** update `flashcard_progress`.
 - Do **not** call `recordStudySessionAnswer`.
 - `isCorrect=true` is the clean Match evaluation path; `isCorrect=false` is the wrong path.
-- The `studyMode` argument must be `StudyMode.match`; other modes return `UnsupportedActionFailure`.
 
 **Errors:** `NotFoundFailure`, `UnsupportedActionFailure`, `StorageFailure`.
 

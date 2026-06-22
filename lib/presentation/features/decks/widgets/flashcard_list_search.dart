@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
 import 'package:memox/presentation/shared/hooks/mx_search_controller_hooks.dart';
-import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_scoped_search_dock.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
-import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 
 /// Inline flashcard-list search field, bound to `flashcardSearchQueryProvider`
-/// keyed by [deckId] (front/back filter is applied server-side). WBS 3.4.2.
+/// keyed by [deckId] (front/back filter is applied server-side). Provider-synced
+/// via [useMxSearchController] so the body's no-results `Clear` CTA resets the
+/// field. WBS 3.4.2.
 class FlashcardListSearchField extends HookConsumerWidget {
   const FlashcardListSearchField({
     required this.deckId,
@@ -39,42 +39,18 @@ class FlashcardListSearchField extends HookConsumerWidget {
   }
 }
 
-/// Flashcard-list search-mode app bar (field + Cancel), keyed by [deckId].
-class FlashcardListSearchAppBar extends ConsumerWidget
-    implements PreferredSizeWidget {
-  const FlashcardListSearchAppBar({required this.deckId, super.key});
+/// The flashcard-list **persistent** bottom search dock (kit `06` `search-dock`):
+/// the shared [MxScopedSearchDock] chrome hosting the [FlashcardListSearchField].
+/// Unlike the toggle docks on Library / Folder detail, this dock is **always
+/// present** while the deck has cards (the kit `06` Loaded state ships the dock
+/// in its base tree); it is hidden only in the empty / loading / error / reorder
+/// states. WBS 3.4.2.
+class FlashcardListSearchDock extends StatelessWidget {
+  const FlashcardListSearchDock({required this.deckId, super.key});
 
   final String deckId;
 
-  static const double _toolbarHeight = kToolbarHeight + MxSpacing.space4;
-
   @override
-  Size get preferredSize => const Size.fromHeight(_toolbarHeight);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AppLocalizations l10n = AppLocalizations.of(context);
-
-    void cancel() {
-      ref.read(flashcardSearchQueryProvider(deckId).notifier).clear();
-      ref.read(flashcardSearchActiveProvider(deckId).notifier).deactivate();
-    }
-
-    return MxAppBar(
-      automaticallyImplyLeading: false,
-      titleSpacing: MxSpacing.screen,
-      toolbarHeight: _toolbarHeight,
-      titleWidget: FlashcardListSearchField(deckId: deckId, autofocus: true),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: MxSpacing.space2),
-          child: MxSecondaryButton(
-            label: l10n.commonCancel,
-            variant: MxSecondaryVariant.text,
-            onPressed: cancel,
-          ),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) =>
+      MxScopedSearchDock(child: FlashcardListSearchField(deckId: deckId));
 }

@@ -52,7 +52,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong loading your folders.';
 
   @override
-  String get libraryRetryLabel => 'Retry';
+  String get commonRetryLabel => 'Retry';
 
   @override
   String get librarySearchNoResultsTitle => 'No folders found';
@@ -525,4 +525,330 @@ class AppLocalizationsEn extends AppLocalizations {
   String flashcardReorderCountHeader(int count) {
     return '$count cards · drag to reorder';
   }
+
+  @override
+  String get flashcardStateNew => 'New · not studied';
+
+  @override
+  String flashcardStateBoxDueIn(int box, int days) {
+    return 'Box $box · due in ${days}d';
+  }
+
+  @override
+  String flashcardStateBoxDueToday(int box) {
+    return 'Box $box · due today';
+  }
+
+  @override
+  String get cardDiscardTitle => 'Discard changes?';
+
+  @override
+  String get cardDiscardMessage =>
+      'Your edits to this card haven\'t been saved.';
+
+  @override
+  String get cardDiscardConfirm => 'Discard';
+
+  @override
+  String get cardDeleteTooltip => 'Delete card';
+
+  @override
+  String get cardDetailsLabel => 'Details';
+
+  @override
+  String get cardDetailsOptional => 'Optional';
+
+  @override
+  String get cardDetailsSummary => 'example · pronunciation · hint';
+
+  @override
+  String get cardExampleLabel => 'Example';
+
+  @override
+  String get cardPronunciationLabel => 'Pronunciation';
+
+  @override
+  String get cardHintLabel => 'Hint';
+
+  @override
+  String get cardTagsLabel => 'Tags';
+
+  @override
+  String get cardAddTagLabel => 'Add tag';
+
+  @override
+  String get cardSaveFailedMessage => 'Changes couldn\'t be saved.';
+
+  @override
+  String get cardLoadFailedTitle => 'Couldn\'t load card';
+
+  @override
+  String get cardLoadFailedMessage => 'We couldn\'t fetch this card to edit.';
+
+  @override
+  String get commonBack => 'Back';
+
+  @override
+  String get studyEntryTitle => 'Study';
+
+  @override
+  String get studySessionTitle => 'Study';
+
+  @override
+  String get studySessionPlaceholder => 'Review session — coming soon.';
+
+  @override
+  String get studyPreparing => 'Preparing study…';
+
+  @override
+  String get studyEntryErrorTitle => 'Couldn\'t start study';
+
+  @override
+  String get studyEntryErrorMessage =>
+      'We couldn\'t prepare this study session. Please try again.';
+
+  @override
+  String get studyEmptyCaughtUpTitle => 'All caught up!';
+
+  @override
+  String get studyEmptyDeckNoCardsTitle => 'No cards in this deck';
+
+  @override
+  String get studyEmptyDeckNoCardsMessage =>
+      'Add flashcards to start studying.';
+
+  @override
+  String get studyEmptyDeckNoDueMessage =>
+      'No cards are due in this deck right now.';
+
+  @override
+  String get studyEmptyFolderNoCardsTitle => 'No cards in this folder';
+
+  @override
+  String get studyEmptyFolderNoCardsMessage =>
+      'Add a deck and some cards to start studying.';
+
+  @override
+  String get studyEmptyFolderNoDueMessage =>
+      'No cards are due in this folder right now.';
+
+  @override
+  String get studyEmptyTodayAllDoneTitle => 'All done for today!';
+
+  @override
+  String get studyEmptyTodayAllDoneMessage =>
+      'Come back tomorrow to keep your streak going.';
+
+  @override
+  String get studyEmptyTodayNoContentTitle => 'No flashcards yet';
+
+  @override
+  String get studyEmptyTodayNoContentMessage =>
+      'Create a deck and add cards to start studying.';
+
+  @override
+  String get studyEmptyAllBuriedTitle => 'All cards buried for today';
+
+  @override
+  String get studyEmptyAllBuriedMessage => 'They\'ll return tomorrow.';
+
+  @override
+  String get studyEmptyAllSuspendedTitle => 'All cards are suspended';
+
+  @override
+  String get studyEmptyAllSuspendedMessage =>
+      'Resume some cards to start studying.';
+
+  @override
+  String get studyResumeTitle => 'Resume your session?';
+
+  @override
+  String get studyResumeMessage =>
+      'You have an unfinished study session for this scope.';
+
+  @override
+  String get studyResumeAction => 'Resume';
+
+  @override
+  String get studyStartOverAction => 'Start over';
+
+  @override
+  String get studyStartOverTitle => 'Start over?';
+
+  @override
+  String get studyStartOverMessage =>
+      'This discards your current progress for this session and starts fresh.';
+
+  @override
+  String get studyActionStudyNew => 'Study new instead';
+
+  @override
+  String get studyReviewFrontLabel => 'FRONT';
+
+  @override
+  String get studyReviewBackLabel => 'BACK';
+
+  @override
+  String get studyReviewEmptyTitle => 'Nothing to review';
+
+  @override
+  String get studyReviewEmptyMessage => 'This session has no cards.';
+
+  @override
+  String get studyReviewLoadFailedTitle => 'Couldn\'t load the session';
+
+  @override
+  String get studyReviewLoadFailedMessage =>
+      'We couldn\'t load this study session.';
+
+  @override
+  String get studyReviewSwipeHint =>
+      'Swipe right if you knew it, left if you didn\'t';
+
+  @override
+  String get studyReviewFinishTitle => 'Review complete';
+
+  @override
+  String get studyReviewFinishMessage =>
+      'You\'ve gone through every card in this session.';
+
+  @override
+  String get studyReviewFinishAction => 'Finish session';
+
+  @override
+  String get studyExitTitle => 'Exit study session?';
+
+  @override
+  String get studyExitMessage =>
+      'Your progress is saved and you can resume later. Leave this session?';
+
+  @override
+  String get studyExitConfirm => 'Exit';
+
+  @override
+  String get studyExitCancel => 'Keep studying';
+
+  @override
+  String get studyActionBury => 'Bury until tomorrow';
+
+  @override
+  String get studyActionSuspend => 'Suspend card';
+
+  @override
+  String get studyResultTitle => 'Session complete';
+
+  @override
+  String get studyResultLoading => 'Saving your results…';
+
+  @override
+  String get studyResultHeroTitle => 'Nice work!';
+
+  @override
+  String studyResultCardsReviewed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards reviewed',
+      one: '1 card reviewed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyResultCorrect => 'Correct';
+
+  @override
+  String get studyResultWrong => 'Wrong';
+
+  @override
+  String get studyResultAnswered => 'Answered';
+
+  @override
+  String get studyResultDone => 'Done';
+
+  @override
+  String get studyResultLoadFailedTitle => 'Couldn\'t load your results';
+
+  @override
+  String get studyResultLoadFailedMessage =>
+      'Something went wrong loading this session\'s summary.';
+
+  @override
+  String get studyResultSaveFailedBanner =>
+      'Couldn\'t save your results. Your progress is kept locally.';
+
+  @override
+  String get studyResultRetry => 'Retry save';
+
+  @override
+  String get studyResultDefensiveTitle => 'No cards answered';
+
+  @override
+  String get studyResultDefensiveMessage =>
+      'This session has no recorded answers.';
+
+  @override
+  String get studyMatchTitle => 'Match the pairs';
+
+  @override
+  String get studyMatchSubtitle => 'Tap a term, then its meaning.';
+
+  @override
+  String studyMatchProgress(int matched, int left) {
+    return '$matched matched · $left left';
+  }
+
+  @override
+  String get studyGuessPrompt => 'What does this mean?';
+
+  @override
+  String get studyGuessTapToContinue => 'Tap to continue';
+
+  @override
+  String get studyRecallPrompt => 'Recall the meaning';
+
+  @override
+  String get studyRecallHint => 'Say it in your head, then reveal.';
+
+  @override
+  String get studyRecallShowAnswer => 'Show answer';
+
+  @override
+  String get studyRecallAnswerLabel => 'Answer';
+
+  @override
+  String get studyRecallGradePrompt => 'How well did you know it?';
+
+  @override
+  String get studyRecallMissed => 'Missed';
+
+  @override
+  String get studyRecallGotIt => 'Got it';
+
+  @override
+  String get studyFillPrompt => 'Type the answer';
+
+  @override
+  String get studyFillAnswerLabel => 'Your answer';
+
+  @override
+  String get studyFillCheck => 'Check answer';
+
+  @override
+  String get studyFillWrongMessage => 'Not quite — see the answer below.';
+
+  @override
+  String get studyFillCorrectLabel => 'Correct answer';
+
+  @override
+  String get studyFillRetry => 'Retry';
+
+  @override
+  String get studyFillNext => 'Next';
+
+  @override
+  String get studyFillMarkCorrect => 'Mark correct';
+
+  @override
+  String get studyFillHint => 'Hint';
 }

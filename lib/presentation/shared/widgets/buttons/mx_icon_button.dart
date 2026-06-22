@@ -31,6 +31,18 @@ class MxIconButton extends StatelessWidget {
     super.key,
   });
 
+  /// The app-bar / feature-header variant — a visually quiet Back/More/close
+  /// glyph action. Same rendering as the default; the distinct constructor is
+  /// the canonical API for header icon actions
+  /// (`memox.design_system.header_actions_use_toolbar_icon_buttons`).
+  const MxIconButton.toolbar({
+    required this.icon,
+    this.onPressed,
+    this.tooltip,
+    this.color,
+    super.key,
+  });
+
   final IconData icon;
   final VoidCallback? onPressed;
   final String? tooltip;

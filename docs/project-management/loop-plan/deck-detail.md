@@ -3,7 +3,7 @@ last_updated: 2026-06-21
 object: Deck (detail)
 loop_order: 4 of 10 (outer→inner)
 route: /library/deck/:deckId/flashcards
-status: DONE (deck container Implemented WBS 3.4.2 + WP-D1 overline due badge)
+status: DONE — re-audit-confirmed 2026-06-22 (container WBS 3.4.2 + WP-D1 due badge + WP-D2 persistent search dock)
 ---
 
 # Loop plan — Object 4: Deck (detail)
@@ -47,7 +47,7 @@ kebab maps to delete-deck only, which the impl matches.
 | `142 CARDS` overline | `flashcard_list_body._Overline` | Current |
 | `23 due` badge (overline, top-right) | — | **WP-D1 (missing)** |
 | Add-card FAB | `MxFab(Icons.add)` | Current |
-| Search cards (bottom field / mode) | `flashcard_list_search` | Current |
+| Search cards (persistent bottom dock) | `FlashcardListSearchDock` (WP-D2) | Current |
 | Card rows (icon + front—back + Box/due + status chip) | `flashcard_tile` (front/back only today) | **object 5** |
 
 ## Gap-checklist (work-package queue)
@@ -60,9 +60,25 @@ kebab maps to delete-deck only, which the impl matches.
       `> 0`, independent of search. BE test (active-due only, suspended excluded, search-invariant)
       + overline widget tests (badge present / absent) + `loaded-due` golden (light+dark). verify PASS.
 
+- [x] **WP-D2 — Persistent flashcard-list search dock (kit `06`) — Implemented (2026-06-22).**
+      **RE-AUDIT finding (TRUST POLICY):** flashcard-list search shipped as an **app-bar swap**
+      (`FlashcardListSearchAppBar` + a `FlashcardSearchActive` toggle), but the kit `06` Loaded base
+      tree ships a **persistent** bottom `search-dock` (`abs:[1,700 388x69]`) — always present while
+      the deck has cards, removed only in reorder. So this dock differs from the Library/Folder
+      **toggle** docks (WP-L10/WP-FD10): it is persistent, not toggled. Per PRECEDENCE #2 (visual →
+      mock), rebuilt: `FlashcardListSearchDock` (surface fill + top hairline, hosts the
+      provider-synced `FlashcardListSearchField`, no autofocus) mounted in the `bottomNavigationBar`
+      slot **only when `detail.totalCount > 0 && !reordering`** (hidden in empty/loading/error/
+      reorder per spec). Removed the app-bar search icon + the now-dead `FlashcardSearchActive`
+      notifier (filtering keys on `flashcardSearchQueryProvider` alone; the body's no-results state
+      already keyed on `term.isNotEmpty`). FAB + breadcrumb no longer hide on "search". Regenerated
+      6 goldens (loaded/loaded-due/search-no-results gained the dock; empty/loading/error lost the
+      app-bar search icon); added dock present (loaded) / absent (empty, reorder) tests. verify PASS.
+
 ## Conclusion
 
-Object 4 (Deck detail = the deck container on the Flashcard-list screen) is **DONE** (2026-06-21):
-WBS 3.4.2 container + WP-D1 overline due badge. All card-level work (SRS row enrichment, the
-`07`/`08` editor, card CRUD/reorder) is **object 5**. Next object (outer→inner): **Flashcard
-(list + editor)**.
+Object 4 (Deck detail = the deck container on the Flashcard-list screen) is **DONE — re-audit-
+confirmed 2026-06-22**: WBS 3.4.2 container + WP-D1 overline due badge + **WP-D2 persistent search
+dock** (the re-audit found the app-bar-swap-vs-dock gap, same class as objects 1–2 but the kit `06`
+dock is persistent). All card-level work (SRS row enrichment, the `07`/`08` editor, card CRUD/
+reorder) is **object 5**. Next object (outer→inner): **Flashcard (list + editor)**.

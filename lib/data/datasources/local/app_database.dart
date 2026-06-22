@@ -6,6 +6,7 @@ import 'package:memox/data/datasources/local/migrations/v4_add_bury_suspend.dart
 import 'package:memox/data/datasources/local/migrations/v5_add_folder_color_icon.dart';
 import 'package:memox/data/datasources/local/migrations/v6_add_study_tables.dart';
 import 'package:memox/data/datasources/local/migrations/v7_add_card_history.dart';
+import 'package:memox/data/datasources/local/migrations/v8_add_match_evaluations.dart';
 
 part 'app_database.g.dart';
 
@@ -53,7 +54,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Current schema version. Bump on every schema change and add a matching
   /// `onUpgrade` step (`docs/database/migration-contract.md`).
-  static const int currentSchemaVersion = 7;
+  static const int currentSchemaVersion = 8;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -88,6 +89,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 7) {
         await migrateV6ToV7(m, this);
+      }
+      if (from < 8) {
+        await migrateV7ToV8(m, this);
       }
     },
     beforeOpen: (OpeningDetails details) async {

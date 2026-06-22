@@ -13,8 +13,11 @@ applies_to: flashcard tags — creation, filtering, study-by-tag, management
 > `WatchTagsWithCountUseCase` / `RenameTagUseCase` / `MergeTagsUseCase` / `DeleteTagUseCase`, over
 > the project `Result` contract. Rename surfaces `ConflictFailure` on a name collision (never
 > auto-merges); merge re-tags + de-dups + removes the source; delete keeps the cards. Search is the
-> screen filtering the watched list. Per-card add/remove tag stays on the flashcard editor;
-> study-by-tag (`StudyEntryType.tag`) remains Blocked / Future.
+> screen filtering the watched list. Per-card add/remove tag stays on the flashcard editor — **built
+> (WP-FL2b2b, 2026-06-22):** the editor's Details § TAGS chip row + inline Add-tag field validates +
+> lowercases + dedupes on add (`TagValidator`) and replaces the card's tag set wholesale on save (via
+> `Create`/`UpdateFlashcardUseCase`); see `lib/presentation/features/decks/widgets/flashcard_editor_body.dart`.
+> Study-by-tag (`StudyEntryType.tag`) remains Blocked / Future.
 
 ## Purpose
 

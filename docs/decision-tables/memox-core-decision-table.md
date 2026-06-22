@@ -13,7 +13,7 @@ Behavior branches are split into per-feature files. Read only the file(s) your t
 |------|---------|---------|
 | `docs/decision-tables/folder.md` | Folder CRUD, reorder, content-mode guard | F1–F13 |
 | `docs/decision-tables/deck.md` | Deck CRUD, reorder, move | D1–D10 |
-| `docs/decision-tables/flashcard.md` | Flashcard CRUD + Import | C1–C41, I1–I8 |
+| `docs/decision-tables/flashcard.md` | Flashcard CRUD + Import | C1–C46, I1–I8 |
 | `docs/decision-tables/study-srs.md` | Study modes, SRS, Bury/Suspend, Resume, Result | S1–S79, BS1–BS16, R1–R18, RES1–RES8 |
 | `docs/decision-tables/tags-bulk-export.md` | Tags, Bulk ops, Export | TG1–TG11, BK1–BK8, EX1–EX7 |
 | `docs/decision-tables/search.md` | Global + scope-local search | SR1–SR10, SR-rank, SR-cap, SR-empty, SR-err |

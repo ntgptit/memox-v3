@@ -21,17 +21,44 @@ class FlashcardActionController extends _$FlashcardActionController {
     required DeckId deckId,
     required String front,
     required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+    List<String> tags = const <String>[],
   }) => ref
       .read(createFlashcardUseCaseProvider)
-      .call(deckId: deckId, front: front, back: back);
+      .call(
+        deckId: deckId,
+        front: front,
+        back: back,
+        exampleSentence: exampleSentence,
+        pronunciation: pronunciation,
+        hint: hint,
+        tags: tags,
+      );
 
+  /// [tags] must be the card's FULL tag set — the use case replaces tags
+  /// wholesale, so callers preserve existing tags by passing them back until the
+  /// tag editor lands.
   Future<Result<Flashcard>> update({
     required FlashcardId flashcardId,
     required String front,
     required String back,
+    String? exampleSentence,
+    String? pronunciation,
+    String? hint,
+    List<String> tags = const <String>[],
   }) => ref
       .read(updateFlashcardUseCaseProvider)
-      .call(flashcardId: flashcardId, front: front, back: back);
+      .call(
+        flashcardId: flashcardId,
+        front: front,
+        back: back,
+        exampleSentence: exampleSentence,
+        pronunciation: pronunciation,
+        hint: hint,
+        tags: tags,
+      );
 
   Future<Result<void>> delete({required FlashcardId flashcardId}) =>
       ref.read(deleteFlashcardUseCaseProvider).call(flashcardId: flashcardId);

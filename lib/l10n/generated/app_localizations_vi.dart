@@ -51,7 +51,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get libraryLoadFailedMessage => 'Đã có lỗi khi tải thư mục của bạn.';
 
   @override
-  String get libraryRetryLabel => 'Thử lại';
+  String get commonRetryLabel => 'Thử lại';
 
   @override
   String get librarySearchNoResultsTitle => 'Không tìm thấy thư mục';
@@ -511,4 +511,326 @@ class AppLocalizationsVi extends AppLocalizations {
   String flashcardReorderCountHeader(int count) {
     return '$count thẻ · kéo để sắp xếp';
   }
+
+  @override
+  String get flashcardStateNew => 'Thẻ mới · chưa học';
+
+  @override
+  String flashcardStateBoxDueIn(int box, int days) {
+    return 'Hộp $box · đến hạn sau $days ngày';
+  }
+
+  @override
+  String flashcardStateBoxDueToday(int box) {
+    return 'Hộp $box · đến hạn hôm nay';
+  }
+
+  @override
+  String get cardDiscardTitle => 'Bỏ thay đổi?';
+
+  @override
+  String get cardDiscardMessage => 'Các chỉnh sửa cho thẻ này chưa được lưu.';
+
+  @override
+  String get cardDiscardConfirm => 'Bỏ';
+
+  @override
+  String get cardDeleteTooltip => 'Xoá thẻ';
+
+  @override
+  String get cardDetailsLabel => 'Chi tiết';
+
+  @override
+  String get cardDetailsOptional => 'Tuỳ chọn';
+
+  @override
+  String get cardDetailsSummary => 'ví dụ · phát âm · gợi ý';
+
+  @override
+  String get cardExampleLabel => 'Ví dụ';
+
+  @override
+  String get cardPronunciationLabel => 'Phát âm';
+
+  @override
+  String get cardHintLabel => 'Gợi ý';
+
+  @override
+  String get cardTagsLabel => 'Nhãn';
+
+  @override
+  String get cardAddTagLabel => 'Thêm nhãn';
+
+  @override
+  String get cardSaveFailedMessage => 'Không thể lưu thay đổi.';
+
+  @override
+  String get cardLoadFailedTitle => 'Không tải được thẻ';
+
+  @override
+  String get cardLoadFailedMessage => 'Không thể tải thẻ này để chỉnh sửa.';
+
+  @override
+  String get commonBack => 'Quay lại';
+
+  @override
+  String get studyEntryTitle => 'Học';
+
+  @override
+  String get studySessionTitle => 'Học';
+
+  @override
+  String get studySessionPlaceholder => 'Phiên ôn tập — sắp ra mắt.';
+
+  @override
+  String get studyPreparing => 'Đang chuẩn bị phiên học…';
+
+  @override
+  String get studyEntryErrorTitle => 'Không thể bắt đầu học';
+
+  @override
+  String get studyEntryErrorMessage =>
+      'Không thể chuẩn bị phiên học này. Vui lòng thử lại.';
+
+  @override
+  String get studyEmptyCaughtUpTitle => 'Đã xong hết!';
+
+  @override
+  String get studyEmptyDeckNoCardsTitle => 'Bộ thẻ chưa có thẻ nào';
+
+  @override
+  String get studyEmptyDeckNoCardsMessage => 'Thêm thẻ để bắt đầu học.';
+
+  @override
+  String get studyEmptyDeckNoDueMessage =>
+      'Hiện không có thẻ nào trong bộ thẻ này đến hạn.';
+
+  @override
+  String get studyEmptyFolderNoCardsTitle => 'Thư mục chưa có thẻ nào';
+
+  @override
+  String get studyEmptyFolderNoCardsMessage =>
+      'Thêm một bộ thẻ và vài thẻ để bắt đầu học.';
+
+  @override
+  String get studyEmptyFolderNoDueMessage =>
+      'Hiện không có thẻ nào trong thư mục này đến hạn.';
+
+  @override
+  String get studyEmptyTodayAllDoneTitle => 'Đã xong hôm nay!';
+
+  @override
+  String get studyEmptyTodayAllDoneMessage =>
+      'Quay lại vào ngày mai để giữ chuỗi học.';
+
+  @override
+  String get studyEmptyTodayNoContentTitle => 'Chưa có thẻ nào';
+
+  @override
+  String get studyEmptyTodayNoContentMessage =>
+      'Tạo một bộ thẻ và thêm thẻ để bắt đầu học.';
+
+  @override
+  String get studyEmptyAllBuriedTitle => 'Đã ẩn hết thẻ cho hôm nay';
+
+  @override
+  String get studyEmptyAllBuriedMessage => 'Chúng sẽ quay lại vào ngày mai.';
+
+  @override
+  String get studyEmptyAllSuspendedTitle => 'Tất cả thẻ đang tạm dừng';
+
+  @override
+  String get studyEmptyAllSuspendedMessage =>
+      'Mở lại một số thẻ để bắt đầu học.';
+
+  @override
+  String get studyResumeTitle => 'Tiếp tục phiên học?';
+
+  @override
+  String get studyResumeMessage =>
+      'Bạn có một phiên học chưa hoàn thành cho phạm vi này.';
+
+  @override
+  String get studyResumeAction => 'Tiếp tục';
+
+  @override
+  String get studyStartOverAction => 'Bắt đầu lại';
+
+  @override
+  String get studyStartOverTitle => 'Bắt đầu lại?';
+
+  @override
+  String get studyStartOverMessage =>
+      'Thao tác này xoá tiến độ hiện tại của phiên này và bắt đầu lại từ đầu.';
+
+  @override
+  String get studyActionStudyNew => 'Học thẻ mới';
+
+  @override
+  String get studyReviewFrontLabel => 'MẶT TRƯỚC';
+
+  @override
+  String get studyReviewBackLabel => 'MẶT SAU';
+
+  @override
+  String get studyReviewEmptyTitle => 'Không có gì để ôn';
+
+  @override
+  String get studyReviewEmptyMessage => 'Phiên này không có thẻ nào.';
+
+  @override
+  String get studyReviewLoadFailedTitle => 'Không tải được phiên';
+
+  @override
+  String get studyReviewLoadFailedMessage => 'Không thể tải phiên học này.';
+
+  @override
+  String get studyReviewSwipeHint =>
+      'Vuốt phải nếu bạn nhớ, vuốt trái nếu chưa';
+
+  @override
+  String get studyReviewFinishTitle => 'Đã ôn xong';
+
+  @override
+  String get studyReviewFinishMessage =>
+      'Bạn đã xem qua tất cả thẻ trong phiên này.';
+
+  @override
+  String get studyReviewFinishAction => 'Kết thúc phiên';
+
+  @override
+  String get studyExitTitle => 'Thoát phiên học?';
+
+  @override
+  String get studyExitMessage =>
+      'Tiến độ của bạn đã được lưu và có thể tiếp tục sau. Rời phiên này?';
+
+  @override
+  String get studyExitConfirm => 'Thoát';
+
+  @override
+  String get studyExitCancel => 'Tiếp tục học';
+
+  @override
+  String get studyActionBury => 'Ẩn đến ngày mai';
+
+  @override
+  String get studyActionSuspend => 'Tạm dừng thẻ';
+
+  @override
+  String get studyResultTitle => 'Hoàn thành phiên học';
+
+  @override
+  String get studyResultLoading => 'Đang lưu kết quả của bạn…';
+
+  @override
+  String get studyResultHeroTitle => 'Làm tốt lắm!';
+
+  @override
+  String studyResultCardsReviewed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã ôn $count thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyResultCorrect => 'Đúng';
+
+  @override
+  String get studyResultWrong => 'Sai';
+
+  @override
+  String get studyResultAnswered => 'Đã trả lời';
+
+  @override
+  String get studyResultDone => 'Xong';
+
+  @override
+  String get studyResultLoadFailedTitle => 'Không tải được kết quả';
+
+  @override
+  String get studyResultLoadFailedMessage =>
+      'Đã xảy ra lỗi khi tải tóm tắt phiên học này.';
+
+  @override
+  String get studyResultSaveFailedBanner =>
+      'Không lưu được kết quả. Tiến độ của bạn đã được giữ trên máy.';
+
+  @override
+  String get studyResultRetry => 'Thử lưu lại';
+
+  @override
+  String get studyResultDefensiveTitle => 'Chưa trả lời thẻ nào';
+
+  @override
+  String get studyResultDefensiveMessage =>
+      'Phiên học này chưa có câu trả lời nào được ghi lại.';
+
+  @override
+  String get studyMatchTitle => 'Ghép các cặp';
+
+  @override
+  String get studyMatchSubtitle => 'Chạm vào một từ, rồi chạm nghĩa của nó.';
+
+  @override
+  String studyMatchProgress(int matched, int left) {
+    return '$matched đã ghép · còn $left';
+  }
+
+  @override
+  String get studyGuessPrompt => 'Nghĩa của từ này là gì?';
+
+  @override
+  String get studyGuessTapToContinue => 'Chạm để tiếp tục';
+
+  @override
+  String get studyRecallPrompt => 'Nhớ lại nghĩa';
+
+  @override
+  String get studyRecallHint => 'Nhẩm trong đầu, rồi xem đáp án.';
+
+  @override
+  String get studyRecallShowAnswer => 'Xem đáp án';
+
+  @override
+  String get studyRecallAnswerLabel => 'Đáp án';
+
+  @override
+  String get studyRecallGradePrompt => 'Bạn nhớ tốt đến đâu?';
+
+  @override
+  String get studyRecallMissed => 'Chưa nhớ';
+
+  @override
+  String get studyRecallGotIt => 'Nhớ rồi';
+
+  @override
+  String get studyFillPrompt => 'Nhập đáp án';
+
+  @override
+  String get studyFillAnswerLabel => 'Câu trả lời của bạn';
+
+  @override
+  String get studyFillCheck => 'Kiểm tra';
+
+  @override
+  String get studyFillWrongMessage => 'Chưa đúng — xem đáp án bên dưới.';
+
+  @override
+  String get studyFillCorrectLabel => 'Đáp án đúng';
+
+  @override
+  String get studyFillRetry => 'Thử lại';
+
+  @override
+  String get studyFillNext => 'Tiếp';
+
+  @override
+  String get studyFillMarkCorrect => 'Tôi đã đúng';
+
+  @override
+  String get studyFillHint => 'Gợi ý';
 }

@@ -49,14 +49,14 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Empty scope handling| Specified| `docs/business/study/study-flow.md` (empty scope matrix)|
 | SRS review (Leitner 8-box)| Specified (BE box transition + interval + finalization Implemented — WBS 4.6.1/4.6.2/4.6.4; study FE pending)| `docs/business/srs/srs-review.md`|
 | Bury / suspend cards| Partial (BE Current — queue exclusion WBS 4.11.1 + in-session bury/suspend WBS 4.11.2; flashcard-list / bulk / undo FE Specified)| `docs/business/study-actions/bury-suspend.md`|
-| Tag filter + study-by-tag + management| Specified (tag management BE Current — WBS 8.3.1: list/count/rename/merge/delete; FE wiring + filter + study-by-tag Future)| `docs/business/tags/tag-system.md`|
+| Tag filter + study-by-tag + management| Partial (tag management BE Current — WBS 8.3.1: list/count/rename/merge/delete; **per-card tag assignment on the editor Current — WBS 2.15.2, WP-FL2b2b**; tag-filter chips + study-by-tag Future)| `docs/business/tags/tag-system.md`|
 | Bulk operations on flashcards| Specified| `docs/business/bulk/bulk-operations.md`|
 | Deck move between folders| Specified (BE Current — WBS 2.19.1)| `docs/business/deck/deck-management.md`|
 | Session batch limit (`maxSessionItems`)| Implemented (BE — WBS 4.2.4, cap in `CreateStudySessionUseCase`)| `docs/business/study/study-flow.md`|
 | Daily new-card limit| Implemented (BE — WBS 4.5.10; new-card eligibility cap per local day)| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
 | Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|
-| Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `_dueAtFor`)| `docs/business/srs/srs-review.md`|
+| Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `dueAtFor`)| `docs/business/srs/srs-review.md`|
 | Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
 | Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
 | Global search screen (folders/decks/flashcards)| Implemented (WBS 3.5.1 BE + 3.5.2/3.5.3 FE) — top-level `/search` with a bottom search dock (design redesign)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|

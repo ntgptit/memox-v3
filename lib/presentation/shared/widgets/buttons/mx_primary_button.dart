@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
+import 'package:memox/core/theme/mx_opacity.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
+import 'package:memox/core/theme/mx_stroke.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 
 /// The accent-filled primary button — the single dominant action on a surface.
@@ -28,6 +31,9 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_button_size.dart';
 /// - size: density (defaults to medium).
 /// - fullWidth: stretch to the available width (defaults to false).
 /// - destructive: use the danger fill for irreversible actions (delete/discard).
+/// - loading: show a spinner and disable the button (in-flight action). The fill
+///   stays accent/danger at the disabled alpha so it reads as the same button
+///   mid-action, not a neutral disabled control.
 class MxPrimaryButton extends StatelessWidget {
   const MxPrimaryButton({
     required this.label,
@@ -36,6 +42,7 @@ class MxPrimaryButton extends StatelessWidget {
     this.size = MxButtonSize.medium,
     this.fullWidth = false,
     this.destructive = false,
+    this.loading = false,
     super.key,
   });
 
@@ -45,18 +52,26 @@ class MxPrimaryButton extends StatelessWidget {
   final MxButtonSize size;
   final bool fullWidth;
   final bool destructive;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MxColors colors = context.mxColors;
+    final Color fill = destructive ? colors.danger : colors.accent;
     final Widget button = FilledButton(
-      onPressed: onPressed,
+      onPressed: loading ? null : onPressed,
       style: FilledButton.styleFrom(
-        backgroundColor: destructive ? colors.danger : colors.accent,
+        backgroundColor: fill,
         foregroundColor: colors.accentContrast,
-        disabledBackgroundColor: colors.surfaceMuted,
-        disabledForegroundColor: colors.textTertiary,
+        // Loading keeps the accent/danger fill (faded) so the button reads as
+        // the same action mid-flight; a real disabled state is neutral.
+        disabledBackgroundColor: loading
+            ? fill.withValues(alpha: MxOpacity.disabled)
+            : colors.surfaceMuted,
+        disabledForegroundColor: loading
+            ? colors.accentContrast
+            : colors.textTertiary,
         elevation: 0,
         shape: const StadiumBorder(),
         minimumSize: Size(0, size.height),
@@ -64,7 +79,16 @@ class MxPrimaryButton extends StatelessWidget {
         textStyle: theme.textTheme.labelLarge,
         tapTargetSize: MaterialTapTargetSize.padded,
       ),
-      child: _MxButtonLabel(icon: icon, label: label),
+      child: loading
+          ? SizedBox(
+              width: MxIconSize.sm,
+              height: MxIconSize.sm,
+              child: CircularProgressIndicator(
+                strokeWidth: MxStroke.emphasis,
+                color: colors.accentContrast,
+              ),
+            )
+          : _MxButtonLabel(icon: icon, label: label),
     );
     return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
   }

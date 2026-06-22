@@ -26,7 +26,7 @@ BE has not shipped (BE-blocked → DEFER, not FE-eligible).
 | Area | As-built | Verdict |
 |---|---|---|
 | Screen shell + app-bar mode toggle (search / sort) | `library_overview_screen.dart` | Implemented |
-| Search-mode app bar (field + Cancel) | `library_search_app_bar.dart`, `library_search_field.dart` | Implemented |
+| Search-mode bottom dock (rev. 3) | `library_search_dock.dart`, `library_search_field.dart` | Implemented (WP-L10) |
 | States body (loading / loaded / empty / search / no-results / error) | `library_overview_body.dart` | Implemented |
 | Loading skeleton | `library_loading_skeleton.dart` | Implemented |
 | Folder row (tinted tile + meta + chevron) | `library_folder_tile.dart`, `folder_icon_tile.dart` | Implemented |
@@ -46,7 +46,7 @@ BE has not shipped (BE-blocked → DEFER, not FE-eligible).
 | `03b` Loading | `LibraryLoadingSkeleton` | Current |
 | `03c` Empty | `MxEmptyState` + Create-folder CTA | Current |
 | `03d` Error | `MxErrorState` + Retry | Current |
-| `03e` Search | `LibrarySearchAppBar` + filtered rows + `{n} FOLDERS` overline | Current |
+| `03e` Search | `LibrarySearchDock` (bottom dock) + filtered rows + `{n} FOLDERS` overline | Current |
 | `03f` Overflow sheet | `showFolderActionsSheet` (rename/move/import/delete) | Current |
 | `03g` Create folder | `showFolderCreateDialog` (name + color + icon pickers) | Current |
 | `03h` Rename folder | `folder_rename_dialog.dart` | Current |
@@ -101,6 +101,21 @@ remains → object is **DONE** for the FE loop.
       Library visual contract marks archive **Future / out-of-scope** (no archive use case / repo /
       DAO / schema column; product scope decision, not just missing BE). Building it = inventing
       product scope; needs an approved task.
+- [x] **WP-L10 — Library search bottom-dock (kit `03` Search) — Implemented (2026-06-22).**
+      **RE-AUDIT finding (TRUST POLICY):** the prior "DONE per current mock" claim was wrong for the
+      Search state. `ui-parity-checker` + the kit spec `specs/03-library-overview.md` §State: Search
+      (the `+ search-dock` node, `abs:[1,636 388x69]`, `border-t:1px divider`, FAB removed) show the
+      search field as a **flat bottom dock** with the regular `Library` + sort app bar retained —
+      not the app-bar swap the code shipped. This matches the IA-redesign direction (bottom dock).
+      Per PRECEDENCE #2 (visual → mock wins over the derived visual-contract), built the dock:
+      new `library_search_dock.dart` (`LibrarySearchDock`, surface fill + top hairline, hosts the
+      autofocused `LibrarySearchField`), mounted in the `bottomNavigationBar` slot while searching;
+      the app-bar `Icons.search` now toggles search on/off; deleted the dead
+      `library_search_app_bar.dart`. Regenerated the 2 search + 2 search-no-results goldens; added
+      dock-present/absent + toggle-exit widget tests. verify PASS.
+      **Activation note (minor divergence):** the kit loaded state `03a` shows only the sort icon
+      (search is reached via the not-yet-built bottom-nav Search tab / kit `05`); the app-bar search
+      icon is kept as the pragmatic activation bridge until the app-shell bottom-nav lands.
 
 Note: Folder-row tap → folder detail navigation is **object 2 (Folder detail, WBS 3.2.2)**,
 not Library; the interim tap→action-sheet keeps the chevron live and is correct for this object.

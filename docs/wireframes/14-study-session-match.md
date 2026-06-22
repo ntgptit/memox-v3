@@ -9,14 +9,29 @@ source_specs:
 
 # 14 — Study Session: Match Mode
 
-> **Drift correction (2026-06-12):** the Match backend slice now includes the dedicated
-> append-only evaluation path plus transactional finalization derivation; the visual UI is still
-> Specified and not built. The shared shell at
-> `lib/presentation/features/study/screens/study_session_screen.dart` still owns the current
-> runtime route, and any `lib/presentation/features/study/widgets/study_session/**` paths below are
-> the target structure from the previous UI iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Status (2026-06-22):** the Match **backend is built** (WBS 4.5.4 = Implemented — WP-SM1a schema +
+> WP-SM1b record/load + WP-SM2 finalization; `study_match_evaluations`, `recordMatchEvaluation` /
+> `loadMatchEvaluations`, the Match-finalization branch). The **FE board shell** (`MatchSessionScreen`,
+> reached via `?mode=match`) is built (WP-SM3): the ✕ + blue progress + `{matched}/{total}` count, the
+> title + prompt subtitle, the 2×5 board grid, and the "{matched} matched · {left} left" line. The
+> **tap-pair state machine** is built (WP-SM4): `MatchBoardController` Fisher-Yates-shuffles the 10
+> cells, one selection at a time → a valid pair locks green ✓ / a wrong pair flashes red
+> (`AppMotion.matchWrongFlash`) then reverts, each pair persisting via `RecordMatchEvaluationUseCase`.
+> **Board progression + finalize→result** is built (WP-SM5): clearing a board advances to the next
+> (after `AppMotion.matchBoardAdvance`); the last board marks the view `finished` → the screen calls
+> `FinalizeStudySessionUseCase` (Match branch derives terminals from the evals) and `pushReplacement`s
+> to the shared result screen (S96/S97). **Deferred (WP-SM4b):** the **Shuffle & restart** bar +
+> mistake counter + count-up timer.
+>
+> **MOCK ↔ §Components reconciliation (2026-06-22, PRECEDENCE #2 — mock wins for visual):** the kit
+> `13-study-match--matching` shot is the visual source and it has **no MATCH mode pill** and **no "BOARD
+> n OF m" caption**; instead it shows a centered **"Match the pairs"** title + the **"Tap a term, then its
+> meaning."** prompt and a **"{matched} matched · {left} left"** status line below the grid (plus a
+> **Shuffle & restart** bar = WP-SM4). The §Components / §Layout text below still describes the older
+> pill + board-indicator chrome — **superseded by the mock for visual**; the implementation follows the
+> mock. (Behavior — board composition, evaluation, finalization — is unchanged and governed by
+> study-flow.md / srs-review.md per PRECEDENCE #1.) Slice plan:
+> `docs/project-management/loop-plan/study-match.md`.
 
 ## Purpose
 
@@ -242,13 +257,12 @@ Same as Review mode.
 
 **Contracts:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase, `docs/contracts/usecase-contracts/srs.md`
 
-**Code paths (verified 2026-05-28):**
+**Code paths (verified 2026-06-22 — current; the earlier `widgets/study_session/match/**` paths were target structure that never existed):**
 
-- Mode view: `lib/presentation/features/study/widgets/study_session/match/match_mode_session_view.dart` + `match_mode_panel.dart`.
-- Board: `lib/presentation/features/study/widgets/study_session/match/match_board.dart` + `match_mode_tile.dart` + `match_tile_models.dart`.
-- Board size: `lib/presentation/features/study/widgets/study_session/match/match_batching.dart` → `const matchVisiblePairLimit = 5`. Take the next 5 items from session order via `visibleMatchBatch(items, startIndex)`.
-- Seeded shuffle: `lib/presentation/features/study/widgets/study_session/match/match_seed.dart` (NOT in `lib/domain/study/`). Deterministic per `sessionId + boardIndex` so resume preserves layout.
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase` is the only in-session answer path today; a match-specific batch grade path (the previous iteration's `AnswerCurrentMatchModeBatchUseCase`) must be designed when this mode is built. No standalone `grade_attempt_usecase.dart`.
+- Screen: `lib/presentation/features/study/screens/match_session_screen.dart` (the board surface + `_MatchCell`), reached via the session route `?mode=match` dispatch in `lib/presentation/features/study/routes/study_routes.dart`.
+- Board state: `lib/presentation/features/study/controllers/match_board_controller.dart` (`MatchBoardController` + `MatchCell`/`MatchCellStatus`/`MatchBoardView`). Board size = 5 cards = 10 cells; Fisher-Yates seeded by `sessionId.hashCode ^ (boardIndex+1)` (deterministic per board).
+- Flash duration: `lib/core/theme/app_motion.dart` → `AppMotion.matchWrongFlash`.
+- Grading: each pair-tap → `RecordMatchEvaluationUseCase` (`lib/domain/usecases/study/record_match_evaluation_usecase.dart`, append-only); terminals are derived at finalize (`StudyMatchEvaluationActions.finalize`, see `lib/data/repositories/study_match_evaluations.dart`). Board progression + finalize → result (WP-SM5): `MatchBoardController` advances boards / marks `finished`; `MatchSessionScreen._finish` → `FinalizeStudySessionUseCase` + `pushReplacementNamed(RouteNames.studyResult)` (reuses `StudyResultScreen`).
 
 **Related wireframes:**
 

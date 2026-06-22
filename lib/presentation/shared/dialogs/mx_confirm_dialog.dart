@@ -54,10 +54,13 @@ class MxConfirmDialog extends StatelessWidget {
     required String confirmLabel,
     required String cancelLabel,
     bool destructive = false,
+    bool? barrierDismissible,
   }) async {
     final bool? result = await showDialog<bool>(
       context: context,
-      barrierDismissible: !destructive,
+      // Defaults to the destructive rule; callers can force a modal lock for
+      // a safe-but-important dialog (e.g. the study exit confirm, §24).
+      barrierDismissible: barrierDismissible ?? !destructive,
       builder: (BuildContext context) => MxConfirmDialog(
         title: title,
         message: message,

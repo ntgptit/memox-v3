@@ -1,59 +1,144 @@
 ---
-last_updated: 2026-06-21
-object: Study — Review mode (and Match / Guess / Recall / Fill)
+last_updated: 2026-06-22
+object: Study — Review mode (anchor for Match / Guess / Recall / Fill)
 loop_order: 6-10 of 10 (outer→inner)
-route: /library/study/session/:sessionId (NOT wired — no study routes exist)
-status: DEFER (greenfield study FE wiped + mock↔docs conflict + doc drift)
+route: /library/study/session/:sessionId (to be wired — no study routes exist yet)
+status: BUILD (greenfield FE over ready BE; DEFER overturned)
 ---
 
-# Loop plan — Objects 6-10: Study (Review / Match / Guess / Recall / Fill)
+# Loop plan — Object 6: Study — Review (+ shared shell for 7-10)
 
-## Audit — the entire Study FE is absent (greenfield), the docs say otherwise
+## DEFER overturned (2026-06-22)
 
-- **No Study FE exists.** `lib/presentation/features/study/` does **not exist**; there are **no
-  study routes** (`route_names.dart` / `route_paths.dart` have none); WBS **4.5.3 (Review FE),
-  4.5.5 (Match FE), 4.5.7 (Guess FE), 4.5.9 (Fill FE)** are all `Specified`. The study session UI
-  was wiped in the 2026-06-19/06-21 reset and never rebuilt.
-- **Study BE is largely built** (loops 1-30): entry eligibility (4.1.1), session create/load/answer
-  /cancel (4.2.x/4.3.1/4.4.1), finalize + SRS transition (4.6.1), resume gate (4.2.2), mode
-  strategies (4.5.1 review/recall/guess, 4.5.6 guess options, 4.5.8 fill), daily new limit (4.5.10),
-  result read model (4.7.1). So the FE has BE to call — but no screen, no route.
-- **Mocks exist:** `shots/12-study-review`, `13-match`, `14-guess`, `15-recall`, `16-fill`,
-  `17-result`; wireframes `12-study-entry-gate.md` … `18-study-result.md`.
+The previous revision DEFERred objects 6-10 on three reasons that the loop rules explicitly disallow:
 
-## DEFER reasons (objects 6-10)
+1. **"Greenfield / too large"** → not a defer. G1: CHẺ into the smallest runnable slices (route →
+   entry gate → session shell → card → grade → finalize → result). Build them one per iteration.
+2. **"mock ↔ docs conflict on the Review grade interaction (flip vs swipe)"** → resolved by
+   **PRECEDENCE #1** (behavior → `docs/business/study/study-flow.md` + wireframe 13 WIN over the
+   mock). Review grades by **swipe** (both sides shown, right = `perfect`, left = `forgot`, no reveal
+   step). The mock `12-study-review--default` flip-card is a **documented mock visual gap** (built as
+   swipe per study-flow.md / wireframe 13 §Rules), NOT a blocker.
+3. **wireframe 13 "shipped" drift** → stale doc-status, not running-code drift. Corrected on this
+   pass (the screen does not exist yet → greenfield); the rest is fixed one line at a time as each
+   slice lands.
 
-1. **Doc drift (DRIFT DETECTED).** `docs/wireframes/13-study-session-review.md` §"Current V1
-   implementation note" claims a **shipped** screen at
-   `lib/presentation/features/study/screens/study_session_screen.dart` ("swipe-grade review
-   surface…") — but that file/dir does **not exist**. Wireframes 13-18 describe a prior iteration's
-   shipped state that the reset wiped. The docs must be corrected (status → Specified/greenfield) by
-   an owner-directed pass before a rebuild, so a rebuild isn't started from a false "as-built" spec.
-2. **Mock ↔ docs conflict on the core Review interaction (do not guess).** The **mock** `12-study-
-   review--default` shows a **flip card**: a TERM front + pronunciation + `↻ TAP TO FLIP`, with
-   `Flip` / `Next →` buttons (front → flip → back → advance). The **wireframe 13 + business
-   `study-flow.md` §61/§160-176** specify the opposite: **both sides shown on one card, graded by
-   swipe** (right = perfect, left = forgot), **no reveal/flip step**. These are fundamentally
-   different grade interactions. Review mode is the **anchor screen** whose "visual grammar is reused
-   by modes 14-17", so this conflict blocks **all five** study screens. Per `CLAUDE.md` (mock-parity:
-   "if the mock and documentation conflict, stop and document"), this needs an **owner decision**:
-   flip-then-grade (mock) vs both-sides-swipe (docs).
-3. **Greenfield scope.** Building the study session UI from scratch — routes, entry gate (12),
-   the shared session shell + 5 mode surfaces (12-16), card-actions sheet (edit/bury/suspend),
-   exit-confirm, finalize → result (17/18) — is a large multi-slice feature, not a single overnight
-   work-package, and it cannot start until (1) and (2) are resolved.
+## BE inventory (audited 2026-06-22 — all Implemented, FE has everything to call)
 
-## Gap-checklist (all DEFER — owner-blocked)
+| Need | Use case (provider) → returns |
+|------|-------------------------------|
+| Entry gate outcome | `ResolveStudyEntryStartUseCase` (`resolveStudyEntryStartUseCaseProvider`) `call({scope})` → `StudyEntryStartResult` = `resumeRequired(StudySession)` \| `canStart(StudyEntryEligibility)` \| `blocked(StudyScopeEmptyReason, nextDueAt?)` |
+| Eligibility detail | `ResolveStudyEntryEligibilityUseCase` → `StudyEntryEligibility{eligibleCount, emptyReason, nextDueAt, hasEligible}` |
+| Create session | `CreateStudySessionUseCase` `call({scope, flashcardIds})` → `StudySession` (cap `maxSessionItems = 20`) |
+| Eligible card ids | `StudyEntryRepository.resolveEligibleCardIds({scope, now})` → `List<FlashcardId>` |
+| Load review queue | `LoadStudySessionReviewUseCase` → `StudySessionReview{session, items[], total, answeredCount, isComplete, firstUnansweredIndex}` |
+| Current card | `StudySessionReviewItem{sessionItemId, flashcardId, front, back, exampleSentence?, pronunciation?, hint?, sortOrder, answeredAt?}` |
+| Record a grade | `RecordStudySessionAnswerUseCase` `call({sessionId, sessionItemId, result: AttemptResult, studyMode: StudyMode.review})` → `Result<void>` |
+| Grade enum | `AttemptResult` = `perfect` \| `recovered` \| `forgot` \| `initialPassed`(legacy) |
+| Finalize (SRS) | `FinalizeStudySessionUseCase` `call({sessionId})` → applies Leitner transition + marks `completed` (rejects unanswered) |
+| Result read model | `LoadStudySessionResultUseCase` → `StudySessionResult{session, items[], total, answeredCount, forgotCount, passedCount}` |
 
-- [ ] Objects 6-10 — Study session FE (Review/Match/Guess/Recall/Fill) — **DEFER (mock-doc-conflict +
-      drift + greenfield).** Needs: (a) an owner decision on the Review grade interaction (flip vs
-      swipe); (b) a docs pass correcting wireframes 13-18 from "shipped" to greenfield; (c) a
-      dedicated multi-slice build of the study FE over the existing BE. None is a safe overnight slice.
+Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`, `SessionId`,
+`SessionStatus`, `StudyMode`. No session-state notifier/controller exists yet (FE greenfield).
 
-## Conclusion
+## PRECEDENCE resolution (record once; reuse for modes 7-10)
 
-Objects 6-10 are **DEFERred** — the study FE is greenfield (wiped), the wireframes wrongly claim it
-is shipped (drift), and the mock contradicts the docs on the foundational Review grade interaction.
-This is the loop's stopping point: objects 1-5 (Library, Folder detail, Sub-folder, Deck detail,
-Flashcard list+editor) are DONE; objects 6-10 (all Study) are blocked on owner decisions + a large
-greenfield rebuild. See `docs/project-management/loop-deferred.md` for the decision list.
+- **Grade interaction**: SWIPE (study-flow.md / wireframe 13). Mock-12 flip = visual gap, not built.
+- **No reveal / "Show answer"** step in Review (both sides visible). Forbidden by wireframe 13.
+- **Progress-bar colour**: Review = **blue family** (recognition); Recall/Fill = green. No mode pill
+  in Review (it is the default). Modes 14-17 show the pill.
+- **Example pill** renders below the back iff `exampleSentence` non-empty; `note`/`pronunciation`/
+  `hint` are NOT shown in study session (Phase 1).
+- Copy → ARB (en+vi); route → RouteNames/RoutePaths; tokens + `Mx*` shared widgets.
+
+## STATE COVERAGE (shots/INDEX.md)
+
+- Screen **12 — study-review** (the session card): **1 state** (`default`). Build = the card surface
+  (both sides, labels, example pill) + the shell (✕ / blue progress / count) + swipe-grade + the
+  last-card Finish CTA + exit-confirm + card-actions sheet.
+- Screen **17 — study-result**: **6 states** (`loaded`, `loading`, `goal-off`, `save-failed`,
+  `defensive`, `tough-empty`) — each = 1 render branch + 1 golden (light+dark).
+- Entry gate (wireframe `12-study-entry-gate.md`): the 3 `StudyEntryStartResult` outcomes
+  (canStart / resumeRequired / blocked-by-reason) — no dedicated shot; a launch surface.
+
+## GAP-CHECKLIST (CHẺ — smallest runnable slices, depends-on order; 1 per iteration)
+
+- [x] **WP-SR1a — study route scaffold + entry gate (core).** `c5b2a25`: top-level
+      immersive study routes (`RouteNames`/`RoutePaths` `studyEntry`+`studySession`, `study_routes.dart`
+      composed into `app_router.dart`); `StudyEntryController` (family on `StudyScope`) +
+      `StudyEntryOutcome` (blocked/resumeRequired/ready); `StudyEntryScreen` rendering preparing /
+      generic empty (blocks zero-card) / Resume-Start-over-Back / error, auto-create →
+      `pushReplacement` to the `StudySessionScreen` **placeholder**. `MxIconButton.toolbar` added
+      (guard `header_actions`). ARB ×13 (en+vi). Rows S84/S27/S28; WBS 4.1.2 Implemented, 4.2.3 Partial.
+      7 gate tests + 4 goldens. **Launch CTA stays Future** (reachable by route/deep-link/test).
+- [x] **WP-SR1b-1 — today route + `study_type` override.** `08dcb50`: the `today` literal route
+      (`/library/study/today` → `StudyScope(today, null, srsReview)`) + the `?study_type=` query
+      override parsed via a new canonical `StudyType.storageValue`/`fromStorage` (consolidated with the
+      data mapper; `new_cards`/`srs_review`); unrecognized `study_type` → error. Rows S85; 11 gate tests.
+- [x] **WP-SR1b-2a — per-reason empty matrix (icon + copy).** `427d392`: `_blockedBody` switches
+      the 8 `StudyScopeEmptyReason` → tailored icon + title + message (`studyEmpty*` ARB ×15, en+vi;
+      cards/check/celebration/bedtime/pause glyphs) + Back, replacing the generic surface. Row S86; per-
+      reason tests + 6 representative goldens (deck-no-cards / today-all-done / all-suspended ×2).
+- [x] **WP-SR1b-2b — core empty-matrix CTAs + start-over confirm.** `935e630`: **Study new
+      instead** (re-enter the gate `?study_type=new_cards`) for deck/folderNoDueCards + allBuried;
+      **Done** (pop) for todayAllDone + allBuried; the start-over **confirm dialog** (`MxConfirmDialog`,
+      S28) before cancel+create. Rows S86 (CTA) + S87 (confirm). ARB ×3; CTA + confirm + cancel tests +
+      2 new goldens (deck-no-due, all-buried). **Gate functionally complete.**
+- [ ] **WP-SR1b-2c — scope-specific CTA polish (deferred).** deckNoCards → Add flashcards (push
+      `flashcardCreate`, deck scope); folderNoCards → Open folder; todayNoContent → Create deck;
+      allSuspended → View suspended (`?filter=suspended`, deck scope); the "Next due in {relativeTime}"
+      line from `nextDueAt`; the todayAllDone streak inset (needs engagement read model); the `?mode=`
+      query. Lower-value polish — **deprioritized below WP-SR2** (the review session) per build-value.
+- [x] **WP-SR2 — review session shell + card.** `b69c2eb`: `StudySessionScreen` (replacing the
+      placeholder) loads `studySessionReviewProvider` (`LoadStudySessionReviewUseCase`) → app bar (`✕` +
+      blue `MxLinearProgress` + `{answered}/{total}`) + the both-sides card (front-side label → front →
+      divider → back-side label → back → example pill) + loading/error/empty. New shared `MxLinearProgress`
+      (guard `no_raw_progress_indicator`). FRONT/BACK label fallback (language labels = WP-SR2b). No
+      grading (WP-SR3). Row S88; 7 widget tests + card goldens (light+dark).
+- [ ] **WP-SR2b — language side-labels (deferred polish).** KOREAN/MEANING from `deck.target_language`
+      — needs the review read model (`StudySessionReview`/`LoadStudySessionReviewUseCase`) to carry the
+      deck's `target_language`; until then the card uses the FRONT/BACK fallback.
+- [x] **WP-SR3 — swipe-grade + advance.** `8549fb6`: `StudySessionController` (`@riverpod`
+      AsyncNotifier over `StudySessionView{review, currentIndex}`) — swipe right → `perfect`, left →
+      `forgot` (Dismissible) → `RecordStudySessionAnswerUseCase(studyMode: review)`; advances the card
+      first (optimistic) then persists (`unawaited`); swipe-hint footer (first 3 cards); last card →
+      Finish surface (`MxEmptyState` + Finish action; finalize→result = WP-SR5, pops for now). Row S89;
+      swipe right/left/advance/finish/hint tests; regen card golden.
+- [x] **WP-SR4a — exit-confirm.** `2983088`: `✕` mid-session with `answeredCount > 0` →
+      `MxConfirmDialog` ("progress is saved — resume later") before pop; pops directly when nothing is
+      answered yet (wireframe `13` Rule). Row S90; ARB ×3 (en+vi); confirm/cancel/pop tests.
+- [x] **WP-SR4b — card-actions sheet (Bury / Suspend).** `0ddbd62`: long-press the card →
+      `showStudyCardActionsSheet` (`study_card_actions_sheet.dart`, reusing `showMxBottomSheet`): **Bury
+      until tomorrow** → `BuryStudySessionCardUseCase`, **Suspend card** → `SuspendStudySessionCardUseCase`
+      → re-queue (`ref.invalidate(studySessionReviewProvider)`; the use case removed the session item, so
+      the reload excludes it). Canonical row **S59** (the appended S91 dup was dropped); WBS 4.11.3 →
+      Partial; ARB ×2; long-press/bury/suspend tests; §25 + phantom-path drift corrected. Undo toast
+      (§undo-toast) deferred.
+- [ ] **WP-SR4b-2 — Edit card action (deferred).** The sheet's **Edit** → push the flashcard editor —
+      needs the card's `deckId`, which `StudySessionReviewItem` does not carry. Either add `deckId` to
+      the review read model (`LoadStudySessionReviewUseCase`) or derive it from a deck-scope session
+      (`scope.entryRefId`). Then add Edit to the sheet + a navigation test.
+- [x] **WP-SR5a — finalize → result (V1: loaded/loading/error).** `b426047`: new route `studyResult`;
+      Finish → `FinalizeStudySessionUseCase` → `pushReplacementNamed(studyResult)`; `StudyResultScreen`
+      V1 = hero + Correct/Wrong/Answered counts + **Done → origin via `go`** (deck → flashcard list,
+      otherwise Dashboard; §Agent rule) + loading/error. Mock-`17` accuracy ring / Goal & streak /
+      "Due next" / "Keep studying" = Future. Row S92; ARB ×12; nav-flow + WBS 4.7.2 Partial; loaded
+      goldens. 3-reviewer fan-out (Done go-not-pop folded).
+- [x] **WP-SR5b — result variant states.** `7a9ae4a`: the status-driven **save-failed**
+      (`session.status == failedToFinalize` → danger banner "Couldn't save your results" + a **Retry
+      save** re-running finalize; **Done stays enabled**) + **defensive** (`answeredCount == 0` → a "No
+      cards answered" notice + Done) states + save-failed & defensive goldens (light+dark). The body is
+      now an `Expanded`-scroll + pinned footer (no overflow). `goal-off`/`tough-empty` map to loaded
+      (Future blocks). Row S93; ARB ×4; WBS 4.7.2 → **Implemented (V1)**. **Object 6 COMPLETE.**
+- [ ] **Objects 7-10 (Match/Guess/Recall/Fill)** — reuse the WP-SR2 shell + WP-SR5 result; each adds
+      its own grade grammar (independent; not blocked by Review's grade question — shared only at
+      BE finalization/result).
+
+## Notes / traps
+
+- Wireframe 13 still carries stale "shipped (verified 2026-05-28)" code-path refs to
+  `lib/presentation/features/study/**` files that do **not** exist — treat as TARGET structure, fix
+  the doc-status line in the slice that builds each. The screen is greenfield.
+- `RecordStudySessionAnswerUseCase` is the ONLY in-session answer path (no `GradeAttemptUseCase` /
+  `AnswerFlashcardUseCase` despite older doc refs). SRS box transition happens at **finalize**, not
+  per-answer (V1 keeps `flashcard_progress` untouched until Finish succeeds).

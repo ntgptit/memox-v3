@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-06
+last_updated: 2026-06-22
 route: /library/deck/:deckId/flashcards/new
 source_specs:
   - docs/business/flashcard/flashcard-management.md
@@ -8,19 +8,34 @@ source_specs:
 
 # 07 - Flashcard Create
 
-> **Shared implementation note (V1).** This route is implemented by the shared
-> Flashcard Editor surface at
-> `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`.
-> Create mode is selected by `deckId` and currently supports front, back, plus
-> optional example, pronunciation, hint, and tags fields. Edit mode is documented
-> separately in `docs/wireframes/08-flashcard-edit.md`.
+> **Shared implementation note (V1 shell, WP-FL2a 2026-06-22).** This route is implemented by the
+> shared Flashcard Editor surface at
+> `lib/presentation/features/decks/screens/flashcard_editor_screen.dart` (async dispatcher) +
+> `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`).
+> Create mode is selected by the absence of `:flashcardId`; the **shell** supports front/back +
+> the dirty-discard confirm + delete-from-editor (edit). The **Details expander** (WP-FL2b2,
+> 2026-06-22) toggles the optional **example / pronunciation / hint** fields (auto-opens in edit when
+> the card has any). **PRECEDENCE #1 note:** the mock `07` Details draws a **deck-selector** (Future —
+> `flashcard-management.md` §V1 "Destination-deck retargeting remains future work") + Tags + a single
+> "Note"; the business model defines the optional content as example/pronunciation/hint + tags, so
+> those fields are built instead of the mock's single Note, and the deck-selector is not built. The
+> **Tags** input (chip + add-tag) = **built (WP-FL2b2b)**: the TAGS row in Details renders a `#`-chip per
+> tag (tap ✕ to remove) + a "+ Add tag" affordance that reveals an inline field; tags are validated +
+> lowercased + deduped on add (`TagValidator`), and the editor manages the full set, **replacing** tags
+> wholesale on save (both create + update). The
+> non-base `07` states (saving / save-failed = WP-FL2b3a; loading skeleton + load-error surface with
+> Retry = WP-FL2b3b — the create screen watches the same deck stream, so it shows the
+> `flashcard_editor_skeleton` while the deck context loads and the `MxErrorState` on failure) are
+> **built**; only the **Tags** input (**WP-FL2b2b**) remains. Edit mode is documented separately in
+> `docs/wireframes/08-flashcard-edit.md`.
 
 > **Mock-first refinement (2026-06-13).** Create mode keeps the collapsible
-> "Add details" toggle (optional example/hint/pronunciation). **Saving:** both the
-> app-bar and bottom CTAs read `Saving…` (disabled) and the bottom helper switches
-> to `Saving to this device…`. **Save failed:** a text-only failure banner
-> (`flashcard_editor_save_failed_banner`) is anchored just above the bottom bar and
-> the bottom primary CTA becomes `Retry save` (re-invokes the create use case);
+> "Details" expander (optional example/pronunciation/hint). **Saving:** per the kit
+> spec the app-bar Save pill drops its label and shows a spinner at the disabled
+> accent fill (`op:0.38`) while the create write is in flight; double submit is
+> ignored. **Save failed:** an inline danger banner
+> (`flashcard_editor_save_failed_banner`) sits just below the app bar, above the
+> fields (`abs:[21,95]`), with a `Retry` CTA that re-invokes the create use case;
 > typed input is preserved. The mock's mic / pronunciation-speaker glyphs are
 > decorative (no capture/TTS behavior wired) and the deck-selector dropdown does
 > not change the owning deck in V1 — both are visual-only, not faked behavior.
@@ -49,9 +64,9 @@ fast manual entry and keeps the surface intentionally small.
 │ │ Add the meaning or translation.           │  │
 │ └────────────────────────────────────────────┘  │
 │                                                │
-│ Add details   example · hint · pronunciation    │
+│ ▾ Details        example · pronunciation · hint │
 │                                                │
-│ (collapsed by default; expands to three fields) │
+│ (collapsed → "Details   Optional"; tap to expand)│
 │ Example                                         │
 │ ┌────────────────────────────────────────────┐   │
 │ │ Add an example sentence.                  │   │
@@ -132,13 +147,15 @@ fast manual entry and keeps the surface intentionally small.
 | Details collapsed | Default | More details row shows the example / hint / pronunciation summary. |
 | Details expanded | Tap More details | Summary row stays visible with an expanded chevron and the example, pronunciation, and hint inputs are shown inline. |
 | Tags idle | Default | Tag chips row shows any current chips plus the Add tag chip. |
-| Tags add | Tap Add tag | The tag input dialog accepts one tag and appends it if valid. |
+| Tags add | Tap Add tag | An inline tag field opens (in place of the chip); a valid entry is appended on submit and the field stays open for the next; an empty submit closes it. |
 | Save and add another off | Default | Checkbox under Tags is unchecked; Save behaves normally. |
 | Save and add another on | Checkbox checked | Save clears the draft and keeps the editor open for batch entry. |
 | Saving | Save tapped | Save button shows spinner; form stays visible and the buttons disable. |
 | Saved | Success | Return to the deck's flashcard list with a success snackbar. |
 | Save error | Repository failure | Error banner appears; form contents remain. |
 | Dirty close confirm | Close/back with unsaved changes | Show discard confirmation dialog. |
+| Loading | Deck context still fetching | Field-shaped skeleton (`flashcard_editor_skeleton`) under the app-bar shell; row C46. |
+| Load error | Deck stream errors / returns no detail | Load-error surface (`MxErrorState`, cloud-off, `cardLoadFailedTitle`/`cardLoadFailedMessage`) with Retry; app-bar leading escapes back. Row C28. |
 
 ## Actions
 
@@ -149,8 +166,8 @@ fast manual entry and keeps the surface intentionally small.
 | Tap Save | Tap | Validate required fields, save, then pop back to the deck list. |
 | Toggle save and add another | Tap checkbox | Turn batch-entry mode on or off for the current create session. |
 | Tap More details | Tap | Toggle the inline optional detail inputs while keeping the summary row visible. |
-| Tap Add tag | Tap | Open the tag input dialog and append a valid tag chip. |
-| Tap tag chip | Tap chip | Remove the tag chip from the draft. |
+| Tap Add tag | Tap | Open the inline tag field and append a valid tag chip on submit. |
+| Tap tag chip ✕ | Tap the chip's remove ✕ | Remove the tag chip from the draft. |
 | Retry after save error | Tap retry | Re-run the save using the current draft. |
 
 ## Dialogs used
@@ -212,6 +229,6 @@ fast manual entry and keeps the surface intentionally small.
 
 **Code paths:**
 
-- `lib/presentation/features/flashcards/screens/flashcard_editor_screen.dart`
-- `lib/presentation/features/flashcards/viewmodels/flashcard_editor_viewmodel.dart`
-- `lib/presentation/features/flashcards/widgets/flashcard_editor_view.dart`
+- `lib/presentation/features/decks/screens/flashcard_editor_screen.dart`
+- `lib/presentation/features/decks/widgets/flashcard_editor_body.dart` (`FlashcardEditorForm`)
+- `test/presentation/features/decks/flashcard_editor_test.dart`

@@ -13,6 +13,7 @@ import 'package:memox/domain/types/target_language.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/screens/flashcard_list_screen.dart';
 import 'package:memox/presentation/features/decks/viewmodels/flashcard_list_viewmodel.dart';
+import 'package:memox/presentation/features/decks/widgets/flashcard_list_search.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_fab.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
@@ -101,11 +102,34 @@ void main() {
     testWidgets('loaded lists cards + add-card FAB', (tester) async {
       await _pump(tester, _value(_loaded));
       await tester.pumpAndSettle();
-      expect(find.text('日本'), findsOneWidget);
-      expect(find.text('Japan'), findsOneWidget);
+      // The row title combines front — back (mock `06` `list-row-title`).
+      expect(find.text('日本 — Japan'), findsOneWidget);
+      // Cards have no progress → the NEW SRS subtitle (mock `06` `list-row-meta`).
+      expect(find.text('New · not studied'), findsWidgets);
       expect(find.byType(MxFab), findsOneWidget);
       // The sort control is exposed so the user can reorder (WBS 2.23.1).
       expect(find.byIcon(Icons.swap_vert), findsOneWidget);
+      // The search dock is persistent while the deck has cards (kit `06`) — the
+      // dock owns search, so there is no app-bar search-toggle icon.
+      expect(find.byType(FlashcardListSearchDock), findsOneWidget);
+    });
+
+    testWidgets('search dock is hidden in empty / reorder states', (
+      tester,
+    ) async {
+      // Empty deck: nothing to search → no dock.
+      await _pump(tester, _value(_detail(const <Flashcard>[])));
+      await tester.pumpAndSettle();
+      expect(find.byType(FlashcardListSearchDock), findsNothing);
+
+      // Reorder mode removes the dock (kit `06` reorder).
+      await _pump(tester, _value(_loaded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Reorder cards'));
+      await tester.pumpAndSettle();
+      expect(find.byType(FlashcardListSearchDock), findsNothing);
     });
 
     testWidgets('overline shows the deck due badge when dueCount > 0', (
@@ -197,7 +221,7 @@ void main() {
       await _pump(tester, _value(_loaded));
       await tester.pumpAndSettle();
 
-      await tester.longPress(find.text('日本'));
+      await tester.longPress(find.text('日本 — Japan'));
       await tester.pumpAndSettle();
       // The destructive confirm dialog is shown before any deletion.
       expect(find.text('Delete this card?'), findsOneWidget);
@@ -206,7 +230,7 @@ void main() {
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       expect(find.text('Delete this card?'), findsNothing);
-      expect(find.text('日本'), findsOneWidget);
+      expect(find.text('日本 — Japan'), findsOneWidget);
     });
   });
 
@@ -253,8 +277,7 @@ void main() {
           golden: true,
         );
         await tester.pumpAndSettle();
-        await tester.tap(find.byIcon(Icons.search));
-        await tester.pumpAndSettle();
+        // The search dock is persistent (no app-bar toggle): type into it.
         await tester.enterText(find.byType(TextField), 'zzz');
         await tester.pumpAndSettle();
         await expectLater(

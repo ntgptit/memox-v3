@@ -5,13 +5,15 @@ import 'package:memox/core/util/id_generator.dart';
 import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_session_mapper.dart';
+import 'package:memox/data/repositories/study_match_evaluations.dart';
 import 'package:memox/data/repositories/study_session_card_actions.dart';
+import 'package:memox/domain/entities/match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
-import 'package:memox/domain/srs/box_intervals.dart';
 import 'package:memox/domain/srs/srs_box.dart';
+import 'package:memox/domain/srs/srs_due.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -33,7 +35,15 @@ class StudyRepositoryImpl implements StudyRepository {
   }) : _dao = dao,
        _idGenerator = idGenerator ?? IdGenerator(),
        _mapper = mapper,
-       _cardActions = StudySessionCardActions(dao);
+       _cardActions = StudySessionCardActions(dao) {
+    // Share the one resolved IdGenerator instance with the collaborator (so an
+    // injected/seeded generator drives both).
+    _matchEvaluations = StudyMatchEvaluationActions(
+      _dao,
+      _idGenerator,
+      _mapper,
+    );
+  }
 
   final StudySessionDao _dao;
   final IdGenerator _idGenerator;
@@ -42,6 +52,9 @@ class StudyRepositoryImpl implements StudyRepository {
   /// In-session bury/suspend actions (WBS 4.11.2), extracted as a data-layer
   /// collaborator to keep this file cohesive and within the line budget.
   final StudySessionCardActions _cardActions;
+
+  /// Match-mode evaluation persistence (WBS 4.5.4), extracted likewise.
+  late final StudyMatchEvaluationActions _matchEvaluations;
 
   @override
   Future<Result<int>> expireOldSessions({required int now}) async {
@@ -349,6 +362,14 @@ class StudyRepositoryImpl implements StudyRepository {
         );
       }
 
+      // Match sessions persist append-only evaluations (not per-item attempts),
+      // so their items are never marked answered mid-session. If this session has
+      // any match evaluations, finalize via the Match branch (derive one terminal
+      // attempt per item from the evaluations) — WBS 4.5.4 / WP-SM2.
+      if (await _dao.matchEvaluationCount(sessionId) > 0) {
+        return _matchEvaluations.finalize(sessionId: sessionId, now: now);
+      }
+
       final List<StudySessionItemRow> items = await _dao.itemsForSession(
         sessionId,
       );
@@ -393,7 +414,7 @@ class StudyRepositoryImpl implements StudyRepository {
           FlashcardProgressCompanion.insert(
             flashcardId: item.flashcardId,
             boxNumber: Value<int>(boxAfter),
-            dueAt: Value<int?>(_dueAtFor(now, boxAfter)),
+            dueAt: Value<int?>(dueAtFor(now, boxAfter)),
             reviewCount: Value<int>((progress?.reviewCount ?? 0) + 1),
             lapseCount: Value<int>(
               (progress?.lapseCount ?? 0) +
@@ -442,6 +463,38 @@ class StudyRepositoryImpl implements StudyRepository {
     now: now,
     suspend: true,
   );
+
+  @override
+  Future<Result<void>> recordMatchEvaluation({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+    required StudyMode studyMode,
+    required int now,
+  }) => _matchEvaluations.record(
+    sessionId: sessionId,
+    sessionItemId: sessionItemId,
+    boardIndex: boardIndex,
+    pairId: pairId,
+    selectedFrontCellId: selectedFrontCellId,
+    selectedBackCellId: selectedBackCellId,
+    expectedFrontFlashcardId: expectedFrontFlashcardId,
+    expectedBackFlashcardId: expectedBackFlashcardId,
+    isCorrect: isCorrect,
+    studyMode: studyMode,
+    now: now,
+  );
+
+  @override
+  Future<Result<List<MatchEvaluation>>> loadMatchEvaluations(
+    SessionId sessionId,
+  ) => _matchEvaluations.load(sessionId);
 
   @override
   Future<Result<StudySessionResult>> loadStudySessionResult({
@@ -540,24 +593,5 @@ class StudyRepositoryImpl implements StudyRepository {
       return AttemptResult.recovered;
     }
     return last;
-  }
-
-  /// The due time for a card entering [box] when finalized at [nowMs]:
-  /// `localMidnight(studyDay + interval[box])` (WBS 4.6.4). Computed in Dart
-  /// (local time), never via a SQLite `localtime` modifier, so "due today"
-  /// counts stay stable across the day.
-  int _dueAtFor(int nowMs, int box) {
-    final DateTime nowLocal = DateTime.fromMillisecondsSinceEpoch(
-      nowMs,
-    ).toLocal();
-    final DateTime studyDayMidnight = DateTime(
-      nowLocal.year,
-      nowLocal.month,
-      nowLocal.day,
-    );
-    final DateTime due = studyDayMidnight.add(
-      Duration(days: BoxIntervals.daysFor(box)),
-    );
-    return due.millisecondsSinceEpoch;
   }
 }

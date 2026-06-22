@@ -16,7 +16,8 @@ source_specs:
 > **authoritative** over the prompt-era prose below where they differ:
 >
 > - **Search is a mode toggle**, not an always-visible inline field: the app bar shows
->   `Icons.search` (→ `LibrarySearchAppBar` with an autofocused field + Cancel) and an
+>   `Icons.search` (toggles search → mounts the bottom `LibrarySearchDock` with an autofocused
+>   field; the regular Library app bar stays) and an
 >   `Icons.swap_vert` sort icon that opens the shared content-sort sheet (WBS 2.23.1 — was
 >   visual-only/disabled). (Supersedes "always-visible inline (no toggle)".)
 > - **Folder rows use a chevron** (`Icons.chevron_right`), **no kebab**; a row tap opens the
@@ -42,7 +43,7 @@ source_specs:
 >   fields absent). The per-row **due badge** *is* built (shows when `dueCount > 0`).
 > - As-built file map: `library_overview_screen.dart` · `library_overview_body.dart` ·
 >   `library_folder_tile.dart` · `folder_icon_tile.dart` · `library_loading_skeleton.dart` ·
->   `library_search_app_bar.dart` · `library_folder_actions_sheet.dart` ·
+>   `library_search_dock.dart` · `library_folder_actions_sheet.dart` ·
 >   `folder_create_dialog.dart` · `library_create_folder_action.dart` ·
 >   `library_overview_viewmodel.dart` (`libraryOverviewStreamProvider` /
 >   `librarySearchQueryProvider` / `librarySearchActiveProvider`). The old
