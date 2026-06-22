@@ -11,15 +11,18 @@ last_updated: 2026-06-22
   COMPLETE** (all WP-SR slices shipped; Review loop end-to-end). Objects 7-10 reuse the SR2 session
   shell + SR5 result; each adds its own grade grammar. See `loop-plan/study-review.md` (the shared
   Review anchor) + read the Match wireframe/shots before building.
-- **Current work-package:** **OBJECT 6 COMPLETE — WP-SR5b SHIPPED (result variant states).** Final
-  Review slice: **save-failed** (`failedToFinalize` → danger banner + Retry; Done stays) + **defensive**
-  (zero answered → "No cards answered" notice) states + goldens. Full Review path now lives: launch →
-  gate → session → swipe-grade → exit-confirm → Bury/Suspend → Finish → finalize → result → Done.
-  **NEXT: object 7 — Study — Match.** Audit the Match BE (does a Match study mode / read model exist?
-  check `StudyMode.match`, the usecases, `docs/wireframes/14-study-session-match.md` + study-flow.md)
-  + the shots `14-study-session-match-*`; CHẺ into slices (mode chrome → option grid → match-grade →
-  reuse SR5 finalize/result). Deferred polish: WP-SR4b-2 (Edit, needs deckId), WP-SR1b-2c (gate CTAs),
-  WP-SR2b (language labels); object-5 WP-FL2b2b (Tags).
+- **Current work-package:** **OBJECT 7 (Match) — AUDIT DONE; plan written; a real BE gap was found.**
+  Object 6 (Review) is COMPLETE. The Match audit (TRUST POLICY) found a **confirmed drift**: the
+  wireframe-14 drift-note + the repo contract claim the Match BE (`study_match_evaluations` table,
+  `recordMatchEvaluation`/`loadMatchEvaluations`, finalization derivation) is built, but **it is NOT**
+  — the table is undefined, zero code usages, `MatchStudyModeStrategy` is an empty leaf, WBS 4.5.4 =
+  Specified. Wireframe-14 note corrected this iteration. **Match is a BE-first build.** Full slice plan:
+  `docs/project-management/loop-plan/study-match.md` (WP-SM1 schema+eval persistence → WP-SM2
+  finalization derivation → WP-SM3 mode-dispatch+board shell → WP-SM4 grid+tap-pair → WP-SM5
+  progression+finalize). **NEXT: WP-SM1** — the `study_match_evaluations` schema + migration + schema
+  docs + `MatchEvaluation` entity + `recordMatchEvaluation`/`loadMatchEvaluations` repo/DAO +
+  `RecordMatchEvaluationUseCase` + tests (a careful schema slice). Deferred polish: WP-SR4b-2 (Edit),
+  WP-SR1b-2c (gate CTAs), WP-SR2b (language labels); object-5 WP-FL2b2b (Tags).
 - **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
   after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
 - **Branch:** `feat/loop-library`; latest code commit `7a9ae4a` (WP-SR5b — object 6 COMPLETE; prior
@@ -66,21 +69,23 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 
 ## Next action
 
-**Start object 7 — Study — Match (AUDIT-FIRST, then CHẺ + build).** Object 6 (Review) is COMPLETE.
-Match is a sibling study mode that reuses the SR2 session shell + the SR5 finalize/result, adding its
-own grade grammar (an option grid — pick the matching card; per `docs/business/study/study-flow.md`
-S60 mentions "5 real option cards"). **Before building, BƯỚC 1 audit (TRUST POLICY — confirm by
-evidence, don't trust status):**
-1. Read `docs/wireframes/14-study-session-match.md` + the shots `14-study-session-match-*`
-   (`shots/INDEX.md`) + `docs/business/study/study-flow.md` (match flow) + decision rows S60/S6x.
-2. Audit the **Match BE**: does `StudyMode.match` exist? Is there a match read model / use case
-   (option-set generation, match-grade recording) like Review's `LoadStudySessionReviewUseCase` /
-   `RecordStudySessionAnswerUseCase`? Grep `lib/domain/usecases/study/` + `study_repository*`. **If the
-   BE is missing**, the first slice is BE (entity → repo contract → use case → DI + tests) per the
-   vertical-slice invariant — do NOT build FE on a missing read model.
-3. CHẺ into runnable slices (e.g. mode chrome/route → option grid → match-grade+advance → reuse SR5
-   finalize/result), one per iteration, each verified + fan-out + 2-commit.
-PRECEDENCE: behavior → study-flow.md + wireframe 14 win over the mock. Reuse `StudyMode`, the session
-shell pattern, `MxLinearProgress` (green family for non-recognition modes per the PRECEDENCE note),
-the card-actions sheet, and the result screen. Deferred: WP-SR4b-2 (Edit), WP-SR1b-2c (gate CTAs),
-WP-SR2b (language labels); object-5 WP-FL2b2b (Tags). Do NOT defer for greenfield.
+**Build WP-SM1 — Match BE: schema + append-only evaluation persistence** (object 7, BE-first). The
+audit (`loop-plan/study-match.md`) confirmed the Match BE is NOT built (drift corrected). This is a
+**schema slice** — follow the schema hard-rule (table + migration + schema-contract + migration-contract
++ storage-boundaries + drift-guide docs + tests, all in the SAME commit). Read FIRST:
+`docs/project-management/loop-plan/study-match.md` (the full slice plan + BE inventory + the OPEN
+QUESTION on mode selection), `docs/contracts/repository-contracts/study-repository.md` (§Match —
+`recordMatchEvaluation` / `loadMatchEvaluations` / finalization spec already written), `docs/database/
+schema-contract.md` + `migration-contract.md`, `docs/business/study/study-flow.md` (match flow).
+Build:
+1. `study_match_evaluations` table (`session_id`, `flashcard_id`, `is_correct`, `created_at`;
+   append-only) in `lib/data/datasources/local/drift/study_tables.drift` + a Drift migration (bump the
+   schema version) + the 4 schema docs.
+2. `MatchEvaluation` entity + `study_session_mapper` rows.
+3. `recordMatchEvaluation({sessionId, flashcardId, isCorrect, now})` + `loadMatchEvaluations(sessionId)`
+   on the study repository + DAO (append-only INSERT + touch `updated_at`; load ordered).
+4. `RecordMatchEvaluationUseCase` + DI provider.
+5. Repo + DAO + usecase tests (append-only, ordering, touch). Decision rows.
+Do NOT also build the finalization derivation here — that is WP-SM2 (next slice). PRECEDENCE: behavior
+→ study-repository.md contract + study-flow.md. Deferred: WP-SR4b-2 (Edit), WP-SR1b-2c, WP-SR2b;
+object-5 WP-FL2b2b (Tags). Do NOT defer for greenfield.

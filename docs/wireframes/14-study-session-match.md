@@ -9,14 +9,19 @@ source_specs:
 
 # 14 — Study Session: Match Mode
 
-> **Drift correction (2026-06-12):** the Match backend slice now includes the dedicated
-> append-only evaluation path plus transactional finalization derivation; the visual UI is still
-> Specified and not built. The shared shell at
-> `lib/presentation/features/study/screens/study_session_screen.dart` still owns the current
-> runtime route, and any `lib/presentation/features/study/widgets/study_session/**` paths below are
-> the target structure from the previous UI iteration and do NOT exist — verify against
-> `lib/presentation/features/study/widgets/` before relying on them. Work is tracked as WBS 4.5.x
-> in `docs/project-management/wbs.md`.
+> **Status correction (2026-06-22 audit — supersedes the 2026-06-12 note):** the Match **backend is
+> NOT built** (WBS 4.5.4 = Specified, confirmed by evidence). The earlier note claimed the append-only
+> evaluation path + finalization derivation had landed, but the `study_match_evaluations` table is not
+> defined (`study_tables.drift` calls it "target shape… not this enabler"), there are zero code usages
+> of it / `MatchEvaluation`, `MatchStudyModeStrategy` is an empty Board-family leaf with no grading
+> API, and the `recordMatchEvaluation` / `loadMatchEvaluations` / Match-finalization methods in
+> `docs/contracts/repository-contracts/study-repository.md` are **specified, not implemented**. The
+> visual UI is likewise not built. The shared shell at
+> `lib/presentation/features/study/screens/study_session_screen.dart` owns the current runtime route
+> (Review only), and any `lib/presentation/features/study/widgets/study_session/**` paths below are
+> target structure that does NOT exist — verify against `lib/presentation/features/study/widgets/`.
+> Build is BE-first; the slice plan is `docs/project-management/loop-plan/study-match.md`. Tracked as
+> WBS 4.5.4 (BE) + 4.5.5 (FE).
 
 ## Purpose
 
