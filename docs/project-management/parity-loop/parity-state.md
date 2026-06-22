@@ -10,8 +10,12 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **06 — Flashcard list** (decks feature) — NEXT screen (run audit / BƯỚC 2). Confirm FE exists
-  (`lib/presentation/features/decks/**` — flashcard_list_body.dart seen), then audit its 8 kit states.
+- **06 — Flashcard list** (decks feature) — AUDIT done (see
+  `docs/project-management/parity-loop/screen-plans/06-flashcard-list.md`). 8 kit states; 6 goldens +
+  delete-card/deck via shared confirm. Key finding: empty/error are bare-centered AND the kit card is
+  **vertically CENTERED** (unlike 03/04 top-anchored) → next WP = add a `centered` variant to shared
+  `MxStateCard` + apply to flashcard empty/error. Then FlashcardTile audit (chevron 24→20, status
+  chip, icon-tile) + reorder drag-handle. `_DueBadge` here already solid accent ✓.
 
 ### Screen 04 — Folder detail: DONE (modulo deferred)
 
@@ -41,6 +45,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | --- | --- | --- | --- | --- | --- |
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
+| 06 | Flashcard list | yes | done 2026-06-23 | in-progress | plan written; empty/error bare (kit=CENTERED card); 8/8 states have goldens/shared |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |
