@@ -107,7 +107,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
 - [x] **WP-SR4a — exit-confirm.** `2983088`: `✕` mid-session with `answeredCount > 0` →
       `MxConfirmDialog` ("progress is saved — resume later") before pop; pops directly when nothing is
       answered yet (wireframe `13` Rule). Row S90; ARB ×3 (en+vi); confirm/cancel/pop tests.
-- [x] **WP-SR4b — card-actions sheet (Bury / Suspend).** `<this commit>`: long-press the card →
+- [x] **WP-SR4b — card-actions sheet (Bury / Suspend).** `0ddbd62`: long-press the card →
       `showStudyCardActionsSheet` (`study_card_actions_sheet.dart`, reusing `showMxBottomSheet`): **Bury
       until tomorrow** → `BuryStudySessionCardUseCase`, **Suspend card** → `SuspendStudySessionCardUseCase`
       → re-queue (`ref.invalidate(studySessionReviewProvider)`; the use case removed the session item, so
