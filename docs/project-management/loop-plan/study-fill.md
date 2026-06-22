@@ -3,7 +3,7 @@ last_updated: 2026-06-22
 object: Study — Fill mode (object 10 of 10 — the LAST study mode)
 loop_order: 10 of 10 (after object 9 Recall, DONE)
 route: /library/study/session/:sessionId?mode=fill
-status: WP-FI1 DONE (typed check/grade end-to-end); WP-FI2 deferred
+status: WP-FI1 DONE (typed check/grade); WP-FI2a DONE (Mark-correct → recovered); WP-FI2b-e remain
 ---
 
 # Loop plan — Object 10: Study — Fill
@@ -54,12 +54,16 @@ is superseded), real text field, full-width Check, CORRECT ANSWER card, Retry/Ne
       ARB +7; 16 tests + typing/wrong/correct goldens. 4-reviewer fan-out folded (Check disable,
       alert-circle, correct golden, `recovered` doc caveat). **Fill playable end-to-end → ALL 5 STUDY
       MODES COMPLETE.**
-- [ ] **WP-FI2 — the richer wireframe flow (`recovered` + polish).** The **Hint** button (reveal one
-      char at a time, max half the front; taints → caps at `recovered` via `evaluate(hintUsed: true)`);
-      the **Mark correct** affordance on wrong feedback (→ `recovered` via `evaluate(markCorrect: true)`,
-      S69/S72); the 0.8s auto-advance countdown on correct (S68, reuse Guess's timer pattern); the
-      last-card **Finish** callout (S73) + the explicit **finalize-fail** surface (S75); the Edit ✎ /
-      TTS 🔊 affordances. Re-confirm the front-vs-reading conflict with the owner before WP-FI2.
+- [~] **WP-FI2 — the richer wireframe flow (`recovered` + polish).** Split into slices:
+  - [x] **WP-FI2a — Mark correct** (`f1625b1`, S72): a discreet accent link under the wrong-feedback
+        Retry/Next row overrides to `recovered` (`evaluate(markCorrect:true)` outcome) + flips to the
+        correct-feedback state; recorded on advance. Mock variance flagged (mock = Retry/Next only).
+  - [ ] **WP-FI2b — Hint** button (reveal one char at a time, max half the front; taints → caps at
+        `recovered` via `evaluate(hintUsed: true)`, S69), beside Check.
+  - [ ] **WP-FI2c** — the 0.8s auto-advance countdown on correct (S68, reuse Guess's timer pattern).
+  - [ ] **WP-FI2d** — last-card **Finish** callout (S73) + the explicit **finalize-fail** surface (S75).
+  - [ ] **WP-FI2e** — the Edit ✎ / TTS 🔊 affordances.
+  Re-confirm the front-vs-reading conflict with the owner before extending further.
 
 ## PRECEDENCE / rules
 

@@ -28,8 +28,11 @@ last_updated: 2026-06-22
   Recommend **WP-FI2 first** (closes the most spec gaps + the only `recovered`-bearing mode). Audit-first
   as always; re-confirm the Fill front-vs-reading conflict with the owner before extending Fill.
 - **Parked (object 5):** none — WP-FL2b2b shipped (`13e0fe8`); object 5 (library FE) is complete.
-- **Branch:** `feat/loop-library`; latest code commit `13e0fe8` (WP-FL2b2b — Tags chip input, object 5
-  done; prior `a6f37b5` WP-FI1 Fill done → all 5 study modes done, `85a2c67` WP-RC1 Recall done).
+- **Polish progress:** **WP-FI2a (Fill Mark-correct → `recovered`, S72) — DONE** (`f1625b1`): a discreet
+  accent link under the wrong Retry/Next row overrides to `recovered`. Remaining WP-FI2: Hint-taint (S69),
+  auto-advance countdown, last-card Finish callout (S73), finalize-fail (S75), Edit/TTS.
+- **Branch:** `feat/loop-library`; latest code commit `f1625b1` (WP-FI2a — Fill Mark-correct; prior
+  `13e0fe8` WP-FL2b2b Tags / object 5 done, `a6f37b5` WP-FI1 Fill → all 5 study modes done).
 - **Last verify:** PASS (code chain, guard 0 errors) — WP-SR1b-2b tree + review-fix. **Fan-out now
   complete:** docs-drift PASS; code-reviewer APPROVE + ui-parity PASS (re-ran after the 529 overload
   cleared). Folded 2 Importants: fallback-Back `fullWidth`, + a "Study new instead" navigation test
@@ -77,14 +80,14 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 **All greenfield objects are COMPLETE** — the 5 study modes (6-10) + object 5 (library FE, incl. Tags).
 Only the deferred study-mode **polish** backlog remains. Pick the highest-value item (audit-first as always):
 
-**RECOMMENDED NEXT — WP-FI2 (Fill polish).** The richest remaining item + the only one that unlocks the
-`recovered` grade (the evaluator already supports it). Read `loop-plan/study-fill.md` +
-`docs/wireframes/17-study-session-fill.md` + decision S69/S72/S73/S75. Build (CHẺ into slices, ~1/iter):
-the **Hint** char-reveal (reveal 1 char at a time, max half the front; taints → `evaluate(hintUsed: true)`
-→ `recovered`, S69); the **Mark correct** affordance on wrong feedback (→ `evaluate(markCorrect: true)`
-→ `recovered`, S72); the 0.8s **auto-advance countdown** on correct (S68, reuse Guess's timer pattern);
-the last-card **Finish callout** (S73) + the explicit **finalize-fail** surface (S75); the Edit ✎ / TTS 🔊
-affordances. **Re-confirm the Fill front-vs-reading mock↔doc conflict with the owner before extending.**
+**RECOMMENDED NEXT — continue WP-FI2 (Fill polish); WP-FI2a Mark-correct is done.** Remaining slices
+(CHẺ ~1/iter), read `loop-plan/study-fill.md` + `docs/wireframes/17-study-session-fill.md` + decision
+S68/S69/S73/S75: **WP-FI2b — Hint** char-reveal (reveal 1 char at a time, max half the front; taints →
+`evaluate(hintUsed: true)` → `recovered`, S69; add a Hint button beside Check); **WP-FI2c — 0.8s
+auto-advance countdown** on correct (S68, reuse Guess's timer pattern); **WP-FI2d — last-card Finish
+callout** (S73) + explicit **finalize-fail** surface (S75); **WP-FI2e — Edit ✎ / TTS 🔊**. Each adds UI
+the redesign mock dropped → build the documented behavior + flag the visual variance (as WP-FI2a did).
+**Re-confirm the Fill front-vs-reading mock↔doc conflict with the owner before extending further.**
 
 **ALSO PENDING (pick by value):** WP-RC2 (Recall Show-answer countdown + auto-reveal-on-timeout, S63/S64;
 needs a `recallAnswerTimeout` constant), WP-RC3 (Recall Edit/TTS, S65), WP-SG3 (Guess long-press
