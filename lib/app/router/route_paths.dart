@@ -56,6 +56,10 @@ abstract final class RoutePaths {
   /// The active study session. `:sessionId` is the persisted session id. Listed
   /// before [studyEntry] so the literal `session` segment wins over `:entryType`.
   static const String studySession = '$study/session/:sessionId';
+
+  /// The end-of-session result summary (`/library/study/session/:sessionId/result`).
+  /// Reached via `pushReplacement` from the session's Finish action (WBS 4.7.2).
+  static const String studyResult = '$study/session/:sessionId/result';
 }
 
 /// Path/query parameter keys for GoRouter — never pass a raw string literal as

@@ -3,6 +3,7 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
 /// Route registry for the Study feature.
@@ -19,6 +20,15 @@ List<RouteBase> studyRoutes() => <RouteBase>[
     path: RoutePaths.studySession,
     name: RouteNames.studySession,
     builder: (context, state) => StudySessionScreen(
+      sessionId: state.pathParameters[RouteParams.sessionId] ?? '',
+    ),
+  ),
+  // The result summary — `session/:sessionId/result`, listed near the session
+  // route. The Finish action finalizes then `pushReplacement`s here.
+  GoRoute(
+    path: RoutePaths.studyResult,
+    name: RouteNames.studyResult,
+    builder: (context, state) => StudyResultScreen(
       sessionId: state.pathParameters[RouteParams.sessionId] ?? '',
     ),
   ),

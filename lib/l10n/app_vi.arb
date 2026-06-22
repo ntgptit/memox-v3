@@ -210,5 +210,16 @@
   "studyExitConfirm": "Thoát",
   "studyExitCancel": "Tiếp tục học",
   "studyActionBury": "Ẩn đến ngày mai",
-  "studyActionSuspend": "Tạm dừng thẻ"
+  "studyActionSuspend": "Tạm dừng thẻ",
+  "studyResultTitle": "Hoàn thành phiên học",
+  "studyResultLoading": "Đang lưu kết quả của bạn…",
+  "studyResultHeroTitle": "Làm tốt lắm!",
+  "studyResultCardsReviewed": "{count, plural, other{Đã ôn {count} thẻ}}",
+  "@studyResultCardsReviewed": { "placeholders": { "count": { "type": "int" } } },
+  "studyResultCorrect": "Đúng",
+  "studyResultWrong": "Sai",
+  "studyResultAnswered": "Đã trả lời",
+  "studyResultDone": "Xong",
+  "studyResultLoadFailedTitle": "Không tải được kết quả",
+  "studyResultLoadFailedMessage": "Đã xảy ra lỗi khi tải tóm tắt phiên học này."
 }

@@ -1363,6 +1363,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Suspend card'**
   String get studyActionSuspend;
+
+  /// App-bar title of the study result screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete'**
+  String get studyResultTitle;
+
+  /// Loading message while the result summary loads.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving your results…'**
+  String get studyResultLoading;
+
+  /// Celebratory headline on the result screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice work!'**
+  String get studyResultHeroTitle;
+
+  /// Reviewed-count subtitle on the result hero.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card reviewed} other{{count} cards reviewed}}'**
+  String studyResultCardsReviewed(int count);
+
+  /// Label for the passed-count stat.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get studyResultCorrect;
+
+  /// Label for the forgot-count stat.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get studyResultWrong;
+
+  /// Label for the answered/total stat.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered'**
+  String get studyResultAnswered;
+
+  /// Primary action that leaves the result screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get studyResultDone;
+
+  /// Error title when the result summary fails to load.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your results'**
+  String get studyResultLoadFailedTitle;
+
+  /// Error body when the result summary fails to load.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong loading this session\'s summary.'**
+  String get studyResultLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

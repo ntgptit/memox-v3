@@ -727,4 +727,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyActionSuspend => 'Suspend card';
+
+  @override
+  String get studyResultTitle => 'Session complete';
+
+  @override
+  String get studyResultLoading => 'Saving your results…';
+
+  @override
+  String get studyResultHeroTitle => 'Nice work!';
+
+  @override
+  String studyResultCardsReviewed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards reviewed',
+      one: '1 card reviewed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyResultCorrect => 'Correct';
+
+  @override
+  String get studyResultWrong => 'Wrong';
+
+  @override
+  String get studyResultAnswered => 'Answered';
+
+  @override
+  String get studyResultDone => 'Done';
+
+  @override
+  String get studyResultLoadFailedTitle => 'Couldn\'t load your results';
+
+  @override
+  String get studyResultLoadFailedMessage =>
+      'Something went wrong loading this session\'s summary.';
 }

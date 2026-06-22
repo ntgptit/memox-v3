@@ -15,7 +15,9 @@ End-of-session summary. Celebrate completion, show what improved, motivate next 
 
 ## V1 slice
 
-Current implementation keeps the result route intentionally narrow: it shows the completion header, completed/answered count, total / answered / passed / forgot summary, and library/home exit actions. Accuracy, box-change aggregates, streak/goal, and tough-card drill-in remain future enhancements for the richer target layout below.
+**Built (WP-SR5a):** `StudyResultScreen` at `/library/study/session/:sessionId/result`, reached via `pushReplacement` from the session's **Finish** action after `FinalizeStudySessionUseCase`. It reads `LoadStudySessionResultUseCase` (`studySessionResultProvider`) and renders the completion hero ("Nice work!" + reviewed count) + the counts summary (**Correct** = `passedCount` / **Wrong** = `forgotCount` / **Answered** = `answeredCount` / `total`) + a **Done** exit (**`go` to origin** — deck scope → that deck's flashcard list, else Dashboard, per §Agent rule; never `pop`), plus loading and load-error states.
+
+The mock-`17` **accuracy ring, "Due next" projection, Goal & streak block, and "Keep studying" CTA** stay **Future** (they need the engagement read model + an SRS due-projection the result read model does not carry) — documented visual gaps, not built. The status-driven **save-failed** (`failed_to_finalize` → retry banner) and **defensive** (zero answered) states + per-state goldens are **WP-SR5b**. Box-change aggregates and tough-card drill-in remain future enhancements for the richer target layout below.
 
 ## Layout
 

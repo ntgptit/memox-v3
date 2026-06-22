@@ -40,4 +40,8 @@ abstract final class RouteNames {
   static const String studyEntry = 'studyEntry';
   static const String studyToday = 'studyToday';
   static const String studySession = 'studySession';
+
+  /// End-of-session result summary (`/library/study/session/:sessionId/result`).
+  /// WBS 4.7.2.
+  static const String studyResult = 'studyResult';
 }

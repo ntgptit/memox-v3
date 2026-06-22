@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
@@ -72,7 +75,7 @@ class StudySessionScreen extends ConsumerWidget {
           l10n,
           progress: (view.answeredCount, view.total),
           body: view.isFinished
-              ? _finishBody(context, l10n)
+              ? _finishBody(context, ref, l10n)
               : _gradeBody(context, ref, view),
         );
       },
@@ -241,17 +244,37 @@ class StudySessionScreen extends ConsumerWidget {
   }
 
   /// The end-of-session surface — every card graded. The Finish action
-  /// finalizes + navigates to the result screen in WP-SR5; for now it pops.
-  Widget _finishBody(BuildContext context, AppLocalizations l10n) =>
-      MxEmptyState(
-        icon: Icons.celebration_outlined,
-        title: l10n.studyReviewFinishTitle,
-        message: l10n.studyReviewFinishMessage,
-        action: MxPrimaryButton(
-          label: l10n.studyReviewFinishAction,
-          onPressed: () => context.pop(),
-        ),
-      );
+  /// finalizes the session (`FinalizeStudySessionUseCase` — applies the Leitner
+  /// SRS transition + marks `completed`) then `pushReplacement`s to the result
+  /// screen (WP-SR5a), so Back from the result returns to the caller, not here.
+  Widget _finishBody(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+  ) => MxEmptyState(
+    icon: Icons.celebration_outlined,
+    title: l10n.studyReviewFinishTitle,
+    message: l10n.studyReviewFinishMessage,
+    action: MxPrimaryButton(
+      label: l10n.studyReviewFinishAction,
+      onPressed: () => unawaited(_finish(context, ref)),
+    ),
+  );
+
+  /// Finalize then open the result screen. The finalize result is **not** gated
+  /// on here — the user can always leave (wireframe `18` Forbidden); a finalize
+  /// failure persists `failed_to_finalize`, which the result screen surfaces as
+  /// the save-failed state (WP-SR5b).
+  Future<void> _finish(BuildContext context, WidgetRef ref) async {
+    await ref
+        .read(finalizeStudySessionUseCaseProvider)
+        .call(sessionId: sessionId);
+    if (!context.mounted) return;
+    context.pushReplacementNamed(
+      RouteNames.studyResult,
+      pathParameters: <String, String>{RouteParams.sessionId: sessionId},
+    );
+  }
 }
 
 /// The Review card: both sides on one surface (mock `12` / wireframe `13`) —

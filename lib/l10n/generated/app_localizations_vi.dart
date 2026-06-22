@@ -710,4 +710,42 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyActionSuspend => 'Tạm dừng thẻ';
+
+  @override
+  String get studyResultTitle => 'Hoàn thành phiên học';
+
+  @override
+  String get studyResultLoading => 'Đang lưu kết quả của bạn…';
+
+  @override
+  String get studyResultHeroTitle => 'Làm tốt lắm!';
+
+  @override
+  String studyResultCardsReviewed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã ôn $count thẻ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyResultCorrect => 'Đúng';
+
+  @override
+  String get studyResultWrong => 'Sai';
+
+  @override
+  String get studyResultAnswered => 'Đã trả lời';
+
+  @override
+  String get studyResultDone => 'Xong';
+
+  @override
+  String get studyResultLoadFailedTitle => 'Không tải được kết quả';
+
+  @override
+  String get studyResultLoadFailedMessage =>
+      'Đã xảy ra lỗi khi tải tóm tắt phiên học này.';
 }
