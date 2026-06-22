@@ -163,6 +163,10 @@ strict and must surface the corruption instead of hiding it.
 **Schema:** `docs/database/schema-contract.md` `study_sessions`, `study_session_items`
 **Code paths:**
 
-- `lib/domain/study/ports/study_repo.dart`
-- `lib/data/repositories/study_repo_impl.dart`
+- `lib/domain/repositories/study_repository.dart`
+- `lib/data/repositories/study_repository_impl.dart`
+- `lib/data/repositories/study_session_card_actions.dart` (bury/suspend collaborator)
+- `lib/data/repositories/study_match_evaluations.dart` (Match-evaluation collaborator, WBS 4.5.4)
 - `lib/data/datasources/local/daos/study_session_dao.dart`
+- `lib/domain/entities/match_evaluation.dart`
+- `lib/domain/usecases/study/record_match_evaluation_usecase.dart`

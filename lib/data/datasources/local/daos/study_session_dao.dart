@@ -172,6 +172,41 @@ class StudySessionDao {
         .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
   });
 
+  /// Appends one Match-mode pair evaluation and touches the session (WBS 4.5.4):
+  /// inserts the append-only [evaluation] row and refreshes
+  /// `study_sessions.updated_at` so the active session stays resumable. The row
+  /// does NOT mark any item answered (finalization derives that).
+  Future<void> recordMatchEvaluation({
+    required StudyMatchEvaluationsCompanion evaluation,
+    required String sessionId,
+    required int updatedAt,
+  }) => _db.transaction(() async {
+    await _db.into(_db.studyMatchEvaluations).insert(evaluation);
+    await (_db.update(_db.studySessions)..where((t) => t.id.equals(sessionId)))
+        .write(StudySessionsCompanion(updatedAt: Value<int>(updatedAt)));
+  });
+
+  /// All Match evaluations for [sessionId], ordered by their append sequence.
+  Future<List<StudyMatchEvaluationRow>> matchEvaluationsBySession(
+    String sessionId,
+  ) =>
+      (_db.select(_db.studyMatchEvaluations)
+            ..where((t) => t.sessionId.equals(sessionId))
+            ..orderBy(<OrderClauseGenerator<StudyMatchEvaluations>>[
+              (t) => OrderingTerm(expression: t.attemptOrder),
+            ]))
+          .get();
+
+  /// The next append-sequence index for [sessionId] (= the current row count),
+  /// via a SQL `COUNT` (no row materialization).
+  Future<int> matchEvaluationCount(String sessionId) {
+    final Expression<int> count = _db.studyMatchEvaluations.id.count();
+    final query = _db.selectOnly(_db.studyMatchEvaluations)
+      ..addColumns(<Expression<Object>>[count])
+      ..where(_db.studyMatchEvaluations.sessionId.equals(sessionId));
+    return query.map((row) => row.read(count) ?? 0).getSingle();
+  }
+
   /// The session item for [flashcardId] within [sessionId], or `null` when the
   /// card is not (or no longer) in that session's queue.
   Future<StudySessionItemRow?> itemBySessionAndFlashcard(

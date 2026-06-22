@@ -1,4 +1,5 @@
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
@@ -135,6 +136,38 @@ abstract interface class StudyRepository {
     required FlashcardId flashcardId,
     required int now,
   });
+
+  /// Appends one Match-mode pair evaluation for the active session [sessionId]
+  /// (WBS 4.5.4): inserts an append-only `study_match_evaluations` row recording
+  /// the tapped pair (the two selected cells + the expected front/back cards +
+  /// [isCorrect]) and touches `study_sessions.updated_at` at [now] (epoch ms).
+  /// `attempt_order` is assigned as the next per-session sequence; `flashcard_id`
+  /// denormalizes [expectedFrontFlashcardId]. The row does NOT mark the item
+  /// answered — finalization derives the terminal attempt. The session must be
+  /// `in_progress` and [studyMode] must be `match`; otherwise an
+  /// `UnsupportedActionFailure` / `NotFoundFailure`, and a write error maps to a
+  /// `StorageFailure` (`docs/contracts/repository-contracts/study-repository.md`
+  /// §Match).
+  Future<Result<void>> recordMatchEvaluation({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+    required StudyMode studyMode,
+    required int now,
+  });
+
+  /// Loads all Match evaluations for session [sessionId] ordered by their append
+  /// sequence (WBS 4.5.4); a read error maps to a `StorageFailure`. Used by Match
+  /// finalization to derive one terminal attempt per item.
+  Future<Result<List<MatchEvaluation>>> loadMatchEvaluations(
+    SessionId sessionId,
+  );
 
   /// Loads the result summary for session [id] (WBS 4.7.1): the persisted
   /// session header plus its ordered `study_session_items` joined with their

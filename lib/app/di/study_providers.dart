@@ -9,6 +9,7 @@ import 'package:memox/domain/usecases/study/create_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/finalize_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/load_study_session_result_usecase.dart';
 import 'package:memox/domain/usecases/study/load_study_session_review_usecase.dart';
+import 'package:memox/domain/usecases/study/record_match_evaluation_usecase.dart';
 import 'package:memox/domain/usecases/study/record_study_session_answer_usecase.dart';
 import 'package:memox/domain/usecases/study/resolve_study_entry_start_usecase.dart';
 import 'package:memox/domain/usecases/study/suspend_study_session_card_usecase.dart';
@@ -71,5 +72,11 @@ BuryStudySessionCardUseCase buryStudySessionCardUseCase(Ref ref) =>
 @riverpod
 SuspendStudySessionCardUseCase suspendStudySessionCardUseCase(Ref ref) =>
     SuspendStudySessionCardUseCase(
+      repository: ref.watch(studyRepositoryProvider),
+    );
+
+@riverpod
+RecordMatchEvaluationUseCase recordMatchEvaluationUseCase(Ref ref) =>
+    RecordMatchEvaluationUseCase(
       repository: ref.watch(studyRepositoryProvider),
     );

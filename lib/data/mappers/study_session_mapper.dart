@@ -1,4 +1,5 @@
 import 'package:memox/data/datasources/local/app_database.dart';
+import 'package:memox/domain/entities/match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
@@ -134,4 +135,29 @@ class StudySessionMapper {
     sortOrder: item.sortOrder,
     result: terminalResult,
   );
+
+  /// Maps a `study_match_evaluations` row to its domain entity (WBS 4.5.4).
+  MatchEvaluation toMatchEvaluation(StudyMatchEvaluationRow row) =>
+      MatchEvaluation(
+        id: row.id,
+        sessionId: row.sessionId,
+        sessionItemId: row.sessionItemId,
+        flashcardId: row.flashcardId,
+        boardIndex: row.boardIndex,
+        pairId: row.pairId,
+        selectedFrontCellId: row.selectedFrontCellId,
+        selectedBackCellId: row.selectedBackCellId,
+        expectedFrontFlashcardId: row.expectedFrontFlashcardId,
+        expectedBackFlashcardId: row.expectedBackFlashcardId,
+        isCorrect: row.isCorrect,
+        attemptOrder: row.attemptOrder,
+        evaluatedAt: DateTime.fromMillisecondsSinceEpoch(
+          row.evaluatedAt,
+          isUtc: true,
+        ),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(
+          row.createdAt,
+          isUtc: true,
+        ),
+      );
 }

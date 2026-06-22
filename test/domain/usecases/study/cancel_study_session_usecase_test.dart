@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/domain/entities/match_evaluation.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
@@ -43,6 +44,26 @@ class _FakeStudyRepository implements StudyRepository {
     required StudyMode studyMode,
     required int now,
   }) async => throw UnimplementedError();
+
+  @override
+  Future<Result<void>> recordMatchEvaluation({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+    required StudyMode studyMode,
+    required int now,
+  }) async => throw UnimplementedError();
+
+  @override
+  Future<Result<List<MatchEvaluation>>> loadMatchEvaluations(
+    SessionId sessionId,
+  ) async => throw UnimplementedError();
 
   @override
   Future<Result<StudySession?>> findResumable({
