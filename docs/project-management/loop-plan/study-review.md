@@ -75,7 +75,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       (`/library/study/today` → `StudyScope(today, null, srsReview)`) + the `?study_type=` query
       override parsed via a new canonical `StudyType.storageValue`/`fromStorage` (consolidated with the
       data mapper; `new_cards`/`srs_review`); unrecognized `study_type` → error. Rows S85; 11 gate tests.
-- [x] **WP-SR1b-2a — per-reason empty matrix (icon + copy).** `<this commit>`: `_blockedBody` switches
+- [x] **WP-SR1b-2a — per-reason empty matrix (icon + copy).** `427d392`: `_blockedBody` switches
       the 8 `StudyScopeEmptyReason` → tailored icon + title + message (`studyEmpty*` ARB ×15, en+vi;
       cards/check/celebration/bedtime/pause glyphs) + Back, replacing the generic surface. Row S86; per-
       reason tests + 6 representative goldens (deck-no-cards / today-all-done / all-suspended ×2).
