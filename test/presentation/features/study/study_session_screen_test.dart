@@ -6,11 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
+import 'package:memox/presentation/features/study/controllers/study_session_controller.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
@@ -53,9 +56,33 @@ StudySessionReview _review({required List<StudySessionReviewItem> items}) =>
       items: items,
     );
 
+/// Fakes the session controller so swipe/grade/finish are deterministic without
+/// touching the record use case / DB: [build] returns [_initial]; [grade] records
+/// the result via [onGrade] and advances (mirroring the real advance).
+class _FakeSessionController extends StudySessionController {
+  _FakeSessionController(this._initial, {this.onGrade});
+
+  final StudySessionView _initial;
+  final void Function(AttemptResult result)? onGrade;
+
+  @override
+  Future<StudySessionView> build(SessionId sessionId) async => _initial;
+
+  @override
+  Future<void> grade(AttemptResult result) async {
+    onGrade?.call(result);
+    final StudySessionView? v = state.asData?.value;
+    if (v == null || v.isFinished) return;
+    state = AsyncData<StudySessionView>(
+      v.copyWith(currentIndex: v.currentIndex + 1),
+    );
+  }
+}
+
 Future<void> _pump(
   WidgetTester tester, {
-  required Future<StudySessionReview> Function() review,
+  Future<StudySessionReview> Function()? review,
+  StudySessionController Function()? controller,
   Brightness brightness = Brightness.light,
   bool golden = false,
 }) async {
@@ -67,7 +94,10 @@ Future<void> _pump(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        studySessionReviewProvider(_sid).overrideWith((ref) => review()),
+        if (review != null)
+          studySessionReviewProvider(_sid).overrideWith((ref) => review()),
+        if (controller != null)
+          studySessionControllerProvider(_sid).overrideWith(controller),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -132,7 +162,9 @@ void main() {
 
     testWidgets('a load failure shows the error surface', (tester) async {
       await _pump(tester, review: () async => throw Exception('boom'));
-      await tester.pump();
+      // The controller awaits the review provider, so the error needs the
+      // chained async to settle.
+      await tester.pumpAndSettle();
       expect(find.text("Couldn't load the session"), findsOneWidget);
     });
 
@@ -142,6 +174,90 @@ void main() {
         review: () async => _review(items: const <StudySessionReviewItem>[]),
       );
       expect(find.text('Nothing to review'), findsOneWidget);
+    });
+
+    testWidgets('the swipe hint shows on the first card', (tester) async {
+      await _pump(
+        tester,
+        review: () async => _review(items: <StudySessionReviewItem>[_item()]),
+      );
+      expect(find.textContaining('Swipe right'), findsOneWidget);
+    });
+
+    testWidgets('the swipe hint is hidden after the first few cards', (
+      tester,
+    ) async {
+      final StudySessionView view = StudySessionView(
+        review: _review(
+          items: List<StudySessionReviewItem>.generate(
+            5,
+            (int i) => _item(sortOrder: i),
+          ),
+        ),
+        currentIndex: 3, // past the hint window
+      );
+      await _pump(tester, controller: () => _FakeSessionController(view));
+      expect(find.textContaining('Swipe right'), findsNothing);
+    });
+
+    testWidgets('swipe right grades perfect and advances to the next card', (
+      tester,
+    ) async {
+      AttemptResult? graded;
+      final StudySessionView view = StudySessionView(
+        review: _review(
+          items: <StudySessionReviewItem>[
+            _item(),
+            _item(front: '물', back: 'water', sortOrder: 1),
+          ],
+        ),
+        currentIndex: 0,
+      );
+      await _pump(
+        tester,
+        controller: () =>
+            _FakeSessionController(view, onGrade: (r) => graded = r),
+      );
+      expect(find.text('먹다'), findsOneWidget);
+      await tester.drag(find.byType(Dismissible), const Offset(600, 0));
+      await tester.pumpAndSettle();
+      expect(graded, AttemptResult.perfect);
+      expect(find.text('water'), findsOneWidget); // advanced
+    });
+
+    testWidgets('swipe left grades forgot', (tester) async {
+      AttemptResult? graded;
+      final StudySessionView view = StudySessionView(
+        review: _review(
+          items: <StudySessionReviewItem>[
+            _item(),
+            _item(front: '물', back: 'water', sortOrder: 1),
+          ],
+        ),
+        currentIndex: 0,
+      );
+      await _pump(
+        tester,
+        controller: () =>
+            _FakeSessionController(view, onGrade: (r) => graded = r),
+      );
+      await tester.drag(find.byType(Dismissible), const Offset(-600, 0));
+      await tester.pumpAndSettle();
+      expect(graded, AttemptResult.forgot);
+    });
+
+    testWidgets('grading the last card shows the finish surface', (
+      tester,
+    ) async {
+      final StudySessionView view = StudySessionView(
+        review: _review(items: <StudySessionReviewItem>[_item()]),
+        currentIndex: 0,
+      );
+      await _pump(tester, controller: () => _FakeSessionController(view));
+      await tester.drag(find.byType(Dismissible), const Offset(600, 0));
+      await tester.pumpAndSettle();
+      expect(find.text('Review complete'), findsOneWidget);
+      expect(find.text('Finish session'), findsOneWidget);
     });
   });
 

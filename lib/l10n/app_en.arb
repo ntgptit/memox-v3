@@ -434,5 +434,13 @@
   "studyReviewLoadFailedTitle": "Couldn't load the session",
   "@studyReviewLoadFailedTitle": { "description": "Title of the study session load-error state." },
   "studyReviewLoadFailedMessage": "We couldn't load this study session.",
-  "@studyReviewLoadFailedMessage": { "description": "Body of the study session load-error state." }
+  "@studyReviewLoadFailedMessage": { "description": "Body of the study session load-error state." },
+  "studyReviewSwipeHint": "Swipe right if you knew it, left if you didn't",
+  "@studyReviewSwipeHint": { "description": "Hint under the review card explaining the swipe-grade gesture (shown for the first few cards)." },
+  "studyReviewFinishTitle": "Review complete",
+  "@studyReviewFinishTitle": { "description": "Title of the end-of-session surface when every card is graded." },
+  "studyReviewFinishMessage": "You've gone through every card in this session.",
+  "@studyReviewFinishMessage": { "description": "Body of the end-of-session surface." },
+  "studyReviewFinishAction": "Finish session",
+  "@studyReviewFinishAction": { "description": "Action that finalizes the session and shows the result." }
 }

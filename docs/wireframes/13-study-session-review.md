@@ -12,16 +12,20 @@ source_specs:
 # 13 — Study Session: Review Mode
 
 > **Status (2026-06-22): being rebuilt slice-by-slice (WP-SR1..SR5).** Built so far:
-> `lib/presentation/features/study/screens/study_session_screen.dart` renders the **shell + card
-> (WP-SR2)** — the `✕` exit + a blue progress bar (`MxProgressBar`) + `{answered}/{total}` count, and
-> the card showing **both sides at once** (front-side label → front → divider → back-side label → back
-> → example pill) via `studySessionReviewProvider` / `LoadStudySessionReviewUseCase`, with
-> loading/error/empty states. **Not yet built:** swipe-grade (WP-SR3), exit-confirm + card-actions
-> sheet (WP-SR4), finalize→result (WP-SR5). The front/back labels fall back to FRONT/BACK — the
-> language-specific labels (KOREAN/MEANING from `deck.target_language`) need the read model to carry the
-> language (WP-SR2b). Any other `lib/presentation/features/study/**` path below is **target structure**
-> until its slice lands. The mock `12-study-review--default` flip card is a documented visual gap —
-> behaviour follows §Rules (swipe, no reveal) per PRECEDENCE #1.
+> `lib/presentation/features/study/screens/study_session_screen.dart` (+ `controllers/
+> study_session_review_provider.dart` + `controllers/study_session_controller.dart`) renders the
+> **shell + card (WP-SR2)** — the `✕` exit + a blue `MxLinearProgress` + `{answered}/{total}` count,
+> and the card showing **both sides at once** (front-side label → front → divider → back-side label →
+> back → example pill) via `LoadStudySessionReviewUseCase`, with loading/error/empty states — **plus
+> swipe-grade (WP-SR3):** `StudySessionController` grades by swipe (right → `perfect`, left → `forgot`
+> via `RecordStudySessionAnswerUseCase`), advances optimistically, shows the swipe hint for the first
+> 3 cards, and renders a Finish surface after the last card. **Not yet built:** exit-confirm +
+> card-actions sheet (WP-SR4), finalize→result (WP-SR5 — the Finish action pops for now). The
+> front/back labels fall back to FRONT/BACK — the language-specific labels (KOREAN/MEANING from
+> `deck.target_language`) need the read model to carry the language (WP-SR2b). Any other
+> `lib/presentation/features/study/**` path below is **target structure** until its slice lands. The
+> mock `12-study-review--default` flip card is a documented visual gap — behaviour follows §Rules
+> (swipe, no reveal) per PRECEDENCE #1.
 
 ## Purpose
 
@@ -131,7 +135,7 @@ swiping (gesture is the primary input).
 | Back-side label   | Caption-sized, uppercase. Copy: `MEANING`. Falls back to `BACK`.                                                                                                                                               |
 | Back              | Body-large size, centered.                                                                                                                                                                                     |
 | Example pill      | Optional. Rounded surface around `flashcards.example`. Only renders when example is non-empty. Center-aligned.                                                                                                 |
-| Swipe hint footer | Caption-sized, with a `»` chevron prefix. Copy: "Swipe left for the next card". Fades out after the user has swiped 3 times in this session (already learned).                                                 |
+| Swipe hint footer | Caption-sized. Copy (`studyReviewSwipeHint`): "Swipe right if you knew it, left if you didn't" — conveys the **grade** meaning (right = perfect, left = forgot), clearer than the original "next card" wording. Shown for the first 3 cards of the session, then hidden. |
 
 ## States
 
@@ -219,7 +223,7 @@ settings surface and is not surfaced from this review screen yet.
 - Card announces front and back in sequence on focus.
 - Swipe gestures are the primary review interaction.
 - Reduced-motion users see a cross-fade instead of the horizontal slide on card advance.
-- Swipe hint footer carries `Semantics(hint: 'Swipe right for Perfect, swipe left for Forgot')`.
+- The swipe card region carries `Semantics(hint: studyReviewSwipeHint)` so the grade gesture is announced.
 
 ## Rules
 
@@ -261,25 +265,21 @@ settings surface and is not surfaced from this review screen yet.
 **Contracts:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase,
 `docs/contracts/usecase-contracts/srs.md`, `docs/contracts/usecase-contracts/tts.md`
 
-**Code paths (verified 2026-05-28):**
+**Code paths (rebuilt; verified 2026-06-22 — WP-SR2/SR3):**
 
-- Shared shell: `lib/presentation/features/study/screens/study_session_screen.dart` (app bar,
-  progress bar, exit handling).
-- Mode view:
-  `lib/presentation/features/study/widgets/study_session/review/review_mode_session_view.dart` +
-  `review_mode_card.dart` + `review_mode_panel.dart`.
-- Swipe gesture:
-  `lib/presentation/features/study/widgets/study_session/review/review_page_scroll_behavior.dart` (
-  no standalone `swipe_to_grade.dart`; behavior is embedded in the page scroll behaviour widget).
-- Grading: `lib/domain/study/usecases/study_usecases.dart` → `RecordStudySessionAnswerUseCase`
-  (the only in-session answer path today; the `AnswerFlashcardUseCase` / `Answer*BatchUseCase`
-  family from a previous iteration does NOT exist). No standalone `grade_attempt_usecase.dart`
-  exists either.
-- SRS transitions: no standalone `lib/domain/srs/box_transition.dart` exists. Runtime finalization
-  lives in `lib/data/repositories/study_repo_impl.dart`; in-session study use cases record attempts
-  and re-queue failed cards.
-- TTS: see `lib/presentation/features/study/widgets/study_session/study_speak_button.dart` for the
-  in-mode button; engine lives behind `lib/presentation/features/tts/providers/`.
+- Screen: `lib/presentation/features/study/screens/study_session_screen.dart` (shell: `✕` +
+  `MxLinearProgress` + count; the both-sides `_ReviewCard`; the `Dismissible` swipe + swipe-hint +
+  Finish surface). NOT the prior iteration's `widgets/study_session/review/**` files — those were
+  wiped and do not exist.
+- State: `lib/presentation/features/study/controllers/study_session_review_provider.dart`
+  (`@riverpod` future → `LoadStudySessionReviewUseCase`) + `controllers/study_session_controller.dart`
+  (`@riverpod` `StudySessionController` over `StudySessionView{review, currentIndex}`; `grade` →
+  `RecordStudySessionAnswerUseCase`).
+- Grading use case: `lib/domain/usecases/study/record_study_session_answer_usecase.dart`
+  (`recordStudySessionAnswerUseCaseProvider`) — the only in-session answer path. No standalone
+  `grade_attempt_usecase.dart` / `box_transition.dart`; the SRS box transition is applied at
+  **finalize** (`FinalizeStudySessionUseCase`, WP-SR5), not per-answer.
+- TTS: not surfaced in the review screen (separate settings; WP-SR4+ may add the actions sheet).
 
 **Related wireframes:**
 

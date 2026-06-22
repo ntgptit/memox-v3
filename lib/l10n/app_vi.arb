@@ -200,5 +200,9 @@
   "studyReviewEmptyTitle": "Không có gì để ôn",
   "studyReviewEmptyMessage": "Phiên này không có thẻ nào.",
   "studyReviewLoadFailedTitle": "Không tải được phiên",
-  "studyReviewLoadFailedMessage": "Không thể tải phiên học này."
+  "studyReviewLoadFailedMessage": "Không thể tải phiên học này.",
+  "studyReviewSwipeHint": "Vuốt phải nếu bạn nhớ, vuốt trái nếu chưa",
+  "studyReviewFinishTitle": "Đã ôn xong",
+  "studyReviewFinishMessage": "Bạn đã xem qua tất cả thẻ trong phiên này.",
+  "studyReviewFinishAction": "Kết thúc phiên"
 }

@@ -98,10 +98,12 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
 - [ ] **WP-SR2b — language side-labels (deferred polish).** KOREAN/MEANING from `deck.target_language`
       — needs the review read model (`StudySessionReview`/`LoadStudySessionReviewUseCase`) to carry the
       deck's `target_language`; until then the card uses the FRONT/BACK fallback.
-- [ ] **WP-SR3 — swipe-grade + advance.** Swipe right → `perfect`, left → `forgot` →
-      `RecordStudySessionAnswerUseCase(studyMode: review)`; order: gesture → persist (background) →
-      next card slide; swipe-hint footer (first 3 cards); last-card → **Finish Session** CTA (no
-      auto-finalize). Decision rows (S-review + SRS perfect/forgot). Widget tests per branch.
+- [x] **WP-SR3 — swipe-grade + advance.** `<this commit>`: `StudySessionController` (`@riverpod`
+      AsyncNotifier over `StudySessionView{review, currentIndex}`) — swipe right → `perfect`, left →
+      `forgot` (Dismissible) → `RecordStudySessionAnswerUseCase(studyMode: review)`; advances the card
+      first (optimistic) then persists (`unawaited`); swipe-hint footer (first 3 cards); last card →
+      Finish surface (`MxEmptyState` + Finish action; finalize→result = WP-SR5, pops for now). Row S89;
+      swipe right/left/advance/finish/hint tests; regen card golden.
 - [ ] **WP-SR4 — exit-confirm + card-actions sheet.** `✕` mid-session (answered>0) → exit-confirm
       (progress saved/resumable); long-press card → actions sheet (Edit / Bury until tomorrow /
       Suspend) — reuse shared dialog/sheet contracts (24/25); re-queue after bury/suspend.

@@ -694,4 +694,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get studyReviewLoadFailedMessage =>
       'We couldn\'t load this study session.';
+
+  @override
+  String get studyReviewSwipeHint =>
+      'Swipe right if you knew it, left if you didn\'t';
+
+  @override
+  String get studyReviewFinishTitle => 'Review complete';
+
+  @override
+  String get studyReviewFinishMessage =>
+      'You\'ve gone through every card in this session.';
+
+  @override
+  String get studyReviewFinishAction => 'Finish session';
 }

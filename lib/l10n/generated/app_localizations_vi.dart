@@ -677,4 +677,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyReviewLoadFailedMessage => 'Không thể tải phiên học này.';
+
+  @override
+  String get studyReviewSwipeHint =>
+      'Vuốt phải nếu bạn nhớ, vuốt trái nếu chưa';
+
+  @override
+  String get studyReviewFinishTitle => 'Đã ôn xong';
+
+  @override
+  String get studyReviewFinishMessage =>
+      'Bạn đã xem qua tất cả thẻ trong phiên này.';
+
+  @override
+  String get studyReviewFinishAction => 'Kết thúc phiên';
 }

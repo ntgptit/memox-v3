@@ -1303,6 +1303,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn\'t load this study session.'**
   String get studyReviewLoadFailedMessage;
+
+  /// Hint under the review card explaining the swipe-grade gesture (shown for the first few cards).
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe right if you knew it, left if you didn\'t'**
+  String get studyReviewSwipeHint;
+
+  /// Title of the end-of-session surface when every card is graded.
+  ///
+  /// In en, this message translates to:
+  /// **'Review complete'**
+  String get studyReviewFinishTitle;
+
+  /// Body of the end-of-session surface.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve gone through every card in this session.'**
+  String get studyReviewFinishMessage;
+
+  /// Action that finalizes the session and shows the result.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish session'**
+  String get studyReviewFinishAction;
 }
 
 class _AppLocalizationsDelegate
