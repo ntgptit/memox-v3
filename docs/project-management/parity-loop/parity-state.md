@@ -10,9 +10,13 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **07/08 — Flashcard editor** (decks feature) — NEXT screen (run audit / BƯỚC 2). Confirm FE exists
-  (`lib/presentation/features/decks/screens/flashcard_editor_screen.dart` + flashcard_editor_body —
-  yes; goldens flashcard_editor_* exist), then audit 07 create (6 states) + 08 edit (7 states).
+- **07/08 — Flashcard editor** — AUDIT done (see
+  `docs/project-management/parity-loop/screen-plans/07-08-flashcard-editor.md`). One shared
+  `FlashcardEditorForm`; 7 goldens cover most states. KEY finding: **dark ≈2× light** across editor
+  states (details-open dark 27.58%) → systematic dark-mode divergence, likely `MxTextField` dark
+  fill/border or scaffold bg. **Next WP = investigate + fix MxTextField dark parity** (shared → all
+  forms). Deferred (behavior/data-owned): DECK selector (Future), Note→3 fields (business model).
+  Missing goldens: 07 valid + 07/08 validation.
 
 ### Screen 06 — Flashcard list: DONE (modulo deferred)
 
@@ -51,7 +55,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
 | 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
-| 07/08 | Flashcard editor | yes | — | — | next: audit create (6) + edit (7) states |
+| 07/08 | Flashcard editor | yes | done 2026-06-23 | in-progress | audited; dark ≈2× light → MxTextField dark parity is next WP; deck-selector/Note deferred |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |
