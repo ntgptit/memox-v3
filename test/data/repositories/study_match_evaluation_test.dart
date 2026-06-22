@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/error/failure.dart';
@@ -201,6 +201,113 @@ void main() {
             .loadMatchEvaluations('s1');
         expect(loaded.failure, isNull);
         expect(loaded.data, isEmpty);
+      },
+    );
+
+    Future<FlashcardProgressRow> progressC1() => (db.select(
+      db.flashcardProgress,
+    )..where((t) => t.flashcardId.equals('c1'))).getSingle();
+
+    // WP-SM2: finalizeStudySession routes to the Match branch when the session
+    // has evaluations; it derives one terminal attempt per item (S56/S57).
+    test('finalize match: clean correct → perfect, advances box', () async {
+      await seedSession();
+      await record(isCorrect: true);
+
+      final Result<void> result = await repository.finalizeStudySession(
+        sessionId: 's1',
+        now: now,
+      );
+      expect(result.failure, isNull);
+
+      final List<StudyAttemptRow> attempts = await db
+          .select(db.studyAttempts)
+          .get();
+      expect(attempts, hasLength(1));
+      expect(attempts.single.result, 'perfect');
+      expect(attempts.single.studyMode, 'match');
+
+      final StudySessionItemRow item = await (db.select(
+        db.studySessionItems,
+      )..where((t) => t.id.equals('i1'))).getSingle();
+      expect(item.answeredAt, isNotNull);
+      final StudySessionRow session = await (db.select(
+        db.studySessions,
+      )..where((t) => t.id.equals('s1'))).getSingle();
+      expect(session.status, 'completed');
+      expect((await progressC1()).boxNumber, 2); // new-card box 1 + perfect → 2
+    });
+
+    test(
+      'finalize match: an un-evaluated item → forgot (never-correct)',
+      () async {
+        await seedSession();
+        // A second item that receives no evaluation this session.
+        await db
+            .into(db.flashcards)
+            .insert(
+              FlashcardsCompanion.insert(
+                id: 'c2',
+                deckId: 'd1',
+                front: '물',
+                back: 'water',
+                sortOrder: 1,
+                createdAt: now,
+                updatedAt: now,
+              ),
+            );
+        await db
+            .into(db.studySessionItems)
+            .insert(
+              StudySessionItemsCompanion.insert(
+                id: 'i2',
+                sessionId: 's1',
+                flashcardId: 'c2',
+                sortOrder: 1,
+                createdAt: now,
+                updatedAt: now,
+              ),
+            );
+        await record(isCorrect: true); // only i1 gets an evaluation
+
+        await repository.finalizeStudySession(sessionId: 's1', now: now);
+
+        // i2 had no evaluation → derived forgot.
+        final StudyAttemptRow i2Attempt = await (db.select(
+          db.studyAttempts,
+        )..where((t) => t.sessionItemId.equals('i2'))).getSingle();
+        expect(i2Attempt.result, 'forgot');
+      },
+    );
+
+    test('finalize match: wrong eval → forgot (box 1, lapse +1)', () async {
+      await seedSession();
+      await record(isCorrect: false);
+
+      await repository.finalizeStudySession(sessionId: 's1', now: now);
+
+      final StudyAttemptRow attempt = await db
+          .select(db.studyAttempts)
+          .getSingle();
+      expect(attempt.result, 'forgot');
+      final FlashcardProgressRow prog = await progressC1();
+      expect(prog.boxNumber, 1);
+      expect(prog.lapseCount, 1);
+    });
+
+    test(
+      'finalize match: wrong-before-correct → forgot (first decides)',
+      () async {
+        await seedSession();
+        await record(isCorrect: false, at: 0);
+        await record(isCorrect: true, at: 1);
+
+        await repository.finalizeStudySession(sessionId: 's1', now: now);
+
+        final StudyAttemptRow attempt = await db
+            .select(db.studyAttempts)
+            .getSingle();
+        expect(attempt.result, 'forgot');
       },
     );
   });

@@ -63,7 +63,7 @@ class DueDateComputer {
   interval`) so "due today" counts stay stable across the day. Computed in Dart
   local time; never via a SQLite `localtime` modifier.
 
-**Source (current — WBS 4.6.4):** `StudyRepositoryImpl._dueAtFor(now, box)` in `lib/data/repositories/study_repository_impl.dart`, using `BoxIntervals.daysFor` and the injected `now` (epoch ms); pinned by `test/data/repositories/study_srs_transition_test.dart`.
+**Source (current — WBS 4.6.4):** `dueAtFor(now, box)` in `lib/domain/srs/srs_due.dart`, using `BoxIntervals.daysFor` and the injected `now` (epoch ms); pinned by `test/data/repositories/study_srs_transition_test.dart`.
 
 ## NextCardSelector
 
@@ -115,4 +115,4 @@ class LifetimeStatsComputer {
 **Caller:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase
 **Wireframes:** `docs/wireframes/13-study-session-review.md` through `docs/wireframes/17-study-session-fill.md`
 **Decision table:** rows under "SRS"
-**Code paths (current — WBS 4.6.x):** SRS finalization lives in `StudyRepositoryImpl.finalizeStudySession` (`lib/data/repositories/study_repository_impl.dart`); box transition in `SrsBox.nextBox` (`lib/domain/srs/srs_box.dart`); interval ladder in `BoxIntervals.daysFor` (`lib/domain/srs/box_intervals.dart`); due-date normalization in `StudyRepositoryImpl._dueAtFor`. Due/new-card SELECTION (`NextCardSelector` above) is not yet implemented (eligibility counts land via WBS 4.1.1; ordered-card selection is a later slice).
+**Code paths (current — WBS 4.6.x):** SRS finalization lives in `StudyRepositoryImpl.finalizeStudySession` (`lib/data/repositories/study_repository_impl.dart`); box transition in `SrsBox.nextBox` (`lib/domain/srs/srs_box.dart`); interval ladder in `BoxIntervals.daysFor` (`lib/domain/srs/box_intervals.dart`); due-date normalization in `dueAtFor` (`lib/domain/srs/srs_due.dart`). Due/new-card SELECTION (`NextCardSelector` above) is not yet implemented (eligibility counts land via WBS 4.1.1; ordered-card selection is a later slice).

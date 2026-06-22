@@ -293,7 +293,12 @@ For "no due cards" cases, the empty state displays "Next due in {relativeTime}":
   relaxing the current "reject second answer" rule in `recordStudySessionAnswer` together with
   the C1 classifier change — ship the two together.
 - Match uses the same local-evaluation principle, but it persists append-only board evaluations
-  rather than terminal attempts until finalization derives the SRS history.
+  rather than terminal attempts until finalization derives the SRS history. **Finalize routing
+  (WP-SM2):** `finalizeStudySession` detects a Match session by the presence of any
+  `study_match_evaluations` rows — if present it runs the Match branch (derive one terminal
+  `study_attempts` per item from the evaluations: first-eval-correct → `perfect`, else `forgot`;
+  an un-evaluated item → `forgot`); otherwise the one-terminal-attempt path applies. (V1: one
+  session = one mode, so the heuristic is unambiguous.)
 - Retry state must be persisted through session items or domain-supported queue.
 - UI must not be the only source of retry state.
 

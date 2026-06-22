@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:memox/core/error/failure.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/util/id_generator.dart';
@@ -5,6 +6,9 @@ import 'package:memox/data/datasources/local/app_database.dart';
 import 'package:memox/data/datasources/local/daos/study_session_dao.dart';
 import 'package:memox/data/mappers/study_session_mapper.dart';
 import 'package:memox/domain/entities/match_evaluation.dart';
+import 'package:memox/domain/srs/srs_box.dart';
+import 'package:memox/domain/srs/srs_due.dart';
+import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/study_mode.dart';
 
@@ -124,5 +128,103 @@ class StudyMatchEvaluationActions {
         data: null,
       );
     }
+  }
+
+  /// Finalizes a Match session (WBS 4.5.4 / WP-SM2): derives **one terminal
+  /// attempt per session item** from the append-only evaluations, applies the
+  /// normal SRS box transition, and marks the session completed — all in one
+  /// transaction. Per `docs/business/srs/srs-review.md`, a clean correct pair →
+  /// `perfect`; any wrong-before-correct or never-correct path → `forgot`
+  /// (first-attempt-decides). The caller (`finalizeStudySession`) routes here
+  /// when the session has any evaluations.
+  Future<Result<void>> finalize({
+    required SessionId sessionId,
+    required int now,
+  }) async {
+    try {
+      final List<StudySessionItemRow> items = await _dao.itemsForSession(
+        sessionId,
+      );
+      if (items.isEmpty) {
+        return (
+          failure: const Failure.finalization(
+            message: 'Study session has no items to finalize.',
+          ),
+          data: null,
+        );
+      }
+      final List<StudyMatchEvaluationRow> evals = await _dao
+          .matchEvaluationsBySession(sessionId);
+
+      final List<StudyAttemptsCompanion> attempts = <StudyAttemptsCompanion>[];
+      final List<FlashcardProgressCompanion> upserts =
+          <FlashcardProgressCompanion>[];
+      for (final StudySessionItemRow item in items) {
+        final AttemptResult terminal = _deriveTerminal(
+          evals.where(
+            (StudyMatchEvaluationRow e) => e.sessionItemId == item.id,
+          ),
+        );
+        final FlashcardProgressRow? progress = await _dao.progressById(
+          item.flashcardId,
+        );
+        final int boxBefore = progress?.boxNumber ?? SrsBox.min;
+        final int boxAfter = SrsBox.nextBox(boxBefore, terminal);
+        attempts.add(
+          StudyAttemptsCompanion.insert(
+            id: _idGenerator.newId(),
+            sessionItemId: item.id,
+            result: _mapper.resultToken(terminal),
+            studyMode: _mapper.studyModeToken(StudyMode.match),
+            boxBefore: Value<int>(boxBefore),
+            boxAfter: Value<int>(boxAfter),
+            attemptedAt: now,
+          ),
+        );
+        upserts.add(
+          FlashcardProgressCompanion.insert(
+            flashcardId: item.flashcardId,
+            boxNumber: Value<int>(boxAfter),
+            dueAt: Value<int?>(dueAtFor(now, boxAfter)),
+            reviewCount: Value<int>((progress?.reviewCount ?? 0) + 1),
+            lapseCount: Value<int>(
+              (progress?.lapseCount ?? 0) +
+                  (terminal == AttemptResult.forgot ? 1 : 0),
+            ),
+            isSuspended: Value<bool>(progress?.isSuspended ?? false),
+            buriedUntil: Value<int?>(progress?.buriedUntil),
+          ),
+        );
+      }
+
+      await _dao.finalizeMatchSession(
+        sessionId: sessionId,
+        attempts: attempts,
+        answeredItemIds: items.map((StudySessionItemRow i) => i.id).toList(),
+        progressUpserts: upserts,
+        now: now,
+      );
+      return (failure: null, data: null);
+    } catch (error) {
+      return (
+        failure: Failure.storage(
+          operation: StorageOp.transaction,
+          table: 'flashcard_progress',
+          cause: error.toString(),
+        ),
+        data: null,
+      );
+    }
+  }
+
+  /// Derives an item's terminal result from its ordered evaluations: a clean
+  /// correct pair (first evaluation correct) → `perfect`; a wrong-before-correct
+  /// (first evaluation wrong) or never-correct (no evaluations) path → `forgot`.
+  AttemptResult _deriveTerminal(Iterable<StudyMatchEvaluationRow> itemEvals) {
+    final Iterator<StudyMatchEvaluationRow> it = itemEvals.iterator;
+    if (!it.moveNext()) {
+      return AttemptResult.forgot; // never evaluated
+    }
+    return it.current.isCorrect ? AttemptResult.perfect : AttemptResult.forgot;
   }
 }

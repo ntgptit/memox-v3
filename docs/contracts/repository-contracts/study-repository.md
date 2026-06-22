@@ -170,3 +170,4 @@ strict and must surface the corruption instead of hiding it.
 - `lib/data/datasources/local/daos/study_session_dao.dart`
 - `lib/domain/entities/match_evaluation.dart`
 - `lib/domain/usecases/study/record_match_evaluation_usecase.dart`
+- `lib/domain/srs/srs_due.dart` (`dueAtFor` — shared by both finalize paths)

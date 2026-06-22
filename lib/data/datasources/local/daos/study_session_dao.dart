@@ -138,6 +138,43 @@ class StudySessionDao {
     );
   });
 
+  /// Finalizes a Match session in one transaction (WBS 4.5.4 / WP-SM2): inserts
+  /// the derived terminal [attempts], marks every [answeredItemIds] item answered
+  /// at [now], upserts the [progressUpserts] (each companion MUST carry every
+  /// preserved column, see [finalizeSession]), and marks the session completed.
+  Future<void> finalizeMatchSession({
+    required String sessionId,
+    required List<StudyAttemptsCompanion> attempts,
+    required List<String> answeredItemIds,
+    required List<FlashcardProgressCompanion> progressUpserts,
+    required int now,
+  }) => _db.transaction(() async {
+    for (final StudyAttemptsCompanion attempt in attempts) {
+      await _db.into(_db.studyAttempts).insert(attempt);
+    }
+    for (final String itemId in answeredItemIds) {
+      await (_db.update(
+        _db.studySessionItems,
+      )..where((t) => t.id.equals(itemId))).write(
+        StudySessionItemsCompanion(
+          answeredAt: Value<int>(now),
+          updatedAt: Value<int>(now),
+        ),
+      );
+    }
+    for (final FlashcardProgressCompanion upsert in progressUpserts) {
+      await _db.into(_db.flashcardProgress).insertOnConflictUpdate(upsert);
+    }
+    await (_db.update(
+      _db.studySessions,
+    )..where((t) => t.id.equals(sessionId))).write(
+      StudySessionsCompanion(
+        status: const Value(statusCompleted),
+        updatedAt: Value<int>(now),
+      ),
+    );
+  });
+
   /// The current Leitner box of [flashcardId] from `flashcard_progress`, or
   /// `null` when the card has no progress row yet (a new card).
   Future<int?> flashcardProgressBox(String flashcardId) async {

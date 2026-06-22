@@ -12,8 +12,8 @@ import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_session_result.dart';
 import 'package:memox/domain/repositories/study_repository.dart';
-import 'package:memox/domain/srs/box_intervals.dart';
 import 'package:memox/domain/srs/srs_box.dart';
+import 'package:memox/domain/srs/srs_due.dart';
 import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -362,6 +362,14 @@ class StudyRepositoryImpl implements StudyRepository {
         );
       }
 
+      // Match sessions persist append-only evaluations (not per-item attempts),
+      // so their items are never marked answered mid-session. If this session has
+      // any match evaluations, finalize via the Match branch (derive one terminal
+      // attempt per item from the evaluations) — WBS 4.5.4 / WP-SM2.
+      if (await _dao.matchEvaluationCount(sessionId) > 0) {
+        return _matchEvaluations.finalize(sessionId: sessionId, now: now);
+      }
+
       final List<StudySessionItemRow> items = await _dao.itemsForSession(
         sessionId,
       );
@@ -406,7 +414,7 @@ class StudyRepositoryImpl implements StudyRepository {
           FlashcardProgressCompanion.insert(
             flashcardId: item.flashcardId,
             boxNumber: Value<int>(boxAfter),
-            dueAt: Value<int?>(_dueAtFor(now, boxAfter)),
+            dueAt: Value<int?>(dueAtFor(now, boxAfter)),
             reviewCount: Value<int>((progress?.reviewCount ?? 0) + 1),
             lapseCount: Value<int>(
               (progress?.lapseCount ?? 0) +
@@ -585,24 +593,5 @@ class StudyRepositoryImpl implements StudyRepository {
       return AttemptResult.recovered;
     }
     return last;
-  }
-
-  /// The due time for a card entering [box] when finalized at [nowMs]:
-  /// `localMidnight(studyDay + interval[box])` (WBS 4.6.4). Computed in Dart
-  /// (local time), never via a SQLite `localtime` modifier, so "due today"
-  /// counts stay stable across the day.
-  int _dueAtFor(int nowMs, int box) {
-    final DateTime nowLocal = DateTime.fromMillisecondsSinceEpoch(
-      nowMs,
-    ).toLocal();
-    final DateTime studyDayMidnight = DateTime(
-      nowLocal.year,
-      nowLocal.month,
-      nowLocal.day,
-    );
-    final DateTime due = studyDayMidnight.add(
-      Duration(days: BoxIntervals.daysFor(box)),
-    );
-    return due.millisecondsSinceEpoch;
   }
 }

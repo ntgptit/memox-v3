@@ -23,7 +23,7 @@ applies_to: SRS algorithm, flashcard_progress, review session finalization
 - `lib/data/datasources/local/drift/flashcard_progress.drift`
 - `lib/data/datasources/local/drift/study_attempts.drift`
 - `lib/data/repositories/study_repository_impl.dart` (canonical owner of finalization in V1:
-  `finalizeStudySession` + `_terminalResult` classifier + `_dueAtFor`; also `recordStudySessionAnswer`,
+  `finalizeStudySession` + `_terminalResult` classifier + `dueAtFor`; also `recordStudySessionAnswer`,
   WBS 4.4.1 — the in-session answer path, which records `study_attempts.box_before`/`box_after`
   and keeps `flashcard_progress` unchanged until finalization).
 - `lib/domain/srs/srs_box.dart` (`SrsBox.nextBox` box transition) +
@@ -219,7 +219,7 @@ The due query must:
 Any SRS behavior change must update:
 
 - `lib/data/repositories/study_repository_impl.dart` (finalization: `finalizeStudySession` /
-  `_terminalResult` / `_dueAtFor`) and `lib/domain/srs/{srs_box,box_intervals}.dart` (transition +
+  `_terminalResult` / `dueAtFor`) and `lib/domain/srs/{srs_box,box_intervals}.dart` (transition +
   interval owners)
 - This doc (transition table and/or interval table)
 - `docs/business/study/study-flow.md` if flow changes
@@ -277,5 +277,5 @@ Any SRS behavior change must update:
 - `lib/data/repositories/study_repository_impl.dart` — finalization write path
   (`finalizeStudySession`): computes the final per-card result from persisted attempts
   (`_terminalResult`), applies the box transition (`SrsBox.nextBox`), and computes the
-  local-midnight due date (`_dueAtFor` via `BoxIntervals.daysFor`), all in one transaction
+  local-midnight due date (`dueAtFor` via `BoxIntervals.daysFor`), all in one transaction
   (`StudySessionDao.finalizeSession`), WBS 4.6.1/4.6.2/4.6.4.

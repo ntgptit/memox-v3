@@ -56,7 +56,7 @@ This overview lists product capabilities. The detailed contract for each lives i
 | Daily new-card limit| Implemented (BE — WBS 4.5.10; new-card eligibility cap per local day)| `docs/business/srs/srs-review.md`|
 | Answer re-grade before finalize| Specified (ships with first retry mode)| `docs/business/study/study-flow.md`|
 | Manual-create duplicate soft-warning| Specified (BE Implemented — WBS 2.20.1)| `docs/business/flashcard/flashcard-management.md`|
-| Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `_dueAtFor`)| `docs/business/srs/srs-review.md`|
+| Due-time local-midnight normalization| Implemented (BE — WBS 4.6.4, finalization `dueAtFor`)| `docs/business/srs/srs-review.md`|
 | Card history view| Specified| `docs/business/history/card-history.md`, `docs/wireframes/09-flashcard-history.md`|
 | Inline/scope-local search| V1 guideline| `docs/business/search/global-search.md`|
 | Global search screen (folders/decks/flashcards)| Implemented (WBS 3.5.1 BE + 3.5.2/3.5.3 FE) — top-level `/search` with a bottom search dock (design redesign)| `docs/business/search/global-search.md`, `docs/wireframes/11-library-search.md`|
