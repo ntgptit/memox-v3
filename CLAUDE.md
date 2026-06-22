@@ -220,6 +220,16 @@ viết báo cáo cuối**, tự fan-out **song song** (một lượt, nhiều `A
   design-system, tool/verify).
 - `docs-drift-detector` — quét doc-code drift còn sót (path/symbol/test-ref ma, WBS gap, ARB).
 
+**Diff là đơn vị review (không commit trước).** Mọi review-subagent fan-out (gồm cả
+`srs-reviewer`, `ui-parity-checker` khi áp dụng) phải anchor trên **working-tree diff**, KHÔNG
+phải whole-file và KHÔNG commit trước để "có cái mà diff". Trong prompt fan-out, chỉ thị reviewer:
+chạy `git add -N .` (intent-to-add để file mới cũng hiện trong diff) rồi `git diff` — đó là toàn
+bộ thay đổi chưa commit (sửa + mới); với file mới, diff degenerate thành full content nên không
+cần phân biệt nhánh "mới vs sửa". Chỉ mở whole-file khi cần bối cảnh ngoài 3 dòng context của
+hunk. Lý do không commit trước: giữ đúng thứ tự `verify → review → sửa blocker → commit` (commit
+trước = đẩy code chưa review vào history, review ra Critical thì phải amend), và tránh pre-commit
+hook `--check-marker` chặn commit giữa chừng.
+
 Xử lý kết quả:
 
 - Tổng hợp finding của cả hai vào section `Subagent review` của báo cáo.
