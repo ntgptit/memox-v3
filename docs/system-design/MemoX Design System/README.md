@@ -23,6 +23,40 @@ MemoX screens are built from.
 
 ---
 
+## Running locally
+
+This is **not** a bundled React app — there is no `package.json`, build step, or
+`node_modules`. The Mobile UI Kit is a static HTML gallery
+(`ui_kits/mobile/index.html`) that loads React 18 (UMD) + Babel standalone + Lucide
+from CDN and compiles `screens/*.jsx` in the browser at runtime.
+
+**Requirements:** any static HTTP server (Python or Node) **and an internet
+connection** (for the CDN scripts). You must serve over HTTP — opening
+`index.html` via `file://` fails because Babel fetches the `.jsx` files over XHR
+(CORS). Serve from **this folder** (the `index.html` links `../../colors_and_type.css`).
+
+**One-click (Windows):** double-click `run.cmd` in this folder. It starts a local
+server, opens the browser at the right URL, prefers Python and falls back to Node.
+Stop it with `Ctrl+C`.
+
+**Manual:**
+
+```bash
+cd "docs/system-design/MemoX Design System"
+
+python -m http.server 8753          # Python
+# or
+npx http-server -p 8753 .           # Node
+```
+
+Then open: `http://127.0.0.1:8753/ui_kits/mobile/index.html`
+
+> The gallery is for a quick browse / control order / copy text. The **canonical
+> visual mock** for each screen is the PNG set under `ui_kits/mobile/shots/`
+> (look up via `shots/INDEX.md`); exact measurements live in `ui_kits/mobile/specs/`.
+
+---
+
 ## Index (root manifest)
 
 | Path | What |
@@ -35,6 +69,7 @@ MemoX screens are built from.
 | `components/mobile/` | NoteCard (the signature memo tile). |
 | `guidelines/` | Foundation specimen cards (Colors / Type / Spacing / Brand). |
 | `SKILL.md` | Agent-Skills front-matter for use in Claude Code. |
+| `run.cmd` | **Local launcher** (Windows) — starts a static server and opens the gallery. See *Running locally* above. |
 | `tools/check-ui-kit.js` | **Adherence linter** — `node tools/check-ui-kit.js` checks the UI kit for hardcoded colors, undefined tokens, missing bundle guards, raw px, and shared-primitive usage. Exit 0 = clean. |
 
 ### Components
