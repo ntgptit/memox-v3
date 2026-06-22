@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_scoped_search_dock.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
 
@@ -18,6 +19,7 @@ Widget _gallery() => Padding(
         hintText: 'Search your library',
         controller: TextEditingController(text: 'languages'),
       ),
+      const MxScopedSearchDock(child: MxSearchField(hintText: 'Search')),
     ],
   ),
 );

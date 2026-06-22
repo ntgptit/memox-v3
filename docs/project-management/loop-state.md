@@ -45,9 +45,11 @@ last_updated: 2026-06-22
 
 ## Follow-up cleanups (logged, not blocking)
 
-- Shared-dock dedup: `LibrarySearchDock` + `FolderDetailSearchDock` are near-identical (dock chrome
-  + a provider-synced field). Extract a shared `MxScopedSearchDock({child})` once both consumers are
-  stable. (`MxSearchDock` stays separate — its onChanged-only API can't host the synced field.)
+- ✅ **DONE (2026-06-22):** Shared-dock dedup — extracted `MxScopedSearchDock({child})`
+  (`lib/presentation/shared/widgets/inputs/mx_scoped_search_dock.dart`); `LibrarySearchDock` +
+  `FolderDetailSearchDock` + `FlashcardListSearchDock` (a **third** near-identical dock the fan-out caught)
+  are now thin wrappers. Behavior-preserving (no golden changes); test in `mx_inputs_test.dart`.
+  (`MxSearchDock` stays separate — its onChanged-only API can't host the synced field.)
 - Search-mode app-bar icons: kit Decks/loaded states show only overflow (folder) / sort (library);
   the search-toggle + sort icons are kept as post-redesign affordances (documented variance). A
   future pass could hide search+sort while `searching` to match the mock exactly — apply to BOTH

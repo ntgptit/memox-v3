@@ -181,6 +181,11 @@ Redesign tokens & components (design redesign):
   (wired into global Search `/search`); `Breadcrumb` → `MxBreadcrumb` (wired into
   nested screens); `ShortcutRow`/`DueSummary` → `MxShortcutRow`/`MxDueSummary`;
   `Insight`/`GoalRing` → `MxInsight`/`MxGoalRing`; the kit `IconTile` → `MxIconTile`.
+- `MxScopedSearchDock({child})` — the scoped-list variant of the `.search-dock` chrome
+  (surface + top hairline + safe area) hosting a **caller-provided, provider-synced**
+  search field; shared by the Library / Folder-detail / Flashcard-list search docks.
+  Distinct from `MxSearchDock` (onChanged-only, owns its field — can't host a synced
+  controller).
   The `MxShortcutRow`/`MxDueSummary`/`MxInsight`/`MxGoalRing` widgets exist and are
   golden-tested, but their consuming **Dashboard (`/home`) and Progress (`/progress`)
   screens are deferred** — they need read-model BE and (for goal/streak) the

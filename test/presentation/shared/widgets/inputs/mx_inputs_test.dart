@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_scoped_search_dock.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
 
@@ -46,6 +47,19 @@ void main() {
       await tester.pump();
       expect(find.byIcon(Icons.close), findsNothing);
       expect(latest, '');
+    });
+  });
+
+  group('MxScopedSearchDock', () {
+    testWidgets('hosts the given child inside the dock chrome', (tester) async {
+      await pumpThemed(
+        tester,
+        const MxScopedSearchDock(child: Text('scoped-field')),
+      );
+      expect(find.text('scoped-field'), findsOneWidget);
+      // The dock owns the top-hairline surface chrome + the home-indicator safe area.
+      expect(find.byType(DecoratedBox), findsWidgets);
+      expect(find.byType(SafeArea), findsOneWidget);
     });
   });
 }

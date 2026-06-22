@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:memox/core/theme/mx_colors.dart';
-import 'package:memox/core/theme/mx_spacing.dart';
-import 'package:memox/core/theme/mx_stroke.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/folders/viewmodels/folder_detail_viewmodel.dart';
 import 'package:memox/presentation/shared/hooks/mx_search_controller_hooks.dart';
+import 'package:memox/presentation/shared/widgets/inputs/mx_scoped_search_dock.dart';
 import 'package:memox/presentation/shared/widgets/inputs/mx_search_field.dart';
 
 /// Inline folder-detail search field, bound to `folderSearchQueryProvider`
@@ -40,40 +38,17 @@ class FolderDetailSearchField extends HookConsumerWidget {
 }
 
 /// The folder-detail search-mode bottom dock (kit `04` Search state `search-dock`):
-/// a flat full-bleed bar pinned at the foot — a top hairline over a surface fill —
-/// hosting the autofocused [FolderDetailSearchField]. The regular folder app bar
-/// (title + sort + overflow) stays above it and the FAB is suppressed while
-/// searching, matching the mock.
-///
-/// Mounted in the `Scaffold.bottomNavigationBar` slot (via `MxScaffold`) so it
-/// renders flat and full-bleed — no rounded/elevated BottomSheet chrome — and
-/// reserves its own foot room under the content. Mirrors `LibrarySearchDock`
-/// (object 1, WP-L10). WBS 3.2.2.
+/// the shared [MxScopedSearchDock] chrome hosting the autofocused
+/// [FolderDetailSearchField]. The regular folder app bar (title + sort +
+/// overflow) stays above it and the FAB is suppressed while searching, matching
+/// the mock. Mirrors `LibrarySearchDock`. WBS 3.2.2.
 class FolderDetailSearchDock extends StatelessWidget {
   const FolderDetailSearchDock({required this.folderId, super.key});
 
   final String folderId;
 
   @override
-  Widget build(BuildContext context) {
-    final MxColors colors = context.mxColors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        border: Border(
-          top: BorderSide(color: colors.divider, width: MxStroke.hairline),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: MxSpacing.screen,
-            vertical: MxSpacing.space3,
-          ),
-          child: FolderDetailSearchField(folderId: folderId, autofocus: true),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => MxScopedSearchDock(
+    child: FolderDetailSearchField(folderId: folderId, autofocus: true),
+  );
 }
