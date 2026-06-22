@@ -14,9 +14,15 @@ per loop. Visual-only; behavior is docs-owned.
   study. Screens WITHOUT FE (no `lib/presentation/features/**` screen) → no-FE-yet, out of scope:
   01 onboarding, 09 history, 10 import, 11 tags, 18 stats, 19 progress, 20-25 settings/account/learning/
   audio/appearance/language. (See parity-deferred no-FE-yet block.)
-- **NEXT: 05 Library search** — last remaining FE-built screen to audit (`global_search_screen`).
-  02 Dashboard audited (done modulo redesign-deferred — see below). After 05, all FE screens covered →
-  sanity check + terminal summary.
+- **ALL FE screens AUDITED** (03/04/06/07/08/12-17/02/05). Concrete pixel fixes landed where token-
+  available; remaining gaps validly deferred. Residual diff.py % across screens is Ahem test-font
+  rendering (harness limitation, not a parity failure); ui-parity-checker (actual images) passed on
+  reviewed screens.
+- **NEXT eligible substantive WP: app-wide MxTextField field-fill** (kit `accent-contrast` vs FE
+  `surfaceMuted` — real visual divergence, NOT a valid defer per "khác biệt visual"). Do it properly:
+  change `mx_text_field.dart` `fillColor: surfaceMuted → surface`, regen ALL field goldens in ONE
+  `--update-goldens --test <all field test paths>` pass (editor, folder dialogs, all search docks,
+  study fill, shared mx_inputs), prove pass w/o --update, fan-out. Then re-assess terminal.
 
 ### Screen 02 — Dashboard: AUDITED, done (modulo redesign-deferred)
 FE = redesigned quiet surface (MxDueSummary + Progress/Library shortcuts); its states (loading/error/
@@ -89,7 +95,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 07/08 | Flashcard editor | yes | done 2026-06-23 | done (modulo deferred) | create-valid golden added; validation behavior-owned; field-fill/deck-selector/Note deferred |
 | 12-17 | Study modes + result | yes | done 2026-06-23 | done (modulo deferred) | states covered; mode interactions behavior-owned (swipe/board vs kit flip); 17 Future blocks deferred |
 | 02 | Dashboard | yes | done 2026-06-23 | done (modulo deferred) | FE states golden-covered; kit-02 engagement layout = redesign-deferred (scope-owned) |
-| 05 | Library search | yes | — | — | next: audit global_search_screen |
+| 05 | Library search | yes | done 2026-06-23 | done (modulo deferred) | full 5/5 state coverage; residual Ahem-noise; field-fill shared-deferred |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |
