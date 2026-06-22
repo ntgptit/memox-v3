@@ -124,11 +124,12 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       otherwise Dashboard; §Agent rule) + loading/error. Mock-`17` accuracy ring / Goal & streak /
       "Due next" / "Keep studying" = Future. Row S92; ARB ×12; nav-flow + WBS 4.7.2 Partial; loaded
       goldens. 3-reviewer fan-out (Done go-not-pop folded).
-- [ ] **WP-SR5b — result variant states.** The status-driven **save-failed** (`session.status =
-      failed_to_finalize` → top retry banner "Some data couldn't be saved" + Retry re-runs finalize;
-      Done still leaves) + **defensive** (zero answered → "No cards answered" notice) states +
-      goldens for loading/save-failed/defensive (light+dark). `goal-off`/`tough-empty` map to loaded
-      (their blocks are Future). Decision rows + tests per state.
+- [x] **WP-SR5b — result variant states.** `7a9ae4a`: the status-driven **save-failed**
+      (`session.status == failedToFinalize` → danger banner "Couldn't save your results" + a **Retry
+      save** re-running finalize; **Done stays enabled**) + **defensive** (`answeredCount == 0` → a "No
+      cards answered" notice + Done) states + save-failed & defensive goldens (light+dark). The body is
+      now an `Expanded`-scroll + pinned footer (no overflow). `goal-off`/`tough-empty` map to loaded
+      (Future blocks). Row S93; ARB ×4; WBS 4.7.2 → **Implemented (V1)**. **Object 6 COMPLETE.**
 - [ ] **Objects 7-10 (Match/Guess/Recall/Fill)** — reuse the WP-SR2 shell + WP-SR5 result; each adds
       its own grade grammar (independent; not blocked by Review's grade question — shared only at
       BE finalization/result).
