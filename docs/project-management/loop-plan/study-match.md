@@ -97,9 +97,12 @@ chrome), keeping (b) (the phase chain) as a separate object. Read `study-flow.md
 - [ ] **WP-SM4b — board chrome (FE, deferred polish).** The **Shuffle & restart** secondary bar
       (re-shuffle the current board + reset its progress), the mistake counter (ICU plural), and the
       count-up timer (M:SS, non-blocking). Lower-value than WP-SM5; build after the loop is end-to-end.
-- [ ] **WP-SM5 — board progression + finalize → result.** Board clear → fade → next board; last board
-      → `FinalizeStudySessionUseCase` → reuse the SR5 result route/screen. Tests for multi-board
-      advance + finalize-on-last. Then **object 7 COMPLETE** → object 8 (Guess) reuses this shell.
+- [x] **WP-SM5 — board progression + finalize → result.** `b9cec66`: clearing a board advances
+      (after `AppMotion.matchBoardAdvance`) to the next (S96); the last board marks the view `finished`
+      → `MatchSessionScreen._finish` = `FinalizeStudySessionUseCase` + `pushReplacementNamed(studyResult)`
+      reusing the SR5 result (S97). `boardsDone`/session-wide `matchedCount` vs per-board `matchedOnBoard`.
+      13 tests (multi-board advance + finalize→route). **Match is playable end-to-end; WBS 4.5.5 →
+      Implemented (V1).** Only WP-SM4b chrome remains. → object 8 (Guess) reuses this shell + result.
 
 ## PRECEDENCE / rules (from wireframe 14 §Forbidden + §Board composition)
 
