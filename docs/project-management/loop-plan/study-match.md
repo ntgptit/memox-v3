@@ -68,7 +68,7 @@ chrome), keeping (b) (the phase chain) as a separate object. Read `study-flow.md
       `study_tables.drift`; `currentSchemaVersion` 7→8 + `migrateV7ToV8` + `v8_add_match_evaluations.dart`;
       schema-contract + migration-contract + drift-guide; v8 migration test + schema-assert 7→8.
       Schema-only/additive (no behavior — mirrors v6/v7 enablers). Corrected the wireframe-14 drift-note.
-- [ ] **WP-SM1b — Match BE: evaluation persistence (WBS 4.5.4, part 1b).** `MatchEvaluation` entity +
+- [x] **WP-SM1b — Match BE: evaluation persistence (WBS 4.5.4, part 1b).** `a99cdc8`: `MatchEvaluation` entity +
       `study_session_mapper` rows; `recordMatchEvaluation(...)` (append the eval row — `attempt_order` =
       next per-session seq, `flashcard_id` = `expectedFrontFlashcardId`, `evaluated_at`/`created_at` = now
       — + touch `study_sessions.updated_at`) and `loadMatchEvaluations(sessionId)` (ordered by
