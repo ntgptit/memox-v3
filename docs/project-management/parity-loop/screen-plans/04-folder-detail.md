@@ -81,7 +81,13 @@ Subfolders state: rows are folder rows (`LibraryFolderTile`, already audited in 
    13/400 textSecondary (bodySmall) ✓, leading tile accent-tint icon20 ✓. Residual: chip weight is
    labelSmall 11/600 vs kit 11/700 (no 11/700 role; <neg). decks diff ~13% Ahem-noise-dominated;
    chip now visually solid-indigo matching the shot. Goldens: folder_detail_decks + deck_tile_studied.
-4. **FolderStatsCard audit**: 3 equal cols, Due col tint accent@12%, value 26/800 -0.5, label 13/600, Due color accent.
+4. **FolderStatsCard audit** — ✅ WP DONE (2026-06-23): value typography titleLarge(18/600)→
+   displayMedium(26/700 -0.5) — kit value is 26/800 -0.5 (no 26/800 role; weight 700 residual).
+   Col padding vertical12→ pad 8/4 (V space2 / H space1) per kit. 3 equal Expanded cols ✓; Due col
+   highlighted accentSoft + accent value/label ✓. Residual: label 11/600 (labelSmall) vs kit 13/600
+   — no 13/600 role (needs-token). NOTE: diff.py rose (decks 13.04→13.46, subfolders 10.96→11.39)
+   because the now-correct 26px value renders as larger Ahem blocks — value size is RIGHT (verified
+   visually); diff.py penalizes text enlargement under Ahem rendering.
 5. **delete-confirm golden** (missing state).
 6. **move-sheet golden** (missing state).
 
