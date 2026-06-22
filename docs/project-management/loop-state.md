@@ -7,31 +7,30 @@ last_updated: 2026-06-22
 
 ## Cursor
 
-- **Active object:** 10 — Study — Fill — **objects 6 (Review) + 7 (Match) + 8 (Guess) + 9 (Recall) are
-  COMPLETE** (all playable end-to-end). Object 10 reuses the session shell + the SR5 result + the SRS
-  finalization. **Fill is the only TypedAnswer mode** (`FillStudyModeStrategy extends
-  TypedAnswerStudyModeStrategy`, `evaluate(input, expected, hintUsed, markCorrect)` — strict trim-only
-  match, hint-taint + mark-correct cap at `recovered`, WBS 4.5.8 Implemented). Audit FE-readiness, then CHẺ.
-  Plans: `loop-plan/study-{review,match,guess,recall}.md` (anchors).
-- **Current work-package:** **OBJECT 9 (Recall) — COMPLETE (WP-RC1, binary flip-card self-grade).**
-  Audit-first corrected a wrong cursor assumption: Recall is a **flip-card self-grade** (`RecallStudyModeStrategy
-  extends BinaryGradeStudyModeStrategy`), NOT typed free-recall (that's Fill). `?mode=recall` →
-  `RecallSessionScreen` (S94); front prompt → **Show answer** reveals the green ANSWER card → binary
-  **Missed**(`forgot`)/**Got it**(`perfect`) → record + advance → last card finalizes → SR5 (`85a2c67`, S66).
-  WBS 4.5.11 → Partial (WP-RC1). **Mock conflict flagged:** revealed mock shows a 3-way Missed/Partial/Got-it;
-  built binary per S66 (PRECEDENCE #1) — Partial would need a grade extension + decision update.
-  **NEXT: object 10 — Study — Fill (BE-first audit, then CHẺ).** Fill = typed production: show the back
-  (definition/hint), type the **front** in a free-text input; strict-match `TypedAnswerStudyModeStrategy.evaluate`
-  (V1 case-sensitive trim-only) → `perfect`/`forgot`, with a **Mark-correct** override + **Hint** taint both
-  capping at `recovered`. BE Implemented (WBS 4.5.8) — likely FE-only. Read `docs/wireframes/17-study-session-fill.md`
-  + shots + `study-flow.md` (fill row) + decision rows. Reuse the session shell + a NEW grade path (typed
-  evaluate, not `mapGotItAction`) + SR5. **Deferred:** WP-RC2 (Recall countdown/timeout, S63/S64), WP-RC3
-  (Recall Edit/TTS, S65); WP-SG3 (Guess long-press); WP-SM4b (Match polish); WP-SR4b-2 (Edit), WP-SR1b-2c,
-  WP-SR2b; object-5 WP-FL2b2b (Tags).
-- **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
-  after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
-- **Branch:** `feat/loop-library`; latest code commit `85a2c67` (WP-RC1 — Recall flip-card self-grade,
-  **Recall done end-to-end**; prior `6d2ad59` WP-SG2 Guess done, `b9cec66` WP-SM5 Match done).
+- **🎉 MILESTONE — ALL 5 STUDY MODES COMPLETE (V1, 2026-06-22):** Review (6) + Match (7) + Guess (8) +
+  Recall (9) + Fill (10) all play end-to-end on one shared spine (session shell + exit-confirm +
+  `MxLinearProgress` + the `?mode=` dispatch + SRS finalization + the SR5 result). The study-mode chain
+  (objects 6-10) is done. Plans: `loop-plan/study-{review,match,guess,recall,fill}.md`.
+- **Current work-package:** **OBJECT 10 (Fill) — COMPLETE (WP-FI1, typed check/grade).** `?mode=fill` →
+  `FillSessionScreen` (S94, `HookConsumerWidget` + `useMxTextSubmitState`); hint card (back) → free-text
+  field → **Check** strict trim-only match of the front via `FillStudyModeStrategy.evaluate` (`studyMode:
+  fill`) → `perfect`(✓+Next) / `forgot`(CORRECT ANSWER + Retry/Next) → record + advance → last card
+  finalizes → SR5 (`a6f37b5`, S67/S68/S70/S71/S74). WBS 4.5.9 → Partial. **Conflicts flagged:** mock grades
+  the reading (built front-graded per S68); the `recovered` path (Hint/Mark-correct) deferred WP-FI2.
+  **NEXT — the study-mode chain is done; pick from the remaining backlog (greenfield first):**
+  1. **Object-5 WP-FL2b2b (Tags chip input)** — the only remaining greenfield object node (parked "resume
+     after Study" per owner; Study is now done). Read `docs/business/tags/tag-system.md` +
+     `docs/contracts/usecase-contracts/tag.md` + the flashcard-edit wireframe. **Audit-first** (does the
+     tag BE/read model exist?).
+  2. **Study-mode polish (deferred WP-*2/3):** WP-FI2 (Fill: Hint + Mark-correct → `recovered`, countdown,
+     Finish callout S73, finalize-fail S75, Edit/TTS), WP-RC2 (Recall countdown/timeout S63/S64), WP-RC3
+     (Recall Edit/TTS S65), WP-SG3 (Guess long-press card-actions), WP-SM4b (Match Shuffle&restart/timer/
+     mistake counter), WP-SR4b-2 (Review Edit), WP-SR1b-2c, WP-SR2b.
+  Recommend **Tags first** (greenfield > polish, per the loop's outer→inner order).
+- **Parked (object 5):** WP-FL2b2b (Tags chip input) — now the **top** next item (Study done). Object 5
+  otherwise evidence-confirmed through WP-FL2b3b.
+- **Branch:** `feat/loop-library`; latest code commit `a6f37b5` (WP-FI1 — Fill typed check/grade,
+  **Fill done → all 5 modes done**; prior `85a2c67` WP-RC1 Recall done, `6d2ad59` WP-SG2 Guess done).
 - **Last verify:** PASS (code chain, guard 0 errors) — WP-SR1b-2b tree + review-fix. **Fan-out now
   complete:** docs-drift PASS; code-reviewer APPROVE + ui-parity PASS (re-ran after the 529 overload
   cleared). Folded 2 Importants: fallback-Back `fullWidth`, + a "Study new instead" navigation test
@@ -72,31 +71,29 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 7 | Study — Match | **DONE (V1, 2026-06-22).** BE (WP-SM1a/1b/2, 4.5.4 Implemented, S54–S57) + FE board shell (WP-SM3, S94) + tap-pair FSM (WP-SM4, S95) + **progression + finalize→result (WP-SM5, S96/S97)** — **playable end-to-end** (`?mode=match` → board → match all pairs across boards → finalize → SR5 result). WBS 4.5.5 Implemented (V1). Deferred polish: WP-SM4b (Shuffle&restart / mistake counter / timer). |
 | 8 | Study — Guess | **DONE (V1, 2026-06-22).** BE Implemented (4.5.6 `buildOptions`) + shell (WP-SG1, S94) + **select-to-grade (WP-SG2, S60–S62)** — tap an option → binary record (correct→`perfect`/wrong→`forgot`), reveal green ✓ / red ✗ + dim others, auto-advance countdown footer (`AppMotion.guessReveal*`, tap-to-skip), last card finalizes → SR5 result. **Playable end-to-end.** WBS 4.5.7 Implemented (V1). Deferred: WP-SG3 (long-press option card-actions). |
 | 9 | Study — Recall | **DONE (V1, 2026-06-22).** Audit corrected the type: Recall = **flip-card self-grade** (`BinaryGradeStudyModeStrategy`), not typed. WP-RC1 (S66, S94): `?mode=recall` → `RecallSessionScreen`; front → **Show answer** → green ANSWER card → binary **Missed**(`forgot`)/**Got it**(`perfect`) → record + advance → SR5. **Playable end-to-end.** WBS 4.5.11 Partial. Mock conflict flagged (3-way Partial not built). Deferred: WP-RC2 (countdown/timeout S63/S64), WP-RC3 (Edit/TTS S65). |
-| 10 | Study — Fill | **ACTIVE next — BUILD (audit-first).** Typed production (`FillStudyModeStrategy`/`TypedAnswerStudyModeStrategy.evaluate`, WBS 4.5.8 BE Implemented): show back → type the front → strict match → `perfect`/`forgot`, with Mark-correct + Hint capping at `recovered`. Reuse the session shell + a NEW typed-grade path + SR5. Wireframe `17`. |
+| 10 | Study — Fill | **DONE (V1, 2026-06-22).** WP-FI1 (S67/S68/S70/S71/S74, S94): `?mode=fill` → `FillSessionScreen`; hint (back) → type the front → **Check** strict trim-only match via `FillStudyModeStrategy.evaluate` → `perfect`(✓+Next) / `forgot`(CORRECT ANSWER + Retry/Next) → record + advance → SR5. **Playable end-to-end.** WBS 4.5.9 Partial. Front-graded per S68 (mock reading-grading flagged). Deferred WP-FI2: Hint/Mark-correct (`recovered`), countdown, Finish callout, finalize-fail, Edit/TTS. |
 
 ## Next action
 
-**Start object 10 — Study — Fill (AUDIT-FIRST, then CHẺ + build) — the LAST study mode.** Objects 6
-(Review) + 7 (Match) + 8 (Guess) + 9 (Recall) are DONE end-to-end. Fill = typed **production**: show the
-**back** (definition / hint), type the **front** in a free-text input; the answer is graded by a strict
-evaluator — `FillStudyModeStrategy extends TypedAnswerStudyModeStrategy`, `evaluate(input, expected,
-hintUsed, markCorrect)` (V1 case-sensitive, trim-only) → `perfect` / `forgot`, with a **Mark-correct**
-override + **Hint** taint both capping at `recovered`. This is the **only** typed mode + the only one that
-emits `recovered`. **BƯỚC 1 audit (TRUST POLICY — confirm by evidence):**
-1. Read `docs/wireframes/17-study-session-fill.md` + the shots (`shots/INDEX.md` — likely `16-study-fill`
-   given the offset) + `docs/business/study/study-flow.md` (the `fill` row + `recovered` grammar) +
-   decision rows for fill.
-2. Audit the **Fill BE**: confirm `FillStudyModeStrategy.evaluate` (WBS 4.5.8) + how `recovered` is
-   persisted (does `RecordStudySessionAnswerUseCase` take the evaluated `AttemptResult` directly, incl.
-   `recovered`?). Grep `lib/domain/study/modes/` + `study_repository*` for `evaluate`/`recovered`/Fill.
-   Likely **FE-only** (the evaluator is built). The grade is NOT `mapGotItAction` — it's the typed
-   `evaluate(...)`, so the controller differs from Recall/Guess (no binary tap; a text submit).
-3. CHẺ into slices (`?mode=fill` → shell + text input → submit→evaluate→reveal correct/wrong + Mark-correct
-   + Hint → record `evaluate` result → advance → reuse SR5). Mirror the Guess/Recall slicing. Watch the
-   mock↔wireframe offset-numbering + the mock↔doc behavior-conflict pattern (Recall had a 3-grade mock vs
-   binary doc — re-check Fill's mock against the documented evaluate grammar before building).
-PRECEDENCE: behavior → study-flow.md + wireframe 17 win over mock; mock wins VISUAL (no pill, blue
-progress). Reuse the session shell, exit-confirm, `MxLinearProgress`, the SR5 result + finalize.
-**Deferred:** WP-RC2 (Recall countdown/timeout S63/S64), WP-RC3 (Recall Edit/TTS S65); WP-SG3 (Guess
-long-press); WP-SM4b (Match polish); WP-SR4b-2 (Edit), WP-SR1b-2c, WP-SR2b; object-5 WP-FL2b2b (Tags).
-Do NOT defer for greenfield.
+**The study-mode chain (objects 6-10) is COMPLETE — all 5 modes play end-to-end.** Pick the next item
+from the remaining backlog, **greenfield before polish** (the loop's outer→inner order):
+
+**RECOMMENDED NEXT — Object-5 WP-FL2b2b (Tags chip input) (AUDIT-FIRST, then CHẺ).** The only remaining
+greenfield object node; it was parked "resume after Study", and Study is now done.
+1. Read `docs/business/tags/tag-system.md` + `docs/contracts/usecase-contracts/tag.md` + the
+   flashcard create/edit wireframe (the tag field) + `where-is.md` row for tags.
+2. **Audit the Tag BE (TRUST POLICY):** does a tag entity + read model + usecases (`tag.md`) + a
+   `tags`/`flashcard_tags` schema exist? Grep `lib/domain/entities/`, `lib/domain/usecases/`,
+   `lib/data/datasources/local/drift/` for `tag`. **If the BE is missing, the first slice is BE**
+   (entity → schema + migration → repo/usecase → tests) per the BE-first invariant; if present, FE-only
+   (a tag chip input on flashcard create/edit). Watch the mock↔doc conflict pattern the study modes hit.
+3. CHẺ into slices; reuse existing chip / input components; copy → ARB; schema change ⇒ migration +
+   schema/migration docs + test in the same commit.
+
+**ALTERNATIVE — study-mode polish (deferred):** WP-FI2 (Fill: Hint + Mark-correct → `recovered`, the
+0.8s countdown, the last-card Finish callout S73, finalize-fail S75, Edit/TTS), WP-RC2 (Recall countdown/
+timeout S63/S64), WP-RC3 (Recall Edit/TTS S65), WP-SG3 (Guess long-press card-actions), WP-SM4b (Match
+Shuffle&restart/timer/mistake counter), WP-SR4b-2 (Review Edit), WP-SR1b-2c, WP-SR2b.
+
+PRECEDENCE unchanged: behavior → business docs + decision tables win over the mock; mock wins VISUAL;
+tokens; copy → ARB. Do NOT defer for greenfield.
