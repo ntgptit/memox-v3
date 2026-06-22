@@ -1,5 +1,5 @@
 ﻿---
-last_updated: 2026-06-14
+last_updated: 2026-06-22
 route: /library/study/session/:sessionId
 study_mode: review
 source_specs:
@@ -11,14 +11,17 @@ source_specs:
 
 # 13 — Study Session: Review Mode
 
-> **Status correction (2026-06-22): GREENFIELD — not yet built.** `lib/presentation/features/study/`
-> does **not exist**; there are no study routes and no `study_session_screen.dart`. The previous
-> iteration's "shipped (verified 2026-05-28)" claims below describe a surface that was wiped in the
-> 2026-06-19 reset and never rebuilt — treat **all** `lib/presentation/features/study/**` paths in
-> this file as the **target structure** to build, not as-built code. The BE is ready
-> (`ResolveStudyEntryStartUseCase`, `LoadStudySessionReviewUseCase`, `RecordStudySessionAnswerUseCase`,
-> `FinalizeStudySessionUseCase`, `LoadStudySessionResultUseCase`). The rebuild is planned, CHẺ into
-> slices WP-SR1..WP-SR5, in `docs/project-management/loop-plan/study-review.md`; WBS 4.5.3 = Specified.
+> **Status (2026-06-22): being rebuilt slice-by-slice (WP-SR1..SR5).** Built so far:
+> `lib/presentation/features/study/screens/study_session_screen.dart` renders the **shell + card
+> (WP-SR2)** — the `✕` exit + a blue progress bar (`MxProgressBar`) + `{answered}/{total}` count, and
+> the card showing **both sides at once** (front-side label → front → divider → back-side label → back
+> → example pill) via `studySessionReviewProvider` / `LoadStudySessionReviewUseCase`, with
+> loading/error/empty states. **Not yet built:** swipe-grade (WP-SR3), exit-confirm + card-actions
+> sheet (WP-SR4), finalize→result (WP-SR5). The front/back labels fall back to FRONT/BACK — the
+> language-specific labels (KOREAN/MEANING from `deck.target_language`) need the read model to carry the
+> language (WP-SR2b). Any other `lib/presentation/features/study/**` path below is **target structure**
+> until its slice lands. The mock `12-study-review--default` flip card is a documented visual gap —
+> behaviour follows §Rules (swipe, no reveal) per PRECEDENCE #1.
 
 ## Purpose
 
@@ -27,8 +30,8 @@ advances by swipe. Lightest mode in the 5-mode cycle; serves as the **anchor scr
 establishes the visual grammar reused by modes 14-17 (top app bar, progress bar, mode pill
 convention).
 
-> **Target V1 behaviour (greenfield — to build).** The review surface at
-> `/library/study/session/:sessionId` loads the persisted session + ordered
+> **Target V1 behaviour (full slice; shell+card built in WP-SR2, the rest WP-SR3..SR5).** The review
+> surface at `/library/study/session/:sessionId` loads the persisted session + ordered
 > session items, renders **both sides on one card**, grades by **swipe** (right =
 > `perfect`, left = `forgot`), shows the blue progress bar + exit confirmation,
 > and exposes the long-press card-actions sheet (Edit / Bury until tomorrow /

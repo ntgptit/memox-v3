@@ -89,11 +89,15 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       allSuspended → View suspended (`?filter=suspended`, deck scope); the "Next due in {relativeTime}"
       line from `nextDueAt`; the todayAllDone streak inset (needs engagement read model); the `?mode=`
       query. Lower-value polish — **deprioritized below WP-SR2** (the review session) per build-value.
-- [ ] **WP-SR2 — review session shell + card.** `study_session_screen.dart`: app bar (`✕` +
-      **blue** progress bar + `{answered}/{total}`), and the card (front-side label from
-      `deck.target_language`, front large-centered, divider, back-side label, back, example pill when
-      present). Loads `LoadStudySessionReviewUseCase`; loading/error/empty states. No grading yet
-      (static current card). Goldens for the card.
+- [x] **WP-SR2 — review session shell + card.** `<this commit>`: `StudySessionScreen` (replacing the
+      placeholder) loads `studySessionReviewProvider` (`LoadStudySessionReviewUseCase`) → app bar (`✕` +
+      blue `MxProgressBar` + `{answered}/{total}`) + the both-sides card (front-side label → front →
+      divider → back-side label → back → example pill) + loading/error/empty. New shared `MxProgressBar`
+      (guard `no_raw_progress_indicator`). FRONT/BACK label fallback (language labels = WP-SR2b). No
+      grading (WP-SR3). Row S88; 7 widget tests + card goldens (light+dark).
+- [ ] **WP-SR2b — language side-labels (deferred polish).** KOREAN/MEANING from `deck.target_language`
+      — needs the review read model (`StudySessionReview`/`LoadStudySessionReviewUseCase`) to carry the
+      deck's `target_language`; until then the card uses the FRONT/BACK fallback.
 - [ ] **WP-SR3 — swipe-grade + advance.** Swipe right → `perfect`, left → `forgot` →
       `RecordStudySessionAnswerUseCase(studyMode: review)`; order: gesture → persist (background) →
       next card slide; swipe-hint footer (first 3 cards); last-card → **Finish Session** CTA (no

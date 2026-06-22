@@ -1267,6 +1267,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Study new instead'**
   String get studyActionStudyNew;
+
+  /// Caption above the front side of a review card (fallback when the deck language is unknown).
+  ///
+  /// In en, this message translates to:
+  /// **'FRONT'**
+  String get studyReviewFrontLabel;
+
+  /// Caption above the back side of a review card.
+  ///
+  /// In en, this message translates to:
+  /// **'BACK'**
+  String get studyReviewBackLabel;
+
+  /// Title shown when a study session has no cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to review'**
+  String get studyReviewEmptyTitle;
+
+  /// Body shown when a study session has no cards.
+  ///
+  /// In en, this message translates to:
+  /// **'This session has no cards.'**
+  String get studyReviewEmptyMessage;
+
+  /// Title of the study session load-error state.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the session'**
+  String get studyReviewLoadFailedTitle;
+
+  /// Body of the study session load-error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load this study session.'**
+  String get studyReviewLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

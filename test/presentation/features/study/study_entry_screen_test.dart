@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/domain/models/study_entry_eligibility.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/session_status.dart';
@@ -14,8 +15,10 @@ import 'package:memox/domain/types/study_type.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_entry_controller.dart';
 import 'package:memox/presentation/features/study/controllers/study_entry_outcome.dart';
+import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
 import 'package:memox/presentation/features/study/routes/study_routes.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
+import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
 
 import '../../../support/golden_harness.dart';
 
@@ -317,6 +320,15 @@ void main() {
                 () async => const StudyEntryOutcome.ready('s1'),
               ),
             ),
+            // The session screen loads its review on mount; resolve it to an
+            // empty session (no spinner animation) so the test can settle and
+            // stay focused on the gate's navigation (no DB).
+            studySessionReviewProvider('s1').overrideWith(
+              (ref) async => StudySessionReview(
+                session: _session(),
+                items: const <StudySessionReviewItem>[],
+              ),
+            ),
           ],
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
@@ -328,12 +340,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      // The gate pushReplacement'd to the session placeholder shell.
-      expect(
-        find.byKey(const ValueKey<String>('study_session_placeholder')),
-        findsOneWidget,
-      );
-      expect(find.text('s1'), findsOneWidget);
+      // The gate pushReplacement'd to the real session screen.
+      expect(find.byType(StudySessionScreen), findsOneWidget);
     });
 
     testWidgets('Study new instead re-enters the gate with study_type=new_cards', (

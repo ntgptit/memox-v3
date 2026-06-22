@@ -194,5 +194,11 @@
   "studyStartOverAction": "Bắt đầu lại",
   "studyStartOverTitle": "Bắt đầu lại?",
   "studyStartOverMessage": "Thao tác này xoá tiến độ hiện tại của phiên này và bắt đầu lại từ đầu.",
-  "studyActionStudyNew": "Học thẻ mới"
+  "studyActionStudyNew": "Học thẻ mới",
+  "studyReviewFrontLabel": "MẶT TRƯỚC",
+  "studyReviewBackLabel": "MẶT SAU",
+  "studyReviewEmptyTitle": "Không có gì để ôn",
+  "studyReviewEmptyMessage": "Phiên này không có thẻ nào.",
+  "studyReviewLoadFailedTitle": "Không tải được phiên",
+  "studyReviewLoadFailedMessage": "Không thể tải phiên học này."
 }

@@ -659,4 +659,22 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyActionStudyNew => 'Học thẻ mới';
+
+  @override
+  String get studyReviewFrontLabel => 'MẶT TRƯỚC';
+
+  @override
+  String get studyReviewBackLabel => 'MẶT SAU';
+
+  @override
+  String get studyReviewEmptyTitle => 'Không có gì để ôn';
+
+  @override
+  String get studyReviewEmptyMessage => 'Phiên này không có thẻ nào.';
+
+  @override
+  String get studyReviewLoadFailedTitle => 'Không tải được phiên';
+
+  @override
+  String get studyReviewLoadFailedMessage => 'Không thể tải phiên học này.';
 }

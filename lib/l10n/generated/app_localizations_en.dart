@@ -675,4 +675,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyActionStudyNew => 'Study new instead';
+
+  @override
+  String get studyReviewFrontLabel => 'FRONT';
+
+  @override
+  String get studyReviewBackLabel => 'BACK';
+
+  @override
+  String get studyReviewEmptyTitle => 'Nothing to review';
+
+  @override
+  String get studyReviewEmptyMessage => 'This session has no cards.';
+
+  @override
+  String get studyReviewLoadFailedTitle => 'Couldn\'t load the session';
+
+  @override
+  String get studyReviewLoadFailedMessage =>
+      'We couldn\'t load this study session.';
 }

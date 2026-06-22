@@ -422,5 +422,17 @@
   "studyStartOverMessage": "This discards your current progress for this session and starts fresh.",
   "@studyStartOverMessage": { "description": "Body of the start-over confirm dialog." },
   "studyActionStudyNew": "Study new instead",
-  "@studyActionStudyNew": { "description": "Empty-scope CTA that re-enters the gate as a new-learning session." }
+  "@studyActionStudyNew": { "description": "Empty-scope CTA that re-enters the gate as a new-learning session." },
+  "studyReviewFrontLabel": "FRONT",
+  "@studyReviewFrontLabel": { "description": "Caption above the front side of a review card (fallback when the deck language is unknown)." },
+  "studyReviewBackLabel": "BACK",
+  "@studyReviewBackLabel": { "description": "Caption above the back side of a review card." },
+  "studyReviewEmptyTitle": "Nothing to review",
+  "@studyReviewEmptyTitle": { "description": "Title shown when a study session has no cards." },
+  "studyReviewEmptyMessage": "This session has no cards.",
+  "@studyReviewEmptyMessage": { "description": "Body shown when a study session has no cards." },
+  "studyReviewLoadFailedTitle": "Couldn't load the session",
+  "@studyReviewLoadFailedTitle": { "description": "Title of the study session load-error state." },
+  "studyReviewLoadFailedMessage": "We couldn't load this study session.",
+  "@studyReviewLoadFailedMessage": { "description": "Body of the study session load-error state." }
 }
