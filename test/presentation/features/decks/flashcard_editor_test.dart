@@ -542,6 +542,23 @@ void main() {
       );
     });
 
+    // 07 valid: a create form with both fields filled → Save enabled (solid).
+    // Distinct from create-empty (which has Save disabled / soft).
+    for (final Brightness brightness in Brightness.values) {
+      testWidgets('create-valid — ${brightness.name}', (tester) async {
+        await _pump(tester, brightness: brightness, golden: true);
+        await tester.enterText(find.byType(MxTextField).first, '日本');
+        await tester.enterText(find.byType(MxTextField).last, 'Japan');
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(FlashcardEditorScreen),
+          matchesGoldenFile(
+            'goldens/flashcard_editor_create-valid__${brightness.name}.png',
+          ),
+        );
+      });
+    }
+
     for (final Brightness brightness in Brightness.values) {
       testWidgets('edit-loaded — ${brightness.name}', (tester) async {
         await _pump(

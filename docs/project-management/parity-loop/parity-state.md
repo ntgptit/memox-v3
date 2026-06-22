@@ -10,6 +10,17 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
+- **12 — Study · Review** (study feature) — NEXT screen (run audit / BƯỚC 2). Confirm FE exists
+  (`lib/presentation/features/study/**` — study mode files exist), then audit. Study/SRS screen → add
+  `srs-reviewer` to fan-out. 13 Match (3 states), 14 Guess, 15 Recall, 16 Fill, 17 Result follow.
+
+### Screen 07/08 — Flashcard editor: DONE (modulo deferred)
+
+All states covered (07 empty/valid/details-open/saving/save-failed + 08 loaded/loading/load-error/
+saving/save-failed + delete via shared confirm). create-valid golden added. validation = behavior-owned
+(disable-Save, no inline errors). Deferred: field-fill (app-wide), DECK selector (Future), Note→3 fields
+(business). dark≈2× = general Ahem amplification. See `screen-plans/07-08-flashcard-editor.md`.
+
 - **07/08 — Flashcard editor** — AUDIT done (see
   `docs/project-management/parity-loop/screen-plans/07-08-flashcard-editor.md`). One shared
   `FlashcardEditorForm`; 7 goldens cover most states. KEY finding: **dark ≈2× light** across editor
@@ -56,7 +67,8 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
 | 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
-| 07/08 | Flashcard editor | yes | done 2026-06-23 | in-progress | audited; dark=general Ahem ampl.; field-fill (surfaceMuted vs accent-contrast) deferred app-wide; next = valid/validation goldens |
+| 07/08 | Flashcard editor | yes | done 2026-06-23 | done (modulo deferred) | create-valid golden added; validation behavior-owned; field-fill/deck-selector/Note deferred |
+| 12-17 | Study modes | yes | — | — | next: audit (Study/SRS → +srs-reviewer fan-out) |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |

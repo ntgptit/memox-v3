@@ -59,7 +59,20 @@ delete action + title + initial text.
    `colors.surfaceMuted`. Fix = `fillColor: colors.surface`. DEFERRED app-wide-coordinated: MxTextField
    feeds editor + 3 dialogs + MxSearchField (all search docks) + study fill + shared mx_inputs goldens
    (~20 goldens) — needs a dedicated WP regenerating every field golden in one pass (parity-deferred).
-2. **Missing goldens**: 07 valid + 07/08 validation states (field-error rendering). Add goldens.
+2. **Missing goldens** — ✅ 07 valid DONE (2026-06-23): added `create-valid` golden (light+dark) — filled
+   create form, Save enabled (7.87%/13.62%). 07/08 **validation** = behavior-owned: the FE has NO inline
+   field-error UI — it DISABLES Save when front/back empty (`canSubmit` gate), so the "validation" visual
+   ≈ create-empty (no distinct render). Keep disable-Save behavior; no separate golden. (validation is
+   validation/behavior per precedence rule 2.)
+
+## Screen 07/08 status: DONE (modulo deferred)
+
+All states covered: 07 empty/valid/details-open/saving/save-failed + 08 loaded/loading/load-error/
+saving/save-failed + delete (shared mx_confirm-destructive). validation = behavior-owned (disable-Save,
+no inline errors). Remaining deferred:
+- MxTextField field-fill (accent-contrast vs surfaceMuted) — app-wide-coordinated (parity-deferred).
+- Details DECK selector — Future (deck retargeting). Note→3 fields — business model.
+- dark≈2× = general Ahem-on-dark amplification (not a bug).
 3. **Save pill**: verify size/enabled+disabled (soft vs solid) match kit; the details-open golden seeds
    an empty form (Save disabled/soft) while the kit shows a filled form (Save solid) — consider a
    filled fixture for the details-open golden so it matches the kit scenario.
