@@ -10,12 +10,17 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **04 — Folder detail** — AUDIT done; empty/error card-wrap DONE (shared `MxStateCard`, used by
-  03+04). See `docs/project-management/parity-loop/screen-plans/04-folder-detail.md`.
-  DeckTile + FolderStatsCard done. Next WP candidates: GAP #2 DECKS overline count color (text-3
-  suffix; `_Overline` duplicated in library+folder → candidate to share); GAP #5/6 delete-confirm +
-  move-sheet goldens (missing states). Then screen 04 essentially done modulo needs-token (label
-  13/600, empty inner-panel 56/22-800).
+- **06 — Flashcard list** (decks feature) — NEXT screen (run audit / BƯỚC 2). Confirm FE exists
+  (`lib/presentation/features/decks/**` — flashcard_list_body.dart seen), then audit its 8 kit states.
+
+### Screen 04 — Folder detail: DONE (modulo deferred)
+
+All 8 kit states covered (6 folder_detail_* goldens + delete-confirm via shared mx_confirm-destructive
++ move-sheet via shared folder_move_picker). Parity done: empty/error card-wrap (MxStateCard), DeckTile
+chevron 24→20 + solid due chip, FolderStatsCard value 18→26 + col pad. Remaining = deferred only:
+move-sheet full visual (behavior-conflict + needs-schema), DECKS overline shade (low-value), label
+13/600 + empty inner-panel + due-chip 11/700 (needs-token), error icon/button (behavior/copy-owned).
+See `screen-plans/04-folder-detail.md`.
 
 ### Screen 03 — Library overview: DONE (modulo deferred)
 
@@ -35,7 +40,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | # | Screen | FE? | Audit | Parity | Notes |
 | --- | --- | --- | --- | --- | --- |
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
-| 04 | Folder detail | yes | done 2026-06-23 | in-progress | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 6/8 goldens |
+| 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |

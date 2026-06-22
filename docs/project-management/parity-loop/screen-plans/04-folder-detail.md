@@ -19,8 +19,8 @@ Audit: 2026-06-23.
 | loading | folder_detail_loading | 1.71% | 5.86% |
 | error | folder_detail_error | 17.00% | 20.59% |
 | search-empty | folder_detail_search-no-results | 8.27% | 10.27% |
-| delete-confirm | **MISSING golden** | — | — |
-| move-sheet | **MISSING golden** | — | — |
+| delete-confirm | covered (shared `mx_confirm-destructive`) | — | — |
+| move-sheet | covered (shared `folder_move_picker`) | — | — |
 
 ## STATE COVERAGE (kit = 8 states)
 
@@ -32,8 +32,8 @@ Audit: 2026-06-23.
 | loading | yes | `LibraryLoadingSkeleton` | closest to parity |
 | error | yes | `MxErrorState` (bare) | **bare-centered, no card** |
 | search-empty | yes | `MxNoResultsState` | |
-| delete-confirm | **MISSING** | `MxConfirmDialog` (folder delete) | add golden |
-| move-sheet | **MISSING** | `showFolderMovePicker` (`folder_move_picker_sheet.dart`) | add golden |
+| delete-confirm | covered (shared) | `MxConfirmDialog` destructive | folder delete = `MxConfirmDialog.show(destructive:true)`; component golden `test/presentation/shared/dialogs/goldens/mx_confirm-destructive__{light,dark}.png`. No 04-framed golden needed (would duplicate the shared confirm + the decks backdrop). |
+| move-sheet | covered (shared) + behavior-owned | `showFolderMovePicker` (`folder_move_picker_sheet.dart`) | component golden `folder_move_picker__{light,dark}.png`. Visual diverges from kit (kit: icon-tile + trailing radio + "Move here" button; FE: `MxListTile` tap-to-move). DEFER behavior-conflict — wireframe `docs/wireframes/25-shared-bottom-sheets.md:490` mandates tap-to-select (radio/"Move here" deferred at :496); icon-tile needs folder icon/color in the move-target model (needs-schema). |
 
 ## INVENTORY — Decks base state
 
@@ -88,8 +88,18 @@ Subfolders state: rows are folder rows (`LibraryFolderTile`, already audited in 
    — no 13/600 role (needs-token). NOTE: diff.py rose (decks 13.04→13.46, subfolders 10.96→11.39)
    because the now-correct 26px value renders as larger Ahem blocks — value size is RIGHT (verified
    visually); diff.py penalizes text enlargement under Ahem rendering.
-5. **delete-confirm golden** (missing state).
-6. **move-sheet golden** (missing state).
+5. **delete-confirm** — ✅ covered by shared `mx_confirm-destructive` golden (folder delete = `MxConfirmDialog` destructive). No 04-framed golden added.
+6. **move-sheet** — covered by shared `folder_move_picker` golden; full kit visual (icon-tile + trailing radio + "Move here") DEFERRED behavior-conflict (wireframe mandates tap-to-select) + needs-schema (folder icon/color in move-target model).
+
+## Screen 04 status: DONE (modulo deferred)
+
+All 8 kit states render + have goldens (6 folder_detail_* + delete-confirm via mx_confirm-destructive
++ move-sheet via folder_move_picker). Parity work done: empty/error card-wrap (MxStateCard), DeckTile
+chevron 24→20 + solid due chip, FolderStatsCard value 18→26 + col pad. Remaining are all deferred:
+- GAP #2 DECKS overline count-suffix shade (text-2 vs text-3) — low-value, needs RichText split; deferred.
+- empty inner-panel 56 tile / 22-800 title; stat/overline label 13/600; due-chip 11/700 — needs-token.
+- move-sheet full visual — behavior-conflict + needs-schema.
+- error icon (cloud_off vs alert-triangle) + error button ("Retry" vs "Back to library") — behavior/copy-owned.
 
 ## Consolidation (empty/error card-wrap) — DONE (2026-06-23)
 
