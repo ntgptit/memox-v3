@@ -26,6 +26,7 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_state_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// Flashcard-list body: the streamed cards rendered as a count overline + a
@@ -124,15 +125,19 @@ class FlashcardListBody extends ConsumerWidget {
   }
 
   Widget _error(BuildContext context, WidgetRef ref, AppLocalizations l10n) =>
-      MxErrorState(
-        title: l10n.flashcardLoadFailedTitle,
-        message: l10n.flashcardLoadFailedMessage,
-        icon: Icons.cloud_off_outlined,
-        action: MxPrimaryButton(
-          label: l10n.commonRetryLabel,
-          icon: Icons.refresh,
-          fullWidth: true,
-          onPressed: () => ref.invalidate(flashcardListStreamProvider(deckId)),
+      MxStateCard(
+        centered: true,
+        child: MxErrorState(
+          title: l10n.flashcardLoadFailedTitle,
+          message: l10n.flashcardLoadFailedMessage,
+          icon: Icons.cloud_off_outlined,
+          action: MxPrimaryButton(
+            label: l10n.commonRetryLabel,
+            icon: Icons.refresh,
+            fullWidth: true,
+            onPressed: () =>
+                ref.invalidate(flashcardListStreamProvider(deckId)),
+          ),
         ),
       );
 
@@ -145,15 +150,18 @@ class FlashcardListBody extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
 
     if (detail.totalCount == 0) {
-      return MxEmptyState(
-        icon: Icons.copy_all_outlined,
-        title: l10n.flashcardEmptyTitle,
-        message: l10n.flashcardEmptyMessage,
-        action: MxPrimaryButton(
-          label: l10n.flashcardAddCardLabel,
-          icon: Icons.add,
-          fullWidth: true,
-          onPressed: () => runAddCard(context, deckId),
+      return MxStateCard(
+        centered: true,
+        child: MxEmptyState(
+          icon: Icons.copy_all_outlined,
+          title: l10n.flashcardEmptyTitle,
+          message: l10n.flashcardEmptyMessage,
+          action: MxPrimaryButton(
+            label: l10n.flashcardAddCardLabel,
+            icon: Icons.add,
+            fullWidth: true,
+            onPressed: () => runAddCard(context, deckId),
+          ),
         ),
       );
     }

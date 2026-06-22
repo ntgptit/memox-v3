@@ -104,6 +104,32 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('centered variant hosts the panel in a card without overflow', (
+      tester,
+    ) async {
+      await pumpThemed(
+        tester,
+        const MxStateCard(
+          centered: true,
+          child: MxEmptyState(
+            icon: Icons.folder_outlined,
+            title: 'No cards yet',
+            message: 'Add your first flashcard.',
+          ),
+        ),
+      );
+
+      expect(find.byType(MxCard), findsOneWidget);
+      expect(find.byType(Scrollable), findsOneWidget);
+      // The centering tree must be present (regression guard against silently
+      // reverting to the top-anchored ListView path). MxEmptyState also has its
+      // own Center, so allow one-or-more here.
+      expect(find.byType(Center), findsWidgets);
+      expect(find.byType(ConstrainedBox), findsWidgets);
+      expect(find.text('No cards yet'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   });
 
   group('MxLoadingState', () {

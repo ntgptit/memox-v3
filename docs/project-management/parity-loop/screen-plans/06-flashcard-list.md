@@ -65,16 +65,24 @@ Audit: 2026-06-23.
 
 ## GAP checklist (ordered)
 
-1. **Empty + error CENTERED card-wrap** (highest %, recurring) — flashcard_list_body renders bare;
-   kit wraps in a **centered** card (NOT top-anchored like 03/04). → add a `centered` variant to the
-   shared `MxStateCard` (top default for 03/04; centered for 06) + apply to flashcard empty + error.
-   **WP candidate.**
+1. **Empty + error CENTERED card-wrap** — ✅ WP DONE (2026-06-23): added `centered` (scroll-safe) variant
+   to shared `MxStateCard` (`LayoutBuilder → SingleChildScrollView → ConstrainedBox(minHeight) → Center`);
+   applied to flashcard empty + error. Card now renders centered like the kit. diff.py ~flat (empty
+   17.12→17.54, error 14.02→14.31) because the FE content was ALREADY centered (MxEmptyState's Center) —
+   the change adds the card chrome; remaining inner-panel gaps + missing button offset it under Ahem.
+   REMAINING for 06 empty: (a) **missing "Import cards" secondary button** — kit empty has TWO buttons
+   (Add card primary + Import cards secondary outlined); FE has only "Add card" → NEW GAP (see #6 below);
+   (b) inner-panel 56 tile (solid accent) / 22-800 title → needs-token (shared, deferred).
 2. **FlashcardTile audit**: chevron 24→20 (cf. 03 WP-3 / 04); status chip (Review/Learning/New/
    Mastered) color tokens + typography; icon-tile glyph/tint. Audit `flashcard_tile.dart`.
 3. **Reorder drag-handle**: `drag_indicator` size 24→20 (verify kit).
 4. **Search dock**: confirm `flashcard_list_search` renders the persistent bottom "Search cards"
    field (kit loaded shows it pinned) — field r14 + border.
 5. **_Overline count-suffix shade** (same as 04 GAP #2; deferred low-value).
+6. **Empty-state "Import cards" secondary button** (NEW) — kit empty has Add card (primary) + Import
+   cards (secondary outlined); FE empty has only Add card. Add an `MxSecondaryButton(outlined)` calling
+   the deck-import entry — verify the import action/route is reachable from here first (may be
+   behavior/needs-verification). WP candidate.
 
 ## Behavior-owned / shared deltas
 - Error icon cloud_off vs kit alert-triangle (Lucide↔Material accepted); error copy from ARB.
