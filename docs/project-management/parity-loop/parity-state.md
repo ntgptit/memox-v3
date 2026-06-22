@@ -1,5 +1,14 @@
 # Parity Loop — State (pointer / HINT only)
 
+> **LOOP TERMINAL 2026-06-23**: all FE-built screens (02/03/04/05/06/07/08/12-17) audited; concrete
+> pixel fixes landed where existing tokens allowed; every remaining gap is validly deferred
+> (parity-deferred.md): needs-token (new type/size/shadow tokens — design-system decision),
+> behavior/scope-owned (study interactions, dashboard redesign, move-sheet, deck-selector/Note/
+> validation, 03 search-icon/root-anchor), needs-schema (17 goal-off/tough-empty, flashcard status chip,
+> 06 import button), no-FE-yet (01/09/10/11/18/19/20-25), low-value (overline shade), accepted
+> (Lucide↔Material icons). Residual diff.py % = Ahem test-font rendering (golden-harness limit), not a
+> parity failure. Re-open by picking any deferred item once its blocker (token/schema/FE) is approved.
+
 > This file is a **cursor**, not a source of truth about DONE. "Parity OK" here is a
 > hint; the only proof of parity is `python tool/golden_diff/diff.py <golden> <shot>`
 > PASS + `ui-parity-checker` PASS + full INVENTORY/STATE coverage. Re-verify, don't trust.
