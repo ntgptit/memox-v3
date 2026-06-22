@@ -10,8 +10,10 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **03 — Library overview** — AUDIT done (see `docs/project-management/parity-loop/screen-plans/03-library-overview.md`).
-  Next work-package: TBD from the plan's GAP checklist.
+- **03 — Library overview** — AUDIT done; WP-1 done (empty/error card-wrap). See
+  `docs/project-management/parity-loop/screen-plans/03-library-overview.md`.
+  Next work-package: GAP #3 (loaded list-row/card metrics) or GAP #6 (overflow-sheet golden).
+  Empty inner-panel refinement (GAP #1 tile/title) deferred to a shared-widget WP (needs 56 token).
 
 ## Priority order (FE-built first)
 
@@ -22,7 +24,7 @@ per loop. Visual-only; behavior is docs-owned.
 
 | # | Screen | FE? | Audit | Parity | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 03 | Library overview | yes | done 2026-06-23 | in-progress | plan written; diff.py baseline captured |
+| 03 | Library overview | yes | done 2026-06-23 | in-progress | WP-1 done: empty/error card-wrap (error 17→9% / 21→10%, empty 18→16% / 21→19%) |
 | 04 | Folder detail | yes | — | — | |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |

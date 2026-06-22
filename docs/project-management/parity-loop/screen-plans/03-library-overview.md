@@ -65,7 +65,7 @@ Audit: 2026-06-23.
 
 ## GAP checklist (concrete, ordered by impact)
 
-1. **Empty + error empty-state visual** (highest %; shared `MxEmptyState`/`MxErrorState` → fix at Mx layer, benefits every screen): tile-lg 56/r14, title 22/800 tracking -0.4, body lh21 maxw280, pill button 14/700 + 16px leading icon. **← candidate WP-1.**
+1. **Empty + error empty-state visual** — ✅ WP-1 DONE (2026-06-23): card-wrap + top-anchor at library body (`_panelInCard`); error 17.49→8.73% / 20.93→10.46%, empty 18.36→16.04% / 21.43→19.03%. REMAINING (deferred → shared-widget WP, needs-token): tile-lg 56/r14 (no 56 token), solid-accent empty tile vs tonal error, title 22/800 tracking -0.4 (no slot), body lh21 maxw280, pill 14/700 + 16px icon.
 2. **Error icon glyphs** (visual): `cloud_off_outlined`→`alert-triangle` equivalent; `refresh`→`rotate-ccw` equivalent (subject to available Material/icon set; if no close glyph → needs-token/icon defer).
 3. **Loaded list-row/card metrics**: confirm card r20 + divider border + shadow `sm`, row gap12/pad, title 16/600, meta 13/400 text-2, chevron 20.
 4. **Loading skeleton**: confirm 4 rows + skeleton sizes + surface-2 + radii.

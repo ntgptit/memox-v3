@@ -46,6 +46,17 @@ class LibraryOverviewBody extends ConsumerWidget {
   /// the divider starts under the text (mirrors the kit `.hr.inset`).
   static const double _dividerInset = MxSpacing.space10 + MxSpacing.space3;
 
+  /// Wraps a centered state panel (empty / error) in the same grouped content
+  /// card the loaded list uses, anchored at the top of the scroll body — the kit
+  /// renders the empty/error message inside the screen card (mocks `03b`/`03c`,
+  /// `04`), not as bare full-height–centered content. `MxCard` padding is zeroed
+  /// so the panel's own inset (`MxSpacing.space6` = 24) is the card's inner pad,
+  /// matching the kit card pad 24.
+  static Widget _panelInCard(Widget panel) => ListView(
+    padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
+    children: <Widget>[MxCard(padding: EdgeInsets.zero, child: panel)],
+  );
+
   void _clearSearch(WidgetRef ref) =>
       ref.read(librarySearchQueryProvider.notifier).clear();
 
@@ -186,15 +197,17 @@ class LibraryOverviewBody extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
         children: const <Widget>[LibraryLoadingSkeleton()],
       ),
-      error: (_, _) => MxErrorState(
-        title: l10n.libraryLoadFailedTitle,
-        message: l10n.libraryLoadFailedMessage,
-        icon: Icons.cloud_off_outlined,
-        action: MxPrimaryButton(
-          label: l10n.commonRetryLabel,
-          icon: Icons.refresh,
-          fullWidth: true,
-          onPressed: () => ref.invalidate(libraryOverviewStreamProvider),
+      error: (_, _) => _panelInCard(
+        MxErrorState(
+          title: l10n.libraryLoadFailedTitle,
+          message: l10n.libraryLoadFailedMessage,
+          icon: Icons.cloud_off_outlined,
+          action: MxPrimaryButton(
+            label: l10n.commonRetryLabel,
+            icon: Icons.refresh,
+            fullWidth: true,
+            onPressed: () => ref.invalidate(libraryOverviewStreamProvider),
+          ),
         ),
       ),
       data: (LibraryOverview data) =>
@@ -210,15 +223,17 @@ class LibraryOverviewBody extends ConsumerWidget {
     );
 
     if (view.totalFolderCount == 0) {
-      return MxEmptyState(
-        icon: Icons.folder_outlined,
-        title: l10n.libraryEmptyTitle,
-        message: l10n.libraryEmptyMessage,
-        action: MxPrimaryButton(
-          label: l10n.libraryCreateFolderLabel,
-          icon: Icons.create_new_folder_outlined,
-          fullWidth: true,
-          onPressed: () => runCreateFolder(context, ref),
+      return _panelInCard(
+        MxEmptyState(
+          icon: Icons.folder_outlined,
+          title: l10n.libraryEmptyTitle,
+          message: l10n.libraryEmptyMessage,
+          action: MxPrimaryButton(
+            label: l10n.libraryCreateFolderLabel,
+            icon: Icons.create_new_folder_outlined,
+            fullWidth: true,
+            onPressed: () => runCreateFolder(context, ref),
+          ),
         ),
       );
     }
