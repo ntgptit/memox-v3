@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_icon_size.dart';
 import 'package:memox/core/theme/mx_radius.dart';
@@ -42,6 +45,16 @@ class MatchSessionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    // When the last board clears, finalize + route to the result (WP-SM5).
+    ref.listen<AsyncValue<MatchBoardView>>(
+      matchBoardControllerProvider(sessionId),
+      (AsyncValue<MatchBoardView>? prev, AsyncValue<MatchBoardView> next) {
+        final bool wasFinished = prev?.value?.finished ?? false;
+        if (!wasFinished && (next.value?.finished ?? false)) {
+          unawaited(_finish(context, ref));
+        }
+      },
+    );
     final AsyncValue<MatchBoardView> async = ref.watch(
       matchBoardControllerProvider(sessionId),
     );
@@ -133,6 +146,19 @@ class MatchSessionScreen extends ConsumerWidget {
     context.pop();
   }
 
+  /// All boards cleared → finalize (the Match branch derives terminals from the
+  /// evaluations, WP-SM2) then `pushReplacement` to the shared result screen.
+  Future<void> _finish(BuildContext context, WidgetRef ref) async {
+    await ref
+        .read(finalizeStudySessionUseCaseProvider)
+        .call(sessionId: sessionId);
+    if (!context.mounted) return;
+    context.pushReplacementNamed(
+      RouteNames.studyResult,
+      pathParameters: <String, String>{RouteParams.sessionId: sessionId},
+    );
+  }
+
   Widget _boardBody(
     BuildContext context,
     WidgetRef ref,
@@ -201,8 +227,10 @@ class MatchSessionScreen extends ConsumerWidget {
           ),
           const SizedBox(height: MxSpacing.space3),
           Center(
+            // Per-board status (resets each board); the app-bar count is
+            // session-wide (`matchedCount`/`sessionTotal`).
             child: MxText(
-              l10n.studyMatchProgress(board.matchedCount, board.pairsLeft),
+              l10n.studyMatchProgress(board.matchedOnBoard, board.pairsLeft),
               role: MxTextRole.labelMedium,
               color: context.mxColors.textSecondary,
             ),

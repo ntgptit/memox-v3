@@ -8,4 +8,9 @@ abstract final class AppMotion {
   /// The transient red flash shown on a wrong Match pair before the two cells
   /// deselect (wireframe `14` §Components — "~600ms").
   static const Duration matchWrongFlash = Duration(milliseconds: 600);
+
+  /// The brief hold after the last pair of a Match board locks (showing the
+  /// green ✓) before the next board appears / the session finalizes (wireframe
+  /// `14` §Layout board-clear).
+  static const Duration matchBoardAdvance = Duration(milliseconds: 500);
 }

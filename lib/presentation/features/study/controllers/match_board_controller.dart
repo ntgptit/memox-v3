@@ -50,7 +50,9 @@ class MatchBoardView {
     required this.boardIndex,
     required this.totalPairs,
     required this.sessionTotal,
+    required this.boardsDone,
     required this.selectedCellId,
+    this.finished = false,
   });
 
   final List<MatchCell> cells;
@@ -61,28 +63,41 @@ class MatchBoardView {
 
   /// Total cards in the whole session (for the `{matched}/{total}` count).
   final int sessionTotal;
+
+  /// Pairs already matched on prior (cleared) boards.
+  final int boardsDone;
   final String? selectedCellId;
 
-  int get matchedCount =>
+  /// True once the last board is cleared — the screen finalizes + routes to the
+  /// result (WP-SM5).
+  final bool finished;
+
+  int get matchedOnBoard =>
       cells
           .where((MatchCell c) => c.status == MatchCellStatus.matched)
           .length ~/
       2;
-  int get pairsLeft => totalPairs - matchedCount;
-  bool get boardComplete => totalPairs > 0 && matchedCount == totalPairs;
+
+  /// Pairs matched across the whole session (for the `{matched}/{total}` count).
+  int get matchedCount => boardsDone + matchedOnBoard;
+  int get pairsLeft => totalPairs - matchedOnBoard;
+  bool get boardComplete => totalPairs > 0 && matchedOnBoard == totalPairs;
 
   MatchBoardView copyWith({
     List<MatchCell>? cells,
     String? selectedCellId,
     bool clearSelection = false,
+    bool? finished,
   }) => MatchBoardView(
     cells: cells ?? this.cells,
     boardIndex: boardIndex,
     totalPairs: totalPairs,
     sessionTotal: sessionTotal,
+    boardsDone: boardsDone,
     selectedCellId: clearSelection
         ? null
         : (selectedCellId ?? this.selectedCellId),
+    finished: finished ?? this.finished,
   );
 }
 
@@ -92,18 +107,23 @@ class MatchBoardView {
 /// (right or wrong) via `RecordMatchEvaluationUseCase` (append-only).
 ///
 /// One selection at a time; a matched pair locks (non-interactive); a wrong pair
-/// flashes for [_wrongFlash] then both cells deselect. Board progression +
-/// finalize are WP-SM5. WBS 4.5.5.
+/// flashes for [_wrongFlash] then both cells deselect. Clearing a board advances
+/// to the next; clearing the last board marks the view `finished` so the screen
+/// finalizes + routes to the result (WP-SM5). WBS 4.5.5.
 @riverpod
 class MatchBoardController extends _$MatchBoardController {
   static const int _boardSize = 5;
   static const Duration _wrongFlash = AppMotion.matchWrongFlash;
+  static const Duration _boardAdvance = AppMotion.matchBoardAdvance;
+
+  late StudySessionReview _review;
 
   @override
   Future<MatchBoardView> build(SessionId sessionId) async {
     final StudySessionReview review = await ref.watch(
       studySessionReviewProvider(sessionId).future,
     );
+    _review = review;
     return _buildBoard(review, boardIndex: 0);
   }
 
@@ -151,6 +171,7 @@ class MatchBoardController extends _$MatchBoardController {
       boardIndex: boardIndex,
       totalPairs: items.length,
       sessionTotal: review.total,
+      boardsDone: boardIndex * _boardSize,
       selectedCellId: null,
     );
   }
@@ -216,16 +237,31 @@ class MatchBoardController extends _$MatchBoardController {
       final MatchBoardView? current = state.asData?.value;
       if (current == null) return;
       if (isPair) {
-        state = AsyncData<MatchBoardView>(
-          current.copyWith(
-            cells: _withStatus(
-              _withStatus(current.cells, first.id, MatchCellStatus.matched),
-              tapped.id,
-              MatchCellStatus.matched,
-            ),
-            clearSelection: true,
+        final MatchBoardView matched = current.copyWith(
+          cells: _withStatus(
+            _withStatus(current.cells, first.id, MatchCellStatus.matched),
+            tapped.id,
+            MatchCellStatus.matched,
           ),
+          clearSelection: true,
         );
+        state = AsyncData<MatchBoardView>(matched);
+        if (matched.boardComplete) {
+          // Capture the review snapshot before the hold so a concurrent rebuild
+          // (e.g. error-retry invalidation) can't swap `_review` mid-advance.
+          final StudySessionReview review = _review;
+          // Hold on the cleared board (green ✓) then advance or finish (WP-SM5).
+          await Future<void>.delayed(_boardAdvance);
+          // Bail if the provider was invalidated during the hold (now loading).
+          if (state.asData?.value == null) return;
+          final int boardCount = (review.total + _boardSize - 1) ~/ _boardSize;
+          final bool hasNextBoard = matched.boardIndex + 1 < boardCount;
+          state = AsyncData<MatchBoardView>(
+            hasNextBoard
+                ? _buildBoard(review, boardIndex: matched.boardIndex + 1)
+                : matched.copyWith(finished: true),
+          );
+        }
         return;
       }
       // Wrong pair: flash both, then revert to idle.

@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/app/router/route_names.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
@@ -14,6 +16,7 @@ import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/usecases/study/finalize_study_session_usecase.dart';
 import 'package:memox/domain/usecases/study/record_match_evaluation_usecase.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
@@ -41,6 +44,20 @@ class _FakeRecordMatchEval implements RecordMatchEvaluationUseCase {
     required bool isCorrect,
   }) async {
     recorded.add(isCorrect);
+    return (failure: null, data: null);
+  }
+}
+
+/// Records whether finalize was called (no DB).
+class _FakeFinalize implements FinalizeStudySessionUseCase {
+  bool called = false;
+
+  @override
+  StudyRepository get repository => throw UnimplementedError();
+
+  @override
+  Future<Result<void>> call({required SessionId sessionId}) async {
+    called = true;
     return (failure: null, data: null);
   }
 }
@@ -83,6 +100,31 @@ List<StudySessionReviewItem> _fiveCards() => <StudySessionReviewItem>[
   _item('하늘', 'sky', 2),
   _item('도서관', 'library', 3),
   _item('책', 'book', 4),
+];
+
+List<StudySessionReviewItem> _tenCards() => <StudySessionReviewItem>[
+  ..._fiveCards(),
+  _item('의자', 'chair', 5),
+  _item('문', 'door', 6),
+  _item('창문', 'window', 7),
+  _item('컵', 'cup', 8),
+  _item('숟가락', 'spoon', 9),
+];
+
+/// Tap a card's front then back (a valid pair) and settle the board-advance.
+Future<void> _matchPair(WidgetTester tester, String front, String back) async {
+  await tester.tap(find.text(front));
+  await tester.pump();
+  await tester.tap(find.text(back));
+  await tester.pumpAndSettle();
+}
+
+const List<(String, String)> _board1Pairs = <(String, String)>[
+  ('공부하다', 'to study'),
+  ('먹다', 'to eat'),
+  ('하늘', 'sky'),
+  ('도서관', 'library'),
+  ('책', 'book'),
 ];
 
 Future<void> _pump(
@@ -199,6 +241,72 @@ void main() {
       expect(record.recorded, <bool>[false]);
       expect(find.text('0 / 5'), findsOneWidget); // nothing matched
       expect(find.textContaining('0 matched · 5 left'), findsOneWidget);
+    });
+
+    testWidgets('clearing a board advances to the next board', (tester) async {
+      // decision: S96
+      await _pump(
+        tester,
+        review: () async => _review(_tenCards()),
+        record: _FakeRecordMatchEval(),
+      );
+      for (final (String front, String back) in _board1Pairs) {
+        await _matchPair(tester, front, back);
+      }
+      // Board two is now shown; the app-bar count carries the cleared board's
+      // pairs, and the per-board status line starts fresh.
+      expect(find.text('의자'), findsOneWidget); // card 5 front (board 2)
+      expect(find.text('5 / 10'), findsOneWidget);
+      expect(find.textContaining('0 matched · 5 left'), findsOneWidget);
+      expect(find.text('공부하다'), findsNothing); // board 1 cleared
+    });
+
+    testWidgets('clearing the last board finalizes + routes to result', (
+      tester,
+    ) async {
+      // decision: S97
+      final _FakeFinalize finalize = _FakeFinalize();
+      final GoRouter router = GoRouter(
+        initialLocation: '/m',
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/m',
+            builder: (_, _) => const MatchSessionScreen(sessionId: _sid),
+          ),
+          GoRoute(
+            path: '/result/:sessionId',
+            name: RouteNames.studyResult,
+            builder: (_, _) => const Scaffold(body: Text('RESULT')),
+          ),
+        ],
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            studySessionReviewProvider(_sid).overrideWith(
+              (ref) => Future<StudySessionReview>.value(_review(_fiveCards())),
+            ),
+            recordMatchEvaluationUseCaseProvider.overrideWithValue(
+              _FakeRecordMatchEval(),
+            ),
+            finalizeStudySessionUseCaseProvider.overrideWithValue(finalize),
+          ],
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: MxTheme.light,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (final (String front, String back) in _board1Pairs) {
+        await _matchPair(tester, front, back);
+      }
+      await tester.pumpAndSettle();
+      expect(finalize.called, isTrue);
+      expect(find.text('RESULT'), findsOneWidget);
     });
   });
 

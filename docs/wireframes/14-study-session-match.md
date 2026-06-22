@@ -17,8 +17,11 @@ source_specs:
 > **tap-pair state machine** is built (WP-SM4): `MatchBoardController` Fisher-Yates-shuffles the 10
 > cells, one selection at a time → a valid pair locks green ✓ / a wrong pair flashes red
 > (`AppMotion.matchWrongFlash`) then reverts, each pair persisting via `RecordMatchEvaluationUseCase`.
-> **Deferred:** the **Shuffle & restart** bar + mistake counter + count-up timer (WP-SM4b); board
-> progression + finalize→result reuse (WP-SM5).
+> **Board progression + finalize→result** is built (WP-SM5): clearing a board advances to the next
+> (after `AppMotion.matchBoardAdvance`); the last board marks the view `finished` → the screen calls
+> `FinalizeStudySessionUseCase` (Match branch derives terminals from the evals) and `pushReplacement`s
+> to the shared result screen (S96/S97). **Deferred (WP-SM4b):** the **Shuffle & restart** bar +
+> mistake counter + count-up timer.
 >
 > **MOCK ↔ §Components reconciliation (2026-06-22, PRECEDENCE #2 — mock wins for visual):** the kit
 > `13-study-match--matching` shot is the visual source and it has **no MATCH mode pill** and **no "BOARD
@@ -259,7 +262,7 @@ Same as Review mode.
 - Screen: `lib/presentation/features/study/screens/match_session_screen.dart` (the board surface + `_MatchCell`), reached via the session route `?mode=match` dispatch in `lib/presentation/features/study/routes/study_routes.dart`.
 - Board state: `lib/presentation/features/study/controllers/match_board_controller.dart` (`MatchBoardController` + `MatchCell`/`MatchCellStatus`/`MatchBoardView`). Board size = 5 cards = 10 cells; Fisher-Yates seeded by `sessionId.hashCode ^ (boardIndex+1)` (deterministic per board).
 - Flash duration: `lib/core/theme/app_motion.dart` → `AppMotion.matchWrongFlash`.
-- Grading: each pair-tap → `RecordMatchEvaluationUseCase` (`lib/domain/usecases/study/record_match_evaluation_usecase.dart`, append-only); terminals are derived at finalize (`StudyMatchEvaluationActions.finalize`, see `lib/data/repositories/study_match_evaluations.dart`). Board progression + finalize→result reuse = WP-SM5.
+- Grading: each pair-tap → `RecordMatchEvaluationUseCase` (`lib/domain/usecases/study/record_match_evaluation_usecase.dart`, append-only); terminals are derived at finalize (`StudyMatchEvaluationActions.finalize`, see `lib/data/repositories/study_match_evaluations.dart`). Board progression + finalize → result (WP-SM5): `MatchBoardController` advances boards / marks `finished`; `MatchSessionScreen._finish` → `FinalizeStudySessionUseCase` + `pushReplacementNamed(RouteNames.studyResult)` (reuses `StudyResultScreen`).
 
 **Related wireframes:**
 
