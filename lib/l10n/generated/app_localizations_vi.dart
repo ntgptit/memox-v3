@@ -800,4 +800,25 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyRecallGotIt => 'Nhớ rồi';
+
+  @override
+  String get studyFillPrompt => 'Nhập đáp án';
+
+  @override
+  String get studyFillAnswerLabel => 'Câu trả lời của bạn';
+
+  @override
+  String get studyFillCheck => 'Kiểm tra';
+
+  @override
+  String get studyFillWrongMessage => 'Chưa đúng — xem đáp án bên dưới.';
+
+  @override
+  String get studyFillCorrectLabel => 'Đáp án đúng';
+
+  @override
+  String get studyFillRetry => 'Thử lại';
+
+  @override
+  String get studyFillNext => 'Tiếp';
 }

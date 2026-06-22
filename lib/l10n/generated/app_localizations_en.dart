@@ -818,4 +818,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyRecallGotIt => 'Got it';
+
+  @override
+  String get studyFillPrompt => 'Type the answer';
+
+  @override
+  String get studyFillAnswerLabel => 'Your answer';
+
+  @override
+  String get studyFillCheck => 'Check answer';
+
+  @override
+  String get studyFillWrongMessage => 'Not quite — see the answer below.';
+
+  @override
+  String get studyFillCorrectLabel => 'Correct answer';
+
+  @override
+  String get studyFillRetry => 'Retry';
+
+  @override
+  String get studyFillNext => 'Next';
 }

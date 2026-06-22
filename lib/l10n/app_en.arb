@@ -506,5 +506,19 @@
   "studyRecallMissed": "Missed",
   "@studyRecallMissed": { "description": "Self-grade button on the Recall screen — the learner did not recall the card (records forgot)." },
   "studyRecallGotIt": "Got it",
-  "@studyRecallGotIt": { "description": "Self-grade button on the Recall screen — the learner recalled the card (records perfect)." }
+  "@studyRecallGotIt": { "description": "Self-grade button on the Recall screen — the learner recalled the card (records perfect)." },
+  "studyFillPrompt": "Type the answer",
+  "@studyFillPrompt": { "description": "Overline prompt above the hint on the Fill screen." },
+  "studyFillAnswerLabel": "Your answer",
+  "@studyFillAnswerLabel": { "description": "Overline above the answer field on the Fill screen." },
+  "studyFillCheck": "Check answer",
+  "@studyFillCheck": { "description": "Primary CTA on the Fill screen that grades the typed answer." },
+  "studyFillWrongMessage": "Not quite — see the answer below.",
+  "@studyFillWrongMessage": { "description": "Wrong-answer feedback line on the Fill screen." },
+  "studyFillCorrectLabel": "Correct answer",
+  "@studyFillCorrectLabel": { "description": "Overline on the revealed correct-answer card after a wrong Fill answer." },
+  "studyFillRetry": "Retry",
+  "@studyFillRetry": { "description": "Button on Fill wrong-feedback that clears the input and returns to typing." },
+  "studyFillNext": "Next",
+  "@studyFillNext": { "description": "Button on the Fill screen that records the grade and advances to the next card." }
 }

@@ -1519,6 +1519,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Got it'**
   String get studyRecallGotIt;
+
+  /// Overline prompt above the hint on the Fill screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the answer'**
+  String get studyFillPrompt;
+
+  /// Overline above the answer field on the Fill screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer'**
+  String get studyFillAnswerLabel;
+
+  /// Primary CTA on the Fill screen that grades the typed answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Check answer'**
+  String get studyFillCheck;
+
+  /// Wrong-answer feedback line on the Fill screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite — see the answer below.'**
+  String get studyFillWrongMessage;
+
+  /// Overline on the revealed correct-answer card after a wrong Fill answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct answer'**
+  String get studyFillCorrectLabel;
+
+  /// Button on Fill wrong-feedback that clears the input and returns to typing.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get studyFillRetry;
+
+  /// Button on the Fill screen that records the grade and advances to the next card.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get studyFillNext;
 }
 
 class _AppLocalizationsDelegate

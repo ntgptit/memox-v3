@@ -238,5 +238,12 @@
   "studyRecallAnswerLabel": "Đáp án",
   "studyRecallGradePrompt": "Bạn nhớ tốt đến đâu?",
   "studyRecallMissed": "Chưa nhớ",
-  "studyRecallGotIt": "Nhớ rồi"
+  "studyRecallGotIt": "Nhớ rồi",
+  "studyFillPrompt": "Nhập đáp án",
+  "studyFillAnswerLabel": "Câu trả lời của bạn",
+  "studyFillCheck": "Kiểm tra",
+  "studyFillWrongMessage": "Chưa đúng — xem đáp án bên dưới.",
+  "studyFillCorrectLabel": "Đáp án đúng",
+  "studyFillRetry": "Thử lại",
+  "studyFillNext": "Tiếp"
 }

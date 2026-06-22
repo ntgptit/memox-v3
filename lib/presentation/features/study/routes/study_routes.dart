@@ -3,6 +3,7 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
+import 'package:memox/presentation/features/study/screens/fill_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/guess_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/match_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/recall_session_screen.dart';
@@ -24,8 +25,8 @@ List<RouteBase> studyRoutes() => <RouteBase>[
     path: RoutePaths.studySession,
     name: RouteNames.studySession,
     // `?mode=` selects the mode surface — `match` (board), `guess` (multiple
-    // choice), `recall` (flip-card self-grade); any other / absent value falls
-    // back to the default Review session.
+    // choice), `recall` (flip-card self-grade), `fill` (typed production); any
+    // other / absent value falls back to the default Review session.
     builder: (context, state) {
       final String sessionId =
           state.pathParameters[RouteParams.sessionId] ?? '';
@@ -39,6 +40,9 @@ List<RouteBase> studyRoutes() => <RouteBase>[
       }
       if (mode == StudyMode.recall.name) {
         return RecallSessionScreen(sessionId: sessionId);
+      }
+      if (mode == StudyMode.fill.name) {
+        return FillSessionScreen(sessionId: sessionId);
       }
       return StudySessionScreen(sessionId: sessionId);
     },
