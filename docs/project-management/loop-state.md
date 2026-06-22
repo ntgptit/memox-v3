@@ -92,12 +92,14 @@ S73 Fill Finish-callout, FI2e Fill Edit/TTS, WP-RC2/RC3 (Recall countdown/Edit/T
 long-press), WP-SM4b (Match shuffle/timer/mistake), WP-SR4b-2 (Review Edit), WP-SR1b-2c, WP-SR2b — each
 re-opens the mock↔doc conflict and needs an owner call on whether the redesign intentionally cut it.
 
-**RECOMMENDED NEXT (non-conflicting, real value) — the logged QUALITY refactor** in §Follow-up cleanups:
-extract a shared **`MxScopedSearchDock`** from the near-identical `LibrarySearchDock` +
-`FolderDetailSearchDock` (dock chrome + a provider-synced field). DRY, no mock involvement, testable —
-genuine value without grinding a cut affordance. If instead continuing study polish, the least-bad pick
-is **WP-SR4b-2 (Review Edit)** (a real feature, not purely cosmetic) — but it needs `deckId` threaded
-into the review session + is mock-dropped, so flag it.
+**The logged `MxScopedSearchDock` dedup is DONE (`f3c337f`)** — and it also folded a third dock
+(`FlashcardListSearchDock`). The remaining §Follow-up cleanup is the **search-mode app-bar icons** (hide
+the search+sort icons while `searching` to match the kit Decks/Library loaded states exactly — a small
+visual-parity fix, apply to BOTH Library + folder together). That + the owner-flagged polish backlog
+below are what's left. **RECOMMENDED NEXT:** the search-mode-app-bar-icons cleanup (small, non-conflicting
+visual parity); if continuing study polish instead, the least-bad pick is **WP-SR4b-2 (Review Edit)** (a
+real feature, not cosmetic) — needs `deckId` threaded into the review session + is mock-dropped, so flag.
+**Genuine high-value runway is exhausted** — consider surfacing the owner-decision flags for a steer.
 
 **OWNER-DECISION FLAGS (accumulating — surface on review):** (1) the systematic mock-drops-wireframe-
 affordance pattern across all 5 modes — are these cut or deferred? (2) Fill front-vs-reading grading;
