@@ -41,14 +41,12 @@ auto-advance to the next card. Per-card flow (like Review), not boards (unlike M
 
 ## CHẺ — slices (FE; depends-on order; 1 per iteration)
 
-- [ ] **WP-SG1 — mode dispatch + Guess shell + option grid (static).** `?mode=guess` route dispatch →
-      `GuessSessionScreen`. A `GuessSessionController` (`@riverpod` family on sessionId): build from
-      `studySessionReviewProvider`, track `currentIndex` (resume at `firstUnansweredIndex`), and for the
-      current card build its option set via `buildOptions` (pool = the other items' `{id, back}`, seeded
-      by sessionId+index for stability). The screen: the immersive ✕ shell (reuse exit-confirm) + blue
-      progress + `{answered}/{total}` count + the **prompt card** (the front) + a **static** grid of
-      option cards (the backs) + loading/error/empty. Tokens + `Mx*`; copy → ARB; golden. (Watch the
-      mock↔wireframe conflict pattern — PRECEDENCE #2 mock wins visual.)
+- [x] **WP-SG1 — mode dispatch + Guess shell + option grid (static).** `88f906a`: `?mode=guess` →
+      `GuessSessionScreen` (S94); `GuessSessionController` builds the per-card option set via
+      `GuessStudyModeStrategy.buildOptions` (pool = other items' backs, seeded). Shell: ✕/exit-confirm +
+      blue progress + `{answered}/{total}` count + prompt card (overline + front `displayLarge` + reading)
+      + static lettered (A–E) option grid + states. ARB +1; nav-flow + wireframe-15 corrected. 7 tests +
+      question goldens. (Confirmed mock = no pill / single-line options — built to match, PRECEDENCE #2.)
 - [ ] **WP-SG2 — select-to-grade + advance + finalize → result.** Tap an option → `isCorrect` →
       `RecordStudySessionAnswerUseCase(studyMode: guess, result: perfect|forgot)`; reveal correct/wrong
       (correct green, wrong red + highlight the right one); auto-advance (countdown, `AppMotion.*`) to the
