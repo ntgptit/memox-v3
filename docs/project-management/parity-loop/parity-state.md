@@ -10,12 +10,20 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **12–17 — Study modes + result** — AUDIT done (combined; see
-  `docs/project-management/parity-loop/screen-plans/12-17-study.md`). 5 modes share one spine; goldens
-  cover 12/14/15/16 well; diff.py moderate (Ahem range, guess 19.8% + result-loaded 17.2% highest).
-  17 Result: loading golden ADDED (5.18%/6.13%); goal-off + tough-empty are V1-slice Future (goal block /
-  tough-cards not built) → needs-schema deferred. Next WP candidates: 13 match content-variant check;
-  per-mode node INVENTORY (12 review / 14 guess highest %). Study/SRS → fan-out adds `srs-reviewer`.
+- **NEXT: audit remaining FE screens** — the priority-built screens (03/04/06/07/08/12-17) are all
+  done-modulo-deferred. Remaining screens with FE to audit (confirm each via Explore first —
+  `lib/presentation/features/**`): 02 dashboard, 05 library-search, 09 flashcard-history, 11 tag-mgmt,
+  18 stats, 19 progress, 20-25 settings/account/learning/audio/appearance/language, 01 onboarding,
+  10 deck-import. Screens with NO FE → DEFER no-FE-yet. Pick the highest-priority FE-built one next.
+
+### Screen 12–17 — Study modes + result: AUDITED, done (modulo deferred)
+
+State coverage complete (12/14/15/16 goldens; 17 loading added; 17 goal-off/tough-empty Future). The FE
+study spine intentionally diverges from several kit per-mode mocks at the INTERACTION level (swipe/board/
+reveal vs flip+Next) — documented behavior-owned visual gaps (study-flow.md + wireframes 13-17,
+`[[study-mode-chain-complete]]`). Shared-token visuals close. Deferred: 17 Future blocks (needs-schema),
+per-mode interaction divergences (behavior-owned), per-mode token INVENTORY (low-priority). See
+`screen-plans/12-17-study.md`.
 
 ### Screen 07/08 — Flashcard editor: DONE (modulo deferred)
 
@@ -71,7 +79,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
 | 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
 | 07/08 | Flashcard editor | yes | done 2026-06-23 | done (modulo deferred) | create-valid golden added; validation behavior-owned; field-fill/deck-selector/Note deferred |
-| 12-17 | Study modes + result | yes | done 2026-06-23 | in-progress | 17 loading golden added; goal-off/tough-empty Future; next = 13 match variants + per-mode INVENTORY |
+| 12-17 | Study modes + result | yes | done 2026-06-23 | done (modulo deferred) | states covered; mode interactions behavior-owned (swipe/board vs kit flip); 17 Future blocks deferred |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |

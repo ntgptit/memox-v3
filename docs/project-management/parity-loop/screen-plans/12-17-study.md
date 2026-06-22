@@ -48,10 +48,26 @@ hint, guess answered, match board-fresh — all legit app states, keep.
 2. **13 Match content variants** (long-meanings, read-full-meaning): verify whether the FE match board
    renders a distinct layout for long meanings (wrap/ellipsis/expand) or it's the same board with longer
    text; add golden(s) if a distinct render exists, else note as covered by board goldens.
-3. **14 Guess** (19.84%) + **17 result loaded** (17.19%) — highest %; per-mode INVENTORY pass to check
-   for real divergences (vs Ahem text density). Likely text-noise; confirm via image compare.
-4. Per-mode node INVENTORY (deferred to per-mode WPs): each mode is a full-screen study UI; audit
-   app-bar/progress, card surface, answer controls, rating bar, etc. against its spec when taken as a WP.
+3. **12 Review interaction** — DOCUMENTED behavior-conflict (2026-06-23): kit `12` is a FLIP card
+   (one side "Term" + "Tap to flip" + bottom Flip/Next bar + teal deck chip); the FE shows BOTH sides
+   on one card + swipe-to-grade (right=perfect/left=forgot), no flip/Next. `study-flow.md:61` +
+   `wireframe 13:32-33` explicitly call the kit flip card a "documented visual gap — behaviour follows
+   §Rules (swipe, no reveal) per PRECEDENCE #1". → behavior-owned, do NOT pixel-match. Same pattern
+   likely applies to 13 match (board, both-sides). The 9.5% diff is structural-different + Ahem.
+4. **14 Guess** (19.84%) + **17 result loaded** (17.19%) — highest %; likely Ahem text-density + (guess)
+   its own interaction. Per-mode token INVENTORY (typography/spacing WITHIN the FE design) deferred as
+   lower-priority — no concrete token divergence surfaced in the sample; the mode interactions that
+   differ from the kit are behavior-owned (study-flow docs).
+
+## Screen 12-17 status: audited; done (modulo deferred)
+
+State coverage complete (12/14/15/16 goldens; 17 loading added; 17 goal-off/tough-empty Future;
+13 long-meanings/read-full-meaning + 14 guess content variants are mode-interaction variants). The
+FE study spine intentionally diverges from several kit per-mode mocks at the INTERACTION level
+(swipe/board/reveal vs flip+Next) — documented behavior-owned visual gaps per the wireframes
+(`[[study-mode-chain-complete]]`). Shared-token visuals (card/app-bar/progress) are close. Remaining
+deferred: 17 Future blocks (needs-schema); per-mode token INVENTORY (low-priority); mode-interaction
+divergences (behavior-owned).
 
 ## Notes
 - Study/SRS screens → fan-out MUST add `srs-reviewer` (behavior: box/interval/finalization) in addition
