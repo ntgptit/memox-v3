@@ -10,12 +10,14 @@ source_specs:
 
 # 15 — Study Session: Guess Mode
 
-> **Implementation note (2026-06-14):** Guess mode is now implemented in the current codebase.
-> The active presentation files are
-> `lib/presentation/features/study/widgets/study_session_guess_mode_view.dart` and
-> `lib/presentation/features/study/viewmodels/study_session_guess_viewmodel.dart`, wired from
-> `lib/presentation/features/study/screens/study_session_screen.dart`. This wireframe remains the
-> behavioral reference for the implemented screen.
+> **Status (2026-06-22):** the Guess **BE** is built (WBS 4.5.6 — `GuessStudyModeStrategy.buildOptions`
+> + `GuessOption`). The **FE shell** is built (WP-SG1): `lib/presentation/features/study/screens/guess_session_screen.dart`
+> + `lib/presentation/features/study/controllers/guess_session_controller.dart`, reached via the session
+> route `?mode=guess` dispatch (`study_routes.dart`) — the ✕ + blue progress + count, the prompt card
+> (front + reading), and the static lettered option grid. **Deferred (WP-SG2):** select-to-grade reveal
+> (correct green / wrong red) + `RecordStudySessionAnswerUseCase` wiring + auto-advance + finalize →
+> result. The earlier `study_session_guess_mode_view.dart` / `..._viewmodel.dart` paths were target
+> structure that never existed. This wireframe is the behavioral reference.
 
 ## Purpose
 

@@ -488,5 +488,7 @@
   "studyMatchSubtitle": "Tap a term, then its meaning.",
   "@studyMatchSubtitle": { "description": "Prompt subtitle under the Match title." },
   "studyMatchProgress": "{matched} matched · {left} left",
-  "@studyMatchProgress": { "description": "Match board status line below the grid.", "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } }
+  "@studyMatchProgress": { "description": "Match board status line below the grid.", "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } },
+  "studyGuessPrompt": "What does this mean?",
+  "@studyGuessPrompt": { "description": "Overline prompt above the term on the Guess screen." }
 }

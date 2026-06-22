@@ -1465,6 +1465,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{matched} matched · {left} left'**
   String studyMatchProgress(int matched, int left);
+
+  /// Overline prompt above the term on the Guess screen.
+  ///
+  /// In en, this message translates to:
+  /// **'What does this mean?'**
+  String get studyGuessPrompt;
 }
 
 class _AppLocalizationsDelegate

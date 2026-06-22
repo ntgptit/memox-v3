@@ -773,4 +773,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String studyMatchProgress(int matched, int left) {
     return '$matched đã ghép · còn $left';
   }
+
+  @override
+  String get studyGuessPrompt => 'Nghĩa của từ này là gì?';
 }

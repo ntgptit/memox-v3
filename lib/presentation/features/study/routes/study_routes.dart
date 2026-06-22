@@ -3,6 +3,7 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
+import 'package:memox/presentation/features/study/screens/guess_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/match_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
@@ -30,6 +31,9 @@ List<RouteBase> studyRoutes() => <RouteBase>[
           state.uri.queryParameters[RouteParams.modeQueryParam];
       if (mode == StudyMode.match.name) {
         return MatchSessionScreen(sessionId: sessionId);
+      }
+      if (mode == StudyMode.guess.name) {
+        return GuessSessionScreen(sessionId: sessionId);
       }
       return StudySessionScreen(sessionId: sessionId);
     },

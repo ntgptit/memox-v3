@@ -229,5 +229,6 @@
   "studyMatchTitle": "Ghép các cặp",
   "studyMatchSubtitle": "Chạm vào một từ, rồi chạm nghĩa của nó.",
   "studyMatchProgress": "{matched} đã ghép · còn {left}",
-  "@studyMatchProgress": { "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } }
+  "@studyMatchProgress": { "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } },
+  "studyGuessPrompt": "Nghĩa của từ này là gì?"
 }

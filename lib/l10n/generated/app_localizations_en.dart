@@ -791,4 +791,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String studyMatchProgress(int matched, int left) {
     return '$matched matched · $left left';
   }
+
+  @override
+  String get studyGuessPrompt => 'What does this mean?';
 }
