@@ -263,6 +263,7 @@ class StudyEntryScreen extends ConsumerWidget {
       StudyScopeEmptyReason.todayAllDone => done,
       _ => MxSecondaryButton(
         label: l10n.commonBack,
+        fullWidth: true,
         onPressed: () => context.pop(),
       ),
     };

@@ -335,6 +335,50 @@ void main() {
       );
       expect(find.text('s1'), findsOneWidget);
     });
+
+    testWidgets('Study new instead re-enters the gate with study_type=new_cards', (
+      tester,
+    ) async {
+      final GoRouter router = GoRouter(
+        initialLocation: '/library/study/deck/$_deckId?study_type=srs_review',
+        routes: studyRoutes(),
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            // Initial (review) scope is caught-up → shows "Study new instead".
+            studyEntryControllerProvider(_deckReviewScope).overrideWith(
+              () => _FakeController(
+                () async => const StudyEntryOutcome.blocked(
+                  StudyScopeEmptyReason.deckNoDueCards,
+                ),
+              ),
+            ),
+            // After re-entry the scope is the new-cards deck scope.
+            studyEntryControllerProvider(_deckScope).overrideWith(
+              () => _FakeController(
+                () async => const StudyEntryOutcome.blocked(
+                  StudyScopeEmptyReason.deckNoCards,
+                ),
+              ),
+            ),
+          ],
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: MxTheme.light,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('All caught up!'), findsOneWidget);
+      // Tapping it re-enters the gate with the new-cards scope (deckNoCards copy).
+      await tester.tap(find.text('Study new instead'));
+      await tester.pumpAndSettle();
+      expect(find.text('No cards in this deck'), findsOneWidget);
+    });
   });
 
   group('StudyEntryScreen goldens', () {

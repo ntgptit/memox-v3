@@ -24,9 +24,10 @@ last_updated: 2026-06-22
   after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
 - **Branch:** `feat/loop-library`; latest code commit `935e630` (WP-SR1b-2b; prior `427d392` WP-SR1b-2a,
   `c5b2a25` WP-SR1a).
-- **Last verify:** PASS (code chain, guard 0 errors) — marker bound to the WP-SR1b-2b tree. ~24 gate
-  tests + 10 goldens. Fan-out: docs-drift PASS; **code-reviewer + ui-parity-checker pending** (blocked
-  by sustained 529 overload during WP-SR1b-2b — re-run at the next iteration's start).
+- **Last verify:** PASS (code chain, guard 0 errors) — WP-SR1b-2b tree + review-fix. **Fan-out now
+  complete:** docs-drift PASS; code-reviewer APPROVE + ui-parity PASS (re-ran after the 529 overload
+  cleared). Folded 2 Importants: fallback-Back `fullWidth`, + a "Study new instead" navigation test
+  (`_reenterWithNewCards`). ~25 gate tests + 10 goldens.
 
 ## Follow-up cleanups (logged, not blocking)
 
