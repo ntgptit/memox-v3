@@ -89,10 +89,10 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       allSuspended → View suspended (`?filter=suspended`, deck scope); the "Next due in {relativeTime}"
       line from `nextDueAt`; the todayAllDone streak inset (needs engagement read model); the `?mode=`
       query. Lower-value polish — **deprioritized below WP-SR2** (the review session) per build-value.
-- [x] **WP-SR2 — review session shell + card.** `<this commit>`: `StudySessionScreen` (replacing the
+- [x] **WP-SR2 — review session shell + card.** `b69c2eb`: `StudySessionScreen` (replacing the
       placeholder) loads `studySessionReviewProvider` (`LoadStudySessionReviewUseCase`) → app bar (`✕` +
-      blue `MxProgressBar` + `{answered}/{total}`) + the both-sides card (front-side label → front →
-      divider → back-side label → back → example pill) + loading/error/empty. New shared `MxProgressBar`
+      blue `MxLinearProgress` + `{answered}/{total}`) + the both-sides card (front-side label → front →
+      divider → back-side label → back → example pill) + loading/error/empty. New shared `MxLinearProgress`
       (guard `no_raw_progress_indicator`). FRONT/BACK label fallback (language labels = WP-SR2b). No
       grading (WP-SR3). Row S88; 7 widget tests + card goldens (light+dark).
 - [ ] **WP-SR2b — language side-labels (deferred polish).** KOREAN/MEANING from `deck.target_language`
