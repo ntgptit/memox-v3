@@ -13,10 +13,11 @@ per loop. Visual-only; behavior is docs-owned.
 - **07/08 — Flashcard editor** — AUDIT done (see
   `docs/project-management/parity-loop/screen-plans/07-08-flashcard-editor.md`). One shared
   `FlashcardEditorForm`; 7 goldens cover most states. KEY finding: **dark ≈2× light** across editor
-  states (details-open dark 27.58%) → systematic dark-mode divergence, likely `MxTextField` dark
-  fill/border or scaffold bg. **Next WP = investigate + fix MxTextField dark parity** (shared → all
-  forms). Deferred (behavior/data-owned): DECK selector (Future), Note→3 fields (business model).
-  Missing goldens: 07 valid + 07/08 validation.
+  states. INVESTIGATED: dark≈2× is general Ahem-on-dark amplification (all screens), NOT editor-specific;
+  the real gap is `MxTextField` fill = surfaceMuted vs kit accent-contrast (=surface) — DEFERRED
+  app-wide-coordinated (~20 field goldens). Next WP candidates: 07 valid + 07/08 validation goldens
+  (missing states) — these don't need the field-fill change. Deferred: DECK selector (Future), Note→3
+  fields (business), field-fill (app-wide).
 
 ### Screen 06 — Flashcard list: DONE (modulo deferred)
 
@@ -55,7 +56,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
 | 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
-| 07/08 | Flashcard editor | yes | done 2026-06-23 | in-progress | audited; dark ≈2× light → MxTextField dark parity is next WP; deck-selector/Note deferred |
+| 07/08 | Flashcard editor | yes | done 2026-06-23 | in-progress | audited; dark=general Ahem ampl.; field-fill (surfaceMuted vs accent-contrast) deferred app-wide; next = valid/validation goldens |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |

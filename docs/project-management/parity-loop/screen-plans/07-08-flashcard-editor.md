@@ -52,9 +52,13 @@ delete action + title + initial text.
 
 ## GAP checklist (ordered)
 
-1. **Systematic dark-mode divergence** (dark ≈2× light) — investigate `MxTextField` dark fill/border +
-   scaffold body bg vs kit dark field surface. Fix at the shared `MxTextField`/theme layer → improves
-   ALL editor dark states (and every form). **WP candidate** (needs careful dark color-token compare).
+1. **Dark-mode divergence** — INVESTIGATED (2026-06-23). Two findings: (a) the dark ≈2× light pattern is
+   NOT editor-specific — dark runs higher than light on EVERY screen (general Ahem light-on-dark + dark
+   surface deltas), so it's golden-rendering amplification, not an editor bug; (b) a REAL token gap: kit
+   field fill is `accent-contrast` (= `colors.surface`, MxCard's surface), but `MxTextField` uses
+   `colors.surfaceMuted`. Fix = `fillColor: colors.surface`. DEFERRED app-wide-coordinated: MxTextField
+   feeds editor + 3 dialogs + MxSearchField (all search docks) + study fill + shared mx_inputs goldens
+   (~20 goldens) — needs a dedicated WP regenerating every field golden in one pass (parity-deferred).
 2. **Missing goldens**: 07 valid + 07/08 validation states (field-error rendering). Add goldens.
 3. **Save pill**: verify size/enabled+disabled (soft vs solid) match kit; the details-open golden seeds
    an empty form (Save disabled/soft) while the kit shows a filled form (Save solid) — consider a
