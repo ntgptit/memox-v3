@@ -18,11 +18,16 @@ per loop. Visual-only; behavior is docs-owned.
   available; remaining gaps validly deferred. Residual diff.py % across screens is Ahem test-font
   rendering (harness limitation, not a parity failure); ui-parity-checker (actual images) passed on
   reviewed screens.
-- **NEXT eligible substantive WP: app-wide MxTextField field-fill** (kit `accent-contrast` vs FE
-  `surfaceMuted` — real visual divergence, NOT a valid defer per "khác biệt visual"). Do it properly:
-  change `mx_text_field.dart` `fillColor: surfaceMuted → surface`, regen ALL field goldens in ONE
-  `--update-goldens --test <all field test paths>` pass (editor, folder dialogs, all search docks,
-  study fill, shared mx_inputs), prove pass w/o --update, fan-out. Then re-assess terminal.
+- **app-wide MxTextField field-fill — ✅ DONE 2026-06-23**: `fillColor: surfaceMuted → surface`
+  (kit accent-contrast); ~40 field goldens regenerated in one pass; editor dark 13.91→9.42%. This was
+  the last substantive eligible visual fix.
+- **TERMINAL CHECK (next loop)**: all FE screens audited + concrete fixes landed; remaining items are
+  all valid-deferred (needs-token: 56-tile/22-800/13-600/11-700 type roles + modal shadow; behavior/
+  scope-owned: study interactions, dashboard redesign, move-sheet, editor deck-selector/Note, validation;
+  needs-schema: 17 goal-off/tough-empty, flashcard status chip; no-FE-yet: 01/09/10/11/18/19/20-25;
+  Lucide↔Material icons accepted). Residual diff.py % = Ahem test-font rendering (harness limit). Next
+  loop: do a sanity sweep (any non-deferred concrete fix left?) — if none, print terminal summary +
+  PushNotification + STOP (omit ScheduleWakeup). If a concrete fix surfaces, do it.
 
 ### Screen 02 — Dashboard: AUDITED, done (modulo redesign-deferred)
 FE = redesigned quiet surface (MxDueSummary + Progress/Library shortcuts); its states (loading/error/

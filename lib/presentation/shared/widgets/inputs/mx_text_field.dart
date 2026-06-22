@@ -88,7 +88,14 @@ class MxTextField extends StatelessWidget {
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: colors.surfaceMuted,
+        // Kit field fill is the raised card surface (`colors.surface`, what
+        // MxCard uses for the kit `bg:accent-contrast` token), not the muted
+        // gray. NOTE: the kit `accent-contrast` token is the SURFACE (white in
+        // light, dark navy in dark — see the dark kit field shots), NOT the
+        // white-in-both `colors.accentContrast` text color. Fields read
+        // white-on-canvas (light) / border-defined dark box (dark), matching the
+        // kit (specs field `bg:accent-contrast r:14 border:1px border`).
+        fillColor: colors.surface,
         hintStyle: theme.textTheme.bodyLarge?.copyWith(
           color: colors.textTertiary,
         ),
