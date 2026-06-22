@@ -74,8 +74,13 @@ Subfolders state: rows are folder rows (`LibraryFolderTile`, already audited in 
    Also fixed a latent WP-3 staleness: folder_detail_subfolders golden picked up the
    `LibraryFolderTile` chevron 24→20 (WP-3 only regenerated library goldens). Remaining empty
    residual = shared inner-panel (56 tile / 22-800 title, needs-token).
-2. **Decks overline count color**: kit splits "DECKS" (text-2) + count suffix (text-3); FE `_Overline` likely single color. Verify/fix (shared `_Overline` is duplicated in library + folder bodies — candidate to share).
-3. **DeckTile audit**: chevron size 20 (cf. 03 WP-3 — DeckTile may also default to 24), due chip style (accent pill 11/700 tracking0.1), title/meta typography. Audit `deck_tile.dart`.
+2. **Decks overline count color**: kit splits "DECKS" (text-2) + count suffix (text-3); FE `_Overline` likely single color. Verify/fix (shared `_Overline` is duplicated in library + folder bodies — candidate to share). NOTE (future): a `_DueBadge` now exists in 3 places — `deck_tile.dart` (solid, this WP), `flashcard_list_body.dart` (solid), `library_folder_tile.dart` (soft). Candidate to lift to a shared `MxDueBadge({variant: soft|solid})` alongside the `_Overline` dedup, to stop the three drifting.
+3. **DeckTile audit** — ✅ WP DONE (2026-06-23): chevron 24→20 (`MxIconSize.md`); due chip soft→SOLID
+   (was accentSoft bg + accent text; now `accent` bg + `accentContrast` white text + pad h12) to match
+   kit `04 decks` (bg:accent, color:accent-contrast, pad 0/12). Title 16/600 (titleMedium) ✓, meta
+   13/400 textSecondary (bodySmall) ✓, leading tile accent-tint icon20 ✓. Residual: chip weight is
+   labelSmall 11/600 vs kit 11/700 (no 11/700 role; <neg). decks diff ~13% Ahem-noise-dominated;
+   chip now visually solid-indigo matching the shot. Goldens: folder_detail_decks + deck_tile_studied.
 4. **FolderStatsCard audit**: 3 equal cols, Due col tint accent@12%, value 26/800 -0.5, label 13/600, Due color accent.
 5. **delete-confirm golden** (missing state).
 6. **move-sheet golden** (missing state).

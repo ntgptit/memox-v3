@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/core/util/relative_time.dart';
@@ -95,7 +96,13 @@ class DeckTile extends StatelessWidget {
               _DueBadge(count: summary.dueCount),
             ],
             const SizedBox(width: MxSpacing.space2),
-            Icon(Icons.chevron_right, color: colors.textTertiary),
+            // Kit list-row trail chevron is 20px (`--memox-icon-md`), not the
+            // Material default 24 (spec 04 list-row-trail rel 20x20).
+            Icon(
+              Icons.chevron_right,
+              size: MxIconSize.md,
+              color: colors.textTertiary,
+            ),
           ],
         ),
       ),
@@ -111,19 +118,22 @@ class _DueBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MxColors colors = context.mxColors;
+    // Kit `04 decks` deck-row due chip is a SOLID accent pill with white text
+    // (spec: bg:accent, color:accent-contrast, 11/700, pad 0/12), not the soft
+    // tint used elsewhere — a prominent "study these" affordance.
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: MxSpacing.space2,
+        horizontal: MxSpacing.space3,
         vertical: MxSpacing.space1,
       ),
       decoration: BoxDecoration(
-        color: colors.accentSoft,
+        color: colors.accent,
         borderRadius: MxRadius.pillAll,
       ),
       child: MxText(
         AppLocalizations.of(context).folderDueBadge(count),
         role: MxTextRole.labelSmall,
-        color: colors.accent,
+        color: colors.accentContrast,
       ),
     );
   }
