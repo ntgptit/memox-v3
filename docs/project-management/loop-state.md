@@ -28,11 +28,13 @@ last_updated: 2026-06-22
   Recommend **WP-FI2 first** (closes the most spec gaps + the only `recovered`-bearing mode). Audit-first
   as always; re-confirm the Fill front-vs-reading conflict with the owner before extending Fill.
 - **Parked (object 5):** none — WP-FL2b2b shipped (`13e0fe8`); object 5 (library FE) is complete.
-- **Polish progress:** **WP-FI2a (Fill Mark-correct → `recovered`, S72) — DONE** (`f1625b1`): a discreet
-  accent link under the wrong Retry/Next row overrides to `recovered`. Remaining WP-FI2: Hint-taint (S69),
-  auto-advance countdown, last-card Finish callout (S73), finalize-fail (S75), Edit/TTS.
-- **Branch:** `feat/loop-library`; latest code commit `f1625b1` (WP-FI2a — Fill Mark-correct; prior
-  `13e0fe8` WP-FL2b2b Tags / object 5 done, `a6f37b5` WP-FI1 Fill → all 5 study modes done).
+- **Polish progress:** Fill `recovered` path **complete** — **WP-FI2a (Mark-correct, S72)** (`f1625b1`) +
+  **WP-FI2b (Hint-taint, S69)** (`3466204`): a wrong answer can be overridden, and a hint reveals a
+  `·`-masked front prefix that caps a clean match at `recovered` (retained across Retry). Remaining WP-FI2:
+  **FI2c** auto-advance countdown (S68), **FI2d** last-card Finish callout (S73) + finalize-fail (S75),
+  **FI2e** Edit/TTS.
+- **Branch:** `feat/loop-library`; latest code commit `3466204` (WP-FI2b — Fill Hint; prior
+  `f1625b1` WP-FI2a Mark-correct, `13e0fe8` WP-FL2b2b Tags / object 5 done).
 - **Last verify:** PASS (code chain, guard 0 errors) — WP-SR1b-2b tree + review-fix. **Fan-out now
   complete:** docs-drift PASS; code-reviewer APPROVE + ui-parity PASS (re-ran after the 529 overload
   cleared). Folded 2 Importants: fallback-Back `fullWidth`, + a "Study new instead" navigation test
@@ -80,14 +82,16 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 **All greenfield objects are COMPLETE** — the 5 study modes (6-10) + object 5 (library FE, incl. Tags).
 Only the deferred study-mode **polish** backlog remains. Pick the highest-value item (audit-first as always):
 
-**RECOMMENDED NEXT — continue WP-FI2 (Fill polish); WP-FI2a Mark-correct is done.** Remaining slices
-(CHẺ ~1/iter), read `loop-plan/study-fill.md` + `docs/wireframes/17-study-session-fill.md` + decision
-S68/S69/S73/S75: **WP-FI2b — Hint** char-reveal (reveal 1 char at a time, max half the front; taints →
-`evaluate(hintUsed: true)` → `recovered`, S69; add a Hint button beside Check); **WP-FI2c — 0.8s
-auto-advance countdown** on correct (S68, reuse Guess's timer pattern); **WP-FI2d — last-card Finish
-callout** (S73) + explicit **finalize-fail** surface (S75); **WP-FI2e — Edit ✎ / TTS 🔊**. Each adds UI
-the redesign mock dropped → build the documented behavior + flag the visual variance (as WP-FI2a did).
-**Re-confirm the Fill front-vs-reading mock↔doc conflict with the owner before extending further.**
+**RECOMMENDED NEXT — continue WP-FI2 (Fill polish); WP-FI2a (Mark-correct) + WP-FI2b (Hint) are done —
+the `recovered` path is complete.** Remaining slices (CHẺ ~1/iter), read `loop-plan/study-fill.md` +
+`docs/wireframes/17-study-session-fill.md` + decision S68/S73/S75: **WP-FI2c — 0.8s auto-advance countdown**
+on correct (S68, reuse Guess's `_CountdownFooter`/timer pattern + `AppMotion`; add a `recallAnswerTimeout`-
+style constant if needed); **WP-FI2d — last-card Finish callout** (S73) + explicit **finalize-fail** surface
+(S75 — note: all modes currently tolerate finalize failure + route regardless, so S75 is a cross-cutting
+change; consider applying to all modes or keep Fill-only + flag); **WP-FI2e — Edit ✎ / TTS 🔊**. Each adds
+UI the redesign mock dropped → build the documented behavior + flag the visual variance (as FI2a/b did).
+**Re-confirm the Fill front-vs-reading mock↔doc conflict + the S20 `recovered`-redefinition drift with the
+owner before extending further.** (Other backlog: WP-RC2/RC3, WP-SG3, WP-SM4b, WP-SR4b-2.)
 
 **ALSO PENDING (pick by value):** WP-RC2 (Recall Show-answer countdown + auto-reveal-on-timeout, S63/S64;
 needs a `recallAnswerTimeout` constant), WP-RC3 (Recall Edit/TTS, S65), WP-SG3 (Guess long-press

@@ -3,7 +3,7 @@ last_updated: 2026-06-22
 object: Study — Fill mode (object 10 of 10 — the LAST study mode)
 loop_order: 10 of 10 (after object 9 Recall, DONE)
 route: /library/study/session/:sessionId?mode=fill
-status: WP-FI1 DONE (typed check/grade); WP-FI2a DONE (Mark-correct → recovered); WP-FI2b-e remain
+status: WP-FI1 DONE (typed check/grade); WP-FI2a+b DONE (Mark-correct + Hint → recovered); WP-FI2c-e remain
 ---
 
 # Loop plan — Object 10: Study — Fill
@@ -58,8 +58,10 @@ is superseded), real text field, full-width Check, CORRECT ANSWER card, Retry/Ne
   - [x] **WP-FI2a — Mark correct** (`f1625b1`, S72): a discreet accent link under the wrong-feedback
         Retry/Next row overrides to `recovered` (`evaluate(markCorrect:true)` outcome) + flips to the
         correct-feedback state; recorded on advance. Mock variance flagged (mock = Retry/Next only).
-  - [ ] **WP-FI2b — Hint** button (reveal one char at a time, max half the front; taints → caps at
-        `recovered` via `evaluate(hintUsed: true)`, S69), beside Check.
+  - [x] **WP-FI2b — Hint** (`3466204`, S69): a discreet accent link below Check reveals one leading front
+        char at a time (max half the length) as a `·`-masked prefix; any reveal taints → a clean match
+        caps at `recovered` via `evaluate(hintUsed: true)`; retained across Retry. (Mock = Check only;
+        variance flagged. code-reviewer caught + fixed a retry-drops-taint bug.)
   - [ ] **WP-FI2c** — the 0.8s auto-advance countdown on correct (S68, reuse Guess's timer pattern).
   - [ ] **WP-FI2d** — last-card **Finish** callout (S73) + the explicit **finalize-fail** surface (S75).
   - [ ] **WP-FI2e** — the Edit ✎ / TTS 🔊 affordances.

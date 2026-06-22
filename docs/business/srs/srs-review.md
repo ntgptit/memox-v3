@@ -83,7 +83,7 @@ See `docs/business/glossary.md` for result definitions.
 | Result           | When it applies (adopted contract 2026-06-10)                                                      |
 |------------------|------------------------------------------------------------------------------------------------------|
 | `perfect`        | Correct, clean attempt (V1 "Got it")                                                                  |
-| `recovered`      | Single passing-but-imperfect attempt: fill hint-taint or Mark-correct override (Target; redefined — no longer "forgot then passed", which now finalizes as `forgot`) |
+| `recovered`      | Single passing-but-imperfect attempt: fill hint-taint (WP-FI2b) or Mark-correct override (WP-FI2a) — **now emitted by the Fill FE**; redefined — no longer "forgot then passed", which now finalizes as `forgot` (NOTE: decision row S20 still carries the old "forgot-then-passed → recovered" wording — pre-existing drift, flagged for owner reconciliation) |
 | `forgot`         | First attempt failed (V1 "Forgot"); under retry modes, a first-attempt fail stays `forgot` even after a same-session re-queue pass |
 | `initial_passed` | Compatibility-only legacy storage codec value; never emitted by current modes. Reviving it requires a new product decision. |
 
