@@ -75,11 +75,12 @@ chrome), keeping (b) (the phase chain) as a separate object. Read `study-flow.md
       `attempt_order`) on the domain repo interface + `study_repository_impl` + a DAO (reuse the existing
       `Result<T>` pattern, NOT fpdart — the contract's `Either` is target style). `RecordMatchEvaluationUseCase`
       + DI provider. Repo + DAO + use-case tests (append-only, ordering, touch updated_at). Decision rows.
-- [ ] **WP-SM2 — Match BE: finalization derivation (WBS 4.5.4, part 2).** Extend `finalizeStudySession`
-      with the Match branch: read eval rows → derive one terminal `study_attempts` per session item
-      (all-correct→perfect; any-wrong→forgot/recovered per the strategy) → `flashcard_progress` UPDATE +
-      mark item answered; unanswered match items removed per the contract. `study-flow.md` +
-      `srs-review.md` derivation rules + decision rows + transition tests. Flip 4.5.4 → Implemented.
+- [x] **WP-SM2 — Match BE: finalization derivation (WBS 4.5.4, part 2).** `219c272`: `finalizeStudySession`
+      routes to the Match branch (by presence of evaluations) → `StudyMatchEvaluationActions.finalize`
+      derives one terminal `study_attempts` per item (first-eval-correct→`perfect`, else `forgot`) →
+      `SrsBox.nextBox` + `dueAtFor` + lapse/review, in one `finalizeMatchSession` txn (insert attempts +
+      mark answered + upsert progress + complete). Extracted shared `dueAtFor` → `srs_due.dart`. Rows
+      S56/S57; 4 finalize tests. **WBS 4.5.4 → Implemented (Match BE COMPLETE).**
 - [ ] **WP-SM3 — mode dispatch + Match board shell (FE).** Resolve the OPEN QUESTION (recommend
       `?mode=match` query → `RouteParams`/nav-flow). `StudySessionScreen` dispatches Review vs a new
       `MatchBoardScreen`/body: the app bar (✕ + **blue** MATCH mode pill + blue progress + count) + the
