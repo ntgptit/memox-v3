@@ -7,27 +7,25 @@ last_updated: 2026-06-22
 
 ## Cursor
 
-- **Context — the 5 study modes (objects 6-10)** all play end-to-end on one shared spine (session shell +
-  exit-confirm + `MxLinearProgress` + the `?mode=` dispatch + SRS finalization + the SR5 result). Plans:
-  `loop-plan/study-{review,match,guess,recall,fill}.md`. See [[study-mode-chain-complete]] memory.
-- **🎉 MILESTONE — ALL GREENFIELD OBJECTS COMPLETE (2026-06-22):** the 5 study modes (objects 6-10) AND
-  object 5 (library FE, incl. the last node WP-FL2b2b Tags chip input) are done. No greenfield object node
-  remains — only the deferred study-mode **polish** backlog (the WP-*2/3 items below).
-- **Current work-package:** **OBJECT 5 (Tags) — COMPLETE (WP-FL2b2b, `13e0fe8`).** The flashcard editor's
-  Details § TAGS chip row (`#` + name + ✕ remove) + a "+ Add tag" inline field; add validates + lowercases
-  + dedupes (`TagValidator`); the editor manages the full set + **replaces** wholesale on save — wired into
-  **both** create (previously omitted tags — a real bug) + update. WBS 2.15.2 → Implemented; C20/C21. The
-  tag-assignment BE (Flashcard.tags, Create/UpdateFlashcardUseCase, TagValidator) was already built → FE-only.
-  **NEXT — only the deferred study-mode polish remains (pick the highest-value):**
-  1. **WP-FI2 (Fill polish)** — Hint char-reveal + Mark-correct (both → `recovered`, S69/S72), the 0.8s
-     auto-advance countdown, the last-card Finish callout (S73), finalize-fail surface (S75), Edit/TTS.
-     The richest remaining item; the evaluator already supports `recovered`. Plan: `loop-plan/study-fill.md`.
-  2. **WP-RC2** (Recall Show-answer countdown + auto-reveal-on-timeout, S63/S64; needs a `recallAnswerTimeout`
-     constant), **WP-RC3** (Recall Edit/TTS, S65), **WP-SG3** (Guess long-press card-actions), **WP-SM4b**
-     (Match Shuffle&restart/timer/mistake counter), **WP-SR4b-2** (Review Edit), WP-SR1b-2c, WP-SR2b.
-  Recommend **WP-FI2 first** (closes the most spec gaps + the only `recovered`-bearing mode). Audit-first
-  as always; re-confirm the Fill front-vs-reading conflict with the owner before extending Fill.
-- **Parked (object 5):** none — WP-FL2b2b shipped (`13e0fe8`); object 5 (library FE) is complete.
+- **🏁 FE-COMPLETION LOOP DONE (owner ruling 2026-06-22): the redesign mock is AUTHORITATIVE.** All
+  autonomous-safe work is committed; the owner ruled the remaining backlog: affordances the mock dropped
+  are **Rejected/out-of-scope** (the redesign intentionally simplified each mode), conflicts resolve
+  toward the **mock + the built behavior**, and the **FE is complete**. The loop is **STOPPED** — do not
+  self-pace further. See [[fe-loop-complete-mock-authoritative]] + [[study-mode-chain-complete]].
+- **Built FE (kept):** 5 study modes end-to-end (Review/Match/Guess/Recall/Fill) + SR5 result; object 5
+  library FE incl. per-card Tags; Fill `recovered` (Mark-correct WP-FI2a + Hint WP-FI2b) + 0.8s
+  auto-advance (WP-FI2c); shared `MxScopedSearchDock` (deduped 3 docks). Spine: session shell +
+  exit-confirm + `MxLinearProgress` + `?mode=` dispatch + SRS finalization + SR5.
+- **Rejected per the ruling (do NOT build):** Fill Finish-callout (S73) + Edit/TTS (WP-FI2e); Recall
+  countdown/auto-reveal (WP-RC2, S63/S64) + Edit/TTS (WP-RC3, S65); Guess long-press (WP-SG3); Match
+  Shuffle&restart/timer/mistake (WP-SM4b); Review Edit (WP-SR4b-2), WP-SR1b-2c, WP-SR2b.
+- **Conflicts resolved (mock + built):** Fill grades the FRONT (mock's "reading" copy not adopted);
+  Recall is BINARY (mock's "Partial" Rejected); progress bars BLUE (wireframe green-family superseded);
+  finalize-fail = route-to-SR5 + save-failed banner (WP-SR5b; S9/S10/S75 stay-on-session superseded);
+  `recovered` = single hint/mark-correct pass (redefined). **Accepted deviation:** Library/Folder
+  search-mode keeps the search-toggle icon (exit affordance; the mock hides it — exit-rewire not worth it).
+- **Still-deferred (NOT a mock-cut, separate owner decision):** WP-FL1 card-row SRS-state chip — its
+  box→state mapping is genuinely undocumented (needs a spec, not a build call).
 - **Polish progress:** Fill `recovered` path + auto-advance **done** — **WP-FI2a (Mark-correct, S72)**
   (`f1625b1`) + **WP-FI2b (Hint-taint, S69)** (`3466204`) + **WP-FI2c (0.8s auto-advance countdown, S68)**
   (`42104ce`; a depleting bar over Next via `AppMotion.fillAutoAdvance` + `TweenAnimationBuilder.onEnd`,
@@ -50,10 +48,11 @@ last_updated: 2026-06-22
   `FolderDetailSearchDock` + `FlashcardListSearchDock` (a **third** near-identical dock the fan-out caught)
   are now thin wrappers. Behavior-preserving (no golden changes); test in `mx_inputs_test.dart`.
   (`MxSearchDock` stays separate — its onChanged-only API can't host the synced field.)
-- Search-mode app-bar icons: kit Decks/loaded states show only overflow (folder) / sort (library);
-  the search-toggle + sort icons are kept as post-redesign affordances (documented variance). A
-  future pass could hide search+sort while `searching` to match the mock exactly — apply to BOTH
-  Library + folder together.
+- ✅ **RESOLVED (2026-06-22, mock-authoritative ruling) — accepted deviation:** the Library/Folder
+  search-mode app bar keeps the **search-toggle** icon (the mock `03`/`04` search state hides it,
+  keeping only sort). Audit found the toggle is the *only* exit from search mode (the dock ✕ clears the
+  term but does not deactivate), so hiding it would trap the user without an exit rewire. Kept as the
+  explicit exit affordance; the mock's icon-hiding is **not adopted** (the rewire isn't worth it).
 - FAB in flashcard-list **empty** state: `flashcard_list_screen.dart` shows the add-card `MxFab`
   even when `totalCount == 0`, but kit `06` empty has no FAB (the empty state has an inline Add CTA);
   Library/folder empty states correctly hide the FAB. Pre-existing (not WP-D2). Small eligible fix:
@@ -84,32 +83,11 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 
 ## Next action
 
-**All greenfield objects + the high-value study-mode polish are COMPLETE.** The 5 study modes (6-10) +
-object 5 (library FE incl. Tags) are done; Fill's `recovered` path + auto-advance are built and its
-finalize-fail is covered-by-design (WP-SR5b). **The remaining backlog is entirely low-value
-mock-dropped affordances** (the redesign mock simplified every mode; the wireframes' extra UI was cut):
-S73 Fill Finish-callout, FI2e Fill Edit/TTS, WP-RC2/RC3 (Recall countdown/Edit/TTS), WP-SG3 (Guess
-long-press), WP-SM4b (Match shuffle/timer/mistake), WP-SR4b-2 (Review Edit), WP-SR1b-2c, WP-SR2b — each
-re-opens the mock↔doc conflict and needs an owner call on whether the redesign intentionally cut it.
+**None — the FE-completion loop is COMPLETE and STOPPED (owner ruling 2026-06-22: mock authoritative).**
+All autonomous-safe work is committed; the remaining wireframe affordances the redesign mock dropped are
+**Rejected/out-of-scope** (see the Cursor block + [[fe-loop-complete-mock-authoritative]]). The conflict
+flags are **resolved** toward the mock + the built behavior. There is no further loop work to self-pace.
 
-**The logged `MxScopedSearchDock` dedup is DONE (`f3c337f`)** — and it also folded a third dock
-(`FlashcardListSearchDock`). The remaining §Follow-up cleanup is the **search-mode app-bar icons** (hide
-the search+sort icons while `searching` to match the kit Decks/Library loaded states exactly — a small
-visual-parity fix, apply to BOTH Library + folder together). That + the owner-flagged polish backlog
-below are what's left. **RECOMMENDED NEXT:** the search-mode-app-bar-icons cleanup (small, non-conflicting
-visual parity); if continuing study polish instead, the least-bad pick is **WP-SR4b-2 (Review Edit)** (a
-real feature, not cosmetic) — needs `deckId` threaded into the review session + is mock-dropped, so flag.
-**Genuine high-value runway is exhausted** — consider surfacing the owner-decision flags for a steer.
-
-**OWNER-DECISION FLAGS (accumulating — surface on review):** (1) the systematic mock-drops-wireframe-
-affordance pattern across all 5 modes — are these cut or deferred? (2) Fill front-vs-reading grading;
-(3) Recall 3-grade (Partial); (4) the S20 `recovered`-redefinition drift; (5) S9/S10/S75 finalize-fail
-"stay-on-session" superseded by WP-SR5b route-to-result+banner. **Audit-first (TRUST POLICY) on every pickup.**
-
-**ALSO PENDING (pick by value):** WP-RC2 (Recall Show-answer countdown + auto-reveal-on-timeout, S63/S64;
-needs a `recallAnswerTimeout` constant), WP-RC3 (Recall Edit/TTS, S65), WP-SG3 (Guess long-press
-card-actions), WP-SM4b (Match Shuffle&restart/timer/mistake counter), WP-SR4b-2 (Review Edit + deckId),
-WP-SR1b-2c, WP-SR2b; the create-editor **save-and-add-another** (WBS 2.11.2 remaining).
-
-PRECEDENCE unchanged: behavior → business docs + decision tables win over the mock; mock wins VISUAL;
-tokens; copy → ARB. Audit-first (TRUST POLICY) on every pickup.
+**If the owner later wants more:** the only non-rejected open item is **WP-FL1** (card-row SRS-state chip)
+— blocked on a documented box→state mapping (thresholds + chip tokens), not a mock-cut; and the
+create-editor **save-and-add-another** (WBS 2.11.2 remaining) if desired. Both need a fresh decision/spec.

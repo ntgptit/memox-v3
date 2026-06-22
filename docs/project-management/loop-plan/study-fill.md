@@ -66,16 +66,17 @@ is superseded), real text field, full-width Check, CORRECT ANSWER card, Retry/Ne
         `MxLinearProgress` over Next (`AppMotion.fillAutoAdvance` + `TweenAnimationBuilder.onEnd` →
         `next()`; tap Next to skip). Widget-driven (no controller Timer). Area widgets extracted to
         `widgets/fill_session_areas.dart` for file-length.
-  - [~] **WP-FI2d** — **finalize-fail (S75) is covered-by-design** (audit 2026-06-22): Fill inherits the
-        shared route-to-SR5 + save-failed banner (WP-SR5b) like every mode — not a Fill todo; the S9/S10/S75
-        "stay-on-session" wording is superseded (flagged for owner). Only the last-card **Finish callout**
-        (S73) remains — **low value** (auto-finalize already works); deferred.
-  - [ ] **WP-FI2e** — the Edit ✎ / TTS 🔊 affordances (large + needs deckId / a TTS feature; mock-dropped).
-  Re-confirm the front-vs-reading conflict with the owner before extending further.
+  - [x] **WP-FI2d** — **finalize-fail (S75) covered-by-design**: Fill inherits the shared route-to-SR5 +
+        save-failed banner (WP-SR5b) like every mode. The last-card **Finish callout (S73) is REJECTED**
+        (mock-authoritative ruling 2026-06-22 — the mock auto-finalizes; the Finish-callout was a
+        wireframe-only affordance the redesign cut).
+  - [x] **WP-FI2e — REJECTED** (mock-authoritative ruling 2026-06-22): the Edit ✎ / TTS 🔊 affordances
+        are not in the mock; out-of-scope.
 
-  **Assessment (2026-06-22):** Fill's high-value polish is DONE (FI2a/b/c + FI2d finalize-fail covered).
-  The remainder (S73 Finish-callout, FI2e Edit/TTS) is low-value / mock-dropped / large. Recommend NOT
-  grinding these — pause Fill; the broader study-polish backlog is similar (see loop-state).
+  **FINAL (2026-06-22, owner ruling — mock authoritative):** Fill is **DONE**. Built: WP-FI1 +
+  FI2a (Mark-correct) + FI2b (Hint) + FI2c (auto-advance) → the full `recovered` path + countdown.
+  Front-graded (mock's "reading" copy not adopted). FI2d Finish-callout (S73) + FI2e Edit/TTS **Rejected**
+  as redesign-cut. See [[fe-loop-complete-mock-authoritative]] + loop-state.
 
 ## PRECEDENCE / rules
 
