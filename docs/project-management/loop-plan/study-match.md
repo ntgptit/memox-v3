@@ -61,13 +61,20 @@ chrome), keeping (b) (the phase chain) as a separate object. Read `study-flow.md
 
 ## CHẺ — slices (BE-first; depends-on order; 1 per iteration)
 
-- [ ] **WP-SM1 — Match BE: schema + append-only evaluation persistence (WBS 4.5.4, part 1).** The
-      `study_match_evaluations` table (`session_id`, `flashcard_id`, `is_correct`, `created_at`;
-      append-only) + Drift migration (bump schema version) + schema-contract + migration-contract +
-      storage-boundaries + drift-guide docs (schema hard-rule: all in the same commit). `MatchEvaluation`
-      entity + mapper. `recordMatchEvaluation` / `loadMatchEvaluations` repo + DAO (INSERT + touch
-      `updated_at`; load ordered). `RecordMatchEvaluationUseCase` + DI. Repo + DAO + usecase tests
-      (append-only, ordering, touch). Decision rows. Correct the wireframe-14 drift-note.
+- [x] **WP-SM1a — Match BE: `study_match_evaluations` schema enabler (WBS 4.5.4, part 1a).** `a7b5cb9`:
+      the append-only table (14 cols per schema-contract: `id`, `session_id`/`session_item_id`/`flashcard_id`
+      FK cascades, `board_index`, `pair_id`, `selected_/expected_front/back` ids, `is_correct`,
+      `attempt_order`, `evaluated_at`, `created_at`) + `idx_..._session`/`_session_item` in
+      `study_tables.drift`; `currentSchemaVersion` 7→8 + `migrateV7ToV8` + `v8_add_match_evaluations.dart`;
+      schema-contract + migration-contract + drift-guide; v8 migration test + schema-assert 7→8.
+      Schema-only/additive (no behavior — mirrors v6/v7 enablers). Corrected the wireframe-14 drift-note.
+- [ ] **WP-SM1b — Match BE: evaluation persistence (WBS 4.5.4, part 1b).** `MatchEvaluation` entity +
+      `study_session_mapper` rows; `recordMatchEvaluation(...)` (append the eval row — `attempt_order` =
+      next per-session seq, `flashcard_id` = `expectedFrontFlashcardId`, `evaluated_at`/`created_at` = now
+      — + touch `study_sessions.updated_at`) and `loadMatchEvaluations(sessionId)` (ordered by
+      `attempt_order`) on the domain repo interface + `study_repository_impl` + a DAO (reuse the existing
+      `Result<T>` pattern, NOT fpdart — the contract's `Either` is target style). `RecordMatchEvaluationUseCase`
+      + DI provider. Repo + DAO + use-case tests (append-only, ordering, touch updated_at). Decision rows.
 - [ ] **WP-SM2 — Match BE: finalization derivation (WBS 4.5.4, part 2).** Extend `finalizeStudySession`
       with the Match branch: read eval rows → derive one terminal `study_attempts` per session item
       (all-correct→perfect; any-wrong→forgot/recovered per the strategy) → `flashcard_progress` UPDATE +
