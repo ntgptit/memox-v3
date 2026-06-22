@@ -315,8 +315,8 @@ Same as Review mode.
   `lib/presentation/features/study/widgets/study_session/guess/guess_motion.dart` re-exports
   `MxDurations.guessCorrectAdvanceDelay` (800ms) as `guessCorrectAdvanceDelay` and
   `MxDurations.guessWrongFeedbackDelay` (1500ms) as `guessWrongFeedbackDelay`. Source tokens live in
-  `lib/core/theme/tokens/app_motion.dart` (`AppDurations.guessCorrectAdvanceDelay` /
-  `AppDurations.guessWrongFeedbackDelay`). The footer countdown progress bar and the staged-grade
+  `lib/core/theme/app_motion.dart` (`AppMotion.guessCorrectAdvanceDelay` /
+  `AppMotion.guessWrongFeedbackDelay`). The footer countdown progress bar and the staged-grade
   delay both consume the per-grade duration (0.8s on correct selection, 1.5s on wrong selection).
 - Tests: `test/domain/study/modes/guess_option_builder_test.dart` (6 cases — full-pool 5 options,
   small/empty-pool degrade, target/blank/duplicate exclusion, trimmed emit, determinism;

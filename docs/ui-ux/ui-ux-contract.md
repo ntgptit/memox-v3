@@ -148,6 +148,10 @@ Use:
   `Icon(size:)` must use these), and `MxStroke` (`hairline`/`emphasis` — divider /
   border widths). Add to the matching token class (never hardcode) when a new
   weight/size is needed.
+- `AppMotion` (`lib/core/theme/app_motion.dart`) — animation / transition / flash
+  **durations** (e.g. `matchWrongFlash`). Presentation surfaces must source
+  durations here, never raw `Duration(...)` literals (guard
+  `memox.design_token.no_raw_duration_value`).
 - ARB localization for every user-facing string.
 
 Device chrome (status bar / safe area):

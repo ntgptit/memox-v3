@@ -312,7 +312,7 @@ Same as other modes:
 - `lib/presentation/features/study/widgets/study_session/recall/recall_motion.dart` (re-exports
   `MxDurations.recallAnswerTimeout` as `recallAnswerTimeoutDuration` and `MxDurations.slide` as
   `recallRevealTransitionDuration`)
-- `lib/core/theme/tokens/app_motion.dart` — single source of truth for
+- `lib/core/theme/app_motion.dart` — single source of truth for
   `MxDurations.recallAnswerTimeout = Duration(seconds: 20)`
 - `lib/domain/study/usecases/study_usecases.dart` (`RecordStudySessionAnswerUseCase` — grading
   lives here, not in a `grade_attempt_usecase.dart`; the `AnswerFlashcardUseCase` family from a

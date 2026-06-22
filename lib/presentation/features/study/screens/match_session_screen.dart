@@ -1,54 +1,51 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
+import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
-import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/core/theme/mx_stroke.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
-import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
+import 'package:memox/presentation/features/study/controllers/match_board_controller.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/feedback/mx_linear_progress.dart';
+import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
-/// The Match-mode study surface (mock `13-study-match--matching` / wireframe
-/// `14`), reached via the session route with `?mode=match` (WP-SM3).
+/// The Match-mode study surface (mock `13-study-match` / wireframe `14`), reached
+/// via the session route with `?mode=match`.
 ///
-/// **WP-SM3 = the board shell, aligned to the mock** (PRECEDENCE #2 — mock wins
-/// for visual; wireframe-14 reconciled): the immersive ✕ + blue progress +
-/// `{matched}/{total}` count, the "Match the pairs" title + prompt subtitle, a
-/// **static** 2×5 board grid (the first board's front/back cells), and the
-/// "{matched} matched · {left} left" status line, over the
-/// `studySessionReviewProvider` items batched into boards of 5.
-///
-/// Deferred: the tap-pair state machine (select → match / wrong-flash), the
-/// Fisher-Yates shuffle, the **Shuffle & restart** bar, the
-/// `RecordMatchEvaluationUseCase` wiring, and board progression = **WP-SM4**;
-/// finalize → result (reusing SR5) = **WP-SM5**.
+/// **WP-SM4 = the playable board:** the tap-pair state machine over
+/// `MatchBoardController` — one selection at a time → a valid pair locks green,
+/// a wrong pair flashes red then deselects; every pair (right/wrong) persists via
+/// `RecordMatchEvaluationUseCase`. The ✕ + blue progress + `{matched}/{total}`
+/// count + "Match the pairs" title + "{matched} matched · {left} left" line stay
+/// from the shell (WP-SM3). **Deferred:** the Shuffle & restart bar + mistake
+/// counter + count-up timer = WP-SM4b; board progression + finalize→result = WP-SM5.
 class MatchSessionScreen extends ConsumerWidget {
   const MatchSessionScreen({required this.sessionId, super.key});
 
   /// The persisted session id from the entry gate.
   final String sessionId;
 
-  /// Cards per board (wireframe `14` §Board composition: 5 pairs = 10 cells).
-  static const int _boardSize = 5;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
-    final AsyncValue<StudySessionReview> async = ref.watch(
-      studySessionReviewProvider(sessionId),
+    final AsyncValue<MatchBoardView> async = ref.watch(
+      matchBoardControllerProvider(sessionId),
     );
-    return AppAsyncBuilder<StudySessionReview>(
+    return AppAsyncBuilder<MatchBoardView>(
       value: async,
       loading: (_) => _shell(
         context,
@@ -62,23 +59,20 @@ class MatchSessionScreen extends ConsumerWidget {
         progress: null,
         body: _errorBody(context, ref, l10n),
       ),
-      data: (StudySessionReview review) {
-        if (review.total == 0) {
+      data: (MatchBoardView board) {
+        if (board.cells.isEmpty) {
           return _shell(context, l10n, progress: null, body: _emptyBody(l10n));
         }
         return _shell(
           context,
           l10n,
-          // WP-SM3: no pairs are matched yet (the tap interaction is WP-SM4).
-          progress: (0, review.total),
-          body: _boardBody(context, l10n, review),
+          progress: (board.matchedCount, board.sessionTotal),
+          body: _boardBody(context, ref, l10n, board),
         );
       },
     );
   }
 
-  /// The immersive Match shell: ✕ exit + blue progress + the `{matched}/{total}`
-  /// count (mock `13-study-match` app bar — no mode pill).
   Widget _shell(
     BuildContext context,
     AppLocalizations l10n, {
@@ -90,7 +84,7 @@ class MatchSessionScreen extends ConsumerWidget {
       leading: MxIconButton.toolbar(
         icon: Icons.close,
         tooltip: l10n.commonCancel,
-        onPressed: () => _confirmExit(context, l10n, progress),
+        onPressed: () => unawaited(_confirmExit(context, l10n, progress)),
       ),
       title: progress == null ? l10n.studySessionTitle : null,
       titleWidget: progress == null
@@ -141,12 +135,13 @@ class MatchSessionScreen extends ConsumerWidget {
 
   Widget _boardBody(
     BuildContext context,
+    WidgetRef ref,
     AppLocalizations l10n,
-    StudySessionReview review,
+    MatchBoardView board,
   ) {
-    final List<StudySessionReviewItem> board = review.items
-        .take(_boardSize)
-        .toList();
+    final MatchBoardController controller = ref.read(
+      matchBoardControllerProvider(sessionId).notifier,
+    );
     return Padding(
       padding: const EdgeInsets.all(MxSpacing.space5),
       child: Column(
@@ -158,21 +153,45 @@ class MatchSessionScreen extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: MxSpacing.space1),
-          _Subtitle(text: l10n.studyMatchSubtitle),
+          MxText(
+            l10n.studyMatchSubtitle,
+            role: MxTextRole.bodySmall,
+            color: context.mxColors.textSecondary,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: MxSpacing.space5),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  // WP-SM3 renders the first board's pairs row-aligned (front |
-                  // back). The Fisher-Yates shuffle + tap selection are WP-SM4.
-                  for (final StudySessionReviewItem item in board) ...<Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(child: _MatchCell(text: item.front)),
-                        const SizedBox(width: MxSpacing.space3),
-                        Expanded(child: _MatchCell(text: item.back)),
-                      ],
+                  // Boards are 10 cells (always even); the right column is the
+                  // odd-index cell, or an empty filler defensively.
+                  for (int i = 0; i < board.cells.length; i += 2) ...<Widget>[
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
+                            child: _MatchCell(
+                              cell: board.cells[i],
+                              onTap: () => unawaited(
+                                controller.select(board.cells[i].id),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: MxSpacing.space3),
+                          Expanded(
+                            child: i + 1 < board.cells.length
+                                ? _MatchCell(
+                                    cell: board.cells[i + 1],
+                                    onTap: () => unawaited(
+                                      controller.select(board.cells[i + 1].id),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: MxSpacing.space3),
                   ],
@@ -181,7 +200,13 @@ class MatchSessionScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: MxSpacing.space3),
-          _ProgressLine(text: l10n.studyMatchProgress(0, board.length)),
+          Center(
+            child: MxText(
+              l10n.studyMatchProgress(board.matchedCount, board.pairsLeft),
+              role: MxTextRole.labelMedium,
+              color: context.mxColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );
@@ -203,61 +228,71 @@ class MatchSessionScreen extends ConsumerWidget {
     icon: Icons.cloud_off_outlined,
     action: MxSecondaryButton(
       label: l10n.commonRetryLabel,
-      onPressed: () => ref.invalidate(studySessionReviewProvider(sessionId)),
+      onPressed: () => ref.invalidate(matchBoardControllerProvider(sessionId)),
     ),
   );
 }
 
-/// The prompt subtitle under the title ("Tap a term, then its meaning.").
-class _Subtitle extends StatelessWidget {
-  const _Subtitle({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => MxText(
-    text,
-    role: MxTextRole.bodySmall,
-    color: context.mxColors.textSecondary,
-    textAlign: TextAlign.center,
-  );
-}
-
-/// The "{matched} matched · {left} left" status line below the grid.
-class _ProgressLine extends StatelessWidget {
-  const _ProgressLine({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Center(
-    child: MxText(
-      text,
-      role: MxTextRole.labelMedium,
-      color: context.mxColors.textSecondary,
-    ),
-  );
-}
-
-/// One board cell — a front or back face (non-interactive in WP-SM3).
+/// One board cell — a tappable front/back face whose fill reflects its status
+/// (idle / selected = accent / matched = green ✓ / wrong = danger flash).
 class _MatchCell extends StatelessWidget {
-  const _MatchCell({required this.text});
+  const _MatchCell({required this.cell, required this.onTap});
 
-  final String text;
+  final MatchCell cell;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => MxCard(
-    child: Padding(
-      padding: const EdgeInsets.all(MxSpacing.space4),
-      child: Center(
-        child: MxText(
-          text,
-          role: MxTextRole.titleMedium,
-          textAlign: TextAlign.center,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    final (Color bg, Color fg, Color border) = switch (cell.status) {
+      MatchCellStatus.idle => (colors.surface, colors.text, colors.border),
+      MatchCellStatus.selected => (
+        colors.accent,
+        colors.accentContrast,
+        colors.accent,
+      ),
+      MatchCellStatus.matched => (
+        colors.successSoft,
+        colors.success,
+        colors.success,
+      ),
+      MatchCellStatus.wrong => (
+        colors.dangerSoft,
+        colors.danger,
+        colors.danger,
+      ),
+    };
+    return MxTappable(
+      onTap: onTap,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: MxRadius.mdAll,
+          border: Border.all(color: border, width: MxStroke.hairline),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(MxSpacing.space4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (cell.status == MatchCellStatus.matched) ...<Widget>[
+                Icon(Icons.check, size: MxIconSize.sm, color: fg),
+                const SizedBox(width: MxSpacing.space1),
+              ],
+              Flexible(
+                child: MxText(
+                  cell.text,
+                  role: MxTextRole.titleMedium,
+                  color: fg,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

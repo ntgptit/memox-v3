@@ -3,18 +3,47 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
+import 'package:memox/domain/repositories/study_repository.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/ids.dart';
 import 'package:memox/domain/types/session_status.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
+import 'package:memox/domain/usecases/study/record_match_evaluation_usecase.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
 import 'package:memox/presentation/features/study/screens/match_session_screen.dart';
 
 import '../../../support/golden_harness.dart';
+
+/// Records the `isCorrect` of each Match evaluation without touching the DB.
+class _FakeRecordMatchEval implements RecordMatchEvaluationUseCase {
+  final List<bool> recorded = <bool>[];
+
+  @override
+  StudyRepository get repository => throw UnimplementedError();
+
+  @override
+  Future<Result<void>> call({
+    required SessionId sessionId,
+    required String sessionItemId,
+    required int boardIndex,
+    required String pairId,
+    required String selectedFrontCellId,
+    required String selectedBackCellId,
+    required FlashcardId expectedFrontFlashcardId,
+    required FlashcardId expectedBackFlashcardId,
+    required bool isCorrect,
+  }) async {
+    recorded.add(isCorrect);
+    return (failure: null, data: null);
+  }
+}
 
 const String _sid = 's1';
 final DateTime _t = DateTime.utc(2026);
@@ -59,6 +88,7 @@ List<StudySessionReviewItem> _fiveCards() => <StudySessionReviewItem>[
 Future<void> _pump(
   WidgetTester tester, {
   required Future<StudySessionReview> Function() review,
+  RecordMatchEvaluationUseCase? record,
   Brightness brightness = Brightness.light,
   bool golden = false,
 }) async {
@@ -71,6 +101,8 @@ Future<void> _pump(
     ProviderScope(
       overrides: [
         studySessionReviewProvider(_sid).overrideWith((ref) => review()),
+        if (record != null)
+          recordMatchEvaluationUseCaseProvider.overrideWithValue(record),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -130,6 +162,44 @@ void main() {
       );
       expect(find.text('Nothing to review'), findsOneWidget);
     });
+
+    testWidgets('tap a matching pair → matched + records correct', (
+      tester,
+    ) async {
+      final _FakeRecordMatchEval record = _FakeRecordMatchEval();
+      await _pump(
+        tester,
+        review: () async => _review(_fiveCards()),
+        record: record,
+      );
+      // Tap card 0's front then its back → a valid pair.
+      await tester.tap(find.text('공부하다'));
+      await tester.pump();
+      await tester.tap(find.text('to study'));
+      await tester.pumpAndSettle();
+      expect(record.recorded, <bool>[true]);
+      expect(find.textContaining('1 matched · 4 left'), findsOneWidget);
+      expect(find.text('1 / 5'), findsOneWidget);
+    });
+
+    testWidgets('tap a wrong pair → records wrong + reverts after the flash', (
+      tester,
+    ) async {
+      final _FakeRecordMatchEval record = _FakeRecordMatchEval();
+      await _pump(
+        tester,
+        review: () async => _review(_fiveCards()),
+        record: record,
+      );
+      // card 0 front + card 1 back → not a pair.
+      await tester.tap(find.text('공부하다'));
+      await tester.pump();
+      await tester.tap(find.text('to eat'));
+      await tester.pumpAndSettle(); // flush the ~600ms wrong-flash
+      expect(record.recorded, <bool>[false]);
+      expect(find.text('0 / 5'), findsOneWidget); // nothing matched
+      expect(find.textContaining('0 matched · 5 left'), findsOneWidget);
+    });
   });
 
   group('MatchSessionScreen goldens', () {
@@ -145,6 +215,29 @@ void main() {
           find.byType(MatchSessionScreen),
           matchesGoldenFile(
             'goldens/match_session_board-fresh__${brightness.name}.png',
+          ),
+        );
+      });
+
+      testWidgets('match-board-mid — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          golden: true,
+          review: () async => _review(_fiveCards()),
+          record: _FakeRecordMatchEval(),
+        );
+        // One matched pair (green ✓) + one selected cell (blue).
+        await tester.tap(find.text('공부하다'));
+        await tester.pump();
+        await tester.tap(find.text('to study'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('먹다'));
+        await tester.pump();
+        await expectLater(
+          find.byType(MatchSessionScreen),
+          matchesGoldenFile(
+            'goldens/match_session_board-mid__${brightness.name}.png',
           ),
         );
       });
