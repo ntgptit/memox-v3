@@ -88,11 +88,15 @@ chrome), keeping (b) (the phase chain) as a separate object. Read `study-flow.md
       **Mock↔§Components conflict reconciled (PRECEDENCE #2 — mock wins):** the kit shot has NO MATCH
       pill / NO board indicator → adopted the mock's title + matched/left instead; wireframe-14 §Components
       superseded for visual. Goldens light+dark. (The board-fresh cells are row-paired; shuffle = WP-SM4.)
-- [ ] **WP-SM4 — board grid + tap-pair state machine (FE).** The 2×5 grid (`MxCard` cells), the
-      select→match/wrong state machine (idle/selected/matched/wrong-flash ~600ms), Fisher-Yates shuffle,
-      one-selection-at-a-time, lock matched. Each pair (right/wrong) → `RecordMatchEvaluationUseCase`
-      (append-only, persisted immediately). Mistake counter (ICU plural) + count-up timer (M:SS).
-      Widget tests per cell state + the grade→record path + goldens (mid-board, matched, wrong-flash).
+- [x] **WP-SM4 — board grid + tap-pair state machine (FE).** `a2ac51b`: `MatchBoardController`
+      (Fisher-Yates 10 cells, one-selection FSM, valid pair → matched green ✓ / wrong → red-flash
+      `AppMotion.matchWrongFlash` → revert, each pair → `RecordMatchEvaluationUseCase`, `_evaluating`
+      re-entrancy guard); interactive status-colored cells. Row S95; 9 tests + board-fresh & board-mid
+      goldens. New `AppMotion` token. **Deferred to WP-SM4b:** the Shuffle & restart bar + mistake
+      counter (ICU plural) + count-up timer (M:SS).
+- [ ] **WP-SM4b — board chrome (FE, deferred polish).** The **Shuffle & restart** secondary bar
+      (re-shuffle the current board + reset its progress), the mistake counter (ICU plural), and the
+      count-up timer (M:SS, non-blocking). Lower-value than WP-SM5; build after the loop is end-to-end.
 - [ ] **WP-SM5 — board progression + finalize → result.** Board clear → fade → next board; last board
       → `FinalizeStudySessionUseCase` → reuse the SR5 result route/screen. Tests for multi-board
       advance + finalize-on-last. Then **object 7 COMPLETE** → object 8 (Guess) reuses this shell.
