@@ -776,4 +776,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyGuessPrompt => 'Nghĩa của từ này là gì?';
+
+  @override
+  String get studyGuessTapToContinue => 'Chạm để tiếp tục';
 }

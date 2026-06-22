@@ -490,5 +490,7 @@
   "studyMatchProgress": "{matched} matched · {left} left",
   "@studyMatchProgress": { "description": "Match board status line below the grid.", "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } },
   "studyGuessPrompt": "What does this mean?",
-  "@studyGuessPrompt": { "description": "Overline prompt above the term on the Guess screen." }
+  "@studyGuessPrompt": { "description": "Overline prompt above the term on the Guess screen." },
+  "studyGuessTapToContinue": "Tap to continue",
+  "@studyGuessTapToContinue": { "description": "Hint under the auto-advance countdown bar on the Guess screen — tap to skip the wait." }
 }

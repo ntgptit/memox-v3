@@ -1471,6 +1471,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'What does this mean?'**
   String get studyGuessPrompt;
+
+  /// Hint under the auto-advance countdown bar on the Guess screen — tap to skip the wait.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to continue'**
+  String get studyGuessTapToContinue;
 }
 
 class _AppLocalizationsDelegate

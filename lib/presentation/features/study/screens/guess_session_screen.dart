@@ -3,7 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:memox/app/di/study_providers.dart';
+import 'package:memox/app/router/route_names.dart';
+import 'package:memox/app/router/route_paths.dart';
+import 'package:memox/core/theme/app_motion.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
+import 'package:memox/core/theme/mx_opacity.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/core/theme/mx_stroke.dart';
@@ -18,6 +24,7 @@ import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/feedback/mx_linear_progress.dart';
+import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
@@ -29,10 +36,10 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 /// via the session route with `?mode=guess`.
 ///
 /// **WP-SG1 = the shell:** the ✕ + blue progress + `{answered}/{total}` count, the
-/// prompt card (the front + reading), and a **static** list of lettered option
-/// cards (the multiple-choice backs from `GuessSessionController`). The
-/// select-to-grade reveal (correct green / wrong red), the `RecordStudySessionAnswerUseCase`
-/// wiring, auto-advance, and finalize → result are **WP-SG2**.
+/// prompt card (the front + reading), and the lettered option cards.
+/// **WP-SG2 = select-to-grade:** tapping an option records the binary grade,
+/// reveals correct (green ✓) / wrong (red ✗) + dims the rest, then the countdown
+/// footer auto-advances (tap to skip); the last card finalizes → the result.
 class GuessSessionScreen extends ConsumerWidget {
   const GuessSessionScreen({required this.sessionId, super.key});
 
@@ -42,6 +49,16 @@ class GuessSessionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l10n = AppLocalizations.of(context);
+    // The last card answered + advanced → finalize + route to the result (WP-SG2).
+    ref.listen<AsyncValue<GuessView>>(
+      guessSessionControllerProvider(sessionId),
+      (AsyncValue<GuessView>? prev, AsyncValue<GuessView> next) {
+        final bool wasFinished = prev?.value?.finished ?? false;
+        if (!wasFinished && (next.value?.finished ?? false)) {
+          unawaited(_finish(context, ref));
+        }
+      },
+    );
     final AsyncValue<GuessView> async = ref.watch(
       guessSessionControllerProvider(sessionId),
     );
@@ -68,7 +85,7 @@ class GuessSessionScreen extends ConsumerWidget {
           context,
           l10n,
           progress: (view.answeredCount, view.total),
-          body: _questionBody(context, l10n, item, view.options),
+          body: _questionBody(context, ref, l10n, item, view),
         );
       },
     );
@@ -136,30 +153,71 @@ class GuessSessionScreen extends ConsumerWidget {
 
   Widget _questionBody(
     BuildContext context,
+    WidgetRef ref,
     AppLocalizations l10n,
     StudySessionReviewItem item,
-    List<GuessOption> options,
-  ) => Padding(
-    padding: const EdgeInsets.all(MxSpacing.space5),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        _PromptCard(prompt: l10n.studyGuessPrompt, item: item),
-        const SizedBox(height: MxSpacing.space5),
-        Expanded(
-          child: ListView.separated(
-            itemCount: options.length,
-            separatorBuilder: (_, _) =>
-                const SizedBox(height: MxSpacing.space3),
-            itemBuilder: (BuildContext context, int index) => _OptionRow(
-              letter: String.fromCharCode(65 + index), // A, B, C…
-              option: options[index],
+    GuessView view,
+  ) {
+    final GuessSessionController controller = ref.read(
+      guessSessionControllerProvider(sessionId).notifier,
+    );
+    return Padding(
+      padding: const EdgeInsets.all(MxSpacing.space5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          _PromptCard(prompt: l10n.studyGuessPrompt, item: item),
+          const SizedBox(height: MxSpacing.space5),
+          Expanded(
+            child: ListView.separated(
+              itemCount: view.options.length,
+              separatorBuilder: (_, _) =>
+                  const SizedBox(height: MxSpacing.space3),
+              itemBuilder: (BuildContext context, int index) => _OptionRow(
+                letter: String.fromCharCode(65 + index), // A, B, C…
+                option: view.options[index],
+                revealed: view.revealed,
+                isPicked: view.selectedBack == view.options[index].back,
+                onTap: view.revealed
+                    ? null
+                    : () => unawaited(controller.grade(view.options[index])),
+              ),
             ),
           ),
-        ),
-      ],
-    ),
+          if (view.revealed) ...<Widget>[
+            const SizedBox(height: MxSpacing.space3),
+            _CountdownFooter(
+              // Correct picks advance faster than wrong ones (the learner needs
+              // longer to read the right answer) — wireframe `15` §States.
+              delay: _pickedCorrect(view)
+                  ? AppMotion.guessRevealCorrect
+                  : AppMotion.guessRevealWrong,
+              label: l10n.studyGuessTapToContinue,
+              onSkip: controller.next,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Whether the option the user picked for the current card was the correct one.
+  bool _pickedCorrect(GuessView view) => view.options.any(
+    (GuessOption o) => o.back == view.selectedBack && o.isCorrect,
   );
+
+  /// Last card answered → finalize (binary one-terminal-attempt path) then
+  /// `pushReplacement` to the shared result screen (mirrors WP-SR5a/SM5).
+  Future<void> _finish(BuildContext context, WidgetRef ref) async {
+    await ref
+        .read(finalizeStudySessionUseCaseProvider)
+        .call(sessionId: sessionId);
+    if (!context.mounted) return;
+    context.pushReplacementNamed(
+      RouteNames.studyResult,
+      pathParameters: <String, String>{RouteParams.sessionId: sessionId},
+    );
+  }
 
   Widget _emptyBody(AppLocalizations l10n) => MxEmptyState(
     icon: Icons.style_outlined,
@@ -222,41 +280,75 @@ class _PromptCard extends StatelessWidget {
   }
 }
 
-/// One multiple-choice option row — a letter badge + the candidate back.
-/// WP-SG1 renders the idle (unselected) state; the correct/wrong reveal is WP-SG2.
+/// One multiple-choice option row — a letter badge + the candidate back. Idle
+/// (tappable) until answered; on reveal the correct option turns green ✓ and a
+/// wrong pick turns red ✗ (WP-SG2).
 class _OptionRow extends StatelessWidget {
-  const _OptionRow({required this.letter, required this.option});
+  const _OptionRow({
+    required this.letter,
+    required this.option,
+    required this.revealed,
+    required this.isPicked,
+    required this.onTap,
+  });
 
   final String letter;
   final GuessOption option;
+  final bool revealed;
+  final bool isPicked;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final MxColors colors = context.mxColors;
-    return ConstrainedBox(
-      // Spec minimum row height so short backs keep the option-card rhythm.
-      constraints: const BoxConstraints(minHeight: MxSpacing.space12),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colors.surface,
-          borderRadius: MxRadius.mdAll,
-          border: Border.all(color: colors.border, width: MxStroke.hairline),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(MxSpacing.space4),
-          child: Row(
-            children: <Widget>[
-              _LetterBadge(letter: letter),
-              const SizedBox(width: MxSpacing.space3),
-              Expanded(
-                child: MxText(
-                  option.back,
-                  role: MxTextRole.bodyLarge,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+    final bool showCorrect = revealed && option.isCorrect;
+    final bool showWrong = revealed && isPicked && !option.isCorrect;
+    // After answering, the options that are neither the correct one nor the
+    // wrong pick dim back (wireframe `15` §Components — "others dim").
+    final bool dim = revealed && !showCorrect && !showWrong;
+    final (Color bg, Color fg, Color border) = showCorrect
+        ? (colors.successSoft, colors.success, colors.success)
+        : showWrong
+        ? (colors.dangerSoft, colors.danger, colors.danger)
+        : (colors.surface, colors.text, colors.border);
+    final IconData? trailing = showCorrect
+        ? Icons.check
+        : showWrong
+        ? Icons.close
+        : null;
+    return Opacity(
+      opacity: dim ? MxOpacity.disabled : 1.0,
+      child: MxTappable(
+        onTap: onTap,
+        child: ConstrainedBox(
+          // Spec minimum row height so short backs keep the option-card rhythm.
+          constraints: const BoxConstraints(minHeight: MxSpacing.space12),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: MxRadius.mdAll,
+              border: Border.all(color: border, width: MxStroke.hairline),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(MxSpacing.space4),
+              child: Row(
+                children: <Widget>[
+                  _LetterBadge(letter: letter, color: fg),
+                  const SizedBox(width: MxSpacing.space3),
+                  Expanded(
+                    child: MxText(
+                      option.back,
+                      role: MxTextRole.bodyLarge,
+                      color: fg,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (trailing != null)
+                    Icon(trailing, size: MxIconSize.md, color: fg),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -265,26 +357,62 @@ class _OptionRow extends StatelessWidget {
 }
 
 class _LetterBadge extends StatelessWidget {
-  const _LetterBadge({required this.letter});
+  const _LetterBadge({required this.letter, this.color});
 
   final String letter;
 
+  /// The badge ring + letter color (the row's foreground when revealed).
+  final Color? color;
+
   @override
   Widget build(BuildContext context) {
-    final MxColors colors = context.mxColors;
+    final Color tint = color ?? context.mxColors.textSecondary;
     return Container(
       width: MxSpacing.space6,
       height: MxSpacing.space6,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: colors.border, width: MxStroke.hairline),
+        border: Border.all(color: tint, width: MxStroke.hairline),
       ),
-      child: MxText(
-        letter,
-        role: MxTextRole.labelMedium,
-        color: colors.textSecondary,
-      ),
+      child: MxText(letter, role: MxTextRole.labelMedium, color: tint),
     );
   }
+}
+
+/// The auto-advance footer shown after answering — a depleting progress bar that
+/// drains over [delay], then the controller's timer advances the card. The whole
+/// footer is tappable to skip the remaining countdown (wireframe `15` §States).
+class _CountdownFooter extends StatelessWidget {
+  const _CountdownFooter({
+    required this.delay,
+    required this.label,
+    required this.onSkip,
+  });
+
+  final Duration delay;
+  final String label;
+  final VoidCallback onSkip;
+
+  @override
+  Widget build(BuildContext context) => MxTappable(
+    onTap: onSkip,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 1, end: 0),
+          duration: delay,
+          builder: (_, double value, _) => MxLinearProgress(value: value),
+        ),
+        const SizedBox(height: MxSpacing.space2),
+        MxText(
+          label,
+          role: MxTextRole.labelMedium,
+          color: context.mxColors.textSecondary,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
 }

@@ -794,4 +794,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyGuessPrompt => 'What does this mean?';
+
+  @override
+  String get studyGuessTapToContinue => 'Tap to continue';
 }

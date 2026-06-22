@@ -13,4 +13,12 @@ abstract final class AppMotion {
   /// green ✓) before the next board appears / the session finalizes (wireframe
   /// `14` §Layout board-clear).
   static const Duration matchBoardAdvance = Duration(milliseconds: 500);
+
+  /// The auto-advance countdown after a **correct** Guess pick — the reveal
+  /// holds, then the next card appears (wireframe `15` §States — "0.8s").
+  static const Duration guessRevealCorrect = Duration(milliseconds: 800);
+
+  /// The auto-advance countdown after a **wrong** Guess pick — longer so the
+  /// learner sees the correct answer before advancing (wireframe `15` — "1.5s").
+  static const Duration guessRevealWrong = Duration(milliseconds: 1500);
 }
