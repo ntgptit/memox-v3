@@ -82,9 +82,11 @@ conflict; "large/greenfield/needs-decision" is never valid). Resolutions:
         details-open golden (light+dark). Decision row C44. **PRECEDENCE #1:** the mock's deck-selector
         is Future (deck retargeting) + its single "Note" → the business example/pronunciation/hint
         fields; built business fields, not the mock layout. verify PASS.
-  - [ ] **WP-FL2b2b — Tags input** (the mock `07`/`08` Tags chips + "Add tag" affordance; business
-        model includes tags — `flashcard-management.md` §238). Needs a chip-display + add/remove-tag
-        UX; edit currently preserves tags untouched. Build after WP-FL2b3 or as the last object-5 node.
+  - [x] **WP-FL2b2b — Tags input** (`13e0fe8`): the Details § TAGS chip row (`#` + name + ✕ remove) +
+        a "+ Add tag" inline field; add validates + lowercases + dedupes (`TagValidator`); the editor
+        manages the card's full tag set, **replacing** wholesale on save — wired into create (previously
+        omitted) + update. ARB +2; 6 tag tests + details-open golden. WBS 2.15.2 → Implemented; decision
+        C20/C21 + C44 + wireframe-07 + tag-system.md updated. **Object 5 (library FE) complete.**
   - [x] **WP-FL2b3a — saving + save-failed** (`6437f66`): `MxPrimaryButton.loading` spinner at the
         disabled accent fill (op:0.38) + `saving` double-submit guard; inline `_SaveErrorBanner`
         (dangerSoft, above the fields per kit `abs:[21,95]`) **replaces** the failure snackbar, keeping
