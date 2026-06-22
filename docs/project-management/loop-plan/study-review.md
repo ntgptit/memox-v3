@@ -118,9 +118,17 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       needs the card's `deckId`, which `StudySessionReviewItem` does not carry. Either add `deckId` to
       the review read model (`LoadStudySessionReviewUseCase`) or derive it from a deck-scope session
       (`scope.entryRefId`). Then add Edit to the sheet + a navigation test.
-- [ ] **WP-SR5 — finalize → result (screen 17).** Finish → `FinalizeStudySessionUseCase` →
-      `pushReplacement` to the result screen rendering `StudySessionResult`; cover all **6** states
-      (loaded/loading/goal-off/save-failed/defensive/tough-empty) with goldens.
+- [x] **WP-SR5a — finalize → result (V1: loaded/loading/error).** `b426047`: new route `studyResult`;
+      Finish → `FinalizeStudySessionUseCase` → `pushReplacementNamed(studyResult)`; `StudyResultScreen`
+      V1 = hero + Correct/Wrong/Answered counts + **Done → origin via `go`** (deck → flashcard list,
+      otherwise Dashboard; §Agent rule) + loading/error. Mock-`17` accuracy ring / Goal & streak /
+      "Due next" / "Keep studying" = Future. Row S92; ARB ×12; nav-flow + WBS 4.7.2 Partial; loaded
+      goldens. 3-reviewer fan-out (Done go-not-pop folded).
+- [ ] **WP-SR5b — result variant states.** The status-driven **save-failed** (`session.status =
+      failed_to_finalize` → top retry banner "Some data couldn't be saved" + Retry re-runs finalize;
+      Done still leaves) + **defensive** (zero answered → "No cards answered" notice) states +
+      goldens for loading/save-failed/defensive (light+dark). `goal-off`/`tough-empty` map to loaded
+      (their blocks are Future). Decision rows + tests per state.
 - [ ] **Objects 7-10 (Match/Guess/Recall/Fill)** — reuse the WP-SR2 shell + WP-SR5 result; each adds
       its own grade grammar (independent; not blocked by Review's grade question — shared only at
       BE finalization/result).
