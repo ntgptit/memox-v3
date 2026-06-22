@@ -39,8 +39,12 @@ hint, guess answered, match board-fresh — all legit app states, keep.
 
 ## GAP checklist (ordered)
 
-1. **17 Result missing goldens** (state-coverage FAIL): add **loading**, **goal-off**, **tough-empty**
-   (light+dark = 6 goldens) — verify `study_result_screen` renders these branches first. **WP candidate.**
+1. **17 Result missing goldens** — ✅ partly DONE (2026-06-23): added **loading** golden (light+dark;
+   diff.py 5.18%/6.13%). **goal-off** + **tough-empty** have NO distinct FE render: `study_result_screen`
+   is an explicit V1 slice — the kit's Goal & streak block (goal-off variant) + "Keep studying"/tough-
+   cards section (tough-empty) are documented **Future** (need engagement read model + SRS due-projection
+   the result read model doesn't carry). DEFERRED needs-schema (see parity-deferred). FE loaded = a slice
+   (hero + Correct/Wrong/Answered counts + Done); accuracy ring / goal / due-next / keep-studying Future.
 2. **13 Match content variants** (long-meanings, read-full-meaning): verify whether the FE match board
    renders a distinct layout for long meanings (wrap/ellipsis/expand) or it's the same board with longer
    text; add golden(s) if a distinct render exists, else note as covered by board goldens.

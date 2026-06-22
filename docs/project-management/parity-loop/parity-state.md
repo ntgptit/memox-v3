@@ -13,9 +13,9 @@ per loop. Visual-only; behavior is docs-owned.
 - **12–17 — Study modes + result** — AUDIT done (combined; see
   `docs/project-management/parity-loop/screen-plans/12-17-study.md`). 5 modes share one spine; goldens
   cover 12/14/15/16 well; diff.py moderate (Ahem range, guess 19.8% + result-loaded 17.2% highest).
-  Top gap: **17 Result missing loading/goal-off/tough-empty goldens** (state-coverage FAIL) → next WP
-  (verify study_result_screen renders them, add 6 goldens). Then 13 match content-variant check + per-mode
-  INVENTORY. Study/SRS → fan-out adds `srs-reviewer`.
+  17 Result: loading golden ADDED (5.18%/6.13%); goal-off + tough-empty are V1-slice Future (goal block /
+  tough-cards not built) → needs-schema deferred. Next WP candidates: 13 match content-variant check;
+  per-mode node INVENTORY (12 review / 14 guess highest %). Study/SRS → fan-out adds `srs-reviewer`.
 
 ### Screen 07/08 — Flashcard editor: DONE (modulo deferred)
 
@@ -71,7 +71,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
 | 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
 | 07/08 | Flashcard editor | yes | done 2026-06-23 | done (modulo deferred) | create-valid golden added; validation behavior-owned; field-fill/deck-selector/Note deferred |
-| 12-17 | Study modes + result | yes | done 2026-06-23 | in-progress | audited; 12/14/15/16 covered; next = 17 result missing goldens (loading/goal-off/tough-empty) |
+| 12-17 | Study modes + result | yes | done 2026-06-23 | in-progress | 17 loading golden added; goal-off/tough-empty Future; next = 13 match variants + per-mode INVENTORY |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |
