@@ -98,7 +98,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
 - [ ] **WP-SR2b — language side-labels (deferred polish).** KOREAN/MEANING from `deck.target_language`
       — needs the review read model (`StudySessionReview`/`LoadStudySessionReviewUseCase`) to carry the
       deck's `target_language`; until then the card uses the FRONT/BACK fallback.
-- [x] **WP-SR3 — swipe-grade + advance.** `<this commit>`: `StudySessionController` (`@riverpod`
+- [x] **WP-SR3 — swipe-grade + advance.** `8549fb6`: `StudySessionController` (`@riverpod`
       AsyncNotifier over `StudySessionView{review, currentIndex}`) — swipe right → `perfect`, left →
       `forgot` (Dismissible) → `RecordStudySessionAnswerUseCase(studyMode: review)`; advances the card
       first (optimistic) then persists (`unawaited`); swipe-hint footer (first 3 cards); last card →
