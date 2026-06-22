@@ -21,8 +21,8 @@ last_updated: 2026-06-22
   Deferred polish: WP-SR1b-2c (gate CTAs), WP-SR2b (language labels).
 - **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
   after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
-- **Branch:** `feat/loop-library`; latest code commit `8549fb6` (WP-SR3; prior `b69c2eb` WP-SR2,
-  `935e630` WP-SR1b-2b).
+- **Branch:** `feat/loop-library`; latest code commit `2983088` (WP-SR4a; prior `8549fb6` WP-SR3,
+  `b69c2eb` WP-SR2).
 - **Last verify:** PASS (code chain, guard 0 errors) — WP-SR1b-2b tree + review-fix. **Fan-out now
   complete:** docs-drift PASS; code-reviewer APPROVE + ui-parity PASS (re-ran after the 529 overload
   cleared). Folded 2 Importants: fallback-Back `fullWidth`, + a "Study new instead" navigation test

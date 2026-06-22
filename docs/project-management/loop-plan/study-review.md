@@ -104,7 +104,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       first (optimistic) then persists (`unawaited`); swipe-hint footer (first 3 cards); last card →
       Finish surface (`MxEmptyState` + Finish action; finalize→result = WP-SR5, pops for now). Row S89;
       swipe right/left/advance/finish/hint tests; regen card golden.
-- [x] **WP-SR4a — exit-confirm.** `<this commit>`: `✕` mid-session with `answeredCount > 0` →
+- [x] **WP-SR4a — exit-confirm.** `2983088`: `✕` mid-session with `answeredCount > 0` →
       `MxConfirmDialog` ("progress is saved — resume later") before pop; pops directly when nothing is
       answered yet (wireframe `13` Rule). Row S90; ARB ×3 (en+vi); confirm/cancel/pop tests.
 - [ ] **WP-SR4b — card-actions sheet.** Long-press the card → a bottom sheet (Edit / Bury until
