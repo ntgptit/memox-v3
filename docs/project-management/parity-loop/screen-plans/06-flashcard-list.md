@@ -80,13 +80,25 @@ Audit: 2026-06-23.
    New/Due only (`docs/business/srs/srs-review.md`) — no taxonomy to back it. DEFER needs-schema.
 3. **Reorder drag-handle** — ✅ WP DONE (2026-06-23): `_ReorderRow` `Icons.drag_indicator` 24→20
    (`MxIconSize.md`) — kit `grip-vertical` rel 20x20. diff.py reorder 10.00→9.96 / 18.74→18.72.
-4. **Search dock**: confirm `flashcard_list_search` renders the persistent bottom "Search cards"
-   field (kit loaded shows it pinned) — field r14 + border.
+4. **Search dock** — ✅ DONE/built (2026-06-23): `FlashcardListSearchDock` (shared `MxScopedSearchDock`
+   + `FlashcardListSearchField`) is mounted persistently in `flashcard_list_screen` bottomNav slot when
+   the deck has cards (kit `06` loaded ships the dock in its base tree). Parity via the shared dock.
 5. **_Overline count-suffix shade** (same as 04 GAP #2; deferred low-value).
-6. **Empty-state "Import cards" secondary button** (NEW) — kit empty has Add card (primary) + Import
-   cards (secondary outlined); FE empty has only Add card. Add an `MxSecondaryButton(outlined)` calling
-   the deck-import entry — verify the import action/route is reachable from here first (may be
-   behavior/needs-verification). WP candidate.
+6. **Empty-state "Import cards" secondary button** — DEFERRED (2026-06-23): no import-into-existing-deck
+   UI entry exists (no `runImport` in `flashcard_list_actions`, no import route constant in
+   `route_names`/`route_paths`, no import trigger in `lib/presentation/`). Wiring the button needs a new
+   import flow/route — out of visual-loop scope. DEFER behavior/needs-verification (see parity-deferred).
+
+## Screen 06 status: DONE (modulo deferred)
+
+All 8 kit states covered (6 flashcard_list_* goldens + delete-card/deck via shared mx_confirm-destructive).
+Parity done: empty/error centered card-wrap (`MxStateCard(centered)`); FlashcardTile audited (chevron
+already 20, title/meta/glyph match); reorder drag-handle 24→20; search dock built (shared
+`MxScopedSearchDock`); `_DueBadge` solid accent. Remaining all deferred:
+- "Import cards" secondary button on empty — behavior/needs-verification (no import-into-deck entry).
+- FlashcardTile status chip + per-status tile color — needs-schema (SRS model New/Due only).
+- empty inner-panel 56 tile / 22-800 title; label 13/600 — needs-token.
+- DECKS overline count-suffix shade — low-value.
 
 ## Behavior-owned / shared deltas
 - Error icon cloud_off vs kit alert-triangle (Lucide↔Material accepted); error copy from ARB.

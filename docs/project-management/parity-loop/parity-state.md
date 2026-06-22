@@ -10,12 +10,17 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **06 — Flashcard list** (decks feature) — AUDIT done; empty/error CENTERED card-wrap DONE (added
-  `centered` variant to shared `MxStateCard`). See
-  `docs/project-management/parity-loop/screen-plans/06-flashcard-list.md`.
-  FlashcardTile audited (chevron already 20 ✓; status chip = needs-schema defer); reorder drag-handle
-  24→20 done. Next WP candidates: empty-state missing "Import cards" secondary button (GAP #6, verify
-  import entry first); search dock parity. Inner-panel 56 tile / 22-800 title → needs-token (deferred).
+- **07/08 — Flashcard editor** (decks feature) — NEXT screen (run audit / BƯỚC 2). Confirm FE exists
+  (`lib/presentation/features/decks/screens/flashcard_editor_screen.dart` + flashcard_editor_body —
+  yes; goldens flashcard_editor_* exist), then audit 07 create (6 states) + 08 edit (7 states).
+
+### Screen 06 — Flashcard list: DONE (modulo deferred)
+
+All 8 kit states covered. Done: empty/error centered card-wrap (`MxStateCard(centered)`), FlashcardTile
+audited (chevron 20 ✓), reorder grip 24→20, search dock built (shared `MxScopedSearchDock`), `_DueBadge`
+solid. Remaining deferred: Import-cards button (behavior/no-entry), status chip (needs-schema),
+inner-panel 56/22-800 + label 13/600 (needs-token), overline shade (low-value).
+See `screen-plans/06-flashcard-list.md`.
 
 ### Screen 04 — Folder detail: DONE (modulo deferred)
 
@@ -45,7 +50,8 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | --- | --- | --- | --- | --- | --- |
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
-| 06 | Flashcard list | yes | done 2026-06-23 | in-progress | centered card-wrap; FlashcardTile audited (chevron✓); reorder grip 24→20; 8/8 covered |
+| 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
+| 07/08 | Flashcard editor | yes | — | — | next: audit create (6) + edit (7) states |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |
