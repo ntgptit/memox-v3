@@ -81,11 +81,13 @@ chrome), keeping (b) (the phase chain) as a separate object. Read `study-flow.md
       `SrsBox.nextBox` + `dueAtFor` + lapse/review, in one `finalizeMatchSession` txn (insert attempts +
       mark answered + upsert progress + complete). Extracted shared `dueAtFor` → `srs_due.dart`. Rows
       S56/S57; 4 finalize tests. **WBS 4.5.4 → Implemented (Match BE COMPLETE).**
-- [ ] **WP-SM3 — mode dispatch + Match board shell (FE).** Resolve the OPEN QUESTION (recommend
-      `?mode=match` query → `RouteParams`/nav-flow). `StudySessionScreen` dispatches Review vs a new
-      `MatchBoardScreen`/body: the app bar (✕ + **blue** MATCH mode pill + blue progress + count) + the
-      board indicator ("BOARD n OF m · k PAIRS LEFT") + a loading/error/empty shell. Reuse
-      `studySessionReviewProvider` items, batched into boards of 5. Golden(s) for the fresh board.
+- [x] **WP-SM3 — mode dispatch + Match board shell (FE).** `6abbe2b`: `?mode=match` route dispatch
+      (`RouteParams.modeQueryParam`, S94) → `MatchSessionScreen` over `studySessionReviewProvider`:
+      ✕ exit + blue progress + `{matched}/{total}` count, **"Match the pairs" title + prompt**, a static
+      2×5 board-fresh grid, the **"{matched} matched · {left} left"** line, loading/error/empty. ARB +3.
+      **Mock↔§Components conflict reconciled (PRECEDENCE #2 — mock wins):** the kit shot has NO MATCH
+      pill / NO board indicator → adopted the mock's title + matched/left instead; wireframe-14 §Components
+      superseded for visual. Goldens light+dark. (The board-fresh cells are row-paired; shuffle = WP-SM4.)
 - [ ] **WP-SM4 — board grid + tap-pair state machine (FE).** The 2×5 grid (`MxCard` cells), the
       select→match/wrong state machine (idle/selected/matched/wrong-flash ~600ms), Fisher-Yates shuffle,
       one-selection-at-a-time, lock matched. Each pair (right/wrong) → `RecordMatchEvaluationUseCase`
