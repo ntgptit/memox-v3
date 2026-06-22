@@ -22,11 +22,11 @@ source_specs:
 > under the wrong-feedback Retry/Next row) and the **Hint** affordance (→ `recovered`, S69; a discreet
 > accent link below the full-width Check, reveals one leading front char at a time up to half the length
 > as a `·`-masked prefix, tainting the grade — retained across Retry). The mock shows neither affordance
-> (Retry/Next + full-width Check only) — documented variance per
-> PRECEDENCE #1 (the decision-table behavior wins). **Deferred (WP-FI2):** the auto-advance countdown
-> (S68/S69), the last-card Finish callout (S73) + finalize-fail surface (S75), and the Edit ✎ / TTS 🔊
-> affordances. The earlier `study_session_fill_mode_view.dart` / `study_session_fill_viewmodel.dart` paths
-> never existed.
+> (Retry/Next + full-width Check only) — documented variance per PRECEDENCE #1. **Built (WP-FI2c):** a
+> correct answer **auto-advances after a 0.8s countdown** (`AppMotion.fillAutoAdvance`; a depleting bar
+> over the Next button which taps to skip, S68). **Deferred (WP-FI2):** the last-card Finish callout
+> (S73) + finalize-fail surface (S75), and the Edit ✎ / TTS 🔊 affordances. The earlier
+> `study_session_fill_mode_view.dart` / `study_session_fill_viewmodel.dart` paths never existed.
 >
 > **Mock conflict (flagged for owner):** the mock (`shots/16-study-fill`) frames the prompt as "TYPE THE
 > READING" + grades the romaji/reading (showing the front + an "English: …" gloss), whereas study-flow +

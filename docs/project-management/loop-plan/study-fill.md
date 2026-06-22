@@ -3,7 +3,7 @@ last_updated: 2026-06-22
 object: Study — Fill mode (object 10 of 10 — the LAST study mode)
 loop_order: 10 of 10 (after object 9 Recall, DONE)
 route: /library/study/session/:sessionId?mode=fill
-status: WP-FI1 DONE (typed check/grade); WP-FI2a+b DONE (Mark-correct + Hint → recovered); WP-FI2c-e remain
+status: WP-FI1 DONE; WP-FI2a+b+c DONE (Mark-correct + Hint → recovered, auto-advance countdown); WP-FI2d-e remain
 ---
 
 # Loop plan — Object 10: Study — Fill
@@ -62,7 +62,10 @@ is superseded), real text field, full-width Check, CORRECT ANSWER card, Retry/Ne
         char at a time (max half the length) as a `·`-masked prefix; any reveal taints → a clean match
         caps at `recovered` via `evaluate(hintUsed: true)`; retained across Retry. (Mock = Check only;
         variance flagged. code-reviewer caught + fixed a retry-drops-taint bug.)
-  - [ ] **WP-FI2c** — the 0.8s auto-advance countdown on correct (S68, reuse Guess's timer pattern).
+  - [x] **WP-FI2c** — the 0.8s auto-advance countdown on correct (`42104ce`, S68): a depleting
+        `MxLinearProgress` over Next (`AppMotion.fillAutoAdvance` + `TweenAnimationBuilder.onEnd` →
+        `next()`; tap Next to skip). Widget-driven (no controller Timer). Area widgets extracted to
+        `widgets/fill_session_areas.dart` for file-length.
   - [ ] **WP-FI2d** — last-card **Finish** callout (S73) + the explicit **finalize-fail** surface (S75).
   - [ ] **WP-FI2e** — the Edit ✎ / TTS 🔊 affordances.
   Re-confirm the front-vs-reading conflict with the owner before extending further.
