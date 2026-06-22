@@ -31,8 +31,11 @@ last_updated: 2026-06-22
 - **Polish progress:** Fill `recovered` path + auto-advance **done** — **WP-FI2a (Mark-correct, S72)**
   (`f1625b1`) + **WP-FI2b (Hint-taint, S69)** (`3466204`) + **WP-FI2c (0.8s auto-advance countdown, S68)**
   (`42104ce`; a depleting bar over Next via `AppMotion.fillAutoAdvance` + `TweenAnimationBuilder.onEnd`,
-  widget-driven). Remaining WP-FI2: **FI2d** last-card Finish callout (S73) + finalize-fail (S75) — note
-  S75 is cross-cutting (all modes currently tolerate finalize failure); **FI2e** Edit/TTS.
+  widget-driven). **WP-FI2d finalize-fail (S75) is covered-by-design** (audit 2026-06-22): Fill inherits
+  the shared route-to-SR5 + `failed_to_finalize` save-failed banner (WP-SR5b) like every mode — NOT a
+  todo; the S9/S10/S75 "stay-on-session" wording is superseded (flagged for owner). Remaining Fill: only
+  the **low-value** last-card Finish callout (S73) + **FI2e** Edit/TTS (large / mock-dropped). **Fill's
+  high-value polish is DONE.**
 - **Branch:** `feat/loop-library`; latest code commit `42104ce` (WP-FI2c — Fill auto-advance; prior
   `3466204` WP-FI2b Hint, `f1625b1` WP-FI2a Mark-correct).
 - **Last verify:** PASS (code chain, guard 0 errors) — WP-SR1b-2b tree + review-fix. **Fan-out now
@@ -79,21 +82,25 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 
 ## Next action
 
-**All greenfield objects are COMPLETE** — the 5 study modes (6-10) + object 5 (library FE, incl. Tags).
-Only the deferred study-mode **polish** backlog remains. Pick the highest-value item (audit-first as always):
+**All greenfield objects + the high-value study-mode polish are COMPLETE.** The 5 study modes (6-10) +
+object 5 (library FE incl. Tags) are done; Fill's `recovered` path + auto-advance are built and its
+finalize-fail is covered-by-design (WP-SR5b). **The remaining backlog is entirely low-value
+mock-dropped affordances** (the redesign mock simplified every mode; the wireframes' extra UI was cut):
+S73 Fill Finish-callout, FI2e Fill Edit/TTS, WP-RC2/RC3 (Recall countdown/Edit/TTS), WP-SG3 (Guess
+long-press), WP-SM4b (Match shuffle/timer/mistake), WP-SR4b-2 (Review Edit), WP-SR1b-2c, WP-SR2b — each
+re-opens the mock↔doc conflict and needs an owner call on whether the redesign intentionally cut it.
 
-**RECOMMENDED NEXT — continue WP-FI2 (Fill polish); WP-FI2a (Mark-correct) + WP-FI2b (Hint) + WP-FI2c
-(auto-advance countdown) are done — the `recovered` path + auto-advance are complete.** Remaining slices
-(CHẺ ~1/iter), read `loop-plan/study-fill.md` + `docs/wireframes/17-study-session-fill.md` + decision
-S73/S75: **WP-FI2d — last-card Finish callout** (S73) + explicit **finalize-fail** surface (S75 — note:
-all modes currently tolerate finalize failure + route regardless, so S75 is a **cross-cutting** change;
-consider applying to all modes or keep Fill-only + flag); **WP-FI2e — Edit ✎ / TTS 🔊**. Each adds UI the
-redesign mock dropped → build the documented behavior + flag the visual variance (as FI2a/b/c did).
-**Consider whether the remaining Fill polish (Finish-callout / Edit / TTS) is worth more iterations vs.
-switching to another mode's backlog — many of these are low-value mock-dropped affordances; the
-owner-decision flags below are accumulating.**
-**Re-confirm the Fill front-vs-reading mock↔doc conflict + the S20 `recovered`-redefinition drift with the
-owner before extending further.** (Other backlog: WP-RC2/RC3, WP-SG3, WP-SM4b, WP-SR4b-2.)
+**RECOMMENDED NEXT (non-conflicting, real value) — the logged QUALITY refactor** in §Follow-up cleanups:
+extract a shared **`MxScopedSearchDock`** from the near-identical `LibrarySearchDock` +
+`FolderDetailSearchDock` (dock chrome + a provider-synced field). DRY, no mock involvement, testable —
+genuine value without grinding a cut affordance. If instead continuing study polish, the least-bad pick
+is **WP-SR4b-2 (Review Edit)** (a real feature, not purely cosmetic) — but it needs `deckId` threaded
+into the review session + is mock-dropped, so flag it.
+
+**OWNER-DECISION FLAGS (accumulating — surface on review):** (1) the systematic mock-drops-wireframe-
+affordance pattern across all 5 modes — are these cut or deferred? (2) Fill front-vs-reading grading;
+(3) Recall 3-grade (Partial); (4) the S20 `recovered`-redefinition drift; (5) S9/S10/S75 finalize-fail
+"stay-on-session" superseded by WP-SR5b route-to-result+banner. **Audit-first (TRUST POLICY) on every pickup.**
 
 **ALSO PENDING (pick by value):** WP-RC2 (Recall Show-answer countdown + auto-reveal-on-timeout, S63/S64;
 needs a `recallAnswerTimeout` constant), WP-RC3 (Recall Edit/TTS, S65), WP-SG3 (Guess long-press

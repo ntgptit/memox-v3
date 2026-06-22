@@ -66,9 +66,16 @@ is superseded), real text field, full-width Check, CORRECT ANSWER card, Retry/Ne
         `MxLinearProgress` over Next (`AppMotion.fillAutoAdvance` + `TweenAnimationBuilder.onEnd` →
         `next()`; tap Next to skip). Widget-driven (no controller Timer). Area widgets extracted to
         `widgets/fill_session_areas.dart` for file-length.
-  - [ ] **WP-FI2d** — last-card **Finish** callout (S73) + the explicit **finalize-fail** surface (S75).
-  - [ ] **WP-FI2e** — the Edit ✎ / TTS 🔊 affordances.
+  - [~] **WP-FI2d** — **finalize-fail (S75) is covered-by-design** (audit 2026-06-22): Fill inherits the
+        shared route-to-SR5 + save-failed banner (WP-SR5b) like every mode — not a Fill todo; the S9/S10/S75
+        "stay-on-session" wording is superseded (flagged for owner). Only the last-card **Finish callout**
+        (S73) remains — **low value** (auto-finalize already works); deferred.
+  - [ ] **WP-FI2e** — the Edit ✎ / TTS 🔊 affordances (large + needs deckId / a TTS feature; mock-dropped).
   Re-confirm the front-vs-reading conflict with the owner before extending further.
+
+  **Assessment (2026-06-22):** Fill's high-value polish is DONE (FI2a/b/c + FI2d finalize-fail covered).
+  The remainder (S73 Finish-callout, FI2e Edit/TTS) is low-value / mock-dropped / large. Recommend NOT
+  grinding these — pause Fill; the broader study-polish backlog is similar (see loop-state).
 
 ## PRECEDENCE / rules
 
