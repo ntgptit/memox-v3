@@ -10,12 +10,18 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **03 — Library overview** — AUDIT done; WP-1 done (empty/error card-wrap); WP-2 done
-  (overflow-sheet golden → all 6 kit states now covered). See
-  `docs/project-management/parity-loop/screen-plans/03-library-overview.md`.
-  Next work-package: GAP #3 (loaded list-row/card metrics) — likely already close (Ahem-noise);
-  then GAP #2 (error glyphs) / GAP #4 (loading skeleton) / GAP #5 (search overline+dock).
-  Empty inner-panel refinement (GAP #1 tile/title) deferred to a shared-widget WP (needs 56 token).
+- **04 — Folder detail** — NEXT screen (run audit / BƯỚC 2). Confirm FE exists
+  (`lib/presentation/features/folders/screens/folder_detail_screen.dart` — yes), then audit its
+  8 kit states. Screen 03 is essentially done (see below); remaining 03 items are deferred or
+  Ahem-noise.
+
+### Screen 03 — Library overview: DONE (modulo deferred)
+
+WP-1 empty/error card-wrap · WP-2 overflow-sheet golden (6/6 kit states covered) · WP-3 loaded
+chevron 24→20 + loaded metrics audited (card/row/tile/typography all match spec). Loaded/loading/
+search residual diff is Ahem test-font noise (structurally correct). Remaining = deferred only:
+empty inner-panel (56 tile / 22-800 title, needs-token), modal sheet shadow:8/28 (needs-token),
+Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 
 ## Priority order (FE-built first)
 
@@ -26,7 +32,7 @@ per loop. Visual-only; behavior is docs-owned.
 
 | # | Screen | FE? | Audit | Parity | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 03 | Library overview | yes | done 2026-06-23 | in-progress | WP-1 empty/error card-wrap; WP-2 overflow-sheet golden (6/6 states covered) |
+| 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | — | — | |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |

@@ -67,7 +67,7 @@ Audit: 2026-06-23.
 
 1. **Empty + error empty-state visual** — ✅ WP-1 DONE (2026-06-23): card-wrap + top-anchor at library body (`_panelInCard`); error 17.49→8.73% / 20.93→10.46%, empty 18.36→16.04% / 21.43→19.03%. REMAINING (deferred → shared-widget WP, needs-token): tile-lg 56/r14 (no 56 token), solid-accent empty tile vs tonal error, title 22/800 tracking -0.4 (no slot), body lh21 maxw280, pill 14/700 + 16px icon.
 2. **Error icon glyphs** (visual): `cloud_off_outlined`→`alert-triangle` equivalent; `refresh`→`rotate-ccw` equivalent (subject to available Material/icon set; if no close glyph → needs-token/icon defer).
-3. **Loaded list-row/card metrics**: confirm card r20 + divider border + shadow `sm`, row gap12/pad, title 16/600, meta 13/400 text-2, chevron 20.
+3. **Loaded list-row/card metrics** — ✅ WP-3 DONE (2026-06-23): audited vs spec — card r20/border/shadow-sm ✓, row gap12 ✓ + net horizontal inset 16 ✓, title 16/600 (titleMedium) ✓, meta 13/400 text-2 (bodySmall) ✓, leading MxIconTile 40/r14/icon20/tint ✓. Fixed: trail chevron 24→20 (`MxIconSize.md`). Residual loaded diff (~14%) is Ahem test-font noise. Un-tokenizable micro-gap left as-is: title→meta gap is space1=4 vs kit 3 (no 3px token; <1px visual).
 4. **Loading skeleton**: confirm 4 rows + skeleton sizes + surface-2 + radii.
 5. **Search**: confirm overline 12/700 tracking 1; search-dock field r14/border + icons.
 6. **Overflow-sheet golden** — ✅ WP-2 DONE (2026-06-23): added light+dark golden; sheet structurally matches kit (grabber, folder header tile+name+meta, divider, Rename/Move to…/Delete-folder rows with neutral + danger tiles). State coverage now complete for all 6 kit states.
