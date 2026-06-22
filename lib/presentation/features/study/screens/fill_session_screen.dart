@@ -7,15 +7,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
-import 'package:memox/core/theme/mx_colors.dart';
-import 'package:memox/core/theme/mx_icon_size.dart';
-import 'package:memox/core/theme/mx_radius.dart';
+import 'package:memox/core/theme/app_motion.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
-import 'package:memox/core/theme/mx_stroke.dart';
 import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/fill_session_controller.dart';
+import 'package:memox/presentation/features/study/widgets/fill_session_areas.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/hooks/mx_text_controller_hooks.dart';
@@ -24,14 +22,11 @@ import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_secondary_button.dart';
 import 'package:memox/presentation/shared/widgets/feedback/mx_linear_progress.dart';
-import 'package:memox/presentation/shared/widgets/inputs/mx_text_field.dart';
-import 'package:memox/presentation/shared/widgets/mx_tappable.dart';
 import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/navigation/mx_app_bar.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_loading_state.dart';
-import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// The Fill-mode study surface (mock `16-study-fill` / wireframe `17`), reached
 /// via the session route with `?mode=fill`.
@@ -40,9 +35,10 @@ import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 /// card (the back / definition), a free-text answer field, **Check** → a strict
 /// trim-only match of the typed front (`perfect` / `forgot`); correct → ✓ + Next,
 /// wrong → the CORRECT ANSWER card + Retry / Next → record + advance → the last
-/// card finalizes → the result. **Mark correct → `recovered` is built (WP-FI2a)**;
-/// the Hint char-reveal, the auto-advance countdown, and the edit / TTS
-/// affordances remain deferred (WP-FI2).
+/// card finalizes → the result. **Mark correct (WP-FI2a) + Hint (WP-FI2b) →
+/// `recovered`, and a correct answer auto-advances after a 0.8s countdown
+/// (WP-FI2c) are built**; the last-card Finish callout, finalize-fail surface,
+/// and edit / TTS affordances remain deferred (WP-FI2).
 class FillSessionScreen extends HookConsumerWidget {
   const FillSessionScreen({required this.sessionId, super.key});
 
@@ -210,7 +206,7 @@ class FillSessionScreen extends HookConsumerWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        _HintCard(prompt: l10n.studyFillPrompt, hint: item.back),
+        FillHintCard(prompt: l10n.studyFillPrompt, hint: item.back),
         const SizedBox(height: MxSpacing.space4),
         Expanded(
           child: _answerArea(
@@ -245,7 +241,7 @@ class FillSessionScreen extends HookConsumerWidget {
   }) {
     switch (view.phase) {
       case FillPhase.typing:
-        return _TypingArea(
+        return FillTypingArea(
           label: l10n.studyFillAnswerLabel,
           controller: field.controller,
           // The Hint reveals leading characters of the front (WP-FI2b, S69).
@@ -254,9 +250,9 @@ class FillSessionScreen extends HookConsumerWidget {
               : null,
         );
       case FillPhase.correct:
-        return _CorrectArea(answer: submitted);
+        return FillCorrectArea(answer: submitted);
       case FillPhase.wrong:
-        return _WrongArea(
+        return FillWrongArea(
           submitted: submitted,
           message: l10n.studyFillWrongMessage,
           correctLabel: l10n.studyFillCorrectLabel,
@@ -298,14 +294,29 @@ class FillSessionScreen extends HookConsumerWidget {
               onPressed: canCheck ? onCheck : null,
             ),
             const SizedBox(height: MxSpacing.space2),
-            _FillActionLink(label: l10n.studyFillHint, onTap: onHint),
+            FillActionLink(label: l10n.studyFillHint, onTap: onHint),
           ],
         );
       case FillPhase.correct:
-        return MxPrimaryButton(
-          label: l10n.studyFillNext,
-          fullWidth: true,
-          onPressed: onNext,
+        // A depleting countdown bar (auto-advances after 0.8s, S68) over the
+        // Next button (tap to skip — wireframe `17` "Next ▸ tappable to skip").
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 1, end: 0),
+              duration: AppMotion.fillAutoAdvance,
+              // Auto-advance when the bar depletes (S68); Next taps to skip early.
+              onEnd: onNext,
+              builder: (_, double value, _) => MxLinearProgress(value: value),
+            ),
+            const SizedBox(height: MxSpacing.space3),
+            MxPrimaryButton(
+              label: l10n.studyFillNext,
+              fullWidth: true,
+              onPressed: onNext,
+            ),
+          ],
         );
       case FillPhase.wrong:
         // Mock `16-study-fill--wrong` shows Retry / Next; the **Mark correct**
@@ -334,7 +345,7 @@ class FillSessionScreen extends HookConsumerWidget {
               ],
             ),
             const SizedBox(height: MxSpacing.space2),
-            _FillActionLink(
+            FillActionLink(
               label: l10n.studyFillMarkCorrect,
               onTap: onMarkCorrect,
             ),
@@ -371,227 +382,4 @@ class FillSessionScreen extends HookConsumerWidget {
       onPressed: () => ref.invalidate(fillSessionControllerProvider(sessionId)),
     ),
   );
-}
-
-/// A discreet accent text link for the Fill secondary actions the redesign mock
-/// dropped — **Hint** (typing, WP-FI2b) and **Mark correct** (wrong, WP-FI2a) —
-/// kept off the primary button row so it never crowds Check / Retry / Next.
-class _FillActionLink extends StatelessWidget {
-  const _FillActionLink({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Center(
-    child: MxTappable(
-      onTap: onTap,
-      child: MxText(
-        label,
-        role: MxTextRole.labelMedium,
-        color: context.mxColors.accent,
-      ),
-    ),
-  );
-}
-
-/// The hint card: an overline + the back / definition (the prompt the learner
-/// produces the front from).
-class _HintCard extends StatelessWidget {
-  const _HintCard({required this.prompt, required this.hint});
-
-  final String prompt;
-  final String hint;
-
-  @override
-  Widget build(BuildContext context) {
-    final MxColors colors = context.mxColors;
-    return MxCard(
-      child: Padding(
-        padding: const EdgeInsets.all(MxSpacing.space5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            MxText(
-              StringUtils.upperFold(prompt),
-              role: MxTextRole.labelSmall,
-              color: colors.textTertiary,
-            ),
-            const SizedBox(height: MxSpacing.space2),
-            MxText(hint, role: MxTextRole.titleLarge),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// The typing state: an overline label + the free-text answer field.
-class _TypingArea extends StatelessWidget {
-  const _TypingArea({
-    required this.label,
-    required this.controller,
-    this.revealedHint,
-  });
-
-  final String label;
-  final TextEditingController controller;
-
-  /// The Hint mask (revealed prefix + `·` per hidden char), or null when no hint
-  /// has been revealed for the current card (WP-FI2b).
-  final String? revealedHint;
-
-  @override
-  Widget build(BuildContext context) {
-    final MxColors colors = context.mxColors;
-    final String? hint = revealedHint;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        MxText(
-          StringUtils.upperFold(label),
-          role: MxTextRole.labelSmall,
-          color: colors.textTertiary,
-        ),
-        const SizedBox(height: MxSpacing.space2),
-        MxTextField(controller: controller, autofocus: true),
-        if (hint != null) ...<Widget>[
-          const SizedBox(height: MxSpacing.space2),
-          MxText(
-            hint,
-            role: MxTextRole.titleMedium,
-            color: colors.textSecondary,
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-/// The correct-feedback state: the typed answer over a ✓ glyph (success family).
-class _CorrectArea extends StatelessWidget {
-  const _CorrectArea({required this.answer});
-
-  final String answer;
-
-  @override
-  Widget build(BuildContext context) {
-    final MxColors colors = context.mxColors;
-    return Align(
-      alignment: Alignment.topCenter,
-      child: SizedBox(
-        width: double.infinity,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.successSoft,
-            borderRadius: MxRadius.mdAll,
-            border: Border.all(color: colors.success, width: MxStroke.hairline),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(MxSpacing.space5),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                MxText(answer, role: MxTextRole.titleLarge),
-                const SizedBox(height: MxSpacing.space2),
-                Icon(Icons.check, size: MxIconSize.lg, color: colors.success),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// The wrong-feedback state: the typed answer in a red-bordered box, a "not
-/// quite" message, and the correct answer in a green card.
-class _WrongArea extends StatelessWidget {
-  const _WrongArea({
-    required this.submitted,
-    required this.message,
-    required this.correctLabel,
-    required this.correct,
-  });
-
-  final String submitted;
-  final String message;
-  final String correctLabel;
-  final String correct;
-
-  @override
-  Widget build(BuildContext context) {
-    final MxColors colors = context.mxColors;
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.dangerSoft,
-              borderRadius: MxRadius.mdAll,
-              border: Border.all(
-                color: colors.danger,
-                width: MxStroke.hairline,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(MxSpacing.space4),
-              child: MxText(
-                submitted,
-                role: MxTextRole.titleLarge,
-                color: colors.danger,
-              ),
-            ),
-          ),
-          const SizedBox(height: MxSpacing.space2),
-          Row(
-            children: <Widget>[
-              Icon(
-                Icons.error_outline,
-                size: MxIconSize.sm,
-                color: colors.danger,
-              ),
-              const SizedBox(width: MxSpacing.space1),
-              Flexible(
-                child: MxText(
-                  message,
-                  role: MxTextRole.bodySmall,
-                  color: colors.danger,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: MxSpacing.space4),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.successSoft,
-              borderRadius: MxRadius.mdAll,
-              border: Border.all(
-                color: colors.success,
-                width: MxStroke.hairline,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(MxSpacing.space4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  MxText(
-                    StringUtils.upperFold(correctLabel),
-                    role: MxTextRole.labelSmall,
-                    color: colors.success,
-                  ),
-                  const SizedBox(height: MxSpacing.space1),
-                  MxText(correct, role: MxTextRole.titleLarge),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

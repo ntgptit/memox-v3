@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:memox/app/di/study_providers.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/core/error/result.dart';
+import 'package:memox/core/theme/app_motion.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
@@ -111,6 +112,9 @@ Future<void> _pump(
         studySessionReviewProvider(_sid).overrideWith((ref) => review()),
         if (record != null)
           recordStudySessionAnswerUseCaseProvider.overrideWithValue(record),
+        // A no-op finalize keeps any auto-advance that reaches the last card
+        // DB-safe (the screen has no router here, so it never actually routes).
+        finalizeStudySessionUseCaseProvider.overrideWithValue(_FakeFinalize()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -190,6 +194,28 @@ void main() {
       expect(record.recorded, <AttemptResult>[AttemptResult.perfect]);
       expect(find.text('1 / 2'), findsOneWidget); // advanced
       expect(find.text('sea'), findsOneWidget); // the next hint
+    });
+
+    testWidgets('a correct answer auto-advances after the countdown (S68)', (
+      tester,
+    ) async {
+      final _FakeRecordAnswer record = _FakeRecordAnswer();
+      await _pump(
+        tester,
+        review: () async => _review(_cards()),
+        record: record,
+      );
+      await tester.enterText(find.byType(TextField), 'yama');
+      await tester.pump();
+      await tester.tap(find.text('Check answer'));
+      await tester
+          .pump(); // enter the correct-feedback state (countdown starts)
+      expect(find.text('0 / 2'), findsOneWidget); // not yet advanced
+      // The countdown bar depletes → onEnd → auto-advance (no manual Next tap).
+      await tester.pump(AppMotion.fillAutoAdvance);
+      await tester.pumpAndSettle();
+      expect(record.recorded, <AttemptResult>[AttemptResult.perfect]);
+      expect(find.text('1 / 2'), findsOneWidget); // advanced to card 2
     });
 
     testWidgets('wrong → Next records forgot + advances', (tester) async {

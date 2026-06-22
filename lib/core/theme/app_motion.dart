@@ -21,4 +21,8 @@ abstract final class AppMotion {
   /// The auto-advance countdown after a **wrong** Guess pick — longer so the
   /// learner sees the correct answer before advancing (wireframe `15` — "1.5s").
   static const Duration guessRevealWrong = Duration(milliseconds: 1500);
+
+  /// The auto-advance countdown after a **correct** Fill answer — the ✓ holds,
+  /// then the next card appears (tappable to skip; wireframe `17` — "0.8s").
+  static const Duration fillAutoAdvance = Duration(milliseconds: 800);
 }

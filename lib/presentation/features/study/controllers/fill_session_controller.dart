@@ -63,10 +63,12 @@ class FillView {
 /// hint, type the front, **Check** grades a strict trim-only match via
 /// `FillStudyModeStrategy.evaluate` (`studyMode: fill`) → `perfect` (clean match)
 /// or `forgot` (mismatch). Correct → advance; wrong → show the answer + Retry
-/// (re-type) / Next (advance). The last card finalizes → the result. The Hint
-/// char-reveal (→ `recovered`), the auto-advance countdown, and the edit / TTS
-/// affordances are deferred (WP-FI2); **Mark correct → `recovered` is built
-/// (WP-FI2a, see [markCorrect]).** WBS 4.5.9.
+/// (re-type) / Next (advance). The last card finalizes → the result. **Mark
+/// correct + Hint → `recovered` are built (WP-FI2a/b); a correct answer
+/// auto-advances after a 0.8s countdown (WP-FI2c) — driven by the screen's
+/// countdown bar `onEnd`, calling [next].** The last-card Finish callout,
+/// finalize-fail surface, and edit / TTS affordances remain deferred (WP-FI2).
+/// WBS 4.5.9.
 @riverpod
 class FillSessionController extends _$FillSessionController {
   static const FillStudyModeStrategy _strategy = FillStudyModeStrategy();
