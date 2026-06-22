@@ -3,7 +3,7 @@ last_updated: 2026-06-22
 object: Study — Guess mode (object 8 of 10)
 loop_order: 8 of 10 (after object 7 Match, DONE)
 route: /library/study/session/:sessionId?mode=guess
-status: AUDIT DONE → BUILD (FE-only; the Guess BE is Implemented — no drift)
+status: DONE (WP-SG1 shell + WP-SG2 select-to-grade — Guess playable end-to-end, 2026-06-22)
 ---
 
 # Loop plan — Object 8: Study — Guess
@@ -47,12 +47,15 @@ auto-advance to the next card. Per-card flow (like Review), not boards (unlike M
       blue progress + `{answered}/{total}` count + prompt card (overline + front `displayLarge` + reading)
       + static lettered (A–E) option grid + states. ARB +1; nav-flow + wireframe-15 corrected. 7 tests +
       question goldens. (Confirmed mock = no pill / single-line options — built to match, PRECEDENCE #2.)
-- [ ] **WP-SG2 — select-to-grade + advance + finalize → result.** Tap an option → `isCorrect` →
-      `RecordStudySessionAnswerUseCase(studyMode: guess, result: perfect|forgot)`; reveal correct/wrong
-      (correct green, wrong red + highlight the right one); auto-advance (countdown, `AppMotion.*`) to the
-      next card; the last card → `FinalizeStudySessionUseCase` → `pushReplacementNamed(studyResult)`
-      (reuse SR5). Tests per branch (correct/wrong grade + record + advance; last card → finalize→route)
-      + goldens (answered-correct, answered-wrong). Then **object 8 COMPLETE** → object 9 (Recall).
+- [x] **WP-SG2 — select-to-grade + advance + finalize → result.** `6d2ad59`: tap an option →
+      `RecordStudySessionAnswerUseCase(studyMode: guess, correct→perfect / wrong→forgot)`; reveal correct
+      green ✓ / wrong red ✗ + dim the rest (`MxOpacity.disabled`); the `_CountdownFooter` (depleting
+      `MxLinearProgress` + tap-to-skip) auto-advances after `AppMotion.guessRevealCorrect` (0.8s) /
+      `guessRevealWrong` (1.5s); the last card → `FinalizeStudySessionUseCase` → `pushReplacementNamed(studyResult)`
+      (reused SR5). Decision S60–S62 test refs filled; wireframe-15 → built. 13 tests + answered goldens.
+      **Fan-out fold:** the first cut used a manual Next button — 3 reviewers caught it as a doc-parity
+      breach (wireframe 15 / WBS / S61-S62 all mandate the auto-advance countdown) → rebuilt to spec.
+      **Object 8 (Guess) COMPLETE** → next object 9 (Recall). Deferred WP-SG3: long-press option card-actions.
 
 ## PRECEDENCE / rules
 
