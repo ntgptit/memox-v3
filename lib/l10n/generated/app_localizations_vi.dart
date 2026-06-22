@@ -691,4 +691,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyReviewFinishAction => 'Kết thúc phiên';
+
+  @override
+  String get studyExitTitle => 'Thoát phiên học?';
+
+  @override
+  String get studyExitMessage =>
+      'Tiến độ của bạn đã được lưu và có thể tiếp tục sau. Rời phiên này?';
+
+  @override
+  String get studyExitConfirm => 'Thoát';
+
+  @override
+  String get studyExitCancel => 'Tiếp tục học';
 }

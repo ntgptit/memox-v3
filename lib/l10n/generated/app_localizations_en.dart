@@ -708,4 +708,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyReviewFinishAction => 'Finish session';
+
+  @override
+  String get studyExitTitle => 'Exit study session?';
+
+  @override
+  String get studyExitMessage =>
+      'Your progress is saved and you can resume later. Leave this session?';
+
+  @override
+  String get studyExitConfirm => 'Exit';
+
+  @override
+  String get studyExitCancel => 'Keep studying';
 }

@@ -442,5 +442,13 @@
   "studyReviewFinishMessage": "You've gone through every card in this session.",
   "@studyReviewFinishMessage": { "description": "Body of the end-of-session surface." },
   "studyReviewFinishAction": "Finish session",
-  "@studyReviewFinishAction": { "description": "Action that finalizes the session and shows the result." }
+  "@studyReviewFinishAction": { "description": "Action that finalizes the session and shows the result." },
+  "studyExitTitle": "Exit study session?",
+  "@studyExitTitle": { "description": "Title of the mid-session exit-confirm dialog (§exit-session)." },
+  "studyExitMessage": "Your progress is saved and you can resume later. Leave this session?",
+  "@studyExitMessage": { "description": "Body of the exit-confirm dialog reassuring the user progress is kept." },
+  "studyExitConfirm": "Exit",
+  "@studyExitConfirm": { "description": "Confirm action that leaves the study session." },
+  "studyExitCancel": "Keep studying",
+  "@studyExitCancel": { "description": "Cancel action that stays in the study session." }
 }

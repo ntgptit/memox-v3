@@ -19,8 +19,11 @@ source_specs:
 > back → example pill) via `LoadStudySessionReviewUseCase`, with loading/error/empty states — **plus
 > swipe-grade (WP-SR3):** `StudySessionController` grades by swipe (right → `perfect`, left → `forgot`
 > via `RecordStudySessionAnswerUseCase`), advances optimistically, shows the swipe hint for the first
-> 3 cards, and renders a Finish surface after the last card. **Not yet built:** exit-confirm +
-> card-actions sheet (WP-SR4), finalize→result (WP-SR5 — the Finish action pops for now). The
+> 3 cards, and renders a Finish surface after the last card — **plus the exit-confirm (WP-SR4a):**
+> `✕` mid-session with `answeredCount > 0` shows the §exit-session `MxConfirmDialog` ("Exit study
+> session? … Keep studying / Exit", modal-locked) before popping; nothing answered → pop directly.
+> **Not yet built:** the card-actions sheet (WP-SR4b: Edit / Bury / Suspend), finalize→result (WP-SR5
+> — the Finish action pops for now). The
 > front/back labels fall back to FRONT/BACK — the language-specific labels (KOREAN/MEANING from
 > `deck.target_language`) need the read model to carry the language (WP-SR2b). Any other
 > `lib/presentation/features/study/**` path below is **target structure** until its slice lands. The

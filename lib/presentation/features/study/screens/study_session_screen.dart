@@ -12,6 +12,7 @@ import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_controller.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
+import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_icon_button.dart';
 import 'package:memox/presentation/shared/widgets/buttons/mx_primary_button.dart';
@@ -90,7 +91,7 @@ class StudySessionScreen extends ConsumerWidget {
       leading: MxIconButton.toolbar(
         icon: Icons.close,
         tooltip: l10n.commonCancel,
-        onPressed: () => context.pop(),
+        onPressed: () => _confirmExit(context, l10n, progress),
       ),
       // The app bar needs a title or titleWidget; the loading/error/empty shells
       // (no progress yet) fall back to the session title.
@@ -115,6 +116,33 @@ class StudySessionScreen extends ConsumerWidget {
     ),
     body: body,
   );
+
+  /// Exit guard (wireframe `13` Rule "exit confirmation when answered > 0"):
+  /// once any card is graded, `✕` confirms before leaving (progress is saved and
+  /// resumable); with nothing graded yet it pops straight away.
+  Future<void> _confirmExit(
+    BuildContext context,
+    AppLocalizations l10n,
+    (int answered, int total)? progress,
+  ) async {
+    final int answered = progress?.$1 ?? 0;
+    if (answered == 0) {
+      context.pop();
+      return;
+    }
+    final bool leave = await MxConfirmDialog.show(
+      context,
+      title: l10n.studyExitTitle,
+      message: l10n.studyExitMessage,
+      confirmLabel: l10n.studyExitConfirm,
+      cancelLabel: l10n.studyExitCancel,
+      barrierDismissible:
+          false, // §exit-session: shared dialogs are modal-locked
+    );
+    if (!leave) return;
+    if (!context.mounted) return;
+    context.pop();
+  }
 
   Widget _emptyBody(AppLocalizations l10n) => MxEmptyState(
     icon: Icons.style_outlined,

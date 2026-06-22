@@ -204,5 +204,9 @@
   "studyReviewSwipeHint": "Vuốt phải nếu bạn nhớ, vuốt trái nếu chưa",
   "studyReviewFinishTitle": "Đã ôn xong",
   "studyReviewFinishMessage": "Bạn đã xem qua tất cả thẻ trong phiên này.",
-  "studyReviewFinishAction": "Kết thúc phiên"
+  "studyReviewFinishAction": "Kết thúc phiên",
+  "studyExitTitle": "Thoát phiên học?",
+  "studyExitMessage": "Tiến độ của bạn đã được lưu và có thể tiếp tục sau. Rời phiên này?",
+  "studyExitConfirm": "Thoát",
+  "studyExitCancel": "Tiếp tục học"
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:memox/core/theme/mx_theme.dart';
 import 'package:memox/domain/entities/study_session.dart';
 import 'package:memox/domain/entities/study_session_review.dart';
@@ -258,6 +259,90 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Review complete'), findsOneWidget);
       expect(find.text('Finish session'), findsOneWidget);
+    });
+
+    testWidgets('exit mid-session (answered > 0) confirms before leaving', (
+      tester,
+    ) async {
+      // currentIndex 1 of 2 → one card answered.
+      final StudySessionView view = StudySessionView(
+        review: _review(
+          items: <StudySessionReviewItem>[
+            _item(answered: true),
+            _item(front: '물', back: 'water', sortOrder: 1),
+          ],
+        ),
+        currentIndex: 1,
+      );
+      await _pump(tester, controller: () => _FakeSessionController(view));
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(find.text('Exit study session?'), findsOneWidget);
+    });
+
+    testWidgets('exit cancel keeps the session', (tester) async {
+      final StudySessionView view = StudySessionView(
+        review: _review(
+          items: <StudySessionReviewItem>[
+            _item(answered: true),
+            _item(front: '물', back: 'water', sortOrder: 1),
+          ],
+        ),
+        currentIndex: 1,
+      );
+      await _pump(tester, controller: () => _FakeSessionController(view));
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Keep studying'));
+      await tester.pumpAndSettle();
+      expect(find.text('Exit study session?'), findsNothing);
+      expect(find.text('water'), findsOneWidget); // still on the card
+    });
+
+    testWidgets('exit with nothing answered pops without a confirm', (
+      tester,
+    ) async {
+      final GoRouter router = GoRouter(
+        initialLocation: '/',
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/',
+            builder: (_, _) => const Scaffold(body: Text('HOME')),
+          ),
+          GoRoute(
+            path: '/s',
+            builder: (_, _) => const StudySessionScreen(sessionId: _sid),
+          ),
+        ],
+      );
+      final StudySessionView view = StudySessionView(
+        review: _review(items: <StudySessionReviewItem>[_item()]),
+        currentIndex: 0, // nothing answered
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            studySessionControllerProvider(
+              _sid,
+            ).overrideWith(() => _FakeSessionController(view)),
+          ],
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: MxTheme.light,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      // Push the session over home so the exit pop has a caller to return to.
+      unawaited(router.push('/s'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(find.text('Exit study session?'), findsNothing);
+      expect(find.text('HOME'), findsOneWidget); // popped to caller
     });
   });
 

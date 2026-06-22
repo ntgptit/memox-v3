@@ -1327,6 +1327,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finish session'**
   String get studyReviewFinishAction;
+
+  /// Title of the mid-session exit-confirm dialog (§exit-session).
+  ///
+  /// In en, this message translates to:
+  /// **'Exit study session?'**
+  String get studyExitTitle;
+
+  /// Body of the exit-confirm dialog reassuring the user progress is kept.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress is saved and you can resume later. Leave this session?'**
+  String get studyExitMessage;
+
+  /// Confirm action that leaves the study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get studyExitConfirm;
+
+  /// Cancel action that stays in the study session.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep studying'**
+  String get studyExitCancel;
 }
 
 class _AppLocalizationsDelegate
