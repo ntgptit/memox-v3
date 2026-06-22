@@ -10,12 +10,11 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **04 — Folder detail** — AUDIT done (see `docs/project-management/parity-loop/screen-plans/04-folder-detail.md`).
-  8 kit states; goldens exist for 6 (delete-confirm + move-sheet missing). Biggest gap = empty/error
-  bare-centered (RECURRING from 03). **Next WP = the cross-consumer shared-widget card-wrap
-  consolidation** (audit dashboard/decks/search/study empty-error mocks via Explore → push card-wrap
-  into shared MxEmptyState/MxErrorState, retire library's local `_panelInCard`). Then DeckTile/
-  FolderStatsCard audits + delete-confirm/move-sheet goldens.
+- **04 — Folder detail** — AUDIT done; empty/error card-wrap DONE (shared `MxStateCard`, used by
+  03+04). See `docs/project-management/parity-loop/screen-plans/04-folder-detail.md`.
+  Next WP candidates: GAP #2 DECKS overline count color (text-3 suffix; `_Overline` duplicated in
+  library+folder → candidate to share); GAP #3 DeckTile audit (chevron/due-chip/typography); GAP #4
+  FolderStatsCard audit; GAP #5/6 delete-confirm + move-sheet goldens (missing states).
 
 ### Screen 03 — Library overview: DONE (modulo deferred)
 
@@ -35,7 +34,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | # | Screen | FE? | Audit | Parity | Notes |
 | --- | --- | --- | --- | --- | --- |
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
-| 04 | Folder detail | yes | done 2026-06-23 | in-progress | plan written; empty/error bare-centered (recurring), 6/8 states have goldens |
+| 04 | Folder detail | yes | done 2026-06-23 | in-progress | empty/error card-wrap done (shared MxStateCard); 6/8 states have goldens |
 | 04 | Folder detail | yes | — | — | |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |

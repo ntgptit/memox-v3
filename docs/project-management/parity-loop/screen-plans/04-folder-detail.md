@@ -67,29 +67,32 @@ Subfolders state: rows are folder rows (`LibraryFolderTile`, already audited in 
 
 ## GAP checklist (ordered by impact)
 
-1. **Empty + error card-wrap** (highest %, RECURRING from 03) — folder_detail_body renders `MxEmptyState`/`MxErrorState` bare-centered; kit wraps in the content card anchored top (kit 04 empty-unlocked + error, identical to 03b/03c). **← Decision point: consolidate into shared widget, do NOT add a second `_panelInCard` copy (anti-pattern).** See "Consolidation decision" below. **WP candidate.**
+1. **Empty + error card-wrap** — ✅ WP DONE (2026-06-23): created shared `MxStateCard`
+   (`lib/presentation/shared/widgets/states/mx_state_card.dart`), retired library's local
+   `_panelInCard` (now uses `MxStateCard`), and applied it to folder_detail empty + error.
+   diff.py: empty 20.85→17.24% (light) / 24.41→20.23% (dark); error 17.00→12.19% / 20.59→14.27%.
+   Also fixed a latent WP-3 staleness: folder_detail_subfolders golden picked up the
+   `LibraryFolderTile` chevron 24→20 (WP-3 only regenerated library goldens). Remaining empty
+   residual = shared inner-panel (56 tile / 22-800 title, needs-token).
 2. **Decks overline count color**: kit splits "DECKS" (text-2) + count suffix (text-3); FE `_Overline` likely single color. Verify/fix (shared `_Overline` is duplicated in library + folder bodies — candidate to share).
 3. **DeckTile audit**: chevron size 20 (cf. 03 WP-3 — DeckTile may also default to 24), due chip style (accent pill 11/700 tracking0.1), title/meta typography. Audit `deck_tile.dart`.
 4. **FolderStatsCard audit**: 3 equal cols, Due col tint accent@12%, value 26/800 -0.5, label 13/600, Due color accent.
 5. **delete-confirm golden** (missing state).
 6. **move-sheet golden** (missing state).
 
-## Consolidation decision (empty/error card-wrap) — KEY
+## Consolidation (empty/error card-wrap) — DONE (2026-06-23)
 
-The card-wrapped, top-anchored empty/error panel is now confirmed in BOTH screen 03 and 04
-(and the same pattern is in the kit's other screens). Library WP-1 implemented it via a local
-`_panelInCard` in `library_overview_body.dart`. Repeating that in `folder_detail_body.dart`
-would be the "vá lẻ" anti-pattern CLAUDE.md forbids. Preferred lowest-layer fix:
+The card-wrapped, top-anchored empty/error panel recurs in screens 03 + 04. Library WP-1 first
+implemented it via a local `_panelInCard` in `library_overview_body.dart`; repeating that in
+`folder_detail_body.dart` would be the "vá lẻ" anti-pattern CLAUDE.md forbids. Resolved with an
+**opt-in shared wrapper** `MxStateCard` (`lib/presentation/shared/widgets/states/mx_state_card.dart`)
+= `ListView(vertical space3) → MxCard(padding: zero, child)`:
 
-1. Cross-consumer audit (Explore): check the empty/error mocks of the OTHER `MxEmptyState`/
-   `MxErrorState` consumers (dashboard, decks/flashcard-list, search, study screens 12-17) —
-   do they ALL card-wrap empty/error, or do some (e.g. full-screen study) render bare-centered?
-2. If universal → push the card-wrap into shared `MxEmptyState`/`MxErrorState` (or a shared
-   `MxStatePanelCard` wrapper) and retire library's local `_panelInCard`. One change fixes all.
-3. If NOT universal → add an opt-in `card: true` flag (or shared wrapper) used by 03 + 04, keep
-   bare default for full-screen consumers.
-
-This is bigger than a 1-screen WP; do it as a deliberate shared-widget WP next.
+- Library now uses `MxStateCard` (local `_panelInCard` retired) — pure refactor, goldens unchanged.
+- Folder detail empty + error now use `MxStateCard` (were bare-centered).
+- Full-screen consumers (study modes) keep passing the bare `Mx*State` panel (no card) — the wrapper
+  is opt-in, so pushing a card into the shared `MxEmptyState`/`MxErrorState` (which would break them)
+  was deliberately avoided. No cross-consumer mock audit needed.
 
 ## Behavior-owned deltas (do NOT "fix" to kit)
 - Error button: kit "Back to library"; FE "Retry" → behavior-owned (copy from ARB). Visual gap noted.

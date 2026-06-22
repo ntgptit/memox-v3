@@ -57,6 +57,7 @@ Preferred primitives:
 - `MxEmptyState`
 - `MxErrorState`
 - `MxLoadingState`
+- `MxStateCard` (opt-in card wrapper hosting a state panel inside the content card, top-anchored)
 - `MxCard`
 - `MxSliderField`
 - `MxActionButton` (semantic, intent-driven — prefer over raw buttons)

@@ -33,6 +33,7 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_state_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// Library Overview body: the streamed folder list rendered as one grouped
@@ -45,17 +46,6 @@ class LibraryOverviewBody extends ConsumerWidget {
   /// Inset for the inter-row hairline: tile width + the row's leading gap, so
   /// the divider starts under the text (mirrors the kit `.hr.inset`).
   static const double _dividerInset = MxSpacing.space10 + MxSpacing.space3;
-
-  /// Wraps a centered state panel (empty / error) in the same grouped content
-  /// card the loaded list uses, anchored at the top of the scroll body — the kit
-  /// renders the empty/error message inside the screen card (mocks `03b`/`03c`,
-  /// `04`), not as bare full-height–centered content. `MxCard` padding is zeroed
-  /// so the panel's own inset (`MxSpacing.space6` = 24) is the card's inner pad,
-  /// matching the kit card pad 24.
-  static Widget _panelInCard(Widget panel) => ListView(
-    padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
-    children: <Widget>[MxCard(padding: EdgeInsets.zero, child: panel)],
-  );
 
   void _clearSearch(WidgetRef ref) =>
       ref.read(librarySearchQueryProvider.notifier).clear();
@@ -197,8 +187,8 @@ class LibraryOverviewBody extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
         children: const <Widget>[LibraryLoadingSkeleton()],
       ),
-      error: (_, _) => _panelInCard(
-        MxErrorState(
+      error: (_, _) => MxStateCard(
+        child: MxErrorState(
           title: l10n.libraryLoadFailedTitle,
           message: l10n.libraryLoadFailedMessage,
           icon: Icons.cloud_off_outlined,
@@ -223,8 +213,8 @@ class LibraryOverviewBody extends ConsumerWidget {
     );
 
     if (view.totalFolderCount == 0) {
-      return _panelInCard(
-        MxEmptyState(
+      return MxStateCard(
+        child: MxEmptyState(
           icon: Icons.folder_outlined,
           title: l10n.libraryEmptyTitle,
           message: l10n.libraryEmptyMessage,
