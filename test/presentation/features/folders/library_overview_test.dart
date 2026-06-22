@@ -369,5 +369,28 @@ void main() {
         );
       });
     }
+
+    // Overflow sheet (kit `03f`): long-press a folder row opens the action
+    // sheet over a dimmed list. Match the whole app so the scrim + modal sheet
+    // (a separate route, not a descendant of the screen) are captured.
+    for (final Brightness brightness in Brightness.values) {
+      testWidgets('overflow-sheet — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          _value(_loadedGolden),
+          brightness: brightness,
+          golden: true,
+        );
+        await tester.pumpAndSettle();
+        await tester.longPress(find.text('Languages'));
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            'goldens/library_overview_overflow-sheet__${brightness.name}.png',
+          ),
+        );
+      });
+    }
   });
 }

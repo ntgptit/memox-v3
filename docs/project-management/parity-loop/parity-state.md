@@ -10,9 +10,11 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **03 — Library overview** — AUDIT done; WP-1 done (empty/error card-wrap). See
+- **03 — Library overview** — AUDIT done; WP-1 done (empty/error card-wrap); WP-2 done
+  (overflow-sheet golden → all 6 kit states now covered). See
   `docs/project-management/parity-loop/screen-plans/03-library-overview.md`.
-  Next work-package: GAP #3 (loaded list-row/card metrics) or GAP #6 (overflow-sheet golden).
+  Next work-package: GAP #3 (loaded list-row/card metrics) — likely already close (Ahem-noise);
+  then GAP #2 (error glyphs) / GAP #4 (loading skeleton) / GAP #5 (search overline+dock).
   Empty inner-panel refinement (GAP #1 tile/title) deferred to a shared-widget WP (needs 56 token).
 
 ## Priority order (FE-built first)
@@ -24,7 +26,7 @@ per loop. Visual-only; behavior is docs-owned.
 
 | # | Screen | FE? | Audit | Parity | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 03 | Library overview | yes | done 2026-06-23 | in-progress | WP-1 done: empty/error card-wrap (error 17→9% / 21→10%, empty 18→16% / 21→19%) |
+| 03 | Library overview | yes | done 2026-06-23 | in-progress | WP-1 empty/error card-wrap; WP-2 overflow-sheet golden (6/6 states covered) |
 | 04 | Folder detail | yes | — | — | |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |

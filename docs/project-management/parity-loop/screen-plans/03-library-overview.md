@@ -30,7 +30,7 @@ Audit: 2026-06-23.
 | empty | yes | `MxEmptyState` | highest divergence |
 | error | yes | `MxErrorState` | icon/retry-icon differ |
 | search | yes | `_CountOverline` + `LibrarySearchDock` | |
-| overflow-sheet | **MISSING golden** | `showFolderActionsSheet` | add golden (`library_overview_overflow-sheet__{light,dark}`) |
+| overflow-sheet | yes (added 2026-06-23) | `showFolderActionsSheet` | golden added (match `MaterialApp` to capture scrim+modal); structurally matches kit (header tile+name+meta, divider, Rename/Move/Delete-danger). diff.py light 66% / dark 19% is Ahem-text noise over the dimmed list, not layout divergence |
 | (extra) search-no-results | yes | `MxNoResultsState` | app state, not a kit state — keep |
 
 ## INVENTORY — Loaded base state (canonical structure)
@@ -70,7 +70,7 @@ Audit: 2026-06-23.
 3. **Loaded list-row/card metrics**: confirm card r20 + divider border + shadow `sm`, row gap12/pad, title 16/600, meta 13/400 text-2, chevron 20.
 4. **Loading skeleton**: confirm 4 rows + skeleton sizes + surface-2 + radii.
 5. **Search**: confirm overline 12/700 tracking 1; search-dock field r14/border + icons.
-6. **Overflow-sheet golden**: add light+dark golden + confirm sheet r28, grabber, action glyphs, delete danger color.
+6. **Overflow-sheet golden** — ✅ WP-2 DONE (2026-06-23): added light+dark golden; sheet structurally matches kit (grabber, folder header tile+name+meta, divider, Rename/Move to…/Delete-folder rows with neutral + danger tiles). State coverage now complete for all 6 kit states.
 
 ## Behavior-owned visual deltas (do NOT "fix" to kit — see parity-deferred.md)
 
