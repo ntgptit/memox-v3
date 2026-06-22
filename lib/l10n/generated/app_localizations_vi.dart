@@ -779,4 +779,25 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyGuessTapToContinue => 'Chạm để tiếp tục';
+
+  @override
+  String get studyRecallPrompt => 'Nhớ lại nghĩa';
+
+  @override
+  String get studyRecallHint => 'Nhẩm trong đầu, rồi xem đáp án.';
+
+  @override
+  String get studyRecallShowAnswer => 'Xem đáp án';
+
+  @override
+  String get studyRecallAnswerLabel => 'Đáp án';
+
+  @override
+  String get studyRecallGradePrompt => 'Bạn nhớ tốt đến đâu?';
+
+  @override
+  String get studyRecallMissed => 'Chưa nhớ';
+
+  @override
+  String get studyRecallGotIt => 'Nhớ rồi';
 }

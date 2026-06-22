@@ -797,4 +797,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyGuessTapToContinue => 'Tap to continue';
+
+  @override
+  String get studyRecallPrompt => 'Recall the meaning';
+
+  @override
+  String get studyRecallHint => 'Say it in your head, then reveal.';
+
+  @override
+  String get studyRecallShowAnswer => 'Show answer';
+
+  @override
+  String get studyRecallAnswerLabel => 'Answer';
+
+  @override
+  String get studyRecallGradePrompt => 'How well did you know it?';
+
+  @override
+  String get studyRecallMissed => 'Missed';
+
+  @override
+  String get studyRecallGotIt => 'Got it';
 }

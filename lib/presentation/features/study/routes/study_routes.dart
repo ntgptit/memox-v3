@@ -5,6 +5,7 @@ import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_mode.dart';
 import 'package:memox/presentation/features/study/screens/guess_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/match_session_screen.dart';
+import 'package:memox/presentation/features/study/screens/recall_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
@@ -22,8 +23,9 @@ List<RouteBase> studyRoutes() => <RouteBase>[
   GoRoute(
     path: RoutePaths.studySession,
     name: RouteNames.studySession,
-    // `?mode=match` selects the Match board surface; any other / absent value
-    // falls back to the default Review session (WP-SM3).
+    // `?mode=` selects the mode surface — `match` (board), `guess` (multiple
+    // choice), `recall` (flip-card self-grade); any other / absent value falls
+    // back to the default Review session.
     builder: (context, state) {
       final String sessionId =
           state.pathParameters[RouteParams.sessionId] ?? '';
@@ -34,6 +36,9 @@ List<RouteBase> studyRoutes() => <RouteBase>[
       }
       if (mode == StudyMode.guess.name) {
         return GuessSessionScreen(sessionId: sessionId);
+      }
+      if (mode == StudyMode.recall.name) {
+        return RecallSessionScreen(sessionId: sessionId);
       }
       return StudySessionScreen(sessionId: sessionId);
     },

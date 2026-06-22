@@ -10,12 +10,22 @@ source_specs:
 
 # 16 — Study Session: Recall Mode
 
-> **Implementation note (2026-06-14):** recall V1 is now implemented as a dedicated timed
-> reveal/self-grade shell in
-> `lib/presentation/features/study/widgets/study_session_recall_mode_view.dart` with state in
-> `lib/presentation/features/study/viewmodels/study_session_recall_viewmodel.dart`, wired from
-> `lib/presentation/features/study/screens/study_session_screen.dart` for `StudyMode.recall` and
-> the null-mode fallback. The layout below remains the contract for the screen.
+> **Status (2026-06-22, WP-RC1):** recall is built as a dedicated flip-card self-grade shell in
+> `lib/presentation/features/study/screens/recall_session_screen.dart` +
+> `lib/presentation/features/study/controllers/recall_session_controller.dart`, reached via the session
+> route `?mode=recall` dispatch (`study_routes.dart`). Show front → **Show answer** reveals the back (green
+> ANSWER card) → binary **Missed** (`forgot`) / **Got it** (`perfect`) self-grade (decision S66) → record +
+> advance → the last card finalizes (`FinalizeStudySessionUseCase`) → the result. **Deferred:** the
+> Show-answer countdown + auto-reveal-on-timeout (WP-RC2, S63/S64, needs a `recallAnswerTimeout` constant)
+> and the Edit ✎ / TTS 🔊 affordances + edit-pause (WP-RC3, S65). The earlier
+> `study_session_recall_mode_view.dart` / `study_session_recall_viewmodel.dart` paths were target structure
+> that never existed. The layout below remains the contract.
+>
+> **Mock conflict (flagged for owner):** the revealed mock (`shots/15-study-recall--revealed`) shows a
+> **three-way** grade — Missed / **Partial** / Got it — but the V1 BE (`RecallStudyModeStrategy`, binary)
+> + decision S66 + study-flow's adopted binary decision define only `forgot` / `perfect` (`recovered` is
+> Fill-only). Built **binary** per PRECEDENCE (docs/decision win on behavior); the mock's Partial would
+> need a recall-grade extension + a decision update before it can ship.
 
 ## Purpose
 
@@ -304,19 +314,18 @@ Same as other modes:
 **Contracts:** `docs/contracts/usecase-contracts/study.md` §GradeAttemptUseCase,
 `docs/contracts/usecase-contracts/srs.md`, `docs/contracts/usecase-contracts/tts.md`
 
-**Code paths:**
+**Code paths (WP-RC1 — actual):**
 
-- `lib/presentation/features/study/widgets/study_session/recall/recall_mode_session_view.dart` (
-  stateful view, owns countdown `AnimationController`, manages reveal transition)
-- `lib/presentation/features/study/widgets/study_session/recall/recall_mode_panel.dart`
-- `lib/presentation/features/study/widgets/study_session/recall/recall_motion.dart` (re-exports
-  `MxDurations.recallAnswerTimeout` as `recallAnswerTimeoutDuration` and `MxDurations.slide` as
-  `recallRevealTransitionDuration`)
-- `lib/core/theme/app_motion.dart` — single source of truth for
-  `MxDurations.recallAnswerTimeout = Duration(seconds: 20)`
-- `lib/domain/study/usecases/study_usecases.dart` (`RecordStudySessionAnswerUseCase` — grading
-  lives here, not in a `grade_attempt_usecase.dart`; the `AnswerFlashcardUseCase` family from a
-  previous iteration does NOT exist)
+- `lib/presentation/features/study/screens/recall_session_screen.dart` (the flip-card shell: prompt
+  card, hidden hint, Show-answer CTA, revealed ANSWER card, binary Missed / Got it grade row)
+- `lib/presentation/features/study/controllers/recall_session_controller.dart` (`@riverpod`
+  `RecallSessionController` — `RecallView` + `reveal()` + `grade({required bool gotIt})`)
+- `lib/presentation/features/study/routes/study_routes.dart` (`?mode=recall` → `RecallSessionScreen`)
+- `lib/domain/study/modes/study_mode_strategy.dart` (`RecallStudyModeStrategy` — binary grade mapping)
+- `RecordStudySessionAnswerUseCase` + `FinalizeStudySessionUseCase` (via `study_providers.dart`)
+- **Deferred (WP-RC2):** a `recallAnswerTimeout` constant (Duration ~20s) for the Show-answer
+  countdown + auto-reveal — not yet added (no `MxDurations` class exists; the motion tokens live in
+  `lib/core/theme/app_motion.dart` as `AppMotion`).
 
 **Related wireframes:**
 

@@ -1477,6 +1477,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to continue'**
   String get studyGuessTapToContinue;
+
+  /// Overline prompt above the term on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Recall the meaning'**
+  String get studyRecallPrompt;
+
+  /// Calm hint shown before the back is revealed on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Say it in your head, then reveal.'**
+  String get studyRecallHint;
+
+  /// Primary CTA on the Recall screen that reveals the back.
+  ///
+  /// In en, this message translates to:
+  /// **'Show answer'**
+  String get studyRecallShowAnswer;
+
+  /// Overline on the revealed answer card on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer'**
+  String get studyRecallAnswerLabel;
+
+  /// Caption above the self-grade row on the Recall screen.
+  ///
+  /// In en, this message translates to:
+  /// **'How well did you know it?'**
+  String get studyRecallGradePrompt;
+
+  /// Self-grade button on the Recall screen — the learner did not recall the card (records forgot).
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get studyRecallMissed;
+
+  /// Self-grade button on the Recall screen — the learner recalled the card (records perfect).
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get studyRecallGotIt;
 }
 
 class _AppLocalizationsDelegate

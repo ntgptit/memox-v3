@@ -492,5 +492,19 @@
   "studyGuessPrompt": "What does this mean?",
   "@studyGuessPrompt": { "description": "Overline prompt above the term on the Guess screen." },
   "studyGuessTapToContinue": "Tap to continue",
-  "@studyGuessTapToContinue": { "description": "Hint under the auto-advance countdown bar on the Guess screen — tap to skip the wait." }
+  "@studyGuessTapToContinue": { "description": "Hint under the auto-advance countdown bar on the Guess screen — tap to skip the wait." },
+  "studyRecallPrompt": "Recall the meaning",
+  "@studyRecallPrompt": { "description": "Overline prompt above the term on the Recall screen." },
+  "studyRecallHint": "Say it in your head, then reveal.",
+  "@studyRecallHint": { "description": "Calm hint shown before the back is revealed on the Recall screen." },
+  "studyRecallShowAnswer": "Show answer",
+  "@studyRecallShowAnswer": { "description": "Primary CTA on the Recall screen that reveals the back." },
+  "studyRecallAnswerLabel": "Answer",
+  "@studyRecallAnswerLabel": { "description": "Overline on the revealed answer card on the Recall screen." },
+  "studyRecallGradePrompt": "How well did you know it?",
+  "@studyRecallGradePrompt": { "description": "Caption above the self-grade row on the Recall screen." },
+  "studyRecallMissed": "Missed",
+  "@studyRecallMissed": { "description": "Self-grade button on the Recall screen — the learner did not recall the card (records forgot)." },
+  "studyRecallGotIt": "Got it",
+  "@studyRecallGotIt": { "description": "Self-grade button on the Recall screen — the learner recalled the card (records perfect)." }
 }

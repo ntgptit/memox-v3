@@ -231,5 +231,12 @@
   "studyMatchProgress": "{matched} đã ghép · còn {left}",
   "@studyMatchProgress": { "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } },
   "studyGuessPrompt": "Nghĩa của từ này là gì?",
-  "studyGuessTapToContinue": "Chạm để tiếp tục"
+  "studyGuessTapToContinue": "Chạm để tiếp tục",
+  "studyRecallPrompt": "Nhớ lại nghĩa",
+  "studyRecallHint": "Nhẩm trong đầu, rồi xem đáp án.",
+  "studyRecallShowAnswer": "Xem đáp án",
+  "studyRecallAnswerLabel": "Đáp án",
+  "studyRecallGradePrompt": "Bạn nhớ tốt đến đâu?",
+  "studyRecallMissed": "Chưa nhớ",
+  "studyRecallGotIt": "Nhớ rồi"
 }
