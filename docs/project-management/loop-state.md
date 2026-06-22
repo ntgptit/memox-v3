@@ -11,13 +11,12 @@ last_updated: 2026-06-22
   loop here (2026-06-22) ahead of object-5's last node WP-FL2b2b (Tags), which is parked.** Entered
   via BƯỚC 2 (re-audit + plan): the prior DEFER is **overturned** (greenfield→split, flip-vs-swipe→
   PRECEDENCE #1 swipe wins, "shipped" drift→fixed). See `loop-plan/study-review.md`.
-- **Current work-package:** **WP-SR1a + WP-SR1b-1 SHIPPED** (study routes + entry-gate controller/
-  screen + session placeholder + the `today` route + `?study_type=` override via canonical
-  `StudyType.storageValue`/`fromStorage`). **WP-SR1b-2 builds next:** the **8-variant per-reason empty
-  matrix** (replace `_blockedBody`'s generic surface with deck-no-cards / *-no-due / today-all-done /
-  all-buried / all-suspended / today-no-content → dedicated icon/title/message/CTA per wireframe `12`)
-  + a start-over confirm dialog. Then WP-SR2 shell+card → WP-SR3 swipe-grade → WP-SR4 exit/actions →
-  WP-SR5 finalize→result(17, 6 states). BE all Implemented.
+- **Current work-package:** **WP-SR1a + WP-SR1b-1 + WP-SR1b-2a SHIPPED** (study routes + entry gate +
+  session placeholder + today route + `?study_type=` override + the **per-reason empty matrix**:
+  8 `StudyScopeEmptyReason` → tailored icon/title/message). **WP-SR1b-2b builds next:** the empty-matrix
+  **CTAs** (deckNoCards → Add flashcards; *NoDue/allBuried → Study new instead + "Next due in {X}";
+  todayNoContent → Create deck; allSuspended → View suspended) + the start-over confirm dialog. Then
+  WP-SR2 shell+card → WP-SR3 swipe-grade → WP-SR4 exit/actions → WP-SR5 finalize→result(17, 6 states).
 - **Parked (object 5):** WP-FL2b2b (Tags chip input) — the only remaining object-5 node; resume
   after Study per owner. Object 5 otherwise evidence-confirmed through WP-FL2b3b.
 - **Branch:** `feat/loop-library`; latest code commit `08dcb50` (WP-SR1b-1; prior `c5b2a25` WP-SR1a,
@@ -56,20 +55,21 @@ greenfield/too-large (→ must split & build), mock↔docs flip-vs-swipe (→ PR
 | 3 | Sub-folder (nested) | **DONE (re-audit-confirmed 2026-06-22)** — same `FolderDetailScreen` at depth (no separate screen/route/mock); nested-breadcrumb + tappability + create-mode-lock + actions-at-depth all code+test-verified (`Explore` + `tool/verify`, 21 tests). No gap to build. |
 | 4 | Deck detail | **DONE (re-audit-confirmed 2026-06-22)** — deck container (WBS 3.4.2) + WP-D1 due badge + WP-D2 **persistent** search dock (kit `06` dock is persistent, not toggle). ui-parity PASS. |
 | 5 | Flashcard (list + editor) | IN PROGRESS — FL3/FL4 + **FL1** + **FL2a shell** + **FL2b1 delete** + **FL2b2 Details** + **FL2b3a saving+save-failed** + **FL2b3b loading+load-error (`d3aa162`)** SHIPPED (ui-parity PASS). **Only WP-FL2b2b (Tags input) remains** before DONE. |
-| 6 | Study — Review | **ACTIVE — BUILD (greenfield FE; BE ready).** WP-SR1a + WP-SR1b-1 SHIPPED (study routes + entry gate + session placeholder + today route + study_type override; WBS 4.1.2 Implemented). Next: WP-SR1b-2 (8-variant empty matrix), then WP-SR2..SR5. Swipe-grade per PRECEDENCE #1 (mock-12 flip = visual gap). |
+| 6 | Study — Review | **ACTIVE — BUILD (greenfield FE; BE ready).** WP-SR1a + 1b-1 + 1b-2a SHIPPED (study routes + entry gate + session placeholder + today route + study_type override + per-reason empty matrix; WBS 4.1.2 Implemented). Next: WP-SR1b-2b (matrix CTAs + confirm), then WP-SR2..SR5. Swipe-grade per PRECEDENCE #1 (mock-12 flip = visual gap). |
 | 7–10 | Study — Match/Guess/Recall/Fill | BUILD (independent FE grammar; not blocked by object 6; reuse SR2 shell + SR5 result) |
 
 ## Next action
 
-**Build WP-SR1b-2 (per-reason empty matrix)** — object 6 (WP-SR1a + WP-SR1b-1 shipped the gate core +
-the today route + `study_type` override). Read `docs/wireframes/12-study-entry-gate.md` §"empty state
-matrix render" + `docs/business/study/study-flow.md` (empty-scope matrix):
-- Replace `_blockedBody`'s generic `MxEmptyState` with a switch over the 8 `StudyScopeEmptyReason` →
-  dedicated icon/title/message/CTA per wireframe `12`: deckNoCards → 🃏 "No cards in this deck." + Add
-  flashcards (push `flashcardCreate`, deck scope); deck/folderNoDueCards → ✓ "All caught up!" + "Next
-  due in {relativeTime}" (from `nextDueAt`) + Study new instead (re-enter gate `?study_type=new_cards`);
-  folderNoCards; todayAllDone → 🎉 streak + Done (pop); todayNoContent → 🃏 Create your first deck;
-  allBuried → 🌙 + Study new instead + Done; allSuspended → 🔇 + View suspended cards. ARB per variant
-  (en+vi). Goldens per reason (light+dark). A start-over **confirm dialog** before cancel+create (S28).
+**Build WP-SR1b-2b (empty-matrix CTAs + confirm)** — object 6 (WP-SR1a + 1b-1 + 1b-2a shipped the gate
+core + today route + `study_type` + the per-reason icon/title/message matrix). Read
+`docs/wireframes/12-study-entry-gate.md` + `docs/business/study/study-flow.md`:
+- Add the dedicated per-variant CTA to each `_blockedBody` arm (an `action` widget): deckNoCards → Add
+  flashcards (push `flashcardCreate`, deck scope only); deck/folderNoDueCards + allBuried → Study new
+  instead (re-enter the gate route with `?study_type=new_cards`) + render "Next due in {relativeTime}"
+  from `StudyEntryOutcome.blocked.nextDueAt` (find/confirm a relative-time helper); todayNoContent →
+  Create deck (or Go to Library); allSuspended → View suspended (deck flashcard list `?filter=suspended`,
+  deck scope); allBuried/todayAllDone → Done (pop). CTAs to unavailable targets (streak inset = engagement
+  read model; Create-deck sheet = Library affordance) → documented mock gap. ARB CTA labels. Tests per CTA.
+- A start-over **confirm dialog** (`MxConfirmDialog`) before cancel+create (decision S28 "confirms then restarts").
 Then WP-SR2 (shell+card) → WP-SR3 (swipe-grade) → WP-SR4 (exit/actions) → WP-SR5 (finalize→result 17,
 6 states). Parked: object-5 WP-FL2b2b (Tags) — resume after Study per owner. Do NOT defer for greenfield.

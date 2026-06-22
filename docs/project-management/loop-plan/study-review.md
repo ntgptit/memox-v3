@@ -75,11 +75,15 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       (`/library/study/today` → `StudyScope(today, null, srsReview)`) + the `?study_type=` query
       override parsed via a new canonical `StudyType.storageValue`/`fromStorage` (consolidated with the
       data mapper; `new_cards`/`srs_review`); unrecognized `study_type` → error. Rows S85; 11 gate tests.
-- [ ] **WP-SR1b-2 — per-reason empty matrix.** Replace `_blockedBody`'s generic surface with a switch
-      over the 8 `StudyScopeEmptyReason` → dedicated icon/title/message/CTA per wireframe `12`
-      (deck-no-cards → Add flashcards; *-no-due → Study new instead + "Next due in …"; today-all-done →
-      streak + Done; all-buried; all-suspended → View suspended; today-no-content → Create deck). ARB
-      per variant (en+vi). A start-over confirm dialog (S28). Tests + goldens per reason.
+- [x] **WP-SR1b-2a — per-reason empty matrix (icon + copy).** `<this commit>`: `_blockedBody` switches
+      the 8 `StudyScopeEmptyReason` → tailored icon + title + message (`studyEmpty*` ARB ×15, en+vi;
+      cards/check/celebration/bedtime/pause glyphs) + Back, replacing the generic surface. Row S86; per-
+      reason tests + 6 representative goldens (deck-no-cards / today-all-done / all-suspended ×2).
+- [ ] **WP-SR1b-2b — empty-matrix CTAs + confirm.** The dedicated per-variant CTAs (deckNoCards → Add
+      flashcards (push `flashcardCreate`, deck scope); *NoDue/allBuried → Study new instead (re-enter
+      gate `?study_type=new_cards`) + the "Next due in {relativeTime}" line from `nextDueAt`; today-all-
+      done → streak inset (needs engagement read model); todayNoContent → Create deck; allSuspended →
+      View suspended (deck flashcard list `?filter=suspended`)) + the start-over confirm dialog (S28).
 - [ ] **WP-SR2 — review session shell + card.** `study_session_screen.dart`: app bar (`✕` +
       **blue** progress bar + `{answered}/{total}`), and the card (front-side label from
       `deck.target_language`, front large-centered, divider, back-side label, back, example pill when

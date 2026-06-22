@@ -1136,17 +1136,95 @@ abstract class AppLocalizations {
   /// **'We couldn\'t prepare this study session. Please try again.'**
   String get studyEntryErrorMessage;
 
-  /// Generic empty-scope title at the study entry gate (WP-SR1a; per-reason matrix is WP-SR1b-2).
+  /// Title of the study entry gate empty state when a scope has cards but none are due (deck/folder, srs_review).
   ///
   /// In en, this message translates to:
-  /// **'Nothing to study right now'**
-  String get studyEmptyGenericTitle;
+  /// **'All caught up!'**
+  String get studyEmptyCaughtUpTitle;
 
-  /// Generic empty-scope body at the study entry gate.
+  /// Empty-scope title — the deck has zero flashcards.
   ///
   /// In en, this message translates to:
-  /// **'There are no cards to study in this scope yet.'**
-  String get studyEmptyGenericMessage;
+  /// **'No cards in this deck'**
+  String get studyEmptyDeckNoCardsTitle;
+
+  /// Empty-scope body — the deck has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Add flashcards to start studying.'**
+  String get studyEmptyDeckNoCardsMessage;
+
+  /// Empty-scope body — the deck has cards but none due.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards are due in this deck right now.'**
+  String get studyEmptyDeckNoDueMessage;
+
+  /// Empty-scope title — the folder subtree has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards in this folder'**
+  String get studyEmptyFolderNoCardsTitle;
+
+  /// Empty-scope body — the folder subtree has zero flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a deck and some cards to start studying.'**
+  String get studyEmptyFolderNoCardsMessage;
+
+  /// Empty-scope body — the folder subtree has cards but none due.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards are due in this folder right now.'**
+  String get studyEmptyFolderNoDueMessage;
+
+  /// Empty-scope title — today's due cards are all reviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'All done for today!'**
+  String get studyEmptyTodayAllDoneTitle;
+
+  /// Empty-scope body — today's review is complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Come back tomorrow to keep your streak going.'**
+  String get studyEmptyTodayAllDoneMessage;
+
+  /// Empty-scope title — the user has no flashcards at all.
+  ///
+  /// In en, this message translates to:
+  /// **'No flashcards yet'**
+  String get studyEmptyTodayNoContentTitle;
+
+  /// Empty-scope body — the user has no flashcards at all.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a deck and add cards to start studying.'**
+  String get studyEmptyTodayNoContentMessage;
+
+  /// Empty-scope title — every eligible card in scope is buried.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards buried for today'**
+  String get studyEmptyAllBuriedTitle;
+
+  /// Empty-scope body — buried cards return next day.
+  ///
+  /// In en, this message translates to:
+  /// **'They\'ll return tomorrow.'**
+  String get studyEmptyAllBuriedMessage;
+
+  /// Empty-scope title — every card in scope is suspended.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards are suspended'**
+  String get studyEmptyAllSuspendedTitle;
+
+  /// Empty-scope body — all cards suspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume some cards to start studying.'**
+  String get studyEmptyAllSuspendedMessage;
 
   /// Title of the resume-or-start-over choice at the study entry gate.
   ///

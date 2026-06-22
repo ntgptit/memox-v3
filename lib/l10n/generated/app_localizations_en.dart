@@ -602,11 +602,56 @@ class AppLocalizationsEn extends AppLocalizations {
       'We couldn\'t prepare this study session. Please try again.';
 
   @override
-  String get studyEmptyGenericTitle => 'Nothing to study right now';
+  String get studyEmptyCaughtUpTitle => 'All caught up!';
 
   @override
-  String get studyEmptyGenericMessage =>
-      'There are no cards to study in this scope yet.';
+  String get studyEmptyDeckNoCardsTitle => 'No cards in this deck';
+
+  @override
+  String get studyEmptyDeckNoCardsMessage =>
+      'Add flashcards to start studying.';
+
+  @override
+  String get studyEmptyDeckNoDueMessage =>
+      'No cards are due in this deck right now.';
+
+  @override
+  String get studyEmptyFolderNoCardsTitle => 'No cards in this folder';
+
+  @override
+  String get studyEmptyFolderNoCardsMessage =>
+      'Add a deck and some cards to start studying.';
+
+  @override
+  String get studyEmptyFolderNoDueMessage =>
+      'No cards are due in this folder right now.';
+
+  @override
+  String get studyEmptyTodayAllDoneTitle => 'All done for today!';
+
+  @override
+  String get studyEmptyTodayAllDoneMessage =>
+      'Come back tomorrow to keep your streak going.';
+
+  @override
+  String get studyEmptyTodayNoContentTitle => 'No flashcards yet';
+
+  @override
+  String get studyEmptyTodayNoContentMessage =>
+      'Create a deck and add cards to start studying.';
+
+  @override
+  String get studyEmptyAllBuriedTitle => 'All cards buried for today';
+
+  @override
+  String get studyEmptyAllBuriedMessage => 'They\'ll return tomorrow.';
+
+  @override
+  String get studyEmptyAllSuspendedTitle => 'All cards are suspended';
+
+  @override
+  String get studyEmptyAllSuspendedMessage =>
+      'Resume some cards to start studying.';
 
   @override
   String get studyResumeTitle => 'Resume your session?';

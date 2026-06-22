@@ -20,15 +20,17 @@ Most users never see this screen for more than a moment — it's a gate.
 > **Status (2026-06-22, WP-SR1a):** `StudyEntryScreen` ships for
 > `/library/study/:entryType/:entryRefId` (`deck` / `folder`). It resolves the scope via
 > `ResolveStudyEntryStartUseCase`, shows a **preparing** state, surfaces an unparseable
-> `entryType` as an **error** state, renders a **generic empty surface** for any
-> zero-eligible-card scope (the per-reason matrix below is **WP-SR1b**), auto-creates a session
-> for an eligible scope and `pushReplacement`s to `/library/study/session/:sessionId`, and shows
+> `entryType` as an **error** state, renders the **per-reason empty matrix** below (icon + title +
+> message per `StudyScopeEmptyReason`, **WP-SR1b-2a**; the dedicated CTAs + the "Next due in {X}"
+> line + the streak inset are **WP-SR1b-2b**), auto-creates a session for an eligible scope and
+> `pushReplacement`s to `/library/study/session/:sessionId`, and shows
 > an explicit **Resume / Start over / Back** choice when a resumable session exists (no silent
 > resume). **WP-SR1b-1 adds** the `today` literal route (`/library/study/today`) and the
-> `?study_type=` override (`StudyType.fromStorage`; unrecognized → error). **Not yet built:** the
-> `?mode=` query, the 8-variant empty matrix (WP-SR1b-2), the start-over confirm dialog, and the
-> real session/result screens — `/library/study/session/:sessionId` is a **placeholder shell**
-> (WP-SR2..SR5).
+> `?study_type=` override (`StudyType.fromStorage`; unrecognized → error). **WP-SR1b-2a adds** the
+> per-reason empty matrix (icon+title+message per `StudyScopeEmptyReason`). **Not yet built:** the
+> `?mode=` query, the empty-matrix **CTAs** + "Next due in {X}" + streak inset (WP-SR1b-2b), the
+> start-over confirm dialog, and the real session/result screens —
+> `/library/study/session/:sessionId` is a **placeholder shell** (WP-SR2..SR5).
 
 ## Behavior tree
 

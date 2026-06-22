@@ -257,14 +257,14 @@ actionable CTA where possible.
 
 | Case                                                   | BE classification (WBS 4.1.1) | FE empty state (WBS 4.1.2) | Decision row |
 |--------------------------------------------------------|-------------------------------|----------------------------|--------------|
-| `studyEmpty_deck_noCards`                              | ✅ `deckNoCards`              | ⏳ pending                  | S4           |
-| `studyEmpty_deck_noDueCards`                           | ✅ `deckNoDueCards` (+nextDue)| ⏳ pending                  | S4e          |
-| `studyEmpty_folder_noCards`                            | ✅ `folderNoCards`           | ⏳ pending                  | S4b          |
-| `studyEmpty_folder_noDueCards`                         | ✅ `folderNoDueCards` (+nextDue)| ⏳ pending                | S4j          |
-| `studyEmpty_today_allDone`                             | ✅ `todayAllDone`            | ⏳ pending (streak inset Target) | S4c    |
-| `studyEmpty_today_noContent`                           | ✅ `todayNoContent`          | ⏳ pending                  | S4d          |
+| `studyEmpty_deck_noCards`                              | ✅ `deckNoCards`              | ✅ icon+copy (WP-SR1b-2a); CTA WP-SR1b-2b | S4           |
+| `studyEmpty_deck_noDueCards`                           | ✅ `deckNoDueCards` (+nextDue)| ✅ icon+copy (WP-SR1b-2a); "Next due in {X}" + Study-new CTA WP-SR1b-2b | S4e          |
+| `studyEmpty_folder_noCards`                            | ✅ `folderNoCards`           | ✅ icon+copy (WP-SR1b-2a); CTA WP-SR1b-2b | S4b          |
+| `studyEmpty_folder_noDueCards`                         | ✅ `folderNoDueCards` (+nextDue)| ✅ icon+copy (WP-SR1b-2a); "Next due in {X}" + Study-new CTA WP-SR1b-2b | S4j          |
+| `studyEmpty_today_allDone`                             | ✅ `todayAllDone`            | ✅ icon+copy (WP-SR1b-2a); streak inset Target/Future | S4c    |
+| `studyEmpty_today_noContent`                           | ✅ `todayNoContent`          | ✅ icon+copy (WP-SR1b-2a); Create-deck CTA WP-SR1b-2b | S4d          |
 | `studyEmpty_tag_noCards` / `studyEmpty_tag_noDueCards` | 🔴 Blocked — `EntryType.tag` not in the core enum; needs tag-scope queries + tag picker | 🔴 Blocked | S4h/S4i |
-| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ `allBuried` / `allSuspended`| ⏳ pending                  | S4f/S4g      |
+| `studyEmpty_allBuried` / `studyEmpty_allSuspended`     | ✅ `allBuried` / `allSuspended`| ✅ icon+copy (WP-SR1b-2a); Study-new / View-suspended CTA WP-SR1b-2b | S4f/S4g      |
 
 ## "Next due" calculation
 

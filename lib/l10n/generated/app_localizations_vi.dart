@@ -587,11 +587,55 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không thể chuẩn bị phiên học này. Vui lòng thử lại.';
 
   @override
-  String get studyEmptyGenericTitle => 'Hiện chưa có gì để học';
+  String get studyEmptyCaughtUpTitle => 'Đã xong hết!';
 
   @override
-  String get studyEmptyGenericMessage =>
-      'Chưa có thẻ nào để học trong phạm vi này.';
+  String get studyEmptyDeckNoCardsTitle => 'Bộ thẻ chưa có thẻ nào';
+
+  @override
+  String get studyEmptyDeckNoCardsMessage => 'Thêm thẻ để bắt đầu học.';
+
+  @override
+  String get studyEmptyDeckNoDueMessage =>
+      'Hiện không có thẻ nào trong bộ thẻ này đến hạn.';
+
+  @override
+  String get studyEmptyFolderNoCardsTitle => 'Thư mục chưa có thẻ nào';
+
+  @override
+  String get studyEmptyFolderNoCardsMessage =>
+      'Thêm một bộ thẻ và vài thẻ để bắt đầu học.';
+
+  @override
+  String get studyEmptyFolderNoDueMessage =>
+      'Hiện không có thẻ nào trong thư mục này đến hạn.';
+
+  @override
+  String get studyEmptyTodayAllDoneTitle => 'Đã xong hôm nay!';
+
+  @override
+  String get studyEmptyTodayAllDoneMessage =>
+      'Quay lại vào ngày mai để giữ chuỗi học.';
+
+  @override
+  String get studyEmptyTodayNoContentTitle => 'Chưa có thẻ nào';
+
+  @override
+  String get studyEmptyTodayNoContentMessage =>
+      'Tạo một bộ thẻ và thêm thẻ để bắt đầu học.';
+
+  @override
+  String get studyEmptyAllBuriedTitle => 'Đã ẩn hết thẻ cho hôm nay';
+
+  @override
+  String get studyEmptyAllBuriedMessage => 'Chúng sẽ quay lại vào ngày mai.';
+
+  @override
+  String get studyEmptyAllSuspendedTitle => 'Tất cả thẻ đang tạm dừng';
+
+  @override
+  String get studyEmptyAllSuspendedMessage =>
+      'Mở lại một số thẻ để bắt đầu học.';
 
   @override
   String get studyResumeTitle => 'Tiếp tục phiên học?';

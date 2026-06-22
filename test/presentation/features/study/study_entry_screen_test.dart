@@ -117,8 +117,36 @@ void main() {
         outcome: () async =>
             const StudyEntryOutcome.blocked(StudyScopeEmptyReason.deckNoCards),
       );
-      expect(find.text('Nothing to study right now'), findsOneWidget);
+      // The per-reason matrix (WP-SR1b-2a) renders the deck-no-cards copy.
+      expect(find.text('No cards in this deck'), findsOneWidget);
+      expect(find.text('Add flashcards to start studying.'), findsOneWidget);
     });
+
+    // Each empty reason renders its own tailored title (WP-SR1b-2a matrix). A
+    // separate test per reason so each gets a fresh tree (AppAsyncBuilder keeps
+    // prior data across a re-pump in one test).
+    const Map<StudyScopeEmptyReason, String> reasonTitles =
+        <StudyScopeEmptyReason, String>{
+          StudyScopeEmptyReason.deckNoDueCards: 'All caught up!',
+          StudyScopeEmptyReason.folderNoCards: 'No cards in this folder',
+          StudyScopeEmptyReason.folderNoDueCards: 'All caught up!',
+          StudyScopeEmptyReason.todayAllDone: 'All done for today!',
+          StudyScopeEmptyReason.todayNoContent: 'No flashcards yet',
+          StudyScopeEmptyReason.allBuried: 'All cards buried for today',
+          StudyScopeEmptyReason.allSuspended: 'All cards are suspended',
+        };
+    for (final MapEntry<StudyScopeEmptyReason, String> e
+        in reasonTitles.entries) {
+      testWidgets('empty reason ${e.key.name} renders its title', (
+        tester,
+      ) async {
+        await _pumpScreen(
+          tester,
+          outcome: () async => StudyEntryOutcome.blocked(e.key),
+        );
+        expect(find.text(e.value), findsOneWidget);
+      });
+    }
 
     testWidgets(
       'resumable scope offers Resume + Start over (no silent resume)',
@@ -171,7 +199,7 @@ void main() {
         outcome: () async =>
             const StudyEntryOutcome.blocked(StudyScopeEmptyReason.todayAllDone),
       );
-      expect(find.text('Nothing to study right now'), findsOneWidget);
+      expect(find.text('All done for today!'), findsOneWidget);
     });
 
     testWidgets('a study_type=srs_review query overrides the deck default', (
@@ -187,7 +215,7 @@ void main() {
           StudyScopeEmptyReason.deckNoDueCards,
         ),
       );
-      expect(find.text('Nothing to study right now'), findsOneWidget);
+      expect(find.text('All caught up!'), findsOneWidget);
     });
 
     testWidgets('an unrecognized study_type shows the error surface', (
@@ -252,22 +280,29 @@ void main() {
 
   group('StudyEntryScreen goldens', () {
     for (final Brightness brightness in Brightness.values) {
-      testWidgets('blocked — ${brightness.name}', (tester) async {
-        await _pumpScreen(
-          tester,
-          brightness: brightness,
-          golden: true,
-          outcome: () async => const StudyEntryOutcome.blocked(
-            StudyScopeEmptyReason.deckNoCards,
-          ),
-        );
-        await expectLater(
-          find.byType(StudyEntryScreen),
-          matchesGoldenFile(
-            'goldens/study_entry_blocked__${brightness.name}.png',
-          ),
-        );
-      });
+      // Representative empty-matrix variants (different icon + copy + layout);
+      // the other reasons share the same `MxEmptyState` structure.
+      for (final (String name, StudyScopeEmptyReason reason) variant
+          in <(String, StudyScopeEmptyReason)>[
+            ('deck-no-cards', StudyScopeEmptyReason.deckNoCards),
+            ('today-all-done', StudyScopeEmptyReason.todayAllDone),
+            ('all-suspended', StudyScopeEmptyReason.allSuspended),
+          ]) {
+        testWidgets('empty ${variant.$1} — ${brightness.name}', (tester) async {
+          await _pumpScreen(
+            tester,
+            brightness: brightness,
+            golden: true,
+            outcome: () async => StudyEntryOutcome.blocked(variant.$2),
+          );
+          await expectLater(
+            find.byType(StudyEntryScreen),
+            matchesGoldenFile(
+              'goldens/study_entry_empty_${variant.$1}__${brightness.name}.png',
+            ),
+          );
+        });
+      }
 
       testWidgets('resume — ${brightness.name}', (tester) async {
         await _pumpScreen(

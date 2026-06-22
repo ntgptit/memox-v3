@@ -5,6 +5,8 @@ import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/entities/study_session.dart';
+import 'package:memox/domain/models/study_entry_eligibility.dart'
+    show StudyScopeEmptyReason;
 import 'package:memox/domain/types/entry_type.dart';
 import 'package:memox/domain/types/study_scope.dart';
 import 'package:memox/domain/types/study_type.dart';
@@ -88,7 +90,8 @@ class StudyEntryScreen extends ConsumerWidget {
           // Ready is transient — the listener above navigates away; keep the
           // preparing placeholder visible until the replacement lands.
           StudyEntryOutcomeReady() => _preparingBody(l10n),
-          StudyEntryOutcomeBlocked() => _blockedBody(context, l10n),
+          StudyEntryOutcomeBlocked(:final StudyScopeEmptyReason reason) =>
+            _blockedBody(context, l10n, reason),
           StudyEntryOutcomeResumeRequired(:final StudySession session) =>
             _resumeBody(context, ref, l10n, scope, session),
         },
@@ -160,20 +163,69 @@ class StudyEntryScreen extends ConsumerWidget {
         ),
       );
 
-  /// WP-SR1a renders a single generic empty surface for every
-  /// `StudyScopeEmptyReason`; the per-reason matrix (deck-no-cards, all-done,
-  /// all-buried, …) with its dedicated CTAs is WP-SR1b-2. The gate still **blocks**
-  /// the zero-card session here — only the copy is generic for now.
-  Widget _blockedBody(BuildContext context, AppLocalizations l10n) =>
-      MxEmptyState(
-        icon: Icons.check_circle_outline,
-        title: l10n.studyEmptyGenericTitle,
-        message: l10n.studyEmptyGenericMessage,
-        action: MxSecondaryButton(
-          label: l10n.commonBack,
-          onPressed: () => context.pop(),
-        ),
-      );
+  /// The per-reason empty-scope matrix (`study-flow.md` §Empty scope matrix,
+  /// wireframe `12`). WP-SR1b-2a renders the tailored icon / title / message for
+  /// each of the 8 `StudyScopeEmptyReason`s with a Back action; the dedicated
+  /// CTAs (Add flashcards / Study new instead / View suspended) + the streak
+  /// inset + the "Next due in {relativeTime}" line are **WP-SR1b-2b**. The gate
+  /// always **blocks** the zero-card session here.
+  Widget _blockedBody(
+    BuildContext context,
+    AppLocalizations l10n,
+    StudyScopeEmptyReason reason,
+  ) {
+    final (IconData icon, String title, String message) = switch (reason) {
+      StudyScopeEmptyReason.deckNoCards => (
+        Icons.style_outlined,
+        l10n.studyEmptyDeckNoCardsTitle,
+        l10n.studyEmptyDeckNoCardsMessage,
+      ),
+      StudyScopeEmptyReason.deckNoDueCards => (
+        Icons.check_circle_outline,
+        l10n.studyEmptyCaughtUpTitle,
+        l10n.studyEmptyDeckNoDueMessage,
+      ),
+      StudyScopeEmptyReason.folderNoCards => (
+        Icons.style_outlined,
+        l10n.studyEmptyFolderNoCardsTitle,
+        l10n.studyEmptyFolderNoCardsMessage,
+      ),
+      StudyScopeEmptyReason.folderNoDueCards => (
+        Icons.check_circle_outline,
+        l10n.studyEmptyCaughtUpTitle,
+        l10n.studyEmptyFolderNoDueMessage,
+      ),
+      StudyScopeEmptyReason.todayAllDone => (
+        Icons.celebration_outlined,
+        l10n.studyEmptyTodayAllDoneTitle,
+        l10n.studyEmptyTodayAllDoneMessage,
+      ),
+      StudyScopeEmptyReason.todayNoContent => (
+        Icons.style_outlined,
+        l10n.studyEmptyTodayNoContentTitle,
+        l10n.studyEmptyTodayNoContentMessage,
+      ),
+      StudyScopeEmptyReason.allBuried => (
+        Icons.bedtime_outlined,
+        l10n.studyEmptyAllBuriedTitle,
+        l10n.studyEmptyAllBuriedMessage,
+      ),
+      StudyScopeEmptyReason.allSuspended => (
+        Icons.pause_circle_outlined,
+        l10n.studyEmptyAllSuspendedTitle,
+        l10n.studyEmptyAllSuspendedMessage,
+      ),
+    };
+    return MxEmptyState(
+      icon: icon,
+      title: title,
+      message: message,
+      action: MxSecondaryButton(
+        label: l10n.commonBack,
+        onPressed: () => context.pop(),
+      ),
+    );
+  }
 
   Widget _resumeBody(
     BuildContext context,
