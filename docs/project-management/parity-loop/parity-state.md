@@ -10,11 +10,19 @@ per loop. Visual-only; behavior is docs-owned.
 
 ## Active screen
 
-- **NEXT: audit remaining FE screens** — the priority-built screens (03/04/06/07/08/12-17) are all
-  done-modulo-deferred. Remaining screens with FE to audit (confirm each via Explore first —
-  `lib/presentation/features/**`): 02 dashboard, 05 library-search, 09 flashcard-history, 11 tag-mgmt,
-  18 stats, 19 progress, 20-25 settings/account/learning/audio/appearance/language, 01 onboarding,
-  10 deck-import. Screens with NO FE → DEFER no-FE-yet. Pick the highest-priority FE-built one next.
+- **FE inventory confirmed**: only 5 feature areas have FE screens — dashboard, decks, folders, search,
+  study. Screens WITHOUT FE (no `lib/presentation/features/**` screen) → no-FE-yet, out of scope:
+  01 onboarding, 09 history, 10 import, 11 tags, 18 stats, 19 progress, 20-25 settings/account/learning/
+  audio/appearance/language. (See parity-deferred no-FE-yet block.)
+- **NEXT: 05 Library search** — last remaining FE-built screen to audit (`global_search_screen`).
+  02 Dashboard audited (done modulo redesign-deferred — see below). After 05, all FE screens covered →
+  sanity check + terminal summary.
+
+### Screen 02 — Dashboard: AUDITED, done (modulo redesign-deferred)
+FE = redesigned quiet surface (MxDueSummary + Progress/Library shortcuts); its states (loading/error/
+due/caught-up) are golden-covered. Kit 02 = pre-redesign engagement dashboard (streak/accuracy/
+continue-studying/recent-decks) → scope/redesign-owned divergence, deferred. See
+`screen-plans/02-dashboard.md`.
 
 ### Screen 12–17 — Study modes + result: AUDITED, done (modulo deferred)
 
@@ -80,6 +88,8 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | 06 | Flashcard list | yes | done 2026-06-23 | done (modulo deferred) | centered card-wrap; FlashcardTile audited; reorder grip 24→20; search dock built; 8/8 covered |
 | 07/08 | Flashcard editor | yes | done 2026-06-23 | done (modulo deferred) | create-valid golden added; validation behavior-owned; field-fill/deck-selector/Note deferred |
 | 12-17 | Study modes + result | yes | done 2026-06-23 | done (modulo deferred) | states covered; mode interactions behavior-owned (swipe/board vs kit flip); 17 Future blocks deferred |
+| 02 | Dashboard | yes | done 2026-06-23 | done (modulo deferred) | FE states golden-covered; kit-02 engagement layout = redesign-deferred (scope-owned) |
+| 05 | Library search | yes | — | — | next: audit global_search_screen |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |
