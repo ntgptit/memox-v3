@@ -79,7 +79,7 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
       the 8 `StudyScopeEmptyReason` → tailored icon + title + message (`studyEmpty*` ARB ×15, en+vi;
       cards/check/celebration/bedtime/pause glyphs) + Back, replacing the generic surface. Row S86; per-
       reason tests + 6 representative goldens (deck-no-cards / today-all-done / all-suspended ×2).
-- [x] **WP-SR1b-2b — core empty-matrix CTAs + start-over confirm.** `<this commit>`: **Study new
+- [x] **WP-SR1b-2b — core empty-matrix CTAs + start-over confirm.** `935e630`: **Study new
       instead** (re-enter the gate `?study_type=new_cards`) for deck/folderNoDueCards + allBuried;
       **Done** (pop) for todayAllDone + allBuried; the start-over **confirm dialog** (`MxConfirmDialog`,
       S28) before cancel+create. Rows S86 (CTA) + S87 (confirm). ARB ×3; CTA + confirm + cancel tests +
