@@ -225,5 +225,9 @@
   "studyResultSaveFailedBanner": "Không lưu được kết quả. Tiến độ của bạn đã được giữ trên máy.",
   "studyResultRetry": "Thử lưu lại",
   "studyResultDefensiveTitle": "Chưa trả lời thẻ nào",
-  "studyResultDefensiveMessage": "Phiên học này chưa có câu trả lời nào được ghi lại."
+  "studyResultDefensiveMessage": "Phiên học này chưa có câu trả lời nào được ghi lại.",
+  "studyMatchTitle": "Ghép các cặp",
+  "studyMatchSubtitle": "Chạm vào một từ, rồi chạm nghĩa của nó.",
+  "studyMatchProgress": "{matched} đã ghép · còn {left}",
+  "@studyMatchProgress": { "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } }
 }

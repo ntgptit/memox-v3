@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:memox/app/router/route_names.dart';
 import 'package:memox/app/router/route_paths.dart';
 import 'package:memox/domain/types/entry_type.dart';
+import 'package:memox/domain/types/study_mode.dart';
+import 'package:memox/presentation/features/study/screens/match_session_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_entry_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_result_screen.dart';
 import 'package:memox/presentation/features/study/screens/study_session_screen.dart';
@@ -19,9 +21,18 @@ List<RouteBase> studyRoutes() => <RouteBase>[
   GoRoute(
     path: RoutePaths.studySession,
     name: RouteNames.studySession,
-    builder: (context, state) => StudySessionScreen(
-      sessionId: state.pathParameters[RouteParams.sessionId] ?? '',
-    ),
+    // `?mode=match` selects the Match board surface; any other / absent value
+    // falls back to the default Review session (WP-SM3).
+    builder: (context, state) {
+      final String sessionId =
+          state.pathParameters[RouteParams.sessionId] ?? '';
+      final String? mode =
+          state.uri.queryParameters[RouteParams.modeQueryParam];
+      if (mode == StudyMode.match.name) {
+        return MatchSessionScreen(sessionId: sessionId);
+      }
+      return StudySessionScreen(sessionId: sessionId);
+    },
   ),
   // The result summary — `session/:sessionId/result`, listed near the session
   // route. The Finish action finalizes then `pushReplacement`s here.

@@ -482,5 +482,11 @@
   "studyResultDefensiveTitle": "No cards answered",
   "@studyResultDefensiveTitle": { "description": "Title of the defensive zero-answers result state." },
   "studyResultDefensiveMessage": "This session has no recorded answers.",
-  "@studyResultDefensiveMessage": { "description": "Body of the defensive zero-answers result state." }
+  "@studyResultDefensiveMessage": { "description": "Body of the defensive zero-answers result state." },
+  "studyMatchTitle": "Match the pairs",
+  "@studyMatchTitle": { "description": "Headline on the Match board surface." },
+  "studyMatchSubtitle": "Tap a term, then its meaning.",
+  "@studyMatchSubtitle": { "description": "Prompt subtitle under the Match title." },
+  "studyMatchProgress": "{matched} matched · {left} left",
+  "@studyMatchProgress": { "description": "Match board status line below the grid.", "placeholders": { "matched": { "type": "int" }, "left": { "type": "int" } } }
 }

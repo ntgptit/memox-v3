@@ -780,4 +780,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get studyResultDefensiveMessage =>
       'This session has no recorded answers.';
+
+  @override
+  String get studyMatchTitle => 'Match the pairs';
+
+  @override
+  String get studyMatchSubtitle => 'Tap a term, then its meaning.';
+
+  @override
+  String studyMatchProgress(int matched, int left) {
+    return '$matched matched · $left left';
+  }
 }

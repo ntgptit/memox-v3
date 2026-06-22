@@ -762,4 +762,15 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get studyResultDefensiveMessage =>
       'Phiên học này chưa có câu trả lời nào được ghi lại.';
+
+  @override
+  String get studyMatchTitle => 'Ghép các cặp';
+
+  @override
+  String get studyMatchSubtitle => 'Chạm vào một từ, rồi chạm nghĩa của nó.';
+
+  @override
+  String studyMatchProgress(int matched, int left) {
+    return '$matched đã ghép · còn $left';
+  }
 }

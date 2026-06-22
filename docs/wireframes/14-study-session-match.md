@@ -9,19 +9,23 @@ source_specs:
 
 # 14 — Study Session: Match Mode
 
-> **Status correction (2026-06-22 audit — supersedes the 2026-06-12 note):** the Match **backend is
-> NOT built** (WBS 4.5.4 = Specified, confirmed by evidence). The earlier note claimed the append-only
-> evaluation path + finalization derivation had landed, but the `study_match_evaluations` table is not
-> defined (`study_tables.drift` calls it "target shape… not this enabler"), there are zero code usages
-> of it / `MatchEvaluation`, `MatchStudyModeStrategy` is an empty Board-family leaf with no grading
-> API, and the `recordMatchEvaluation` / `loadMatchEvaluations` / Match-finalization methods in
-> `docs/contracts/repository-contracts/study-repository.md` are **specified, not implemented**. The
-> visual UI is likewise not built. The shared shell at
-> `lib/presentation/features/study/screens/study_session_screen.dart` owns the current runtime route
-> (Review only), and any `lib/presentation/features/study/widgets/study_session/**` paths below are
-> target structure that does NOT exist — verify against `lib/presentation/features/study/widgets/`.
-> Build is BE-first; the slice plan is `docs/project-management/loop-plan/study-match.md`. Tracked as
-> WBS 4.5.4 (BE) + 4.5.5 (FE).
+> **Status (2026-06-22):** the Match **backend is built** (WBS 4.5.4 = Implemented — WP-SM1a schema +
+> WP-SM1b record/load + WP-SM2 finalization; `study_match_evaluations`, `recordMatchEvaluation` /
+> `loadMatchEvaluations`, the Match-finalization branch). The **FE board shell** (`MatchSessionScreen`,
+> reached via `?mode=match`) is built (WP-SM3): the ✕ + blue progress + `{matched}/{total}` count, the
+> title + prompt subtitle, the static 2×5 board grid, and the "{matched} matched · {left} left" line.
+> **Deferred (WP-SM4/SM5):** the tap-pair state machine + Fisher-Yates shuffle + Shuffle & restart bar +
+> `RecordMatchEvaluationUseCase` wiring (WP-SM4); board progression + finalize→result reuse (WP-SM5).
+>
+> **MOCK ↔ §Components reconciliation (2026-06-22, PRECEDENCE #2 — mock wins for visual):** the kit
+> `13-study-match--matching` shot is the visual source and it has **no MATCH mode pill** and **no "BOARD
+> n OF m" caption**; instead it shows a centered **"Match the pairs"** title + the **"Tap a term, then its
+> meaning."** prompt and a **"{matched} matched · {left} left"** status line below the grid (plus a
+> **Shuffle & restart** bar = WP-SM4). The §Components / §Layout text below still describes the older
+> pill + board-indicator chrome — **superseded by the mock for visual**; the implementation follows the
+> mock. (Behavior — board composition, evaluation, finalization — is unchanged and governed by
+> study-flow.md / srs-review.md per PRECEDENCE #1.) Slice plan:
+> `docs/project-management/loop-plan/study-match.md`.
 
 ## Purpose
 

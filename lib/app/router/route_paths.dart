@@ -92,6 +92,11 @@ abstract final class RouteParams {
   /// value surfaces the gate error state. The CTA surfaces that emit it stay
   /// Future.
   static const String studyTypeQueryParam = 'study_type';
+
+  /// Optional `mode` query param on the session route (`StudyMode.name`, e.g.
+  /// `match`) selecting the study-mode surface; absent → `review` (WP-SM3). The
+  /// per-phase `current_mode` chain (WBS 4.5.12+) supersedes this later.
+  static const String modeQueryParam = 'mode';
 }
 
 /// Router-level defaults.

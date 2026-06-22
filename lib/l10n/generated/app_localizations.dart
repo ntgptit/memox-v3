@@ -1447,6 +1447,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This session has no recorded answers.'**
   String get studyResultDefensiveMessage;
+
+  /// Headline on the Match board surface.
+  ///
+  /// In en, this message translates to:
+  /// **'Match the pairs'**
+  String get studyMatchTitle;
+
+  /// Prompt subtitle under the Match title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a term, then its meaning.'**
+  String get studyMatchSubtitle;
+
+  /// Match board status line below the grid.
+  ///
+  /// In en, this message translates to:
+  /// **'{matched} matched · {left} left'**
+  String studyMatchProgress(int matched, int left);
 }
 
 class _AppLocalizationsDelegate
