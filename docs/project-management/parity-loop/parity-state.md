@@ -13,9 +13,9 @@ per loop. Visual-only; behavior is docs-owned.
 - **06 — Flashcard list** (decks feature) — AUDIT done; empty/error CENTERED card-wrap DONE (added
   `centered` variant to shared `MxStateCard`). See
   `docs/project-management/parity-loop/screen-plans/06-flashcard-list.md`.
-  Next WP candidates: FlashcardTile audit (chevron 24→20, status chip color/typography, icon-tile);
-  reorder drag-handle size; empty-state missing "Import cards" secondary button (GAP #6, verify import
-  entry first); search dock. Inner-panel 56 tile / 22-800 title → needs-token (deferred).
+  FlashcardTile audited (chevron already 20 ✓; status chip = needs-schema defer); reorder drag-handle
+  24→20 done. Next WP candidates: empty-state missing "Import cards" secondary button (GAP #6, verify
+  import entry first); search dock parity. Inner-panel 56 tile / 22-800 title → needs-token (deferred).
 
 ### Screen 04 — Folder detail: DONE (modulo deferred)
 
@@ -45,7 +45,7 @@ Lucide↔Material icons (accepted). See `screen-plans/03-library-overview.md`.
 | --- | --- | --- | --- | --- | --- |
 | 03 | Library overview | yes | done 2026-06-23 | done (modulo deferred) | WP-1 card-wrap; WP-2 overflow-sheet golden 6/6; WP-3 chevron 24→20 + metrics audited |
 | 04 | Folder detail | yes | done 2026-06-23 | done (modulo deferred) | card-wrap; DeckTile chevron+solid-chip; StatsCard value 18→26; 8/8 states covered |
-| 06 | Flashcard list | yes | done 2026-06-23 | in-progress | empty/error centered card-wrap (MxStateCard `centered`); 8/8 states covered |
+| 06 | Flashcard list | yes | done 2026-06-23 | in-progress | centered card-wrap; FlashcardTile audited (chevron✓); reorder grip 24→20; 8/8 covered |
 | 06 | Flashcard list | yes (decks) | — | — | |
 | 07/08 | Flashcard create/edit | yes (decks) | — | — | |
 | 12–17 | Study modes | yes (study) | — | — | |

@@ -73,9 +73,13 @@ Audit: 2026-06-23.
    REMAINING for 06 empty: (a) **missing "Import cards" secondary button** — kit empty has TWO buttons
    (Add card primary + Import cards secondary outlined); FE has only "Add card" → NEW GAP (see #6 below);
    (b) inner-panel 56 tile (solid accent) / 22-800 title → needs-token (shared, deferred).
-2. **FlashcardTile audit**: chevron 24→20 (cf. 03 WP-3 / 04); status chip (Review/Learning/New/
-   Mastered) color tokens + typography; icon-tile glyph/tint. Audit `flashcard_tile.dart`.
-3. **Reorder drag-handle**: `drag_indicator` size 24→20 (verify kit).
+2. **FlashcardTile audit** — ✅ DONE (2026-06-23): chevron ALREADY `MxIconSize.md` (20) ✓; title
+   "front — back" 16/600 ✓; meta "Box N · due in Nd" / "New · not studied" 13/400 text-2 ✓; icon-tile
+   accent + copy_all glyph ✓. REMAINING = needs-schema (documented in `flashcard_tile.dart`): the kit
+   draws a status **chip** (Review/Learning/Mastered) + per-status tile color, but the SRS model is
+   New/Due only (`docs/business/srs/srs-review.md`) — no taxonomy to back it. DEFER needs-schema.
+3. **Reorder drag-handle** — ✅ WP DONE (2026-06-23): `_ReorderRow` `Icons.drag_indicator` 24→20
+   (`MxIconSize.md`) — kit `grip-vertical` rel 20x20. diff.py reorder 10.00→9.96 / 18.74→18.72.
 4. **Search dock**: confirm `flashcard_list_search` renders the persistent bottom "Search cards"
    field (kit loaded shows it pinned) — field r14 + border.
 5. **_Overline count-suffix shade** (same as 04 GAP #2; deferred low-value).

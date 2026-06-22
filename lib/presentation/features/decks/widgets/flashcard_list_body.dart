@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/core/util/string_utils.dart';
@@ -305,7 +306,13 @@ class _ReorderRow extends StatelessWidget {
           const SizedBox(width: MxSpacing.space2),
           ReorderableDragStartListener(
             index: index,
-            child: Icon(Icons.drag_indicator, color: colors.textTertiary),
+            // Kit `06` reorder grip is 20px (`--memox-icon-md`, grip-vertical
+            // rel 20x20), not the Material default 24.
+            child: Icon(
+              Icons.drag_indicator,
+              size: MxIconSize.md,
+              color: colors.textTertiary,
+            ),
           ),
         ],
       ),
