@@ -8,9 +8,11 @@ import 'package:memox/core/theme/mx_colors.dart';
 import 'package:memox/core/theme/mx_icon_size.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
+import 'package:memox/core/util/string_utils.dart';
 import 'package:memox/domain/entities/deck.dart';
 import 'package:memox/domain/entities/flashcard.dart';
 import 'package:memox/domain/entities/folder.dart';
+import 'package:memox/domain/tag/tag_validator.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/decks/controllers/flashcard_action_controller.dart';
 import 'package:memox/presentation/features/decks/flashcard_failure_message.dart';
@@ -72,11 +74,17 @@ class FlashcardEditorForm extends HookConsumerWidget {
     final MxTextSubmitState hint = useMxTextSubmitState(
       initialText: card?.hint ?? '',
     );
+    // The card's tag set (lowercased, deduped — `tag-system.md`). Seeded from the
+    // edited card; the use case replaces tags wholesale on save. WP-FL2b2b.
+    final ValueNotifier<List<String>> tags = useState<List<String>>(
+      card?.tags ?? const <String>[],
+    );
     // Auto-open the Details expander when editing a card that already has any.
     final bool hasDetails =
         (card?.exampleSentence ?? '').isNotEmpty ||
         (card?.pronunciation ?? '').isNotEmpty ||
-        (card?.hint ?? '').isNotEmpty;
+        (card?.hint ?? '').isNotEmpty ||
+        (card?.tags ?? const <String>[]).isNotEmpty;
     final ValueNotifier<bool> detailsOpen = useState<bool>(hasDetails);
     // Save in-flight (Save spinner, mock `07`/`08` Saving) + last-save-failed
     // (inline danger banner, mock Save-failed — replaces the snackbar).
@@ -90,7 +98,8 @@ class FlashcardEditorForm extends HookConsumerWidget {
         back.trimmedText != (card?.back ?? '') ||
         example.trimmedText != (card?.exampleSentence ?? '') ||
         pronunciation.trimmedText != (card?.pronunciation ?? '') ||
-        hint.trimmedText != (card?.hint ?? '');
+        hint.trimmedText != (card?.hint ?? '') ||
+        !_sameTags(tags.value, card?.tags ?? const <String>[]);
 
     Future<bool> confirmDiscard() => MxConfirmDialog.show(
       context,
@@ -102,6 +111,20 @@ class FlashcardEditorForm extends HookConsumerWidget {
     );
 
     String? orNull(String text) => text.isEmpty ? null : text;
+
+    // Add a typed tag: validate (trim/lowercase, reject empty/comma/>50 —
+    // `TagValidator`), then append if not already present case-insensitively
+    // (tags are stored lowercased, so equality is exact). `tag-system.md`.
+    void addTag(String raw) {
+      final Result<String> validated = TagValidator.validate(raw);
+      final String? name = validated.data;
+      if (name == null || tags.value.contains(name)) return;
+      tags.value = <String>[...tags.value, name];
+    }
+
+    void removeTag(String name) {
+      tags.value = tags.value.where((String t) => t != name).toList();
+    }
 
     Future<void> save() async {
       if (!canSubmit || saving.value) return;
@@ -118,6 +141,7 @@ class FlashcardEditorForm extends HookConsumerWidget {
                   exampleSentence: orNull(example.trimmedText),
                   pronunciation: orNull(pronunciation.trimmedText),
                   hint: orNull(hint.trimmedText),
+                  tags: tags.value,
                 )
           : await ref
                 .read(flashcardActionControllerProvider.notifier)
@@ -128,9 +152,8 @@ class FlashcardEditorForm extends HookConsumerWidget {
                   exampleSentence: orNull(example.trimmedText),
                   pronunciation: orNull(pronunciation.trimmedText),
                   hint: orNull(hint.trimmedText),
-                  // Preserve existing tags until the tag editor lands (the use
-                  // case replaces tags wholesale).
-                  tags: existing.tags,
+                  // The use case replaces tags wholesale (WP-FL2b2b).
+                  tags: tags.value,
                 );
       if (!context.mounted) return;
       saving.value = false;
@@ -297,6 +320,8 @@ class FlashcardEditorForm extends HookConsumerWidget {
             ),
             if (detailsOpen.value) ...<Widget>[
               const SizedBox(height: MxSpacing.space2),
+              _TagEditor(tags: tags.value, onAdd: addTag, onRemove: removeTag),
+              const SizedBox(height: MxSpacing.space4),
               MxTextField(
                 controller: example.controller,
                 labelText: l10n.cardExampleLabel,
@@ -317,6 +342,162 @@ class FlashcardEditorForm extends HookConsumerWidget {
               ),
             ],
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Set-equality for the deduped lowercased tag lists (order-insensitive, so
+/// reordering on re-tag does not falsely dirty the form).
+bool _sameTags(List<String> a, List<String> b) =>
+    a.length == b.length && a.toSet().containsAll(b);
+
+/// The per-card tag editor (mock `07`/`08` Details § TAGS): a `#`-prefixed chip
+/// per tag (tap ✕ to remove) + a "+ Add tag" affordance that reveals an inline
+/// field. Tags are validated + lowercased on add (`TagValidator`); the parent
+/// owns the list + the create/update wiring. WP-FL2b2b.
+class _TagEditor extends HookWidget {
+  const _TagEditor({
+    required this.tags,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  final List<String> tags;
+  final ValueChanged<String> onAdd;
+  final ValueChanged<String> onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    final ValueNotifier<bool> adding = useState<bool>(false);
+    final MxTextSubmitState input = useMxTextSubmitState();
+
+    void submit(String value) {
+      // Empty submit closes the field; a non-empty submit adds + clears but
+      // keeps the field open for rapid multi-tag entry.
+      if (StringUtils.trimmed(value).isEmpty) {
+        adding.value = false;
+        return;
+      }
+      onAdd(value);
+      input.controller.clear();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        MxText(
+          StringUtils.upperFold(l10n.cardTagsLabel),
+          role: MxTextRole.labelSmall,
+          color: context.mxColors.textTertiary,
+        ),
+        const SizedBox(height: MxSpacing.space2),
+        Wrap(
+          spacing: MxSpacing.space2,
+          runSpacing: MxSpacing.space2,
+          children: <Widget>[
+            for (final String tag in tags)
+              _TagChip(label: tag, onRemove: () => onRemove(tag)),
+            if (!adding.value)
+              _AddTagChip(
+                label: l10n.cardAddTagLabel,
+                onTap: () => adding.value = true,
+              ),
+          ],
+        ),
+        if (adding.value) ...<Widget>[
+          const SizedBox(height: MxSpacing.space2),
+          MxTextField(
+            key: const ValueKey<String>('card_tag_input'),
+            controller: input.controller,
+            hintText: l10n.cardAddTagLabel,
+            autofocus: true,
+            onSubmitted: submit,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// One assigned-tag chip: `#` + the name + a ✕ remove button (soft-tinted pill).
+class _TagChip extends StatelessWidget {
+  const _TagChip({required this.label, required this.onRemove});
+
+  final String label;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surfaceMuted,
+        borderRadius: MxRadius.pillAll,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: MxSpacing.space3,
+          vertical: MxSpacing.space1,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.tag, size: MxIconSize.sm, color: colors.textSecondary),
+            const SizedBox(width: MxSpacing.space1),
+            MxText(label, role: MxTextRole.labelSmall),
+            const SizedBox(width: MxSpacing.space1),
+            MxTappable(
+              onTap: onRemove,
+              child: Icon(
+                Icons.close,
+                size: MxIconSize.sm,
+                color: colors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The "+ Add tag" affordance chip (outlined) that opens the inline tag field.
+class _AddTagChip extends StatelessWidget {
+  const _AddTagChip({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final MxColors colors = context.mxColors;
+    return MxTappable(
+      onTap: onTap,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: MxRadius.pillAll,
+          border: Border.all(color: colors.border),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: MxSpacing.space3,
+            vertical: MxSpacing.space1,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(Icons.add, size: MxIconSize.sm, color: colors.textSecondary),
+              const SizedBox(width: MxSpacing.space1),
+              MxText(
+                label,
+                role: MxTextRole.labelSmall,
+                color: colors.textSecondary,
+              ),
+            ],
+          ),
         ),
       ),
     );

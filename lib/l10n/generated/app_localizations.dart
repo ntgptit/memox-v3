@@ -1076,6 +1076,18 @@ abstract class AppLocalizations {
   /// **'Hint'**
   String get cardHintLabel;
 
+  /// Label above the tag chips in the card editor Details section.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get cardTagsLabel;
+
+  /// The card-editor chip / field that adds a new tag to the card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add tag'**
+  String get cardAddTagLabel;
+
   /// Inline banner message when saving a card fails in the editor.
   ///
   /// In en, this message translates to:

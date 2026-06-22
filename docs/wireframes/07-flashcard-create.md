@@ -19,7 +19,10 @@ source_specs:
 > `flashcard-management.md` §V1 "Destination-deck retargeting remains future work") + Tags + a single
 > "Note"; the business model defines the optional content as example/pronunciation/hint + tags, so
 > those fields are built instead of the mock's single Note, and the deck-selector is not built. The
-> **Tags** input (chip + add-tag) = WP-FL2b2b (edit currently **preserves** existing tags on save). The
+> **Tags** input (chip + add-tag) = **built (WP-FL2b2b)**: the TAGS row in Details renders a `#`-chip per
+> tag (tap ✕ to remove) + a "+ Add tag" affordance that reveals an inline field; tags are validated +
+> lowercased + deduped on add (`TagValidator`), and the editor manages the full set, **replacing** tags
+> wholesale on save (both create + update). The
 > non-base `07` states (saving / save-failed = WP-FL2b3a; loading skeleton + load-error surface with
 > Retry = WP-FL2b3b — the create screen watches the same deck stream, so it shows the
 > `flashcard_editor_skeleton` while the deck context loads and the `MxErrorState` on failure) are
@@ -144,7 +147,7 @@ fast manual entry and keeps the surface intentionally small.
 | Details collapsed | Default | More details row shows the example / hint / pronunciation summary. |
 | Details expanded | Tap More details | Summary row stays visible with an expanded chevron and the example, pronunciation, and hint inputs are shown inline. |
 | Tags idle | Default | Tag chips row shows any current chips plus the Add tag chip. |
-| Tags add | Tap Add tag | The tag input dialog accepts one tag and appends it if valid. |
+| Tags add | Tap Add tag | An inline tag field opens (in place of the chip); a valid entry is appended on submit and the field stays open for the next; an empty submit closes it. |
 | Save and add another off | Default | Checkbox under Tags is unchecked; Save behaves normally. |
 | Save and add another on | Checkbox checked | Save clears the draft and keeps the editor open for batch entry. |
 | Saving | Save tapped | Save button shows spinner; form stays visible and the buttons disable. |
@@ -163,8 +166,8 @@ fast manual entry and keeps the surface intentionally small.
 | Tap Save | Tap | Validate required fields, save, then pop back to the deck list. |
 | Toggle save and add another | Tap checkbox | Turn batch-entry mode on or off for the current create session. |
 | Tap More details | Tap | Toggle the inline optional detail inputs while keeping the summary row visible. |
-| Tap Add tag | Tap | Open the tag input dialog and append a valid tag chip. |
-| Tap tag chip | Tap chip | Remove the tag chip from the draft. |
+| Tap Add tag | Tap | Open the inline tag field and append a valid tag chip on submit. |
+| Tap tag chip ✕ | Tap the chip's remove ✕ | Remove the tag chip from the draft. |
 | Retry after save error | Tap retry | Re-run the save using the current draft. |
 
 ## Dialogs used

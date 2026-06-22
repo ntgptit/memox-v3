@@ -29,11 +29,20 @@ import '../../../support/golden_harness.dart';
 /// build a FRESH instance per call — gates are reported to [gateSink] (a shared
 /// sink) rather than held on the instance, so retries stay inspectable.
 class _StubActionController extends FlashcardActionController {
-  _StubActionController({this.failure, this.autoGate = false, this.gateSink});
+  _StubActionController({
+    this.failure,
+    this.autoGate = false,
+    this.gateSink,
+    this.tagsSink,
+  });
 
   final Failure? failure;
   final bool autoGate;
   final void Function(Completer<void> gate)? gateSink;
+
+  /// Reports the tag set passed to create / update (a shared sink, like
+  /// [gateSink], so it survives the autoDispose fresh-instance-per-call rule).
+  final void Function(List<String> tags)? tagsSink;
 
   Future<Result<Flashcard>> _result() async {
     if (autoGate) {
@@ -54,7 +63,10 @@ class _StubActionController extends FlashcardActionController {
     String? pronunciation,
     String? hint,
     List<String> tags = const <String>[],
-  }) => _result();
+  }) {
+    tagsSink?.call(tags);
+    return _result();
+  }
 
   @override
   Future<Result<Flashcard>> update({
@@ -65,7 +77,10 @@ class _StubActionController extends FlashcardActionController {
     String? pronunciation,
     String? hint,
     List<String> tags = const <String>[],
-  }) => _result();
+  }) {
+    tagsSink?.call(tags);
+    return _result();
+  }
 }
 
 const String _deckId = 'deck1';
@@ -85,6 +100,7 @@ Flashcard _card({
   String? exampleSentence,
   String? pronunciation,
   String? hint,
+  List<String> tags = const <String>[],
 }) => Flashcard(
   id: 'c1',
   deckId: _deckId,
@@ -93,6 +109,7 @@ Flashcard _card({
   exampleSentence: exampleSentence,
   pronunciation: pronunciation,
   hint: hint,
+  tags: tags,
   sortOrder: 0,
   createdAt: _t,
   updatedAt: _t,
@@ -252,6 +269,118 @@ void main() {
       // Auto-opened (the card has details) with the values prefilled.
       expect(find.text('日本へ行く'), findsOneWidget);
       expect(find.text('country'), findsOneWidget);
+    });
+
+    testWidgets('edit: existing tags prefilled as chips + Details auto-opens', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        cardId: 'c1',
+        cards: <Flashcard>[
+          _card(tags: <String>['kanji', 'n5']),
+        ],
+      );
+      // Tags alone auto-open Details; each renders as a chip.
+      expect(find.text('kanji'), findsOneWidget);
+      expect(find.text('n5'), findsOneWidget);
+    });
+
+    testWidgets('add a tag: open the field, type + submit → lowercased chip', (
+      tester,
+    ) async {
+      await _pump(tester, cardId: 'c1', cards: <Flashcard>[_card()]);
+      await tester.tap(find.text('Details')); // collapsed for a plain card
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Add tag')); // open the inline field
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const ValueKey<String>('card_tag_input')),
+        'Kanji',
+      );
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.text('kanji'), findsOneWidget); // normalized lowercased
+    });
+
+    testWidgets('add tag: a comma is rejected (no chip)', (tester) async {
+      await _pump(tester, cardId: 'c1', cards: <Flashcard>[_card()]);
+      await tester.tap(find.text('Details'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Add tag'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const ValueKey<String>('card_tag_input')),
+        'a,b',
+      );
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.text('a,b'), findsNothing); // validation rejected it
+    });
+
+    testWidgets('remove a tag: tapping ✕ drops the chip', (tester) async {
+      await _pump(
+        tester,
+        cardId: 'c1',
+        cards: <Flashcard>[
+          _card(tags: <String>['verb']),
+        ],
+      );
+      expect(find.text('verb'), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.close)); // the chip's remove ✕
+      await tester.pumpAndSettle();
+      expect(find.text('verb'), findsNothing);
+    });
+
+    testWidgets('edit: removing a tag dirties the form → discard confirm', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        cardId: 'c1',
+        cards: <Flashcard>[
+          _card(tags: <String>['verb']),
+        ],
+      );
+      await tester.tap(find.byIcon(Icons.close)); // remove the only tag → dirty
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.arrow_back)); // edit-mode leading
+      await tester.pumpAndSettle();
+      expect(find.text('Discard changes?'), findsOneWidget);
+    });
+
+    testWidgets('save passes the full tag set to the use case', (tester) async {
+      final List<String> captured = <String>[];
+      await _pump(
+        tester,
+        cardId: 'c1',
+        cards: <Flashcard>[
+          _card(tags: <String>['verb']),
+        ],
+        // A failing save captures the tags (the sink fires before the result)
+        // without popping — the editor has no router in this harness.
+        controller: () => _StubActionController(
+          failure: const Failure.storage(
+            operation: StorageOp.write,
+            cause: 'disk full',
+          ),
+          tagsSink: (List<String> t) => captured
+            ..clear()
+            ..addAll(t),
+        ),
+      );
+      // Add a second tag, then save → the use case gets both (tags replace).
+      await tester.tap(find.text('Add tag'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const ValueKey<String>('card_tag_input')),
+        'grammar',
+      );
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(MxPrimaryButton).first); // Save
+      await tester.pumpAndSettle();
+      expect(captured, <String>['verb', 'grammar']);
     });
 
     testWidgets('create mode has no trash/delete action (mock `07`)', (

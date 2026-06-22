@@ -556,6 +556,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cardHintLabel => 'Gợi ý';
 
   @override
+  String get cardTagsLabel => 'Nhãn';
+
+  @override
+  String get cardAddTagLabel => 'Thêm nhãn';
+
+  @override
   String get cardSaveFailedMessage => 'Không thể lưu thay đổi.';
 
   @override

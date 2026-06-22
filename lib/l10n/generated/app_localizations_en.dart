@@ -571,6 +571,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardHintLabel => 'Hint';
 
   @override
+  String get cardTagsLabel => 'Tags';
+
+  @override
+  String get cardAddTagLabel => 'Add tag';
+
+  @override
   String get cardSaveFailedMessage => 'Changes couldn\'t be saved.';
 
   @override

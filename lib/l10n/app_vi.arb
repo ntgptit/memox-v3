@@ -163,6 +163,8 @@
   "cardExampleLabel": "Ví dụ",
   "cardPronunciationLabel": "Phát âm",
   "cardHintLabel": "Gợi ý",
+  "cardTagsLabel": "Nhãn",
+  "cardAddTagLabel": "Thêm nhãn",
   "cardSaveFailedMessage": "Không thể lưu thay đổi.",
   "cardLoadFailedTitle": "Không tải được thẻ",
   "cardLoadFailedMessage": "Không thể tải thẻ này để chỉnh sửa.",
