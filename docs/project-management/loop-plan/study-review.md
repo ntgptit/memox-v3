@@ -107,11 +107,17 @@ Entities: `StudySession{id, scope, status, startedAt, updatedAt}`, `StudyScope`,
 - [x] **WP-SR4a — exit-confirm.** `2983088`: `✕` mid-session with `answeredCount > 0` →
       `MxConfirmDialog` ("progress is saved — resume later") before pop; pops directly when nothing is
       answered yet (wireframe `13` Rule). Row S90; ARB ×3 (en+vi); confirm/cancel/pop tests.
-- [ ] **WP-SR4b — card-actions sheet.** Long-press the card → a bottom sheet (Edit / Bury until
-      tomorrow / Suspend card; reuse the shared sheet §25). Bury → `BuryStudySessionCardUseCase`,
-      Suspend → `SuspendStudySessionCardUseCase` (both exist), then **re-queue** (remove the card +
-      advance, or invalidate the review so the reload excludes it). Edit → push the flashcard editor
-      (returnable). Decision rows; tests per action.
+- [x] **WP-SR4b — card-actions sheet (Bury / Suspend).** `<this commit>`: long-press the card →
+      `showStudyCardActionsSheet` (`study_card_actions_sheet.dart`, reusing `showMxBottomSheet`): **Bury
+      until tomorrow** → `BuryStudySessionCardUseCase`, **Suspend card** → `SuspendStudySessionCardUseCase`
+      → re-queue (`ref.invalidate(studySessionReviewProvider)`; the use case removed the session item, so
+      the reload excludes it). Canonical row **S59** (the appended S91 dup was dropped); WBS 4.11.3 →
+      Partial; ARB ×2; long-press/bury/suspend tests; §25 + phantom-path drift corrected. Undo toast
+      (§undo-toast) deferred.
+- [ ] **WP-SR4b-2 — Edit card action (deferred).** The sheet's **Edit** → push the flashcard editor —
+      needs the card's `deckId`, which `StudySessionReviewItem` does not carry. Either add `deckId` to
+      the review read model (`LoadStudySessionReviewUseCase`) or derive it from a deck-scope session
+      (`scope.entryRefId`). Then add Edit to the sheet + a navigation test.
 - [ ] **WP-SR5 — finalize → result (screen 17).** Finish → `FinalizeStudySessionUseCase` →
       `pushReplacement` to the result screen rendering `StudySessionResult`; cover all **6** states
       (loaded/loading/goal-off/save-failed/defensive/tough-empty) with goldens.

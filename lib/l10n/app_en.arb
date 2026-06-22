@@ -450,5 +450,9 @@
   "studyExitConfirm": "Exit",
   "@studyExitConfirm": { "description": "Confirm action that leaves the study session." },
   "studyExitCancel": "Keep studying",
-  "@studyExitCancel": { "description": "Cancel action that stays in the study session." }
+  "@studyExitCancel": { "description": "Cancel action that stays in the study session." },
+  "studyActionBury": "Bury until tomorrow",
+  "@studyActionBury": { "description": "Card-actions sheet: bury the current card until tomorrow." },
+  "studyActionSuspend": "Suspend card",
+  "@studyActionSuspend": { "description": "Card-actions sheet: suspend the current card." }
 }

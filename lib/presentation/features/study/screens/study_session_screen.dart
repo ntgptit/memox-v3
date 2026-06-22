@@ -11,6 +11,7 @@ import 'package:memox/domain/types/attempt_result.dart';
 import 'package:memox/l10n/generated/app_localizations.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_controller.dart';
 import 'package:memox/presentation/features/study/controllers/study_session_review_provider.dart';
+import 'package:memox/presentation/features/study/widgets/study_card_actions_sheet.dart';
 import 'package:memox/presentation/shared/async/app_async_builder.dart';
 import 'package:memox/presentation/shared/dialogs/mx_confirm_dialog.dart';
 import 'package:memox/presentation/shared/layouts/mx_scaffold.dart';
@@ -200,7 +201,11 @@ class StudySessionScreen extends ConsumerWidget {
             // (wireframe `13` §Accessibility).
             child: Semantics(
               hint: l10n.studyReviewSwipeHint,
-              child: _ReviewCard(item: item),
+              // Long-press opens the card-actions sheet (Bury / Suspend).
+              child: GestureDetector(
+                onLongPress: () => _openCardActions(context, ref),
+                child: _ReviewCard(item: item),
+              ),
             ),
           ),
         ),
@@ -215,6 +220,24 @@ class StudySessionScreen extends ConsumerWidget {
           ),
       ],
     );
+  }
+
+  /// Long-press the card → the card-actions sheet (wireframe `13` Actions): Bury
+  /// until tomorrow / Suspend card. Both remove the card from the session and
+  /// re-queue (`StudySessionController`). Edit = WP-SR4b-2 (needs the deck id).
+  Future<void> _openCardActions(BuildContext context, WidgetRef ref) async {
+    final StudyCardAction? action = await showStudyCardActionsSheet(context);
+    if (action == null) return;
+    if (!context.mounted) return;
+    final StudySessionController notifier = ref.read(
+      studySessionControllerProvider(sessionId).notifier,
+    );
+    switch (action) {
+      case StudyCardAction.buryUntilTomorrow:
+        unawaited(notifier.buryCurrent());
+      case StudyCardAction.suspend:
+        unawaited(notifier.suspendCurrent());
+    }
   }
 
   /// The end-of-session surface — every card graded. The Finish action

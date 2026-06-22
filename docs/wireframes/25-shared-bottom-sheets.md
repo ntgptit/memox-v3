@@ -46,9 +46,12 @@ update the files `mx_bottom_sheet.dart`, `mx_action_sheet_list.dart`,
 - `MxDestinationPickerSheet` (`lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`) is
   the shared searchable destination picker. It receives immutable destination view data and
   callbacks from the owner; disabled destinations stay visible and non-selectable.
-- `MxCardActionsSheet` (`lib/presentation/shared/dialogs/mx_card_actions_sheet.dart`) is Current for
-  study-session card actions: Edit / Bury until tomorrow / Suspend card. Flashcard History is
-  intentionally absent.
+- The study-session card-actions sheet (`showStudyCardActionsSheet`,
+  `lib/presentation/features/study/widgets/study_card_actions_sheet.dart`) is **Current (WP-SR4b)** —
+  a feature sheet reusing the shared `showMxBottomSheet` chrome. Built actions: **Bury until tomorrow /
+  Suspend card** (long-press the review card → `Bury`/`Suspend` use cases + re-queue). **Edit** = WP-SR4b-2
+  (it needs the card's deck id, which the review read model does not yet carry). Flashcard History is
+  intentionally absent. (The earlier `MxCardActionsSheet` shared-dialog path never existed — wiped iteration.)
 
 **Current composed usages:**
 
@@ -746,8 +749,10 @@ library-fab, deck-create, item-context, folder-picker, deck-picker),
 
 - Current host/list/picker primitives: `lib/presentation/shared/dialogs/mx_bottom_sheet.dart`,
   `lib/presentation/shared/dialogs/mx_action_sheet_list.dart`,
-  `lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`,
-  `lib/presentation/shared/dialogs/mx_card_actions_sheet.dart`
+  `lib/presentation/shared/dialogs/mx_destination_picker_sheet.dart`
+- Current study card-actions feature sheet (WP-SR4b, Bury / Suspend; Edit = WP-SR4b-2):
+  `lib/presentation/features/study/widgets/study_card_actions_sheet.dart` (reuses `showMxBottomSheet`).
+  The earlier `mx_card_actions_sheet.dart` shared-dialog path never existed (wiped iteration).
 - Current shared scope picker: `lib/presentation/shared/bottom_sheets/study_scope_picker_sheet.dart`
 - Current Dashboard paused sessions feature sheet:
   `lib/presentation/features/dashboard/widgets/dashboard_paused_sessions_sheet.dart`

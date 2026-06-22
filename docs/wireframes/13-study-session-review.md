@@ -21,9 +21,11 @@ source_specs:
 > via `RecordStudySessionAnswerUseCase`), advances optimistically, shows the swipe hint for the first
 > 3 cards, and renders a Finish surface after the last card — **plus the exit-confirm (WP-SR4a):**
 > `✕` mid-session with `answeredCount > 0` shows the §exit-session `MxConfirmDialog` ("Exit study
-> session? … Keep studying / Exit", modal-locked) before popping; nothing answered → pop directly.
-> **Not yet built:** the card-actions sheet (WP-SR4b: Edit / Bury / Suspend), finalize→result (WP-SR5
-> — the Finish action pops for now). The
+> session? … Keep studying / Exit", modal-locked) before popping; nothing answered → pop directly —
+> **plus the card-actions sheet (WP-SR4b):** long-press the card → `showStudyCardActionsSheet` (Bury
+> until tomorrow / Suspend card → the `Bury`/`Suspend` use cases + re-queue). **Not yet built:** the
+> sheet's **Edit** action (WP-SR4b-2 — needs the card's deck id), the 5s undo toast (§undo-toast / WBS
+> 4.11.3), finalize→result (WP-SR5 — the Finish action pops for now). The
 > front/back labels fall back to FRONT/BACK — the language-specific labels (KOREAN/MEANING from
 > `deck.target_language`) need the read model to carry the language (WP-SR2b). Any other
 > `lib/presentation/features/study/**` path below is **target structure** until its slice lands. The

@@ -208,5 +208,7 @@
   "studyExitTitle": "Thoát phiên học?",
   "studyExitMessage": "Tiến độ của bạn đã được lưu và có thể tiếp tục sau. Rời phiên này?",
   "studyExitConfirm": "Thoát",
-  "studyExitCancel": "Tiếp tục học"
+  "studyExitCancel": "Tiếp tục học",
+  "studyActionBury": "Ẩn đến ngày mai",
+  "studyActionSuspend": "Tạm dừng thẻ"
 }

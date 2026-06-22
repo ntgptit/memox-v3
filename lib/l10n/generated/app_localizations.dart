@@ -1351,6 +1351,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep studying'**
   String get studyExitCancel;
+
+  /// Card-actions sheet: bury the current card until tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Bury until tomorrow'**
+  String get studyActionBury;
+
+  /// Card-actions sheet: suspend the current card.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspend card'**
+  String get studyActionSuspend;
 }
 
 class _AppLocalizationsDelegate

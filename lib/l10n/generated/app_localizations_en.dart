@@ -721,4 +721,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyExitCancel => 'Keep studying';
+
+  @override
+  String get studyActionBury => 'Bury until tomorrow';
+
+  @override
+  String get studyActionSuspend => 'Suspend card';
 }

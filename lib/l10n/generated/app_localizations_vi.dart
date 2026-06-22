@@ -704,4 +704,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyExitCancel => 'Tiếp tục học';
+
+  @override
+  String get studyActionBury => 'Ẩn đến ngày mai';
+
+  @override
+  String get studyActionSuspend => 'Tạm dừng thẻ';
 }

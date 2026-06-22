@@ -80,4 +80,31 @@ class StudySessionController extends _$StudySessionController {
     // (decision S38) — there is no app logger yet to trace to.
     if (recorded.failure != null) return;
   }
+
+  /// Bury the current card until tomorrow (`BuryStudySessionCardUseCase`) and
+  /// re-queue (WP-SR4b). The card is removed from the session by the use case,
+  /// so invalidating the review reload excludes it and the controller rebuilds.
+  Future<void> buryCurrent() => _cardAction(bury: true);
+
+  /// Suspend the current card (`SuspendStudySessionCardUseCase`) and re-queue.
+  Future<void> suspendCurrent() => _cardAction(bury: false);
+
+  Future<void> _cardAction({required bool bury}) async {
+    final StudySessionView? view = state.asData?.value;
+    if (view == null || view.isFinished) return;
+    final StudySessionReviewItem item = view.review.items[view.currentIndex];
+    final Result<void> result = bury
+        ? await ref
+              .read(buryStudySessionCardUseCaseProvider)
+              .call(sessionId: sessionId, flashcardId: item.flashcardId)
+        : await ref
+              .read(suspendStudySessionCardUseCaseProvider)
+              .call(sessionId: sessionId, flashcardId: item.flashcardId);
+    // Tolerated like grade: on failure the card simply stays in the queue.
+    // The 5s undo toast (§undo-toast / WBS 4.11.3) is deferred — not wired here.
+    if (result.failure != null) return;
+    // Re-queue: the use case removed the session item, so the review reload now
+    // excludes it; invalidating it rebuilds this controller from the new queue.
+    ref.invalidate(studySessionReviewProvider(sessionId));
+  }
 }

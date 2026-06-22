@@ -61,10 +61,11 @@ StudySessionReview _review({required List<StudySessionReviewItem> items}) =>
 /// touching the record use case / DB: [build] returns [_initial]; [grade] records
 /// the result via [onGrade] and advances (mirroring the real advance).
 class _FakeSessionController extends StudySessionController {
-  _FakeSessionController(this._initial, {this.onGrade});
+  _FakeSessionController(this._initial, {this.onGrade, this.onCardAction});
 
   final StudySessionView _initial;
   final void Function(AttemptResult result)? onGrade;
+  final void Function(String action)? onCardAction;
 
   @override
   Future<StudySessionView> build(SessionId sessionId) async => _initial;
@@ -78,6 +79,12 @@ class _FakeSessionController extends StudySessionController {
       v.copyWith(currentIndex: v.currentIndex + 1),
     );
   }
+
+  @override
+  Future<void> buryCurrent() async => onCardAction?.call('bury');
+
+  @override
+  Future<void> suspendCurrent() async => onCardAction?.call('suspend');
 }
 
 Future<void> _pump(
@@ -259,6 +266,54 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Review complete'), findsOneWidget);
       expect(find.text('Finish session'), findsOneWidget);
+    });
+
+    testWidgets('long-press opens the card-actions sheet', (tester) async {
+      final StudySessionView view = StudySessionView(
+        review: _review(items: <StudySessionReviewItem>[_item()]),
+        currentIndex: 0,
+      );
+      await _pump(tester, controller: () => _FakeSessionController(view));
+      await tester.longPress(find.text('먹다'));
+      await tester.pumpAndSettle();
+      expect(find.text('Bury until tomorrow'), findsOneWidget);
+      expect(find.text('Suspend card'), findsOneWidget);
+    });
+
+    testWidgets('card-actions Bury invokes buryCurrent', (tester) async {
+      String? action;
+      final StudySessionView view = StudySessionView(
+        review: _review(items: <StudySessionReviewItem>[_item()]),
+        currentIndex: 0,
+      );
+      await _pump(
+        tester,
+        controller: () =>
+            _FakeSessionController(view, onCardAction: (a) => action = a),
+      );
+      await tester.longPress(find.text('먹다'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Bury until tomorrow'));
+      await tester.pumpAndSettle();
+      expect(action, 'bury');
+    });
+
+    testWidgets('card-actions Suspend invokes suspendCurrent', (tester) async {
+      String? action;
+      final StudySessionView view = StudySessionView(
+        review: _review(items: <StudySessionReviewItem>[_item()]),
+        currentIndex: 0,
+      );
+      await _pump(
+        tester,
+        controller: () =>
+            _FakeSessionController(view, onCardAction: (a) => action = a),
+      );
+      await tester.longPress(find.text('먹다'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Suspend card'));
+      await tester.pumpAndSettle();
+      expect(action, 'suspend');
     });
 
     testWidgets('exit mid-session (answered > 0) confirms before leaving', (
