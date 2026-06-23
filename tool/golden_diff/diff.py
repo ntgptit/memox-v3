@@ -133,6 +133,62 @@ def rgb_delta(a, b):
     return max(abs(a[i] - b[i]) for i in range(3))
 
 
+def figure_ground(img, x, y, w, h, pad=6):
+    """How much a node's box stands out from its surrounding ring (ΔRGB).
+
+    High = there is a distinct element here; ~0 = the box blends into its
+    background (nothing drawn). None if the geometry is degenerate. Used to
+    detect a node that is PRESENT in the mock but MISSING in the render: the
+    box stands out in the shot but blends into the background in the golden.
+    """
+    inner = clamp_box((x, y, x + w, y + h), img.size)
+    outer = clamp_box((x - pad, y - pad, x + w + pad, y + h + pad), img.size)
+    if inner is None or outer is None:
+        return None
+    si = ImageStat.Stat(img.crop(inner))
+    so = ImageStat.Stat(img.crop(outer))
+    area_i = (inner[2] - inner[0]) * (inner[3] - inner[1])
+    area_o = (outer[2] - outer[0]) * (outer[3] - outer[1])
+    if area_o <= area_i:
+        return None
+    ring = [(so.sum[k] - si.sum[k]) / (area_o - area_i) for k in range(3)]
+    return rgb_delta([round(v) for v in si.mean[:3]], [round(v) for v in ring])
+
+
+def internal_contrast(img, box):
+    """Stddev of luminance inside a box — high = ink/edges (text/icon/fill detail),
+    ~0 = a flat region. Distinguishes 'sparse content present' from 'nothing here'
+    on low-contrast (dark) themes where the box MEAN alone ≈ background."""
+    cb = clamp_box(box, img.size)
+    if cb is None:
+        return None
+    return ImageStat.Stat(img.crop(cb).convert("L")).stddev[0]
+
+
+def is_solid_block(fig, var):
+    """The box is a solid, distinct filled block: stands out strongly from its
+    ring AND is internally flat (a fill, not text/icon). High precision — this is
+    the only 'present' signal we trust for MISSING detection."""
+    return fig is not None and fig >= _FG_SOLID and var is not None and var < _VAR_INK
+
+
+def is_blank(fig, var):
+    """A node region is empty: blends into its ring AND has no internal detail."""
+    return (fig is not None and fig < _FG_BLENDS) and (var is not None and var < _VAR_INK)
+
+
+# thresholds for the MISSING/COLOR/SHIFT classifier.
+# NOTE: pixel-based MISSING detection is reliable ONLY for solid filled blocks.
+# Sparse content (text/icons) on a low-contrast (dark) theme has a box-mean ≈
+# background, so it cannot be told apart from 'absent' by pixels — those are left
+# as COLOR?/SHIFT?/diff, NOT MISSING, to keep MISSING high-precision. For a full
+# node inventory, compare the rendered widget tree against the spec structurally.
+_FG_SOLID = 55     # box ΔRGB-vs-ring above which it is a solid distinct block
+_FG_BLENDS = 12    # box blends into its ring → no solid fill there
+_VAR_INK = 8       # luminance stddev above which a box has text/icon/edge detail
+_COLOR_DRGB = 40   # box-vs-box colour delta that reads as a colour/token bug
+
+
 def ssim_score(actual, expected, soft=False):
     """SSIM in [-1, 1] (1 = identical) + a per-pixel dissimilarity map (mode 'L').
 
@@ -232,17 +288,36 @@ def node_rows(actual, expected, nodes, tolerance):
         a_rgb, a_hex = mean_color(a_crop)
         e_rgb, e_hex = mean_color(e_crop)
         ns = ssim_score(a_crop, e_crop, soft=True)
+        drgb = rgb_delta(a_rgb, e_rgb)
+        x, y, w, h = n["abs"]
+        box = (x, y, x + w, y + h)
+        shot_fig = figure_ground(expected, x, y, w, h)
+        gold_fig = figure_ground(actual, x, y, w, h)
+        shot_var = internal_contrast(expected, box)
+        gold_var = internal_contrast(actual, box)
+        # Classify: a SOLID block in the mock that is blank in the render = MISSING.
+        # (High precision only — sparse text/icons can't be told from absent by
+        # pixels on a quiet theme, so they fall through to COLOR?/SHIFT?/diff.)
+        status = "diff"
+        if is_solid_block(shot_fig, shot_var) and is_blank(gold_fig, gold_var):
+            status = "MISSING?"
+        elif drgb >= _COLOR_DRGB:
+            status = "COLOR?"
+        elif pct >= 40:
+            status = "SHIFT?"
         rows.append({
             "name": n["name"],
             "abs": n["abs"],
             "pct": pct,
             "ssim": ns["score"] if ns else None,
+            "status": status,
             "style": n["style"] or "—",
             "golden_hex": a_hex,
             "shot_hex": e_hex,
-            "drgb": rgb_delta(a_rgb, e_rgb),
+            "drgb": drgb,
         })
-    rows.sort(key=lambda r: -r["pct"])
+    # MISSING first, then by pixel%.
+    rows.sort(key=lambda r: (r["status"] != "MISSING?", -r["pct"]))
     return rows
 
 
@@ -292,19 +367,20 @@ def main(argv=None) -> int:
 
     if args.spec:
         rows = node_rows(actual, expected, parse_spec_nodes(args.spec), args.tolerance)
-        print(f"\nper-node divergence (top {args.top} of {len(rows)} nodes, "
-              f"by pixel%) — intended = from spec, golden→shot = measured mean colour:")
-        print(f"  {'node':22} {'bbox':16} {'pix%':>6} {'ssim':>5}  "
+        n_missing = sum(1 for r in rows if r["status"] == "MISSING?")
+        print(f"\nper-node divergence (top {args.top} of {len(rows)} nodes; "
+              f"{n_missing} look MISSING) — intended = spec, golden→shot = measured:")
+        print(f"  {'status':9}{'node':22} {'bbox':16} {'pix%':>6} {'ssim':>5}  "
               f"{'golden→shot (ΔRGB)':22} intended")
         for r in rows[: args.top]:
             x, y, w, h = r["abs"]
             box = f"[{x},{y} {w}x{h}]"
             sval = f"{r['ssim']:.2f}" if r["ssim"] is not None else "  - "
             color = f"{r['golden_hex']}→{r['shot_hex']} ({r['drgb']:>3})"
-            print(f"  {r['name'][:22]:22} {box:16} {r['pct']:6.2f} {sval:>5}  "
-                  f"{color:22} {r['style']}")
-        print("  hint: ΔRGB high → colour/token bug; ΔRGB low but pix% high → "
-              "text/position/size — check the spec's font/rel against the widget.")
+            print(f"  {r['status']:9}{r['name'][:22]:22} {box:16} {r['pct']:6.2f} "
+                  f"{sval:>5}  {color:22} {r['style']}")
+        print("  legend: MISSING? = in mock, blank in render (figure-ground) · "
+              "COLOR? = wrong colour/token (high ΔRGB) · SHIFT? = text/position/size.")
 
     if args.out and px["bbox"]:
         heat = expected.copy()

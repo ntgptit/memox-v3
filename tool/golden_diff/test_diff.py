@@ -138,6 +138,37 @@ class NodeRowsTests(unittest.TestCase):
             self.assertGreater(title["drgb"], 200)         # red vs blue
             self.assertIn("color:text", title["style"])    # intended carried
             self.assertTrue(title["golden_hex"].startswith("#"))
+            self.assertEqual(title["status"], "COLOR?")     # both present, wrong colour
+
+    def test_flags_node_missing_in_render(self):
+        # shot has a blue title box; golden is blank (node absent) → MISSING.
+        shot = solid((390, 56), WHITE)
+        shot.paste(solid((120, 24), (40, 70, 230)), (20, 18))
+        golden = solid((390, 56), WHITE)  # nothing drawn at the title bbox
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = save_text(tmp, "s.md", SPEC_FIXTURE)
+            rows = diff.node_rows(golden, shot, diff.parse_spec_nodes(spec), 16)
+            title = next(r for r in rows if r["name"] == "title")
+            self.assertEqual(title["status"], "MISSING?")
+
+    def test_sparse_content_not_flagged_missing(self):
+        # golden has sparse "ink" (a stripe = text/icon-like detail), shot is a
+        # solid fill. Different, but NOT missing — must not be MISSING?.
+        shot = solid((390, 56), WHITE)
+        shot.paste(solid((120, 24), (40, 70, 230)), (20, 18))
+        golden = solid((390, 56), WHITE)
+        golden.paste(solid((120, 4), (0, 0, 0)), (20, 28))  # a thin dark stripe
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = save_text(tmp, "s.md", SPEC_FIXTURE)
+            rows = diff.node_rows(golden, shot, diff.parse_spec_nodes(spec), 16)
+            title = next(r for r in rows if r["name"] == "title")
+            self.assertNotEqual(title["status"], "MISSING?")
+
+    def test_figure_ground_present_vs_blank(self):
+        img = solid((60, 60), WHITE)
+        img.paste(solid((20, 20), (0, 0, 0)), (20, 20))
+        self.assertGreater(diff.figure_ground(img, 20, 20, 20, 20), 100)  # stands out
+        self.assertEqual(diff.figure_ground(solid((60, 60), WHITE), 20, 20, 20, 20), 0)
 
 
 @unittest.skipUnless(HAS_SKIMAGE, "scikit-image not installed")

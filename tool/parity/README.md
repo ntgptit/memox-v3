@@ -139,6 +139,13 @@ tất định fail.
    Nhờ vậy phân biệt được loại lỗi: **ΔRGB cao → sai màu/token**; **ΔRGB thấp nhưng %pixel cao →
    text/vị trí/size** (đối chiếu `font`/`rel` của spec với widget). Đây là phần "log cần gì, lệch bao
    nhiêu" để agent sửa, không phải chỉ ảnh heat-map cho người.
+   - **Phân loại `status`**: `MISSING?` (mock có **block đặc** ở đây nhưng render trống — figure-vs-ground)
+     · `COLOR?` (có nội dung nhưng sai màu/token) · `SHIFT?` (đúng màu, lệch vị trí/size) · `diff`.
+     MISSING xếp lên đầu. **Giới hạn trung thực**: phát hiện-thiếu bằng pixel chỉ **đáng tin với block
+     đặc** (fill/badge/tile); **text/icon thưa trên theme tối** có mean ≈ nền nên KHÔNG thể tách "thiếu"
+     khỏi "có mà mờ" → cố ý KHÔNG gắn MISSING cho chúng (để MISSING giữ độ chính xác cao). Muốn
+     **inventory node đầy đủ** (mọi loại thiếu) thì phải so **cây widget render vs danh sách node spec**
+     theo cấu trúc, không phải pixel.
 5. ✅ **SSIM perceptual metric**: `diff.py --ssim [--min-ssim V] [--ssim-out heat.png]` qua
    `skimage.metrics.structural_similarity` (KHÔNG tự viết công thức — dùng lib đã kiểm thử). `report.mjs
    --ssim` thêm cột SSIM; `--check --min-ssim V` làm gate. Dep ở `tool/golden_diff/requirements.txt`
@@ -148,6 +155,7 @@ tất định fail.
    region crop, spec-parse, và SSIM gate. Chạy: `python tool/golden_diff/test_diff.py` (CI chạy tự động).
 
 ## Còn để ngỏ
-- Per-element label tagging chính xác hơn (theo cây DOM thật, không heuristic dòng-gần-nhất).
+- **Inventory node đầy đủ (structural)**: phát hiện *mọi* node thiếu (kể cả text/icon) cần dump cây
+  widget render rồi map vs danh sách node của spec — pixel `MISSING?` chỉ bắt được block đặc.
 - Gắn `report.mjs --check` vào `tool/verify/run.mjs` khi map đã ổn định lâu dài.
-- Chọn ngưỡng `--max` / `--min-ssim` per-screen sau khi quan sát phân bố % và SSIM thực tế.
+- Chọn ngưỡng `--max` / `--min-ssim` / figure-ground per-screen sau khi quan sát phân bố thực tế.
