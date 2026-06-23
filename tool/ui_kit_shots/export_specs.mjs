@@ -382,6 +382,7 @@ window.__mx = (() => {
       indent,
       fieldIndent,
       name: meta.name,
+      id: meta.id || '',
       itemLabel: meta.itemLabel || '',
       text: meta.text || '',
       mx: meta.mx || '',
@@ -489,6 +490,9 @@ window.__mx = (() => {
 
       if (emitWorthy(el, cs)) {
         const name = nodeName(el);
+        // Stable spec-driven identity from data-mx-node on the kit JSX, carried
+        // into the spec as the id field for gen_contract (no backticks: in-page string).
+        const mxNode = el.getAttribute('data-mx-node') || '';
         const text = ownText(el);
         const w = Math.round(rect.width), h = Math.round(rect.height);
         // abs = frame-relative (visual cross-check); rel = offset within the parent
@@ -514,6 +518,7 @@ window.__mx = (() => {
           depth,
           itemLabel,
           name,
+          id: mxNode,
           text,
           mx: mx ? mx.replace(/^mx:/, '') : '',
           abs: abs.replace(/^abs:/, ''),

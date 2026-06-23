@@ -94,13 +94,13 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | **Khi nào chạy lại** | Trong commit có thay đổi route / schema / use case / screen, hoặc khi thấy file generated ghi commit cũ hơn HEAD nhiều. |
 | **Output** | `docs/_generated/repo-map.md` — "cái gì đang tồn tại" (schema, routes, use cases, screens, tests, commit gần nhất). `docs/_generated/where-is.md` — "feature X nằm đâu": mỗi dòng = docs cần đọc + source files + tests + mock shots + WBS rows. |
 
-### 3.4 `tool/golden_diff/diff.py` — So ảnh app vs mock (Python + Pillow)
+### 3.4 `tool/golden_diff/diff.py` — So ảnh app vs mock (Python: Pillow + scikit-image)
 
 | | |
 | --- | --- |
 | **Mục đích** | Vòng phản hồi visual-parity **không cần vision**: agent (kể cả model nhỏ) đọc kết quả text để biết màn hình lệch mock ở đâu và tự sửa lặp. Đây là gate thực thi cho rule "screen chỉ complete khi pass visual parity". |
-| **Cách hoạt động** | So 2 PNG pixel-by-pixel (mặc định tolerance 16/kênh để hấp thụ khác biệt anti-aliasing giữa renderer), tự resize nếu khác kích thước, in **mismatch % + bounding box vùng lệch** (đối chiếu được với bbox element trong `specs/`), tùy chọn xuất heat-map đỏ cho người xem. Exit 1 khi vượt threshold. |
-| **Cách chạy** | `python tool/golden_diff/diff.py <ảnh-app.png> <ảnh-mock.png> [--out heatmap.png] [--threshold 5.0] [--tolerance 16]`. Cần `pip install Pillow` (máy hiện tại đã có). |
+| **Cách hoạt động** | Hai metric (phần lõi đều do lib đã kiểm thử lo): **(1) % pixel** (Pillow) — so pixel-by-pixel, tolerance 16/kênh hấp thụ anti-alias, tự resize nếu khác kích thước, in mismatch % + bbox vùng lệch; `--spec` → **log per-node** (mỗi node lệch: status `MISSING?`/`COLOR?`/`SHIFT?` · bbox · %pixel · SSIM-node · màu đo golden→shot ΔRGB · giá trị design intended từ spec). `MISSING?` (block đặc trong mock, trống trong render) chỉ bắt được **block đặc**; text/icon thưa cần inventory structural. **(2) SSIM** (`--ssim`, scikit-image) — tương đồng cấu trúc perceptual ∈[-1,1] (1.0=giống hệt), bền với nhiễu renderer hơn % pixel. Tùy chọn heat-map (`--out`, `--ssim-out`). Exit 1 khi `% > --threshold` hoặc `SSIM < --min-ssim`. |
+| **Cách chạy** | `python tool/golden_diff/diff.py <ảnh-app.png> <ảnh-mock.png> [--out heatmap.png] [--threshold 5.0] [--tolerance 16] [--spec <specfile> --top N] [--ssim --min-ssim 0.6]`. Dep: `pip install -r tool/golden_diff/requirements.txt` (pixel-mode chỉ cần Pillow; SSIM cần numpy + scikit-image, import lazy). Test glue tự viết: `python tool/golden_diff/test_diff.py`. |
 | **Khi nào dùng** | Trong UI task: render golden test Flutter → diff với `shots/NN-...--light.png` tương ứng. Gate per-screen sẽ được gắn từ UI task đầu tiên (WBS 9.14). |
 
 ### 3.5 `tool/verify/run.mjs` — Một lệnh verify duy nhất
@@ -109,7 +109,7 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | --- | --- |
 | **Mục đích** | Thay 7 lệnh verify rời + các pairing rule phải nhớ bằng MỘT lệnh, MỘT bảng tổng kết — và **ép buộc** điều đó: chạy lệnh rời không sinh pass-marker nên không commit được. |
 | **Cách hoạt động** | Tự phát hiện scope từ `git status`: chỉ docs đổi → docs chain (~10 giây); có `.dart`/pubspec đổi → code chain đầy đủ đúng thứ tự chuẩn: `gen-l10n` (chỉ khi ARB đổi) → `build_runner` → guard → `doc_guard` → `dart fix --apply` → `dart format .` → `flutter analyze` → `flutter test` (targeted) → `git diff --check`. **PASS (docs/code) ghi `tool/verify/.last-pass.json`** chứa hash trạng thái nội dung tree; pre-commit hook gọi `--check-marker` — commit bị từ chối khi không có marker khớp, hoặc khi stage code mà marker chỉ là docs-chain. Sửa bất kỳ file nào sau PASS → hash lệch → phải chạy lại. |
-| **Cách chạy** | **Inner loop khi đang dev**: `node tool/verify/run.mjs --quick [--test <paths>]` (analyze + test nhắm đích, nhanh, KHÔNG marker — không dùng để commit). **Cuối task**: `--test <paths>` (code) hoặc `--docs` (docs-only) hoặc auto-detect / `--code` / `--full`. |
+| **Cách chạy** | **Inner loop khi đang dev**: `node tool/verify/run.mjs --quick [--test <paths>]` (analyze + test nhắm đích, nhanh, KHÔNG marker — không dùng để commit). **Cuối task**: `--test <paths>` (code) hoặc `--docs` (docs-only) hoặc auto-detect / `--code` / `--full`. Regen toàn bộ golden (vd sau khi đổi `test/flutter_test_config.dart`): `--full --update-goldens` (nhánh `--full` đã forward `--update-goldens` xuống `flutter test`). |
 | **Lưu ý** | Sau khi nó chạy `dart fix`/`dart format`, vẫn phải xem diff và chỉ giữ thay đổi thuộc task hiện tại. KHÔNG chạy `flutter analyze`/`flutter test`/`build_runner`... trực tiếp — đó là hard-rule violation (`CLAUDE.md` §Hard rules). |
 
 ### 3.6 `tool/prompt_gen/run.mjs` — Sinh Claude Code prompt từ WBS ID
@@ -122,6 +122,15 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | **Khi nào dùng** | Trước mỗi task implement: chạy tool → copy prompt → paste vào Claude Code session mới. Muốn "task tiếp theo chính xác bây giờ": `--ready` (hoặc `--ready --gen`). Khi bắt đầu một phase mới: `--phase N` để thấy gì ready trong phase đó. |
 | **Dependency check** | Tự động kiểm tra `Depends on` column — in ⚠️ warning nếu dep chưa `Implemented`. So khớp status theo **token đầu** nên cell dạng `Implemented (2026-06-20; …)` vẫn được tính là done (không còn báo nhầm "build it first"). |
 | **Output** | Markdown prompt ra stdout — pipe sang file nếu muốn lưu: `node tool/prompt_gen/run.mjs 1.2.1 > /tmp/task-1.2.1.md`. |
+
+### 3.7 `tool/parity/` — Báo cáo & lint visual-parity (tất định, KHÔNG AI)
+
+| | |
+| --- | --- |
+| **Mục đích** | Biến vòng "parity audit" làm tay (liệt kê kit states → tìm golden → `diff.py` từng state → bắt state thiếu golden; soát bare-hex trong spec) thành **lệnh tất định chạy mỗi commit/CI, không gọi model**. Tách phần ĐO + GATE (tất định, ở đây) khỏi phần PHÁN ĐOÁN visual (agent `ui-parity-checker` đọc ảnh thật). |
+| **Cách hoạt động** | `report.mjs` đọc `parity-map.json` (hợp đồng máy-đọc: mỗi state khai `golden` + `scope`); scope `current` → kiểm golden tồn tại (light+dark) + gọi `golden_diff/diff.py` golden↔shot, **thiếu golden = FAIL** (gate STATE COVERAGE). scope `deferred`/`behavior`/`needs-schema`/`needs-token`/`shared` → chỉ liệt kê (divergence sở hữu nơi khác, xem `docs/project-management/parity-loop/parity-deferred.md`). `token_lint.mjs` soát bare `#rrggbb` trong specs (= màu chưa token hóa = gap) + thống kê token màu kit dùng. |
+| **Cách chạy** | `node tool/parity/report.mjs` (bảng; `--ssim`, `--check [--max <pct>] [--min-ssim V]`, `--screen`, `--json`) · `node tool/parity/token_lint.mjs [--check\|--json]` · `node tool/parity/node_audit.mjs` (per-node MISSING?/COLOR?/SHIFT? toàn app) · `node tool/parity/design_watch.mjs --check` (gate: design đổi ⇒ FE/golden/docs phải đổi theo, `--update` để re-baseline). **Sync Claude Design** (2 pha): `/design-sync`+`DesignSync` (agent, auth claude.ai — pull/push, KHÔNG CLI hóa được) → `node tool/parity/after-sync.mjs` (tất định: check_specs_fresh → design_watch → checklist). **Phát hiện FE thiếu element**: parity-contract test (identity by KEY `mx-node:...`, `test/support/parity_contract.dart`) — FE chưa implement node ⇒ test đỏ; KHÔNG dùng geometry (đã gỡ vì FE-toạ-độ ≠ kit). Schema + chi tiết: `tool/parity/README.md`. |
+| **Lưu ý** | diff% chứa **nhiễu font Ahem** (golden render chữ bằng Ahem) → tín hiệu tương đối, KHÔNG phải verdict; vì vậy `--check` mặc định chỉ gate state-coverage (tất định). Thêm/đổi screen/state → cập nhật `parity-map.json` trong CÙNG commit. Chưa wire vào `verify` (commit gate) để tránh chặn commit khi map tạm lệch — gọi trong CI hoặc chạy tay. |
 
 ## 4. Artifacts sinh ra — tra cứu nhanh
 
@@ -153,7 +162,7 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | --- | --- | --- |
 | `doc_guard`, `verify` | Node ≥ 18, **zero npm dependency** | Chạy được ngay, không cần install |
 | `ui_kit_shots` | Node + `npm install` trong thư mục + Google Chrome + mạng | puppeteer-core dùng Chrome hệ thống, không tải browser |
-| `golden_diff` | Python 3 + Pillow (`pip install Pillow`) | |
+| `golden_diff` | Python 3 + `pip install -r tool/golden_diff/requirements.txt` (Pillow; numpy + scikit-image cho `--ssim`) | Pixel-mode chỉ cần Pillow; SSIM import lazy. Có unit test: `python tool/golden_diff/test_diff.py` |
 | `code-verification-guard` | Tool riêng có sẵn trong repo (Python) | Không thuộc `tool/`; được `verify` gọi tự động |
 | pre-commit hook | `git config core.hooksPath .githooks` (một lần / clone) | Tự chạy `doc_guard check` + whitespace check mỗi commit |
 
@@ -169,11 +178,13 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | `doc_guard terms <old>` | AI agent | Ngay sau khi rename thuật ngữ/route/field | Có rename xảy ra | **Bắt buộc khi rename** (CLAUDE.md parity bước 8, AGENTS.md self-audit #6) | `CLAUDE.md`, `AGENTS.md` |
 | `ui_kit_shots export:all` | AI agent / người chỉnh design | Sau BẤT KỲ thay đổi nào của `ui_kits/mobile/index.html` | Kit đổi (state mới, màn mới, style đổi) | **Bắt buộc khi kit đổi** — không regen = shots/specs nói dối | Kit `README.md` §How agents consume |
 | `golden_diff` | AI agent làm UI task | Sau khi render golden/screenshot của màn hình vừa implement | Có golden PNG của màn hình + shot mock tương ứng | Bắt buộc cho UI task (gate per-screen kích hoạt từ WBS 4.1.3) | `CLAUDE.md` §Verification, WBS 9.14 |
+| `parity/report` + `parity/token_lint` | AI agent / CI | Sau UI task; định kỳ/CI để soát regression visual-parity toàn app | Có `parity-map.json` (state→golden→scope) | Tùy chọn (CI gate state-coverage qua `--check`) — KHÔNG gọi AI | `tool/parity/README.md` |
 | **pre-commit hook** | git (tự động) | Mỗi `git commit` | Clone đã chạy MỘT LẦN: `git config core.hooksPath .githooks` | Gọi `verify --check-marker`: chặn commit khi không có pass-marker khớp trạng thái tree, hoặc stage code mà marker là docs-chain. Bypass khẩn cấp: `--no-verify` (phải nêu lý do trong report) | `.githooks/pre-commit` → `tool/verify/run.mjs --check-marker` |
 | `prompt_gen` | AI agent / người | Trước mỗi task implement | Muốn sinh prompt đầy đủ 6-bước từ WBS ID | Tùy chọn nhưng khuyến nghị — tiết kiệm ~10 phút soạn prompt + giảm sót bước | `tool/prompt_gen/run.mjs` |
 
 Quy tắc nhớ nhanh cho agent: **verify trước mọi commit; generate khi đổi cấu trúc; terms khi
-rename; export khi kit đổi; golden_diff khi làm UI; prompt_gen khi bắt đầu task mới; hook lo phần còn lại tự động.**
+rename; export khi kit đổi; golden_diff khi làm UI; parity/report để soát parity toàn app (cập nhật
+`parity-map.json` khi đổi screen/state); prompt_gen khi bắt đầu task mới; hook lo phần còn lại tự động.**
 
 ## 8. Tái sử dụng cho dự án khác (portability)
 

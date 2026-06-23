@@ -399,7 +399,29 @@ marker when staged changes include code. Rules that survive the automation:
   và bởi pre-commit hook (`.githooks/` — kích hoạt: `git config core.hooksPath .githooks`).
 - Rename thuật ngữ: `node tool/doc_guard/run.mjs terms <old>`. Đổi route/schema/usecase/screen:
   `node tool/doc_guard/run.mjs generate` (regen wiki) trong cùng commit.
-- Visual parity cho UI task: `python tool/golden_diff/diff.py <golden> <mock-shot>`.
+- Visual parity cho UI task: `python tool/golden_diff/diff.py <golden> <mock-shot>` (thêm
+  `--spec <specfile> --top N` để diff per-node; `--ssim [--min-ssim V]` để chấm perceptual SSIM, bền với
+  nhiễu renderer hơn % pixel — cần `pip install -r tool/golden_diff/requirements.txt`; test glue:
+  `python tool/golden_diff/test_diff.py`). Golden render bằng **font thật** (Plus Jakarta Sans
+  nạp ở `test/flutter_test_config.dart`) nên diff% so shot có nghĩa (không còn nhiễu Ahem). Đổi
+  `flutter_test_config.dart` → phải regen toàn bộ golden: `node tool/verify/run.mjs --full --update-goldens`.
+- Soát visual-parity toàn app (tất định, KHÔNG AI): `node tool/parity/report.mjs` (bảng diff% + SSIM
+  `--ssim` + state-coverage per screen/state, `--check` gate state thiếu golden, `--min-ssim` gate SSIM)
+  và `node tool/parity/token_lint.mjs`
+  (bare-hex gap + token inventory). Hợp đồng máy-đọc ở `tool/parity/parity-map.json` — khi thêm/đổi
+  screen/state phải cập nhật map trong CÙNG commit. Phần phán đoán "đúng chưa" khi % nhiễu vẫn để agent
+  `ui-parity-checker`. Chi tiết: `tool/parity/README.md`.
+- Phát hiện **FE thiếu element** so design (spec-driven): parity-contract test — FE gắn `key:
+  ValueKey('mx-node:<screen>/<node>')`, test assert `find.byKey` (key là string nên test compile dù FE
+  chưa dựng → thiếu = đỏ). Helper `test/support/parity_contract.dart`; prototype
+  `test/presentation/features/dashboard/dashboard_parity_test.dart`. KHÔNG dùng `find.byType` (class phải
+  tồn tại mới compile) hay geometry (FE toạ-độ ≠ kit). Ngoại lệ có-docs → `tool/parity/intent-ledger.json`.
+- **Sync design từ Claude Design** (design sống ở claude.ai, không phải repo): 2 pha — `/design-sync` +
+  tool `DesignSync` (agent, cần auth claude.ai; pull/ghi project, thay download tay; KHÔNG CLI/CI hóa
+  được) → rồi `node tool/parity/after-sync.mjs` (tất định: check_specs_fresh → design_watch → checklist).
+  `design_watch.mjs --check` là gate: design đổi mà code/docs chưa theo kịp ⇒ đỏ tới khi re-baseline
+  (`--update`). `data-mx-node` ids nên sống trong project Claude Design để pull về không bị ghi đè.
+  Quy trình đầy đủ (2 pha + pipeline data-mx-node + gates + ai-làm-gì): `docs/design/design-sync-process.md`.
 
 Chi tiết từng tool, lệnh rời để debug một bước, trigger matrix, portability: `tool/README.md`.
 

@@ -168,7 +168,7 @@ if (mode === 'quick') {
   step('dart fix', 'dart fix --apply');
   step('dart format', 'dart format .');
   step('flutter analyze', 'flutter analyze');
-  if (has('--full')) step('flutter test (ALL)', 'flutter test');
+  if (has('--full')) step('flutter test (ALL)', `flutter test${goldenFlag}`);
   else if (testTargets.length) step('flutter test (targeted)', `flutter test${goldenFlag} ${testTargets.join(' ')}`);
   else results.push({ name: 'flutter test', status: 'skipped', note: 'no targets — pass --test <paths> or --full' });
   step('ui-kit specs fresh', 'node tool/ui_kit_shots/check_specs_fresh.mjs');
