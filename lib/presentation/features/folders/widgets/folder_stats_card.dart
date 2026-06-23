@@ -44,7 +44,11 @@ class _StatColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final MxColors colors = context.mxColors;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
+      // Kit `04` stat column: pad 8/4 (V8 H4), r14 (highlighted Due column).
+      padding: const EdgeInsets.symmetric(
+        vertical: MxSpacing.space2,
+        horizontal: MxSpacing.space1,
+      ),
       decoration: highlighted
           ? BoxDecoration(
               color: colors.accentSoft,
@@ -55,8 +59,10 @@ class _StatColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           MxText(
+            // Kit stat value is 26/800 -0.5; displayMedium (26/700 -0.5) is the
+            // nearest role (no 26/800 slot in the scale).
             '${stat.value}',
-            role: MxTextRole.titleLarge,
+            role: MxTextRole.displayMedium,
             color: highlighted ? colors.accent : null,
           ),
           const SizedBox(height: MxSpacing.space1),

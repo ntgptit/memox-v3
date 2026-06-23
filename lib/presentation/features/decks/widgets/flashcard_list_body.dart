@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memox/core/error/result.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/core/util/string_utils.dart';
@@ -26,6 +27,7 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_state_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// Flashcard-list body: the streamed cards rendered as a count overline + a
@@ -124,15 +126,19 @@ class FlashcardListBody extends ConsumerWidget {
   }
 
   Widget _error(BuildContext context, WidgetRef ref, AppLocalizations l10n) =>
-      MxErrorState(
-        title: l10n.flashcardLoadFailedTitle,
-        message: l10n.flashcardLoadFailedMessage,
-        icon: Icons.cloud_off_outlined,
-        action: MxPrimaryButton(
-          label: l10n.commonRetryLabel,
-          icon: Icons.refresh,
-          fullWidth: true,
-          onPressed: () => ref.invalidate(flashcardListStreamProvider(deckId)),
+      MxStateCard(
+        centered: true,
+        child: MxErrorState(
+          title: l10n.flashcardLoadFailedTitle,
+          message: l10n.flashcardLoadFailedMessage,
+          icon: Icons.cloud_off_outlined,
+          action: MxPrimaryButton(
+            label: l10n.commonRetryLabel,
+            icon: Icons.refresh,
+            fullWidth: true,
+            onPressed: () =>
+                ref.invalidate(flashcardListStreamProvider(deckId)),
+          ),
         ),
       );
 
@@ -145,15 +151,18 @@ class FlashcardListBody extends ConsumerWidget {
     final AppLocalizations l10n = AppLocalizations.of(context);
 
     if (detail.totalCount == 0) {
-      return MxEmptyState(
-        icon: Icons.copy_all_outlined,
-        title: l10n.flashcardEmptyTitle,
-        message: l10n.flashcardEmptyMessage,
-        action: MxPrimaryButton(
-          label: l10n.flashcardAddCardLabel,
-          icon: Icons.add,
-          fullWidth: true,
-          onPressed: () => runAddCard(context, deckId),
+      return MxStateCard(
+        centered: true,
+        child: MxEmptyState(
+          icon: Icons.copy_all_outlined,
+          title: l10n.flashcardEmptyTitle,
+          message: l10n.flashcardEmptyMessage,
+          action: MxPrimaryButton(
+            label: l10n.flashcardAddCardLabel,
+            icon: Icons.add,
+            fullWidth: true,
+            onPressed: () => runAddCard(context, deckId),
+          ),
         ),
       );
     }
@@ -297,7 +306,13 @@ class _ReorderRow extends StatelessWidget {
           const SizedBox(width: MxSpacing.space2),
           ReorderableDragStartListener(
             index: index,
-            child: Icon(Icons.drag_indicator, color: colors.textTertiary),
+            // Kit `06` reorder grip is 20px (`--memox-icon-md`, grip-vertical
+            // rel 20x20), not the Material default 24.
+            child: Icon(
+              Icons.drag_indicator,
+              size: MxIconSize.md,
+              color: colors.textTertiary,
+            ),
           ),
         ],
       ),

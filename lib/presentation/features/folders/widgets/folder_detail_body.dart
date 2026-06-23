@@ -28,6 +28,7 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_state_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// Folder-detail body: the streamed subfolders + decks rendered as a stats card
@@ -73,15 +74,18 @@ class FolderDetailBody extends ConsumerWidget {
   }
 
   Widget _error(BuildContext context, WidgetRef ref, AppLocalizations l10n) =>
-      MxErrorState(
-        title: l10n.folderDetailLoadFailedTitle,
-        message: l10n.folderDetailLoadFailedMessage,
-        icon: Icons.cloud_off_outlined,
-        action: MxPrimaryButton(
-          label: l10n.commonRetryLabel,
-          icon: Icons.refresh,
-          fullWidth: true,
-          onPressed: () => ref.invalidate(folderDetailStreamProvider(folderId)),
+      MxStateCard(
+        child: MxErrorState(
+          title: l10n.folderDetailLoadFailedTitle,
+          message: l10n.folderDetailLoadFailedMessage,
+          icon: Icons.cloud_off_outlined,
+          action: MxPrimaryButton(
+            label: l10n.commonRetryLabel,
+            icon: Icons.refresh,
+            fullWidth: true,
+            onPressed: () =>
+                ref.invalidate(folderDetailStreamProvider(folderId)),
+          ),
         ),
       );
 
@@ -95,28 +99,30 @@ class FolderDetailBody extends ConsumerWidget {
 
     // True-empty unlocked folder → hero with both create CTAs.
     if (!decksMode && !subfoldersMode) {
-      return MxEmptyState(
-        icon: Icons.folder_open_outlined,
-        title: l10n.folderDetailEmptyTitle,
-        message: l10n.folderDetailEmptyMessage,
-        action: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            MxPrimaryButton(
-              label: l10n.folderDetailCreateDeck,
-              icon: Icons.style_outlined,
-              fullWidth: true,
-              onPressed: () => runCreateDeck(context, ref, folderId),
-            ),
-            const SizedBox(height: MxSpacing.space3),
-            MxSecondaryButton(
-              label: l10n.folderDetailCreateSubfolder,
-              icon: Icons.create_new_folder_outlined,
-              variant: MxSecondaryVariant.outlined,
-              fullWidth: true,
-              onPressed: () => runCreateSubfolder(context, ref, folderId),
-            ),
-          ],
+      return MxStateCard(
+        child: MxEmptyState(
+          icon: Icons.folder_open_outlined,
+          title: l10n.folderDetailEmptyTitle,
+          message: l10n.folderDetailEmptyMessage,
+          action: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              MxPrimaryButton(
+                label: l10n.folderDetailCreateDeck,
+                icon: Icons.style_outlined,
+                fullWidth: true,
+                onPressed: () => runCreateDeck(context, ref, folderId),
+              ),
+              const SizedBox(height: MxSpacing.space3),
+              MxSecondaryButton(
+                label: l10n.folderDetailCreateSubfolder,
+                icon: Icons.create_new_folder_outlined,
+                variant: MxSecondaryVariant.outlined,
+                fullWidth: true,
+                onPressed: () => runCreateSubfolder(context, ref, folderId),
+              ),
+            ],
+          ),
         ),
       );
     }

@@ -33,6 +33,7 @@ import 'package:memox/presentation/shared/widgets/mx_text.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_empty_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_error_state.dart';
 import 'package:memox/presentation/shared/widgets/states/mx_no_results_state.dart';
+import 'package:memox/presentation/shared/widgets/states/mx_state_card.dart';
 import 'package:memox/presentation/shared/widgets/surfaces/mx_card.dart';
 
 /// Library Overview body: the streamed folder list rendered as one grouped
@@ -186,15 +187,17 @@ class LibraryOverviewBody extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: MxSpacing.space3),
         children: const <Widget>[LibraryLoadingSkeleton()],
       ),
-      error: (_, _) => MxErrorState(
-        title: l10n.libraryLoadFailedTitle,
-        message: l10n.libraryLoadFailedMessage,
-        icon: Icons.cloud_off_outlined,
-        action: MxPrimaryButton(
-          label: l10n.commonRetryLabel,
-          icon: Icons.refresh,
-          fullWidth: true,
-          onPressed: () => ref.invalidate(libraryOverviewStreamProvider),
+      error: (_, _) => MxStateCard(
+        child: MxErrorState(
+          title: l10n.libraryLoadFailedTitle,
+          message: l10n.libraryLoadFailedMessage,
+          icon: Icons.cloud_off_outlined,
+          action: MxPrimaryButton(
+            label: l10n.commonRetryLabel,
+            icon: Icons.refresh,
+            fullWidth: true,
+            onPressed: () => ref.invalidate(libraryOverviewStreamProvider),
+          ),
         ),
       ),
       data: (LibraryOverview data) =>
@@ -210,15 +213,17 @@ class LibraryOverviewBody extends ConsumerWidget {
     );
 
     if (view.totalFolderCount == 0) {
-      return MxEmptyState(
-        icon: Icons.folder_outlined,
-        title: l10n.libraryEmptyTitle,
-        message: l10n.libraryEmptyMessage,
-        action: MxPrimaryButton(
-          label: l10n.libraryCreateFolderLabel,
-          icon: Icons.create_new_folder_outlined,
-          fullWidth: true,
-          onPressed: () => runCreateFolder(context, ref),
+      return MxStateCard(
+        child: MxEmptyState(
+          icon: Icons.folder_outlined,
+          title: l10n.libraryEmptyTitle,
+          message: l10n.libraryEmptyMessage,
+          action: MxPrimaryButton(
+            label: l10n.libraryCreateFolderLabel,
+            icon: Icons.create_new_folder_outlined,
+            fullWidth: true,
+            onPressed: () => runCreateFolder(context, ref),
+          ),
         ),
       );
     }

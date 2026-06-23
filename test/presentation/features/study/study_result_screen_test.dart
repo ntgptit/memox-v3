@@ -256,6 +256,22 @@ void main() {
           ),
         );
       });
+
+      // 17 loading: the summary aggregate is still resolving (kit `17` loading).
+      testWidgets('result-loading — ${brightness.name}', (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          golden: true,
+          result: () => Completer<StudySessionResult>().future,
+        );
+        await expectLater(
+          find.byType(StudyResultScreen),
+          matchesGoldenFile(
+            'goldens/study_result_loading__${brightness.name}.png',
+          ),
+        );
+      });
     }
   });
 }

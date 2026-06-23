@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memox/core/theme/mx_colors.dart';
+import 'package:memox/core/theme/mx_icon_size.dart';
 import 'package:memox/core/theme/mx_radius.dart';
 import 'package:memox/core/theme/mx_spacing.dart';
 import 'package:memox/domain/models/folder_summary.dart';
@@ -81,7 +82,13 @@ class LibraryFolderTile extends StatelessWidget {
               _DueBadge(count: summary.dueCount),
             ],
             const SizedBox(width: MxSpacing.space2),
-            Icon(Icons.chevron_right, color: colors.textTertiary),
+            // Kit list-row trail chevron is 20px (`--memox-icon-md`), not the
+            // Material default 24 (spec 03 list-row-trail rel 20x20).
+            Icon(
+              Icons.chevron_right,
+              size: MxIconSize.md,
+              color: colors.textTertiary,
+            ),
           ],
         ),
       ),
