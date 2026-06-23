@@ -7,6 +7,7 @@ không gọi model**:
 | --- | --- |
 | Liệt kê kit states → tìm golden → chạy `diff.py` từng state → phát hiện state thiếu golden | `report.mjs` |
 | Soát spec có màu bare-hex (chưa token hóa) + thống kê token màu kit dùng | `token_lint.mjs` |
+| Chạy per-node log (`diff.py --spec`) cho TOÀN APP → tổng hợp MISSING?/COLOR?/SHIFT? | `node_audit.mjs` |
 
 Triết lý: **mã hóa quyết định MỘT LẦN thành dữ liệu** (`parity-map.json`) → tool đọc và chấm tất
 định mãi mãi. AI chỉ cần khi: build screen mới, một gate fail cần phán đoán, hoặc duyệt baseline
@@ -73,6 +74,26 @@ Hiện `--check` báo 8 bare-hex ở `24-appearance.md` (màn color/appearance h
 là **gap thật** (khi screen đó được build phải token hóa), KHÔNG phải false-positive — nhưng vì screen
 24 chưa có FE, hãy chạy token_lint ở chế độ **report** trong CI, chỉ bật `--check` (hoặc allowlist 24)
 khi muốn chặn cứng.
+
+## `node_audit.mjs` — per-node log cho TOÀN APP
+
+Chạy `diff.py --spec` cho **mọi state `current`** trong `parity-map.json` (cả light+dark) rồi tổng hợp
+số node `MISSING?`/`COLOR?`/`SHIFT?` per screen/state, liệt kê tên node MISSING.
+
+```bash
+node tool/parity/node_audit.mjs                 # bảng tổng hợp cả 2 theme
+node tool/parity/node_audit.mjs --missing       # chỉ liệt kê node MISSING?
+node tool/parity/node_audit.mjs --theme dark    # 1 theme
+node tool/parity/node_audit.mjs --screen 02-dashboard --json
+```
+
+⚠️ **Đọc đúng các con số:**
+- **`MISSING?` đáng tin** (high-precision, chỉ block đặc) — đây là tín hiệu "thiếu hẳn" giá trị nhất.
+- **`COLOR?` bị thổi phồng cross-theme**: golden dark của app **tối hệ thống** hơn shot kit → rất nhiều
+  node vượt ngưỡng ΔRGB 40 dù không phải bug token. Coi `COLOR?` là **xếp hạng tương đối** (so light vs
+  dark, so screen vs screen), KHÔNG phải số bug tuyệt đối. Light theme đáng tin hơn dark.
+- **`SHIFT?`** phần lớn là residual text-raster/offset.
+- Verdict thị giác cuối vẫn là `ui-parity-checker`.
 
 ---
 
