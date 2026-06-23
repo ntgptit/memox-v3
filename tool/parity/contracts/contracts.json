@@ -1,4 +1,15 @@
 {
   "$generated": "tool/parity/gen_contract.mjs",
-  "contracts": {}
+  "contracts": {
+    "06-flashcard-list": [
+      {
+        "key": "mx-node:06-flashcard-list/add-card-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:06-flashcard-list/search-dock",
+        "node": "search-dock"
+      }
+    ]
+  }
 }

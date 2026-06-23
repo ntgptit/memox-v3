@@ -283,8 +283,8 @@
   // Bottom-anchored search bar. Sits at the foot of the screen (above the bottom
   // nav when one is present, otherwise owning the home-indicator safe area) so
   // the input is always thumb-reachable. `trailing` for an optional action.
-  const SearchDock = ({ query, placeholder, trailing }) => (
-    <div className="search-dock">
+  const SearchDock = ({ query, placeholder, trailing, node }) => (
+    <div className="search-dock" data-mx-node={node}>
       <SearchField query={query} placeholder={placeholder} />
       {trailing}
     </div>
