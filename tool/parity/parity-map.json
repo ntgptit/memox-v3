@@ -1,0 +1,162 @@
+{
+  "$comment": "Machine-readable parity contract for tool/parity/report.mjs. Encode the per-screen/per-state decision ONCE here so the report stays deterministic (no AI per run). golden = repo-root path WITHOUT the `__<theme>.png` suffix (the tool appends __light.png / __dark.png). shot = <shotsDir>/<screen.id>--<state.kit>--<theme>.png. scope: current (diff it; missing golden = FAIL) | deferred | behavior | needs-schema | needs-token | shared (reported, not diffed — owned elsewhere; see docs/project-management/parity-loop/parity-deferred.md). Keep in sync when a screen/state changes.",
+  "shotsDir": "docs/system-design/MemoX Design System/ui_kits/mobile/shots",
+  "screens": [
+    {
+      "id": "02-dashboard",
+      "title": "Dashboard",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/dashboard/goldens/dashboard_loaded", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/dashboard/goldens/dashboard_loading", "scope": "current" },
+        { "kit": "caught-up", "golden": "test/presentation/features/dashboard/goldens/dashboard_caught-up", "scope": "current" },
+        { "kit": "error", "golden": "test/presentation/features/dashboard/goldens/dashboard_error", "scope": "current" },
+        { "kit": "multi-resume", "scope": "behavior", "reason": "kit-02 engagement dashboard (pre-redesign); FE = redesigned quiet surface" },
+        { "kit": "no-session", "scope": "behavior", "reason": "pre-redesign engagement layout" },
+        { "kit": "offline", "scope": "behavior", "reason": "pre-redesign engagement layout (FE uses error state)" },
+        { "kit": "onboarding", "scope": "behavior", "reason": "pre-redesign engagement layout" }
+      ]
+    },
+    {
+      "id": "03-library-overview",
+      "title": "Library overview",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/folders/goldens/library_overview_loaded", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/folders/goldens/library_overview_loading", "scope": "current" },
+        { "kit": "empty", "golden": "test/presentation/features/folders/goldens/library_overview_empty", "scope": "current" },
+        { "kit": "error", "golden": "test/presentation/features/folders/goldens/library_overview_error", "scope": "current" },
+        { "kit": "search", "golden": "test/presentation/features/folders/goldens/library_overview_search", "scope": "current" },
+        { "kit": "overflow-sheet", "golden": "test/presentation/features/folders/goldens/library_overview_overflow-sheet", "scope": "current" }
+      ]
+    },
+    {
+      "id": "04-folder-detail",
+      "title": "Folder detail",
+      "states": [
+        { "kit": "decks", "golden": "test/presentation/features/folders/goldens/folder_detail_decks", "scope": "current" },
+        { "kit": "subfolders", "golden": "test/presentation/features/folders/goldens/folder_detail_subfolders", "scope": "current" },
+        { "kit": "empty-unlocked", "golden": "test/presentation/features/folders/goldens/folder_detail_empty", "scope": "current" },
+        { "kit": "error", "golden": "test/presentation/features/folders/goldens/folder_detail_error", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/folders/goldens/folder_detail_loading", "scope": "current" },
+        { "kit": "search-empty", "golden": "test/presentation/features/folders/goldens/folder_detail_search-no-results", "scope": "current" },
+        { "kit": "delete-confirm", "scope": "shared", "reason": "MxConfirmDialog destructive → test/presentation/shared/dialogs/goldens/mx_confirm-destructive" },
+        { "kit": "move-sheet", "scope": "behavior", "reason": "tap-to-move per wireframe 25:490; folder_move_picker golden; radio/Move-here + icon-tile deferred (needs-schema)" }
+      ]
+    },
+    {
+      "id": "05-library-search",
+      "title": "Library / global search",
+      "states": [
+        { "kit": "results", "golden": "test/presentation/features/search/goldens/global_search_results", "scope": "current" },
+        { "kit": "no-results", "golden": "test/presentation/features/search/goldens/global_search_no-results", "scope": "current" },
+        { "kit": "empty", "golden": "test/presentation/features/search/goldens/global_search_empty", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/search/goldens/global_search_loading", "scope": "current" },
+        { "kit": "error", "golden": "test/presentation/features/search/goldens/global_search_error", "scope": "current" }
+      ]
+    },
+    {
+      "id": "06-flashcard-list",
+      "title": "Flashcard list",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/decks/goldens/flashcard_list_loaded", "scope": "current" },
+        { "kit": "empty", "golden": "test/presentation/features/decks/goldens/flashcard_list_empty", "scope": "current" },
+        { "kit": "error", "golden": "test/presentation/features/decks/goldens/flashcard_list_error", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/decks/goldens/flashcard_list_loading", "scope": "current" },
+        { "kit": "reorder", "golden": "test/presentation/features/decks/goldens/flashcard_list_reorder", "scope": "current" },
+        { "kit": "search-empty", "golden": "test/presentation/features/decks/goldens/flashcard_list_search-no-results", "scope": "current" },
+        { "kit": "delete-card", "scope": "shared", "reason": "MxConfirmDialog destructive (mx_confirm-destructive)" },
+        { "kit": "delete-deck", "scope": "shared", "reason": "MxConfirmDialog destructive (mx_confirm-destructive)" }
+      ]
+    },
+    {
+      "id": "07-flashcard-create",
+      "title": "Flashcard create",
+      "states": [
+        { "kit": "empty", "golden": "test/presentation/features/decks/goldens/flashcard_editor_create-empty", "scope": "current" },
+        { "kit": "valid", "golden": "test/presentation/features/decks/goldens/flashcard_editor_create-valid", "scope": "current" },
+        { "kit": "details-open", "golden": "test/presentation/features/decks/goldens/flashcard_editor_details-open", "scope": "current" },
+        { "kit": "saving", "golden": "test/presentation/features/decks/goldens/flashcard_editor_saving", "scope": "current" },
+        { "kit": "save-failed", "golden": "test/presentation/features/decks/goldens/flashcard_editor_save-failed", "scope": "current" },
+        { "kit": "validation", "scope": "behavior", "reason": "FE disables Save (no inline-error UI); validation visual ≈ empty form" }
+      ]
+    },
+    {
+      "id": "08-flashcard-edit",
+      "title": "Flashcard edit",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/decks/goldens/flashcard_editor_edit-loaded", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/decks/goldens/flashcard_editor_loading", "scope": "current" },
+        { "kit": "load-error", "golden": "test/presentation/features/decks/goldens/flashcard_editor_load-error", "scope": "current" },
+        { "kit": "saving", "golden": "test/presentation/features/decks/goldens/flashcard_editor_saving", "scope": "current" },
+        { "kit": "save-failed", "golden": "test/presentation/features/decks/goldens/flashcard_editor_save-failed", "scope": "current" },
+        { "kit": "delete", "scope": "shared", "reason": "MxConfirmDialog destructive (mx_confirm-destructive)" },
+        { "kit": "validation", "scope": "behavior", "reason": "FE disables Save (no inline-error UI)" }
+      ]
+    },
+    {
+      "id": "12-study-review",
+      "title": "Study · Review",
+      "states": [
+        { "kit": "default", "scope": "behavior", "reason": "golden study_session_review-card; kit flip-card is a documented visual gap — FE swipe/both-sides per study-flow.md:61 + wireframe 13:32" }
+      ]
+    },
+    {
+      "id": "13-study-match",
+      "title": "Study · Match",
+      "states": [
+        { "kit": "matching", "scope": "behavior", "reason": "golden match_session_board-*; board interaction behavior-owned" },
+        { "kit": "long-meanings", "scope": "behavior", "reason": "content variant; behavior-owned" },
+        { "kit": "read-full-meaning", "scope": "behavior", "reason": "content variant; behavior-owned" }
+      ]
+    },
+    {
+      "id": "14-study-guess",
+      "title": "Study · Guess",
+      "states": [
+        { "kit": "default", "scope": "behavior", "reason": "goldens guess_session_question/answered; interaction behavior-owned" }
+      ]
+    },
+    {
+      "id": "15-study-recall",
+      "title": "Study · Recall",
+      "states": [
+        { "kit": "hidden", "scope": "behavior", "reason": "golden recall_session_hidden; reveal flow behavior-owned" },
+        { "kit": "revealed", "scope": "behavior", "reason": "golden recall_session_revealed" }
+      ]
+    },
+    {
+      "id": "16-study-fill",
+      "title": "Study · Fill",
+      "states": [
+        { "kit": "input", "scope": "behavior", "reason": "golden fill_session_typing; interaction behavior-owned" },
+        { "kit": "wrong", "scope": "behavior", "reason": "golden fill_session_wrong" }
+      ]
+    },
+    {
+      "id": "17-study-result",
+      "title": "Study result",
+      "states": [
+        { "kit": "loaded", "golden": "test/presentation/features/study/goldens/study_result_loaded", "scope": "current" },
+        { "kit": "loading", "golden": "test/presentation/features/study/goldens/study_result_loading", "scope": "current" },
+        { "kit": "defensive", "golden": "test/presentation/features/study/goldens/study_result_defensive", "scope": "current" },
+        { "kit": "save-failed", "golden": "test/presentation/features/study/goldens/study_result_save-failed", "scope": "current" },
+        { "kit": "goal-off", "scope": "needs-schema", "reason": "Goal & streak block is a V1-slice Future (engagement read model)" },
+        { "kit": "tough-empty", "scope": "needs-schema", "reason": "Keep-studying/tough-cards is Future (SRS due-projection)" }
+      ]
+    }
+  ],
+  "noFe": [
+    "00-components",
+    "01-onboarding",
+    "09-flashcard-history",
+    "10-deck-import",
+    "11-tag-management",
+    "18-stats",
+    "19-progress",
+    "20-settings",
+    "21-account-sync",
+    "22-learning-settings",
+    "23-audio-speech",
+    "24-appearance",
+    "25-language"
+  ]
+}

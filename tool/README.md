@@ -123,6 +123,15 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | **Dependency check** | Tự động kiểm tra `Depends on` column — in ⚠️ warning nếu dep chưa `Implemented`. So khớp status theo **token đầu** nên cell dạng `Implemented (2026-06-20; …)` vẫn được tính là done (không còn báo nhầm "build it first"). |
 | **Output** | Markdown prompt ra stdout — pipe sang file nếu muốn lưu: `node tool/prompt_gen/run.mjs 1.2.1 > /tmp/task-1.2.1.md`. |
 
+### 3.7 `tool/parity/` — Báo cáo & lint visual-parity (tất định, KHÔNG AI)
+
+| | |
+| --- | --- |
+| **Mục đích** | Biến vòng "parity audit" làm tay (liệt kê kit states → tìm golden → `diff.py` từng state → bắt state thiếu golden; soát bare-hex trong spec) thành **lệnh tất định chạy mỗi commit/CI, không gọi model**. Tách phần ĐO + GATE (tất định, ở đây) khỏi phần PHÁN ĐOÁN visual (agent `ui-parity-checker` đọc ảnh thật). |
+| **Cách hoạt động** | `report.mjs` đọc `parity-map.json` (hợp đồng máy-đọc: mỗi state khai `golden` + `scope`); scope `current` → kiểm golden tồn tại (light+dark) + gọi `golden_diff/diff.py` golden↔shot, **thiếu golden = FAIL** (gate STATE COVERAGE). scope `deferred`/`behavior`/`needs-schema`/`needs-token`/`shared` → chỉ liệt kê (divergence sở hữu nơi khác, xem `docs/project-management/parity-loop/parity-deferred.md`). `token_lint.mjs` soát bare `#rrggbb` trong specs (= màu chưa token hóa = gap) + thống kê token màu kit dùng. |
+| **Cách chạy** | `node tool/parity/report.mjs` (bảng markdown) · `--json` · `--check` (exit 1 nếu state `current` thiếu golden) · `--check --max <pct>` (thêm gate diff%, mặc định TẮT vì nhiễu Ahem) · `--screen <id>`. `node tool/parity/token_lint.mjs [--check|--json]`. Schema map + chi tiết: `tool/parity/README.md`. |
+| **Lưu ý** | diff% chứa **nhiễu font Ahem** (golden render chữ bằng Ahem) → tín hiệu tương đối, KHÔNG phải verdict; vì vậy `--check` mặc định chỉ gate state-coverage (tất định). Thêm/đổi screen/state → cập nhật `parity-map.json` trong CÙNG commit. Chưa wire vào `verify` (commit gate) để tránh chặn commit khi map tạm lệch — gọi trong CI hoặc chạy tay. |
+
 ## 4. Artifacts sinh ra — tra cứu nhanh
 
 | File | Trả lời câu hỏi | Sinh bởi |
@@ -169,11 +178,13 @@ Ví dụ một block trong spec (chính xác đến từng px, màu theo tên to
 | `doc_guard terms <old>` | AI agent | Ngay sau khi rename thuật ngữ/route/field | Có rename xảy ra | **Bắt buộc khi rename** (CLAUDE.md parity bước 8, AGENTS.md self-audit #6) | `CLAUDE.md`, `AGENTS.md` |
 | `ui_kit_shots export:all` | AI agent / người chỉnh design | Sau BẤT KỲ thay đổi nào của `ui_kits/mobile/index.html` | Kit đổi (state mới, màn mới, style đổi) | **Bắt buộc khi kit đổi** — không regen = shots/specs nói dối | Kit `README.md` §How agents consume |
 | `golden_diff` | AI agent làm UI task | Sau khi render golden/screenshot của màn hình vừa implement | Có golden PNG của màn hình + shot mock tương ứng | Bắt buộc cho UI task (gate per-screen kích hoạt từ WBS 4.1.3) | `CLAUDE.md` §Verification, WBS 9.14 |
+| `parity/report` + `parity/token_lint` | AI agent / CI | Sau UI task; định kỳ/CI để soát regression visual-parity toàn app | Có `parity-map.json` (state→golden→scope) | Tùy chọn (CI gate state-coverage qua `--check`) — KHÔNG gọi AI | `tool/parity/README.md` |
 | **pre-commit hook** | git (tự động) | Mỗi `git commit` | Clone đã chạy MỘT LẦN: `git config core.hooksPath .githooks` | Gọi `verify --check-marker`: chặn commit khi không có pass-marker khớp trạng thái tree, hoặc stage code mà marker là docs-chain. Bypass khẩn cấp: `--no-verify` (phải nêu lý do trong report) | `.githooks/pre-commit` → `tool/verify/run.mjs --check-marker` |
 | `prompt_gen` | AI agent / người | Trước mỗi task implement | Muốn sinh prompt đầy đủ 6-bước từ WBS ID | Tùy chọn nhưng khuyến nghị — tiết kiệm ~10 phút soạn prompt + giảm sót bước | `tool/prompt_gen/run.mjs` |
 
 Quy tắc nhớ nhanh cho agent: **verify trước mọi commit; generate khi đổi cấu trúc; terms khi
-rename; export khi kit đổi; golden_diff khi làm UI; prompt_gen khi bắt đầu task mới; hook lo phần còn lại tự động.**
+rename; export khi kit đổi; golden_diff khi làm UI; parity/report để soát parity toàn app (cập nhật
+`parity-map.json` khi đổi screen/state); prompt_gen khi bắt đầu task mới; hook lo phần còn lại tự động.**
 
 ## 8. Tái sử dụng cho dự án khác (portability)
 
