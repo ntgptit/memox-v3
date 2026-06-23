@@ -1,5 +1,15 @@
 # mx-node rollout loop — state (cursor / HINT)
 
+> **LOOP TERMINAL 2026-06-24**: all 13 FE-built screens now carry mx-node coverage —
+> 03/04/05/06/07/08 + 17 via kit `data-mx-node` → spec `id:` → `gen_contract` (18
+> nodes / 12 screens) + a parity-contract test each; 12–16 study modes via the shared
+> `StudyShell` chrome (exit + progress) keyed per mode + golden assertions; 02-dashboard
+> via FE keys + a hand-written test (its kit-02 is pre-redesign — kit tagging deferred
+> to a Claude Design regen). Remaining screens (00/01/09/10/11/18–25) have NO FE → out
+> of scope. Gates green: gen_contract --check, design_watch --check, all parity tests.
+> Re-open by: (a) regenerating kit-02 to the redesign then tagging it; (b) deepening any
+> screen's contract with more nodes; (c) pushing the tagged kit to Claude Design "v3".
+
 Autonomous loop: tag the kit JSX with `data-mx-node` on required singleton nodes,
 re-export specs, regenerate the parity contract, add matching Flutter `ValueKey`s +
 a parity test per screen, fix any missing/divergent screen, and fix automation
@@ -40,7 +50,7 @@ problems as they surface. One screen per iteration. Branch:
 
 | Screen | FE | mx-node tagged | nodes | status |
 | --- | --- | --- | --- | --- |
-| 02-dashboard | yes (redesigned) | — | — | **next (special)**: kit-02 is pre-redesign (stat tiles/greeting) ≠ FE redesign (MxDueSummary + 2 shortcuts). Tag kit nodes that the redesign FE actually has, OR key FE + a contract from the redesign — don't tag dropped pre-redesign nodes. |
+| 02-dashboard | yes (redesigned) | FE✅ | due-summary, shortcut-progress, shortcut-library (hand-written test) | DONE (special) — kit-02 is pre-redesign so its data-mx-node tagging is DEFERRED until the kit is regenerated to the redesign (Claude Design); FE keyed + dashboard_parity_test passes. |
 | 03-library-overview | yes | ✅ | new-folder-fab, search-dock | DONE |
 | 04-folder-detail | yes | ✅ | create-deck-fab, new-subfolder-fab, search-dock | DONE |
 | 05-library-search | yes | ✅ | search-dock | DONE |
