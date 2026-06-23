@@ -8,6 +8,8 @@ không gọi model**:
 | Liệt kê kit states → tìm golden → chạy `diff.py` từng state → phát hiện state thiếu golden | `report.mjs` |
 | Soát spec có màu bare-hex (chưa token hóa) + thống kê token màu kit dùng | `token_lint.mjs` |
 | Chạy per-node log (`diff.py --spec`) cho TOÀN APP → tổng hợp MISSING?/COLOR?/SHIFT? | `node_audit.mjs` |
+| Phát hiện node **thiếu thật** theo hình học (cây widget vs spec), không lệ thuộc màu/theme | `structural_inventory.mjs` + `test/support/structural_dump.dart` |
+| Phân loại **redesign vs bug** tất định (ý định đã duyệt) | `intent-ledger.json` |
 
 Triết lý: **mã hóa quyết định MỘT LẦN thành dữ liệu** (`parity-map.json`) → tool đọc và chấm tất
 định mãi mãi. AI chỉ cần khi: build screen mới, một gate fail cần phán đoán, hoặc duyệt baseline
@@ -95,6 +97,51 @@ node tool/parity/node_audit.mjs --screen 02-dashboard --json
 - **`SHIFT?`** phần lớn là residual text-raster/offset.
 - Verdict thị giác cuối vẫn là `ui-parity-checker`.
 
+## Vòng khép kín (closed loop): detect → inventory → classify → resolve
+
+```text
+1. DETECT   node_audit.mjs (pixel)        → MISSING?/COLOR?/SHIFT? (có nhiễu, dark-theme)
+2. INVENTORY structural_inventory.mjs     → node THIẾU THẬT theo hình học (bác/ xác nhận pixel)
+3. CLASSIFY intent-ledger.json            → mỗi node thiếu: redesign (đã duyệt) vs BUG?
+4. RESOLVE  BUG? → sửa code · redesign mới → thêm 1 dòng vào ledger
+            → lần chạy sau tự phân loại đúng (vòng khép lại)
+```
+
+Vì sao chia tầng: **pixel** nhanh nhưng nhiễu (dark-theme, AA); **structural** chính xác cho "thiếu
+hay không" nhưng cần dump cây widget; **redesign-vs-bug** thì *bản chất không tất định được bằng
+script* — cần ý định thiết kế (docs/owner). Nên quyết định đó được làm **1 lần** rồi GHI vào ledger →
+từ đó máy phân loại tất định. Ví dụ thật (dashboard dark): pixel báo `progress-fill` MISSING →
+structural cho thấy **vẫn render** (bác false-positive) → còn lại là COLOR, ledger ghi "dashboard =
+redesign quiet surface" → không phải bug.
+
+## `structural_inventory.mjs` — inventory node theo hình học (no pixel, no AI)
+
+So **cây widget render** (dump từ `test/support/structural_dump.dart`, frame 390×780) với bbox node
+trong `specs/NN-*.md`: node spec nào **không có widget nào phủ** = thiếu thật — đúng cả dark, cả
+text/icon (giải hạn chế pixel). Mỗi node thiếu được ledger phân loại `redesign`/`BUG?`.
+
+```bash
+# 1) sinh dump (Flutter test gọi dumpStructure → test/_parity_dump/<name>.json, là artifact commit)
+node tool/verify/run.mjs --test test/presentation/features/dashboard/dashboard_structural_test.dart
+# 2) so dump vs spec
+node tool/parity/structural_inventory.mjs \
+  --dump test/_parity_dump/dashboard_loaded__dark.json \
+  --spec "docs/system-design/MemoX Design System/ui_kits/mobile/specs/02-dashboard.md"
+```
+
+Loại trừ đúng: node **dưới fold** (`y+h > --viewport`, mặc định 780) và node **app-shell**
+(`--exclude bottom-nav,nav-ind`) bị bỏ qua vì screen pump cô lập không có chúng — báo riêng, không
+tính missing. Hiện đã **prototype trên 02-dashboard** (0 node thiếu, cả light+dark); rollout = thêm 1
+dump-test/screen.
+
+## `intent-ledger.json` — redesign vs bug (tất định, ghi 1 lần)
+
+Mỗi entry: `{screen, node ("*"=mọi node), kind (missing/color/"*"), verdict:"redesign", reason,
+source}`. `source` BẮT BUỘC trích doc/memory/owner ruling. Khi `structural_inventory` thấy node thiếu:
+khớp ledger → `redesign (source)`; không khớp → `BUG?` để điều tra. Divergence mới được xác nhận
+cố ý → thêm 1 dòng (vòng khép lại). Phán đoán "redesign hay bug" cho ca MỚI vẫn do `ui-parity-checker`
+/owner; ledger chỉ giữ kết quả để khỏi phán lại.
+
 ---
 
 ## `parity-map.json` — hợp đồng máy-đọc (nguồn sự thật)
@@ -176,7 +223,10 @@ tất định fail.
    region crop, spec-parse, và SSIM gate. Chạy: `python tool/golden_diff/test_diff.py` (CI chạy tự động).
 
 ## Còn để ngỏ
-- **Inventory node đầy đủ (structural)**: phát hiện *mọi* node thiếu (kể cả text/icon) cần dump cây
-  widget render rồi map vs danh sách node của spec — pixel `MISSING?` chỉ bắt được block đặc.
+- **Rollout structural inventory ra mọi screen**: hiện prototype 02-dashboard; mỗi screen cần 1
+  dump-test (pump screen + `dumpStructure`) — pattern ở `dashboard_structural_test.dart`.
+- Pump screen **trong app-shell** (thay vì cô lập) để bottom-nav không phải loại bằng `--exclude`,
+  và **scroll** để kiểm cả node dưới fold.
+- Một runner gộp `node_audit` + `structural_inventory` + ledger thành 1 báo cáo closed-loop/app.
 - Gắn `report.mjs --check` vào `tool/verify/run.mjs` khi map đã ổn định lâu dài.
 - Chọn ngưỡng `--max` / `--min-ssim` / figure-ground per-screen sau khi quan sát phân bố thực tế.

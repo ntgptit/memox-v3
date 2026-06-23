@@ -1,0 +1,13 @@
+{
+  "$comment": "Intent ledger — the deterministic 'redesign vs bug' source of truth for the parity closed loop. 'redesign vs bug' cannot be invented by a script; it needs the design intent (docs/ + owner ruling). So each such decision is made ONCE (by ui-parity-checker / owner) and RECORDED here, after which the loop classifies that divergence deterministically forever. A finding (structural-missing node, or a node-level divergence) that MATCHES an entry is 'redesign' (intended); anything not listed is 'BUG?' to investigate. Match: screen == entry.screen AND (entry.node == '*' OR node name startsWith entry.node) AND (entry.kind == '*' OR entry.kind == finding kind). source MUST cite a doc / memory / owner ruling.",
+  "intentional": [
+    {
+      "screen": "02-dashboard",
+      "node": "*",
+      "kind": "color",
+      "verdict": "redesign",
+      "reason": "FE was redesigned to a quiet, low-accent surface; kit-02 is the pre-redesign engagement layout (more accent fills). Colour/quiet divergence on dashboard accent surfaces is intended, not a token bug.",
+      "source": "docs/project-management/parity-loop/parity-state.md (dashboard redesign) + memory: fe-loop-complete-mock-authoritative + design-redesign-ia-2026-06-21"
+    }
+  ]
+}
