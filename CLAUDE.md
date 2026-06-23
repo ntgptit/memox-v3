@@ -411,6 +411,16 @@ marker when staged changes include code. Rules that survive the automation:
   (bare-hex gap + token inventory). Hợp đồng máy-đọc ở `tool/parity/parity-map.json` — khi thêm/đổi
   screen/state phải cập nhật map trong CÙNG commit. Phần phán đoán "đúng chưa" khi % nhiễu vẫn để agent
   `ui-parity-checker`. Chi tiết: `tool/parity/README.md`.
+- Phát hiện **FE thiếu element** so design (spec-driven): parity-contract test — FE gắn `key:
+  ValueKey('mx-node:<screen>/<node>')`, test assert `find.byKey` (key là string nên test compile dù FE
+  chưa dựng → thiếu = đỏ). Helper `test/support/parity_contract.dart`; prototype
+  `test/presentation/features/dashboard/dashboard_parity_test.dart`. KHÔNG dùng `find.byType` (class phải
+  tồn tại mới compile) hay geometry (FE toạ-độ ≠ kit). Ngoại lệ có-docs → `tool/parity/intent-ledger.json`.
+- **Sync design từ Claude Design** (design sống ở claude.ai, không phải repo): 2 pha — `/design-sync` +
+  tool `DesignSync` (agent, cần auth claude.ai; pull/ghi project, thay download tay; KHÔNG CLI/CI hóa
+  được) → rồi `node tool/parity/after-sync.mjs` (tất định: check_specs_fresh → design_watch → checklist).
+  `design_watch.mjs --check` là gate: design đổi mà code/docs chưa theo kịp ⇒ đỏ tới khi re-baseline
+  (`--update`). `data-mx-node` ids nên sống trong project Claude Design để pull về không bị ghi đè.
 
 Chi tiết từng tool, lệnh rời để debug một bước, trigger matrix, portability: `tool/README.md`.
 
