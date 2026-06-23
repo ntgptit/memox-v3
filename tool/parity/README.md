@@ -34,10 +34,12 @@ node tool/parity/report.mjs --check --max 60  # đồng thời fail nếu diff% 
 node tool/parity/report.mjs --screen 03-library-overview   # giới hạn 1 screen
 ```
 
-⚠️ **diff% chứa nhiễu font Ahem**: golden render chữ bằng font khối (Ahem), nên % so với shot
-chữ-thật mang nhiễu lớn (dark thường ~2× light trên mọi screen). Coi % là **tín hiệu tương đối**, KHÔNG
-phải verdict. Vì vậy `--check` mặc định **chỉ** gate state-coverage (tất định); chỉ bật `--max` khi đã
-nạp real-font cho golden harness (xem "Hạn chế & nâng cấp").
+ℹ️ **Golden render bằng font thật** (Plus Jakarta Sans, nạp ở `test/flutter_test_config.dart` — xem
+"Nâng cấp đã làm"). Trước đây golden dùng font khối Ahem nên % so shot bị nhiễu nặng (dark ~2× light);
+giờ % so shot có nghĩa hơn nhiều (vd `03 loaded` light 14.13% → 6.64%). Vẫn còn sai khác renderer
+(anti-alias, variable-font weight) nên coi % là **tín hiệu mạnh nhưng chưa tuyệt đối**; phán đoán cuối
+khi % lưng chừng vẫn để `ui-parity-checker`. Có thể bật `--check --max <pct>` làm gate regression pixel
+(chọn ngưỡng sau khi xem báo cáo real-font).
 
 Exit: `0` ok · `1` gate fail (`--check`) · `2` lỗi config/IO.
 
@@ -113,10 +115,19 @@ tất định fail.
 - Node ≥ 18 (ESM). Python 3 + Pillow (cho `diff.py`, do `report.mjs` gọi). Không phụ thuộc package
   ngoài.
 
-## Hạn chế & nâng cấp đáng làm
-1. **Real-font golden harness**: nạp Plus Jakarta Sans vào test → `diff.py` hết nhiễu Ahem → có thể
-   bật `report.mjs --check --max <pct>` làm gate regression pixel thật.
-2. **Wire vào CI**: gọi `node tool/parity/report.mjs --check` (state-coverage) trong CI. Chưa gắn vào
-   `tool/verify/run.mjs` (commit gate) để tránh chặn commit khi map tạm lệch; thêm khi đã ổn định.
-3. **Allowlist cho token_lint**: bỏ qua swatch theme (vd 24-appearance) để `--check` dùng được làm gate.
-4. **Per-element diff**: cross-ref bbox trong `specs/NN-*.md` để báo "node X lệch Y%" thay vì cả frame.
+## Nâng cấp đã làm (2026-06-23)
+1. ✅ **Real-font golden harness**: `test/flutter_test_config.dart` nạp Plus Jakarta Sans cho mọi
+   golden → `diff.py` hết nhiễu Ahem → % so shot có nghĩa. Có thể bật `report.mjs --check --max <pct>`
+   làm gate regression pixel thật (chọn ngưỡng sau khi xem báo cáo real-font).
+2. ✅ **CI**: `.github/workflows/parity.yml` chạy `report.mjs --check` (state-coverage) + `token_lint
+   --check` (bare-hex) trên PR/push — Node + Python + Pillow, KHÔNG Flutter, KHÔNG AI. Vẫn chưa gắn vào
+   `tool/verify/run.mjs` (commit gate) để tránh chặn commit khi map tạm lệch.
+3. ✅ **Allowlist cho token_lint**: `parity-map.json` → `tokenLintAllow` (vd `24-appearance`) → bỏ qua
+   spec là swatch theme; `token_lint --check` giờ dùng được làm gate.
+4. ✅ **Per-element diff**: `diff.py --spec <specfile> [--top N]` → crop từng node bbox trong
+   `specs/NN-*.md`, in "node X lệch Y%" sắp xếp giảm dần (localize divergence thay vì cả frame). Nhãn
+   node là heuristic (lấy `node:`/`text:` gần nhất) — bbox + % là phần chính xác để cross-ref.
+
+## Còn để ngỏ
+- Per-element label tagging chính xác hơn (theo cây DOM thật, không heuristic dòng-gần-nhất).
+- Gắn `report.mjs --check` vào `tool/verify/run.mjs` khi map đã ổn định lâu dài.

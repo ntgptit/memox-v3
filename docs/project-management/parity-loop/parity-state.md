@@ -6,8 +6,14 @@
 > behavior/scope-owned (study interactions, dashboard redesign, move-sheet, deck-selector/Note/
 > validation, 03 search-icon/root-anchor), needs-schema (17 goal-off/tough-empty, flashcard status chip,
 > 06 import button), no-FE-yet (01/09/10/11/18/19/20-25), low-value (overline shade), accepted
-> (Lucide↔Material icons). Residual diff.py % = Ahem test-font rendering (golden-harness limit), not a
-> parity failure. Re-open by picking any deferred item once its blocker (token/schema/FE) is approved.
+> (Lucide↔Material icons). Re-open by picking any deferred item once its blocker (token/schema/FE) is
+> approved.
+>
+> **Tooling update 2026-06-23**: the golden harness now renders the REAL app font (Plus Jakarta Sans via
+> `test/flutter_test_config.dart`), so `diff.py` % is no longer dominated by Ahem test-font noise (e.g.
+> `03 loaded` light 14.13% → 6.64%). A deterministic, no-AI parity gate now lives at `tool/parity/`
+> (`report.mjs` state-coverage + golden↔shot diff; `token_lint.mjs` bare-hex). Residual % is now genuine
+> renderer/layout signal — use `tool/parity/report.mjs` + `ui-parity-checker` to judge it.
 
 > This file is a **cursor**, not a source of truth about DONE. "Parity OK" here is a
 > hint; the only proof of parity is `python tool/golden_diff/diff.py <golden> <shot>`
@@ -24,9 +30,9 @@ per loop. Visual-only; behavior is docs-owned.
   01 onboarding, 09 history, 10 import, 11 tags, 18 stats, 19 progress, 20-25 settings/account/learning/
   audio/appearance/language. (See parity-deferred no-FE-yet block.)
 - **ALL FE screens AUDITED** (03/04/06/07/08/12-17/02/05). Concrete pixel fixes landed where token-
-  available; remaining gaps validly deferred. Residual diff.py % across screens is Ahem test-font
-  rendering (harness limitation, not a parity failure); ui-parity-checker (actual images) passed on
-  reviewed screens.
+  available; remaining gaps validly deferred. diff.py % across screens dropped after the real-font
+  golden harness landed (2026-06-23) — it is now genuine renderer/layout signal, not Ahem noise; gate
+  via `tool/parity/report.mjs`. ui-parity-checker (actual images) passed on reviewed screens.
 - **app-wide MxTextField field-fill — ✅ DONE 2026-06-23**: `fillColor: surfaceMuted → surface`
   (kit accent-contrast); ~40 field goldens regenerated in one pass; editor dark 13.91→9.42%. This was
   the last substantive eligible visual fix.

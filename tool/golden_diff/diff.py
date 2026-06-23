@@ -10,10 +10,15 @@ optional heat-map PNG for humans.
 Usage:
   python tool/golden_diff/diff.py <actual.png> <expected.png> [--out heatmap.png]
                                   [--threshold 5.0] [--tolerance 16]
+                                  [--spec <specfile.md>] [--top 15]
 
   --threshold  max allowed mismatch percent before exit code 1 (default 5.0)
   --tolerance  per-channel delta treated as equal (default 16; absorbs
                anti-aliasing/font-hinting differences between renderers)
+  --spec       a UI-kit DOM spec (specs/NN-*.md): report PER-ELEMENT mismatch by
+               cropping each node's abs bbox, so a divergence is localized to a
+               node ("list-row-meta 18%") instead of the whole frame.
+  --top        with --spec, how many most-divergent nodes to print (default 15)
 
 Exit codes: 0 = within threshold, 1 = mismatch above threshold, 2 = usage/IO error.
 Sizes may differ (Flutter logical px vs 390px mock): the actual image is resized
@@ -21,6 +26,7 @@ to the expected size before comparison; layout shifts still show up as diffs.
 """
 
 import argparse
+import re
 import sys
 
 try:
@@ -28,6 +34,52 @@ try:
 except ImportError:  # pragma: no cover
     print("Pillow is required: pip install Pillow", file=sys.stderr)
     sys.exit(2)
+
+_ABS = re.compile(r"abs:\s*\[(\d+),(\d+)\s+(\d+)x(\d+)\]")
+_NODE = re.compile(r"node:\s*(\S+)")
+_TEXT = re.compile(r"text:\s*(.+?)\s*$")
+
+
+def region_pct(actual, expected, box, tolerance):
+    """Mismatch % inside one bbox (clamped to image bounds)."""
+    w, h = expected.size
+    x0, y0, x1, y1 = box
+    x0, y0 = max(0, x0), max(0, y0)
+    x1, y1 = min(w, x1), min(h, y1)
+    if x1 <= x0 or y1 <= y0:
+        return None
+    a = actual.crop((x0, y0, x1, y1))
+    e = expected.crop((x0, y0, x1, y1))
+    gray = ImageChops.difference(a, e).convert("L")
+    mask = gray.point(lambda v, t=tolerance: 255 if v > t else 0)
+    total = (x1 - x0) * (y1 - y0)
+    changed = total - mask.histogram()[0]
+    return 100.0 * changed / total
+
+
+def parse_spec_boxes(path):
+    """Yield (label, x, y, w, h) for every node with an abs bbox in the spec."""
+    boxes = []
+    label = "?"
+    try:
+        lines = open(path, encoding="utf-8").read().splitlines()
+    except OSError as e:
+        print(f"cannot open spec: {e}", file=sys.stderr)
+        return boxes
+    for line in lines:
+        s = line.strip().lstrip("+-").strip()
+        n = _NODE.match(s)
+        if n:
+            label = n.group(1)
+        else:
+            t = _TEXT.match(s)
+            if t and s.startswith("text:"):
+                label = '"' + t.group(1)[:20] + '"'
+        a = _ABS.search(s)
+        if a:
+            x, y, w, h = (int(v) for v in a.groups())
+            boxes.append((label, x, y, w, h))
+    return boxes
 
 
 def main() -> int:
@@ -37,6 +89,8 @@ def main() -> int:
     ap.add_argument("--out", help="write a diff heat-map PNG here")
     ap.add_argument("--threshold", type=float, default=5.0)
     ap.add_argument("--tolerance", type=int, default=16)
+    ap.add_argument("--spec", help="DOM spec for per-element diff")
+    ap.add_argument("--top", type=int, default=15)
     args = ap.parse_args()
 
     try:
@@ -51,7 +105,6 @@ def main() -> int:
         actual = actual.resize(expected.size, Image.LANCZOS)
 
     diff = ImageChops.difference(actual, expected)
-    # Per-pixel max channel delta, thresholded by tolerance.
     gray = diff.convert("L")
     mask = gray.point(lambda v, t=args.tolerance: 255 if v > t else 0)
 
@@ -68,6 +121,17 @@ def main() -> int:
               f"(compare with element bboxes in ui_kits/mobile/specs/)")
     else:
         print("diff region: none")
+
+    if args.spec:
+        rows = []
+        for label, x, y, w, h in parse_spec_boxes(args.spec):
+            rp = region_pct(actual, expected, (x, y, x + w, y + h), args.tolerance)
+            if rp is not None:
+                rows.append((rp, label, x, y, w, h))
+        rows.sort(reverse=True)
+        print(f"\nper-element (top {args.top} of {len(rows)} nodes, by mismatch%):")
+        for rp, label, x, y, w, h in rows[: args.top]:
+            print(f"  {rp:6.2f}%  {label:24} [{x},{y} {w}x{h}]")
 
     if args.out and bbox:
         heat = expected.copy()

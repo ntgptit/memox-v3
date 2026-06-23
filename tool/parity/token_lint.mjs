@@ -45,6 +45,18 @@ if (!existsSync(SPECS)) {
   process.exit(2);
 }
 
+// Specs where bare #rrggbb is legitimate content (e.g. a theme/appearance
+// screen that DISPLAYS color swatches). Sourced from parity-map.json so the
+// allowlist lives in one contract.
+let allow = [];
+try {
+  const mapPath = join(HERE, 'parity-map.json');
+  if (existsSync(mapPath)) allow = JSON.parse(readFileSync(mapPath, 'utf8')).tokenLintAllow ?? [];
+} catch {
+  allow = [];
+}
+const isAllowed = (file) => allow.some((id) => file === `${id}.md`);
+
 const files = readdirSync(SPECS).filter(
   (f) => f.endsWith('.md') && f !== 'INDEX.md',
 );
@@ -58,11 +70,14 @@ const tokens = new Map();
 for (const file of files) {
   const text = readFileSync(join(SPECS, file), 'utf8');
   const lines = text.split('\n');
+  const allowed = isAllowed(file);
   lines.forEach((line, i) => {
     let m;
-    BARE_HEX.lastIndex = 0;
-    while ((m = BARE_HEX.exec(line))) {
-      gaps.push({ file, line: i + 1, hex: m[0] });
+    if (!allowed) {
+      BARE_HEX.lastIndex = 0;
+      while ((m = BARE_HEX.exec(line))) {
+        gaps.push({ file, line: i + 1, hex: m[0] });
+      }
     }
     TOKEN_REF.lastIndex = 0;
     while ((m = TOKEN_REF.exec(line))) {

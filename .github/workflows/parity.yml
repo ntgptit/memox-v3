@@ -1,0 +1,41 @@
+# Deterministic visual-parity gate (NO AI). Runs the parity report + token lint
+# against committed goldens/shots — no Flutter build, no model calls.
+#
+#   - parity/report.mjs --check : fails if a `current` screen/state in
+#     parity-map.json is missing its golden (state-coverage gate).
+#   - parity/token_lint.mjs --check : fails on un-tokenized bare #rrggbb in specs
+#     (allowlist in parity-map.json `tokenLintAllow`).
+#
+# The visual JUDGEMENT (is a golden actually right) stays with the
+# `ui-parity-checker` agent — this gate only enforces what is deterministic.
+name: parity
+
+on:
+  pull_request:
+    paths:
+      - "test/**/goldens/**"
+      - "docs/system-design/MemoX Design System/ui_kits/mobile/**"
+      - "tool/parity/**"
+      - "tool/golden_diff/**"
+  push:
+    branches: [main]
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install Pillow
+      - name: State-coverage + golden↔shot report
+        run: node tool/parity/report.mjs --check
+      - name: Token lint (bare-hex gaps)
+        run: node tool/parity/token_lint.mjs --check
+      - name: Full parity report (artifact log)
+        if: always()
+        run: node tool/parity/report.mjs

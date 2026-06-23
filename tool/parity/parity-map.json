@@ -1,6 +1,8 @@
 {
   "$comment": "Machine-readable parity contract for tool/parity/report.mjs. Encode the per-screen/per-state decision ONCE here so the report stays deterministic (no AI per run). golden = repo-root path WITHOUT the `__<theme>.png` suffix (the tool appends __light.png / __dark.png). shot = <shotsDir>/<screen.id>--<state.kit>--<theme>.png. scope: current (diff it; missing golden = FAIL) | deferred | behavior | needs-schema | needs-token | shared (reported, not diffed — owned elsewhere; see docs/project-management/parity-loop/parity-deferred.md). Keep in sync when a screen/state changes.",
   "shotsDir": "docs/system-design/MemoX Design System/ui_kits/mobile/shots",
+  "tokenLintAllow": ["24-appearance"],
+  "$tokenLintAllowNote": "spec ids where bare #rrggbb is legitimate content (e.g. a theme/appearance screen that DISPLAYS color swatches). token_lint skips these for --check. Remove an id once that screen is built with real tokens.",
   "screens": [
     {
       "id": "02-dashboard",

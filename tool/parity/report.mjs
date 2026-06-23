@@ -22,17 +22,17 @@
 //   node tool/parity/report.mjs --check --max 60
 //                                          # also exit 1 if a current state's
 //                                          # diff% exceeds 60 (off by default —
-//                                          # goldens render text in Ahem, so %
-//                                          # is noisy; raise the bar deliberately)
+//                                          # pick a bar after reading the report)
 //   node tool/parity/report.mjs --screen 03-library-overview
 //                                          # restrict to one screen id
 //
-// NOTE on the threshold: Flutter golden tests render text with a block font
-// (Ahem), so diff% vs the real-text kit shot carries large font-rendering noise.
-// Treat % as a RELATIVE per-state signal, not an absolute parity verdict; the
-// authoritative visual judgment is the `ui-parity-checker` agent reading the
-// actual images. `--check` (no --max) only gates STATE COVERAGE, which is fully
-// deterministic and the highest-value no-AI guard.
+// NOTE on the threshold: goldens now render the REAL app font (Plus Jakarta Sans,
+// loaded in test/flutter_test_config.dart), so diff% vs the kit shot is a strong
+// signal — no longer dominated by the old Ahem test-font noise. Residual % is
+// genuine renderer/anti-alias/variable-font-weight difference; treat % as a strong
+// but not absolute signal, and let `ui-parity-checker` (reading the actual images)
+// make the final call when % is borderline. `--check` (no --max) only gates STATE
+// COVERAGE, which is fully deterministic and the highest-value no-AI guard.
 //
 // Exit codes: 0 = ok, 1 = a gate failed (--check), 2 = config/IO error.
 
@@ -169,7 +169,7 @@ if (asJson) {
       ` · ${rows.length - current.length} deferred/behavior/shared · ${noFe.length} no-FE-yet.`,
   );
   console.log(
-    '\nReminder: diff% includes Ahem test-font noise — % is a relative signal, not a verdict.',
+    '\nReminder: goldens use the real app font — diff% is a strong signal; let ui-parity-checker judge borderline %.',
   );
 }
 
