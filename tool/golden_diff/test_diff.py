@@ -88,23 +88,56 @@ class PixelTests(unittest.TestCase):
             self.assertEqual(diff.pixel_mismatch(actual, expected, 16)["pct"], 0.0)
 
 
+SPEC_FIXTURE = (
+    "- node: app-bar\n"
+    "  box:\n"
+    "    abs: [0,0 390x56]\n"
+    "    rel: [0,0 390x56]\n"
+    "  style: bg:surface r:14\n"
+    "  - node: title\n"
+    "    text: Library\n"
+    "    box:\n"
+    "      abs: [20,18 120x24]\n"
+    "    style: font:18/700 color:text\n"
+)
+
+
 class SpecParseTests(unittest.TestCase):
-    def test_parses_node_and_abs(self):
+    def test_parses_node_abs_style_text(self):
         with tempfile.TemporaryDirectory() as tmp:
-            spec = save_text(tmp, "03.md", (
-                "- node: app-bar\n"
-                "  abs: [0,0 390x56]\n"
-                "- text: Library\n"
-                "  abs: [20,18 120x24]\n"
-            ))
-            boxes = diff.parse_spec_boxes(spec)
-            self.assertEqual(len(boxes), 2)
-            self.assertEqual(boxes[0], ("app-bar", 0, 0, 390, 56))
-            self.assertEqual(boxes[1][0], '"Library"')
-            self.assertEqual(boxes[1][1:], (20, 18, 120, 24))
+            spec = save_text(tmp, "03.md", SPEC_FIXTURE)
+            nodes = diff.parse_spec_nodes(spec)
+            self.assertEqual([n["name"] for n in nodes], ["app-bar", "title"])
+            self.assertEqual(nodes[0]["abs"], (0, 0, 390, 56))
+            self.assertEqual(nodes[0]["style"], "bg:surface r:14")
+            self.assertEqual(nodes[1]["abs"], (20, 18, 120, 24))
+            self.assertEqual(nodes[1]["text"], "Library")
+            self.assertEqual(nodes[1]["style"], "font:18/700 color:text")
+
+    def test_skips_nodes_without_abs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = save_text(tmp, "x.md", "- node: ghost\n  style: bg:accent\n")
+            self.assertEqual(diff.parse_spec_nodes(spec), [])
 
     def test_missing_file_returns_empty(self):
-        self.assertEqual(diff.parse_spec_boxes("/no/such/spec.md"), [])
+        self.assertEqual(diff.parse_spec_nodes("/no/such/spec.md"), [])
+
+
+class NodeRowsTests(unittest.TestCase):
+    def test_reports_measured_color_and_intended_style(self):
+        # shot: blue title box on white; golden: same layout but red title box.
+        shot = solid((390, 56), WHITE)
+        shot.paste(solid((120, 24), (0, 0, 255)), (20, 18))
+        golden = solid((390, 56), WHITE)
+        golden.paste(solid((120, 24), (255, 0, 0)), (20, 18))
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = save_text(tmp, "s.md", SPEC_FIXTURE)
+            rows = diff.node_rows(golden, shot, diff.parse_spec_nodes(spec), 16)
+            title = next(r for r in rows if r["name"] == "title")
+            self.assertGreater(title["pct"], 90.0)        # box fully changed
+            self.assertGreater(title["drgb"], 200)         # red vs blue
+            self.assertIn("color:text", title["style"])    # intended carried
+            self.assertTrue(title["golden_hex"].startswith("#"))
 
 
 @unittest.skipUnless(HAS_SKIMAGE, "scikit-image not installed")

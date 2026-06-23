@@ -133,9 +133,12 @@ tất định fail.
    `tool/verify/run.mjs` (commit gate) để tránh chặn commit khi map tạm lệch.
 3. ✅ **Allowlist cho token_lint**: `parity-map.json` → `tokenLintAllow` (vd `24-appearance`) → bỏ qua
    spec là swatch theme; `token_lint --check` giờ dùng được làm gate.
-4. ✅ **Per-element diff**: `diff.py --spec <specfile> [--top N]` → crop từng node bbox trong
-   `specs/NN-*.md`, in "node X lệch Y%" sắp xếp giảm dần (localize divergence thay vì cả frame). Nhãn
-   node là heuristic (lấy `node:`/`text:` gần nhất) — bbox + % là phần chính xác để cross-ref.
+4. ✅ **Per-node log AI-fix-được**: `diff.py --spec <specfile> [--top N]` parse `specs/NN-*.md` thành
+   từng node (tên + bbox + `style:` font/color/bg/r/border) rồi với mỗi node lệch in 1 dòng:
+   **bbox · %pixel · SSIM-node · màu đo được golden→shot (ΔRGB) · giá trị design "intended" từ spec**.
+   Nhờ vậy phân biệt được loại lỗi: **ΔRGB cao → sai màu/token**; **ΔRGB thấp nhưng %pixel cao →
+   text/vị trí/size** (đối chiếu `font`/`rel` của spec với widget). Đây là phần "log cần gì, lệch bao
+   nhiêu" để agent sửa, không phải chỉ ảnh heat-map cho người.
 5. ✅ **SSIM perceptual metric**: `diff.py --ssim [--min-ssim V] [--ssim-out heat.png]` qua
    `skimage.metrics.structural_similarity` (KHÔNG tự viết công thức — dùng lib đã kiểm thử). `report.mjs
    --ssim` thêm cột SSIM; `--check --min-ssim V` làm gate. Dep ở `tool/golden_diff/requirements.txt`
