@@ -11,6 +11,20 @@
         "node": "search-dock"
       }
     ],
+    "04-folder-detail": [
+      {
+        "key": "mx-node:04-folder-detail/create-deck-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:04-folder-detail/new-subfolder-fab",
+        "node": "fab"
+      },
+      {
+        "key": "mx-node:04-folder-detail/search-dock",
+        "node": "search-dock"
+      }
+    ],
     "06-flashcard-list": [
       {
         "key": "mx-node:06-flashcard-list/add-card-fab",

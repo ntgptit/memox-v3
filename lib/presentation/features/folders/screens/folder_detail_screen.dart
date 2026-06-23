@@ -97,7 +97,12 @@ class FolderDetailScreen extends ConsumerWidget {
       // `04` Search `search-dock`); the bottom-nav slot renders it without the
       // rounded/elevated BottomSheet chrome and reserves its own foot room.
       bottomNavigationBar: searching
-          ? FolderDetailSearchDock(folderId: folderId)
+          ? FolderDetailSearchDock(
+              key: const ValueKey<String>(
+                'mx-node:04-folder-detail/search-dock',
+              ),
+              folderId: folderId,
+            )
           : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -159,11 +164,15 @@ class FolderDetailScreen extends ConsumerWidget {
     if (searching) return null;
     return switch (mode) {
       ContentMode.decks => MxFab(
+        key: const ValueKey<String>('mx-node:04-folder-detail/create-deck-fab'),
         icon: Icons.style_outlined,
         tooltip: l10n.folderDetailCreateDeck,
         onPressed: () => runCreateDeck(context, ref, folderId),
       ),
       ContentMode.subfolders => MxFab(
+        key: const ValueKey<String>(
+          'mx-node:04-folder-detail/new-subfolder-fab',
+        ),
         icon: Icons.create_new_folder_outlined,
         tooltip: l10n.folderDetailCreateSubfolder,
         onPressed: () => runCreateSubfolder(context, ref, folderId),

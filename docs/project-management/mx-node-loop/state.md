@@ -42,8 +42,8 @@ problems as they surface. One screen per iteration. Branch:
 | --- | --- | --- | --- | --- |
 | 02-dashboard | yes (redesigned) | — | — | **special**: kit-02 is pre-redesign; contract from the redesign, not kit-02 |
 | 03-library-overview | yes | ✅ | new-folder-fab, search-dock | DONE |
-| 04-folder-detail | yes | — | — | next |
-| 05-library-search | yes | — | — | todo |
+| 04-folder-detail | yes | ✅ | create-deck-fab, new-subfolder-fab, search-dock | DONE |
+| 05-library-search | yes | — | — | next |
 | 06-flashcard-list | yes | ✅ | add-card-fab, search-dock | DONE |
 | 07-flashcard-create | yes | — | — | todo |
 | 08-flashcard-edit | yes | — | — | todo |
@@ -53,8 +53,14 @@ problems as they surface. One screen per iteration. Branch:
 
 ## Automation fixes made during the loop
 
-- (none yet beyond the pipeline built pre-loop: export_specs id-carry, gen_contract
-  regex `id:\s*`, SearchDock `node` prop.)
+- (pipeline built pre-loop: export_specs id-carry, gen_contract regex `id:\s*`,
+  SearchDock `node` prop.)
+- **Test gotcha (04):** re-pumping the SAME tester after a state toggle (e.g. tap
+  search, then `pumpWidget` a new seed) can leave stale provider/search state → a
+  later state's node reads as missing. Fix: one `testWidgets` PER state (fresh
+  tester), not multiple pumps in one test.
+- For a screen with a parametrized local FAB helper (04 `FabSlot`), add a `node`
+  prop to the helper and pass a distinct id per call site (decks vs subfolders).
 
 ## Notes for push
 
