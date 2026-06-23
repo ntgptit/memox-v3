@@ -113,10 +113,10 @@
 
         <Body>
           <FormField label="Front" error={invalid ? 'The front of the card is required.' : undefined}>
-            <TextArea invalid={invalid} defaultValue={invalid ? '' : '日本'} placeholder="Term, question or prompt" />
+            <TextArea invalid={invalid} defaultValue={invalid ? '' : '日本'} placeholder="Term, question or prompt" data-mx-node="flashcard-editor/front-field" />
           </FormField>
           <FormField label="Back">
-            <TextArea defaultValue="Japan / にほん" />
+            <TextArea defaultValue="Japan / にほん" data-mx-node="flashcard-editor/back-field" />
           </FormField>
           <DetailsBlock />
         </Body>

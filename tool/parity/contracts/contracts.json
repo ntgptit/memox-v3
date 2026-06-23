@@ -50,6 +50,16 @@
         "key": "mx-node:flashcard-editor/back-field",
         "node": "textarea"
       }
+    ],
+    "08-flashcard-edit": [
+      {
+        "key": "mx-node:flashcard-editor/front-field",
+        "node": "textarea"
+      },
+      {
+        "key": "mx-node:flashcard-editor/back-field",
+        "node": "textarea"
+      }
     ]
   }
 }
