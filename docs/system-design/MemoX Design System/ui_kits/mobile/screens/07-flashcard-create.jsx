@@ -76,11 +76,11 @@
 
         <Body>
           <FormField label="Front" error={variant === 'validation' ? 'The front of the card is required.' : undefined}>
-            <TextArea invalid={variant === 'validation'} placeholder="Term, question or prompt" defaultValue={front} />
+            <TextArea invalid={variant === 'validation'} placeholder="Term, question or prompt" defaultValue={front} data-mx-node="flashcard-editor/front-field" />
           </FormField>
 
           <FormField label="Back">
-            <TextArea placeholder="Answer or definition" defaultValue={back} />
+            <TextArea placeholder="Answer or definition" defaultValue={back} data-mx-node="flashcard-editor/back-field" />
           </FormField>
 
           <div className="hr"></div>

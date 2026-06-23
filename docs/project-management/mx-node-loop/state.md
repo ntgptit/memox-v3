@@ -45,8 +45,8 @@ problems as they surface. One screen per iteration. Branch:
 | 04-folder-detail | yes | ✅ | create-deck-fab, new-subfolder-fab, search-dock | DONE |
 | 05-library-search | yes | ✅ | search-dock | DONE |
 | 06-flashcard-list | yes | ✅ | add-card-fab, search-dock | DONE |
-| 07-flashcard-create | yes | — | — | next |
-| 08-flashcard-edit | yes | — | — | todo |
+| 07-flashcard-create | yes | ✅ | flashcard-editor/front-field, back-field | DONE |
+| 08-flashcard-edit | yes | — | (reuses flashcard-editor/* keys) | next |
 | 12–16 study | yes (behavior) | — | — | todo (study modes) |
 | 17-study-result | yes | — | — | todo |
 | 00,01,09,10,11,18–25 | no FE | n/a | — | out of scope (no-FE-yet) |
@@ -61,6 +61,11 @@ problems as they surface. One screen per iteration. Branch:
   tester), not multiple pumps in one test.
 - For a screen with a parametrized local FAB helper (04 `FabSlot`), add a `node`
   prop to the helper and pass a distinct id per call site (decks vs subfolders).
+- **Shared-screen ids (07/08):** 07-create and 08-edit are ONE Flutter screen
+  (`flashcard_editor_*`). A shared widget can hold only one key, so editor nodes use a
+  shared prefix `flashcard-editor/<node>` tagged in BOTH kit 07 + kit 08; the FE keys
+  once. gen_contract lists the same key under both spec files; each screen's test
+  finds it. `TextArea` spreads `...rest` → tag at the call site.
 
 ## Notes for push
 

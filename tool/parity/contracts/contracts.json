@@ -40,6 +40,16 @@
         "key": "mx-node:06-flashcard-list/search-dock",
         "node": "search-dock"
       }
+    ],
+    "07-flashcard-create": [
+      {
+        "key": "mx-node:flashcard-editor/front-field",
+        "node": "textarea"
+      },
+      {
+        "key": "mx-node:flashcard-editor/back-field",
+        "node": "textarea"
+      }
     ]
   }
 }
