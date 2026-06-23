@@ -138,6 +138,15 @@ void main() {
       expect(find.byType(TextField), findsOneWidget);
       expect(find.text('Check answer'), findsOneWidget);
       expect(find.text('0 / 2'), findsOneWidget);
+      // mx-node parity: shared study chrome (StudyShell → exit + progress).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/exit')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a correct answer → ✓ feedback + Next', (tester) async {

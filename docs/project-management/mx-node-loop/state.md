@@ -40,7 +40,7 @@ problems as they surface. One screen per iteration. Branch:
 
 | Screen | FE | mx-node tagged | nodes | status |
 | --- | --- | --- | --- | --- |
-| 02-dashboard | yes (redesigned) | — | — | **special**: kit-02 is pre-redesign; contract from the redesign, not kit-02 |
+| 02-dashboard | yes (redesigned) | — | — | **next (special)**: kit-02 is pre-redesign (stat tiles/greeting) ≠ FE redesign (MxDueSummary + 2 shortcuts). Tag kit nodes that the redesign FE actually has, OR key FE + a contract from the redesign — don't tag dropped pre-redesign nodes. |
 | 03-library-overview | yes | ✅ | new-folder-fab, search-dock | DONE |
 | 04-folder-detail | yes | ✅ | create-deck-fab, new-subfolder-fab, search-dock | DONE |
 | 05-library-search | yes | ✅ | search-dock | DONE |
@@ -49,9 +49,9 @@ problems as they surface. One screen per iteration. Branch:
 | 08-flashcard-edit | yes | ✅ | (reuses flashcard-editor/front-field, back-field) | DONE |
 | 12-study-review | yes (behavior) | ✅ | study-session/exit, study-session/progress (shared StudyShell) | DONE |
 | 13-study-match | yes | ✅ | study-session/exit, progress (FE keyed + golden assertion) | DONE |
-| 14-study-guess | yes | kit✅ | (reuses study-session/exit+progress) | next — key FE + golden assertion |
-| 15-study-recall | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
-| 16-study-fill | yes | kit✅ | (reuses study-session/exit+progress) | todo — key FE + golden assertion |
+| 14-study-guess | yes | ✅ | study-session/exit, progress (FE keyed + golden assertion) | DONE |
+| 15-study-recall | yes | ✅ | study-session/exit, progress (FE keyed + golden assertion) | DONE |
+| 16-study-fill | yes | ✅ | study-session/exit, progress (FE keyed + golden assertion) | DONE |
 | 17-study-result | yes | ✅ | done-button | DONE |
 | 00,01,09,10,11,18–25 | no FE | n/a | — | out of scope (no-FE-yet) |
 

@@ -145,6 +145,15 @@ void main() {
         findsNothing,
       ); // back hidden until revealed
       expect(find.text('0 / 2'), findsOneWidget);
+      // mx-node parity: shared study chrome (StudyShell → exit + progress).
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/exit')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mx-node:study-session/progress')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Show answer reveals the back + the grade row', (tester) async {
