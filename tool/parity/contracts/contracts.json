@@ -60,6 +60,12 @@
         "key": "mx-node:flashcard-editor/back-field",
         "node": "textarea"
       }
+    ],
+    "17-study-result": [
+      {
+        "key": "mx-node:17-study-result/done-button",
+        "node": "pill-btn"
+      }
     ]
   }
 }

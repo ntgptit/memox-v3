@@ -47,8 +47,8 @@ problems as they surface. One screen per iteration. Branch:
 | 06-flashcard-list | yes | ✅ | add-card-fab, search-dock | DONE |
 | 07-flashcard-create | yes | ✅ | flashcard-editor/front-field, back-field | DONE |
 | 08-flashcard-edit | yes | ✅ | (reuses flashcard-editor/front-field, back-field) | DONE |
-| 12–16 study | yes (behavior) | — | — | todo (study modes) |
-| 17-study-result | yes | — | — | next |
+| 12–16 study | yes (behavior) | — | — | next (study modes: top bar / rate / answer) |
+| 17-study-result | yes | ✅ | done-button | DONE |
 | 00,01,09,10,11,18–25 | no FE | n/a | — | out of scope (no-FE-yet) |
 
 ## Automation fixes made during the loop

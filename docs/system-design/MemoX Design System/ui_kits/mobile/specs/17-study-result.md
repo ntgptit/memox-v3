@@ -350,6 +350,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
               rel: [21,14 16x16]
             position: clip
         - node: pill-btn
+          id: 17-study-result/done-button
           text: Done
           mx: MxPrimaryButton
           box:
@@ -650,6 +651,7 @@ has no l10n key. Visual reference PNGs: `../shots/` (see `../shots/INDEX.md`).
 + rel: [21,14 16x16]
 + position: clip
   - node: pill-btn
+  id: 17-study-result/done-button
   text: Done
   mx: MxPrimaryButton
   box:

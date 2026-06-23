@@ -138,12 +138,12 @@
           {failed ? (
             <div style={{ display: 'flex', gap: S(2) }}>
               <button className="pill-btn outline"><Icon name="rotate-ccw" />Retry save</button>
-              <button className="pill-btn primary" style={{ flex: 1 }}>Done</button>
+              <button className="pill-btn primary" style={{ flex: 1 }} data-mx-node="17-study-result/done-button">Done</button>
             </div>
           ) : (
             <div style={{ display: 'flex', gap: S(2) }}>
               <button className="pill-btn outline"><Icon name="play" />Keep studying</button>
-              <button className="pill-btn primary" style={{ flex: 1 }}><Icon name="check" />Done</button>
+              <button className="pill-btn primary" style={{ flex: 1 }} data-mx-node="17-study-result/done-button"><Icon name="check" />Done</button>
             </div>
           )}
         </Footer>
