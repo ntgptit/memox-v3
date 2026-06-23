@@ -9,6 +9,12 @@
 > of scope. Gates green: gen_contract --check, design_watch --check, all parity tests.
 > Re-open by: (a) regenerating kit-02 to the redesign then tagging it; (b) deepening any
 > screen's contract with more nodes; (c) pushing the tagged kit to Claude Design "v3".
+>
+> **Coverage gauge (`tool/parity/mxnode_coverage.mjs`):** this loop tagged the PRIMARY
+> singletons per screen — only **~28% of singleton mx-mapped nodes** carry `data-mx-node`
+> so far. The coverage tool lists the untagged singletons per screen (icon-btn,
+> bottom-nav, section-head, card, pill-btn, …) — that's the to-do for a deeper rollout.
+> CI runs it as a report; raise `--check --min` as a ratchet once coverage climbs.
 
 Autonomous loop: tag the kit JSX with `data-mx-node` on required singleton nodes,
 re-export specs, regenerate the parity contract, add matching Flutter `ValueKey`s +
